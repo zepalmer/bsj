@@ -1,11 +1,9 @@
-package edu.jhu.cs.bsj.compiler;
-
-import java.sql.Statement;
+package edu.jhu.cs.bsj.compiler.ast;
 
 /**
  * Container interface for meta-programs.
  */
-public interface MetaProgramContainerNode extends Statement
+public interface MetaProgramContainerNode extends StatementNode
 {
     /**
      * Retrieves the meta-program contained.

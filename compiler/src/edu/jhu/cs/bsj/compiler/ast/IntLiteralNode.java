@@ -1,4 +1,4 @@
-package edu.jhu.cs.bsj.compiler;
+package edu.jhu.cs.bsj.compiler.ast;
 
 public interface IntLiteralNode extends LiteralNode
 {

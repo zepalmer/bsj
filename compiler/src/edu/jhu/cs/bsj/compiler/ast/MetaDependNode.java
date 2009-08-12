@@ -1,4 +1,4 @@
-package edu.jhu.cs.bsj.compiler;
+package edu.jhu.cs.bsj.compiler.ast;
 
 /**
  * Interface for meta-program dependency.
