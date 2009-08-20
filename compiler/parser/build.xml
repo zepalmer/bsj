@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ====================================================================== 
+     Aug 20, 2009 1:56:07 PM                                                        
+
+     BSJ Parser    
+     The parser used by the BSJ compiler
+                   
+     Zachary Palmer                                                                
+     ====================================================================== -->
+<project name="BSJ Parser" default="build">
+    <description>
+            The parser used by the BSJ compiler
+    </description>
+	
+	<!-- Names the directory containing the utility sources. -->
+	<property name="utilsrc" value="src/" />
+	<!-- Names the directory containing the generated sources. -->
+	<property name="gensrc" value="gensrc/" />
+	<!-- Names the directory containing the parser's package. -->
+	<property name="parserPackage" value="${gensrc}/edu/jhu/cs/bsj/compiler/tool/parser" />
+	<!-- Names the output directory. -->
+	<property name="target" value="bin/" />
+
+    <!-- ================================= 
+          target: build              
+         ================================= -->
+    <target name="build" depends="compile-parser" description="Builds the parser used by the BSJ compiler">
+        <!-- TODO -->
+    </target>
+
+    <!-- - - - - - - - - - - - - - - - - - 
+          target: compile-utils                      
+         - - - - - - - - - - - - - - - - - -->
+    <target name="compile-utils" description="Compiles classes used by the parser">
+    	<!-- TODO -->
+    </target>
+
+    <!-- - - - - - - - - - - - - - - - - - 
+          target: antlr                      
+         - - - - - - - - - - - - - - - - - -->
+    <target name="antlr" description="Uses ANTLR to generate the parser's source files">
+    	<mkdir dir="${parserPackage}"/>
+    	<antlr:antlr3 xmlns:antlr="antlib:org/apache/tools/ant/antlr"
+    	    target="${utilsrc}/edu/jhu/cs/bsj/compiler/grammar/Bsj.g"
+    		outputdirectory="${parserPackage}"
+    		conversiontimeout="100000"/>
+    </target>
+
+    <!-- - - - - - - - - - - - - - - - - - 
+          target: compile-parser                      
+         - - - - - - - - - - - - - - - - - -->
+    <target name="compile-parser" depends="compile-utils,antlr" description="Compiles the parser's generated source">
+    	<!-- TODO -->
+    </target>
+	
+    <!-- - - - - - - - - - - - - - - - - - 
+          target: clean                      
+         - - - - - - - - - - - - - - - - - -->
+    <target name="clean" description="Cleans the project">
+    	<!-- TODO -->
+    </target>
+</project>
