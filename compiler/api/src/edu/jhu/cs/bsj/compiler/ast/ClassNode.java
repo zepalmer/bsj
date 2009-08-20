@@ -2,6 +2,9 @@ package edu.jhu.cs.bsj.compiler.ast;
 
 import java.util.List;
 
+/**
+ * A node for class definitions.
+ */
 public interface ClassNode extends StatementNode
 {
     Node getExtendsClause();

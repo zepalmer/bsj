@@ -4,6 +4,9 @@ import java.util.List;
 
 import javax.tools.JavaFileObject;
 
+/**
+ * A node for compilation units.
+ */
 public interface CompilationUnitNode extends Node
 {
     List<? extends ImportNode> getImports();

@@ -1,5 +1,8 @@
 package edu.jhu.cs.bsj.compiler.ast;
 
+/**
+ * Lists various primitive types.
+ */
 public enum TypeKind
 {
     ARRAY,
