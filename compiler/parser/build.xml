@@ -25,14 +25,15 @@
           target: build              
          ================================= -->
     <target name="build" depends="compile-parser" description="Builds the parser used by the BSJ compiler">
-        <!-- TODO -->
     </target>
 
     <!-- - - - - - - - - - - - - - - - - - 
           target: compile-utils                      
          - - - - - - - - - - - - - - - - - -->
     <target name="compile-utils" description="Compiles classes used by the parser">
-    	<!-- TODO -->
+    	<javac
+    		srcdir="${utilsrc}"
+    		destdir="${target}"/>
     </target>
 
     <!-- - - - - - - - - - - - - - - - - - 
@@ -50,13 +51,17 @@
           target: compile-parser                      
          - - - - - - - - - - - - - - - - - -->
     <target name="compile-parser" depends="compile-utils,antlr" description="Compiles the parser's generated source">
-    	<!-- TODO -->
+    	<javac
+    		srcdir="${gensrc}"
+    		classpath="${target}"
+    		destdir="${target}"/>
     </target>
 	
     <!-- - - - - - - - - - - - - - - - - - 
           target: clean                      
          - - - - - - - - - - - - - - - - - -->
     <target name="clean" description="Cleans the project">
-    	<!-- TODO -->
+    	<delete dir="gensrc"/>
+    	<delete dir="bin/**"/>
     </target>
 </project>
