@@ -6,10 +6,15 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Iterator;
+import java.util.Properties;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -34,6 +39,9 @@ import edu.jhu.cs.bsj.compiler.tool.parser.antlr.BsjParser;
 
 public class AntlrAstViewer
 {
+	private static final File MEMORY_FILE =
+		new File(System.getProperty("user.home") + File.separator + ".AntlrAstViewer");
+	
 	static class SwingCommonTreeNode implements TreeNode
 	{
 		private java.util.List<SwingCommonTreeNode> children;
@@ -127,6 +135,19 @@ public class AntlrAstViewer
 
 	public static void main(String arg[]) throws Exception
 	{
+		final Properties p = new Properties();
+		try
+		{
+			FileInputStream fis = new FileInputStream(MEMORY_FILE);
+			p.load(fis);
+			fis.close();
+		} catch (IOException e)
+		{
+			// If an I/O exception occurs, we don't care - just proceed with defaults
+			p.clear();
+		}
+		String defaultText = p.getProperty("source", "");
+		
 		JFrame frame = new JFrame("AST Viewer");
 		final JTree tree = new JTree(
 			new DefaultTreeModel(new DefaultMutableTreeNode()));
@@ -136,6 +157,7 @@ public class AntlrAstViewer
 		final JTextArea source = new JTextArea(8, 40);
 		source.setBorder(new TitledBorder(new LineBorder(Color.BLACK), "Source"));
 		JButton parse = new JButton("Parse");
+		source.setText(defaultText);
 		
 		JScrollPane sp = new JScrollPane(tree);
 		sp.setPreferredSize(new Dimension(200,600));
@@ -168,6 +190,19 @@ public class AntlrAstViewer
 				try
 				{
 					String s = source.getText();
+					
+					try
+					{
+						p.setProperty("source", s);
+						FileOutputStream fos = new FileOutputStream(MEMORY_FILE);
+						p.store(fos, "");
+						fos.close();
+					} catch (IOException e)
+					{
+						// If an I/O error occurs, we don't really care that much.
+						MEMORY_FILE.delete();
+					}
+					
 					Tree t = stringToAst(s);
 					tree.setModel(new DefaultTreeModel(
 						new SwingCommonTreeNode(null, t)));
