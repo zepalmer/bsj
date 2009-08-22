@@ -61,8 +61,12 @@ options {
     language=Java;
 }
 
-@header{
-	package edu.jhu.cs.bsj.compiler.tool.parser;
+@lexer::header{
+    package edu.jhu.cs.bsj.compiler.tool.parser.antlr;
+}
+
+@parser::header{
+	package edu.jhu.cs.bsj.compiler.tool.parser.antlr;
 }
 
 /********************************************************************************************
