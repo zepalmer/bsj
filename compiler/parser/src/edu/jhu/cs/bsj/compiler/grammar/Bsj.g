@@ -61,6 +61,10 @@ options {
     language=Java;
 }
 
+tokens {
+    COMPILATION_UNIT;
+}
+
 @lexer::header{
     package edu.jhu.cs.bsj.compiler.tool.parser.antlr;
 }
@@ -87,6 +91,8 @@ compilationUnit
 packageDeclaration 
     :   'package' qualifiedName
         ';'
+    ->
+        ^('package' qualifiedName)
     ;
 
 importDeclaration  
@@ -94,7 +100,7 @@ importDeclaration
         ('static'
         )?
         IDENTIFIER '.' '*'
-        ';'       
+        ';'
     |   'import' 
         ('static'
         )?
