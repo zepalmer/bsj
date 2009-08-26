@@ -57,6 +57,28 @@ ArrayAccessNode :: ExpressionNode
         <i>expression</i>[<i>index</i>]
         </pre>
 
+ArrayInstantiatonNode :: ExpressionNode
+    @props
+    type                    Node                                | the type of the elements in the array
+    dimensions              List<? extends ExpressionNode>      | the dimensions of the array to create
+    @docs
+        A node representing the creation of a new array, as in:
+        <pre>
+        new <i>type</i>[<i>dim</i>]<i>...</i>
+        </pre>
+        The resulting array contains default values based upon the array's type (0, false, or null).
+
+ArrayInitializerNode :: ExpressionNode
+    @props
+    type                    Node                                | the type of the elements in the array
+    initializers            List<? extends ExpressionNode>      | the initializers for the array
+    @docs
+        A node representing the creation of a new array, as in:
+        <pre>
+        new <i>type</i>[]{<i>initializer...</i>}
+        </pre>
+        The resulting array contains one element for each initializer expression.
+
 AssignmentNode :: ExpressionNode
     @props
     expression              ExpressionNode                      | the expression to use
@@ -68,9 +90,22 @@ BinaryOperatorNode :: ExpressionNode
     @props
     leftOperand             ExpressionNode                      | the left operand of the expression
     rightOperand            ExpressionNode                      | the right operand of the expression
+    operator                BinaryOperator                      | the binary operator to apply
     @docs
         Represents the application of a binary operator.
-    # TODO: representation of the actual operator?
+
+ClassInstantiationNode :: ExpressionNode
+    @props
+    typeArguments           List<? extends Node>                | the type arguments of the instantiation
+    identifier              ExpressionNode                      | the identifier of the class
+    arguments               List<? extends ExpressionNode>      | the arguments to the constructor
+    classBody               ClassNode                           | the body of the anonymous class
+    enclosingExpression     ExpressionNode                      | the expression enclosing the non-static inner class
+    @docs
+        A node representing the instantiation of a class, as in:
+        <pre>
+        new <i>type</i>(<i>arg...</i>)
+        </pre>
 
 CompoundAssignmentNode :: ExpressionNode
     @props
@@ -135,36 +170,6 @@ MethodInvocationNode :: ExpressionNode
         <i>expr</i>.&lt;<i>typeArgs</i>&gt;<i>identifier</i>(<i>arg...</i>)
         </pre>
 
-# TODO
-# We probably want to break this into one type for an initializer and one type for a default instantiator, right?
-# That is, we want different node types to distinguish between "new int[]{0,0}" and "new int[2]".  Probably something
-# like "ArrayInstantiator" vs. "ArrayInitializer"?  Can't use ArrayLiteral because arrays don't have to be literal
-# (e.g., "new int[]{x,y}").
-NewArrayNode :: ExpressionNode
-    @props
-    type                    Node                                | the type of the elements in the array
-    dimensions              List<? extends ExpressionNode>      | the dimensions of the array to create
-    initializers            List<? extends ExpressionNode>      | the initializers for the array
-    @docs
-        A node representing the creation of a new array, as in:
-        <pre>
-        new <i>type</i>[<i>dim</i>]<i>...</i>
-        </pre>
-
-# TODO: do we want to rename this?  Something like "InstantiationNode"?  "NewClassNode" doesn't sound right.
-NewClassNode :: ExpressionNode
-    @props
-    typeArguments           List<? extends Node>                | the type arguments of the instantiation
-    identifier              ExpressionNode                      | the identifier of the class
-    arguments               List<? extends ExpressionNode>      | the arguments to the constructor
-    classBody               ClassNode                           | the body of the anonymous class
-    enclosingExpression     ExpressionNode                      | the expression enclosing the non-static inner class
-    @docs
-        A node representing the instantiation of a class, as in:
-        <pre>
-        new <i>type</i>(<i>arg...</i>)
-        </pre>
-
 TypeCastNode :: ExpressionNode
     @props
     expression              ExpressionNode                      | the expression to cast
@@ -178,6 +183,7 @@ TypeCastNode :: ExpressionNode
 UnaryOperatorNode :: ExpressionNode
     @props
     expression              ExpressionNode                      | the expression on which to operate
+    operator                UnaryOperator                       | the operator to apply
     @docs
         A node for unary expressions, such as:
         <pre>
@@ -187,7 +193,6 @@ UnaryOperatorNode :: ExpressionNode
         <pre>
         x++
         </pre>
-    # TODO: representation for the operator
 
 ### Statement Nodes ###################################################################################################
 
@@ -527,8 +532,3 @@ TypeParameterNode :: Node
 CodeLiteralNode :: LiteralNode<Node>
     @docs
         A node representing a code literal.
-
-# Classes which must be manually maintained:
-#       Identifier
-#       Modifier
-#       PrimitiveType (a new enumeration based on PrimitiveTypeKind)

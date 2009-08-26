@@ -22,7 +22,8 @@ import java.util.Set;
  */
 public class SourceGenerator
 {
-	private static final File contentsFile = new File("data/ast-contents.dat");
+	private static final File contentsFile = new File("data/srcgen/ast-contents.dat");
+	private static final File verbatimDir = new File("data/srcgen/verbatim/");
 	private static final File targetDir = new File("out/");
 	
 	private Set<ClassDefHandler> handlers = new HashSet<ClassDefHandler>();
@@ -48,16 +49,11 @@ public class SourceGenerator
 		f.delete();
 	}
 	
-	public void run()
+	private static String getFileAsString(File f)
 		throws IOException
 	{
-		for (ClassDefHandler handler : handlers) handler.init();
-		
-		rmrf(targetDir);
-		
-		targetDir.mkdirs();
-		byte[] data = new byte[(int) contentsFile.length()];
-		FileInputStream fis = new FileInputStream(contentsFile);
+		byte[] data = new byte[(int) f.length()];
+		FileInputStream fis = new FileInputStream(f);
 		int left = data.length;
 		while (left > 0)
 		{
@@ -65,8 +61,24 @@ public class SourceGenerator
 		}
 		fis.close();
 		String contents = new String(data);
+		return contents;
+	}
+	
+	public void run()
+		throws IOException
+	{
+		// Initialize each handler
+		for (ClassDefHandler handler : handlers) handler.init();
+		
+		// Clear the target directory
+		rmrf(targetDir);
+		
+		// Obtain the contents file
+		targetDir.mkdirs();
+		String contents = getFileAsString(contentsFile);
 		List<String> strings = new ArrayList<String>(Arrays.asList(contents.split("\n")));
 
+		// Strip comments
 		for (int i = 0; i < strings.size(); i++)
 		{
 			String s = strings.get(i);
@@ -77,11 +89,56 @@ public class SourceGenerator
 			}
 		}
 
+		// Process the contents file
 		strings = new LinkedList<String>(strings);
 
 		process(strings);
 		
+		// Finish each handler
 		for (ClassDefHandler handler : handlers) handler.finish();
+		
+		// Copy verbatim files to the appropriate locations
+		copyVerbatims(verbatimDir, "");
+	}
+	
+	private void copyVerbatims(File dir, String prefix)
+		throws IOException
+	{
+		for (File f : dir.listFiles())
+		{
+			if (f.isDirectory())
+			{
+				copyVerbatims(f, prefix.length() == 0 ? f.getName() : prefix + File.separator + f.getName());
+			} else
+			{
+				String s = getFileAsString(f);
+				String pkg = "";
+				String pkgDecl = "";
+				if (s.contains("\n"))
+				{
+					pkgDecl = s.substring(0,s.indexOf('\n'));
+				} else
+				{
+					pkgDecl = s;
+				}
+				pkgDecl = pkgDecl.trim();
+				if ((pkgDecl.startsWith("package")) && (pkgDecl.endsWith(";")))
+				{
+					pkg = pkgDecl.substring(7,pkgDecl.length()-1).trim();
+					File target = new File(
+							targetDir.getPath() + File.separator +
+							prefix + File.separator + pkg.replaceAll("\\.", File.separator) +
+							File.separator + f.getName());
+					target.getParentFile().mkdirs();
+					PrintStream ps = new PrintStream(new FileOutputStream(target));
+					ps.print(s);
+					ps.close();
+				} else
+				{
+					System.err.println("warning: file " + f + " has bad package declaration");
+				}
+			}
+		}
 	}
 
 	private void process(List<String> strings) throws IOException
