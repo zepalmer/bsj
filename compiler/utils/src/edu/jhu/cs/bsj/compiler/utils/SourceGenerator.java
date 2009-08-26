@@ -15,7 +15,8 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * This class generates some patternistic sources for the BSJ parser.
+ * This class generates some patternistic sources for the BSJ parser.  The code is awful; it's not intended for
+ * long-term maintenance, as it will become obsolete once the BSJ compiler has been reimplemented in BSJ.
  * 
  * @author Zachary Palmer
  */
@@ -135,17 +136,23 @@ public class SourceGenerator
 			classname = classdef.trim();
 			supername = null;
 		}
+		
+		List<String> docStrings = new ArrayList<String>();
 
 		Mode mode = null;
 		List<Prop> props = new ArrayList<Prop>();
 		while (strings.size() > 0 && strings.get(0).trim().length() > 0)
 		{
-			String s = strings.remove(0).trim();
+			String orig = strings.remove(0);
+			String s = orig.trim();
 			if (s.startsWith("@"))
 			{
 				if (s.equals("@props"))
 				{
 					mode = Mode.PROP;
+				} else if (s.equals("@docs"))
+				{
+					mode = Mode.DOC;
 				} else
 				{
 					throw new IllegalArgumentException("Unknown mode " + s);
@@ -155,6 +162,9 @@ public class SourceGenerator
 				if (mode == Mode.PROP)
 				{
 					props.add(parseProp(s));
+				} else if (mode == Mode.DOC)
+				{
+					docStrings.add(orig);
 				} else if (mode == null)
 				{
 					throw new IllegalArgumentException(classname + ": Mode not set");
@@ -172,7 +182,23 @@ public class SourceGenerator
 			classname.substring(0,classname.length()-1);
 		}
 		
-		ClassDef def = new ClassDef(classname, supername, props, concrete);
+		StringBuilder classDocBuilder = new StringBuilder();
+		if (docStrings.size()>0)
+		{
+			int minIndent = Integer.MAX_VALUE;
+			for (String s : docStrings)
+			{
+				int count = 0;
+				while (count<s.length() && Character.isWhitespace(s.charAt(count))) count++;
+				minIndent = Math.min(count, minIndent);
+			}
+			for (String s : docStrings)
+			{
+				if (classDocBuilder.length()>0) classDocBuilder.append('\n');
+				classDocBuilder.append(s.substring(minIndent));
+			}
+		}
+		ClassDef def = new ClassDef(classname, supername, props, concrete, classDocBuilder.toString());
 
 		for (ClassDefHandler handler : handlers)
 		{
@@ -201,7 +227,8 @@ public class SourceGenerator
 
 	static enum Mode
 	{
-		PROP;
+		PROP,
+		DOC;
 	}
 
 	static class Prop
@@ -225,14 +252,16 @@ public class SourceGenerator
 		String sname; // superclass name
 		List<Prop> props;
 		boolean concrete;
+		String classDoc;
 		
-		public ClassDef(String name, String sname, List<Prop> props, boolean concrete)
+		public ClassDef(String name, String sname, List<Prop> props, boolean concrete, String classDoc)
 		{
 			super();
 			this.name = name;
 			this.sname = sname;
 			this.props = props;
 			this.concrete = concrete;
+			this.classDoc = classDoc;
 		}
 		
 		public String getRawName()
@@ -328,6 +357,9 @@ public class SourceGenerator
 			PrintStream ps = new PrintStream(fos);
 			if (pkg.length()>0) ps.println("package " + pkg + ";");
 			ps.println("");
+			ps.println("/**");
+			ps.println(" * " + def.classDoc.replaceAll("\n", "\n * "));
+			ps.println(" */");
 			ps.println("public class " + def.name + (def.sname == null ? "" : " extends " + def.sname));
 			ps.println("{");
 			// gen getters and setters

@@ -207,10 +207,18 @@ WhileLoopNode :: StatementNode
     @props
     condition               ExpressionNode                      | the loop's condition
     statement               StatementNode                       | the loop's statement
+    @docs
+    A node for a while loop, as in:
+    <pre>
+    while (condition)
+        statement
+    </pre>
 
 WildcardNode :: Node
     @props
     bound                   Node                                | the wildcard's bound
+    @docs
+    # TODO
 
 ### Literal Nodes #####################################################################################################
 
