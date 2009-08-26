@@ -34,8 +34,8 @@
 # JAVA AST NODES
 #######################################################################################################################
 
-!set iPackage=edu.jhu.cs.bsj.compiler.ast
-!set cPackage=edu.jhu.cs.bsj.compiler.impl.ast
+!set iPackage=edu.jhu.cs.bsj.compiler.ast.node
+!set cPackage=edu.jhu.cs.bsj.compiler.impl.ast.node
 
 ### Expression Nodes ##################################################################################################
 
@@ -519,8 +519,8 @@ TypeParameterNode :: Node
 # BSJ AST NODES
 #######################################################################################################################
 
-!set iPackage=edu.jhu.cs.bsj.compiler.ast.meta
-!set cPackage=edu.jhu.cs.bsj.compiler.impl.ast.meta
+!set iPackage=edu.jhu.cs.bsj.compiler.ast.node.meta
+!set cPackage=edu.jhu.cs.bsj.compiler.impl.ast.node.meta
 
 # TODO
 
