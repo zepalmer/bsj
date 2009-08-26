@@ -43,33 +43,57 @@ AnnotationNode :: ExpressionNode
     @props
     annotationType          Node                                | the annotation type
     arguments               List<? extends ExpressionNode>      | the arguments
+    @docs
+        Represents the usage of an annotation, as in:
+        <pre>@<i>type</i>(<i>arg...</i>)</pre>
 
 ArrayAccessNode :: ExpressionNode
     @props
     expression              ExpressionNode                      | the expression identifying the array
     index                   ExpressionNode                      | the index into the array
+    @docs
+        Represents an array access, as in:
+        <pre>
+        <i>expression</i>[<i>index</i>]
+        </pre>
 
 AssignmentNode :: ExpressionNode
     @props
     expression              ExpressionNode                      | the expression to use
     variable                ExpressionNode                      | the variable to which to assign a value
+    @docs
+        Represents the assignment of an expression to a variable.
 
 BinaryOperatorNode :: ExpressionNode
     @props
     leftOperand             ExpressionNode                      | the left operand of the expression
     rightOperand            ExpressionNode                      | the right operand of the expression
+    @docs
+        Represents the application of a binary operator.
     # TODO: representation of the actual operator?
 
 CompoundAssignmentNode :: ExpressionNode
     @props
     expression              ExpressionNode                      | the expression to assign
     variable                ExpressionNode                      | the variable to which assignment is occurring
+    @docs
+        Represents a compound assignment node.  A compound assignment node is one which performs an assignment operation
+        which implicitly uses the value of the variable to which a value is being assigned, as in:
+        <pre>
+        <i>variable compoundOp expression</i>
+        </pre>
+        where <i>compoundOp</i> is one of <tt>+=</tt>, <tt>&=</tt>, etc.
 
 ConditionalExpressionNode :: ExpressionNode
     @props
     condition               ExpressionNode                      | the condition of the expression
     trueExpression          ExpressionNode                      | the value of this expression when the condition is true
     falseExpression         ExpressionNode                      | the value of this expression when the condition is false
+    @docs
+        Represents a conditional <i>expression</i>, as in:
+        <pre>
+        <i>condition</i> ? <i>expression</i> : <i>expression</i>
+        </pre>
 
 # TODO: how do we want to handle ErroneousNode?
 
@@ -77,15 +101,27 @@ InstanceOfNode :: ExpressionNode
     @props
     expression              ExpressionNode                      | the expression being evaluated
     type                    Node                                | the type being checked
+    @docs
+        Represents the invocation of the <tt>instanceof</tt> operator, as in:
+        <pre>
+        <i>expression</i> instanceof <i>type</i>
+        </pre>
 
 LiteralNode<T> :: ExpressionNode
     @props
     value                   T                                   | the literal value for this node
+    @docs
+        A superclass for all types of literal nodes.
 
 MemberSelectNode :: ExpressionNode
     @props
     expression              ExpressionNode                      | the expression from which to select
     identifier              Identifier                          | the identifier to select
+    @docs
+        A node representing member selection, as in:
+        <pre>
+        <i>expr<i> . <i>identifier</i>
+        </pre>
 
 # TODO: consider: do we want to tighten the type constraint on methodSelect?
 MethodInvocationNode :: ExpressionNode
@@ -93,6 +129,11 @@ MethodInvocationNode :: ExpressionNode
     methodSelect            ExpressionNode                      | the selection obtaining the method to invoke
     arguments               List<? extends ExpressionNode>      | the arguments to pass to the method
     typeArguments           List<? extends Node>                | the type arguments for the method
+    @docs
+        A node representing method invocation, as in:
+        <pre>
+        <i>expr</i>.&lt;<i>typeArgs</i>&gt;<i>identifier</i>(<i>arg...</i>)
+        </pre>
 
 # TODO
 # We probably want to break this into one type for an initializer and one type for a default instantiator, right?
@@ -104,6 +145,11 @@ NewArrayNode :: ExpressionNode
     type                    Node                                | the type of the elements in the array
     dimensions              List<? extends ExpressionNode>      | the dimensions of the array to create
     initializers            List<? extends ExpressionNode>      | the initializers for the array
+    @docs
+        A node representing the creation of a new array, as in:
+        <pre>
+        new <i>type</i>[<i>dim</i>]<i>...</i>
+        </pre>
 
 # TODO: do we want to rename this?  Something like "InstantiationNode"?  "NewClassNode" doesn't sound right.
 NewClassNode :: ExpressionNode
@@ -113,15 +159,34 @@ NewClassNode :: ExpressionNode
     arguments               List<? extends ExpressionNode>      | the arguments to the constructor
     classBody               ClassNode                           | the body of the anonymous class
     enclosingExpression     ExpressionNode                      | the expression enclosing the non-static inner class
+    @docs
+        A node representing the instantiation of a class, as in:
+        <pre>
+        new <i>type</i>(<i>arg...</i>)
+        </pre>
 
 TypeCastNode :: ExpressionNode
     @props
     expression              ExpressionNode                      | the expression to cast
     type                    Node                                | the type to which to cast
+    @docs
+        A node for typecast expressions, as in:
+        <pre>
+        (<i>type</i>) <i>expr</i>
+        </pre>
 
 UnaryOperatorNode :: ExpressionNode
     @props
     expression              ExpressionNode                      | the expression on which to operate
+    @docs
+        A node for unary expressions, such as:
+        <pre>
+        ~0
+        </pre>
+        or
+        <pre>
+        x++
+        </pre>
     # TODO: representation for the operator
 
 ### Statement Nodes ###################################################################################################
@@ -129,10 +194,23 @@ UnaryOperatorNode :: ExpressionNode
 BlockStatementNode :: StatementNode
     @props
     statements              List<? extends StatementNode>       | the statements contained in this block statement
+    @docs
+        Represents a block of statements, as in
+        <pre>
+        {
+            <i>statement</i>
+            <i>...</i>
+        }
+        </pre>
     
 BreakNode :: StatementNode
     @props
     label                   Identifier                          | the break label
+    @docs
+        A node representing break statements, as in:
+        <pre>
+            break <i>label</i>;
+        </pre>
 
 # TODO: is there anywhere that it makes sense for a ClassNode to be a StatementNode?
 # TODO: we need InterfaceNode, EnumNode, and AnnotationDeclarationNode as well
@@ -144,25 +222,53 @@ ClassNode :: StatementNode
     modifiers               ModifiersNode                       | the modifiers for this class
     simpleName              Identifier                          | the name of this class
     typeParameters          List<? extends TypeParameterNode>   | this class's type parameters
+    @docs
+        Represents the declaration of a class, as in:
+        <pre>
+        <i>modifiers<i> class <i>name</i>&lt;<i>typeParam...</i>&gt; extends <i>type</i> implements <i>type...</i>
+        {
+            <i>member</i>
+            <i>...</i>
+        }
+        </pre>
 
 ContinueNode :: StatementNode
     @props
     label                   Identifier                          | the continue label
+    @docs
+        A node representing continue statements, as in:
+        <pre>
+            continue <i>label</i>;
+        </pre>
 
 DoWhileLoopNode :: StatementNode
     @props
     condition               ExpressionNode                      | the loop's condition
     statement               StatementNode                       | the loop's statement
+    @docs
+        A node representing a do-while loop, as in:
+        <pre>
+        do <i>body</i> while (<i>condition</i>);
+        </pre>
 
 EnhancedForLoopNode :: StatementNode
     @props
     variable                VariableNode                        | the iterator variable
     expression              ExpressionNode                      | the loop's iterable expression
     statement               StatementNode                       | the loop's statement
+    @docs
+        A node representing a for-each loop, as in:
+        <pre>
+        for (<i>variable</i> : <i>expression</i>)
+            <i>body</i>
+        </pre>
 
 ExpressionStatementNode :: StatementNode
     @props
     expression              ExpressionNode                      | this statement's expression
+    @docs
+        A node representing an expression statement.  This allows any expression to be used as a statement and its
+        value discarded.
     
 ForLoopNode :: StatementNode
     @props
@@ -170,49 +276,100 @@ ForLoopNode :: StatementNode
     update                  List<? extends ExpressionStatementNode> | the loop's update operation
     condition               ExpressionNode                      | the loop's termination condition
     statement               StatementNode                       | the loop's statement
+    @docs
+        A node representing a for-loop, as in:
+        <pre>
+        for (<i>initializers</i>; <i>condition</i>; <i>updaters</i>)
+            <i>body</i>
+        </pre>
     
 IfNode :: StatementNode
     @props
     condition               ExpressionNode                      | the condition
     thenStatement           StatementNode                       | the then branch's statement
     elseStatement           StatementNode                       | the else branch's statement
+    @docs
+        A node representing an if-then-else statement, as in:
+        <pre>
+        if (<i>condition</i>) then <i>statement</i> else <i>statement</i>
+        </pre>
     
 LabeledStatementNode :: StatementNode
     @props
     label                   Identifier                          | the statement's label
     statement               StatementNode                       | the statement being labeled
+    @docs
+        A node representing labeled statements, as in:
+        <pre>
+        <i>identifier</i>: <i>statement</i>
+        </pre>
     
 SwitchNode :: StatementNode
     @props
     cases                   List<? extends CaseNode>            | the cases in this switch
     expression              ExpressionNode                      | expression over which to switch
+    @docs
+        A node to represent switch statements, as in:
+        <pre>
+        switch (<i>expr</i>) {
+            case <i>value</i>:
+            ...
+        }
+        </pre>
 
 ThrowNode :: StatementNode
     @props
     expression              ExpressionNode                      | the Throwable to throw
+    @docs
+        A node to represent throw statements, as in:
+        <pre>
+        throw <i>expr</i>;
+        </pre>
 
 TryNode :: StatementNode
     @props
     block                   BlockStatementNode                  | the block in which to try
     catches                 List<? extends CatchNode>           | the catch conditions
     finallyBlock            BlockStatementNode                  | the finally block
+    @docs
+        A node to represent a try-catch block, as in:
+        <pre>
+        try <i>block</i>
+        catch (<i>type name</i>) <i>block</i>
+        </pre>
+        or
+        <pre>
+        try <i>block</i>
+        catch (<i>type name</i>) <i>block</i>
+        catch (<i>type name</i>) <i>block</i>
+        finally <i>block</i>
+        </pre>
 
 VariableNode :: StatementNode
     @props
     type                    Node                                | the type of the variable
     name                    Identifier                          | the name of the variable
     initializer             ExpressionNode                      | the initializer to use
+    @docs
+        A node for the declaration of a variable, as in:
+            <pre>
+            <i>type identifier</i>
+            </pre>
+        or
+            <pre>
+            <i>type identifier</i> = <i>expression</i>
+            </pre>
 
 WhileLoopNode :: StatementNode
     @props
     condition               ExpressionNode                      | the loop's condition
     statement               StatementNode                       | the loop's statement
     @docs
-    A node for a while loop, as in:
-    <pre>
-    while (condition)
-        statement
-    </pre>
+        A node for a while loop, as in:
+        <pre>
+        while (<i>condition</i>)
+            statement
+        </pre>
 
 WildcardNode :: Node
     @props
@@ -223,20 +380,32 @@ WildcardNode :: Node
 ### Literal Nodes #####################################################################################################
 
 BooleanLiteralNode :: LiteralNode<boolean>
+    @docs
+        A node representing a boolean literal.
 
 CharLiteralNode :: LiteralNode<char>
-
-CodeLiteralNode :: LiteralNode<Node>
+    @docs
+        A node representing a character literal.
 
 DoubleLiteralNode :: LiteralNode<double>
+    @docs
+        A node representing a double literal.
 
 FloatLiteralNode :: LiteralNode<float>
+    @docs
+        A node representing a float literal.
 
 IntLiteralNode :: LiteralNode<int>
+    @docs
+        A node representing an int literal.
 
 LongLiteralNode :: LiteralNode<long>
+    @docs
+        A node representing a long literal.
 
 StringLiteralNode :: LiteralNode<String>
+    @docs
+        A node representing a String literal.
 
 ### Base Nodes ########################################################################################################
 
@@ -244,11 +413,24 @@ CaseNode :: Node
     @props
     expression              ExpressionNode                      | the expression used in this case label
     statements              List<? extends StatementNode>       | the statements to execute in this case node
+    @docs
+        A node representing a switch's case block, as in:
+        <pre>
+        case <i>expression</i>:
+            <i>statement</i>
+            <i>...</i>
+        </pre>
 
 CatchNode :: Node
     @props
     block                   BlockStatementNode                  | the block to execute when this catch occurs
     parameter               VariableNode                        | this catch block's exception variable
+    @docs
+        A node representing a catch block, as in
+        <pre>
+        catch (<i>type identifier</i>)
+            <i>block</i>
+        </pre>
 
 CompilationUnitNode :: Node
     @props
@@ -256,14 +438,20 @@ CompilationUnitNode :: Node
     packageAnnotations      List<? extends AnnotationNode>      | the annotations on the package declaration of this unit
     packageName             ExpressionNode                      | the name of the package for this unit
     typeDecls               List<? extends Node>                | the type declarations of this unit
+    @docs
+        Represents a BSJ compilation unit.
     # TODO: do we want sourceFile of type JavaFileObject here or something similar?
 
 ExpressionNode* :: Node
+    @docs
+        This class is a common superclass of all BSJ AST nodes representing expressions.
 
 ImportNode :: Node
     @props
     qualifiedIdentifier     Node                                | the identifier to import
     static                  boolean                             | the static-ness of the import
+    @docs
+        A node representing a compilation unit import statement.
 
 # TODO: we need an AnnotationMethodNode too
 MethodNode :: Node
@@ -275,34 +463,57 @@ MethodNode :: Node
     returnType              Node                                | the type of value returned
     throws                  List<? extends ExpressionNode>      | the types of exceptions thrown by this method
     typeParameters          List<? extends TypeParameterNode>   | this method's applicable type parameters
+    @docs
+        A node representing a method declaration, as in:
+        <pre>
+            <i>modifiers typeParams type name</i>(<i>parameter...</i>) throws <i>expr...</i>
+                <i>body</i>
+        </pre>
 
 ModifiersNode :: Node
     @props
     annotations             List<? extends AnnotationNode>      | the annotations modifying the subject
     flags                   Set<Modifier>                       | the modifiers set on the subject
+    @docs
+        A node representing the modifiers applied to another node.  Modifiers may include flags (such as <tt>final</tt>
+        or <tt>strictfp</tt>) and annotations (such as <tt>@Override</tt>).
     
 Node
     @props
-    parent                  Node                                | retrieves a node's parent
+    parent                  Node                                | this node's parent
+    @docs
+        The parent class for all BSJ AST nodes.
 
 ParameterizedTypeNode :: Node
     @props
     type                    Node                                | the base type
     typeArguments           List<? extends Node>                | the parameterized type arguments
+    @docs
+        A node expressing a parameterized type, as in:
+        <pre>
+        <i>type</i> &lt;<i>arg...</i>&gt;
+        </pre>
 
 # TODO: create TypeNode superclass
 PrimitiveTypeNode :: Node
     @props
     primitiveType           PrimitiveType                       | the primitive type being represented
+    @docs
+        A node representing a primitive type.
     
 StatementNode :: Node
+    @docs
+        Common superclass for statements.
 
 TypeParameterNode :: Node
     @props
     name                    Identifier                          | the base type for the parameter
     bounds                  List<? extends Node>                | the bounds over the base type
-
-
+    @docs
+        A node for type parameters, as in:
+        <pre>
+        T extends Number
+        </pre>
 
 #######################################################################################################################
 # BSJ AST NODES
@@ -312,6 +523,10 @@ TypeParameterNode :: Node
 !set cPackage=edu.jhu.cs.bsj.compiler.impl.ast.meta
 
 # TODO
+
+CodeLiteralNode :: LiteralNode<Node>
+    @docs
+        A node representing a code literal.
 
 # Classes which must be manually maintained:
 #       Identifier
