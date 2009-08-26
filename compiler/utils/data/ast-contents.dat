@@ -1,0 +1,311 @@
+# This file is used to describe the interfaces and classes that are used by the BSJ parser to represent ASTs.  It is
+# used to generate corresponding source code manually.
+#
+# The format of this file is very sloppy as it is meant only to save frequent maintenance.  Any content appearing after
+# a '#' on a line is a comment.  Otherwise, content may be a class description or an operation description.  Class
+# descriptions are separated by line breaks.  The first line of a class description indicates the class's name and
+# immediate superclass.  Each following line up until a blank line is treated as information about the class
+# description.
+#
+# An operation description starts with a '!' character.  The syntax of an operation depends on which operation is being
+# invoked.  Valid operations are:
+#
+#     * !set: Sets a variable for the generator.  All class descriptions which appear after this operation will be
+#             affected accordingly.  The syntax is "!set name=value".  Valid names are:
+#         + iPackage: Changes the package for generated interface files.
+#         + cPackage: Changes the package for generated backing class files.
+#
+# The class's name and immediate superclass are separated by "::".  Additionally, the class's name may be suffixed in a
+# '*' character.  If this is the case, no concrete implementation is expected.  This is used in cases in which parts of
+# the interface hierarchy are not to be used directly (such as LiteralNode, which is simply a superclass for specific
+# types of LiteralNodes).
+#
+# The format of a line of information is dependent upon the "mode" of the interpreter.  The mode of the interpeter is
+# unset each time a class description begins; a mode must be set for a line of information to make sense.  A mode is
+# set using a line beginning in '@' (ignoring leading whitespace).  For example, a single line containing "@props"
+# causes the following lines to be interpreted in props mode.
+#
+# Information lines in props mode are read in the following way:
+#     * All content after a pipe symbol ('|') is treated as a description of the property (used in comments).
+#     * All content up to the first space (ignoring leading whitespace) is treated as the name of the property.
+#     * The rest of the line is treated as the property's type.
+
+#######################################################################################################################
+# JAVA AST NODES
+#######################################################################################################################
+
+!set iPackage=edu.jhu.cs.bsj.compiler.ast
+!set cPackage=edu.jhu.cs.bsj.compiler.impl.ast
+
+### Expression Nodes ##################################################################################################
+
+AnnotationNode :: ExpressionNode
+    @props
+    annotationType          Node                                | the annotation type
+    arguments               List<? extends ExpressionNode>      | the arguments
+
+ArrayAccessNode :: ExpressionNode
+    @props
+    expression              ExpressionNode                      | the expression identifying the array
+    index                   ExpressionNode                      | the index into the array
+
+AssignmentNode :: ExpressionNode
+    @props
+    expression              ExpressionNode                      | the expression to use
+    variable                ExpressionNode                      | the variable to which to assign a value
+
+BinaryOperatorNode :: ExpressionNode
+    @props
+    leftOperand             ExpressionNode                      | the left operand of the expression
+    rightOperand            ExpressionNode                      | the right operand of the expression
+    # TODO: representation of the actual operator?
+
+CompoundAssignmentNode :: ExpressionNode
+    @props
+    expression              ExpressionNode                      | the expression to assign
+    variable                ExpressionNode                      | the variable to which assignment is occurring
+
+ConditionalExpressionNode :: ExpressionNode
+    @props
+    condition               ExpressionNode                      | the condition of the expression
+    trueExpression          ExpressionNode                      | the value of this expression when the condition is true
+    falseExpression         ExpressionNode                      | the value of this expression when the condition is false
+
+# TODO: how do we want to handle ErroneousNode?
+
+InstanceOfNode :: ExpressionNode
+    @props
+    expression              ExpressionNode                      | the expression being evaluated
+    type                    Node                                | the type being checked
+
+LiteralNode<T> :: ExpressionNode
+    @props
+    value                   T                                   | the literal value for this node
+
+MemberSelectNode :: ExpressionNode
+    @props
+    expression              ExpressionNode                      | the expression from which to select
+    identifier              Identifier                          | the identifier to select
+
+# TODO: consider: do we want to tighten the type constraint on methodSelect?
+MethodInvocationNode :: ExpressionNode
+    @props
+    methodSelect            ExpressionNode                      | the selection obtaining the method to invoke
+    arguments               List<? extends ExpressionNode>      | the arguments to pass to the method
+    typeArguments           List<? extends Node>                | the type arguments for the method
+
+# TODO
+# We probably want to break this into one type for an initializer and one type for a default instantiator, right?
+# That is, we want different node types to distinguish between "new int[]{0,0}" and "new int[2]".  Probably something
+# like "ArrayInstantiator" vs. "ArrayInitializer"?  Can't use ArrayLiteral because arrays don't have to be literal
+# (e.g., "new int[]{x,y}").
+NewArrayNode :: ExpressionNode
+    @props
+    type                    Node                                | the type of the elements in the array
+    dimensions              List<? extends ExpressionNode>      | the dimensions of the array to create
+    initializers            List<? extends ExpressionNode>      | the initializers for the array
+
+# TODO: do we want to rename this?  Something like "InstantiationNode"?  "NewClassNode" doesn't sound right.
+NewClassNode :: ExpressionNode
+    @props
+    typeArguments           List<? extends Node>                | the type arguments of the instantiation
+    identifier              ExpressionNode                      | the identifier of the class
+    arguments               List<? extends ExpressionNode>      | the arguments to the constructor
+    classBody               ClassNode                           | the body of the anonymous class
+    enclosingExpression     ExpressionNode                      | the expression enclosing the non-static inner class
+
+TypeCastNode :: ExpressionNode
+    @props
+    expression              ExpressionNode                      | the expression to cast
+    type                    Node                                | the type to which to cast
+
+UnaryOperatorNode :: ExpressionNode
+    @props
+    expression              ExpressionNode                      | the expression on which to operate
+    # TODO: representation for the operator
+
+### Statement Nodes ###################################################################################################
+
+BlockStatementNode :: StatementNode
+    @props
+    statements              List<? extends StatementNode>       | the statements contained in this block statement
+    
+BreakNode :: StatementNode
+    @props
+    label                   Identifier                          | the break label
+
+# TODO: is there anywhere that it makes sense for a ClassNode to be a StatementNode?
+# TODO: we need InterfaceNode, EnumNode, and AnnotationDeclarationNode as well
+ClassNode :: StatementNode
+    @props
+    extendsClause           Node                                | the extends clause
+    implementsClause        List<? extends Node>                | the implements clause
+    members                 List<? extends Node>                | this class's members
+    modifiers               ModifiersNode                       | the modifiers for this class
+    simpleName              Identifier                          | the name of this class
+    typeParameters          List<? extends TypeParameterNode>   | this class's type parameters
+
+ContinueNode :: StatementNode
+    @props
+    label                   Identifier                          | the continue label
+
+DoWhileLoopNode :: StatementNode
+    @props
+    condition               ExpressionNode                      | the loop's condition
+    statement               StatementNode                       | the loop's statement
+
+EnhancedForLoopNode :: StatementNode
+    @props
+    variable                VariableNode                        | the iterator variable
+    expression              ExpressionNode                      | the loop's iterable expression
+    statement               StatementNode                       | the loop's statement
+
+ExpressionStatementNode :: StatementNode
+    @props
+    expression              ExpressionNode                      | this statement's expression
+    
+ForLoopNode :: StatementNode
+    @props
+    initializer             List<? extends StatementNode>       | the iterator variable
+    update                  List<? extends ExpressionStatementNode> | the loop's update operation
+    condition               ExpressionNode                      | the loop's termination condition
+    statement               StatementNode                       | the loop's statement
+    
+IfNode :: StatementNode
+    @props
+    condition               ExpressionNode                      | the condition
+    thenStatement           StatementNode                       | the then branch's statement
+    elseStatement           StatementNode                       | the else branch's statement
+    
+LabeledStatementNode :: StatementNode
+    @props
+    label                   Identifier                          | the statement's label
+    statement               StatementNode                       | the statement being labeled
+    
+SwitchNode :: StatementNode
+    @props
+    cases                   List<? extends CaseNode>            | the cases in this switch
+    expression              ExpressionNode                      | expression over which to switch
+
+ThrowNode :: StatementNode
+    @props
+    expression              ExpressionNode                      | the Throwable to throw
+
+TryNode :: StatementNode
+    @props
+    block                   BlockStatementNode                  | the block in which to try
+    catches                 List<? extends CatchNode>           | the catch conditions
+    finallyBlock            BlockStatementNode                  | the finally block
+
+VariableNode :: StatementNode
+    @props
+    type                    Node                                | the type of the variable
+    name                    Identifier                          | the name of the variable
+    initializer             ExpressionNode                      | the initializer to use
+
+WhileLoopNode :: StatementNode
+    @props
+    condition               ExpressionNode                      | the loop's condition
+    statement               StatementNode                       | the loop's statement
+
+WildcardNode :: Node
+    @props
+    bound                   Node                                | the wildcard's bound
+
+### Literal Nodes #####################################################################################################
+
+BooleanLiteralNode :: LiteralNode<boolean>
+
+CharLiteralNode :: LiteralNode<char>
+
+CodeLiteralNode :: LiteralNode<Node>
+
+DoubleLiteralNode :: LiteralNode<double>
+
+FloatLiteralNode :: LiteralNode<float>
+
+IntLiteralNode :: LiteralNode<int>
+
+LongLiteralNode :: LiteralNode<long>
+
+StringLiteralNode :: LiteralNode<String>
+
+### Base Nodes ########################################################################################################
+
+CaseNode :: Node
+    @props
+    expression              ExpressionNode                      | the expression used in this case label
+    statements              List<? extends StatementNode>       | the statements to execute in this case node
+
+CatchNode :: Node
+    @props
+    block                   BlockStatementNode                  | the block to execute when this catch occurs
+    parameter               VariableNode                        | this catch block's exception variable
+
+CompilationUnitNode :: Node
+    @props
+    imports                 List<? extends ImportNode>          | the imports used in this unit
+    packageAnnotations      List<? extends AnnotationNode>      | the annotations on the package declaration of this unit
+    packageName             ExpressionNode                      | the name of the package for this unit
+    typeDecls               List<? extends Node>                | the type declarations of this unit
+    # TODO: do we want sourceFile of type JavaFileObject here or something similar?
+
+ExpressionNode* :: Node
+
+ImportNode :: Node
+    @props
+    qualifiedIdentifier     Node                                | the identifier to import
+    static                  boolean                             | the static-ness of the import
+
+# TODO: we need an AnnotationMethodNode too
+MethodNode :: Node
+    @props
+    body                    BlockStatementNode                  | the body of this method
+    modifiers               ModifiersNode                       | the modifiers for this method
+    name                    Identifier                          | this method's name
+    parameters              List<? extends VariableNode>        | the parameters declared by this method
+    returnType              Node                                | the type of value returned
+    throws                  List<? extends ExpressionNode>      | the types of exceptions thrown by this method
+    typeParameters          List<? extends TypeParameterNode>   | this method's applicable type parameters
+
+ModifiersNode :: Node
+    @props
+    annotations             List<? extends AnnotationNode>      | the annotations modifying the subject
+    flags                   Set<Modifier>                       | the modifiers set on the subject
+    
+Node
+    @props
+    parent                  Node                                | retrieves a node's parent
+
+ParameterizedTypeNode :: Node
+    @props
+    type                    Node                                | the base type
+    typeArguments           List<? extends Node>                | the parameterized type arguments
+
+# TODO: create TypeNode superclass
+PrimitiveTypeNode :: Node
+    @props
+    primitiveType           PrimitiveType                       | the primitive type being represented
+    
+StatementNode :: Node
+
+TypeParameterNode :: Node
+    @props
+    name                    Identifier                          | the base type for the parameter
+    bounds                  List<? extends Node>                | the bounds over the base type
+
+
+
+#######################################################################################################################
+# BSJ AST NODES
+#######################################################################################################################
+
+!set iPackage=edu.jhu.cs.bsj.compiler.ast.meta
+!set cPackage=edu.jhu.cs.bsj.compiler.impl.ast.meta
+
+# TODO
+
+# Classes which must be manually maintained:
+#       Identifier
+#       Modifier
+#       PrimitiveType (a new enumeration based on PrimitiveTypeKind)
