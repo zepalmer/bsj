@@ -372,12 +372,6 @@ WhileLoopNode :: StatementNode
             statement
         </pre>
 
-WildcardNode :: Node
-    @props
-    bound                   Node                                | the wildcard's bound
-    @docs
-    # TODO
-
 ### Type Nodes ########################################################################################################
 
 ArrayTypeNode :: TypeNode
@@ -668,13 +662,38 @@ TypeNode* :: Node
 TypeParameterNode :: Node
     @props
     name                    IdentifierNode                      | the base type name for the parameter
-    bounds                  List<? extends Node>                | the bounds over the base type
+    bounds                  List<? extends TypeNode>            | the bounds over the base type
     @docs
         A node for type parameters, as in:
         <pre>
-        T extends Number
+        <i>name</i>
         </pre>
-    # TODO: tighten the bounds property's type
+        or
+        <pre>
+        <i>name</i> extends <i>type</i>
+        </pre>
+        or
+        <pre>
+        <i>name</i> extends <i>type</i> &amp; <i>type...</i>
+        </pre>
+
+TypeParameterWildcardNode :: Node
+    @props
+    bound                   TypeNode                            | the wildcard's bound
+    upperBound              boolean                             | whether or not the wildcard's bound is an upper (<tt>extends</tt>) bound
+    @docs
+        A nore for wildcard type parameters, as in:
+        <pre>
+        ?
+        </pre>
+        or
+        <pre>
+        ? extends <i>type</i>
+        </pre>
+        or
+        <pre>
+        ? super <i>type</i>
+        </pre>
 
 #######################################################################################################################
 # BSJ AST NODES
