@@ -171,7 +171,6 @@ MemberSelectNode :: NameNode
         <i>expr<i> . <i>identifier</i>
         </pre>
 
-# TODO: consider: do we want to tighten the type constraint on methodSelect?
 MethodInvocationNode :: ExpressionNode
     @props
     methodSelect            NameNode                            | the selection obtaining the method to invoke
@@ -490,7 +489,6 @@ InitializerDeclarationNode :: Node + ClassMember
     staticInitializer       boolean                             | whether or not the initializer is static
     body                    BlockStatementNode                  | the body of the initializer
 
-# TODO: we need an AnnotationMethodNode too
 MethodDeclarationNode :: Node + ClassMember, InterfaceMember
     @props
     body                    BlockStatementNode                  | the body of this method
@@ -633,7 +631,6 @@ CompilationUnitNode :: Node
     @docs
         Represents a BSJ compilation unit.
     # TODO: do we want sourceFile of type JavaFileObject here or something similar?
-    # TODO: typeDecls should have a tighter constraint
 
 ExpressionNode* :: Node
     @docs
