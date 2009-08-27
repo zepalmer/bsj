@@ -38,15 +38,9 @@
 # itself.  Note that each line will be interpreted as HTML by the Javadoc reader.
 #
 # The third mode is include.  When in include mode, each line is taken to be a filename in the supplements directory.
-# Each file is parsed according to the SourceGenerator#parseSupplementFile method's rules.  Each handler may do with
-# the supplement data as it sees fit.  Current supplement groups are:
-#     * methodheader:     The group is treated as the header for a method.  It is inserted into generated classes and
-#                         interfaces; interfaces suffix it with a semicolon for syntactic compliance.
-#     * methodbody:       The group is treated as the body for a method.  It is inserted verbatim into generated classes
-#                         only.
-#     * methodheaderonly: The group is treated as the header for a method.  It is inserted into generated interfaces
-#                         only (and suffixed with a semicolon); it is ignored by the class generator.
-#     * stop:             By convention, this supplement group is and will always be ignored.
+# Each file is read line by line and scanned for comments on their own line.  A comment /* GEN:start */ causes following
+# lines to be copied verbatim into the file.  A comment /* GEN:stop */ causes copying to cease.  If an include file is
+# mentioned, it must appear in all immediate supplements subdirectories, even if it is empty.
 
 #######################################################################################################################
 # JAVA AST NODES

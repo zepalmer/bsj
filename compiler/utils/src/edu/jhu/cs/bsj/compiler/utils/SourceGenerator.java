@@ -229,7 +229,7 @@ public class SourceGenerator
 		}
 
 		List<String> docStrings = new ArrayList<String>();
-		List<File> includeFiles = new ArrayList<File>();
+		List<String> includeFilenames = new ArrayList<String>();
 
 		Mode mode = null;
 		List<Prop> props = new ArrayList<Prop>();
@@ -264,7 +264,7 @@ public class SourceGenerator
 					docStrings.add(orig);
 				} else if (mode == Mode.INCLUDE)
 				{
-					includeFiles.add(new File(supplementsDir.getPath() + File.separator + s));
+					includeFilenames.add(s);
 				} else if (mode == null)
 				{
 					throw new IllegalArgumentException(errorPrefix + "Mode not set");
@@ -301,7 +301,7 @@ public class SourceGenerator
 			}
 		}
 
-		ClassDef def = new ClassDef(classname, supername, taggingInterfaces, props, includeFiles, concrete,
+		ClassDef def = new ClassDef(classname, supername, taggingInterfaces, props, includeFilenames, concrete,
 				classDocBuilder.toString());
 
 		for (ClassDefHandler handler : handlers)
@@ -355,11 +355,11 @@ public class SourceGenerator
 		String sname; // superclass name
 		List<String> tags; // tagging interface names
 		List<Prop> props;
-		List<File> includeFiles;
+		List<String> includeFilenames;
 		boolean concrete;
 		String classDoc;
 
-		public ClassDef(String name, String sname, List<String> tags, List<Prop> props, List<File> includeFiles,
+		public ClassDef(String name, String sname, List<String> tags, List<Prop> props, List<String> includeFilenames,
 				boolean concrete, String classDoc)
 		{
 			super();
@@ -367,7 +367,7 @@ public class SourceGenerator
 			this.sname = sname;
 			this.tags = tags;
 			this.props = props;
-			this.includeFiles = includeFiles;
+			this.includeFilenames = includeFilenames;
 			this.concrete = concrete;
 			this.classDoc = classDoc;
 		}
@@ -447,63 +447,44 @@ public class SourceGenerator
 	}
 	
 	/**
-	 * Reads the provided {@link File}, obtaining groups of lines.  Each group of lines is associated with a mode in
-	 * which it was discovered.  Modes are defined by Java comments in the file, each on their own line, containing the
-	 * string GEN:<i>foo</i>; <i>foo</i> defines the mode.
-	 * 
-	 * For example, assume that the following file was read:
-	 * 
-	 * <pre>
-	 * public class Foo {
-	 *     /* GEN:alpha &#42;/
-	 *     private int x;
-	 *     private int y;
-	 *     /* GEN:beta &#42;/
-	 *     private int z;
-	 *     /* GEN:alpha &#42;/
-	 *     private String s;
-	 *     /* GEN:stop &#42;/
-	 * }
-	 * </pre>
-	 * 
-	 * This would produce four different lists of strings:
-	 * <ul>
-	 *     <li>One named "alpha" containing the lines for the declarations of x and y.</li>
-	 *     <li>One named "beta" containing the line for the declaration of z.</li>
-	 *     <li>One named "alpha" containing the line for the declaration of s.</li>
-	 *     <li>One named "stop" containing the final close brace.</li>
-	 * </ul>
-	 * The class declaration itself would not be captured because it does not follow a GEN comment.
-	 * @param f The file to parse.
-	 * @return The captured string groups.
+	 * Performs a source file inclusion.
+	 * @param f The {@link File} to include.
+	 * @param ps The {@link PrintStream} to which to write lines that need to be copied.
 	 */
-	private static List<StringGroup> parseSupplementFile(File f)
+	private static void includeFile(File f, PrintStream ps)
 		throws IOException
 	{
+		boolean copying = false;
 		String[] lines = getFileAsString(f).split("\n");
-		String mode = null;
-		List<String> current = new ArrayList<String>();
-		List<StringGroup> groups = new ArrayList<StringGroup>();
-		for (String s : lines)
+		
+		for (int i=0;i<lines.length;i++)
 		{
+			String s = lines[i];
 			String trimmed = s.trim();
 			if (trimmed.startsWith("/*") && trimmed.endsWith("*/"))
 			{
 				String commentContent = trimmed.substring(2, trimmed.length()-2).trim();
 				if (commentContent.startsWith("GEN:"))
 				{
-					if (mode!=null) groups.add(new StringGroup(mode, current)); 
-					mode = commentContent.substring(4);
-					current = new ArrayList<String>();
+					String mode = commentContent.substring(4);
+					if (mode.equals("start"))
+					{
+						copying = true;
+					} else if (mode.equals("stop"))
+					{
+						copying = false;
+					} else
+					{
+						System.err.println(f + ":" + (i+1) + ": Invalid GEN mode: " + mode);
+					}
+
 					continue;
 				}
 			}
-			current.add(s);
+			ps.println(s);
 		}
-		if (mode!=null) groups.add(new StringGroup(mode, current)); 
-		return groups;
 	}
-
+	
 	/**
 	 * An interface implemented by those modules that wish to handle class definitions.
 	 */
@@ -575,25 +556,10 @@ public class SourceGenerator
 				ps.println();
 			}
 			// add supplements
-			for (File f : def.includeFiles)
+			for (String name : def.includeFilenames)
 			{
-				List<StringGroup> groups = parseSupplementFile(f);
-				for (StringGroup group : groups)
-				{
-					if (group.name.equals("methodheader"))
-					{
-						/* Copy the method header with a trailing println. */
-						boolean first = true;
-						for (String s : group.strings)
-						{
-							if (!first) ps.println();
-							first = false;
-							ps.print(s);
-						}
-						ps.println(";");
-						ps.println();
-					}
-				}
+				File f = new File(supplementsDir.getParent() + File.separator + "ifaces" + File.separator + name);
+				includeFile(f, ps);
 			}
 			ps.println("}");
 		}
@@ -664,6 +630,7 @@ public class SourceGenerator
 			ps.println("public class " + classname + (def.sname == null ? "" : " extends " + superclassname)
 					+ " implements " + def.name);
 			ps.println("{");
+			
 			// gen properties
 			for (Prop p : def.props)
 			{
@@ -671,6 +638,7 @@ public class SourceGenerator
 				ps.println("    private " + p.type + " " + p.name + ";");
 				ps.println();
 			}
+			
 			// gen constructor
 			ps.println("    /** General constructor. */");
 			ps.print("    " + (def.concrete ? "public" : "protected") + " " + classname + "(");
@@ -713,6 +681,7 @@ public class SourceGenerator
 			}
 			ps.println("    }");
 			ps.println();
+			
 			// gen getters and setters
 			for (Prop p : def.props)
 			{
@@ -735,22 +704,15 @@ public class SourceGenerator
 				ps.println("    }");
 				ps.println();
 			}
+			
+			// add visitor implementation
+			// TODO
+			
 			// add supplements
-			for (File f : def.includeFiles)
+			for (String name : def.includeFilenames)
 			{
-				List<StringGroup> groups = parseSupplementFile(f);
-				for (StringGroup group : groups)
-				{
-					if (group.name.equals("methodheader") || group.name.equals("methodbody"))
-					{
-						/* Copy the method header with a trailing println. */
-						for (String s : group.strings)
-						{
-							ps.println(s);
-						}
-					}
-					if (group.name.equals("methodbody")) ps.println();
-				}
+				File f = new File(supplementsDir.getParent() + File.separator + "ifaces" + File.separator + name);
+				includeFile(f, ps);
 			}
 			
 			ps.println("}");
