@@ -279,7 +279,7 @@ public class SourceGenerator
 		if (classname.endsWith("*"))
 		{
 			concrete = false;
-			classname.substring(0, classname.length() - 1);
+			classname = classname.substring(0, classname.length() - 1);
 		}
 
 		StringBuilder classDocBuilder = new StringBuilder();
