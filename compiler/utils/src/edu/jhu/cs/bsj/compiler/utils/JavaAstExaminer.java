@@ -24,6 +24,8 @@ import com.sun.source.tree.BinaryTree;
 import com.sun.source.tree.BlockTree;
 import com.sun.source.tree.ClassTree;
 import com.sun.source.tree.CompilationUnitTree;
+import com.sun.source.tree.CompoundAssignmentTree;
+import com.sun.source.tree.EnhancedForLoopTree;
 import com.sun.source.tree.ExpressionStatementTree;
 import com.sun.source.tree.IdentifierTree;
 import com.sun.source.tree.ImportTree;
@@ -34,12 +36,15 @@ import com.sun.source.tree.MethodTree;
 import com.sun.source.tree.ModifiersTree;
 import com.sun.source.tree.NewArrayTree;
 import com.sun.source.tree.NewClassTree;
+import com.sun.source.tree.ParameterizedTypeTree;
 import com.sun.source.tree.ParenthesizedTree;
 import com.sun.source.tree.PrimitiveTypeTree;
 import com.sun.source.tree.ReturnTree;
 import com.sun.source.tree.Tree;
+import com.sun.source.tree.TypeParameterTree;
 import com.sun.source.tree.UnaryTree;
 import com.sun.source.tree.VariableTree;
+import com.sun.source.tree.WildcardTree;
 import com.sun.source.util.Trees;
 
 public class JavaAstExaminer
@@ -49,7 +54,7 @@ public class JavaAstExaminer
         JavaCompiler javaCompiler = ToolProvider.getSystemJavaCompiler();
         SimpleJavaFileObject fileObject = new JavaSourceFromString(
                 "GenSource",
-                "import java.util.Random;" +
+                "import java.util.*;" +
                 "import java.io.*;" +
                 "import static java.lang.System.*;" +
                 "public class GenSource {" +
@@ -69,6 +74,16 @@ public class JavaAstExaminer
                 "        A,"+
                 "        B;"+
                 "        static final int x = 0;" +
+                "    }" +
+                "    public static <T> T ident(T t) { return t; }" +
+                "    public static <T,U extends T> T downcast(U u) { return u; }" +
+                "    public static <T extends Number> int numFoo(T t) { return t.intValue(); }" +
+                "    public static int sumList(List<? extends Number> list) {"+
+                "        int tot = 0;" +
+                "        for (Number n : list) {"+
+                "            tot+=n.intValue();"+
+                "        }"+
+                "        return tot;" +
                 "    }" +
                 "}"
         );
@@ -118,6 +133,8 @@ class CodeAnalyzerProcessor extends AbstractProcessor {
         }
     }
     
+    private static final int PAD = 80;
+    
     public void examineTree(String desc, Tree tree, int indent)
     {
         for (int i=0;i<indent;i++) System.out.print("    ");
@@ -125,7 +142,7 @@ class CodeAnalyzerProcessor extends AbstractProcessor {
         {
             System.out.print(desc + ": ");
         }
-        for (int i=(desc==null?0:desc.length()+2);i<60-indent*4;i++)
+        for (int i=(desc==null?0:desc.length()+2);i<PAD-indent*4;i++)
         {
             System.out.print(' ');
         }
@@ -264,6 +281,35 @@ class CodeAnalyzerProcessor extends AbstractProcessor {
         	examineList("args", "arg", nTree.getArguments(), indent+1);
         	examineTree("body", nTree.getClassBody(), indent+1);
         	examineTree("encExpr", nTree.getEnclosingExpression(), indent+1);
+        } else if (tree instanceof TypeParameterTree)
+        {
+        	TypeParameterTree tTree = (TypeParameterTree)tree;
+        	System.out.println("Type parameter: " + tTree.getName());
+        	examineList("bounds","bound",tTree.getBounds(),indent+1);
+        } else if (tree instanceof ParameterizedTypeTree)
+        {
+        	ParameterizedTypeTree pTree = (ParameterizedTypeTree)tree;
+        	System.out.println("Parameterized type: ");
+        	examineTree("base", pTree.getType(), indent+1);
+        	examineList("params","param",pTree.getTypeArguments(), indent+1);
+        } else if (tree instanceof EnhancedForLoopTree)
+        {
+        	EnhancedForLoopTree eTree = (EnhancedForLoopTree)tree;
+        	System.out.println("Foreach loop:");
+        	examineTree("var", eTree.getVariable(), indent+1);
+        	examineTree("expr", eTree.getExpression(),indent+1);
+        	examineTree("stmt", eTree.getStatement(), indent+1);
+        } else if (tree instanceof WildcardTree)
+        {
+        	WildcardTree wTree = (WildcardTree)tree;
+        	System.out.println("Wildcard: " + wTree.getKind());
+        	examineTree("bound", wTree.getBound(), indent+1);
+        } else if (tree instanceof CompoundAssignmentTree)
+        {
+        	CompoundAssignmentTree cTree = (CompoundAssignmentTree)tree;
+        	System.out.println("Compound assignment: " + cTree.getKind());
+        	examineTree("var", cTree.getVariable(), indent+1);
+        	examineTree("expr", cTree.getExpression(), indent+1);
         } else if (tree==null)
         {
             System.out.println("null");
@@ -297,7 +343,7 @@ class CodeAnalyzerProcessor extends AbstractProcessor {
         {
             System.out.print(desc + ": ");
         }
-        for (int i=(desc==null?0:desc.length()+2);i<60-indent*4;i++)
+        for (int i=(desc==null?0:desc.length()+2);i<PAD-indent*4;i++)
         {
             System.out.print(' ');
         }
