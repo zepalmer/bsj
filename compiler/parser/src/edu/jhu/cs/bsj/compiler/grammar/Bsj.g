@@ -100,7 +100,7 @@ importDeclaration
         ('static'
         )?
         IDENTIFIER '.' '*'
-        ';'
+        ';'!
     |   'import'^ 
         ('static'
         )?
@@ -109,7 +109,7 @@ importDeclaration
         )+
         ('.' '*'
         )?
-        ';'
+        ';'!
     ;
 
 qualifiedImportName 
@@ -167,7 +167,11 @@ normalClassDeclaration
         )?
         ('implements' typeList
         )?            
-        classBody
+        classBody 
+    -> 
+        ^('class' IDENTIFIER
+        	^('implements' typeList)? ^('extends' type)?
+        )
     ;
 
 
