@@ -346,6 +346,7 @@ TryNode :: StatementNode
         finally <i>block</i>
         </pre>
 
+# TODO: variables and variable declaration statements should not be the same thing; method params are not statements
 VariableNode :: StatementNode
     @props
     type                    TypeNode                            | the type of the variable
@@ -389,8 +390,8 @@ DeclaredTypeNode :: TypeNode
 
 ParameterizedTypeNode :: TypeNode
     @props
-    type                    TypeNode                            | the base type
-    typeArguments           List<? extends NameNode>            | the parameterized type arguments
+    type                    DeclaredTypeNode                    | the base type
+    typeArguments           List<? extends TypeArgumentNode>    | the parameterized type arguments
     @docs
         A node expressing a parameterized type, as in:
         <pre>
@@ -655,7 +656,7 @@ StatementNode* :: Node
     @docs
         Common superclass for statements.
 
-TypeNode* :: Node
+TypeNode* :: Node + TypeArgument
     @docs
         Common superclass for types.
 
@@ -677,7 +678,7 @@ TypeParameterNode :: Node
         <i>name</i> extends <i>type</i> &amp; <i>type...</i>
         </pre>
 
-TypeParameterWildcardNode :: Node
+WildcardTypeNode :: Node + TypeArgument
     @props
     bound                   TypeNode                            | the wildcard's bound
     upperBound              boolean                             | whether or not the wildcard's bound is an upper (<tt>extends</tt>) bound
