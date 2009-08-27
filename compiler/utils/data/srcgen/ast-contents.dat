@@ -99,7 +99,7 @@ ClassInstantiationNode :: ExpressionNode
     typeArguments           List<? extends Node>                | the type arguments of the instantiation
     identifier              NameNode                            | the identifier of the class
     arguments               List<? extends ExpressionNode>      | the arguments to the constructor
-    classBody               ClassNode                           | the body of the anonymous class
+    classBody               ClassDeclarationNode                | the body of the anonymous class
     enclosingExpression     ExpressionNode                      | the expression enclosing the non-static inner class
     @docs
         A node representing the instantiation of a class, as in:
@@ -179,7 +179,7 @@ MethodInvocationNode :: ExpressionNode
         <i>expr</i>.&lt;<i>typeArgs</i>&gt;<i>identifier</i>(<i>arg...</i>)
         </pre>
 
-NameNode :: ExpressionNode
+NameNode* :: ExpressionNode
     @docs
         A common supertype to nodes which represent a name.
 
@@ -228,27 +228,6 @@ BreakNode :: StatementNode
         A node representing break statements, as in:
         <pre>
             break <i>label</i>;
-        </pre>
-
-# TODO: is there anywhere that it makes sense for a ClassNode to be a StatementNode?
-# TODO: we need InterfaceNode, EnumNode, and AnnotationDeclarationNode as well
-# TODO: do we perhaps want to distinguish between member types or create a ClassMemberNode superclass?
-ClassNode :: StatementNode
-    @props
-    extendsClause           TypeNode                            | the extends clause
-    implementsClause        List<? extends TypeNode>            | the implements clause
-    members                 List<? extends Node>                | this class's members
-    modifiers               ModifiersNode                       | the modifiers for this class
-    simpleName              IdentifierNode                      | the name of this class
-    typeParameters          List<? extends TypeParameterNode>   | this class's type parameters
-    @docs
-        Represents the declaration of a class, as in:
-        <pre>
-        <i>modifiers<i> class <i>name</i>&lt;<i>typeParam...</i>&gt; extends <i>type</i> implements <i>type...</i>
-        {
-            <i>member</i>
-            <i>...</i>
-        }
         </pre>
 
 ContinueNode :: StatementNode
@@ -457,6 +436,74 @@ LongLiteralNode :: LiteralNode<long>
 StringLiteralNode :: LiteralNode<String>
     @docs
         A node representing a String literal.
+        
+### Type Declaration Nodes ############################################################################################
+
+# TODO: replace "members" in each declaration.  Each declaration type should have a corresponding "body" node which
+# describes more precisely the members which can exist.
+
+AnnotationDeclarationNode :: TypeDeclarationNode
+    @props
+    members                 List<? extends Node>                | this class's members
+    @docs
+        Represents the declaration of an annotation, as in:
+        <pre>
+        <i>modifiers</i> @interface <i>name</i>
+        {
+            <i>member</i>
+            ...
+        }
+        </pre>
+
+ClassDeclarationNode :: TypeDeclarationNode
+    @props
+    extendsClause           TypeNode                            | the extends clause
+    implementsClause        List<? extends TypeNode>            | the implements clause
+    members                 List<? extends Node>                | this class's members
+    typeParameters          List<? extends TypeParameterNode>   | this class's type parameters
+    @docs
+        Represents the declaration of a class, as in:
+        <pre>
+        <i>modifiers<i> class <i>name</i>&lt;<i>typeParam...</i>&gt; extends <i>type</i> implements <i>type...</i>
+        {
+            <i>member</i>
+            <i>...</i>
+        }
+        </pre>
+        
+EnumDeclarationNode :: TypeDeclarationNode
+    @props
+    implementsClause        List<? extends TypeNode>            | the implements clause
+    members                 List<? extends Node>                | this class's members
+    @docs
+        Represents the declaration of a class, as in:
+        <pre>
+        <i>modifiers<i> enum <i>name</i> implements <i>type...</i>
+        {
+            <i>member</i>
+            <i>...</i>
+        }
+        </pre>
+
+InterfaceDeclarationNode :: TypeDeclarationNode
+    @props
+    extendsClause           List<? extends TypeNode>            | the extends clause
+    members                 List<? extends Node>                | this interface's members
+    typeParameters          List<? extends TypeParameterNode>   | this class's type parameters
+    @docs
+        Represents the declaration of an interface, as in:
+        <pre>
+        <i>modifiers<i> interface <i>name</i>&lt;<i>typeParam...</i>&gt; extends <i>type...</i>
+        {
+            <i>member</i>
+            <i>...</i>
+        }
+        </pre>
+
+TypeDeclarationNode* :: Node
+    @props
+    simpleName              IdentifierNode                      | the name of this declared type
+    modifiers               ModifiersNode                       | the modifiers for this declared type
 
 ### Base Nodes ########################################################################################################
 
