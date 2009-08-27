@@ -33,6 +33,20 @@
 #     * All content after a pipe symbol ('|') is treated as a description of the property (used in comments).
 #     * All content up to the first space (ignoring leading whitespace) is treated as the name of the property.
 #     * The rest of the line is treated as the property's type.
+#
+# The second mode available is docs.  When in docs mode, each line is interpreted as Javadoc commentation for the class
+# itself.  Note that each line will be interpreted as HTML by the Javadoc reader.
+#
+# The third mode is include.  When in include mode, each line is taken to be a filename in the supplements directory.
+# Each file is parsed according to the SourceGenerator#parseSupplementFile method's rules.  Each handler may do with
+# the supplement data as it sees fit.  Current supplement groups are:
+#     * methodheader:     The group is treated as the header for a method.  It is inserted into generated classes and
+#                         interfaces; interfaces suffix it with a semicolon for syntactic compliance.
+#     * methodbody:       The group is treated as the body for a method.  It is inserted verbatim into generated classes
+#                         only.
+#     * methodheaderonly: The group is treated as the header for a method.  It is inserted into generated interfaces
+#                         only (and suffixed with a semicolon); it is ignored by the class generator.
+#     * stop:             By convention, this supplement group is and will always be ignored.
 
 #######################################################################################################################
 # JAVA AST NODES

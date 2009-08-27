@@ -1,13 +1,10 @@
-//public class Node
-//{
-//	/* GEN:methodheader */
-//    /**
-//	 * TODO
-//	 */
-//	public void accept(BsjNodeVisitor visitor)
-//	/* GEN:methodbody */
-//	{
-//		// TODO
-//	}
-//	/* GEN:stop */
-//}
+public class Node
+{
+	/* GEN:methodheaderonly */
+    /**
+	 * TODO
+	 */
+	public void receive(BsjNodeVisitor visitor)
+	/* GEN:stop */
+	{} // for the benefit of syntax highlighting editors
+}
