@@ -648,6 +648,8 @@ ModifiersNode :: Node
 Node*
     @props
     parent                  Node                                | this node's parent
+    @include
+        Node.java
     @docs
         The parent class for all BSJ AST nodes.
 
