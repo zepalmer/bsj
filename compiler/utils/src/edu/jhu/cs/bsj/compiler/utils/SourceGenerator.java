@@ -219,7 +219,7 @@ public class SourceGenerator
 			supername = data[1].trim();
 			if (supername.contains("+"))
 			{
-				String[] supersplit = supername.split("+");
+				String[] supersplit = supername.split("\\+");
 				supername = supersplit[0].trim();
 				taggingInterfaces.addAll(Arrays.asList(supersplit[1].trim().split(",")));
 			}
