@@ -346,20 +346,18 @@ TryNode :: StatementNode
         finally <i>block</i>
         </pre>
 
-# TODO: variables and variable declaration statements should not be the same thing; method params are not statements
-VariableNode :: StatementNode
+VariableDeclarationNode :: StatementNode
     @props
-    type                    TypeNode                            | the type of the variable
-    name                    IdentifierNode                      | the name of the variable
+    variable                VariableNode                        | the variable to declare
     initializer             ExpressionNode                      | the initializer to use
     @docs
         A node for the declaration of a variable, as in:
             <pre>
-            <i>type identifier</i>
+            <i>type identifier</i>;
             </pre>
         or
             <pre>
-            <i>type identifier</i> = <i>expression</i>
+            <i>type identifier</i> = <i>expression</i>;
             </pre>
 
 WhileLoopNode :: StatementNode
@@ -476,6 +474,7 @@ EnumConstantDeclarationNode :: Node
 FieldDeclarationNode :: Node + ClassMember, InterfaceMember, AnnotationMember
     @props
     variable                VariableNode                        | the variable description of the field
+    initializer             ExpressionNode                      | the initializer to use
     @docs
         A node representing a field declaration.  Constants are represented by this node as well.
 
@@ -677,6 +676,16 @@ TypeParameterNode :: Node
         <pre>
         <i>name</i> extends <i>type</i> &amp; <i>type...</i>
         </pre>
+
+VariableNode :: Node
+    @props
+    type                    TypeNode                            | the type of the variable
+    name                    IdentifierNode                      | the name of the variable
+    @docs
+        A node describing a variable, as in:
+            <pre>
+            <i>type identifier</i>
+            </pre>
 
 WildcardTypeNode :: Node + TypeArgument
     @props
