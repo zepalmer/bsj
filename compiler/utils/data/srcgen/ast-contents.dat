@@ -20,6 +20,10 @@
 # the interface hierarchy are not to be used directly (such as LiteralNode, which is simply a superclass for specific
 # types of LiteralNodes).
 #
+# The immediate superclass may be suffixed by a "+" and a comma-separated list of interface names.  If this occurs, the
+# interfaces are extended by interface implementations.  Note that no properties can be conveyed by this functionality;
+# the intention is that this feature be used for tagging interfaces.
+#
 # The format of a line of information is dependent upon the "mode" of the interpreter.  The mode of the interpeter is
 # unset each time a class description begins; a mode must be set for a line of information to make sense.  A mode is
 # set using a line beginning in '@' (ignoring leading whitespace).  For example, a single line containing "@props"
@@ -386,7 +390,6 @@ ArrayTypeNode :: TypeNode
 DeclaredTypeNode :: TypeNode
     @props
     name                    NameNode                            | the name of the type
-    # TODO: we need a tighter constraint on the above name
     @docs
         A node expressing a declared type.  Declared types encompass classes, interfaces, enums, and annotations.
         Anonymous classes and other such constructs are included as well.
@@ -437,14 +440,105 @@ StringLiteralNode :: LiteralNode<String>
     @docs
         A node representing a String literal.
         
-### Type Declaration Nodes ############################################################################################
+### Member Nodes ######################################################################################################
 
-# TODO: replace "members" in each declaration.  Each declaration type should have a corresponding "body" node which
-# describes more precisely the members which can exist.
+AnnotationMethodDeclarationNode :: Node + AnnotationMember
+    @props
+    modifiers               ModifiersNode                       | the modifiers for this annotation method
+    type                    TypeNode                            | the return type of this annotation method
+    identifier              IdentifierNode                      | this annotation method's name
+    defaultValue            ExpressionNode                      | the default value for this method
+    @docs
+        A node representing an annotation method declaration, as in:
+        <pre>
+            <i>modifiers type identifier</i> () default <i>defaultValue</i>;
+        </pre>
+
+ConstructorDeclarationNode :: Node + ClassMember
+    @props
+    body                    BlockStatementNode                  | the body of this constructor
+    modifiers               ModifiersNode                       | the modifiers for this constructor
+    parameters              List<? extends VariableNode>        | the parameters declared by this constructor
+    throws                  List<? extends DeclaredTypeNode>    | the types of exceptions thrown by this constructor
+    typeParameters          List<? extends TypeParameterNode>   | this constructor's applicable type parameters
+    @docs
+        A node representing a constructor declaration, as in:
+        <pre>
+            <i>modifiers typeParams typeName</i>(<i>parameter...</i>) throws <i>expr...</i>
+                <i>body</i>
+        </pre>
+
+EnumConstantDeclarationNode :: Node
+    @props
+    annotations             List<? extends AnnotationNode>      | the annotations on this constant
+    identifier              IdentifierNode                      | the name of this constant
+    arguments               List<? extends ExpressionNode>      | the arguments to the enum constructor
+    body                    ClassBodyNode                       | the body used to anonymously subclass the constant
+    @docs
+        A node representing an enum constant.  While enum constants typically consist of a single name, many optional
+        extensions exist.  Enum constants are distinguished from normal variables for purposes of reverse-generating
+        source.
+
+FieldDeclarationNode :: Node + ClassMember, InterfaceMember, AnnotationMember
+    @props
+    variable                VariableNode                        | the variable description of the field
+    @docs
+        A node representing a field declaration.  Constants are represented by this node as well.
+
+InitializerDeclarationNode :: Node + ClassMember
+    @props
+    staticInitializer       boolean                             | whether or not the initializer is static
+    body                    BlockStatementNode                  | the body of the initializer
+
+# TODO: we need an AnnotationMethodNode too
+MethodDeclarationNode :: Node + ClassMember, InterfaceMember
+    @props
+    body                    BlockStatementNode                  | the body of this method
+    modifiers               ModifiersNode                       | the modifiers for this method
+    name                    IdentifierNode                      | this method's name
+    parameters              List<? extends VariableNode>        | the parameters declared by this method
+    returnType              TypeNode                            | the type of value returned
+    throws                  List<? extends DeclaredTypeNode>    | the types of exceptions thrown by this method
+    typeParameters          List<? extends TypeParameterNode>   | this method's applicable type parameters
+    @docs
+        A node representing a method declaration, as in:
+        <pre>
+            <i>modifiers typeParams type name</i>(<i>parameter...</i>) throws <i>expr...</i>
+                <i>body</i>
+        </pre>
+
+### Body Nodes ########################################################################################################
+
+AnnotationBodyNode :: Node
+    @props
+    members             List<? extends AnnotationMember>        | the members of this annotation body
+    @docs
+        Represents the body of an annotation declaration.
+
+ClassBodyNode :: Node
+    @props
+    members             List<? extends ClassMember>             | the members of this class body
+    @docs
+        Represents the body of a class declaration.
+
+EnumBodyNode :: Node
+    @props
+    constants           List<? extends EnumConstantNode>        | the enumeration constants
+    members             List<? extends ClassMember>             | the members of the class body part
+    @docs
+        Represents the body of an enum declaration.
+
+InterfaceBodyNode :: Node
+    @props
+    members             List<? extends InterfaceMember>         | the members of this interface body
+    @docs
+        Represents the body of an interface declaration.
+
+### Type Declaration Nodes ############################################################################################
 
 AnnotationDeclarationNode :: TypeDeclarationNode
     @props
-    members                 List<? extends Node>                | this class's members
+    body                    AnnotationBodyNode                  | this annotation's mbody
     @docs
         Represents the declaration of an annotation, as in:
         <pre>
@@ -459,7 +553,7 @@ ClassDeclarationNode :: TypeDeclarationNode
     @props
     extendsClause           TypeNode                            | the extends clause
     implementsClause        List<? extends TypeNode>            | the implements clause
-    members                 List<? extends Node>                | this class's members
+    body                    ClassBodyNode                       | the body of this class
     typeParameters          List<? extends TypeParameterNode>   | this class's type parameters
     @docs
         Represents the declaration of a class, as in:
@@ -474,7 +568,7 @@ ClassDeclarationNode :: TypeDeclarationNode
 EnumDeclarationNode :: TypeDeclarationNode
     @props
     implementsClause        List<? extends TypeNode>            | the implements clause
-    members                 List<? extends Node>                | this class's members
+    body                    EnumBodyNode                        | this enum's body
     @docs
         Represents the declaration of a class, as in:
         <pre>
@@ -488,7 +582,7 @@ EnumDeclarationNode :: TypeDeclarationNode
 InterfaceDeclarationNode :: TypeDeclarationNode
     @props
     extendsClause           List<? extends TypeNode>            | the extends clause
-    members                 List<? extends Node>                | this interface's members
+    body                    InterfaceBodyNode                   | this interface's body
     typeParameters          List<? extends TypeParameterNode>   | this class's type parameters
     @docs
         Represents the declaration of an interface, as in:
@@ -500,7 +594,7 @@ InterfaceDeclarationNode :: TypeDeclarationNode
         }
         </pre>
 
-TypeDeclarationNode* :: Node
+TypeDeclarationNode* :: Node + ClassMember, InterfaceMember, AnnotationMember
     @props
     simpleName              IdentifierNode                      | the name of this declared type
     modifiers               ModifiersNode                       | the modifiers for this declared type
@@ -548,26 +642,9 @@ ExpressionNode* :: Node
 ImportNode :: Node
     @props
     qualifiedIdentifier     NameNode                            | the identifier to import
-    static                  boolean                             | the static-ness of the import
+    staticImport            boolean                             | the static-ness of the import
     @docs
         A node representing a compilation unit import statement.
-
-# TODO: we need an AnnotationMethodNode too
-MethodNode :: Node
-    @props
-    body                    BlockStatementNode                  | the body of this method
-    modifiers               ModifiersNode                       | the modifiers for this method
-    name                    IdentifierNode                      | this method's name
-    parameters              List<? extends VariableNode>        | the parameters declared by this method
-    returnType              TypeNode                            | the type of value returned
-    throws                  List<? extends DeclaredTypeNode>    | the types of exceptions thrown by this method
-    typeParameters          List<? extends TypeParameterNode>   | this method's applicable type parameters
-    @docs
-        A node representing a method declaration, as in:
-        <pre>
-            <i>modifiers typeParams type name</i>(<i>parameter...</i>) throws <i>expr...</i>
-                <i>body</i>
-        </pre>
 
 ModifiersNode :: Node
     @props

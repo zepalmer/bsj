@@ -1,3 +1,5 @@
+package edu.jhu.cs.bsj.compiler.ast;
+
 public enum UnaryOperator
 {
 	BITWISE_COMPLEMENT,       // ~

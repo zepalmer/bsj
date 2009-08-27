@@ -18,6 +18,7 @@ import javax.tools.JavaCompiler;
 import javax.tools.SimpleJavaFileObject;
 import javax.tools.ToolProvider;
 
+import com.sun.source.tree.ArrayAccessTree;
 import com.sun.source.tree.ArrayTypeTree;
 import com.sun.source.tree.BinaryTree;
 import com.sun.source.tree.BlockTree;
@@ -25,16 +26,19 @@ import com.sun.source.tree.ClassTree;
 import com.sun.source.tree.CompilationUnitTree;
 import com.sun.source.tree.ExpressionStatementTree;
 import com.sun.source.tree.IdentifierTree;
+import com.sun.source.tree.ImportTree;
 import com.sun.source.tree.LiteralTree;
 import com.sun.source.tree.MemberSelectTree;
 import com.sun.source.tree.MethodInvocationTree;
 import com.sun.source.tree.MethodTree;
 import com.sun.source.tree.ModifiersTree;
 import com.sun.source.tree.NewArrayTree;
+import com.sun.source.tree.NewClassTree;
 import com.sun.source.tree.ParenthesizedTree;
 import com.sun.source.tree.PrimitiveTypeTree;
 import com.sun.source.tree.ReturnTree;
 import com.sun.source.tree.Tree;
+import com.sun.source.tree.UnaryTree;
 import com.sun.source.tree.VariableTree;
 import com.sun.source.util.Trees;
 
@@ -45,6 +49,9 @@ public class JavaAstExaminer
         JavaCompiler javaCompiler = ToolProvider.getSystemJavaCompiler();
         SimpleJavaFileObject fileObject = new JavaSourceFromString(
                 "GenSource",
+                "import java.util.Random;" +
+                "import java.io.*;" +
+                "import static java.lang.System.*;" +
                 "public class GenSource {" +
                 "    public static void main(String[] arg) {" +
                 "        System.out.println(\"Hello, world!\");" +
@@ -56,6 +63,13 @@ public class JavaAstExaminer
                 "    private static int[] foo2 = new int[5];" +
                 "    private int foo3 = 2 + (4 + 5);" +
                 "    public String toString() { return \"hey!\"; }" + 
+                "    static { foo2[0]++; } " +
+                "    { foo3++; }" +
+                "    static enum E {" +
+                "        A,"+
+                "        B;"+
+                "        static final int x = 0;" +
+                "    }" +
                 "}"
         );
         
@@ -79,7 +93,7 @@ class CodeAnalyzerProcessor extends AbstractProcessor {
     {
         this.task = task;
     }
-
+    
     public boolean process(Set<? extends TypeElement> annotations,
             RoundEnvironment roundEnvironment) {
         
@@ -87,9 +101,7 @@ class CodeAnalyzerProcessor extends AbstractProcessor {
             examine(e, 0);
             
             Trees t = Trees.instance(task);
-            Tree tree = t.getTree(e);
-            
-            examineTree("root", tree, 0);
+            examineTree("unit", t.getPath(e).getCompilationUnit(), 0);
         }
         return true;
     }
@@ -217,6 +229,11 @@ class CodeAnalyzerProcessor extends AbstractProcessor {
         	System.out.println("Binary operation: " + bTree.getKind());
         	examineTree("left", bTree.getLeftOperand(), indent+1);
         	examineTree("right", bTree.getRightOperand(), indent+1);
+        } else if (tree instanceof UnaryTree)
+        {
+        	UnaryTree uTree = (UnaryTree)tree;
+        	System.out.println("Unary operation: " + uTree.getKind());
+        	examineTree("expr", uTree.getExpression(), indent+1);
         } else if (tree instanceof ParenthesizedTree)
         {
         	ParenthesizedTree pTree = (ParenthesizedTree)tree;
@@ -227,6 +244,26 @@ class CodeAnalyzerProcessor extends AbstractProcessor {
         	ReturnTree rTree = (ReturnTree)tree;
         	System.out.println("Return:");
         	examineTree("expr", rTree.getExpression(), indent+1);
+        } else if (tree instanceof ImportTree)
+        {
+        	ImportTree iTree = (ImportTree)tree;
+        	System.out.println("Import: (static="+iTree.isStatic()+")");
+        	examineTree("ident", iTree.getQualifiedIdentifier(), indent+1);
+        } else if (tree instanceof ArrayAccessTree)
+        {
+        	ArrayAccessTree aTree = (ArrayAccessTree)tree;
+        	System.out.println("Array access: ");
+        	examineTree("array",aTree.getExpression(),indent+1);
+        	examineTree("index",aTree.getIndex(),indent+1);
+        } else if (tree instanceof NewClassTree)
+        {
+        	NewClassTree nTree = (NewClassTree)tree;
+        	System.out.println("Instantiation: ");
+        	examineList("typeArgs", "typeArg", nTree.getTypeArguments(), indent+1);
+        	examineTree("name", nTree.getIdentifier(), indent+1);
+        	examineList("args", "arg", nTree.getArguments(), indent+1);
+        	examineTree("body", nTree.getClassBody(), indent+1);
+        	examineTree("encExpr", nTree.getEnclosingExpression(), indent+1);
         } else if (tree==null)
         {
             System.out.println("null");

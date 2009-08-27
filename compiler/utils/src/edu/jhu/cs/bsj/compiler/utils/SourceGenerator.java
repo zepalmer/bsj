@@ -64,6 +64,30 @@ public class SourceGenerator
 		return contents;
 	}
 	
+	static class Line
+	{
+		public String string;
+		public int number;
+		
+		public Line(String string, int number)
+		{
+			super();
+			this.string = string;
+			this.number = number;
+		}
+
+		public static List<Line> number(List<String> list)
+		{
+			List<Line> ret = new ArrayList<Line>();
+			int n = 0;
+			for (String s : list)
+			{
+				ret.add(new Line(s, ++n));
+			}
+			return ret;
+		}
+	}
+	
 	public void run()
 		throws IOException
 	{
@@ -89,10 +113,12 @@ public class SourceGenerator
 			}
 		}
 
-		// Process the contents file
-		strings = new LinkedList<String>(strings);
+		List<Line> lines = Line.number(strings);
 
-		process(strings);
+		// Process the contents file
+		lines = new LinkedList<Line>(lines);
+
+		process(lines);
 		
 		// Finish each handler
 		for (ClassDefHandler handler : handlers) handler.finish();
@@ -106,6 +132,7 @@ public class SourceGenerator
 	{
 		for (File f : dir.listFiles())
 		{
+			if (f.getName().startsWith(".")) continue;
 			if (f.isDirectory())
 			{
 				copyVerbatims(f, prefix.length() == 0 ? f.getName() : prefix + File.separator + f.getName());
@@ -141,17 +168,18 @@ public class SourceGenerator
 		}
 	}
 
-	private void process(List<String> strings) throws IOException
+	private void process(List<Line> lines) throws IOException
 	{
-		while (strings.size() > 0 && strings.get(0).trim().length() == 0)
+		while (lines.size() > 0 && lines.get(0).string.trim().length() == 0)
 		{
-			strings.remove(0);
+			lines.remove(0);
 		}
-		while (strings.size() > 0)
+		while (lines.size() > 0)
 		{
-			if (strings.get(0).trim().startsWith("!"))
+			if (lines.get(0).string.trim().startsWith("!"))
 			{
-				String command = strings.remove(0).trim();
+				Line line = lines.remove(0);
+				String command = line.string.trim();
 				String op = command.substring(0, command.indexOf(' '));
 				String arg = command.substring(op.length()).trim();
 				
@@ -169,28 +197,35 @@ public class SourceGenerator
 				}
 			} else
 			{
-				processEntry(strings);
+				processEntry(lines);
 			}
-			while (strings.size() > 0 && strings.get(0).trim().length() == 0)
+			while (lines.size() > 0 && lines.get(0).string.trim().length() == 0)
 			{
-				strings.remove(0);
+				lines.remove(0);
 			}
 		}
 	}
 
-	private void processEntry(List<String> strings) throws IOException
+	private void processEntry(List<Line> lines) throws IOException
 	{
-		String classdef = strings.remove(0);
+		Line classdef = lines.remove(0);
 		String classname, supername;
-		if (classdef.contains("::"))
+		List<String> taggingInterfaces = new ArrayList<String>();
+		if (classdef.string.contains("::"))
 		{
-			String[] data = classdef.split("::");
+			String[] data = classdef.string.split("::");
 			assert (data.length == 2);
 			classname = data[0].trim();
 			supername = data[1].trim();
+			if (supername.contains("+"))
+			{
+				String[] supersplit = supername.split("+");
+				supername = supersplit[0].trim();
+				taggingInterfaces.addAll(Arrays.asList(supersplit[1].trim().split(",")));
+			}
 		} else
 		{
-			classname = classdef.trim();
+			classname = classdef.string.trim();
 			supername = null;
 		}
 		
@@ -198,9 +233,11 @@ public class SourceGenerator
 
 		Mode mode = null;
 		List<Prop> props = new ArrayList<Prop>();
-		while (strings.size() > 0 && strings.get(0).trim().length() > 0)
+		while (lines.size() > 0 && lines.get(0).string.trim().length() > 0)
 		{
-			String orig = strings.remove(0);
+			Line line = lines.remove(0);
+			String errorPrefix = "#" + line.number + ": " + classname + ": ";
+			String orig = line.string;
 			String s = orig.trim();
 			if (s.startsWith("@"))
 			{
@@ -212,7 +249,7 @@ public class SourceGenerator
 					mode = Mode.DOC;
 				} else
 				{
-					throw new IllegalArgumentException("Unknown mode " + s);
+					throw new IllegalArgumentException(errorPrefix + "Unknown mode " + s);
 				}
 			} else
 			{
@@ -224,10 +261,10 @@ public class SourceGenerator
 					docStrings.add(orig);
 				} else if (mode == null)
 				{
-					throw new IllegalArgumentException(classname + ": Mode not set");
+					throw new IllegalArgumentException(errorPrefix + "Mode not set");
 				} else
 				{
-					throw new IllegalStateException(classname + ": Unknown mode " + mode);
+					throw new IllegalStateException(errorPrefix + "Unknown mode " + mode);
 				}
 			}
 		}
@@ -255,7 +292,8 @@ public class SourceGenerator
 				classDocBuilder.append(s.substring(minIndent));
 			}
 		}
-		ClassDef def = new ClassDef(classname, supername, props, concrete, classDocBuilder.toString());
+		ClassDef def = new ClassDef(classname, supername, taggingInterfaces, props, concrete,
+				classDocBuilder.toString());
 
 		for (ClassDefHandler handler : handlers)
 		{
@@ -307,15 +345,17 @@ public class SourceGenerator
 	{
 		String name;
 		String sname; // superclass name
+		List<String> tags; // tagging interface names
 		List<Prop> props;
 		boolean concrete;
 		String classDoc;
 		
-		public ClassDef(String name, String sname, List<Prop> props, boolean concrete, String classDoc)
+		public ClassDef(String name, String sname, List<String> tags, List<Prop> props, boolean concrete, String classDoc)
 		{
 			super();
 			this.name = name;
 			this.sname = sname;
+			this.tags = tags;
 			this.props = props;
 			this.concrete = concrete;
 			this.classDoc = classDoc;
@@ -417,7 +457,17 @@ public class SourceGenerator
 			ps.println("/**");
 			ps.println(" * " + def.classDoc.replaceAll("\n", "\n * "));
 			ps.println(" */");
-			ps.println("public class " + def.name + (def.sname == null ? "" : " extends " + def.sname));
+			
+			StringBuilder extendsClause = new StringBuilder();
+			if (def.sname!=null) extendsClause.append(def.sname);
+			for (String tag : def.tags)
+			{
+				if (extendsClause.length()>0) extendsClause.append(", ");
+				extendsClause.append(tag);
+			}
+			if (extendsClause.length()>0) extendsClause.insert(0, " extends ");
+			
+			ps.println("public class " + def.name + extendsClause.toString());
 			ps.println("{");
 			// gen getters and setters
 			for (Prop p : def.props)
