@@ -97,7 +97,7 @@ BinaryOperatorNode :: ExpressionNode
 ClassInstantiationNode :: ExpressionNode
     @props
     typeArguments           List<? extends Node>                | the type arguments of the instantiation
-    identifier              ExpressionNode                      | the identifier of the class
+    identifier              NameNode                            | the identifier of the class
     arguments               List<? extends ExpressionNode>      | the arguments to the constructor
     classBody               ClassNode                           | the body of the anonymous class
     enclosingExpression     ExpressionNode                      | the expression enclosing the non-static inner class
@@ -110,7 +110,7 @@ ClassInstantiationNode :: ExpressionNode
 CompoundAssignmentNode :: ExpressionNode
     @props
     expression              ExpressionNode                      | the expression to assign
-    variable                ExpressionNode                      | the variable to which assignment is occurring
+    variable                NameNode                            | the variable to which assignment is occurring
     @docs
         Represents a compound assignment node.  A compound assignment node is one which performs an assignment operation
         which implicitly uses the value of the variable to which a value is being assigned, as in:
@@ -132,7 +132,7 @@ ConditionalExpressionNode :: ExpressionNode
 
 # TODO: how do we want to handle ErroneousNode?
 
-IdentifierNode :: ExpressionNode
+IdentifierNode :: NameNode
     @props
     identifier              Identifier                          | the identifier contained in this node
     @docs
@@ -140,7 +140,6 @@ IdentifierNode :: ExpressionNode
         <pre>
         <i>name</i>
         </pre>
-# TODO: common subclass for IdentifierNode and MemberSelectNode?
 
 InstanceOfNode :: ExpressionNode
     @props
@@ -158,9 +157,9 @@ LiteralNode<T> :: ExpressionNode
     @docs
         A superclass for all types of literal nodes.
 
-MemberSelectNode :: ExpressionNode
+MemberSelectNode :: NameNode
     @props
-    expression              ExpressionNode                      | the expression from which to select
+    expression              NameNode                            | the expression from which to select
     identifier              IdentifierNode                      | the identifier to select
     @docs
         A node representing member selection, as in:
@@ -171,7 +170,7 @@ MemberSelectNode :: ExpressionNode
 # TODO: consider: do we want to tighten the type constraint on methodSelect?
 MethodInvocationNode :: ExpressionNode
     @props
-    methodSelect            ExpressionNode                      | the selection obtaining the method to invoke
+    methodSelect            NameNode                            | the selection obtaining the method to invoke
     arguments               List<? extends ExpressionNode>      | the arguments to pass to the method
     typeArguments           List<? extends TypeNode>            | the type arguments for the method
     @docs
@@ -179,6 +178,10 @@ MethodInvocationNode :: ExpressionNode
         <pre>
         <i>expr</i>.&lt;<i>typeArgs</i>&gt;<i>identifier</i>(<i>arg...</i>)
         </pre>
+
+NameNode :: ExpressionNode
+    @docs
+        A common supertype to nodes which represent a name.
 
 TypeCastNode :: ExpressionNode
     @props
@@ -229,10 +232,11 @@ BreakNode :: StatementNode
 
 # TODO: is there anywhere that it makes sense for a ClassNode to be a StatementNode?
 # TODO: we need InterfaceNode, EnumNode, and AnnotationDeclarationNode as well
+# TODO: do we perhaps want to distinguish between member types or create a ClassMemberNode superclass?
 ClassNode :: StatementNode
     @props
-    extendsClause           Node                                | the extends clause
-    implementsClause        List<? extends Node>                | the implements clause
+    extendsClause           TypeNode                            | the extends clause
+    implementsClause        List<? extends TypeNode>            | the implements clause
     members                 List<? extends Node>                | this class's members
     modifiers               ModifiersNode                       | the modifiers for this class
     simpleName              IdentifierNode                      | the name of this class
@@ -402,7 +406,7 @@ ArrayTypeNode :: TypeNode
 
 DeclaredTypeNode :: TypeNode
     @props
-    name                    Node                                | the name of the type
+    name                    NameNode                            | the name of the type
     # TODO: we need a tighter constraint on the above name
     @docs
         A node expressing a declared type.  Declared types encompass classes, interfaces, enums, and annotations.
@@ -411,7 +415,7 @@ DeclaredTypeNode :: TypeNode
 ParameterizedTypeNode :: TypeNode
     @props
     type                    TypeNode                            | the base type
-    typeArguments           List<? extends Node>                | the parameterized type arguments
+    typeArguments           List<? extends NameNode>            | the parameterized type arguments
     @docs
         A node expressing a parameterized type, as in:
         <pre>
@@ -488,6 +492,7 @@ CompilationUnitNode :: Node
     @docs
         Represents a BSJ compilation unit.
     # TODO: do we want sourceFile of type JavaFileObject here or something similar?
+    # TODO: typeDecls should have a tighter constraint
 
 ExpressionNode* :: Node
     @docs
@@ -495,7 +500,7 @@ ExpressionNode* :: Node
 
 ImportNode :: Node
     @props
-    qualifiedIdentifier     Node                                | the identifier to import
+    qualifiedIdentifier     NameNode                            | the identifier to import
     static                  boolean                             | the static-ness of the import
     @docs
         A node representing a compilation unit import statement.
@@ -508,7 +513,7 @@ MethodNode :: Node
     name                    IdentifierNode                      | this method's name
     parameters              List<? extends VariableNode>        | the parameters declared by this method
     returnType              TypeNode                            | the type of value returned
-    throws                  List<? extends ExpressionNode>      | the types of exceptions thrown by this method
+    throws                  List<? extends DeclaredTypeNode>    | the types of exceptions thrown by this method
     typeParameters          List<? extends TypeParameterNode>   | this method's applicable type parameters
     @docs
         A node representing a method declaration, as in:
@@ -541,7 +546,7 @@ TypeNode* :: Node
 
 TypeParameterNode :: Node
     @props
-    name                    IdentifierNode                      | the base type for the parameter
+    name                    IdentifierNode                      | the base type name for the parameter
     bounds                  List<? extends Node>                | the bounds over the base type
     @docs
         A node for type parameters, as in:
