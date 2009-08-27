@@ -96,12 +96,12 @@ packageDeclaration
     ;
 
 importDeclaration  
-    :   'import' 
+    :   'import'^ 
         ('static'
         )?
         IDENTIFIER '.' '*'
         ';'
-    |   'import' 
+    |   'import'^ 
         ('static'
         )?
         IDENTIFIER
@@ -499,7 +499,7 @@ annotations
 
 /**
  *  Using an annotation. 
- * '@' is flaged in modifier
+ * '@' is flagged in modifier
  */
 annotation 
     :   '@' qualifiedName
