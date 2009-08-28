@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -33,8 +34,27 @@ public class SourceGenerator
 	public static void main(String[] arg) throws Exception
 	{
 		SourceGenerator sg = new SourceGenerator();
-		sg.handlers.add(new InterfaceWriter());
-		sg.handlers.add(new BackingClassWriter());
+		for (Class<?> c : SourceGenerator.class.getDeclaredClasses())
+		{
+			Class<? extends ClassDefHandler> handlerClass;
+			try
+			{
+				handlerClass = c.asSubclass(ClassDefHandler.class);
+			} catch (ClassCastException cce)
+			{
+				// Not a ClassDefHandler
+				continue;
+			}
+
+			try
+			{
+				ClassDefHandler handler = handlerClass.newInstance();
+				sg.handlers.add(handler);
+			} catch (InstantiationException ie)
+			{
+				// Doesn't have a nullary constructor or is an interface, etc.
+			}
+		}
 		sg.run();
 	}
 
@@ -433,11 +453,12 @@ public class SourceGenerator
 	{
 		return Character.toUpperCase(s.charAt(0)) + s.substring(1);
 	}
-	
+
 	static class StringGroup
 	{
 		String name;
 		List<String> strings;
+
 		public StringGroup(String name, List<String> strings)
 		{
 			super();
@@ -445,25 +466,27 @@ public class SourceGenerator
 			this.strings = strings;
 		}
 	}
-	
+
 	/**
 	 * Performs a source file inclusion.
-	 * @param f The {@link File} to include.
-	 * @param ps The {@link PrintStream} to which to write lines that need to be copied.
+	 * 
+	 * @param f
+	 *            The {@link File} to include.
+	 * @param ps
+	 *            The {@link PrintStream} to which to write lines that need to be copied.
 	 */
-	private static void includeFile(File f, PrintStream ps)
-		throws IOException
+	private static void includeFile(File f, PrintStream ps) throws IOException
 	{
 		boolean copying = false;
 		String[] lines = getFileAsString(f).split("\n");
-		
-		for (int i=0;i<lines.length;i++)
+
+		for (int i = 0; i < lines.length; i++)
 		{
 			String s = lines[i];
 			String trimmed = s.trim();
 			if (trimmed.startsWith("/*") && trimmed.endsWith("*/"))
 			{
-				String commentContent = trimmed.substring(2, trimmed.length()-2).trim();
+				String commentContent = trimmed.substring(2, trimmed.length() - 2).trim();
 				if (commentContent.startsWith("GEN:"))
 				{
 					String mode = commentContent.substring(4);
@@ -475,7 +498,7 @@ public class SourceGenerator
 						copying = false;
 					} else
 					{
-						System.err.println(f + ":" + (i+1) + ": Invalid GEN mode: " + mode);
+						System.err.println(f + ":" + (i + 1) + ": Invalid GEN mode: " + mode);
 					}
 
 					continue;
@@ -484,7 +507,7 @@ public class SourceGenerator
 			ps.println(s);
 		}
 	}
-	
+
 	/**
 	 * An interface implemented by those modules that wish to handle class definitions.
 	 */
@@ -537,7 +560,7 @@ public class SourceGenerator
 			if (extendsClause.length() > 0)
 				extendsClause.insert(0, " extends ");
 
-			ps.println("public class " + def.name + extendsClause.toString());
+			ps.println("public interface " + def.name + extendsClause.toString());
 			ps.println("{");
 			// gen getters and setters
 			for (Prop p : def.props)
@@ -558,7 +581,8 @@ public class SourceGenerator
 			// add supplements
 			for (String name : def.includeFilenames)
 			{
-				File f = new File(supplementsDir.getParent() + File.separator + "ifaces" + File.separator + name);
+				File f = new File(supplementsDir.getParent() + File.separator + "supplement" + File.separator
+						+ "ifaces" + File.separator + name);
 				includeFile(f, ps);
 			}
 			ps.println("}");
@@ -627,10 +651,10 @@ public class SourceGenerator
 			if (pkg.length() > 0)
 				ps.println("package " + pkg + ";");
 			ps.println("");
-			ps.println("public class " + classname + (def.sname == null ? "" : " extends " + superclassname)
-					+ " implements " + def.name);
+			ps.println("public " + (def.concrete ? "" : "abstract ") + "class " + classname
+					+ (def.sname == null ? "" : " extends " + superclassname) + " implements " + def.name);
 			ps.println("{");
-			
+
 			// gen properties
 			for (Prop p : def.props)
 			{
@@ -638,7 +662,7 @@ public class SourceGenerator
 				ps.println("    private " + p.type + " " + p.name + ";");
 				ps.println();
 			}
-			
+
 			// gen constructor
 			ps.println("    /** General constructor. */");
 			ps.print("    " + (def.concrete ? "public" : "protected") + " " + classname + "(");
@@ -681,7 +705,7 @@ public class SourceGenerator
 			}
 			ps.println("    }");
 			ps.println();
-			
+
 			// gen getters and setters
 			for (Prop p : def.props)
 			{
@@ -704,18 +728,151 @@ public class SourceGenerator
 				ps.println("    }");
 				ps.println();
 			}
-			
+
 			// add visitor implementation
 			// TODO
-			
+
 			// add supplements
 			for (String name : def.includeFilenames)
 			{
-				File f = new File(supplementsDir.getParent() + File.separator + "ifaces" + File.separator + name);
+				File f = new File(supplementsDir.getParent() + File.separator + "supplement" + File.separator
+						+ "classes" + File.separator + name);
 				includeFile(f, ps);
 			}
-			
+
 			ps.println("}");
+		}
+	}
+
+	/**
+	 * Writes the BsjTypedNodeVisitor abstract class.
+	 */
+	static class BsjTypedNodeVisitorWriter implements ClassDefHandler
+	{
+		private PrintStream ps;
+		private Map<String, Set<String>> subtypeMap;
+		private Map<String, String> supertypeMap;
+		private List<String> abstractTypes;
+
+		@Override
+		public void init() throws IOException
+		{
+			subtypeMap = new HashMap<String, Set<String>>();
+			supertypeMap = new HashMap<String, String>();
+			abstractTypes = new ArrayList<String>();
+		}
+
+		@Override
+		public void handleDefinition(ClassDef def, Map<String, String> env) throws IOException
+		{
+			String tname = def.name;
+			String sname = def.sname;
+
+			if (sname != null)
+				sname = sname.replaceAll("<.*>$", "");
+
+			if (!subtypeMap.containsKey(sname))
+				subtypeMap.put(sname, new HashSet<String>());
+			subtypeMap.get(sname).add(tname);
+			supertypeMap.put(tname, sname);
+			if (!def.concrete)
+				abstractTypes.add(tname);
+		}
+
+		@Override
+		public void finish() throws IOException
+		{
+			// Generate name list in breadth-first order starting with root type
+			List<String> names = new ArrayList<String>();
+			for (String root : subtypeMap.get(null))
+			{
+				// Breadth-first addition to the list
+				List<String> queue = new LinkedList<String>();
+				queue.add(root);
+				while (queue.size() > 0)
+				{
+					String type = queue.remove(0);
+					names.add(type);
+					Set<String> subs = subtypeMap.get(type);
+					if (subs != null)
+						queue.addAll(subs);
+				}
+			}
+
+			List<String> concreteTypeNames = new ArrayList<String>(names);
+			concreteTypeNames.removeAll(abstractTypes);
+			Collections.reverse(concreteTypeNames);
+
+			// Write class header
+			String pkg = "edu.jhu.cs.bsj.compiler.ast";
+			ps = new PrintStream(new FileOutputStream(new File(targetDir.getPath() + File.separator + "ifaces"
+					+ File.separator + pkg.replaceAll("\\.", File.separator) + File.separator
+					+ "BsjTypedNodeVisitor.java")));
+			ps.println("package " + pkg + ";");
+			ps.println();
+			ps.println("/**");
+			ps.println(" * This default implementation of the BsjNodeVisitor separates nodes based on type.  Each");
+			ps.println(" * type of node is routed to a different method to be handled; the default implementation of");
+			ps.println(" * each of the type-specific methods does nothing.");
+			ps.println(" *");
+			ps.println(" * @author Zachary Palmer");
+			ps.println(" */");
+			ps.println("public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor");
+			ps.println("{");
+
+			// Write visitStart and visitStop methods
+			for (String mode : new String[] { "Start", "Stop" })
+			{
+				// Write header
+				ps.println("    /**");
+				ps.println("     * " + mode + "s visiting the specified node.");
+				ps.println("     * @param node The node to visit.");
+				ps.println("     */");
+				ps.println("    public void visit" + mode + "(Node node)");
+				ps.println("    {");
+
+				// Write body
+				boolean first = true;
+				for (String name : concreteTypeNames)
+				{
+					ps.println((first ? "        " : " else ") + "if (node instanceof " + name + ")");
+					ps.println("        {");
+					ps.println("            visit" + name + mode + "((" + name + ")node);");
+					ps.print("        }");
+					first = false;
+				}
+
+				// Write footer
+				ps.println(" else");
+				ps.println("        {");
+				ps
+						.println("            throw new IllegalStateException(\"Unrecognized node type \" + node.getClass());");
+				ps.println("        }");
+				ps.println("    }");
+				ps.println();
+			}
+
+			// Write type-specific visit methods.
+			for (String mode : new String[] { "Start", "Stop" })
+			{
+				for (String name : concreteTypeNames)
+				{
+					ps.println("    /**");
+					ps.println("     * " + mode + "s a visit for nodes of type " + name + ".");
+					ps.println("     * @param node The node being visited.");
+					ps.println("     */");
+					ps.println("    public void visit" + name + mode + "(" + name + " node)");
+					ps.println("    {");
+					ps.println("    }");
+					ps.println();
+				}
+			}
+
+			// Write class footer
+			ps.println("}");
+
+			// Complete write
+			ps.close();
 		}
 	}
 }
