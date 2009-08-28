@@ -332,6 +332,8 @@ public class SourceGenerator
 
 	private Prop parseProp(String s)
 	{
+		boolean readOnly = false;
+		
 		s = s.trim();
 		String name, type, comment;
 		if (s.contains("|"))
@@ -345,8 +347,14 @@ public class SourceGenerator
 
 		name = s.substring(0, s.indexOf(' ')).trim();
 		type = s.substring(s.indexOf(' ')).trim();
+		
+		if (name.endsWith("*"))
+		{
+			name = name.substring(0, name.length()-1);
+			readOnly = true;
+		}
 
-		return new Prop(name, type, comment);
+		return new Prop(name, type, comment, readOnly);
 	}
 
 	static enum Mode
@@ -359,13 +367,15 @@ public class SourceGenerator
 		String name;
 		String type;
 		String desc;
-
-		public Prop(String name, String type, String desc)
+		boolean readOnly;
+		
+		public Prop(String name, String type, String desc, boolean readOnly)
 		{
 			super();
 			this.name = name;
 			this.type = type;
 			this.desc = desc;
+			this.readOnly = readOnly;
 		}
 	}
 
@@ -718,19 +728,34 @@ public class SourceGenerator
 				ps.println("        return this." + p.name + ";");
 				ps.println("    }");
 				ps.println();
-				ps.println("    /**");
-				ps.println("     * Changes " + p.desc + ".");
-				ps.println("     * @param " + p.name + " " + capFirst(p.desc) + ".");
-				ps.println("     */");
-				ps.println("    public void set" + capFirst(p.name) + "(" + p.type + " " + p.name + ")");
-				ps.println("    {");
-				ps.println("        this." + p.name + " = " + p.name + ";");
-				ps.println("    }");
-				ps.println();
+				if (!p.readOnly)
+				{
+					ps.println("    /**");
+					ps.println("     * Changes " + p.desc + ".");
+					ps.println("     * @param " + p.name + " " + capFirst(p.desc) + ".");
+					ps.println("     */");
+					ps.println("    public void set" + capFirst(p.name) + "(" + p.type + " " + p.name + ")");
+					ps.println("    {");
+					ps.println("        this." + p.name + " = " + p.name + ";");
+					ps.println("    }");
+					ps.println();
+				}
 			}
 
 			// add visitor implementation
-			// TODO
+			if (!def.name.equals("Node"))
+			{
+				ps.println("    /**");
+				ps.println("     * Performs visitation for this node's children.");
+				ps.println("     * @param visitor The visitor to visit this node's children.");
+				ps.println("     */");
+				ps.println("    @Override");
+				ps.println("    protected void receiveToChildren(BsjNodeVisitor visitor)");
+				ps.println("    {");
+				// TODO
+				ps.println("        ");
+				ps.println("    }");
+			}
 
 			// add supplements
 			for (String name : def.includeFilenames)
@@ -753,6 +778,7 @@ public class SourceGenerator
 		private Map<String, Set<String>> subtypeMap;
 		private Map<String, String> supertypeMap;
 		private List<String> abstractTypes;
+		private Set<String> parameterizedTypes;
 
 		@Override
 		public void init() throws IOException
@@ -760,6 +786,7 @@ public class SourceGenerator
 			subtypeMap = new HashMap<String, Set<String>>();
 			supertypeMap = new HashMap<String, String>();
 			abstractTypes = new ArrayList<String>();
+			parameterizedTypes = new HashSet<String>();
 		}
 
 		@Override
@@ -768,8 +795,16 @@ public class SourceGenerator
 			String tname = def.name;
 			String sname = def.sname;
 
-			if (sname != null)
+			if ((sname != null) && (sname.contains("<")))
+			{
 				sname = sname.replaceAll("<.*>$", "");
+				parameterizedTypes.add(sname);
+			}
+			if ((tname != null) && (tname.contains("<")))
+			{
+				tname = tname.replaceAll("<.*>$", "");
+				parameterizedTypes.add(tname);
+			}
 
 			if (!subtypeMap.containsKey(sname))
 				subtypeMap.put(sname, new HashSet<String>());
@@ -837,7 +872,8 @@ public class SourceGenerator
 				{
 					ps.println((first ? "        " : " else ") + "if (node instanceof " + name + ")");
 					ps.println("        {");
-					ps.println("            visit" + name + mode + "((" + name + ")node);");
+					ps.println("            visit" + name + mode + "((" + name +
+							(parameterizedTypes.contains(name)?"<?>":"") + ")node);");
 					ps.print("        }");
 					first = false;
 				}
@@ -861,7 +897,8 @@ public class SourceGenerator
 					ps.println("     * " + mode + "s a visit for nodes of type " + name + ".");
 					ps.println("     * @param node The node being visited.");
 					ps.println("     */");
-					ps.println("    public void visit" + name + mode + "(" + name + " node)");
+					ps.println("    public void visit" + name + mode + "(" + name +
+							(parameterizedTypes.contains(name)?"<?>":"") + " node)");
 					ps.println("    {");
 					ps.println("    }");
 					ps.println();

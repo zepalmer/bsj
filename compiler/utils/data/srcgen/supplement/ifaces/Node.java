@@ -9,5 +9,11 @@ public interface Node
 	 * @param visitor The visitor which should visit this node.
 	 */
 	public void receive(BsjNodeVisitor visitor);
+	
+	/**
+	 * Retrieves the unique ID number of this node.
+	 * @return The unique ID number of this node.
+	 */
+	public long getUid();
 	/* GEN:stop */
 }
