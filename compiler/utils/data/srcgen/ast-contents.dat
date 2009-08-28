@@ -163,7 +163,7 @@ InstanceOfNode :: ExpressionNode
         <i>expression</i> instanceof <i>type</i>
         </pre>
 
-LiteralNode<T> :: ExpressionNode
+LiteralNode<T>* :: ExpressionNode
     @props
     value                   T                                   | the literal value for this node
     @docs
