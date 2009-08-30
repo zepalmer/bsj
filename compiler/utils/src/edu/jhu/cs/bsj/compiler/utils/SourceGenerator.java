@@ -545,7 +545,7 @@ public class SourceGenerator
 				ps.print("            " + p.type + " " + p.name);
 			}
 		}
-		ps.println(")");
+		ps.print(")");
 	}
 	
 	/**
@@ -772,6 +772,7 @@ public class SourceGenerator
 			ps.print("    " + (def.concrete ? "public" : "protected") + " " + classname);
 			List<Prop> recProps = getRecursiveProps(def);
 			printParameterList(ps, recProps);
+			ps.println();
 			ps.println("    {");
 			ps.print("        super");
 			List<Prop> superProps = new ArrayList<Prop>(recProps);
@@ -1036,12 +1037,38 @@ public class SourceGenerator
 			if (def.concrete)
 			{
 				List<Prop> recProps = getRecursiveProps(def);
-				String nameParam = def.getNameParam().length() > 0 ? def.getNameParam() + " " : "";
+				String typeParam;
+				String typeName;
+				String typeArg;
+				if (def.getNameParam().length() > 0)
+				{
+					typeParam = def.getNameParam();
+					String[] args = typeParam.substring(1,typeParam.length()-1).split(",");
+					for (int i=0;i<args.length;i++)
+					{
+						if (args[i].contains(" ")) args[i] = args[i].substring(0,args[i].indexOf(' ')).trim();
+					}
+					StringBuilder sb = new StringBuilder();
+					for (String s : args)
+					{
+						if (sb.length()>0) sb.append(",");
+						sb.append(s);
+					}
+					sb.insert(0, "<");
+					sb.append(">");
+					typeArg = sb.toString();
+				} else
+				{
+					typeParam = null;
+					typeArg = "";
+				}
+				typeName = def.getRawName() + typeArg;
+				String typeParamS = typeParam == null ? "" : (typeParam + " ");
 				
 				ips.println("    /**");
 				ips.println("     * Creates a " + def.getRawName() + ".");
 				ips.println("     */");
-				ips.print("    public " + nameParam + def.name + " make" + def.name);
+				ips.print("    public " + typeParamS + typeName + " make" + def.getRawName());
 				printParameterList(ips, recProps);
 				ips.println(";");
 				ips.println();
@@ -1049,10 +1076,11 @@ public class SourceGenerator
 				cps.println("    /**");
 				cps.println("     * Creates a " + def.getRawName() + ".");
 				cps.println("     */");
-				cps.print("    public " + nameParam + def.name + " make" + def.name);
+				cps.print("    public " + typeParamS + typeName + " make" + def.getRawName());
 				printParameterList(cps, recProps);
+				cps.println();
 				cps.println("    {");
-				String classname = def.getRawName() + "Impl" + def.getNameParam();
+				String classname = def.getRawName() + "Impl" + typeArg;
 				cps.print("        return new " + classname);
 				printArgumentList(cps, recProps);
 				cps.println(";");
