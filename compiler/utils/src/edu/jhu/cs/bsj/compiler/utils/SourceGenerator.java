@@ -110,12 +110,12 @@ public class SourceGenerator
 
 	public void run() throws IOException
 	{
+		// Clear the target directory
+		rmrf(targetDir);
+
 		// Initialize each handler
 		for (ClassDefHandler handler : handlers)
 			handler.init();
-
-		// Clear the target directory
-		rmrf(targetDir);
 
 		// Obtain the contents file
 		targetDir.mkdirs();
@@ -523,6 +523,53 @@ public class SourceGenerator
 	}
 
 	/**
+	 * Writes a list of parameters suitable for the provided properties.
+	 * @param ps The stream to which to write the text.
+	 * @param props The properties to use as parameters.
+	 */
+	private static void printParameterList(PrintStream ps, List<Prop> props)
+	{
+		boolean first = true;
+		ps.print("(");
+		if (props.size() > 0)
+		{
+			ps.println();
+			for (Prop p : props)
+			{
+				if (!first)
+				{
+					ps.println(",");
+				}
+				first = false;
+
+				ps.print("            " + p.type + " " + p.name);
+			}
+		}
+		ps.println(")");
+	}
+	
+	/**
+	 * Writes a list of arguments suitable for the provided properties.
+	 * @param ps The stream to which to write the text.
+	 * @param props The properties to use as arguments.
+	 */
+	private static void printArgumentList(PrintStream ps, List<Prop> props)
+	{
+		boolean first = true;
+		ps.print("(");
+		for (Prop p : props)
+		{
+			if (!first)
+			{
+				ps.print(", ");
+			}
+			first = false;
+			ps.print(p.name);
+		}
+		ps.print(")");
+	}
+	
+	/**
 	 * An interface implemented by those modules that wish to handle class definitions.
 	 */
 	static interface ClassDefHandler
@@ -606,16 +653,11 @@ public class SourceGenerator
 		{
 		}
 	}
-
-	/**
-	 * A module which creates AST backing classes.
-	 */
-	static class BackingClassWriter implements ClassDefHandler
+	
+	static abstract class ClassHierarchyBuildingHandler implements ClassDefHandler
 	{
-		private static File classTargetDir = new File(targetDir.getAbsolutePath() + File.separator + "classes");
-
-		private static Map<String, ClassDef> map;
-		private static Map<ClassDef, Map<String, String>> envs;
+		protected static Map<String, ClassDef> map;
+		protected static Map<ClassDef, Map<String, String>> envs;
 
 		public void init() throws IOException
 		{
@@ -625,7 +667,7 @@ public class SourceGenerator
 
 		public void handleDefinition(ClassDef def, Map<String, String> env) throws IOException
 		{
-			map.put(def.name, def);
+			map.put(def.getRawName(), def);
 			envs.put(def, new HashMap<String, String>(env));
 		}
 
@@ -637,18 +679,61 @@ public class SourceGenerator
 			}
 		}
 
-		private List<Prop> getRecursiveProps(ClassDef def)
+		protected List<Prop> getRecursiveProps(ClassDef def)
 		{
 			List<Prop> list = new ArrayList<Prop>();
+			// maps type parameter names to their values
+			Map<String,String> replacementMap = new HashMap<String,String>();
 			while (def != null)
 			{
-				list.addAll(0, def.props);
-				def = map.get(def.sname);
+				for (Prop p : def.props)
+				{
+					if (replacementMap.containsKey(p.type))
+					{
+						p = new Prop(
+								p.name,
+								replacementMap.get(p.type),
+								p.desc,
+								p.readOnly);
+					}
+					list.add(p);
+				}
+				
+				if (def.getSnameParam()==null || def.getSnameParam().length()==0)
+				{
+					def = map.get(def.getRawSname());
+				} else
+				{
+					String superparam = def.getSnameParam();
+					superparam = superparam.substring(1,superparam.length()-1);
+					def = map.get(def.getRawSname());
+					
+					String nameParamPart = def.getNameParam().substring(1,def.getNameParam().length()-1);
+					String[] param = nameParamPart.split(",");
+					for (int i=0;i<param.length;i++)
+					{
+						if (param[i].contains(" ")) param[i] = param[i].substring(0,param[i].indexOf(' ')).trim();
+					}
+					String[] args = superparam.split(",");
+					
+					for (int i=0;i<args.length; i++) replacementMap.put(param[i], args[i]);
+				}
 			}
 			return list;
 		}
+		
+		public abstract void useDefinition(ClassDef def) throws IOException;
 
-		private void useDefinition(ClassDef def) throws IOException
+	}
+
+	/**
+	 * A module which creates AST backing classes.
+	 */
+	static class BackingClassWriter extends ClassHierarchyBuildingHandler
+	{
+		private static File classTargetDir = new File(targetDir.getAbsolutePath() + File.separator + "classes");
+
+		public void useDefinition(ClassDef def) throws IOException
 		{
 			String classname = def.getRawName() + "Impl" + def.getNameParam();
 			String superclassname = def.getRawSname() + "Impl" + def.getSnameParam();
@@ -661,7 +746,7 @@ public class SourceGenerator
 			if (pkg == null)
 				pkg = "";
 			File classFile = new File(classTargetDir.getAbsolutePath() + File.separator
-					+ pkg.replaceAll("\\.", File.separator) + File.separator + def.getRawName() + ".java");
+					+ pkg.replaceAll("\\.", File.separator) + File.separator + def.getRawName() + "Impl" + ".java");
 			classFile.getParentFile().mkdirs();
 			FileOutputStream fos = new FileOutputStream(classFile);
 			PrintStream ps = new PrintStream(fos);
@@ -684,40 +769,15 @@ public class SourceGenerator
 			// gen constructor
 			ps.println("    /** General constructor. */");
 			if (stopGen.contains("cons")) ps.println("/* // stopGen="+stopGenStr); // stopGen logic
-			ps.print("    " + (def.concrete ? "public" : "protected") + " " + classname + "(");
-			boolean first = true;
+			ps.print("    " + (def.concrete ? "public" : "protected") + " " + classname);
 			List<Prop> recProps = getRecursiveProps(def);
-			if (recProps.size() > 0)
-			{
-				ps.println();
-				for (Prop p : recProps)
-				{
-					if (!first)
-					{
-						ps.println(",");
-					}
-					first = false;
-
-					ps.print("            " + p.type + " " + p.name);
-				}
-			}
-			ps.println(")");
+			printParameterList(ps, recProps);
 			ps.println("    {");
-			ps.print("        super(");
-			first = true;
-			for (Prop p : recProps)
-			{
-				if (!def.props.contains(p))
-				{
-					if (!first)
-					{
-						ps.print(", ");
-						first = false;
-					}
-					ps.print(p.name);
-				}
-			}
-			ps.println(");");
+			ps.print("        super");
+			List<Prop> superProps = new ArrayList<Prop>(recProps);
+			superProps.removeAll(def.props);
+			printArgumentList(ps, superProps);
+			ps.println(";");
 			for (Prop p : def.props)
 			{
 				ps.println("        this." + p.name + " = " + p.name + ";");
@@ -920,6 +980,97 @@ public class SourceGenerator
 
 			// Complete write
 			ps.close();
+		}
+	}
+	
+	/**
+	 * Writes the BSJ AST node factory interface and implementation.
+	 */
+	static class FactoryWriter extends ClassHierarchyBuildingHandler
+	{
+		PrintStream ips;
+		PrintStream cps;
+		
+		@Override
+		public void init() throws IOException
+		{
+			super.init();
+			String pkg = "edu.jhu.cs.bsj.compiler.ast";
+			File f = new File(targetDir.getPath() + File.separator + "ifaces"
+					+ File.separator + pkg.replaceAll("\\.", File.separator) + File.separator
+					+ "BsjNodeFactory.java");
+			f.getParentFile().mkdirs();
+			ips = new PrintStream(new FileOutputStream(f));
+			ips.println("package " + pkg + ";");
+			ips.println();
+			ips.println("/**");
+			ips.println(" * This interface is implemented by any object which can act as a factory for BSJ nodes.  It");
+			ips.println(" * is strongly advisable to ensure that all nodes in a given AST are produced from the same");
+			ips.println(" * factory, although the urgency of this restriction is implementation-dependent.");
+			ips.println(" *");
+			ips.println( "* @author Zachary Palmer");
+			ips.println(" */");
+			ips.println("public interface BsjNodeFactory");
+			ips.println("{");
+			
+			pkg = "edu.jhu.cs.bsj.compiler.impl.ast";
+			f = new File(targetDir.getPath() + File.separator + "classes"
+					+ File.separator + pkg.replaceAll("\\.", File.separator) + File.separator
+					+ "BsjNodeFactoryImpl.java");
+			f.getParentFile().mkdirs();
+			cps = new PrintStream(new FileOutputStream(f));
+			cps.println("package " + pkg + ";");
+			cps.println();
+			cps.println("/**");
+			cps.println(" * This class acts as a BSJ node factory for the standard BSJ compiler.");
+			cps.println(" *");
+			cps.println( "* @author Zachary Palmer");
+			cps.println(" */");
+			cps.println("public class BsjNodeFactoryImpl implements BsjNodeFactory");
+			cps.println("{");
+		}
+		
+		@Override
+		public void useDefinition(ClassDef def) throws IOException
+		{
+			if (def.concrete)
+			{
+				List<Prop> recProps = getRecursiveProps(def);
+				String nameParam = def.getNameParam().length() > 0 ? def.getNameParam() + " " : "";
+				
+				ips.println("    /**");
+				ips.println("     * Creates a " + def.getRawName() + ".");
+				ips.println("     */");
+				ips.print("    public " + nameParam + def.name + " make" + def.name);
+				printParameterList(ips, recProps);
+				ips.println(";");
+				ips.println();
+				
+				cps.println("    /**");
+				cps.println("     * Creates a " + def.getRawName() + ".");
+				cps.println("     */");
+				cps.print("    public " + nameParam + def.name + " make" + def.name);
+				printParameterList(cps, recProps);
+				cps.println("    {");
+				String classname = def.getRawName() + "Impl" + def.getNameParam();
+				cps.print("        return new " + classname);
+				printArgumentList(cps, recProps);
+				cps.println(";");
+				cps.println("    }");
+				cps.println();
+			}
+		}
+
+		@Override
+		public void finish() throws IOException
+		{
+			super.finish();
+			
+			ips.println("}");
+			ips.close();
+			
+			cps.println("}");
+			cps.close();
 		}
 	}
 }
