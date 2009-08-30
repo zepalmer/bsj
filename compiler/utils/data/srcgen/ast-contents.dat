@@ -14,6 +14,9 @@
 #             affected accordingly.  The syntax is "!set name=value".  Valid names are:
 #         + iPackage: Changes the package for generated interface files.
 #         + cPackage: Changes the package for generated backing class files.
+#         + stopGen:  A comma-separated list of items to avoid generating.  The items are generated anyway, but within
+#                     a comment.  The legal items are:
+#             - cons: Prevents a concrete class's constructor from being generated.
 #
 # The class's name and immediate superclass are separated by "::".  Additionally, the class's name may be suffixed in a
 # '*' character.  If this is the case, no concrete implementation is expected.  This is used in cases in which parts of
@@ -646,13 +649,19 @@ ImportNode :: Node
     staticImport            boolean                                     | the static-ness of the import
     @docs
         A node representing a compilation unit import statement.
-        
+
+!set stopGen=cons
+
 ListNode<T extends Node> :: Node
     @props
     children*               List<? extends T>                           | the list of children  
     @docs
         Represents a list of nodes.  Nodes do not simply have lists as properties as the ListNode allows additional
         information to be tracked as necessary.
+    @include
+        ListNode.java
+
+!set stopGen=
 
 ModifiersNode :: Node
     @props
@@ -664,7 +673,6 @@ ModifiersNode :: Node
     
 Node*
     @props
-    parent                  Node                                        | this node's parent
     @include
         Node.java
     @docs

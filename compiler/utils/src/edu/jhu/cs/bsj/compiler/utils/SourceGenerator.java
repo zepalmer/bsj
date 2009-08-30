@@ -205,6 +205,10 @@ public class SourceGenerator
 				if (op.equals("!set"))
 				{
 					String[] pieces = arg.split("=");
+					if ((pieces.length==1) && (arg.endsWith("=")))
+					{
+						pieces = new String[]{pieces[0],""};
+					}
 					if (pieces.length != 2)
 					{
 						throw new IllegalArgumentException("Malformed set command " + command);
@@ -514,7 +518,7 @@ public class SourceGenerator
 					continue;
 				}
 			}
-			ps.println(s);
+			if (copying) ps.println(s);
 		}
 	}
 
@@ -648,7 +652,11 @@ public class SourceGenerator
 		{
 			String classname = def.getRawName() + "Impl" + def.getNameParam();
 			String superclassname = def.getRawSname() + "Impl" + def.getSnameParam();
-
+			
+			String stopGenStr = envs.get(def).get("stopGen");
+			if (stopGenStr==null) stopGenStr="";
+			Set<String> stopGen = new HashSet<String>(Arrays.asList(stopGenStr.split(",")));
+			
 			String pkg = envs.get(def).get("cPackage");
 			if (pkg == null)
 				pkg = "";
@@ -675,6 +683,7 @@ public class SourceGenerator
 
 			// gen constructor
 			ps.println("    /** General constructor. */");
+			if (stopGen.contains("cons")) ps.println("/* // stopGen="+stopGenStr); // stopGen logic
 			ps.print("    " + (def.concrete ? "public" : "protected") + " " + classname + "(");
 			boolean first = true;
 			List<Prop> recProps = getRecursiveProps(def);
@@ -714,6 +723,7 @@ public class SourceGenerator
 				ps.println("        this." + p.name + " = " + p.name + ";");
 			}
 			ps.println("    }");
+			if (stopGen.contains("cons")) ps.print("*/"); // stopGen logic
 			ps.println();
 
 			// gen getters and setters

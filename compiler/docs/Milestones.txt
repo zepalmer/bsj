@@ -27,5 +27,6 @@
 0.6
 	* Java Compiler API integration
 	
-?
+General Future Targets
 	* Performance tuning and general niftiness.
+	* Generated Java source should look as much as possible like original static source in BSJ file.
