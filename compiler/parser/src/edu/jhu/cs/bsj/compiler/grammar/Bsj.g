@@ -216,6 +216,12 @@ enumDeclaration
         ('implements' typeList
         )?
         enumBody
+    ->
+    	^('enum' IDENTIFIER 
+    		^(MODIFIERS modifiers)
+        	^('implements' typeList)?
+        	enumBody
+        )
     ;
     
 
@@ -233,6 +239,8 @@ enumConstants
     :   enumConstant
         (',' enumConstant
         )*
+    ->
+    	enumConstant+
     ;
 
 /**
@@ -284,6 +292,8 @@ classBody
         (classBodyDeclaration
         )* 
         '}'
+    ->
+    	classBodyDeclaration*
     ;
 
 interfaceBody 
