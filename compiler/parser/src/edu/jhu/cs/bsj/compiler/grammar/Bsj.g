@@ -185,12 +185,17 @@ typeParameters
             (',' typeParameter
             )*
         '>'
+    ->
+    	typeParameter+
     ;
+
 
 typeParameter 
     :   IDENTIFIER
         ('extends' typeBound
         )?
+    ->
+    	^(IDENTIFIER ^('extends' typeBound)?)
     ;
 
 
@@ -198,6 +203,8 @@ typeBound
     :   type
         ('&' type
         )*
+    ->
+    	type+
     ;
 
 
@@ -268,6 +275,8 @@ typeList
     :   type
         (',' type
         )*
+    ->
+    	type+
     ;
 
 classBody 
