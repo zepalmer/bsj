@@ -464,7 +464,7 @@ ConstructorDeclarationNode :: Node + ClassMember
     body                    BlockStatementNode                          | the body of this constructor
     modifiers               ModifiersNode                               | the modifiers for this constructor
     parameters              ListNode<? extends VariableNode>            | the parameters declared by this constructor
-    throws                  ListNode<? extends DeclaredTypeNode>        | the types of exceptions thrown by this constructor
+    throwTypes              ListNode<? extends DeclaredTypeNode>        | the types of exceptions thrown by this constructor
     typeParameters          ListNode<? extends TypeParameterNode>       | this constructor's applicable type parameters
     @docs
         A node representing a constructor declaration, as in:
