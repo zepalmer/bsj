@@ -63,6 +63,9 @@ options {
 
 tokens {
     COMPILATION_UNIT;
+    TYPEPARAMETERS;
+    MODIFIERS;
+    MEMBERS;
 }
 
 @lexer::header{
@@ -169,8 +172,9 @@ normalClassDeclaration
         )?            
         classBody 
     -> 
-        ^('class' IDENTIFIER
-        	^('implements' typeList)? ^('extends' type)?
+        ^('class' IDENTIFIER ^(MODIFIERS modifiers)
+        	^('implements' typeList)? ^('extends' type)? 
+        	^(TYPEPARAMETERS typeParameters)? ^(MEMBERS classBody)
         )
     ;
 
