@@ -14,7 +14,10 @@ if [ ! -d "../out" ]; then
 fi
 
 for d in "$apisrc/$apipkg" "$astsrc/$astpkg"; do
-	rm -rvf "$d"
+    find "$d" -name '*.java' | while read line; do
+        echo "deleted $line"
+        rm "$line"
+    done
 	mkdir -p "$d"
 done
 

@@ -13,6 +13,16 @@ public abstract class NodeImpl implements Node
         super();
     }
 
+    /**
+     * Handles the visitation of this node's children for the provided visitor.  Each
+     * subclass should override this method, having the subclass implementation call this
+     * method first and then visit its subclass-specific children.
+     *
+     * @param visitor The visitor to visit this node's children.
+     */
+    protected void receiveToChildren(BsjNodeVisitor visitor)
+    {
+    }
 	/**
 	 * The next globally unique UID to assign.
 	 */
@@ -48,14 +58,6 @@ public abstract class NodeImpl implements Node
 		receiveToChildren(visitor);
 		visitor.visitStop(this);
 	}
-	
-	/**
-	 * Handles the visitation of this node's children for the provided visitor.  Each subclass should override this
-	 * method, having the subclass implementation call this method first and then visit its subclass-specific children.
-	 * 
-	 * @param visitor The visitor which should visit this node.
-	 */
-	protected abstract void receiveToChildren(BsjNodeVisitor visitor);
 	
 	/**
 	 * Retrieves the unique ID number of this node.

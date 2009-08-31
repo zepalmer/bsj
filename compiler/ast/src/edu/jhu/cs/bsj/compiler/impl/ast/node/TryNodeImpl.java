@@ -108,12 +108,18 @@ public class TryNodeImpl extends StatementNodeImpl implements TryNode
     }
 
     /**
-     * Performs visitation for this node's children.
+     * Handles the visitation of this node's children for the provided visitor.  Each
+     * subclass should override this method, having the subclass implementation call this
+     * method first and then visit its subclass-specific children.
+     *
      * @param visitor The visitor to visit this node's children.
      */
     @Override
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
-        
+        super.receiveToChildren(visitor);
+        this.block.receive(visitor);
+        this.catches.receive(visitor);
+        this.finallyBlock.receive(visitor);
     }
 }

@@ -963,19 +963,31 @@ public class SourceGenerator
 			}
 
 			// add visitor implementation
-			if (!def.name.equals("Node"))
+			ps.println("    /**");
+			ps.println("     * Handles the visitation of this node's children for the provided visitor.  Each");
+			ps.println("     * subclass should override this method, having the subclass implementation call this");
+			ps.println("     * method first and then visit its subclass-specific children.");
+			ps.println("     *");
+			ps.println("     * @param visitor The visitor to visit this node's children.");
+			ps.println("     */");
+			if (def.sname!=null)
 			{
-				ps.println("    /**");
-				ps.println("     * Performs visitation for this node's children.");
-				ps.println("     * @param visitor The visitor to visit this node's children.");
-				ps.println("     */");
 				ps.println("    @Override");
-				ps.println("    protected void receiveToChildren(BsjNodeVisitor visitor)");
-				ps.println("    {");
-				// TODO
-				ps.println("        ");
-				ps.println("    }");
 			}
+			ps.println("    protected void receiveToChildren(BsjNodeVisitor visitor)");
+			ps.println("    {");
+			if (def.sname!=null)
+			{
+				ps.println("        super.receiveToChildren(visitor);");
+			}
+			for (Prop p : def.props)
+			{
+				if (propInstanceOf(p.type, "Node"))
+				{
+					ps.println("        this." + p.name + ".receive(visitor);");
+				}
+			}
+			ps.println("    }");
 
 			// add supplements
 			includeAllBodies(ps, def.includeFilenames, "classes");
