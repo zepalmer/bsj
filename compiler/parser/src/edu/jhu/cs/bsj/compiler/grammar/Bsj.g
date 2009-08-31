@@ -66,6 +66,14 @@ tokens {
     TYPEPARAMETERS;
     MODIFIERS;
     MEMBERS;
+    VARIABLE;
+    METHOD;
+    METHOD_PARAMS;
+    METHOD_RETURN;
+    METHOD_BODY;
+    THROWS;
+    BLOCKSTATEMENT;
+    STATEMENT;
 }
 
 @lexer::header{
@@ -98,6 +106,8 @@ packageDeclaration
         ^('package' qualifiedName)
     ;
 
+
+//TODO fix
 importDeclaration  
     :   'import'^ 
         ('static'
@@ -301,6 +311,8 @@ interfaceBody
         (interfaceBodyDeclaration
         )* 
         '}'
+	->
+    	interfaceBodyDeclaration*        
     ;
 
 classBodyDeclaration 
@@ -351,6 +363,13 @@ methodDeclaration
             block
         |   ';' 
         )
+    	->
+    		^(METHOD IDENTIFIER ^(MODIFIERS modifiers)
+    			^(TYPEPARAMETERS typeParameters)?
+    			^(METHOD_PARAMS formalParameters)
+    			^(THROWS qualifiedNameList)?
+    			^(METHOD_BODY block)
+    		)        
     ;
 
 
@@ -464,6 +483,8 @@ qualifiedNameList
     :   qualifiedName
         (',' qualifiedName
         )*
+    ->
+    	qualifiedName+
     ;
 
 formalParameters 
@@ -471,17 +492,25 @@ formalParameters
         (formalParameterDecls
         )? 
         ')'
+    ->
+    	formalParameterDecls?
     ;
 
 formalParameterDecls 
     :   ellipsisParameterDecl
+    ->
+    	ellipsisParameterDecl
     |   normalParameterDecl
         (',' normalParameterDecl
         )*
+    ->
+    	normalParameterDecl+
     |   (normalParameterDecl
         ','
         )+ 
         ellipsisParameterDecl
+    ->
+    	normalParameterDecl+ ellipsisParameterDecl
     ;
 
 normalParameterDecl 
@@ -606,6 +635,7 @@ block
         (blockStatement
         )*
         '}'
+    -> ^(BLOCKSTATEMENT blockStatement*)
     ;
 
 /*
