@@ -74,6 +74,7 @@ tokens {
     BLOCKSTATEMENT;
     STATEMENT;
     CLASS_BODY;
+    INTERFACE_BODY;
 }
 
 @lexer::header{
@@ -380,6 +381,8 @@ fieldDeclaration
         (',' variableDeclarator
         )*
         ';'
+    ->
+    	^(VARIABLE type variableDeclarator)+        
     ;
 
 variableDeclarator 
@@ -388,6 +391,8 @@ variableDeclarator
         )*
         ('=' variableInitializer
         )?
+    ->
+    	IDENTIFIER        
     ;
 
 /**
