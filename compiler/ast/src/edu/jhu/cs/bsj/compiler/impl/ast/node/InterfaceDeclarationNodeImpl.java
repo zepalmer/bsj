@@ -49,7 +49,15 @@ public class InterfaceDeclarationNodeImpl extends TypeDeclarationNodeImpl implem
      */
     public void setExtendsClause(ListNode<? extends TypeNode> extendsClause)
     {
+        if (this.extendsClause instanceof NodeImpl)
+        {
+            ((NodeImpl)this.extendsClause).setParent(null);
+        }
         this.extendsClause = extendsClause;
+        if (this.extendsClause instanceof NodeImpl)
+        {
+            ((NodeImpl)this.extendsClause).setParent(this);
+        }
     }
 
     /**
@@ -67,7 +75,15 @@ public class InterfaceDeclarationNodeImpl extends TypeDeclarationNodeImpl implem
      */
     public void setBody(InterfaceBodyNode body)
     {
+        if (this.body instanceof NodeImpl)
+        {
+            ((NodeImpl)this.body).setParent(null);
+        }
         this.body = body;
+        if (this.body instanceof NodeImpl)
+        {
+            ((NodeImpl)this.body).setParent(this);
+        }
     }
 
     /**
@@ -85,7 +101,15 @@ public class InterfaceDeclarationNodeImpl extends TypeDeclarationNodeImpl implem
      */
     public void setTypeParameters(ListNode<? extends TypeParameterNode> typeParameters)
     {
+        if (this.typeParameters instanceof NodeImpl)
+        {
+            ((NodeImpl)this.typeParameters).setParent(null);
+        }
         this.typeParameters = typeParameters;
+        if (this.typeParameters instanceof NodeImpl)
+        {
+            ((NodeImpl)this.typeParameters).setParent(this);
+        }
     }
 
     /**

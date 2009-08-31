@@ -33,7 +33,15 @@ public class InterfaceBodyNodeImpl extends NodeImpl implements InterfaceBodyNode
      */
     public void setMembers(ListNode<? extends InterfaceMember> members)
     {
+        if (this.members instanceof NodeImpl)
+        {
+            ((NodeImpl)this.members).setParent(null);
+        }
         this.members = members;
+        if (this.members instanceof NodeImpl)
+        {
+            ((NodeImpl)this.members).setParent(this);
+        }
     }
 
     /**

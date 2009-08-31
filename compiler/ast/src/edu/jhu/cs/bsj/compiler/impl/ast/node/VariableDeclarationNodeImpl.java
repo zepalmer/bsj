@@ -38,7 +38,15 @@ public class VariableDeclarationNodeImpl extends StatementNodeImpl implements Va
      */
     public void setVariable(VariableNode variable)
     {
+        if (this.variable instanceof NodeImpl)
+        {
+            ((NodeImpl)this.variable).setParent(null);
+        }
         this.variable = variable;
+        if (this.variable instanceof NodeImpl)
+        {
+            ((NodeImpl)this.variable).setParent(this);
+        }
     }
 
     /**
@@ -56,7 +64,15 @@ public class VariableDeclarationNodeImpl extends StatementNodeImpl implements Va
      */
     public void setInitializer(ExpressionNode initializer)
     {
+        if (this.initializer instanceof NodeImpl)
+        {
+            ((NodeImpl)this.initializer).setParent(null);
+        }
         this.initializer = initializer;
+        if (this.initializer instanceof NodeImpl)
+        {
+            ((NodeImpl)this.initializer).setParent(this);
+        }
     }
 
     /**

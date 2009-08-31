@@ -32,7 +32,15 @@ public class DeclaredTypeNodeImpl extends TypeNodeImpl implements DeclaredTypeNo
      */
     public void setName(NameNode name)
     {
+        if (this.name instanceof NodeImpl)
+        {
+            ((NodeImpl)this.name).setParent(null);
+        }
         this.name = name;
+        if (this.name instanceof NodeImpl)
+        {
+            ((NodeImpl)this.name).setParent(this);
+        }
     }
 
     /**

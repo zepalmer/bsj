@@ -39,7 +39,15 @@ public class ArrayInstantiatonNodeImpl extends ExpressionNodeImpl implements Arr
      */
     public void setType(TypeNode type)
     {
+        if (this.type instanceof NodeImpl)
+        {
+            ((NodeImpl)this.type).setParent(null);
+        }
         this.type = type;
+        if (this.type instanceof NodeImpl)
+        {
+            ((NodeImpl)this.type).setParent(this);
+        }
     }
 
     /**
@@ -57,7 +65,15 @@ public class ArrayInstantiatonNodeImpl extends ExpressionNodeImpl implements Arr
      */
     public void setDimensions(ListNode<? extends ExpressionNode> dimensions)
     {
+        if (this.dimensions instanceof NodeImpl)
+        {
+            ((NodeImpl)this.dimensions).setParent(null);
+        }
         this.dimensions = dimensions;
+        if (this.dimensions instanceof NodeImpl)
+        {
+            ((NodeImpl)this.dimensions).setParent(this);
+        }
     }
 
     /**

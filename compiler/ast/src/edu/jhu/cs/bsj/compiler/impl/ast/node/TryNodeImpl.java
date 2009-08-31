@@ -44,7 +44,15 @@ public class TryNodeImpl extends StatementNodeImpl implements TryNode
      */
     public void setBlock(BlockStatementNode block)
     {
+        if (this.block instanceof NodeImpl)
+        {
+            ((NodeImpl)this.block).setParent(null);
+        }
         this.block = block;
+        if (this.block instanceof NodeImpl)
+        {
+            ((NodeImpl)this.block).setParent(this);
+        }
     }
 
     /**
@@ -62,7 +70,15 @@ public class TryNodeImpl extends StatementNodeImpl implements TryNode
      */
     public void setCatches(ListNode<? extends CatchNode> catches)
     {
+        if (this.catches instanceof NodeImpl)
+        {
+            ((NodeImpl)this.catches).setParent(null);
+        }
         this.catches = catches;
+        if (this.catches instanceof NodeImpl)
+        {
+            ((NodeImpl)this.catches).setParent(this);
+        }
     }
 
     /**
@@ -80,7 +96,15 @@ public class TryNodeImpl extends StatementNodeImpl implements TryNode
      */
     public void setFinallyBlock(BlockStatementNode finallyBlock)
     {
+        if (this.finallyBlock instanceof NodeImpl)
+        {
+            ((NodeImpl)this.finallyBlock).setParent(null);
+        }
         this.finallyBlock = finallyBlock;
+        if (this.finallyBlock instanceof NodeImpl)
+        {
+            ((NodeImpl)this.finallyBlock).setParent(this);
+        }
     }
 
     /**

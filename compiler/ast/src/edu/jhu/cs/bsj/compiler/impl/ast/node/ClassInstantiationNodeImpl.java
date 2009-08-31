@@ -56,7 +56,15 @@ public class ClassInstantiationNodeImpl extends ExpressionNodeImpl implements Cl
      */
     public void setTypeArguments(ListNode<? extends TypeNode> typeArguments)
     {
+        if (this.typeArguments instanceof NodeImpl)
+        {
+            ((NodeImpl)this.typeArguments).setParent(null);
+        }
         this.typeArguments = typeArguments;
+        if (this.typeArguments instanceof NodeImpl)
+        {
+            ((NodeImpl)this.typeArguments).setParent(this);
+        }
     }
 
     /**
@@ -74,7 +82,15 @@ public class ClassInstantiationNodeImpl extends ExpressionNodeImpl implements Cl
      */
     public void setIdentifier(NameNode identifier)
     {
+        if (this.identifier instanceof NodeImpl)
+        {
+            ((NodeImpl)this.identifier).setParent(null);
+        }
         this.identifier = identifier;
+        if (this.identifier instanceof NodeImpl)
+        {
+            ((NodeImpl)this.identifier).setParent(this);
+        }
     }
 
     /**
@@ -92,7 +108,15 @@ public class ClassInstantiationNodeImpl extends ExpressionNodeImpl implements Cl
      */
     public void setArguments(ListNode<? extends ExpressionNode> arguments)
     {
+        if (this.arguments instanceof NodeImpl)
+        {
+            ((NodeImpl)this.arguments).setParent(null);
+        }
         this.arguments = arguments;
+        if (this.arguments instanceof NodeImpl)
+        {
+            ((NodeImpl)this.arguments).setParent(this);
+        }
     }
 
     /**
@@ -110,7 +134,15 @@ public class ClassInstantiationNodeImpl extends ExpressionNodeImpl implements Cl
      */
     public void setClassBody(ClassDeclarationNode classBody)
     {
+        if (this.classBody instanceof NodeImpl)
+        {
+            ((NodeImpl)this.classBody).setParent(null);
+        }
         this.classBody = classBody;
+        if (this.classBody instanceof NodeImpl)
+        {
+            ((NodeImpl)this.classBody).setParent(this);
+        }
     }
 
     /**
@@ -128,7 +160,15 @@ public class ClassInstantiationNodeImpl extends ExpressionNodeImpl implements Cl
      */
     public void setEnclosingExpression(ExpressionNode enclosingExpression)
     {
+        if (this.enclosingExpression instanceof NodeImpl)
+        {
+            ((NodeImpl)this.enclosingExpression).setParent(null);
+        }
         this.enclosingExpression = enclosingExpression;
+        if (this.enclosingExpression instanceof NodeImpl)
+        {
+            ((NodeImpl)this.enclosingExpression).setParent(this);
+        }
     }
 
     /**

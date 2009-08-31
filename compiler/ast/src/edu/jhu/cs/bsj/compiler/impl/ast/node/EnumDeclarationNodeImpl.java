@@ -43,7 +43,15 @@ public class EnumDeclarationNodeImpl extends TypeDeclarationNodeImpl implements 
      */
     public void setImplementsClause(ListNode<? extends TypeNode> implementsClause)
     {
+        if (this.implementsClause instanceof NodeImpl)
+        {
+            ((NodeImpl)this.implementsClause).setParent(null);
+        }
         this.implementsClause = implementsClause;
+        if (this.implementsClause instanceof NodeImpl)
+        {
+            ((NodeImpl)this.implementsClause).setParent(this);
+        }
     }
 
     /**
@@ -61,7 +69,15 @@ public class EnumDeclarationNodeImpl extends TypeDeclarationNodeImpl implements 
      */
     public void setBody(EnumBodyNode body)
     {
+        if (this.body instanceof NodeImpl)
+        {
+            ((NodeImpl)this.body).setParent(null);
+        }
         this.body = body;
+        if (this.body instanceof NodeImpl)
+        {
+            ((NodeImpl)this.body).setParent(this);
+        }
     }
 
     /**

@@ -51,7 +51,15 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
      */
     public void setAnnotations(ListNode<? extends AnnotationNode> annotations)
     {
+        if (this.annotations instanceof NodeImpl)
+        {
+            ((NodeImpl)this.annotations).setParent(null);
+        }
         this.annotations = annotations;
+        if (this.annotations instanceof NodeImpl)
+        {
+            ((NodeImpl)this.annotations).setParent(this);
+        }
     }
 
     /**
@@ -69,7 +77,15 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
      */
     public void setIdentifier(IdentifierNode identifier)
     {
+        if (this.identifier instanceof NodeImpl)
+        {
+            ((NodeImpl)this.identifier).setParent(null);
+        }
         this.identifier = identifier;
+        if (this.identifier instanceof NodeImpl)
+        {
+            ((NodeImpl)this.identifier).setParent(this);
+        }
     }
 
     /**
@@ -87,7 +103,15 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
      */
     public void setArguments(ListNode<? extends ExpressionNode> arguments)
     {
+        if (this.arguments instanceof NodeImpl)
+        {
+            ((NodeImpl)this.arguments).setParent(null);
+        }
         this.arguments = arguments;
+        if (this.arguments instanceof NodeImpl)
+        {
+            ((NodeImpl)this.arguments).setParent(this);
+        }
     }
 
     /**
@@ -105,7 +129,15 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
      */
     public void setBody(ClassBodyNode body)
     {
+        if (this.body instanceof NodeImpl)
+        {
+            ((NodeImpl)this.body).setParent(null);
+        }
         this.body = body;
+        if (this.body instanceof NodeImpl)
+        {
+            ((NodeImpl)this.body).setParent(this);
+        }
     }
 
     /**

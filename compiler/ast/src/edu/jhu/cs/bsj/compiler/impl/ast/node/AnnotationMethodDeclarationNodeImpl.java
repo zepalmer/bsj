@@ -50,7 +50,15 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
      */
     public void setModifiers(ModifiersNode modifiers)
     {
+        if (this.modifiers instanceof NodeImpl)
+        {
+            ((NodeImpl)this.modifiers).setParent(null);
+        }
         this.modifiers = modifiers;
+        if (this.modifiers instanceof NodeImpl)
+        {
+            ((NodeImpl)this.modifiers).setParent(this);
+        }
     }
 
     /**
@@ -68,7 +76,15 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
      */
     public void setType(TypeNode type)
     {
+        if (this.type instanceof NodeImpl)
+        {
+            ((NodeImpl)this.type).setParent(null);
+        }
         this.type = type;
+        if (this.type instanceof NodeImpl)
+        {
+            ((NodeImpl)this.type).setParent(this);
+        }
     }
 
     /**
@@ -86,7 +102,15 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
      */
     public void setIdentifier(IdentifierNode identifier)
     {
+        if (this.identifier instanceof NodeImpl)
+        {
+            ((NodeImpl)this.identifier).setParent(null);
+        }
         this.identifier = identifier;
+        if (this.identifier instanceof NodeImpl)
+        {
+            ((NodeImpl)this.identifier).setParent(this);
+        }
     }
 
     /**
@@ -104,7 +128,15 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
      */
     public void setDefaultValue(ExpressionNode defaultValue)
     {
+        if (this.defaultValue instanceof NodeImpl)
+        {
+            ((NodeImpl)this.defaultValue).setParent(null);
+        }
         this.defaultValue = defaultValue;
+        if (this.defaultValue instanceof NodeImpl)
+        {
+            ((NodeImpl)this.defaultValue).setParent(this);
+        }
     }
 
     /**

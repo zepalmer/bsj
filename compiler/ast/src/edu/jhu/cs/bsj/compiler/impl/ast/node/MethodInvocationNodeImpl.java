@@ -45,7 +45,15 @@ public class MethodInvocationNodeImpl extends ExpressionNodeImpl implements Meth
      */
     public void setMethodSelect(NameNode methodSelect)
     {
+        if (this.methodSelect instanceof NodeImpl)
+        {
+            ((NodeImpl)this.methodSelect).setParent(null);
+        }
         this.methodSelect = methodSelect;
+        if (this.methodSelect instanceof NodeImpl)
+        {
+            ((NodeImpl)this.methodSelect).setParent(this);
+        }
     }
 
     /**
@@ -63,7 +71,15 @@ public class MethodInvocationNodeImpl extends ExpressionNodeImpl implements Meth
      */
     public void setArguments(ListNode<? extends ExpressionNode> arguments)
     {
+        if (this.arguments instanceof NodeImpl)
+        {
+            ((NodeImpl)this.arguments).setParent(null);
+        }
         this.arguments = arguments;
+        if (this.arguments instanceof NodeImpl)
+        {
+            ((NodeImpl)this.arguments).setParent(this);
+        }
     }
 
     /**
@@ -81,7 +97,15 @@ public class MethodInvocationNodeImpl extends ExpressionNodeImpl implements Meth
      */
     public void setTypeArguments(ListNode<? extends TypeNode> typeArguments)
     {
+        if (this.typeArguments instanceof NodeImpl)
+        {
+            ((NodeImpl)this.typeArguments).setParent(null);
+        }
         this.typeArguments = typeArguments;
+        if (this.typeArguments instanceof NodeImpl)
+        {
+            ((NodeImpl)this.typeArguments).setParent(this);
+        }
     }
 
     /**

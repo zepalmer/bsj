@@ -43,7 +43,15 @@ public class IfNodeImpl extends StatementNodeImpl implements IfNode
      */
     public void setCondition(ExpressionNode condition)
     {
+        if (this.condition instanceof NodeImpl)
+        {
+            ((NodeImpl)this.condition).setParent(null);
+        }
         this.condition = condition;
+        if (this.condition instanceof NodeImpl)
+        {
+            ((NodeImpl)this.condition).setParent(this);
+        }
     }
 
     /**
@@ -61,7 +69,15 @@ public class IfNodeImpl extends StatementNodeImpl implements IfNode
      */
     public void setThenStatement(StatementNode thenStatement)
     {
+        if (this.thenStatement instanceof NodeImpl)
+        {
+            ((NodeImpl)this.thenStatement).setParent(null);
+        }
         this.thenStatement = thenStatement;
+        if (this.thenStatement instanceof NodeImpl)
+        {
+            ((NodeImpl)this.thenStatement).setParent(this);
+        }
     }
 
     /**
@@ -79,7 +95,15 @@ public class IfNodeImpl extends StatementNodeImpl implements IfNode
      */
     public void setElseStatement(StatementNode elseStatement)
     {
+        if (this.elseStatement instanceof NodeImpl)
+        {
+            ((NodeImpl)this.elseStatement).setParent(null);
+        }
         this.elseStatement = elseStatement;
+        if (this.elseStatement instanceof NodeImpl)
+        {
+            ((NodeImpl)this.elseStatement).setParent(this);
+        }
     }
 
     /**

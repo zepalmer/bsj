@@ -38,7 +38,15 @@ public class CatchNodeImpl extends NodeImpl implements CatchNode
      */
     public void setBlock(BlockStatementNode block)
     {
+        if (this.block instanceof NodeImpl)
+        {
+            ((NodeImpl)this.block).setParent(null);
+        }
         this.block = block;
+        if (this.block instanceof NodeImpl)
+        {
+            ((NodeImpl)this.block).setParent(this);
+        }
     }
 
     /**
@@ -56,7 +64,15 @@ public class CatchNodeImpl extends NodeImpl implements CatchNode
      */
     public void setParameter(VariableNode parameter)
     {
+        if (this.parameter instanceof NodeImpl)
+        {
+            ((NodeImpl)this.parameter).setParent(null);
+        }
         this.parameter = parameter;
+        if (this.parameter instanceof NodeImpl)
+        {
+            ((NodeImpl)this.parameter).setParent(this);
+        }
     }
 
     /**

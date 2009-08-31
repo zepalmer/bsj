@@ -33,7 +33,15 @@ public class ClassBodyNodeImpl extends NodeImpl implements ClassBodyNode
      */
     public void setMembers(ListNode<? extends ClassMember> members)
     {
+        if (this.members instanceof NodeImpl)
+        {
+            ((NodeImpl)this.members).setParent(null);
+        }
         this.members = members;
+        if (this.members instanceof NodeImpl)
+        {
+            ((NodeImpl)this.members).setParent(this);
+        }
     }
 
     /**

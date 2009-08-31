@@ -37,7 +37,15 @@ public class ImportNodeImpl extends NodeImpl implements ImportNode
      */
     public void setQualifiedIdentifier(NameNode qualifiedIdentifier)
     {
+        if (this.qualifiedIdentifier instanceof NodeImpl)
+        {
+            ((NodeImpl)this.qualifiedIdentifier).setParent(null);
+        }
         this.qualifiedIdentifier = qualifiedIdentifier;
+        if (this.qualifiedIdentifier instanceof NodeImpl)
+        {
+            ((NodeImpl)this.qualifiedIdentifier).setParent(this);
+        }
     }
 
     /**

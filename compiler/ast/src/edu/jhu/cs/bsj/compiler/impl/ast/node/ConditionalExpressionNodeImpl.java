@@ -42,7 +42,15 @@ public class ConditionalExpressionNodeImpl extends ExpressionNodeImpl implements
      */
     public void setCondition(ExpressionNode condition)
     {
+        if (this.condition instanceof NodeImpl)
+        {
+            ((NodeImpl)this.condition).setParent(null);
+        }
         this.condition = condition;
+        if (this.condition instanceof NodeImpl)
+        {
+            ((NodeImpl)this.condition).setParent(this);
+        }
     }
 
     /**
@@ -60,7 +68,15 @@ public class ConditionalExpressionNodeImpl extends ExpressionNodeImpl implements
      */
     public void setTrueExpression(ExpressionNode trueExpression)
     {
+        if (this.trueExpression instanceof NodeImpl)
+        {
+            ((NodeImpl)this.trueExpression).setParent(null);
+        }
         this.trueExpression = trueExpression;
+        if (this.trueExpression instanceof NodeImpl)
+        {
+            ((NodeImpl)this.trueExpression).setParent(this);
+        }
     }
 
     /**
@@ -78,7 +94,15 @@ public class ConditionalExpressionNodeImpl extends ExpressionNodeImpl implements
      */
     public void setFalseExpression(ExpressionNode falseExpression)
     {
+        if (this.falseExpression instanceof NodeImpl)
+        {
+            ((NodeImpl)this.falseExpression).setParent(null);
+        }
         this.falseExpression = falseExpression;
+        if (this.falseExpression instanceof NodeImpl)
+        {
+            ((NodeImpl)this.falseExpression).setParent(this);
+        }
     }
 
     /**

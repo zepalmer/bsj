@@ -50,7 +50,15 @@ public class ForLoopNodeImpl extends StatementNodeImpl implements ForLoopNode
      */
     public void setInitializer(ListNode<? extends StatementNode> initializer)
     {
+        if (this.initializer instanceof NodeImpl)
+        {
+            ((NodeImpl)this.initializer).setParent(null);
+        }
         this.initializer = initializer;
+        if (this.initializer instanceof NodeImpl)
+        {
+            ((NodeImpl)this.initializer).setParent(this);
+        }
     }
 
     /**
@@ -68,7 +76,15 @@ public class ForLoopNodeImpl extends StatementNodeImpl implements ForLoopNode
      */
     public void setUpdate(ListNode<? extends ExpressionStatementNode> update)
     {
+        if (this.update instanceof NodeImpl)
+        {
+            ((NodeImpl)this.update).setParent(null);
+        }
         this.update = update;
+        if (this.update instanceof NodeImpl)
+        {
+            ((NodeImpl)this.update).setParent(this);
+        }
     }
 
     /**
@@ -86,7 +102,15 @@ public class ForLoopNodeImpl extends StatementNodeImpl implements ForLoopNode
      */
     public void setCondition(ExpressionNode condition)
     {
+        if (this.condition instanceof NodeImpl)
+        {
+            ((NodeImpl)this.condition).setParent(null);
+        }
         this.condition = condition;
+        if (this.condition instanceof NodeImpl)
+        {
+            ((NodeImpl)this.condition).setParent(this);
+        }
     }
 
     /**
@@ -104,7 +128,15 @@ public class ForLoopNodeImpl extends StatementNodeImpl implements ForLoopNode
      */
     public void setStatement(StatementNode statement)
     {
+        if (this.statement instanceof NodeImpl)
+        {
+            ((NodeImpl)this.statement).setParent(null);
+        }
         this.statement = statement;
+        if (this.statement instanceof NodeImpl)
+        {
+            ((NodeImpl)this.statement).setParent(this);
+        }
     }
 
     /**

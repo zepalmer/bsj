@@ -32,7 +32,15 @@ public class ExpressionStatementNodeImpl extends StatementNodeImpl implements Ex
      */
     public void setExpression(ExpressionNode expression)
     {
+        if (this.expression instanceof NodeImpl)
+        {
+            ((NodeImpl)this.expression).setParent(null);
+        }
         this.expression = expression;
+        if (this.expression instanceof NodeImpl)
+        {
+            ((NodeImpl)this.expression).setParent(this);
+        }
     }
 
     /**

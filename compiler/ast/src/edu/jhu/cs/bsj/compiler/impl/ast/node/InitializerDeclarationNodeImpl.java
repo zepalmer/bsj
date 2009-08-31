@@ -55,7 +55,15 @@ public class InitializerDeclarationNodeImpl extends NodeImpl implements Initiali
      */
     public void setBody(BlockStatementNode body)
     {
+        if (this.body instanceof NodeImpl)
+        {
+            ((NodeImpl)this.body).setParent(null);
+        }
         this.body = body;
+        if (this.body instanceof NodeImpl)
+        {
+            ((NodeImpl)this.body).setParent(this);
+        }
     }
 
     /**

@@ -57,7 +57,15 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
      */
     public void setBody(BlockStatementNode body)
     {
+        if (this.body instanceof NodeImpl)
+        {
+            ((NodeImpl)this.body).setParent(null);
+        }
         this.body = body;
+        if (this.body instanceof NodeImpl)
+        {
+            ((NodeImpl)this.body).setParent(this);
+        }
     }
 
     /**
@@ -75,7 +83,15 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
      */
     public void setModifiers(ModifiersNode modifiers)
     {
+        if (this.modifiers instanceof NodeImpl)
+        {
+            ((NodeImpl)this.modifiers).setParent(null);
+        }
         this.modifiers = modifiers;
+        if (this.modifiers instanceof NodeImpl)
+        {
+            ((NodeImpl)this.modifiers).setParent(this);
+        }
     }
 
     /**
@@ -93,7 +109,15 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
      */
     public void setParameters(ListNode<? extends VariableNode> parameters)
     {
+        if (this.parameters instanceof NodeImpl)
+        {
+            ((NodeImpl)this.parameters).setParent(null);
+        }
         this.parameters = parameters;
+        if (this.parameters instanceof NodeImpl)
+        {
+            ((NodeImpl)this.parameters).setParent(this);
+        }
     }
 
     /**
@@ -111,7 +135,15 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
      */
     public void setThrowTypes(ListNode<? extends DeclaredTypeNode> throwTypes)
     {
+        if (this.throwTypes instanceof NodeImpl)
+        {
+            ((NodeImpl)this.throwTypes).setParent(null);
+        }
         this.throwTypes = throwTypes;
+        if (this.throwTypes instanceof NodeImpl)
+        {
+            ((NodeImpl)this.throwTypes).setParent(this);
+        }
     }
 
     /**
@@ -129,7 +161,15 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
      */
     public void setTypeParameters(ListNode<? extends TypeParameterNode> typeParameters)
     {
+        if (this.typeParameters instanceof NodeImpl)
+        {
+            ((NodeImpl)this.typeParameters).setParent(null);
+        }
         this.typeParameters = typeParameters;
+        if (this.typeParameters instanceof NodeImpl)
+        {
+            ((NodeImpl)this.typeParameters).setParent(this);
+        }
     }
 
     /**

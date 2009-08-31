@@ -39,7 +39,15 @@ public class ArrayInitializerNodeImpl extends ExpressionNodeImpl implements Arra
      */
     public void setType(TypeNode type)
     {
+        if (this.type instanceof NodeImpl)
+        {
+            ((NodeImpl)this.type).setParent(null);
+        }
         this.type = type;
+        if (this.type instanceof NodeImpl)
+        {
+            ((NodeImpl)this.type).setParent(this);
+        }
     }
 
     /**
@@ -57,7 +65,15 @@ public class ArrayInitializerNodeImpl extends ExpressionNodeImpl implements Arra
      */
     public void setInitializers(ListNode<? extends ExpressionNode> initializers)
     {
+        if (this.initializers instanceof NodeImpl)
+        {
+            ((NodeImpl)this.initializers).setParent(null);
+        }
         this.initializers = initializers;
+        if (this.initializers instanceof NodeImpl)
+        {
+            ((NodeImpl)this.initializers).setParent(this);
+        }
     }
 
     /**

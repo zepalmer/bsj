@@ -69,7 +69,15 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
      */
     public void setBody(BlockStatementNode body)
     {
+        if (this.body instanceof NodeImpl)
+        {
+            ((NodeImpl)this.body).setParent(null);
+        }
         this.body = body;
+        if (this.body instanceof NodeImpl)
+        {
+            ((NodeImpl)this.body).setParent(this);
+        }
     }
 
     /**
@@ -87,7 +95,15 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
      */
     public void setModifiers(ModifiersNode modifiers)
     {
+        if (this.modifiers instanceof NodeImpl)
+        {
+            ((NodeImpl)this.modifiers).setParent(null);
+        }
         this.modifiers = modifiers;
+        if (this.modifiers instanceof NodeImpl)
+        {
+            ((NodeImpl)this.modifiers).setParent(this);
+        }
     }
 
     /**
@@ -105,7 +121,15 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
      */
     public void setName(IdentifierNode name)
     {
+        if (this.name instanceof NodeImpl)
+        {
+            ((NodeImpl)this.name).setParent(null);
+        }
         this.name = name;
+        if (this.name instanceof NodeImpl)
+        {
+            ((NodeImpl)this.name).setParent(this);
+        }
     }
 
     /**
@@ -123,7 +147,15 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
      */
     public void setParameters(ListNode<? extends VariableNode> parameters)
     {
+        if (this.parameters instanceof NodeImpl)
+        {
+            ((NodeImpl)this.parameters).setParent(null);
+        }
         this.parameters = parameters;
+        if (this.parameters instanceof NodeImpl)
+        {
+            ((NodeImpl)this.parameters).setParent(this);
+        }
     }
 
     /**
@@ -141,7 +173,15 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
      */
     public void setReturnType(TypeNode returnType)
     {
+        if (this.returnType instanceof NodeImpl)
+        {
+            ((NodeImpl)this.returnType).setParent(null);
+        }
         this.returnType = returnType;
+        if (this.returnType instanceof NodeImpl)
+        {
+            ((NodeImpl)this.returnType).setParent(this);
+        }
     }
 
     /**
@@ -159,7 +199,15 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
      */
     public void setThrowTypes(ListNode<? extends DeclaredTypeNode> throwTypes)
     {
+        if (this.throwTypes instanceof NodeImpl)
+        {
+            ((NodeImpl)this.throwTypes).setParent(null);
+        }
         this.throwTypes = throwTypes;
+        if (this.throwTypes instanceof NodeImpl)
+        {
+            ((NodeImpl)this.throwTypes).setParent(this);
+        }
     }
 
     /**
@@ -177,7 +225,15 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
      */
     public void setTypeParameters(ListNode<? extends TypeParameterNode> typeParameters)
     {
+        if (this.typeParameters instanceof NodeImpl)
+        {
+            ((NodeImpl)this.typeParameters).setParent(null);
+        }
         this.typeParameters = typeParameters;
+        if (this.typeParameters instanceof NodeImpl)
+        {
+            ((NodeImpl)this.typeParameters).setParent(this);
+        }
     }
 
     /**

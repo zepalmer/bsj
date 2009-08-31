@@ -38,7 +38,15 @@ public class VariableNodeImpl extends NodeImpl implements VariableNode
      */
     public void setType(TypeNode type)
     {
+        if (this.type instanceof NodeImpl)
+        {
+            ((NodeImpl)this.type).setParent(null);
+        }
         this.type = type;
+        if (this.type instanceof NodeImpl)
+        {
+            ((NodeImpl)this.type).setParent(this);
+        }
     }
 
     /**
@@ -56,7 +64,15 @@ public class VariableNodeImpl extends NodeImpl implements VariableNode
      */
     public void setName(IdentifierNode name)
     {
+        if (this.name instanceof NodeImpl)
+        {
+            ((NodeImpl)this.name).setParent(null);
+        }
         this.name = name;
+        if (this.name instanceof NodeImpl)
+        {
+            ((NodeImpl)this.name).setParent(this);
+        }
     }
 
     /**

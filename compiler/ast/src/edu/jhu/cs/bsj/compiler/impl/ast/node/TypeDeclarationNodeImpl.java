@@ -38,7 +38,15 @@ public abstract class TypeDeclarationNodeImpl extends NodeImpl implements TypeDe
      */
     public void setSimpleName(IdentifierNode simpleName)
     {
+        if (this.simpleName instanceof NodeImpl)
+        {
+            ((NodeImpl)this.simpleName).setParent(null);
+        }
         this.simpleName = simpleName;
+        if (this.simpleName instanceof NodeImpl)
+        {
+            ((NodeImpl)this.simpleName).setParent(this);
+        }
     }
 
     /**
@@ -56,7 +64,15 @@ public abstract class TypeDeclarationNodeImpl extends NodeImpl implements TypeDe
      */
     public void setModifiers(ModifiersNode modifiers)
     {
+        if (this.modifiers instanceof NodeImpl)
+        {
+            ((NodeImpl)this.modifiers).setParent(null);
+        }
         this.modifiers = modifiers;
+        if (this.modifiers instanceof NodeImpl)
+        {
+            ((NodeImpl)this.modifiers).setParent(this);
+        }
     }
 
     /**

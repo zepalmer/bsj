@@ -43,7 +43,15 @@ public class BinaryOperatorNodeImpl extends ExpressionNodeImpl implements Binary
      */
     public void setLeftOperand(ExpressionNode leftOperand)
     {
+        if (this.leftOperand instanceof NodeImpl)
+        {
+            ((NodeImpl)this.leftOperand).setParent(null);
+        }
         this.leftOperand = leftOperand;
+        if (this.leftOperand instanceof NodeImpl)
+        {
+            ((NodeImpl)this.leftOperand).setParent(this);
+        }
     }
 
     /**
@@ -61,7 +69,15 @@ public class BinaryOperatorNodeImpl extends ExpressionNodeImpl implements Binary
      */
     public void setRightOperand(ExpressionNode rightOperand)
     {
+        if (this.rightOperand instanceof NodeImpl)
+        {
+            ((NodeImpl)this.rightOperand).setParent(null);
+        }
         this.rightOperand = rightOperand;
+        if (this.rightOperand instanceof NodeImpl)
+        {
+            ((NodeImpl)this.rightOperand).setParent(this);
+        }
     }
 
     /**

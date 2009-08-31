@@ -39,7 +39,15 @@ public class AnnotationNodeImpl extends ExpressionNodeImpl implements Annotation
      */
     public void setAnnotationType(DeclaredTypeNode annotationType)
     {
+        if (this.annotationType instanceof NodeImpl)
+        {
+            ((NodeImpl)this.annotationType).setParent(null);
+        }
         this.annotationType = annotationType;
+        if (this.annotationType instanceof NodeImpl)
+        {
+            ((NodeImpl)this.annotationType).setParent(this);
+        }
     }
 
     /**
@@ -57,7 +65,15 @@ public class AnnotationNodeImpl extends ExpressionNodeImpl implements Annotation
      */
     public void setArguments(ListNode<? extends ExpressionNode> arguments)
     {
+        if (this.arguments instanceof NodeImpl)
+        {
+            ((NodeImpl)this.arguments).setParent(null);
+        }
         this.arguments = arguments;
+        if (this.arguments instanceof NodeImpl)
+        {
+            ((NodeImpl)this.arguments).setParent(this);
+        }
     }
 
     /**

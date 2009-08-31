@@ -32,7 +32,15 @@ public class ArrayTypeNodeImpl extends TypeNodeImpl implements ArrayTypeNode
      */
     public void setType(TypeNode type)
     {
+        if (this.type instanceof NodeImpl)
+        {
+            ((NodeImpl)this.type).setParent(null);
+        }
         this.type = type;
+        if (this.type instanceof NodeImpl)
+        {
+            ((NodeImpl)this.type).setParent(this);
+        }
     }
 
     /**

@@ -36,7 +36,15 @@ public class AnnotationDeclarationNodeImpl extends TypeDeclarationNodeImpl imple
      */
     public void setBody(AnnotationBodyNode body)
     {
+        if (this.body instanceof NodeImpl)
+        {
+            ((NodeImpl)this.body).setParent(null);
+        }
         this.body = body;
+        if (this.body instanceof NodeImpl)
+        {
+            ((NodeImpl)this.body).setParent(this);
+        }
     }
 
     /**

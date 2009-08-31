@@ -32,7 +32,15 @@ public class ContinueNodeImpl extends StatementNodeImpl implements ContinueNode
      */
     public void setLabel(IdentifierNode label)
     {
+        if (this.label instanceof NodeImpl)
+        {
+            ((NodeImpl)this.label).setParent(null);
+        }
         this.label = label;
+        if (this.label instanceof NodeImpl)
+        {
+            ((NodeImpl)this.label).setParent(this);
+        }
     }
 
     /**

@@ -37,7 +37,15 @@ public class ArrayAccessNodeImpl extends ExpressionNodeImpl implements ArrayAcce
      */
     public void setExpression(ExpressionNode expression)
     {
+        if (this.expression instanceof NodeImpl)
+        {
+            ((NodeImpl)this.expression).setParent(null);
+        }
         this.expression = expression;
+        if (this.expression instanceof NodeImpl)
+        {
+            ((NodeImpl)this.expression).setParent(this);
+        }
     }
 
     /**
@@ -55,7 +63,15 @@ public class ArrayAccessNodeImpl extends ExpressionNodeImpl implements ArrayAcce
      */
     public void setIndex(ExpressionNode index)
     {
+        if (this.index instanceof NodeImpl)
+        {
+            ((NodeImpl)this.index).setParent(null);
+        }
         this.index = index;
+        if (this.index instanceof NodeImpl)
+        {
+            ((NodeImpl)this.index).setParent(this);
+        }
     }
 
     /**

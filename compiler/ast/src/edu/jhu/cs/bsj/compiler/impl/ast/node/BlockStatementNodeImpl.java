@@ -33,7 +33,15 @@ public class BlockStatementNodeImpl extends StatementNodeImpl implements BlockSt
      */
     public void setStatements(ListNode<? extends StatementNode> statements)
     {
+        if (this.statements instanceof NodeImpl)
+        {
+            ((NodeImpl)this.statements).setParent(null);
+        }
         this.statements = statements;
+        if (this.statements instanceof NodeImpl)
+        {
+            ((NodeImpl)this.statements).setParent(this);
+        }
     }
 
     /**

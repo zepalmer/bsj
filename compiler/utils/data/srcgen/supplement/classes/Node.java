@@ -16,11 +16,9 @@ public abstract class NodeImpl
 	private long uid;
 	
 	/**
-	 * The parent for this node.  The object containing the parent is indirected here to allow the setting of the parent
-	 * node to be a restricted ability; a third party may have a reference to this object, allowing it to set the parent
-	 * property without exposing such functionality as a feature on the node itself.
+	 * The parent for this node.
 	 */
-	
+	private Node parent = null;
 	
 	/**
 	 * Assigns this node a UID.
@@ -59,5 +57,25 @@ public abstract class NodeImpl
 		return this.uid;
 	}
 	
+	
+	/**
+	 * Retrieves the parent of this node.  If this node does not have a parent, <code>null</code> is returned.  A node
+	 * may be without a parent if it is a {@link CompilationUnitNode} or if it is a code fragment (such as an isolated
+	 * expression).
+	 * @return This node's parent, or <code>null</code> if this node has no parent.
+	 */
+	public Node getParent()
+	{
+		return this.parent;
+	}
+	
+	/**
+	 * Retrieves the parent node reference object for this node.
+	 * @param node The parent node for this node.
+	 */
+	public void setParent(Node node)
+	{
+		this.parent = node;
+	}
 	/* GEN:stop */
 }

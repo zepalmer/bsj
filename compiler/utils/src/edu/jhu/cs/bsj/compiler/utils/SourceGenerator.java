@@ -790,6 +790,22 @@ public class SourceGenerator
 				useDefinition(def);
 			}
 		}
+		
+		protected boolean defInstanceOf(ClassDef def, String classname)
+		{
+			while (def!=null)
+			{
+				if (def.getRawName().equals(classname)) return true;
+				def = map.get(def.getRawSname());
+			}
+			return false;
+		}
+		
+		protected boolean propInstanceOf(String propType, String classname)
+		{
+			if (propType.contains("<")) propType = propType.substring(0,propType.indexOf('<')).trim();
+			return defInstanceOf(map.get(propType), classname);
+		}
 
 		protected List<Prop> getRecursiveProps(ClassDef def)
 		{
@@ -926,7 +942,21 @@ public class SourceGenerator
 					ps.println("     */");
 					ps.println("    public void set" + capFirst(p.name) + "(" + p.type + " " + p.name + ")");
 					ps.println("    {");
+					if (propInstanceOf(p.type, "Node"))
+					{
+						ps.println("        if (this." + p.name + " instanceof NodeImpl)");
+						ps.println("        {");
+						ps.println("            ((NodeImpl)this."+p.name+").setParent(null);");
+						ps.println("        }");
+					}
 					ps.println("        this." + p.name + " = " + p.name + ";");
+					if (propInstanceOf(p.type, "Node"))
+					{
+						ps.println("        if (this." + p.name + " instanceof NodeImpl)");
+						ps.println("        {");
+						ps.println("            ((NodeImpl)this."+p.name+").setParent(this);");
+						ps.println("        }");
+					}
 					ps.println("    }");
 					ps.println();
 				}
@@ -1190,9 +1220,11 @@ public class SourceGenerator
 				cps.println();
 				cps.println("    {");
 				String classname = def.getRawName() + "Impl" + typeArg;
-				cps.print("        return new " + classname);
+				cps.print("        " + typeName + " ret = new " + classname);
 				printArgumentList(cps, recProps);
 				cps.println(";");
+				// TODO: later, this is where we register created nodes with the central dependency validation authority
+				cps.println("        return ret;");
 				cps.println("    }");
 				cps.println();
 			}

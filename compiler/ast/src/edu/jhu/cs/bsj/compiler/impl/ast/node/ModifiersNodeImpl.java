@@ -41,7 +41,15 @@ public class ModifiersNodeImpl extends NodeImpl implements ModifiersNode
      */
     public void setAnnotations(ListNode<? extends AnnotationNode> annotations)
     {
+        if (this.annotations instanceof NodeImpl)
+        {
+            ((NodeImpl)this.annotations).setParent(null);
+        }
         this.annotations = annotations;
+        if (this.annotations instanceof NodeImpl)
+        {
+            ((NodeImpl)this.annotations).setParent(this);
+        }
     }
 
     /**

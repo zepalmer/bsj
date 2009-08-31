@@ -38,7 +38,15 @@ public class MemberSelectNodeImpl extends NameNodeImpl implements MemberSelectNo
      */
     public void setExpression(NameNode expression)
     {
+        if (this.expression instanceof NodeImpl)
+        {
+            ((NodeImpl)this.expression).setParent(null);
+        }
         this.expression = expression;
+        if (this.expression instanceof NodeImpl)
+        {
+            ((NodeImpl)this.expression).setParent(this);
+        }
     }
 
     /**
@@ -56,7 +64,15 @@ public class MemberSelectNodeImpl extends NameNodeImpl implements MemberSelectNo
      */
     public void setIdentifier(IdentifierNode identifier)
     {
+        if (this.identifier instanceof NodeImpl)
+        {
+            ((NodeImpl)this.identifier).setParent(null);
+        }
         this.identifier = identifier;
+        if (this.identifier instanceof NodeImpl)
+        {
+            ((NodeImpl)this.identifier).setParent(this);
+        }
     }
 
     /**

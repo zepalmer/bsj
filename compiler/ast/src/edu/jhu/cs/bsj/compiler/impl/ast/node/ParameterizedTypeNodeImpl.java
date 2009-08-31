@@ -39,7 +39,15 @@ public class ParameterizedTypeNodeImpl extends TypeNodeImpl implements Parameter
      */
     public void setType(DeclaredTypeNode type)
     {
+        if (this.type instanceof NodeImpl)
+        {
+            ((NodeImpl)this.type).setParent(null);
+        }
         this.type = type;
+        if (this.type instanceof NodeImpl)
+        {
+            ((NodeImpl)this.type).setParent(this);
+        }
     }
 
     /**
@@ -57,7 +65,15 @@ public class ParameterizedTypeNodeImpl extends TypeNodeImpl implements Parameter
      */
     public void setTypeArguments(ListNode<? extends TypeArgument> typeArguments)
     {
+        if (this.typeArguments instanceof NodeImpl)
+        {
+            ((NodeImpl)this.typeArguments).setParent(null);
+        }
         this.typeArguments = typeArguments;
+        if (this.typeArguments instanceof NodeImpl)
+        {
+            ((NodeImpl)this.typeArguments).setParent(this);
+        }
     }
 
     /**

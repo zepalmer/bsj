@@ -37,7 +37,15 @@ public class AssignmentNodeImpl extends ExpressionNodeImpl implements Assignment
      */
     public void setExpression(ExpressionNode expression)
     {
+        if (this.expression instanceof NodeImpl)
+        {
+            ((NodeImpl)this.expression).setParent(null);
+        }
         this.expression = expression;
+        if (this.expression instanceof NodeImpl)
+        {
+            ((NodeImpl)this.expression).setParent(this);
+        }
     }
 
     /**
@@ -55,7 +63,15 @@ public class AssignmentNodeImpl extends ExpressionNodeImpl implements Assignment
      */
     public void setVariable(ExpressionNode variable)
     {
+        if (this.variable instanceof NodeImpl)
+        {
+            ((NodeImpl)this.variable).setParent(null);
+        }
         this.variable = variable;
+        if (this.variable instanceof NodeImpl)
+        {
+            ((NodeImpl)this.variable).setParent(this);
+        }
     }
 
     /**

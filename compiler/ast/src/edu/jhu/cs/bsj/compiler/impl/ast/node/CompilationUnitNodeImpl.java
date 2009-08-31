@@ -51,7 +51,15 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
      */
     public void setImports(ListNode<? extends ImportNode> imports)
     {
+        if (this.imports instanceof NodeImpl)
+        {
+            ((NodeImpl)this.imports).setParent(null);
+        }
         this.imports = imports;
+        if (this.imports instanceof NodeImpl)
+        {
+            ((NodeImpl)this.imports).setParent(this);
+        }
     }
 
     /**
@@ -69,7 +77,15 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
      */
     public void setPackageAnnotations(ListNode<? extends AnnotationNode> packageAnnotations)
     {
+        if (this.packageAnnotations instanceof NodeImpl)
+        {
+            ((NodeImpl)this.packageAnnotations).setParent(null);
+        }
         this.packageAnnotations = packageAnnotations;
+        if (this.packageAnnotations instanceof NodeImpl)
+        {
+            ((NodeImpl)this.packageAnnotations).setParent(this);
+        }
     }
 
     /**
@@ -87,7 +103,15 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
      */
     public void setPackageName(ExpressionNode packageName)
     {
+        if (this.packageName instanceof NodeImpl)
+        {
+            ((NodeImpl)this.packageName).setParent(null);
+        }
         this.packageName = packageName;
+        if (this.packageName instanceof NodeImpl)
+        {
+            ((NodeImpl)this.packageName).setParent(this);
+        }
     }
 
     /**
@@ -105,7 +129,15 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
      */
     public void setTypeDecls(ListNode<? extends TypeDeclarationNode> typeDecls)
     {
+        if (this.typeDecls instanceof NodeImpl)
+        {
+            ((NodeImpl)this.typeDecls).setParent(null);
+        }
         this.typeDecls = typeDecls;
+        if (this.typeDecls instanceof NodeImpl)
+        {
+            ((NodeImpl)this.typeDecls).setParent(this);
+        }
     }
 
     /**

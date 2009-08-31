@@ -54,7 +54,15 @@ public class ClassDeclarationNodeImpl extends TypeDeclarationNodeImpl implements
      */
     public void setExtendsClause(TypeNode extendsClause)
     {
+        if (this.extendsClause instanceof NodeImpl)
+        {
+            ((NodeImpl)this.extendsClause).setParent(null);
+        }
         this.extendsClause = extendsClause;
+        if (this.extendsClause instanceof NodeImpl)
+        {
+            ((NodeImpl)this.extendsClause).setParent(this);
+        }
     }
 
     /**
@@ -72,7 +80,15 @@ public class ClassDeclarationNodeImpl extends TypeDeclarationNodeImpl implements
      */
     public void setImplementsClause(ListNode<? extends TypeNode> implementsClause)
     {
+        if (this.implementsClause instanceof NodeImpl)
+        {
+            ((NodeImpl)this.implementsClause).setParent(null);
+        }
         this.implementsClause = implementsClause;
+        if (this.implementsClause instanceof NodeImpl)
+        {
+            ((NodeImpl)this.implementsClause).setParent(this);
+        }
     }
 
     /**
@@ -90,7 +106,15 @@ public class ClassDeclarationNodeImpl extends TypeDeclarationNodeImpl implements
      */
     public void setBody(ClassBodyNode body)
     {
+        if (this.body instanceof NodeImpl)
+        {
+            ((NodeImpl)this.body).setParent(null);
+        }
         this.body = body;
+        if (this.body instanceof NodeImpl)
+        {
+            ((NodeImpl)this.body).setParent(this);
+        }
     }
 
     /**
@@ -108,7 +132,15 @@ public class ClassDeclarationNodeImpl extends TypeDeclarationNodeImpl implements
      */
     public void setTypeParameters(ListNode<? extends TypeParameterNode> typeParameters)
     {
+        if (this.typeParameters instanceof NodeImpl)
+        {
+            ((NodeImpl)this.typeParameters).setParent(null);
+        }
         this.typeParameters = typeParameters;
+        if (this.typeParameters instanceof NodeImpl)
+        {
+            ((NodeImpl)this.typeParameters).setParent(this);
+        }
     }
 
     /**

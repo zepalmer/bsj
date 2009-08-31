@@ -39,7 +39,15 @@ public class SwitchNodeImpl extends StatementNodeImpl implements SwitchNode
      */
     public void setCases(ListNode<? extends CaseNode> cases)
     {
+        if (this.cases instanceof NodeImpl)
+        {
+            ((NodeImpl)this.cases).setParent(null);
+        }
         this.cases = cases;
+        if (this.cases instanceof NodeImpl)
+        {
+            ((NodeImpl)this.cases).setParent(this);
+        }
     }
 
     /**
@@ -57,7 +65,15 @@ public class SwitchNodeImpl extends StatementNodeImpl implements SwitchNode
      */
     public void setExpression(ExpressionNode expression)
     {
+        if (this.expression instanceof NodeImpl)
+        {
+            ((NodeImpl)this.expression).setParent(null);
+        }
         this.expression = expression;
+        if (this.expression instanceof NodeImpl)
+        {
+            ((NodeImpl)this.expression).setParent(this);
+        }
     }
 
     /**

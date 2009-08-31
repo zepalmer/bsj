@@ -44,7 +44,15 @@ public class EnhancedForLoopNodeImpl extends StatementNodeImpl implements Enhanc
      */
     public void setVariable(VariableNode variable)
     {
+        if (this.variable instanceof NodeImpl)
+        {
+            ((NodeImpl)this.variable).setParent(null);
+        }
         this.variable = variable;
+        if (this.variable instanceof NodeImpl)
+        {
+            ((NodeImpl)this.variable).setParent(this);
+        }
     }
 
     /**
@@ -62,7 +70,15 @@ public class EnhancedForLoopNodeImpl extends StatementNodeImpl implements Enhanc
      */
     public void setExpression(ExpressionNode expression)
     {
+        if (this.expression instanceof NodeImpl)
+        {
+            ((NodeImpl)this.expression).setParent(null);
+        }
         this.expression = expression;
+        if (this.expression instanceof NodeImpl)
+        {
+            ((NodeImpl)this.expression).setParent(this);
+        }
     }
 
     /**
@@ -80,7 +96,15 @@ public class EnhancedForLoopNodeImpl extends StatementNodeImpl implements Enhanc
      */
     public void setStatement(StatementNode statement)
     {
+        if (this.statement instanceof NodeImpl)
+        {
+            ((NodeImpl)this.statement).setParent(null);
+        }
         this.statement = statement;
+        if (this.statement instanceof NodeImpl)
+        {
+            ((NodeImpl)this.statement).setParent(this);
+        }
     }
 
     /**
