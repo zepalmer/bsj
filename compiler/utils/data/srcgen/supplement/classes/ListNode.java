@@ -1,13 +1,13 @@
 import java.util.List;
 
-public class ListNode<T extends Node> extends Node
+public class ListNodeImpl<T extends Node> extends Node implements ListNode<T>
 {
 	/* GEN:start */
 	/** General constructor */
-    public ListNodeImpl<T extends Node>(List<? extends T> children)
+    public ListNodeImpl(List<? extends T> children)
     {
         super();
-        this.children = new ArrayList<? extends T>(children);
+        this.children = new ArrayList<T>(children);
     }
 
 	// TODO: implement the List<T> interface

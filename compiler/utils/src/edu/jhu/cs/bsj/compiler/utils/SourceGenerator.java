@@ -23,10 +23,25 @@ import java.util.Set;
  */
 public class SourceGenerator
 {
-	private static final File contentsFile = new File("data/srcgen/ast-contents.dat");
-	private static final File verbatimDir = new File("data/srcgen/verbatim/");
-	private static final File supplementsDir = new File("data/srcgen/supplement/");
-	private static final File targetDir = new File("out/");
+	private static final File CONTENTS_FILE = new File("data/srcgen/ast-contents.dat");
+	private static final File VERBATIM_DIR = new File("data/srcgen/verbatim/");
+	private static final File SUPPLEMENTS_DIR = new File("data/srcgen/supplement/");
+	private static final File TARGET_DIR = new File("out/");
+	private static final String[] IFACE_IMPORTS = new String[]{
+		"edu.jhu.cs.bsj.compiler.ast.*",
+		"edu.jhu.cs.bsj.compiler.ast.node.*",
+		"edu.jhu.cs.bsj.compiler.ast.node.meta.*",
+		"edu.jhu.cs.bsj.compiler.ast.tags.*",
+		"java.util.*",
+	};
+	private static final String[] CLASS_IMPORTS = new String[]{
+		"edu.jhu.cs.bsj.compiler.impl.ast.*",
+		"edu.jhu.cs.bsj.compiler.impl.ast.node.*",
+		"edu.jhu.cs.bsj.compiler.impl.ast.node.meta.*",
+		"java.util.concurrent.atomic.*",
+	};
+	
+	//private static final String[] DEFAULT_IMPORTS = 
 
 	private Set<ClassDefHandler> handlers = new HashSet<ClassDefHandler>();
 	private Map<String, String> envMap = new HashMap<String, String>();
@@ -111,15 +126,15 @@ public class SourceGenerator
 	public void run() throws IOException
 	{
 		// Clear the target directory
-		rmrf(targetDir);
+		rmrf(TARGET_DIR);
 
 		// Initialize each handler
 		for (ClassDefHandler handler : handlers)
 			handler.init();
 
 		// Obtain the contents file
-		targetDir.mkdirs();
-		String contents = getFileAsString(contentsFile);
+		TARGET_DIR.mkdirs();
+		String contents = getFileAsString(CONTENTS_FILE);
 		List<String> strings = new ArrayList<String>(Arrays.asList(contents.split("\n")));
 
 		// Strip comments
@@ -145,7 +160,7 @@ public class SourceGenerator
 			handler.finish();
 
 		// Copy verbatim files to the appropriate locations
-		copyVerbatims(verbatimDir, "");
+		copyVerbatims(VERBATIM_DIR, "");
 	}
 
 	private void copyVerbatims(File dir, String prefix) throws IOException
@@ -173,7 +188,7 @@ public class SourceGenerator
 				if ((pkgDecl.startsWith("package")) && (pkgDecl.endsWith(";")))
 				{
 					pkg = pkgDecl.substring(7, pkgDecl.length() - 1).trim();
-					File target = new File(targetDir.getPath() + File.separator + prefix + File.separator
+					File target = new File(TARGET_DIR.getPath() + File.separator + prefix + File.separator
 							+ pkg.replaceAll("\\.", File.separator) + File.separator + f.getName());
 					target.getParentFile().mkdirs();
 					PrintStream ps = new PrintStream(new FileOutputStream(target));
@@ -453,6 +468,30 @@ public class SourceGenerator
 				return "";
 			}
 		}
+		
+		public String getNameArg()
+		{
+			String nameParam = getNameParam();
+			if (nameParam.length()>0)
+			{
+				String[] pieces = nameParam.substring(1,nameParam.length()-1).split(",");
+				StringBuilder sb = new StringBuilder("<");
+				for (int i=0;i<pieces.length;i++)
+				{
+					if (i>0) sb.append(',');
+					if (pieces[i].contains(" "))
+					{
+						pieces[i] = pieces[i].substring(0,pieces[i].indexOf(' ')).trim();
+					}
+					sb.append(pieces[i]);
+				}
+				sb.append(">");
+				return sb.toString();
+			} else
+			{
+				return "";
+			}
+		}
 	}
 
 	/* handles the definition for an AST class */
@@ -570,6 +609,27 @@ public class SourceGenerator
 	}
 	
 	/**
+	 * Prints imports for a file.
+	 * @param ps The stream on which to print.
+	 * @param classImp <code>true</code> to include class imports; <code>false</code> otherwise.
+	 */
+	private static void printImports(PrintStream ps, boolean classImp)
+	{
+		for (String s : IFACE_IMPORTS)
+		{
+			ps.println("import " + s + ";");
+		}
+		if (classImp)
+		{
+			for (String s : CLASS_IMPORTS)
+			{
+				ps.println("import " + s + ";");
+			}
+		}
+		ps.println();
+	}
+	
+	/**
 	 * An interface implemented by those modules that wish to handle class definitions.
 	 */
 	static interface ClassDefHandler
@@ -586,7 +646,7 @@ public class SourceGenerator
 	 */
 	static class InterfaceWriter implements ClassDefHandler
 	{
-		private static File ifaceTargetDir = new File(targetDir.getAbsolutePath() + File.separator + "ifaces");
+		private static File ifaceTargetDir = new File(TARGET_DIR.getAbsolutePath() + File.separator + "ifaces");
 
 		public void init()
 		{
@@ -605,6 +665,7 @@ public class SourceGenerator
 			if (pkg.length() > 0)
 				ps.println("package " + pkg + ";");
 			ps.println("");
+			printImports(ps, false);
 			ps.println("/**");
 			ps.println(" * " + def.classDoc.replaceAll("\n", "\n * "));
 			ps.println(" */");
@@ -632,17 +693,20 @@ public class SourceGenerator
 				ps.println("     */");
 				ps.println("    public " + p.type + " get" + capFirst(p.name) + "();");
 				ps.println();
-				ps.println("    /**");
-				ps.println("     * Changes " + p.desc + ".");
-				ps.println("     * @param " + p.name + " " + capFirst(p.desc) + ".");
-				ps.println("     */");
-				ps.println("    public void set" + capFirst(p.name) + "(" + p.type + " " + p.name + ");");
-				ps.println();
+				if (!p.readOnly)
+				{
+					ps.println("    /**");
+					ps.println("     * Changes " + p.desc + ".");
+					ps.println("     * @param " + p.name + " " + capFirst(p.desc) + ".");
+					ps.println("     */");
+					ps.println("    public void set" + capFirst(p.name) + "(" + p.type + " " + p.name + ");");
+					ps.println();
+				}
 			}
 			// add supplements
 			for (String name : def.includeFilenames)
 			{
-				File f = new File(supplementsDir.getParent() + File.separator + "supplement" + File.separator
+				File f = new File(SUPPLEMENTS_DIR.getParent() + File.separator + "supplement" + File.separator
 						+ "ifaces" + File.separator + name);
 				includeFile(f, ps);
 			}
@@ -731,11 +795,12 @@ public class SourceGenerator
 	 */
 	static class BackingClassWriter extends ClassHierarchyBuildingHandler
 	{
-		private static File classTargetDir = new File(targetDir.getAbsolutePath() + File.separator + "classes");
+		private static File classTargetDir = new File(TARGET_DIR.getAbsolutePath() + File.separator + "classes");
 
 		public void useDefinition(ClassDef def) throws IOException
 		{
-			String classname = def.getRawName() + "Impl" + def.getNameParam();
+			String rawclassname = def.getRawName() + "Impl";
+			String classname = rawclassname + def.getNameParam();
 			String superclassname = def.getRawSname() + "Impl" + def.getSnameParam();
 			
 			String stopGenStr = envs.get(def).get("stopGen");
@@ -746,7 +811,7 @@ public class SourceGenerator
 			if (pkg == null)
 				pkg = "";
 			File classFile = new File(classTargetDir.getAbsolutePath() + File.separator
-					+ pkg.replaceAll("\\.", File.separator) + File.separator + def.getRawName() + "Impl" + ".java");
+					+ pkg.replaceAll("\\.", File.separator) + File.separator + rawclassname + ".java");
 			classFile.getParentFile().mkdirs();
 			FileOutputStream fos = new FileOutputStream(classFile);
 			PrintStream ps = new PrintStream(fos);
@@ -754,8 +819,10 @@ public class SourceGenerator
 			if (pkg.length() > 0)
 				ps.println("package " + pkg + ";");
 			ps.println("");
+			printImports(ps, true);
 			ps.println("public " + (def.concrete ? "" : "abstract ") + "class " + classname
-					+ (def.sname == null ? "" : " extends " + superclassname) + " implements " + def.name);
+					+ (def.sname == null ? "" : " extends " + superclassname) + " implements " +
+						def.getRawName() + def.getNameArg());
 			ps.println("{");
 
 			// gen properties
@@ -769,7 +836,7 @@ public class SourceGenerator
 			// gen constructor
 			ps.println("    /** General constructor. */");
 			if (stopGen.contains("cons")) ps.println("/* // stopGen="+stopGenStr); // stopGen logic
-			ps.print("    " + (def.concrete ? "public" : "protected") + " " + classname);
+			ps.print("    " + (def.concrete ? "public" : "protected") + " " + rawclassname);
 			List<Prop> recProps = getRecursiveProps(def);
 			printParameterList(ps, recProps);
 			ps.println();
@@ -831,7 +898,7 @@ public class SourceGenerator
 			// add supplements
 			for (String name : def.includeFilenames)
 			{
-				File f = new File(supplementsDir.getParent() + File.separator + "supplement" + File.separator
+				File f = new File(SUPPLEMENTS_DIR.getParent() + File.separator + "supplement" + File.separator
 						+ "classes" + File.separator + name);
 				includeFile(f, ps);
 			}
@@ -863,19 +930,10 @@ public class SourceGenerator
 		@Override
 		public void handleDefinition(ClassDef def, Map<String, String> env) throws IOException
 		{
-			String tname = def.name;
-			String sname = def.sname;
-
-			if ((sname != null) && (sname.contains("<")))
-			{
-				sname = sname.replaceAll("<.*>$", "");
-				parameterizedTypes.add(sname);
-			}
-			if ((tname != null) && (tname.contains("<")))
-			{
-				tname = tname.replaceAll("<.*>$", "");
-				parameterizedTypes.add(tname);
-			}
+			String tname = def.getRawName();
+			String sname = def.getRawSname();
+			
+			if (def.getNameParam().length()>0) parameterizedTypes.add(tname);
 
 			if (!subtypeMap.containsKey(sname))
 				subtypeMap.put(sname, new HashSet<String>());
@@ -911,11 +969,12 @@ public class SourceGenerator
 
 			// Write class header
 			String pkg = "edu.jhu.cs.bsj.compiler.ast";
-			ps = new PrintStream(new FileOutputStream(new File(targetDir.getPath() + File.separator + "ifaces"
+			ps = new PrintStream(new FileOutputStream(new File(TARGET_DIR.getPath() + File.separator + "ifaces"
 					+ File.separator + pkg.replaceAll("\\.", File.separator) + File.separator
 					+ "BsjTypedNodeVisitor.java")));
 			ps.println("package " + pkg + ";");
 			ps.println();
+			printImports(ps, false);
 			ps.println("/**");
 			ps.println(" * This default implementation of the BsjNodeVisitor separates nodes based on type.  Each");
 			ps.println(" * type of node is routed to a different method to be handled; the default implementation of");
@@ -941,10 +1000,10 @@ public class SourceGenerator
 				boolean first = true;
 				for (String name : concreteTypeNames)
 				{
-					ps.println((first ? "        " : " else ") + "if (node instanceof " + name + ")");
+					String pname = name + (parameterizedTypes.contains(name)?"<?>":"");
+					ps.println((first ? "        " : " else ") + "if (node instanceof " + pname + ")");
 					ps.println("        {");
-					ps.println("            visit" + name + mode + "((" + name +
-							(parameterizedTypes.contains(name)?"<?>":"") + ")node);");
+					ps.println("            visit" + name + mode + "((" + pname + ")node);");
 					ps.print("        }");
 					first = false;
 				}
@@ -997,13 +1056,14 @@ public class SourceGenerator
 		{
 			super.init();
 			String pkg = "edu.jhu.cs.bsj.compiler.ast";
-			File f = new File(targetDir.getPath() + File.separator + "ifaces"
+			File f = new File(TARGET_DIR.getPath() + File.separator + "ifaces"
 					+ File.separator + pkg.replaceAll("\\.", File.separator) + File.separator
 					+ "BsjNodeFactory.java");
 			f.getParentFile().mkdirs();
 			ips = new PrintStream(new FileOutputStream(f));
 			ips.println("package " + pkg + ";");
 			ips.println();
+			printImports(ips, false);
 			ips.println("/**");
 			ips.println(" * This interface is implemented by any object which can act as a factory for BSJ nodes.  It");
 			ips.println(" * is strongly advisable to ensure that all nodes in a given AST are produced from the same");
@@ -1015,13 +1075,14 @@ public class SourceGenerator
 			ips.println("{");
 			
 			pkg = "edu.jhu.cs.bsj.compiler.impl.ast";
-			f = new File(targetDir.getPath() + File.separator + "classes"
+			f = new File(TARGET_DIR.getPath() + File.separator + "classes"
 					+ File.separator + pkg.replaceAll("\\.", File.separator) + File.separator
 					+ "BsjNodeFactoryImpl.java");
 			f.getParentFile().mkdirs();
 			cps = new PrintStream(new FileOutputStream(f));
 			cps.println("package " + pkg + ";");
 			cps.println();
+			printImports(cps, true);
 			cps.println("/**");
 			cps.println(" * This class acts as a BSJ node factory for the standard BSJ compiler.");
 			cps.println(" *");

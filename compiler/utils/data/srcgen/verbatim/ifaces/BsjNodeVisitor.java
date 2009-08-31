@@ -1,5 +1,7 @@
 package edu.jhu.cs.bsj.compiler.ast;
 
+import edu.jhu.cs.bsj.compiler.ast.node.*;
+
 /**
  * A common interface for AST node visitors.
  * 

@@ -386,23 +386,23 @@ WhileLoopNode :: StatementNode
 
 ### Type Nodes ########################################################################################################
 
-ArrayTypeNode :: TypeNode
+ArrayTypeNode :: TypeNode + TypeArgument
     @props
     type                    TypeNode                                    | the element type of the array
     @docs
         Represents an array type.
 
-DeclaredTypeNode :: TypeNode
+DeclaredTypeNode :: TypeNode + TypeArgument
     @props
     name                    NameNode                                    | the name of the type
     @docs
         A node expressing a declared type.  Declared types encompass classes, interfaces, enums, and annotations.
         Anonymous classes and other such constructs are included as well.
 
-ParameterizedTypeNode :: TypeNode
+ParameterizedTypeNode :: TypeNode + TypeArgument
     @props
     type                    DeclaredTypeNode                            | the base type
-    typeArguments           ListNode<? extends TypeArgumentNode>        | the parameterized type arguments
+    typeArguments           ListNode<? extends TypeArgument>            | the parameterized type arguments
     @docs
         A node expressing a parameterized type, as in:
         <pre>
@@ -417,27 +417,27 @@ PrimitiveTypeNode :: TypeNode
     
 ### Literal Nodes #####################################################################################################
 
-BooleanLiteralNode :: LiteralNode<boolean>
+BooleanLiteralNode :: LiteralNode<Boolean>
     @docs
         A node representing a boolean literal.
 
-CharLiteralNode :: LiteralNode<char>
+CharLiteralNode :: LiteralNode<Character>
     @docs
         A node representing a character literal.
 
-DoubleLiteralNode :: LiteralNode<double>
+DoubleLiteralNode :: LiteralNode<Double>
     @docs
         A node representing a double literal.
 
-FloatLiteralNode :: LiteralNode<float>
+FloatLiteralNode :: LiteralNode<Float>
     @docs
         A node representing a float literal.
 
-IntLiteralNode :: LiteralNode<int>
+IntLiteralNode :: LiteralNode<Integer>
     @docs
         A node representing an int literal.
 
-LongLiteralNode :: LiteralNode<long>
+LongLiteralNode :: LiteralNode<Long>
     @docs
         A node representing a long literal.
 
@@ -503,7 +503,7 @@ MethodDeclarationNode :: Node + ClassMember, InterfaceMember
     name                    IdentifierNode                              | this method's name
     parameters              ListNode<? extends VariableNode>            | the parameters declared by this method
     returnType              TypeNode                                    | the type of value returned
-    throws                  ListNode<? extends DeclaredTypeNode>        | the types of exceptions thrown by this method
+    throwTypes              ListNode<? extends DeclaredTypeNode>        | the types of exceptions thrown by this method
     typeParameters          ListNode<? extends TypeParameterNode>       | this method's applicable type parameters
     @docs
         A node representing a method declaration, as in:
@@ -528,7 +528,7 @@ ClassBodyNode :: Node
 
 EnumBodyNode :: Node
     @props
-    constants           ListNode<? extends EnumConstantNode>            | the enumeration constants
+    constants           ListNode<? extends EnumConstantDeclarationNode> | the enumeration constants
     members             ListNode<? extends ClassMember>                 | the members of the class body part
     @docs
         Represents the body of an enum declaration.
@@ -682,7 +682,7 @@ StatementNode* :: Node
     @docs
         Common superclass for statements.
 
-TypeNode* :: Node + TypeArgument
+TypeNode* :: Node
     @docs
         Common superclass for types.
 
