@@ -355,6 +355,13 @@ methodDeclaration
         (blockStatement
         )*
         '}'
+    	->
+    		^(METHOD IDENTIFIER ^(MODIFIERS modifiers)
+    			typeParameters?
+    			^(METHOD_PARAMS formalParameters)
+    			^(THROWS qualifiedNameList)?
+    			^(METHOD_BODY blockStatement*)
+    		)         
     |   modifiers
         (typeParameters
         )?
@@ -439,9 +446,11 @@ interfaceFieldDeclaration
         (',' variableDeclarator
         )*
         ';'
+    ->
+    	^(VARIABLE type variableDeclarator)+
     ;
 
-
+//TODO separate [] and non-[] to differentiate between array types
 type 
     :   classOrInterfaceType
         ('[' ']'
