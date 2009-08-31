@@ -27,21 +27,13 @@ public class SourceGenerator
 	private static final File VERBATIM_DIR = new File("data/srcgen/verbatim/");
 	private static final File SUPPLEMENTS_DIR = new File("data/srcgen/supplement/");
 	private static final File TARGET_DIR = new File("out/");
-	private static final String[] IFACE_IMPORTS = new String[]{
-		"edu.jhu.cs.bsj.compiler.ast.*",
-		"edu.jhu.cs.bsj.compiler.ast.node.*",
-		"edu.jhu.cs.bsj.compiler.ast.node.meta.*",
-		"edu.jhu.cs.bsj.compiler.ast.tags.*",
-		"java.util.*",
-	};
-	private static final String[] CLASS_IMPORTS = new String[]{
-		"edu.jhu.cs.bsj.compiler.impl.ast.*",
-		"edu.jhu.cs.bsj.compiler.impl.ast.node.*",
-		"edu.jhu.cs.bsj.compiler.impl.ast.node.meta.*",
-		"java.util.concurrent.atomic.*",
-	};
-	
-	//private static final String[] DEFAULT_IMPORTS = 
+	private static final String[] IFACE_IMPORTS = new String[] { "edu.jhu.cs.bsj.compiler.ast.*",
+			"edu.jhu.cs.bsj.compiler.ast.node.*", "edu.jhu.cs.bsj.compiler.ast.node.meta.*",
+			"edu.jhu.cs.bsj.compiler.ast.tags.*", "java.util.*" };
+	private static final String[] CLASS_IMPORTS = new String[] { "edu.jhu.cs.bsj.compiler.impl.ast.*",
+			"edu.jhu.cs.bsj.compiler.impl.ast.node.*", "edu.jhu.cs.bsj.compiler.impl.ast.node.meta.*" };
+
+	// private static final String[] DEFAULT_IMPORTS =
 
 	private Set<ClassDefHandler> handlers = new HashSet<ClassDefHandler>();
 	private Map<String, String> envMap = new HashMap<String, String>();
@@ -220,9 +212,9 @@ public class SourceGenerator
 				if (op.equals("!set"))
 				{
 					String[] pieces = arg.split("=");
-					if ((pieces.length==1) && (arg.endsWith("=")))
+					if ((pieces.length == 1) && (arg.endsWith("=")))
 					{
-						pieces = new String[]{pieces[0],""};
+						pieces = new String[] { pieces[0], "" };
 					}
 					if (pieces.length != 2)
 					{
@@ -352,7 +344,7 @@ public class SourceGenerator
 	private Prop parseProp(String s)
 	{
 		boolean readOnly = false;
-		
+
 		s = s.trim();
 		String name, type, comment;
 		if (s.contains("|"))
@@ -366,10 +358,10 @@ public class SourceGenerator
 
 		name = s.substring(0, s.indexOf(' ')).trim();
 		type = s.substring(s.indexOf(' ')).trim();
-		
+
 		if (name.endsWith("*"))
 		{
-			name = name.substring(0, name.length()-1);
+			name = name.substring(0, name.length() - 1);
 			readOnly = true;
 		}
 
@@ -387,7 +379,7 @@ public class SourceGenerator
 		String type;
 		String desc;
 		boolean readOnly;
-		
+
 		public Prop(String name, String type, String desc, boolean readOnly)
 		{
 			super();
@@ -468,20 +460,21 @@ public class SourceGenerator
 				return "";
 			}
 		}
-		
+
 		public String getNameArg()
 		{
 			String nameParam = getNameParam();
-			if (nameParam.length()>0)
+			if (nameParam.length() > 0)
 			{
-				String[] pieces = nameParam.substring(1,nameParam.length()-1).split(",");
+				String[] pieces = nameParam.substring(1, nameParam.length() - 1).split(",");
 				StringBuilder sb = new StringBuilder("<");
-				for (int i=0;i<pieces.length;i++)
+				for (int i = 0; i < pieces.length; i++)
 				{
-					if (i>0) sb.append(',');
+					if (i > 0)
+						sb.append(',');
 					if (pieces[i].contains(" "))
 					{
-						pieces[i] = pieces[i].substring(0,pieces[i].indexOf(' ')).trim();
+						pieces[i] = pieces[i].substring(0, pieces[i].indexOf(' ')).trim();
 					}
 					sb.append(pieces[i]);
 				}
@@ -498,8 +491,7 @@ public class SourceGenerator
 	/**
 	 * Capitalizes the first letter of a string.
 	 * 
-	 * @param s
-	 *            The string.
+	 * @param s The string.
 	 * @return The modified string.
 	 */
 	static String capFirst(String s)
@@ -521,14 +513,14 @@ public class SourceGenerator
 	}
 
 	/**
-	 * Performs a source file inclusion.
+	 * Performs a generic source file inclusion.
 	 * 
-	 * @param f
-	 *            The {@link File} to include.
-	 * @param ps
-	 *            The {@link PrintStream} to which to write lines that need to be copied.
+	 * @param f The {@link File} to include.
+	 * @param ps The {@link PrintStream} to which to write lines that need to be copied.
+	 * @param start The start string.
+	 * @param stop The stop string.
 	 */
-	private static void includeFile(File f, PrintStream ps) throws IOException
+	private static void includeFileParts(File f, PrintStream ps, String start, String stop) throws IOException
 	{
 		boolean copying = false;
 		String[] lines = getFileAsString(f).split("\n");
@@ -543,26 +535,81 @@ public class SourceGenerator
 				if (commentContent.startsWith("GEN:"))
 				{
 					String mode = commentContent.substring(4);
-					if (mode.equals("start"))
+					if (mode.equals(start))
 					{
 						copying = true;
-					} else if (mode.equals("stop"))
+					} else if (mode.equals(stop))
 					{
 						copying = false;
-					} else
-					{
-						System.err.println(f + ":" + (i + 1) + ": Invalid GEN mode: " + mode);
 					}
 
 					continue;
 				}
 			}
-			if (copying) ps.println(s);
+			if (copying)
+				ps.println(s);
 		}
 	}
 
 	/**
+	 * Performs a source file body inclusion.
+	 * 
+	 * @param f The {@link File} to include.
+	 * @param ps The {@link PrintStream} to which to write lines that need to be copied.
+	 */
+	private static void includeBody(File f, PrintStream ps) throws IOException
+	{
+		includeFileParts(f, ps, "start", "stop");
+	}
+	
+	/**
+	 * Performs a source file import inclusion.
+	 * 
+	 * @param f The {@link File} to include.
+	 * @param ps The {@link PrintStream} to which to write lines that need to be copied.
+	 */
+	private static void includeImports(File f, PrintStream ps) throws IOException
+	{
+		includeFileParts(f, ps, "importstart", "importstop");
+	}
+
+	/**
+	 * Performs a source file body inclusion.
+	 * 
+	 * @param ps The {@link PrintStream} to which to write lines that need to be copied.
+	 * @param names The names of the include files.
+	 * @param dir The directory from which to obtain the include files.
+	 */
+	private static void includeAllBodies(PrintStream ps, Iterable<String> names, String dir) throws IOException
+	{
+		for (String name : names)
+		{
+			File f = new File(SUPPLEMENTS_DIR.getParent() + File.separator + "supplement" + File.separator
+					+ dir + File.separator + name);
+			includeBody(f, ps);
+		}
+	}
+	
+	/**
+	 * Performs a source file body inclusion.
+	 * 
+	 * @param ps The {@link PrintStream} to which to write lines that need to be copied.
+	 * @param names The names of the include files.
+	 * @param dir The directory from which to obtain the include files.
+	 */
+	private static void includeAllImports(PrintStream ps, Iterable<String> names, String dir) throws IOException
+	{
+		for (String name : names)
+		{
+			File f = new File(SUPPLEMENTS_DIR.getParent() + File.separator + "supplement" + File.separator
+					+ dir + File.separator + name);
+			includeImports(f, ps);
+		}
+	}
+	
+	/**
 	 * Writes a list of parameters suitable for the provided properties.
+	 * 
 	 * @param ps The stream to which to write the text.
 	 * @param props The properties to use as parameters.
 	 */
@@ -586,9 +633,10 @@ public class SourceGenerator
 		}
 		ps.print(")");
 	}
-	
+
 	/**
 	 * Writes a list of arguments suitable for the provided properties.
+	 * 
 	 * @param ps The stream to which to write the text.
 	 * @param props The properties to use as arguments.
 	 */
@@ -607,9 +655,10 @@ public class SourceGenerator
 		}
 		ps.print(")");
 	}
-	
+
 	/**
 	 * Prints imports for a file.
+	 * 
 	 * @param ps The stream on which to print.
 	 * @param classImp <code>true</code> to include class imports; <code>false</code> otherwise.
 	 */
@@ -628,7 +677,7 @@ public class SourceGenerator
 		}
 		ps.println();
 	}
-	
+
 	/**
 	 * An interface implemented by those modules that wish to handle class definitions.
 	 */
@@ -665,7 +714,11 @@ public class SourceGenerator
 			if (pkg.length() > 0)
 				ps.println("package " + pkg + ";");
 			ps.println("");
+			
+			// imports
 			printImports(ps, false);
+			includeAllImports(ps, def.includeFilenames, "ifaces");
+			
 			ps.println("/**");
 			ps.println(" * " + def.classDoc.replaceAll("\n", "\n * "));
 			ps.println(" */");
@@ -703,13 +756,8 @@ public class SourceGenerator
 					ps.println();
 				}
 			}
-			// add supplements
-			for (String name : def.includeFilenames)
-			{
-				File f = new File(SUPPLEMENTS_DIR.getParent() + File.separator + "supplement" + File.separator
-						+ "ifaces" + File.separator + name);
-				includeFile(f, ps);
-			}
+			
+			includeAllBodies(ps, def.includeFilenames, "ifaces");
 			ps.println("}");
 		}
 
@@ -717,7 +765,7 @@ public class SourceGenerator
 		{
 		}
 	}
-	
+
 	static abstract class ClassHierarchyBuildingHandler implements ClassDefHandler
 	{
 		protected static Map<String, ClassDef> map;
@@ -747,45 +795,43 @@ public class SourceGenerator
 		{
 			List<Prop> list = new ArrayList<Prop>();
 			// maps type parameter names to their values
-			Map<String,String> replacementMap = new HashMap<String,String>();
+			Map<String, String> replacementMap = new HashMap<String, String>();
 			while (def != null)
 			{
 				for (Prop p : def.props)
 				{
 					if (replacementMap.containsKey(p.type))
 					{
-						p = new Prop(
-								p.name,
-								replacementMap.get(p.type),
-								p.desc,
-								p.readOnly);
+						p = new Prop(p.name, replacementMap.get(p.type), p.desc, p.readOnly);
 					}
 					list.add(p);
 				}
-				
-				if (def.getSnameParam()==null || def.getSnameParam().length()==0)
+
+				if (def.getSnameParam() == null || def.getSnameParam().length() == 0)
 				{
 					def = map.get(def.getRawSname());
 				} else
 				{
 					String superparam = def.getSnameParam();
-					superparam = superparam.substring(1,superparam.length()-1);
+					superparam = superparam.substring(1, superparam.length() - 1);
 					def = map.get(def.getRawSname());
-					
-					String nameParamPart = def.getNameParam().substring(1,def.getNameParam().length()-1);
+
+					String nameParamPart = def.getNameParam().substring(1, def.getNameParam().length() - 1);
 					String[] param = nameParamPart.split(",");
-					for (int i=0;i<param.length;i++)
+					for (int i = 0; i < param.length; i++)
 					{
-						if (param[i].contains(" ")) param[i] = param[i].substring(0,param[i].indexOf(' ')).trim();
+						if (param[i].contains(" "))
+							param[i] = param[i].substring(0, param[i].indexOf(' ')).trim();
 					}
 					String[] args = superparam.split(",");
-					
-					for (int i=0;i<args.length; i++) replacementMap.put(param[i], args[i]);
+
+					for (int i = 0; i < args.length; i++)
+						replacementMap.put(param[i], args[i]);
 				}
 			}
 			return list;
 		}
-		
+
 		public abstract void useDefinition(ClassDef def) throws IOException;
 
 	}
@@ -802,11 +848,12 @@ public class SourceGenerator
 			String rawclassname = def.getRawName() + "Impl";
 			String classname = rawclassname + def.getNameParam();
 			String superclassname = def.getRawSname() + "Impl" + def.getSnameParam();
-			
+
 			String stopGenStr = envs.get(def).get("stopGen");
-			if (stopGenStr==null) stopGenStr="";
+			if (stopGenStr == null)
+				stopGenStr = "";
 			Set<String> stopGen = new HashSet<String>(Arrays.asList(stopGenStr.split(",")));
-			
+
 			String pkg = envs.get(def).get("cPackage");
 			if (pkg == null)
 				pkg = "";
@@ -819,10 +866,13 @@ public class SourceGenerator
 			if (pkg.length() > 0)
 				ps.println("package " + pkg + ";");
 			ps.println("");
+			
 			printImports(ps, true);
+			includeAllImports(ps, def.includeFilenames, "classes");
+			
 			ps.println("public " + (def.concrete ? "" : "abstract ") + "class " + classname
-					+ (def.sname == null ? "" : " extends " + superclassname) + " implements " +
-						def.getRawName() + def.getNameArg());
+					+ (def.sname == null ? "" : " extends " + superclassname) + " implements " + def.getRawName()
+					+ def.getNameArg());
 			ps.println("{");
 
 			// gen properties
@@ -835,7 +885,8 @@ public class SourceGenerator
 
 			// gen constructor
 			ps.println("    /** General constructor. */");
-			if (stopGen.contains("cons")) ps.println("/* // stopGen="+stopGenStr); // stopGen logic
+			if (stopGen.contains("cons"))
+				ps.println("/* // stopGen=" + stopGenStr); // stopGen logic
 			ps.print("    " + (def.concrete ? "public" : "protected") + " " + rawclassname);
 			List<Prop> recProps = getRecursiveProps(def);
 			printParameterList(ps, recProps);
@@ -851,7 +902,8 @@ public class SourceGenerator
 				ps.println("        this." + p.name + " = " + p.name + ";");
 			}
 			ps.println("    }");
-			if (stopGen.contains("cons")) ps.print("*/"); // stopGen logic
+			if (stopGen.contains("cons"))
+				ps.print("*/"); // stopGen logic
 			ps.println();
 
 			// gen getters and setters
@@ -896,12 +948,7 @@ public class SourceGenerator
 			}
 
 			// add supplements
-			for (String name : def.includeFilenames)
-			{
-				File f = new File(SUPPLEMENTS_DIR.getParent() + File.separator + "supplement" + File.separator
-						+ "classes" + File.separator + name);
-				includeFile(f, ps);
-			}
+			includeAllBodies(ps, def.includeFilenames, "classes");
 
 			ps.println("}");
 		}
@@ -932,8 +979,9 @@ public class SourceGenerator
 		{
 			String tname = def.getRawName();
 			String sname = def.getRawSname();
-			
-			if (def.getNameParam().length()>0) parameterizedTypes.add(tname);
+
+			if (def.getNameParam().length() > 0)
+				parameterizedTypes.add(tname);
 
 			if (!subtypeMap.containsKey(sname))
 				subtypeMap.put(sname, new HashSet<String>());
@@ -1000,7 +1048,7 @@ public class SourceGenerator
 				boolean first = true;
 				for (String name : concreteTypeNames)
 				{
-					String pname = name + (parameterizedTypes.contains(name)?"<?>":"");
+					String pname = name + (parameterizedTypes.contains(name) ? "<?>" : "");
 					ps.println((first ? "        " : " else ") + "if (node instanceof " + pname + ")");
 					ps.println("        {");
 					ps.println("            visit" + name + mode + "((" + pname + ")node);");
@@ -1027,8 +1075,8 @@ public class SourceGenerator
 					ps.println("     * " + mode + "s a visit for nodes of type " + name + ".");
 					ps.println("     * @param node The node being visited.");
 					ps.println("     */");
-					ps.println("    public void visit" + name + mode + "(" + name +
-							(parameterizedTypes.contains(name)?"<?>":"") + " node)");
+					ps.println("    public void visit" + name + mode + "(" + name
+							+ (parameterizedTypes.contains(name) ? "<?>" : "") + " node)");
 					ps.println("    {");
 					ps.println("    }");
 					ps.println();
@@ -1042,7 +1090,7 @@ public class SourceGenerator
 			ps.close();
 		}
 	}
-	
+
 	/**
 	 * Writes the BSJ AST node factory interface and implementation.
 	 */
@@ -1050,15 +1098,14 @@ public class SourceGenerator
 	{
 		PrintStream ips;
 		PrintStream cps;
-		
+
 		@Override
 		public void init() throws IOException
 		{
 			super.init();
 			String pkg = "edu.jhu.cs.bsj.compiler.ast";
-			File f = new File(TARGET_DIR.getPath() + File.separator + "ifaces"
-					+ File.separator + pkg.replaceAll("\\.", File.separator) + File.separator
-					+ "BsjNodeFactory.java");
+			File f = new File(TARGET_DIR.getPath() + File.separator + "ifaces" + File.separator
+					+ pkg.replaceAll("\\.", File.separator) + File.separator + "BsjNodeFactory.java");
 			f.getParentFile().mkdirs();
 			ips = new PrintStream(new FileOutputStream(f));
 			ips.println("package " + pkg + ";");
@@ -1069,15 +1116,14 @@ public class SourceGenerator
 			ips.println(" * is strongly advisable to ensure that all nodes in a given AST are produced from the same");
 			ips.println(" * factory, although the urgency of this restriction is implementation-dependent.");
 			ips.println(" *");
-			ips.println( "* @author Zachary Palmer");
+			ips.println("* @author Zachary Palmer");
 			ips.println(" */");
 			ips.println("public interface BsjNodeFactory");
 			ips.println("{");
-			
+
 			pkg = "edu.jhu.cs.bsj.compiler.impl.ast";
-			f = new File(TARGET_DIR.getPath() + File.separator + "classes"
-					+ File.separator + pkg.replaceAll("\\.", File.separator) + File.separator
-					+ "BsjNodeFactoryImpl.java");
+			f = new File(TARGET_DIR.getPath() + File.separator + "classes" + File.separator
+					+ pkg.replaceAll("\\.", File.separator) + File.separator + "BsjNodeFactoryImpl.java");
 			f.getParentFile().mkdirs();
 			cps = new PrintStream(new FileOutputStream(f));
 			cps.println("package " + pkg + ";");
@@ -1086,12 +1132,12 @@ public class SourceGenerator
 			cps.println("/**");
 			cps.println(" * This class acts as a BSJ node factory for the standard BSJ compiler.");
 			cps.println(" *");
-			cps.println( "* @author Zachary Palmer");
+			cps.println("* @author Zachary Palmer");
 			cps.println(" */");
 			cps.println("public class BsjNodeFactoryImpl implements BsjNodeFactory");
 			cps.println("{");
 		}
-		
+
 		@Override
 		public void useDefinition(ClassDef def) throws IOException
 		{
@@ -1104,15 +1150,17 @@ public class SourceGenerator
 				if (def.getNameParam().length() > 0)
 				{
 					typeParam = def.getNameParam();
-					String[] args = typeParam.substring(1,typeParam.length()-1).split(",");
-					for (int i=0;i<args.length;i++)
+					String[] args = typeParam.substring(1, typeParam.length() - 1).split(",");
+					for (int i = 0; i < args.length; i++)
 					{
-						if (args[i].contains(" ")) args[i] = args[i].substring(0,args[i].indexOf(' ')).trim();
+						if (args[i].contains(" "))
+							args[i] = args[i].substring(0, args[i].indexOf(' ')).trim();
 					}
 					StringBuilder sb = new StringBuilder();
 					for (String s : args)
 					{
-						if (sb.length()>0) sb.append(",");
+						if (sb.length() > 0)
+							sb.append(",");
 						sb.append(s);
 					}
 					sb.insert(0, "<");
@@ -1125,7 +1173,7 @@ public class SourceGenerator
 				}
 				typeName = def.getRawName() + typeArg;
 				String typeParamS = typeParam == null ? "" : (typeParam + " ");
-				
+
 				ips.println("    /**");
 				ips.println("     * Creates a " + def.getRawName() + ".");
 				ips.println("     */");
@@ -1133,7 +1181,7 @@ public class SourceGenerator
 				printParameterList(ips, recProps);
 				ips.println(";");
 				ips.println();
-				
+
 				cps.println("    /**");
 				cps.println("     * Creates a " + def.getRawName() + ".");
 				cps.println("     */");
@@ -1154,10 +1202,10 @@ public class SourceGenerator
 		public void finish() throws IOException
 		{
 			super.finish();
-			
+
 			ips.println("}");
 			ips.close();
-			
+
 			cps.println("}");
 			cps.close();
 		}

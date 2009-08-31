@@ -43,9 +43,12 @@
 # itself.  Note that each line will be interpreted as HTML by the Javadoc reader.
 #
 # The third mode is include.  When in include mode, each line is taken to be a filename in the supplements directory.
-# Each file is read line by line and scanned for comments on their own line.  A comment /* GEN:start */ causes following
-# lines to be copied verbatim into the file.  A comment /* GEN:stop */ causes copying to cease.  If an include file is
-# mentioned, it must appear in all immediate supplements subdirectories, even if it is empty.
+# Each file is read line by line and scanned for comments on their own line.  Each comment of the form
+# /* GEN:foo */ (where foo is any string containing no whitespace) is interpreted rather than processed.  Interpreted
+# comments change the behavior of the file inclusion.  Lines which appear after a "start" are copied into the body of
+# the file until a "stop" is encountered.  Lines which appear after an "importstart" are copied into the header of the
+# file until an "importstop" is encountered.  If an include is specified, it must be present in both the classes and
+# ifaces directories, even if one of them is empty.
 
 #######################################################################################################################
 # JAVA AST NODES
