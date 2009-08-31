@@ -75,6 +75,8 @@ tokens {
     STATEMENT;
     CLASS_BODY;
     INTERFACE_BODY;
+    INTERFACE;
+    CLASS;
 }
 
 @lexer::header{
@@ -183,9 +185,9 @@ normalClassDeclaration
         )?            
         classBody 
     -> 
-        ^('class' IDENTIFIER ^(MODIFIERS modifiers)
+        ^(CLASS IDENTIFIER ^(MODIFIERS modifiers)
         	^('implements' typeList)? ^('extends' type)? 
-        	^(TYPEPARAMETERS typeParameters)? classBody
+        	typeParameters? classBody
         )
     ;
 
@@ -197,7 +199,7 @@ typeParameters
             )*
         '>'
     ->
-    	typeParameter+
+    	^(TYPEPARAMETERS typeParameter+)
     ;
 
 
@@ -288,6 +290,11 @@ normalInterfaceDeclaration
         ('extends' typeList
         )?
         interfaceBody
+	->
+		^(INTERFACE IDENTIFIER ^(MODIFIERS modifiers)
+			typeParameters? ^('extends' typeList)
+			interfaceBody
+		)        
     ;
 
 typeList 
@@ -313,7 +320,7 @@ interfaceBody
         )* 
         '}'
 	->
-    	interfaceBodyDeclaration*        
+    	^(INTERFACE_BODY interfaceBodyDeclaration*)        
     ;
 
 classBodyDeclaration 
@@ -366,7 +373,7 @@ methodDeclaration
         )
     	->
     		^(METHOD IDENTIFIER ^(MODIFIERS modifiers)
-    			^(TYPEPARAMETERS typeParameters)?
+    			typeParameters?
     			^(METHOD_PARAMS formalParameters)
     			^(THROWS qualifiedNameList)?
     			^(METHOD_BODY block)
