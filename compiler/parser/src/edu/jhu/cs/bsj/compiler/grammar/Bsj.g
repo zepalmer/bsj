@@ -65,7 +65,6 @@ tokens {
     COMPILATION_UNIT;
     TYPEPARAMETERS;
     MODIFIERS;
-    MEMBERS;
     VARIABLE;
     METHOD;
     METHOD_PARAMS;
@@ -74,6 +73,7 @@ tokens {
     THROWS;
     BLOCKSTATEMENT;
     STATEMENT;
+    CLASS_BODY;
 }
 
 @lexer::header{
@@ -184,7 +184,7 @@ normalClassDeclaration
     -> 
         ^('class' IDENTIFIER ^(MODIFIERS modifiers)
         	^('implements' typeList)? ^('extends' type)? 
-        	^(TYPEPARAMETERS typeParameters)? ^(MEMBERS classBody)
+        	^(TYPEPARAMETERS typeParameters)? classBody
         )
     ;
 
@@ -303,7 +303,7 @@ classBody
         )* 
         '}'
     ->
-    	classBodyDeclaration*
+        ^(CLASS_BODY classBodyDeclaration*)
     ;
 
 interfaceBody 
