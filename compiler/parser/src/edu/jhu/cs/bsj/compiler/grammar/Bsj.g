@@ -62,7 +62,6 @@ options {
 }
 
 tokens {
-    TYPEPARAMETERS;
     VARIABLE;
     METHOD;
     METHOD_PARAMS;
@@ -78,15 +77,20 @@ tokens {
     AST_MEMBER_SELECT;
     AST_IDENTIFIER;
     AST_TYPEARG_LIST;
-    AST_AST_LIST;
+    AST_TYPE_LIST;
     AST_COMPILATION_UNIT;
     AST_PACKAGE_DECL;
     AST_IMPORT_LIST;
-    AST_AST_DECL_LIST;
+    AST_TYPE_DECL_LIST;
     AST_IMPORT_DECL;
     AST_VOIDAST_DECL;
     AST_CLASS_DECL;
     AST_MODIFIERS;
+    AST_TYPE_PARAMETERS;
+    AST_TYPE_BOUNDS;
+    AST_IMPLEMENTS_LIST;
+    AST_EXTENDS;
+    AST_ENUM;
 }
 
 @lexer::header{
@@ -114,7 +118,7 @@ compilationUnit
         ^(AST_COMPILATION_UNIT
             ^(AST_PACKAGE_DECL annotations? packageDeclaration)?
             ^(AST_IMPORT_LIST importDeclaration*)
-            ^(AST_AST_DECL_LIST typeDeclaration*))
+            ^(AST_TYPE_DECL_LIST typeDeclaration*))
     ;
 
 packageDeclaration 
@@ -235,9 +239,12 @@ normalClassDeclaration
         )?            
         classBody 
     -> 
-        ^(AST_CLASS_DECL IDENTIFIER modifiers
-        	^('implements' typeList)? ^('extends' type)? 
-        	typeParameters? classBody
+        ^(AST_CLASS_DECL IDENTIFIER
+            modifiers
+            ^(AST_IMPLEMENTS_LIST typeList)?
+            ^(AST_EXTENDS type)?
+        	typeParameters?
+        	classBody
         )
     ;
 
@@ -249,7 +256,7 @@ typeParameters
             )*
         '>'
     ->
-    	^(TYPEPARAMETERS typeParameter+)
+    	^(AST_TYPE_PARAMETERS typeParameter+)
     ;
 
 
@@ -267,7 +274,7 @@ typeBound
         ('&' type
         )*
     ->
-    	type+
+        ^(AST_TYPE_BOUNDS type+)
     ;
 
 
@@ -280,13 +287,13 @@ enumDeclaration
         )?
         enumBody
     ->
-    	^('enum' IDENTIFIER 
-    		^(AST_MODIFIERS modifiers)
-        	^('implements' typeList)?
-        	enumBody
-        )
+        ^(AST_ENUM
+            IDENTIFIER
+            modifiers
+            ^(AST_IMPLEMENTS_LIST typeList)?
+            enumBody)
     ;
-    
+
 
 enumBody 
     :   '{'
@@ -559,7 +566,7 @@ qualifiedNameList
         (',' qualifiedName
         )*
     ->
-        ^(AST_AST_LIST qualifiedName+)
+        ^(AST_TYPE_LIST qualifiedName+)
     ;
 
 formalParameters 
