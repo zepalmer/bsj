@@ -81,6 +81,7 @@ tokens {
     TYPE_MEMBER_SELECT;
     TYPE_IDENTIFIER;
     TYPE_TYPEARG_LIST;
+    TYPE_TYPE_LIST;
 }
 
 @lexer::header{
@@ -516,7 +517,7 @@ qualifiedNameList
         (',' qualifiedName
         )*
     ->
-    	qualifiedName+
+        ^(TYPE_TYPE_LIST qualifiedName+)
     ;
 
 formalParameters 
