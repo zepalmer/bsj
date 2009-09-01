@@ -148,19 +148,22 @@ classOrInterfaceDeclaration
   
 modifiers  
     :
-    (    annotation
-    |   'public'
-    |   'protected'
-    |   'private'
-    |   'static'
-    |   'abstract'
-    |   'final'
-    |   'native'
-    |   'synchronized'
-    |   'transient'
-    |   'volatile'
-    |   'strictfp'
-    )*
+        mod=
+	    (    annotation
+	    |   'public'
+	    |   'protected'
+	    |   'private'
+	    |   'static'
+	    |   'abstract'
+	    |   'final'
+	    |   'native'
+	    |   'synchronized'
+	    |   'transient'
+	    |   'volatile'
+	    |   'strictfp'
+	    )*
+	->
+        ^(MODIFIERS $mod*)
     ;
 
 
@@ -186,7 +189,7 @@ normalClassDeclaration
         )?            
         classBody 
     -> 
-        ^(CLASS IDENTIFIER ^(MODIFIERS modifiers)
+        ^(CLASS IDENTIFIER modifiers
         	^('implements' typeList)? ^('extends' type)? 
         	typeParameters? classBody
         )
@@ -401,6 +404,7 @@ fieldDeclaration
     	^(VARIABLE type variableDeclarator)+        
     ;
 
+// TODO: complete
 variableDeclarator 
     :   IDENTIFIER
         ('[' ']'
