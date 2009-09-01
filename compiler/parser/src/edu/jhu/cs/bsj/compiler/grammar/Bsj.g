@@ -63,7 +63,6 @@ options {
 
 tokens {
     TYPEPARAMETERS;
-    MODIFIERS;
     VARIABLE;
     METHOD;
     METHOD_PARAMS;
@@ -87,6 +86,7 @@ tokens {
     TYPE_IMPORT_DECL;
     TYPE_VOIDTYPE_DECL;
     TYPE_CLASS_DECL;
+    TYPE_MODIFIERS;
 }
 
 @lexer::header{
@@ -186,7 +186,7 @@ modifiers
             mod+=modifier
         )*
     ->
-	    ^(MODIFIERS $mod*)
+	    ^(TYPE_MODIFIERS $mod*)
     ;
 
 modifier
@@ -206,14 +206,19 @@ modifier
     ;
 
 variableModifiers 
-    :   mod=
-        (   'final'
-        |   annotation
+    :
+        (
+            mod+=variableModifier
         )*
     ->
-        ^(MODIFIERS $mod*)
+        ^(TYPE_MODIFIERS $mod*)
     ;
-    
+
+variableModifier
+    :
+            annotation
+        |   'final'
+    ;
 
 classDeclaration 
     :   normalClassDeclaration
@@ -276,7 +281,7 @@ enumDeclaration
         enumBody
     ->
     	^('enum' IDENTIFIER 
-    		^(MODIFIERS modifiers)
+    		^(TYPE_MODIFIERS modifiers)
         	^('implements' typeList)?
         	enumBody
         )
@@ -336,7 +341,7 @@ normalInterfaceDeclaration
         )?
         interfaceBody
 	->
-		^(INTERFACE IDENTIFIER ^(MODIFIERS modifiers)
+		^(INTERFACE IDENTIFIER ^(TYPE_MODIFIERS modifiers)
 			typeParameters? ^('extends' typeList)
 			interfaceBody
 		)        
@@ -401,7 +406,7 @@ methodDeclaration
         )*
         '}'
     	->
-    		^(METHOD IDENTIFIER ^(MODIFIERS modifiers)
+    		^(METHOD IDENTIFIER ^(TYPE_MODIFIERS modifiers)
     			typeParameters?
     			^(METHOD_PARAMS formalParameters)
     			^(THROWS qualifiedNameList)?
@@ -424,7 +429,7 @@ methodDeclaration
         |   ';' 
         )
     	->
-    		^(METHOD IDENTIFIER ^(MODIFIERS modifiers)
+    		^(METHOD IDENTIFIER ^(TYPE_MODIFIERS modifiers)
     			typeParameters?
     			^(RETURN_TYPE $rettype)
     			^(METHOD_PARAMS formalParameters)
