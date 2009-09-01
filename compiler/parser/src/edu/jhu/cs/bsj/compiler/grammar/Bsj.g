@@ -77,6 +77,7 @@ tokens {
     INTERFACE_BODY;
     INTERFACE;
     CLASS;
+    RETURN_TYPE;
 }
 
 @lexer::header{
@@ -365,7 +366,7 @@ methodDeclaration
     |   modifiers
         (typeParameters
         )?
-        (type
+        rettype=(type
         |   'void'
         )
         IDENTIFIER
@@ -381,6 +382,7 @@ methodDeclaration
     	->
     		^(METHOD IDENTIFIER ^(MODIFIERS modifiers)
     			typeParameters?
+    			^(RETURN_TYPE $rettype)
     			^(METHOD_PARAMS formalParameters)
     			^(THROWS qualifiedNameList)?
     			^(METHOD_BODY block)
