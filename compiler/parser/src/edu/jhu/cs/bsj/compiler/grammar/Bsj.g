@@ -85,6 +85,7 @@ tokens {
     TYPE_PACKAGE_DECL;
     TYPE_IMPORT_LIST;
     TYPE_TYPE_DECL_LIST;
+    TYPE_IMPORT_DECL;
 }
 
 @lexer::header{
@@ -123,28 +124,42 @@ packageDeclaration
     ;
 
 
-//TODO fix
 importDeclaration  
-    :   'import'^ 
+    :   'import' 
         ('static'
         )?
         IDENTIFIER '.' '*'
-        ';'!
-    |   'import'^ 
+        ';'
+    ->
+        ^(TYPE_IMPORT_DECL
+            'import'
+            'static'?
+            ^(TYPE_MEMBER_SELECT
+                ^(TYPE_IDENTIFIER IDENTIFIER)
+                ^(TYPE_IDENTIFIER '*')))
+    |
+        'import'
         ('static'
         )?
-        IDENTIFIER
-        ('.' IDENTIFIER
-        )+
-        ('.' '*'
-        )?
-        ';'!
+        qualifiedImportName
+        ';'
+    ->
+        ^(TYPE_IMPORT_DECL
+            'import'
+            'static'?
+            qualifiedImportName)
     ;
 
-qualifiedImportName 
-    :   IDENTIFIER
-        ('.' IDENTIFIER
-        )*
+qualifiedImportName
+    :
+        (a=necessarilyQualifiedName -> $a)
+        ('.' '*' -> ^(TYPE_MEMBER_SELECT $qualifiedImportName '*'))?
+    ;
+
+necessarilyQualifiedName 
+    :   
+        (a=IDENTIFIER -> ^(TYPE_IDENTIFIER $a))
+        ('.' b=IDENTIFIER -> ^(TYPE_MEMBER_SELECT ^(TYPE_IDENTIFIER $b) $necessarilyQualifiedName))+
     ;
 
 typeDeclaration 
