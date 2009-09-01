@@ -182,29 +182,36 @@ classOrInterfaceDeclaration
   
 modifiers  
     :
-        mod=
-	    (    annotation
-	    |   'public'
-	    |   'protected'
-	    |   'private'
-	    |   'static'
-	    |   'abstract'
-	    |   'final'
-	    |   'native'
-	    |   'synchronized'
-	    |   'transient'
-	    |   'volatile'
-	    |   'strictfp'
-	    )*
-	->
-        ^(MODIFIERS $mod*)
+        (
+            mod+=modifier
+        )*
+    ->
+	    ^(MODIFIERS $mod*)
     ;
 
+modifier
+    :
+            annotation
+        |   'public'
+        |   'protected'
+        |   'private'
+        |   'static'
+        |   'abstract'
+        |   'final'
+        |   'native'
+        |   'synchronized'
+        |   'transient'
+        |   'volatile'
+        |   'strictfp'
+    ;
 
 variableModifiers 
-    :   (   'final'
+    :   mod=
+        (   'final'
         |   annotation
         )*
+    ->
+        ^(MODIFIERS $mod*)
     ;
     
 
