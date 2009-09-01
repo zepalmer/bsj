@@ -62,7 +62,6 @@ options {
 }
 
 tokens {
-    COMPILATION_UNIT;
     TYPEPARAMETERS;
     MODIFIERS;
     VARIABLE;
@@ -82,6 +81,10 @@ tokens {
     TYPE_IDENTIFIER;
     TYPE_TYPEARG_LIST;
     TYPE_TYPE_LIST;
+    TYPE_COMPILATION_UNIT;
+    TYPE_PACKAGE_DECL;
+    TYPE_IMPORT_LIST;
+    TYPE_TYPE_DECL_LIST;
 }
 
 @lexer::header{
@@ -105,6 +108,11 @@ compilationUnit
         )*
         (typeDeclaration
         )*
+    ->
+        ^(TYPE_COMPILATION_UNIT
+            ^(TYPE_PACKAGE_DECL annotations? packageDeclaration)?
+            ^(TYPE_IMPORT_LIST importDeclaration*)
+            ^(TYPE_TYPE_DECL_LIST typeDeclaration*))
     ;
 
 packageDeclaration 
