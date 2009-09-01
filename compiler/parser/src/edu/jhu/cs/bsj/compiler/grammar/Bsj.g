@@ -63,17 +63,11 @@ options {
 
 tokens {
     VARIABLE;
-    METHOD;
-    METHOD_PARAMS;
-    METHOD_RETURN;
-    METHOD_BODY;
-    THROWS;
     BLOCKSTATEMENT;
     STATEMENT;
     CLASS_BODY;
     INTERFACE_BODY;
     INTERFACE;
-    RETURN_TYPE;
     AST_MEMBER_SELECT;
     AST_IDENTIFIER;
     AST_TYPEARG_LIST;
@@ -83,14 +77,26 @@ tokens {
     AST_IMPORT_LIST;
     AST_TYPE_DECL_LIST;
     AST_IMPORT_DECL;
-    AST_VOIDAST_DECL;
+    AST_VOID_DECL;
     AST_CLASS_DECL;
     AST_MODIFIERS;
-    AST_TYPE_PARAMETERS;
+    AST_TYPE_PARAMETER_LIST;
+    AST_TYPE_PARAMETER;
     AST_TYPE_BOUNDS;
     AST_IMPLEMENTS_LIST;
     AST_EXTENDS;
     AST_ENUM;
+    AST_ENUM_BODY;
+    AST_ENUM_CONSTANT_LIST;
+    AST_ENUM_CONSTANT;
+    AST_CLASS_INITIALIZER;
+    AST_METHOD;
+    AST_FORMAL_PARAMS;
+    AST_CONSTRUCTOR_BODY;
+    AST_METHOD_BODY;
+    AST_THROWS;
+    AST_EXPLICIT_CONSTRUCTOR;
+    AST_RETURN_TYPE;
 }
 
 @lexer::header{
@@ -175,7 +181,7 @@ typeDeclaration
     |
         ';'
     ->
-        ^(AST_VOIDAST_DECL)
+        ^(AST_VOID_DECL)
     ;
 
 classOrInterfaceDeclaration 
@@ -256,7 +262,7 @@ typeParameters
             )*
         '>'
     ->
-    	^(AST_TYPE_PARAMETERS typeParameter+)
+    	^(AST_TYPE_PARAMETER_LIST typeParameter+)
     ;
 
 
@@ -265,7 +271,7 @@ typeParameter
         ('extends' typeBound
         )?
     ->
-    	^(IDENTIFIER ^('extends' typeBound)?)
+        ^(AST_TYPE_PARAMETER IDENTIFIER typeBound?)
     ;
 
 
@@ -303,6 +309,10 @@ enumBody
         (enumBodyDeclarations
         )? 
         '}'
+    ->
+        ^(AST_ENUM_BODY
+            enumConstants
+            enumBodyDeclarations)
     ;
 
 enumConstants 
@@ -310,13 +320,9 @@ enumConstants
         (',' enumConstant
         )*
     ->
-    	enumConstant+
+        ^(AST_ENUM_CONSTANT_LIST enumConstant+)
     ;
 
-/**
- * NOTE: here differs from the javac grammar, missing TypeArguments.
- * EnumeratorDeclaration = AnnotationsOpt [TypeArguments] IDENTIFIER [ Arguments ] [ "{" ClassBody "}" ]
- */
 enumConstant 
     :   (annotations
         )?
@@ -325,14 +331,21 @@ enumConstant
         )?
         (classBody
         )?
-        /* TODO: $GScope::name = names.empty. enum constant body is actually
-        an anonymous class, where constructor isn't allowed, have to add this check*/
+        /* TODO: conversion note: ensure that enum body doesn't contain a constructor - anonymous classes can't in general*/
+    ->
+        ^(AST_ENUM_CONSTANT
+            annotations?
+            IDENTIFIER
+            arguments?
+            classBody?)
     ;
 
 enumBodyDeclarations 
     :   ';' 
         (classBodyDeclaration
         )*
+    ->
+        ^(CLASS_BODY classBodyDeclaration*)
     ;
 
 interfaceDeclaration 
@@ -359,7 +372,7 @@ typeList
         (',' type
         )*
     ->
-    	type+
+        ^(AST_TYPE_LIST type+)
     ;
 
 classBody 
@@ -381,11 +394,19 @@ interfaceBody
     ;
 
 classBodyDeclaration 
-    :   ';'
-    |   ('static'
-        )? 
+    :
+        ';'
+    ->
+        ^(AST_VOID_DECL)
+    |
+        'static'?
         block
-    |   memberDecl
+    ->
+        ^(AST_CLASS_INITIALIZER
+            'static'?
+            block)
+    |
+        memberDecl
     ;
 
 memberDecl 
@@ -400,25 +421,24 @@ methodDeclaration
     :
         /* For constructor, return type is null, name is 'init' */
          modifiers
-        (typeParameters
-        )?
+        typeParameters?
         IDENTIFIER
         formalParameters
-        ('throws' qualifiedNameList
-        )?
+        ('throws' qualifiedNameList)?
         '{' 
-        (explicitConstructorInvocation
-        )?
-        (blockStatement
-        )*
+        explicitConstructorInvocation?
+        blockStatement*
         '}'
-    	->
-    		^(METHOD IDENTIFIER ^(AST_MODIFIERS modifiers)
-    			typeParameters?
-    			^(METHOD_PARAMS formalParameters)
-    			^(THROWS qualifiedNameList)?
-    			^(METHOD_BODY blockStatement*)
-    		)         
+    ->
+        ^(AST_METHOD
+            IDENTIFIER
+            modifiers
+            typeParameters?
+            formalParameters
+            ^(AST_THROWS qualifiedNameList)?
+            ^(AST_CONSTRUCTOR_BODY
+                ^(AST_EXPLICIT_CONSTRUCTOR explicitConstructorInvocation)?
+                blockStatement*))         
     |   modifiers
         (typeParameters
         )?
@@ -435,14 +455,15 @@ methodDeclaration
             block
         |   ';' 
         )
-    	->
-    		^(METHOD IDENTIFIER ^(AST_MODIFIERS modifiers)
-    			typeParameters?
-    			^(RETURN_TYPE $rettype)
-    			^(METHOD_PARAMS formalParameters)
-    			^(THROWS qualifiedNameList)?
-    			^(METHOD_BODY block)
-    		)        
+    ->
+        ^(AST_METHOD
+            IDENTIFIER
+            modifiers
+            typeParameters?
+            ^(AST_RETURN_TYPE $rettype)
+            formalParameters
+            ^(AST_THROWS qualifiedNameList)?
+            ^(AST_METHOD_BODY block))         
     ;
 
 
@@ -561,6 +582,8 @@ typeArgument
         )?
     ;
 
+// because qualifiedNameList is only ever used in the context of a "throws" clause, it returns an AST_TYPE_LIST?
+// TODO: make sure this is actually okay - the real typeList rule might return differently-typed nodes
 qualifiedNameList 
     :   qualifiedName
         (',' qualifiedName
@@ -570,24 +593,29 @@ qualifiedNameList
     ;
 
 formalParameters 
-    :   '('
+    :
+        '('
         (formalParameterDecls
         )? 
         ')'
     ->
-    	formalParameterDecls?
+    	^(AST_FORMAL_PARAMS formalParameterDecls?)
     ;
 
+// This rule is expected to produce a list of parameter declarations (multiple results)
 formalParameterDecls 
-    :   ellipsisParameterDecl
+    :
+        ellipsisParameterDecl
     ->
     	ellipsisParameterDecl
-    |   normalParameterDecl
+    |
+        normalParameterDecl
         (',' normalParameterDecl
         )*
     ->
     	normalParameterDecl+
-    |   (normalParameterDecl
+    |
+        (normalParameterDecl
         ','
         )+ 
         ellipsisParameterDecl
