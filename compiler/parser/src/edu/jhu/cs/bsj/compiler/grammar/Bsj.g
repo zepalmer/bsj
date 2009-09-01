@@ -80,6 +80,7 @@ tokens {
     RETURN_TYPE;
     TYPE_MEMBER_SELECT;
     TYPE_IDENTIFIER;
+    TYPE_TYPEARG_LIST;
 }
 
 @lexer::header{
@@ -495,6 +496,8 @@ typeArguments
         (',' typeArgument
         )* 
         '>'
+    ->
+        ^(TYPE_TYPEARG_LIST typeArgument+)
     ;
 
 typeArgument 
