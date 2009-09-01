@@ -78,6 +78,8 @@ tokens {
     INTERFACE;
     CLASS;
     RETURN_TYPE;
+    TYPE_MEMBER_SELECT;
+    TYPE_IDENTIFIER;
 }
 
 @lexer::header{
@@ -570,9 +572,9 @@ explicitConstructorInvocation
     ;
 
 qualifiedName 
-    :   IDENTIFIER
-        ('.' IDENTIFIER
-        )*
+    :
+        (a=IDENTIFIER -> ^(TYPE_IDENTIFIER $a))
+        ('.' b=IDENTIFIER -> ^(TYPE_MEMBER_SELECT ^(TYPE_IDENTIFIER $b) $qualifiedName))*
     ;
 
 annotations 
