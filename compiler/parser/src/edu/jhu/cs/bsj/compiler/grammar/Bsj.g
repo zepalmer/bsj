@@ -75,18 +75,18 @@ tokens {
     INTERFACE_BODY;
     INTERFACE;
     RETURN_TYPE;
-    TYPE_MEMBER_SELECT;
-    TYPE_IDENTIFIER;
-    TYPE_TYPEARG_LIST;
-    TYPE_TYPE_LIST;
-    TYPE_COMPILATION_UNIT;
-    TYPE_PACKAGE_DECL;
-    TYPE_IMPORT_LIST;
-    TYPE_TYPE_DECL_LIST;
-    TYPE_IMPORT_DECL;
-    TYPE_VOIDTYPE_DECL;
-    TYPE_CLASS_DECL;
-    TYPE_MODIFIERS;
+    AST_MEMBER_SELECT;
+    AST_IDENTIFIER;
+    AST_TYPEARG_LIST;
+    AST_AST_LIST;
+    AST_COMPILATION_UNIT;
+    AST_PACKAGE_DECL;
+    AST_IMPORT_LIST;
+    AST_AST_DECL_LIST;
+    AST_IMPORT_DECL;
+    AST_VOIDAST_DECL;
+    AST_CLASS_DECL;
+    AST_MODIFIERS;
 }
 
 @lexer::header{
@@ -111,10 +111,10 @@ compilationUnit
         (typeDeclaration
         )*
     ->
-        ^(TYPE_COMPILATION_UNIT
-            ^(TYPE_PACKAGE_DECL annotations? packageDeclaration)?
-            ^(TYPE_IMPORT_LIST importDeclaration*)
-            ^(TYPE_TYPE_DECL_LIST typeDeclaration*))
+        ^(AST_COMPILATION_UNIT
+            ^(AST_PACKAGE_DECL annotations? packageDeclaration)?
+            ^(AST_IMPORT_LIST importDeclaration*)
+            ^(AST_AST_DECL_LIST typeDeclaration*))
     ;
 
 packageDeclaration 
@@ -132,12 +132,12 @@ importDeclaration
         IDENTIFIER '.' '*'
         ';'
     ->
-        ^(TYPE_IMPORT_DECL
+        ^(AST_IMPORT_DECL
             'import'
             'static'?
-            ^(TYPE_MEMBER_SELECT
-                ^(TYPE_IDENTIFIER IDENTIFIER)
-                ^(TYPE_IDENTIFIER '*')))
+            ^(AST_MEMBER_SELECT
+                ^(AST_IDENTIFIER IDENTIFIER)
+                ^(AST_IDENTIFIER '*')))
     |
         'import'
         ('static'
@@ -145,7 +145,7 @@ importDeclaration
         qualifiedImportName
         ';'
     ->
-        ^(TYPE_IMPORT_DECL
+        ^(AST_IMPORT_DECL
             'import'
             'static'?
             qualifiedImportName)
@@ -154,13 +154,13 @@ importDeclaration
 qualifiedImportName
     :
         (a=necessarilyQualifiedName -> $a)
-        ('.' '*' -> ^(TYPE_MEMBER_SELECT $qualifiedImportName '*'))?
+        ('.' '*' -> ^(AST_MEMBER_SELECT $qualifiedImportName '*'))?
     ;
 
 necessarilyQualifiedName 
     :   
-        (a=IDENTIFIER -> ^(TYPE_IDENTIFIER $a))
-        ('.' b=IDENTIFIER -> ^(TYPE_MEMBER_SELECT ^(TYPE_IDENTIFIER $b) $necessarilyQualifiedName))+
+        (a=IDENTIFIER -> ^(AST_IDENTIFIER $a))
+        ('.' b=IDENTIFIER -> ^(AST_MEMBER_SELECT ^(AST_IDENTIFIER $b) $necessarilyQualifiedName))+
     ;
 
 typeDeclaration 
@@ -171,7 +171,7 @@ typeDeclaration
     |
         ';'
     ->
-        ^(TYPE_VOIDTYPE_DECL)
+        ^(AST_VOIDAST_DECL)
     ;
 
 classOrInterfaceDeclaration 
@@ -186,7 +186,7 @@ modifiers
             mod+=modifier
         )*
     ->
-	    ^(TYPE_MODIFIERS $mod*)
+	    ^(AST_MODIFIERS $mod*)
     ;
 
 modifier
@@ -211,7 +211,7 @@ variableModifiers
             mod+=variableModifier
         )*
     ->
-        ^(TYPE_MODIFIERS $mod*)
+        ^(AST_MODIFIERS $mod*)
     ;
 
 variableModifier
@@ -235,7 +235,7 @@ normalClassDeclaration
         )?            
         classBody 
     -> 
-        ^(TYPE_CLASS_DECL IDENTIFIER modifiers
+        ^(AST_CLASS_DECL IDENTIFIER modifiers
         	^('implements' typeList)? ^('extends' type)? 
         	typeParameters? classBody
         )
@@ -281,7 +281,7 @@ enumDeclaration
         enumBody
     ->
     	^('enum' IDENTIFIER 
-    		^(TYPE_MODIFIERS modifiers)
+    		^(AST_MODIFIERS modifiers)
         	^('implements' typeList)?
         	enumBody
         )
@@ -341,7 +341,7 @@ normalInterfaceDeclaration
         )?
         interfaceBody
 	->
-		^(INTERFACE IDENTIFIER ^(TYPE_MODIFIERS modifiers)
+		^(INTERFACE IDENTIFIER ^(AST_MODIFIERS modifiers)
 			typeParameters? ^('extends' typeList)
 			interfaceBody
 		)        
@@ -406,7 +406,7 @@ methodDeclaration
         )*
         '}'
     	->
-    		^(METHOD IDENTIFIER ^(TYPE_MODIFIERS modifiers)
+    		^(METHOD IDENTIFIER ^(AST_MODIFIERS modifiers)
     			typeParameters?
     			^(METHOD_PARAMS formalParameters)
     			^(THROWS qualifiedNameList)?
@@ -429,7 +429,7 @@ methodDeclaration
         |   ';' 
         )
     	->
-    		^(METHOD IDENTIFIER ^(TYPE_MODIFIERS modifiers)
+    		^(METHOD IDENTIFIER ^(AST_MODIFIERS modifiers)
     			typeParameters?
     			^(RETURN_TYPE $rettype)
     			^(METHOD_PARAMS formalParameters)
@@ -540,7 +540,7 @@ typeArguments
         )* 
         '>'
     ->
-        ^(TYPE_TYPEARG_LIST typeArgument+)
+        ^(AST_TYPEARG_LIST typeArgument+)
     ;
 
 typeArgument 
@@ -559,7 +559,7 @@ qualifiedNameList
         (',' qualifiedName
         )*
     ->
-        ^(TYPE_TYPE_LIST qualifiedName+)
+        ^(AST_AST_LIST qualifiedName+)
     ;
 
 formalParameters 
@@ -619,8 +619,8 @@ explicitConstructorInvocation
 
 qualifiedName 
     :
-        (a=IDENTIFIER -> ^(TYPE_IDENTIFIER $a))
-        ('.' b=IDENTIFIER -> ^(TYPE_MEMBER_SELECT ^(TYPE_IDENTIFIER $b) $qualifiedName))*
+        (a=IDENTIFIER -> ^(AST_IDENTIFIER $a))
+        ('.' b=IDENTIFIER -> ^(AST_MEMBER_SELECT ^(AST_IDENTIFIER $b) $qualifiedName))*
     ;
 
 annotations 
