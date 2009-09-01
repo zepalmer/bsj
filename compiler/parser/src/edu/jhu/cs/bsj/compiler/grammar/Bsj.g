@@ -75,7 +75,6 @@ tokens {
     CLASS_BODY;
     INTERFACE_BODY;
     INTERFACE;
-    CLASS;
     RETURN_TYPE;
     TYPE_MEMBER_SELECT;
     TYPE_IDENTIFIER;
@@ -86,6 +85,8 @@ tokens {
     TYPE_IMPORT_LIST;
     TYPE_TYPE_DECL_LIST;
     TYPE_IMPORT_DECL;
+    TYPE_VOIDTYPE_DECL;
+    TYPE_CLASS_DECL;
 }
 
 @lexer::header{
@@ -163,8 +164,14 @@ necessarilyQualifiedName
     ;
 
 typeDeclaration 
-    :   classOrInterfaceDeclaration
-    |   ';'
+    :
+        a=classOrInterfaceDeclaration
+    ->
+        $a
+    |
+        ';'
+    ->
+        ^(TYPE_VOIDTYPE_DECL)
     ;
 
 classOrInterfaceDeclaration 
@@ -216,7 +223,7 @@ normalClassDeclaration
         )?            
         classBody 
     -> 
-        ^(CLASS IDENTIFIER modifiers
+        ^(TYPE_CLASS_DECL IDENTIFIER modifiers
         	^('implements' typeList)? ^('extends' type)? 
         	typeParameters? classBody
         )
