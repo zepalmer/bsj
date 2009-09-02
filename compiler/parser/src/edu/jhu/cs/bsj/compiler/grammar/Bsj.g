@@ -62,7 +62,6 @@ options {
 }
 
 tokens {
-    VARIABLE;
     BLOCKSTATEMENT;
     STATEMENT;
     CLASS_BODY;
@@ -97,6 +96,7 @@ tokens {
     AST_THROWS;
     AST_EXPLICIT_CONSTRUCTOR;
     AST_RETURN_TYPE;
+    AST_VARIABLE;
 }
 
 @lexer::header{
@@ -475,7 +475,12 @@ fieldDeclaration
         )*
         ';'
     ->
-    	^(VARIABLE type variableDeclarator)+        
+        /* Notice: 1-arity nodes used in n-arity group.  Declarations such as "int x=0,y=0" can result in more than one
+           node being returned from this rule. */
+        ^(AST_VARIABLE
+            modifiers
+            type
+            variableDeclarator)+
     ;
 
 // TODO: complete
@@ -527,7 +532,7 @@ interfaceFieldDeclaration
         )*
         ';'
     ->
-    	^(VARIABLE type variableDeclarator)+
+    	^(AST_VARIABLE type variableDeclarator)+
     ;
 
 //TODO separate [] and non-[] to differentiate between array types
