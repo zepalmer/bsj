@@ -416,6 +416,9 @@ memberDecl
     |    interfaceDeclaration
     ;
 
+methodReturnType
+    :
+        type | 'void';
 
 methodDeclaration 
     :
@@ -442,9 +445,7 @@ methodDeclaration
     |   modifiers
         (typeParameters
         )?
-        (type
-        |   'void'
-        )
+        methodReturnType
         IDENTIFIER
         formalParameters
         ('[' ']'
@@ -461,7 +462,7 @@ methodDeclaration
             IDENTIFIER
             modifiers
             typeParameters?
-            ^(AST_RETURN_TYPE type? 'void'?)
+            ^(AST_RETURN_TYPE methodReturnType)
             formalParameters
             ^(AST_THROWS qualifiedNameList)?
             ^(AST_METHOD_BODY block))         
