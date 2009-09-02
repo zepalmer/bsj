@@ -456,6 +456,7 @@ methodDeclaration
         |   ';' 
         )
     ->
+        // TODO: fix bug.  The [] at the end of the method declaration are being ignored and they affect the return type.
         ^(AST_METHOD
             IDENTIFIER
             modifiers
