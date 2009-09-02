@@ -510,7 +510,7 @@ interfaceMethodDeclaration
     :   modifiers
         (typeParameters
         )?
-        (type
+        rettype=(type
         |'void'
         )
         IDENTIFIER
@@ -519,6 +519,15 @@ interfaceMethodDeclaration
         )*
         ('throws' qualifiedNameList
         )? ';'
+    ->
+        ^(AST_METHOD
+            IDENTIFIER
+            modifiers
+            typeParameters?            
+            formalParameters
+            ^(AST_RETURN_TYPE $rettype)
+            ^(AST_THROWS qualifiedNameList)?
+        )         
     ;
 
 /**
