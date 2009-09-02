@@ -442,7 +442,7 @@ methodDeclaration
     |   modifiers
         (typeParameters
         )?
-        rettype=(type
+        (type
         |   'void'
         )
         IDENTIFIER
@@ -460,7 +460,7 @@ methodDeclaration
             IDENTIFIER
             modifiers
             typeParameters?
-            ^(AST_RETURN_TYPE $rettype)
+            ^(AST_RETURN_TYPE type? 'void'?)
             formalParameters
             ^(AST_THROWS qualifiedNameList)?
             ^(AST_METHOD_BODY block))         
@@ -510,7 +510,7 @@ interfaceMethodDeclaration
     :   modifiers
         (typeParameters
         )?
-        rettype=(type
+        (type
         |'void'
         )
         IDENTIFIER
@@ -525,7 +525,7 @@ interfaceMethodDeclaration
             modifiers
             typeParameters?            
             formalParameters
-            ^(AST_RETURN_TYPE $rettype)
+            ^(AST_RETURN_TYPE type? 'void'?)
             ^(AST_THROWS qualifiedNameList)?
         )         
     ;
