@@ -66,7 +66,7 @@ tokens {
     STATEMENT;
     CLASS_BODY;
     INTERFACE_BODY;
-    INTERFACE;
+    AST_IFACE_DECL;
     AST_MEMBER_SELECT;
     AST_IDENTIFIER;
     AST_TYPEARG_LIST;
@@ -361,8 +361,8 @@ normalInterfaceDeclaration
         )?
         interfaceBody
 	->
-		^(INTERFACE IDENTIFIER ^(AST_MODIFIERS modifiers)
-			typeParameters? ^('extends' typeList)
+		^(AST_IFACE_DECL IDENTIFIER modifiers
+			typeParameters? ^(AST_EXTENDS typeList)
 			interfaceBody
 		)        
     ;
