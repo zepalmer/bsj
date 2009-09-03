@@ -1,57 +1,57 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
-import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
-import edu.jhu.cs.bsj.compiler.ast.node.MemberSelectNode;
+import edu.jhu.cs.bsj.compiler.ast.node.NameNode;
+import edu.jhu.cs.bsj.compiler.ast.node.QualifiedNameNode;
 
-public class MemberSelectNodeImpl extends ExpressionNodeImpl implements MemberSelectNode
+public class QualifiedNameNodeImpl extends NameNodeImpl implements QualifiedNameNode
 {
-    /** The expression from which to select. */
-    private ExpressionNode expression;
+    /** The name to qualify. */
+    private NameNode name;
 
-    /** The identifier to select. */
+    /** The identifier to use. */
     private IdentifierNode identifier;
 
     /** General constructor. */
-    public MemberSelectNodeImpl(
-            ExpressionNode expression,
+    public QualifiedNameNodeImpl(
+            NameNode name,
             IdentifierNode identifier)
     {
         super();
-        this.expression = expression;
+        this.name = name;
         this.identifier = identifier;
     }
 
     /**
-     * Gets the expression from which to select.
-     * @return The expression from which to select.
+     * Gets the name to qualify.
+     * @return The name to qualify.
      */
-    public ExpressionNode getExpression()
+    public NameNode getName()
     {
-        return this.expression;
+        return this.name;
     }
 
     /**
-     * Changes the expression from which to select.
-     * @param expression The expression from which to select.
+     * Changes the name to qualify.
+     * @param name The name to qualify.
      */
-    public void setExpression(ExpressionNode expression)
+    public void setName(NameNode name)
     {
-        if (this.expression instanceof NodeImpl)
+        if (this.name instanceof NodeImpl)
         {
-            ((NodeImpl)this.expression).setParent(null);
+            ((NodeImpl)this.name).setParent(null);
         }
-        this.expression = expression;
-        if (this.expression instanceof NodeImpl)
+        this.name = name;
+        if (this.name instanceof NodeImpl)
         {
-            ((NodeImpl)this.expression).setParent(this);
+            ((NodeImpl)this.name).setParent(this);
         }
     }
 
     /**
-     * Gets the identifier to select.
-     * @return The identifier to select.
+     * Gets the identifier to use.
+     * @return The identifier to use.
      */
     public IdentifierNode getIdentifier()
     {
@@ -59,8 +59,8 @@ public class MemberSelectNodeImpl extends ExpressionNodeImpl implements MemberSe
     }
 
     /**
-     * Changes the identifier to select.
-     * @param identifier The identifier to select.
+     * Changes the identifier to use.
+     * @param identifier The identifier to use.
      */
     public void setIdentifier(IdentifierNode identifier)
     {
@@ -86,7 +86,7 @@ public class MemberSelectNodeImpl extends ExpressionNodeImpl implements MemberSe
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        this.expression.receive(visitor);
+        this.name.receive(visitor);
         this.identifier.receive(visitor);
     }
 }

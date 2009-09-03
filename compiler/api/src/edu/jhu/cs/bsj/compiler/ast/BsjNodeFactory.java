@@ -58,6 +58,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.NameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.ParameterizedTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.PrimitiveTypeNode;
+import edu.jhu.cs.bsj.compiler.ast.node.QualifiedNameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.StatementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.StringLiteralNode;
 import edu.jhu.cs.bsj.compiler.ast.node.SwitchNode;
@@ -166,6 +167,13 @@ public interface BsjNodeFactory
             UnaryOperator operator);
 
     /**
+     * Creates a QualifiedNameNode.
+     */
+    public QualifiedNameNode makeQualifiedNameNode(
+            NameNode name,
+            IdentifierNode identifier);
+
+    /**
      * Creates a VariableNode.
      */
     public VariableNode makeVariableNode(
@@ -229,7 +237,7 @@ public interface BsjNodeFactory
      * Creates a MemberSelectNode.
      */
     public MemberSelectNode makeMemberSelectNode(
-            NameNode expression,
+            ExpressionNode expression,
             IdentifierNode identifier);
 
     /**

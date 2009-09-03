@@ -64,6 +64,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.NameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.ParameterizedTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.PrimitiveTypeNode;
+import edu.jhu.cs.bsj.compiler.ast.node.QualifiedNameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.StatementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.StringLiteralNode;
 import edu.jhu.cs.bsj.compiler.ast.node.SwitchNode;
@@ -135,6 +136,7 @@ import edu.jhu.cs.bsj.compiler.impl.ast.node.MethodInvocationNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.ModifiersNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.ParameterizedTypeNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.PrimitiveTypeNodeImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.node.QualifiedNameNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.StringLiteralNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.SwitchNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.ThrowNodeImpl;
@@ -278,6 +280,17 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
 
     /**
+     * Creates a QualifiedNameNode.
+     */
+    public QualifiedNameNode makeQualifiedNameNode(
+            NameNode name,
+            IdentifierNode identifier)
+    {
+        QualifiedNameNode ret = new QualifiedNameNodeImpl(name, identifier);
+        return ret;
+    }
+
+    /**
      * Creates a VariableNode.
      */
     public VariableNode makeVariableNode(
@@ -377,7 +390,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      * Creates a MemberSelectNode.
      */
     public MemberSelectNode makeMemberSelectNode(
-            NameNode expression,
+            ExpressionNode expression,
             IdentifierNode identifier)
     {
         MemberSelectNode ret = new MemberSelectNodeImpl(expression, identifier);

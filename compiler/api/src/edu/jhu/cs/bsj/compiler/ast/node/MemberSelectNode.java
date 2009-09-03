@@ -6,20 +6,22 @@ package edu.jhu.cs.bsj.compiler.ast.node;
  * <pre>
  * <i>expr<i> . <i>identifier</i>
  * </pre>
+ * Member select nodes are used to select members from expressions.  They are not used for chains of identifier
+ * names as in package imports.  See {@link QualifiedNameNode}.
  */
-public interface MemberSelectNode extends NameNode
+public interface MemberSelectNode extends ExpressionNode
 {
     /**
      * Gets the expression from which to select.
      * @return The expression from which to select.
      */
-    public NameNode getExpression();
+    public ExpressionNode getExpression();
 
     /**
      * Changes the expression from which to select.
      * @param expression The expression from which to select.
      */
-    public void setExpression(NameNode expression);
+    public void setExpression(ExpressionNode expression);
 
     /**
      * Gets the identifier to select.

@@ -177,15 +177,17 @@ LiteralNode<T>* :: ExpressionNode
     @docs
         A superclass for all types of literal nodes.
 
-MemberSelectNode :: NameNode
+MemberSelectNode :: ExpressionNode
     @props
-    expression              NameNode                                    | the expression from which to select
+    expression              ExpressionNode                              | the expression from which to select
     identifier              IdentifierNode                              | the identifier to select
     @docs
         A node representing member selection, as in:
         <pre>
         <i>expr<i> . <i>identifier</i>
         </pre>
+        Member select nodes are used to select members from expressions.  They are not used for chains of identifier
+        names as in package imports.  See {@link QualifiedNameNode}.
 
 MethodInvocationNode :: ExpressionNode
     @props
@@ -201,6 +203,18 @@ MethodInvocationNode :: ExpressionNode
 NameNode* :: ExpressionNode
     @docs
         A common supertype to nodes which represent a name.
+
+QualifiedNameNode :: NameNode
+    @props
+    name                    NameNode                                    | the name to qualify
+    identifier              IdentifierNode                              | the identifier to use
+    @docs
+        A node representing a name qualification, as in
+        <pre>
+        <i>name<i> . <i>identifier</i>
+        </pre>
+        QualifiedNameNodes are used to identify classes in package imports and other identifier chains.  They are not
+        used to select members from expressions.  See {@link MemberSelectNode}.
 
 TypeCastNode :: ExpressionNode
     @props

@@ -53,6 +53,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.ModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.ParameterizedTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.PrimitiveTypeNode;
+import edu.jhu.cs.bsj.compiler.ast.node.QualifiedNameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.StringLiteralNode;
 import edu.jhu.cs.bsj.compiler.ast.node.SwitchNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ThrowNode;
@@ -105,9 +106,9 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
         } else if (node instanceof CodeLiteralNode)
         {
             visitCodeLiteralNodeStart((CodeLiteralNode)node);
-        } else if (node instanceof MemberSelectNode)
+        } else if (node instanceof QualifiedNameNode)
         {
-            visitMemberSelectNodeStart((MemberSelectNode)node);
+            visitQualifiedNameNodeStart((QualifiedNameNode)node);
         } else if (node instanceof IdentifierNode)
         {
             visitIdentifierNodeStart((IdentifierNode)node);
@@ -180,6 +181,9 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
         } else if (node instanceof BinaryOperatorNode)
         {
             visitBinaryOperatorNodeStart((BinaryOperatorNode)node);
+        } else if (node instanceof MemberSelectNode)
+        {
+            visitMemberSelectNodeStart((MemberSelectNode)node);
         } else if (node instanceof ArrayInstantiatonNode)
         {
             visitArrayInstantiatonNodeStart((ArrayInstantiatonNode)node);
@@ -309,9 +313,9 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
         } else if (node instanceof CodeLiteralNode)
         {
             visitCodeLiteralNodeStop((CodeLiteralNode)node);
-        } else if (node instanceof MemberSelectNode)
+        } else if (node instanceof QualifiedNameNode)
         {
-            visitMemberSelectNodeStop((MemberSelectNode)node);
+            visitQualifiedNameNodeStop((QualifiedNameNode)node);
         } else if (node instanceof IdentifierNode)
         {
             visitIdentifierNodeStop((IdentifierNode)node);
@@ -384,6 +388,9 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
         } else if (node instanceof BinaryOperatorNode)
         {
             visitBinaryOperatorNodeStop((BinaryOperatorNode)node);
+        } else if (node instanceof MemberSelectNode)
+        {
+            visitMemberSelectNodeStop((MemberSelectNode)node);
         } else if (node instanceof ArrayInstantiatonNode)
         {
             visitArrayInstantiatonNodeStop((ArrayInstantiatonNode)node);
@@ -548,10 +555,10 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
     }
 
     /**
-     * Starts a visit for nodes of type MemberSelectNode.
+     * Starts a visit for nodes of type QualifiedNameNode.
      * @param node The node being visited.
      */
-    public void visitMemberSelectNodeStart(MemberSelectNode node)
+    public void visitQualifiedNameNodeStart(QualifiedNameNode node)
     {
     }
 
@@ -744,6 +751,14 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
      * @param node The node being visited.
      */
     public void visitBinaryOperatorNodeStart(BinaryOperatorNode node)
+    {
+    }
+
+    /**
+     * Starts a visit for nodes of type MemberSelectNode.
+     * @param node The node being visited.
+     */
+    public void visitMemberSelectNodeStart(MemberSelectNode node)
     {
     }
 
@@ -1060,10 +1075,10 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
     }
 
     /**
-     * Stops a visit for nodes of type MemberSelectNode.
+     * Stops a visit for nodes of type QualifiedNameNode.
      * @param node The node being visited.
      */
-    public void visitMemberSelectNodeStop(MemberSelectNode node)
+    public void visitQualifiedNameNodeStop(QualifiedNameNode node)
     {
     }
 
@@ -1256,6 +1271,14 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
      * @param node The node being visited.
      */
     public void visitBinaryOperatorNodeStop(BinaryOperatorNode node)
+    {
+    }
+
+    /**
+     * Stops a visit for nodes of type MemberSelectNode.
+     * @param node The node being visited.
+     */
+    public void visitMemberSelectNodeStop(MemberSelectNode node)
     {
     }
 
