@@ -5,6 +5,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -21,6 +23,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
 import javax.swing.JTextArea;
 import javax.swing.JTree;
 import javax.swing.border.LineBorder;
@@ -132,23 +135,77 @@ public class AntlrAstViewer
 		BsjParser parser = new BsjParser(new TokenRewriteStream(lexer));
 		return (Tree)parser.compilationUnit().getTree();
 	}
-
-	public static void main(String arg[]) throws Exception
+	
+	private static Properties properties = new Properties();
+	
+	public static void loadProperties()
 	{
-		final Properties p = new Properties();
 		try
 		{
 			FileInputStream fis = new FileInputStream(MEMORY_FILE);
-			p.load(fis);
+			properties.load(fis);
 			fis.close();
 		} catch (IOException e)
 		{
 			// If an I/O exception occurs, we don't care - just proceed with defaults
-			p.clear();
+			properties.clear();
 		}
-		String defaultText = p.getProperty("source", "");
+	}
+	
+	public static void saveProperties()
+	{
+		try
+		{
+			FileOutputStream fos = new FileOutputStream(MEMORY_FILE);
+			properties.store(fos, "");
+			fos.close();
+		} catch (IOException e)
+		{
+			// If an I/O error occurs, we don't really care that much.
+			MEMORY_FILE.delete();
+		}
+	}
+	
+	public static String getSource()
+	{
+		return properties.getProperty("source","");
+	}
+	public static void setSource(String source)
+	{
+		properties.setProperty("source", source);
+	}
+	public static Dimension getSize()
+	{
+		String size = properties.getProperty("size","");
+		if (size.contains(","))
+		{
+			String[] dims = size.split(",");
+			if (dims.length==2)
+			{
+				try
+				{
+					int x = Integer.parseInt(dims[0]);
+					int y = Integer.parseInt(dims[1]);
+					return new Dimension(x,y);
+				} catch (NumberFormatException nfe)
+				{
+					// Fall out to default return value.
+				}
+			}
+		}
+		return null;
+	}
+	public static void setSize(Dimension d)
+	{
+		properties.setProperty("size", ((int)(d.getWidth()))+","+((int)(d.getHeight())));
+	}
+
+	public static void main(String arg[]) throws Exception
+	{
+		loadProperties();
+		String defaultText = getSource();
 		
-		JFrame frame = new JFrame("AST Viewer");
+		final JFrame frame = new JFrame("AST Viewer");
 		final JTree tree = new JTree(
 			new DefaultTreeModel(new DefaultMutableTreeNode()));
 		final JTextArea error = new JTextArea(6, 40);
@@ -175,11 +232,11 @@ public class AntlrAstViewer
 		rightPanel.add(treePanel, BorderLayout.CENTER);
 		rightPanel.add(parse, BorderLayout.SOUTH);
 		
-		frame.getContentPane().setLayout(new BorderLayout());
-		frame.getContentPane().add(leftPanel, BorderLayout.CENTER);
-		frame.getContentPane().add(rightPanel, BorderLayout.EAST);
+		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, true, leftPanel, rightPanel);
+		frame.setContentPane(splitPane);
 		
 		frame.pack();
+		if (getSize()!=null) frame.setSize(getSize());
 		frame.setLocationRelativeTo(null);
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		
@@ -189,21 +246,10 @@ public class AntlrAstViewer
 			{
 				try
 				{
-					String s = source.getText();
+					setSource(source.getText());
+					saveProperties();
 					
-					try
-					{
-						p.setProperty("source", s);
-						FileOutputStream fos = new FileOutputStream(MEMORY_FILE);
-						p.store(fos, "");
-						fos.close();
-					} catch (IOException e)
-					{
-						// If an I/O error occurs, we don't really care that much.
-						MEMORY_FILE.delete();
-					}
-					
-					Tree t = stringToAst(s);
+					Tree t = stringToAst(getSource());
 					tree.setModel(new DefaultTreeModel(
 						new SwingCommonTreeNode(null, t)));
 					error.setText("(no error)");
@@ -218,6 +264,14 @@ public class AntlrAstViewer
 					tree.setModel(new DefaultTreeModel(
 						new DefaultMutableTreeNode()));
 				}
+			}
+		});
+		frame.addComponentListener(new ComponentAdapter()
+		{
+			public void componentResized(ComponentEvent e)
+			{
+				setSize(frame.getSize());
+				saveProperties();
 			}
 		});
 		
