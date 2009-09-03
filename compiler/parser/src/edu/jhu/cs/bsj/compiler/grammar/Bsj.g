@@ -97,6 +97,8 @@ tokens {
     AST_EXPLICIT_CONSTRUCTOR;
     AST_RETURN_TYPE;
     AST_VARIABLE;
+    AST_ARRAY_TYPE_SUFFIX;
+    AST_VOID_TYPE;
 }
 
 @lexer::header{
@@ -362,7 +364,7 @@ normalInterfaceDeclaration
         interfaceBody
 	->
 		^(AST_IFACE_DECL IDENTIFIER modifiers
-			typeParameters? ^(AST_EXTENDS typeList)
+			typeParameters? ^(AST_EXTENDS typeList)?
 			interfaceBody
 		)        
     ;
@@ -418,7 +420,14 @@ memberDecl
 
 methodReturnType
     :
-        type | 'void';
+        type
+    ->
+        type
+    |
+        'void'
+    ->
+        ^(AST_VOID_TYPE)
+    ;
 
 methodDeclaration 
     :
@@ -433,6 +442,7 @@ methodDeclaration
         blockStatement*
         '}'
     ->
+        // TODO: consider: should we have a different AST type for constructors?
         ^(AST_METHOD
             IDENTIFIER
             modifiers
@@ -445,11 +455,10 @@ methodDeclaration
     |   modifiers
         (typeParameters
         )?
-        methodReturnType
+        retType=methodReturnType
         IDENTIFIER
         formalParameters
-        ('[' ']'
-        )*
+        arrayTypeSuffix=('[' ']')*
         ('throws' qualifiedNameList
         )?            
         (        
@@ -457,15 +466,15 @@ methodDeclaration
         |   ';' 
         )
     ->
-        // TODO: fix bug.  The [] at the end of the method declaration are being ignored and they affect the return type.
         ^(AST_METHOD
             IDENTIFIER
             modifiers
             typeParameters?
-            ^(AST_RETURN_TYPE methodReturnType)
+            ^(AST_RETURN_TYPE $retType)
+            ^(AST_ARRAY_TYPE_SUFFIX '['*)
             formalParameters
             ^(AST_THROWS qualifiedNameList)?
-            ^(AST_METHOD_BODY block))         
+            ^(AST_METHOD_BODY block)?)         
     ;
 
 
