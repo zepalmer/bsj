@@ -67,6 +67,7 @@ tokens {
     CLASS_BODY;
     INTERFACE_BODY;
     AST_IFACE_DECL;
+    AST_NAME_QUALIFY;
     AST_MEMBER_SELECT;
     AST_IDENTIFIER;
     AST_TYPEARG_LIST;
@@ -99,6 +100,7 @@ tokens {
     AST_VARIABLE;
     AST_ARRAY_TYPE_SUFFIX;
     AST_VOID_TYPE;
+    AST_VARIABLE_DECLARATOR;
 }
 
 @lexer::header{
@@ -147,7 +149,7 @@ importDeclaration
         ^(AST_IMPORT_DECL
             'import'
             'static'?
-            ^(AST_MEMBER_SELECT
+            ^(AST_NAME_QUALIFY
                 ^(AST_IDENTIFIER IDENTIFIER)
                 ^(AST_IDENTIFIER '*')))
     |
@@ -166,13 +168,13 @@ importDeclaration
 qualifiedImportName
     :
         (a=necessarilyQualifiedName -> $a)
-        ('.' '*' -> ^(AST_MEMBER_SELECT $qualifiedImportName '*'))?
+        ('.' '*' -> ^(AST_NAME_QUALIFY $qualifiedImportName '*'))?
     ;
 
 necessarilyQualifiedName 
     :   
         (a=IDENTIFIER -> ^(AST_IDENTIFIER $a))
-        ('.' b=IDENTIFIER -> ^(AST_MEMBER_SELECT ^(AST_IDENTIFIER $b) $necessarilyQualifiedName))+
+        ('.' b=IDENTIFIER -> ^(AST_NAME_QUALIFY ^(AST_IDENTIFIER $b) $necessarilyQualifiedName))+
     ;
 
 typeDeclaration 
@@ -494,7 +496,6 @@ fieldDeclaration
             variableDeclarator)+
     ;
 
-// TODO: complete
 variableDeclarator 
     :   IDENTIFIER
         ('[' ']'
@@ -502,7 +503,10 @@ variableDeclarator
         ('=' variableInitializer
         )?
     ->
-    	IDENTIFIER        
+        ^(AST_VARIABLE_DECLARATOR
+	    	IDENTIFIER
+	    	^(AST_ARRAY_TYPE_SUFFIX '['*)
+	    	variableInitializer?)
     ;
 
 /**
@@ -680,7 +684,7 @@ explicitConstructorInvocation
 qualifiedName 
     :
         (a=IDENTIFIER -> ^(AST_IDENTIFIER $a))
-        ('.' b=IDENTIFIER -> ^(AST_MEMBER_SELECT ^(AST_IDENTIFIER $b) $qualifiedName))*
+        ('.' b=IDENTIFIER -> ^(AST_NAME_QUALIFY ^(AST_IDENTIFIER $b) $qualifiedName))*
     ;
 
 annotations 
