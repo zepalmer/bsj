@@ -109,6 +109,7 @@ tokens {
     AST_FOR_INIT;
     AST_FOR_CONDITION;
     AST_FOR_UPDATE;
+    AST_FINALLY;
 }
 
 @lexer::header{
@@ -878,13 +879,17 @@ switchLabel
 
 
 trystatement 
-    :   'try' block
-        (   catches 'finally' block
+    :   'try' b=block
+        (   catches 'finally' fb=block
         |   catches
-        |   'finally' block
+        |   'finally' fb=block
         )
     ->
-    	^(AST_TRY block catches?) 
+    	^(AST_TRY 
+    		$b 
+    		catches? 
+    		^(AST_FINALLY $fb)?
+    	) 
     ;
 
 catches 
@@ -908,6 +913,7 @@ formalParameter
         )*
     ;
 
+//TODO resolve AST_VARIABLE stuff
 forstatement 
     :   
         // enhanced for loop
@@ -942,7 +948,9 @@ forInit
     ;
 
 parExpression 
-    :   '(' expression ')'
+    :   '(' e=expression ')'
+    ->
+    	$e
     ;
 
 expressionList 
