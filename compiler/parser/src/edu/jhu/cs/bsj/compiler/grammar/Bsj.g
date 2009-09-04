@@ -1,5 +1,5 @@
 /*
- [The "BSD licence"]
+ [The "BSD license"]
  Copyright (c) 2007-2008 Terence Parr
  All rights reserved.
 
@@ -101,6 +101,14 @@ tokens {
     AST_ARRAY_TYPE_SUFFIX;
     AST_VOID_TYPE;
     AST_VARIABLE_DECLARATOR;
+    AST_TRY;
+    AST_CATCH;
+    AST_CATCH_LIST;
+    AST_FOR_LOOP; 
+    AST_FOR_LOOP_ENHANCED;  
+    AST_FOR_INIT;
+    AST_FOR_CONDITION;
+    AST_FOR_UPDATE;
 }
 
 @lexer::header{
@@ -353,8 +361,12 @@ enumBodyDeclarations
     ;
 
 interfaceDeclaration 
-    :   normalInterfaceDeclaration
-    |   annotationTypeDeclaration
+    :   a=normalInterfaceDeclaration
+    ->
+    	$a
+    |   b=annotationTypeDeclaration
+    ->
+    	$b
     ;
     
 normalInterfaceDeclaration 
@@ -871,17 +883,23 @@ trystatement
         |   catches
         |   'finally' block
         )
-     ;
+    ->
+    	^(AST_TRY block catches?) 
+    ;
 
 catches 
     :   catchClause
         (catchClause
         )*
+    ->
+    	^(AST_CATCH_LIST catchClause+)
     ;
 
 catchClause 
     :   'catch' '(' formalParameter
         ')' block 
+    ->
+    	^(AST_CATCH block formalParameter)
     ;
 
 formalParameter 
@@ -895,7 +913,12 @@ forstatement
         // enhanced for loop
         'for' '(' variableModifiers type IDENTIFIER ':' 
         expression ')' statement
-            
+    ->
+    	^(AST_FOR_LOOP_ENHANCED
+    		^(AST_VARIABLE IDENTIFIER type)
+    		expression
+    		statement
+    	)   
         // normal for loop
     |   'for' '(' 
                 (forInit
@@ -904,6 +927,13 @@ forstatement
                 )? ';' 
                 (expressionList
                 )? ')' statement
+	->
+		^(AST_FOR_LOOP 
+			^(AST_FOR_INIT forInit)?
+			^(AST_FOR_CONDITION expression)?
+			^(AST_FOR_UPDATE expressionList)?
+			statement
+		)                
     ;
 
 forInit 
