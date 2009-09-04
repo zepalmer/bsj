@@ -111,6 +111,9 @@ tokens {
     AST_FOR_UPDATE;
     AST_FINALLY;
     AST_EXPR_LIST;
+    AST_SWITCH;
+    AST_CASE_LIST;
+    AST_CASE;
 }
 
 @lexer::header{
@@ -834,6 +837,7 @@ localVariableDeclaration
         )*
     ;
 
+//TODO in progress
 statement 
     :   block
             
@@ -847,6 +851,11 @@ statement
     |   'do' statement 'while' parExpression ';'
     |   trystatement
     |   'switch' parExpression '{' switchBlockStatementGroups '}'
+    ->
+    	^(AST_SWITCH
+    		parExpression
+    		switchBlockStatementGroups
+    	)
     |   'synchronized' parExpression block
     |   'return' (expression )? ';'
     |   'throw' expression ';'
@@ -864,6 +873,8 @@ statement
 
 switchBlockStatementGroups 
     :   (switchBlockStatementGroup )*
+    ->
+    	^(AST_CASE_LIST switchBlockStatementGroup*)
     ;
 
 switchBlockStatementGroup 
@@ -871,11 +882,21 @@ switchBlockStatementGroup
         switchLabel
         (blockStatement
         )*
-    ;
+	->
+		^(AST_CASE 
+			switchLabel 
+			^(BLOCKSTATEMENT blockStatement*)
+		)
+	;
 
+//TODO null in case of default switch label?
 switchLabel 
     :   'case' expression ':'
+    ->
+    	expression
     |   'default' ':'
+    ->
+    	AST_VOID_DECL
     ;
 
 
