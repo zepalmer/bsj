@@ -110,6 +110,7 @@ tokens {
     AST_FOR_CONDITION;
     AST_FOR_UPDATE;
     AST_FINALLY;
+    AST_EXPR_LIST;
 }
 
 @lexer::header{
@@ -957,6 +958,8 @@ expressionList
     :   expression
         (',' expression
         )*
+    ->
+    	^(AST_EXPR_LIST expression+)
     ;
 
 
