@@ -57,7 +57,6 @@ grammar Bsj;
 options {
     backtrack=true;
     memoize=true;
-    output=AST;
     language=Java;
 }
 
@@ -122,35 +121,71 @@ tokens {
 
 @parser::header{
 	package edu.jhu.cs.bsj.compiler.tool.parser.antlr;
+	
+	import edu.jhu.cs.bsj.compiler.ast.*;
+    import edu.jhu.cs.bsj.compiler.ast.node.*;
+    import edu.jhu.cs.bsj.compiler.ast.tags.*;
+    import edu.jhu.cs.bsj.compiler.ast.node.meta.*;
+}
+
+@parser::members {
+    /**
+     * Factory used to generate nodes for the parser.
+     */
+    private BsjNodeFactory factory;
+    
+    public BsjNodeFactory getFactory()
+    {
+        return this.factory;
+    }
+    
+    public void setFactory(BsjNodeFactory factory)
+    {
+        this.factory = factory;
+    }
 }
 
 /********************************************************************************************
                           Parser section
 *********************************************************************************************/
 
-compilationUnit 
-    :   (   (annotations
-            )?
+compilationUnit returns [CompilationUnitNode ret]
+    :
+        (
+            annotations?
             packageDeclaration
         )?
-        (importDeclaration
-        )*
-        (typeDeclaration
-        )*
-    ->
-        ^(AST_COMPILATION_UNIT
-            ^(AST_PACKAGE_DECL annotations? packageDeclaration)?
-            ^(AST_IMPORT_LIST importDeclaration*)
-            ^(AST_TYPE_DECL_LIST typeDeclaration*))
+        importDeclarations
+        typeDeclarations
+        
+	    {
+	        $ret = factory.makeCompilationUnit($importDeclarations, $annotations, $packageDeclaration, $typeDeclarations);
+	    }
     ;
 
-packageDeclaration 
-    :   'package' qualifiedName
-        ';'
-    ->
-        ^('package' qualifiedName)
+packageDeclaration returns [QualifiedNameNode ret]
+    :
+        'package' qualifiedName ';'
+        {
+            $ret = $qualifiedName.ret;
+        }
     ;
 
+importDeclarations returns [ListNode<ImportNode> ret]
+        @init {
+            List<ImportNode> list = new ArrayList<ImportNode>();
+        }
+        @after {
+            $ret = factory.<ImportNode>makeListNode(list);
+        }
+    :
+        (
+            importDeclaration
+            {
+                list.add($importDeclaration);
+            }
+        )*
+    ;
 
 importDeclaration  
     :   'import' 
