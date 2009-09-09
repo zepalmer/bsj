@@ -159,7 +159,11 @@ compilationUnit returns [CompilationUnitNode ret]
         typeDeclarations
         
 	    {
-	        $ret = factory.makeCompilationUnit($importDeclarations, $annotations, $packageDeclaration, $typeDeclarations);
+	        $ret = factory.makeCompilationUnit(
+	                    $importDeclarations.ret,
+	                    $annotations.ret,
+	                    $packageDeclaration.ret,
+	                    $typeDeclarations.ret);
 	    }
     ;
 
@@ -182,73 +186,102 @@ importDeclarations returns [ListNode<ImportNode> ret]
         (
             importDeclaration
             {
-                list.add($importDeclaration);
+                list.add($importDeclaration.ret);
             }
         )*
     ;
 
-importDeclaration  
+importDeclaration returns [ImportNode ret]
     :   'import' 
-        ('static'
-        )?
-        IDENTIFIER '.' '*'
-        ';'
-    ->
-        ^(AST_IMPORT_DECL
-            'import'
-            'static'?
-            ^(AST_NAME_QUALIFY
-                ^(AST_IDENTIFIER IDENTIFIER)
-                ^(AST_IDENTIFIER '*')))
+        (staticImport='static')?
+        IDENTIFIER '.' '*' ';'
+        {
+            $ret = factory.makeImportNode(
+                factory.makeQualifiedNameNode(
+                    factory.makeIdentifierNode(null), // TODO: fix - should be IDENTIFIER
+                    factory.makeIdentifierNode(null))  // TODO: fix - should be *
+                staticImport!=null);
+        }
     |
         'import'
-        ('static'
-        )?
+        (staticImport='static')?
         qualifiedImportName
         ';'
-    ->
-        ^(AST_IMPORT_DECL
-            'import'
-            'static'?
-            qualifiedImportName)
+        {
+            $ret = factory.makeImportNode(
+                $qualifiedImportName.ret,
+                staticImport!=null);
+        }
     ;
 
-qualifiedImportName
+qualifiedImportName returns [QualifiedNameNode ret]
     :
-        (a=necessarilyQualifiedName -> $a)
-        ('.' '*' -> ^(AST_NAME_QUALIFY $qualifiedImportName '*'))?
+        necessarilyQualifiedName (starQual=('.' '*')?)
+        {
+            $ret = null; // TODO
+        }
     ;
 
-necessarilyQualifiedName 
+necessarilyQualifiedName returns [QualifiedNameNode ret]
     :   
-        (a=IDENTIFIER -> ^(AST_IDENTIFIER $a))
-        ('.' b=IDENTIFIER -> ^(AST_NAME_QUALIFY ^(AST_IDENTIFIER $b) $necessarilyQualifiedName))+
+        IDENTIFIER ('.' IDENTIFIER)+
+        {
+            $ret = null; // TODO
+        }
     ;
 
-typeDeclaration 
+typeDeclarations returns [ListNode<TypeDeclarationNode> ret]
+        @init {
+            List<TypeDeclarationNode> list = new ArrayList<TypeDeclarationNode>();
+        }
+        @after {
+            $ret = factory.<TypeDeclarationNode>makeListNode(list);
+        }
     :
-        a=classOrInterfaceDeclaration
-    ->
-        $a
+        (
+            typeDeclaration
+            {
+                list.add($typeDeclaration.ret);
+            }
+        )*
+    ;
+
+typeDeclaration returns [TypeDeclarationNode ret]
+    :
+        classOrInterfaceDeclaration
+        {
+            $ret = $classOrInterfaceDeclaration.ret;
+        }
     |
         ';'
-    ->
-        ^(AST_VOID_DECL)
+        {
+            $ret = null; // TODO: how to handle?
+        }
     ;
 
-classOrInterfaceDeclaration 
-    :    classDeclaration
-    |   interfaceDeclaration
+classOrInterfaceDeclaration returns [TypeDeclarationNode ret]
+    :
+        classDeclaration
+        {
+            $ret = $classDeclaration.ret;
+        }
+    |
+        interfaceDeclaration
+        {
+            $ret = $interfaceDeclaration.ret;
+        }
     ;
     
   
 modifiers  
     :
-        (
-            mod+=modifier
-        )*
-    ->
-	    ^(AST_MODIFIERS $mod*)
+        modifier*
+//        (
+//            mod+=modifier
+//        )*
+        // TODO
+//    ->
+//	    ^(AST_MODIFIERS $mod*)
     ;
 
 modifier
@@ -269,11 +302,13 @@ modifier
 
 variableModifiers 
     :
-        (
-            mod+=variableModifier
-        )*
-    ->
-        ^(AST_MODIFIERS $mod*)
+        variableModifier*
+//        (
+//            mod+=variableModifier
+//        )*
+        // TODO
+//    ->
+//        ^(AST_MODIFIERS $mod*)
     ;
 
 variableModifier
@@ -295,15 +330,16 @@ normalClassDeclaration
         )?
         ('implements' typeList
         )?            
-        classBody 
-    -> 
-        ^(AST_CLASS_DECL IDENTIFIER
-            modifiers
-            ^(AST_IMPLEMENTS_LIST typeList)?
-            ^(AST_EXTENDS type)?
-        	typeParameters?
-        	classBody
-        )
+        classBody
+        // TODO 
+//    -> 
+//        ^(AST_CLASS_DECL IDENTIFIER
+//            modifiers
+//            ^(AST_IMPLEMENTS_LIST typeList)?
+//            ^(AST_EXTENDS type)?
+//        	typeParameters?
+//        	classBody
+//        )
     ;
 
 
@@ -313,8 +349,9 @@ typeParameters
             (',' typeParameter
             )*
         '>'
-    ->
-    	^(AST_TYPE_PARAMETER_LIST typeParameter+)
+        // TODO
+//    ->
+//    	^(AST_TYPE_PARAMETER_LIST typeParameter+)
     ;
 
 
@@ -322,8 +359,9 @@ typeParameter
     :   IDENTIFIER
         ('extends' typeBound
         )?
-    ->
-        ^(AST_TYPE_PARAMETER IDENTIFIER typeBound?)
+        // TODO
+//    ->
+//        ^(AST_TYPE_PARAMETER IDENTIFIER typeBound?)
     ;
 
 
@@ -331,8 +369,9 @@ typeBound
     :   type
         ('&' type
         )*
-    ->
-        ^(AST_TYPE_BOUNDS type+)
+        // TODO
+//    ->
+//        ^(AST_TYPE_BOUNDS type+)
     ;
 
 
@@ -344,12 +383,13 @@ enumDeclaration
         ('implements' typeList
         )?
         enumBody
-    ->
-        ^(AST_ENUM
-            IDENTIFIER
-            modifiers
-            ^(AST_IMPLEMENTS_LIST typeList)?
-            enumBody)
+        // TODO
+//    ->
+//        ^(AST_ENUM
+//            IDENTIFIER
+//            modifiers
+//            ^(AST_IMPLEMENTS_LIST typeList)?
+//            enumBody)
     ;
 
 
@@ -361,18 +401,20 @@ enumBody
         (enumBodyDeclarations
         )? 
         '}'
-    ->
-        ^(AST_ENUM_BODY
-            enumConstants
-            enumBodyDeclarations)
+        // TODO
+//    ->
+//        ^(AST_ENUM_BODY
+//            enumConstants
+//            enumBodyDeclarations)
     ;
 
 enumConstants 
     :   enumConstant
         (',' enumConstant
         )*
-    ->
-        ^(AST_ENUM_CONSTANT_LIST enumConstant+)
+        // TODO
+//    ->
+//        ^(AST_ENUM_CONSTANT_LIST enumConstant+)
     ;
 
 enumConstant 
@@ -384,29 +426,33 @@ enumConstant
         (classBody
         )?
         /* TODO: conversion note: ensure that enum body doesn't contain a constructor - anonymous classes can't in general*/
-    ->
-        ^(AST_ENUM_CONSTANT
-            annotations?
-            IDENTIFIER
-            arguments?
-            classBody?)
+        // TODO
+//    ->
+//        ^(AST_ENUM_CONSTANT
+//            annotations?
+//            IDENTIFIER
+//            arguments?
+//            classBody?)
     ;
 
 enumBodyDeclarations 
     :   ';' 
         (classBodyDeclaration
         )*
-    ->
-        ^(CLASS_BODY classBodyDeclaration*)
+        // TODO
+//    ->
+//        ^(CLASS_BODY classBodyDeclaration*)
     ;
 
 interfaceDeclaration 
     :   a=normalInterfaceDeclaration
-    ->
-    	$a
+    // TODO
+//    ->
+//    	$a
     |   b=annotationTypeDeclaration
-    ->
-    	$b
+    // TODO
+//    ->
+//    	$b
     ;
     
 normalInterfaceDeclaration 
@@ -416,19 +462,21 @@ normalInterfaceDeclaration
         ('extends' typeList
         )?
         interfaceBody
-	->
-		^(AST_IFACE_DECL IDENTIFIER modifiers
-			typeParameters? ^(AST_EXTENDS typeList)?
-			interfaceBody
-		)        
+        // TODO
+//	->
+//		^(AST_IFACE_DECL IDENTIFIER modifiers
+//			typeParameters? ^(AST_EXTENDS typeList)?
+//			interfaceBody
+//		)        
     ;
 
 typeList 
     :   type
         (',' type
         )*
-    ->
-        ^(AST_TYPE_LIST type+)
+        // TODO
+//    ->
+//        ^(AST_TYPE_LIST type+)
     ;
 
 classBody 
@@ -436,8 +484,9 @@ classBody
         (classBodyDeclaration
         )* 
         '}'
-    ->
-        ^(CLASS_BODY classBodyDeclaration*)
+        // TODO
+//    ->
+//        ^(CLASS_BODY classBodyDeclaration*)
     ;
 
 interfaceBody 
@@ -445,22 +494,25 @@ interfaceBody
         (interfaceBodyDeclaration
         )* 
         '}'
-	->
-    	^(INTERFACE_BODY interfaceBodyDeclaration*)        
+        // TODO
+//	->
+//    	^(INTERFACE_BODY interfaceBodyDeclaration*)        
     ;
 
 classBodyDeclaration 
     :
         ';'
-    ->
-        ^(AST_VOID_DECL)
+        // TODO
+//    ->
+//        ^(AST_VOID_DECL)
     |
         'static'?
         block
-    ->
-        ^(AST_CLASS_INITIALIZER
-            'static'?
-            block)
+        // TODO
+//    ->
+//        ^(AST_CLASS_INITIALIZER
+//            'static'?
+//            block)
     |
         memberDecl
     ;
@@ -475,12 +527,14 @@ memberDecl
 methodReturnType
     :
         type
-    ->
-        type
+        // TODO
+//    ->
+//        type
     |
         'void'
-    ->
-        ^(AST_VOID_TYPE)
+        // TODO
+//    ->
+//        ^(AST_VOID_TYPE)
     ;
 
 methodDeclaration 
@@ -495,17 +549,18 @@ methodDeclaration
         explicitConstructorInvocation?
         blockStatement*
         '}'
-    ->
         // TODO: consider: should we have a different AST type for constructors?
-        ^(AST_METHOD
-            IDENTIFIER
-            modifiers
-            typeParameters?
-            formalParameters
-            ^(AST_THROWS qualifiedNameList)?
-            ^(AST_CONSTRUCTOR_BODY
-                ^(AST_EXPLICIT_CONSTRUCTOR explicitConstructorInvocation)?
-                blockStatement*))         
+        // TODO
+//    ->
+//        ^(AST_METHOD
+//            IDENTIFIER
+//            modifiers
+//            typeParameters?
+//            formalParameters
+//            ^(AST_THROWS qualifiedNameList)?
+//            ^(AST_CONSTRUCTOR_BODY
+//                ^(AST_EXPLICIT_CONSTRUCTOR explicitConstructorInvocation)?
+//                blockStatement*))         
     |   modifiers
         (typeParameters
         )?
@@ -519,16 +574,17 @@ methodDeclaration
             block
         |   ';' 
         )
-    ->
-        ^(AST_METHOD
-            IDENTIFIER
-            modifiers
-            typeParameters?
-            ^(AST_RETURN_TYPE $retType)
-            ^(AST_ARRAY_TYPE_SUFFIX '['*)
-            formalParameters
-            ^(AST_THROWS qualifiedNameList)?
-            ^(AST_METHOD_BODY block)?)         
+        // TODO
+//    ->
+//        ^(AST_METHOD
+//            IDENTIFIER
+//            modifiers
+//            typeParameters?
+//            ^(AST_RETURN_TYPE $retType)
+//            ^(AST_ARRAY_TYPE_SUFFIX '['*)
+//            formalParameters
+//            ^(AST_THROWS qualifiedNameList)?
+//            ^(AST_METHOD_BODY block)?)         
     ;
 
 
@@ -539,13 +595,14 @@ fieldDeclaration
         (',' variableDeclarator
         )*
         ';'
-    ->
-        /* Notice: 1-arity nodes used in n-arity group.  Declarations such as "int x=0,y=0" can result in more than one
-           node being returned from this rule. */
-        ^(AST_VARIABLE
-            modifiers
-            type
-            variableDeclarator)+
+        // TODO
+//    ->
+//        /* Notice: 1-arity nodes used in n-arity group.  Declarations such as "int x=0,y=0" can result in more than one
+//           node being returned from this rule. */
+//        ^(AST_VARIABLE
+//            modifiers
+//            type
+//            variableDeclarator)+
     ;
 
 variableDeclarator 
@@ -554,11 +611,12 @@ variableDeclarator
         )*
         ('=' variableInitializer
         )?
-    ->
-        ^(AST_VARIABLE_DECLARATOR
-	    	IDENTIFIER
-	    	^(AST_ARRAY_TYPE_SUFFIX '['*)
-	    	variableInitializer?)
+        // TODO
+//    ->
+//        ^(AST_VARIABLE_DECLARATOR
+//	    	IDENTIFIER
+//	    	^(AST_ARRAY_TYPE_SUFFIX '['*)
+//	    	variableInitializer?)
     ;
 
 /**
@@ -586,15 +644,16 @@ interfaceMethodDeclaration
         )*
         ('throws' qualifiedNameList
         )? ';'
-    ->
-        ^(AST_METHOD
-            IDENTIFIER
-            modifiers
-            typeParameters?            
-            formalParameters
-            ^(AST_RETURN_TYPE type? 'void'?)
-            ^(AST_THROWS qualifiedNameList)?
-        )         
+        // TODO
+//    ->
+//        ^(AST_METHOD
+//            IDENTIFIER
+//            modifiers
+//            typeParameters?            
+//            formalParameters
+//            ^(AST_RETURN_TYPE type? 'void'?)
+//            ^(AST_THROWS qualifiedNameList)?
+//        )         
     ;
 
 /**
@@ -607,8 +666,9 @@ interfaceFieldDeclaration
         (',' variableDeclarator
         )*
         ';'
-    ->
-    	^(AST_VARIABLE type variableDeclarator)+
+        // TODO
+//    ->
+//    	^(AST_VARIABLE type variableDeclarator)+
     ;
 
 //TODO separate [] and non-[] to differentiate between array types
@@ -648,8 +708,9 @@ typeArguments
         (',' typeArgument
         )* 
         '>'
-    ->
-        ^(AST_TYPEARG_LIST typeArgument+)
+        // TODO
+//    ->
+//        ^(AST_TYPEARG_LIST typeArgument+)
     ;
 
 typeArgument 
@@ -669,8 +730,9 @@ qualifiedNameList
     :   qualifiedName
         (',' qualifiedName
         )*
-    ->
-        ^(AST_TYPE_LIST qualifiedName+)
+        // TODO
+//    ->
+//        ^(AST_TYPE_LIST qualifiedName+)
     ;
 
 formalParameters 
@@ -679,29 +741,33 @@ formalParameters
         (formalParameterDecls
         )? 
         ')'
-    ->
-    	^(AST_FORMAL_PARAMS formalParameterDecls?)
+        // TODO
+//    ->
+//    	^(AST_FORMAL_PARAMS formalParameterDecls?)
     ;
 
 // This rule is expected to produce a list of parameter declarations (multiple results)
 formalParameterDecls 
     :
         ellipsisParameterDecl
-    ->
-    	ellipsisParameterDecl
+        // TODO
+//    ->
+//    	ellipsisParameterDecl
     |
         normalParameterDecl
         (',' normalParameterDecl
         )*
-    ->
-    	normalParameterDecl+
+        // TODO
+//    ->
+//    	normalParameterDecl+
     |
         (normalParameterDecl
         ','
         )+ 
         ellipsisParameterDecl
-    ->
-    	normalParameterDecl+ ellipsisParameterDecl
+        // TODO
+//    ->
+//    	normalParameterDecl+ ellipsisParameterDecl
     ;
 
 normalParameterDecl 
@@ -735,8 +801,8 @@ explicitConstructorInvocation
 
 qualifiedName 
     :
-        (a=IDENTIFIER -> ^(AST_IDENTIFIER $a))
-        ('.' b=IDENTIFIER -> ^(AST_NAME_QUALIFY ^(AST_IDENTIFIER $b) $qualifiedName))*
+        IDENTIFIER ('.' IDENTIFIER)*
+        // TODO
     ;
 
 annotations 
@@ -826,7 +892,8 @@ block
         (blockStatement
         )*
         '}'
-    -> ^(BLOCKSTATEMENT blockStatement*)
+        // TODO
+//    -> ^(BLOCKSTATEMENT blockStatement*)
     ;
 
 /*
@@ -886,30 +953,32 @@ statement
     |   'do' statement 'while' parExpression ';'
     |   trystatement
     |   'switch' parExpression '{' switchBlockStatementGroups '}'
-    ->
-    	^(AST_SWITCH
-    		parExpression
-    		switchBlockStatementGroups
-    	)
-    |   'synchronized' parExpression block
-    |   'return' (expression )? ';'
-    |   'throw' expression ';'
-    |   'break'
-            (IDENTIFIER
-            )? ';'
-    |   'continue'
-            (IDENTIFIER
-            )? ';'
-    |   expression  ';'     
-    |   IDENTIFIER ':' statement
-    |   ';'
+    // TODO
+//    ->
+//    	^(AST_SWITCH
+//    		parExpression
+//    		switchBlockStatementGroups
+//    	)
+//    |   'synchronized' parExpression block
+//    |   'return' (expression )? ';'
+//    |   'throw' expression ';'
+//    |   'break'
+//            (IDENTIFIER
+//            )? ';'
+//    |   'continue'
+//            (IDENTIFIER
+//            )? ';'
+//    |   expression  ';'     
+//    |   IDENTIFIER ':' statement
+//    |   ';'
 
     ;
 
 switchBlockStatementGroups 
     :   (switchBlockStatementGroup )*
-    ->
-    	^(AST_CASE_LIST switchBlockStatementGroup*)
+    // TODO
+//    ->
+//    	^(AST_CASE_LIST switchBlockStatementGroup*)
     ;
 
 switchBlockStatementGroup 
@@ -917,21 +986,24 @@ switchBlockStatementGroup
         switchLabel
         (blockStatement
         )*
-	->
-		^(AST_CASE 
-			switchLabel 
-			^(BLOCKSTATEMENT blockStatement*)
-		)
+    // TODO
+//	->
+//		^(AST_CASE 
+//			switchLabel 
+//			^(BLOCKSTATEMENT blockStatement*)
+//		)
 	;
 
 //TODO null in case of default switch label?
 switchLabel 
     :   'case' expression ':'
-    ->
-    	expression
+    // TODO
+//    ->
+//    	expression
     |   'default' ':'
-    ->
-    	AST_VOID_DECL
+    // TODO
+//    ->
+//    	AST_VOID_DECL
     ;
 
 
@@ -941,27 +1013,30 @@ trystatement
         |   catches
         |   'finally' fb=block
         )
-    ->
-    	^(AST_TRY 
-    		$b 
-    		catches? 
-    		^(AST_FINALLY $fb)?
-    	) 
+        // TODO
+//    ->
+//    	^(AST_TRY 
+//    		$b 
+//    		catches? 
+//    		^(AST_FINALLY $fb)?
+//    	) 
     ;
 
 catches 
     :   catchClause
         (catchClause
         )*
-    ->
-    	^(AST_CATCH_LIST catchClause+)
+        // TODO
+//    ->
+//    	^(AST_CATCH_LIST catchClause+)
     ;
 
 catchClause 
     :   'catch' '(' formalParameter
-        ')' block 
-    ->
-    	^(AST_CATCH block formalParameter)
+        ')' block
+        // TODO 
+//    ->
+//    	^(AST_CATCH block formalParameter)
     ;
 
 formalParameter 
@@ -976,12 +1051,13 @@ forstatement
         // enhanced for loop
         'for' '(' variableModifiers type IDENTIFIER ':' 
         expression ')' statement
-    ->
-    	^(AST_FOR_LOOP_ENHANCED
-    		^(AST_VARIABLE IDENTIFIER type)
-    		expression
-    		statement
-    	)   
+        // TODO
+//    ->
+//    	^(AST_FOR_LOOP_ENHANCED
+//    		^(AST_VARIABLE IDENTIFIER type)
+//    		expression
+//    		statement
+//    	)   
         // normal for loop
     |   'for' '(' 
                 (forInit
@@ -990,13 +1066,14 @@ forstatement
                 )? ';' 
                 (expressionList
                 )? ')' statement
-	->
-		^(AST_FOR_LOOP 
-			^(AST_FOR_INIT forInit)?
-			^(AST_FOR_CONDITION expression)?
-			^(AST_FOR_UPDATE expressionList)?
-			statement
-		)                
+        // TODO
+//	->
+//		^(AST_FOR_LOOP 
+//			^(AST_FOR_INIT forInit)?
+//			^(AST_FOR_CONDITION expression)?
+//			^(AST_FOR_UPDATE expressionList)?
+//			statement
+//		)                
     ;
 
 forInit 
@@ -1006,16 +1083,18 @@ forInit
 
 parExpression 
     :   '(' e=expression ')'
-    ->
-    	$e
+    // TODO
+//    ->
+//    	$e
     ;
 
 expressionList 
     :   expression
         (',' expression
         )*
-    ->
-    	^(AST_EXPR_LIST expression+)
+        // TODO
+//    ->
+//    	^(AST_EXPR_LIST expression+)
     ;
 
 
