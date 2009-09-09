@@ -1028,13 +1028,20 @@ annotationMethodDeclaration
         ';'
         ;
 
-block 
+block returns [BlockStatementNode ret]
+	@init {
+    		List<StatementNode> list = new ArrayList<StatementNode>();
+	}
+    @after {
+    		$ret = factory.makeBlockStatementNode(list);
+	}
     :   '{'
         (blockStatement
+        	{
+        		list.add($blockStatement.ret);
+        	}
         )*
         '}'
-        // TODO
-//    -> ^(BLOCKSTATEMENT blockStatement*)
     ;
 
 /*
