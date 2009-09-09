@@ -1107,18 +1107,18 @@ statement
 //    		parExpression
 //    		switchBlockStatementGroups
 //    	)
-//    |   'synchronized' parExpression block
-//    |   'return' (expression )? ';'
-//    |   'throw' expression ';'
-//    |   'break'
-//            (IDENTIFIER
-//            )? ';'
-//    |   'continue'
-//            (IDENTIFIER
-//            )? ';'
-//    |   expression  ';'     
-//    |   IDENTIFIER ':' statement
-//    |   ';'
+      |   'synchronized' parExpression block
+      |   'return' (expression )? ';'
+      |   'throw' expression ';'
+      |   'break'
+              (IDENTIFIER
+              )? ';'
+      |   'continue'
+              (IDENTIFIER
+              )? ';'
+      |   expression  ';'     
+      |   IDENTIFIER ':' statement
+      |   ';'
 
     ;
 
@@ -1155,36 +1155,46 @@ switchLabel
     ;
 
 
-trystatement 
+trystatement returns [TryNode ret]
     :   'try' b=block
         (   catches 'finally' fb=block
         |   catches
         |   'finally' fb=block
         )
-        // TODO
-//    ->
-//    	^(AST_TRY 
-//    		$b 
-//    		catches? 
-//    		^(AST_FINALLY $fb)?
-//    	) 
+        {
+            $ret = factory.makeTryNode(
+                    $b.ret,
+                    $catches.ret,
+                    (fb != null ? $fb.ret : null));
+        }        
     ;
 
-catches 
-    :   catchClause
-        (catchClause
+catches returns [ListNode<CatchNode> ret]
+        @init {
+            List<CatchNode> list = new ArrayList<CatchNode>();
+        }
+        @after {
+            $ret = factory.<CatchNode>makeListNode(list);
+        }
+    :   a=catchClause
+    		{
+    			list.add($a.ret);
+    		}
+        (b=catchClause
+    		{
+    			list.add($b.ret);
+    		}
         )*
-        // TODO
-//    ->
-//    	^(AST_CATCH_LIST catchClause+)
     ;
 
-catchClause 
+catchClause returns [CatchNode ret]
     :   'catch' '(' formalParameter
         ')' block
-        // TODO 
-//    ->
-//    	^(AST_CATCH block formalParameter)
+		{
+			$ret = factory.makeCatchNode(
+					$block.ret,
+					$formalParameter.ret);
+		}
     ;
 
 formalParameter 
