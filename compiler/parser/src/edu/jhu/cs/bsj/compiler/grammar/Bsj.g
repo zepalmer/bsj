@@ -284,7 +284,7 @@ classOrInterfaceDeclaration returns [TypeDeclarationNode ret]
 // Accepts as a parameter the set of legal modifiers.  null means all of them are legal.
 modifiers[Collection<Modifier> legalModifiers] returns [ModifiersNode ret]
         @init {
-            List<AnnotationNode> list = new ArrayList<AnnotationNode>();
+            List<? extends AnnotationNode> list = new ArrayList<AnnotationNode>();
             Set<Modifier> modifiers = new HashSet<Modifier>();
         }
         @after {
