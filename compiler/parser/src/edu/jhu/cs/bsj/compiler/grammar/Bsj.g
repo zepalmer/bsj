@@ -380,18 +380,20 @@ variableModifiers returns [ModifiersNode ret]
         }
     ;
 
-variableModifier
+classDeclaration returns [TypeDeclarationNode ret] 
     :
-            annotation
-        |   'final'
+        normalClassDeclaration
+        {
+            $ret = $normalClassDeclaration.ret;
+        }
+    |
+        enumDeclaration
+        {
+            $ret = $enumDeclaration.ret;
+        }
     ;
 
-classDeclaration 
-    :   normalClassDeclaration
-    |   enumDeclaration
-    ;
-
-normalClassDeclaration 
+normalClassDeclaration returns [ClassDeclarationNode ret]
     :   
         modifiers[Arrays.asList(
             Modifier.PUBLIC,
@@ -401,23 +403,20 @@ normalClassDeclaration
             Modifier.STATIC,
             Modifier.FINAL,
             Modifier.STRICTFP)]
-        'class' IDENTIFIER
-        (typeParameters
-        )?
-        ('extends' type
-        )?
-        ('implements' typeList
-        )?            
+        'class' id=IDENTIFIER
+        typeParameters?
+        ('extends' type)?
+        ('implements' typeList)?            
         classBody
-        // TODO 
-//    -> 
-//        ^(AST_CLASS_DECL IDENTIFIER
-//            modifiers
-//            ^(AST_IMPLEMENTS_LIST typeList)?
-//            ^(AST_EXTENDS type)?
-//        	typeParameters?
-//        	classBody
-//        )
+        {
+            $ret = factory.makeClassDeclarationNode(
+                    $type.ret,
+                    $typeList.ret,
+                    $classBody.ret,
+                    $typeParameters.ret,
+                    null, // TODO: identifier node from IDENTIFIER
+                    $modifiers.ret);
+        }
     ;
 
 
