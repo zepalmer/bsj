@@ -605,7 +605,7 @@ classBody returns [ClassBodyNode ret]
 
 interfaceBody returns [InterfaceBodyNode ret]
 	@init {
-    		List<InterfaceBodyNode> list = new ArrayList<InterfaceBodyNode>();
+    		List<InterfaceMember> list = new ArrayList<InterfaceMember>();
 	}
     @after {
     		$ret = factory.makeInterfaceBodyNode(list);
@@ -619,7 +619,7 @@ interfaceBody returns [InterfaceBodyNode ret]
         '}'
     ;
 
-classBodyDeclaration 
+classBodyDeclaration returns [ClassMember ret]
     :
         ';'
         // TODO
@@ -637,7 +637,7 @@ classBodyDeclaration
         memberDecl
     ;
 
-memberDecl 
+memberDecl
     :    fieldDeclaration
     |    methodDeclaration
     |    classDeclaration
@@ -657,7 +657,7 @@ methodReturnType
 //        ^(AST_VOID_TYPE)
     ;
 
-methodDeclaration 
+methodDeclaration returns [MethodDeclarationNode ret]
     :
         /* For constructor, return type is null, name is 'init' */
          modifiers
@@ -684,7 +684,7 @@ methodDeclaration
     |   modifiers
         (typeParameters
         )?
-        retType=methodReturnType
+        methodReturnType
         IDENTIFIER
         formalParameters
         arrayTypeSuffix=('[' ']')*
@@ -694,21 +694,20 @@ methodDeclaration
             block
         |   ';' 
         )
-        // TODO
-//    ->
-//        ^(AST_METHOD
-//            IDENTIFIER
-//            modifiers
-//            typeParameters?
-//            ^(AST_RETURN_TYPE $retType)
-//            ^(AST_ARRAY_TYPE_SUFFIX '['*)
-//            formalParameters
-//            ^(AST_THROWS qualifiedNameList)?
-//            ^(AST_METHOD_BODY block)?)         
+        {
+            $ret = factory.makeMethodDeclarationNode(
+            		$block.ret,
+            		$modifiers.ret,
+            		null, // TODO: identifier node from IDENTIFIER
+            		$formalParameters.ret,
+            		$methodReturnType.ret,
+            		$qualifiedNameList.ret,
+                    $typeParameters.ret);
+        }        
     ;
 
 
-fieldDeclaration 
+fieldDeclaration returns [VariableDeclarationNode ret]
     :   modifiers
         type
         variableDeclarator
@@ -742,38 +741,51 @@ variableDeclarator
 /**
  *TODO: add predicates
  */
-interfaceBodyDeclaration 
+interfaceBodyDeclaration returns [InterfaceMember ret]
     :
-        interfaceFieldDeclaration
-    |   interfaceMethodDeclaration
-    |   interfaceDeclaration
-    |   classDeclaration
+        a=interfaceFieldDeclaration
+		{
+			$ret = $a.ret;
+		}        
+    |   b=interfaceMethodDeclaration
+		{
+			$ret = $b.ret;
+		}
+    |   c=interfaceDeclaration
+		{
+			$ret = $c.ret;
+		}
+    |   d=classDeclaration
+		{
+			$ret = $d.ret;
+		}
     |   ';'
+		{
+			$ret = null;
+		}    
     ;
 
-interfaceMethodDeclaration 
+interfaceMethodDeclaration returns [MethodDeclarationNode ret]
     :   modifiers
         (typeParameters
         )?
-        (type
-        |'void'
-        )
+        methodReturnType
         IDENTIFIER
         formalParameters
         ('[' ']'
         )*
         ('throws' qualifiedNameList
         )? ';'
-        // TODO
-//    ->
-//        ^(AST_METHOD
-//            IDENTIFIER
-//            modifiers
-//            typeParameters?            
-//            formalParameters
-//            ^(AST_RETURN_TYPE type? 'void'?)
-//            ^(AST_THROWS qualifiedNameList)?
-//        )         
+        {
+            $ret = factory.makeMethodDeclarationNode(
+            		null, //TODO no body for interface methods, leave null?
+            		$modifiers.ret,
+            		null, // TODO: identifier node from IDENTIFIER
+            		$formalParameters.ret,
+            		$methodReturnType.ret,
+            		$qualifiedNameList.ret,
+                    $typeParameters.ret);
+        }         
     ;
 
 /**
@@ -846,13 +858,22 @@ typeArgument
 
 // because qualifiedNameList is only ever used in the context of a "throws" clause, it returns an AST_TYPE_LIST?
 // TODO: make sure this is actually okay - the real typeList rule might return differently-typed nodes
-qualifiedNameList 
-    :   qualifiedName
-        (',' qualifiedName
+qualifiedNameList returns [ListNode<QualifiedNameNode> ret]
+        @init {
+            List<QualifiedNameNode> list = new ArrayList<QualifiedNameNode>();
+        }
+        @after {
+            $ret = factory.<QualifiedNameNode>makeListNode(list);
+        }
+    :   a=qualifiedName
+        	{
+        		list.add($a.ret);
+        	}    
+        (',' b=qualifiedName
+        	{
+        		list.add($b.ret);
+        	}
         )*
-        // TODO
-//    ->
-//        ^(AST_TYPE_LIST qualifiedName+)
     ;
 
 formalParameters 
