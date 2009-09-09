@@ -552,7 +552,7 @@ interfaceDeclaration returns [TypeDeclarationNode ret]
 			}
     ;
     
-normalInterfaceDeclaration 
+normalInterfaceDeclaration returns [InterfaceDeclarationNode ret]
     :   
     	modifiers[Arrays.asList(
             Modifier.PUBLIC,
@@ -587,24 +587,36 @@ typeList
 //        ^(AST_TYPE_LIST type+)
     ;
 
-classBody 
+classBody returns [ClassBodyNode ret]
+	@init {
+    		List<ClassMember> list = new ArrayList<ClassMember>();
+	}
+    @after {
+    		$ret = factory.makeClassBodyNode(list);
+	}
     :   '{' 
         (classBodyDeclaration
+        	{
+        		list.add($classBodyDeclaration.ret);
+        	}
         )* 
         '}'
-        // TODO
-//    ->
-//        ^(CLASS_BODY classBodyDeclaration*)
     ;
 
-interfaceBody 
+interfaceBody returns [InterfaceBodyNode ret]
+	@init {
+    		List<InterfaceBodyNode> list = new ArrayList<InterfaceBodyNode>();
+	}
+    @after {
+    		$ret = factory.makeInterfaceBodyNode(list);
+	}
     :   '{' 
         (interfaceBodyDeclaration
+        	{
+        		list.add($interfaceBodyDeclaration.ret);
+        	}        
         )* 
         '}'
-        // TODO
-//	->
-//    	^(INTERFACE_BODY interfaceBodyDeclaration*)        
     ;
 
 classBodyDeclaration 
