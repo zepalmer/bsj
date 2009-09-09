@@ -650,7 +650,7 @@ CompilationUnitNode :: Node
     @props
     imports                 ListNode<? extends ImportNode>              | the imports used in this unit
     packageAnnotations      ListNode<? extends AnnotationNode>          | the annotations on the package declaration of this unit
-    packageName             ExpressionNode                              | the name of the package for this unit
+    packageName             QualifiedNameNode                           | the name of the package for this unit
     typeDecls               ListNode<? extends TypeDeclarationNode>     | the type declarations of this unit
     @docs
         Represents a BSJ compilation unit.
