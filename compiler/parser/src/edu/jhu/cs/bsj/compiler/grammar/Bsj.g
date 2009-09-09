@@ -198,8 +198,8 @@ importDeclaration returns [ImportNode ret]
         {
             $ret = factory.makeImportNode(
                 factory.makeQualifiedNameNode(
-                    factory.makeIdentifierNode(null), // TODO: fix - should be IDENTIFIER
-                    factory.makeIdentifierNode(null))  // TODO: fix - should be *
+                    factory.makeIdentifierNode(null), /* TODO: fix - should be IDENTIFIER */
+                    factory.makeIdentifierNode(null))  /* TODO: fix - should be * */
                 staticImport!=null);
         }
     |
