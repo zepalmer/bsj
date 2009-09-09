@@ -420,25 +420,43 @@ normalClassDeclaration returns [ClassDeclarationNode ret]
     ;
 
 
-typeParameters 
+typeParameters returns [ListNode<TypeParameterNode> ret]
+	@init {
+    		List<TypeParameterNode> list = new ArrayList<TypeParameterNode>();
+	}
+    @after {
+    		$ret = factory.<TypeParameterNode>makeListNode(list);
+	}
     :   '<'
-            typeParameter
-            (',' typeParameter
+            a=typeParameter
+            {
+                list.add($a.ret);
+            }
+            (',' b=typeParameter
+				{
+                	list.add($b.ret);
+            	}
             )*
         '>'
-        // TODO
-//    ->
-//    	^(AST_TYPE_PARAMETER_LIST typeParameter+)
     ;
 
 
-typeParameter 
+typeParameter returns [TypeParameterNode ret]
+	@init {
+    		List<TypeNode> list = new ArrayList<TypeNode>();
+	}
     :   IDENTIFIER
         ('extends' typeBound
+		{
+			list.add($typeBound.ret);
+        }        
         )?
-        // TODO
-//    ->
-//        ^(AST_TYPE_PARAMETER IDENTIFIER typeBound?)
+        
+	    {
+	        $ret = factory.makeTypeParameterNode(
+	                    null, //TODO IDENTIFIER return
+	                    list);
+	    }        
     ;
 
 
