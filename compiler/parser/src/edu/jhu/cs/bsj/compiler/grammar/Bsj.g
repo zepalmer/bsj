@@ -122,7 +122,13 @@ tokens {
 @parser::header{
 	package edu.jhu.cs.bsj.compiler.tool.parser.antlr;
 	
-	import java.util.*;
+    import java.util.ArrayList;
+	import java.util.Arrays;
+	import java.util.Collection;
+	import java.util.Collections;
+    import java.util.List;
+    import java.util.HashSet;
+	import java.util.Set;
 	
 	import edu.jhu.cs.bsj.compiler.ast.*;
     import edu.jhu.cs.bsj.compiler.ast.node.*;
