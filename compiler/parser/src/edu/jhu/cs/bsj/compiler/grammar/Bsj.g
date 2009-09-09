@@ -454,13 +454,13 @@ typeParameter returns [TypeParameterNode ret]
         
 	    {
 	        $ret = factory.makeTypeParameterNode(
-	                    null, //TODO IDENTIFIER return
+	                    factory.makeIdentifierNode(null), //TODO IDENTIFIER return
 	                    list);
 	    }        
     ;
 
 
-typeBound 
+typeBound returns [TypeNode ret]
     :   type
         ('&' type
         )*
@@ -539,30 +539,43 @@ enumBodyDeclarations
 //        ^(CLASS_BODY classBodyDeclaration*)
     ;
 
-interfaceDeclaration 
-    :   a=normalInterfaceDeclaration
-    // TODO
-//    ->
-//    	$a
-    |   b=annotationTypeDeclaration
-    // TODO
-//    ->
-//    	$b
+interfaceDeclaration returns [TypeDeclarationNode ret] 
+    :   
+    	a=normalInterfaceDeclaration
+			{
+				$ret = $a.ret;
+			}
+    |
+    	b=annotationTypeDeclaration
+			{
+				$ret = $b.ret;
+			}
     ;
     
 normalInterfaceDeclaration 
-    :   modifiers 'interface' IDENTIFIER
+    :   
+    	modifiers[Arrays.asList(
+            Modifier.PUBLIC,
+            Modifier.PROTECTED,
+            Modifier.PRIVATE,
+            Modifier.ABSTRACT,
+            Modifier.STATIC,
+            Modifier.FINAL,
+            Modifier.STRICTFP)]
+        'interface' IDENTIFIER
         (typeParameters
         )?
         ('extends' typeList
         )?
         interfaceBody
-        // TODO
-//	->
-//		^(AST_IFACE_DECL IDENTIFIER modifiers
-//			typeParameters? ^(AST_EXTENDS typeList)?
-//			interfaceBody
-//		)        
+        {
+            $ret = factory.makeInterfaceDeclarationNode(
+					$typeList.ret,
+                    $interfaceBody.ret,
+                    $typeParameters.ret,
+                    null, // TODO: identifier node from IDENTIFIER
+                    $modifiers.ret);
+        }
     ;
 
 typeList 
