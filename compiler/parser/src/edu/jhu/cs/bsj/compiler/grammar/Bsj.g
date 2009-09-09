@@ -122,6 +122,8 @@ tokens {
 @parser::header{
 	package edu.jhu.cs.bsj.compiler.tool.parser.antlr;
 	
+	import java.util.*;
+	
 	import edu.jhu.cs.bsj.compiler.ast.*;
     import edu.jhu.cs.bsj.compiler.ast.node.*;
     import edu.jhu.cs.bsj.compiler.ast.tags.*;
@@ -129,6 +131,7 @@ tokens {
 }
 
 @parser::members {
+    // *** FACTORY NODE PROPERTY **********************************************
     /**
      * Factory used to generate nodes for the parser.
      */
@@ -272,43 +275,101 @@ classOrInterfaceDeclaration returns [TypeDeclarationNode ret]
         }
     ;
     
-  
-modifiers  
+// Accepts as a parameter the set of legal modifiers.  null means all of them are legal.
+modifiers[Collection<Modifier> legalModifiers] returns [ModifiersNode ret]
+        @init {
+            ListAnnotationNode> list = new ArrayList<AnnotationNode>();
+            Set<Modifier> modifiers = new HashSet<Modifier>();
+        }
+        @after {
+            $ret = factory.makeModifiersNode(list, modifiers);
+        }
     :
-        modifier*
-//        (
-//            mod+=modifier
-//        )*
-        // TODO
-//    ->
-//	    ^(AST_MODIFIERS $mod*)
+        (
+            modifier
+            {
+                if ($modifier.mod==null)
+                {
+                    list.add($modifier.ann);
+                } else
+                {
+                    if ($legalModifiers==null || $legalModifiers.contains($modifier.mod))
+                    {
+	                    // TODO: if this next call returns true, that's something like "public public void".  Figure out
+	                    // error handling.
+	                    modifiers.add($modifier.mod);
+	                } else
+	                {
+	                    // TODO: if we get here, that's like "volatile" on a class declaration.  Figure out error
+	                    // handling.
+	                }
+                }
+            }
+        )*
     ;
 
-modifier
+modifier returns [Modifier mod, AnnotationNode ann]
+	    @init {
+	        $ann = null;
+	        $mod = null;
+	    }
     :
             annotation
+        {
+            $ann = $annotation.ret;
+        }
         |   'public'
+        {
+            $mod = Modifier.PUBLIC;
+        }
         |   'protected'
+        {
+            $mod = Modifier.PROTECTED;
+        }
         |   'private'
+        {
+            $mod = Modifier.PRIVATE;
+        }
         |   'static'
+        {
+            $mod = Modifier.STATIC;
+        }
         |   'abstract'
+        {
+            $mod = Modifier.ABSTRACT;
+        }
         |   'final'
+        {
+            $mod = Modifier.FINAL;
+        }
         |   'native'
+        {
+            $mod = Modifier.NATIVE;
+        }
         |   'synchronized'
+        {
+            $mod = Modifier.SYNCHRONIZED;
+        }
         |   'transient'
+        {
+            $mod = Modifier.TRANSIENT;
+        }
         |   'volatile'
+        {
+            $mod = Modifier.VOLATILE;
+        }
         |   'strictfp'
+        {
+            $mod = Modifier.STRICTFP;
+        }
     ;
 
-variableModifiers 
+variableModifiers returns [ModifiersNode ret]
     :
-        variableModifier*
-//        (
-//            mod+=variableModifier
-//        )*
-        // TODO
-//    ->
-//        ^(AST_MODIFIERS $mod*)
+        modifiers[Arrays.asList(Modifier.FINAL)]
+        {
+            $ret = $modifiers.ret;
+        }
     ;
 
 variableModifier
@@ -323,7 +384,16 @@ classDeclaration
     ;
 
 normalClassDeclaration 
-    :   modifiers  'class' IDENTIFIER
+    :   
+        modifiers[Arrays.asList(
+            Modifier.PUBLIC,
+            Modifier.PROTECTED,
+            Modifier.PRIVATE,
+            Modifier.ABSTRACT,
+            Modifier.STATIC,
+            Modifier.FINAL,
+            Modifier.STRICTFP)]
+        'class' IDENTIFIER
         (typeParameters
         )?
         ('extends' type
