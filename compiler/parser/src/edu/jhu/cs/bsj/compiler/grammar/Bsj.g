@@ -806,14 +806,26 @@ interfaceFieldDeclaration
 //    	^(AST_VARIABLE type variableDeclarator)+
     ;
 
-//TODO separate [] and non-[] to differentiate between array types
-type 
+//TODO done?
+type returns [TypeNode ret]
     :   classOrInterfaceType
-        ('[' ']'
-        )*
+        	{
+        		$ret = $classOrInterfaceType.ret;
+        	}
+    |   classOrInterfaceType
+        ('[' ']')+
+			{
+        		$ret = factory.makeArrayTypeNode($classOrInterfaceType.ret);
+        	}        	
     |   primitiveType
-        ('[' ']'
-        )*
+        	{
+        		$ret = $primitiveType.ret;
+        	}
+    |	primitiveType
+        ('[' ']')+
+        	{
+        		$ret = factory.makeArrayTypeNode($primitiveType.ret);
+        	}
     ;
 
 
