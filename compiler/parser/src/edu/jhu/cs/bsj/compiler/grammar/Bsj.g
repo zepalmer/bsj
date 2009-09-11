@@ -710,7 +710,7 @@ methodDeclaration returns [MethodDeclarationNode ret]
     ;
 
 
-fieldDeclaration returns [VariableDeclarationNode ret]
+fieldDeclaration returns [FieldDeclarationNode ret]
     :   modifiers
         type
         variableDeclarator
@@ -1133,7 +1133,7 @@ localVariableDeclaration
     ;
 
 //TODO in progress
-statement 
+statement returns [StatementNode ret]
     :   block
             
     |   ('assert'
@@ -1145,58 +1145,70 @@ statement
     |   'while' parExpression statement
     |   'do' statement 'while' parExpression ';'
     |   trystatement
-    |   'switch' parExpression '{' switchBlockStatementGroups '}'
-    // TODO
-//    ->
-//    	^(AST_SWITCH
-//    		parExpression
-//    		switchBlockStatementGroups
-//    	)
-      |   'synchronized' parExpression block
-      |   'return' (expression )? ';'
-      |   'throw' expression ';'
-      |   'break'
+	|   'switch' parExpression '{' switchBlockStatementGroups '}'
+    	{
+    		$ret = factory.makeSwitchNode(
+    			$switchBlockStatementGroups.ret,
+    			$parExpression.ret);
+    	}
+	|   'synchronized' parExpression block
+	|   'return' (expression )? ';'
+	|   'throw' expression ';'
+	|   'break'
               (IDENTIFIER
               )? ';'
-      |   'continue'
+	|   'continue'
               (IDENTIFIER
               )? ';'
-      |   expression  ';'     
-      |   IDENTIFIER ':' statement
-      |   ';'
+	|   expression  ';'     
+	|   IDENTIFIER ':' statement
+	|   ';'
+	;
 
+switchBlockStatementGroups returns [ListNode<CaseNode> ret]
+	@init {
+    		List<CaseNode> list = new ArrayList<CaseNode>();
+	}
+    @after {
+    		$ret = factory.makeListNode(list);
+	}
+    :   (switchBlockStatementGroup 
+    		{
+    			list.add($switchBlockStatementGroup.ret);
+    		}	
+    	)*
     ;
 
-switchBlockStatementGroups 
-    :   (switchBlockStatementGroup )*
-    // TODO
-//    ->
-//    	^(AST_CASE_LIST switchBlockStatementGroup*)
-    ;
-
-switchBlockStatementGroup 
+switchBlockStatementGroup returns [CaseNode ret]
+	@init {
+    		List<StatementNode> list = new ArrayList<StatementNode>();
+    		ExpressionNode label;
+	}
+    @after {
+    		$ret = factory.makeCaseNode(label, list);
+	}
     :
         switchLabel
+        	{
+        		label = $switchLabel.ret;
+        	}
         (blockStatement
+        	{
+        		list.add($blockStatement.ret);
+        	}
         )*
-    // TODO
-//	->
-//		^(AST_CASE 
-//			switchLabel 
-//			^(BLOCKSTATEMENT blockStatement*)
-//		)
 	;
 
 //TODO null in case of default switch label?
-switchLabel 
+switchLabel returns [ExpressionNode ret]
     :   'case' expression ':'
-    // TODO
-//    ->
-//    	expression
+    	{
+    		$ret = $expression.ret;
+    	}
     |   'default' ':'
-    // TODO
-//    ->
-//    	AST_VOID_DECL
+		{
+    		$ret = null;
+    	}
     ;
 
 
