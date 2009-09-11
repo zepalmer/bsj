@@ -622,9 +622,9 @@ interfaceBody returns [InterfaceBodyNode ret]
 classBodyDeclaration returns [ClassMember ret]
     :
         ';'
-        // TODO
-//    ->
-//        ^(AST_VOID_DECL)
+		{//TODO just use null here?
+			$ret = null;
+		}
     |
         'static'?
         block
@@ -635,6 +635,9 @@ classBodyDeclaration returns [ClassMember ret]
 //            block)
     |
         memberDecl
+        {
+        	$ret = $memberDecl.ret;
+        }
     ;
 
 memberDecl
@@ -644,15 +647,15 @@ memberDecl
     |    interfaceDeclaration
     ;
 
-methodReturnType
+methodReturnType returns [TypeNode ret]
     :
         type
-        // TODO
-//    ->
-//        type
+        {
+        	$ret = $type.ret;
+        }
     |
         'void'
-        // TODO
+        // TODO define VoidTypeNode?
 //    ->
 //        ^(AST_VOID_TYPE)
     ;
@@ -824,15 +827,45 @@ classOrInterfaceType
         )*
     ;
 
-primitiveType  
+primitiveType returns [PrimitiveTypeNode ret]
+	@init {
+    		PrimitiveType temp;
+	}
+    @after {
+    		$ret = factory.makePrimitiveTypeNode(temp);
+	}
     :   'boolean'
+    	{
+    		temp = PrimitiveType.BOOLEAN;
+    	}
     |   'char'
+    	{
+    		temp = PrimitiveType.CHAR;
+    	}
     |   'byte'
+    	{
+    		temp = PrimitiveType.BYTE;
+    	}
     |   'short'
+    	{
+    		temp = PrimitiveType.SHORT;
+    	}    
     |   'int'
+    	{
+    		temp = PrimitiveType.INT;
+    	}    
     |   'long'
+    	{
+    		temp = PrimitiveType.LONG;
+    	}
     |   'float'
+    	{
+    		temp = PrimitiveType.FLOAT;
+    	}
     |   'double'
+    	{
+    		temp = PrimitiveType.DOUBLE;
+    	}    
     ;
 
 typeArguments 
