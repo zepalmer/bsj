@@ -458,31 +458,33 @@ typeParameters returns [ListNode<TypeParameterNode> ret]
 
 
 typeParameter returns [TypeParameterNode ret]
-	@init {
-    		List<TypeNode> list = new ArrayList<TypeNode>();
-	}
     :   id=IDENTIFIER
-        ('extends' typeBound
-		{
-			list.add($typeBound.ret);
-        }        
-        )?
-        
+        ('extends' typeBound)?
 	    {
 	        $ret = factory.makeTypeParameterNode(
 	                    factory.makeIdentifierNode($id.text),
-	                    list);
+	                    $typeBound.ret);
 	    }        
     ;
 
 
-typeBound returns [TypeNode ret]
-    :   type
-        ('&' type
+typeBound returns [ListNode<TypeNode> ret]
+    @init {
+        List<TypeNode> list = new ArrayList<TypeNode>();
+    }
+    @after {
+        $ret = factory.makeListNode(list);
+    }
+    :   a=type
+        {
+            list.add($a.ret);
+        }
+        (
+            '&' b=type
+            {
+                list.add($b.ret);
+            }
         )*
-        // TODO
-//    ->
-//        ^(AST_TYPE_BOUNDS type+)
     ;
 
 
