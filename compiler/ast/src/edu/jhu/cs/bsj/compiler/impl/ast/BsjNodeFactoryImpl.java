@@ -61,6 +61,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.MethodInvocationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.NameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
+import edu.jhu.cs.bsj.compiler.ast.node.PackageDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ParameterizedTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.PrimitiveTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.QualifiedNameNode;
@@ -133,6 +134,7 @@ import edu.jhu.cs.bsj.compiler.impl.ast.node.MemberSelectNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.MethodDeclarationNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.MethodInvocationNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.ModifiersNodeImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.node.PackageDeclarationNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.ParameterizedTypeNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.PrimitiveTypeNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.QualifiedNameNodeImpl;
@@ -793,6 +795,17 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
 
     /**
+     * Creates a PackageDeclarationNode.
+     */
+    public PackageDeclarationNode makePackageDeclarationNode(
+            QualifiedNameNode name,
+            ListNode<? extends AnnotationNode> annotations)
+    {
+        PackageDeclarationNode ret = new PackageDeclarationNodeImpl(name, annotations);
+        return ret;
+    }
+
+    /**
      * Creates a AnnotationDeclarationNode.
      */
     public AnnotationDeclarationNode makeAnnotationDeclarationNode(
@@ -808,12 +821,11 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      * Creates a CompilationUnitNode.
      */
     public CompilationUnitNode makeCompilationUnitNode(
+            PackageDeclarationNode packageDeclaration,
             ListNode<? extends ImportNode> imports,
-            ListNode<? extends AnnotationNode> packageAnnotations,
-            QualifiedNameNode packageName,
             ListNode<? extends TypeDeclarationNode> typeDecls)
     {
-        CompilationUnitNode ret = new CompilationUnitNodeImpl(imports, packageAnnotations, packageName, typeDecls);
+        CompilationUnitNode ret = new CompilationUnitNodeImpl(packageDeclaration, imports, typeDecls);
         return ret;
     }
 

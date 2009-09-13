@@ -1,39 +1,59 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
-import edu.jhu.cs.bsj.compiler.ast.node.AnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ImportNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.QualifiedNameNode;
+import edu.jhu.cs.bsj.compiler.ast.node.PackageDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeDeclarationNode;
 
 public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnitNode
 {
+    /** The package declaration for this unit. */
+    private PackageDeclarationNode packageDeclaration;
+
     /** The imports used in this unit. */
     private ListNode<? extends ImportNode> imports;
-
-    /** The annotations on the package declaration of this unit. */
-    private ListNode<? extends AnnotationNode> packageAnnotations;
-
-    /** The name of the package for this unit. */
-    private QualifiedNameNode packageName;
 
     /** The type declarations of this unit. */
     private ListNode<? extends TypeDeclarationNode> typeDecls;
 
     /** General constructor. */
     public CompilationUnitNodeImpl(
+            PackageDeclarationNode packageDeclaration,
             ListNode<? extends ImportNode> imports,
-            ListNode<? extends AnnotationNode> packageAnnotations,
-            QualifiedNameNode packageName,
             ListNode<? extends TypeDeclarationNode> typeDecls)
     {
         super();
+        this.packageDeclaration = packageDeclaration;
         this.imports = imports;
-        this.packageAnnotations = packageAnnotations;
-        this.packageName = packageName;
         this.typeDecls = typeDecls;
+    }
+
+    /**
+     * Gets the package declaration for this unit.
+     * @return The package declaration for this unit.
+     */
+    public PackageDeclarationNode getPackageDeclaration()
+    {
+        return this.packageDeclaration;
+    }
+
+    /**
+     * Changes the package declaration for this unit.
+     * @param packageDeclaration The package declaration for this unit.
+     */
+    public void setPackageDeclaration(PackageDeclarationNode packageDeclaration)
+    {
+        if (this.packageDeclaration instanceof NodeImpl)
+        {
+            ((NodeImpl)this.packageDeclaration).setParent(null);
+        }
+        this.packageDeclaration = packageDeclaration;
+        if (this.packageDeclaration instanceof NodeImpl)
+        {
+            ((NodeImpl)this.packageDeclaration).setParent(this);
+        }
     }
 
     /**
@@ -59,58 +79,6 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
         if (this.imports instanceof NodeImpl)
         {
             ((NodeImpl)this.imports).setParent(this);
-        }
-    }
-
-    /**
-     * Gets the annotations on the package declaration of this unit.
-     * @return The annotations on the package declaration of this unit.
-     */
-    public ListNode<? extends AnnotationNode> getPackageAnnotations()
-    {
-        return this.packageAnnotations;
-    }
-
-    /**
-     * Changes the annotations on the package declaration of this unit.
-     * @param packageAnnotations The annotations on the package declaration of this unit.
-     */
-    public void setPackageAnnotations(ListNode<? extends AnnotationNode> packageAnnotations)
-    {
-        if (this.packageAnnotations instanceof NodeImpl)
-        {
-            ((NodeImpl)this.packageAnnotations).setParent(null);
-        }
-        this.packageAnnotations = packageAnnotations;
-        if (this.packageAnnotations instanceof NodeImpl)
-        {
-            ((NodeImpl)this.packageAnnotations).setParent(this);
-        }
-    }
-
-    /**
-     * Gets the name of the package for this unit.
-     * @return The name of the package for this unit.
-     */
-    public QualifiedNameNode getPackageName()
-    {
-        return this.packageName;
-    }
-
-    /**
-     * Changes the name of the package for this unit.
-     * @param packageName The name of the package for this unit.
-     */
-    public void setPackageName(QualifiedNameNode packageName)
-    {
-        if (this.packageName instanceof NodeImpl)
-        {
-            ((NodeImpl)this.packageName).setParent(null);
-        }
-        this.packageName = packageName;
-        if (this.packageName instanceof NodeImpl)
-        {
-            ((NodeImpl)this.packageName).setParent(this);
         }
     }
 
@@ -151,9 +119,8 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
+        this.packageDeclaration.receive(visitor);
         this.imports.receive(visitor);
-        this.packageAnnotations.receive(visitor);
-        this.packageName.receive(visitor);
         this.typeDecls.receive(visitor);
     }
 }

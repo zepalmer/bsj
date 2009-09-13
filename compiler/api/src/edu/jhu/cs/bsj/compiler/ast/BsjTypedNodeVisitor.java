@@ -51,6 +51,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.MethodDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.MethodInvocationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
+import edu.jhu.cs.bsj.compiler.ast.node.PackageDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ParameterizedTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.PrimitiveTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.QualifiedNameNode;
@@ -259,6 +260,9 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
         } else if (node instanceof VariableNode)
         {
             visitVariableNodeStart((VariableNode)node);
+        } else if (node instanceof PackageDeclarationNode)
+        {
+            visitPackageDeclarationNodeStart((PackageDeclarationNode)node);
         } else if (node instanceof EnumConstantDeclarationNode)
         {
             visitEnumConstantDeclarationNodeStart((EnumConstantDeclarationNode)node);
@@ -466,6 +470,9 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
         } else if (node instanceof VariableNode)
         {
             visitVariableNodeStop((VariableNode)node);
+        } else if (node instanceof PackageDeclarationNode)
+        {
+            visitPackageDeclarationNodeStop((PackageDeclarationNode)node);
         } else if (node instanceof EnumConstantDeclarationNode)
         {
             visitEnumConstantDeclarationNodeStop((EnumConstantDeclarationNode)node);
@@ -959,6 +966,14 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
      * @param node The node being visited.
      */
     public void visitVariableNodeStart(VariableNode node)
+    {
+    }
+
+    /**
+     * Starts a visit for nodes of type PackageDeclarationNode.
+     * @param node The node being visited.
+     */
+    public void visitPackageDeclarationNodeStart(PackageDeclarationNode node)
     {
     }
 
@@ -1479,6 +1494,14 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
      * @param node The node being visited.
      */
     public void visitVariableNodeStop(VariableNode node)
+    {
+    }
+
+    /**
+     * Stops a visit for nodes of type PackageDeclarationNode.
+     * @param node The node being visited.
+     */
+    public void visitPackageDeclarationNodeStop(PackageDeclarationNode node)
     {
     }
 

@@ -56,6 +56,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.MethodInvocationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.NameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
+import edu.jhu.cs.bsj.compiler.ast.node.PackageDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ParameterizedTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.PrimitiveTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.QualifiedNameNode;
@@ -497,6 +498,13 @@ public interface BsjNodeFactory
             ModifiersNode modifiers);
 
     /**
+     * Creates a PackageDeclarationNode.
+     */
+    public PackageDeclarationNode makePackageDeclarationNode(
+            QualifiedNameNode name,
+            ListNode<? extends AnnotationNode> annotations);
+
+    /**
      * Creates a AnnotationDeclarationNode.
      */
     public AnnotationDeclarationNode makeAnnotationDeclarationNode(
@@ -508,9 +516,8 @@ public interface BsjNodeFactory
      * Creates a CompilationUnitNode.
      */
     public CompilationUnitNode makeCompilationUnitNode(
+            PackageDeclarationNode packageDeclaration,
             ListNode<? extends ImportNode> imports,
-            ListNode<? extends AnnotationNode> packageAnnotations,
-            QualifiedNameNode packageName,
             ListNode<? extends TypeDeclarationNode> typeDecls);
 
     /**

@@ -160,27 +160,25 @@ tokens {
 
 compilationUnit returns [CompilationUnitNode ret]
     :
-        (
-            annotations?
-            packageDeclaration
-        )?
+        packageDeclaration?
         importDeclarations
         typeDeclarations
-        
 	    {
 	        $ret = factory.makeCompilationUnit(
-	                    $importDeclarations.ret,
-	                    $annotations.ret,
 	                    $packageDeclaration.ret,
+                        $importDeclarations.ret,
 	                    $typeDeclarations.ret);
 	    }
     ;
 
-packageDeclaration returns [QualifiedNameNode ret]
+packageDeclaration returns [PackageDeclarationNode ret]
     :
+        annotations?
         'package' qualifiedName ';'
         {
-            $ret = $qualifiedName.ret;
+            $ret = factory.makePackageDeclaration(
+                    $qualifiedName.ret,
+                    $annotations.ret);
         }
     ;
 

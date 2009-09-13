@@ -655,9 +655,8 @@ CatchNode :: Node
 
 CompilationUnitNode :: Node
     @props
+    packageDeclaration      PackageDeclarationNode                      | the package declaration for this unit
     imports                 ListNode<? extends ImportNode>              | the imports used in this unit
-    packageAnnotations      ListNode<? extends AnnotationNode>          | the annotations on the package declaration of this unit
-    packageName             QualifiedNameNode                           | the name of the package for this unit
     typeDecls               ListNode<? extends TypeDeclarationNode>     | the type declarations of this unit
     @docs
         Represents a BSJ compilation unit.
@@ -701,6 +700,21 @@ Node*
         Node.java
     @docs
         The parent class for all BSJ AST nodes.
+
+PackageDeclarationNode :: Node
+    @props
+    name                    QualifiedNameNode                           | the qualified name indicating the package
+    annotations             ListNode<? extends AnnotationNode>          | the annotations on the package declaration
+    @docs
+        A node representing a package declaration, as in
+        <pre>
+            package <i>packageName</i>;
+        </pre>
+        or
+        <pre>
+            <i>annotations</i>
+            package <i>packageName</i>;
+        </pre>
 
 StatementNode* :: Node
     @docs
