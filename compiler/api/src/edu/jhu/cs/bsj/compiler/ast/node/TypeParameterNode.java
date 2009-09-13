@@ -1,5 +1,6 @@
 package edu.jhu.cs.bsj.compiler.ast.node;
 
+import edu.jhu.cs.bsj.compiler.ast.tags.BoundType;
 
 /**
  * A node for type parameters, as in:
@@ -33,12 +34,12 @@ public interface TypeParameterNode extends Node
      * Gets the bounds over the base type.
      * @return The bounds over the base type.
      */
-    public ListNode<? extends TypeNode> getBounds();
+    public ListNode<? extends BoundType> getBounds();
 
     /**
      * Changes the bounds over the base type.
      * @param bounds The bounds over the base type.
      */
-    public void setBounds(ListNode<? extends TypeNode> bounds);
+    public void setBounds(ListNode<? extends BoundType> bounds);
 
 }

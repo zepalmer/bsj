@@ -1,5 +1,6 @@
 package edu.jhu.cs.bsj.compiler.ast.node;
 
+import edu.jhu.cs.bsj.compiler.ast.tags.BoundType;
 import edu.jhu.cs.bsj.compiler.ast.tags.TypeArgument;
 
 /**
@@ -8,7 +9,7 @@ import edu.jhu.cs.bsj.compiler.ast.tags.TypeArgument;
  * <i>type</i> &lt;<i>arg...</i>&gt;
  * </pre>
  */
-public interface ParameterizedTypeNode extends TypeNode, TypeArgument
+public interface ParameterizedTypeNode extends TypeNode, TypeArgument,  BoundType
 {
     /**
      * Gets the base type.

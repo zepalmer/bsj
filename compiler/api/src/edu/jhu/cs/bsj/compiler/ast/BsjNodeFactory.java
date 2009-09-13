@@ -76,6 +76,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.WhileLoopNode;
 import edu.jhu.cs.bsj.compiler.ast.node.WildcardTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.CodeLiteralNode;
 import edu.jhu.cs.bsj.compiler.ast.tags.AnnotationMember;
+import edu.jhu.cs.bsj.compiler.ast.tags.BoundType;
 import edu.jhu.cs.bsj.compiler.ast.tags.ClassMember;
 import edu.jhu.cs.bsj.compiler.ast.tags.InterfaceMember;
 import edu.jhu.cs.bsj.compiler.ast.tags.TypeArgument;
@@ -355,7 +356,7 @@ public interface BsjNodeFactory
      */
     public TypeParameterNode makeTypeParameterNode(
             IdentifierNode name,
-            ListNode<? extends TypeNode> bounds);
+            ListNode<? extends BoundType> bounds);
 
     /**
      * Creates a AnnotationMethodDeclarationNode.

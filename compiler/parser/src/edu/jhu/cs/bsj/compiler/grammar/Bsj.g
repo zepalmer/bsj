@@ -468,19 +468,19 @@ typeParameter returns [TypeParameterNode ret]
     ;
 
 
-typeBound returns [ListNode<TypeNode> ret]
+typeBound returns [ListNode<BoundType> ret]
     @init {
-        List<TypeNode> list = new ArrayList<TypeNode>();
+        List<BoundType> list = new ArrayList<BoundType>();
     }
     @after {
         $ret = factory.makeListNode(list);
     }
-    :   a=type
+    :   a=classOrInterfaceDeclaration
         {
             list.add($a.ret);
         }
         (
-            '&' b=type
+            '&' b=interfaceDeclaration
             {
                 list.add($b.ret);
             }

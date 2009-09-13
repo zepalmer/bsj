@@ -3,8 +3,8 @@ package edu.jhu.cs.bsj.compiler.impl.ast.node;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeParameterNode;
+import edu.jhu.cs.bsj.compiler.ast.tags.BoundType;
 
 public class TypeParameterNodeImpl extends NodeImpl implements TypeParameterNode
 {
@@ -12,12 +12,12 @@ public class TypeParameterNodeImpl extends NodeImpl implements TypeParameterNode
     private IdentifierNode name;
 
     /** The bounds over the base type. */
-    private ListNode<? extends TypeNode> bounds;
+    private ListNode<? extends BoundType> bounds;
 
     /** General constructor. */
     public TypeParameterNodeImpl(
             IdentifierNode name,
-            ListNode<? extends TypeNode> bounds)
+            ListNode<? extends BoundType> bounds)
     {
         super();
         this.name = name;
@@ -54,7 +54,7 @@ public class TypeParameterNodeImpl extends NodeImpl implements TypeParameterNode
      * Gets the bounds over the base type.
      * @return The bounds over the base type.
      */
-    public ListNode<? extends TypeNode> getBounds()
+    public ListNode<? extends BoundType> getBounds()
     {
         return this.bounds;
     }
@@ -63,7 +63,7 @@ public class TypeParameterNodeImpl extends NodeImpl implements TypeParameterNode
      * Changes the bounds over the base type.
      * @param bounds The bounds over the base type.
      */
-    public void setBounds(ListNode<? extends TypeNode> bounds)
+    public void setBounds(ListNode<? extends BoundType> bounds)
     {
         if (this.bounds instanceof NodeImpl)
         {
