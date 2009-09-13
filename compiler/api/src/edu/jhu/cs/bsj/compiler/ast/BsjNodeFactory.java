@@ -328,7 +328,7 @@ public interface BsjNodeFactory
      * Creates a IdentifierNode.
      */
     public IdentifierNode makeIdentifierNode(
-            Identifier identifier);
+            String identifier);
 
     /**
      * Creates a ArrayTypeNode.

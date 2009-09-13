@@ -5,7 +5,6 @@ import java.util.Set;
 
 import edu.jhu.cs.bsj.compiler.ast.BinaryOperator;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
-import edu.jhu.cs.bsj.compiler.ast.Identifier;
 import edu.jhu.cs.bsj.compiler.ast.Modifier;
 import edu.jhu.cs.bsj.compiler.ast.PrimitiveType;
 import edu.jhu.cs.bsj.compiler.ast.UnaryOperator;
@@ -529,7 +528,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      * Creates a IdentifierNode.
      */
     public IdentifierNode makeIdentifierNode(
-            Identifier identifier)
+            String identifier)
     {
         IdentifierNode ret = new IdentifierNodeImpl(identifier);
         return ret;

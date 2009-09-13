@@ -1,17 +1,16 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
-import edu.jhu.cs.bsj.compiler.ast.Identifier;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 
 public class IdentifierNodeImpl extends NameNodeImpl implements IdentifierNode
 {
     /** The identifier contained in this node. */
-    private Identifier identifier;
+    private String identifier;
 
     /** General constructor. */
     public IdentifierNodeImpl(
-            Identifier identifier)
+            String identifier)
     {
         super();
         this.identifier = identifier;
@@ -21,7 +20,7 @@ public class IdentifierNodeImpl extends NameNodeImpl implements IdentifierNode
      * Gets the identifier contained in this node.
      * @return The identifier contained in this node.
      */
-    public Identifier getIdentifier()
+    public String getIdentifier()
     {
         return this.identifier;
     }
@@ -30,7 +29,7 @@ public class IdentifierNodeImpl extends NameNodeImpl implements IdentifierNode
      * Changes the identifier contained in this node.
      * @param identifier The identifier contained in this node.
      */
-    public void setIdentifier(Identifier identifier)
+    public void setIdentifier(String identifier)
     {
         this.identifier = identifier;
     }

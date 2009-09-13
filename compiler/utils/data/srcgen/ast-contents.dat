@@ -154,7 +154,7 @@ ConditionalExpressionNode :: ExpressionNode
 
 IdentifierNode :: NameNode
     @props
-    identifier              Identifier                                  | the identifier contained in this node
+    identifier              String                                      | the identifier contained in this node
     @docs
         A tree node representing a simple identifier, as in:
         <pre>
