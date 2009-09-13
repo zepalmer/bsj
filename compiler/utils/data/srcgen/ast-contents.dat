@@ -634,6 +634,13 @@ CaseNode :: Node
             <i>statement</i>
             <i>...</i>
         </pre>
+        or
+        <pre>
+        default:
+            <i>statement</i>
+            <i>...</i>
+        </pre>
+        If the switch label is <tt>default</tt>, <tt>expression</tt> is <tt>null</tt>. 
 
 CatchNode :: Node
     @props

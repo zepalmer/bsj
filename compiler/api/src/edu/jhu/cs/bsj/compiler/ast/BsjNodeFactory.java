@@ -510,7 +510,7 @@ public interface BsjNodeFactory
     public CompilationUnitNode makeCompilationUnitNode(
             ListNode<? extends ImportNode> imports,
             ListNode<? extends AnnotationNode> packageAnnotations,
-            ExpressionNode packageName,
+            QualifiedNameNode packageName,
             ListNode<? extends TypeDeclarationNode> typeDecls);
 
     /**

@@ -8,6 +8,13 @@ package edu.jhu.cs.bsj.compiler.ast.node;
  *     <i>statement</i>
  *     <i>...</i>
  * </pre>
+ * or
+ * <pre>
+ * default:
+ *     <i>statement</i>
+ *     <i>...</i>
+ * </pre>
+ * If the switch label is <tt>default</tt>, <tt>expression</tt> is <tt>null</tt>. 
  */
 public interface CaseNode extends Node
 {

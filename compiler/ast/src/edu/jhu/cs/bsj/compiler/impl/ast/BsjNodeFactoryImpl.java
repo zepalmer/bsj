@@ -811,7 +811,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public CompilationUnitNode makeCompilationUnitNode(
             ListNode<? extends ImportNode> imports,
             ListNode<? extends AnnotationNode> packageAnnotations,
-            ExpressionNode packageName,
+            QualifiedNameNode packageName,
             ListNode<? extends TypeDeclarationNode> typeDecls)
     {
         CompilationUnitNode ret = new CompilationUnitNodeImpl(imports, packageAnnotations, packageName, typeDecls);

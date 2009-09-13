@@ -34,13 +34,13 @@ public interface CompilationUnitNode extends Node
      * Gets the name of the package for this unit.
      * @return The name of the package for this unit.
      */
-    public ExpressionNode getPackageName();
+    public QualifiedNameNode getPackageName();
 
     /**
      * Changes the name of the package for this unit.
      * @param packageName The name of the package for this unit.
      */
-    public void setPackageName(ExpressionNode packageName);
+    public void setPackageName(QualifiedNameNode packageName);
 
     /**
      * Gets the type declarations of this unit.

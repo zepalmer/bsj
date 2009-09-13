@@ -1199,7 +1199,6 @@ switchBlockStatementGroup returns [CaseNode ret]
         )*
 	;
 
-//TODO null in case of default switch label?
 switchLabel returns [ExpressionNode ret]
     :   'case' expression ':'
     	{

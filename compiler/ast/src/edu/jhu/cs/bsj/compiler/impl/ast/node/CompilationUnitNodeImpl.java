@@ -3,9 +3,9 @@ package edu.jhu.cs.bsj.compiler.impl.ast.node;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ImportNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.QualifiedNameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeDeclarationNode;
 
 public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnitNode
@@ -17,7 +17,7 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
     private ListNode<? extends AnnotationNode> packageAnnotations;
 
     /** The name of the package for this unit. */
-    private ExpressionNode packageName;
+    private QualifiedNameNode packageName;
 
     /** The type declarations of this unit. */
     private ListNode<? extends TypeDeclarationNode> typeDecls;
@@ -26,7 +26,7 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
     public CompilationUnitNodeImpl(
             ListNode<? extends ImportNode> imports,
             ListNode<? extends AnnotationNode> packageAnnotations,
-            ExpressionNode packageName,
+            QualifiedNameNode packageName,
             ListNode<? extends TypeDeclarationNode> typeDecls)
     {
         super();
@@ -92,7 +92,7 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
      * Gets the name of the package for this unit.
      * @return The name of the package for this unit.
      */
-    public ExpressionNode getPackageName()
+    public QualifiedNameNode getPackageName()
     {
         return this.packageName;
     }
@@ -101,7 +101,7 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
      * Changes the name of the package for this unit.
      * @param packageName The name of the package for this unit.
      */
-    public void setPackageName(ExpressionNode packageName)
+    public void setPackageName(QualifiedNameNode packageName)
     {
         if (this.packageName instanceof NodeImpl)
         {
