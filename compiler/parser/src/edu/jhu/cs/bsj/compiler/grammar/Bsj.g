@@ -203,12 +203,12 @@ importDeclarations returns [ListNode<ImportNode> ret]
 importDeclaration returns [ImportNode ret]
     :   'import' 
         (staticImport='static')?
-        IDENTIFIER '.' '*' ';'
+        id=IDENTIFIER '.' '*' ';'
         {
             $ret = factory.makeImportNode(
                 factory.makeQualifiedNameNode(
-                    factory.makeIdentifierNode(null), /* TODO: fix - should be IDENTIFIER */
-                    factory.makeIdentifierNode(null)),  /* TODO: fix - should be * */
+                    factory.makeIdentifierNode($id.text),
+                    factory.makeIdentifierNode("*")),
                 staticImport!=null);
         }
     |
@@ -227,16 +227,34 @@ qualifiedImportName returns [QualifiedNameNode ret]
     :
         necessarilyQualifiedName (starQual=('.' '*')?)
         {
-            $ret = null; // TODO
+            if ($starQual!=null)
+            {
+                $ret = factory.makeQualifiedNameNode(
+                    $necessarilyQualifiedName.ret,
+                    factory.makeIdentifierNode("*"));
+            } else
+            {
+                $ret = $necessarilyQualifiedName.ret;
+            } 
         }
     ;
 
 necessarilyQualifiedName returns [QualifiedNameNode ret]
     :   
-        IDENTIFIER ('.' IDENTIFIER)+
+        a=IDENTIFIER '.' b=IDENTIFIER
         {
-            $ret = null; // TODO
+            $ret = factory.makeQualifiedNameNode(
+                    factory.makeIdentifierNode($a.text),
+                    factory.makeIdentifierNode($b.text));
         }
+        (
+            '.' c=IDENTIFIER
+            {
+                $ret = factory.makeQualifiedNameNode(
+                    $ret,
+                    factory.makeIdentifierNode($c.text));
+            }
+        )*
     ;
 
 typeDeclarations returns [ListNode<TypeDeclarationNode> ret]
