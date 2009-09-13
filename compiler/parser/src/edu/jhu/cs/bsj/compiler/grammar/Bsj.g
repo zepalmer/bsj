@@ -824,26 +824,24 @@ interfaceFieldDeclaration
 //    	^(AST_VARIABLE type variableDeclarator)+
     ;
 
-//TODO done?
 type returns [TypeNode ret]
-    :   classOrInterfaceType
-        	{
+    :   (
+            classOrInterfaceType
+            {
         		$ret = $classOrInterfaceType.ret;
         	}
-    |   classOrInterfaceType
-        ('[' ']')+
-			{
-        		$ret = factory.makeArrayTypeNode($classOrInterfaceType.ret);
-        	}        	
-    |   primitiveType
-        	{
-        		$ret = $primitiveType.ret;
-        	}
-    |	primitiveType
-        ('[' ']')+
-        	{
-        		$ret = factory.makeArrayTypeNode($primitiveType.ret);
-        	}
+        |
+            primitiveType
+            {
+                $ret = $primitiveType.ret;
+            }
+        )
+        (
+            '[' ']'
+            {
+                $ret = factory.makeArrayTypeNode($ret);
+            }
+        )*
     ;
 
 
