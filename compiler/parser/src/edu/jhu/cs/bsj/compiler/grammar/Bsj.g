@@ -164,7 +164,7 @@ compilationUnit returns [CompilationUnitNode ret]
         importDeclarations
         typeDeclarations
 	    {
-	        $ret = factory.makeCompilationUnit(
+	        $ret = factory.makeCompilationUnitNode(
 	                    $packageDeclaration.ret,
                         $importDeclarations.ret,
 	                    $typeDeclarations.ret);
@@ -176,7 +176,7 @@ packageDeclaration returns [PackageDeclarationNode ret]
         annotations?
         'package' qualifiedName ';'
         {
-            $ret = factory.makePackageDeclaration(
+            $ret = factory.makePackageDeclarationNode(
                     $qualifiedName.ret,
                     $annotations.ret);
         }
@@ -430,7 +430,7 @@ normalClassDeclaration returns [ClassDeclarationNode ret]
                     $typeList.ret,
                     $classBody.ret,
                     $typeParameters.ret,
-                    null, // TODO: identifier node from IDENTIFIER
+                    factory.makeIdentifierNode($id.text),
                     $modifiers.ret);
         }
     ;
@@ -461,7 +461,7 @@ typeParameter returns [TypeParameterNode ret]
 	@init {
     		List<TypeNode> list = new ArrayList<TypeNode>();
 	}
-    :   IDENTIFIER
+    :   id=IDENTIFIER
         ('extends' typeBound
 		{
 			list.add($typeBound.ret);
@@ -470,7 +470,7 @@ typeParameter returns [TypeParameterNode ret]
         
 	    {
 	        $ret = factory.makeTypeParameterNode(
-	                    factory.makeIdentifierNode(null), //TODO IDENTIFIER return
+	                    factory.makeIdentifierNode($id.text),
 	                    list);
 	    }        
     ;
