@@ -1311,20 +1311,29 @@ forInit
     |   expressionList
     ;
 
-parExpression 
-    :   '(' e=expression ')'
-    // TODO
-//    ->
-//    	$e
+parExpression returns [ExpressionNode ret]
+    :   '(' expression ')'
+		{
+			$ret = $expression.ret;
+		}
     ;
 
-expressionList 
-    :   expression
-        (',' expression
+expressionList returns [ListNode<ExpressionNode> ret]
+	@init {
+    	List<ExpressionNode> list = new ArrayList<ExpressionNode>();
+	}
+    @after {
+    	$ret = factory.<ExpressionNode>makeListNode(list);
+	}
+    :   a=expression
+    	{
+    		list.add($a.ret);
+    	}
+        (',' b=expression
+            {
+    			list.add($b.ret);
+    		}
         )*
-        // TODO
-//    ->
-//    	^(AST_EXPR_LIST expression+)
     ;
 
 
