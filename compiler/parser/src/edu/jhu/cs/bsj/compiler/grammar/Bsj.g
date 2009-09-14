@@ -1158,6 +1158,9 @@ statement returns [StatementNode ret]
     |   'assert'  expression (':' expression)? ';'            
     |   'if' parExpression statement ('else' statement)?          
     |   forstatement
+    	{
+    		$ret = $forstatement.ret;
+    	}
     |   'while' parExpression statement
     |   'do' statement 'while' parExpression ';'
     |   trystatement
@@ -1276,7 +1279,7 @@ formalParameter
     ;
 
 //TODO resolve AST_VARIABLE stuff
-forstatement 
+forstatement returns [StatementNode ret]
     :   
         // enhanced for loop
         'for' '(' variableModifiers type IDENTIFIER ':' 
@@ -1296,17 +1299,20 @@ forstatement
                 )? ';' 
                 (expressionList
                 )? ')' statement
-        // TODO
-//	->
-//		^(AST_FOR_LOOP 
-//			^(AST_FOR_INIT forInit)?
-//			^(AST_FOR_CONDITION expression)?
-//			^(AST_FOR_UPDATE expressionList)?
-//			statement
-//		)                
+        {
+            $ret = factory.makeForLoopNode(
+            		(forInit == null ? null : $forInit.ret), 
+            		(expressionList == null 
+            			? factory.<ExpressionStatementNode>makeListNode(
+            				new ArrayList<ExpressionStatementNode>())
+            			: $expressionList.ret),
+            		(expression == null ? null : $expression.ret),
+            		$statement.ret);
+        }                 
     ;
 
-forInit 
+//TODO
+forInit returns [ListNode<StatementNode> ret]
     :   localVariableDeclaration
     |   expressionList
     ;
@@ -1337,7 +1343,7 @@ expressionList returns [ListNode<ExpressionNode> ret]
     ;
 
 
-expression 
+expression returns [ExpressionNode ret]
     :   conditionalExpression
         (assignmentOperator expression
         )?
