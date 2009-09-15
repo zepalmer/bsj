@@ -342,50 +342,17 @@ modifier returns [Modifier mod, AnnotationNode ann]
         {
             $ann = $annotation.ret;
         }
-        |   'public'
-        {
-            $mod = Modifier.PUBLIC;
-        }
-        |   'protected'
-        {
-            $mod = Modifier.PROTECTED;
-        }
-        |   'private'
-        {
-            $mod = Modifier.PRIVATE;
-        }
-        |   'static'
-        {
-            $mod = Modifier.STATIC;
-        }
-        |   'abstract'
-        {
-            $mod = Modifier.ABSTRACT;
-        }
-        |   'final'
-        {
-            $mod = Modifier.FINAL;
-        }
-        |   'native'
-        {
-            $mod = Modifier.NATIVE;
-        }
-        |   'synchronized'
-        {
-            $mod = Modifier.SYNCHRONIZED;
-        }
-        |   'transient'
-        {
-            $mod = Modifier.TRANSIENT;
-        }
-        |   'volatile'
-        {
-            $mod = Modifier.VOLATILE;
-        }
-        |   'strictfp'
-        {
-            $mod = Modifier.STRICTFP;
-        }
+        |   'public'        { $mod = Modifier.PUBLIC; }
+        |   'protected'     { $mod = Modifier.PROTECTED; }
+        |   'private'       { $mod = Modifier.PRIVATE; }
+        |   'static'        { $mod = Modifier.STATIC; }
+        |   'abstract'      { $mod = Modifier.ABSTRACT; }
+        |   'final'         { $mod = Modifier.FINAL; }
+        |   'native'        { $mod = Modifier.NATIVE; }
+        |   'synchronized'  { $mod = Modifier.SYNCHRONIZED; }
+        |   'transient'     { $mod = Modifier.TRANSIENT; }
+        |   'volatile'      { $mod = Modifier.VOLATILE; }
+        |   'strictfp'      { $mod = Modifier.STRICTFP; }
     ;
 
 variableModifiers returns [ModifiersNode ret]
