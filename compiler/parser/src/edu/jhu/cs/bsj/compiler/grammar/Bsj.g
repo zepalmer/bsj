@@ -547,7 +547,7 @@ normalInterfaceDeclaration returns [InterfaceDeclarationNode ret]
             Modifier.STATIC,
             Modifier.FINAL,
             Modifier.STRICTFP)]
-        'interface' IDENTIFIER
+        'interface' id=IDENTIFIER
         (typeParameters
         )?
         ('extends' typeList
@@ -558,7 +558,7 @@ normalInterfaceDeclaration returns [InterfaceDeclarationNode ret]
 					$typeList.ret,
                     $interfaceBody.ret,
                     $typeParameters.ret,
-                    null, // TODO: identifier node from IDENTIFIER
+                    factory.makeIdentifierNode($id.text),
                     $modifiers.ret);
         }
     ;
