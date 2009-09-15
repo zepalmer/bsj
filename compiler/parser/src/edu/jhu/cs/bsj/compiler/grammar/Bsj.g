@@ -670,23 +670,28 @@ methodDeclaration returns [MethodDeclarationNode ret]
 //                ^(AST_EXPLICIT_CONSTRUCTOR explicitConstructorInvocation)?
 //                blockStatement*))         
     |   modifiers
-        (typeParameters
-        )?
+        typeParameters?
         methodReturnType
-        IDENTIFIER
+        id=IDENTIFIER
         formalParameters
-        arrayTypeSuffix=('[' ']')*
-        ('throws' qualifiedNameList
-        )?            
+        (
+            '[' ']'
+            {
+                $methodReturnType = factory.makeArrayTypeNode(
+                        $methodReturnType.ret);
+            }
+        )*
+        'throws' qualifiedNameList?            
         (        
             block
-        |   ';' 
+        |
+            ';' 
         )
         {
             $ret = factory.makeMethodDeclarationNode(
             		$block.ret,
             		$modifiers.ret,
-            		null, // TODO: identifier node from IDENTIFIER
+            		factory.makeIdentifierNode($id.text),
             		$formalParameters.ret,
             		$methodReturnType.ret,
             		$qualifiedNameList.ret,
