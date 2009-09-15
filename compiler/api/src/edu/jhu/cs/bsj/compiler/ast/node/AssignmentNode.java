@@ -1,23 +1,16 @@
 package edu.jhu.cs.bsj.compiler.ast.node;
 
+import edu.jhu.cs.bsj.compiler.ast.AssignmentOperator;
 
 /**
- * Represents the assignment of an expression to a variable.
+ * Represents the assignment of an expression to a variable, as in
+ * <pre>
+ * <i>expr op expr</i>
+ * </pre>
+ * where <i>op</i> is one of <tt>+=</tt>, <tt>%=</tt>, etc.
  */
 public interface AssignmentNode extends ExpressionNode
 {
-    /**
-     * Gets the expression to use.
-     * @return The expression to use.
-     */
-    public ExpressionNode getExpression();
-
-    /**
-     * Changes the expression to use.
-     * @param expression The expression to use.
-     */
-    public void setExpression(ExpressionNode expression);
-
     /**
      * Gets the variable to which to assign a value.
      * @return The variable to which to assign a value.
@@ -29,5 +22,29 @@ public interface AssignmentNode extends ExpressionNode
      * @param variable The variable to which to assign a value.
      */
     public void setVariable(ExpressionNode variable);
+
+    /**
+     * Gets the assignment operator indicating the operation to perform.
+     * @return The assignment operator indicating the operation to perform.
+     */
+    public AssignmentOperator getOperator();
+
+    /**
+     * Changes the assignment operator indicating the operation to perform.
+     * @param operator The assignment operator indicating the operation to perform.
+     */
+    public void setOperator(AssignmentOperator operator);
+
+    /**
+     * Gets the expression to use.
+     * @return The expression to use.
+     */
+    public ExpressionNode getExpression();
+
+    /**
+     * Changes the expression to use.
+     * @param expression The expression to use.
+     */
+    public void setExpression(ExpressionNode expression);
 
 }

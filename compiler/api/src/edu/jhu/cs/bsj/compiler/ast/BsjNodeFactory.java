@@ -408,8 +408,9 @@ public interface BsjNodeFactory
      * Creates a AssignmentNode.
      */
     public AssignmentNode makeAssignmentNode(
-            ExpressionNode expression,
-            ExpressionNode variable);
+            ExpressionNode variable,
+            AssignmentOperator operator,
+            ExpressionNode expression);
 
     /**
      * Creates a InstanceOfNode.

@@ -3,6 +3,7 @@ package edu.jhu.cs.bsj.compiler.impl.ast;
 import java.util.List;
 import java.util.Set;
 
+import edu.jhu.cs.bsj.compiler.ast.AssignmentOperator;
 import edu.jhu.cs.bsj.compiler.ast.BinaryOperator;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 import edu.jhu.cs.bsj.compiler.ast.Modifier;
@@ -653,10 +654,11 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      * Creates a AssignmentNode.
      */
     public AssignmentNode makeAssignmentNode(
-            ExpressionNode expression,
-            ExpressionNode variable)
+            ExpressionNode variable,
+            AssignmentOperator operator,
+            ExpressionNode expression)
     {
-        AssignmentNode ret = new AssignmentNodeImpl(expression, variable);
+        AssignmentNode ret = new AssignmentNodeImpl(variable, operator, expression);
         return ret;
     }
 

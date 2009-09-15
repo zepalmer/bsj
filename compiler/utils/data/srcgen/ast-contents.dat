@@ -101,10 +101,15 @@ ArrayInitializerNode :: ExpressionNode
 
 AssignmentNode :: ExpressionNode
     @props
-    expression              ExpressionNode                              | the expression to use
     variable                ExpressionNode                              | the variable to which to assign a value
+    operator                AssignmentOperator                          | the assignment operator indicating the operation to perform
+    expression              ExpressionNode                              | the expression to use
     @docs
-        Represents the assignment of an expression to a variable.
+        Represents the assignment of an expression to a variable, as in
+        <pre>
+        <i>expr op expr</i>
+        </pre>
+        where <i>op</i> is one of <tt>+=</tt>, <tt>%=</tt>, etc.
 
 BinaryOperatorNode :: ExpressionNode
     @props
