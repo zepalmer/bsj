@@ -447,7 +447,7 @@ typeBound returns [ListNode<BoundType> ret]
             list.add($a.ret);
         }
         (
-            '&' b=interfaceType
+            '&' b=classOrInterfaceType
             {
                 list.add($b.ret);
             }
