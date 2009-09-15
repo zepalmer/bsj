@@ -755,20 +755,23 @@ interfaceBodyDeclaration returns [InterfaceMember ret]
 
 interfaceMethodDeclaration returns [MethodDeclarationNode ret]
     :   modifiers
-        (typeParameters
-        )?
+        typeParameters?
         methodReturnType
-        IDENTIFIER
+        id=IDENTIFIER
         formalParameters
-        ('[' ']'
+        (
+            '[' ']'
+            {
+                $methodReturnType = factory.makeArrayTypeNode(
+                        $methodReturnType.ret);
+            }
         )*
-        ('throws' qualifiedNameList
-        )? ';'
+        ('throws' qualifiedNameList)? ';'
         {
             $ret = factory.makeMethodDeclarationNode(
             		null, //TODO no body for interface methods, leave null?
             		$modifiers.ret,
-            		null, // TODO: identifier node from IDENTIFIER
+            		factory.makeIdentifierNode($id.text),
             		$formalParameters.ret,
             		$methodReturnType.ret,
             		$qualifiedNameList.ret,
