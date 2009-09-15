@@ -430,7 +430,7 @@ typeParameter returns [TypeParameterNode ret]
 	    {
 	        $ret = factory.makeTypeParameterNode(
 	                    factory.makeIdentifierNode($id.text),
-	                    $typeBound.ret);
+	                    ($typeBound==null?Collections.emptyList():$typeBound.ret));
 	    }        
     ;
 
@@ -442,12 +442,12 @@ typeBound returns [ListNode<BoundType> ret]
     @after {
         $ret = factory.makeListNode(list);
     }
-    :   a=classOrInterfaceDeclaration
+    :   a=classOrInterfaceType
         {
             list.add($a.ret);
         }
         (
-            '&' b=interfaceDeclaration
+            '&' b=interfaceType
             {
                 list.add($b.ret);
             }
