@@ -152,6 +152,25 @@ tokens {
     {
         this.factory = factory;
     }
+    
+    // *** COMMONLY USED MODIFIERS ********************************************
+    private static final List<Modifier> classModifiers = Arrays.asList(
+            Modifier.PUBLIC,
+            Modifier.PROTECTED,
+            Modifier.PRIVATE,
+            Modifier.ABSTRACT,
+            Modifier.STATIC,
+            Modifier.FINAL,
+            Modifier.STRICTFP);
+    private static final List<Modifier> interfaceModifiers = Arrays.asList(
+            Modifier.PUBLIC,
+            Modifier.PROTECTED,
+            Modifier.PRIVATE,
+            Modifier.ABSTRACT,
+            Modifier.STATIC,
+            Modifier.FINAL,
+            Modifier.STRICTFP);
+    private static final List<Modifier> variableModifiers = Arrays.asList(Modifier.FINAL);
 }
 
 /********************************************************************************************
@@ -357,7 +376,7 @@ modifier returns [Modifier mod, AnnotationNode ann]
 
 variableModifiers returns [ModifiersNode ret]
     :
-        modifiers[Arrays.asList(Modifier.FINAL)]
+        modifiers[variableModifiers]
         {
             $ret = $modifiers.ret;
         }
@@ -378,14 +397,7 @@ classDeclaration returns [TypeDeclarationNode ret]
 
 normalClassDeclaration returns [ClassDeclarationNode ret]
     :   
-        modifiers[Arrays.asList(
-            Modifier.PUBLIC,
-            Modifier.PROTECTED,
-            Modifier.PRIVATE,
-            Modifier.ABSTRACT,
-            Modifier.STATIC,
-            Modifier.FINAL,
-            Modifier.STRICTFP)]
+        modifiers[classModifiers]
         'class' id=IDENTIFIER
         typeParameters?
         ('extends' type)?
@@ -455,21 +467,19 @@ typeBound returns [ListNode<BoundType> ret]
     ;
 
 
-enumDeclaration 
-    :   modifiers 
-        ('enum'
-        ) 
-        IDENTIFIER
-        ('implements' typeList
-        )?
+enumDeclaration returns [EnumDeclarationNode ret]
+    :   modifiers[classModifiers]
+        'enum' 
+        id=IDENTIFIER
+        ('implements' typeList)?
         enumBody
-        // TODO
-//    ->
-//        ^(AST_ENUM
-//            IDENTIFIER
-//            modifiers
-//            ^(AST_IMPLEMENTS_LIST typeList)?
-//            enumBody)
+        {
+            $ret = factory.makeEnumDeclarationNode(
+                        $typeList.ret,
+                        $enumBody.ret,
+                        factory.makeIdentifierNode($id.text),
+                        $modifiers.ret);
+        }
     ;
 
 
@@ -532,21 +542,14 @@ interfaceDeclaration returns [TypeDeclarationNode ret]
 			}
     |
     	b=annotationTypeDeclaration
-			{
+		    {
 				$ret = $b.ret;
 			}
     ;
     
 normalInterfaceDeclaration returns [InterfaceDeclarationNode ret]
     :   
-    	modifiers[Arrays.asList(
-            Modifier.PUBLIC,
-            Modifier.PROTECTED,
-            Modifier.PRIVATE,
-            Modifier.ABSTRACT,
-            Modifier.STATIC,
-            Modifier.FINAL,
-            Modifier.STRICTFP)]
+    	modifiers[interfaceModifiers]
         'interface' id=IDENTIFIER
         (typeParameters
         )?
