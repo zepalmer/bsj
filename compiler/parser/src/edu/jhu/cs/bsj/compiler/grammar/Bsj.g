@@ -485,11 +485,9 @@ enumDeclaration returns [EnumDeclarationNode ret]
 
 enumBody 
     :   '{'
-        (enumConstants
-        )? 
+        enumConstants? 
         ','? 
-        (enumBodyDeclarations
-        )? 
+        enumBodyDeclarations? 
         '}'
         // TODO
 //    ->
@@ -499,12 +497,24 @@ enumBody
     ;
 
 enumConstants 
-    :   enumConstant
-        (',' enumConstant
+        @init {
+            List<EnumConstantDeclarationNode> list = new ArrayList<EnumConstantDeclarationNode>();
+        }
+        @after {
+            $ret = factory.<EnumConstantDeclarationNode>makeListNode(list);
+        }
+    :
+        enumConstant
+        {
+            list.add($enumConstant.ret);
+        }
+        (
+            ','
+            enumConstant
+            {
+                list.add($enumConstant.ret);
+            }
         )*
-        // TODO
-//    ->
-//        ^(AST_ENUM_CONSTANT_LIST enumConstant+)
     ;
 
 enumConstant 
