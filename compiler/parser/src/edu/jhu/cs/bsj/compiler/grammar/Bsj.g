@@ -483,17 +483,21 @@ enumDeclaration returns [EnumDeclarationNode ret]
     ;
 
 
-enumBody 
+enumBody returns [EnumBodyNode ret]
     :   '{'
         enumConstants? 
         ','? 
-        enumBodyDeclarations? 
+        enumBodyDeclarations?
         '}'
-        // TODO
-//    ->
-//        ^(AST_ENUM_BODY
-//            enumConstants
-//            enumBodyDeclarations)
+        {
+            $ret = factory.makeEnumBodyNode(
+                    ($enumConstants == null)?
+                        factory.<EnumConstantDeclarationNode>makeListNode(Collections.emptyList()) :
+                        $enumConstants.ret,
+                    ($enumBodyDeclarations == null)?
+                        factory.<ClassMember>makeListNode(Collections.emptyList()) :
+                        $enumBodyDeclarations.ret); 
+        }
     ;
 
 enumConstants 
@@ -518,13 +522,12 @@ enumConstants
     ;
 
 enumConstant 
-    :   (annotations
-        )?
+    :   
+        annotations?
         IDENTIFIER
-        (arguments
-        )?
-        (classBody
-        )?
+        arguments?
+        classBody?
+        // TODO: should we have an "anonymousClassBody"?
         /* TODO: conversion note: ensure that enum body doesn't contain a constructor - anonymous classes can't in general*/
         // TODO
 //    ->
@@ -535,14 +538,23 @@ enumConstant
 //            classBody?)
     ;
 
-enumBodyDeclarations 
-    :   ';' 
-        (classBodyDeclaration
+enumBodyDeclarations returns [ListNode<EnumBodyDeclaration> ret]
+        @init {
+            List<EnumBodyDeclaration> list = new ArrayList<EnumBodyDeclaration>();
+        }
+        @after {
+            $ret = factory.<EnumBodyDeclaration>makeListNode(list);
+        }
+    :
+        ';'
+        (
+            classDeclaration
+            {
+                list.add($classDeclaration.ret);
+            }
         )*
-        // TODO
-//    ->
-//        ^(CLASS_BODY classBodyDeclaration*)
     ;
+
 
 interfaceDeclaration returns [TypeDeclarationNode ret] 
     :   
