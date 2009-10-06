@@ -14,16 +14,40 @@ package edu.jhu.cs.bsj.compiler.ast.node;
 public interface VariableDeclarationNode extends StatementNode
 {
     /**
-     * Gets the variable to declare.
-     * @return The variable to declare.
+     * Gets the modifiers for this variable.
+     * @return The modifiers for this variable.
      */
-    public VariableNode getVariable();
+    public ModifiersNode getModifiers();
 
     /**
-     * Changes the variable to declare.
-     * @param variable The variable to declare.
+     * Changes the modifiers for this variable.
+     * @param modifiers The modifiers for this variable.
      */
-    public void setVariable(VariableNode variable);
+    public void setModifiers(ModifiersNode modifiers);
+
+    /**
+     * Gets the type of this variable.
+     * @return The type of this variable.
+     */
+    public TypeNode getType();
+
+    /**
+     * Changes the type of this variable.
+     * @param type The type of this variable.
+     */
+    public void setType(TypeNode type);
+
+    /**
+     * Gets the name of this variable.
+     * @return The name of this variable.
+     */
+    public IdentifierNode getName();
+
+    /**
+     * Changes the name of this variable.
+     * @param name The name of this variable.
+     */
+    public void setName(IdentifierNode name);
 
     /**
      * Gets the initializer to use.

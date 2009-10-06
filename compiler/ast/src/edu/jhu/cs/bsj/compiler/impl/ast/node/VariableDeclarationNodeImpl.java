@@ -2,50 +2,114 @@ package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
+import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
+import edu.jhu.cs.bsj.compiler.ast.node.ModifiersNode;
+import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclarationNode;
-import edu.jhu.cs.bsj.compiler.ast.node.VariableNode;
 
 public class VariableDeclarationNodeImpl extends StatementNodeImpl implements VariableDeclarationNode
 {
-    /** The variable to declare. */
-    private VariableNode variable;
+    /** The modifiers for this variable. */
+    private ModifiersNode modifiers;
+
+    /** The type of this variable. */
+    private TypeNode type;
+
+    /** The name of this variable. */
+    private IdentifierNode name;
 
     /** The initializer to use. */
     private ExpressionNode initializer;
 
     /** General constructor. */
     public VariableDeclarationNodeImpl(
-            VariableNode variable,
+            ModifiersNode modifiers,
+            TypeNode type,
+            IdentifierNode name,
             ExpressionNode initializer)
     {
         super();
-        this.variable = variable;
+        this.modifiers = modifiers;
+        this.type = type;
+        this.name = name;
         this.initializer = initializer;
     }
 
     /**
-     * Gets the variable to declare.
-     * @return The variable to declare.
+     * Gets the modifiers for this variable.
+     * @return The modifiers for this variable.
      */
-    public VariableNode getVariable()
+    public ModifiersNode getModifiers()
     {
-        return this.variable;
+        return this.modifiers;
     }
 
     /**
-     * Changes the variable to declare.
-     * @param variable The variable to declare.
+     * Changes the modifiers for this variable.
+     * @param modifiers The modifiers for this variable.
      */
-    public void setVariable(VariableNode variable)
+    public void setModifiers(ModifiersNode modifiers)
     {
-        if (this.variable instanceof NodeImpl)
+        if (this.modifiers instanceof NodeImpl)
         {
-            ((NodeImpl)this.variable).setParent(null);
+            ((NodeImpl)this.modifiers).setParent(null);
         }
-        this.variable = variable;
-        if (this.variable instanceof NodeImpl)
+        this.modifiers = modifiers;
+        if (this.modifiers instanceof NodeImpl)
         {
-            ((NodeImpl)this.variable).setParent(this);
+            ((NodeImpl)this.modifiers).setParent(this);
+        }
+    }
+
+    /**
+     * Gets the type of this variable.
+     * @return The type of this variable.
+     */
+    public TypeNode getType()
+    {
+        return this.type;
+    }
+
+    /**
+     * Changes the type of this variable.
+     * @param type The type of this variable.
+     */
+    public void setType(TypeNode type)
+    {
+        if (this.type instanceof NodeImpl)
+        {
+            ((NodeImpl)this.type).setParent(null);
+        }
+        this.type = type;
+        if (this.type instanceof NodeImpl)
+        {
+            ((NodeImpl)this.type).setParent(this);
+        }
+    }
+
+    /**
+     * Gets the name of this variable.
+     * @return The name of this variable.
+     */
+    public IdentifierNode getName()
+    {
+        return this.name;
+    }
+
+    /**
+     * Changes the name of this variable.
+     * @param name The name of this variable.
+     */
+    public void setName(IdentifierNode name)
+    {
+        if (this.name instanceof NodeImpl)
+        {
+            ((NodeImpl)this.name).setParent(null);
+        }
+        this.name = name;
+        if (this.name instanceof NodeImpl)
+        {
+            ((NodeImpl)this.name).setParent(this);
         }
     }
 
@@ -86,7 +150,9 @@ public class VariableDeclarationNodeImpl extends StatementNodeImpl implements Va
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        this.variable.receive(visitor);
+        this.modifiers.receive(visitor);
+        this.type.receive(visitor);
+        this.name.receive(visitor);
         this.initializer.receive(visitor);
     }
 }

@@ -297,10 +297,11 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      * Creates a VariableNode.
      */
     public VariableNode makeVariableNode(
+            ModifiersNode modifiers,
             TypeNode type,
             IdentifierNode name)
     {
-        VariableNode ret = new VariableNodeImpl(type, name);
+        VariableNode ret = new VariableNodeImpl(modifiers, type, name);
         return ret;
     }
 
@@ -552,10 +553,12 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      * Creates a VariableDeclarationNode.
      */
     public VariableDeclarationNode makeVariableDeclarationNode(
-            VariableNode variable,
+            ModifiersNode modifiers,
+            TypeNode type,
+            IdentifierNode name,
             ExpressionNode initializer)
     {
-        VariableDeclarationNode ret = new VariableDeclarationNodeImpl(variable, initializer);
+        VariableDeclarationNode ret = new VariableDeclarationNodeImpl(modifiers, type, name, initializer);
         return ret;
     }
 
@@ -597,10 +600,12 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      * Creates a FieldDeclarationNode.
      */
     public FieldDeclarationNode makeFieldDeclarationNode(
-            VariableNode variable,
+            ModifiersNode modifiers,
+            TypeNode type,
+            IdentifierNode name,
             ExpressionNode initializer)
     {
-        FieldDeclarationNode ret = new FieldDeclarationNodeImpl(variable, initializer);
+        FieldDeclarationNode ret = new FieldDeclarationNodeImpl(modifiers, type, name, initializer);
         return ret;
     }
 

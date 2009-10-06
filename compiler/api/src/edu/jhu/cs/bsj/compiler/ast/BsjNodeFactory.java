@@ -179,6 +179,7 @@ public interface BsjNodeFactory
      * Creates a VariableNode.
      */
     public VariableNode makeVariableNode(
+            ModifiersNode modifiers,
             TypeNode type,
             IdentifierNode name);
 
@@ -342,7 +343,9 @@ public interface BsjNodeFactory
      * Creates a VariableDeclarationNode.
      */
     public VariableDeclarationNode makeVariableDeclarationNode(
-            VariableNode variable,
+            ModifiersNode modifiers,
+            TypeNode type,
+            IdentifierNode name,
             ExpressionNode initializer);
 
     /**
@@ -371,7 +374,9 @@ public interface BsjNodeFactory
      * Creates a FieldDeclarationNode.
      */
     public FieldDeclarationNode makeFieldDeclarationNode(
-            VariableNode variable,
+            ModifiersNode modifiers,
+            TypeNode type,
+            IdentifierNode name,
             ExpressionNode initializer);
 
     /**

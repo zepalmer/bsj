@@ -171,11 +171,65 @@ tokens {
             Modifier.FINAL,
             Modifier.STRICTFP);
     private static final List<Modifier> variableModifiers = Arrays.asList(Modifier.FINAL);
+    private static final List<Modifier> fieldModifiers = Arrays.asList(
+            Modifier.PUBLIC,
+            Modifier.PROTECTED,
+            Modifier.PRIVATE,
+            Modifier.STATIC,
+            Modifier.FINAL,
+            Modifier.TRANSIENT,
+            Modifier.VOLATILE);
 }
 
 /********************************************************************************************
                           Parser section
 *********************************************************************************************/
+
+/* 
+ * These rules only exist in the parser.  They may map to the language standard but are primarily used to abstract
+ * away parser patterns and do not manifest in the AST. 
+ */
+ 
+// Represents the combination of an identifier and an initializer.  As the identifier can be followed with array type
+// indicators, an in/out type is also required.  This construct is necessary on its own to support the multiple
+// declaration sugar ("int x,y;").
+variableDeclarator[TypeNode inType] returns [IdentifierNode identifier, ExpressionNode initializer, TypeNode type]
+    @init {
+        $type = $inType;
+    }
+    :
+        id=IDENTIFIER
+        (
+            arrayTypeIndicator[inType]
+            {
+                $type = $arrayTypeIndicator.ret
+            }
+        )?
+        (
+            '=' variableInitializer
+        )?
+        {
+            $identifier = makeIdentifierNode($id.text);
+            $initializer = $variableInitializer.ret;
+        }
+    ;
+
+// Represents the declaration of an array type over a normal type.  This construct only handles the parsing of the []
+// symbols and the modification of a type.
+arrayTypeIndicator[TypeNode inType] returns [TypeNode ret]
+    @init {
+        $ret = $inType;
+    }
+    :
+        (
+            '[' ']'
+            {
+                $ret = factory.makeArrayTypeNode($ret);
+            }
+        )*
+    ;
+
+/** These are the actual grammar rules. */
 
 compilationUnit returns [CompilationUnitNode ret]
     :
@@ -317,6 +371,7 @@ classOrInterfaceDeclaration returns [TypeDeclarationNode ret]
     ;
     
 // Accepts as a parameter the set of legal modifiers.  null means all of them are legal.
+// TODO: which modifiers are legal should be in the *type system!*  (Oops)
 modifiers[Collection<Modifier> legalModifiers] returns [ModifiersNode ret]
         @init {
             List<AnnotationNode> list = new ArrayList<AnnotationNode>();
@@ -345,6 +400,9 @@ modifiers[Collection<Modifier> legalModifiers] returns [ModifiersNode ret]
 	                {
 	                    // TODO: if we get here, that's like "volatile" on a class declaration.  Figure out error
 	                    // handling.
+	                    // TODO: We should handle the error here, but it should be recognized in the factory, the node,
+	                    // or somewhere else like that.  That will ensure that the type system handles the problem and
+	                    // it's caught automatically in metaprograms.
 	                }
                 }
             }
@@ -661,7 +719,7 @@ classBodyDeclaration returns [ClassMember ret]
         }
     ;
 
-memberDecl
+memberDecl // TODO: fieldDeclaration can now return a list - resolve this
     :    fieldDeclaration
     |    methodDeclaration
     |    classDeclaration
@@ -736,35 +794,36 @@ methodDeclaration returns [MethodDeclarationNode ret]
     ;
 
 
-fieldDeclaration returns [FieldDeclarationNode ret]
-    :   modifiers
+fieldDeclaration returns [List<FieldDeclarationNode> ret]
+    @init {
+        $ret = new ArrayList<FieldDeclarationNode>();
+    }
+    @after {
+    }
+    :   
+        modifiers[fieldModifiers]
         type
-        variableDeclarator
-        (',' variableDeclarator
+        a=variableDeclarator[$type.ret] // process type in case identifier has [] after it
+        {
+            $ret.add(
+                factory.makeFieldDeclarationNode(
+                    $modifiers.ret,
+                    $a.type,
+                    $a.identifier,
+                    $a.initializer));
+        }
+        (
+            ',' b=variableDeclarator[$type.ret]
+            {
+	            $ret.add(
+	                factory.makeFieldDeclarationNode(
+	                    $modifiers.ret,
+	                    $b.type,
+	                    $b.identifier,
+	                    $b.initializer));
+            }
         )*
         ';'
-        // TODO
-//    ->
-//        /* Notice: 1-arity nodes used in n-arity group.  Declarations such as "int x=0,y=0" can result in more than one
-//           node being returned from this rule. */
-//        ^(AST_VARIABLE
-//            modifiers
-//            type
-//            variableDeclarator)+
-    ;
-
-variableDeclarator returns [VariableDeclarationNode ret]
-    :   IDENTIFIER
-        ('[' ']'
-        )*
-        ('=' variableInitializer
-        )?
-        // TODO
-//    ->
-//        ^(AST_VARIABLE_DECLARATOR
-//	    	IDENTIFIER
-//	    	^(AST_ARRAY_TYPE_SUFFIX '['*)
-//	    	variableInitializer?)
     ;
 
 /**

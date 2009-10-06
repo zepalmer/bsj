@@ -10,16 +10,40 @@ import edu.jhu.cs.bsj.compiler.ast.tags.InterfaceMember;
 public interface FieldDeclarationNode extends Node, ClassMember,  InterfaceMember,  AnnotationMember
 {
     /**
-     * Gets the variable description of the field.
-     * @return The variable description of the field.
+     * Gets the modifiers for this field.
+     * @return The modifiers for this field.
      */
-    public VariableNode getVariable();
+    public ModifiersNode getModifiers();
 
     /**
-     * Changes the variable description of the field.
-     * @param variable The variable description of the field.
+     * Changes the modifiers for this field.
+     * @param modifiers The modifiers for this field.
      */
-    public void setVariable(VariableNode variable);
+    public void setModifiers(ModifiersNode modifiers);
+
+    /**
+     * Gets the type of this field.
+     * @return The type of this field.
+     */
+    public TypeNode getType();
+
+    /**
+     * Changes the type of this field.
+     * @param type The type of this field.
+     */
+    public void setType(TypeNode type);
+
+    /**
+     * Gets the name of this field.
+     * @return The name of this field.
+     */
+    public IdentifierNode getName();
+
+    /**
+     * Changes the name of this field.
+     * @param name The name of this field.
+     */
+    public void setName(IdentifierNode name);
 
     /**
      * Gets the initializer to use.

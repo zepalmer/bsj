@@ -2,30 +2,62 @@ package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
+import edu.jhu.cs.bsj.compiler.ast.node.ModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableNode;
 
 public class VariableNodeImpl extends NodeImpl implements VariableNode
 {
-    /** The type of the variable. */
+    /** The modifiers of this parameter. */
+    private ModifiersNode modifiers;
+
+    /** The type of the parameter. */
     private TypeNode type;
 
-    /** The name of the variable. */
+    /** The name of the parameter. */
     private IdentifierNode name;
 
     /** General constructor. */
     public VariableNodeImpl(
+            ModifiersNode modifiers,
             TypeNode type,
             IdentifierNode name)
     {
         super();
+        this.modifiers = modifiers;
         this.type = type;
         this.name = name;
     }
 
     /**
-     * Gets the type of the variable.
-     * @return The type of the variable.
+     * Gets the modifiers of this parameter.
+     * @return The modifiers of this parameter.
+     */
+    public ModifiersNode getModifiers()
+    {
+        return this.modifiers;
+    }
+
+    /**
+     * Changes the modifiers of this parameter.
+     * @param modifiers The modifiers of this parameter.
+     */
+    public void setModifiers(ModifiersNode modifiers)
+    {
+        if (this.modifiers instanceof NodeImpl)
+        {
+            ((NodeImpl)this.modifiers).setParent(null);
+        }
+        this.modifiers = modifiers;
+        if (this.modifiers instanceof NodeImpl)
+        {
+            ((NodeImpl)this.modifiers).setParent(this);
+        }
+    }
+
+    /**
+     * Gets the type of the parameter.
+     * @return The type of the parameter.
      */
     public TypeNode getType()
     {
@@ -33,8 +65,8 @@ public class VariableNodeImpl extends NodeImpl implements VariableNode
     }
 
     /**
-     * Changes the type of the variable.
-     * @param type The type of the variable.
+     * Changes the type of the parameter.
+     * @param type The type of the parameter.
      */
     public void setType(TypeNode type)
     {
@@ -50,8 +82,8 @@ public class VariableNodeImpl extends NodeImpl implements VariableNode
     }
 
     /**
-     * Gets the name of the variable.
-     * @return The name of the variable.
+     * Gets the name of the parameter.
+     * @return The name of the parameter.
      */
     public IdentifierNode getName()
     {
@@ -59,8 +91,8 @@ public class VariableNodeImpl extends NodeImpl implements VariableNode
     }
 
     /**
-     * Changes the name of the variable.
-     * @param name The name of the variable.
+     * Changes the name of the parameter.
+     * @param name The name of the parameter.
      */
     public void setName(IdentifierNode name)
     {
@@ -86,6 +118,7 @@ public class VariableNodeImpl extends NodeImpl implements VariableNode
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
+        this.modifiers.receive(visitor);
         this.type.receive(visitor);
         this.name.receive(visitor);
     }

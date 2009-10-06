@@ -383,7 +383,9 @@ TryNode :: StatementNode
 
 VariableDeclarationNode :: StatementNode
     @props
-    variable                VariableNode                                | the variable to declare
+    modifiers               ModifiersNode                               | the modifiers for this variable
+    type                    TypeNode                                    | the type of this variable
+    name                    IdentifierNode                              | the name of this variable
     initializer             ExpressionNode                              | the initializer to use
     @docs
         A node for the declaration of a variable, as in:
@@ -508,7 +510,9 @@ EnumConstantDeclarationNode :: Node
 
 FieldDeclarationNode :: Node + ClassMember, InterfaceMember, AnnotationMember
     @props
-    variable                VariableNode                                | the variable description of the field
+    modifiers               ModifiersNode                               | the modifiers for this field
+    type                    TypeNode                                    | the type of this field
+    name                    IdentifierNode                              | the name of this field
     initializer             ExpressionNode                              | the initializer to use
     @docs
         A node representing a field declaration.  Constants are represented by this node as well.
@@ -721,6 +725,17 @@ PackageDeclarationNode :: Node
             package <i>packageName</i>;
         </pre>
 
+VariableNode :: Node
+    @props
+    modifiers               ModifiersNode                               | the modifiers of this parameter
+    type                    TypeNode                                    | the type of the parameter
+    name                    IdentifierNode                              | the name of the parameter
+    @docs
+        A node describing a variable, as in:
+            <pre>
+            <i>type identifier</i>
+            </pre>
+
 StatementNode* :: Node
     @docs
         Common superclass for statements.
@@ -746,16 +761,6 @@ TypeParameterNode :: Node
         <pre>
         <i>name</i> extends <i>type</i> &amp; <i>type...</i>
         </pre>
-
-VariableNode :: Node
-    @props
-    type                    TypeNode                                    | the type of the variable
-    name                    IdentifierNode                              | the name of the variable
-    @docs
-        A node describing a variable, as in:
-            <pre>
-            <i>type identifier</i>
-            </pre>
 
 WildcardTypeNode :: Node + TypeArgument
     @props
