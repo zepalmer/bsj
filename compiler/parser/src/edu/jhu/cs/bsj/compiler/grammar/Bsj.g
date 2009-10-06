@@ -730,7 +730,7 @@ fieldDeclaration returns [FieldDeclarationNode ret]
 //            variableDeclarator)+
     ;
 
-variableDeclarator 
+variableDeclarator returns [VariableDeclarationNode ret]
     :   IDENTIFIER
         ('[' ']'
         )*
@@ -1149,9 +1149,22 @@ statement returns [StatementNode ret]
     	{
     		$ret = $forstatement.ret;
     	}
-    |   'while' parExpression statement
-    |   'do' statement 'while' parExpression ';'
+    |   'while' parExpression s=statement
+    	{
+    		$ret = factory.makeWhileLoopNode(
+    			$parExpression.ret,
+    			$s.ret);
+    	}
+    |   'do' s=statement 'while' parExpression ';'
+    	{
+    		$ret = factory.makeDoWhileLoopNode(
+    			$parExpression.ret,
+    			$s.ret);
+    	}
     |   trystatement
+    	{
+    		$ret = $trystatement.ret;
+    	}
 	|   'switch' parExpression '{' switchBlockStatementGroups '}'
     	{
     		$ret = factory.makeSwitchNode(
@@ -1161,14 +1174,34 @@ statement returns [StatementNode ret]
 	|   'synchronized' parExpression block
 	|   'return' (expression )? ';'
 	|   'throw' expression ';'
+		{
+			$ret = factory.makeThrowNode(
+				$expression.ret);
+		}
 	|   'break'
-              (IDENTIFIER
+              (a=IDENTIFIER
               )? ';'
+        {
+        	$ret = factory.makeBreakNode(
+        		a == null ? null : factory.makeIdentifierNode($a.text));
+        }
 	|   'continue'
-              (IDENTIFIER
+              (a=IDENTIFIER
               )? ';'
-	|   expression  ';'     
-	|   IDENTIFIER ':' statement
+        {
+        	$ret = factory.makeContinueNode(
+        		a == null ? null : factory.makeIdentifierNode($a.text));
+        }
+	|   expression  ';'  
+		{
+			$ret = $expression.ret;
+		}   
+	|   a=IDENTIFIER ':' s=statement
+		{
+			$ret = factory.makeLabeledStatementNode(
+				factory.makeIdentifierNode($a.text),
+				$s.ret);
+		}
 	|   ';'
 	;
 
