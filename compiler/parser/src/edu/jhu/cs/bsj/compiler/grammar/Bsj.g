@@ -500,7 +500,7 @@ enumBody returns [EnumBodyNode ret]
         }
     ;
 
-enumConstants 
+enumConstants returns [List<EnumConstantDeclarationNode> ret]
         @init {
             List<EnumConstantDeclarationNode> list = new ArrayList<EnumConstantDeclarationNode>();
         }
@@ -508,15 +508,15 @@ enumConstants
             $ret = factory.<EnumConstantDeclarationNode>makeListNode(list);
         }
     :
-        enumConstant
+        a=enumConstant
         {
-            list.add($enumConstant.ret);
+            list.add($a.ret);
         }
         (
             ','
-            enumConstant
+            b=enumConstant
             {
-                list.add($enumConstant.ret);
+                list.add($b.ret);
             }
         )*
     ;
@@ -588,13 +588,24 @@ normalInterfaceDeclaration returns [InterfaceDeclarationNode ret]
         }
     ;
 
-typeList 
-    :   type
-        (',' type
+typeList returns [ListNode<TypeNode> ret]
+        @init {
+            List<TypeNode> list = new ArrayList<TypeNode>();
+        }
+        @after {
+            $ret = factory.<TypeNode>makeListNode(list);
+        }
+    :   
+        a=type
+        {
+            list.add($a.ret);
+        }
+        (
+            ',' b=type
+            {
+                list.add($b.ret);
+            }
         )*
-        // TODO
-//    ->
-//        ^(AST_TYPE_LIST type+)
     ;
 
 classBody returns [ClassBodyNode ret]
@@ -636,13 +647,13 @@ classBodyDeclaration returns [ClassMember ret]
 			$ret = null;
 		}
     |
-        'static'?
+        staticText='static'?
         block
-        // TODO
-//    ->
-//        ^(AST_CLASS_INITIALIZER
-//            'static'?
-//            block)
+        {
+            $ret = factory.makeInitializerDeclarationNode(
+                    $staticText!=null,
+                    $block.ret);
+        }
     |
         memberDecl
         {
