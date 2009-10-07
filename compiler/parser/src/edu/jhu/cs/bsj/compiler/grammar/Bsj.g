@@ -202,7 +202,7 @@ variableDeclarator[TypeNode inType] returns [IdentifierNode identifier, Expressi
         (
             arrayTypeIndicator[inType]
             {
-                $type = $arrayTypeIndicator.ret
+                $type = $arrayTypeIndicator.ret;
             }
         )?
         (
