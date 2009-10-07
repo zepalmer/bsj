@@ -769,12 +769,11 @@ methodDeclaration returns [MethodDeclarationNode ret]
         id=IDENTIFIER
         formalParameters
         (
-            '[' ']'
+            arrayTypeIndicator[$methodReturnType]
             {
-                $methodReturnType = factory.makeArrayTypeNode(
-                        $methodReturnType.ret);
+                $methodReturnType = $arrayTypeIndicator.ret;
             }
-        )*
+        )?
         'throws' qualifiedNameList?            
         (        
             block
@@ -854,18 +853,18 @@ interfaceBodyDeclaration returns [InterfaceMember ret]
     ;
 
 interfaceMethodDeclaration returns [MethodDeclarationNode ret]
-    :   modifiers
+    :   
+        modifiers
         typeParameters?
         methodReturnType
         id=IDENTIFIER
         formalParameters
         (
-            '[' ']'
+            arrayTypeIndicator[$methodReturnType]
             {
-                $methodReturnType = factory.makeArrayTypeNode(
-                        $methodReturnType.ret);
+                $methodReturnType = $arrayTypeIndicator.ret;
             }
-        )*
+        )?
         ('throws' qualifiedNameList)? ';'
         {
             $ret = factory.makeMethodDeclarationNode(
@@ -907,11 +906,11 @@ type returns [TypeNode ret]
             }
         )
         (
-            '[' ']'
+            arrayTypeIndicator[$ret]
             {
-                $ret = factory.makeArrayTypeNode($ret);
+                $ret = factory.$ret;
             }
-        )*
+        )?
     ;
 
 
