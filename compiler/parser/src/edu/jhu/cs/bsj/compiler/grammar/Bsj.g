@@ -179,6 +179,10 @@ tokens {
             Modifier.FINAL,
             Modifier.TRANSIENT,
             Modifier.VOLATILE);
+    private static final List<Modifier> constantModifiers = Arrays.asList(
+            Modifier.PUBLIC,
+            Modifier.STATIC,
+            Modifier.FINAL);
 }
 
 /********************************************************************************************
@@ -227,6 +231,40 @@ arrayTypeIndicator[TypeNode inType] returns [TypeNode ret]
                 $ret = factory.makeArrayTypeNode($ret);
             }
         )*
+    ;
+
+// Represents an abstraction for field declarations which allows legal modifiers to be specified (to differentiate
+// between interface and class fields).
+abstractFieldDeclaration[List<Modifier> legalModifiers] returns [List<FieldDeclarationNode> ret]
+    @init {
+        $ret = new ArrayList<FieldDeclarationNode>();
+    }
+    @after {
+    }
+    :   
+        modifiers[legalModifiers]
+        type
+        a=variableDeclarator[$type.ret] // process type in case identifier has [] after it
+        {
+            $ret.add(
+                factory.makeFieldDeclarationNode(
+                    $modifiers.ret,
+                    $a.type,
+                    $a.identifier,
+                    $a.initializer));
+        }
+        (
+            ',' b=variableDeclarator[$type.ret]
+            {
+                $ret.add(
+                    factory.makeFieldDeclarationNode(
+                        $modifiers.ret,
+                        $b.type,
+                        $b.identifier,
+                        $b.initializer));
+            }
+        )*
+        ';'
     ;
 
 /** These are the actual grammar rules. */
@@ -794,40 +832,14 @@ methodDeclaration returns [MethodDeclarationNode ret]
 
 
 fieldDeclaration returns [List<FieldDeclarationNode> ret]
-    @init {
-        $ret = new ArrayList<FieldDeclarationNode>();
-    }
-    @after {
-    }
-    :   
-        modifiers[fieldModifiers]
-        type
-        a=variableDeclarator[$type.ret] // process type in case identifier has [] after it
+    :
+        abstractFieldDeclaration[fieldModifiers]
         {
-            $ret.add(
-                factory.makeFieldDeclarationNode(
-                    $modifiers.ret,
-                    $a.type,
-                    $a.identifier,
-                    $a.initializer));
-        }
-        (
-            ',' b=variableDeclarator[$type.ret]
-            {
-	            $ret.add(
-	                factory.makeFieldDeclarationNode(
-	                    $modifiers.ret,
-	                    $b.type,
-	                    $b.identifier,
-	                    $b.initializer));
-            }
-        )*
-        ';'
+            $ret = $abstractFieldDeclaration.ret;
+        }   
     ;
 
-/**
- *TODO: add predicates
- */
+// TODO: list?
 interfaceBodyDeclaration returns [InterfaceMember ret]
     :
         a=interfaceFieldDeclaration
@@ -848,6 +860,7 @@ interfaceBodyDeclaration returns [InterfaceMember ret]
 		}
     |   ';'
 		{
+		    // TODO: void decl?
 			$ret = null;
 		}    
     ;
@@ -878,19 +891,12 @@ interfaceMethodDeclaration returns [MethodDeclarationNode ret]
         }         
     ;
 
-/**
- * NOTE, should not use variableDeclarator here, as it doesn't necessary require
- * an initializer, while an interface field does, or judge by the returned value.
- * But this gives better diagnostic message, or antlr won't predict this rule.
- */
-interfaceFieldDeclaration 
-    :   modifiers type variableDeclarator
-        (',' variableDeclarator
-        )*
-        ';'
-        // TODO
-//    ->
-//    	^(AST_VARIABLE type variableDeclarator)+
+interfaceFieldDeclaration returns [List<FieldDeclarationNode> ret]
+    :   
+        abstractFieldDeclaration[constantModifiers]
+        {
+            $ret = $abstractFieldDeclaration.ret;
+        }
     ;
 
 type returns [TypeNode ret]
@@ -913,15 +919,37 @@ type returns [TypeNode ret]
         )?
     ;
 
+// parameterizableType corresponds to TypeDeclSpecifier from chapter 4.3 of JLS 3.0
+parameterizableType returns [ParameterizableType ret]
+    :
+        (classOrInterfaceType '.')?
+        a=IDENTIFIER
+        {
+            DeclaredTypeNode selected = factory.makeDeclaredTypeNode(factory.makeIdentifierNode($a.text));
+            if ($classOrInterfaceType == null)
+            {
+                // Just a single identifier
+                $ret = selected;
+            } else
+            {
+                // A type selection
+                $ret = factory.makeTypeSelectNode($classOrInterfaceType.ret, selected);
+            }
+        }
+    ;
 
-classOrInterfaceType 
-    :   IDENTIFIER
-        (typeArguments
-        )?
-        ('.' IDENTIFIER
-            (typeArguments
-            )?
-        )*
+classOrInterfaceType returns [BoundType ret] 
+    :   
+        parameterizableType typeArguments?
+        {
+            if ($typeArguments==null)
+            {
+                $ret = $parameterizableType.ret;
+            } else
+            {
+                $ret = factory.makeParameterizedTypeNode($parameterizableType.ret, $typeArguments.ret);
+            }
+        }
     ;
 
 primitiveType returns [PrimitiveTypeNode ret]

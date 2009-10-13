@@ -1,53 +1,45 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
-import edu.jhu.cs.bsj.compiler.ast.node.DeclaredTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ParameterizedTypeNode;
+import edu.jhu.cs.bsj.compiler.ast.tags.ParameterizableType;
 import edu.jhu.cs.bsj.compiler.ast.tags.TypeArgument;
 
 public class ParameterizedTypeNodeImpl extends TypeNodeImpl implements ParameterizedTypeNode
 {
-    /** The base type. */
-    private DeclaredTypeNode type;
+    /** The base to parameterize. */
+    private ParameterizableType baseType;
 
     /** The parameterized type arguments. */
     private ListNode<? extends TypeArgument> typeArguments;
 
     /** General constructor. */
     public ParameterizedTypeNodeImpl(
-            DeclaredTypeNode type,
+            ParameterizableType baseType,
             ListNode<? extends TypeArgument> typeArguments)
     {
         super();
-        this.type = type;
+        this.baseType = baseType;
         this.typeArguments = typeArguments;
     }
 
     /**
-     * Gets the base type.
-     * @return The base type.
+     * Gets the base to parameterize.
+     * @return The base to parameterize.
      */
-    public DeclaredTypeNode getType()
+    public ParameterizableType getBaseType()
     {
-        return this.type;
+        return this.baseType;
     }
 
     /**
-     * Changes the base type.
-     * @param type The base type.
+     * Changes the base to parameterize.
+     * @param baseType The base to parameterize.
      */
-    public void setType(DeclaredTypeNode type)
+    public void setBaseType(ParameterizableType baseType)
     {
-        if (this.type instanceof NodeImpl)
-        {
-            ((NodeImpl)this.type).setParent(null);
-        }
-        this.type = type;
-        if (this.type instanceof NodeImpl)
-        {
-            ((NodeImpl)this.type).setParent(this);
-        }
+        this.baseType = baseType;
     }
 
     /**
@@ -87,7 +79,6 @@ public class ParameterizedTypeNodeImpl extends TypeNodeImpl implements Parameter
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        this.type.receive(visitor);
         this.typeArguments.receive(visitor);
     }
 }

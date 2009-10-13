@@ -2,35 +2,35 @@ package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.DeclaredTypeNode;
-import edu.jhu.cs.bsj.compiler.ast.node.NameNode;
+import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 
 public class DeclaredTypeNodeImpl extends TypeNodeImpl implements DeclaredTypeNode
 {
-    /** The name of the type. */
-    private NameNode name;
+    /** The identifier naming this type. */
+    private IdentifierNode name;
 
     /** General constructor. */
     public DeclaredTypeNodeImpl(
-            NameNode name)
+            IdentifierNode name)
     {
         super();
         this.name = name;
     }
 
     /**
-     * Gets the name of the type.
-     * @return The name of the type.
+     * Gets the identifier naming this type.
+     * @return The identifier naming this type.
      */
-    public NameNode getName()
+    public IdentifierNode getName()
     {
         return this.name;
     }
 
     /**
-     * Changes the name of the type.
-     * @param name The name of the type.
+     * Changes the identifier naming this type.
+     * @param name The identifier naming this type.
      */
-    public void setName(NameNode name)
+    public void setName(IdentifierNode name)
     {
         if (this.name instanceof NodeImpl)
         {

@@ -416,19 +416,19 @@ ArrayTypeNode :: TypeNode + TypeArgument
     @docs
         Represents an array type.
 
-DeclaredTypeNode :: TypeNode + TypeArgument, BoundType
+DeclaredTypeNode :: TypeNode + TypeArgument, BoundType, ParameterizableType
     @props
-    name                    NameNode                                    | the name of the type
+    name                    IdentifierNode                              | the identifier naming this type
     @docs
         A node expressing a declared type.  Declared types encompass classes, interfaces, enums, and annotations.
         Anonymous classes and other such constructs are included as well.
 
 ParameterizedTypeNode :: TypeNode + TypeArgument, BoundType
     @props
-    type                    DeclaredTypeNode                            | the base type
+    baseType                ParameterizableType                         | the base to parameterize
     typeArguments           ListNode<? extends TypeArgument>            | the parameterized type arguments
     @docs
-        A node expressing a parameterized type, as in:
+        A node representing a type parameterization as in:
         <pre>
         <i>type</i> &lt;<i>arg...</i>&gt;
         </pre>
@@ -438,6 +438,16 @@ PrimitiveTypeNode :: TypeNode
     primitiveType           PrimitiveType                               | the primitive type being represented
     @docs
         A node representing a primitive type.
+
+TypeSelectNode :: TypeNode + TypeArgument, BoundType, ParameterizableType
+    @props
+    base                    BoundType                                   | the base type from which to select
+    select                  DeclaredTypeNode                            | the selected type from the base type
+    @docs
+        A node representing a type selection, as in:
+        <pre>
+        <i>type</i> . <i>type</i>
+        </pre>
 
 ### Literal Nodes #####################################################################################################
 

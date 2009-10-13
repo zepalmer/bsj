@@ -75,6 +75,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.TypeCastNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeParameterNode;
+import edu.jhu.cs.bsj.compiler.ast.node.TypeSelectNode;
 import edu.jhu.cs.bsj.compiler.ast.node.UnaryOperatorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableNode;
@@ -85,6 +86,7 @@ import edu.jhu.cs.bsj.compiler.ast.tags.AnnotationMember;
 import edu.jhu.cs.bsj.compiler.ast.tags.BoundType;
 import edu.jhu.cs.bsj.compiler.ast.tags.ClassMember;
 import edu.jhu.cs.bsj.compiler.ast.tags.InterfaceMember;
+import edu.jhu.cs.bsj.compiler.ast.tags.ParameterizableType;
 import edu.jhu.cs.bsj.compiler.ast.tags.TypeArgument;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.AnnotationBodyNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.AnnotationDeclarationNodeImpl;
@@ -146,6 +148,7 @@ import edu.jhu.cs.bsj.compiler.impl.ast.node.ThrowNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.TryNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.TypeCastNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.TypeParameterNodeImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.node.TypeSelectNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.UnaryOperatorNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.VariableDeclarationNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.VariableNodeImpl;
@@ -160,6 +163,17 @@ import edu.jhu.cs.bsj.compiler.impl.ast.node.meta.CodeLiteralNodeImpl;
  */
 public class BsjNodeFactoryImpl implements BsjNodeFactory
 {
+    /**
+     * Creates a TypeSelectNode.
+     */
+    public TypeSelectNode makeTypeSelectNode(
+            BoundType base,
+            DeclaredTypeNode select)
+    {
+        TypeSelectNode ret = new TypeSelectNodeImpl(base, select);
+        return ret;
+    }
+
     /**
      * Creates a InterfaceBodyNode.
      */
@@ -223,7 +237,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      * Creates a DeclaredTypeNode.
      */
     public DeclaredTypeNode makeDeclaredTypeNode(
-            NameNode name)
+            IdentifierNode name)
     {
         DeclaredTypeNode ret = new DeclaredTypeNodeImpl(name);
         return ret;
@@ -749,10 +763,10 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      * Creates a ParameterizedTypeNode.
      */
     public ParameterizedTypeNode makeParameterizedTypeNode(
-            DeclaredTypeNode type,
+            ParameterizableType baseType,
             ListNode<? extends TypeArgument> typeArguments)
     {
-        ParameterizedTypeNode ret = new ParameterizedTypeNodeImpl(type, typeArguments);
+        ParameterizedTypeNode ret = new ParameterizedTypeNodeImpl(baseType, typeArguments);
         return ret;
     }
 

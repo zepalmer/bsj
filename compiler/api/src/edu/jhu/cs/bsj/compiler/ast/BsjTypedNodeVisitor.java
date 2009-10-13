@@ -61,6 +61,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.ThrowNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TryNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeCastNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeParameterNode;
+import edu.jhu.cs.bsj.compiler.ast.node.TypeSelectNode;
 import edu.jhu.cs.bsj.compiler.ast.node.UnaryOperatorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableNode;
@@ -122,6 +123,9 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
         } else if (node instanceof ParameterizedTypeNode)
         {
             visitParameterizedTypeNodeStart((ParameterizedTypeNode)node);
+        } else if (node instanceof TypeSelectNode)
+        {
+            visitTypeSelectNodeStart((TypeSelectNode)node);
         } else if (node instanceof ArrayTypeNode)
         {
             visitArrayTypeNodeStart((ArrayTypeNode)node);
@@ -332,6 +336,9 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
         } else if (node instanceof ParameterizedTypeNode)
         {
             visitParameterizedTypeNodeStop((ParameterizedTypeNode)node);
+        } else if (node instanceof TypeSelectNode)
+        {
+            visitTypeSelectNodeStop((TypeSelectNode)node);
         } else if (node instanceof ArrayTypeNode)
         {
             visitArrayTypeNodeStop((ArrayTypeNode)node);
@@ -598,6 +605,14 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
      * @param node The node being visited.
      */
     public void visitParameterizedTypeNodeStart(ParameterizedTypeNode node)
+    {
+    }
+
+    /**
+     * Starts a visit for nodes of type TypeSelectNode.
+     * @param node The node being visited.
+     */
+    public void visitTypeSelectNodeStart(TypeSelectNode node)
     {
     }
 
@@ -1126,6 +1141,14 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
      * @param node The node being visited.
      */
     public void visitParameterizedTypeNodeStop(ParameterizedTypeNode node)
+    {
+    }
+
+    /**
+     * Stops a visit for nodes of type TypeSelectNode.
+     * @param node The node being visited.
+     */
+    public void visitTypeSelectNodeStop(TypeSelectNode node)
     {
     }
 

@@ -69,6 +69,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.TypeCastNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeParameterNode;
+import edu.jhu.cs.bsj.compiler.ast.node.TypeSelectNode;
 import edu.jhu.cs.bsj.compiler.ast.node.UnaryOperatorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableNode;
@@ -79,6 +80,7 @@ import edu.jhu.cs.bsj.compiler.ast.tags.AnnotationMember;
 import edu.jhu.cs.bsj.compiler.ast.tags.BoundType;
 import edu.jhu.cs.bsj.compiler.ast.tags.ClassMember;
 import edu.jhu.cs.bsj.compiler.ast.tags.InterfaceMember;
+import edu.jhu.cs.bsj.compiler.ast.tags.ParameterizableType;
 import edu.jhu.cs.bsj.compiler.ast.tags.TypeArgument;
 
 /**
@@ -90,6 +92,13 @@ import edu.jhu.cs.bsj.compiler.ast.tags.TypeArgument;
  */
 public interface BsjNodeFactory
 {
+    /**
+     * Creates a TypeSelectNode.
+     */
+    public TypeSelectNode makeTypeSelectNode(
+            BoundType base,
+            DeclaredTypeNode select);
+
     /**
      * Creates a InterfaceBodyNode.
      */
@@ -133,7 +142,7 @@ public interface BsjNodeFactory
      * Creates a DeclaredTypeNode.
      */
     public DeclaredTypeNode makeDeclaredTypeNode(
-            NameNode name);
+            IdentifierNode name);
 
     /**
      * Creates a CompoundAssignmentNode.
@@ -471,7 +480,7 @@ public interface BsjNodeFactory
      * Creates a ParameterizedTypeNode.
      */
     public ParameterizedTypeNode makeParameterizedTypeNode(
-            DeclaredTypeNode type,
+            ParameterizableType baseType,
             ListNode<? extends TypeArgument> typeArguments);
 
     /**

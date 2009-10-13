@@ -1,10 +1,11 @@
 package edu.jhu.cs.bsj.compiler.ast.node;
 
 import edu.jhu.cs.bsj.compiler.ast.tags.BoundType;
+import edu.jhu.cs.bsj.compiler.ast.tags.ParameterizableType;
 import edu.jhu.cs.bsj.compiler.ast.tags.TypeArgument;
 
 /**
- * A node expressing a parameterized type, as in:
+ * A node representing a type parameterization as in:
  * <pre>
  * <i>type</i> &lt;<i>arg...</i>&gt;
  * </pre>
@@ -12,16 +13,16 @@ import edu.jhu.cs.bsj.compiler.ast.tags.TypeArgument;
 public interface ParameterizedTypeNode extends TypeNode, TypeArgument,  BoundType
 {
     /**
-     * Gets the base type.
-     * @return The base type.
+     * Gets the base to parameterize.
+     * @return The base to parameterize.
      */
-    public DeclaredTypeNode getType();
+    public ParameterizableType getBaseType();
 
     /**
-     * Changes the base type.
-     * @param type The base type.
+     * Changes the base to parameterize.
+     * @param baseType The base to parameterize.
      */
-    public void setType(DeclaredTypeNode type);
+    public void setBaseType(ParameterizableType baseType);
 
     /**
      * Gets the parameterized type arguments.
