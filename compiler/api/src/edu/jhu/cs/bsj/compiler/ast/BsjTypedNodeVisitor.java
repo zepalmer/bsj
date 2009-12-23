@@ -65,6 +65,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.TypeSelectNode;
 import edu.jhu.cs.bsj.compiler.ast.node.UnaryOperatorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableNode;
+import edu.jhu.cs.bsj.compiler.ast.node.VoidTypeDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.WhileLoopNode;
 import edu.jhu.cs.bsj.compiler.ast.node.WildcardTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.CodeLiteralNode;
@@ -177,6 +178,9 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
         } else if (node instanceof InterfaceDeclarationNode)
         {
             visitInterfaceDeclarationNodeStart((InterfaceDeclarationNode)node);
+        } else if (node instanceof VoidTypeDeclarationNode)
+        {
+            visitVoidTypeDeclarationNodeStart((VoidTypeDeclarationNode)node);
         } else if (node instanceof ClassDeclarationNode)
         {
             visitClassDeclarationNodeStart((ClassDeclarationNode)node);
@@ -390,6 +394,9 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
         } else if (node instanceof InterfaceDeclarationNode)
         {
             visitInterfaceDeclarationNodeStop((InterfaceDeclarationNode)node);
+        } else if (node instanceof VoidTypeDeclarationNode)
+        {
+            visitVoidTypeDeclarationNodeStop((VoidTypeDeclarationNode)node);
         } else if (node instanceof ClassDeclarationNode)
         {
             visitClassDeclarationNodeStop((ClassDeclarationNode)node);
@@ -749,6 +756,14 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
      * @param node The node being visited.
      */
     public void visitInterfaceDeclarationNodeStart(InterfaceDeclarationNode node)
+    {
+    }
+
+    /**
+     * Starts a visit for nodes of type VoidTypeDeclarationNode.
+     * @param node The node being visited.
+     */
+    public void visitVoidTypeDeclarationNodeStart(VoidTypeDeclarationNode node)
     {
     }
 
@@ -1285,6 +1300,14 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
      * @param node The node being visited.
      */
     public void visitInterfaceDeclarationNodeStop(InterfaceDeclarationNode node)
+    {
+    }
+
+    /**
+     * Stops a visit for nodes of type VoidTypeDeclarationNode.
+     * @param node The node being visited.
+     */
+    public void visitVoidTypeDeclarationNodeStop(VoidTypeDeclarationNode node)
     {
     }
 

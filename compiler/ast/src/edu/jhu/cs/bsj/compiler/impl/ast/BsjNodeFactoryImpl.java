@@ -79,6 +79,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.TypeSelectNode;
 import edu.jhu.cs.bsj.compiler.ast.node.UnaryOperatorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableNode;
+import edu.jhu.cs.bsj.compiler.ast.node.VoidTypeDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.WhileLoopNode;
 import edu.jhu.cs.bsj.compiler.ast.node.WildcardTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.CodeLiteralNode;
@@ -152,6 +153,7 @@ import edu.jhu.cs.bsj.compiler.impl.ast.node.TypeSelectNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.UnaryOperatorNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.VariableDeclarationNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.VariableNodeImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.node.VoidTypeDeclarationNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.WhileLoopNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.WildcardTypeNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.meta.CodeLiteralNodeImpl;
@@ -666,6 +668,17 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             VariableNode parameter)
     {
         CatchNode ret = new CatchNodeImpl(block, parameter);
+        return ret;
+    }
+
+    /**
+     * Creates a VoidTypeDeclarationNode.
+     */
+    public VoidTypeDeclarationNode makeVoidTypeDeclarationNode(
+            IdentifierNode simpleName,
+            ModifiersNode modifiers)
+    {
+        VoidTypeDeclarationNode ret = new VoidTypeDeclarationNodeImpl(simpleName, modifiers);
         return ret;
     }
 

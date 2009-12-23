@@ -639,6 +639,12 @@ TypeDeclarationNode* :: Node + ClassMember, InterfaceMember, AnnotationMember
     @props
     simpleName              IdentifierNode                              | the name of this declared type
     modifiers               ModifiersNode                               | the modifiers for this declared type
+    @docs
+        Acts as a superclass for all type declarations.
+
+VoidTypeDeclarationNode :: TypeDeclarationNode
+    @docs
+        Represents the void declaration (a single semi-colon).
 
 ### Base Nodes ########################################################################################################
 

@@ -73,6 +73,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.TypeSelectNode;
 import edu.jhu.cs.bsj.compiler.ast.node.UnaryOperatorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableNode;
+import edu.jhu.cs.bsj.compiler.ast.node.VoidTypeDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.WhileLoopNode;
 import edu.jhu.cs.bsj.compiler.ast.node.WildcardTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.CodeLiteralNode;
@@ -417,6 +418,13 @@ public interface BsjNodeFactory
     public CatchNode makeCatchNode(
             BlockStatementNode block,
             VariableNode parameter);
+
+    /**
+     * Creates a VoidTypeDeclarationNode.
+     */
+    public VoidTypeDeclarationNode makeVoidTypeDeclarationNode(
+            IdentifierNode simpleName,
+            ModifiersNode modifiers);
 
     /**
      * Creates a AssignmentNode.
