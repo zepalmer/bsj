@@ -1244,9 +1244,19 @@ annotationTypeDeclaration //TODO
     ;
 
 
-annotationTypeBody //TODO
-    :   '{' 
+annotationTypeBody [AnnotationBodyNode ret]
+    @init {
+            List<AnnotationMember> list = new ArrayList<AnnotationMember>();
+    }
+    @after {
+            $ret = factory.makeAnnotationBodyNode(factory.makeListNode(list));
+    }
+    :   
+        '{' 
         (annotationTypeElementDeclaration
+        {
+            list.add($annotationTypeElementDeclaration.ret);
+        }
         )* 
         '}'
     ;
@@ -1930,8 +1940,12 @@ classCreatorRest //TODO
     ;
 
 
-nonWildcardTypeArguments //TODO
-    :   '<' typeList
+nonWildcardTypeArguments [ListNode<TypeNode> ret]
+    :   
+        '<' typeList
+        {
+            $ret = $typeList.ret;
+        }
         '>'
     ;
 
