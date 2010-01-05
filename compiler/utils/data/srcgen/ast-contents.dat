@@ -62,10 +62,14 @@
 AnnotationNode :: ExpressionNode
     @props
     annotationType          DeclaredTypeNode                            | the annotation type
-    arguments               ListNode<? extends ExpressionNode>          | the arguments
+    arguments               ListNode<? extends AnnotationValueNode>     | the arguments
     @docs
         Represents the usage of an annotation, as in:
-        <pre>@<i>type</i>(<i>arg...</i>)</pre>
+        <pre>@<i>type</i>(<i>value</i>)</pre>
+        or
+        <pre>@<i>type</i>(<i>key</i>=<i>value</i>,...)</pre>
+        If the annotation has only a single (default) value, the arguments list will contain a single
+        <tt>AnnotationValueNode</tt> with a <tt>null</tt> identifier.
 
 ArrayAccessNode :: ExpressionNode
     @props
@@ -686,6 +690,16 @@ AlternateConstructorInvocationNode :: ConstructorInvocationNode
         </pre>
         Note that this only applies to <i>alternate</i> constructor invocations (those using the <tt>this</tt> keyword).
         For superclass constructor invocations, see {@link SuperclassConstructorInvocationNode}.
+
+AnnotationValueNode :: Node
+    @props
+    identifier              IdentifierNode                              | the identifier
+    value                   ExpressionNode                              | the expression
+    @docs
+        Represents an annotation expression, as in
+        <pre>
+        <i>ident</i>=<i>expr</i>
+        </pre>
 
 CaseNode :: Node
     @props

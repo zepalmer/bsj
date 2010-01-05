@@ -2,8 +2,8 @@ package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.AnnotationValueNode;
 import edu.jhu.cs.bsj.compiler.ast.node.DeclaredTypeNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
 
 public class AnnotationNodeImpl extends ExpressionNodeImpl implements AnnotationNode
@@ -12,12 +12,12 @@ public class AnnotationNodeImpl extends ExpressionNodeImpl implements Annotation
     private DeclaredTypeNode annotationType;
 
     /** The arguments. */
-    private ListNode<? extends ExpressionNode> arguments;
+    private ListNode<? extends AnnotationValueNode> arguments;
 
     /** General constructor. */
     public AnnotationNodeImpl(
             DeclaredTypeNode annotationType,
-            ListNode<? extends ExpressionNode> arguments)
+            ListNode<? extends AnnotationValueNode> arguments)
     {
         super();
         this.annotationType = annotationType;
@@ -54,7 +54,7 @@ public class AnnotationNodeImpl extends ExpressionNodeImpl implements Annotation
      * Gets the arguments.
      * @return The arguments.
      */
-    public ListNode<? extends ExpressionNode> getArguments()
+    public ListNode<? extends AnnotationValueNode> getArguments()
     {
         return this.arguments;
     }
@@ -63,7 +63,7 @@ public class AnnotationNodeImpl extends ExpressionNodeImpl implements Annotation
      * Changes the arguments.
      * @param arguments The arguments.
      */
-    public void setArguments(ListNode<? extends ExpressionNode> arguments)
+    public void setArguments(ListNode<? extends AnnotationValueNode> arguments)
     {
         if (this.arguments instanceof NodeImpl)
         {

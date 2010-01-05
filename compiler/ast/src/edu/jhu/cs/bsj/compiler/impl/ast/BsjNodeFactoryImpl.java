@@ -14,6 +14,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.AnnotationBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationMethodDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.AnnotationValueNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ArrayAccessNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ArrayInitializerNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ArrayInstantiatonNode;
@@ -101,6 +102,7 @@ import edu.jhu.cs.bsj.compiler.impl.ast.node.AnnotationBodyNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.AnnotationDeclarationNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.AnnotationMethodDeclarationNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.AnnotationNodeImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.node.AnnotationValueNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.ArrayAccessNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.ArrayInitializerNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.ArrayInstantiatonNodeImpl;
@@ -533,6 +535,17 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
 
     /**
+     * Creates a AnnotationValueNode.
+     */
+    public AnnotationValueNode makeAnnotationValueNode(
+            IdentifierNode identifier,
+            ExpressionNode value)
+    {
+        AnnotationValueNode ret = new AnnotationValueNodeImpl(identifier, value);
+        return ret;
+    }
+
+    /**
      * Creates a ForLoopNode.
      */
     public ForLoopNode makeForLoopNode(
@@ -823,7 +836,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     public AnnotationNode makeAnnotationNode(
             DeclaredTypeNode annotationType,
-            ListNode<? extends ExpressionNode> arguments)
+            ListNode<? extends AnnotationValueNode> arguments)
     {
         AnnotationNode ret = new AnnotationNodeImpl(annotationType, arguments);
         return ret;

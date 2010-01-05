@@ -5,6 +5,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.AnnotationBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationMethodDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.AnnotationValueNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ArrayAccessNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ArrayInitializerNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ArrayInstantiatonNode;
@@ -246,12 +247,12 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
         } else if (node instanceof AnnotationNode)
         {
             visitAnnotationNodeStart((AnnotationNode)node);
-        } else if (node instanceof TypeParameterNode)
-        {
-            visitTypeParameterNodeStart((TypeParameterNode)node);
         } else if (node instanceof MethodDeclarationNode)
         {
             visitMethodDeclarationNodeStart((MethodDeclarationNode)node);
+        } else if (node instanceof TypeParameterNode)
+        {
+            visitTypeParameterNodeStart((TypeParameterNode)node);
         } else if (node instanceof AnnotationBodyNode)
         {
             visitAnnotationBodyNodeStart((AnnotationBodyNode)node);
@@ -273,6 +274,9 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
         } else if (node instanceof EnumConstantDeclarationNode)
         {
             visitEnumConstantDeclarationNodeStart((EnumConstantDeclarationNode)node);
+        } else if (node instanceof AnnotationValueNode)
+        {
+            visitAnnotationValueNodeStart((AnnotationValueNode)node);
         } else if (node instanceof ConstructorDeclarationNode)
         {
             visitConstructorDeclarationNodeStart((ConstructorDeclarationNode)node);
@@ -477,12 +481,12 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
         } else if (node instanceof AnnotationNode)
         {
             visitAnnotationNodeStop((AnnotationNode)node);
-        } else if (node instanceof TypeParameterNode)
-        {
-            visitTypeParameterNodeStop((TypeParameterNode)node);
         } else if (node instanceof MethodDeclarationNode)
         {
             visitMethodDeclarationNodeStop((MethodDeclarationNode)node);
+        } else if (node instanceof TypeParameterNode)
+        {
+            visitTypeParameterNodeStop((TypeParameterNode)node);
         } else if (node instanceof AnnotationBodyNode)
         {
             visitAnnotationBodyNodeStop((AnnotationBodyNode)node);
@@ -504,6 +508,9 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
         } else if (node instanceof EnumConstantDeclarationNode)
         {
             visitEnumConstantDeclarationNodeStop((EnumConstantDeclarationNode)node);
+        } else if (node instanceof AnnotationValueNode)
+        {
+            visitAnnotationValueNodeStop((AnnotationValueNode)node);
         } else if (node instanceof ConstructorDeclarationNode)
         {
             visitConstructorDeclarationNodeStop((ConstructorDeclarationNode)node);
@@ -963,18 +970,18 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
     }
 
     /**
-     * Starts a visit for nodes of type TypeParameterNode.
-     * @param node The node being visited.
-     */
-    public void visitTypeParameterNodeStart(TypeParameterNode node)
-    {
-    }
-
-    /**
      * Starts a visit for nodes of type MethodDeclarationNode.
      * @param node The node being visited.
      */
     public void visitMethodDeclarationNodeStart(MethodDeclarationNode node)
+    {
+    }
+
+    /**
+     * Starts a visit for nodes of type TypeParameterNode.
+     * @param node The node being visited.
+     */
+    public void visitTypeParameterNodeStart(TypeParameterNode node)
     {
     }
 
@@ -1031,6 +1038,14 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
      * @param node The node being visited.
      */
     public void visitEnumConstantDeclarationNodeStart(EnumConstantDeclarationNode node)
+    {
+    }
+
+    /**
+     * Starts a visit for nodes of type AnnotationValueNode.
+     * @param node The node being visited.
+     */
+    public void visitAnnotationValueNodeStart(AnnotationValueNode node)
     {
     }
 
@@ -1547,18 +1562,18 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
     }
 
     /**
-     * Stops a visit for nodes of type TypeParameterNode.
-     * @param node The node being visited.
-     */
-    public void visitTypeParameterNodeStop(TypeParameterNode node)
-    {
-    }
-
-    /**
      * Stops a visit for nodes of type MethodDeclarationNode.
      * @param node The node being visited.
      */
     public void visitMethodDeclarationNodeStop(MethodDeclarationNode node)
+    {
+    }
+
+    /**
+     * Stops a visit for nodes of type TypeParameterNode.
+     * @param node The node being visited.
+     */
+    public void visitTypeParameterNodeStop(TypeParameterNode node)
     {
     }
 
@@ -1615,6 +1630,14 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
      * @param node The node being visited.
      */
     public void visitEnumConstantDeclarationNodeStop(EnumConstantDeclarationNode node)
+    {
+    }
+
+    /**
+     * Stops a visit for nodes of type AnnotationValueNode.
+     * @param node The node being visited.
+     */
+    public void visitAnnotationValueNodeStop(AnnotationValueNode node)
     {
     }
 

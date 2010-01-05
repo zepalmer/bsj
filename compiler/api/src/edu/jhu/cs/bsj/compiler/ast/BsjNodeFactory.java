@@ -8,6 +8,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.AnnotationBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationMethodDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.AnnotationValueNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ArrayAccessNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ArrayInitializerNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ArrayInstantiatonNode;
@@ -328,6 +329,13 @@ public interface BsjNodeFactory
             ListNode<? extends TypeParameterNode> typeParameters);
 
     /**
+     * Creates a AnnotationValueNode.
+     */
+    public AnnotationValueNode makeAnnotationValueNode(
+            IdentifierNode identifier,
+            ExpressionNode value);
+
+    /**
      * Creates a ForLoopNode.
      */
     public ForLoopNode makeForLoopNode(
@@ -518,7 +526,7 @@ public interface BsjNodeFactory
      */
     public AnnotationNode makeAnnotationNode(
             DeclaredTypeNode annotationType,
-            ListNode<? extends ExpressionNode> arguments);
+            ListNode<? extends AnnotationValueNode> arguments);
 
     /**
      * Creates a ParameterizedTypeNode.
