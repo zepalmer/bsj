@@ -1392,79 +1392,101 @@ localVariableDeclaration //TODO
 statement returns [StatementNode ret]
     :   block
             
-    |   ('assert'
-        )
-        expression (':' expression)? ';'
-        //TODO
-    |   'assert'  expression (':' expression)? ';'   
-        //TODO         
-    |   'if' parExpression s1=statement ('else' s2=statement)?    
+    |   
+        ('assert') e1=expression (':' e2=expression)? ';'
+        {
+            $ret = factory.makeAssertStatementNode(
+                $e1.ret,
+                e2 == null ? null | $e2.ret);
+        }
+    |   
+        'assert'  e1=expression (':' e2=expression)? ';'   
+        {
+            $ret = factory.makeAssertStatementNode(
+                $e1.ret,
+                e2 == null ? null | $e2.ret);
+        }        
+    |   
+        'if' parExpression s1=statement ('else' s2=statement)?    
         {
             $ret = factory.makeIfNode(
                 $parExpression.ret
                 $s1.ret,
                 s2 == null ? null : $s2.ret);
         }   
-    |   forstatement
+    |   
+        forstatement
         {
             $ret = $forstatement.ret;
         }
-    |   'while' parExpression s=statement
+    |   
+        'while' parExpression s=statement
         {
             $ret = factory.makeWhileLoopNode(
                 $parExpression.ret,
                 $s.ret);
         }
-    |   'do' s=statement 'while' parExpression ';'
+    |   
+        'do' s=statement 'while' parExpression ';'
         {
             $ret = factory.makeDoWhileLoopNode(
                 $parExpression.ret,
                 $s.ret);
         }
-    |   trystatement
+    |   
+        trystatement
         {
             $ret = $trystatement.ret;
         }
-    |   'switch' parExpression '{' switchBlockStatementGroups '}'
+    |   
+        'switch' parExpression '{' switchBlockStatementGroups '}'
         {
             $ret = factory.makeSwitchNode(
                 $switchBlockStatementGroups.ret,
                 $parExpression.ret);
         }
-    |   'synchronized' parExpression block
+    |   
+        'synchronized' parExpression block
         //TODO
-    |   'return' (expression )? ';'
+    |   
+        'return' (expression )? ';'
         //TODO
-    |   'throw' expression ';'
+    |   
+        'throw' expression ';'
         {
             $ret = factory.makeThrowNode(
                 $expression.ret);
         }
-    |   'break'
+    |   
+        'break'
               (a=IDENTIFIER
               )? ';'
         {
             $ret = factory.makeBreakNode(
                 a == null ? null : factory.makeIdentifierNode($a.text));
         }
-    |   'continue'
+    |   
+        'continue'
               (a=IDENTIFIER
               )? ';'
         {
             $ret = factory.makeContinueNode(
                 a == null ? null : factory.makeIdentifierNode($a.text));
         }
-    |   expression  ';'  
+    |   
+        expression  ';'  
         {
             $ret = $expression.ret;
         }   
-    |   a=IDENTIFIER ':' s=statement
+    |   
+        a=IDENTIFIER ':' s=statement
         {
             $ret = factory.makeLabeledStatementNode(
                 factory.makeIdentifierNode($a.text),
                 $s.ret);
         }
-    |   ';' //TODO - done?
+    |   
+        ';' //TODO - done?
     ;
 
 switchBlockStatementGroups returns [ListNode<CaseNode> ret]
