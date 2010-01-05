@@ -617,21 +617,21 @@ enumConstants returns [List<EnumConstantDeclarationNode> ret]
         )*
     ;
 
-enumConstant 
+enumConstant [EnumConstantDeclarationNode ret]
     :   
         annotations?
-        IDENTIFIER
+        id=IDENTIFIER
         arguments?
         classBody?
+        {
+            $ret = factory.makeEnumConstantDeclarationNode(
+                annotations == null ? null || $annotations.ret,
+                factory.makeIdentifierNode($id.text),
+                arguments == null ? null | $arguments.ret,
+                classBody == null ? null | $classBody.ret);
+        }
         // TODO: should we have an "anonymousClassBody"?
         /* TODO: conversion note: ensure that enum body doesn't contain a constructor - anonymous classes can't in general*/
-        // TODO
-//    ->
-//        ^(AST_ENUM_CONSTANT
-//            annotations?
-//            IDENTIFIER
-//            arguments?
-//            classBody?)
     ;
 
 enumBodyDeclarations returns [ListNode<EnumBodyDeclaration> ret]
@@ -1686,11 +1686,27 @@ relationalExpression //TODO
         )*
     ;
 
-relationalOp //TODO
-    :    '<' '='
-    |    '>' '='
-    |   '<'
-    |   '>'
+relationalOp [BinaryOperator ret]
+    :    
+        '<' '='
+        {
+            $ret = BinaryOperator.LESS_THAN_EQUAL;
+        }         
+    |   
+        '>' '='
+        {
+            $ret = BinaryOperator.GREATER_THAN_EQUAL;
+        }         
+    |   
+        '<'
+        {
+            $ret = BinaryOperator.LESS_THAN;
+        }         
+    |   
+        '>'
+        {
+            $ret = BinaryOperator.GREATER_THAN;
+        }         
     ;
 
 shiftExpression //TODO
@@ -1700,10 +1716,22 @@ shiftExpression //TODO
     ;
 
 
-shiftOp //TODO
-    :    '<' '<'
-    |    '>' '>' '>'
-    |    '>' '>'
+shiftOp [BinaryOperator ret]
+    :    
+        '<' '<'
+        {
+            $ret = BinaryOperator.LEFT_SHIFT;
+        }         
+    |   
+        '>' '>' '>'
+        {
+            $ret = BinaryOperator.UNSIGNED_RIGHT_SHIFT;
+        }         
+    |   
+        '>' '>'
+        {
+            $ret = BinaryOperator.RIGHT_SHIFT;
+        }        
     ;
 
 
