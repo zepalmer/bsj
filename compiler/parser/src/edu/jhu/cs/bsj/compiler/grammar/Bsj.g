@@ -1770,9 +1770,20 @@ assignmentOperator returns [AssignmentOperator ret]
     ;
 
 
-conditionalExpression //TODO
-    :   conditionalOrExpression
-        ('?' expression ':' conditionalExpression
+conditionalExpression returns [ExpressionNode ret]
+    :   
+        conditionalOrExpression
+        {
+            $ret = $conditionalOrExpression.ret;
+        }
+        (
+	        '?' e1=expression ':' e2=conditionalExpression
+	        {
+	            $ret = factory.makeConditionalExpressionNode(
+	                $ret, 
+	                $e1.ret, 
+	                $e2.ret);
+	        }
         )?
     ;
 
