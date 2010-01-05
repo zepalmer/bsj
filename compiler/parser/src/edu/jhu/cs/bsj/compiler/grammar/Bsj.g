@@ -780,7 +780,7 @@ methodReturnType returns [TypeNode ret]
 methodDeclaration returns [MethodDeclarationNode ret]
     :
         /* For constructor, return type is null, name is 'init' */
-         modifiers
+        modifiers
         typeParameters?
         IDENTIFIER
         formalParameters
@@ -1272,7 +1272,7 @@ annotationMethodDeclaration [AnnotationMethodDeclarationNode ret]
         ';'
         {
             $ret = factory.makeAnnotationMethodDeclarationNode(
-                $modifiers,//TODO
+                $modifiers.ret,
                 $type.ret,
                 factory.makeIdentifierNode($id.text),
                 elementValue == null ? null || $elementValue.ret);
