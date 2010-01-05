@@ -391,7 +391,7 @@ typeDeclaration returns [TypeDeclarationNode ret]
     |
         ';'
         {
-            $ret = null; // TODO: how to handle?
+            $ret = new VoidTypeDeclarationNode();
         }
     ;
 
@@ -919,37 +919,47 @@ type returns [TypeNode ret]
         )?
     ;
 
-// parameterizableType corresponds to TypeDeclSpecifier from chapter 4.3 of JLS 3.0
-parameterizableType returns [ParameterizableType ret]
+// The following rule does not exist in the language standard; it is solely for the purpose of making
+// classOrInterfaceType less repetetive.
+unqualifiedClassOrInterfaceType[BoundType in] returns [BoundType ret]
+    @init {
+            $ret = $in;
+    }
     :
-        (classOrInterfaceType '.')?
         a=IDENTIFIER
         {
             DeclaredTypeNode selected = factory.makeDeclaredTypeNode(factory.makeIdentifierNode($a.text));
-            if ($classOrInterfaceType == null)
+            if ($ret == null)
             {
-                // Just a single identifier
                 $ret = selected;
             } else
             {
-                // A type selection
-                $ret = factory.makeTypeSelectNode($classOrInterfaceType.ret, selected);
+                $ret = factory.makeTypeSelectNode($ret, selected);
             }
         }
+        
+        (
+            typeArguments
+            {
+                $ret = factory.makeParameterizedTypeNode($ret, $typeArguments.ret);
+            }
+        )?
     ;
+        
 
-classOrInterfaceType returns [BoundType ret] 
+classOrInterfaceType returns [BoundType ret]
     :   
-        parameterizableType typeArguments?
+        a=unqualifiedClassOrInterfaceType[null]
         {
-            if ($typeArguments==null)
-            {
-                $ret = $parameterizableType.ret;
-            } else
-            {
-                $ret = factory.makeParameterizedTypeNode($parameterizableType.ret, $typeArguments.ret);
-            }
+            $ret = $a.ret;
         }
+        (
+            '.'
+            b=unqualifiedClassOrInterfaceType[$ret]
+            {
+                $ret = $b.ret;
+            }
+        )*
     ;
 
 primitiveType returns [PrimitiveTypeNode ret]
