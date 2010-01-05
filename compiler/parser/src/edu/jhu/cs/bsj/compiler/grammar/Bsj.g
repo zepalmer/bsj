@@ -183,6 +183,20 @@ tokens {
             Modifier.PUBLIC,
             Modifier.STATIC,
             Modifier.FINAL);
+    private static final List<Modifier> methodModifiers = Arrays.asList(
+            Modifier.PUBLIC,
+            Modifier.PROTECTED,
+            Modifier.PRIVATE,
+            Modifier.ABSTRACT,
+            Modifier.STATIC,
+            Modifier.FINAL,
+            Modifier.SYNCHRONIZED,
+            Modifier.NATIVE,
+            Modifier.STRICTFP);
+    private static final List<Modifier> constructorModifiers = Arrays.asList(
+            Modifier.PUBLIC,
+            Modifier.PROTECTED,
+            Modifier.PRIVATE);
 }
 
 /********************************************************************************************
@@ -759,6 +773,7 @@ classBodyDeclaration returns [ClassMember ret]
 
 memberDecl // TODO: fieldDeclaration can now return a list - resolve this
     :    fieldDeclaration
+    |    constructorDeclaration
     |    methodDeclaration
     |    classDeclaration
     |    interfaceDeclaration
@@ -777,31 +792,49 @@ methodReturnType returns [TypeNode ret]
 //        ^(AST_VOID_TYPE)
     ;
 
-methodDeclaration returns [MethodDeclarationNode ret]
+constructorDeclaration returns [ConstructorDeclarationNode ret]
     :
-        /* For constructor, return type is null, name is 'init' */
-        modifiers
+        modifiers[constructorModifiers]
         typeParameters?
         IDENTIFIER
         formalParameters
         ('throws' qualifiedNameList)?
+        constructorBody
+        {
+            // TODO: what about the identifier?  assert here that it is correct
+            $ret = factory.makeConstructorDeclarationNode(
+                    $constructorBody.ret,
+                    $modifiers.ret,
+                    $formalParameters.ret,
+                    $qualifiedNameList.ret,
+                    $typeParameters.ret);
+        }
+    ;
+
+constructorBody returns [ConstructorBodyNode ret]
+	    @init {
+	        List<StatementNode> list = new ArrayList<StatementNode>();
+	    }
+	    @after {
+	        $ret = factory.makeConstructorBodyNode(
+	                ($explicitConstructorInvocation == null ? null : $explicitConstructorInvocation.ret),
+	                factory.makeBlockStatementNode(list));
+	    }
+    :
         '{' 
         explicitConstructorInvocation?
-        blockStatement*
+        (
+            blockStatement
+            {
+                list.add($blockStatement.ret);
+            }
+        )*
         '}'
-        // TODO: consider: should we have a different AST type for constructors?
-        // TODO
-//    ->
-//        ^(AST_METHOD
-//            IDENTIFIER
-//            modifiers
-//            typeParameters?
-//            formalParameters
-//            ^(AST_THROWS qualifiedNameList)?
-//            ^(AST_CONSTRUCTOR_BODY
-//                ^(AST_EXPLICIT_CONSTRUCTOR explicitConstructorInvocation)?
-//                blockStatement*))         
-    |   modifiers
+    ;
+
+methodDeclaration returns [MethodDeclarationNode ret]
+    :
+        modifiers[methodModifiers]
         typeParameters?
         methodReturnType
         id=IDENTIFIER
@@ -1149,7 +1182,7 @@ normalParameterDecl returns [VariableNode ret]
 
 ellipsisParameterDecl returns [VariableNode ret]
     :
-        mod=variableModifiers t=type  '...' id=IDENTIFIER
+        mod=variableModifiers t=type '...' id=IDENTIFIER
         {
             $ret = factory.makeVariableNode($mod.ret, $t.ret, factory.makeIdentifierNode($id.text));
         }
