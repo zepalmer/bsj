@@ -1406,10 +1406,22 @@ staticBlock returns [JCBlock tree]
         )* '}'
     ;
 */
-blockStatement //TODO
-    :   localVariableDeclarationStatement
-    |   classOrInterfaceDeclaration
-    |   statement
+blockStatement returns [StatementNode ret]
+    :   
+        localVariableDeclarationStatement
+        {
+            $ret = $localVariableDeclarationStatement.ret;
+        }
+    |   
+        classDeclaration
+        {
+            $ret = $classDeclaration.ret;
+        }
+    |   
+        statement
+        {
+            $ret = $statement.ret;
+        }        
     ;
 
 
