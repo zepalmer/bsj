@@ -1973,9 +1973,20 @@ instanceOfExpression returns [ExpressionNode ret]
         )?
     ;
 
-relationalExpression //TODO
-    :   shiftExpression
-        (relationalOp shiftExpression
+relationalExpression returns [ExpressionNode ret]
+    :   
+        e1=shiftExpression
+        {
+            $ret = $e1.ret;
+        }         
+        (
+            op=relationalOp e2=shiftExpression
+            {
+                $ret = factory.makeBinaryOperatorNode(
+                    $ret, 
+                    $e2.ret, 
+                    $op.ret);
+            }             
         )*
     ;
 
