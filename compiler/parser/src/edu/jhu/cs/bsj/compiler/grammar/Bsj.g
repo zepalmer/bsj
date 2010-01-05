@@ -1172,7 +1172,7 @@ explicitConstructorInvocation //TODO
         arguments ';'
     ;
 
-qualifiedName 
+qualifiedName returns [QualifiedNameNode ret]
     :
         IDENTIFIER ('.' IDENTIFIER)*
         // TODO
@@ -1978,19 +1978,19 @@ literal //TODO
  */
  
 classHeader //TODO
-    :   modifiers 'class' IDENTIFIER
+    :   modifiers[classModifiers] 'class' IDENTIFIER
     ;
 
 enumHeader //TODO
-    :   modifiers ('enum'|IDENTIFIER) IDENTIFIER
+    :   modifiers[classModifiers] ('enum'|IDENTIFIER) IDENTIFIER
     ;
 
 interfaceHeader //TODO
-    :   modifiers 'interface' IDENTIFIER
+    :   modifiers[interfaceModifiers] 'interface' IDENTIFIER
     ;
 
 annotationHeader //TODO
-    :   modifiers '@' 'interface' IDENTIFIER
+    :   modifiers[interfaceModifiers] '@' 'interface' IDENTIFIER
     ;
 
 typeHeader //TODO
@@ -2002,7 +2002,7 @@ methodHeader //TODO
     ;
 
 fieldHeader //TODO
-    :   modifiers type IDENTIFIER ('['']')* ('='|','|';')
+    :   modifiers[fieldModifiers] type IDENTIFIER ('['']')* ('='|','|';')
     ;
 
 localVariableHeader //TODO
