@@ -1415,7 +1415,7 @@ blockStatement returns [StatementNode ret]
     |   
         classDeclaration
         {
-            $ret = $classDeclaration.ret;
+            $ret = factory.makeInlineTypeDeclarationNode($classDeclaration.ret);
         }
     |   
         statement
