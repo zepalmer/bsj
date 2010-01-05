@@ -1287,8 +1287,13 @@ statement returns [StatementNode ret]
         //TODO
     |   'assert'  expression (':' expression)? ';'   
         //TODO         
-    |   'if' parExpression statement ('else' statement)?       
-        //TODO   
+    |   'if' parExpression s1=statement ('else' s2=statement)?    
+        {
+            $ret = factory.makeIfNode(
+                $parExpression.ret
+                $s1.ret,
+                s2 == null ? null : $s2.ret);
+        }   
     |   forstatement
     	{
     		$ret = $forstatement.ret;
