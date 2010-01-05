@@ -924,11 +924,12 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ModifiersNode modifiers,
             IdentifierNode name,
             ListNode<? extends VariableNode> parameters,
+            VariableNode varargParameter,
             TypeNode returnType,
             ListNode<? extends DeclaredTypeNode> throwTypes,
             ListNode<? extends TypeParameterNode> typeParameters)
     {
-        MethodDeclarationNode ret = new MethodDeclarationNodeImpl(body, modifiers, name, parameters, returnType, throwTypes, typeParameters);
+        MethodDeclarationNode ret = new MethodDeclarationNodeImpl(body, modifiers, name, parameters, varargParameter, returnType, throwTypes, typeParameters);
         return ret;
     }
 

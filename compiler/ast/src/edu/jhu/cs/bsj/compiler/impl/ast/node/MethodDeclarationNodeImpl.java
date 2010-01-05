@@ -25,6 +25,9 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
     /** The parameters declared by this method. */
     private ListNode<? extends VariableNode> parameters;
 
+    /** The vararg parameter declared by this method. */
+    private VariableNode varargParameter;
+
     /** The type of value returned. */
     private TypeNode returnType;
 
@@ -40,6 +43,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
             ModifiersNode modifiers,
             IdentifierNode name,
             ListNode<? extends VariableNode> parameters,
+            VariableNode varargParameter,
             TypeNode returnType,
             ListNode<? extends DeclaredTypeNode> throwTypes,
             ListNode<? extends TypeParameterNode> typeParameters)
@@ -49,6 +53,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
         this.modifiers = modifiers;
         this.name = name;
         this.parameters = parameters;
+        this.varargParameter = varargParameter;
         this.returnType = returnType;
         this.throwTypes = throwTypes;
         this.typeParameters = typeParameters;
@@ -159,6 +164,32 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
     }
 
     /**
+     * Gets the vararg parameter declared by this method.
+     * @return The vararg parameter declared by this method.
+     */
+    public VariableNode getVarargParameter()
+    {
+        return this.varargParameter;
+    }
+
+    /**
+     * Changes the vararg parameter declared by this method.
+     * @param varargParameter The vararg parameter declared by this method.
+     */
+    public void setVarargParameter(VariableNode varargParameter)
+    {
+        if (this.varargParameter instanceof NodeImpl)
+        {
+            ((NodeImpl)this.varargParameter).setParent(null);
+        }
+        this.varargParameter = varargParameter;
+        if (this.varargParameter instanceof NodeImpl)
+        {
+            ((NodeImpl)this.varargParameter).setParent(this);
+        }
+    }
+
+    /**
      * Gets the type of value returned.
      * @return The type of value returned.
      */
@@ -251,6 +282,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
         this.modifiers.receive(visitor);
         this.name.receive(visitor);
         this.parameters.receive(visitor);
+        this.varargParameter.receive(visitor);
         this.returnType.receive(visitor);
         this.throwTypes.receive(visitor);
         this.typeParameters.receive(visitor);

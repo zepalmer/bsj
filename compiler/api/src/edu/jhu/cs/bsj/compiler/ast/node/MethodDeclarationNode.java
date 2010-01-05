@@ -9,6 +9,12 @@ import edu.jhu.cs.bsj.compiler.ast.tags.InterfaceMember;
  *     <i>modifiers typeParams type name</i>(<i>parameter...</i>) throws <i>expr...</i>
  *         <i>body</i>
  * </pre>
+ * Note that the vararg parameter is used in cases where a variable argument is used, such as in
+ * <pre>
+ *     public void foo(String... vararg)
+ * </pre>
+ * The type on the <tt>varargParameter</tt> node should be <tt>String</tt> in the above case (and <i>not</i>
+ * <tt>String[]</tt>).
  */
 public interface MethodDeclarationNode extends Node, ClassMember,  InterfaceMember
 {
@@ -59,6 +65,18 @@ public interface MethodDeclarationNode extends Node, ClassMember,  InterfaceMemb
      * @param parameters The parameters declared by this method.
      */
     public void setParameters(ListNode<? extends VariableNode> parameters);
+
+    /**
+     * Gets the vararg parameter declared by this method.
+     * @return The vararg parameter declared by this method.
+     */
+    public VariableNode getVarargParameter();
+
+    /**
+     * Changes the vararg parameter declared by this method.
+     * @param varargParameter The vararg parameter declared by this method.
+     */
+    public void setVarargParameter(VariableNode varargParameter);
 
     /**
      * Gets the type of value returned.

@@ -538,6 +538,7 @@ MethodDeclarationNode :: Node + ClassMember, InterfaceMember
     modifiers               ModifiersNode                               | the modifiers for this method
     name                    IdentifierNode                              | this method's name
     parameters              ListNode<? extends VariableNode>            | the parameters declared by this method
+    varargParameter         VariableNode                                | the vararg parameter declared by this method
     returnType              TypeNode                                    | the type of value returned
     throwTypes              ListNode<? extends DeclaredTypeNode>        | the types of exceptions thrown by this method
     typeParameters          ListNode<? extends TypeParameterNode>       | this method's applicable type parameters
@@ -547,6 +548,12 @@ MethodDeclarationNode :: Node + ClassMember, InterfaceMember
             <i>modifiers typeParams type name</i>(<i>parameter...</i>) throws <i>expr...</i>
                 <i>body</i>
         </pre>
+        Note that the vararg parameter is used in cases where a variable argument is used, such as in
+        <pre>
+            public void foo(String... vararg)
+        </pre>
+        The type on the <tt>varargParameter</tt> node should be <tt>String</tt> in the above case (and <i>not</i>
+        <tt>String[]</tt>).
 
 ### Body Nodes ########################################################################################################
 

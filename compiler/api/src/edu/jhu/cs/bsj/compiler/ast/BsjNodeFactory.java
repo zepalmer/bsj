@@ -584,6 +584,7 @@ public interface BsjNodeFactory
             ModifiersNode modifiers,
             IdentifierNode name,
             ListNode<? extends VariableNode> parameters,
+            VariableNode varargParameter,
             TypeNode returnType,
             ListNode<? extends DeclaredTypeNode> throwTypes,
             ListNode<? extends TypeParameterNode> typeParameters);
