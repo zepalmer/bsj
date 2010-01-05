@@ -1869,25 +1869,47 @@ inclusiveOrExpression returns [ExpressionNode ret]
         )*
     ;
 
-exclusiveOrExpression //TODO
-    :   e1=andExpression
-        ('^' e2=andExpression
+exclusiveOrExpression returns [ExpressionNode ret]
+    :   
+        e1=andExpression
+        {
+            $ret = $e1.ret;
+        }          
+        (
+            '^' e2=andExpression
+            {
+                $ret = factory.makeBinaryOperatorNode(
+                    $ret, 
+                    $e2.ret, 
+                    BinaryOperator.XOR);
+            }            
         )*
     ;
 
-andExpression //TODO
-    :   equalityExpression
-        ('&' equalityExpression
+andExpression returns [ExpressionNode ret]
+    :   
+        e1=equalityExpression
+        {
+            $ret = $e1.ret;
+        }         
+        (
+            '&' e2=equalityExpression
+            {
+                $ret = factory.makeBinaryOperatorNode(
+                    $ret, 
+                    $e2.ret, 
+                    BinaryOperator.LOGICAL_AND);
+            }              
         )*
     ;
 
-equalityExpression //TODO
-    :   instanceOfExpression
+equalityExpression returns [ExpressionNode ret] //TODO
+    :   e1=instanceOfExpression
         (   
             (   '=='
             |   '!='
             )
-            instanceOfExpression
+            e2=instanceOfExpression
         )*
     ;
 
