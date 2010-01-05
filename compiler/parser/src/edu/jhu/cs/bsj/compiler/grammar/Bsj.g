@@ -1156,8 +1156,8 @@ typeArgument returns [TypeArgument ret]
         }
     ;
 
-// because qualifiedNameList is only ever used in the context of a "throws" clause, it returns an AST_TYPE_LIST?
-// TODO: make sure this is actually okay - the real typeList rule might return differently-typed nodes
+// should this be a ListNode<DeclaredTypeNode>?  Are QualifiedNameNode and DeclaredTypeNode different enough that we can
+// keep them separate?
 qualifiedNameList returns [ListNode<QualifiedNameNode> ret]
         @init {
             List<QualifiedNameNode> list = new ArrayList<QualifiedNameNode>();
@@ -1323,23 +1323,58 @@ annotations returns [ListNode<AnnotationNode> ret]
  * '@' is flagged in modifier
  */
 annotation returns [AnnotationNode ret]//TODO
+        @init {
+            ListNode<AnnotationValueNode> listNode = factory.makeListNode(new ArrayList<AnnotationValueNode>());
+        }
+        @after {
+        }
     :   '@' qualifiedName
-        (   '('   
-                  (   elementValuePairs
-                  |   elementValue
+        (
+            '('   
+                  (
+                      elementValuePairs
+                      {
+                          listNode = $elementValuePairs.ret;
+                      }
+                  |
+                      elementValue
+                      {
+                          // TODO: set listNode to something using elementValue
+                      }
                   )? 
             ')' 
         )?
+        
+        {
+            // TODO: qualifiedName is not a type - is there enough of a difference in how it's used?
+            $ret = factory.makeAnnotationNode($qualifiedName.ret, listNode);
+        }
     ;
 
-elementValuePairs //TODO
-    :   elementValuePair
-        (',' elementValuePair
+elementValuePairs returns [ListNode<AnnotationValueNode> ret]
+        @init {
+            List<AnnotationValueNode> list = new ArrayList<AnnotationValueNode>();
+        }
+        @after {
+            $ret = factory.makeListNode(list);
+        }
+    :
+        elementValuePair
+        {
+            list.add($elementValuePair.ret);
+        }
+        (
+            ','
+            elementValuePair
+            {
+                list.add($elementValuePair.ret);
+            }
         )*
     ;
 
-elementValuePair //TODO
-    :   IDENTIFIER '=' elementValue
+elementValuePair returns [AnnotationValueNode ret] // TODO
+    :
+        IDENTIFIER '=' elementValue
     ;
 
 elementValue //TODO
