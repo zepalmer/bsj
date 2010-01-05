@@ -2013,9 +2013,20 @@ relationalOp returns [BinaryOperator ret]
         }         
     ;
 
-shiftExpression //TODO
-    :   additiveExpression
-        (shiftOp additiveExpression
+shiftExpression returns [ExpressionNode ret]
+    :   
+        e1=additiveExpression
+        {
+            $ret = $e1.ret;
+        }        
+        (
+            op=shiftOp e2=additiveExpression
+            {
+                $ret = factory.makeBinaryOperatorNode(
+                    $ret, 
+                    $e2.ret, 
+                    $op.ret);
+            }            
         )*
     ;
 
