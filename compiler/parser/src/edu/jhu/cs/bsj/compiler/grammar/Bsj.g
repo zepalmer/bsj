@@ -936,6 +936,20 @@ interfaceFieldDeclaration returns [List<FieldDeclarationNode> ret]
         }
     ;
 
+nonprimitiveType returns [TypeNode ret]
+    :
+        classOrInterfaceType
+        {
+            $ret = $classOrInterfaceType.ret;
+        }
+        (
+            arrayTypeIndicator[$ret]
+            {
+                $ret = factory.$ret;
+            }
+        )?
+    ;
+
 type returns [TypeNode ret]
     :   
         (
@@ -1082,19 +1096,34 @@ typeArguments returns [ListNode<TypeArgument> ret]
 //     Foo<? extends Bar>
 // this node would parse
 //     ? extends Bar
-typeArgument returns [TypeArgument ret]//TODO 
+typeArgument returns [TypeArgument ret]
+        @init {
+            boolean upper = false;
+        } 
     :
-        type
+        nonprimitiveType
+        {
+            // All nonprimitive types are potential type arguments.
+            $ret = (TypeArgument)($nonprimitiveType.ret);
+        }
     |   
         '?'
+        {
+            $ret = factory.makeWildcardTypeNode(null, false);
+        }
+    |
+        '?'
         (
-            (
-                'extends'
-            |
-                'super'
-            )
-            type
-        )?
+            'extends' { upper = true; }
+        |
+            'super' { upper = false; }
+        )
+        nonprimitiveType
+        {
+            $ret = factory.makeWildcardTypeNode(
+                        (TypeArgument)($nonprimitiveType.ret),
+                        upper);
+        }
     ;
 
 // because qualifiedNameList is only ever used in the context of a "throws" clause, it returns an AST_TYPE_LIST?

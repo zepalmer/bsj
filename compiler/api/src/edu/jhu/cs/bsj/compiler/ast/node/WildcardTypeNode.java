@@ -5,16 +5,17 @@ import edu.jhu.cs.bsj.compiler.ast.tags.TypeArgument;
 /**
  * A nore for wildcard type parameters, as in:
  * <pre>
- * ?
- * </pre>
- * or
- * <pre>
  * ? extends <i>type</i>
  * </pre>
- * or
+ * (in which case <tt>bound</tt> is non-<tt>null</tt> and <tt>upperBound</tt> is <tt>true</tt>) or
  * <pre>
  * ? super <i>type</i>
  * </pre>
+ * (in which case <tt>bound</tt> is non-<tt>null</tt> and <tt>upperBound</tt> is <tt>false</tt>) or
+ * <pre>
+ * ?
+ * </pre>
+ * (in which case <tt>bound</tt> is <tt>null</tt>).
  */
 public interface WildcardTypeNode extends Node, TypeArgument
 {
