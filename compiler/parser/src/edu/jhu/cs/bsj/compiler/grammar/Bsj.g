@@ -1054,15 +1054,22 @@ qualifiedNameList returns [ListNode<QualifiedNameNode> ret]
         )*
     ;
 
-formalParameters 
+formalParameters returns [ListNode<VariableNode> ret]
     :
         '('
-        (formalParameterDecls
+        (
+            formalParameterDecls
         )? 
         ')'
-        // TODO
-//    ->
-//    	^(AST_FORMAL_PARAMS formalParameterDecls?)
+        {
+            if ($formalParameterDecls == null)
+            {
+                return factory.makeListNode(new ArrayList<VariableNode>());
+            } else
+            {
+                return $formalParameterDecls.ret;
+            }
+        }
     ;
 
 // This rule is expected to produce a list of parameter declarations (multiple results)
