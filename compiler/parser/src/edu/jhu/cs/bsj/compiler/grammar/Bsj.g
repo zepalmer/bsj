@@ -1138,16 +1138,21 @@ formalParameterDecls returns [ListNode<VariableNode> parameters, VariableNode va
         }
     ;
 
-normalParameterDecl //TODO
-    :   variableModifiers type IDENTIFIER
-        ('[' ']'
-        )*
+normalParameterDecl returns [VariableNode ret]
+    :
+        mod=variableModifiers t=type id=IDENTIFIER
+        t=arrayTypeIndicator[$t.ret]
+        {
+            $ret = factory.makeVariableNode($mod.ret, $t.ret, factory.makeIdentifierNode($id.text));
+        }
     ;
 
-ellipsisParameterDecl //TODO
-    :   variableModifiers
-        type  '...'
-        IDENTIFIER
+ellipsisParameterDecl returns [VariableNode ret]
+    :
+        mod=variableModifiers t=type  '...' id=IDENTIFIER
+        {
+            $ret = factory.makeVariableNode($mod.ret, $t.ret, factory.makeIdentifierNode($id.text));
+        }
     ;
 
 
