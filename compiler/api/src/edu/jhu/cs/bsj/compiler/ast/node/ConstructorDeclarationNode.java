@@ -8,6 +8,7 @@ import edu.jhu.cs.bsj.compiler.ast.tags.ClassMember;
  *     <i>modifiers typeParams typeName</i>(<i>parameter...</i>) throws <i>expr...</i>
  *         <i>body</i>
  * </pre>
+ * See {@link MethodDeclarationNode} for more information.
  */
 public interface ConstructorDeclarationNode extends Node, ClassMember
 {
@@ -15,13 +16,13 @@ public interface ConstructorDeclarationNode extends Node, ClassMember
      * Gets the body of this constructor.
      * @return The body of this constructor.
      */
-    public BlockStatementNode getBody();
+    public ConstructorBodyNode getBody();
 
     /**
      * Changes the body of this constructor.
      * @param body The body of this constructor.
      */
-    public void setBody(BlockStatementNode body);
+    public void setBody(ConstructorBodyNode body);
 
     /**
      * Gets the modifiers for this constructor.
@@ -46,6 +47,18 @@ public interface ConstructorDeclarationNode extends Node, ClassMember
      * @param parameters The parameters declared by this constructor.
      */
     public void setParameters(ListNode<? extends VariableNode> parameters);
+
+    /**
+     * Gets the vararg parameter declared by this method.
+     * @return The vararg parameter declared by this method.
+     */
+    public VariableNode getVarargParameter();
+
+    /**
+     * Changes the vararg parameter declared by this method.
+     * @param varargParameter The vararg parameter declared by this method.
+     */
+    public void setVarargParameter(VariableNode varargParameter);
 
     /**
      * Gets the types of exceptions thrown by this constructor.

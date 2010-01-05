@@ -1,7 +1,7 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
-import edu.jhu.cs.bsj.compiler.ast.node.BlockStatementNode;
+import edu.jhu.cs.bsj.compiler.ast.node.ConstructorBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ConstructorDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.DeclaredTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
@@ -12,13 +12,16 @@ import edu.jhu.cs.bsj.compiler.ast.node.VariableNode;
 public class ConstructorDeclarationNodeImpl extends NodeImpl implements ConstructorDeclarationNode
 {
     /** The body of this constructor. */
-    private BlockStatementNode body;
+    private ConstructorBodyNode body;
 
     /** The modifiers for this constructor. */
     private ModifiersNode modifiers;
 
     /** The parameters declared by this constructor. */
     private ListNode<? extends VariableNode> parameters;
+
+    /** The vararg parameter declared by this method. */
+    private VariableNode varargParameter;
 
     /** The types of exceptions thrown by this constructor. */
     private ListNode<? extends DeclaredTypeNode> throwTypes;
@@ -28,9 +31,10 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
 
     /** General constructor. */
     public ConstructorDeclarationNodeImpl(
-            BlockStatementNode body,
+            ConstructorBodyNode body,
             ModifiersNode modifiers,
             ListNode<? extends VariableNode> parameters,
+            VariableNode varargParameter,
             ListNode<? extends DeclaredTypeNode> throwTypes,
             ListNode<? extends TypeParameterNode> typeParameters)
     {
@@ -38,6 +42,7 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
         this.body = body;
         this.modifiers = modifiers;
         this.parameters = parameters;
+        this.varargParameter = varargParameter;
         this.throwTypes = throwTypes;
         this.typeParameters = typeParameters;
     }
@@ -46,7 +51,7 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
      * Gets the body of this constructor.
      * @return The body of this constructor.
      */
-    public BlockStatementNode getBody()
+    public ConstructorBodyNode getBody()
     {
         return this.body;
     }
@@ -55,7 +60,7 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
      * Changes the body of this constructor.
      * @param body The body of this constructor.
      */
-    public void setBody(BlockStatementNode body)
+    public void setBody(ConstructorBodyNode body)
     {
         if (this.body instanceof NodeImpl)
         {
@@ -117,6 +122,32 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
         if (this.parameters instanceof NodeImpl)
         {
             ((NodeImpl)this.parameters).setParent(this);
+        }
+    }
+
+    /**
+     * Gets the vararg parameter declared by this method.
+     * @return The vararg parameter declared by this method.
+     */
+    public VariableNode getVarargParameter()
+    {
+        return this.varargParameter;
+    }
+
+    /**
+     * Changes the vararg parameter declared by this method.
+     * @param varargParameter The vararg parameter declared by this method.
+     */
+    public void setVarargParameter(VariableNode varargParameter)
+    {
+        if (this.varargParameter instanceof NodeImpl)
+        {
+            ((NodeImpl)this.varargParameter).setParent(null);
+        }
+        this.varargParameter = varargParameter;
+        if (this.varargParameter instanceof NodeImpl)
+        {
+            ((NodeImpl)this.varargParameter).setParent(this);
         }
     }
 
@@ -186,6 +217,7 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
         this.body.receive(visitor);
         this.modifiers.receive(visitor);
         this.parameters.receive(visitor);
+        this.varargParameter.receive(visitor);
         this.throwTypes.receive(visitor);
         this.typeParameters.receive(visitor);
     }

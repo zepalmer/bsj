@@ -8,7 +8,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.ModifiersNode;
 
 public class AnnotationDeclarationNodeImpl extends TypeDeclarationNodeImpl implements AnnotationDeclarationNode
 {
-    /** This annotation's mbody. */
+    /** This annotation's body. */
     private AnnotationBodyNode body;
 
     /** General constructor. */
@@ -22,8 +22,8 @@ public class AnnotationDeclarationNodeImpl extends TypeDeclarationNodeImpl imple
     }
 
     /**
-     * Gets this annotation's mbody.
-     * @return This annotation's mbody.
+     * Gets this annotation's body.
+     * @return This annotation's body.
      */
     public AnnotationBodyNode getBody()
     {
@@ -31,8 +31,8 @@ public class AnnotationDeclarationNodeImpl extends TypeDeclarationNodeImpl imple
     }
 
     /**
-     * Changes this annotation's mbody.
-     * @param body This annotation's mbody.
+     * Changes this annotation's body.
+     * @param body This annotation's body.
      */
     public void setBody(AnnotationBodyNode body)
     {

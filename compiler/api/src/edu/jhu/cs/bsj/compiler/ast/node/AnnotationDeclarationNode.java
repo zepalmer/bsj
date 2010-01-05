@@ -14,14 +14,14 @@ package edu.jhu.cs.bsj.compiler.ast.node;
 public interface AnnotationDeclarationNode extends TypeDeclarationNode
 {
     /**
-     * Gets this annotation's mbody.
-     * @return This annotation's mbody.
+     * Gets this annotation's body.
+     * @return This annotation's body.
      */
     public AnnotationBodyNode getBody();
 
     /**
-     * Changes this annotation's mbody.
-     * @param body This annotation's mbody.
+     * Changes this annotation's body.
+     * @param body This annotation's body.
      */
     public void setBody(AnnotationBodyNode body);
 

@@ -9,6 +9,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 import edu.jhu.cs.bsj.compiler.ast.Modifier;
 import edu.jhu.cs.bsj.compiler.ast.PrimitiveType;
 import edu.jhu.cs.bsj.compiler.ast.UnaryOperator;
+import edu.jhu.cs.bsj.compiler.ast.node.AlternateConstructorInvocationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationMethodDeclarationNode;
@@ -31,7 +32,9 @@ import edu.jhu.cs.bsj.compiler.ast.node.ClassInstantiationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
 import edu.jhu.cs.bsj.compiler.ast.node.CompoundAssignmentNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ConditionalExpressionNode;
+import edu.jhu.cs.bsj.compiler.ast.node.ConstructorBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ConstructorDeclarationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.ConstructorInvocationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ContinueNode;
 import edu.jhu.cs.bsj.compiler.ast.node.DeclaredTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.DoWhileLoopNode;
@@ -68,6 +71,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.PrimitiveTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.QualifiedNameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.StatementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.StringLiteralNode;
+import edu.jhu.cs.bsj.compiler.ast.node.SuperclassConstructorInvocationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.SwitchNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ThrowNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TryNode;
@@ -89,6 +93,7 @@ import edu.jhu.cs.bsj.compiler.ast.tags.ClassMember;
 import edu.jhu.cs.bsj.compiler.ast.tags.InterfaceMember;
 import edu.jhu.cs.bsj.compiler.ast.tags.ParameterizableType;
 import edu.jhu.cs.bsj.compiler.ast.tags.TypeArgument;
+import edu.jhu.cs.bsj.compiler.impl.ast.node.AlternateConstructorInvocationNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.AnnotationBodyNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.AnnotationDeclarationNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.AnnotationMethodDeclarationNodeImpl;
@@ -111,6 +116,7 @@ import edu.jhu.cs.bsj.compiler.impl.ast.node.ClassInstantiationNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.CompilationUnitNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.CompoundAssignmentNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.ConditionalExpressionNodeImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.node.ConstructorBodyNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.ConstructorDeclarationNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.ContinueNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.DeclaredTypeNodeImpl;
@@ -144,6 +150,7 @@ import edu.jhu.cs.bsj.compiler.impl.ast.node.ParameterizedTypeNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.PrimitiveTypeNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.QualifiedNameNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.StringLiteralNodeImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.node.SuperclassConstructorInvocationNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.SwitchNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.ThrowNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.TryNodeImpl;
@@ -375,6 +382,18 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
 
     /**
+     * Creates a SuperclassConstructorInvocationNode.
+     */
+    public SuperclassConstructorInvocationNode makeSuperclassConstructorInvocationNode(
+            ExpressionNode qualifyingExpression,
+            ListNode<? extends ExpressionNode> arguments,
+            ListNode<? extends TypeNode> typeArguments)
+    {
+        SuperclassConstructorInvocationNode ret = new SuperclassConstructorInvocationNodeImpl(qualifyingExpression, arguments, typeArguments);
+        return ret;
+    }
+
+    /**
      * Creates a PrimitiveTypeNode.
      */
     public PrimitiveTypeNode makePrimitiveTypeNode(
@@ -450,6 +469,17 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
 
     /**
+     * Creates a AlternateConstructorInvocationNode.
+     */
+    public AlternateConstructorInvocationNode makeAlternateConstructorInvocationNode(
+            ListNode<? extends ExpressionNode> arguments,
+            ListNode<? extends TypeNode> typeArguments)
+    {
+        AlternateConstructorInvocationNode ret = new AlternateConstructorInvocationNodeImpl(arguments, typeArguments);
+        return ret;
+    }
+
+    /**
      * Creates a TryNode.
      */
     public TryNode makeTryNode(
@@ -465,13 +495,14 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      * Creates a ConstructorDeclarationNode.
      */
     public ConstructorDeclarationNode makeConstructorDeclarationNode(
-            BlockStatementNode body,
+            ConstructorBodyNode body,
             ModifiersNode modifiers,
             ListNode<? extends VariableNode> parameters,
+            VariableNode varargParameter,
             ListNode<? extends DeclaredTypeNode> throwTypes,
             ListNode<? extends TypeParameterNode> typeParameters)
     {
-        ConstructorDeclarationNode ret = new ConstructorDeclarationNodeImpl(body, modifiers, parameters, throwTypes, typeParameters);
+        ConstructorDeclarationNode ret = new ConstructorDeclarationNodeImpl(body, modifiers, parameters, varargParameter, throwTypes, typeParameters);
         return ret;
     }
 
@@ -837,6 +868,17 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ListNode<? extends AnnotationNode> annotations)
     {
         PackageDeclarationNode ret = new PackageDeclarationNodeImpl(name, annotations);
+        return ret;
+    }
+
+    /**
+     * Creates a ConstructorBodyNode.
+     */
+    public ConstructorBodyNode makeConstructorBodyNode(
+            ConstructorInvocationNode constructorInvocation,
+            ListNode<? extends StatementNode> statements)
+    {
+        ConstructorBodyNode ret = new ConstructorBodyNodeImpl(constructorInvocation, statements);
         return ret;
     }
 

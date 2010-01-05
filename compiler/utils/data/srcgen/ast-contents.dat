@@ -495,9 +495,10 @@ AnnotationMethodDeclarationNode :: Node + AnnotationMember
 
 ConstructorDeclarationNode :: Node + ClassMember
     @props
-    body                    BlockStatementNode                          | the body of this constructor
+    body                    ConstructorBodyNode                         | the body of this constructor
     modifiers               ModifiersNode                               | the modifiers for this constructor
     parameters              ListNode<? extends VariableNode>            | the parameters declared by this constructor
+    varargParameter         VariableNode                                | the vararg parameter declared by this method
     throwTypes              ListNode<? extends DeclaredTypeNode>        | the types of exceptions thrown by this constructor
     typeParameters          ListNode<? extends TypeParameterNode>       | this constructor's applicable type parameters
     @docs
@@ -506,6 +507,7 @@ ConstructorDeclarationNode :: Node + ClassMember
             <i>modifiers typeParams typeName</i>(<i>parameter...</i>) throws <i>expr...</i>
                 <i>body</i>
         </pre>
+        See {@link MethodDeclarationNode} for more information.
 
 EnumConstantDeclarationNode :: Node
     @props
@@ -555,7 +557,7 @@ MethodDeclarationNode :: Node + ClassMember, InterfaceMember
         The type on the <tt>varargParameter</tt> node should be <tt>String</tt> in the above case (and <i>not</i>
         <tt>String[]</tt>).
 
-### Body Nodes ########################################################################################################
+### Type Body Nodes ####################################################################################################
 
 AnnotationBodyNode :: Node
     @props
@@ -586,7 +588,7 @@ InterfaceBodyNode :: Node
 
 AnnotationDeclarationNode :: TypeDeclarationNode
     @props
-    body                    AnnotationBodyNode                          | this annotation's mbody
+    body                    AnnotationBodyNode                          | this annotation's body
     @docs
         Represents the declaration of an annotation, as in:
         <pre>
@@ -655,6 +657,15 @@ VoidTypeDeclarationNode :: TypeDeclarationNode
 
 ### Base Nodes ########################################################################################################
 
+AlternateConstructorInvocationNode :: ConstructorInvocationNode
+    @docs
+        Represents an alternate constructor invocation, as in
+        <pre>
+        this("foo")
+        </pre>
+        Note that this only applies to <i>alternate</i> constructor invocations (those using the <tt>this</tt> keyword).
+        For superclass constructor invocations, see {@link SuperclassConstructorInvocationNode}.
+
 CaseNode :: Node
     @props
     expression              ExpressionNode                              | the expression used in this case label
@@ -693,6 +704,35 @@ CompilationUnitNode :: Node
     @docs
         Represents a BSJ compilation unit.
     # TODO: do we want sourceFile of type JavaFileObject here or something similar?
+
+ConstructorBodyNode :: Node
+    @props
+    constructorInvocation   ConstructorInvocationNode                   | the (nullable) constructor invocation
+    statements              ListNode<? extends StatementNode>           | the statements contained in this constructor
+    @docs
+        Represents a constructor body.  For example, in
+        <pre>
+        public MyClass()
+        {
+            super();
+            this.foo = 0;
+        }
+        </pre>
+        this node would represent all but the first line.  Observe that this structure enforces the Java language rule
+        that there be exactly one explicit constructor invocation and that it appears at the top of the constructor
+        body.
+
+# TODO: the language specification says that the type nodes in the list can't be wild - can we type-encode this?
+ConstructorInvocationNode* :: Node
+    @props
+    arguments               ListNode<? extends ExpressionNode>          | the arguments to pass to the method
+    typeArguments           ListNode<? extends TypeNode>                | the type arguments for the method
+    @docs
+        This class is a common superclass to both types of explicit constructor invocations: alternate constructor
+        invocations (those using the <tt>this</tt> keyword) and superclass constructor invocations (those using the
+        <tt>super</tt> keyword).  This distinction is made because, despite their similarities in use and syntax, the
+        language specification treats these two entities as distinct (and there are some corner cases for the superclass
+        constructor syntax which are best contained
 
 ExpressionNode* :: Node
     @docs
@@ -747,6 +787,21 @@ PackageDeclarationNode :: Node
             <i>annotations</i>
             package <i>packageName</i>;
         </pre>
+
+SuperclassConstructorInvocationNode :: ConstructorInvocationNode
+    @props
+    qualifyingExpression    ExpressionNode                              | the qualifying expression for the enclosing object
+    @docs
+        Represents an alternate constructor invocation, as in
+        <pre>
+        super("foo")
+        </pre>
+        or in the rarer syntax
+        <pre>
+        (new Foo()).super(0)
+        </pre>
+        .  Note that this only applies to <i>superclass</i> constructor invocations (those using the <tt>super</tt>
+        keyword).  For alternate constructor invocations, see {@link AlternateConstructorInvocationNode}.
 
 VariableNode :: Node
     @props

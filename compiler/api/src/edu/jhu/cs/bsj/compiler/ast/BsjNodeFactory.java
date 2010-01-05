@@ -3,6 +3,7 @@ package edu.jhu.cs.bsj.compiler.ast;
 import java.util.List;
 import java.util.Set;
 
+import edu.jhu.cs.bsj.compiler.ast.node.AlternateConstructorInvocationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationMethodDeclarationNode;
@@ -25,7 +26,9 @@ import edu.jhu.cs.bsj.compiler.ast.node.ClassInstantiationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
 import edu.jhu.cs.bsj.compiler.ast.node.CompoundAssignmentNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ConditionalExpressionNode;
+import edu.jhu.cs.bsj.compiler.ast.node.ConstructorBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ConstructorDeclarationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.ConstructorInvocationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ContinueNode;
 import edu.jhu.cs.bsj.compiler.ast.node.DeclaredTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.DoWhileLoopNode;
@@ -62,6 +65,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.PrimitiveTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.QualifiedNameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.StatementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.StringLiteralNode;
+import edu.jhu.cs.bsj.compiler.ast.node.SuperclassConstructorInvocationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.SwitchNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ThrowNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TryNode;
@@ -227,6 +231,14 @@ public interface BsjNodeFactory
             boolean upperBound);
 
     /**
+     * Creates a SuperclassConstructorInvocationNode.
+     */
+    public SuperclassConstructorInvocationNode makeSuperclassConstructorInvocationNode(
+            ExpressionNode qualifyingExpression,
+            ListNode<? extends ExpressionNode> arguments,
+            ListNode<? extends TypeNode> typeArguments);
+
+    /**
      * Creates a PrimitiveTypeNode.
      */
     public PrimitiveTypeNode makePrimitiveTypeNode(
@@ -274,6 +286,13 @@ public interface BsjNodeFactory
             ExpressionNode expression);
 
     /**
+     * Creates a AlternateConstructorInvocationNode.
+     */
+    public AlternateConstructorInvocationNode makeAlternateConstructorInvocationNode(
+            ListNode<? extends ExpressionNode> arguments,
+            ListNode<? extends TypeNode> typeArguments);
+
+    /**
      * Creates a TryNode.
      */
     public TryNode makeTryNode(
@@ -285,9 +304,10 @@ public interface BsjNodeFactory
      * Creates a ConstructorDeclarationNode.
      */
     public ConstructorDeclarationNode makeConstructorDeclarationNode(
-            BlockStatementNode body,
+            ConstructorBodyNode body,
             ModifiersNode modifiers,
             ListNode<? extends VariableNode> parameters,
+            VariableNode varargParameter,
             ListNode<? extends DeclaredTypeNode> throwTypes,
             ListNode<? extends TypeParameterNode> typeParameters);
 
@@ -527,6 +547,13 @@ public interface BsjNodeFactory
     public PackageDeclarationNode makePackageDeclarationNode(
             QualifiedNameNode name,
             ListNode<? extends AnnotationNode> annotations);
+
+    /**
+     * Creates a ConstructorBodyNode.
+     */
+    public ConstructorBodyNode makeConstructorBodyNode(
+            ConstructorInvocationNode constructorInvocation,
+            ListNode<? extends StatementNode> statements);
 
     /**
      * Creates a AnnotationDeclarationNode.
