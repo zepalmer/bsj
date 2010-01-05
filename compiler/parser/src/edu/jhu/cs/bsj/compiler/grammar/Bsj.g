@@ -1198,7 +1198,7 @@ annotations returns [ListNode<AnnotationNode> ret]
  *  Using an annotation. 
  * '@' is flagged in modifier
  */
-annotation //TODO
+annotation returns [AnnotationNode ret]//TODO
     :   '@' qualifiedName
         (   '('   
                   (   elementValuePairs
@@ -1236,11 +1236,18 @@ elementValueArrayInitializer //TODO
 /**
  * Annotation declaration.
  */
-annotationTypeDeclaration //TODO
-    :   modifiers[interfaceModifiers] '@'
+annotationTypeDeclaration returns [AnnotationDeclarationNode ret]
+    :   
+        modifiers[interfaceModifiers] '@'
         'interface'
-        IDENTIFIER
+        id=IDENTIFIER
         annotationTypeBody
+        {
+            $ret = factory.makeAnnotationDeclarationNode(
+                $annotationTypeBody.ret,
+                factory.makeIdentifierNode($id.text),
+                $modifiers.ret);
+        }
     ;
 
 
