@@ -1051,7 +1051,7 @@ primitiveType returns [PrimitiveTypeNode ret]
 
 // Parses type arguments for a declared type.
 // For example, in
-//     Map.Entry<K,V>
+//     Map.Entry<K,V> entry;
 // this node would parse
 //     <K,V>
 typeArguments returns [ListNode<TypeArgument> ret]
@@ -1075,6 +1075,13 @@ typeArguments returns [ListNode<TypeArgument> ret]
         '>'
     ;
 
+// Parses a single type argument for a declared type.
+// For example, in
+//     Map.Entry<K,V> entry;
+// this node would parse either K or V.  Also, in
+//     Foo<? extends Bar>
+// this node would parse
+//     ? extends Bar
 typeArgument returns [TypeArgument ret]//TODO 
     :
         type
@@ -1330,13 +1337,14 @@ annotationMethodDeclaration returns [AnnotationMethodDeclarationNode ret]
         ;
 
 block returns [BlockStatementNode ret]
-    @init {
-            List<StatementNode> list = new ArrayList<StatementNode>();
-    }
-    @after {
-            $ret = factory.makeBlockStatementNode(list);
-    }
-    :   '{'
+	    @init {
+	            List<StatementNode> list = new ArrayList<StatementNode>();
+	    }
+	    @after {
+	            $ret = factory.makeBlockStatementNode(list);
+	    }
+    :   
+        '{'
         (blockStatement
             {
                 list.add($blockStatement.ret);
