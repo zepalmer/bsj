@@ -1178,8 +1178,19 @@ qualifiedName
         // TODO
     ;
 
-annotations //TODO
-    :   (annotation
+annotations [ListNode<AnnotationNode> ret]
+	    @init {
+	            List<AnnotationNode> list = new ArrayList<AnnotationNode>();
+	    }
+	    @after {
+	            $ret = factory.makeListNode(list);
+	    }
+    :   
+        (
+	        annotation
+	        {
+	            list.add($annotation.ret);
+	        }
         )+
     ;
 
