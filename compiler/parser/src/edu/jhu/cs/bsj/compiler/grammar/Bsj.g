@@ -1003,6 +1003,11 @@ primitiveType returns [PrimitiveTypeNode ret]
     	}    
     ;
 
+// Parses type arguments for a declared type.
+// For example, in
+//     Map.Entry<K,V>
+// this node would parse
+//     <K,V>
 typeArguments returns [ListNode<TypeArgument> ret]
     @init {
         List<TypeArgument> list = new ArrayList<TypeArgument>();
