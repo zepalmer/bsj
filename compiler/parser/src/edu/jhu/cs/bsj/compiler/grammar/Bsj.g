@@ -1522,19 +1522,67 @@ expression returns [ExpressionNode ret] //TODO
     ;
 
 
-assignmentOperator //TODO
-    :   '='
-    |   '+='
-    |   '-='
-    |   '*='
-    |   '/='
-    |   '&='
-    |   '|='
-    |   '^='
-    |   '%='
-    |    '<' '<' '='
-    |    '>' '>' '>' '='
-    |    '>' '>' '='
+assignmentOperator [AssignmentOperator ret]
+    :   
+        '='
+        {
+            $ret = AssignmentOperator.ASSIGNMENT;
+        }
+    |   
+        '+='
+        {
+            $ret = AssignmentOperator.PLUS_ASSIGNMENT;
+        }        
+    |   
+        '-='
+        {
+            $ret = AssignmentOperator.MINUS_ASSIGNMENT;
+        }    
+    |   
+        '*='
+        {
+            $ret = AssignmentOperator.MULTIPLY_ASSIGNMENT;
+        }        
+    |   
+        '/='
+        {
+            $ret = AssignmentOperator.DIVIDE_ASSIGNMENT;
+        }        
+    |   
+        '&='
+        {
+            $ret = AssignmentOperator.AND_ASSIGNMENT;
+        }
+    |   
+        '|='
+        {
+            $ret = AssignmentOperator.OR_ASSIGNMENT;
+        }        
+    |   
+        '^='
+        {
+            $ret = AssignmentOperator.XOR_ASSIGNMENT;
+        }        
+    |   
+        '%='
+        {
+            $ret = AssignmentOperator.MODULUS_ASSIGNMENT;
+        }        
+    |   
+        '<' '<' '='
+        {
+            $ret = AssignmentOperator.LEFT_SHIFT_ASSIGNMENT;
+        }    
+    |    
+        '>' '>' '>' '='
+        {
+            $ret = AssignmentOperator.RIGHT_SHIFT_ASSIGNMENT;
+        }        
+    |   
+        '>' '>' '='
+        {
+            $ret = AssignmentOperator.UNSIGNED_RIGHT_SHIFT_ASSIGNMENT;
+        }         
     ;
 
 
