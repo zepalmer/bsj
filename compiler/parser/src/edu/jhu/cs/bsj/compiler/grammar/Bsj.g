@@ -1042,7 +1042,7 @@ typeArguments returns [ListNode<TypeArgument> ret]
         '>'
     ;
 
-typeArgument //TODO 
+typeArgument returns [TypeArgument ret]//TODO 
     :
         type
     |   
