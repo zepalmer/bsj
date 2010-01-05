@@ -1528,21 +1528,24 @@ formalParameter //TODO
         )*
     ;
 
-//TODO resolve AST_VARIABLE stuff
 forstatement returns [StatementNode ret]
     :   
         // enhanced for loop
-        'for' '(' variableModifiers type IDENTIFIER ':' 
+        'for' '(' variableModifiers type id=IDENTIFIER ':' 
         expression ')' statement
-        // TODO
-//    ->
-//      ^(AST_FOR_LOOP_ENHANCED
-//          ^(AST_VARIABLE IDENTIFIER type)
-//          expression
-//          statement
-//      )   
+        {
+            $ret = factory.makeEnhancedForLoopNode(
+                factory.makeVariableNode(
+                  $variableModifiers.ret, 
+                  $type.ret,
+                  factory.makeIdentifierNode($id.text)),
+                $expression.ret,
+                $statement.ret);
+        }
+        
+    |   
         // normal for loop
-    |   'for' '(' 
+        'for' '(' 
                 (forInit
                 )? ';' 
                 (expression
