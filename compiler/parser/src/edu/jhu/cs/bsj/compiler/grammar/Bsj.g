@@ -2063,7 +2063,7 @@ typeHeader //TODO
     ;
 
 methodHeader //TODO
-    :   modifiers typeParameters? (type|'void')? IDENTIFIER '('
+    :   modifiers[methodModifiers] typeParameters? (type|'void')? IDENTIFIER '('
     ;
 
 fieldHeader //TODO
