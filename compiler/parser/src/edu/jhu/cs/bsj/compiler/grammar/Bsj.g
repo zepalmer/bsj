@@ -1003,14 +1003,24 @@ primitiveType returns [PrimitiveTypeNode ret]
     	}    
     ;
 
-typeArguments 
-    :   '<' typeArgument
-        (',' typeArgument
+typeArguments returns [ListNode<TypeArgument> ret]
+    @init {
+        List<TypeArgument> list = new ArrayList<TypeArgument>();
+    }
+    @after {
+        $ret = factory.<TypeArgument>makeListNode(list);
+    }
+    :   '<' a=typeArgument
+        {
+            list.add($a.ret);
+        }
+        (
+            ',' b=typeArgument
+            {
+                list.add($b.ret);
+            }
         )* 
         '>'
-        // TODO
-//    ->
-//        ^(AST_TYPEARG_LIST typeArgument+)
     ;
 
 typeArgument 
