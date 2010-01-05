@@ -1541,8 +1541,7 @@ forstatement returns [StatementNode ret]
                   factory.makeIdentifierNode($id.text)),
                 $expression.ret,
                 $statement.ret);
-        }
-        
+        }        
     |   
         // normal for loop
         'for' '(' 
