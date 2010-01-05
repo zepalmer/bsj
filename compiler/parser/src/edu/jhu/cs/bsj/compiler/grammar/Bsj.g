@@ -212,9 +212,9 @@ tokens {
 // indicators, an in/out type is also required.  This construct is necessary on its own to support the multiple
 // declaration sugar ("int x,y;").
 variableDeclarator[TypeNode inType] returns [IdentifierNode identifier, ExpressionNode initializer, TypeNode type]
-    @init {
-        $type = $inType;
-    }
+	    @init {
+	        $type = $inType;
+	    }
     :
         id=IDENTIFIER
         (
@@ -235,9 +235,9 @@ variableDeclarator[TypeNode inType] returns [IdentifierNode identifier, Expressi
 // Represents the declaration of an array type over a normal type.  This construct only handles the parsing of the []
 // symbols and the modification of a type.
 arrayTypeIndicator[TypeNode inType] returns [TypeNode ret]
-    @init {
-        $ret = $inType;
-    }
+	    @init {
+	        $ret = $inType;
+	    }
     :
         (
             '[' ']'
@@ -250,11 +250,11 @@ arrayTypeIndicator[TypeNode inType] returns [TypeNode ret]
 // Represents an abstraction for field declarations which allows legal modifiers to be specified (to differentiate
 // between interface and class fields).
 abstractFieldDeclaration[List<Modifier> legalModifiers] returns [List<FieldDeclarationNode> ret]
-    @init {
-        $ret = new ArrayList<FieldDeclarationNode>();
-    }
-    @after {
-    }
+	    @init {
+	        $ret = new ArrayList<FieldDeclarationNode>();
+	    }
+	    @after {
+	    }
     :   
         modifiers[legalModifiers]
         type
@@ -324,7 +324,8 @@ importDeclarations returns [ListNode<ImportNode> ret]
     ;
 
 importDeclaration returns [ImportNode ret]
-    :   'import' 
+    :   
+        'import' 
         (staticImport='static')?
         id=IDENTIFIER '.' '*' ';'
         {
@@ -526,13 +527,14 @@ normalClassDeclaration returns [ClassDeclarationNode ret]
 
 
 typeParameters returns [ListNode<TypeParameterNode> ret]
-    @init {
-            List<TypeParameterNode> list = new ArrayList<TypeParameterNode>();
-    }
-    @after {
-            $ret = factory.<TypeParameterNode>makeListNode(list);
-    }
-    :   '<'
+	    @init {
+	            List<TypeParameterNode> list = new ArrayList<TypeParameterNode>();
+	    }
+	    @after {
+	            $ret = factory.<TypeParameterNode>makeListNode(list);
+	    }
+    :   
+        '<'
             a=typeParameter
             {
                 list.add($a.ret);
@@ -547,7 +549,8 @@ typeParameters returns [ListNode<TypeParameterNode> ret]
 
 
 typeParameter returns [TypeParameterNode ret]
-    :   id=IDENTIFIER
+    :   
+        id=IDENTIFIER
         ('extends' typeBound)?
         {
             $ret = factory.makeTypeParameterNode(
@@ -558,13 +561,14 @@ typeParameter returns [TypeParameterNode ret]
 
 
 typeBound returns [ListNode<BoundType> ret]
-    @init {
-        List<BoundType> list = new ArrayList<BoundType>();
-    }
-    @after {
-        $ret = factory.makeListNode(list);
-    }
-    :   a=classOrInterfaceType
+	    @init {
+	        List<BoundType> list = new ArrayList<BoundType>();
+	    }
+	    @after {
+	        $ret = factory.makeListNode(list);
+	    }
+    :   
+        a=classOrInterfaceType
         {
             list.add($a.ret);
         }
@@ -578,7 +582,8 @@ typeBound returns [ListNode<BoundType> ret]
 
 
 enumDeclaration returns [EnumDeclarationNode ret]
-    :   modifiers[classModifiers]
+    :   
+        modifiers[classModifiers]
         'enum' 
         id=IDENTIFIER
         ('implements' typeList)?
@@ -594,7 +599,8 @@ enumDeclaration returns [EnumDeclarationNode ret]
 
 
 enumBody returns [EnumBodyNode ret]
-    :   '{'
+    :   
+        '{'
         enumConstants? 
         ','? 
         enumBodyDeclarations?
@@ -719,14 +725,16 @@ typeList returns [ListNode<TypeNode> ret]
     ;
 
 classBody returns [ClassBodyNode ret]
-    @init {
-            List<ClassMember> list = new ArrayList<ClassMember>();
-    }
-    @after {
-            $ret = factory.makeClassBodyNode(list);
-    }
-    :   '{' 
-        (classBodyDeclaration
+	    @init {
+	            List<ClassMember> list = new ArrayList<ClassMember>();
+	    }
+	    @after {
+	            $ret = factory.makeClassBodyNode(list);
+	    }
+    :   
+        '{' 
+        (
+            classBodyDeclaration
             {
                 list.add($classBodyDeclaration.ret);
             }
@@ -741,8 +749,10 @@ interfaceBody returns [InterfaceBodyNode ret]
         @after {
                 $ret = factory.makeInterfaceBodyNode(list);
         }
-    :   '{' 
-        (interfaceBodyDeclaration
+    :   
+        '{' 
+        (
+            interfaceBodyDeclaration
             {
                 list.add($interfaceBodyDeclaration.ret);
             }        
@@ -853,7 +863,7 @@ methodDeclaration returns [MethodDeclarationNode ret]
         )
         {
             $ret = factory.makeMethodDeclarationNode(
-                    $block.ret,
+                    $block.ret, // TODO: what if ';'?
                     $modifiers.ret,
                     factory.makeIdentifierNode($id.text),
                     $formalParameters.ret,
@@ -1135,11 +1145,13 @@ qualifiedNameList returns [ListNode<QualifiedNameNode> ret]
         @after {
             $ret = factory.<QualifiedNameNode>makeListNode(list);
         }
-    :   a=qualifiedName
+    :   
+        a=qualifiedName
             {
                 list.add($a.ret);
             }    
-        (',' b=qualifiedName
+        (
+            ',' b=qualifiedName
             {
                 list.add($b.ret);
             }
@@ -1339,18 +1351,19 @@ annotationTypeDeclaration returns [AnnotationDeclarationNode ret]
 
 
 annotationTypeBody returns [AnnotationBodyNode ret]
-    @init {
-            List<AnnotationMember> list = new ArrayList<AnnotationMember>();
-    }
-    @after {
-            $ret = factory.makeAnnotationBodyNode(factory.makeListNode(list));
-    }
+	    @init {
+	            List<AnnotationMember> list = new ArrayList<AnnotationMember>();
+	    }
+	    @after {
+	            $ret = factory.makeAnnotationBodyNode(factory.makeListNode(list));
+	    }
     :   
         '{' 
-        (annotationTypeElementDeclaration
-        {
-            list.add($annotationTypeElementDeclaration.ret);
-        }
+        (
+            annotationTypeElementDeclaration
+	        {
+	            list.add($annotationTypeElementDeclaration.ret);
+	        }
         )* 
         '}'
     ;
@@ -1371,8 +1384,8 @@ annotationTypeElementDeclaration //TODO
 annotationMethodDeclaration returns [AnnotationMethodDeclarationNode ret]
     :   
         modifiers[interfaceModifiers] type id=IDENTIFIER
-        '(' ')' ('default' elementValue
-                )?
+        '(' ')'
+        ('default' elementValue)?
         ';'
         {
             $ret = factory.makeAnnotationMethodDeclarationNode(
