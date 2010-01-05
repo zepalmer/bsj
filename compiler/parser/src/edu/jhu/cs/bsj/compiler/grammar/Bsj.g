@@ -1398,8 +1398,8 @@ localVariableDeclaration //TODO
 
 //TODO in progress
 statement returns [StatementNode ret]
-    :   block
-            
+    :   
+        block            
     |   
         ('assert') e1=expression (':' e2=expression)? ';'
         {
