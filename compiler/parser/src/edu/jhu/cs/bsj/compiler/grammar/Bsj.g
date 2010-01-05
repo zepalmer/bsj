@@ -960,6 +960,14 @@ nonprimitiveType returns [TypeNode ret]
         )?
     ;
 
+// This rule matches any legal Java type.
+// For example, this rule would match any of the following:
+//     int
+//     boolean[]
+//     String
+//     Comparator<String>
+//     Map.Entry<K,V>
+//     List<String>[] (even though this generates a warning later)
 type returns [TypeNode ret]
     :   
         (
@@ -1009,6 +1017,13 @@ unqualifiedClassOrInterfaceType[BoundType in] returns [BoundType ret]
     ;
         
 
+// Parses a class or interface type.
+// For example, in
+//     Map.Entry<K,V> entry;
+// this rule matches
+//     Map.Entry<K,V>
+// Note that the legal types can get pretty complex, as in
+//     A<X,Y>.B.C<Z>.D
 classOrInterfaceType returns [BoundType ret]
     :   
         a=unqualifiedClassOrInterfaceType[null]
@@ -1024,6 +1039,11 @@ classOrInterfaceType returns [BoundType ret]
         )*
     ;
 
+// Parses a primitive type.
+// For example, in
+//     boolean b = true;
+// this rule matches
+//     boolean
 primitiveType returns [PrimitiveTypeNode ret]
         @init {
                 PrimitiveType temp;
@@ -1158,6 +1178,11 @@ qualifiedNameList returns [ListNode<QualifiedNameNode> ret]
         )*
     ;
 
+// Matches a formal parameter list.
+// For example, in
+//     public void foo(int x, int y)
+// this rule matches
+//     (int x, int y)
 formalParameters returns [ListNode<VariableNode> parameters, VariableNode varargParameter]
     :
         '('
