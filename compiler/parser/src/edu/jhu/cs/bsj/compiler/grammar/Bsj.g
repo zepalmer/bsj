@@ -1224,21 +1224,39 @@ ellipsisParameterDecl returns [VariableNode ret]
         }
     ;
 
+alternateConstructorInvocation returns [AlternateConstructorInvocationNode ret]
+    :
+        nonWildcardTypeArguments? 'this' arguments ';'
+        {
+            $ret = factory.makeAlternateConstructorInvocationNode(
+                        $arguments.ret,
+                        $nonWildcardTypeArguments.ret);
+        }
+    ;
 
-explicitConstructorInvocation //TODO
-    :   (nonWildcardTypeArguments
-        )?     //NOTE: the position of Identifier 'super' is set to the type args position here
-        ('this'
-        |'super'
-        )
-        arguments ';'
+superclassConstructorInvocation returns [SuperclassConstructorInvocationNode ret]
+    :
+        (primary '.')?
+        nonWildcardTypeArguments? 'super' arguments ';'
+        {
+            $ret = factory.makeSuperclassConstructorInvocationNode(
+                        $primary == null? null : $primary.ret,
+                        $arguments.ret,
+                        $nonWildcardTypeArguments.ret);
+        }
+    ;
 
-    |   primary
-        '.'
-        (nonWildcardTypeArguments
-        )?
-        'super'
-        arguments ';'
+explicitConstructorInvocation returns [ConstructorInvocationNode ret]
+    :
+        alternateConstructorInvocation
+        {
+            $ret = $alternateConstructorInvocation.ret;
+        }
+    |
+        superclassConstructorInvocation
+        {
+            $ret = $superclassConstructorInvocation.ret;
+        }
     ;
 
 qualifiedName returns [QualifiedNameNode ret]
