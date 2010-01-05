@@ -18,6 +18,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.ArrayAccessNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ArrayInitializerNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ArrayInstantiatonNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ArrayTypeNode;
+import edu.jhu.cs.bsj.compiler.ast.node.AssertStatementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.AssignmentNode;
 import edu.jhu.cs.bsj.compiler.ast.node.BinaryOperatorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.BlockStatementNode;
@@ -102,6 +103,7 @@ import edu.jhu.cs.bsj.compiler.impl.ast.node.ArrayAccessNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.ArrayInitializerNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.ArrayInstantiatonNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.ArrayTypeNodeImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.node.AssertStatementNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.AssignmentNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.BinaryOperatorNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.BlockStatementNodeImpl;
@@ -172,6 +174,17 @@ import edu.jhu.cs.bsj.compiler.impl.ast.node.meta.CodeLiteralNodeImpl;
  */
 public class BsjNodeFactoryImpl implements BsjNodeFactory
 {
+    /**
+     * Creates a AssertStatementNode.
+     */
+    public AssertStatementNode makeAssertStatementNode(
+            ExpressionNode testExpression,
+            ExpressionNode messageExpression)
+    {
+        AssertStatementNode ret = new AssertStatementNodeImpl(testExpression, messageExpression);
+        return ret;
+    }
+
     /**
      * Creates a TypeSelectNode.
      */

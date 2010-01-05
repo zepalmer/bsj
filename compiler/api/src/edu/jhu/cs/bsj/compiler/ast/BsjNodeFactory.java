@@ -12,6 +12,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.ArrayAccessNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ArrayInitializerNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ArrayInstantiatonNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ArrayTypeNode;
+import edu.jhu.cs.bsj.compiler.ast.node.AssertStatementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.AssignmentNode;
 import edu.jhu.cs.bsj.compiler.ast.node.BinaryOperatorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.BlockStatementNode;
@@ -97,6 +98,13 @@ import edu.jhu.cs.bsj.compiler.ast.tags.TypeArgument;
  */
 public interface BsjNodeFactory
 {
+    /**
+     * Creates a AssertStatementNode.
+     */
+    public AssertStatementNode makeAssertStatementNode(
+            ExpressionNode testExpression,
+            ExpressionNode messageExpression);
+
     /**
      * Creates a TypeSelectNode.
      */

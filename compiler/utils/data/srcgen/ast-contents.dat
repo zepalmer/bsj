@@ -247,6 +247,20 @@ UnaryOperatorNode :: ExpressionNode
 
 ### Statement Nodes ###################################################################################################
 
+AssertStatementNode :: StatementNode
+    @props
+    testExpression          ExpressionNode                              | the assertion's test expression
+    messageExpression       ExpressionNode                              | the assertion's message expression
+    @docs
+        Represents an assert statement, as in
+        <pre>
+            assert <i>expr</i>;
+        </pre>
+        or
+        <pre>
+            assert <i>expr</i> : <i>expr</i>;
+        </pre>
+
 BlockStatementNode :: StatementNode
     @props
     statements              ListNode<? extends StatementNode>           | the statements contained in this block statement

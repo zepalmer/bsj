@@ -9,6 +9,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.ArrayAccessNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ArrayInitializerNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ArrayInstantiatonNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ArrayTypeNode;
+import edu.jhu.cs.bsj.compiler.ast.node.AssertStatementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.AssignmentNode;
 import edu.jhu.cs.bsj.compiler.ast.node.BinaryOperatorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.BlockStatementNode;
@@ -121,12 +122,12 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
         } else if (node instanceof SwitchNode)
         {
             visitSwitchNodeStart((SwitchNode)node);
-        } else if (node instanceof VariableDeclarationNode)
-        {
-            visitVariableDeclarationNodeStart((VariableDeclarationNode)node);
         } else if (node instanceof IfNode)
         {
             visitIfNodeStart((IfNode)node);
+        } else if (node instanceof VariableDeclarationNode)
+        {
+            visitVariableDeclarationNodeStart((VariableDeclarationNode)node);
         } else if (node instanceof ContinueNode)
         {
             visitContinueNodeStart((ContinueNode)node);
@@ -160,6 +161,9 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
         } else if (node instanceof DoWhileLoopNode)
         {
             visitDoWhileLoopNodeStart((DoWhileLoopNode)node);
+        } else if (node instanceof AssertStatementNode)
+        {
+            visitAssertStatementNodeStart((AssertStatementNode)node);
         } else if (node instanceof EnumDeclarationNode)
         {
             visitEnumDeclarationNodeStart((EnumDeclarationNode)node);
@@ -346,12 +350,12 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
         } else if (node instanceof SwitchNode)
         {
             visitSwitchNodeStop((SwitchNode)node);
-        } else if (node instanceof VariableDeclarationNode)
-        {
-            visitVariableDeclarationNodeStop((VariableDeclarationNode)node);
         } else if (node instanceof IfNode)
         {
             visitIfNodeStop((IfNode)node);
+        } else if (node instanceof VariableDeclarationNode)
+        {
+            visitVariableDeclarationNodeStop((VariableDeclarationNode)node);
         } else if (node instanceof ContinueNode)
         {
             visitContinueNodeStop((ContinueNode)node);
@@ -385,6 +389,9 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
         } else if (node instanceof DoWhileLoopNode)
         {
             visitDoWhileLoopNodeStop((DoWhileLoopNode)node);
+        } else if (node instanceof AssertStatementNode)
+        {
+            visitAssertStatementNodeStop((AssertStatementNode)node);
         } else if (node instanceof EnumDeclarationNode)
         {
             visitEnumDeclarationNodeStop((EnumDeclarationNode)node);
@@ -621,18 +628,18 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
     }
 
     /**
-     * Starts a visit for nodes of type VariableDeclarationNode.
-     * @param node The node being visited.
-     */
-    public void visitVariableDeclarationNodeStart(VariableDeclarationNode node)
-    {
-    }
-
-    /**
      * Starts a visit for nodes of type IfNode.
      * @param node The node being visited.
      */
     public void visitIfNodeStart(IfNode node)
+    {
+    }
+
+    /**
+     * Starts a visit for nodes of type VariableDeclarationNode.
+     * @param node The node being visited.
+     */
+    public void visitVariableDeclarationNodeStart(VariableDeclarationNode node)
     {
     }
 
@@ -721,6 +728,14 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
      * @param node The node being visited.
      */
     public void visitDoWhileLoopNodeStart(DoWhileLoopNode node)
+    {
+    }
+
+    /**
+     * Starts a visit for nodes of type AssertStatementNode.
+     * @param node The node being visited.
+     */
+    public void visitAssertStatementNodeStart(AssertStatementNode node)
     {
     }
 
@@ -1189,18 +1204,18 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
     }
 
     /**
-     * Stops a visit for nodes of type VariableDeclarationNode.
-     * @param node The node being visited.
-     */
-    public void visitVariableDeclarationNodeStop(VariableDeclarationNode node)
-    {
-    }
-
-    /**
      * Stops a visit for nodes of type IfNode.
      * @param node The node being visited.
      */
     public void visitIfNodeStop(IfNode node)
+    {
+    }
+
+    /**
+     * Stops a visit for nodes of type VariableDeclarationNode.
+     * @param node The node being visited.
+     */
+    public void visitVariableDeclarationNodeStop(VariableDeclarationNode node)
     {
     }
 
@@ -1289,6 +1304,14 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
      * @param node The node being visited.
      */
     public void visitDoWhileLoopNodeStop(DoWhileLoopNode node)
+    {
+    }
+
+    /**
+     * Stops a visit for nodes of type AssertStatementNode.
+     * @param node The node being visited.
+     */
+    public void visitAssertStatementNodeStop(AssertStatementNode node)
     {
     }
 
