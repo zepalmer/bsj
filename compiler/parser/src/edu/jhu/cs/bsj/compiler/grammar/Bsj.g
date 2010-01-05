@@ -871,7 +871,7 @@ interfaceBodyDeclaration returns [InterfaceMember ret]
 
 interfaceMethodDeclaration returns [MethodDeclarationNode ret]
     :   
-        modifiers
+        modifiers[interfaceModifiers]
         typeParameters?
         methodReturnType
         id=IDENTIFIER
@@ -1237,7 +1237,7 @@ elementValueArrayInitializer //TODO
  * Annotation declaration.
  */
 annotationTypeDeclaration //TODO
-    :   modifiers '@'
+    :   modifiers[interfaceModifiers] '@'
         'interface'
         IDENTIFIER
         annotationTypeBody
@@ -1276,7 +1276,7 @@ annotationTypeElementDeclaration //TODO
 
 annotationMethodDeclaration returns [AnnotationMethodDeclarationNode ret]
     :   
-        modifiers type id=IDENTIFIER
+        modifiers[interfaceModifiers] type id=IDENTIFIER
         '(' ')' ('default' elementValue
                 )?
         ';'
