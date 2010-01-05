@@ -1264,11 +1264,19 @@ annotationTypeElementDeclaration //TODO
     |   ';'
     ;
 
-annotationMethodDeclaration //TODO
-    :   modifiers type IDENTIFIER
+annotationMethodDeclaration [AnnotationMethodDeclarationNode ret]
+    :   
+        modifiers type id=IDENTIFIER
         '(' ')' ('default' elementValue
                 )?
         ';'
+        {
+            $ret = factory.makeAnnotationMethodDeclarationNode(
+                $modifiers,//TODO
+                $type.ret,
+                factory.makeIdentifierNode($id.text),
+                elementValue == null ? null || $elementValue.ret);
+        }
         ;
 
 block returns [BlockStatementNode ret]
