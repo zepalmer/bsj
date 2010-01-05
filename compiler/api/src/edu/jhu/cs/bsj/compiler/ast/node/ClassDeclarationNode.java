@@ -1,5 +1,6 @@
 package edu.jhu.cs.bsj.compiler.ast.node;
 
+import edu.jhu.cs.bsj.compiler.ast.tags.InlineTypeDeclarable;
 
 /**
  * Represents the declaration of a class, as in:
@@ -11,7 +12,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
  * }
  * </pre>
  */
-public interface ClassDeclarationNode extends TypeDeclarationNode
+public interface ClassDeclarationNode extends TypeDeclarationNode, InlineTypeDeclarable
 {
     /**
      * Gets the extends clause.

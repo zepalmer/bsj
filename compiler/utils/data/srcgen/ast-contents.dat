@@ -343,6 +343,13 @@ IfNode :: StatementNode
         <pre>
         if (<i>condition</i>) then <i>statement</i> else <i>statement</i>
         </pre>
+
+InlineTypeDeclarationNode :: StatementNode
+    @props
+    declaration             InlineTypeDeclarable                        | the type declaration
+    @docs
+        A node representing an inline type declaration.  This is used to allow classes and enums to be declared
+        within a method body or similar environment.
     
 LabeledStatementNode :: StatementNode
     @props
@@ -613,7 +620,7 @@ AnnotationDeclarationNode :: TypeDeclarationNode
         }
         </pre>
 
-ClassDeclarationNode :: TypeDeclarationNode
+ClassDeclarationNode :: TypeDeclarationNode + InlineTypeDeclarable
     @props
     extendsClause           TypeNode                                    | the extends clause
     implementsClause        ListNode<? extends TypeNode>                | the implements clause
@@ -629,7 +636,7 @@ ClassDeclarationNode :: TypeDeclarationNode
         }
         </pre>
         
-EnumDeclarationNode :: TypeDeclarationNode
+EnumDeclarationNode :: TypeDeclarationNode + InlineTypeDeclarable
     @props
     implementsClause        ListNode<? extends TypeNode>                | the implements clause
     body                    EnumBodyNode                                | this enum's body

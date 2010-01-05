@@ -53,6 +53,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.IfNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ImportNode;
 import edu.jhu.cs.bsj.compiler.ast.node.InitializerDeclarationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.InlineTypeDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.InstanceOfNode;
 import edu.jhu.cs.bsj.compiler.ast.node.IntLiteralNode;
 import edu.jhu.cs.bsj.compiler.ast.node.InterfaceBodyNode;
@@ -91,6 +92,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.CodeLiteralNode;
 import edu.jhu.cs.bsj.compiler.ast.tags.AnnotationMember;
 import edu.jhu.cs.bsj.compiler.ast.tags.BoundType;
 import edu.jhu.cs.bsj.compiler.ast.tags.ClassMember;
+import edu.jhu.cs.bsj.compiler.ast.tags.InlineTypeDeclarable;
 import edu.jhu.cs.bsj.compiler.ast.tags.InterfaceMember;
 import edu.jhu.cs.bsj.compiler.ast.tags.ParameterizableType;
 import edu.jhu.cs.bsj.compiler.ast.tags.TypeArgument;
@@ -136,6 +138,7 @@ import edu.jhu.cs.bsj.compiler.impl.ast.node.IdentifierNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.IfNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.ImportNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.InitializerDeclarationNodeImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.node.InlineTypeDeclarationNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.InstanceOfNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.IntLiteralNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.InterfaceBodyNodeImpl;
@@ -391,6 +394,16 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             boolean upperBound)
     {
         WildcardTypeNode ret = new WildcardTypeNodeImpl(bound, upperBound);
+        return ret;
+    }
+
+    /**
+     * Creates a InlineTypeDeclarationNode.
+     */
+    public InlineTypeDeclarationNode makeInlineTypeDeclarationNode(
+            InlineTypeDeclarable declaration)
+    {
+        InlineTypeDeclarationNode ret = new InlineTypeDeclarationNodeImpl(declaration);
         return ret;
     }
 

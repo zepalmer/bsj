@@ -47,6 +47,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.IfNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ImportNode;
 import edu.jhu.cs.bsj.compiler.ast.node.InitializerDeclarationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.InlineTypeDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.InstanceOfNode;
 import edu.jhu.cs.bsj.compiler.ast.node.IntLiteralNode;
 import edu.jhu.cs.bsj.compiler.ast.node.InterfaceBodyNode;
@@ -85,6 +86,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.CodeLiteralNode;
 import edu.jhu.cs.bsj.compiler.ast.tags.AnnotationMember;
 import edu.jhu.cs.bsj.compiler.ast.tags.BoundType;
 import edu.jhu.cs.bsj.compiler.ast.tags.ClassMember;
+import edu.jhu.cs.bsj.compiler.ast.tags.InlineTypeDeclarable;
 import edu.jhu.cs.bsj.compiler.ast.tags.InterfaceMember;
 import edu.jhu.cs.bsj.compiler.ast.tags.ParameterizableType;
 import edu.jhu.cs.bsj.compiler.ast.tags.TypeArgument;
@@ -237,6 +239,12 @@ public interface BsjNodeFactory
     public WildcardTypeNode makeWildcardTypeNode(
             TypeNode bound,
             boolean upperBound);
+
+    /**
+     * Creates a InlineTypeDeclarationNode.
+     */
+    public InlineTypeDeclarationNode makeInlineTypeDeclarationNode(
+            InlineTypeDeclarable declaration);
 
     /**
      * Creates a SuperclassConstructorInvocationNode.

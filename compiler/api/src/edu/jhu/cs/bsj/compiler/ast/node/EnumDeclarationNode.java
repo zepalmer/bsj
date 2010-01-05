@@ -1,5 +1,6 @@
 package edu.jhu.cs.bsj.compiler.ast.node;
 
+import edu.jhu.cs.bsj.compiler.ast.tags.InlineTypeDeclarable;
 
 /**
  * Represents the declaration of a class, as in:
@@ -11,7 +12,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
  * }
  * </pre>
  */
-public interface EnumDeclarationNode extends TypeDeclarationNode
+public interface EnumDeclarationNode extends TypeDeclarationNode, InlineTypeDeclarable
 {
     /**
      * Gets the implements clause.
