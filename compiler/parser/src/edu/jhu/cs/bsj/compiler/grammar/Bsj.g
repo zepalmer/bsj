@@ -1023,7 +1023,7 @@ typeArguments returns [ListNode<TypeArgument> ret]
         '>'
     ;
 
-typeArgument 
+typeArgument //TODO 
     :   type
     |   '?'
         (
@@ -1089,20 +1089,20 @@ formalParameterDecls
 //    	normalParameterDecl+ ellipsisParameterDecl
     ;
 
-normalParameterDecl 
+normalParameterDecl //TODO
     :   variableModifiers type IDENTIFIER
         ('[' ']'
         )*
     ;
 
-ellipsisParameterDecl 
+ellipsisParameterDecl //TODO
     :   variableModifiers
         type  '...'
         IDENTIFIER
     ;
 
 
-explicitConstructorInvocation 
+explicitConstructorInvocation //TODO
     :   (nonWildcardTypeArguments
         )?     //NOTE: the position of Identifier 'super' is set to the type args position here
         ('this'
@@ -1124,7 +1124,7 @@ qualifiedName
         // TODO
     ;
 
-annotations 
+annotations //TODO
     :   (annotation
         )+
     ;
@@ -1133,7 +1133,7 @@ annotations
  *  Using an annotation. 
  * '@' is flagged in modifier
  */
-annotation 
+annotation //TODO
     :   '@' qualifiedName
         (   '('   
                   (   elementValuePairs
@@ -1143,23 +1143,23 @@ annotation
         )?
     ;
 
-elementValuePairs 
+elementValuePairs //TODO
     :   elementValuePair
         (',' elementValuePair
         )*
     ;
 
-elementValuePair 
+elementValuePair //TODO
     :   IDENTIFIER '=' elementValue
     ;
 
-elementValue 
+elementValue //TODO
     :   conditionalExpression
     |   annotation
     |   elementValueArrayInitializer
     ;
 
-elementValueArrayInitializer 
+elementValueArrayInitializer //TODO
     :   '{'
         (elementValue
             (',' elementValue
@@ -1171,7 +1171,7 @@ elementValueArrayInitializer
 /**
  * Annotation declaration.
  */
-annotationTypeDeclaration 
+annotationTypeDeclaration //TODO
     :   modifiers '@'
         'interface'
         IDENTIFIER
@@ -1179,7 +1179,7 @@ annotationTypeDeclaration
     ;
 
 
-annotationTypeBody 
+annotationTypeBody //TODO
     :   '{' 
         (annotationTypeElementDeclaration
         )* 
@@ -1189,7 +1189,7 @@ annotationTypeBody
 /**
  * NOTE: here use interfaceFieldDeclaration for field declared inside annotation. they are sytactically the same.
  */
-annotationTypeElementDeclaration 
+annotationTypeElementDeclaration //TODO
     :   annotationMethodDeclaration
     |   interfaceFieldDeclaration
     |   normalClassDeclaration
@@ -1199,7 +1199,7 @@ annotationTypeElementDeclaration
     |   ';'
     ;
 
-annotationMethodDeclaration 
+annotationMethodDeclaration //TODO
     :   modifiers type IDENTIFIER
         '(' ')' ('default' elementValue
                 )?
@@ -1246,19 +1246,19 @@ staticBlock returns [JCBlock tree]
         )* '}'
     ;
 */
-blockStatement 
+blockStatement //TODO
     :   localVariableDeclarationStatement
     |   classOrInterfaceDeclaration
     |   statement
     ;
 
 
-localVariableDeclarationStatement 
+localVariableDeclarationStatement //TODO
     :   localVariableDeclaration
         ';'
     ;
 
-localVariableDeclaration 
+localVariableDeclaration //TODO
     :   variableModifiers type
         variableDeclarator
         (',' variableDeclarator
@@ -1272,8 +1272,11 @@ statement returns [StatementNode ret]
     |   ('assert'
         )
         expression (':' expression)? ';'
-    |   'assert'  expression (':' expression)? ';'            
-    |   'if' parExpression statement ('else' statement)?          
+        //TODO
+    |   'assert'  expression (':' expression)? ';'   
+        //TODO         
+    |   'if' parExpression statement ('else' statement)?       
+        //TODO   
     |   forstatement
     	{
     		$ret = $forstatement.ret;
@@ -1301,7 +1304,9 @@ statement returns [StatementNode ret]
     			$parExpression.ret);
     	}
 	|   'synchronized' parExpression block
+	    //TODO
 	|   'return' (expression )? ';'
+	    //TODO
 	|   'throw' expression ';'
 		{
 			$ret = factory.makeThrowNode(
@@ -1331,7 +1336,7 @@ statement returns [StatementNode ret]
 				factory.makeIdentifierNode($a.text),
 				$s.ret);
 		}
-	|   ';'
+	|   ';' //TODO - done?
 	;
 
 switchBlockStatementGroups returns [ListNode<CaseNode> ret]
@@ -1422,7 +1427,7 @@ catchClause returns [CatchNode ret]
 		}
     ;
 
-formalParameter 
+formalParameter //TODO
     :   variableModifiers type IDENTIFIER
         ('[' ']'
         )*
@@ -1493,14 +1498,14 @@ expressionList returns [ListNode<ExpressionNode> ret]
     ;
 
 
-expression returns [ExpressionNode ret]
+expression returns [ExpressionNode ret] //TODO
     :   conditionalExpression
         (assignmentOperator expression
         )?
     ;
 
 
-assignmentOperator 
+assignmentOperator //TODO
     :   '='
     |   '+='
     |   '-='
@@ -1516,43 +1521,43 @@ assignmentOperator
     ;
 
 
-conditionalExpression 
+conditionalExpression //TODO
     :   conditionalOrExpression
         ('?' expression ':' conditionalExpression
         )?
     ;
 
-conditionalOrExpression 
+conditionalOrExpression //TODO
     :   conditionalAndExpression
         ('||' conditionalAndExpression
         )*
     ;
 
-conditionalAndExpression 
+conditionalAndExpression //TODO
     :   inclusiveOrExpression
         ('&&' inclusiveOrExpression
         )*
     ;
 
-inclusiveOrExpression 
+inclusiveOrExpression //TODO
     :   exclusiveOrExpression
         ('|' exclusiveOrExpression
         )*
     ;
 
-exclusiveOrExpression 
+exclusiveOrExpression //TODO
     :   andExpression
         ('^' andExpression
         )*
     ;
 
-andExpression 
+andExpression //TODO
     :   equalityExpression
         ('&' equalityExpression
         )*
     ;
 
-equalityExpression 
+equalityExpression //TODO
     :   instanceOfExpression
         (   
             (   '=='
@@ -1562,40 +1567,40 @@ equalityExpression
         )*
     ;
 
-instanceOfExpression 
+instanceOfExpression //TODO
     :   relationalExpression
         ('instanceof' type
         )?
     ;
 
-relationalExpression 
+relationalExpression //TODO
     :   shiftExpression
         (relationalOp shiftExpression
         )*
     ;
 
-relationalOp 
+relationalOp //TODO
     :    '<' '='
     |    '>' '='
     |   '<'
     |   '>'
     ;
 
-shiftExpression 
+shiftExpression //TODO
     :   additiveExpression
         (shiftOp additiveExpression
         )*
     ;
 
 
-shiftOp 
+shiftOp //TODO
     :    '<' '<'
     |    '>' '>' '>'
     |    '>' '>'
     ;
 
 
-additiveExpression 
+additiveExpression //TODO
     :   multiplicativeExpression
         (   
             (   '+'
@@ -1605,7 +1610,7 @@ additiveExpression
          )*
     ;
 
-multiplicativeExpression 
+multiplicativeExpression //TODO
     :
         unaryExpression
         (   
@@ -1621,7 +1626,7 @@ multiplicativeExpression
  * NOTE: for '+' and '-', if the next token is int or long interal, then it's not a unary expression.
  *       it's a literal with signed value. INTLTERAL AND LONG LITERAL are added here for this.
  */
-unaryExpression 
+unaryExpression //TODO
     :   '+'  unaryExpression
     |   '-' unaryExpression
     |   '++' unaryExpression
@@ -1629,7 +1634,7 @@ unaryExpression
     |   unaryExpressionNotPlusMinus
     ;
 
-unaryExpressionNotPlusMinus 
+unaryExpressionNotPlusMinus //TODO
     :   '~' unaryExpression
     |   '!' unaryExpression
     |   castExpression
@@ -1641,7 +1646,7 @@ unaryExpressionNotPlusMinus
         )?
     ;
 
-castExpression 
+castExpression //TODO
     :   '(' primitiveType ')' unaryExpression
     |   '(' type ')' unaryExpressionNotPlusMinus
     ;
@@ -1649,7 +1654,7 @@ castExpression
 /**
  * have to use scope here, parameter passing isn't well supported in antlr.
  */
-primary 
+primary //TODO
     :   parExpression            
     |   'this'
         ('.' IDENTIFIER
@@ -1673,7 +1678,7 @@ primary
     ;
     
 
-superSuffix  
+superSuffix  //TODO
     :   arguments
     |   '.' (typeArguments
         )?
@@ -1683,7 +1688,7 @@ superSuffix
     ;
 
 
-identifierSuffix 
+identifierSuffix //TODO
     :   ('[' ']'
         )+
         '.' 'class'
@@ -1698,7 +1703,7 @@ identifierSuffix
     ;
 
 
-selector  
+selector  //TODO
     :   '.' IDENTIFIER
         (arguments
         )?
@@ -1709,13 +1714,13 @@ selector
     |   '[' expression ']'
     ;
 
-creator 
+creator //TODO
     :   'new' nonWildcardTypeArguments classOrInterfaceType classCreatorRest
     |   'new' classOrInterfaceType classCreatorRest
     |   arrayCreator
     ;
 
-arrayCreator 
+arrayCreator //TODO
     :   'new' createdName
         '[' ']'
         ('[' ']'
@@ -1732,12 +1737,12 @@ arrayCreator
         )*
     ;
 
-variableInitializer 
+variableInitializer //TODO
     :   arrayInitializer
     |   expression
     ;
 
-arrayInitializer 
+arrayInitializer //TODO
     :   '{' 
             (variableInitializer
                 (',' variableInitializer
@@ -1748,12 +1753,12 @@ arrayInitializer
     ;
 
 
-createdName 
+createdName //TODO
     :   classOrInterfaceType
     |   primitiveType
     ;
 
-innerCreator  
+innerCreator  //TODO
     :   '.' 'new'
         (nonWildcardTypeArguments
         )?
@@ -1764,24 +1769,24 @@ innerCreator
     ;
 
 
-classCreatorRest 
+classCreatorRest //TODO
     :   arguments
         (classBody
         )?
     ;
 
 
-nonWildcardTypeArguments 
+nonWildcardTypeArguments //TODO
     :   '<' typeList
         '>'
     ;
 
-arguments 
+arguments //TODO
     :   '(' (expressionList
         )? ')'
     ;
 
-literal 
+literal //TODO
     :   INTLITERAL
     |   LONGLITERAL
     |   FLOATLITERAL
@@ -1797,35 +1802,35 @@ literal
  * These are headers help to make syntatical predicates, not necessary but helps to make grammar faster.
  */
  
-classHeader 
+classHeader //TODO
     :   modifiers 'class' IDENTIFIER
     ;
 
-enumHeader 
+enumHeader //TODO
     :   modifiers ('enum'|IDENTIFIER) IDENTIFIER
     ;
 
-interfaceHeader 
+interfaceHeader //TODO
     :   modifiers 'interface' IDENTIFIER
     ;
 
-annotationHeader 
+annotationHeader //TODO
     :   modifiers '@' 'interface' IDENTIFIER
     ;
 
-typeHeader 
+typeHeader //TODO
     :   modifiers ('class'|'enum'|('@' ? 'interface')) IDENTIFIER
     ;
 
-methodHeader 
+methodHeader //TODO
     :   modifiers typeParameters? (type|'void')? IDENTIFIER '('
     ;
 
-fieldHeader 
+fieldHeader //TODO
     :   modifiers type IDENTIFIER ('['']')* ('='|','|';')
     ;
 
-localVariableHeader 
+localVariableHeader //TODO
     :   variableModifiers type IDENTIFIER ('['']')* ('='|','|';')
     ;
 
