@@ -1818,27 +1818,60 @@ conditionalExpression returns [ExpressionNode ret]
         )?
     ;
 
-conditionalOrExpression //TODO
-    :   conditionalAndExpression
-        ('||' conditionalAndExpression
+conditionalOrExpression returns [ExpressionNode ret]
+    :   
+        e1=conditionalAndExpression
+        {
+            $ret = $e1.ret;
+        }    
+        (
+            '||' e2=conditionalAndExpression
+            {
+                $ret = factory.makeBinaryOperatorNode(
+                    $ret, 
+                    $e2.ret, 
+                    BinaryOperator.CONDITIONAL_OR);
+            }            
         )*
     ;
 
-conditionalAndExpression //TODO
-    :   inclusiveOrExpression
-        ('&&' inclusiveOrExpression
+conditionalAndExpression returns [ExpressionNode ret]
+    :   
+        e1=inclusiveOrExpression
+        {
+            $ret = $e1.ret;
+        }         
+        (
+            '&&' e2=inclusiveOrExpression
+            {
+                $ret = factory.makeBinaryOperatorNode(
+                    $ret, 
+                    $e2.ret, 
+                    BinaryOperator.CONDITIONAL_AND);
+            }             
         )*
     ;
 
-inclusiveOrExpression //TODO
-    :   exclusiveOrExpression
-        ('|' exclusiveOrExpression
+inclusiveOrExpression returns [ExpressionNode ret]
+    :   
+        e1=exclusiveOrExpression
+        {
+            $ret = $e1.ret;
+        }    
+        (
+            '|' e2=exclusiveOrExpression
+            {
+                $ret = factory.makeBinaryOperatorNode(
+                    $ret, 
+                    $e2.ret, 
+                    BinaryOperator.LOGICAL_OR);
+            }             
         )*
     ;
 
 exclusiveOrExpression //TODO
-    :   andExpression
-        ('^' andExpression
+    :   e1=andExpression
+        ('^' e2=andExpression
         )*
     ;
 
