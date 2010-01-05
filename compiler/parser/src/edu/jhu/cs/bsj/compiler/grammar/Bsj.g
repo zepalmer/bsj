@@ -617,7 +617,7 @@ enumConstants returns [List<EnumConstantDeclarationNode> ret]
         )*
     ;
 
-enumConstant [EnumConstantDeclarationNode ret]
+enumConstant returns [EnumConstantDeclarationNode ret]
     :   
         annotations?
         id=IDENTIFIER
@@ -1178,7 +1178,7 @@ qualifiedName
         // TODO
     ;
 
-annotations [ListNode<AnnotationNode> ret]
+annotations returns [ListNode<AnnotationNode> ret]
 	    @init {
 	            List<AnnotationNode> list = new ArrayList<AnnotationNode>();
 	    }
@@ -1244,7 +1244,7 @@ annotationTypeDeclaration //TODO
     ;
 
 
-annotationTypeBody [AnnotationBodyNode ret]
+annotationTypeBody returns [AnnotationBodyNode ret]
     @init {
             List<AnnotationMember> list = new ArrayList<AnnotationMember>();
     }
@@ -1274,7 +1274,7 @@ annotationTypeElementDeclaration //TODO
     |   ';'
     ;
 
-annotationMethodDeclaration [AnnotationMethodDeclarationNode ret]
+annotationMethodDeclaration returns [AnnotationMethodDeclarationNode ret]
     :   
         modifiers type id=IDENTIFIER
         '(' ')' ('default' elementValue
@@ -1593,7 +1593,7 @@ expression returns [ExpressionNode ret] //TODO
     ;
 
 
-assignmentOperator [AssignmentOperator ret]
+assignmentOperator returns [AssignmentOperator ret]
     :   
         '='
         {
@@ -1715,7 +1715,7 @@ relationalExpression //TODO
         )*
     ;
 
-relationalOp [BinaryOperator ret]
+relationalOp returns [BinaryOperator ret]
     :    
         '<' '='
         {
@@ -1745,7 +1745,7 @@ shiftExpression //TODO
     ;
 
 
-shiftOp [BinaryOperator ret]
+shiftOp returns [BinaryOperator ret]
     :    
         '<' '<'
         {
@@ -1940,7 +1940,7 @@ classCreatorRest //TODO
     ;
 
 
-nonWildcardTypeArguments [ListNode<TypeNode> ret]
+nonWildcardTypeArguments returns [ListNode<TypeNode> ret]
     :   
         '<' typeList
         {
