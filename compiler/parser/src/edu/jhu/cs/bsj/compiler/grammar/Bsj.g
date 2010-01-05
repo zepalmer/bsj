@@ -1928,19 +1928,48 @@ andExpression returns [ExpressionNode ret]
         )*
     ;
 
-equalityExpression returns [ExpressionNode ret] //TODO
-    :   e1=instanceOfExpression
+equalityExpression returns [ExpressionNode ret]
+        @init{
+            BinaryOperator op;
+        }
+    :   
+        e1=instanceOfExpression
+        {
+            $ret = $e1.ret;
+        }        
         (   
             (   '=='
+                {
+                    op = BinaryOperator.EQUAL;
+                }
             |   '!='
+                {
+                    op = BinaryOperator.NOT_EQUALS;
+                }            
             )
             e2=instanceOfExpression
+            {
+                $ret = factory.makeBinaryOperatorNode(
+                    $ret, 
+                    $e2.ret, 
+                    op);
+            }             
         )*
     ;
 
-instanceOfExpression //TODO
-    :   relationalExpression
-        ('instanceof' type
+instanceOfExpression returns [ExpressionNode ret]
+    :   
+        e1=relationalExpression
+        {
+            $ret = $e1.ret;
+        }        
+        (
+            'instanceof' t1=type
+            {
+                $ret = factory.makeInstanceOfNode(
+                    $ret, 
+                    $t1.ret);
+            }        
         )?
     ;
 
