@@ -2050,13 +2050,29 @@ shiftOp returns [BinaryOperator ret]
     ;
 
 
-additiveExpression //TODO
-    :   multiplicativeExpression
+additiveExpression returns [ExpressionNode ret]
+        @init{
+            BinaryOperator op;
+        }
+    :   
+        e1=multiplicativeExpression
         (   
             (   '+'
+                {
+                    op = BinaryOperator.PLUS;
+                }
             |   '-'
+                {
+                    op = BinaryOperator.MINUS;
+                }            
             )
-            multiplicativeExpression
+            e2=multiplicativeExpression
+            {
+                $ret = factory.makeBinaryOperatorNode(
+                    $ret, 
+                    $e2.ret, 
+                    op);
+            }             
          )*
     ;
 
