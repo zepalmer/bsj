@@ -797,9 +797,9 @@ methodReturnType returns [TypeNode ret]
         }
     |
         'void'
-        // TODO define VoidTypeNode?
-//    ->
-//        ^(AST_VOID_TYPE)
+        {
+            $ret = factory.makeVoidTypeNode();
+        }
     ;
 
 constructorDeclaration returns [ConstructorDeclarationNode ret]
