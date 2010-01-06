@@ -1245,8 +1245,8 @@ typeArgument returns [TypeArgument ret]
         }
     ;
 
-// should this be a ListNode<DeclaredTypeNode>?  Are QualifiedNameNode and DeclaredTypeNode different enough that we can
-// keep them separate?
+// TODO: should this be a ListNode<DeclaredTypeNode>?  Are QualifiedNameNode and DeclaredTypeNode different enough that
+// we can keep them separate?
 qualifiedNameList returns [ListNode<QualifiedNameNode> ret]
         @init {
             List<QualifiedNameNode> list = new ArrayList<QualifiedNameNode>();
