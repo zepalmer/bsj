@@ -857,7 +857,7 @@ methodDeclaration returns [MethodDeclarationNode ret]
         )
         {
             $ret = factory.makeMethodDeclarationNode(
-                    $block.ret, // TODO: what if ';'?
+                    ($block == null? null : $block.ret),
                     $modifiers.ret,
                     factory.makeIdentifierNode($id.text),
                     $formalParameters.ret,
