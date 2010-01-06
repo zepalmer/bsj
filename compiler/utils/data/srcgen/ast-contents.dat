@@ -540,6 +540,10 @@ LongLiteralNode :: LiteralNode<Long>
     @docs
         A node representing a long literal.
 
+NullLiteralNode :: LiteralNode<Void>
+    @docs
+        A node representing a null literal.
+
 StringLiteralNode :: LiteralNode<String>
     @docs
         A node representing a String literal.

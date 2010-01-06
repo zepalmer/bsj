@@ -73,6 +73,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.ModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.NameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.NormalAnnotationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.NullLiteralNode;
 import edu.jhu.cs.bsj.compiler.ast.node.PackageDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ParameterizedTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.PrimitiveTypeNode;
@@ -166,6 +167,7 @@ import edu.jhu.cs.bsj.compiler.impl.ast.node.MethodDeclarationNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.MethodInvocationNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.ModifiersNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.NormalAnnotationNodeImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.node.NullLiteralNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.PackageDeclarationNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.ParameterizedTypeNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.PrimitiveTypeNodeImpl;
@@ -1090,6 +1092,16 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             String value)
     {
         StringLiteralNode ret = new StringLiteralNodeImpl(value);
+        return ret;
+    }
+
+    /**
+     * Creates a NullLiteralNode.
+     */
+    public NullLiteralNode makeNullLiteralNode(
+            Void value)
+    {
+        NullLiteralNode ret = new NullLiteralNodeImpl(value);
         return ret;
     }
 

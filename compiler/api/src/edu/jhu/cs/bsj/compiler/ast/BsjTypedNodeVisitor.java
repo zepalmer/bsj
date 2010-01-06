@@ -59,6 +59,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.MethodInvocationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.NormalAnnotationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.NullLiteralNode;
 import edu.jhu.cs.bsj.compiler.ast.node.PackageDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ParameterizedTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.PrimitiveTypeNode;
@@ -124,6 +125,9 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
         } else if (node instanceof IntLiteralNode)
         {
             visitIntLiteralNodeStart((IntLiteralNode)node);
+        } else if (node instanceof NullLiteralNode)
+        {
+            visitNullLiteralNodeStart((NullLiteralNode)node);
         } else if (node instanceof StringLiteralNode)
         {
             visitStringLiteralNodeStart((StringLiteralNode)node);
@@ -385,6 +389,9 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
         } else if (node instanceof IntLiteralNode)
         {
             visitIntLiteralNodeStop((IntLiteralNode)node);
+        } else if (node instanceof NullLiteralNode)
+        {
+            visitNullLiteralNodeStop((NullLiteralNode)node);
         } else if (node instanceof StringLiteralNode)
         {
             visitStringLiteralNodeStop((StringLiteralNode)node);
@@ -677,6 +684,14 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
      * @param node The node being visited.
      */
     public void visitIntLiteralNodeStart(IntLiteralNode node)
+    {
+    }
+
+    /**
+     * Starts a visit for nodes of type NullLiteralNode.
+     * @param node The node being visited.
+     */
+    public void visitNullLiteralNodeStart(NullLiteralNode node)
     {
     }
 
@@ -1341,6 +1356,14 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
      * @param node The node being visited.
      */
     public void visitIntLiteralNodeStop(IntLiteralNode node)
+    {
+    }
+
+    /**
+     * Stops a visit for nodes of type NullLiteralNode.
+     * @param node The node being visited.
+     */
+    public void visitNullLiteralNodeStop(NullLiteralNode node)
     {
     }
 

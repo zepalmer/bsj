@@ -67,6 +67,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.ModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.NameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.NormalAnnotationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.NullLiteralNode;
 import edu.jhu.cs.bsj.compiler.ast.node.PackageDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ParameterizedTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.PrimitiveTypeNode;
@@ -681,6 +682,12 @@ public interface BsjNodeFactory
      */
     public StringLiteralNode makeStringLiteralNode(
             String value);
+
+    /**
+     * Creates a NullLiteralNode.
+     */
+    public NullLiteralNode makeNullLiteralNode(
+            Void value);
 
     /**
      * Creates a IntLiteralNode.
