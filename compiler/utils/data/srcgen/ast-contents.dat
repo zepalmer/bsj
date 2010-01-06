@@ -59,18 +59,6 @@
 
 ### Expression Nodes ##################################################################################################
 
-AnnotationNode :: ExpressionNode
-    @props
-    annotationType          DeclaredTypeNode                            | the annotation type
-    arguments               ListNode<? extends AnnotationValueNode>     | the arguments
-    @docs
-        Represents the usage of an annotation, as in:
-        <pre>@<i>type</i>(<i>value</i>)</pre>
-        or
-        <pre>@<i>type</i>(<i>key</i>=<i>value</i>,...)</pre>
-        If the annotation has only a single (default) value, the arguments list will contain a single
-        <tt>AnnotationValueNode</tt> with a <tt>null</tt> identifier.
-
 ArrayAccessNode :: ExpressionNode
     @props
     expression              ExpressionNode                              | the expression identifying the array
@@ -680,6 +668,71 @@ VoidTypeDeclarationNode :: TypeDeclarationNode
     @docs
         Represents the void declaration (a single semi-colon).
 
+### Annotation Nodes ##################################################################################################
+
+AnnotationAnnotationValueNode :: AnnotationValueNode
+    @props
+    annotation              AnnotationNode                              | the annotation
+    @docs
+        A value in an annotation which is another annotation.  This node is used for complex annotations, such as
+        <pre>@Foo(a=@Bar)</pre>
+        In the above snippet, this node would represent the
+        <pre>@Bar</pre>
+        portion.
+
+AnnotationArrayValueNode :: AnnotationValueNode
+    @props
+    values                  ListNode<? extends AnnotationValueNode>     | the array values
+    @docs
+        A value in an annotation representing an array.  This node is distinct from the {@link ArrayInitializerNode}
+        because it allows annotations (by way of {@link AnnotationAnnotationValueNode}) as well as expressions.
+
+# TODO: is there a nice way for us to type-encode that this expression may not be an assignment expression?
+AnnotationExpressionValueNode :: AnnotationValueNode
+    @props
+    expression              ExpressionNode                              | the expression
+    @docs
+        A value in an annotation which is an expression.  This value may not be an assignment expression.
+
+AnnotationNode* :: Node
+    @props
+    annotationType          DeclaredTypeNode                            | the annotation type
+    @docs
+        Acts as a base class for annotation nodes.  Subclasses distinguish between the different types of annotation
+        sugar.
+
+AnnotationElementNode :: Node
+    @props
+    identifier              IdentifierNode                              | the identifier
+    value                   AnnotationValueNode                         | the element's value
+    @docs
+        Represents an annotation element, as in
+        <pre>
+        <i>ident</i>=<i>value</i>
+        </pre>
+
+AnnotationValueNode* :: Node
+    @docs
+        Acts as a common base class for all annotation values.
+
+NormalAnnotationNode :: AnnotationNode
+    @props
+    arguments               ListNode<? extends AnnotationElementNode>   | the arguments
+    @docs
+        Represents the usage of an annotation, as in:
+        <pre>@<i>type</i></pre>
+        or
+        <pre>@<i>type</i>(<i>key</i>=<i>value</i>,...)</pre>
+        Note that this node does not handle the single element annotation format (<pre>@Foo("bar")</pre>).  That is
+        handled by the {@link SingleElementAnnotationNode} class.
+
+SingleElementAnnotationNode :: AnnotationNode
+    @props
+    value                   AnnotationValueNode                         | the value of the "value" element
+    @docs
+        Represents a single element annotation, as in:
+        <pre>@<i>type</i>(<i>value</i>)</pre>
+
 ### Base Nodes ########################################################################################################
 
 AlternateConstructorInvocationNode :: ConstructorInvocationNode
@@ -690,16 +743,6 @@ AlternateConstructorInvocationNode :: ConstructorInvocationNode
         </pre>
         Note that this only applies to <i>alternate</i> constructor invocations (those using the <tt>this</tt> keyword).
         For superclass constructor invocations, see {@link SuperclassConstructorInvocationNode}.
-
-AnnotationValueNode :: Node
-    @props
-    identifier              IdentifierNode                              | the identifier
-    value                   ExpressionNode                              | the expression
-    @docs
-        Represents an annotation expression, as in
-        <pre>
-        <i>ident</i>=<i>expr</i>
-        </pre>
 
 CaseNode :: Node
     @props

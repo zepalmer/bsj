@@ -10,8 +10,12 @@ import edu.jhu.cs.bsj.compiler.ast.Modifier;
 import edu.jhu.cs.bsj.compiler.ast.PrimitiveType;
 import edu.jhu.cs.bsj.compiler.ast.UnaryOperator;
 import edu.jhu.cs.bsj.compiler.ast.node.AlternateConstructorInvocationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.AnnotationAnnotationValueNode;
+import edu.jhu.cs.bsj.compiler.ast.node.AnnotationArrayValueNode;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationDeclarationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.AnnotationElementNode;
+import edu.jhu.cs.bsj.compiler.ast.node.AnnotationExpressionValueNode;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationMethodDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationValueNode;
@@ -68,10 +72,12 @@ import edu.jhu.cs.bsj.compiler.ast.node.MethodInvocationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.NameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
+import edu.jhu.cs.bsj.compiler.ast.node.NormalAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.PackageDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ParameterizedTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.PrimitiveTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.QualifiedNameNode;
+import edu.jhu.cs.bsj.compiler.ast.node.SingleElementAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.StatementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.StringLiteralNode;
 import edu.jhu.cs.bsj.compiler.ast.node.SuperclassConstructorInvocationNode;
@@ -98,11 +104,13 @@ import edu.jhu.cs.bsj.compiler.ast.tags.InterfaceMember;
 import edu.jhu.cs.bsj.compiler.ast.tags.ParameterizableType;
 import edu.jhu.cs.bsj.compiler.ast.tags.TypeArgument;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.AlternateConstructorInvocationNodeImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.node.AnnotationAnnotationValueNodeImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.node.AnnotationArrayValueNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.AnnotationBodyNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.AnnotationDeclarationNodeImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.node.AnnotationElementNodeImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.node.AnnotationExpressionValueNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.AnnotationMethodDeclarationNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.AnnotationNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.AnnotationValueNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.ArrayAccessNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.ArrayInitializerNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.ArrayInstantiatonNodeImpl;
@@ -152,10 +160,12 @@ import edu.jhu.cs.bsj.compiler.impl.ast.node.MemberSelectNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.MethodDeclarationNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.MethodInvocationNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.ModifiersNodeImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.node.NormalAnnotationNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.PackageDeclarationNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.ParameterizedTypeNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.PrimitiveTypeNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.QualifiedNameNodeImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.node.SingleElementAnnotationNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.StringLiteralNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.SuperclassConstructorInvocationNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.SwitchNodeImpl;
@@ -179,6 +189,17 @@ import edu.jhu.cs.bsj.compiler.impl.ast.node.meta.CodeLiteralNodeImpl;
  */
 public class BsjNodeFactoryImpl implements BsjNodeFactory
 {
+    /**
+     * Creates a AnnotationElementNode.
+     */
+    public AnnotationElementNode makeAnnotationElementNode(
+            IdentifierNode identifier,
+            AnnotationValueNode value)
+    {
+        AnnotationElementNode ret = new AnnotationElementNodeImpl(identifier, value);
+        return ret;
+    }
+
     /**
      * Creates a AssertStatementNode.
      */
@@ -535,13 +556,12 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
 
     /**
-     * Creates a AnnotationValueNode.
+     * Creates a AnnotationAnnotationValueNode.
      */
-    public AnnotationValueNode makeAnnotationValueNode(
-            IdentifierNode identifier,
-            ExpressionNode value)
+    public AnnotationAnnotationValueNode makeAnnotationAnnotationValueNode(
+            AnnotationNode annotation)
     {
-        AnnotationValueNode ret = new AnnotationValueNodeImpl(identifier, value);
+        AnnotationAnnotationValueNode ret = new AnnotationAnnotationValueNodeImpl(annotation);
         return ret;
     }
 
@@ -696,6 +716,27 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
 
     /**
+     * Creates a AnnotationArrayValueNode.
+     */
+    public AnnotationArrayValueNode makeAnnotationArrayValueNode(
+            ListNode<? extends AnnotationValueNode> values)
+    {
+        AnnotationArrayValueNode ret = new AnnotationArrayValueNodeImpl(values);
+        return ret;
+    }
+
+    /**
+     * Creates a SingleElementAnnotationNode.
+     */
+    public SingleElementAnnotationNode makeSingleElementAnnotationNode(
+            AnnotationValueNode value,
+            DeclaredTypeNode annotationType)
+    {
+        SingleElementAnnotationNode ret = new SingleElementAnnotationNodeImpl(value, annotationType);
+        return ret;
+    }
+
+    /**
      * Creates a ThrowNode.
      */
     public ThrowNode makeThrowNode(
@@ -731,6 +772,16 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
 
     /**
+     * Creates a AnnotationExpressionValueNode.
+     */
+    public AnnotationExpressionValueNode makeAnnotationExpressionValueNode(
+            ExpressionNode expression)
+    {
+        AnnotationExpressionValueNode ret = new AnnotationExpressionValueNodeImpl(expression);
+        return ret;
+    }
+
+    /**
      * Creates a CatchNode.
      */
     public CatchNode makeCatchNode(
@@ -749,6 +800,17 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ModifiersNode modifiers)
     {
         VoidTypeDeclarationNode ret = new VoidTypeDeclarationNodeImpl(simpleName, modifiers);
+        return ret;
+    }
+
+    /**
+     * Creates a NormalAnnotationNode.
+     */
+    public NormalAnnotationNode makeNormalAnnotationNode(
+            ListNode<? extends AnnotationElementNode> arguments,
+            DeclaredTypeNode annotationType)
+    {
+        NormalAnnotationNode ret = new NormalAnnotationNodeImpl(arguments, annotationType);
         return ret;
     }
 
@@ -828,17 +890,6 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             StatementNode statement)
     {
         DoWhileLoopNode ret = new DoWhileLoopNodeImpl(condition, statement);
-        return ret;
-    }
-
-    /**
-     * Creates a AnnotationNode.
-     */
-    public AnnotationNode makeAnnotationNode(
-            DeclaredTypeNode annotationType,
-            ListNode<? extends AnnotationValueNode> arguments)
-    {
-        AnnotationNode ret = new AnnotationNodeImpl(annotationType, arguments);
         return ret;
     }
 

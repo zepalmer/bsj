@@ -4,8 +4,12 @@ import java.util.List;
 import java.util.Set;
 
 import edu.jhu.cs.bsj.compiler.ast.node.AlternateConstructorInvocationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.AnnotationAnnotationValueNode;
+import edu.jhu.cs.bsj.compiler.ast.node.AnnotationArrayValueNode;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationDeclarationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.AnnotationElementNode;
+import edu.jhu.cs.bsj.compiler.ast.node.AnnotationExpressionValueNode;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationMethodDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationValueNode;
@@ -62,10 +66,12 @@ import edu.jhu.cs.bsj.compiler.ast.node.MethodInvocationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.NameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
+import edu.jhu.cs.bsj.compiler.ast.node.NormalAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.PackageDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ParameterizedTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.PrimitiveTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.QualifiedNameNode;
+import edu.jhu.cs.bsj.compiler.ast.node.SingleElementAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.StatementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.StringLiteralNode;
 import edu.jhu.cs.bsj.compiler.ast.node.SuperclassConstructorInvocationNode;
@@ -101,6 +107,13 @@ import edu.jhu.cs.bsj.compiler.ast.tags.TypeArgument;
  */
 public interface BsjNodeFactory
 {
+    /**
+     * Creates a AnnotationElementNode.
+     */
+    public AnnotationElementNode makeAnnotationElementNode(
+            IdentifierNode identifier,
+            AnnotationValueNode value);
+
     /**
      * Creates a AssertStatementNode.
      */
@@ -329,11 +342,10 @@ public interface BsjNodeFactory
             ListNode<? extends TypeParameterNode> typeParameters);
 
     /**
-     * Creates a AnnotationValueNode.
+     * Creates a AnnotationAnnotationValueNode.
      */
-    public AnnotationValueNode makeAnnotationValueNode(
-            IdentifierNode identifier,
-            ExpressionNode value);
+    public AnnotationAnnotationValueNode makeAnnotationAnnotationValueNode(
+            AnnotationNode annotation);
 
     /**
      * Creates a ForLoopNode.
@@ -434,6 +446,19 @@ public interface BsjNodeFactory
             ExpressionNode initializer);
 
     /**
+     * Creates a AnnotationArrayValueNode.
+     */
+    public AnnotationArrayValueNode makeAnnotationArrayValueNode(
+            ListNode<? extends AnnotationValueNode> values);
+
+    /**
+     * Creates a SingleElementAnnotationNode.
+     */
+    public SingleElementAnnotationNode makeSingleElementAnnotationNode(
+            AnnotationValueNode value,
+            DeclaredTypeNode annotationType);
+
+    /**
      * Creates a ThrowNode.
      */
     public ThrowNode makeThrowNode(
@@ -457,6 +482,12 @@ public interface BsjNodeFactory
             ExpressionNode enclosingExpression);
 
     /**
+     * Creates a AnnotationExpressionValueNode.
+     */
+    public AnnotationExpressionValueNode makeAnnotationExpressionValueNode(
+            ExpressionNode expression);
+
+    /**
      * Creates a CatchNode.
      */
     public CatchNode makeCatchNode(
@@ -469,6 +500,13 @@ public interface BsjNodeFactory
     public VoidTypeDeclarationNode makeVoidTypeDeclarationNode(
             IdentifierNode simpleName,
             ModifiersNode modifiers);
+
+    /**
+     * Creates a NormalAnnotationNode.
+     */
+    public NormalAnnotationNode makeNormalAnnotationNode(
+            ListNode<? extends AnnotationElementNode> arguments,
+            DeclaredTypeNode annotationType);
 
     /**
      * Creates a AssignmentNode.
@@ -520,13 +558,6 @@ public interface BsjNodeFactory
     public DoWhileLoopNode makeDoWhileLoopNode(
             ExpressionNode condition,
             StatementNode statement);
-
-    /**
-     * Creates a AnnotationNode.
-     */
-    public AnnotationNode makeAnnotationNode(
-            DeclaredTypeNode annotationType,
-            ListNode<? extends AnnotationValueNode> arguments);
 
     /**
      * Creates a ParameterizedTypeNode.
