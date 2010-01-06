@@ -1,7 +1,7 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
-import edu.jhu.cs.bsj.compiler.ast.node.ClassDeclarationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.AnonymousClassBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassInstantiationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
@@ -20,7 +20,7 @@ public class ClassInstantiationNodeImpl extends ExpressionNodeImpl implements Cl
     private ListNode<? extends ExpressionNode> arguments;
 
     /** The body of the anonymous class. */
-    private ClassDeclarationNode classBody;
+    private AnonymousClassBodyNode body;
 
     /** The expression enclosing the non-static inner class. */
     private ExpressionNode enclosingExpression;
@@ -30,14 +30,14 @@ public class ClassInstantiationNodeImpl extends ExpressionNodeImpl implements Cl
             ListNode<? extends TypeNode> typeArguments,
             NameNode identifier,
             ListNode<? extends ExpressionNode> arguments,
-            ClassDeclarationNode classBody,
+            AnonymousClassBodyNode body,
             ExpressionNode enclosingExpression)
     {
         super();
         this.typeArguments = typeArguments;
         this.identifier = identifier;
         this.arguments = arguments;
-        this.classBody = classBody;
+        this.body = body;
         this.enclosingExpression = enclosingExpression;
     }
 
@@ -123,25 +123,25 @@ public class ClassInstantiationNodeImpl extends ExpressionNodeImpl implements Cl
      * Gets the body of the anonymous class.
      * @return The body of the anonymous class.
      */
-    public ClassDeclarationNode getClassBody()
+    public AnonymousClassBodyNode getBody()
     {
-        return this.classBody;
+        return this.body;
     }
 
     /**
      * Changes the body of the anonymous class.
-     * @param classBody The body of the anonymous class.
+     * @param body The body of the anonymous class.
      */
-    public void setClassBody(ClassDeclarationNode classBody)
+    public void setBody(AnonymousClassBodyNode body)
     {
-        if (this.classBody instanceof NodeImpl)
+        if (this.body instanceof NodeImpl)
         {
-            ((NodeImpl)this.classBody).setParent(null);
+            ((NodeImpl)this.body).setParent(null);
         }
-        this.classBody = classBody;
-        if (this.classBody instanceof NodeImpl)
+        this.body = body;
+        if (this.body instanceof NodeImpl)
         {
-            ((NodeImpl)this.classBody).setParent(this);
+            ((NodeImpl)this.body).setParent(this);
         }
     }
 
@@ -185,7 +185,7 @@ public class ClassInstantiationNodeImpl extends ExpressionNodeImpl implements Cl
         this.typeArguments.receive(visitor);
         this.identifier.receive(visitor);
         this.arguments.receive(visitor);
-        this.classBody.receive(visitor);
+        this.body.receive(visitor);
         this.enclosingExpression.receive(visitor);
     }
 }

@@ -1,11 +1,12 @@
 package edu.jhu.cs.bsj.compiler.ast.node;
 
+import edu.jhu.cs.bsj.compiler.ast.tags.AnonymousClassMember;
 import edu.jhu.cs.bsj.compiler.ast.tags.ClassMember;
 
 /**
  * 
  */
-public interface InitializerDeclarationNode extends Node, ClassMember
+public interface InitializerDeclarationNode extends Node, ClassMember,  AnonymousClassMember
 {
     /**
      * Gets whether or not the initializer is static.

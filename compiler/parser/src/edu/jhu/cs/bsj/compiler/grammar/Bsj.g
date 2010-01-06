@@ -425,10 +425,18 @@ typeDeclaration returns [TypeDeclarationNode ret]
             $ret = $classOrInterfaceDeclaration.ret;
         }
     |
-        ';'
+        voidTypeDeclaration
         {
-            $ret = new VoidTypeDeclarationNode();
+            $ret = $voidTypeDeclaration.ret;
         }
+    ;
+
+voidTypeDeclaration returns [VoidTypeDeclarationNode ret]
+    :
+	    ';'
+	    {
+	        $ret = factory.makeVoidTypeDeclarationNode();
+	    }
     ;
 
 classOrInterfaceDeclaration returns [TypeDeclarationNode ret]
@@ -663,16 +671,14 @@ enumConstant returns [EnumConstantDeclarationNode ret]
         annotations?
         id=IDENTIFIER
         arguments?
-        classBody?
+        anonymousClassBody?
         {
             $ret = factory.makeEnumConstantDeclarationNode(
-                annotations == null ? null || $annotations.ret,
+                $annotations == null ? null || $annotations.ret,
                 factory.makeIdentifierNode($id.text),
-                arguments == null ? null | $arguments.ret,
-                classBody == null ? null | $classBody.ret);
+                $arguments == null ? null | $arguments.ret,
+                $anonymousClassBody == null ? null | $anonymousClassBody.ret);
         }
-        // TODO: should we have an "anonymousClassBody"?
-        /* TODO: conversion note: ensure that enum body doesn't contain a constructor - anonymous classes can't in general*/
     ;
 
 enumBodyDeclarations returns [ListNode<EnumBodyDeclaration> ret]
@@ -763,6 +769,24 @@ classBody returns [ClassBodyNode ret]
         '}'
     ;
 
+anonymousClassBody returns [AnonymousClassBodyNode ret]
+        @init {
+                List<AnonymousClassMember> list = new ArrayList<AnonymousClassMember>();
+        }
+        @after {
+                $ret = factory.makeAnonymousClassBodyNode(list);
+        }
+    :   
+        '{' 
+        (
+            anonymousClassBodyDeclaration
+            {
+                list.add($anonymousClassBodyDeclaration.ret);
+            }
+        )* 
+        '}'
+    ;
+
 interfaceBody returns [InterfaceBodyNode ret]
         @init {
                 List<InterfaceMember> list = new ArrayList<InterfaceMember>();
@@ -781,19 +805,32 @@ interfaceBody returns [InterfaceBodyNode ret]
         '}'
     ;
 
-classBodyDeclaration returns [ClassMember ret]
+initializerBlock returns [InitializerDeclarationNode ret]
     :
-        ';'
-        {
-            $ret = factory.makeVoidTypeDeclarationNode();
-        }
-    |
         staticText='static'?
         block
         {
             $ret = factory.makeInitializerDeclarationNode(
                     $staticText!=null,
                     $block.ret);
+        }
+    ;
+    
+classBodyDeclaration returns [ClassMember ret]
+    :
+        voidTypeDeclaration
+        {
+            $ret = $voidTypeDeclaration.ret;
+        }
+    |
+        initializerBlock
+        {
+            $ret = $initializerBlock.ret;
+        }
+    |
+        constructorDeclaration
+        {
+            $ret = $constructorDeclaration.ret;
         }
     |
         memberDecl
@@ -802,12 +839,37 @@ classBodyDeclaration returns [ClassMember ret]
         }
     ;
 
-memberDecl // TODO
-    :    fieldDeclaration
-    |    constructorDeclaration
-    |    methodDeclaration
-    |    classDeclaration
-    |    interfaceDeclaration
+anonymousClassBodyDeclaration returns [AnonymousClassMember ret]
+    :
+        voidTypeDeclaration
+        {
+            $ret = $voidTypeDeclaration.ret;
+        }
+    |
+        initializerBlock
+        {
+            $ret = $initializerBlock.ret;
+        }
+    |
+        memberDecl
+        {
+            $ret = $memberDecl.ret;
+        }
+    ;
+
+memberDecl returns [AnonymousClassMember ret]
+    :    
+        fieldDeclaration
+        // TODO
+    |   
+        methodDeclaration
+        // TODO
+    |   
+        classDeclaration
+        // TODO
+    |   
+        interfaceDeclaration
+        // TODO
     ;
 
 methodReturnType returns [TypeNode ret]
@@ -905,30 +967,30 @@ fieldDeclaration returns [FieldDeclarationNode ret]
 
 interfaceBodyDeclaration returns [InterfaceMember ret]
     :
-        a=interfaceFieldDeclaration
+        interfaceFieldDeclaration
         {
-            $ret = $a.ret;
+            $ret = $interfaceFieldDeclaration.ret;
         }        
     |   
-        b=interfaceMethodDeclaration
+        interfaceMethodDeclaration
         {
-            $ret = $b.ret;
+            $ret = $interfaceMethodDeclaration.ret;
         }
     |   
-        c=interfaceDeclaration
+        interfaceDeclaration
         {
-            $ret = $c.ret;
+            $ret = $interfaceDeclaration.ret;
         }
     |   
-        d=classDeclaration
+        classDeclaration
         {
-            $ret = $d.ret;
+            $ret = $classDeclaration.ret;
         }
     |   
-        ';'
+        voidTypeDeclaration
         {
-            $ret = factory.makeVoidTypeDeclarationNode();
-        }    
+            $ret = $voidTypeDeclaration.ret;
+        }
     ;
 
 interfaceMethodDeclaration returns [MethodDeclarationNode ret]
@@ -2400,7 +2462,7 @@ innerCreator  //TODO
 
 classCreatorRest //TODO
     :   arguments
-        (classBody
+        (anonymousClassBody
         )?
     ;
 

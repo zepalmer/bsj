@@ -116,13 +116,14 @@ ClassInstantiationNode :: ExpressionNode
     typeArguments           ListNode<? extends TypeNode>                | the type arguments of the instantiation
     identifier              NameNode                                    | the identifier of the class
     arguments               ListNode<? extends ExpressionNode>          | the arguments to the constructor
-    classBody               ClassDeclarationNode                        | the body of the anonymous class
+    body                    AnonymousClassBodyNode                      | the body of the anonymous class
     enclosingExpression     ExpressionNode                              | the expression enclosing the non-static inner class
     @docs
         A node representing the instantiation of a class, as in:
         <pre>
         new <i>type</i>(<i>arg...</i>)
         </pre>
+        If this class is not anonymous, the <tt>body</tt> field is <tt>null</tt>.
 
 CompoundAssignmentNode :: ExpressionNode
     @props
@@ -583,25 +584,25 @@ EnumConstantDeclarationNode :: Node
     annotations             ListNode<? extends AnnotationNode>          | the annotations on this constant
     identifier              IdentifierNode                              | the name of this constant
     arguments               ListNode<? extends ExpressionNode>          | the arguments to the enum constructor
-    body                    ClassBodyNode                               | the body used to anonymously subclass the constant
+    body                    AnonymousClassBodyNode                      | the body used to anonymously subclass the constant
     @docs
         A node representing an enum constant.  While enum constants typically consist of a single name, many optional
-        extensions exist.  Enum constants are distinguished from normal variables for purposes of reverse-generating
-        source.
+        extensions exist.  In the likely case that this constant is not an anonymous subclass, <tt>body</tt> is
+        <tt>null</tt>.
 
-FieldDeclarationNode :: Node + ClassMember, InterfaceMember, AnnotationMember
+FieldDeclarationNode :: Node + ClassMember, InterfaceMember, AnnotationMember, AnonymousClassMember
     @props
     modifiers               ModifiersNode                               | the modifiers for this field
     declarators             ListNode<VariableDeclaratorNode>            | the variable declarators for this node
     @docs
         A node representing a field declaration.  Constants are represented by this node as well.
 
-InitializerDeclarationNode :: Node + ClassMember
+InitializerDeclarationNode :: Node + ClassMember, AnonymousClassMember
     @props
     staticInitializer       boolean                                     | whether or not the initializer is static
     body                    BlockStatementNode                          | the body of the initializer
 
-MethodDeclarationNode :: Node + ClassMember, InterfaceMember
+MethodDeclarationNode :: Node + ClassMember, InterfaceMember, AnonymousClassMember
     @props
     body                    BlockStatementNode                          | the body of this method
     modifiers               ModifiersNode                               | the modifiers for this method
@@ -633,6 +634,14 @@ AnnotationBodyNode :: Node
     members             ListNode<? extends AnnotationMember>            | the members of this annotation body
     @docs
         Represents the body of an annotation declaration.
+
+AnonymousClassBodyNode :: Node
+    @props
+    members             ListNode<? extends AnonymousClassMember>        | the members of this anonymous class body
+    @docs
+        Represents the body of an anonymous class declaration.  This body is distinct from {@link ClassBodyNode} in that
+        it does not permit constructors.  There is no corresponding <tt>AnonymousClassDeclarationNode</tt> because the
+        expression which contains this body implicitly stands as the declaration of that type.
 
 ClassBodyNode :: Node
     @props
@@ -720,7 +729,7 @@ NamedTypeDeclarationNode* :: TypeDeclarationNode
     @docs
         Acts as a superclass for all named type declarations.
 
-TypeDeclarationNode* :: Node + ClassMember, InterfaceMember, AnnotationMember
+TypeDeclarationNode* :: Node + ClassMember, InterfaceMember, AnnotationMember, AnonymousClassMember
     @docs
         Acts as a superclass for all type declarations.
 

@@ -6,6 +6,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
  * <pre>
  * new <i>type</i>(<i>arg...</i>)
  * </pre>
+ * If this class is not anonymous, the <tt>body</tt> field is <tt>null</tt>.
  */
 public interface ClassInstantiationNode extends ExpressionNode
 {
@@ -49,13 +50,13 @@ public interface ClassInstantiationNode extends ExpressionNode
      * Gets the body of the anonymous class.
      * @return The body of the anonymous class.
      */
-    public ClassDeclarationNode getClassBody();
+    public AnonymousClassBodyNode getBody();
 
     /**
      * Changes the body of the anonymous class.
-     * @param classBody The body of the anonymous class.
+     * @param body The body of the anonymous class.
      */
-    public void setClassBody(ClassDeclarationNode classBody);
+    public void setBody(AnonymousClassBodyNode body);
 
     /**
      * Gets the expression enclosing the non-static inner class.

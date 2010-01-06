@@ -8,6 +8,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.AnnotationDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationElementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationExpressionValueNode;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationMethodDeclarationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.AnonymousClassBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ArrayAccessNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ArrayInitializerNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ArrayInstantiatonNode;
@@ -335,24 +336,27 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
         } else if (node instanceof CaseNode)
         {
             visitCaseNodeStart((CaseNode)node);
-        } else if (node instanceof VariableNode)
-        {
-            visitVariableNodeStart((VariableNode)node);
         } else if (node instanceof ImportNode)
         {
             visitImportNodeStart((ImportNode)node);
+        } else if (node instanceof VariableNode)
+        {
+            visitVariableNodeStart((VariableNode)node);
+        } else if (node instanceof AnonymousClassBodyNode)
+        {
+            visitAnonymousClassBodyNodeStart((AnonymousClassBodyNode)node);
         } else if (node instanceof FieldDeclarationNode)
         {
             visitFieldDeclarationNodeStart((FieldDeclarationNode)node);
         } else if (node instanceof InterfaceBodyNode)
         {
             visitInterfaceBodyNodeStart((InterfaceBodyNode)node);
-        } else if (node instanceof AnnotationMethodDeclarationNode)
-        {
-            visitAnnotationMethodDeclarationNodeStart((AnnotationMethodDeclarationNode)node);
         } else if (node instanceof AnnotationElementNode)
         {
             visitAnnotationElementNodeStart((AnnotationElementNode)node);
+        } else if (node instanceof AnnotationMethodDeclarationNode)
+        {
+            visitAnnotationMethodDeclarationNodeStart((AnnotationMethodDeclarationNode)node);
         } else
         {
             throw new IllegalStateException("Unrecognized node type " + node.getClass());
@@ -599,24 +603,27 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
         } else if (node instanceof CaseNode)
         {
             visitCaseNodeStop((CaseNode)node);
-        } else if (node instanceof VariableNode)
-        {
-            visitVariableNodeStop((VariableNode)node);
         } else if (node instanceof ImportNode)
         {
             visitImportNodeStop((ImportNode)node);
+        } else if (node instanceof VariableNode)
+        {
+            visitVariableNodeStop((VariableNode)node);
+        } else if (node instanceof AnonymousClassBodyNode)
+        {
+            visitAnonymousClassBodyNodeStop((AnonymousClassBodyNode)node);
         } else if (node instanceof FieldDeclarationNode)
         {
             visitFieldDeclarationNodeStop((FieldDeclarationNode)node);
         } else if (node instanceof InterfaceBodyNode)
         {
             visitInterfaceBodyNodeStop((InterfaceBodyNode)node);
-        } else if (node instanceof AnnotationMethodDeclarationNode)
-        {
-            visitAnnotationMethodDeclarationNodeStop((AnnotationMethodDeclarationNode)node);
         } else if (node instanceof AnnotationElementNode)
         {
             visitAnnotationElementNodeStop((AnnotationElementNode)node);
+        } else if (node instanceof AnnotationMethodDeclarationNode)
+        {
+            visitAnnotationMethodDeclarationNodeStop((AnnotationMethodDeclarationNode)node);
         } else
         {
             throw new IllegalStateException("Unrecognized node type " + node.getClass());
@@ -1248,6 +1255,14 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
     }
 
     /**
+     * Starts a visit for nodes of type ImportNode.
+     * @param node The node being visited.
+     */
+    public void visitImportNodeStart(ImportNode node)
+    {
+    }
+
+    /**
      * Starts a visit for nodes of type VariableNode.
      * @param node The node being visited.
      */
@@ -1256,10 +1271,10 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
     }
 
     /**
-     * Starts a visit for nodes of type ImportNode.
+     * Starts a visit for nodes of type AnonymousClassBodyNode.
      * @param node The node being visited.
      */
-    public void visitImportNodeStart(ImportNode node)
+    public void visitAnonymousClassBodyNodeStart(AnonymousClassBodyNode node)
     {
     }
 
@@ -1280,18 +1295,18 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
     }
 
     /**
-     * Starts a visit for nodes of type AnnotationMethodDeclarationNode.
-     * @param node The node being visited.
-     */
-    public void visitAnnotationMethodDeclarationNodeStart(AnnotationMethodDeclarationNode node)
-    {
-    }
-
-    /**
      * Starts a visit for nodes of type AnnotationElementNode.
      * @param node The node being visited.
      */
     public void visitAnnotationElementNodeStart(AnnotationElementNode node)
+    {
+    }
+
+    /**
+     * Starts a visit for nodes of type AnnotationMethodDeclarationNode.
+     * @param node The node being visited.
+     */
+    public void visitAnnotationMethodDeclarationNodeStart(AnnotationMethodDeclarationNode node)
     {
     }
 
@@ -1920,6 +1935,14 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
     }
 
     /**
+     * Stops a visit for nodes of type ImportNode.
+     * @param node The node being visited.
+     */
+    public void visitImportNodeStop(ImportNode node)
+    {
+    }
+
+    /**
      * Stops a visit for nodes of type VariableNode.
      * @param node The node being visited.
      */
@@ -1928,10 +1951,10 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
     }
 
     /**
-     * Stops a visit for nodes of type ImportNode.
+     * Stops a visit for nodes of type AnonymousClassBodyNode.
      * @param node The node being visited.
      */
-    public void visitImportNodeStop(ImportNode node)
+    public void visitAnonymousClassBodyNodeStop(AnonymousClassBodyNode node)
     {
     }
 
@@ -1952,18 +1975,18 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
     }
 
     /**
-     * Stops a visit for nodes of type AnnotationMethodDeclarationNode.
-     * @param node The node being visited.
-     */
-    public void visitAnnotationMethodDeclarationNodeStop(AnnotationMethodDeclarationNode node)
-    {
-    }
-
-    /**
      * Stops a visit for nodes of type AnnotationElementNode.
      * @param node The node being visited.
      */
     public void visitAnnotationElementNodeStop(AnnotationElementNode node)
+    {
+    }
+
+    /**
+     * Stops a visit for nodes of type AnnotationMethodDeclarationNode.
+     * @param node The node being visited.
+     */
+    public void visitAnnotationMethodDeclarationNodeStop(AnnotationMethodDeclarationNode node)
     {
     }
 

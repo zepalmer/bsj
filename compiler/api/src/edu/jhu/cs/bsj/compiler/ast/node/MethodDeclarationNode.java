@@ -1,5 +1,6 @@
 package edu.jhu.cs.bsj.compiler.ast.node;
 
+import edu.jhu.cs.bsj.compiler.ast.tags.AnonymousClassMember;
 import edu.jhu.cs.bsj.compiler.ast.tags.ClassMember;
 import edu.jhu.cs.bsj.compiler.ast.tags.InterfaceMember;
 
@@ -18,7 +19,7 @@ import edu.jhu.cs.bsj.compiler.ast.tags.InterfaceMember;
  * <pre>public abstract void foo();</pre>
  * will have a <tt>null</tt> body.
  */
-public interface MethodDeclarationNode extends Node, ClassMember,  InterfaceMember
+public interface MethodDeclarationNode extends Node, ClassMember,  InterfaceMember,  AnonymousClassMember
 {
     /**
      * Gets the body of this method.

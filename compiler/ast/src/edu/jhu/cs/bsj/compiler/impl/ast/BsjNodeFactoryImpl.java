@@ -19,6 +19,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.AnnotationExpressionValueNode;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationMethodDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationValueNode;
+import edu.jhu.cs.bsj.compiler.ast.node.AnonymousClassBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ArrayAccessNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ArrayInitializerNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ArrayInstantiatonNode;
@@ -103,6 +104,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.WhileLoopNode;
 import edu.jhu.cs.bsj.compiler.ast.node.WildcardTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.CodeLiteralNode;
 import edu.jhu.cs.bsj.compiler.ast.tags.AnnotationMember;
+import edu.jhu.cs.bsj.compiler.ast.tags.AnonymousClassMember;
 import edu.jhu.cs.bsj.compiler.ast.tags.BoundType;
 import edu.jhu.cs.bsj.compiler.ast.tags.ClassMember;
 import edu.jhu.cs.bsj.compiler.ast.tags.InlineTypeDeclarable;
@@ -117,6 +119,7 @@ import edu.jhu.cs.bsj.compiler.impl.ast.node.AnnotationDeclarationNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.AnnotationElementNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.AnnotationExpressionValueNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.AnnotationMethodDeclarationNodeImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.node.AnonymousClassBodyNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.ArrayAccessNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.ArrayInitializerNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.ArrayInstantiatonNodeImpl;
@@ -332,6 +335,16 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             Double value)
     {
         DoubleLiteralNode ret = new DoubleLiteralNodeImpl(value);
+        return ret;
+    }
+
+    /**
+     * Creates a AnonymousClassBodyNode.
+     */
+    public AnonymousClassBodyNode makeAnonymousClassBodyNode(
+            ListNode<? extends AnonymousClassMember> members)
+    {
+        AnonymousClassBodyNode ret = new AnonymousClassBodyNodeImpl(members);
         return ret;
     }
 
@@ -638,7 +651,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ListNode<? extends AnnotationNode> annotations,
             IdentifierNode identifier,
             ListNode<? extends ExpressionNode> arguments,
-            ClassBodyNode body)
+            AnonymousClassBodyNode body)
     {
         EnumConstantDeclarationNode ret = new EnumConstantDeclarationNodeImpl(annotations, identifier, arguments, body);
         return ret;
@@ -813,10 +826,10 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ListNode<? extends TypeNode> typeArguments,
             NameNode identifier,
             ListNode<? extends ExpressionNode> arguments,
-            ClassDeclarationNode classBody,
+            AnonymousClassBodyNode body,
             ExpressionNode enclosingExpression)
     {
-        ClassInstantiationNode ret = new ClassInstantiationNodeImpl(typeArguments, identifier, arguments, classBody, enclosingExpression);
+        ClassInstantiationNode ret = new ClassInstantiationNodeImpl(typeArguments, identifier, arguments, body, enclosingExpression);
         return ret;
     }
 

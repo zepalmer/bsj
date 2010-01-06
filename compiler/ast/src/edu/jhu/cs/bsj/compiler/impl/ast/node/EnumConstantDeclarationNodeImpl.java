@@ -2,7 +2,7 @@ package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ClassBodyNode;
+import edu.jhu.cs.bsj.compiler.ast.node.AnonymousClassBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.EnumConstantDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
@@ -20,14 +20,14 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
     private ListNode<? extends ExpressionNode> arguments;
 
     /** The body used to anonymously subclass the constant. */
-    private ClassBodyNode body;
+    private AnonymousClassBodyNode body;
 
     /** General constructor. */
     public EnumConstantDeclarationNodeImpl(
             ListNode<? extends AnnotationNode> annotations,
             IdentifierNode identifier,
             ListNode<? extends ExpressionNode> arguments,
-            ClassBodyNode body)
+            AnonymousClassBodyNode body)
     {
         super();
         this.annotations = annotations;
@@ -118,7 +118,7 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
      * Gets the body used to anonymously subclass the constant.
      * @return The body used to anonymously subclass the constant.
      */
-    public ClassBodyNode getBody()
+    public AnonymousClassBodyNode getBody()
     {
         return this.body;
     }
@@ -127,7 +127,7 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
      * Changes the body used to anonymously subclass the constant.
      * @param body The body used to anonymously subclass the constant.
      */
-    public void setBody(ClassBodyNode body)
+    public void setBody(AnonymousClassBodyNode body)
     {
         if (this.body instanceof NodeImpl)
         {

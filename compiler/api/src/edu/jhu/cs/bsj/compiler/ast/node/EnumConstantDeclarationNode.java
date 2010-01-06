@@ -3,8 +3,8 @@ package edu.jhu.cs.bsj.compiler.ast.node;
 
 /**
  * A node representing an enum constant.  While enum constants typically consist of a single name, many optional
- * extensions exist.  Enum constants are distinguished from normal variables for purposes of reverse-generating
- * source.
+ * extensions exist.  In the likely case that this constant is not an anonymous subclass, <tt>body</tt> is
+ * <tt>null</tt>.
  */
 public interface EnumConstantDeclarationNode extends Node
 {
@@ -48,12 +48,12 @@ public interface EnumConstantDeclarationNode extends Node
      * Gets the body used to anonymously subclass the constant.
      * @return The body used to anonymously subclass the constant.
      */
-    public ClassBodyNode getBody();
+    public AnonymousClassBodyNode getBody();
 
     /**
      * Changes the body used to anonymously subclass the constant.
      * @param body The body used to anonymously subclass the constant.
      */
-    public void setBody(ClassBodyNode body);
+    public void setBody(AnonymousClassBodyNode body);
 
 }
