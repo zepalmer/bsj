@@ -7,6 +7,9 @@ package edu.jhu.cs.bsj.compiler.ast.node;
  * for (<i>initializers</i>; <i>condition</i>; <i>updaters</i>)
  *     <i>body</i>
  * </pre>
+ * If the loop has no initializers, the <tt>initializer</tt> field is <tt>null</tt>.  If the loop has no updates,
+ * the <tt>update</tt> field is a {@link ListNode} with no children.  If the loop has no termination condition, the
+ * <tt>condition</tt> field is <tt>null</tt>.  The <tt>update</tt> field should never be <tt>null</tt>.
  */
 public interface ForLoopNode extends StatementNode
 {
