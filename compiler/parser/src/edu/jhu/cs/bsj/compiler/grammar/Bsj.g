@@ -1687,7 +1687,10 @@ statement returns [StatementNode ret]
                 $s.ret);
         }
     |   
-        ';' //TODO - done?
+        ';'
+        {
+            $ret = factory.makeVoidStatementNode();
+        }
     ;
 
 switchBlockStatementGroups returns [ListNode<CaseNode> ret]
