@@ -1700,7 +1700,9 @@ switchBlockStatementGroups returns [ListNode<CaseNode> ret]
     @after {
             $ret = factory.makeListNode(list);
     }
-    :   (switchBlockStatementGroup 
+    :   
+        (
+            switchBlockStatementGroup 
             {
                 list.add($switchBlockStatementGroup.ret);
             }   
@@ -1720,7 +1722,8 @@ switchBlockStatementGroup returns [CaseNode ret]
             {
                 label = $switchLabel.ret;
             }
-        (blockStatement
+        (
+            blockStatement
             {
                 list.add($blockStatement.ret);
             }
@@ -1728,11 +1731,13 @@ switchBlockStatementGroup returns [CaseNode ret]
     ;
 
 switchLabel returns [ExpressionNode ret]
-    :   'case' expression ':'
+    :   
+        'case' expression ':'
         {
             $ret = $expression.ret;
         }
-    |   'default' ':'
+    |   
+        'default' ':'
         {
             $ret = null;
         }
@@ -1740,12 +1745,17 @@ switchLabel returns [ExpressionNode ret]
 
 
 trystatement returns [TryNode ret]
-    :   'try' b=block
-        (   catches 'finally' fb=block
-        |   catches
-        |   'finally' fb=block
+    :   
+        'try' b=block
+        (
+            catches 'finally' fb=block
+        |   
+            catches
+        |   
+            'finally' fb=block
         )
         {
+            // TODO: what if catches is null?
             $ret = factory.makeTryNode(
                     $b.ret,
                     $catches.ret,
@@ -1798,9 +1808,9 @@ forstatement returns [StatementNode ret]
         {
             $ret = factory.makeEnhancedForLoopNode(
                 factory.makeVariableNode(
-                  $variableModifiers.ret, 
-                  $type.ret,
-                  factory.makeIdentifierNode($id.text)),
+                    $variableModifiers.ret, 
+                    $type.ret,
+                    factory.makeIdentifierNode($id.text)),
                 $expression.ret,
                 $statement.ret);
         }        
@@ -1830,7 +1840,8 @@ forInit returns [ListNode<StatementNode> ret]
     ;
 
 parExpression returns [ExpressionNode ret]
-    :   '(' expression ')'
+    :   
+        '(' expression ')'
         {
             $ret = $expression.ret;
         }
@@ -1857,9 +1868,9 @@ expressionList returns [ListNode<ExpressionNode> ret]
 
 
 expression returns [ExpressionNode ret] //TODO
-    :   conditionalExpression
-        (assignmentOperator expression
-        )?
+    :   
+        conditionalExpression
+        (assignmentOperator expression)?
     ;
 
 
