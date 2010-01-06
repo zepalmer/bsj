@@ -1776,7 +1776,10 @@ trystatement returns [TryNode ret]
             'finally' fb=block
         )
         {
-            // TODO: what if catches is null?
+            if ($catches == null)
+            {
+                $catches = factory.makeListNode(new ArrayList<CatchNode>());
+            }
             $ret = factory.makeTryNode(
                     $b.ret,
                     $catches.ret,
