@@ -1318,42 +1318,50 @@ annotations returns [ListNode<AnnotationNode> ret]
         )+
     ;
 
-/**
- *  Using an annotation. 
- * '@' is flagged in modifier
- */
-annotation returns [AnnotationNode ret]//TODO
-        @init {
-            ListNode<AnnotationValueNode> listNode = factory.makeListNode(new ArrayList<AnnotationValueNode>());
+// Parses an annotation.
+// For example, in
+//     @Test("foo")
+//     public void foo() { }
+// This rule would parse
+//     @Test("foo")
+annotation returns [AnnotationNode ret]
+    :   
+        // TODO: qualifiedName.ret is not a DeclaredTypeNode
+        '@' qualifiedName
+        {
+            $ret = factory.makeNormalAnnotationNode(
+                    factory.makeListNode(new ArrayList<AnnotationElementNode>()),
+                    $qualifiedName.ret);
         }
-        @after {
-        }
-    :   '@' qualifiedName
         (
             '('   
-                  (
-                      elementValuePairs
-                      {
-                          listNode = $elementValuePairs.ret;
-                      }
-                  |
-                      elementValue
-                      {
-                          // TODO: set listNode to something using elementValue
-                      }
-                  )? 
+            (
+                elementValuePairs
+                {
+                    $ret = factory.makeNormalAnnotationNode(
+                            $elementValuePairs.ret,
+                            $qualifiedName.ret);
+                }
+            |
+                elementValue
+                {
+                    $ret = factory.makeSingleElementAnnotationNode(
+                            $elementValue.ret,
+                            $qualifiedName.ret);
+                }
+            )? 
             ')' 
         )?
-        
-        {
-            // TODO: qualifiedName is not a type - is there enough of a difference in how it's used?
-            $ret = factory.makeAnnotationNode($qualifiedName.ret, listNode);
-        }
     ;
 
-elementValuePairs returns [ListNode<AnnotationValueNode> ret]
+// Parses an annotation's element-value pairs.
+// For example, in
+//     @Foo(bar="baz",happy=5)
+// this rule would parse
+//     bar="baz",happy=5
+elementValuePairs returns [ListNode<AnnotationElementNode> ret]
         @init {
-            List<AnnotationValueNode> list = new ArrayList<AnnotationValueNode>();
+            List<AnnotationElementNode> list = new ArrayList<AnnotationElementNode>();
         }
         @after {
             $ret = factory.makeListNode(list);
@@ -1372,25 +1380,81 @@ elementValuePairs returns [ListNode<AnnotationValueNode> ret]
         )*
     ;
 
-elementValuePair returns [AnnotationValueNode ret] // TODO
+// Parses a single annotation element-value pair.
+// For example, in
+//     @Foo(bar="baz",happy=5)
+// this rule would parse either
+//     bar="baz"
+// or
+//     happy=5
+elementValuePair returns [AnnotationElementNode ret]
     :
-        IDENTIFIER '=' elementValue
+        id=IDENTIFIER '=' elementValue
+        {
+            $ret = factory.makeAnnotationElementNode(factory.makeIdentifierNode($id.text), $elementValue.ret);
+        }
     ;
 
-elementValue //TODO
-    :   conditionalExpression
-    |   annotation
-    |   elementValueArrayInitializer
+// Parses an annotation element value.
+// For example, in
+//    @Ann(a=5,b={7,8},c=@Test)
+// this rule would parse one of
+//    5
+// or
+//    {7,8}
+// or
+//    @Test
+elementValue returns [AnnotationValueNode ret]
+    :   
+        conditionalExpression
+        {
+            $ret = factory.makeAnnotationExpressionValueNode($conditionalExpression.ret);
+        }
+    |   
+        annotation
+        {
+            $ret = factory.makeAnnotationAnnotationValueNode($annotation.ret);
+        }
+    |   
+        elementValueArrayInitializer
+        {
+            $ret = $elementValueArrayInitializer.ret;
+        }
     ;
 
-elementValueArrayInitializer //TODO
-    :   '{'
-        (elementValue
-            (',' elementValue
+// Parses an annotation element array.
+// For example, in
+//     @Ann({@Foo,@Bar(5)})
+// this rule would parse
+//     {@Foo,@Bar(5)}
+// and in
+//     @Test({1,2,3})
+// this rule would parse
+//     {1,2,3}
+elementValueArrayInitializer returns [AnnotationArrayValueNode ret]
+        @init {
+            List<AnnotationValueNode> list = new ArrayList<AnnotationValueNode>();
+        }
+        @after {
+            $ret = factory.makeAnnotationArrayValueNode(factory.makeListNode(list));
+        }
+    :   
+        '{'
+        (
+            elementValue
+            {
+                list.add($elementValue.ret);
+            }
+            (
+                ',' elementValue
+                {
+                    list.add($elementValue.ret);
+                }
             )*
-        )? (',')? '}'
+        )?
+        ','?
+        '}'
     ;
-
 
 /**
  * Annotation declaration.
