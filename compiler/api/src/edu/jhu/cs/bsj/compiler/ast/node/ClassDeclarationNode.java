@@ -12,7 +12,7 @@ import edu.jhu.cs.bsj.compiler.ast.tags.InlineTypeDeclarable;
  * }
  * </pre>
  */
-public interface ClassDeclarationNode extends TypeDeclarationNode, InlineTypeDeclarable
+public interface ClassDeclarationNode extends NamedTypeDeclarationNode, InlineTypeDeclarable
 {
     /**
      * Gets the extends clause.

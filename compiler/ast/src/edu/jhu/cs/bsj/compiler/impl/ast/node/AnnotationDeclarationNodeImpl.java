@@ -6,7 +6,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.AnnotationDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ModifiersNode;
 
-public class AnnotationDeclarationNodeImpl extends TypeDeclarationNodeImpl implements AnnotationDeclarationNode
+public class AnnotationDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl implements AnnotationDeclarationNode
 {
     /** This annotation's body. */
     private AnnotationBodyNode body;

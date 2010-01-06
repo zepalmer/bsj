@@ -9,7 +9,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.ModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeParameterNode;
 
-public class InterfaceDeclarationNodeImpl extends TypeDeclarationNodeImpl implements InterfaceDeclarationNode
+public class InterfaceDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl implements InterfaceDeclarationNode
 {
     /** The extends clause. */
     private ListNode<? extends TypeNode> extendsClause;

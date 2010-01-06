@@ -631,7 +631,7 @@ InterfaceBodyNode :: Node
 
 ### Type Declaration Nodes ############################################################################################
 
-AnnotationDeclarationNode :: TypeDeclarationNode
+AnnotationDeclarationNode :: NamedTypeDeclarationNode
     @props
     body                    AnnotationBodyNode                          | this annotation's body
     @docs
@@ -644,7 +644,7 @@ AnnotationDeclarationNode :: TypeDeclarationNode
         }
         </pre>
 
-ClassDeclarationNode :: TypeDeclarationNode + InlineTypeDeclarable
+ClassDeclarationNode :: NamedTypeDeclarationNode + InlineTypeDeclarable
     @props
     extendsClause           TypeNode                                    | the extends clause
     implementsClause        ListNode<? extends TypeNode>                | the implements clause
@@ -660,7 +660,7 @@ ClassDeclarationNode :: TypeDeclarationNode + InlineTypeDeclarable
         }
         </pre>
         
-EnumDeclarationNode :: TypeDeclarationNode + InlineTypeDeclarable
+EnumDeclarationNode :: NamedTypeDeclarationNode + InlineTypeDeclarable
     @props
     implementsClause        ListNode<? extends TypeNode>                | the implements clause
     body                    EnumBodyNode                                | this enum's body
@@ -674,7 +674,7 @@ EnumDeclarationNode :: TypeDeclarationNode + InlineTypeDeclarable
         }
         </pre>
 
-InterfaceDeclarationNode :: TypeDeclarationNode
+InterfaceDeclarationNode :: NamedTypeDeclarationNode
     @props
     extendsClause           ListNode<? extends TypeNode>                | the extends clause
     body                    InterfaceBodyNode                           | this interface's body
@@ -689,10 +689,14 @@ InterfaceDeclarationNode :: TypeDeclarationNode
         }
         </pre>
 
-TypeDeclarationNode* :: Node + ClassMember, InterfaceMember, AnnotationMember
+NamedTypeDeclarationNode* :: TypeDeclarationNode
     @props
     simpleName              IdentifierNode                              | the name of this declared type
     modifiers               ModifiersNode                               | the modifiers for this declared type
+    @docs
+        Acts as a superclass for all named type declarations.
+
+TypeDeclarationNode* :: Node + ClassMember, InterfaceMember, AnnotationMember
     @docs
         Acts as a superclass for all type declarations.
 

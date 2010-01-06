@@ -524,9 +524,7 @@ public interface BsjNodeFactory
     /**
      * Creates a VoidTypeDeclarationNode.
      */
-    public VoidTypeDeclarationNode makeVoidTypeDeclarationNode(
-            IdentifierNode simpleName,
-            ModifiersNode modifiers);
+    public VoidTypeDeclarationNode makeVoidTypeDeclarationNode();
 
     /**
      * Creates a NormalAnnotationNode.

@@ -9,7 +9,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.ModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeParameterNode;
 
-public class ClassDeclarationNodeImpl extends TypeDeclarationNodeImpl implements ClassDeclarationNode
+public class ClassDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl implements ClassDeclarationNode
 {
     /** The extends clause. */
     private TypeNode extendsClause;

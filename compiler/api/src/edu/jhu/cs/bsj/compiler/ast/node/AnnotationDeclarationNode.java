@@ -11,7 +11,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
  * }
  * </pre>
  */
-public interface AnnotationDeclarationNode extends TypeDeclarationNode
+public interface AnnotationDeclarationNode extends NamedTypeDeclarationNode
 {
     /**
      * Gets this annotation's body.

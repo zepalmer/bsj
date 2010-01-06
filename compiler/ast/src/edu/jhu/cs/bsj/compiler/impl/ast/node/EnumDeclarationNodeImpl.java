@@ -8,7 +8,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
 
-public class EnumDeclarationNodeImpl extends TypeDeclarationNodeImpl implements EnumDeclarationNode
+public class EnumDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl implements EnumDeclarationNode
 {
     /** The implements clause. */
     private ListNode<? extends TypeNode> implementsClause;

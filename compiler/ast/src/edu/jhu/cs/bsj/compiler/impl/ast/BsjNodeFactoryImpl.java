@@ -842,11 +842,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     /**
      * Creates a VoidTypeDeclarationNode.
      */
-    public VoidTypeDeclarationNode makeVoidTypeDeclarationNode(
-            IdentifierNode simpleName,
-            ModifiersNode modifiers)
+    public VoidTypeDeclarationNode makeVoidTypeDeclarationNode()
     {
-        VoidTypeDeclarationNode ret = new VoidTypeDeclarationNodeImpl(simpleName, modifiers);
+        VoidTypeDeclarationNode ret = new VoidTypeDeclarationNodeImpl();
         return ret;
     }
 

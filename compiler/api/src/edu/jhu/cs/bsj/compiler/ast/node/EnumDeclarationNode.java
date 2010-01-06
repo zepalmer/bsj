@@ -12,7 +12,7 @@ import edu.jhu.cs.bsj.compiler.ast.tags.InlineTypeDeclarable;
  * }
  * </pre>
  */
-public interface EnumDeclarationNode extends TypeDeclarationNode, InlineTypeDeclarable
+public interface EnumDeclarationNode extends NamedTypeDeclarationNode, InlineTypeDeclarable
 {
     /**
      * Gets the implements clause.

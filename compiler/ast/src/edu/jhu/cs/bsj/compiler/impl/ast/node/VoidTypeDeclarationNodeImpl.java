@@ -1,18 +1,14 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
-import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VoidTypeDeclarationNode;
 
 public class VoidTypeDeclarationNodeImpl extends TypeDeclarationNodeImpl implements VoidTypeDeclarationNode
 {
     /** General constructor. */
-    public VoidTypeDeclarationNodeImpl(
-            IdentifierNode simpleName,
-            ModifiersNode modifiers)
+    public VoidTypeDeclarationNodeImpl()
     {
-        super(simpleName, modifiers);
+        super();
     }
 
     /**
