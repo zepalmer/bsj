@@ -205,30 +205,31 @@ tokens {
 
 /* 
  * These rules only exist in the parser.  They may map to the language standard but are primarily used to abstract
- * away parser patterns and do not manifest in the AST. 
+ * away parser patterns and may not manifest in the AST. 
  */
  
 // Represents the combination of an identifier and an initializer.  As the identifier can be followed with array type
 // indicators, an in/out type is also required.  This construct is necessary on its own to support the multiple
 // declaration sugar ("int x,y;").
-variableDeclarator[TypeNode inType] returns [IdentifierNode identifier, ExpressionNode initializer, TypeNode type]
+variableDeclarator[TypeNode inType] returns [VariableDeclaratorNode ret]
 	    @init {
-	        $type = $inType;
+	        TypeNode type = $inType;
 	    }
     :
         id=IDENTIFIER
         (
             arrayTypeIndicator[inType]
             {
-                $type = $arrayTypeIndicator.ret;
+                type = $arrayTypeIndicator.ret;
             }
         )?
         (
             '=' variableInitializer
         )?
         {
-            $identifier = makeIdentifierNode($id.text);
-            $initializer = $variableInitializer.ret;
+            IdentifierNode identifier = makeIdentifierNode($id.text);
+            ExpressionNode initializer = ($variableInitializer == null? null : $variableInitializer.ret);
+            $ret = factory.makeVariableDeclaratorNode(type, identifier, initializer);
         }
     ;
 
@@ -249,33 +250,26 @@ arrayTypeIndicator[TypeNode inType] returns [TypeNode ret]
 
 // Represents an abstraction for field declarations which allows legal modifiers to be specified (to differentiate
 // between interface and class fields).
-abstractFieldDeclaration[List<Modifier> legalModifiers] returns [List<FieldDeclarationNode> ret]
+abstractFieldDeclaration[List<Modifier> legalModifiers] returns [FieldDeclarationNode ret]
 	    @init {
-	        $ret = new ArrayList<FieldDeclarationNode>();
+	        List<VariableDeclaratorNode> list = new ArrayList<VariableDeclaratorNode>();
 	    }
 	    @after {
+            $ret = factory.makeFieldDeclarationNode(
+                    $modifiers.ret,
+                    factory.makeListNode(list)));
 	    }
     :   
         modifiers[legalModifiers]
         type
         a=variableDeclarator[$type.ret] // process type in case identifier has [] after it
         {
-            $ret.add(
-                factory.makeFieldDeclarationNode(
-                    $modifiers.ret,
-                    $a.type,
-                    $a.identifier,
-                    $a.initializer));
+            list.add($a.ret);
         }
         (
             ',' b=variableDeclarator[$type.ret]
             {
-                $ret.add(
-                    factory.makeFieldDeclarationNode(
-                        $modifiers.ret,
-                        $b.type,
-                        $b.identifier,
-                        $b.initializer));
+                list.add($b.ret);
             }
         )*
         ';'
@@ -1560,6 +1554,8 @@ staticBlock returns [JCBlock tree]
         )* '}'
     ;
 */
+
+// Parses a statement from a block of statements.
 blockStatement returns [StatementNode ret]
     :   
         localVariableDeclarationStatement
@@ -1578,16 +1574,43 @@ blockStatement returns [StatementNode ret]
         }        
     ;
 
-
-localVariableDeclarationStatement //TODO
-    :   localVariableDeclaration
-        ';'
+// Parses local variable declaration statement.
+// For example, this rule would match
+//     int x = 5, y;
+localVariableDeclarationStatement returns [VariableDeclarationNode ret]
+    :
+        localVariableDeclaration ';'
+        {
+            $ret = $localVariableDeclaration.ret;
+        }
     ;
 
-localVariableDeclaration //TODO
-    :   variableModifiers type
-        variableDeclarator
-        (',' variableDeclarator
+// Parses a local variable declaration.  Note that local variable declarations may declare multiple variables.
+// For example, this rule would match
+//     int x = 5, y
+// Note the absence of a semicolon.
+localVariableDeclaration returns [VariableDeclarationNode ret]
+        @init {
+            List<VariableDeclaratorNode> list = new ArrayList<VariableDeclaratorNode>();
+        }
+        @after {
+            $ret = factory.makeVariableDeclarationNode(
+                    $variableModifiers.ret,
+                    factory.makeListNode(list));
+        }
+    :   
+        variableModifiers type
+        variableDeclarator[$type]
+        {
+            list.add(factory.makeVariableDeclaratorNode($variableDeclarator.type, $variableDeclarator.identifier,
+                    $variableDeclarator.initializer); 
+        }
+        (
+            ',' variableDeclarator[$type]
+            {
+	            list.add(factory.makeVariableDeclaratorNode($variableDeclarator.type, $variableDeclarator.identifier,
+	                    $variableDeclarator.initializer); 
+            }
         )*
     ;
 
