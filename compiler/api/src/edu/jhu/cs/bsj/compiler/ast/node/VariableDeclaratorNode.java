@@ -2,7 +2,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
 
 
 /**
- * Represents a declarator for a variable multi-declaration.  For example, in
+ * Represents a declarator for a variable declaration.  For example, in
  * <pre>int x = 5, y;</pre>
  * this node either represents
  * <pre>x = 5</pre>

@@ -94,7 +94,6 @@ import edu.jhu.cs.bsj.compiler.ast.node.TypeSelectNode;
 import edu.jhu.cs.bsj.compiler.ast.node.UnaryOperatorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclaratorNode;
-import edu.jhu.cs.bsj.compiler.ast.node.VariableMultiDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VoidStatementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VoidTypeDeclarationNode;
@@ -185,7 +184,6 @@ import edu.jhu.cs.bsj.compiler.impl.ast.node.TypeSelectNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.UnaryOperatorNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.VariableDeclarationNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.VariableDeclaratorNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.VariableMultiDeclarationNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.VariableNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.VoidStatementNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.VoidTypeDeclarationNodeImpl;
@@ -311,17 +309,6 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             NameNode variable)
     {
         CompoundAssignmentNode ret = new CompoundAssignmentNodeImpl(expression, variable);
-        return ret;
-    }
-
-    /**
-     * Creates a VariableMultiDeclarationNode.
-     */
-    public VariableMultiDeclarationNode makeVariableMultiDeclarationNode(
-            ModifiersNode modifiers,
-            ListNode<VariableDeclaratorNode> declarators)
-    {
-        VariableMultiDeclarationNode ret = new VariableMultiDeclarationNodeImpl(modifiers, declarators);
         return ret;
     }
 
@@ -712,11 +699,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     public VariableDeclarationNode makeVariableDeclarationNode(
             ModifiersNode modifiers,
-            TypeNode type,
-            IdentifierNode name,
-            ExpressionNode initializer)
+            ListNode<VariableDeclaratorNode> declarators)
     {
-        VariableDeclarationNode ret = new VariableDeclarationNodeImpl(modifiers, type, name, initializer);
+        VariableDeclarationNode ret = new VariableDeclarationNodeImpl(modifiers, declarators);
         return ret;
     }
 
@@ -771,11 +756,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     public FieldDeclarationNode makeFieldDeclarationNode(
             ModifiersNode modifiers,
-            TypeNode type,
-            IdentifierNode name,
-            ExpressionNode initializer)
+            ListNode<VariableDeclaratorNode> declarators)
     {
-        FieldDeclarationNode ret = new FieldDeclarationNodeImpl(modifiers, type, name, initializer);
+        FieldDeclarationNode ret = new FieldDeclarationNodeImpl(modifiers, declarators);
         return ret;
     }
 

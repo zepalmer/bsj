@@ -1,38 +1,27 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
-import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
-import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
+import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ModifiersNode;
-import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclarationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclaratorNode;
 
 public class VariableDeclarationNodeImpl extends StatementNodeImpl implements VariableDeclarationNode
 {
     /** The modifiers for this variable. */
     private ModifiersNode modifiers;
 
-    /** The type of this variable. */
-    private TypeNode type;
-
-    /** The name of this variable. */
-    private IdentifierNode name;
-
-    /** The initializer to use. */
-    private ExpressionNode initializer;
+    /** The variable declarators for this node. */
+    private ListNode<VariableDeclaratorNode> declarators;
 
     /** General constructor. */
     public VariableDeclarationNodeImpl(
             ModifiersNode modifiers,
-            TypeNode type,
-            IdentifierNode name,
-            ExpressionNode initializer)
+            ListNode<VariableDeclaratorNode> declarators)
     {
         super();
         this.modifiers = modifiers;
-        this.type = type;
-        this.name = name;
-        this.initializer = initializer;
+        this.declarators = declarators;
     }
 
     /**
@@ -62,80 +51,28 @@ public class VariableDeclarationNodeImpl extends StatementNodeImpl implements Va
     }
 
     /**
-     * Gets the type of this variable.
-     * @return The type of this variable.
+     * Gets the variable declarators for this node.
+     * @return The variable declarators for this node.
      */
-    public TypeNode getType()
+    public ListNode<VariableDeclaratorNode> getDeclarators()
     {
-        return this.type;
+        return this.declarators;
     }
 
     /**
-     * Changes the type of this variable.
-     * @param type The type of this variable.
+     * Changes the variable declarators for this node.
+     * @param declarators The variable declarators for this node.
      */
-    public void setType(TypeNode type)
+    public void setDeclarators(ListNode<VariableDeclaratorNode> declarators)
     {
-        if (this.type instanceof NodeImpl)
+        if (this.declarators instanceof NodeImpl)
         {
-            ((NodeImpl)this.type).setParent(null);
+            ((NodeImpl)this.declarators).setParent(null);
         }
-        this.type = type;
-        if (this.type instanceof NodeImpl)
+        this.declarators = declarators;
+        if (this.declarators instanceof NodeImpl)
         {
-            ((NodeImpl)this.type).setParent(this);
-        }
-    }
-
-    /**
-     * Gets the name of this variable.
-     * @return The name of this variable.
-     */
-    public IdentifierNode getName()
-    {
-        return this.name;
-    }
-
-    /**
-     * Changes the name of this variable.
-     * @param name The name of this variable.
-     */
-    public void setName(IdentifierNode name)
-    {
-        if (this.name instanceof NodeImpl)
-        {
-            ((NodeImpl)this.name).setParent(null);
-        }
-        this.name = name;
-        if (this.name instanceof NodeImpl)
-        {
-            ((NodeImpl)this.name).setParent(this);
-        }
-    }
-
-    /**
-     * Gets the initializer to use.
-     * @return The initializer to use.
-     */
-    public ExpressionNode getInitializer()
-    {
-        return this.initializer;
-    }
-
-    /**
-     * Changes the initializer to use.
-     * @param initializer The initializer to use.
-     */
-    public void setInitializer(ExpressionNode initializer)
-    {
-        if (this.initializer instanceof NodeImpl)
-        {
-            ((NodeImpl)this.initializer).setParent(null);
-        }
-        this.initializer = initializer;
-        if (this.initializer instanceof NodeImpl)
-        {
-            ((NodeImpl)this.initializer).setParent(this);
+            ((NodeImpl)this.declarators).setParent(this);
         }
     }
 
@@ -151,8 +88,6 @@ public class VariableDeclarationNodeImpl extends StatementNodeImpl implements Va
     {
         super.receiveToChildren(visitor);
         this.modifiers.receive(visitor);
-        this.type.receive(visitor);
-        this.name.receive(visitor);
-        this.initializer.receive(visitor);
+        this.declarators.receive(visitor);
     }
 }

@@ -22,39 +22,15 @@ public interface FieldDeclarationNode extends Node, ClassMember,  InterfaceMembe
     public void setModifiers(ModifiersNode modifiers);
 
     /**
-     * Gets the type of this field.
-     * @return The type of this field.
+     * Gets the variable declarators for this node.
+     * @return The variable declarators for this node.
      */
-    public TypeNode getType();
+    public ListNode<VariableDeclaratorNode> getDeclarators();
 
     /**
-     * Changes the type of this field.
-     * @param type The type of this field.
+     * Changes the variable declarators for this node.
+     * @param declarators The variable declarators for this node.
      */
-    public void setType(TypeNode type);
-
-    /**
-     * Gets the name of this field.
-     * @return The name of this field.
-     */
-    public IdentifierNode getName();
-
-    /**
-     * Changes the name of this field.
-     * @param name The name of this field.
-     */
-    public void setName(IdentifierNode name);
-
-    /**
-     * Gets the initializer to use.
-     * @return The initializer to use.
-     */
-    public ExpressionNode getInitializer();
-
-    /**
-     * Changes the initializer to use.
-     * @param initializer The initializer to use.
-     */
-    public void setInitializer(ExpressionNode initializer);
+    public void setDeclarators(ListNode<VariableDeclaratorNode> declarators);
 
 }

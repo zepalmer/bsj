@@ -10,6 +10,9 @@ package edu.jhu.cs.bsj.compiler.ast.node;
  *     <pre>
  *     <i>type identifier</i> = <i>expression</i>;
  *     </pre>
+ * or
+ *     <pre>
+ *     <i>type identifier</i> = <i>expression</i>, <i>identifier</i> = <i>expression</i>, ...;
  */
 public interface VariableDeclarationNode extends StatementNode
 {
@@ -26,39 +29,15 @@ public interface VariableDeclarationNode extends StatementNode
     public void setModifiers(ModifiersNode modifiers);
 
     /**
-     * Gets the type of this variable.
-     * @return The type of this variable.
+     * Gets the variable declarators for this node.
+     * @return The variable declarators for this node.
      */
-    public TypeNode getType();
+    public ListNode<VariableDeclaratorNode> getDeclarators();
 
     /**
-     * Changes the type of this variable.
-     * @param type The type of this variable.
+     * Changes the variable declarators for this node.
+     * @param declarators The variable declarators for this node.
      */
-    public void setType(TypeNode type);
-
-    /**
-     * Gets the name of this variable.
-     * @return The name of this variable.
-     */
-    public IdentifierNode getName();
-
-    /**
-     * Changes the name of this variable.
-     * @param name The name of this variable.
-     */
-    public void setName(IdentifierNode name);
-
-    /**
-     * Gets the initializer to use.
-     * @return The initializer to use.
-     */
-    public ExpressionNode getInitializer();
-
-    /**
-     * Changes the initializer to use.
-     * @param initializer The initializer to use.
-     */
-    public void setInitializer(ExpressionNode initializer);
+    public void setDeclarators(ListNode<VariableDeclaratorNode> declarators);
 
 }

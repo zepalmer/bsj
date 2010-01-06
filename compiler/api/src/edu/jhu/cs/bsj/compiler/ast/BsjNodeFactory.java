@@ -88,7 +88,6 @@ import edu.jhu.cs.bsj.compiler.ast.node.TypeSelectNode;
 import edu.jhu.cs.bsj.compiler.ast.node.UnaryOperatorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclaratorNode;
-import edu.jhu.cs.bsj.compiler.ast.node.VariableMultiDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VoidStatementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VoidTypeDeclarationNode;
@@ -185,13 +184,6 @@ public interface BsjNodeFactory
     public CompoundAssignmentNode makeCompoundAssignmentNode(
             ExpressionNode expression,
             NameNode variable);
-
-    /**
-     * Creates a VariableMultiDeclarationNode.
-     */
-    public VariableMultiDeclarationNode makeVariableMultiDeclarationNode(
-            ModifiersNode modifiers,
-            ListNode<VariableDeclaratorNode> declarators);
 
     /**
      * Creates a ArrayAccessNode.
@@ -440,9 +432,7 @@ public interface BsjNodeFactory
      */
     public VariableDeclarationNode makeVariableDeclarationNode(
             ModifiersNode modifiers,
-            TypeNode type,
-            IdentifierNode name,
-            ExpressionNode initializer);
+            ListNode<VariableDeclaratorNode> declarators);
 
     /**
      * Creates a AnnotationBodyNode.
@@ -479,9 +469,7 @@ public interface BsjNodeFactory
      */
     public FieldDeclarationNode makeFieldDeclarationNode(
             ModifiersNode modifiers,
-            TypeNode type,
-            IdentifierNode name,
-            ExpressionNode initializer);
+            ListNode<VariableDeclaratorNode> declarators);
 
     /**
      * Creates a AnnotationArrayValueNode.

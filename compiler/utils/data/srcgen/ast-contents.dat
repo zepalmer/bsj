@@ -420,9 +420,7 @@ TryNode :: StatementNode
 VariableDeclarationNode :: StatementNode
     @props
     modifiers               ModifiersNode                               | the modifiers for this variable
-    type                    TypeNode                                    | the type of this variable
-    name                    IdentifierNode                              | the name of this variable
-    initializer             ExpressionNode                              | the initializer to use
+    declarators             ListNode<VariableDeclaratorNode>            | the variable declarators for this node
     @docs
         A node for the declaration of a variable, as in:
             <pre>
@@ -432,6 +430,9 @@ VariableDeclarationNode :: StatementNode
             <pre>
             <i>type identifier</i> = <i>expression</i>;
             </pre>
+        or
+            <pre>
+            <i>type identifier</i> = <i>expression</i>, <i>identifier</i> = <i>expression</i>, ...;
 
 VariableDeclaratorNode :: StatementNode
     @props
@@ -439,7 +440,7 @@ VariableDeclaratorNode :: StatementNode
     name                    IdentifierNode                              | the name of this variable
     initializer             ExpressionNode                              | the initializer to use
     @docs
-        Represents a declarator for a variable multi-declaration.  For example, in
+        Represents a declarator for a variable declaration.  For example, in
         <pre>int x = 5, y;</pre>
         this node either represents
         <pre>x = 5</pre>
@@ -449,14 +450,6 @@ VariableDeclaratorNode :: StatementNode
         <pre>int x = 5, y[] = new int[2];</pre>
         Hence, type exists on this node instead of its parent.
         
-VariableMultiDeclarationNode :: StatementNode
-    @props
-    modifiers               ModifiersNode                               | the modifiers for these variables
-    declarators             ListNode<VariableDeclaratorNode>            | the variable declarators for this node
-    @docs
-        Represents a variable multi-declaration, as in:
-        <pre>int x = 5, y;</pre>
-
 VoidStatementNode :: StatementNode
     @docs
         A node representing a void statement, as in
@@ -592,9 +585,7 @@ EnumConstantDeclarationNode :: Node
 FieldDeclarationNode :: Node + ClassMember, InterfaceMember, AnnotationMember
     @props
     modifiers               ModifiersNode                               | the modifiers for this field
-    type                    TypeNode                                    | the type of this field
-    name                    IdentifierNode                              | the name of this field
-    initializer             ExpressionNode                              | the initializer to use
+    declarators             ListNode<VariableDeclaratorNode>            | the variable declarators for this node
     @docs
         A node representing a field declaration.  Constants are represented by this node as well.
 

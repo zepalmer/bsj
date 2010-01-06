@@ -77,7 +77,6 @@ import edu.jhu.cs.bsj.compiler.ast.node.TypeSelectNode;
 import edu.jhu.cs.bsj.compiler.ast.node.UnaryOperatorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclaratorNode;
-import edu.jhu.cs.bsj.compiler.ast.node.VariableMultiDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VoidStatementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VoidTypeDeclarationNode;
@@ -185,9 +184,6 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
         } else if (node instanceof BlockStatementNode)
         {
             visitBlockStatementNodeStart((BlockStatementNode)node);
-        } else if (node instanceof VariableMultiDeclarationNode)
-        {
-            visitVariableMultiDeclarationNodeStart((VariableMultiDeclarationNode)node);
         } else if (node instanceof LabeledStatementNode)
         {
             visitLabeledStatementNodeStart((LabeledStatementNode)node);
@@ -449,9 +445,6 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
         } else if (node instanceof BlockStatementNode)
         {
             visitBlockStatementNodeStop((BlockStatementNode)node);
-        } else if (node instanceof VariableMultiDeclarationNode)
-        {
-            visitVariableMultiDeclarationNodeStop((VariableMultiDeclarationNode)node);
         } else if (node instanceof LabeledStatementNode)
         {
             visitLabeledStatementNodeStop((LabeledStatementNode)node);
@@ -844,14 +837,6 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
      * @param node The node being visited.
      */
     public void visitBlockStatementNodeStart(BlockStatementNode node)
-    {
-    }
-
-    /**
-     * Starts a visit for nodes of type VariableMultiDeclarationNode.
-     * @param node The node being visited.
-     */
-    public void visitVariableMultiDeclarationNodeStart(VariableMultiDeclarationNode node)
     {
     }
 
@@ -1516,14 +1501,6 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
      * @param node The node being visited.
      */
     public void visitBlockStatementNodeStop(BlockStatementNode node)
-    {
-    }
-
-    /**
-     * Stops a visit for nodes of type VariableMultiDeclarationNode.
-     * @param node The node being visited.
-     */
-    public void visitVariableMultiDeclarationNodeStop(VariableMultiDeclarationNode node)
     {
     }
 
