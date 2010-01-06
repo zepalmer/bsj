@@ -775,7 +775,7 @@ classBodyDeclaration returns [ClassMember ret]
         }
     ;
 
-memberDecl // TODO: fieldDeclaration can now return a list - resolve this
+memberDecl
     :    fieldDeclaration
     |    constructorDeclaration
     |    methodDeclaration
@@ -868,7 +868,7 @@ methodDeclaration returns [MethodDeclarationNode ret]
     ;
 
 
-fieldDeclaration returns [List<FieldDeclarationNode> ret]
+fieldDeclaration returns [FieldDeclarationNode ret]
     :
         abstractFieldDeclaration[fieldModifiers]
         {
@@ -931,7 +931,7 @@ interfaceMethodDeclaration returns [MethodDeclarationNode ret]
         }         
     ;
 
-interfaceFieldDeclaration returns [List<FieldDeclarationNode> ret]
+interfaceFieldDeclaration returns [FieldDeclarationNode ret]
     :   
         abstractFieldDeclaration[constantModifiers]
         {
