@@ -860,16 +860,24 @@ anonymousClassBodyDeclaration returns [AnonymousClassMember ret]
 memberDecl returns [AnonymousClassMember ret]
     :    
         fieldDeclaration
-        // TODO
+        {
+            $ret = $fieldDeclaration.ret;
+        }
     |   
         methodDeclaration
-        // TODO
+        {
+            $ret = $methodDeclaration.ret;
+        }
     |   
         classDeclaration
-        // TODO
+        {
+            $ret = $classDeclaration.ret;
+        }
     |   
         interfaceDeclaration
-        // TODO
+        {
+            $ret = $interfaceDeclaration.ref;
+        }
     ;
 
 methodReturnType returns [TypeNode ret]
