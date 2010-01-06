@@ -14,6 +14,8 @@
 	
 	<!-- Names the ANTLR grammar file. -->
 	<property name="grammar" value="src/edu/jhu/cs/bsj/compiler/grammar/Bsj.g"/>
+	<!-- Names the directory which should contain the sources on which the parser depends. -->
+	<property name="presrc" value="src-pre" />
 	<!-- Names the directory which will contain the generated sources. -->
 	<property name="gensrc" value=".gen/src" />
 	<!-- Names the directory which will contain the compiled ANTLR parser. -->
@@ -22,11 +24,21 @@
 	<property name="parserPackage" value="${gensrc}/edu/jhu/cs/bsj/compiler/tool/parser/antlr" />
 	<!-- Names the directory containing compiled binaries for the BSJ Compiler API. -->
 	<property name="compilerApiPath" value="../api/bin" />
+	
+    <!-- - - - - - - - - - - - - - - - - - 
+          target: antlr                      
+         - - - - - - - - - - - - - - - - - -->
+	<target name="prebuild" description="Builds the sources on which the ANTLR parser depends">
+		<javac
+		    destdir="${genbin}"
+		    srcdir="${presrc}"
+		    />
+	</target>
 
     <!-- - - - - - - - - - - - - - - - - - 
           target: antlr                      
          - - - - - - - - - - - - - - - - - -->
-    <target name="antlr" description="Uses ANTLR to generate the parser's source files">
+    <target name="antlr" depends="prebuild" description="Uses ANTLR to generate the parser's source files">
     	<mkdir dir="${parserPackage}"/>
     	<antlr:antlr3 xmlns:antlr="antlib:org/apache/tools/ant/antlr"
     	    target="${grammar}"
