@@ -907,8 +907,7 @@ interfaceBodyDeclaration returns [InterfaceMember ret]
     |   
         ';'
         {
-            // TODO: void decl?
-            $ret = null;
+            $ret = factory.makeVoidTypeDeclarationNode();
         }    
     ;
 
