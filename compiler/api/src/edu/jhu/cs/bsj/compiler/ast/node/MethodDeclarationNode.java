@@ -14,7 +14,9 @@ import edu.jhu.cs.bsj.compiler.ast.tags.InterfaceMember;
  *     public void foo(String... vararg)
  * </pre>
  * The type on the <tt>varargParameter</tt> node should be <tt>String</tt> in the above case (and <i>not</i>
- * <tt>String[]</tt>).
+ * <tt>String[]</tt>).  Also observe that methods with no body, such as the abstract method
+ * <pre>public abstract void foo();</pre>
+ * will have a <tt>null</tt> body.
  */
 public interface MethodDeclarationNode extends Node, ClassMember,  InterfaceMember
 {
