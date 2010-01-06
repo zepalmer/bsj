@@ -1719,9 +1719,9 @@ switchBlockStatementGroup returns [CaseNode ret]
     }
     :
         switchLabel
-            {
-                label = $switchLabel.ret;
-            }
+        {
+            label = $switchLabel.ret;
+        }
         (
             blockStatement
             {
