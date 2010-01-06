@@ -1915,10 +1915,19 @@ catchClause returns [CatchNode ret]
         }
     ;
 
-formalParameter //TODO
+// Parses the formal parameter of a catch block.
+// For example, in
+//     try { ... } catch (IOException e) { ... }
+// this rule would match
+//     IOException e
+formalParameter returns [VariableNode ret]
     :   
-        variableModifiers type IDENTIFIER
-        ('[' ']')*
+        variableModifiers type id=IDENTIFIER
+        arrayTypeIndicator[$type.ret]
+        {
+            $ret = factory.makeVariableNode($variableModifiers.ret, $arrayTypeIndicator.ret,
+                    factory.makeIdentifierNode($id.text));
+        }
     ;
 
 forstatement returns [StatementNode ret]
