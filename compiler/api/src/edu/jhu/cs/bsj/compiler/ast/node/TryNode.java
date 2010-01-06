@@ -14,6 +14,8 @@ package edu.jhu.cs.bsj.compiler.ast.node;
  * catch (<i>type name</i>) <i>block</i>
  * finally <i>block</i>
  * </pre>
+ * If no catch block exists, the <tt>catches</tt> list node will contain no children.  If no finally block exists,
+ * <tt>finallyBlock</tt> will be <tt>null</tt>.  <tt>catches</tt> is not permitted to be <tt>null</tt>.
  */
 public interface TryNode extends StatementNode
 {
