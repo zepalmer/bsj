@@ -197,6 +197,33 @@ tokens {
             Modifier.PUBLIC,
             Modifier.PROTECTED,
             Modifier.PRIVATE);
+    
+    static class IntegerBaseResult
+    {
+        public int base;
+        public String string;
+        public IntegerBaseResult(int base, String string)
+        {
+            this.base = base;
+            this.string = string;
+        }
+        public IntegerBaseResult(String string)
+        {
+            if (string.length()>1 && string.charAt(0)=='0')
+            {
+                this.base = 8;
+                this.string = string.substring(1);
+            } else if (s.startsWith("0x") || s.startsWith("0X"))
+            {
+                this.base = 16;
+                this.string = string.substring(2);
+            } else
+            {
+                this.base = 10;
+                this.string = string;
+            }
+        }
+    }
 }
 
 /********************************************************************************************
@@ -2392,16 +2419,89 @@ arguments //TODO
         )? ')'
     ;
 
-literal //TODO
-    :   INTLITERAL
-    |   LONGLITERAL
-    |   FLOATLITERAL
-    |   DOUBLELITERAL
-    |   CHARLITERAL
-    |   STRINGLITERAL
-    |   TRUE
-    |   FALSE
-    |   NULL
+literal returns [LiteralNode<?> ret]
+    :
+        INTLITERAL
+        {
+            IntegerBaseResult ibr = new IntegerBaseResult($INTLITERAL.text);
+            Integer i;
+            try
+            {
+                i = Integer.parseInt(ibr.string, ibr.base);
+	        } catch (NumberFormatException nfe)
+	        {
+	            // TODO: report and handle error
+	        }
+	        $ret = factory.makeIntegerLiteralNode(i);
+        }
+    |   
+        LONGLITERAL
+        {
+            String s = $LONGLITERAL.text;
+            s = s.substring(0, s.length()-1);
+            IntegerBaseResult ibr = new IntegerBaseResult(s);
+            Long l;
+            try
+            {
+                l = Long.parseLong(ibr.string, ibr.base);
+            } catch (NumberFormatException nfe)
+            {
+                // TODO: report and handle error
+            }
+            $ret = factory.makeLongLiteralNode(l);
+        }
+    |   
+        FLOATLITERAL
+        {
+            String s = $FLOATLITERAL.text;
+            s = s.substring(0,s.length()-1);
+            Float f;
+            try
+            {
+                f = Float.parseFloat(s);
+            } catch (NumberFormatException nfe)
+            {
+                // TODO: report and handle error
+            }
+            $ret = factory.makeFloatLiteralNode(f);
+        }
+    |   
+        DOUBLELITERAL
+        {
+            String s = $DOUBLELITERAL.text;
+            if (s.endsWith("d") || s.endsWith("D"))
+            {
+                s = s.substring(0,s.length()-1);
+            }
+            Double d;
+            try
+            {
+                d = Double.parseDouble(s);
+            } catch (NumberFormatException nfe)
+            {
+                // TODO: report and handle error
+            }
+            $ret = factory.makeDoubleLiteralNode(d);
+        }
+    |   
+        CHARLITERAL
+        // TODO
+    |   
+        STRINGLITERAL
+        // TODO
+    |   
+        TRUE
+        {
+            $ret = factory.makeBooleanLiteralNode(true);
+        }
+    |   
+        FALSE
+        {
+            $ret = factory.makeBooleanLiteralNode(false);
+        }
+    |   
+        NULL
+        // TODO
     ;
 
 /**
