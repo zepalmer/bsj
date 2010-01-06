@@ -88,6 +88,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.TypeSelectNode;
 import edu.jhu.cs.bsj.compiler.ast.node.UnaryOperatorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableNode;
+import edu.jhu.cs.bsj.compiler.ast.node.VoidStatementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VoidTypeDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.WhileLoopNode;
 import edu.jhu.cs.bsj.compiler.ast.node.WildcardTypeNode;
@@ -243,6 +244,11 @@ public interface BsjNodeFactory
     public CaseNode makeCaseNode(
             ExpressionNode expression,
             ListNode<? extends StatementNode> statements);
+
+    /**
+     * Creates a VoidStatementNode.
+     */
+    public VoidStatementNode makeVoidStatementNode();
 
     /**
      * Creates a CodeLiteralNode.

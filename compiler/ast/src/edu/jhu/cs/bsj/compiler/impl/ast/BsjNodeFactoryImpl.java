@@ -94,6 +94,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.TypeSelectNode;
 import edu.jhu.cs.bsj.compiler.ast.node.UnaryOperatorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableNode;
+import edu.jhu.cs.bsj.compiler.ast.node.VoidStatementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VoidTypeDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.WhileLoopNode;
 import edu.jhu.cs.bsj.compiler.ast.node.WildcardTypeNode;
@@ -181,6 +182,7 @@ import edu.jhu.cs.bsj.compiler.impl.ast.node.TypeSelectNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.UnaryOperatorNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.VariableDeclarationNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.VariableNodeImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.node.VoidStatementNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.VoidTypeDeclarationNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.WhileLoopNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.WildcardTypeNodeImpl;
@@ -401,6 +403,15 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ListNode<? extends StatementNode> statements)
     {
         CaseNode ret = new CaseNodeImpl(expression, statements);
+        return ret;
+    }
+
+    /**
+     * Creates a VoidStatementNode.
+     */
+    public VoidStatementNode makeVoidStatementNode()
+    {
+        VoidStatementNode ret = new VoidStatementNodeImpl();
         return ret;
     }
 

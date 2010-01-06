@@ -77,6 +77,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.TypeSelectNode;
 import edu.jhu.cs.bsj.compiler.ast.node.UnaryOperatorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableNode;
+import edu.jhu.cs.bsj.compiler.ast.node.VoidStatementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VoidTypeDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.WhileLoopNode;
 import edu.jhu.cs.bsj.compiler.ast.node.WildcardTypeNode;
@@ -145,6 +146,9 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
         } else if (node instanceof ContinueNode)
         {
             visitContinueNodeStart((ContinueNode)node);
+        } else if (node instanceof VoidStatementNode)
+        {
+            visitVoidStatementNodeStart((VoidStatementNode)node);
         } else if (node instanceof SynchronizedNode)
         {
             visitSynchronizedNodeStart((SynchronizedNode)node);
@@ -397,6 +401,9 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
         } else if (node instanceof ContinueNode)
         {
             visitContinueNodeStop((ContinueNode)node);
+        } else if (node instanceof VoidStatementNode)
+        {
+            visitVoidStatementNodeStop((VoidStatementNode)node);
         } else if (node instanceof SynchronizedNode)
         {
             visitSynchronizedNodeStop((SynchronizedNode)node);
@@ -720,6 +727,14 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
      * @param node The node being visited.
      */
     public void visitContinueNodeStart(ContinueNode node)
+    {
+    }
+
+    /**
+     * Starts a visit for nodes of type VoidStatementNode.
+     * @param node The node being visited.
+     */
+    public void visitVoidStatementNodeStart(VoidStatementNode node)
     {
     }
 
@@ -1360,6 +1375,14 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
      * @param node The node being visited.
      */
     public void visitContinueNodeStop(ContinueNode node)
+    {
+    }
+
+    /**
+     * Stops a visit for nodes of type VoidStatementNode.
+     * @param node The node being visited.
+     */
+    public void visitVoidStatementNodeStop(VoidStatementNode node)
     {
     }
 

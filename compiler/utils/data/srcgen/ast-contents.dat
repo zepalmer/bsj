@@ -433,6 +433,11 @@ VariableDeclarationNode :: StatementNode
             <i>type identifier</i> = <i>expression</i>;
             </pre>
 
+VoidStatementNode :: StatementNode
+    @docs
+        A node representing a void statement, as in
+        <pre>;</pre>        
+
 WhileLoopNode :: StatementNode
     @props
     condition               ExpressionNode                              | the loop's condition
