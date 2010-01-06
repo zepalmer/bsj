@@ -2007,10 +2007,22 @@ expressionList returns [ListNode<ExpressionNode> ret]
     ;
 
 
-expression returns [ExpressionNode ret] //TODO
+expression returns [ExpressionNode ret]
     :   
         conditionalExpression
-        (assignmentOperator expression)?
+        {
+            $ret = $conditionalExpression.ret;
+        }
+        (
+            assignmentOperator
+            expression
+            {
+                $ret = factory.makeAssignmentNode(
+                        $ret,
+                        $assignmentOperator.ret,
+                        $expression.ret);
+            }
+        )?
     ;
 
 
