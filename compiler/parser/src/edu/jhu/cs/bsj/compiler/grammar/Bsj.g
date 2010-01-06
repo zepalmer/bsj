@@ -1599,14 +1599,14 @@ statement returns [StatementNode ret]
             $ret = $block.ret;
         }
     |   
-        ('assert') e1=expression (':' e2=expression)? ';'
+        'assert' e1=expression (':' e2=expression)? ';'
         {
             $ret = factory.makeAssertStatementNode(
                 $e1.ret,
                 e2 == null ? null | $e2.ret);
         }
     |   
-        'assert'  e1=expression (':' e2=expression)? ';'   
+        'assert' e1=expression (':' e2=expression)? ';'   
         {
             $ret = factory.makeAssertStatementNode(
                 $e1.ret,
@@ -1670,20 +1670,16 @@ statement returns [StatementNode ret]
                 $expression.ret);
         }
     |   
-        'break'
-              (a=IDENTIFIER
-              )? ';'
+        'break' (a=IDENTIFIER)? ';'
         {
             $ret = factory.makeBreakNode(
-                a == null ? null : factory.makeIdentifierNode($a.text));
+                $a == null ? null : factory.makeIdentifierNode($a.text));
         }
     |   
-        'continue'
-              (a=IDENTIFIER
-              )? ';'
+        'continue' (a=IDENTIFIER)? ';'
         {
             $ret = factory.makeContinueNode(
-                a == null ? null : factory.makeIdentifierNode($a.text));
+                $a == null ? null : factory.makeIdentifierNode($a.text));
         }
     |   
         expression  ';'  
