@@ -490,6 +490,10 @@ TypeSelectNode :: TypeNode + TypeArgument, BoundType, ParameterizableType
         <i>type</i> . <i>type</i>
         </pre>
 
+VoidTypeNode :: TypeNode
+    @docs
+        A node representing the void type.  This is used, for example, in method return values.
+
 ### Literal Nodes #####################################################################################################
 
 BooleanLiteralNode :: LiteralNode<Boolean>

@@ -96,6 +96,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VoidStatementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VoidTypeDeclarationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.VoidTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.WhileLoopNode;
 import edu.jhu.cs.bsj.compiler.ast.node.WildcardTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.CodeLiteralNode;
@@ -184,6 +185,7 @@ import edu.jhu.cs.bsj.compiler.impl.ast.node.VariableDeclarationNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.VariableNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.VoidStatementNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.VoidTypeDeclarationNodeImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.node.VoidTypeNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.WhileLoopNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.WildcardTypeNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.meta.CodeLiteralNodeImpl;
@@ -658,6 +660,15 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ModifiersNode modifiers)
     {
         EnumDeclarationNode ret = new EnumDeclarationNodeImpl(implementsClause, body, simpleName, modifiers);
+        return ret;
+    }
+
+    /**
+     * Creates a VoidTypeNode.
+     */
+    public VoidTypeNode makeVoidTypeNode()
+    {
+        VoidTypeNode ret = new VoidTypeNodeImpl();
         return ret;
     }
 

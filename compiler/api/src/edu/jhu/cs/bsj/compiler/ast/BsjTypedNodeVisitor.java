@@ -79,6 +79,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VoidStatementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VoidTypeDeclarationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.VoidTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.WhileLoopNode;
 import edu.jhu.cs.bsj.compiler.ast.node.WildcardTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.CodeLiteralNode;
@@ -221,6 +222,9 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
         } else if (node instanceof NormalAnnotationNode)
         {
             visitNormalAnnotationNodeStart((NormalAnnotationNode)node);
+        } else if (node instanceof VoidTypeNode)
+        {
+            visitVoidTypeNodeStart((VoidTypeNode)node);
         } else if (node instanceof PrimitiveTypeNode)
         {
             visitPrimitiveTypeNodeStart((PrimitiveTypeNode)node);
@@ -476,6 +480,9 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
         } else if (node instanceof NormalAnnotationNode)
         {
             visitNormalAnnotationNodeStop((NormalAnnotationNode)node);
+        } else if (node instanceof VoidTypeNode)
+        {
+            visitVoidTypeNodeStop((VoidTypeNode)node);
         } else if (node instanceof PrimitiveTypeNode)
         {
             visitPrimitiveTypeNodeStop((PrimitiveTypeNode)node);
@@ -927,6 +934,14 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
      * @param node The node being visited.
      */
     public void visitNormalAnnotationNodeStart(NormalAnnotationNode node)
+    {
+    }
+
+    /**
+     * Starts a visit for nodes of type VoidTypeNode.
+     * @param node The node being visited.
+     */
+    public void visitVoidTypeNodeStart(VoidTypeNode node)
     {
     }
 
@@ -1575,6 +1590,14 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
      * @param node The node being visited.
      */
     public void visitNormalAnnotationNodeStop(NormalAnnotationNode node)
+    {
+    }
+
+    /**
+     * Stops a visit for nodes of type VoidTypeNode.
+     * @param node The node being visited.
+     */
+    public void visitVoidTypeNodeStop(VoidTypeNode node)
     {
     }
 

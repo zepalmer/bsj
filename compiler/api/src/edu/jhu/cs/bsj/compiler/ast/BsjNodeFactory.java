@@ -90,6 +90,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VoidStatementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VoidTypeDeclarationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.VoidTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.WhileLoopNode;
 import edu.jhu.cs.bsj.compiler.ast.node.WildcardTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.CodeLiteralNode;
@@ -407,6 +408,11 @@ public interface BsjNodeFactory
             EnumBodyNode body,
             IdentifierNode simpleName,
             ModifiersNode modifiers);
+
+    /**
+     * Creates a VoidTypeNode.
+     */
+    public VoidTypeNode makeVoidTypeNode();
 
     /**
      * Creates a IdentifierNode.
