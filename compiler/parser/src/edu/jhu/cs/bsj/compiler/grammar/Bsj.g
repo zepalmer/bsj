@@ -1599,13 +1599,6 @@ statement returns [StatementNode ret]
             $ret = $block.ret;
         }
     |   
-        'assert' e1=expression (':' e2=expression)? ';'
-        {
-            $ret = factory.makeAssertStatementNode(
-                $e1.ret,
-                e2 == null ? null | $e2.ret);
-        }
-    |   
         'assert' e1=expression (':' e2=expression)? ';'   
         {
             $ret = factory.makeAssertStatementNode(
