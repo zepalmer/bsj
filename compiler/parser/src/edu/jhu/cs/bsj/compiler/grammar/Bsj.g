@@ -1963,10 +1963,19 @@ forstatement returns [StatementNode ret]
         }                 
     ;
 
-//TODO
-forInit returns [ListNode<StatementNode> ret]
-    :   localVariableDeclaration
-    |   expressionList
+// Parses the initializer for a standard for loop.  This may either be a list of variable declarations or a list of
+// initialization expressions.
+forInit returns [ForInitializerNode ret]
+    :   
+        localVariableDeclaration
+        {
+            $ret = factory.makeForInitializerDeclarationNode($localVariableDeclaration.ret);
+        }
+    |   
+        expressionList
+        {
+            $ret = factory.makeForInitializerExpressionNode($expressionList.ret);
+        }
     ;
 
 parExpression returns [ExpressionNode ret]
