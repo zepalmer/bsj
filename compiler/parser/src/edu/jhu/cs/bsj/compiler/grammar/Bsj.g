@@ -802,7 +802,7 @@ classBodyDeclaration returns [ClassMember ret]
         }
     ;
 
-memberDecl
+memberDecl // TODO
     :    fieldDeclaration
     |    constructorDeclaration
     |    methodDeclaration
