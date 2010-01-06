@@ -2485,10 +2485,25 @@ literal returns [LiteralNode<?> ret]
         }
     |   
         CHARLITERAL
-        // TODO
+        {
+            String s = $CHARLITERAL.text;
+            s = s.substring(1,s.length()-1);
+            s = BsjAntlrParserUtils.unescape(s);
+            if (s.length()!=1)
+            {
+                throw new IllegalStateException("Unescape of \"" + $CHARLITERAL.text + "\" resulted in \"" + s +
+                        "\" (length!=1)");
+            }
+            $ret = factory.makeCharLiteralNode(s.charAt(0));
+        }
     |   
         STRINGLITERAL
-        // TODO
+        {
+            String s = $STRINGLITERAL.text;
+            s = s.substring(1,s.length()-1);
+            s = BsjAntlrParserUtils.unescape(s);
+            $ret = factory.makeStringLiteralNode(s);
+        }
     |   
         TRUE
         {
