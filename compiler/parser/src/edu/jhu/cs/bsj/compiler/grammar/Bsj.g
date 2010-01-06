@@ -610,7 +610,7 @@ enumBody returns [EnumBodyNode ret]
         }
     ;
 
-enumConstants returns [List<EnumConstantDeclarationNode> ret]
+enumConstants returns [ListNode<EnumConstantDeclarationNode> ret]
         @init {
             List<EnumConstantDeclarationNode> list = new ArrayList<EnumConstantDeclarationNode>();
         }
