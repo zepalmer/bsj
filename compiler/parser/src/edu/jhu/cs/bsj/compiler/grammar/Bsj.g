@@ -1626,31 +1626,6 @@ block returns [BlockStatementNode ret]
         '}'
     ;
 
-/*
-staticBlock returns [JCBlock tree]
-        @init {
-            ListBuffer<JCStatement> stats = new ListBuffer<JCStatement>();
-            int pos = ((AntlrJavacToken) $start).getStartIndex();
-        }
-        @after {
-            $tree = T.at(pos).Block(Flags.STATIC, stats.toList());
-            pu.storeEnd($tree, $stop);
-            // construct a dummy static modifiers for end position
-            pu.storeEnd(T.at(pos).Modifiers(Flags.STATIC,  com.sun.tools.javac.util.List.<JCAnnotation>nil()),$st);
-        }
-    :   st_1='static' '{' 
-        (blockStatement
-            {
-                if ($blockStatement.tree == null) {
-                    stats.appendList($blockStatement.list);
-                } else {
-                    stats.append($blockStatement.tree);
-                }
-            }
-        )* '}'
-    ;
-*/
-
 // Parses a statement from a block of statements.
 blockStatement returns [StatementNode ret]
     :   
