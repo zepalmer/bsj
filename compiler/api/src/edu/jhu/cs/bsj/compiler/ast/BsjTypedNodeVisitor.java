@@ -67,6 +67,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.SingleElementAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.StringLiteralNode;
 import edu.jhu.cs.bsj.compiler.ast.node.SuperclassConstructorInvocationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.SwitchNode;
+import edu.jhu.cs.bsj.compiler.ast.node.SynchronizedNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ThrowNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TryNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeCastNode;
@@ -140,6 +141,9 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
         } else if (node instanceof ContinueNode)
         {
             visitContinueNodeStart((ContinueNode)node);
+        } else if (node instanceof SynchronizedNode)
+        {
+            visitSynchronizedNodeStart((SynchronizedNode)node);
         } else if (node instanceof ThrowNode)
         {
             visitThrowNodeStart((ThrowNode)node);
@@ -386,6 +390,9 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
         } else if (node instanceof ContinueNode)
         {
             visitContinueNodeStop((ContinueNode)node);
+        } else if (node instanceof SynchronizedNode)
+        {
+            visitSynchronizedNodeStop((SynchronizedNode)node);
         } else if (node instanceof ThrowNode)
         {
             visitThrowNodeStop((ThrowNode)node);
@@ -698,6 +705,14 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
      * @param node The node being visited.
      */
     public void visitContinueNodeStart(ContinueNode node)
+    {
+    }
+
+    /**
+     * Starts a visit for nodes of type SynchronizedNode.
+     * @param node The node being visited.
+     */
+    public void visitSynchronizedNodeStart(SynchronizedNode node)
     {
     }
 
@@ -1322,6 +1337,14 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
      * @param node The node being visited.
      */
     public void visitContinueNodeStop(ContinueNode node)
+    {
+    }
+
+    /**
+     * Stops a visit for nodes of type SynchronizedNode.
+     * @param node The node being visited.
+     */
+    public void visitSynchronizedNodeStop(SynchronizedNode node)
     {
     }
 

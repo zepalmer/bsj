@@ -13,18 +13,6 @@ package edu.jhu.cs.bsj.compiler.ast.node;
 public interface SwitchNode extends StatementNode
 {
     /**
-     * Gets the cases in this switch.
-     * @return The cases in this switch.
-     */
-    public ListNode<? extends CaseNode> getCases();
-
-    /**
-     * Changes the cases in this switch.
-     * @param cases The cases in this switch.
-     */
-    public void setCases(ListNode<? extends CaseNode> cases);
-
-    /**
      * Gets expression over which to switch.
      * @return Expression over which to switch.
      */
@@ -35,5 +23,17 @@ public interface SwitchNode extends StatementNode
      * @param expression Expression over which to switch.
      */
     public void setExpression(ExpressionNode expression);
+
+    /**
+     * Gets the cases in this switch.
+     * @return The cases in this switch.
+     */
+    public ListNode<? extends CaseNode> getCases();
+
+    /**
+     * Changes the cases in this switch.
+     * @param cases The cases in this switch.
+     */
+    public void setCases(ListNode<? extends CaseNode> cases);
 
 }

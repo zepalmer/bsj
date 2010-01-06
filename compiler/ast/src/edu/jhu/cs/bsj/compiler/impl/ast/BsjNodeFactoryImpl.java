@@ -82,6 +82,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.StatementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.StringLiteralNode;
 import edu.jhu.cs.bsj.compiler.ast.node.SuperclassConstructorInvocationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.SwitchNode;
+import edu.jhu.cs.bsj.compiler.ast.node.SynchronizedNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ThrowNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TryNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeCastNode;
@@ -169,6 +170,7 @@ import edu.jhu.cs.bsj.compiler.impl.ast.node.SingleElementAnnotationNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.StringLiteralNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.SuperclassConstructorInvocationNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.SwitchNodeImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.node.SynchronizedNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.ThrowNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.TryNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.TypeCastNodeImpl;
@@ -356,6 +358,17 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
 
     /**
+     * Creates a SynchronizedNode.
+     */
+    public SynchronizedNode makeSynchronizedNode(
+            ExpressionNode expression,
+            BlockStatementNode block)
+    {
+        SynchronizedNode ret = new SynchronizedNodeImpl(expression, block);
+        return ret;
+    }
+
+    /**
      * Creates a VariableNode.
      */
     public VariableNode makeVariableNode(
@@ -510,10 +523,10 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      * Creates a SwitchNode.
      */
     public SwitchNode makeSwitchNode(
-            ListNode<? extends CaseNode> cases,
-            ExpressionNode expression)
+            ExpressionNode expression,
+            ListNode<? extends CaseNode> cases)
     {
-        SwitchNode ret = new SwitchNodeImpl(cases, expression);
+        SwitchNode ret = new SwitchNodeImpl(expression, cases);
         return ret;
     }
 

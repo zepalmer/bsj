@@ -1,32 +1,31 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
-import edu.jhu.cs.bsj.compiler.ast.node.CaseNode;
+import edu.jhu.cs.bsj.compiler.ast.node.BlockStatementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.SwitchNode;
+import edu.jhu.cs.bsj.compiler.ast.node.SynchronizedNode;
 
-public class SwitchNodeImpl extends StatementNodeImpl implements SwitchNode
+public class SynchronizedNodeImpl extends StatementNodeImpl implements SynchronizedNode
 {
-    /** Expression over which to switch. */
+    /** The synchronization expression. */
     private ExpressionNode expression;
 
-    /** The cases in this switch. */
-    private ListNode<? extends CaseNode> cases;
+    /** The block of statements to synchronize. */
+    private BlockStatementNode block;
 
     /** General constructor. */
-    public SwitchNodeImpl(
+    public SynchronizedNodeImpl(
             ExpressionNode expression,
-            ListNode<? extends CaseNode> cases)
+            BlockStatementNode block)
     {
         super();
         this.expression = expression;
-        this.cases = cases;
+        this.block = block;
     }
 
     /**
-     * Gets expression over which to switch.
-     * @return Expression over which to switch.
+     * Gets the synchronization expression.
+     * @return The synchronization expression.
      */
     public ExpressionNode getExpression()
     {
@@ -34,8 +33,8 @@ public class SwitchNodeImpl extends StatementNodeImpl implements SwitchNode
     }
 
     /**
-     * Changes expression over which to switch.
-     * @param expression Expression over which to switch.
+     * Changes the synchronization expression.
+     * @param expression The synchronization expression.
      */
     public void setExpression(ExpressionNode expression)
     {
@@ -51,28 +50,28 @@ public class SwitchNodeImpl extends StatementNodeImpl implements SwitchNode
     }
 
     /**
-     * Gets the cases in this switch.
-     * @return The cases in this switch.
+     * Gets the block of statements to synchronize.
+     * @return The block of statements to synchronize.
      */
-    public ListNode<? extends CaseNode> getCases()
+    public BlockStatementNode getBlock()
     {
-        return this.cases;
+        return this.block;
     }
 
     /**
-     * Changes the cases in this switch.
-     * @param cases The cases in this switch.
+     * Changes the block of statements to synchronize.
+     * @param block The block of statements to synchronize.
      */
-    public void setCases(ListNode<? extends CaseNode> cases)
+    public void setBlock(BlockStatementNode block)
     {
-        if (this.cases instanceof NodeImpl)
+        if (this.block instanceof NodeImpl)
         {
-            ((NodeImpl)this.cases).setParent(null);
+            ((NodeImpl)this.block).setParent(null);
         }
-        this.cases = cases;
-        if (this.cases instanceof NodeImpl)
+        this.block = block;
+        if (this.block instanceof NodeImpl)
         {
-            ((NodeImpl)this.cases).setParent(this);
+            ((NodeImpl)this.block).setParent(this);
         }
     }
 
@@ -88,6 +87,6 @@ public class SwitchNodeImpl extends StatementNodeImpl implements SwitchNode
     {
         super.receiveToChildren(visitor);
         this.expression.receive(visitor);
-        this.cases.receive(visitor);
+        this.block.receive(visitor);
     }
 }

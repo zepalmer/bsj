@@ -76,6 +76,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.StatementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.StringLiteralNode;
 import edu.jhu.cs.bsj.compiler.ast.node.SuperclassConstructorInvocationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.SwitchNode;
+import edu.jhu.cs.bsj.compiler.ast.node.SynchronizedNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ThrowNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TryNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeCastNode;
@@ -214,6 +215,13 @@ public interface BsjNodeFactory
             IdentifierNode identifier);
 
     /**
+     * Creates a SynchronizedNode.
+     */
+    public SynchronizedNode makeSynchronizedNode(
+            ExpressionNode expression,
+            BlockStatementNode block);
+
+    /**
      * Creates a VariableNode.
      */
     public VariableNode makeVariableNode(
@@ -312,8 +320,8 @@ public interface BsjNodeFactory
      * Creates a SwitchNode.
      */
     public SwitchNode makeSwitchNode(
-            ListNode<? extends CaseNode> cases,
-            ExpressionNode expression);
+            ExpressionNode expression,
+            ListNode<? extends CaseNode> cases);
 
     /**
      * Creates a AlternateConstructorInvocationNode.

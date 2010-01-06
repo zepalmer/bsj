@@ -355,13 +355,25 @@ LabeledStatementNode :: StatementNode
     
 SwitchNode :: StatementNode
     @props
-    cases                   ListNode<? extends CaseNode>                | the cases in this switch
     expression              ExpressionNode                              | expression over which to switch
+    cases                   ListNode<? extends CaseNode>                | the cases in this switch
     @docs
         A node to represent switch statements, as in:
         <pre>
         switch (<i>expr</i>) {
             case <i>value</i>:
+            ...
+        }
+        </pre>
+
+SynchronizedNode :: StatementNode
+    @props
+    expression              ExpressionNode                              | the synchronization expression
+    block                   BlockStatementNode                          | the block of statements to synchronize
+    @docs
+        A node to represent synchronization statements, as in:
+        <pre>
+        synchronized (<i>expr</i>) {
             ...
         }
         </pre>
