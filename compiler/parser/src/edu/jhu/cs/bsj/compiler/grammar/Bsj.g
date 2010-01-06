@@ -1760,11 +1760,13 @@ catches returns [ListNode<CatchNode> ret]
         @after {
             $ret = factory.<CatchNode>makeListNode(list);
         }
-    :   a=catchClause
-            {
-                list.add($a.ret);
-            }
-        (b=catchClause
+    :   
+        a=catchClause
+        {
+            list.add($a.ret);
+        }
+        (
+            b=catchClause
             {
                 list.add($b.ret);
             }
@@ -1772,8 +1774,9 @@ catches returns [ListNode<CatchNode> ret]
     ;
 
 catchClause returns [CatchNode ret]
-    :   'catch' '(' formalParameter
-        ')' block
+    :   
+        'catch' '(' formalParameter ')'
+        block
         {
             $ret = factory.makeCatchNode(
                     $block.ret,
@@ -1782,9 +1785,9 @@ catchClause returns [CatchNode ret]
     ;
 
 formalParameter //TODO
-    :   variableModifiers type IDENTIFIER
-        ('[' ']'
-        )*
+    :   
+        variableModifiers type IDENTIFIER
+        ('[' ']')*
     ;
 
 forstatement returns [StatementNode ret]
@@ -1804,12 +1807,10 @@ forstatement returns [StatementNode ret]
     |   
         // normal for loop
         'for' '(' 
-                (forInit
-                )? ';' 
-                (expression
-                )? ';' 
-                (expressionList
-                )? ')' statement
+        forInit? ';' 
+        expression? ';' 
+        expressionList? ')'
+        statement
         {
             $ret = factory.makeForLoopNode(
                     (forInit == null ? null : $forInit.ret), 
@@ -1836,13 +1837,14 @@ parExpression returns [ExpressionNode ret]
     ;
 
 expressionList returns [ListNode<ExpressionNode> ret]
-    @init {
-        List<ExpressionNode> list = new ArrayList<ExpressionNode>();
-    }
-    @after {
-        $ret = factory.<ExpressionNode>makeListNode(list);
-    }
-    :   a=expression
+	    @init {
+	        List<ExpressionNode> list = new ArrayList<ExpressionNode>();
+	    }
+	    @after {
+	        $ret = factory.<ExpressionNode>makeListNode(list);
+	    }
+    :   
+        a=expression
         {
             list.add($a.ret);
         }
@@ -2172,7 +2174,7 @@ additiveExpression returns [ExpressionNode ret]
                     $e2.ret, 
                     op);
             }             
-         )*
+        )*
     ;
 
 multiplicativeExpression //TODO
