@@ -1698,14 +1698,12 @@ localVariableDeclaration returns [VariableDeclarationNode ret]
         variableModifiers type
         variableDeclarator[$type]
         {
-            list.add(factory.makeVariableDeclaratorNode($variableDeclarator.type, $variableDeclarator.identifier,
-                    $variableDeclarator.initializer); 
+            list.add($variableDeclarator.ret); 
         }
         (
             ',' variableDeclarator[$type]
             {
-	            list.add(factory.makeVariableDeclaratorNode($variableDeclarator.type, $variableDeclarator.identifier,
-	                    $variableDeclarator.initializer); 
+	            list.add($variableDeclarator.ret); 
             }
         )*
     ;
