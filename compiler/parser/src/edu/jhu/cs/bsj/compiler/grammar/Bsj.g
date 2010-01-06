@@ -1989,7 +1989,8 @@ expressionList returns [ListNode<ExpressionNode> ret]
         {
             list.add($a.ret);
         }
-        (',' b=expression
+        (
+            ',' b=expression
             {
                 list.add($b.ret);
             }
