@@ -54,6 +54,8 @@ import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionStatementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.FieldDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.FloatLiteralNode;
+import edu.jhu.cs.bsj.compiler.ast.node.ForInitializerDeclarationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.ForInitializerExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ForLoopNode;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.IfNode;
@@ -152,6 +154,8 @@ import edu.jhu.cs.bsj.compiler.impl.ast.node.EnumDeclarationNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.ExpressionStatementNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.FieldDeclarationNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.FloatLiteralNodeImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.node.ForInitializerDeclarationNodeImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.node.ForInitializerExpressionNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.ForLoopNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.IdentifierNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.IfNodeImpl;
@@ -205,17 +209,6 @@ import edu.jhu.cs.bsj.compiler.impl.ast.node.meta.CodeLiteralNodeImpl;
 public class BsjNodeFactoryImpl implements BsjNodeFactory
 {
     /**
-     * Creates a AnnotationElementNode.
-     */
-    public AnnotationElementNode makeAnnotationElementNode(
-            IdentifierNode identifier,
-            AnnotationValueNode value)
-    {
-        AnnotationElementNode ret = new AnnotationElementNodeImpl(identifier, value);
-        return ret;
-    }
-
-    /**
      * Creates a AssertStatementNode.
      */
     public AssertStatementNode makeAssertStatementNode(
@@ -227,13 +220,12 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
 
     /**
-     * Creates a TypeSelectNode.
+     * Creates a ExpressionStatementNode.
      */
-    public TypeSelectNode makeTypeSelectNode(
-            BoundType base,
-            DeclaredTypeNode select)
+    public ExpressionStatementNode makeExpressionStatementNode(
+            ExpressionNode expression)
     {
-        TypeSelectNode ret = new TypeSelectNodeImpl(base, select);
+        ExpressionStatementNode ret = new ExpressionStatementNodeImpl(expression);
         return ret;
     }
 
@@ -244,16 +236,6 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ListNode<? extends InterfaceMember> members)
     {
         InterfaceBodyNode ret = new InterfaceBodyNodeImpl(members);
-        return ret;
-    }
-
-    /**
-     * Creates a ExpressionStatementNode.
-     */
-    public ExpressionStatementNode makeExpressionStatementNode(
-            ExpressionNode expression)
-    {
-        ExpressionStatementNode ret = new ExpressionStatementNodeImpl(expression);
         return ret;
     }
 
@@ -270,6 +252,18 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
 
     /**
+     * Creates a EnhancedForLoopNode.
+     */
+    public EnhancedForLoopNode makeEnhancedForLoopNode(
+            VariableNode variable,
+            ExpressionNode expression,
+            StatementNode statement)
+    {
+        EnhancedForLoopNode ret = new EnhancedForLoopNodeImpl(variable, expression, statement);
+        return ret;
+    }
+
+    /**
      * Creates a ClassDeclarationNode.
      */
     public ClassDeclarationNode makeClassDeclarationNode(
@@ -281,18 +275,6 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ModifiersNode modifiers)
     {
         ClassDeclarationNode ret = new ClassDeclarationNodeImpl(extendsClause, implementsClause, body, typeParameters, simpleName, modifiers);
-        return ret;
-    }
-
-    /**
-     * Creates a EnhancedForLoopNode.
-     */
-    public EnhancedForLoopNode makeEnhancedForLoopNode(
-            VariableNode variable,
-            ExpressionNode expression,
-            StatementNode statement)
-    {
-        EnhancedForLoopNode ret = new EnhancedForLoopNodeImpl(variable, expression, statement);
         return ret;
     }
 
@@ -329,6 +311,350 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
 
     /**
+     * Creates a LongLiteralNode.
+     */
+    public LongLiteralNode makeLongLiteralNode(
+            Long value)
+    {
+        LongLiteralNode ret = new LongLiteralNodeImpl(value);
+        return ret;
+    }
+
+    /**
+     * Creates a QualifiedNameNode.
+     */
+    public QualifiedNameNode makeQualifiedNameNode(
+            NameNode name,
+            IdentifierNode identifier)
+    {
+        QualifiedNameNode ret = new QualifiedNameNodeImpl(name, identifier);
+        return ret;
+    }
+
+    /**
+     * Creates a VoidStatementNode.
+     */
+    public VoidStatementNode makeVoidStatementNode()
+    {
+        VoidStatementNode ret = new VoidStatementNodeImpl();
+        return ret;
+    }
+
+    /**
+     * Creates a CaseNode.
+     */
+    public CaseNode makeCaseNode(
+            ExpressionNode expression,
+            ListNode<? extends StatementNode> statements)
+    {
+        CaseNode ret = new CaseNodeImpl(expression, statements);
+        return ret;
+    }
+
+    /**
+     * Creates a CodeLiteralNode.
+     */
+    public CodeLiteralNode makeCodeLiteralNode(
+            Node value)
+    {
+        CodeLiteralNode ret = new CodeLiteralNodeImpl(value);
+        return ret;
+    }
+
+    /**
+     * Creates a PrimitiveTypeNode.
+     */
+    public PrimitiveTypeNode makePrimitiveTypeNode(
+            PrimitiveType primitiveType)
+    {
+        PrimitiveTypeNode ret = new PrimitiveTypeNodeImpl(primitiveType);
+        return ret;
+    }
+
+    /**
+     * Creates a SuperclassConstructorInvocationNode.
+     */
+    public SuperclassConstructorInvocationNode makeSuperclassConstructorInvocationNode(
+            ExpressionNode qualifyingExpression,
+            ListNode<? extends ExpressionNode> arguments,
+            ListNode<? extends TypeNode> typeArguments)
+    {
+        SuperclassConstructorInvocationNode ret = new SuperclassConstructorInvocationNodeImpl(qualifyingExpression, arguments, typeArguments);
+        return ret;
+    }
+
+    /**
+     * Creates a InitializerDeclarationNode.
+     */
+    public InitializerDeclarationNode makeInitializerDeclarationNode(
+            boolean staticInitializer,
+            BlockStatementNode body)
+    {
+        InitializerDeclarationNode ret = new InitializerDeclarationNodeImpl(staticInitializer, body);
+        return ret;
+    }
+
+    /**
+     * Creates a ModifiersNode.
+     */
+    public ModifiersNode makeModifiersNode(
+            ListNode<? extends AnnotationNode> annotations,
+            Set<Modifier> flags)
+    {
+        ModifiersNode ret = new ModifiersNodeImpl(annotations, flags);
+        return ret;
+    }
+
+    /**
+     * Creates a EnumBodyNode.
+     */
+    public EnumBodyNode makeEnumBodyNode(
+            ListNode<? extends EnumConstantDeclarationNode> constants,
+            ListNode<? extends ClassMember> members)
+    {
+        EnumBodyNode ret = new EnumBodyNodeImpl(constants, members);
+        return ret;
+    }
+
+    /**
+     * Creates a TryNode.
+     */
+    public TryNode makeTryNode(
+            BlockStatementNode block,
+            ListNode<? extends CatchNode> catches,
+            BlockStatementNode finallyBlock)
+    {
+        TryNode ret = new TryNodeImpl(block, catches, finallyBlock);
+        return ret;
+    }
+
+    /**
+     * Creates a EnumDeclarationNode.
+     */
+    public EnumDeclarationNode makeEnumDeclarationNode(
+            ListNode<? extends TypeNode> implementsClause,
+            EnumBodyNode body,
+            IdentifierNode simpleName,
+            ModifiersNode modifiers)
+    {
+        EnumDeclarationNode ret = new EnumDeclarationNodeImpl(implementsClause, body, simpleName, modifiers);
+        return ret;
+    }
+
+    /**
+     * Creates a VoidTypeNode.
+     */
+    public VoidTypeNode makeVoidTypeNode()
+    {
+        VoidTypeNode ret = new VoidTypeNodeImpl();
+        return ret;
+    }
+
+    /**
+     * Creates a VariableDeclarationNode.
+     */
+    public VariableDeclarationNode makeVariableDeclarationNode(
+            ModifiersNode modifiers,
+            ListNode<VariableDeclaratorNode> declarators)
+    {
+        VariableDeclarationNode ret = new VariableDeclarationNodeImpl(modifiers, declarators);
+        return ret;
+    }
+
+    /**
+     * Creates a AnnotationBodyNode.
+     */
+    public AnnotationBodyNode makeAnnotationBodyNode(
+            ListNode<? extends AnnotationMember> members)
+    {
+        AnnotationBodyNode ret = new AnnotationBodyNodeImpl(members);
+        return ret;
+    }
+
+    /**
+     * Creates a VariableDeclaratorNode.
+     */
+    public VariableDeclaratorNode makeVariableDeclaratorNode(
+            TypeNode type,
+            IdentifierNode name,
+            ExpressionNode initializer)
+    {
+        VariableDeclaratorNode ret = new VariableDeclaratorNodeImpl(type, name, initializer);
+        return ret;
+    }
+
+    /**
+     * Creates a ThrowNode.
+     */
+    public ThrowNode makeThrowNode(
+            ExpressionNode expression)
+    {
+        ThrowNode ret = new ThrowNodeImpl(expression);
+        return ret;
+    }
+
+    /**
+     * Creates a CatchNode.
+     */
+    public CatchNode makeCatchNode(
+            BlockStatementNode block,
+            VariableNode parameter)
+    {
+        CatchNode ret = new CatchNodeImpl(block, parameter);
+        return ret;
+    }
+
+    /**
+     * Creates a VoidTypeDeclarationNode.
+     */
+    public VoidTypeDeclarationNode makeVoidTypeDeclarationNode()
+    {
+        VoidTypeDeclarationNode ret = new VoidTypeDeclarationNodeImpl();
+        return ret;
+    }
+
+    /**
+     * Creates a NormalAnnotationNode.
+     */
+    public NormalAnnotationNode makeNormalAnnotationNode(
+            ListNode<? extends AnnotationElementNode> arguments,
+            DeclaredTypeNode annotationType)
+    {
+        NormalAnnotationNode ret = new NormalAnnotationNodeImpl(arguments, annotationType);
+        return ret;
+    }
+
+    /**
+     * Creates a DoWhileLoopNode.
+     */
+    public DoWhileLoopNode makeDoWhileLoopNode(
+            ExpressionNode condition,
+            StatementNode statement)
+    {
+        DoWhileLoopNode ret = new DoWhileLoopNodeImpl(condition, statement);
+        return ret;
+    }
+
+    /**
+     * Creates a TypeCastNode.
+     */
+    public TypeCastNode makeTypeCastNode(
+            ExpressionNode expression,
+            TypeNode type)
+    {
+        TypeCastNode ret = new TypeCastNodeImpl(expression, type);
+        return ret;
+    }
+
+    /**
+     * Creates a LabeledStatementNode.
+     */
+    public LabeledStatementNode makeLabeledStatementNode(
+            IdentifierNode label,
+            StatementNode statement)
+    {
+        LabeledStatementNode ret = new LabeledStatementNodeImpl(label, statement);
+        return ret;
+    }
+
+    /**
+     * Creates a BlockStatementNode.
+     */
+    public BlockStatementNode makeBlockStatementNode(
+            ListNode<? extends StatementNode> statements)
+    {
+        BlockStatementNode ret = new BlockStatementNodeImpl(statements);
+        return ret;
+    }
+
+    /**
+     * Creates a ForInitializerExpressionNode.
+     */
+    public ForInitializerExpressionNode makeForInitializerExpressionNode(
+            ListNode<? extends ExpressionNode> expressions)
+    {
+        ForInitializerExpressionNode ret = new ForInitializerExpressionNodeImpl(expressions);
+        return ret;
+    }
+
+    /**
+     * Creates a PackageDeclarationNode.
+     */
+    public PackageDeclarationNode makePackageDeclarationNode(
+            QualifiedNameNode name,
+            ListNode<? extends AnnotationNode> annotations)
+    {
+        PackageDeclarationNode ret = new PackageDeclarationNodeImpl(name, annotations);
+        return ret;
+    }
+
+    /**
+     * Creates a AnnotationDeclarationNode.
+     */
+    public AnnotationDeclarationNode makeAnnotationDeclarationNode(
+            AnnotationBodyNode body,
+            IdentifierNode simpleName,
+            ModifiersNode modifiers)
+    {
+        AnnotationDeclarationNode ret = new AnnotationDeclarationNodeImpl(body, simpleName, modifiers);
+        return ret;
+    }
+
+    /**
+     * Creates a CompilationUnitNode.
+     */
+    public CompilationUnitNode makeCompilationUnitNode(
+            PackageDeclarationNode packageDeclaration,
+            ListNode<? extends ImportNode> imports,
+            ListNode<? extends TypeDeclarationNode> typeDecls)
+    {
+        CompilationUnitNode ret = new CompilationUnitNodeImpl(packageDeclaration, imports, typeDecls);
+        return ret;
+    }
+
+    /**
+     * Creates a ContinueNode.
+     */
+    public ContinueNode makeContinueNode(
+            IdentifierNode label)
+    {
+        ContinueNode ret = new ContinueNodeImpl(label);
+        return ret;
+    }
+
+    /**
+     * Creates a StringLiteralNode.
+     */
+    public StringLiteralNode makeStringLiteralNode(
+            String value)
+    {
+        StringLiteralNode ret = new StringLiteralNodeImpl(value);
+        return ret;
+    }
+
+    /**
+     * Creates a AnnotationElementNode.
+     */
+    public AnnotationElementNode makeAnnotationElementNode(
+            IdentifierNode identifier,
+            AnnotationValueNode value)
+    {
+        AnnotationElementNode ret = new AnnotationElementNodeImpl(identifier, value);
+        return ret;
+    }
+
+    /**
+     * Creates a TypeSelectNode.
+     */
+    public TypeSelectNode makeTypeSelectNode(
+            BoundType base,
+            DeclaredTypeNode select)
+    {
+        TypeSelectNode ret = new TypeSelectNodeImpl(base, select);
+        return ret;
+    }
+
+    /**
      * Creates a DoubleLiteralNode.
      */
     public DoubleLiteralNode makeDoubleLiteralNode(
@@ -349,16 +675,6 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
 
     /**
-     * Creates a LongLiteralNode.
-     */
-    public LongLiteralNode makeLongLiteralNode(
-            Long value)
-    {
-        LongLiteralNode ret = new LongLiteralNodeImpl(value);
-        return ret;
-    }
-
-    /**
      * Creates a UnaryOperatorNode.
      */
     public UnaryOperatorNode makeUnaryOperatorNode(
@@ -366,17 +682,6 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             UnaryOperator operator)
     {
         UnaryOperatorNode ret = new UnaryOperatorNodeImpl(expression, operator);
-        return ret;
-    }
-
-    /**
-     * Creates a QualifiedNameNode.
-     */
-    public QualifiedNameNode makeQualifiedNameNode(
-            NameNode name,
-            IdentifierNode identifier)
-    {
-        QualifiedNameNode ret = new QualifiedNameNodeImpl(name, identifier);
         return ret;
     }
 
@@ -392,18 +697,6 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
 
     /**
-     * Creates a VariableNode.
-     */
-    public VariableNode makeVariableNode(
-            ModifiersNode modifiers,
-            TypeNode type,
-            IdentifierNode name)
-    {
-        VariableNode ret = new VariableNodeImpl(modifiers, type, name);
-        return ret;
-    }
-
-    /**
      * Creates a ImportNode.
      */
     public ImportNode makeImportNode(
@@ -415,32 +708,14 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
 
     /**
-     * Creates a CaseNode.
+     * Creates a VariableNode.
      */
-    public CaseNode makeCaseNode(
-            ExpressionNode expression,
-            ListNode<? extends StatementNode> statements)
+    public VariableNode makeVariableNode(
+            ModifiersNode modifiers,
+            TypeNode type,
+            IdentifierNode name)
     {
-        CaseNode ret = new CaseNodeImpl(expression, statements);
-        return ret;
-    }
-
-    /**
-     * Creates a VoidStatementNode.
-     */
-    public VoidStatementNode makeVoidStatementNode()
-    {
-        VoidStatementNode ret = new VoidStatementNodeImpl();
-        return ret;
-    }
-
-    /**
-     * Creates a CodeLiteralNode.
-     */
-    public CodeLiteralNode makeCodeLiteralNode(
-            Node value)
-    {
-        CodeLiteralNode ret = new CodeLiteralNodeImpl(value);
+        VariableNode ret = new VariableNodeImpl(modifiers, type, name);
         return ret;
     }
 
@@ -476,46 +751,12 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
 
     /**
-     * Creates a SuperclassConstructorInvocationNode.
+     * Creates a BooleanLiteralNode.
      */
-    public SuperclassConstructorInvocationNode makeSuperclassConstructorInvocationNode(
-            ExpressionNode qualifyingExpression,
-            ListNode<? extends ExpressionNode> arguments,
-            ListNode<? extends TypeNode> typeArguments)
+    public BooleanLiteralNode makeBooleanLiteralNode(
+            Boolean value)
     {
-        SuperclassConstructorInvocationNode ret = new SuperclassConstructorInvocationNodeImpl(qualifyingExpression, arguments, typeArguments);
-        return ret;
-    }
-
-    /**
-     * Creates a PrimitiveTypeNode.
-     */
-    public PrimitiveTypeNode makePrimitiveTypeNode(
-            PrimitiveType primitiveType)
-    {
-        PrimitiveTypeNode ret = new PrimitiveTypeNodeImpl(primitiveType);
-        return ret;
-    }
-
-    /**
-     * Creates a InitializerDeclarationNode.
-     */
-    public InitializerDeclarationNode makeInitializerDeclarationNode(
-            boolean staticInitializer,
-            BlockStatementNode body)
-    {
-        InitializerDeclarationNode ret = new InitializerDeclarationNodeImpl(staticInitializer, body);
-        return ret;
-    }
-
-    /**
-     * Creates a ModifiersNode.
-     */
-    public ModifiersNode makeModifiersNode(
-            ListNode<? extends AnnotationNode> annotations,
-            Set<Modifier> flags)
-    {
-        ModifiersNode ret = new ModifiersNodeImpl(annotations, flags);
+        BooleanLiteralNode ret = new BooleanLiteralNodeImpl(value);
         return ret;
     }
 
@@ -527,27 +768,6 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             IdentifierNode identifier)
     {
         MemberSelectNode ret = new MemberSelectNodeImpl(expression, identifier);
-        return ret;
-    }
-
-    /**
-     * Creates a BooleanLiteralNode.
-     */
-    public BooleanLiteralNode makeBooleanLiteralNode(
-            Boolean value)
-    {
-        BooleanLiteralNode ret = new BooleanLiteralNodeImpl(value);
-        return ret;
-    }
-
-    /**
-     * Creates a EnumBodyNode.
-     */
-    public EnumBodyNode makeEnumBodyNode(
-            ListNode<? extends EnumConstantDeclarationNode> constants,
-            ListNode<? extends ClassMember> members)
-    {
-        EnumBodyNode ret = new EnumBodyNodeImpl(constants, members);
         return ret;
     }
 
@@ -570,18 +790,6 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ListNode<? extends TypeNode> typeArguments)
     {
         AlternateConstructorInvocationNode ret = new AlternateConstructorInvocationNodeImpl(arguments, typeArguments);
-        return ret;
-    }
-
-    /**
-     * Creates a TryNode.
-     */
-    public TryNode makeTryNode(
-            BlockStatementNode block,
-            ListNode<? extends CatchNode> catches,
-            BlockStatementNode finallyBlock)
-    {
-        TryNode ret = new TryNodeImpl(block, catches, finallyBlock);
         return ret;
     }
 
@@ -611,19 +819,6 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
 
     /**
-     * Creates a ForLoopNode.
-     */
-    public ForLoopNode makeForLoopNode(
-            ListNode<? extends StatementNode> initializer,
-            ListNode<? extends ExpressionStatementNode> update,
-            ExpressionNode condition,
-            StatementNode statement)
-    {
-        ForLoopNode ret = new ForLoopNodeImpl(initializer, update, condition, statement);
-        return ret;
-    }
-
-    /**
      * Creates a WhileLoopNode.
      */
     public WhileLoopNode makeWhileLoopNode(
@@ -635,12 +830,15 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
 
     /**
-     * Creates a ListNode.
+     * Creates a ForLoopNode.
      */
-    public <T extends Node> ListNode<T> makeListNode(
-            List<? extends T> children)
+    public ForLoopNode makeForLoopNode(
+            ListNode<? extends StatementNode> initializer,
+            ListNode<? extends ExpressionStatementNode> update,
+            ExpressionNode condition,
+            StatementNode statement)
     {
-        ListNode<T> ret = new ListNodeImpl<T>(children);
+        ForLoopNode ret = new ForLoopNodeImpl(initializer, update, condition, statement);
         return ret;
     }
 
@@ -658,44 +856,22 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
 
     /**
+     * Creates a ListNode.
+     */
+    public <T extends Node> ListNode<T> makeListNode(
+            List<? extends T> children)
+    {
+        ListNode<T> ret = new ListNodeImpl<T>(children);
+        return ret;
+    }
+
+    /**
      * Creates a BreakNode.
      */
     public BreakNode makeBreakNode(
             IdentifierNode label)
     {
         BreakNode ret = new BreakNodeImpl(label);
-        return ret;
-    }
-
-    /**
-     * Creates a EnumDeclarationNode.
-     */
-    public EnumDeclarationNode makeEnumDeclarationNode(
-            ListNode<? extends TypeNode> implementsClause,
-            EnumBodyNode body,
-            IdentifierNode simpleName,
-            ModifiersNode modifiers)
-    {
-        EnumDeclarationNode ret = new EnumDeclarationNodeImpl(implementsClause, body, simpleName, modifiers);
-        return ret;
-    }
-
-    /**
-     * Creates a VoidTypeNode.
-     */
-    public VoidTypeNode makeVoidTypeNode()
-    {
-        VoidTypeNode ret = new VoidTypeNodeImpl();
-        return ret;
-    }
-
-    /**
-     * Creates a IdentifierNode.
-     */
-    public IdentifierNode makeIdentifierNode(
-            String identifier)
-    {
-        IdentifierNode ret = new IdentifierNodeImpl(identifier);
         return ret;
     }
 
@@ -710,35 +886,12 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
 
     /**
-     * Creates a VariableDeclarationNode.
+     * Creates a IdentifierNode.
      */
-    public VariableDeclarationNode makeVariableDeclarationNode(
-            ModifiersNode modifiers,
-            ListNode<VariableDeclaratorNode> declarators)
+    public IdentifierNode makeIdentifierNode(
+            String identifier)
     {
-        VariableDeclarationNode ret = new VariableDeclarationNodeImpl(modifiers, declarators);
-        return ret;
-    }
-
-    /**
-     * Creates a AnnotationBodyNode.
-     */
-    public AnnotationBodyNode makeAnnotationBodyNode(
-            ListNode<? extends AnnotationMember> members)
-    {
-        AnnotationBodyNode ret = new AnnotationBodyNodeImpl(members);
-        return ret;
-    }
-
-    /**
-     * Creates a VariableDeclaratorNode.
-     */
-    public VariableDeclaratorNode makeVariableDeclaratorNode(
-            TypeNode type,
-            IdentifierNode name,
-            ExpressionNode initializer)
-    {
-        VariableDeclaratorNode ret = new VariableDeclaratorNodeImpl(type, name, initializer);
+        IdentifierNode ret = new IdentifierNodeImpl(identifier);
         return ret;
     }
 
@@ -799,12 +952,16 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
 
     /**
-     * Creates a ThrowNode.
+     * Creates a ClassInstantiationNode.
      */
-    public ThrowNode makeThrowNode(
-            ExpressionNode expression)
+    public ClassInstantiationNode makeClassInstantiationNode(
+            ListNode<? extends TypeNode> typeArguments,
+            NameNode identifier,
+            ListNode<? extends ExpressionNode> arguments,
+            AnonymousClassBodyNode body,
+            ExpressionNode enclosingExpression)
     {
-        ThrowNode ret = new ThrowNodeImpl(expression);
+        ClassInstantiationNode ret = new ClassInstantiationNodeImpl(typeArguments, identifier, arguments, body, enclosingExpression);
         return ret;
     }
 
@@ -820,20 +977,6 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
 
     /**
-     * Creates a ClassInstantiationNode.
-     */
-    public ClassInstantiationNode makeClassInstantiationNode(
-            ListNode<? extends TypeNode> typeArguments,
-            NameNode identifier,
-            ListNode<? extends ExpressionNode> arguments,
-            AnonymousClassBodyNode body,
-            ExpressionNode enclosingExpression)
-    {
-        ClassInstantiationNode ret = new ClassInstantiationNodeImpl(typeArguments, identifier, arguments, body, enclosingExpression);
-        return ret;
-    }
-
-    /**
      * Creates a AnnotationExpressionValueNode.
      */
     public AnnotationExpressionValueNode makeAnnotationExpressionValueNode(
@@ -844,43 +987,12 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
 
     /**
-     * Creates a CatchNode.
-     */
-    public CatchNode makeCatchNode(
-            BlockStatementNode block,
-            VariableNode parameter)
-    {
-        CatchNode ret = new CatchNodeImpl(block, parameter);
-        return ret;
-    }
-
-    /**
      * Creates a ReturnNode.
      */
     public ReturnNode makeReturnNode(
             ExpressionNode expression)
     {
         ReturnNode ret = new ReturnNodeImpl(expression);
-        return ret;
-    }
-
-    /**
-     * Creates a VoidTypeDeclarationNode.
-     */
-    public VoidTypeDeclarationNode makeVoidTypeDeclarationNode()
-    {
-        VoidTypeDeclarationNode ret = new VoidTypeDeclarationNodeImpl();
-        return ret;
-    }
-
-    /**
-     * Creates a NormalAnnotationNode.
-     */
-    public NormalAnnotationNode makeNormalAnnotationNode(
-            ListNode<? extends AnnotationElementNode> arguments,
-            DeclaredTypeNode annotationType)
-    {
-        NormalAnnotationNode ret = new NormalAnnotationNodeImpl(arguments, annotationType);
         return ret;
     }
 
@@ -920,6 +1032,16 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
 
     /**
+     * Creates a FloatLiteralNode.
+     */
+    public FloatLiteralNode makeFloatLiteralNode(
+            Float value)
+    {
+        FloatLiteralNode ret = new FloatLiteralNodeImpl(value);
+        return ret;
+    }
+
+    /**
      * Creates a ArrayInstantiatonNode.
      */
     public ArrayInstantiatonNode makeArrayInstantiatonNode(
@@ -927,16 +1049,6 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ListNode<? extends ExpressionNode> dimensions)
     {
         ArrayInstantiatonNode ret = new ArrayInstantiatonNodeImpl(type, dimensions);
-        return ret;
-    }
-
-    /**
-     * Creates a FloatLiteralNode.
-     */
-    public FloatLiteralNode makeFloatLiteralNode(
-            Float value)
-    {
-        FloatLiteralNode ret = new FloatLiteralNodeImpl(value);
         return ret;
     }
 
@@ -953,17 +1065,6 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
 
     /**
-     * Creates a DoWhileLoopNode.
-     */
-    public DoWhileLoopNode makeDoWhileLoopNode(
-            ExpressionNode condition,
-            StatementNode statement)
-    {
-        DoWhileLoopNode ret = new DoWhileLoopNodeImpl(condition, statement);
-        return ret;
-    }
-
-    /**
      * Creates a ParameterizedTypeNode.
      */
     public ParameterizedTypeNode makeParameterizedTypeNode(
@@ -971,38 +1072,6 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ListNode<? extends TypeArgument> typeArguments)
     {
         ParameterizedTypeNode ret = new ParameterizedTypeNodeImpl(baseType, typeArguments);
-        return ret;
-    }
-
-    /**
-     * Creates a TypeCastNode.
-     */
-    public TypeCastNode makeTypeCastNode(
-            ExpressionNode expression,
-            TypeNode type)
-    {
-        TypeCastNode ret = new TypeCastNodeImpl(expression, type);
-        return ret;
-    }
-
-    /**
-     * Creates a LabeledStatementNode.
-     */
-    public LabeledStatementNode makeLabeledStatementNode(
-            IdentifierNode label,
-            StatementNode statement)
-    {
-        LabeledStatementNode ret = new LabeledStatementNodeImpl(label, statement);
-        return ret;
-    }
-
-    /**
-     * Creates a BlockStatementNode.
-     */
-    public BlockStatementNode makeBlockStatementNode(
-            ListNode<? extends StatementNode> statements)
-    {
-        BlockStatementNode ret = new BlockStatementNodeImpl(statements);
         return ret;
     }
 
@@ -1021,13 +1090,12 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
 
     /**
-     * Creates a PackageDeclarationNode.
+     * Creates a ForInitializerDeclarationNode.
      */
-    public PackageDeclarationNode makePackageDeclarationNode(
-            QualifiedNameNode name,
-            ListNode<? extends AnnotationNode> annotations)
+    public ForInitializerDeclarationNode makeForInitializerDeclarationNode(
+            VariableDeclarationNode declaration)
     {
-        PackageDeclarationNode ret = new PackageDeclarationNodeImpl(name, annotations);
+        ForInitializerDeclarationNode ret = new ForInitializerDeclarationNodeImpl(declaration);
         return ret;
     }
 
@@ -1039,50 +1107,6 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ListNode<? extends StatementNode> statements)
     {
         ConstructorBodyNode ret = new ConstructorBodyNodeImpl(constructorInvocation, statements);
-        return ret;
-    }
-
-    /**
-     * Creates a AnnotationDeclarationNode.
-     */
-    public AnnotationDeclarationNode makeAnnotationDeclarationNode(
-            AnnotationBodyNode body,
-            IdentifierNode simpleName,
-            ModifiersNode modifiers)
-    {
-        AnnotationDeclarationNode ret = new AnnotationDeclarationNodeImpl(body, simpleName, modifiers);
-        return ret;
-    }
-
-    /**
-     * Creates a CompilationUnitNode.
-     */
-    public CompilationUnitNode makeCompilationUnitNode(
-            PackageDeclarationNode packageDeclaration,
-            ListNode<? extends ImportNode> imports,
-            ListNode<? extends TypeDeclarationNode> typeDecls)
-    {
-        CompilationUnitNode ret = new CompilationUnitNodeImpl(packageDeclaration, imports, typeDecls);
-        return ret;
-    }
-
-    /**
-     * Creates a ContinueNode.
-     */
-    public ContinueNode makeContinueNode(
-            IdentifierNode label)
-    {
-        ContinueNode ret = new ContinueNodeImpl(label);
-        return ret;
-    }
-
-    /**
-     * Creates a ClassBodyNode.
-     */
-    public ClassBodyNode makeClassBodyNode(
-            ListNode<? extends ClassMember> members)
-    {
-        ClassBodyNode ret = new ClassBodyNodeImpl(members);
         return ret;
     }
 
@@ -1099,22 +1123,12 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
 
     /**
-     * Creates a StringLiteralNode.
+     * Creates a ClassBodyNode.
      */
-    public StringLiteralNode makeStringLiteralNode(
-            String value)
+    public ClassBodyNode makeClassBodyNode(
+            ListNode<? extends ClassMember> members)
     {
-        StringLiteralNode ret = new StringLiteralNodeImpl(value);
-        return ret;
-    }
-
-    /**
-     * Creates a NullLiteralNode.
-     */
-    public NullLiteralNode makeNullLiteralNode(
-            Void value)
-    {
-        NullLiteralNode ret = new NullLiteralNodeImpl(value);
+        ClassBodyNode ret = new ClassBodyNodeImpl(members);
         return ret;
     }
 
@@ -1125,6 +1139,16 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             Integer value)
     {
         IntLiteralNode ret = new IntLiteralNodeImpl(value);
+        return ret;
+    }
+
+    /**
+     * Creates a NullLiteralNode.
+     */
+    public NullLiteralNode makeNullLiteralNode(
+            Void value)
+    {
+        NullLiteralNode ret = new NullLiteralNodeImpl(value);
         return ret;
     }
 

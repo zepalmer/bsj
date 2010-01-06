@@ -41,6 +41,8 @@ import edu.jhu.cs.bsj.compiler.ast.node.EnumDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionStatementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.FieldDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.FloatLiteralNode;
+import edu.jhu.cs.bsj.compiler.ast.node.ForInitializerDeclarationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.ForInitializerExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ForLoopNode;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.IfNode;
@@ -249,6 +251,12 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
         } else if (node instanceof ArrayTypeNode)
         {
             visitArrayTypeNodeStart((ArrayTypeNode)node);
+        } else if (node instanceof ForInitializerExpressionNode)
+        {
+            visitForInitializerExpressionNodeStart((ForInitializerExpressionNode)node);
+        } else if (node instanceof ForInitializerDeclarationNode)
+        {
+            visitForInitializerDeclarationNodeStart((ForInitializerDeclarationNode)node);
         } else if (node instanceof BinaryOperatorNode)
         {
             visitBinaryOperatorNodeStart((BinaryOperatorNode)node);
@@ -303,12 +311,12 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
         } else if (node instanceof CompilationUnitNode)
         {
             visitCompilationUnitNodeStart((CompilationUnitNode)node);
-        } else if (node instanceof PackageDeclarationNode)
-        {
-            visitPackageDeclarationNodeStart((PackageDeclarationNode)node);
         } else if (node instanceof ConstructorBodyNode)
         {
             visitConstructorBodyNodeStart((ConstructorBodyNode)node);
+        } else if (node instanceof PackageDeclarationNode)
+        {
+            visitPackageDeclarationNodeStart((PackageDeclarationNode)node);
         } else if (node instanceof ListNode<?>)
         {
             visitListNodeStart((ListNode<?>)node);
@@ -516,6 +524,12 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
         } else if (node instanceof ArrayTypeNode)
         {
             visitArrayTypeNodeStop((ArrayTypeNode)node);
+        } else if (node instanceof ForInitializerExpressionNode)
+        {
+            visitForInitializerExpressionNodeStop((ForInitializerExpressionNode)node);
+        } else if (node instanceof ForInitializerDeclarationNode)
+        {
+            visitForInitializerDeclarationNodeStop((ForInitializerDeclarationNode)node);
         } else if (node instanceof BinaryOperatorNode)
         {
             visitBinaryOperatorNodeStop((BinaryOperatorNode)node);
@@ -570,12 +584,12 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
         } else if (node instanceof CompilationUnitNode)
         {
             visitCompilationUnitNodeStop((CompilationUnitNode)node);
-        } else if (node instanceof PackageDeclarationNode)
-        {
-            visitPackageDeclarationNodeStop((PackageDeclarationNode)node);
         } else if (node instanceof ConstructorBodyNode)
         {
             visitConstructorBodyNodeStop((ConstructorBodyNode)node);
+        } else if (node instanceof PackageDeclarationNode)
+        {
+            visitPackageDeclarationNodeStop((PackageDeclarationNode)node);
         } else if (node instanceof ListNode<?>)
         {
             visitListNodeStop((ListNode<?>)node);
@@ -1023,6 +1037,22 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
     }
 
     /**
+     * Starts a visit for nodes of type ForInitializerExpressionNode.
+     * @param node The node being visited.
+     */
+    public void visitForInitializerExpressionNodeStart(ForInitializerExpressionNode node)
+    {
+    }
+
+    /**
+     * Starts a visit for nodes of type ForInitializerDeclarationNode.
+     * @param node The node being visited.
+     */
+    public void visitForInitializerDeclarationNodeStart(ForInitializerDeclarationNode node)
+    {
+    }
+
+    /**
      * Starts a visit for nodes of type BinaryOperatorNode.
      * @param node The node being visited.
      */
@@ -1167,18 +1197,18 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
     }
 
     /**
-     * Starts a visit for nodes of type PackageDeclarationNode.
-     * @param node The node being visited.
-     */
-    public void visitPackageDeclarationNodeStart(PackageDeclarationNode node)
-    {
-    }
-
-    /**
      * Starts a visit for nodes of type ConstructorBodyNode.
      * @param node The node being visited.
      */
     public void visitConstructorBodyNodeStart(ConstructorBodyNode node)
+    {
+    }
+
+    /**
+     * Starts a visit for nodes of type PackageDeclarationNode.
+     * @param node The node being visited.
+     */
+    public void visitPackageDeclarationNodeStart(PackageDeclarationNode node)
     {
     }
 
@@ -1703,6 +1733,22 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
     }
 
     /**
+     * Stops a visit for nodes of type ForInitializerExpressionNode.
+     * @param node The node being visited.
+     */
+    public void visitForInitializerExpressionNodeStop(ForInitializerExpressionNode node)
+    {
+    }
+
+    /**
+     * Stops a visit for nodes of type ForInitializerDeclarationNode.
+     * @param node The node being visited.
+     */
+    public void visitForInitializerDeclarationNodeStop(ForInitializerDeclarationNode node)
+    {
+    }
+
+    /**
      * Stops a visit for nodes of type BinaryOperatorNode.
      * @param node The node being visited.
      */
@@ -1847,18 +1893,18 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
     }
 
     /**
-     * Stops a visit for nodes of type PackageDeclarationNode.
-     * @param node The node being visited.
-     */
-    public void visitPackageDeclarationNodeStop(PackageDeclarationNode node)
-    {
-    }
-
-    /**
      * Stops a visit for nodes of type ConstructorBodyNode.
      * @param node The node being visited.
      */
     public void visitConstructorBodyNodeStop(ConstructorBodyNode node)
+    {
+    }
+
+    /**
+     * Stops a visit for nodes of type PackageDeclarationNode.
+     * @param node The node being visited.
+     */
+    public void visitPackageDeclarationNodeStop(PackageDeclarationNode node)
     {
     }
 

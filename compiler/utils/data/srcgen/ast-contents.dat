@@ -306,6 +306,7 @@ EnhancedForLoopNode :: StatementNode
             <i>body</i>
         </pre>
 
+# TODO: not every expression can be a statement in Java.  Create a suitable tagging interface.
 ExpressionStatementNode :: StatementNode
     @props
     expression              ExpressionNode                              | this statement's expression
@@ -884,6 +885,31 @@ ConstructorInvocationNode* :: Node
 ExpressionNode* :: Node
     @docs
         This class is a common superclass of all BSJ AST nodes representing expressions.
+
+ForInitializerDeclarationNode :: ForInitializerNode
+    @props
+    declaration             VariableDeclarationNode                     | the variables declared in this initializer
+    @docs
+        Represents a for loop initializer which declares variables.  For example, in
+        <pre>for (int i=0;i<n;i++)</pre>
+        this node represents
+        <pre>int i=0</pre>
+        Note that, due to the nature of {@link VariableDeclarationNode}, this can be a variable muilti-declaration.
+
+ForInitializerExpressionNode :: ForInitializerNode
+    @props
+    expressions             ListNode<? extends ExpressionNode>          | the expressions used in this initializer
+    @docs
+        Represents a for loop initializer which contains expressions.  For example, in
+        <pre>for (i=0,j=0;i<n || j<m;i++,j++)</pre>
+        this node represents
+        <pre>i=0,j=0</pre>
+# TODO: this node should not be able to use any expression which is not applicable as a statement - fix the type
+
+ForInitializerNode* :: Node
+    @docs
+        This class is a common superclass for standard for-loop initializers.  It exists to allow the two different
+        types of for loop initializers to be used coherently.
 
 ImportNode :: Node
     @props
