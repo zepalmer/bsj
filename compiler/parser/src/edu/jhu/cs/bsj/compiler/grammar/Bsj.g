@@ -876,7 +876,6 @@ fieldDeclaration returns [FieldDeclarationNode ret]
         }   
     ;
 
-// TODO: list?
 interfaceBodyDeclaration returns [InterfaceMember ret]
     :
         a=interfaceFieldDeclaration
@@ -921,7 +920,7 @@ interfaceMethodDeclaration returns [MethodDeclarationNode ret]
         ('throws' qualifiedNameList)? ';'
         {
             $ret = factory.makeMethodDeclarationNode(
-                    null, //TODO no body for interface methods, leave null?
+                    null, // No body for interface methods; thus null
                     $modifiers.ret,
                     factory.makeIdentifierNode($id.text),
                     $formalParameters.ret,
