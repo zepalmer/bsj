@@ -2501,7 +2501,9 @@ literal returns [LiteralNode<?> ret]
         }
     |   
         NULL
-        // TODO
+        {
+            $ret = factory.makeNullLiteralNode(null);
+        }
     ;
 
 /**
