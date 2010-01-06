@@ -757,8 +757,8 @@ interfaceBody returns [InterfaceBodyNode ret]
 classBodyDeclaration returns [ClassMember ret]
     :
         ';'
-        {//TODO just use null here?
-            $ret = null;
+        {
+            $ret = factory.makeVoidTypeDeclarationNode();
         }
     |
         staticText='static'?
