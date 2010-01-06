@@ -71,6 +71,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.PackageDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ParameterizedTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.PrimitiveTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.QualifiedNameNode;
+import edu.jhu.cs.bsj.compiler.ast.node.ReturnNode;
 import edu.jhu.cs.bsj.compiler.ast.node.SingleElementAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.StatementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.StringLiteralNode;
@@ -501,6 +502,12 @@ public interface BsjNodeFactory
     public CatchNode makeCatchNode(
             BlockStatementNode block,
             VariableNode parameter);
+
+    /**
+     * Creates a ReturnNode.
+     */
+    public ReturnNode makeReturnNode(
+            ExpressionNode expression);
 
     /**
      * Creates a VoidTypeDeclarationNode.

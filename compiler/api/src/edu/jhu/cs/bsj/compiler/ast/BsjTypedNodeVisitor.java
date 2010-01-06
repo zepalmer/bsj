@@ -63,6 +63,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.PackageDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ParameterizedTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.PrimitiveTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.QualifiedNameNode;
+import edu.jhu.cs.bsj.compiler.ast.node.ReturnNode;
 import edu.jhu.cs.bsj.compiler.ast.node.SingleElementAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.StringLiteralNode;
 import edu.jhu.cs.bsj.compiler.ast.node.SuperclassConstructorInvocationNode;
@@ -138,6 +139,9 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
         } else if (node instanceof VariableDeclarationNode)
         {
             visitVariableDeclarationNodeStart((VariableDeclarationNode)node);
+        } else if (node instanceof ReturnNode)
+        {
+            visitReturnNodeStart((ReturnNode)node);
         } else if (node instanceof ContinueNode)
         {
             visitContinueNodeStart((ContinueNode)node);
@@ -387,6 +391,9 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
         } else if (node instanceof VariableDeclarationNode)
         {
             visitVariableDeclarationNodeStop((VariableDeclarationNode)node);
+        } else if (node instanceof ReturnNode)
+        {
+            visitReturnNodeStop((ReturnNode)node);
         } else if (node instanceof ContinueNode)
         {
             visitContinueNodeStop((ContinueNode)node);
@@ -697,6 +704,14 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
      * @param node The node being visited.
      */
     public void visitVariableDeclarationNodeStart(VariableDeclarationNode node)
+    {
+    }
+
+    /**
+     * Starts a visit for nodes of type ReturnNode.
+     * @param node The node being visited.
+     */
+    public void visitReturnNodeStart(ReturnNode node)
     {
     }
 
@@ -1329,6 +1344,14 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
      * @param node The node being visited.
      */
     public void visitVariableDeclarationNodeStop(VariableDeclarationNode node)
+    {
+    }
+
+    /**
+     * Stops a visit for nodes of type ReturnNode.
+     * @param node The node being visited.
+     */
+    public void visitReturnNodeStop(ReturnNode node)
     {
     }
 

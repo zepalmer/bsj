@@ -13,14 +13,14 @@ package edu.jhu.cs.bsj.compiler.ast.node;
 public interface SwitchNode extends StatementNode
 {
     /**
-     * Gets expression over which to switch.
-     * @return Expression over which to switch.
+     * Gets the expression over which to switch.
+     * @return The expression over which to switch.
      */
     public ExpressionNode getExpression();
 
     /**
-     * Changes expression over which to switch.
-     * @param expression Expression over which to switch.
+     * Changes the expression over which to switch.
+     * @param expression The expression over which to switch.
      */
     public void setExpression(ExpressionNode expression);
 

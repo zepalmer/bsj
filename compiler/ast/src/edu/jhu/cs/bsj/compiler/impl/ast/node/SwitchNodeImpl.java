@@ -8,7 +8,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.SwitchNode;
 
 public class SwitchNodeImpl extends StatementNodeImpl implements SwitchNode
 {
-    /** Expression over which to switch. */
+    /** The expression over which to switch. */
     private ExpressionNode expression;
 
     /** The cases in this switch. */
@@ -25,8 +25,8 @@ public class SwitchNodeImpl extends StatementNodeImpl implements SwitchNode
     }
 
     /**
-     * Gets expression over which to switch.
-     * @return Expression over which to switch.
+     * Gets the expression over which to switch.
+     * @return The expression over which to switch.
      */
     public ExpressionNode getExpression()
     {
@@ -34,8 +34,8 @@ public class SwitchNodeImpl extends StatementNodeImpl implements SwitchNode
     }
 
     /**
-     * Changes expression over which to switch.
-     * @param expression Expression over which to switch.
+     * Changes the expression over which to switch.
+     * @param expression The expression over which to switch.
      */
     public void setExpression(ExpressionNode expression)
     {

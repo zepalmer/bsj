@@ -352,10 +352,21 @@ LabeledStatementNode :: StatementNode
         <pre>
         <i>identifier</i>: <i>statement</i>
         </pre>
+
+ReturnNode :: StatementNode
+    @props
+    expression              ExpressionNode                              | the expression to return
+    @docs
+        A node representing a return statement, as in;
+        <pre>return <i>expr</i>;</pre>
+        or
+        <pre>return;</pre>
+        For void return statements, the <tt>expression</tt> is <tt>null</tt>.
+# TODO: should we be using null object for things like this?
     
 SwitchNode :: StatementNode
     @props
-    expression              ExpressionNode                              | expression over which to switch
+    expression              ExpressionNode                              | the expression over which to switch
     cases                   ListNode<? extends CaseNode>                | the cases in this switch
     @docs
         A node to represent switch statements, as in:

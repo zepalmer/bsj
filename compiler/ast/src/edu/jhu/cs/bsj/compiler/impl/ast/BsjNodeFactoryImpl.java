@@ -77,6 +77,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.PackageDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ParameterizedTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.PrimitiveTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.QualifiedNameNode;
+import edu.jhu.cs.bsj.compiler.ast.node.ReturnNode;
 import edu.jhu.cs.bsj.compiler.ast.node.SingleElementAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.StatementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.StringLiteralNode;
@@ -166,6 +167,7 @@ import edu.jhu.cs.bsj.compiler.impl.ast.node.PackageDeclarationNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.ParameterizedTypeNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.PrimitiveTypeNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.QualifiedNameNodeImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.node.ReturnNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.SingleElementAnnotationNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.StringLiteralNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.SuperclassConstructorInvocationNodeImpl;
@@ -802,6 +804,16 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             VariableNode parameter)
     {
         CatchNode ret = new CatchNodeImpl(block, parameter);
+        return ret;
+    }
+
+    /**
+     * Creates a ReturnNode.
+     */
+    public ReturnNode makeReturnNode(
+            ExpressionNode expression)
+    {
+        ReturnNode ret = new ReturnNodeImpl(expression);
         return ret;
     }
 
