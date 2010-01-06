@@ -87,6 +87,8 @@ import edu.jhu.cs.bsj.compiler.ast.node.TypeParameterNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeSelectNode;
 import edu.jhu.cs.bsj.compiler.ast.node.UnaryOperatorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclarationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclaratorNode;
+import edu.jhu.cs.bsj.compiler.ast.node.VariableMultiDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VoidStatementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VoidTypeDeclarationNode;
@@ -183,6 +185,13 @@ public interface BsjNodeFactory
     public CompoundAssignmentNode makeCompoundAssignmentNode(
             ExpressionNode expression,
             NameNode variable);
+
+    /**
+     * Creates a VariableMultiDeclarationNode.
+     */
+    public VariableMultiDeclarationNode makeVariableMultiDeclarationNode(
+            ModifiersNode modifiers,
+            ListNode<VariableDeclaratorNode> declarators);
 
     /**
      * Creates a ArrayAccessNode.
@@ -442,6 +451,14 @@ public interface BsjNodeFactory
             ListNode<? extends AnnotationMember> members);
 
     /**
+     * Creates a VariableDeclaratorNode.
+     */
+    public VariableDeclaratorNode makeVariableDeclaratorNode(
+            TypeNode type,
+            IdentifierNode name,
+            ExpressionNode initializer);
+
+    /**
      * Creates a TypeParameterNode.
      */
     public TypeParameterNode makeTypeParameterNode(
@@ -672,16 +689,16 @@ public interface BsjNodeFactory
             StatementNode elseStatement);
 
     /**
-     * Creates a IntLiteralNode.
-     */
-    public IntLiteralNode makeIntLiteralNode(
-            Integer value);
-
-    /**
      * Creates a StringLiteralNode.
      */
     public StringLiteralNode makeStringLiteralNode(
             String value);
+
+    /**
+     * Creates a IntLiteralNode.
+     */
+    public IntLiteralNode makeIntLiteralNode(
+            Integer value);
 
     /**
      * Creates a MethodDeclarationNode.

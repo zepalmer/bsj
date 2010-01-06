@@ -433,6 +433,30 @@ VariableDeclarationNode :: StatementNode
             <i>type identifier</i> = <i>expression</i>;
             </pre>
 
+VariableDeclaratorNode :: StatementNode
+    @props
+    type                    TypeNode                                    | the type of this variable
+    name                    IdentifierNode                              | the name of this variable
+    initializer             ExpressionNode                              | the initializer to use
+    @docs
+        Represents a declarator for a variable multi-declaration.  For example, in
+        <pre>int x = 5, y;</pre>
+        this node either represents
+        <pre>x = 5</pre>
+        or
+        <pre>y</pre>
+        .  Note that variable multi-declaration syntax allows different types, as in
+        <pre>int x = 5, y[] = new int[2];</pre>
+        Hence, type exists on this node instead of its parent.
+        
+VariableMultiDeclarationNode :: StatementNode
+    @props
+    modifiers               ModifiersNode                               | the modifiers for these variables
+    declarators             ListNode<VariableDeclaratorNode>            | the variable declarators for this node
+    @docs
+        Represents a variable multi-declaration, as in:
+        <pre>int x = 5, y;</pre>
+
 VoidStatementNode :: StatementNode
     @docs
         A node representing a void statement, as in

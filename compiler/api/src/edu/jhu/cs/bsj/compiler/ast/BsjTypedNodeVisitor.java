@@ -76,6 +76,8 @@ import edu.jhu.cs.bsj.compiler.ast.node.TypeParameterNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeSelectNode;
 import edu.jhu.cs.bsj.compiler.ast.node.UnaryOperatorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclarationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclaratorNode;
+import edu.jhu.cs.bsj.compiler.ast.node.VariableMultiDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VoidStatementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VoidTypeDeclarationNode;
@@ -144,6 +146,9 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
         } else if (node instanceof SwitchNode)
         {
             visitSwitchNodeStart((SwitchNode)node);
+        } else if (node instanceof VariableDeclaratorNode)
+        {
+            visitVariableDeclaratorNodeStart((VariableDeclaratorNode)node);
         } else if (node instanceof InlineTypeDeclarationNode)
         {
             visitInlineTypeDeclarationNodeStart((InlineTypeDeclarationNode)node);
@@ -180,6 +185,9 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
         } else if (node instanceof BlockStatementNode)
         {
             visitBlockStatementNodeStart((BlockStatementNode)node);
+        } else if (node instanceof VariableMultiDeclarationNode)
+        {
+            visitVariableMultiDeclarationNodeStart((VariableMultiDeclarationNode)node);
         } else if (node instanceof LabeledStatementNode)
         {
             visitLabeledStatementNodeStart((LabeledStatementNode)node);
@@ -402,6 +410,9 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
         } else if (node instanceof SwitchNode)
         {
             visitSwitchNodeStop((SwitchNode)node);
+        } else if (node instanceof VariableDeclaratorNode)
+        {
+            visitVariableDeclaratorNodeStop((VariableDeclaratorNode)node);
         } else if (node instanceof InlineTypeDeclarationNode)
         {
             visitInlineTypeDeclarationNodeStop((InlineTypeDeclarationNode)node);
@@ -438,6 +449,9 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
         } else if (node instanceof BlockStatementNode)
         {
             visitBlockStatementNodeStop((BlockStatementNode)node);
+        } else if (node instanceof VariableMultiDeclarationNode)
+        {
+            visitVariableMultiDeclarationNodeStop((VariableMultiDeclarationNode)node);
         } else if (node instanceof LabeledStatementNode)
         {
             visitLabeledStatementNodeStop((LabeledStatementNode)node);
@@ -730,6 +744,14 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
     }
 
     /**
+     * Starts a visit for nodes of type VariableDeclaratorNode.
+     * @param node The node being visited.
+     */
+    public void visitVariableDeclaratorNodeStart(VariableDeclaratorNode node)
+    {
+    }
+
+    /**
      * Starts a visit for nodes of type InlineTypeDeclarationNode.
      * @param node The node being visited.
      */
@@ -822,6 +844,14 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
      * @param node The node being visited.
      */
     public void visitBlockStatementNodeStart(BlockStatementNode node)
+    {
+    }
+
+    /**
+     * Starts a visit for nodes of type VariableMultiDeclarationNode.
+     * @param node The node being visited.
+     */
+    public void visitVariableMultiDeclarationNodeStart(VariableMultiDeclarationNode node)
     {
     }
 
@@ -1386,6 +1416,14 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
     }
 
     /**
+     * Stops a visit for nodes of type VariableDeclaratorNode.
+     * @param node The node being visited.
+     */
+    public void visitVariableDeclaratorNodeStop(VariableDeclaratorNode node)
+    {
+    }
+
+    /**
      * Stops a visit for nodes of type InlineTypeDeclarationNode.
      * @param node The node being visited.
      */
@@ -1478,6 +1516,14 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
      * @param node The node being visited.
      */
     public void visitBlockStatementNodeStop(BlockStatementNode node)
+    {
+    }
+
+    /**
+     * Stops a visit for nodes of type VariableMultiDeclarationNode.
+     * @param node The node being visited.
+     */
+    public void visitVariableMultiDeclarationNodeStop(VariableMultiDeclarationNode node)
     {
     }
 

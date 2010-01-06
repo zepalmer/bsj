@@ -93,6 +93,8 @@ import edu.jhu.cs.bsj.compiler.ast.node.TypeParameterNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeSelectNode;
 import edu.jhu.cs.bsj.compiler.ast.node.UnaryOperatorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclarationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclaratorNode;
+import edu.jhu.cs.bsj.compiler.ast.node.VariableMultiDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VoidStatementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VoidTypeDeclarationNode;
@@ -182,6 +184,8 @@ import edu.jhu.cs.bsj.compiler.impl.ast.node.TypeParameterNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.TypeSelectNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.UnaryOperatorNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.VariableDeclarationNodeImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.node.VariableDeclaratorNodeImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.node.VariableMultiDeclarationNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.VariableNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.VoidStatementNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.VoidTypeDeclarationNodeImpl;
@@ -307,6 +311,17 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             NameNode variable)
     {
         CompoundAssignmentNode ret = new CompoundAssignmentNodeImpl(expression, variable);
+        return ret;
+    }
+
+    /**
+     * Creates a VariableMultiDeclarationNode.
+     */
+    public VariableMultiDeclarationNode makeVariableMultiDeclarationNode(
+            ModifiersNode modifiers,
+            ListNode<VariableDeclaratorNode> declarators)
+    {
+        VariableMultiDeclarationNode ret = new VariableMultiDeclarationNodeImpl(modifiers, declarators);
         return ret;
     }
 
@@ -716,6 +731,18 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
 
     /**
+     * Creates a VariableDeclaratorNode.
+     */
+    public VariableDeclaratorNode makeVariableDeclaratorNode(
+            TypeNode type,
+            IdentifierNode name,
+            ExpressionNode initializer)
+    {
+        VariableDeclaratorNode ret = new VariableDeclaratorNodeImpl(type, name, initializer);
+        return ret;
+    }
+
+    /**
      * Creates a TypeParameterNode.
      */
     public TypeParameterNode makeTypeParameterNode(
@@ -1074,22 +1101,22 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
 
     /**
-     * Creates a IntLiteralNode.
-     */
-    public IntLiteralNode makeIntLiteralNode(
-            Integer value)
-    {
-        IntLiteralNode ret = new IntLiteralNodeImpl(value);
-        return ret;
-    }
-
-    /**
      * Creates a StringLiteralNode.
      */
     public StringLiteralNode makeStringLiteralNode(
             String value)
     {
         StringLiteralNode ret = new StringLiteralNodeImpl(value);
+        return ret;
+    }
+
+    /**
+     * Creates a IntLiteralNode.
+     */
+    public IntLiteralNode makeIntLiteralNode(
+            Integer value)
+    {
+        IntLiteralNode ret = new IntLiteralNodeImpl(value);
         return ret;
     }
 
