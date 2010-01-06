@@ -1594,7 +1594,10 @@ localVariableDeclaration //TODO
 
 statement returns [StatementNode ret]
     :   
-        block // TODO
+        block
+        {
+            $ret = $block.ret;
+        }
     |   
         ('assert') e1=expression (':' e2=expression)? ';'
         {
