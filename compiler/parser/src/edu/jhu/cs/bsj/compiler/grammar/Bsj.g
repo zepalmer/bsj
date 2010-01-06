@@ -1659,8 +1659,10 @@ statement returns [StatementNode ret]
                 $block.ret);
         }
     |   
-        'return' (expression )? ';'
-        //TODO
+        'return' expression? ';'
+        {
+            $ret = factory.makeReturnNode($expression == null ? null : $expression.ret);
+        }
     |   
         'throw' expression ';'
         {
