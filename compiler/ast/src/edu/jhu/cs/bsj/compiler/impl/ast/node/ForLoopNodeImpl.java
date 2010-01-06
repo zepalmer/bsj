@@ -3,14 +3,15 @@ package edu.jhu.cs.bsj.compiler.impl.ast.node;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionStatementNode;
+import edu.jhu.cs.bsj.compiler.ast.node.ForInitializerNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ForLoopNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.StatementNode;
 
 public class ForLoopNodeImpl extends StatementNodeImpl implements ForLoopNode
 {
-    /** The iterator variable. */
-    private ListNode<? extends StatementNode> initializer;
+    /** The initializer used for this for loop. */
+    private ForInitializerNode initializer;
 
     /** The loop's update operation. */
     private ListNode<? extends ExpressionStatementNode> update;
@@ -23,7 +24,7 @@ public class ForLoopNodeImpl extends StatementNodeImpl implements ForLoopNode
 
     /** General constructor. */
     public ForLoopNodeImpl(
-            ListNode<? extends StatementNode> initializer,
+            ForInitializerNode initializer,
             ListNode<? extends ExpressionStatementNode> update,
             ExpressionNode condition,
             StatementNode statement)
@@ -36,19 +37,19 @@ public class ForLoopNodeImpl extends StatementNodeImpl implements ForLoopNode
     }
 
     /**
-     * Gets the iterator variable.
-     * @return The iterator variable.
+     * Gets the initializer used for this for loop.
+     * @return The initializer used for this for loop.
      */
-    public ListNode<? extends StatementNode> getInitializer()
+    public ForInitializerNode getInitializer()
     {
         return this.initializer;
     }
 
     /**
-     * Changes the iterator variable.
-     * @param initializer The iterator variable.
+     * Changes the initializer used for this for loop.
+     * @param initializer The initializer used for this for loop.
      */
-    public void setInitializer(ListNode<? extends StatementNode> initializer)
+    public void setInitializer(ForInitializerNode initializer)
     {
         if (this.initializer instanceof NodeImpl)
         {

@@ -316,7 +316,7 @@ ExpressionStatementNode :: StatementNode
     
 ForLoopNode :: StatementNode
     @props
-    initializer             ListNode<? extends StatementNode>           | the iterator variable
+    initializer             ForInitializerNode                          | the initializer used for this for loop
     update                  ListNode<? extends ExpressionStatementNode> | the loop's update operation
     condition               ExpressionNode                              | the loop's termination condition
     statement               StatementNode                               | the loop's statement

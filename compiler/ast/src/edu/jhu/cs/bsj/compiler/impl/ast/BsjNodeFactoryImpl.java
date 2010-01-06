@@ -56,6 +56,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.FieldDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.FloatLiteralNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ForInitializerDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ForInitializerExpressionNode;
+import edu.jhu.cs.bsj.compiler.ast.node.ForInitializerNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ForLoopNode;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.IfNode;
@@ -833,7 +834,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      * Creates a ForLoopNode.
      */
     public ForLoopNode makeForLoopNode(
-            ListNode<? extends StatementNode> initializer,
+            ForInitializerNode initializer,
             ListNode<? extends ExpressionStatementNode> update,
             ExpressionNode condition,
             StatementNode statement)

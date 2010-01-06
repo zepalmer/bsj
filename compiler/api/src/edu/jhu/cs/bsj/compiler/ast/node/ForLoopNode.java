@@ -11,16 +11,16 @@ package edu.jhu.cs.bsj.compiler.ast.node;
 public interface ForLoopNode extends StatementNode
 {
     /**
-     * Gets the iterator variable.
-     * @return The iterator variable.
+     * Gets the initializer used for this for loop.
+     * @return The initializer used for this for loop.
      */
-    public ListNode<? extends StatementNode> getInitializer();
+    public ForInitializerNode getInitializer();
 
     /**
-     * Changes the iterator variable.
-     * @param initializer The iterator variable.
+     * Changes the initializer used for this for loop.
+     * @param initializer The initializer used for this for loop.
      */
-    public void setInitializer(ListNode<? extends StatementNode> initializer);
+    public void setInitializer(ForInitializerNode initializer);
 
     /**
      * Gets the loop's update operation.
