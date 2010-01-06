@@ -2591,43 +2591,6 @@ literal returns [LiteralNode<?> ret]
         }
     ;
 
-/**
- * These are headers help to make syntatical predicates, not necessary but helps to make grammar faster.
- */
- 
-classHeader //TODO
-    :   modifiers[classModifiers] 'class' IDENTIFIER
-    ;
-
-enumHeader //TODO
-    :   modifiers[classModifiers] ('enum'|IDENTIFIER) IDENTIFIER
-    ;
-
-interfaceHeader //TODO
-    :   modifiers[interfaceModifiers] 'interface' IDENTIFIER
-    ;
-
-annotationHeader //TODO
-    :   modifiers[interfaceModifiers] '@' 'interface' IDENTIFIER
-    ;
-
-typeHeader //TODO
-    :   modifiers ('class'|'enum'|('@' ? 'interface')) IDENTIFIER
-    ;
-
-methodHeader //TODO
-    :   modifiers[methodModifiers] typeParameters? (type|'void')? IDENTIFIER '('
-    ;
-
-fieldHeader //TODO
-    :   modifiers[fieldModifiers] type IDENTIFIER ('['']')* ('='|','|';')
-    ;
-
-localVariableHeader //TODO
-    :   variableModifiers type IDENTIFIER ('['']')* ('='|','|';')
-    ;
-
-
 
 
 /********************************************************************************************
