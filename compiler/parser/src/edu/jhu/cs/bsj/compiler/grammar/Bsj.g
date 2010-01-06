@@ -1581,17 +1581,42 @@ annotationTypeBody returns [AnnotationBodyNode ret]
         '}'
     ;
 
-/**
- * NOTE: here use interfaceFieldDeclaration for field declared inside annotation. they are sytactically the same.
- */
-annotationTypeElementDeclaration //TODO
-    :   annotationMethodDeclaration
-    |   interfaceFieldDeclaration
-    |   normalClassDeclaration
-    |   normalInterfaceDeclaration
-    |   enumDeclaration
-    |   annotationTypeDeclaration
-    |   ';'
+annotationTypeElementDeclaration returns [AnnotationMember ret]
+    :   
+        annotationMethodDeclaration
+        {
+            $ret = $annotationMethodDeclaration.ret;
+        }
+    |   
+        interfaceFieldDeclaration
+        {
+            $ret = $interfaceFieldDeclaration.ret;
+        }
+    |   
+        normalClassDeclaration
+        {
+            $ret = $normalClassDeclaration.ret;
+        }
+    |   
+        normalInterfaceDeclaration
+        {
+            $ret = $normalInterfaceDeclaration.ret;
+        }
+    |   
+        enumDeclaration
+        {
+            $ret = $enumDeclaration.ret;
+        }
+    |   
+        annotationTypeDeclaration
+        {
+            $ret = $annotationTypeDeclaration.ret;
+        }
+    |   
+        voidTypeDeclaration
+        {
+            $ret = $voidTypeDeclaration.ret;
+        }
     ;
 
 annotationMethodDeclaration returns [AnnotationMethodDeclarationNode ret]
