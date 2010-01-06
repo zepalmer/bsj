@@ -1592,10 +1592,9 @@ localVariableDeclaration //TODO
         )*
     ;
 
-//TODO in progress
 statement returns [StatementNode ret]
     :   
-        block            
+        block // TODO
     |   
         ('assert') e1=expression (':' e2=expression)? ';'
         {
@@ -1646,12 +1645,16 @@ statement returns [StatementNode ret]
         'switch' parExpression '{' switchBlockStatementGroups '}'
         {
             $ret = factory.makeSwitchNode(
-                $switchBlockStatementGroups.ret,
-                $parExpression.ret);
+                $parExpression.ret,
+                $switchBlockStatementGroups.ret);
         }
     |   
         'synchronized' parExpression block
-        //TODO
+        {
+            $ret = factory.makeSynchronizedNode(
+                $parExpression.ret,
+                $block.ret);
+        }
     |   
         'return' (expression )? ';'
         //TODO
