@@ -2283,15 +2283,33 @@ additiveExpression returns [ExpressionNode ret]
         )*
     ;
 
-multiplicativeExpression //TODO
+multiplicativeExpression returns [ExpressionNode ret]
+        @init{
+            BinaryOperator op;
+        }
     :
-        unaryExpression
+        e1=unaryExpression
         (   
             (   '*'
+                {
+                    op = BinaryOperator.MULTIPLY;
+                }            
             |   '/'
+                {
+                    op = BinaryOperator.DIVIDE;
+                }            
             |   '%'
+                {
+                    op = BinaryOperator.MODULUS;
+                }            
             )
-            unaryExpression
+            e2=unaryExpression
+            {
+                $ret = factory.makeBinaryOperatorNode(
+                    $ret, 
+                    $e2.ret, 
+                    op);
+            }            
         )*
     ;
 
