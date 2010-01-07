@@ -2323,19 +2323,51 @@ multiplicativeExpression returns [ExpressionNode ret]
  * NOTE: for '+' and '-', if the next token is int or long interal, then it's not a unary expression.
  *       it's a literal with signed value. INTLTERAL AND LONG LITERAL are added here for this.
  */
-unaryExpression //TODO
-    :   '+'  unaryExpression
-    |   '-' unaryExpression
-    |   '++' unaryExpression
-    |   '--' unaryExpression
-    |   unaryExpressionNotPlusMinus
+unaryExpression returns [ExpressionNode ret] //TODO handle signed int/long literals as above?
+    :   
+        '+'  unaryExpression
+        {
+            $ret = factory.makeUnaryOperatorNode(
+                $unaryExpression.ret,
+                UnaryOperator.UNARY_PLUS);
+        }        
+    |   
+        '-' unaryExpression
+        {
+            $ret = factory.makeUnaryOperatorNode(
+                $unaryExpression.ret,
+                UnaryOperator.UNARY_MINUS);
+        }        
+    |   
+        '++' unaryExpression
+        {
+            $ret = factory.makeUnaryOperatorNode(
+                $unaryExpression.ret,
+                UnaryOperator.PREFIX_INCREMENT);
+        }
+    |   
+        '--' unaryExpression
+        {
+            $ret = factory.makeUnaryOperatorNode(
+                $unaryExpression.ret,
+                UnaryOperator.PREFIX_DECREMENT);
+        }        
+    |   
+        unaryExpressionNotPlusMinus
+        {
+            $ret = $unaryExpressionNotPlusMinus.ret;
+        }
     ;
 
-unaryExpressionNotPlusMinus //TODO
-    :   '~' unaryExpression
-    |   '!' unaryExpression
-    |   castExpression
-    |   primary
+unaryExpressionNotPlusMinus returns [ExpressionNode ret] //TODO
+    :   
+        '~' unaryExpression
+    |   
+        '!' unaryExpression
+    |   
+        castExpression
+    |   
+        primary
         (selector
         )*
         (   '++'
@@ -2434,13 +2466,22 @@ arrayCreator //TODO
         )*
     ;
 
-variableInitializer //TODO
-    :   arrayInitializer
-    |   expression
+variableInitializer returns [ExpressionNode ret]
+    :   
+        arrayInitializer
+        {
+            $ret = $arrayInitializer.ret;
+        }        
+    |   
+        expression
+        {
+            $ret = $expression.ret;
+        }
     ;
 
 arrayInitializer //TODO
-    :   '{' 
+    :   
+        '{' 
             (variableInitializer
                 (',' variableInitializer
                 )*
