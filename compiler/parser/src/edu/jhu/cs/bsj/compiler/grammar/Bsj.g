@@ -2359,11 +2359,21 @@ unaryExpression returns [ExpressionNode ret] //TODO handle signed int/long liter
         }
     ;
 
-unaryExpressionNotPlusMinus returns [ExpressionNode ret] //TODO
+unaryExpressionNotPlusMinus returns [ExpressionNode ret] // TODO primary and castExpression
     :   
         '~' unaryExpression
+        {
+            $ret = factory.makeUnaryOperatorNode(
+                $unaryExpression.ret,
+                UnaryOperator.BITWISE_COMPLEMENT);
+        }        
     |   
         '!' unaryExpression
+        {
+            $ret = factory.makeUnaryOperatorNode(
+                $unaryExpression.ret,
+                UnaryOperator.LOGICAL_COMPLEMENT);
+        }        
     |   
         castExpression
     |   
