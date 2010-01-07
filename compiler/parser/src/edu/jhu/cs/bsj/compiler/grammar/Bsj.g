@@ -1251,14 +1251,14 @@ formalParameterDecls returns [ListNode<VariableNode> parameters, VariableNode va
             $varargParameter = $ellipsisParameterDecl.ret;
         }
     |
-        normalParameterDecl
+        a=normalParameterDecl
         {
-            list.add($normalParameterDecl.ret);
+            list.add($a.ret);
         }
         (
-            ',' normalParameterDecl
+            ',' b=normalParameterDecl
             {
-                list.add($normalParameterDecl.ret);
+                list.add($b.ret);
             }
         )*
         {
@@ -1401,15 +1401,15 @@ elementValuePairs returns [ListNode<AnnotationElementNode> ret]
             $ret = factory.makeListNode(list);
         }
     :
-        elementValuePair
+        a=elementValuePair
         {
-            list.add($elementValuePair.ret);
+            list.add($a.ret);
         }
         (
             ','
-            elementValuePair
+            b=elementValuePair
             {
-                list.add($elementValuePair.ret);
+                list.add($b.ret);
             }
         )*
     ;
@@ -1475,14 +1475,14 @@ elementValueArrayInitializer returns [AnnotationArrayValueNode ret]
     :   
         '{'
         (
-            elementValue
+            a=elementValue
             {
-                list.add($elementValue.ret);
+                list.add($a.ret);
             }
             (
-                ',' elementValue
+                ',' b=elementValue
                 {
-                    list.add($elementValue.ret);
+                    list.add($b.ret);
                 }
             )*
         )?
@@ -1641,14 +1641,14 @@ localVariableDeclaration returns [VariableDeclarationNode ret]
         }
     :   
         variableModifiers type
-        variableDeclarator[$type]
+        a=variableDeclarator[$type]
         {
-            list.add($variableDeclarator.ret); 
+            list.add($a.ret); 
         }
         (
-            ',' variableDeclarator[$type]
+            ',' b=variableDeclarator[$type]
             {
-	            list.add($variableDeclarator.ret); 
+	            list.add($b.ret); 
             }
         )*
     ;
