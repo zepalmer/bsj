@@ -2263,6 +2263,9 @@ additiveExpression returns [ExpressionNode ret]
         }
     :   
         e1=multiplicativeExpression
+        {
+            $ret = $e1.ret;
+        }        
         (   
             (   '+'
                 {
@@ -2289,6 +2292,9 @@ multiplicativeExpression returns [ExpressionNode ret]
         }
     :
         e1=unaryExpression
+        {
+            $ret = $e1.ret;
+        }        
         (   
             (   '*'
                 {
