@@ -879,7 +879,8 @@ constructorDeclaration returns [ConstructorDeclarationNode ret]
             $ret = factory.makeConstructorDeclarationNode(
                     $constructorBody.ret,
                     $modifiers.ret,
-                    $formalParameters.ret,
+                    $formalParameters.parameters,
+                    $formalParameters.varargParameter,
                     $qualifiedNameList.ret,
                     $typeParameters.ret);
         }
@@ -930,7 +931,8 @@ methodDeclaration returns [MethodDeclarationNode ret]
                     ($block == null? null : $block.ret),
                     $modifiers.ret,
                     factory.makeIdentifierNode($id.text),
-                    $formalParameters.ret,
+                    $formalParameters.parameters,
+                    $formalParameters.varargParameter,
                     $methodReturnType.ret,
                     $qualifiedNameList.ret,
                     $typeParameters.ret);
@@ -993,7 +995,8 @@ interfaceMethodDeclaration returns [MethodDeclarationNode ret]
                     null, // No body for interface methods; thus null
                     $modifiers.ret,
                     factory.makeIdentifierNode($id.text),
-                    $formalParameters.ret,
+                    $formalParameters.parameters,
+                    $formalParameters.varargParameter,
                     $methodReturnType.ret,
                     $qualifiedNameList.ret,
                     $typeParameters.ret);
@@ -1851,7 +1854,7 @@ trystatement returns [TryNode ret]
             $ret = factory.makeTryNode(
                     $b.ret,
                     $catches.ret,
-                    (fb != null ? $fb.ret : null));
+                    ($fb != null ? $fb.ret : null));
         }        
     ;
 
