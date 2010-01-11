@@ -2,9 +2,9 @@ package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationElementNode;
-import edu.jhu.cs.bsj.compiler.ast.node.DeclaredTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.NormalAnnotationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.RawTypeNode;
 
 public class NormalAnnotationNodeImpl extends AnnotationNodeImpl implements NormalAnnotationNode
 {
@@ -14,7 +14,7 @@ public class NormalAnnotationNodeImpl extends AnnotationNodeImpl implements Norm
     /** General constructor. */
     public NormalAnnotationNodeImpl(
             ListNode<? extends AnnotationElementNode> arguments,
-            DeclaredTypeNode annotationType)
+            RawTypeNode annotationType)
     {
         super(annotationType);
         this.arguments = arguments;

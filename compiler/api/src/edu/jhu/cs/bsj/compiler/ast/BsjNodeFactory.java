@@ -54,6 +54,8 @@ import edu.jhu.cs.bsj.compiler.ast.node.ForLoopNode;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.IfNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ImportNode;
+import edu.jhu.cs.bsj.compiler.ast.node.ImportOnDemandNode;
+import edu.jhu.cs.bsj.compiler.ast.node.ImportSingleTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.InitializerDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.InlineTypeDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.InstanceOfNode;
@@ -202,6 +204,13 @@ public interface BsjNodeFactory
             Node value);
 
     /**
+     * Creates a ImportOnDemandNode.
+     */
+    public ImportOnDemandNode makeImportOnDemandNode(
+            NameNode name,
+            boolean staticImport);
+
+    /**
      * Creates a PrimitiveTypeNode.
      */
     public PrimitiveTypeNode makePrimitiveTypeNode(
@@ -302,7 +311,7 @@ public interface BsjNodeFactory
      */
     public NormalAnnotationNode makeNormalAnnotationNode(
             ListNode<? extends AnnotationElementNode> arguments,
-            DeclaredTypeNode annotationType);
+            RawTypeNode annotationType);
 
     /**
      * Creates a DoWhileLoopNode.
@@ -406,13 +415,6 @@ public interface BsjNodeFactory
             BlockStatementNode block);
 
     /**
-     * Creates a ImportNode.
-     */
-    public ImportNode makeImportNode(
-            NameNode qualifiedName,
-            boolean staticImport);
-
-    /**
      * Creates a VariableNode.
      */
     public VariableNode makeVariableNode(
@@ -467,7 +469,7 @@ public interface BsjNodeFactory
             ModifiersNode modifiers,
             ListNode<? extends VariableNode> parameters,
             VariableNode varargParameter,
-            ListNode<? extends DeclaredTypeNode> throwTypes,
+            ListNode<? extends RawTypeNode> throwTypes,
             ListNode<? extends TypeParameterNode> typeParameters);
 
     /**
@@ -549,6 +551,13 @@ public interface BsjNodeFactory
             ListNode<VariableDeclaratorNode> declarators);
 
     /**
+     * Creates a ImportSingleTypeNode.
+     */
+    public ImportSingleTypeNode makeImportSingleTypeNode(
+            NameNode name,
+            boolean staticImport);
+
+    /**
      * Creates a AnnotationArrayValueNode.
      */
     public AnnotationArrayValueNode makeAnnotationArrayValueNode(
@@ -559,7 +568,7 @@ public interface BsjNodeFactory
      */
     public SingleElementAnnotationNode makeSingleElementAnnotationNode(
             AnnotationValueNode value,
-            DeclaredTypeNode annotationType);
+            RawTypeNode annotationType);
 
     /**
      * Creates a ClassInstantiationNode.
@@ -713,7 +722,7 @@ public interface BsjNodeFactory
             ListNode<? extends VariableNode> parameters,
             VariableNode varargParameter,
             TypeNode returnType,
-            ListNode<? extends DeclaredTypeNode> throwTypes,
+            ListNode<? extends RawTypeNode> throwTypes,
             ListNode<? extends TypeParameterNode> typeParameters);
 
 }

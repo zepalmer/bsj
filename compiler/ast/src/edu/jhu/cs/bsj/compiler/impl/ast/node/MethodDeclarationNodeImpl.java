@@ -2,11 +2,11 @@ package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.BlockStatementNode;
-import edu.jhu.cs.bsj.compiler.ast.node.DeclaredTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.MethodDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ModifiersNode;
+import edu.jhu.cs.bsj.compiler.ast.node.RawTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeParameterNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableNode;
@@ -32,7 +32,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
     private TypeNode returnType;
 
     /** The types of exceptions thrown by this method. */
-    private ListNode<? extends DeclaredTypeNode> throwTypes;
+    private ListNode<? extends RawTypeNode> throwTypes;
 
     /** This method's applicable type parameters. */
     private ListNode<? extends TypeParameterNode> typeParameters;
@@ -45,7 +45,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
             ListNode<? extends VariableNode> parameters,
             VariableNode varargParameter,
             TypeNode returnType,
-            ListNode<? extends DeclaredTypeNode> throwTypes,
+            ListNode<? extends RawTypeNode> throwTypes,
             ListNode<? extends TypeParameterNode> typeParameters)
     {
         super();
@@ -219,7 +219,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
      * Gets the types of exceptions thrown by this method.
      * @return The types of exceptions thrown by this method.
      */
-    public ListNode<? extends DeclaredTypeNode> getThrowTypes()
+    public ListNode<? extends RawTypeNode> getThrowTypes()
     {
         return this.throwTypes;
     }
@@ -228,7 +228,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
      * Changes the types of exceptions thrown by this method.
      * @param throwTypes The types of exceptions thrown by this method.
      */
-    public void setThrowTypes(ListNode<? extends DeclaredTypeNode> throwTypes)
+    public void setThrowTypes(ListNode<? extends RawTypeNode> throwTypes)
     {
         if (this.throwTypes instanceof NodeImpl)
         {

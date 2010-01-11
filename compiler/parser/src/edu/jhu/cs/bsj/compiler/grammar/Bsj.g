@@ -306,61 +306,35 @@ importDeclarations returns [ListNode<ImportNode> ret]
     ;
 
 importDeclaration returns [ImportNode ret]
-    :   
-        'import' 
-        (staticImport='static')?
-        id=identifier '.' '*' ';'
-        {
-            $ret = factory.makeImportNode(
-                factory.makeQualifiedNameNode(
-                    $id.ret,
-                    factory.makeIdentifierNode("*")),
-                staticImport!=null);
+        @init {
+            boolean staticImport = false;
+            boolean onDemand = false;
         }
-    |
+    :   
         'import'
-        (staticImport='static')?
-        qualifiedImportName
+        (
+            'static'
+            {
+                staticImport = true;
+            }
+        )?
+        packageOrTypeName
+        (
+            '.' '*'
+            {
+                onDemand = true;
+            }
+        )?
         ';'
         {
-            $ret = factory.makeImportNode(
-                $qualifiedImportName.ret,
-                staticImport!=null);
-        }
-    ;
-
-qualifiedImportName returns [QualifiedNameNode ret]
-    :
-        necessarilyQualifiedName (starQual=('.' '*')?)
-        {
-            if ($starQual!=null)
+            if (onDemand)
             {
-                $ret = factory.makeQualifiedNameNode(
-                    $necessarilyQualifiedName.ret,
-                    factory.makeIdentifierNode("*"));
+                $ret = factory.makeImportOnDemandNode($packageOrTypeName.ret, staticImport);
             } else
             {
-                $ret = $necessarilyQualifiedName.ret;
-            } 
-        }
-    ;
-
-necessarilyQualifiedName returns [QualifiedNameNode ret]
-    :   
-        a=identifier '.' b=identifier
-        {
-            $ret = factory.makeQualifiedNameNode(
-                    $a.ret,
-                    $b.ret);
-        }
-        (
-            '.' c=identifier
-            {
-                $ret = factory.makeQualifiedNameNode(
-                    $ret,
-                    $c.ret);
+                $ret = factory.makeImportSingleTypeNode($packageOrTypeName.ret, staticImport);
             }
-        )*
+        }
     ;
 
 typeDeclarations returns [ListNode<TypeDeclarationNode> ret]
@@ -923,28 +897,30 @@ methodReturnType returns [TypeNode ret]
 constructorDeclaration returns [ConstructorDeclarationNode ret]
     scope Global;
     :
+        // TODO: null handling
         modifiers[constructorModifiers]
         typeParameters?
         identifier
         formalParameters
-        ('throws' qualifiedNameList)?
+        throwsClause?
         constructorBody
         {
             if ($Global::className.empty())
             {
                 //TODO error handling            
-            }
-            else if (!$identifier.ret.getIdentifier().equals($Global::className.peek()))
+            } else if (!$identifier.ret.getIdentifier().equals($Global::className.peek()))
             {
                 //TODO error handling
-            }
-            $ret = factory.makeConstructorDeclarationNode(
+            } else
+            {
+                $ret = factory.makeConstructorDeclarationNode(
                     $constructorBody.ret,
                     $modifiers.ret,
                     $formalParameters.parameters,
                     $formalParameters.varargParameter,
                     $qualifiedNameList.ret,
                     $typeParameters.ret);
+            }
         }
     ;
 
@@ -1002,7 +978,7 @@ methodDeclaration returns [MethodDeclarationNode ret]
                 returnTypeNode = $arrayTypeIndicator.ret;
             }
         )?
-        'throws' qualifiedNameList?            
+        throwsClause?
         (        
             block
             {
@@ -1023,7 +999,6 @@ methodDeclaration returns [MethodDeclarationNode ret]
                     typeParametersNode;
         }        
     ;
-
 
 fieldDeclaration returns [FieldDeclarationNode ret]
     :
@@ -1080,7 +1055,8 @@ interfaceMethodDeclaration returns [MethodDeclarationNode ret]
                 returnTypeNode = $arrayTypeIndicator.ret;
             }
         )?
-        ('throws' qualifiedNameList)? ';'
+        throwsClause?
+        ';'
         {
             $ret = factory.makeMethodDeclarationNode(
                     null, // No body for interface methods; thus null
@@ -1100,6 +1076,27 @@ interfaceFieldDeclaration returns [FieldDeclarationNode ret]
         {
             $ret = $abstractFieldDeclaration.ret;
         }
+    ;
+
+throwsClause returns [ListNode<RawTypeNode> ret]
+        @init {
+            List<RawTypeNode> list = new ArrayList<RawType>();
+        }
+        @after {
+            $ret = factory.makeListNode(list);
+        }
+    :
+        THROWS
+        a=typeName
+        {
+            list.add(factory.makeRawTypeNode($a.ret));
+        }
+        (
+            ',' b=typeName
+            {
+                list.add(factory.makeRawTypeNode($b.ret));
+            }
+        )*
     ;
 
 nonprimitiveType returns [TypeNode ret]
@@ -1311,28 +1308,6 @@ typeArgument returns [TypeArgument ret]
         }
     ;
 
-// TODO: should this be a ListNode<DeclaredTypeNode>?  Are QualifiedNameNode and DeclaredTypeNode different enough that
-// we can keep them separate?
-qualifiedNameList returns [ListNode<QualifiedNameNode> ret]
-        @init {
-            List<QualifiedNameNode> list = new ArrayList<QualifiedNameNode>();
-        }
-        @after {
-            $ret = factory.<QualifiedNameNode>makeListNode(list);
-        }
-    :   
-        a=qualifiedName
-            {
-                list.add($a.ret);
-            }    
-        (
-            ',' b=qualifiedName
-            {
-                list.add($b.ret);
-            }
-        )*
-    ;
-
 // Matches a formal parameter list.
 // For example, in
 //     public void foo(int x, int y)
@@ -1478,12 +1453,11 @@ annotations returns [ListNode<AnnotationNode> ret]
 //     @Test("foo")
 annotation returns [AnnotationNode ret]
     :   
-        // TODO: qualifiedName.ret is not a DeclaredTypeNode
-        '@' qualifiedName
+        '@' typeName
         {
             $ret = factory.makeNormalAnnotationNode(
                     factory.makeListNode(new ArrayList<AnnotationElementNode>()),
-                    $qualifiedName.ret);
+                    factory.makeRawTypeNode($typeName.ret));
         }
         (
             '('   
@@ -1492,14 +1466,14 @@ annotation returns [AnnotationNode ret]
                 {
                     $ret = factory.makeNormalAnnotationNode(
                             $elementValuePairs.ret,
-                            $qualifiedName.ret);
+                            factory.makeRawTypeNode($typeName.ret));
                 }
             |
                 elementValue
                 {
                     $ret = factory.makeSingleElementAnnotationNode(
                             $elementValue.ret,
-                            $qualifiedName.ret);
+                            factory.makeRawTypeNode($typeName.ret));
                 }
             )? 
             ')' 

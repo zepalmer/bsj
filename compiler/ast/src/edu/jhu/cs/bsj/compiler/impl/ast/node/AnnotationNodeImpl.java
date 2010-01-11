@@ -2,16 +2,16 @@ package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationNode;
-import edu.jhu.cs.bsj.compiler.ast.node.DeclaredTypeNode;
+import edu.jhu.cs.bsj.compiler.ast.node.RawTypeNode;
 
 public abstract class AnnotationNodeImpl extends NodeImpl implements AnnotationNode
 {
     /** The annotation type. */
-    private DeclaredTypeNode annotationType;
+    private RawTypeNode annotationType;
 
     /** General constructor. */
     protected AnnotationNodeImpl(
-            DeclaredTypeNode annotationType)
+            RawTypeNode annotationType)
     {
         super();
         this.annotationType = annotationType;
@@ -21,7 +21,7 @@ public abstract class AnnotationNodeImpl extends NodeImpl implements AnnotationN
      * Gets the annotation type.
      * @return The annotation type.
      */
-    public DeclaredTypeNode getAnnotationType()
+    public RawTypeNode getAnnotationType()
     {
         return this.annotationType;
     }
@@ -30,7 +30,7 @@ public abstract class AnnotationNodeImpl extends NodeImpl implements AnnotationN
      * Changes the annotation type.
      * @param annotationType The annotation type.
      */
-    public void setAnnotationType(DeclaredTypeNode annotationType)
+    public void setAnnotationType(RawTypeNode annotationType)
     {
         if (this.annotationType instanceof NodeImpl)
         {

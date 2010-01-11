@@ -572,7 +572,7 @@ ConstructorDeclarationNode :: Node + ClassMember
     modifiers               ModifiersNode                               | the modifiers for this constructor
     parameters              ListNode<? extends VariableNode>            | the parameters declared by this constructor
     varargParameter         VariableNode                                | the vararg parameter declared by this method
-    throwTypes              ListNode<? extends DeclaredTypeNode>        | the types of exceptions thrown by this constructor
+    throwTypes              ListNode<? extends RawTypeNode>             | the types of exceptions thrown by this constructor
     typeParameters          ListNode<? extends TypeParameterNode>       | this constructor's applicable type parameters
     @docs
         A node representing a constructor declaration, as in:
@@ -613,7 +613,7 @@ MethodDeclarationNode :: Node + ClassMember, InterfaceMember, AnonymousClassMemb
     parameters              ListNode<? extends VariableNode>            | the parameters declared by this method
     varargParameter         VariableNode                                | the vararg parameter declared by this method
     returnType              TypeNode                                    | the type of value returned
-    throwTypes              ListNode<? extends DeclaredTypeNode>        | the types of exceptions thrown by this method
+    throwTypes              ListNode<? extends RawTypeNode>             | the types of exceptions thrown by this method
     typeParameters          ListNode<? extends TypeParameterNode>       | this method's applicable type parameters
     @docs
         A node representing a method declaration, as in:
@@ -768,7 +768,7 @@ AnnotationExpressionValueNode :: AnnotationValueNode
 
 AnnotationNode* :: Node
     @props
-    annotationType          DeclaredTypeNode                            | the annotation type
+    annotationType          RawTypeNode                                 | the annotation type
     @docs
         Acts as a base class for annotation nodes.  Subclasses distinguish between the different types of annotation
         sugar.
@@ -913,12 +913,23 @@ ForInitializerNode* :: Node
         This class is a common superclass for standard for-loop initializers.  It exists to allow the two different
         types of for loop initializers to be used coherently.
 
-ImportNode :: Node
+ImportNode* :: Node
+    @docs
+        A common base class for import statements.
+
+ImportOnDemandNode :: ImportNode
     @props
-    qualifiedName           NameNode                                    | the name of the package to import
+    name                    NameNode                                    | the name of the package to import
     staticImport            boolean                                     | the static-ness of the import
     @docs
-        A node representing a compilation unit import statement.
+        A node representing an on-demand import statement, such as "<tt>import java.util.*</tt>".
+
+ImportSingleTypeNode :: ImportNode
+    @props
+    name                    NameNode                                    | the name of the type to import
+    staticImport            boolean                                     | the static-ness of the import
+    @docs
+        A node representing a single type import statement, such as "<tt>import java.util.Set</tt>".
 
 !set stopGen=cons
 

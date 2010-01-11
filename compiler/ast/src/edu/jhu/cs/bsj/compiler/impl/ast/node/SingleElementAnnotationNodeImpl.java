@@ -2,7 +2,7 @@ package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationValueNode;
-import edu.jhu.cs.bsj.compiler.ast.node.DeclaredTypeNode;
+import edu.jhu.cs.bsj.compiler.ast.node.RawTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.SingleElementAnnotationNode;
 
 public class SingleElementAnnotationNodeImpl extends AnnotationNodeImpl implements SingleElementAnnotationNode
@@ -13,7 +13,7 @@ public class SingleElementAnnotationNodeImpl extends AnnotationNodeImpl implemen
     /** General constructor. */
     public SingleElementAnnotationNodeImpl(
             AnnotationValueNode value,
-            DeclaredTypeNode annotationType)
+            RawTypeNode annotationType)
     {
         super(annotationType);
         this.value = value;

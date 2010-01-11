@@ -44,7 +44,8 @@ import edu.jhu.cs.bsj.compiler.ast.node.ForInitializerExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ForLoopNode;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.IfNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ImportNode;
+import edu.jhu.cs.bsj.compiler.ast.node.ImportOnDemandNode;
+import edu.jhu.cs.bsj.compiler.ast.node.ImportSingleTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.InitializerDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.InlineTypeDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.InstanceOfNode;
@@ -252,6 +253,12 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
         } else if (node instanceof ForInitializerDeclarationNode)
         {
             visitForInitializerDeclarationNodeStart((ForInitializerDeclarationNode)node);
+        } else if (node instanceof ImportOnDemandNode)
+        {
+            visitImportOnDemandNodeStart((ImportOnDemandNode)node);
+        } else if (node instanceof ImportSingleTypeNode)
+        {
+            visitImportSingleTypeNodeStart((ImportSingleTypeNode)node);
         } else if (node instanceof BinaryOperatorNode)
         {
             visitBinaryOperatorNodeStart((BinaryOperatorNode)node);
@@ -336,9 +343,6 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
         } else if (node instanceof CaseNode)
         {
             visitCaseNodeStart((CaseNode)node);
-        } else if (node instanceof ImportNode)
-        {
-            visitImportNodeStart((ImportNode)node);
         } else if (node instanceof VariableNode)
         {
             visitVariableNodeStart((VariableNode)node);
@@ -519,6 +523,12 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
         } else if (node instanceof ForInitializerDeclarationNode)
         {
             visitForInitializerDeclarationNodeStop((ForInitializerDeclarationNode)node);
+        } else if (node instanceof ImportOnDemandNode)
+        {
+            visitImportOnDemandNodeStop((ImportOnDemandNode)node);
+        } else if (node instanceof ImportSingleTypeNode)
+        {
+            visitImportSingleTypeNodeStop((ImportSingleTypeNode)node);
         } else if (node instanceof BinaryOperatorNode)
         {
             visitBinaryOperatorNodeStop((BinaryOperatorNode)node);
@@ -603,9 +613,6 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
         } else if (node instanceof CaseNode)
         {
             visitCaseNodeStop((CaseNode)node);
-        } else if (node instanceof ImportNode)
-        {
-            visitImportNodeStop((ImportNode)node);
         } else if (node instanceof VariableNode)
         {
             visitVariableNodeStop((VariableNode)node);
@@ -1031,6 +1038,22 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
     }
 
     /**
+     * Starts a visit for nodes of type ImportOnDemandNode.
+     * @param node The node being visited.
+     */
+    public void visitImportOnDemandNodeStart(ImportOnDemandNode node)
+    {
+    }
+
+    /**
+     * Starts a visit for nodes of type ImportSingleTypeNode.
+     * @param node The node being visited.
+     */
+    public void visitImportSingleTypeNodeStart(ImportSingleTypeNode node)
+    {
+    }
+
+    /**
      * Starts a visit for nodes of type BinaryOperatorNode.
      * @param node The node being visited.
      */
@@ -1251,14 +1274,6 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
      * @param node The node being visited.
      */
     public void visitCaseNodeStart(CaseNode node)
-    {
-    }
-
-    /**
-     * Starts a visit for nodes of type ImportNode.
-     * @param node The node being visited.
-     */
-    public void visitImportNodeStart(ImportNode node)
     {
     }
 
@@ -1711,6 +1726,22 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
     }
 
     /**
+     * Stops a visit for nodes of type ImportOnDemandNode.
+     * @param node The node being visited.
+     */
+    public void visitImportOnDemandNodeStop(ImportOnDemandNode node)
+    {
+    }
+
+    /**
+     * Stops a visit for nodes of type ImportSingleTypeNode.
+     * @param node The node being visited.
+     */
+    public void visitImportSingleTypeNodeStop(ImportSingleTypeNode node)
+    {
+    }
+
+    /**
      * Stops a visit for nodes of type BinaryOperatorNode.
      * @param node The node being visited.
      */
@@ -1931,14 +1962,6 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
      * @param node The node being visited.
      */
     public void visitCaseNodeStop(CaseNode node)
-    {
-    }
-
-    /**
-     * Stops a visit for nodes of type ImportNode.
-     * @param node The node being visited.
-     */
-    public void visitImportNodeStop(ImportNode node)
     {
     }
 

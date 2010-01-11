@@ -61,6 +61,8 @@ import edu.jhu.cs.bsj.compiler.ast.node.ForLoopNode;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.IfNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ImportNode;
+import edu.jhu.cs.bsj.compiler.ast.node.ImportOnDemandNode;
+import edu.jhu.cs.bsj.compiler.ast.node.ImportSingleTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.InitializerDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.InlineTypeDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.InstanceOfNode;
@@ -157,7 +159,8 @@ import edu.jhu.cs.bsj.compiler.impl.ast.node.ForInitializerExpressionNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.ForLoopNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.IdentifierNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.IfNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.ImportNodeImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.node.ImportOnDemandNodeImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.node.ImportSingleTypeNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.InitializerDeclarationNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.InlineTypeDeclarationNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.InstanceOfNodeImpl;
@@ -340,6 +343,17 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
 
     /**
+     * Creates a ImportOnDemandNode.
+     */
+    public ImportOnDemandNode makeImportOnDemandNode(
+            NameNode name,
+            boolean staticImport)
+    {
+        ImportOnDemandNode ret = new ImportOnDemandNodeImpl(name, staticImport);
+        return ret;
+    }
+
+    /**
      * Creates a PrimitiveTypeNode.
      */
     public PrimitiveTypeNode makePrimitiveTypeNode(
@@ -496,7 +510,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     public NormalAnnotationNode makeNormalAnnotationNode(
             ListNode<? extends AnnotationElementNode> arguments,
-            DeclaredTypeNode annotationType)
+            RawTypeNode annotationType)
     {
         NormalAnnotationNode ret = new NormalAnnotationNodeImpl(arguments, annotationType);
         return ret;
@@ -664,17 +678,6 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
 
     /**
-     * Creates a ImportNode.
-     */
-    public ImportNode makeImportNode(
-            NameNode qualifiedName,
-            boolean staticImport)
-    {
-        ImportNode ret = new ImportNodeImpl(qualifiedName, staticImport);
-        return ret;
-    }
-
-    /**
      * Creates a VariableNode.
      */
     public VariableNode makeVariableNode(
@@ -757,7 +760,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ModifiersNode modifiers,
             ListNode<? extends VariableNode> parameters,
             VariableNode varargParameter,
-            ListNode<? extends DeclaredTypeNode> throwTypes,
+            ListNode<? extends RawTypeNode> throwTypes,
             ListNode<? extends TypeParameterNode> typeParameters)
     {
         ConstructorDeclarationNode ret = new ConstructorDeclarationNodeImpl(body, modifiers, parameters, varargParameter, throwTypes, typeParameters);
@@ -887,6 +890,17 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
 
     /**
+     * Creates a ImportSingleTypeNode.
+     */
+    public ImportSingleTypeNode makeImportSingleTypeNode(
+            NameNode name,
+            boolean staticImport)
+    {
+        ImportSingleTypeNode ret = new ImportSingleTypeNodeImpl(name, staticImport);
+        return ret;
+    }
+
+    /**
      * Creates a AnnotationArrayValueNode.
      */
     public AnnotationArrayValueNode makeAnnotationArrayValueNode(
@@ -901,7 +915,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     public SingleElementAnnotationNode makeSingleElementAnnotationNode(
             AnnotationValueNode value,
-            DeclaredTypeNode annotationType)
+            RawTypeNode annotationType)
     {
         SingleElementAnnotationNode ret = new SingleElementAnnotationNodeImpl(value, annotationType);
         return ret;
@@ -1139,7 +1153,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ListNode<? extends VariableNode> parameters,
             VariableNode varargParameter,
             TypeNode returnType,
-            ListNode<? extends DeclaredTypeNode> throwTypes,
+            ListNode<? extends RawTypeNode> throwTypes,
             ListNode<? extends TypeParameterNode> typeParameters)
     {
         MethodDeclarationNode ret = new MethodDeclarationNodeImpl(body, modifiers, identifier, parameters, varargParameter, returnType, throwTypes, typeParameters);
