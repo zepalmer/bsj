@@ -68,8 +68,9 @@ IdentifierNode :: Node
         <i>ident</i>
         </pre>
 
-# TODO: NameNode needs category information
 NameNode* :: Node
+    @props
+    category*               NameCategory                                | the category for this name
     @docs
         A common supertype for all nodes representing a name.  In Java, a name is either a simple name (a single
         identifier) or a qualified name (a name, a dot, and an identifier).  The meaning of a name is context-sensitive
@@ -80,6 +81,8 @@ NameNode* :: Node
         or one of its subclasses.  Examples of such cases include variable and type declarations, where the identifier
         is not technically a name because it is being used to create a name which does not exist.  For more information,
         please see the Java Language Specification v3.0 &#167;6.
+    @include
+        NameNode.java
 
 QualifiedNameNode :: NameNode
     @props

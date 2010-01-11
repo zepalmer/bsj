@@ -1,6 +1,7 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.NameCategory;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.NameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.QualifiedNameNode;
@@ -16,9 +17,10 @@ public class QualifiedNameNodeImpl extends NameNodeImpl implements QualifiedName
     /** General constructor. */
     public QualifiedNameNodeImpl(
             NameNode base,
-            IdentifierNode identifier)
+            IdentifierNode identifier,
+            NameCategory category)
     {
-        super();
+        super(category);
         this.base = base;
         this.identifier = identifier;
     }

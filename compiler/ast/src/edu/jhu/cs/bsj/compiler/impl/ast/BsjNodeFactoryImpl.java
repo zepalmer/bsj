@@ -7,6 +7,7 @@ import edu.jhu.cs.bsj.compiler.ast.AssignmentOperator;
 import edu.jhu.cs.bsj.compiler.ast.BinaryOperator;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 import edu.jhu.cs.bsj.compiler.ast.Modifier;
+import edu.jhu.cs.bsj.compiler.ast.NameCategory;
 import edu.jhu.cs.bsj.compiler.ast.PrimitiveType;
 import edu.jhu.cs.bsj.compiler.ast.UnaryOperator;
 import edu.jhu.cs.bsj.compiler.ast.node.AlternateConstructorInvocationNode;
@@ -301,9 +302,10 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     public QualifiedNameNode makeQualifiedNameNode(
             NameNode base,
-            IdentifierNode identifier)
+            IdentifierNode identifier,
+            NameCategory category)
     {
-        QualifiedNameNode ret = new QualifiedNameNodeImpl(base, identifier);
+        QualifiedNameNode ret = new QualifiedNameNodeImpl(base, identifier, category);
         return ret;
     }
 
@@ -1078,9 +1080,10 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      * Creates a SimpleNameNode.
      */
     public SimpleNameNode makeSimpleNameNode(
-            IdentifierNode identifier)
+            IdentifierNode identifier,
+            NameCategory category)
     {
-        SimpleNameNode ret = new SimpleNameNodeImpl(identifier);
+        SimpleNameNode ret = new SimpleNameNodeImpl(identifier, category);
         return ret;
     }
 

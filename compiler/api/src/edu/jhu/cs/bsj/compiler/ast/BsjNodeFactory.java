@@ -180,7 +180,8 @@ public interface BsjNodeFactory
      */
     public QualifiedNameNode makeQualifiedNameNode(
             NameNode base,
-            IdentifierNode identifier);
+            IdentifierNode identifier,
+            NameCategory category);
 
     /**
      * Creates a VoidStatementNode.
@@ -673,7 +674,8 @@ public interface BsjNodeFactory
      * Creates a SimpleNameNode.
      */
     public SimpleNameNode makeSimpleNameNode(
-            IdentifierNode identifier);
+            IdentifierNode identifier,
+            NameCategory category);
 
     /**
      * Creates a IfNode.

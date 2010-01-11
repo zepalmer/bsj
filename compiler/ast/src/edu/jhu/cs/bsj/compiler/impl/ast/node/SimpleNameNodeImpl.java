@@ -1,6 +1,7 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.NameCategory;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.SimpleNameNode;
 
@@ -11,9 +12,10 @@ public class SimpleNameNodeImpl extends NameNodeImpl implements SimpleNameNode
 
     /** General constructor. */
     public SimpleNameNodeImpl(
-            IdentifierNode identifier)
+            IdentifierNode identifier,
+            NameCategory category)
     {
-        super();
+        super(category);
         this.identifier = identifier;
     }
 
