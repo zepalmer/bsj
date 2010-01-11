@@ -270,13 +270,22 @@ compilationUnit returns [CompilationUnitNode ret]
     ;
 
 packageDeclaration returns [PackageDeclarationNode ret]
+    @init{
+        ListNode<AnnotationNode> annotationsNode = 
+            factory.makeListNode(Collections.<AnnotationNode>emptyList());
+    }
     :
-        annotations?
-        'package' qualifiedName ';'
+        (
+            annotations
+            {
+                annotationsNode = $annotations.ret;
+            }
+        )?
+        'package' packageName ';'
         {
             $ret = factory.makePackageDeclarationNode(
-                    $qualifiedName.ret,
-                    $annotations.ret);
+                    $packageName.ret,
+                    annotationsNode);
         }
     ;
 
