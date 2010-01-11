@@ -1989,12 +1989,12 @@ expression returns [ExpressionNode ret]
         }
         (
             assignmentOperator
-            expression
+            e=expression
             {
                 $ret = factory.makeAssignmentNode(
                         $ret,
                         $assignmentOperator.ret,
-                        $expression.ret);
+                        $e.ret);
             }
         )?
     ;
@@ -2356,10 +2356,10 @@ multiplicativeExpression returns [ExpressionNode ret]
  */
 unaryExpression returns [ExpressionNode ret]
     :   
-        '+'  unaryExpression
+        '+'  e=unaryExpression
         {
             $ret = factory.makeUnaryOperatorNode(
-                $unaryExpression.ret,
+                $e.ret,
                 UnaryOperator.UNARY_PLUS);
         }        
     |
@@ -2373,24 +2373,24 @@ unaryExpression returns [ExpressionNode ret]
             $ret = $longLiteral.ret;
         }    
     |
-        '-' unaryExpression
+        '-' e=unaryExpression
         {
             $ret = factory.makeUnaryOperatorNode(
-                $unaryExpression.ret,
+                $e.ret,
                 UnaryOperator.UNARY_MINUS);
         }        
     |   
-        '++' unaryExpression
+        '++' e=unaryExpression
         {
             $ret = factory.makeUnaryOperatorNode(
-                $unaryExpression.ret,
+                $e.ret,
                 UnaryOperator.PREFIX_INCREMENT);
         }
     |   
-        '--' unaryExpression
+        '--' e=unaryExpression
         {
             $ret = factory.makeUnaryOperatorNode(
-                $unaryExpression.ret,
+                $e.ret,
                 UnaryOperator.PREFIX_DECREMENT);
         }        
     |   
