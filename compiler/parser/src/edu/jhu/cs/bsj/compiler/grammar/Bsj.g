@@ -2320,10 +2320,10 @@ multiplicativeExpression returns [ExpressionNode ret]
     ;
 
 /**
- * NOTE: for '+' and '-', if the next token is int or long interal, then it's not a unary expression.
- *       it's a literal with signed value. INTLTERAL AND LONG LITERAL are added here for this.
+ * NOTE: for '+' and '-', if the next token is int or long literal, then it's not a unary expression.
+ *       it's a literal with signed value. INTLITERAL AND LONG LITERAL are added here for this.
  */
-unaryExpression returns [ExpressionNode ret] //TODO handle signed int/long literals as above?
+unaryExpression returns [ExpressionNode ret]
     :   
         '+'  unaryExpression
         {
@@ -2331,7 +2331,17 @@ unaryExpression returns [ExpressionNode ret] //TODO handle signed int/long liter
                 $unaryExpression.ret,
                 UnaryOperator.UNARY_PLUS);
         }        
-    |   
+    |
+        '-' intLiteral[true]
+        {
+            $ret = $intLiteral.ret;
+        }   
+    |
+        '-' longLiteral[true]
+        {
+            $ret = $longLiteral.ret;
+        }    
+    |
         '-' unaryExpression
         {
             $ret = factory.makeUnaryOperatorNode(
@@ -2557,23 +2567,27 @@ arguments returns [ListNode<ExpressionNode> ret]
             }
         )? ')'
     ;
-
-literal returns [LiteralNode<?> ret]
-    :
+    
+intLiteral [boolean isNegative] returns [LiteralNode<?> ret]
+    :  
         INTLITERAL
         {
             IntegerBaseResult ibr = new IntegerBaseResult($INTLITERAL.text);
             Integer i;
             try
             {
-                i = Integer.parseInt(ibr.string, ibr.base);
-	        } catch (NumberFormatException nfe)
-	        {
-	            // TODO: report and handle error
-	        }
-	        $ret = factory.makeIntegerLiteralNode(i);
+                i = Integer.parseInt(
+                    (isNegative ? "-" : "") + ibr.string, ibr.base);
+            } catch (NumberFormatException nfe)
+            {
+                // TODO: report and handle error
+            }
+            $ret = factory.makeIntegerLiteralNode(i);
         }
-    |   
+    ;   
+    
+longLiteral [boolean isNegative] returns [LiteralNode<?> ret]    
+    :
         LONGLITERAL
         {
             String s = $LONGLITERAL.text;
@@ -2582,12 +2596,26 @@ literal returns [LiteralNode<?> ret]
             Long l;
             try
             {
-                l = Long.parseLong(ibr.string, ibr.base);
+                l = Long.parseLong(
+                    (isNegative ? "-" : "") + ibr.string, ibr.base);
             } catch (NumberFormatException nfe)
             {
                 // TODO: report and handle error
             }
             $ret = factory.makeLongLiteralNode(l);
+        }    
+    ;
+
+literal returns [LiteralNode<?> ret]
+    :
+        intLiteral[false]
+        {
+            $ret = $intLiteral.ret;
+        }
+    |   
+        longLiteral[false]
+        {
+            $ret = $longLiteral.ret;
         }
     |   
         FLOATLITERAL
