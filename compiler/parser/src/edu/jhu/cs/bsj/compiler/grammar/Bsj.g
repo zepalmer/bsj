@@ -1849,24 +1849,34 @@ switchLabel returns [ExpressionNode ret]
 
 
 trystatement returns [TryNode ret]
+        @init {
+            List<CatchNode> catchList = factory.makeListNode(new ArrayList<CatchNode>());
+            BlockStatementNode finallyBlock = null;
+        }    
     :   
         'try' b=block
         (
             catches 'finally' fb=block
+            {
+                catchList = $catches.ret;
+                finallyBlock = $fb.ret;
+            }
         |   
             catches
+            {
+                catchList = $catches.ret;
+            }            
         |   
             'finally' fb=block
+            {
+                finallyBlock = $fb.ret;
+            }            
         )
         {
-            if ($catches == null)
-            {
-                $catches = factory.makeListNode(new ArrayList<CatchNode>());
-            }
             $ret = factory.makeTryNode(
                     $b.ret,
-                    $catches.ret,
-                    ($fb != null ? $fb.ret : null));
+                    catchList,
+                    finallyBlock);
         }        
     ;
 
