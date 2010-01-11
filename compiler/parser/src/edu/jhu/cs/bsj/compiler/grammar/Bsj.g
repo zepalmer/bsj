@@ -191,6 +191,7 @@ scope Global {
 variableDeclarator[TypeNode inType] returns [VariableDeclaratorNode ret]
 	    @init {
 	        TypeNode type = $inType;
+	        ExpressionNode initializer = null;
 	    }
     :
         id=IDENTIFIER
@@ -202,10 +203,12 @@ variableDeclarator[TypeNode inType] returns [VariableDeclaratorNode ret]
         )?
         (
             '=' variableInitializer
+            {
+                initializer = $variableInitializer.ret;
+            }
         )?
         {
             IdentifierNode identifier = makeIdentifierNode($id.text);
-            ExpressionNode initializer = ($variableInitializer == null? null : $variableInitializer.ret);
             $ret = factory.makeVariableDeclaratorNode(type, identifier, initializer);
         }
     ;
@@ -537,13 +540,21 @@ typeParameters returns [ListNode<TypeParameterNode> ret]
 
 
 typeParameter returns [TypeParameterNode ret]
+        @init {
+            ListNode<BoundType> typeBoundNode = factory.<BoundType>makeNode(Collections.emptyList());
+        }
     :   
         id=IDENTIFIER
-        ('extends' typeBound)?
+        (
+            'extends' typeBound
+            {
+                typeBoundNode = $typeBound.ret;
+            }
+        )?
         {
             $ret = factory.makeTypeParameterNode(
                         factory.makeIdentifierNode($id.text),
-                        ($typeBound==null?Collections.emptyList():$typeBound.ret));
+                        typeBoundNode);
         }        
     ;
 
@@ -596,20 +607,31 @@ enumDeclaration returns [EnumDeclarationNode ret]
 
 
 enumBody returns [EnumBodyNode ret]
+        @init {
+            ListNode<EnumConstantDeclarationNode> enumConstantsNode = factory.makeListNode(
+                    Collections.<EnumConstantDeclarationNode>emptyList());
+            ListNode<ClassMember> enumBodyDeclarationsNode = factory.makeListNode(Collections.<ClassMember>emptyList());
+        }
     :   
         '{'
-        enumConstants? 
-        ','? 
-        enumBodyDeclarations?
+        (
+            enumConstants
+            {
+                enumConstantsNode = $enumConstants.ret;
+            }
+        )? 
+        ','?
+        (
+            enumBodyDeclarations
+            {
+                enumBodyDeclarationsNode = $enumBodyDeclarations.ret;
+            }
+        )?
         '}'
         {
             $ret = factory.makeEnumBodyNode(
-                    ($enumConstants == null)?
-                        factory.<EnumConstantDeclarationNode>makeListNode(Collections.emptyList()) :
-                        $enumConstants.ret,
-                    ($enumBodyDeclarations == null)?
-                        factory.<ClassMember>makeListNode(Collections.emptyList()) :
-                        $enumBodyDeclarations.ret); 
+                    enumConstantsNode,
+                    enumBodyDeclarationsNode);
         }
     ;
 
@@ -635,17 +657,37 @@ enumConstants returns [ListNode<EnumConstantDeclarationNode> ret]
     ;
 
 enumConstant returns [EnumConstantDeclarationNode ret]
+        @init {
+            ListNode<AnnotationNode> annotationsNode = factory.makeListNode(Collections.<AnnotationNode>emptyList());
+            ListNode<ExpressionNode> argumentsNode = factory.makeListNode(Collections.<ExpressionNode>emptyList());
+            AnonymousClassBodyNode anonymousClassBodyNode = null;
+        }
     :   
-        annotations?
+        (
+            annotations
+            {
+                annotationsNode = $annotations.ret;
+            }
+        )?
         id=IDENTIFIER
-        arguments?
-        anonymousClassBody?
+        (
+            arguments
+            {
+                argumentsNode = $arguments.ret;
+            }
+        )?
+        (
+            anonymousClassBody
+            {
+                anonymousClassBodyNode = $anonymousClassBody.ret;
+            }
+        )?
         {
             $ret = factory.makeEnumConstantDeclarationNode(
-                $annotations == null ? null || $annotations.ret,
+                annotationsNode,
                 factory.makeIdentifierNode($id.text),
-                $arguments == null ? null | $arguments.ret,
-                $anonymousClassBody == null ? null | $anonymousClassBody.ret);
+                argumentsNode,
+                anonymousClassBodyNode);
         }
     ;
 
