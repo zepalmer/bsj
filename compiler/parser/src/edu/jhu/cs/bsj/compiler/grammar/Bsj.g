@@ -668,7 +668,7 @@ enumConstant returns [EnumConstantDeclarationNode ret]
                 annotationsNode = $annotations.ret;
             }
         )?
-        id=IDENTIFIER
+        id=identifier
         (
             arguments
             {
@@ -684,7 +684,7 @@ enumConstant returns [EnumConstantDeclarationNode ret]
         {
             $ret = factory.makeEnumConstantDeclarationNode(
                 annotationsNode,
-                factory.makeIdentifierNode($id.text),
+                $id.ret,
                 argumentsNode,
                 anonymousClassBodyNode);
         }
@@ -725,13 +725,13 @@ normalInterfaceDeclaration returns [InterfaceDeclarationNode ret]
     scope Global;
     :   
         modifiers[interfaceModifiers]
-        'interface' id=IDENTIFIER
+        'interface' id=identifier
         {
             if ($Global::className == null)
             {
                 $Global::className = new Stack<String>();
             }        
-            $Global::className.push($id.text);
+            $Global::className.push($id.ret.getIdentifier());
         }        
         (typeParameters
         )?
@@ -743,7 +743,7 @@ normalInterfaceDeclaration returns [InterfaceDeclarationNode ret]
                     $typeList.ret,
                     $interfaceBody.ret,
                     $typeParameters.ret,
-                    factory.makeIdentifierNode($id.text),
+                    $id.ret,
                     $modifiers.ret);
             $Global::className.pop();                    
         }
@@ -916,7 +916,7 @@ constructorDeclaration returns [ConstructorDeclarationNode ret]
     :
         modifiers[constructorModifiers]
         typeParameters?
-        IDENTIFIER
+        identifier
         formalParameters
         ('throws' qualifiedNameList)?
         constructorBody
@@ -925,7 +925,7 @@ constructorDeclaration returns [ConstructorDeclarationNode ret]
             {
                 //TODO error handling            
             }
-            else if (!$IDENTIFIER.text.equals($Global::className.peek()))
+            else if (!$identifier.ret.getIdentifier().equals($Global::className.peek()))
             {
                 //TODO error handling
             }
@@ -985,7 +985,7 @@ methodDeclaration returns [MethodDeclarationNode ret]
         {
             returnTypeNode = $methodReturnType.ret;
         }
-        id=IDENTIFIER
+        id=identifier
         formalParameters
         (
             arrayTypeIndicator[returnTypeNode]
@@ -1006,7 +1006,7 @@ methodDeclaration returns [MethodDeclarationNode ret]
             $ret = factory.makeMethodDeclarationNode(
                     blockStatementNode,
                     $modifiers.ret,
-                    factory.makeIdentifierNode($id.text),
+                    $id.ret,
                     $formalParameters.parameters,
                     $formalParameters.varargParameter,
                     returnTypeNode,
@@ -1063,7 +1063,7 @@ interfaceMethodDeclaration returns [MethodDeclarationNode ret]
         {
             returnTypeNode = $methodReturnType.ret;
         }
-        id=IDENTIFIER
+        id=identifier
         formalParameters
         (
             arrayTypeIndicator[returnTypeNode]
@@ -1076,7 +1076,7 @@ interfaceMethodDeclaration returns [MethodDeclarationNode ret]
             $ret = factory.makeMethodDeclarationNode(
                     null, // No body for interface methods; thus null
                     $modifiers.ret,
-                    factory.makeIdentifierNode($id.text),
+                    $id.ret,
                     $formalParameters.parameters,
                     $formalParameters.varargParameter,
                     returnTypeNode,
@@ -1143,9 +1143,9 @@ unqualifiedClassOrInterfaceType[BoundType in] returns [BoundType ret]
             $ret = $in;
         }
     :
-        a=IDENTIFIER
+        a=identifier
         {
-            DeclaredTypeNode selected = factory.makeDeclaredTypeNode(factory.makeIdentifierNode($a.text));
+            DeclaredTypeNode selected = factory.makeDeclaredTypeNode($a.ret);
             if ($ret == null)
             {
                 $ret = selected;
@@ -1153,8 +1153,7 @@ unqualifiedClassOrInterfaceType[BoundType in] returns [BoundType ret]
             {
                 $ret = factory.makeTypeSelectNode($ret, selected);
             }
-        }
-        
+        }        
         (
             typeArguments
             {
@@ -1390,18 +1389,18 @@ formalParameterDecls returns [ListNode<VariableNode> parameters, VariableNode va
 
 normalParameterDecl returns [VariableNode ret]
     :
-        mod=variableModifiers t=type id=IDENTIFIER
+        mod=variableModifiers t=type id=identifier
         t=arrayTypeIndicator[$t.ret]
         {
-            $ret = factory.makeVariableNode($mod.ret, $t.ret, factory.makeIdentifierNode($id.text));
+            $ret = factory.makeVariableNode($mod.ret, $t.ret, $id.ret);
         }
     ;
 
 ellipsisParameterDecl returns [VariableNode ret]
     :
-        mod=variableModifiers t=type '...' id=IDENTIFIER
+        mod=variableModifiers t=type '...' id=identifier
         {
-            $ret = factory.makeVariableNode($mod.ret, $t.ret, factory.makeIdentifierNode($id.text));
+            $ret = factory.makeVariableNode($mod.ret, $t.ret, $id.ret);
         }
     ;
 
@@ -1533,9 +1532,9 @@ elementValuePairs returns [ListNode<AnnotationElementNode> ret]
 //     happy=5
 elementValuePair returns [AnnotationElementNode ret]
     :
-        id=IDENTIFIER '=' elementValue
+        id=identifier '=' elementValue
         {
-            $ret = factory.makeAnnotationElementNode(factory.makeIdentifierNode($id.text), $elementValue.ret);
+            $ret = factory.makeAnnotationElementNode($id.ret, $elementValue.ret);
         }
     ;
 
@@ -1607,12 +1606,12 @@ annotationTypeDeclaration returns [AnnotationDeclarationNode ret]
     :   
         modifiers[interfaceModifiers] '@'
         'interface'
-        id=IDENTIFIER
+        id=identifier
         annotationTypeBody
         {
             $ret = factory.makeAnnotationDeclarationNode(
                 $annotationTypeBody.ret,
-                factory.makeIdentifierNode($id.text),
+                $id.ret,
                 $modifiers.ret);
         }
     ;
@@ -1675,17 +1674,25 @@ annotationTypeElementDeclaration returns [AnnotationMember ret]
     ;
 
 annotationMethodDeclaration returns [AnnotationMethodDeclarationNode ret]
+    @init{
+        AnnotationValueNode elementValueNode = null;
+    }
     :   
         modifiers[interfaceModifiers] type id=IDENTIFIER
         '(' ')'
-        ('default' elementValue)?
+        ('default' 
+            elementValue
+            {
+                elementValueNode = $elementValue.ret;
+            }
+        )?
         ';'
         {
             $ret = factory.makeAnnotationMethodDeclarationNode(
                 $modifiers.ret,
                 $type.ret,
                 factory.makeIdentifierNode($id.text),
-                elementValue == null ? null || $elementValue.ret);
+                elementValueNode);
         }
         ;
 
@@ -1859,9 +1866,9 @@ statement returns [StatementNode ret]
     |   
         'break'
         (
-            id=IDENTIFIER
+            id=identifier
             {
-                idNode = factory.makeIdentifierNode($id.text);
+                idNode = $id.ret;
             }
         )? ';'
         {
@@ -1870,9 +1877,9 @@ statement returns [StatementNode ret]
     |   
         'continue' 
         (
-            id=IDENTIFIER
+            id=identifier
             {
-                idNode = factory.makeIdentifierNode($id.text);
+                idNode = $id.ret;
             }
         )? ';'
         {
@@ -1884,10 +1891,10 @@ statement returns [StatementNode ret]
             $ret = $expression.ret;
         }   
     |   
-        a=IDENTIFIER ':' s=statement
+        a=identifier ':' s=statement
         {
             $ret = factory.makeLabeledStatementNode(
-                factory.makeIdentifierNode($a.text),
+                $a.ret,
                 $s.ret);
         }
     |   
