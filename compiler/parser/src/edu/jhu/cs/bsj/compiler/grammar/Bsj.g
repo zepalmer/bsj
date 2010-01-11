@@ -2750,7 +2750,84 @@ arguments returns [ListNode<ExpressionNode> ret]
             }
         )? ')'
     ;
+
+// Parses a package name chain.
+packageName returns [NameNode ret]
+    :
+        categorizedName[NameCategory.PACKAGE, NameCategory.PACKAGE]
+        {
+            $ret = $categorizedName.ret;
+        }
+    ;
+
+// Parses a type name chain.  The last node is of the category TYPE; the rest are PACKAGE_OR_TYPE.
+typeName returns [NameNode ret]
+    :
+        categorizedName[NameCategory.PACKAGE_OR_TYPE, NameCategory.TYPE]
+        {
+            $ret = $categorizedName.ret;
+        }
+    ;
+
+// Parses an expression name chain.  The last node is of the category EXPRESSION; the rest are AMBIGUOUS.
+expressionName returns [NameNode ret]
+    :
+        categorizedName[NameCategory.AMBIGUOUS, NameCategory.EXPRESSION]
+        {
+            $ret = $categorizedName.ret;
+        }
+    ;
+
+// Parses a method name chain.  The last node is of the category METHOD; the rest are AMBIGUOUS.
+methodName returns [NameNode ret]
+    :
+        categorizedName[NameCategory.AMBIGUOUS, NameCategory.METHOD]
+        {
+            $ret = $categorizedName.ret;
+        }
+    ;
     
+// Parses a package-or-type name chain.
+packageOrTypeName returns [NameNode ret]
+    :
+        categorizedName[NameCategory.PACKAGE_OR_TYPE, NameCategory.PACKAGE_OR_TYPE]
+        {
+            $ret = $categorizedName.ret;
+        }
+    ;
+
+// Parses an ambiguous name.
+ambiguousName returns [NameNode ret]
+    :
+        categorizedName[NameCategory.AMBIGUOUS, NameCategory.AMBIGUOUS]
+        {
+            $ret = $categorizedName.ret;
+        }
+    ;
+
+// Parses a name (a dot-separated sequence of identifiers) and assigns each of them the specified category.  The top
+// name node is then assigned another category (which obviously must be a subcategory of the first).  This rule does
+// not correspond directly to anything in the JLS; it is used as a parsing subroutine.
+categorizedName[NameCategory category, NameCategory lastCategory] returns [NameNode ret]
+    :
+        a=identifier
+        {
+            $ret = factory.makeSimpleNameNode($a.ret, category);
+        }
+        (
+            '.' b=identifier
+            {
+                $ret = factory.makeQualifiedNameNode(
+                        $ret,
+                        $b.ret,
+                        category);
+            }
+        )*
+        {
+            $ret.assertCategory(lastCategory);
+        }
+    ;
+
 intLiteral [boolean isNegative] returns [LiteralNode<?> ret]
     :  
         INTLITERAL
