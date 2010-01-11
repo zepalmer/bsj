@@ -1423,12 +1423,6 @@ explicitConstructorInvocation returns [ConstructorInvocationNode ret]
         }
     ;
 
-qualifiedName returns [QualifiedNameNode ret]
-    :
-        IDENTIFIER ('.' IDENTIFIER)*
-        // TODO
-    ;
-
 annotations returns [ListNode<AnnotationNode> ret]
 	    @init {
 	            List<AnnotationNode> list = new ArrayList<AnnotationNode>();
