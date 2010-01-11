@@ -345,11 +345,11 @@ necessarilyQualifiedName returns [QualifiedNameNode ret]
                     $b.ret);
         }
         (
-            '.' c=IDENTIFIER
+            '.' c=identifier
             {
                 $ret = factory.makeQualifiedNameNode(
                     $ret,
-                    factory.makeIdentifierNode($c.text));
+                    $c.ret);
             }
         )*
     ;
@@ -1678,7 +1678,7 @@ annotationMethodDeclaration returns [AnnotationMethodDeclarationNode ret]
         AnnotationValueNode elementValueNode = null;
     }
     :   
-        modifiers[interfaceModifiers] type id=IDENTIFIER
+        modifiers[interfaceModifiers] type id=identifier
         '(' ')'
         ('default' 
             elementValue
@@ -1691,7 +1691,7 @@ annotationMethodDeclaration returns [AnnotationMethodDeclarationNode ret]
             $ret = factory.makeAnnotationMethodDeclarationNode(
                 $modifiers.ret,
                 $type.ret,
-                factory.makeIdentifierNode($id.text),
+                $id.ret,
                 elementValueNode);
         }
         ;
@@ -2025,11 +2025,13 @@ catchClause returns [CatchNode ret]
 //     IOException e
 formalParameter returns [VariableNode ret]
     :   
-        variableModifiers type id=IDENTIFIER
+        variableModifiers type id=identifier
         arrayTypeIndicator[$type.ret]
         {
-            $ret = factory.makeVariableNode($variableModifiers.ret, $arrayTypeIndicator.ret,
-                    factory.makeIdentifierNode($id.text));
+            $ret = factory.makeVariableNode(
+                $variableModifiers.ret, 
+                $arrayTypeIndicator.ret,
+                $id.ret);
         }
     ;
 
@@ -2042,14 +2044,14 @@ forstatement returns [StatementNode ret]
     }
     :   
         // enhanced for loop
-        'for' '(' variableModifiers type id=IDENTIFIER ':' 
+        'for' '(' variableModifiers type id=identifier ':' 
         expression ')' statement
         {
             $ret = factory.makeEnhancedForLoopNode(
                 factory.makeVariableNode(
                     $variableModifiers.ret, 
                     $type.ret,
-                    factory.makeIdentifierNode($id.text)),
+                    $id.ret),
                 $expression.ret,
                 $statement.ret);
         }        
