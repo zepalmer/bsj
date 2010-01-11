@@ -7,16 +7,16 @@ package edu.jhu.cs.bsj.compiler.ast.node;
 public interface ImportNode extends Node
 {
     /**
-     * Gets the identifier to import.
-     * @return The identifier to import.
+     * Gets the name of the package to import.
+     * @return The name of the package to import.
      */
-    public NameNode getQualifiedIdentifier();
+    public NameNode getQualifiedName();
 
     /**
-     * Changes the identifier to import.
-     * @param qualifiedIdentifier The identifier to import.
+     * Changes the name of the package to import.
+     * @param qualifiedName The name of the package to import.
      */
-    public void setQualifiedIdentifier(NameNode qualifiedIdentifier);
+    public void setQualifiedName(NameNode qualifiedName);
 
     /**
      * Gets the static-ness of the import.

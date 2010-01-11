@@ -3,7 +3,7 @@ package edu.jhu.cs.bsj.compiler.impl.ast.node;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.NameNode;
 
-public abstract class NameNodeImpl extends ExpressionNodeImpl implements NameNode
+public abstract class NameNodeImpl extends NodeImpl implements NameNode
 {
     /** General constructor. */
     protected NameNodeImpl()

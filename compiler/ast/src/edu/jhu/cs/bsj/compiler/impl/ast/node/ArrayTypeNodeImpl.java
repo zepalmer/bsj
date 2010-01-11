@@ -4,7 +4,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.ArrayTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
 
-public class ArrayTypeNodeImpl extends TypeNodeImpl implements ArrayTypeNode
+public class ArrayTypeNodeImpl extends ReferenceTypeNodeImpl implements ArrayTypeNode
 {
     /** The element type of the array. */
     private TypeNode type;

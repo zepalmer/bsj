@@ -6,7 +6,9 @@ package edu.jhu.cs.bsj.compiler.ast.node;
  * <pre>
  * new <i>type</i>(<i>arg...</i>)
  * </pre>
- * If this class is not anonymous, the <tt>body</tt> field is <tt>null</tt>.
+ * If this class is not anonymous, the <tt>body</tt> field is <tt>null</tt>.  If the newly created object should
+ * not use an explicit enclosing expression (and it almost never will), the <tt>enclosingExpression</tt> field
+ * should be <tt>null</tt>.
  */
 public interface ClassInstantiationNode extends ExpressionNode
 {
@@ -23,16 +25,16 @@ public interface ClassInstantiationNode extends ExpressionNode
     public void setTypeArguments(ListNode<? extends TypeNode> typeArguments);
 
     /**
-     * Gets the identifier of the class.
-     * @return The identifier of the class.
+     * Gets the type being instantiated.
+     * @return The type being instantiated.
      */
-    public NameNode getIdentifier();
+    public DeclaredTypeNode getType();
 
     /**
-     * Changes the identifier of the class.
-     * @param identifier The identifier of the class.
+     * Changes the type being instantiated.
+     * @param type The type being instantiated.
      */
-    public void setIdentifier(NameNode identifier);
+    public void setType(DeclaredTypeNode type);
 
     /**
      * Gets the arguments to the constructor.

@@ -14,10 +14,10 @@ public class AnnotationDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl 
     /** General constructor. */
     public AnnotationDeclarationNodeImpl(
             AnnotationBodyNode body,
-            IdentifierNode simpleName,
+            IdentifierNode identifier,
             ModifiersNode modifiers)
     {
-        super(simpleName, modifiers);
+        super(identifier, modifiers);
         this.body = body;
     }
 

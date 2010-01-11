@@ -22,27 +22,27 @@ public interface VariableNode extends Node
     public void setModifiers(ModifiersNode modifiers);
 
     /**
-     * Gets the type of the parameter.
-     * @return The type of the parameter.
+     * Gets the type of the variable.
+     * @return The type of the variable.
      */
     public TypeNode getType();
 
     /**
-     * Changes the type of the parameter.
-     * @param type The type of the parameter.
+     * Changes the type of the variable.
+     * @param type The type of the variable.
      */
     public void setType(TypeNode type);
 
     /**
-     * Gets the name of the parameter.
-     * @return The name of the parameter.
+     * Gets the name of the variable.
+     * @return The name of the variable.
      */
-    public IdentifierNode getName();
+    public IdentifierNode getIdentifier();
 
     /**
-     * Changes the name of the parameter.
-     * @param name The name of the parameter.
+     * Changes the name of the variable.
+     * @param identifier The name of the variable.
      */
-    public void setName(IdentifierNode name);
+    public void setIdentifier(IdentifierNode identifier);
 
 }

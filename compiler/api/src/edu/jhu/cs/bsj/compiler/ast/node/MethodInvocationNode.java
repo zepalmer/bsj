@@ -10,16 +10,16 @@ package edu.jhu.cs.bsj.compiler.ast.node;
 public interface MethodInvocationNode extends ExpressionNode
 {
     /**
-     * Gets the selection obtaining the method to invoke.
-     * @return The selection obtaining the method to invoke.
+     * Gets the name of the method to invoke.
+     * @return The name of the method to invoke.
      */
-    public NameNode getMethodSelect();
+    public NameNode getMethod();
 
     /**
-     * Changes the selection obtaining the method to invoke.
-     * @param methodSelect The selection obtaining the method to invoke.
+     * Changes the name of the method to invoke.
+     * @param method The name of the method to invoke.
      */
-    public void setMethodSelect(NameNode methodSelect);
+    public void setMethod(NameNode method);
 
     /**
      * Gets the arguments to pass to the method.

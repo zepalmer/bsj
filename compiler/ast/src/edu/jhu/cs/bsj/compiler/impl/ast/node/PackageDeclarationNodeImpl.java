@@ -3,20 +3,20 @@ package edu.jhu.cs.bsj.compiler.impl.ast.node;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.NameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.PackageDeclarationNode;
-import edu.jhu.cs.bsj.compiler.ast.node.QualifiedNameNode;
 
 public class PackageDeclarationNodeImpl extends NodeImpl implements PackageDeclarationNode
 {
-    /** The qualified name indicating the package. */
-    private QualifiedNameNode name;
+    /** The name of the package. */
+    private NameNode name;
 
     /** The annotations on the package declaration. */
     private ListNode<? extends AnnotationNode> annotations;
 
     /** General constructor. */
     public PackageDeclarationNodeImpl(
-            QualifiedNameNode name,
+            NameNode name,
             ListNode<? extends AnnotationNode> annotations)
     {
         super();
@@ -25,19 +25,19 @@ public class PackageDeclarationNodeImpl extends NodeImpl implements PackageDecla
     }
 
     /**
-     * Gets the qualified name indicating the package.
-     * @return The qualified name indicating the package.
+     * Gets the name of the package.
+     * @return The name of the package.
      */
-    public QualifiedNameNode getName()
+    public NameNode getName()
     {
         return this.name;
     }
 
     /**
-     * Changes the qualified name indicating the package.
-     * @param name The qualified name indicating the package.
+     * Changes the name of the package.
+     * @param name The name of the package.
      */
-    public void setName(QualifiedNameNode name)
+    public void setName(NameNode name)
     {
         if (this.name instanceof NodeImpl)
         {

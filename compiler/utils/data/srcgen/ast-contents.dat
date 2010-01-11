@@ -57,6 +57,49 @@
 !set iPackage=edu.jhu.cs.bsj.compiler.ast.node
 !set cPackage=edu.jhu.cs.bsj.compiler.impl.ast.node
 
+### Naming Nodes ######################################################################################################
+
+IdentifierNode :: Node
+    @props
+    identifier              String                                      | the identifier contained in this node
+    @docs
+        A tree node representing a simple identifier, as in:
+        <pre>
+        <i>ident</i>
+        </pre>
+
+# TODO: NameNode needs category information
+NameNode* :: Node
+    @docs
+        A common supertype for all nodes representing a name.  In Java, a name is either a simple name (a single
+        identifier) or a qualified name (a name, a dot, and an identifier).  The meaning of a name is context-sensitive
+        and is partially dependent upon type information; therefore, this node maintains information about the facts
+        currently known about this name.
+        <p/>
+        Note that some identifiers are not used as names; as a result, not all identifiers are children of this class
+        or one of its subclasses.  Examples of such cases include variable and type declarations, where the identifier
+        is not technically a name because it is being used to create a name which does not exist.  For more information,
+        please see the Java Language Specification v3.0 &#167;6.
+
+QualifiedNameNode :: NameNode
+    @props
+    base                    NameNode                                    | the name being qualified
+    identifier              IdentifierNode                              | the identifier used to qualify the base name
+    @docs
+        Represents a qualified name, as in
+        <pre>
+        <i>name.ident</i>
+        </pre>
+
+SimpleNameNode :: NameNode
+    @props
+    identifier              IdentifierNode                              | the identifier used as a simple name
+    @docs
+        Represents a simple name, as in
+        <pre>
+        <i>name</i>
+        </pre>
+
 ### Expression Nodes ##################################################################################################
 
 ArrayAccessNode :: ExpressionNode
@@ -101,7 +144,7 @@ AssignmentNode :: ExpressionNode
         <pre>
         <i>expr op expr</i>
         </pre>
-        where <i>op</i> is one of <tt>+=</tt>, <tt>%=</tt>, etc.
+        where <i>op</i> is one of <tt>=</tt>, <tt>+=</tt>, <tt>%=</tt>, etc.
 
 BinaryOperatorNode :: ExpressionNode
     @props
@@ -114,7 +157,7 @@ BinaryOperatorNode :: ExpressionNode
 ClassInstantiationNode :: ExpressionNode
     @props
     typeArguments           ListNode<? extends TypeNode>                | the type arguments of the instantiation
-    identifier              NameNode                                    | the identifier of the class
+    type                    DeclaredTypeNode                            | the type being instantiated
     arguments               ListNode<? extends ExpressionNode>          | the arguments to the constructor
     body                    AnonymousClassBodyNode                      | the body of the anonymous class
     enclosingExpression     ExpressionNode                              | the expression enclosing the non-static inner class
@@ -123,19 +166,9 @@ ClassInstantiationNode :: ExpressionNode
         <pre>
         new <i>type</i>(<i>arg...</i>)
         </pre>
-        If this class is not anonymous, the <tt>body</tt> field is <tt>null</tt>.
-
-CompoundAssignmentNode :: ExpressionNode
-    @props
-    expression              ExpressionNode                              | the expression to assign
-    variable                NameNode                                    | the variable to which assignment is occurring
-    @docs
-        Represents a compound assignment node.  A compound assignment node is one which performs an assignment operation
-        which implicitly uses the value of the variable to which a value is being assigned, as in:
-        <pre>
-        <i>variable compoundOp expression</i>
-        </pre>
-        where <i>compoundOp</i> is one of <tt>+=</tt>, <tt>&=</tt>, etc.
+        If this class is not anonymous, the <tt>body</tt> field is <tt>null</tt>.  If the newly created object should
+        not use an explicit enclosing expression (and it almost never will), the <tt>enclosingExpression</tt> field
+        should be <tt>null</tt>.
 
 ConditionalExpressionNode :: ExpressionNode
     @props
@@ -148,16 +181,7 @@ ConditionalExpressionNode :: ExpressionNode
         <i>condition</i> ? <i>expression</i> : <i>expression</i>
         </pre>
 
-# TODO: how do we want to handle ErroneousNode?
-
-IdentifierNode :: NameNode
-    @props
-    identifier              String                                      | the identifier contained in this node
-    @docs
-        A tree node representing a simple identifier, as in:
-        <pre>
-        <i>name</i>
-        </pre>
+# TODO: how do we want to handle ErroneousNode or the equivalent error nodes?
 
 InstanceOfNode :: ExpressionNode
     @props
@@ -175,21 +199,9 @@ LiteralNode<T>* :: ExpressionNode
     @docs
         A superclass for all types of literal nodes.
 
-MemberSelectNode :: ExpressionNode
-    @props
-    expression              ExpressionNode                              | the expression from which to select
-    identifier              IdentifierNode                              | the identifier to select
-    @docs
-        A node representing member selection, as in:
-        <pre>
-        <i>expr<i> . <i>identifier</i>
-        </pre>
-        Member select nodes are used to select members from expressions.  They are not used for chains of identifier
-        names as in package imports.  See {@link QualifiedNameNode}.
-
 MethodInvocationNode :: ExpressionNode
     @props
-    methodSelect            NameNode                                    | the selection obtaining the method to invoke
+    method                  NameNode                                    | the name of the method to invoke
     arguments               ListNode<? extends ExpressionNode>          | the arguments to pass to the method
     typeArguments           ListNode<? extends TypeNode>                | the type arguments for the method
     @docs
@@ -197,22 +209,6 @@ MethodInvocationNode :: ExpressionNode
         <pre>
         <i>expr</i>.&lt;<i>typeArgs</i>&gt;<i>identifier</i>(<i>arg...</i>)
         </pre>
-
-NameNode* :: ExpressionNode
-    @docs
-        A common supertype to nodes which represent a name.
-
-QualifiedNameNode :: NameNode
-    @props
-    name                    NameNode                                    | the name to qualify
-    identifier              IdentifierNode                              | the identifier to use
-    @docs
-        A node representing a name qualification, as in
-        <pre>
-        <i>name<i> . <i>identifier</i>
-        </pre>
-        QualifiedNameNodes are used to identify classes in package imports and other identifier chains.  They are not
-        used to select members from expressions.  See {@link MemberSelectNode}.
 
 TypeCastNode :: ExpressionNode
     @props
@@ -476,28 +472,25 @@ WhileLoopNode :: StatementNode
 
 ### Type Nodes ########################################################################################################
 
-ArrayTypeNode :: TypeNode + TypeArgument
+ArrayTypeNode :: ReferenceTypeNode
     @props
     type                    TypeNode                                    | the element type of the array
     @docs
         Represents an array type.
 
-DeclaredTypeNode :: TypeNode + TypeArgument, BoundType, ParameterizableType
-    @props
-    name                    IdentifierNode                              | the identifier naming this type
+DeclaredTypeNode* :: ReferenceTypeNode
     @docs
-        A node expressing a declared type.  Declared types encompass classes, interfaces, enums, and annotations.
-        Anonymous classes and other such constructs are included as well.
+        A node representing any declared type.  In the BSJ API, a "declared type" refers to any type which has been
+        created by a declaration statement.  Arrays and primitives are not declared types because they are not declared.
 
-ParameterizedTypeNode :: TypeNode + TypeArgument, BoundType
+ParameterizedTypeNode :: TypeNode
     @props
-    baseType                ParameterizableType                         | the base to parameterize
-    typeArguments           ListNode<? extends TypeArgument>            | the parameterized type arguments
+    rawType                 RawTypeNode                                 | the raw type being parameterized
+    typeArguments           ListNode<TypeArgument>                      | the type arguments for this node
     @docs
-        A node representing a type parameterization as in:
-        <pre>
-        <i>type</i> &lt;<i>arg...</i>&gt;
-        </pre>
+        A node representing parameterized types.  This node represents the use of a type which has type arguments, such
+        as Set<String> (which would be represented by the raw type Set and the single-element argument list containing
+        the raw type for String).
 
 PrimitiveTypeNode :: TypeNode
     @props
@@ -505,15 +498,18 @@ PrimitiveTypeNode :: TypeNode
     @docs
         A node representing a primitive type.
 
-TypeSelectNode :: TypeNode + TypeArgument, BoundType, ParameterizableType
+# TODO: add information which tracks whether we have determined this node to represent a true raw type or type parameter
+RawTypeNode :: DeclaredTypeNode + ParameterizableType
     @props
-    base                    BoundType                                   | the base type from which to select
-    select                  DeclaredTypeNode                            | the selected type from the base type
+    name                    NameNode                                    | the name of the type
     @docs
-        A node representing a type selection, as in:
-        <pre>
-        <i>type</i> . <i>type</i>
-        </pre>
+        Represents a raw type.  Examples of raw types in Java include most of the API: String, InputStream, and so on.
+        Parameterized types, such as Set<String>, are not represented in this way.  Raw types also represent type
+        parameters.
+
+ReferenceTypeNode* :: TypeNode + TypeArgument, BoundType
+    @docs
+        A node representing a reference type.  A reference type in Java is any non-primitive type.
 
 VoidTypeNode :: TypeNode
     @docs
@@ -610,7 +606,7 @@ MethodDeclarationNode :: Node + ClassMember, InterfaceMember, AnonymousClassMemb
     @props
     body                    BlockStatementNode                          | the body of this method
     modifiers               ModifiersNode                               | the modifiers for this method
-    name                    IdentifierNode                              | this method's name
+    identifier              IdentifierNode                              | this method's name
     parameters              ListNode<? extends VariableNode>            | the parameters declared by this method
     varargParameter         VariableNode                                | the vararg parameter declared by this method
     returnType              TypeNode                                    | the type of value returned
@@ -728,7 +724,7 @@ InterfaceDeclarationNode :: NamedTypeDeclarationNode
 
 NamedTypeDeclarationNode* :: TypeDeclarationNode
     @props
-    simpleName              IdentifierNode                              | the name of this declared type
+    identifier              IdentifierNode                              | the name of this declared type
     modifiers               ModifiersNode                               | the modifiers for this declared type
     @docs
         Acts as a superclass for all named type declarations.
@@ -916,7 +912,7 @@ ForInitializerNode* :: Node
 
 ImportNode :: Node
     @props
-    qualifiedIdentifier     NameNode                                    | the identifier to import
+    qualifiedName           NameNode                                    | the name of the package to import
     staticImport            boolean                                     | the static-ness of the import
     @docs
         A node representing a compilation unit import statement.
@@ -951,7 +947,7 @@ Node*
 
 PackageDeclarationNode :: Node
     @props
-    name                    QualifiedNameNode                           | the qualified name indicating the package
+    name                    NameNode                                    | the name of the package
     annotations             ListNode<? extends AnnotationNode>          | the annotations on the package declaration
     @docs
         A node representing a package declaration, as in
@@ -982,8 +978,8 @@ SuperclassConstructorInvocationNode :: ConstructorInvocationNode
 VariableNode :: Node
     @props
     modifiers               ModifiersNode                               | the modifiers of this parameter
-    type                    TypeNode                                    | the type of the parameter
-    name                    IdentifierNode                              | the name of the parameter
+    type                    TypeNode                                    | the type of the variable
+    identifier              IdentifierNode                              | the name of the variable
     @docs
         A node describing a variable, as in:
             <pre>
@@ -1000,20 +996,20 @@ TypeNode* :: Node
 
 TypeParameterNode :: Node
     @props
-    name                    IdentifierNode                              | the base type name for the parameter
+    identifier              IdentifierNode                              | the base type name for the parameter
     bounds                  ListNode<? extends BoundType>               | the bounds over the base type
     @docs
         A node for type parameters, as in:
         <pre>
-        <i>name</i>
+        <i>ident</i>
         </pre>
         or
         <pre>
-        <i>name</i> extends <i>type</i>
+        <i>ident</i> extends <i>type</i>
         </pre>
         or
         <pre>
-        <i>name</i> extends <i>type</i> &amp; <i>type...</i>
+        <i>ident</i> extends <i>type</i> &amp; <i>type...</i>
         </pre>
 
 WildcardTypeNode :: Node + TypeArgument

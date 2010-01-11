@@ -8,18 +8,18 @@ import edu.jhu.cs.bsj.compiler.ast.node.NamedTypeDeclarationNode;
 public abstract class NamedTypeDeclarationNodeImpl extends TypeDeclarationNodeImpl implements NamedTypeDeclarationNode
 {
     /** The name of this declared type. */
-    private IdentifierNode simpleName;
+    private IdentifierNode identifier;
 
     /** The modifiers for this declared type. */
     private ModifiersNode modifiers;
 
     /** General constructor. */
     protected NamedTypeDeclarationNodeImpl(
-            IdentifierNode simpleName,
+            IdentifierNode identifier,
             ModifiersNode modifiers)
     {
         super();
-        this.simpleName = simpleName;
+        this.identifier = identifier;
         this.modifiers = modifiers;
     }
 
@@ -27,25 +27,25 @@ public abstract class NamedTypeDeclarationNodeImpl extends TypeDeclarationNodeIm
      * Gets the name of this declared type.
      * @return The name of this declared type.
      */
-    public IdentifierNode getSimpleName()
+    public IdentifierNode getIdentifier()
     {
-        return this.simpleName;
+        return this.identifier;
     }
 
     /**
      * Changes the name of this declared type.
-     * @param simpleName The name of this declared type.
+     * @param identifier The name of this declared type.
      */
-    public void setSimpleName(IdentifierNode simpleName)
+    public void setIdentifier(IdentifierNode identifier)
     {
-        if (this.simpleName instanceof NodeImpl)
+        if (this.identifier instanceof NodeImpl)
         {
-            ((NodeImpl)this.simpleName).setParent(null);
+            ((NodeImpl)this.identifier).setParent(null);
         }
-        this.simpleName = simpleName;
-        if (this.simpleName instanceof NodeImpl)
+        this.identifier = identifier;
+        if (this.identifier instanceof NodeImpl)
         {
-            ((NodeImpl)this.simpleName).setParent(this);
+            ((NodeImpl)this.identifier).setParent(this);
         }
     }
 
@@ -86,7 +86,7 @@ public abstract class NamedTypeDeclarationNodeImpl extends TypeDeclarationNodeIm
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        this.simpleName.receive(visitor);
+        this.identifier.receive(visitor);
         this.modifiers.receive(visitor);
     }
 }

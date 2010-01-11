@@ -20,10 +20,10 @@ public class EnumDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl implem
     public EnumDeclarationNodeImpl(
             ListNode<? extends TypeNode> implementsClause,
             EnumBodyNode body,
-            IdentifierNode simpleName,
+            IdentifierNode identifier,
             ModifiersNode modifiers)
     {
-        super(simpleName, modifiers);
+        super(identifier, modifiers);
         this.implementsClause = implementsClause;
         this.body = body;
     }

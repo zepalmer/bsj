@@ -2,56 +2,24 @@ package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
-import edu.jhu.cs.bsj.compiler.ast.node.NameNode;
-import edu.jhu.cs.bsj.compiler.ast.node.QualifiedNameNode;
+import edu.jhu.cs.bsj.compiler.ast.node.SimpleNameNode;
 
-public class QualifiedNameNodeImpl extends NameNodeImpl implements QualifiedNameNode
+public class SimpleNameNodeImpl extends NameNodeImpl implements SimpleNameNode
 {
-    /** The name being qualified. */
-    private NameNode base;
-
-    /** The identifier used to qualify the base name. */
+    /** The identifier used as a simple name. */
     private IdentifierNode identifier;
 
     /** General constructor. */
-    public QualifiedNameNodeImpl(
-            NameNode base,
+    public SimpleNameNodeImpl(
             IdentifierNode identifier)
     {
         super();
-        this.base = base;
         this.identifier = identifier;
     }
 
     /**
-     * Gets the name being qualified.
-     * @return The name being qualified.
-     */
-    public NameNode getBase()
-    {
-        return this.base;
-    }
-
-    /**
-     * Changes the name being qualified.
-     * @param base The name being qualified.
-     */
-    public void setBase(NameNode base)
-    {
-        if (this.base instanceof NodeImpl)
-        {
-            ((NodeImpl)this.base).setParent(null);
-        }
-        this.base = base;
-        if (this.base instanceof NodeImpl)
-        {
-            ((NodeImpl)this.base).setParent(this);
-        }
-    }
-
-    /**
-     * Gets the identifier used to qualify the base name.
-     * @return The identifier used to qualify the base name.
+     * Gets the identifier used as a simple name.
+     * @return The identifier used as a simple name.
      */
     public IdentifierNode getIdentifier()
     {
@@ -59,8 +27,8 @@ public class QualifiedNameNodeImpl extends NameNodeImpl implements QualifiedName
     }
 
     /**
-     * Changes the identifier used to qualify the base name.
-     * @param identifier The identifier used to qualify the base name.
+     * Changes the identifier used as a simple name.
+     * @param identifier The identifier used as a simple name.
      */
     public void setIdentifier(IdentifierNode identifier)
     {
@@ -86,7 +54,6 @@ public class QualifiedNameNodeImpl extends NameNodeImpl implements QualifiedName
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        this.base.receive(visitor);
         this.identifier.receive(visitor);
     }
 }

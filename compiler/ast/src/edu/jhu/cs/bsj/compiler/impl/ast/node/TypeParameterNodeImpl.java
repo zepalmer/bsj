@@ -9,18 +9,18 @@ import edu.jhu.cs.bsj.compiler.ast.tags.BoundType;
 public class TypeParameterNodeImpl extends NodeImpl implements TypeParameterNode
 {
     /** The base type name for the parameter. */
-    private IdentifierNode name;
+    private IdentifierNode identifier;
 
     /** The bounds over the base type. */
     private ListNode<? extends BoundType> bounds;
 
     /** General constructor. */
     public TypeParameterNodeImpl(
-            IdentifierNode name,
+            IdentifierNode identifier,
             ListNode<? extends BoundType> bounds)
     {
         super();
-        this.name = name;
+        this.identifier = identifier;
         this.bounds = bounds;
     }
 
@@ -28,25 +28,25 @@ public class TypeParameterNodeImpl extends NodeImpl implements TypeParameterNode
      * Gets the base type name for the parameter.
      * @return The base type name for the parameter.
      */
-    public IdentifierNode getName()
+    public IdentifierNode getIdentifier()
     {
-        return this.name;
+        return this.identifier;
     }
 
     /**
      * Changes the base type name for the parameter.
-     * @param name The base type name for the parameter.
+     * @param identifier The base type name for the parameter.
      */
-    public void setName(IdentifierNode name)
+    public void setIdentifier(IdentifierNode identifier)
     {
-        if (this.name instanceof NodeImpl)
+        if (this.identifier instanceof NodeImpl)
         {
-            ((NodeImpl)this.name).setParent(null);
+            ((NodeImpl)this.identifier).setParent(null);
         }
-        this.name = name;
-        if (this.name instanceof NodeImpl)
+        this.identifier = identifier;
+        if (this.identifier instanceof NodeImpl)
         {
-            ((NodeImpl)this.name).setParent(this);
+            ((NodeImpl)this.identifier).setParent(this);
         }
     }
 
@@ -87,7 +87,7 @@ public class TypeParameterNodeImpl extends NodeImpl implements TypeParameterNode
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        this.name.receive(visitor);
+        this.identifier.receive(visitor);
         this.bounds.receive(visitor);
     }
 }

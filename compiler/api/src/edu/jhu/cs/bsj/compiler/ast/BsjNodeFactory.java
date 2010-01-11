@@ -31,7 +31,6 @@ import edu.jhu.cs.bsj.compiler.ast.node.ClassBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassInstantiationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
-import edu.jhu.cs.bsj.compiler.ast.node.CompoundAssignmentNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ConditionalExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ConstructorBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ConstructorDeclarationNode;
@@ -64,7 +63,6 @@ import edu.jhu.cs.bsj.compiler.ast.node.InterfaceDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.LabeledStatementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.LongLiteralNode;
-import edu.jhu.cs.bsj.compiler.ast.node.MemberSelectNode;
 import edu.jhu.cs.bsj.compiler.ast.node.MethodDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.MethodInvocationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ModifiersNode;
@@ -76,7 +74,9 @@ import edu.jhu.cs.bsj.compiler.ast.node.PackageDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ParameterizedTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.PrimitiveTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.QualifiedNameNode;
+import edu.jhu.cs.bsj.compiler.ast.node.RawTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ReturnNode;
+import edu.jhu.cs.bsj.compiler.ast.node.SimpleNameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.SingleElementAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.StatementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.StringLiteralNode;
@@ -89,7 +89,6 @@ import edu.jhu.cs.bsj.compiler.ast.node.TypeCastNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeParameterNode;
-import edu.jhu.cs.bsj.compiler.ast.node.TypeSelectNode;
 import edu.jhu.cs.bsj.compiler.ast.node.UnaryOperatorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclaratorNode;
@@ -106,7 +105,6 @@ import edu.jhu.cs.bsj.compiler.ast.tags.BoundType;
 import edu.jhu.cs.bsj.compiler.ast.tags.ClassMember;
 import edu.jhu.cs.bsj.compiler.ast.tags.InlineTypeDeclarable;
 import edu.jhu.cs.bsj.compiler.ast.tags.InterfaceMember;
-import edu.jhu.cs.bsj.compiler.ast.tags.ParameterizableType;
 import edu.jhu.cs.bsj.compiler.ast.tags.TypeArgument;
 
 /**
@@ -141,7 +139,7 @@ public interface BsjNodeFactory
      * Creates a MethodInvocationNode.
      */
     public MethodInvocationNode makeMethodInvocationNode(
-            NameNode methodSelect,
+            NameNode method,
             ListNode<? extends ExpressionNode> arguments,
             ListNode<? extends TypeNode> typeArguments);
 
@@ -161,21 +159,8 @@ public interface BsjNodeFactory
             ListNode<? extends TypeNode> implementsClause,
             ClassBodyNode body,
             ListNode<? extends TypeParameterNode> typeParameters,
-            IdentifierNode simpleName,
+            IdentifierNode identifier,
             ModifiersNode modifiers);
-
-    /**
-     * Creates a DeclaredTypeNode.
-     */
-    public DeclaredTypeNode makeDeclaredTypeNode(
-            IdentifierNode name);
-
-    /**
-     * Creates a CompoundAssignmentNode.
-     */
-    public CompoundAssignmentNode makeCompoundAssignmentNode(
-            ExpressionNode expression,
-            NameNode variable);
 
     /**
      * Creates a ArrayAccessNode.
@@ -194,7 +179,7 @@ public interface BsjNodeFactory
      * Creates a QualifiedNameNode.
      */
     public QualifiedNameNode makeQualifiedNameNode(
-            NameNode name,
+            NameNode base,
             IdentifierNode identifier);
 
     /**
@@ -264,7 +249,7 @@ public interface BsjNodeFactory
     public EnumDeclarationNode makeEnumDeclarationNode(
             ListNode<? extends TypeNode> implementsClause,
             EnumBodyNode body,
-            IdentifierNode simpleName,
+            IdentifierNode identifier,
             ModifiersNode modifiers);
 
     /**
@@ -355,7 +340,7 @@ public interface BsjNodeFactory
      * Creates a PackageDeclarationNode.
      */
     public PackageDeclarationNode makePackageDeclarationNode(
-            QualifiedNameNode name,
+            NameNode name,
             ListNode<? extends AnnotationNode> annotations);
 
     /**
@@ -363,7 +348,7 @@ public interface BsjNodeFactory
      */
     public AnnotationDeclarationNode makeAnnotationDeclarationNode(
             AnnotationBodyNode body,
-            IdentifierNode simpleName,
+            IdentifierNode identifier,
             ModifiersNode modifiers);
 
     /**
@@ -392,13 +377,6 @@ public interface BsjNodeFactory
     public AnnotationElementNode makeAnnotationElementNode(
             IdentifierNode identifier,
             AnnotationValueNode value);
-
-    /**
-     * Creates a TypeSelectNode.
-     */
-    public TypeSelectNode makeTypeSelectNode(
-            BoundType base,
-            DeclaredTypeNode select);
 
     /**
      * Creates a DoubleLiteralNode.
@@ -430,7 +408,7 @@ public interface BsjNodeFactory
      * Creates a ImportNode.
      */
     public ImportNode makeImportNode(
-            NameNode qualifiedIdentifier,
+            NameNode qualifiedName,
             boolean staticImport);
 
     /**
@@ -439,7 +417,7 @@ public interface BsjNodeFactory
     public VariableNode makeVariableNode(
             ModifiersNode modifiers,
             TypeNode type,
-            IdentifierNode name);
+            IdentifierNode identifier);
 
     /**
      * Creates a CharLiteralNode.
@@ -465,13 +443,6 @@ public interface BsjNodeFactory
      */
     public BooleanLiteralNode makeBooleanLiteralNode(
             Boolean value);
-
-    /**
-     * Creates a MemberSelectNode.
-     */
-    public MemberSelectNode makeMemberSelectNode(
-            ExpressionNode expression,
-            IdentifierNode identifier);
 
     /**
      * Creates a SwitchNode.
@@ -557,7 +528,7 @@ public interface BsjNodeFactory
      * Creates a TypeParameterNode.
      */
     public TypeParameterNode makeTypeParameterNode(
-            IdentifierNode name,
+            IdentifierNode identifier,
             ListNode<? extends BoundType> bounds);
 
     /**
@@ -594,7 +565,7 @@ public interface BsjNodeFactory
      */
     public ClassInstantiationNode makeClassInstantiationNode(
             ListNode<? extends TypeNode> typeArguments,
-            NameNode identifier,
+            DeclaredTypeNode type,
             ListNode<? extends ExpressionNode> arguments,
             AnonymousClassBodyNode body,
             ExpressionNode enclosingExpression);
@@ -666,8 +637,8 @@ public interface BsjNodeFactory
      * Creates a ParameterizedTypeNode.
      */
     public ParameterizedTypeNode makeParameterizedTypeNode(
-            ParameterizableType baseType,
-            ListNode<? extends TypeArgument> typeArguments);
+            RawTypeNode rawType,
+            ListNode<TypeArgument> typeArguments);
 
     /**
      * Creates a InterfaceDeclarationNode.
@@ -676,7 +647,7 @@ public interface BsjNodeFactory
             ListNode<? extends TypeNode> extendsClause,
             InterfaceBodyNode body,
             ListNode<? extends TypeParameterNode> typeParameters,
-            IdentifierNode simpleName,
+            IdentifierNode identifier,
             ModifiersNode modifiers);
 
     /**
@@ -686,11 +657,23 @@ public interface BsjNodeFactory
             VariableDeclarationNode declaration);
 
     /**
+     * Creates a RawTypeNode.
+     */
+    public RawTypeNode makeRawTypeNode(
+            NameNode name);
+
+    /**
      * Creates a ConstructorBodyNode.
      */
     public ConstructorBodyNode makeConstructorBodyNode(
             ConstructorInvocationNode constructorInvocation,
             ListNode<? extends StatementNode> statements);
+
+    /**
+     * Creates a SimpleNameNode.
+     */
+    public SimpleNameNode makeSimpleNameNode(
+            IdentifierNode identifier);
 
     /**
      * Creates a IfNode.
@@ -724,7 +707,7 @@ public interface BsjNodeFactory
     public MethodDeclarationNode makeMethodDeclarationNode(
             BlockStatementNode body,
             ModifiersNode modifiers,
-            IdentifierNode name,
+            IdentifierNode identifier,
             ListNode<? extends VariableNode> parameters,
             VariableNode varargParameter,
             TypeNode returnType,

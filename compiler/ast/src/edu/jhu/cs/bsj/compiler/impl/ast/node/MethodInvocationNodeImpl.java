@@ -9,8 +9,8 @@ import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
 
 public class MethodInvocationNodeImpl extends ExpressionNodeImpl implements MethodInvocationNode
 {
-    /** The selection obtaining the method to invoke. */
-    private NameNode methodSelect;
+    /** The name of the method to invoke. */
+    private NameNode method;
 
     /** The arguments to pass to the method. */
     private ListNode<? extends ExpressionNode> arguments;
@@ -20,39 +20,39 @@ public class MethodInvocationNodeImpl extends ExpressionNodeImpl implements Meth
 
     /** General constructor. */
     public MethodInvocationNodeImpl(
-            NameNode methodSelect,
+            NameNode method,
             ListNode<? extends ExpressionNode> arguments,
             ListNode<? extends TypeNode> typeArguments)
     {
         super();
-        this.methodSelect = methodSelect;
+        this.method = method;
         this.arguments = arguments;
         this.typeArguments = typeArguments;
     }
 
     /**
-     * Gets the selection obtaining the method to invoke.
-     * @return The selection obtaining the method to invoke.
+     * Gets the name of the method to invoke.
+     * @return The name of the method to invoke.
      */
-    public NameNode getMethodSelect()
+    public NameNode getMethod()
     {
-        return this.methodSelect;
+        return this.method;
     }
 
     /**
-     * Changes the selection obtaining the method to invoke.
-     * @param methodSelect The selection obtaining the method to invoke.
+     * Changes the name of the method to invoke.
+     * @param method The name of the method to invoke.
      */
-    public void setMethodSelect(NameNode methodSelect)
+    public void setMethod(NameNode method)
     {
-        if (this.methodSelect instanceof NodeImpl)
+        if (this.method instanceof NodeImpl)
         {
-            ((NodeImpl)this.methodSelect).setParent(null);
+            ((NodeImpl)this.method).setParent(null);
         }
-        this.methodSelect = methodSelect;
-        if (this.methodSelect instanceof NodeImpl)
+        this.method = method;
+        if (this.method instanceof NodeImpl)
         {
-            ((NodeImpl)this.methodSelect).setParent(this);
+            ((NodeImpl)this.method).setParent(this);
         }
     }
 
@@ -119,7 +119,7 @@ public class MethodInvocationNodeImpl extends ExpressionNodeImpl implements Meth
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        this.methodSelect.receive(visitor);
+        this.method.receive(visitor);
         this.arguments.receive(visitor);
         this.typeArguments.receive(visitor);
     }

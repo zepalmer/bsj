@@ -1,12 +1,12 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
-import edu.jhu.cs.bsj.compiler.ast.node.DeclaredTypeNode;
+import edu.jhu.cs.bsj.compiler.ast.node.ReferenceTypeNode;
 
-public abstract class DeclaredTypeNodeImpl extends ReferenceTypeNodeImpl implements DeclaredTypeNode
+public abstract class ReferenceTypeNodeImpl extends TypeNodeImpl implements ReferenceTypeNode
 {
     /** General constructor. */
-    protected DeclaredTypeNodeImpl()
+    protected ReferenceTypeNodeImpl()
     {
         super();
     }

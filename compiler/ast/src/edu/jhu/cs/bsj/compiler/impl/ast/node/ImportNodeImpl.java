@@ -6,45 +6,45 @@ import edu.jhu.cs.bsj.compiler.ast.node.NameNode;
 
 public class ImportNodeImpl extends NodeImpl implements ImportNode
 {
-    /** The identifier to import. */
-    private NameNode qualifiedIdentifier;
+    /** The name of the package to import. */
+    private NameNode qualifiedName;
 
     /** The static-ness of the import. */
     private boolean staticImport;
 
     /** General constructor. */
     public ImportNodeImpl(
-            NameNode qualifiedIdentifier,
+            NameNode qualifiedName,
             boolean staticImport)
     {
         super();
-        this.qualifiedIdentifier = qualifiedIdentifier;
+        this.qualifiedName = qualifiedName;
         this.staticImport = staticImport;
     }
 
     /**
-     * Gets the identifier to import.
-     * @return The identifier to import.
+     * Gets the name of the package to import.
+     * @return The name of the package to import.
      */
-    public NameNode getQualifiedIdentifier()
+    public NameNode getQualifiedName()
     {
-        return this.qualifiedIdentifier;
+        return this.qualifiedName;
     }
 
     /**
-     * Changes the identifier to import.
-     * @param qualifiedIdentifier The identifier to import.
+     * Changes the name of the package to import.
+     * @param qualifiedName The name of the package to import.
      */
-    public void setQualifiedIdentifier(NameNode qualifiedIdentifier)
+    public void setQualifiedName(NameNode qualifiedName)
     {
-        if (this.qualifiedIdentifier instanceof NodeImpl)
+        if (this.qualifiedName instanceof NodeImpl)
         {
-            ((NodeImpl)this.qualifiedIdentifier).setParent(null);
+            ((NodeImpl)this.qualifiedName).setParent(null);
         }
-        this.qualifiedIdentifier = qualifiedIdentifier;
-        if (this.qualifiedIdentifier instanceof NodeImpl)
+        this.qualifiedName = qualifiedName;
+        if (this.qualifiedName instanceof NodeImpl)
         {
-            ((NodeImpl)this.qualifiedIdentifier).setParent(this);
+            ((NodeImpl)this.qualifiedName).setParent(this);
         }
     }
 
@@ -77,6 +77,6 @@ public class ImportNodeImpl extends NodeImpl implements ImportNode
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        this.qualifiedIdentifier.receive(visitor);
+        this.qualifiedName.receive(visitor);
     }
 }

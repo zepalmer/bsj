@@ -3,9 +3,9 @@ package edu.jhu.cs.bsj.compiler.impl.ast.node;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.AnonymousClassBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassInstantiationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.DeclaredTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.NameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
 
 public class ClassInstantiationNodeImpl extends ExpressionNodeImpl implements ClassInstantiationNode
@@ -13,8 +13,8 @@ public class ClassInstantiationNodeImpl extends ExpressionNodeImpl implements Cl
     /** The type arguments of the instantiation. */
     private ListNode<? extends TypeNode> typeArguments;
 
-    /** The identifier of the class. */
-    private NameNode identifier;
+    /** The type being instantiated. */
+    private DeclaredTypeNode type;
 
     /** The arguments to the constructor. */
     private ListNode<? extends ExpressionNode> arguments;
@@ -28,14 +28,14 @@ public class ClassInstantiationNodeImpl extends ExpressionNodeImpl implements Cl
     /** General constructor. */
     public ClassInstantiationNodeImpl(
             ListNode<? extends TypeNode> typeArguments,
-            NameNode identifier,
+            DeclaredTypeNode type,
             ListNode<? extends ExpressionNode> arguments,
             AnonymousClassBodyNode body,
             ExpressionNode enclosingExpression)
     {
         super();
         this.typeArguments = typeArguments;
-        this.identifier = identifier;
+        this.type = type;
         this.arguments = arguments;
         this.body = body;
         this.enclosingExpression = enclosingExpression;
@@ -68,28 +68,28 @@ public class ClassInstantiationNodeImpl extends ExpressionNodeImpl implements Cl
     }
 
     /**
-     * Gets the identifier of the class.
-     * @return The identifier of the class.
+     * Gets the type being instantiated.
+     * @return The type being instantiated.
      */
-    public NameNode getIdentifier()
+    public DeclaredTypeNode getType()
     {
-        return this.identifier;
+        return this.type;
     }
 
     /**
-     * Changes the identifier of the class.
-     * @param identifier The identifier of the class.
+     * Changes the type being instantiated.
+     * @param type The type being instantiated.
      */
-    public void setIdentifier(NameNode identifier)
+    public void setType(DeclaredTypeNode type)
     {
-        if (this.identifier instanceof NodeImpl)
+        if (this.type instanceof NodeImpl)
         {
-            ((NodeImpl)this.identifier).setParent(null);
+            ((NodeImpl)this.type).setParent(null);
         }
-        this.identifier = identifier;
-        if (this.identifier instanceof NodeImpl)
+        this.type = type;
+        if (this.type instanceof NodeImpl)
         {
-            ((NodeImpl)this.identifier).setParent(this);
+            ((NodeImpl)this.type).setParent(this);
         }
     }
 
@@ -183,7 +183,7 @@ public class ClassInstantiationNodeImpl extends ExpressionNodeImpl implements Cl
     {
         super.receiveToChildren(visitor);
         this.typeArguments.receive(visitor);
-        this.identifier.receive(visitor);
+        this.type.receive(visitor);
         this.arguments.receive(visitor);
         this.body.receive(visitor);
         this.enclosingExpression.receive(visitor);

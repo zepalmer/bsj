@@ -2,36 +2,34 @@ package edu.jhu.cs.bsj.compiler.ast.node;
 
 
 /**
- * A node representing a name qualification, as in
+ * Represents a qualified name, as in
  * <pre>
- * <i>name<i> . <i>identifier</i>
+ * <i>name.ident</i>
  * </pre>
- * QualifiedNameNodes are used to identify classes in package imports and other identifier chains.  They are not
- * used to select members from expressions.  See {@link MemberSelectNode}.
  */
 public interface QualifiedNameNode extends NameNode
 {
     /**
-     * Gets the name to qualify.
-     * @return The name to qualify.
+     * Gets the name being qualified.
+     * @return The name being qualified.
      */
-    public NameNode getName();
+    public NameNode getBase();
 
     /**
-     * Changes the name to qualify.
-     * @param name The name to qualify.
+     * Changes the name being qualified.
+     * @param base The name being qualified.
      */
-    public void setName(NameNode name);
+    public void setBase(NameNode base);
 
     /**
-     * Gets the identifier to use.
-     * @return The identifier to use.
+     * Gets the identifier used to qualify the base name.
+     * @return The identifier used to qualify the base name.
      */
     public IdentifierNode getIdentifier();
 
     /**
-     * Changes the identifier to use.
-     * @param identifier The identifier to use.
+     * Changes the identifier used to qualify the base name.
+     * @param identifier The identifier used to qualify the base name.
      */
     public void setIdentifier(IdentifierNode identifier);
 

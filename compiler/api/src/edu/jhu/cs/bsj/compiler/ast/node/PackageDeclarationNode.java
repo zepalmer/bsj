@@ -15,16 +15,16 @@ package edu.jhu.cs.bsj.compiler.ast.node;
 public interface PackageDeclarationNode extends Node
 {
     /**
-     * Gets the qualified name indicating the package.
-     * @return The qualified name indicating the package.
+     * Gets the name of the package.
+     * @return The name of the package.
      */
-    public QualifiedNameNode getName();
+    public NameNode getName();
 
     /**
-     * Changes the qualified name indicating the package.
-     * @param name The qualified name indicating the package.
+     * Changes the name of the package.
+     * @param name The name of the package.
      */
-    public void setName(QualifiedNameNode name);
+    public void setName(NameNode name);
 
     /**
      * Gets the annotations on the package declaration.

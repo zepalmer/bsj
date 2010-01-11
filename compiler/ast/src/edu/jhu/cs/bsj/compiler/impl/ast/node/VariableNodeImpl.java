@@ -11,22 +11,22 @@ public class VariableNodeImpl extends NodeImpl implements VariableNode
     /** The modifiers of this parameter. */
     private ModifiersNode modifiers;
 
-    /** The type of the parameter. */
+    /** The type of the variable. */
     private TypeNode type;
 
-    /** The name of the parameter. */
-    private IdentifierNode name;
+    /** The name of the variable. */
+    private IdentifierNode identifier;
 
     /** General constructor. */
     public VariableNodeImpl(
             ModifiersNode modifiers,
             TypeNode type,
-            IdentifierNode name)
+            IdentifierNode identifier)
     {
         super();
         this.modifiers = modifiers;
         this.type = type;
-        this.name = name;
+        this.identifier = identifier;
     }
 
     /**
@@ -56,8 +56,8 @@ public class VariableNodeImpl extends NodeImpl implements VariableNode
     }
 
     /**
-     * Gets the type of the parameter.
-     * @return The type of the parameter.
+     * Gets the type of the variable.
+     * @return The type of the variable.
      */
     public TypeNode getType()
     {
@@ -65,8 +65,8 @@ public class VariableNodeImpl extends NodeImpl implements VariableNode
     }
 
     /**
-     * Changes the type of the parameter.
-     * @param type The type of the parameter.
+     * Changes the type of the variable.
+     * @param type The type of the variable.
      */
     public void setType(TypeNode type)
     {
@@ -82,28 +82,28 @@ public class VariableNodeImpl extends NodeImpl implements VariableNode
     }
 
     /**
-     * Gets the name of the parameter.
-     * @return The name of the parameter.
+     * Gets the name of the variable.
+     * @return The name of the variable.
      */
-    public IdentifierNode getName()
+    public IdentifierNode getIdentifier()
     {
-        return this.name;
+        return this.identifier;
     }
 
     /**
-     * Changes the name of the parameter.
-     * @param name The name of the parameter.
+     * Changes the name of the variable.
+     * @param identifier The name of the variable.
      */
-    public void setName(IdentifierNode name)
+    public void setIdentifier(IdentifierNode identifier)
     {
-        if (this.name instanceof NodeImpl)
+        if (this.identifier instanceof NodeImpl)
         {
-            ((NodeImpl)this.name).setParent(null);
+            ((NodeImpl)this.identifier).setParent(null);
         }
-        this.name = name;
-        if (this.name instanceof NodeImpl)
+        this.identifier = identifier;
+        if (this.identifier instanceof NodeImpl)
         {
-            ((NodeImpl)this.name).setParent(this);
+            ((NodeImpl)this.identifier).setParent(this);
         }
     }
 
@@ -120,6 +120,6 @@ public class VariableNodeImpl extends NodeImpl implements VariableNode
         super.receiveToChildren(visitor);
         this.modifiers.receive(visitor);
         this.type.receive(visitor);
-        this.name.receive(visitor);
+        this.identifier.receive(visitor);
     }
 }

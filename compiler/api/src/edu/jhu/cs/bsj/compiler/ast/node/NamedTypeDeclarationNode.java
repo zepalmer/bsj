@@ -10,13 +10,13 @@ public interface NamedTypeDeclarationNode extends TypeDeclarationNode
      * Gets the name of this declared type.
      * @return The name of this declared type.
      */
-    public IdentifierNode getSimpleName();
+    public IdentifierNode getIdentifier();
 
     /**
      * Changes the name of this declared type.
-     * @param simpleName The name of this declared type.
+     * @param identifier The name of this declared type.
      */
-    public void setSimpleName(IdentifierNode simpleName);
+    public void setIdentifier(IdentifierNode identifier);
 
     /**
      * Gets the modifiers for this declared type.

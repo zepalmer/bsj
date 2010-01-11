@@ -49,13 +49,13 @@ public interface MethodDeclarationNode extends Node, ClassMember,  InterfaceMemb
      * Gets this method's name.
      * @return This method's name.
      */
-    public IdentifierNode getName();
+    public IdentifierNode getIdentifier();
 
     /**
      * Changes this method's name.
-     * @param name This method's name.
+     * @param identifier This method's name.
      */
-    public void setName(IdentifierNode name);
+    public void setIdentifier(IdentifierNode identifier);
 
     /**
      * Gets the parameters declared by this method.

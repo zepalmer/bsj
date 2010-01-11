@@ -25,10 +25,10 @@ public class InterfaceDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl i
             ListNode<? extends TypeNode> extendsClause,
             InterfaceBodyNode body,
             ListNode<? extends TypeParameterNode> typeParameters,
-            IdentifierNode simpleName,
+            IdentifierNode identifier,
             ModifiersNode modifiers)
     {
-        super(simpleName, modifiers);
+        super(identifier, modifiers);
         this.extendsClause = extendsClause;
         this.body = body;
         this.typeParameters = typeParameters;

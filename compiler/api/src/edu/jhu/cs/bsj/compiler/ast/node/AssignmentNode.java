@@ -7,7 +7,7 @@ import edu.jhu.cs.bsj.compiler.ast.AssignmentOperator;
  * <pre>
  * <i>expr op expr</i>
  * </pre>
- * where <i>op</i> is one of <tt>+=</tt>, <tt>%=</tt>, etc.
+ * where <i>op</i> is one of <tt>=</tt>, <tt>+=</tt>, <tt>%=</tt>, etc.
  */
 public interface AssignmentNode extends ExpressionNode
 {

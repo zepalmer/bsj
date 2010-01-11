@@ -1,11 +1,10 @@
 package edu.jhu.cs.bsj.compiler.ast.node;
 
-import edu.jhu.cs.bsj.compiler.ast.tags.TypeArgument;
 
 /**
  * Represents an array type.
  */
-public interface ArrayTypeNode extends TypeNode, TypeArgument
+public interface ArrayTypeNode extends ReferenceTypeNode
 {
     /**
      * Gets the element type of the array.

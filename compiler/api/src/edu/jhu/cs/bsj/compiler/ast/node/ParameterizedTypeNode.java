@@ -1,39 +1,36 @@
 package edu.jhu.cs.bsj.compiler.ast.node;
 
-import edu.jhu.cs.bsj.compiler.ast.tags.BoundType;
-import edu.jhu.cs.bsj.compiler.ast.tags.ParameterizableType;
 import edu.jhu.cs.bsj.compiler.ast.tags.TypeArgument;
 
 /**
- * A node representing a type parameterization as in:
- * <pre>
- * <i>type</i> &lt;<i>arg...</i>&gt;
- * </pre>
+ * A node representing parameterized types.  This node represents the use of a type which has type arguments, such
+ * as Set<String> (which would be represented by the raw type Set and the single-element argument list containing
+ * the raw type for String).
  */
-public interface ParameterizedTypeNode extends TypeNode, TypeArgument,  BoundType
+public interface ParameterizedTypeNode extends TypeNode
 {
     /**
-     * Gets the base to parameterize.
-     * @return The base to parameterize.
+     * Gets the raw type being parameterized.
+     * @return The raw type being parameterized.
      */
-    public ParameterizableType getBaseType();
+    public RawTypeNode getRawType();
 
     /**
-     * Changes the base to parameterize.
-     * @param baseType The base to parameterize.
+     * Changes the raw type being parameterized.
+     * @param rawType The raw type being parameterized.
      */
-    public void setBaseType(ParameterizableType baseType);
+    public void setRawType(RawTypeNode rawType);
 
     /**
-     * Gets the parameterized type arguments.
-     * @return The parameterized type arguments.
+     * Gets the type arguments for this node.
+     * @return The type arguments for this node.
      */
-    public ListNode<? extends TypeArgument> getTypeArguments();
+    public ListNode<TypeArgument> getTypeArguments();
 
     /**
-     * Changes the parameterized type arguments.
-     * @param typeArguments The parameterized type arguments.
+     * Changes the type arguments for this node.
+     * @param typeArguments The type arguments for this node.
      */
-    public void setTypeArguments(ListNode<? extends TypeArgument> typeArguments);
+    public void setTypeArguments(ListNode<TypeArgument> typeArguments);
 
 }

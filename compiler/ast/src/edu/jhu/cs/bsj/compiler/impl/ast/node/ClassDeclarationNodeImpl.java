@@ -29,10 +29,10 @@ public class ClassDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl imple
             ListNode<? extends TypeNode> implementsClause,
             ClassBodyNode body,
             ListNode<? extends TypeParameterNode> typeParameters,
-            IdentifierNode simpleName,
+            IdentifierNode identifier,
             ModifiersNode modifiers)
     {
-        super(simpleName, modifiers);
+        super(identifier, modifiers);
         this.extendsClause = extendsClause;
         this.implementsClause = implementsClause;
         this.body = body;

@@ -20,7 +20,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
     private ModifiersNode modifiers;
 
     /** This method's name. */
-    private IdentifierNode name;
+    private IdentifierNode identifier;
 
     /** The parameters declared by this method. */
     private ListNode<? extends VariableNode> parameters;
@@ -41,7 +41,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
     public MethodDeclarationNodeImpl(
             BlockStatementNode body,
             ModifiersNode modifiers,
-            IdentifierNode name,
+            IdentifierNode identifier,
             ListNode<? extends VariableNode> parameters,
             VariableNode varargParameter,
             TypeNode returnType,
@@ -51,7 +51,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
         super();
         this.body = body;
         this.modifiers = modifiers;
-        this.name = name;
+        this.identifier = identifier;
         this.parameters = parameters;
         this.varargParameter = varargParameter;
         this.returnType = returnType;
@@ -115,25 +115,25 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
      * Gets this method's name.
      * @return This method's name.
      */
-    public IdentifierNode getName()
+    public IdentifierNode getIdentifier()
     {
-        return this.name;
+        return this.identifier;
     }
 
     /**
      * Changes this method's name.
-     * @param name This method's name.
+     * @param identifier This method's name.
      */
-    public void setName(IdentifierNode name)
+    public void setIdentifier(IdentifierNode identifier)
     {
-        if (this.name instanceof NodeImpl)
+        if (this.identifier instanceof NodeImpl)
         {
-            ((NodeImpl)this.name).setParent(null);
+            ((NodeImpl)this.identifier).setParent(null);
         }
-        this.name = name;
-        if (this.name instanceof NodeImpl)
+        this.identifier = identifier;
+        if (this.identifier instanceof NodeImpl)
         {
-            ((NodeImpl)this.name).setParent(this);
+            ((NodeImpl)this.identifier).setParent(this);
         }
     }
 
@@ -280,7 +280,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
         super.receiveToChildren(visitor);
         this.body.receive(visitor);
         this.modifiers.receive(visitor);
-        this.name.receive(visitor);
+        this.identifier.receive(visitor);
         this.parameters.receive(visitor);
         this.varargParameter.receive(visitor);
         this.returnType.receive(visitor);
