@@ -867,7 +867,11 @@ constructorDeclaration returns [ConstructorDeclarationNode ret]
         ('throws' qualifiedNameList)?
         constructorBody
         {
-            if (!$IDENTIFIER.text.equals($Global::className.peek()))
+            if ($Global::className.empty())
+            {
+                //TODO error handling            
+            }
+            else if (!$IDENTIFIER.text.equals($Global::className.peek()))
             {
                 //TODO error handling
             }
