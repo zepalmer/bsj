@@ -1752,12 +1752,12 @@ localVariableDeclaration returns [VariableDeclarationNode ret]
         }
     :   
         variableModifiers type
-        a=variableDeclarator[$type]
+        a=variableDeclarator[$type.ret]
         {
             list.add($a.ret); 
         }
         (
-            ',' b=variableDeclarator[$type]
+            ',' b=variableDeclarator[$type.ret]
             {
 	            list.add($b.ret); 
             }
