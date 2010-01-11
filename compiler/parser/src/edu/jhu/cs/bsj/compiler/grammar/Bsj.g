@@ -841,7 +841,7 @@ memberDecl returns [AnonymousClassMember ret]
     |   
         interfaceDeclaration
         {
-            $ret = $interfaceDeclaration.ref;
+            $ret = $interfaceDeclaration.ret;
         }
     ;
 
