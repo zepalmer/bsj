@@ -20,6 +20,7 @@ import javax.tools.ToolProvider;
 
 import com.sun.source.tree.ArrayAccessTree;
 import com.sun.source.tree.ArrayTypeTree;
+import com.sun.source.tree.AssignmentTree;
 import com.sun.source.tree.BinaryTree;
 import com.sun.source.tree.BlockTree;
 import com.sun.source.tree.ClassTree;
@@ -85,6 +86,8 @@ public class JavaAstExaminer
                 "        }"+
                 "        return tot;" +
                 "    }" +
+                "    static int foo4 = 0; " + 
+                "    { int foo5; foo5 = GenSource.foo4; }" +
                 "}"
         );
         
@@ -310,6 +313,12 @@ class CodeAnalyzerProcessor extends AbstractProcessor {
         	System.out.println("Compound assignment: " + cTree.getKind());
         	examineTree("var", cTree.getVariable(), indent+1);
         	examineTree("expr", cTree.getExpression(), indent+1);
+        } else if (tree instanceof AssignmentTree)
+        {
+        	AssignmentTree aTree = (AssignmentTree)tree;
+        	System.out.println("Assignment:");
+        	examineTree("var", aTree.getVariable(), indent+1);
+        	examineTree("expr", aTree.getExpression(), indent+1);
         } else if (tree==null)
         {
             System.out.println("null");
