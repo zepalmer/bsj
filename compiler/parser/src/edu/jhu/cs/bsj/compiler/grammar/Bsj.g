@@ -943,15 +943,21 @@ constructorDeclaration returns [ConstructorDeclarationNode ret]
 constructorBody returns [ConstructorBodyNode ret]
 	    @init {
 	        List<StatementNode> list = new ArrayList<StatementNode>();
+	        ConstructorInvocationNode constructorInvocationNode = null;
 	    }
 	    @after {
 	        $ret = factory.makeConstructorBodyNode(
-	                ($explicitConstructorInvocation == null ? null : $explicitConstructorInvocation.ret),
+	                constructorInvocationNode,
 	                factory.makeBlockStatementNode(list));
 	    }
     :
         '{' 
-        explicitConstructorInvocation?
+        (
+            explicitConstructorInvocation
+            {
+                constructorInvocationNode = $explicitConstructorInvocation.ret;
+            }
+        )?
         (
             blockStatement
             {
