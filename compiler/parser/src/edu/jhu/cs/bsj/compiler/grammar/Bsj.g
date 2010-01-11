@@ -1768,25 +1768,42 @@ localVariableDeclaration returns [VariableDeclarationNode ret]
     ;
 
 statement returns [StatementNode ret]
+    @init{
+        IdentifierNode idNode = null;
+        ExpressionNode expNode = null;
+        StatementNode stmtNode = null;
+    }
     :   
         block
         {
             $ret = $block.ret;
         }
     |   
-        'assert' e1=expression (':' e2=expression)? ';'   
+        'assert' e1=expression 
+        (
+            ':' e2=expression
+            {
+                expNode = $e2.ret;
+            }
+        )? ';'   
         {
             $ret = factory.makeAssertStatementNode(
                 $e1.ret,
-                e2 == null ? null | $e2.ret);
+                expNode);
         }        
     |   
-        'if' parExpression s1=statement ('else' s2=statement)?    
+        'if' parExpression s1=statement 
+        (
+            'else' s2=statement
+            {
+                stmtNode = $e2.ret;
+            }
+        )?    
         {
             $ret = factory.makeIfNode(
                 $parExpression.ret
                 $s1.ret,
-                s2 == null ? null : $s2.ret);
+                stmtNode);
         }   
     |   
         forstatement
@@ -1827,9 +1844,15 @@ statement returns [StatementNode ret]
                 $block.ret);
         }
     |   
-        'return' expression? ';'
+        'return' 
+        (
+            expression
+            {
+                expNode = $expression.ret;
+            }
+        )? ';'
         {
-            $ret = factory.makeReturnNode($expression == null ? null : $expression.ret);
+            $ret = factory.makeReturnNode(expNode);
         }
     |   
         'throw' expression ';'
@@ -1838,16 +1861,26 @@ statement returns [StatementNode ret]
                 $expression.ret);
         }
     |   
-        'break' (a=IDENTIFIER)? ';'
+        'break'
+        (
+            id=IDENTIFIER
+            {
+                idNode = factory.makeIdentifierNode($id.text);
+            }
+        )? ';'
         {
-            $ret = factory.makeBreakNode(
-                $a == null ? null : factory.makeIdentifierNode($a.text));
+            $ret = factory.makeBreakNode(idNode);
         }
     |   
-        'continue' (a=IDENTIFIER)? ';'
+        'continue' 
+        (
+            id=IDENTIFIER
+            {
+                idNode = factory.makeIdentifierNode($id.text);
+            }
+        )? ';'
         {
-            $ret = factory.makeContinueNode(
-                $a == null ? null : factory.makeIdentifierNode($a.text));
+            $ret = factory.makeContinueNode(idNode);
         }
     |   
         expression  ';'  
