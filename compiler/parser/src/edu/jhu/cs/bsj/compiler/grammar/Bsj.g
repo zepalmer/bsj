@@ -2385,9 +2385,21 @@ unaryExpressionNotPlusMinus returns [ExpressionNode ret] // TODO primary and cas
         )?
     ;
 
-castExpression //TODO
-    :   '(' primitiveType ')' unaryExpression
-    |   '(' type ')' unaryExpressionNotPlusMinus
+castExpression returns [TypeCastNode ret]
+    :   
+        '(' primitiveType ')' unaryExpression
+        {
+            $ret = factory.makeTypeCastNode(
+                $unaryExpression.ret,
+                $primitiveType.ret);
+        }
+    |   
+        '(' type ')' unaryExpressionNotPlusMinus
+        {
+            $ret = factory.makeTypeCastNode(
+                $unaryExpressionNotPlusMinus.ret,
+                $type.ret);
+        }
     ;
 
 /**
