@@ -61,7 +61,7 @@ options {
 }
 
 scope Global {   
-    Stack<String> className = new Stack<String>();
+    Stack<String> className;
 }
 
 @lexer::header{
@@ -491,6 +491,10 @@ normalClassDeclaration returns [ClassDeclarationNode ret]
         modifiers[classModifiers]
         'class' id=IDENTIFIER
         {
+            if ($Global::className == null)
+            {
+                $Global::className = new Stack<String>();
+            }
             $Global::className.push($id.text);
         }
         typeParameters?
@@ -572,6 +576,10 @@ enumDeclaration returns [EnumDeclarationNode ret]
         'enum' 
         id=IDENTIFIER
         {
+            if ($Global::className == null)
+            {
+                $Global::className = new Stack<String>();
+            }        
             $Global::className.push(id.text);
         }
         ('implements' typeList)?
@@ -678,6 +686,10 @@ normalInterfaceDeclaration returns [InterfaceDeclarationNode ret]
         modifiers[interfaceModifiers]
         'interface' id=IDENTIFIER
         {
+            if ($Global::className == null)
+            {
+                $Global::className = new Stack<String>();
+            }        
             $Global::className.push($id.text);
         }        
         (typeParameters
