@@ -194,7 +194,7 @@ variableDeclarator[TypeNode inType] returns [VariableDeclaratorNode ret]
 	        ExpressionNode initializer = null;
 	    }
     :
-        id=IDENTIFIER
+        id=identifier
         (
             arrayTypeIndicator[inType]
             {
@@ -208,8 +208,7 @@ variableDeclarator[TypeNode inType] returns [VariableDeclaratorNode ret]
             }
         )?
         {
-            IdentifierNode identifier = makeIdentifierNode($id.text);
-            $ret = factory.makeVariableDeclaratorNode(type, identifier, initializer);
+            $ret = factory.makeVariableDeclaratorNode(type, $id.ret, initializer);
         }
     ;
 
@@ -301,11 +300,11 @@ importDeclaration returns [ImportNode ret]
     :   
         'import' 
         (staticImport='static')?
-        id=IDENTIFIER '.' '*' ';'
+        id=identifier '.' '*' ';'
         {
             $ret = factory.makeImportNode(
                 factory.makeQualifiedNameNode(
-                    factory.makeIdentifierNode($id.text),
+                    $id.ret,
                     factory.makeIdentifierNode("*")),
                 staticImport!=null);
         }
@@ -339,11 +338,11 @@ qualifiedImportName returns [QualifiedNameNode ret]
 
 necessarilyQualifiedName returns [QualifiedNameNode ret]
     :   
-        a=IDENTIFIER '.' b=IDENTIFIER
+        a=identifier '.' b=identifier
         {
             $ret = factory.makeQualifiedNameNode(
-                    factory.makeIdentifierNode($a.text),
-                    factory.makeIdentifierNode($b.text));
+                    $a.ret,
+                    $b.ret);
         }
         (
             '.' c=IDENTIFIER
@@ -492,13 +491,13 @@ normalClassDeclaration returns [ClassDeclarationNode ret]
     scope Global;
     :   
         modifiers[classModifiers]
-        'class' id=IDENTIFIER
+        'class' id=identifier
         {
             if ($Global::className == null)
             {
                 $Global::className = new Stack<String>();
             }
-            $Global::className.push($id.text);
+            $Global::className.push($id.ret.getIdentifier());
         }
         typeParameters?
         ('extends' type)?
@@ -510,7 +509,7 @@ normalClassDeclaration returns [ClassDeclarationNode ret]
                     $typeList.ret,
                     $classBody.ret,
                     $typeParameters.ret,
-                    factory.makeIdentifierNode($id.text),
+                    $id.ret),
                     $modifiers.ret);
             $Global::className.pop();
         }
@@ -544,7 +543,7 @@ typeParameter returns [TypeParameterNode ret]
             ListNode<BoundType> typeBoundNode = factory.<BoundType>makeNode(Collections.emptyList());
         }
     :   
-        id=IDENTIFIER
+        id=identifier
         (
             'extends' typeBound
             {
@@ -553,7 +552,7 @@ typeParameter returns [TypeParameterNode ret]
         )?
         {
             $ret = factory.makeTypeParameterNode(
-                        factory.makeIdentifierNode($id.text),
+                        $id.ret,
                         typeBoundNode);
         }        
     ;
@@ -585,13 +584,13 @@ enumDeclaration returns [EnumDeclarationNode ret]
     :   
         modifiers[classModifiers]
         'enum' 
-        id=IDENTIFIER
+        id=identifier
         {
             if ($Global::className == null)
             {
                 $Global::className = new Stack<String>();
             }        
-            $Global::className.push(id.text);
+            $Global::className.push($id.ret.getIdentifier());
         }
         ('implements' typeList)?
         enumBody
@@ -599,7 +598,7 @@ enumDeclaration returns [EnumDeclarationNode ret]
             $ret = factory.makeEnumDeclarationNode(
                         $typeList.ret,
                         $enumBody.ret,
-                        factory.makeIdentifierNode($id.text),
+                        $id.ret,
                         $modifiers.ret);
             $Global::className.pop();                        
         }
