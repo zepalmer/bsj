@@ -538,7 +538,7 @@ typeParameters returns [ListNode<TypeParameterNode> ret]
     ;
 
 
-typeParameter returns [TypeParameterNode ret] //TODO handle naming
+typeParameter returns [TypeParameterNode ret]
         @init {
             ListNode<BoundType> typeBoundNode = factory.<BoundType>makeNode(Collections.emptyList());
         }
@@ -1602,7 +1602,7 @@ elementValueArrayInitializer returns [AnnotationArrayValueNode ret]
 /**
  * Annotation declaration.
  */
-annotationTypeDeclaration returns [AnnotationDeclarationNode ret] //TODO handle naming
+annotationTypeDeclaration returns [AnnotationDeclarationNode ret]
     :   
         modifiers[interfaceModifiers] '@'
         'interface'
