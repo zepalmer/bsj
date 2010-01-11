@@ -2369,7 +2369,7 @@ unaryExpression returns [ExpressionNode ret]
         }
     ;
 
-unaryExpressionNotPlusMinus returns [ExpressionNode ret] // TODO primary and castExpression
+unaryExpressionNotPlusMinus returns [ExpressionNode ret] // TODO primary
     :   
         '~' unaryExpression
         {
@@ -2386,6 +2386,9 @@ unaryExpressionNotPlusMinus returns [ExpressionNode ret] // TODO primary and cas
         }        
     |   
         castExpression
+        {
+            $ret = $castExpression.ret;
+        }
     |   
         primary
         (selector
