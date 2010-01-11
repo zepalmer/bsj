@@ -1054,16 +1054,22 @@ interfaceBodyDeclaration returns [InterfaceMember ret]
     ;
 
 interfaceMethodDeclaration returns [MethodDeclarationNode ret]
+        @init {
+            TypeNode returnTypeNode;
+        }
     :   
         modifiers[interfaceModifiers]
         typeParameters?
         methodReturnType
+        {
+            returnTypeNode = $methodReturnType.ret;
+        }
         id=IDENTIFIER
         formalParameters
         (
-            arrayTypeIndicator[$methodReturnType]
+            arrayTypeIndicator[returnTypeNode]
             {
-                $methodReturnType = $arrayTypeIndicator.ret;
+                returnTypeNode = $arrayTypeIndicator.ret;
             }
         )?
         ('throws' qualifiedNameList)? ';'
@@ -1074,7 +1080,7 @@ interfaceMethodDeclaration returns [MethodDeclarationNode ret]
                     factory.makeIdentifierNode($id.text),
                     $formalParameters.parameters,
                     $formalParameters.varargParameter,
-                    $methodReturnType.ret,
+                    returnTypeNode,
                     $qualifiedNameList.ret,
                     $typeParameters.ret);
         }         
