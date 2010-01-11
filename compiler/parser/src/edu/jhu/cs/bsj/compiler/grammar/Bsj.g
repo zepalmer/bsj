@@ -234,7 +234,7 @@ abstractFieldDeclaration[List<Modifier> legalModifiers] returns [FieldDeclaratio
 	    @after {
             $ret = factory.makeFieldDeclarationNode(
                     $modifiers.ret,
-                    factory.makeListNode(list)));
+                    factory.makeListNode(list));
 	    }
     :   
         modifiers[legalModifiers]
