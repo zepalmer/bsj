@@ -968,9 +968,19 @@ constructorBody returns [ConstructorBodyNode ret]
     ;
 
 methodDeclaration returns [MethodDeclarationNode ret]
+        @init {
+            BlockStatementNode blockStatementNode = null;
+            ListNode<TypeParameterNode> typeParametersNode =
+                    factory.makeListNode(Collections.<TypeParameterNode>emptySet());
+        }
     :
         modifiers[methodModifiers]
-        typeParameters?
+        (
+            typeParameters
+            {
+                typeParametersNode = $typeParameters.ret;
+            }
+        )?
         methodReturnType
         id=IDENTIFIER
         formalParameters
@@ -983,19 +993,22 @@ methodDeclaration returns [MethodDeclarationNode ret]
         'throws' qualifiedNameList?            
         (        
             block
+            {
+                blockStatementNode = $block.ret;
+            }
         |
             ';' 
         )
         {
             $ret = factory.makeMethodDeclarationNode(
-                    ($block == null? null : $block.ret),
+                    blockStatementNode,
                     $modifiers.ret,
                     factory.makeIdentifierNode($id.text),
                     $formalParameters.parameters,
                     $formalParameters.varargParameter,
                     $methodReturnType.ret,
                     $qualifiedNameList.ret,
-                    $typeParameters.ret);
+                    typeParametersNode;
         }        
     ;
 
