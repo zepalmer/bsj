@@ -1904,15 +1904,15 @@ trystatement returns [TryNode ret]
     :   
         'try' b=block
         (
-            catches 'finally' fb=block
+            c=catches 'finally' fb=block
             {
-                catchList = $catches.ret;
+                catchList = $c.ret;
                 finallyBlock = $fb.ret;
             }
         |   
-            catches
+            c=catches
             {
-                catchList = $catches.ret;
+                catchList = $c.ret;
             }            
         |   
             'finally' fb=block
