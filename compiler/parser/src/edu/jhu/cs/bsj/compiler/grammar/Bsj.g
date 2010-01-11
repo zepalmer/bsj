@@ -2545,8 +2545,16 @@ nonWildcardTypeArguments returns [ListNode<TypeNode> ret]
         '>'
     ;
 
-arguments //TODO
-    :   '(' (expressionList
+arguments returns [ListNode<ExpressionNode> ret]
+    :
+        {
+            // initialize to empty list
+            $ret = factory.<ExpressionNode>makeListNode(new ArrayList<ExpressionNode>());
+        }
+        '(' (expressionList
+            {
+                $ret = $expressionList.ret;
+            }
         )? ')'
     ;
 
