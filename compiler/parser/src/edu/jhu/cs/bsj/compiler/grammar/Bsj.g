@@ -972,6 +972,7 @@ methodDeclaration returns [MethodDeclarationNode ret]
             BlockStatementNode blockStatementNode = null;
             ListNode<TypeParameterNode> typeParametersNode =
                     factory.makeListNode(Collections.<TypeParameterNode>emptySet());
+            TypeNode returnTypeNode;
         }
     :
         modifiers[methodModifiers]
@@ -982,12 +983,15 @@ methodDeclaration returns [MethodDeclarationNode ret]
             }
         )?
         methodReturnType
+        {
+            returnTypeNode = $methodReturnType.ret;
+        }
         id=IDENTIFIER
         formalParameters
         (
-            arrayTypeIndicator[$methodReturnType]
+            arrayTypeIndicator[returnTypeNode]
             {
-                $methodReturnType = $arrayTypeIndicator.ret;
+                returnTypeNode = $arrayTypeIndicator.ret;
             }
         )?
         'throws' qualifiedNameList?            
@@ -1006,7 +1010,7 @@ methodDeclaration returns [MethodDeclarationNode ret]
                     factory.makeIdentifierNode($id.text),
                     $formalParameters.parameters,
                     $formalParameters.varargParameter,
-                    $methodReturnType.ret,
+                    returnTypeNode,
                     $qualifiedNameList.ret,
                     typeParametersNode;
         }        
