@@ -60,6 +60,10 @@ options {
     language=Java;
 }
 
+scope Global {   
+    Stack<String> className = new Stack<String>();
+}
+
 @lexer::header{
     package edu.jhu.cs.bsj.compiler.tool.parser.antlr;
 }
@@ -481,14 +485,18 @@ classDeclaration returns [TypeDeclarationNode ret]
     ;
 
 normalClassDeclaration returns [ClassDeclarationNode ret]
+    scope Global;
     :   
         modifiers[classModifiers]
         'class' id=IDENTIFIER
+        {
+            $Global::className.push($id.text);
+        }
         typeParameters?
         ('extends' type)?
         ('implements' typeList)?            
         classBody
-        {
+        {            
             $ret = factory.makeClassDeclarationNode(
                     $type.ret,
                     $typeList.ret,
@@ -496,6 +504,7 @@ normalClassDeclaration returns [ClassDeclarationNode ret]
                     $typeParameters.ret,
                     factory.makeIdentifierNode($id.text),
                     $modifiers.ret);
+            $Global::className.pop();
         }
     ;
 
@@ -556,10 +565,14 @@ typeBound returns [ListNode<BoundType> ret]
 
 
 enumDeclaration returns [EnumDeclarationNode ret]
+    scope Global;
     :   
         modifiers[classModifiers]
         'enum' 
         id=IDENTIFIER
+        {
+            $Global::className.push(id.text);
+        }
         ('implements' typeList)?
         enumBody
         {
@@ -568,6 +581,7 @@ enumDeclaration returns [EnumDeclarationNode ret]
                         $enumBody.ret,
                         factory.makeIdentifierNode($id.text),
                         $modifiers.ret);
+            $Global::className.pop();                        
         }
     ;
 
@@ -658,9 +672,13 @@ interfaceDeclaration returns [TypeDeclarationNode ret]
     ;
     
 normalInterfaceDeclaration returns [InterfaceDeclarationNode ret]
+    scope Global;
     :   
         modifiers[interfaceModifiers]
         'interface' id=IDENTIFIER
+        {
+            $Global::className.push($id.text);
+        }        
         (typeParameters
         )?
         ('extends' typeList
@@ -673,6 +691,7 @@ normalInterfaceDeclaration returns [InterfaceDeclarationNode ret]
                     $typeParameters.ret,
                     factory.makeIdentifierNode($id.text),
                     $modifiers.ret);
+            $Global::className.pop();                    
         }
     ;
 
@@ -839,6 +858,7 @@ methodReturnType returns [TypeNode ret]
     ;
 
 constructorDeclaration returns [ConstructorDeclarationNode ret]
+    scope Global;
     :
         modifiers[constructorModifiers]
         typeParameters?
@@ -847,7 +867,10 @@ constructorDeclaration returns [ConstructorDeclarationNode ret]
         ('throws' qualifiedNameList)?
         constructorBody
         {
-            // TODO: what about the identifier?  assert here that it is correct
+            if (!$IDENTIFIER.text.equals($Global::className.peek()))
+            {
+                //TODO error handling
+            }
             $ret = factory.makeConstructorDeclarationNode(
                     $constructorBody.ret,
                     $modifiers.ret,
