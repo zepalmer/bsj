@@ -78,6 +78,7 @@ scope Global {
     import java.util.List;
     import java.util.HashSet;
     import java.util.Set;
+    import java.util.Stack;
     
     import edu.jhu.cs.bsj.compiler.ast.*;
     import edu.jhu.cs.bsj.compiler.ast.node.*;
