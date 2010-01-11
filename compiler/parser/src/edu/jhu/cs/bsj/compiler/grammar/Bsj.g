@@ -970,7 +970,7 @@ methodDeclaration returns [MethodDeclarationNode ret]
         @init {
             BlockStatementNode blockStatementNode = null;
             ListNode<TypeParameterNode> typeParametersNode =
-                    factory.makeListNode(Collections.<TypeParameterNode>emptySet());
+                    factory.makeListNode(Collections.<TypeParameterNode>emptyList());
             TypeNode returnTypeNode;
         }
     :
@@ -1331,7 +1331,7 @@ qualifiedNameList returns [ListNode<QualifiedNameNode> ret]
 //     (int x, int y)
 formalParameters returns [ListNode<VariableNode> parameters, VariableNode varargParameter]
         @init {
-            $parameters = factory.makeListNode(Collections.<VariableNode>emptySet());
+            $parameters = factory.makeListNode(Collections.<VariableNode>emptyList());
             $varargParameter = null;
         }
     :
