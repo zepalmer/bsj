@@ -1917,6 +1917,12 @@ formalParameter returns [VariableNode ret]
     ;
 
 forstatement returns [StatementNode ret]
+    @init{
+        ExpressionNode forInitNode = null;
+        ExpressionNode expNode = null;
+        ListNode<ExpressionNode> expListNode = factory.<ExpressionStatementNode>makeListNode(
+            new ArrayList<ExpressionStatementNode>();
+    }
     :   
         // enhanced for loop
         'for' '(' variableModifiers type id=IDENTIFIER ':' 
@@ -1933,18 +1939,30 @@ forstatement returns [StatementNode ret]
     |   
         // normal for loop
         'for' '(' 
-        forInit? ';' 
-        expression? ';' 
-        expressionList? ')'
+        (
+            forInit
+            {
+                forInitNode = $forInit.ret;
+            }
+        )? ';' 
+        (
+            expression
+            {
+                expNode = $expression.ret;
+            }
+        )? ';' 
+        (
+            expressionList
+            {
+                expListNode = $expressionList.ret;
+            }
+        )? ')'
         statement
         {
             $ret = factory.makeForLoopNode(
-                    (forInit == null ? null : $forInit.ret), 
-                    (expressionList == null 
-                        ? factory.<ExpressionStatementNode>makeListNode(
-                            new ArrayList<ExpressionStatementNode>())
-                        : $expressionList.ret),
-                    (expression == null ? null : $expression.ret),
+                    forInitNode, 
+                    expListNode,
+                    expNode,
                     $statement.ret);
         }                 
     ;
