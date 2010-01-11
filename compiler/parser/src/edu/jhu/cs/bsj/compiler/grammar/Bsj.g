@@ -1332,23 +1332,20 @@ qualifiedNameList returns [ListNode<QualifiedNameNode> ret]
 // this rule matches
 //     (int x, int y)
 formalParameters returns [ListNode<VariableNode> parameters, VariableNode varargParameter]
+        @init {
+            $parameters = factory.makeListNode(Collections.<VariableNode>emptySet());
+            $varargParameter = null;
+        }
     :
         '('
         (
             formalParameterDecls
-        )? 
-        ')'
-        {
-            if ($formalParameterDecls == null)
-            {
-                $parameters = factory.makeListNode(new ArrayList<VariableNode>());
-                $varargParameter = null;
-            } else
             {
                 $parameters = $formalParameterDecls.parameters;
                 $varargParameter = $formalParameterDecls.varargParameter;
             }
-        }
+        )? 
+        ')'
     ;
 
 // This rule is expected to produce a list of parameter declarations (multiple results)
