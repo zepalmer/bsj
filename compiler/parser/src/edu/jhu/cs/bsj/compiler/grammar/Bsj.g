@@ -2863,7 +2863,13 @@ literal returns [LiteralNode<?> ret]
         }
     ;
 
-
+identifier returns [IdentifierNode ret]
+    :
+        IDENTIFIER
+        {
+            $ret = factory.makeIdentifierNode($IDENTIFIER.text);
+        }
+    ;
 
 /********************************************************************************************
                   Lexer section
