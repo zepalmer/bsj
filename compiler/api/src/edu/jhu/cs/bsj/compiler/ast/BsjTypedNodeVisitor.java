@@ -39,6 +39,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.EnumBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.EnumConstantDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.EnumDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionStatementNode;
+import edu.jhu.cs.bsj.compiler.ast.node.FieldAccessNode;
 import edu.jhu.cs.bsj.compiler.ast.node.FieldDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.FloatLiteralNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ForInitializerDeclarationNode;
@@ -65,6 +66,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.NormalAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.NullLiteralNode;
 import edu.jhu.cs.bsj.compiler.ast.node.PackageDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ParameterizedTypeNode;
+import edu.jhu.cs.bsj.compiler.ast.node.ParenthesizedExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.PrimitiveTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.QualifiedNameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.RawTypeNode;
@@ -75,6 +77,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.StringLiteralNode;
 import edu.jhu.cs.bsj.compiler.ast.node.SuperclassConstructorInvocationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.SwitchNode;
 import edu.jhu.cs.bsj.compiler.ast.node.SynchronizedNode;
+import edu.jhu.cs.bsj.compiler.ast.node.ThisNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ThrowNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TryNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeCastNode;
@@ -105,12 +108,12 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
      */
     public void visitStart(Node node)
     {
-        if (node instanceof RawTypeNode)
+        if (node instanceof ArrayInitializerCreationNode)
         {
-            visitRawTypeNodeStart((RawTypeNode)node);
-        } else if (node instanceof ParameterizedTypeNode)
+            visitArrayInitializerCreationNodeStart((ArrayInitializerCreationNode)node);
+        } else if (node instanceof ArrayInstantiatorCreationNode)
         {
-            visitParameterizedTypeNodeStart((ParameterizedTypeNode)node);
+            visitArrayInstantiatorCreationNodeStart((ArrayInstantiatorCreationNode)node);
         } else if (node instanceof BooleanLiteralNode)
         {
             visitBooleanLiteralNodeStart((BooleanLiteralNode)node);
@@ -141,12 +144,30 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
         } else if (node instanceof CodeLiteralNode)
         {
             visitCodeLiteralNodeStart((CodeLiteralNode)node);
-        } else if (node instanceof ArrayInitializerCreationNode)
+        } else if (node instanceof RawTypeNode)
         {
-            visitArrayInitializerCreationNodeStart((ArrayInitializerCreationNode)node);
-        } else if (node instanceof ArrayInstantiatorCreationNode)
+            visitRawTypeNodeStart((RawTypeNode)node);
+        } else if (node instanceof ParameterizedTypeNode)
         {
-            visitArrayInstantiatorCreationNodeStart((ArrayInstantiatorCreationNode)node);
+            visitParameterizedTypeNodeStart((ParameterizedTypeNode)node);
+        } else if (node instanceof ParenthesizedExpressionNode)
+        {
+            visitParenthesizedExpressionNodeStart((ParenthesizedExpressionNode)node);
+        } else if (node instanceof ArrayAccessNode)
+        {
+            visitArrayAccessNodeStart((ArrayAccessNode)node);
+        } else if (node instanceof ThisNode)
+        {
+            visitThisNodeStart((ThisNode)node);
+        } else if (node instanceof FieldAccessNode)
+        {
+            visitFieldAccessNodeStart((FieldAccessNode)node);
+        } else if (node instanceof MethodInvocationNode)
+        {
+            visitMethodInvocationNodeStart((MethodInvocationNode)node);
+        } else if (node instanceof ClassInstantiationNode)
+        {
+            visitClassInstantiationNodeStart((ClassInstantiationNode)node);
         } else if (node instanceof EnumDeclarationNode)
         {
             visitEnumDeclarationNodeStart((EnumDeclarationNode)node);
@@ -177,18 +198,9 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
         } else if (node instanceof AssignmentNode)
         {
             visitAssignmentNodeStart((AssignmentNode)node);
-        } else if (node instanceof ArrayAccessNode)
-        {
-            visitArrayAccessNodeStart((ArrayAccessNode)node);
-        } else if (node instanceof MethodInvocationNode)
-        {
-            visitMethodInvocationNodeStart((MethodInvocationNode)node);
         } else if (node instanceof TypeCastNode)
         {
             visitTypeCastNodeStart((TypeCastNode)node);
-        } else if (node instanceof ClassInstantiationNode)
-        {
-            visitClassInstantiationNodeStart((ClassInstantiationNode)node);
         } else if (node instanceof SwitchNode)
         {
             visitSwitchNodeStart((SwitchNode)node);
@@ -381,12 +393,12 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
      */
     public void visitStop(Node node)
     {
-        if (node instanceof RawTypeNode)
+        if (node instanceof ArrayInitializerCreationNode)
         {
-            visitRawTypeNodeStop((RawTypeNode)node);
-        } else if (node instanceof ParameterizedTypeNode)
+            visitArrayInitializerCreationNodeStop((ArrayInitializerCreationNode)node);
+        } else if (node instanceof ArrayInstantiatorCreationNode)
         {
-            visitParameterizedTypeNodeStop((ParameterizedTypeNode)node);
+            visitArrayInstantiatorCreationNodeStop((ArrayInstantiatorCreationNode)node);
         } else if (node instanceof BooleanLiteralNode)
         {
             visitBooleanLiteralNodeStop((BooleanLiteralNode)node);
@@ -417,12 +429,30 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
         } else if (node instanceof CodeLiteralNode)
         {
             visitCodeLiteralNodeStop((CodeLiteralNode)node);
-        } else if (node instanceof ArrayInitializerCreationNode)
+        } else if (node instanceof RawTypeNode)
         {
-            visitArrayInitializerCreationNodeStop((ArrayInitializerCreationNode)node);
-        } else if (node instanceof ArrayInstantiatorCreationNode)
+            visitRawTypeNodeStop((RawTypeNode)node);
+        } else if (node instanceof ParameterizedTypeNode)
         {
-            visitArrayInstantiatorCreationNodeStop((ArrayInstantiatorCreationNode)node);
+            visitParameterizedTypeNodeStop((ParameterizedTypeNode)node);
+        } else if (node instanceof ParenthesizedExpressionNode)
+        {
+            visitParenthesizedExpressionNodeStop((ParenthesizedExpressionNode)node);
+        } else if (node instanceof ArrayAccessNode)
+        {
+            visitArrayAccessNodeStop((ArrayAccessNode)node);
+        } else if (node instanceof ThisNode)
+        {
+            visitThisNodeStop((ThisNode)node);
+        } else if (node instanceof FieldAccessNode)
+        {
+            visitFieldAccessNodeStop((FieldAccessNode)node);
+        } else if (node instanceof MethodInvocationNode)
+        {
+            visitMethodInvocationNodeStop((MethodInvocationNode)node);
+        } else if (node instanceof ClassInstantiationNode)
+        {
+            visitClassInstantiationNodeStop((ClassInstantiationNode)node);
         } else if (node instanceof EnumDeclarationNode)
         {
             visitEnumDeclarationNodeStop((EnumDeclarationNode)node);
@@ -453,18 +483,9 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
         } else if (node instanceof AssignmentNode)
         {
             visitAssignmentNodeStop((AssignmentNode)node);
-        } else if (node instanceof ArrayAccessNode)
-        {
-            visitArrayAccessNodeStop((ArrayAccessNode)node);
-        } else if (node instanceof MethodInvocationNode)
-        {
-            visitMethodInvocationNodeStop((MethodInvocationNode)node);
         } else if (node instanceof TypeCastNode)
         {
             visitTypeCastNodeStop((TypeCastNode)node);
-        } else if (node instanceof ClassInstantiationNode)
-        {
-            visitClassInstantiationNodeStop((ClassInstantiationNode)node);
         } else if (node instanceof SwitchNode)
         {
             visitSwitchNodeStop((SwitchNode)node);
@@ -652,18 +673,18 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
     }
 
     /**
-     * Starts a visit for nodes of type RawTypeNode.
+     * Starts a visit for nodes of type ArrayInitializerCreationNode.
      * @param node The node being visited.
      */
-    public void visitRawTypeNodeStart(RawTypeNode node)
+    public void visitArrayInitializerCreationNodeStart(ArrayInitializerCreationNode node)
     {
     }
 
     /**
-     * Starts a visit for nodes of type ParameterizedTypeNode.
+     * Starts a visit for nodes of type ArrayInstantiatorCreationNode.
      * @param node The node being visited.
      */
-    public void visitParameterizedTypeNodeStart(ParameterizedTypeNode node)
+    public void visitArrayInstantiatorCreationNodeStart(ArrayInstantiatorCreationNode node)
     {
     }
 
@@ -748,18 +769,66 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
     }
 
     /**
-     * Starts a visit for nodes of type ArrayInitializerCreationNode.
+     * Starts a visit for nodes of type RawTypeNode.
      * @param node The node being visited.
      */
-    public void visitArrayInitializerCreationNodeStart(ArrayInitializerCreationNode node)
+    public void visitRawTypeNodeStart(RawTypeNode node)
     {
     }
 
     /**
-     * Starts a visit for nodes of type ArrayInstantiatorCreationNode.
+     * Starts a visit for nodes of type ParameterizedTypeNode.
      * @param node The node being visited.
      */
-    public void visitArrayInstantiatorCreationNodeStart(ArrayInstantiatorCreationNode node)
+    public void visitParameterizedTypeNodeStart(ParameterizedTypeNode node)
+    {
+    }
+
+    /**
+     * Starts a visit for nodes of type ParenthesizedExpressionNode.
+     * @param node The node being visited.
+     */
+    public void visitParenthesizedExpressionNodeStart(ParenthesizedExpressionNode node)
+    {
+    }
+
+    /**
+     * Starts a visit for nodes of type ArrayAccessNode.
+     * @param node The node being visited.
+     */
+    public void visitArrayAccessNodeStart(ArrayAccessNode node)
+    {
+    }
+
+    /**
+     * Starts a visit for nodes of type ThisNode.
+     * @param node The node being visited.
+     */
+    public void visitThisNodeStart(ThisNode node)
+    {
+    }
+
+    /**
+     * Starts a visit for nodes of type FieldAccessNode.
+     * @param node The node being visited.
+     */
+    public void visitFieldAccessNodeStart(FieldAccessNode node)
+    {
+    }
+
+    /**
+     * Starts a visit for nodes of type MethodInvocationNode.
+     * @param node The node being visited.
+     */
+    public void visitMethodInvocationNodeStart(MethodInvocationNode node)
+    {
+    }
+
+    /**
+     * Starts a visit for nodes of type ClassInstantiationNode.
+     * @param node The node being visited.
+     */
+    public void visitClassInstantiationNodeStart(ClassInstantiationNode node)
     {
     }
 
@@ -844,34 +913,10 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
     }
 
     /**
-     * Starts a visit for nodes of type ArrayAccessNode.
-     * @param node The node being visited.
-     */
-    public void visitArrayAccessNodeStart(ArrayAccessNode node)
-    {
-    }
-
-    /**
-     * Starts a visit for nodes of type MethodInvocationNode.
-     * @param node The node being visited.
-     */
-    public void visitMethodInvocationNodeStart(MethodInvocationNode node)
-    {
-    }
-
-    /**
      * Starts a visit for nodes of type TypeCastNode.
      * @param node The node being visited.
      */
     public void visitTypeCastNodeStart(TypeCastNode node)
-    {
-    }
-
-    /**
-     * Starts a visit for nodes of type ClassInstantiationNode.
-     * @param node The node being visited.
-     */
-    public void visitClassInstantiationNodeStart(ClassInstantiationNode node)
     {
     }
 
@@ -1356,18 +1401,18 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
     }
 
     /**
-     * Stops a visit for nodes of type RawTypeNode.
+     * Stops a visit for nodes of type ArrayInitializerCreationNode.
      * @param node The node being visited.
      */
-    public void visitRawTypeNodeStop(RawTypeNode node)
+    public void visitArrayInitializerCreationNodeStop(ArrayInitializerCreationNode node)
     {
     }
 
     /**
-     * Stops a visit for nodes of type ParameterizedTypeNode.
+     * Stops a visit for nodes of type ArrayInstantiatorCreationNode.
      * @param node The node being visited.
      */
-    public void visitParameterizedTypeNodeStop(ParameterizedTypeNode node)
+    public void visitArrayInstantiatorCreationNodeStop(ArrayInstantiatorCreationNode node)
     {
     }
 
@@ -1452,18 +1497,66 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
     }
 
     /**
-     * Stops a visit for nodes of type ArrayInitializerCreationNode.
+     * Stops a visit for nodes of type RawTypeNode.
      * @param node The node being visited.
      */
-    public void visitArrayInitializerCreationNodeStop(ArrayInitializerCreationNode node)
+    public void visitRawTypeNodeStop(RawTypeNode node)
     {
     }
 
     /**
-     * Stops a visit for nodes of type ArrayInstantiatorCreationNode.
+     * Stops a visit for nodes of type ParameterizedTypeNode.
      * @param node The node being visited.
      */
-    public void visitArrayInstantiatorCreationNodeStop(ArrayInstantiatorCreationNode node)
+    public void visitParameterizedTypeNodeStop(ParameterizedTypeNode node)
+    {
+    }
+
+    /**
+     * Stops a visit for nodes of type ParenthesizedExpressionNode.
+     * @param node The node being visited.
+     */
+    public void visitParenthesizedExpressionNodeStop(ParenthesizedExpressionNode node)
+    {
+    }
+
+    /**
+     * Stops a visit for nodes of type ArrayAccessNode.
+     * @param node The node being visited.
+     */
+    public void visitArrayAccessNodeStop(ArrayAccessNode node)
+    {
+    }
+
+    /**
+     * Stops a visit for nodes of type ThisNode.
+     * @param node The node being visited.
+     */
+    public void visitThisNodeStop(ThisNode node)
+    {
+    }
+
+    /**
+     * Stops a visit for nodes of type FieldAccessNode.
+     * @param node The node being visited.
+     */
+    public void visitFieldAccessNodeStop(FieldAccessNode node)
+    {
+    }
+
+    /**
+     * Stops a visit for nodes of type MethodInvocationNode.
+     * @param node The node being visited.
+     */
+    public void visitMethodInvocationNodeStop(MethodInvocationNode node)
+    {
+    }
+
+    /**
+     * Stops a visit for nodes of type ClassInstantiationNode.
+     * @param node The node being visited.
+     */
+    public void visitClassInstantiationNodeStop(ClassInstantiationNode node)
     {
     }
 
@@ -1548,34 +1641,10 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
     }
 
     /**
-     * Stops a visit for nodes of type ArrayAccessNode.
-     * @param node The node being visited.
-     */
-    public void visitArrayAccessNodeStop(ArrayAccessNode node)
-    {
-    }
-
-    /**
-     * Stops a visit for nodes of type MethodInvocationNode.
-     * @param node The node being visited.
-     */
-    public void visitMethodInvocationNodeStop(MethodInvocationNode node)
-    {
-    }
-
-    /**
      * Stops a visit for nodes of type TypeCastNode.
      * @param node The node being visited.
      */
     public void visitTypeCastNodeStop(TypeCastNode node)
-    {
-    }
-
-    /**
-     * Stops a visit for nodes of type ClassInstantiationNode.
-     * @param node The node being visited.
-     */
-    public void visitClassInstantiationNodeStop(ClassInstantiationNode node)
     {
     }
 

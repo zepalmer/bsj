@@ -10,7 +10,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
  * not use an explicit enclosing expression (and it almost never will), the <tt>enclosingExpression</tt> field
  * should be <tt>null</tt>.
  */
-public interface ClassInstantiationNode extends ExpressionNode
+public interface ClassInstantiationNode extends RestrictedPrimaryExpressionNode
 {
     /**
      * Gets the type arguments of the instantiation.

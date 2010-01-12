@@ -8,7 +8,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
 
-public class ClassInstantiationNodeImpl extends ExpressionNodeImpl implements ClassInstantiationNode
+public class ClassInstantiationNodeImpl extends RestrictedPrimaryExpressionNodeImpl implements ClassInstantiationNode
 {
     /** The type arguments of the instantiation. */
     private ListNode<? extends TypeNode> typeArguments;

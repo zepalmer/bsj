@@ -1,30 +1,25 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
-import edu.jhu.cs.bsj.compiler.ast.node.ArrayAccessNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
+import edu.jhu.cs.bsj.compiler.ast.node.ParenthesizedExpressionNode;
 
-public class ArrayAccessNodeImpl extends RestrictedPrimaryExpressionNodeImpl implements ArrayAccessNode
+public class ParenthesizedExpressionNodeImpl extends RestrictedPrimaryExpressionNodeImpl implements ParenthesizedExpressionNode
 {
-    /** The expression identifying the array. */
+    /** The expression contained in this node. */
     private ExpressionNode expression;
 
-    /** The index into the array. */
-    private ExpressionNode index;
-
     /** General constructor. */
-    public ArrayAccessNodeImpl(
-            ExpressionNode expression,
-            ExpressionNode index)
+    public ParenthesizedExpressionNodeImpl(
+            ExpressionNode expression)
     {
         super();
         this.expression = expression;
-        this.index = index;
     }
 
     /**
-     * Gets the expression identifying the array.
-     * @return The expression identifying the array.
+     * Gets the expression contained in this node.
+     * @return The expression contained in this node.
      */
     public ExpressionNode getExpression()
     {
@@ -32,8 +27,8 @@ public class ArrayAccessNodeImpl extends RestrictedPrimaryExpressionNodeImpl imp
     }
 
     /**
-     * Changes the expression identifying the array.
-     * @param expression The expression identifying the array.
+     * Changes the expression contained in this node.
+     * @param expression The expression contained in this node.
      */
     public void setExpression(ExpressionNode expression)
     {
@@ -49,32 +44,6 @@ public class ArrayAccessNodeImpl extends RestrictedPrimaryExpressionNodeImpl imp
     }
 
     /**
-     * Gets the index into the array.
-     * @return The index into the array.
-     */
-    public ExpressionNode getIndex()
-    {
-        return this.index;
-    }
-
-    /**
-     * Changes the index into the array.
-     * @param index The index into the array.
-     */
-    public void setIndex(ExpressionNode index)
-    {
-        if (this.index instanceof NodeImpl)
-        {
-            ((NodeImpl)this.index).setParent(null);
-        }
-        this.index = index;
-        if (this.index instanceof NodeImpl)
-        {
-            ((NodeImpl)this.index).setParent(this);
-        }
-    }
-
-    /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
      * method first and then visit its subclass-specific children.
@@ -86,6 +55,5 @@ public class ArrayAccessNodeImpl extends RestrictedPrimaryExpressionNodeImpl imp
     {
         super.receiveToChildren(visitor);
         this.expression.receive(visitor);
-        this.index.receive(visitor);
     }
 }

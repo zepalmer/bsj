@@ -159,6 +159,12 @@ public interface BsjNodeFactory
             BlockStatementNode finallyBlock);
 
     /**
+     * Creates a ThisNode.
+     */
+    public ThisNode makeThisNode(
+            NameNode type);
+
+    /**
      * Creates a EnumDeclarationNode.
      */
     public EnumDeclarationNode makeEnumDeclarationNode(
@@ -192,6 +198,13 @@ public interface BsjNodeFactory
             TypeNode type,
             IdentifierNode name,
             VariableInitializerNode initializer);
+
+    /**
+     * Creates a FieldAccessNode.
+     */
+    public FieldAccessNode makeFieldAccessNode(
+            PrimaryExpressionNode expression,
+            IdentifierNode identifier);
 
     /**
      * Creates a ThrowNode.
@@ -400,6 +413,12 @@ public interface BsjNodeFactory
             StatementNode statement);
 
     /**
+     * Creates a ListNode.
+     */
+    public <T extends Node> ListNode<T> makeListNode(
+            List<? extends T> children);
+
+    /**
      * Creates a EnumConstantDeclarationNode.
      */
     public EnumConstantDeclarationNode makeEnumConstantDeclarationNode(
@@ -407,12 +426,6 @@ public interface BsjNodeFactory
             IdentifierNode identifier,
             ListNode<? extends ExpressionNode> arguments,
             AnonymousClassBodyNode body);
-
-    /**
-     * Creates a ListNode.
-     */
-    public <T extends Node> ListNode<T> makeListNode(
-            List<? extends T> children);
 
     /**
      * Creates a BreakNode.
@@ -457,18 +470,18 @@ public interface BsjNodeFactory
             ExpressionNode defaultValue);
 
     /**
-     * Creates a FieldDeclarationNode.
-     */
-    public FieldDeclarationNode makeFieldDeclarationNode(
-            ModifiersNode modifiers,
-            ListNode<VariableDeclaratorNode> declarators);
-
-    /**
      * Creates a ImportSingleTypeNode.
      */
     public ImportSingleTypeNode makeImportSingleTypeNode(
             NameNode name,
             boolean staticImport);
+
+    /**
+     * Creates a FieldDeclarationNode.
+     */
+    public FieldDeclarationNode makeFieldDeclarationNode(
+            ModifiersNode modifiers,
+            ListNode<VariableDeclaratorNode> declarators);
 
     /**
      * Creates a AnnotationArrayValueNode.
@@ -539,6 +552,12 @@ public interface BsjNodeFactory
             ExpressionNode condition,
             ExpressionNode trueExpression,
             ExpressionNode falseExpression);
+
+    /**
+     * Creates a ParenthesizedExpressionNode.
+     */
+    public ParenthesizedExpressionNode makeParenthesizedExpressionNode(
+            ExpressionNode expression);
 
     /**
      * Creates a FloatLiteralNode.

@@ -59,6 +59,7 @@ import edu.jhu.cs.bsj.compiler.impl.ast.node.EnumBodyNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.EnumConstantDeclarationNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.EnumDeclarationNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.ExpressionStatementNodeImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.node.FieldAccessNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.FieldDeclarationNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.FloatLiteralNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.ForInitializerDeclarationNodeImpl;
@@ -84,6 +85,7 @@ import edu.jhu.cs.bsj.compiler.impl.ast.node.NormalAnnotationNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.NullLiteralNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.PackageDeclarationNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.ParameterizedTypeNodeImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.node.ParenthesizedExpressionNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.PrimitiveTypeNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.QualifiedNameNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.RawTypeNodeImpl;
@@ -94,6 +96,7 @@ import edu.jhu.cs.bsj.compiler.impl.ast.node.StringLiteralNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.SuperclassConstructorInvocationNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.SwitchNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.SynchronizedNodeImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.node.ThisNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.ThrowNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.TryNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.TypeCastNodeImpl;
@@ -328,6 +331,16 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
 
     /**
+     * Creates a ThisNode.
+     */
+    public ThisNode makeThisNode(
+            NameNode type)
+    {
+        ThisNode ret = new ThisNodeImpl(type);
+        return ret;
+    }
+
+    /**
      * Creates a EnumDeclarationNode.
      */
     public EnumDeclarationNode makeEnumDeclarationNode(
@@ -379,6 +392,17 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             VariableInitializerNode initializer)
     {
         VariableDeclaratorNode ret = new VariableDeclaratorNodeImpl(type, name, initializer);
+        return ret;
+    }
+
+    /**
+     * Creates a FieldAccessNode.
+     */
+    public FieldAccessNode makeFieldAccessNode(
+            PrimaryExpressionNode expression,
+            IdentifierNode identifier)
+    {
+        FieldAccessNode ret = new FieldAccessNodeImpl(expression, identifier);
         return ret;
     }
 
@@ -709,6 +733,16 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
 
     /**
+     * Creates a ListNode.
+     */
+    public <T extends Node> ListNode<T> makeListNode(
+            List<? extends T> children)
+    {
+        ListNode<T> ret = new ListNodeImpl<T>(children);
+        return ret;
+    }
+
+    /**
      * Creates a EnumConstantDeclarationNode.
      */
     public EnumConstantDeclarationNode makeEnumConstantDeclarationNode(
@@ -718,16 +752,6 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             AnonymousClassBodyNode body)
     {
         EnumConstantDeclarationNode ret = new EnumConstantDeclarationNodeImpl(annotations, identifier, arguments, body);
-        return ret;
-    }
-
-    /**
-     * Creates a ListNode.
-     */
-    public <T extends Node> ListNode<T> makeListNode(
-            List<? extends T> children)
-    {
-        ListNode<T> ret = new ListNodeImpl<T>(children);
         return ret;
     }
 
@@ -798,17 +822,6 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
 
     /**
-     * Creates a FieldDeclarationNode.
-     */
-    public FieldDeclarationNode makeFieldDeclarationNode(
-            ModifiersNode modifiers,
-            ListNode<VariableDeclaratorNode> declarators)
-    {
-        FieldDeclarationNode ret = new FieldDeclarationNodeImpl(modifiers, declarators);
-        return ret;
-    }
-
-    /**
      * Creates a ImportSingleTypeNode.
      */
     public ImportSingleTypeNode makeImportSingleTypeNode(
@@ -816,6 +829,17 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             boolean staticImport)
     {
         ImportSingleTypeNode ret = new ImportSingleTypeNodeImpl(name, staticImport);
+        return ret;
+    }
+
+    /**
+     * Creates a FieldDeclarationNode.
+     */
+    public FieldDeclarationNode makeFieldDeclarationNode(
+            ModifiersNode modifiers,
+            ListNode<VariableDeclaratorNode> declarators)
+    {
+        FieldDeclarationNode ret = new FieldDeclarationNodeImpl(modifiers, declarators);
         return ret;
     }
 
@@ -926,6 +950,16 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ExpressionNode falseExpression)
     {
         ConditionalExpressionNode ret = new ConditionalExpressionNodeImpl(condition, trueExpression, falseExpression);
+        return ret;
+    }
+
+    /**
+     * Creates a ParenthesizedExpressionNode.
+     */
+    public ParenthesizedExpressionNode makeParenthesizedExpressionNode(
+            ExpressionNode expression)
+    {
+        ParenthesizedExpressionNode ret = new ParenthesizedExpressionNodeImpl(expression);
         return ret;
     }
 

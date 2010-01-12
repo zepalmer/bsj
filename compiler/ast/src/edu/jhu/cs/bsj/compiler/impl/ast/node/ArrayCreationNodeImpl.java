@@ -4,7 +4,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.ArrayCreationNode;
 import edu.jhu.cs.bsj.compiler.ast.tags.BaseType;
 
-public abstract class ArrayCreationNodeImpl extends ExpressionNodeImpl implements ArrayCreationNode
+public abstract class ArrayCreationNodeImpl extends PrimaryExpressionNodeImpl implements ArrayCreationNode
 {
     /** The base type for this array. */
     private BaseType baseType;

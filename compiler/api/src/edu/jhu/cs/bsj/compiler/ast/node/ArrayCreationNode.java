@@ -5,7 +5,7 @@ import edu.jhu.cs.bsj.compiler.ast.tags.BaseType;
 /**
  * Represents the creation of an array, including both instantiation and initialization.
  */
-public interface ArrayCreationNode extends ExpressionNode
+public interface ArrayCreationNode extends PrimaryExpressionNode
 {
     /**
      * Gets the base type for this array.

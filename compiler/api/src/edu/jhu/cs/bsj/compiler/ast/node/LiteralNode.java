@@ -4,7 +4,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
 /**
  * A superclass for all types of literal nodes.
  */
-public interface LiteralNode<T> extends ExpressionNode
+public interface LiteralNode<T> extends RestrictedPrimaryExpressionNode
 {
     /**
      * Gets the literal value for this node.

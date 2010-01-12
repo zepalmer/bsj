@@ -7,7 +7,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
  * <i>expr</i>.&lt;<i>typeArgs</i>&gt;<i>identifier</i>(<i>arg...</i>)
  * </pre>
  */
-public interface MethodInvocationNode extends ExpressionNode
+public interface MethodInvocationNode extends RestrictedPrimaryExpressionNode
 {
     /**
      * Gets the name of the method to invoke.

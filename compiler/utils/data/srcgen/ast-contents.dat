@@ -105,7 +105,7 @@ SimpleNameNode :: NameNode
 
 ### Expression Nodes ##################################################################################################
 
-ArrayAccessNode :: ExpressionNode
+ArrayAccessNode :: RestrictedPrimaryExpressionNode
     @props
     expression              ExpressionNode                              | the expression identifying the array
     index                   ExpressionNode                              | the index into the array
@@ -115,7 +115,7 @@ ArrayAccessNode :: ExpressionNode
         <i>expression</i>[<i>index</i>]
         </pre>
         
-ArrayCreationNode* :: ExpressionNode
+ArrayCreationNode* :: PrimaryExpressionNode
 	@props
 	baseType				BaseType									| the base type for this array
 	arrayLevels				int											| the number of levels for this array
@@ -160,7 +160,7 @@ BinaryOperatorNode :: ExpressionNode
     @docs
         Represents the application of a binary operator.
 
-ClassInstantiationNode :: ExpressionNode
+ClassInstantiationNode :: RestrictedPrimaryExpressionNode
     @props
     typeArguments           ListNode<? extends TypeNode>                | the type arguments of the instantiation
     type                    DeclaredTypeNode                            | the type being instantiated
@@ -189,6 +189,20 @@ ConditionalExpressionNode :: ExpressionNode
 
 # TODO: how do we want to handle ErroneousNode or the equivalent error nodes?
 
+FieldAccessNode :: RestrictedPrimaryExpressionNode
+    @props
+    expression              PrimaryExpressionNode                       | the expression from which the field is being selected
+    identifier              IdentifierNode                              | the name of the field
+    @docs
+        Represents a field access, as in
+        <pre>
+        <i>expr</i> . <i>field</i>
+        </pre>
+        One example of field access is
+        <pre>
+        new int[1].length
+        </pre>
+
 InstanceOfNode :: ExpressionNode
     @props
     expression              ExpressionNode                              | the expression being evaluated
@@ -199,13 +213,13 @@ InstanceOfNode :: ExpressionNode
         <i>expression</i> instanceof <i>type</i>
         </pre>
 
-LiteralNode<T>* :: ExpressionNode
+LiteralNode<T>* :: RestrictedPrimaryExpressionNode
     @props
     value                   T                                           | the literal value for this node
     @docs
         A superclass for all types of literal nodes.
 
-MethodInvocationNode :: ExpressionNode
+MethodInvocationNode :: RestrictedPrimaryExpressionNode
     @props
     method                  NameNode                                    | the name of the method to invoke
     arguments               ListNode<? extends ExpressionNode>          | the arguments to pass to the method
@@ -215,6 +229,53 @@ MethodInvocationNode :: ExpressionNode
         <pre>
         <i>expr</i>.&lt;<i>typeArgs</i>&gt;<i>identifier</i>(<i>arg...</i>)
         </pre>
+
+ParenthesizedExpressionNode :: RestrictedPrimaryExpressionNode
+    @props
+    expression              ExpressionNode                              | the expression contained in this node
+    @docs
+        A node representing a parenthesized expression, as in:
+        <pre>
+        (<i>expr</i>)
+        </pre>
+        This node is made explicit in this AST because Java distinguishes between primary expressions and other types
+        of expressions.  For example, the ternary conditional operator (<tt>?:</tt>) is not a primary expression, but
+        there is a big difference between <tt>b?x:y.z</tt> and <tt>(b?x:y).z</tt>.  However, the field selection node
+        (which represents <tt>a.z</tt>) expects a primary expression; thus, without this node, there would be no way
+        to express <tt>(b?x:y).z</tt>.
+
+PrimaryExpressionNode* :: ExpressionNode
+    @docs
+        A superclass for all nodes considered "primary expressions" by the Java Language Specification.  Primary
+        expressions include the basic building blocks of more complex expressions.
+
+RestrictedPrimaryExpressionNode* :: ExpressionNode
+    @docs
+        A superclass for restricted primary expressions.  This maps to the <i>PrimaryNoNewArray</i> parse target in the
+        JLS.
+
+ThisNode :: RestrictedPrimaryExpressionNode
+    @props
+    type                    NameNode                                    | the name of the qualifying type
+    @docs
+        A node representing the code snippet <tt>this</tt> in terms of a value, such as in the expression
+        <pre>
+        Object o = this;
+        </pre>
+        In some cases (especially in inner classes), <tt>this</tt> may be qualified with a type, such as in
+        <pre>
+        public class A {
+            int x = 0;
+            class B {
+                int x = 0;
+                public void foo() {
+                    A.this.x++;
+                }
+            }
+        }
+        </pre>
+        In that case, the <tt>type</tt> field contains the name of the qualified <tt>this</tt>.  Usually, <tt>this</tt>
+        is unqualified and the <tt>type</tt> field is <tt>null</tt>.
 
 TypeCastNode :: ExpressionNode
     @props

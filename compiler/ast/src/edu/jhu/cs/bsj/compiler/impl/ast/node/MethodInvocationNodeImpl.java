@@ -7,7 +7,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.MethodInvocationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.NameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
 
-public class MethodInvocationNodeImpl extends ExpressionNodeImpl implements MethodInvocationNode
+public class MethodInvocationNodeImpl extends RestrictedPrimaryExpressionNodeImpl implements MethodInvocationNode
 {
     /** The name of the method to invoke. */
     private NameNode method;
