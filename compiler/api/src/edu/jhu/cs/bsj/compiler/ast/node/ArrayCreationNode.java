@@ -20,14 +20,14 @@ public interface ArrayCreationNode extends PrimaryExpressionNode
     public void setBaseType(BaseType baseType);
 
     /**
-     * Gets the number of levels for this array.
-     * @return The number of levels for this array.
+     * Gets the number of uninitialized levels for this array.
+     * @return The number of uninitialized levels for this array.
      */
     public int getArrayLevels();
 
     /**
-     * Changes the number of levels for this array.
-     * @param arrayLevels The number of levels for this array.
+     * Changes the number of uninitialized levels for this array.
+     * @param arrayLevels The number of uninitialized levels for this array.
      */
     public void setArrayLevels(int arrayLevels);
 

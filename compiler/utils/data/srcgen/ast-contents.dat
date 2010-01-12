@@ -118,7 +118,7 @@ ArrayAccessNode :: RestrictedPrimaryExpressionNode
 ArrayCreationNode* :: PrimaryExpressionNode
 	@props
 	baseType				BaseType									| the base type for this array
-	arrayLevels				int											| the number of levels for this array
+	arrayLevels				int											| the number of uninitialized levels for this array
 	@docs
 		Represents the creation of an array, including both instantiation and initialization.
 	
@@ -130,6 +130,8 @@ ArrayInitializerCreationNode :: ArrayCreationNode
 		<pre>
 		new <i>type</i> []... {<i>initializer</i>,...}
 		</pre>
+		Levels for this array creator refer to square brace pairs,
+		for example <code>new int[][][]</code> would have three levels.
 
 ArrayInstantiatorCreationNode :: ArrayCreationNode
 	@props
@@ -139,6 +141,8 @@ ArrayInstantiatorCreationNode :: ArrayCreationNode
 		<pre>
 		new <i>type</i> [<i>expression</i>]... []...
 		</pre>
+		Levels for this array creator refer to square braces without initializers,
+		for example <code>new int[2][][]</code> would have two levels.
 			
 AssignmentNode :: ExpressionNode
     @props

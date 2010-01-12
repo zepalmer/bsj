@@ -9,7 +9,7 @@ public abstract class ArrayCreationNodeImpl extends PrimaryExpressionNodeImpl im
     /** The base type for this array. */
     private BaseType baseType;
 
-    /** The number of levels for this array. */
+    /** The number of uninitialized levels for this array. */
     private int arrayLevels;
 
     /** General constructor. */
@@ -41,8 +41,8 @@ public abstract class ArrayCreationNodeImpl extends PrimaryExpressionNodeImpl im
     }
 
     /**
-     * Gets the number of levels for this array.
-     * @return The number of levels for this array.
+     * Gets the number of uninitialized levels for this array.
+     * @return The number of uninitialized levels for this array.
      */
     public int getArrayLevels()
     {
@@ -50,8 +50,8 @@ public abstract class ArrayCreationNodeImpl extends PrimaryExpressionNodeImpl im
     }
 
     /**
-     * Changes the number of levels for this array.
-     * @param arrayLevels The number of levels for this array.
+     * Changes the number of uninitialized levels for this array.
+     * @param arrayLevels The number of uninitialized levels for this array.
      */
     public void setArrayLevels(int arrayLevels)
     {

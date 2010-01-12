@@ -6,6 +6,8 @@ package edu.jhu.cs.bsj.compiler.ast.node;
  * <pre>
  * new <i>type</i> [<i>expression</i>]... []...
  * </pre>
+ * Levels for this array creator refer to square braces without initializers,
+ * for example <code>new int[2][][]</code> would have two levels.
  */
 public interface ArrayInstantiatorCreationNode extends ArrayCreationNode
 {
