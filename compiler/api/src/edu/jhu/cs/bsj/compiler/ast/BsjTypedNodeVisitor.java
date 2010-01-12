@@ -108,6 +108,9 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
         if (node instanceof RawTypeNode)
         {
             visitRawTypeNodeStart((RawTypeNode)node);
+        } else if (node instanceof ParameterizedTypeNode)
+        {
+            visitParameterizedTypeNodeStart((ParameterizedTypeNode)node);
         } else if (node instanceof BooleanLiteralNode)
         {
             visitBooleanLiteralNodeStart((BooleanLiteralNode)node);
@@ -282,9 +285,6 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
         } else if (node instanceof PrimitiveTypeNode)
         {
             visitPrimitiveTypeNodeStart((PrimitiveTypeNode)node);
-        } else if (node instanceof ParameterizedTypeNode)
-        {
-            visitParameterizedTypeNodeStart((ParameterizedTypeNode)node);
         } else if (node instanceof ForInitializerExpressionNode)
         {
             visitForInitializerExpressionNodeStart((ForInitializerExpressionNode)node);
@@ -384,6 +384,9 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
         if (node instanceof RawTypeNode)
         {
             visitRawTypeNodeStop((RawTypeNode)node);
+        } else if (node instanceof ParameterizedTypeNode)
+        {
+            visitParameterizedTypeNodeStop((ParameterizedTypeNode)node);
         } else if (node instanceof BooleanLiteralNode)
         {
             visitBooleanLiteralNodeStop((BooleanLiteralNode)node);
@@ -558,9 +561,6 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
         } else if (node instanceof PrimitiveTypeNode)
         {
             visitPrimitiveTypeNodeStop((PrimitiveTypeNode)node);
-        } else if (node instanceof ParameterizedTypeNode)
-        {
-            visitParameterizedTypeNodeStop((ParameterizedTypeNode)node);
         } else if (node instanceof ForInitializerExpressionNode)
         {
             visitForInitializerExpressionNodeStop((ForInitializerExpressionNode)node);
@@ -656,6 +656,14 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
      * @param node The node being visited.
      */
     public void visitRawTypeNodeStart(RawTypeNode node)
+    {
+    }
+
+    /**
+     * Starts a visit for nodes of type ParameterizedTypeNode.
+     * @param node The node being visited.
+     */
+    public void visitParameterizedTypeNodeStart(ParameterizedTypeNode node)
     {
     }
 
@@ -1124,14 +1132,6 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
     }
 
     /**
-     * Starts a visit for nodes of type ParameterizedTypeNode.
-     * @param node The node being visited.
-     */
-    public void visitParameterizedTypeNodeStart(ParameterizedTypeNode node)
-    {
-    }
-
-    /**
      * Starts a visit for nodes of type ForInitializerExpressionNode.
      * @param node The node being visited.
      */
@@ -1360,6 +1360,14 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
      * @param node The node being visited.
      */
     public void visitRawTypeNodeStop(RawTypeNode node)
+    {
+    }
+
+    /**
+     * Stops a visit for nodes of type ParameterizedTypeNode.
+     * @param node The node being visited.
+     */
+    public void visitParameterizedTypeNodeStop(ParameterizedTypeNode node)
     {
     }
 
@@ -1824,14 +1832,6 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
      * @param node The node being visited.
      */
     public void visitPrimitiveTypeNodeStop(PrimitiveTypeNode node)
-    {
-    }
-
-    /**
-     * Stops a visit for nodes of type ParameterizedTypeNode.
-     * @param node The node being visited.
-     */
-    public void visitParameterizedTypeNodeStop(ParameterizedTypeNode node)
     {
     }
 

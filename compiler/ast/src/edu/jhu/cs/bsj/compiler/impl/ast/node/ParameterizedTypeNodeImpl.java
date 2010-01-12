@@ -6,7 +6,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.ParameterizedTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.RawTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.tags.TypeArgument;
 
-public class ParameterizedTypeNodeImpl extends TypeNodeImpl implements ParameterizedTypeNode
+public class ParameterizedTypeNodeImpl extends DeclaredTypeNodeImpl implements ParameterizedTypeNode
 {
     /** The raw type being parameterized. */
     private RawTypeNode rawType;

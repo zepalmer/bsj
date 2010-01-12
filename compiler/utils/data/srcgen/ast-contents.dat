@@ -484,12 +484,12 @@ ArrayTypeNode :: ReferenceTypeNode
     @docs
         Represents an array type.
 
-DeclaredTypeNode* :: ReferenceTypeNode
+DeclaredTypeNode* :: ReferenceTypeNode + BaseType
     @docs
         A node representing any declared type.  In the BSJ API, a "declared type" refers to any type which has been
         created by a declaration statement.  Arrays and primitives are not declared types because they are not declared.
 
-ParameterizedTypeNode :: TypeNode
+ParameterizedTypeNode :: DeclaredTypeNode
     @props
     rawType                 RawTypeNode                                 | the raw type being parameterized
     typeArguments           ListNode<TypeArgument>                      | the type arguments for this node
@@ -498,7 +498,7 @@ ParameterizedTypeNode :: TypeNode
         as Set<String> (which would be represented by the raw type Set and the single-element argument list containing
         the raw type for String).
 
-PrimitiveTypeNode :: TypeNode
+PrimitiveTypeNode :: TypeNode + BaseType
     @props
     primitiveType           PrimitiveType                               | the primitive type being represented
     @docs

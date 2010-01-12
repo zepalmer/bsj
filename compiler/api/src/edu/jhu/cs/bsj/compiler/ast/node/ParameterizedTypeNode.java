@@ -7,7 +7,7 @@ import edu.jhu.cs.bsj.compiler.ast.tags.TypeArgument;
  * as Set<String> (which would be represented by the raw type Set and the single-element argument list containing
  * the raw type for String).
  */
-public interface ParameterizedTypeNode extends TypeNode
+public interface ParameterizedTypeNode extends DeclaredTypeNode
 {
     /**
      * Gets the raw type being parameterized.

@@ -37,8 +37,7 @@ import org.antlr.runtime.TokenRewriteStream;
 import org.antlr.runtime.tree.CommonTree;
 import org.antlr.runtime.tree.Tree;
 
-import edu.jhu.cs.bsj.compiler.tool.parser.antlr.BsjLexer;
-import edu.jhu.cs.bsj.compiler.tool.parser.antlr.BsjParser;
+import edu.jhu.cs.bsj.compiler.tool.parser.BsjParser;
 
 public class AntlrAstViewer
 {

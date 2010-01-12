@@ -2667,24 +2667,55 @@ creator //TODO
     |   arrayCreator
     ;
 
-arrayCreator //TODO
-    :   'new' createdName
+arrayCreator returns [ArrayCreationNode ret]
+    @init{
+        int levels = 1;
+        List<ExpressionNode> list = new ArrayList<ExpressionNode>();
+    }
+    :   
+        'new' createdName
         '[' ']'
-        ('[' ']'
+        (
+            '[' ']'
+            {
+                levels++;
+            }
         )*
         arrayInitializer
-
-    |   'new' createdName
-        '[' expression
-        ']'
-        (   '[' expression
-            ']'
+        {
+            $ret = factory.makeArrayInitializerCreationNode(
+                $arrayInitializer.ret,
+                $createdName.ret,
+                levels);
+        }
+    |   
+        'new' createdName
+        '[' e1=expression ']'
+        {
+            list.add($e1.ret);
+        }        
+        (   
+            '[' e2=expression ']'
+            {
+                list.add($e2.ret);
+                levels++;
+            }            
         )*
-        ('[' ']'
+        (
+            '[' ']'
+            {
+                levels++;
+            }            
         )*
+        {
+            $ret = factory.makeArrayInstantiatorCreationNode(
+                factory.makeListNode(list),
+                $createdName.ret,
+                levels);
+        }        
     ;
 
-variableInitializer returns [ExpressionNode ret]
+variableInitializer returns [VariableInitializerNode ret]
     :   
         arrayInitializer
         {
@@ -2697,11 +2728,26 @@ variableInitializer returns [ExpressionNode ret]
         }
     ;
 
-arrayInitializer //TODO
+arrayInitializer returns [ArrayInitializerNode ret]
+    @init {
+            List<VariableInitializerNode> list = new ArrayList<VariableInitializerNode>();
+    }
+    @after {
+            $ret = factory.makeArrayInitializerNode(
+                factory.makeListNode(list));
+    }
     :   
         '{' 
-            (variableInitializer
-                (',' variableInitializer
+            (
+                v1=variableInitializer
+                {
+                    list.add($v1.ret);   
+                }            
+                (
+                    ',' v2=variableInitializer
+                    {
+                        list.add($v2.ret);   
+                    }                    
                 )*
             )? 
             (',')? 
@@ -2709,7 +2755,7 @@ arrayInitializer //TODO
     ;
 
 
-createdName //TODO
+createdName returns [BaseType ret]//TODO
     :   classOrInterfaceType
     |   primitiveType
     ;
