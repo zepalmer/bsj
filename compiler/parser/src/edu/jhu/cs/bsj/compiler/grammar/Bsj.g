@@ -2618,56 +2618,58 @@ postfixExpression returns [ExpressionNode ret]
 primary returns [PrimaryExpression ret]
     :
         (
-        	arrayCreator
-        	// TODO: array creation
- 		|
- 			lexicalLiteral ( '[' expression ']' /* TODO: array access */ )*
-			// TODO: lexical literal
- 		|
- 			typeName '.' 'class' ( '[' expression ']' /* TODO: array access */ )*
-			// TODO: declared class literal
- 		|
- 			voidClassLiteral ( '[' expression ']' /* TODO: array access */ )*
-			// TODO: void class literal
- 		|
- 			(typeName '.')? THIS ( '[' expression ']' /* TODO: array access */ )*
-			// TODO: qualified or unqualified this expression
- 		|
- 			parExpression ( '[' expression ']' /* TODO: array access */ )*
-			// TODO: (remember ParenthesizedExpressionNode)
- 		|
- 			NEW typeArguments? classOrInterfaceType arguments anonymousClassBody? ( '[' expression ']' /* TODO: array access */ )*
-			// TODO: class instance creation
- 		|
- 			(typeName '.')? SUPER '.' identifier ( '[' expression ']' /* TODO: array access */ )*
-			// TODO: field access (typeName is like B.super.myvar
- 		|
- 			methodName arguments ( '[' expression ']' /* TODO: array access */ )*
-			// TODO: method invocation
- 		|
- 			SUPER '.' nonWildcardTypeArguments? identifier arguments ( '[' expression ']' /* TODO: array access */ )*
-			// TODO: method invocation
- 		|
- 			typeName '.' SUPER '.' nonWildcardTypeArguments? identifier arguments ( '[' expression ']' /* TODO: array access */ )*
-			// TODO: method invocation
- 		|
- 			typeName '.' nonWildcardTypeArguments? identifier arguments ( '[' expression ']' /* TODO: array access */ )*
-			// TODO: method invocation
- 		|
- 			expressionName '[' expression ']' ( '[' expression ']' /* TODO: array access */ )*
-			// TODO: array access		
-		)
-		(
-			'.' NEW typeArguments? identifier typeArguments? arguments anonymousClassBody? ( '[' expression ']' /* TODO: array access */ )*
-			// TODO: class instance creation
- 		|
- 			'.' identifier ( '[' expression ']' /* TODO: array access */ )*
-			// TODO: field access
- 		|
- 			'.' nonWildcardTypeArguments? identifier arguments ( '[' expression ']' /* TODO: array access */ )*
-			// TODO: method invocation
-		)*
-	;
+            arrayCreator
+            {
+                $ret = $arrayCreator.ret;
+            }
+        |
+            lexicalLiteral ( '[' expression ']' /* TODO: array access */ )*
+            // TODO: lexical literal
+        |
+            typeName '.' 'class' ( '[' expression ']' /* TODO: array access */ )*
+            // TODO: declared class literal
+        |
+            voidClassLiteral ( '[' expression ']' /* TODO: array access */ )*
+            // TODO: void class literal
+        |
+            (typeName '.')? THIS ( '[' expression ']' /* TODO: array access */ )*
+            // TODO: qualified or unqualified this expression
+        |
+            parExpression ( '[' expression ']' /* TODO: array access */ )*
+            // TODO: (remember ParenthesizedExpressionNode)
+        |
+            NEW typeArguments? classOrInterfaceType arguments anonymousClassBody? ( '[' expression ']' /* TODO: array access */ )*
+            // TODO: class instance creation
+        |
+            (typeName '.')? SUPER '.' identifier ( '[' expression ']' /* TODO: array access */ )*
+            // TODO: field access (typeName is like B.super.myvar
+        |
+            methodName arguments ( '[' expression ']' /* TODO: array access */ )*
+            // TODO: method invocation
+        |
+            SUPER '.' nonWildcardTypeArguments? identifier arguments ( '[' expression ']' /* TODO: array access */ )*
+            // TODO: method invocation
+        |
+            typeName '.' SUPER '.' nonWildcardTypeArguments? identifier arguments ( '[' expression ']' /* TODO: array access */ )*
+            // TODO: method invocation
+        |
+            typeName '.' nonWildcardTypeArguments? identifier arguments ( '[' expression ']' /* TODO: array access */ )*
+            // TODO: method invocation
+        |
+            expressionName '[' expression ']' ( '[' expression ']' /* TODO: array access */ )*
+            // TODO: array access        
+        )
+        (
+            '.' NEW typeArguments? identifier typeArguments? arguments anonymousClassBody? ( '[' expression ']' /* TODO: array access */ )*
+            // TODO: class instance creation
+        |
+             '.' identifier ( '[' expression ']' /* TODO: array access */ )*
+            // TODO: field access
+        |
+             '.' nonWildcardTypeArguments? identifier arguments ( '[' expression ']' /* TODO: array access */ )*
+            // TODO: method invocation
+        )*
+    ;
 
 primitiveClassLiteral returns [ClassLiteralNode ret]
         @init {
