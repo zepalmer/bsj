@@ -239,6 +239,17 @@ public interface BsjNodeFactory
             StatementNode statement);
 
     /**
+     * Creates a QualifiedClassInstantiationNode.
+     */
+    public QualifiedClassInstantiationNode makeQualifiedClassInstantiationNode(
+            ExpressionNode enclosingExpression,
+            IdentifierNode identifier,
+            ListNode<? extends TypeNode> typeArguments,
+            ListNode<? extends TypeNode> constructorTypeArguments,
+            ListNode<? extends ExpressionNode> arguments,
+            AnonymousClassBodyNode body);
+
+    /**
      * Creates a TypeCastNode.
      */
     public TypeCastNode makeTypeCastNode(
@@ -503,16 +514,6 @@ public interface BsjNodeFactory
             RawTypeNode annotationType);
 
     /**
-     * Creates a ClassInstantiationNode.
-     */
-    public ClassInstantiationNode makeClassInstantiationNode(
-            ListNode<? extends TypeNode> typeArguments,
-            DeclaredTypeNode type,
-            ListNode<? extends ExpressionNode> arguments,
-            AnonymousClassBodyNode body,
-            ExpressionNode enclosingExpression);
-
-    /**
      * Creates a ArrayInitializerNode.
      */
     public ArrayInitializerNode makeArrayInitializerNode(
@@ -608,6 +609,15 @@ public interface BsjNodeFactory
     public ConstructorBodyNode makeConstructorBodyNode(
             ConstructorInvocationNode constructorInvocation,
             ListNode<? extends StatementNode> statements);
+
+    /**
+     * Creates a UnqualifiedClassInstantiationNode.
+     */
+    public UnqualifiedClassInstantiationNode makeUnqualifiedClassInstantiationNode(
+            DeclaredTypeNode type,
+            ListNode<? extends TypeNode> constructorTypeArguments,
+            ListNode<? extends ExpressionNode> arguments,
+            AnonymousClassBodyNode body);
 
     /**
      * Creates a SimpleNameNode.

@@ -3,18 +3,14 @@ package edu.jhu.cs.bsj.compiler.impl.ast.node;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.AnonymousClassBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassInstantiationNode;
-import edu.jhu.cs.bsj.compiler.ast.node.DeclaredTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
 
-public class ClassInstantiationNodeImpl extends RestrictedPrimaryExpressionNodeImpl implements ClassInstantiationNode
+public abstract class ClassInstantiationNodeImpl extends RestrictedPrimaryExpressionNodeImpl implements ClassInstantiationNode
 {
-    /** The type arguments of the instantiation. */
-    private ListNode<? extends TypeNode> typeArguments;
-
-    /** The type being instantiated. */
-    private DeclaredTypeNode type;
+    /** The type arguments for the constructor. */
+    private ListNode<? extends TypeNode> constructorTypeArguments;
 
     /** The arguments to the constructor. */
     private ListNode<? extends ExpressionNode> arguments;
@@ -22,74 +18,41 @@ public class ClassInstantiationNodeImpl extends RestrictedPrimaryExpressionNodeI
     /** The body of the anonymous class. */
     private AnonymousClassBodyNode body;
 
-    /** The expression enclosing the non-static inner class. */
-    private ExpressionNode enclosingExpression;
-
     /** General constructor. */
-    public ClassInstantiationNodeImpl(
-            ListNode<? extends TypeNode> typeArguments,
-            DeclaredTypeNode type,
+    protected ClassInstantiationNodeImpl(
+            ListNode<? extends TypeNode> constructorTypeArguments,
             ListNode<? extends ExpressionNode> arguments,
-            AnonymousClassBodyNode body,
-            ExpressionNode enclosingExpression)
+            AnonymousClassBodyNode body)
     {
         super();
-        this.typeArguments = typeArguments;
-        this.type = type;
+        this.constructorTypeArguments = constructorTypeArguments;
         this.arguments = arguments;
         this.body = body;
-        this.enclosingExpression = enclosingExpression;
     }
 
     /**
-     * Gets the type arguments of the instantiation.
-     * @return The type arguments of the instantiation.
+     * Gets the type arguments for the constructor.
+     * @return The type arguments for the constructor.
      */
-    public ListNode<? extends TypeNode> getTypeArguments()
+    public ListNode<? extends TypeNode> getConstructorTypeArguments()
     {
-        return this.typeArguments;
+        return this.constructorTypeArguments;
     }
 
     /**
-     * Changes the type arguments of the instantiation.
-     * @param typeArguments The type arguments of the instantiation.
+     * Changes the type arguments for the constructor.
+     * @param constructorTypeArguments The type arguments for the constructor.
      */
-    public void setTypeArguments(ListNode<? extends TypeNode> typeArguments)
+    public void setConstructorTypeArguments(ListNode<? extends TypeNode> constructorTypeArguments)
     {
-        if (this.typeArguments instanceof NodeImpl)
+        if (this.constructorTypeArguments instanceof NodeImpl)
         {
-            ((NodeImpl)this.typeArguments).setParent(null);
+            ((NodeImpl)this.constructorTypeArguments).setParent(null);
         }
-        this.typeArguments = typeArguments;
-        if (this.typeArguments instanceof NodeImpl)
+        this.constructorTypeArguments = constructorTypeArguments;
+        if (this.constructorTypeArguments instanceof NodeImpl)
         {
-            ((NodeImpl)this.typeArguments).setParent(this);
-        }
-    }
-
-    /**
-     * Gets the type being instantiated.
-     * @return The type being instantiated.
-     */
-    public DeclaredTypeNode getType()
-    {
-        return this.type;
-    }
-
-    /**
-     * Changes the type being instantiated.
-     * @param type The type being instantiated.
-     */
-    public void setType(DeclaredTypeNode type)
-    {
-        if (this.type instanceof NodeImpl)
-        {
-            ((NodeImpl)this.type).setParent(null);
-        }
-        this.type = type;
-        if (this.type instanceof NodeImpl)
-        {
-            ((NodeImpl)this.type).setParent(this);
+            ((NodeImpl)this.constructorTypeArguments).setParent(this);
         }
     }
 
@@ -146,32 +109,6 @@ public class ClassInstantiationNodeImpl extends RestrictedPrimaryExpressionNodeI
     }
 
     /**
-     * Gets the expression enclosing the non-static inner class.
-     * @return The expression enclosing the non-static inner class.
-     */
-    public ExpressionNode getEnclosingExpression()
-    {
-        return this.enclosingExpression;
-    }
-
-    /**
-     * Changes the expression enclosing the non-static inner class.
-     * @param enclosingExpression The expression enclosing the non-static inner class.
-     */
-    public void setEnclosingExpression(ExpressionNode enclosingExpression)
-    {
-        if (this.enclosingExpression instanceof NodeImpl)
-        {
-            ((NodeImpl)this.enclosingExpression).setParent(null);
-        }
-        this.enclosingExpression = enclosingExpression;
-        if (this.enclosingExpression instanceof NodeImpl)
-        {
-            ((NodeImpl)this.enclosingExpression).setParent(this);
-        }
-    }
-
-    /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
      * method first and then visit its subclass-specific children.
@@ -182,10 +119,8 @@ public class ClassInstantiationNodeImpl extends RestrictedPrimaryExpressionNodeI
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        this.typeArguments.receive(visitor);
-        this.type.receive(visitor);
+        this.constructorTypeArguments.receive(visitor);
         this.arguments.receive(visitor);
         this.body.receive(visitor);
-        this.enclosingExpression.receive(visitor);
     }
 }

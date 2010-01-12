@@ -45,7 +45,6 @@ import edu.jhu.cs.bsj.compiler.impl.ast.node.CatchNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.CharLiteralNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.ClassBodyNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.ClassDeclarationNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.ClassInstantiationNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.ClassLiteralNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.CompilationUnitNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.ConditionalExpressionNodeImpl;
@@ -87,6 +86,7 @@ import edu.jhu.cs.bsj.compiler.impl.ast.node.PackageDeclarationNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.ParameterizedTypeNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.ParenthesizedExpressionNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.PrimitiveTypeNodeImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.node.QualifiedClassInstantiationNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.QualifiedNameNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.RawTypeNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.ReturnNodeImpl;
@@ -102,6 +102,7 @@ import edu.jhu.cs.bsj.compiler.impl.ast.node.TryNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.TypeCastNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.TypeParameterNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.UnaryOperatorNodeImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.node.UnqualifiedClassInstantiationNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.VariableDeclarationNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.VariableDeclaratorNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.VariableNodeImpl;
@@ -455,6 +456,21 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             StatementNode statement)
     {
         DoWhileLoopNode ret = new DoWhileLoopNodeImpl(condition, statement);
+        return ret;
+    }
+
+    /**
+     * Creates a QualifiedClassInstantiationNode.
+     */
+    public QualifiedClassInstantiationNode makeQualifiedClassInstantiationNode(
+            ExpressionNode enclosingExpression,
+            IdentifierNode identifier,
+            ListNode<? extends TypeNode> typeArguments,
+            ListNode<? extends TypeNode> constructorTypeArguments,
+            ListNode<? extends ExpressionNode> arguments,
+            AnonymousClassBodyNode body)
+    {
+        QualifiedClassInstantiationNode ret = new QualifiedClassInstantiationNodeImpl(enclosingExpression, identifier, typeArguments, constructorTypeArguments, arguments, body);
         return ret;
     }
 
@@ -875,20 +891,6 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
 
     /**
-     * Creates a ClassInstantiationNode.
-     */
-    public ClassInstantiationNode makeClassInstantiationNode(
-            ListNode<? extends TypeNode> typeArguments,
-            DeclaredTypeNode type,
-            ListNode<? extends ExpressionNode> arguments,
-            AnonymousClassBodyNode body,
-            ExpressionNode enclosingExpression)
-    {
-        ClassInstantiationNode ret = new ClassInstantiationNodeImpl(typeArguments, type, arguments, body, enclosingExpression);
-        return ret;
-    }
-
-    /**
      * Creates a ArrayInitializerNode.
      */
     public ArrayInitializerNode makeArrayInitializerNode(
@@ -1038,6 +1040,19 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ListNode<? extends StatementNode> statements)
     {
         ConstructorBodyNode ret = new ConstructorBodyNodeImpl(constructorInvocation, statements);
+        return ret;
+    }
+
+    /**
+     * Creates a UnqualifiedClassInstantiationNode.
+     */
+    public UnqualifiedClassInstantiationNode makeUnqualifiedClassInstantiationNode(
+            DeclaredTypeNode type,
+            ListNode<? extends TypeNode> constructorTypeArguments,
+            ListNode<? extends ExpressionNode> arguments,
+            AnonymousClassBodyNode body)
+    {
+        UnqualifiedClassInstantiationNode ret = new UnqualifiedClassInstantiationNodeImpl(type, constructorTypeArguments, arguments, body);
         return ret;
     }
 

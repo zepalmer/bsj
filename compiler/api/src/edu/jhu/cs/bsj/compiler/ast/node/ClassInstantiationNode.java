@@ -2,39 +2,21 @@ package edu.jhu.cs.bsj.compiler.ast.node;
 
 
 /**
- * A node representing the instantiation of a class, as in:
- * <pre>
- * new <i>type</i>(<i>arg...</i>)
- * </pre>
- * If this class is not anonymous, the <tt>body</tt> field is <tt>null</tt>.  If the newly created object should
- * not use an explicit enclosing expression (and it almost never will), the <tt>enclosingExpression</tt> field
- * should be <tt>null</tt>.
+ * Acts as a parent to class instantiation nodes. 
  */
 public interface ClassInstantiationNode extends RestrictedPrimaryExpressionNode
 {
     /**
-     * Gets the type arguments of the instantiation.
-     * @return The type arguments of the instantiation.
+     * Gets the type arguments for the constructor.
+     * @return The type arguments for the constructor.
      */
-    public ListNode<? extends TypeNode> getTypeArguments();
+    public ListNode<? extends TypeNode> getConstructorTypeArguments();
 
     /**
-     * Changes the type arguments of the instantiation.
-     * @param typeArguments The type arguments of the instantiation.
+     * Changes the type arguments for the constructor.
+     * @param constructorTypeArguments The type arguments for the constructor.
      */
-    public void setTypeArguments(ListNode<? extends TypeNode> typeArguments);
-
-    /**
-     * Gets the type being instantiated.
-     * @return The type being instantiated.
-     */
-    public DeclaredTypeNode getType();
-
-    /**
-     * Changes the type being instantiated.
-     * @param type The type being instantiated.
-     */
-    public void setType(DeclaredTypeNode type);
+    public void setConstructorTypeArguments(ListNode<? extends TypeNode> constructorTypeArguments);
 
     /**
      * Gets the arguments to the constructor.
@@ -59,17 +41,5 @@ public interface ClassInstantiationNode extends RestrictedPrimaryExpressionNode
      * @param body The body of the anonymous class.
      */
     public void setBody(AnonymousClassBodyNode body);
-
-    /**
-     * Gets the expression enclosing the non-static inner class.
-     * @return The expression enclosing the non-static inner class.
-     */
-    public ExpressionNode getEnclosingExpression();
-
-    /**
-     * Changes the expression enclosing the non-static inner class.
-     * @param enclosingExpression The expression enclosing the non-static inner class.
-     */
-    public void setEnclosingExpression(ExpressionNode enclosingExpression);
 
 }

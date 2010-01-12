@@ -164,21 +164,13 @@ BinaryOperatorNode :: ExpressionNode
     @docs
         Represents the application of a binary operator.
 
-ClassInstantiationNode :: RestrictedPrimaryExpressionNode
+ClassInstantiationNode* :: RestrictedPrimaryExpressionNode
     @props
-    typeArguments           ListNode<? extends TypeNode>                | the type arguments of the instantiation
-    type                    DeclaredTypeNode                            | the type being instantiated
+    constructorTypeArguments ListNode<? extends TypeNode>               | the type arguments for the constructor
     arguments               ListNode<? extends ExpressionNode>          | the arguments to the constructor
     body                    AnonymousClassBodyNode                      | the body of the anonymous class
-    enclosingExpression     ExpressionNode                              | the expression enclosing the non-static inner class
     @docs
-        A node representing the instantiation of a class, as in:
-        <pre>
-        new <i>type</i>(<i>arg...</i>)
-        </pre>
-        If this class is not anonymous, the <tt>body</tt> field is <tt>null</tt>.  If the newly created object should
-        not use an explicit enclosing expression (and it almost never will), the <tt>enclosingExpression</tt> field
-        should be <tt>null</tt>.
+        Acts as a parent to class instantiation nodes. 
 
 ConditionalExpressionNode :: ExpressionNode
     @props
@@ -253,6 +245,35 @@ PrimaryExpressionNode* :: ExpressionNode
         A superclass for all nodes considered "primary expressions" by the Java Language Specification.  Primary
         expressions include the basic building blocks of more complex expressions.
 
+QualifiedClassInstantiationNode :: ClassInstantiationNode
+    @props
+    enclosingExpression     ExpressionNode                              | the expression enclosing the non-static inner class
+    identifier              IdentifierNode                              | the name of the class being instantiated
+    typeArguments           ListNode<? extends TypeNode>                | the type arguments to apply to the class being instantiated
+    @docs
+        A node representing the qualified instantiation of a class, as in:
+        <pre>
+        <i>expr</i>.new <i>type</i>(<i>arg...</i>)
+        </pre>
+        For example, consider the following code:
+        <pre>
+        public class Example
+        {
+            class A
+            {
+                class B
+                {
+                }
+            }
+            &nbsp;
+            public void foo()
+            {
+                A a = new A();
+                A.B b = a.new B(); // qualified instantiation
+            }
+        }
+        </pre>
+
 RestrictedPrimaryExpressionNode* :: ExpressionNode
     @docs
         A superclass for restricted primary expressions.  This maps to the <i>PrimaryNoNewArray</i> parse target in the
@@ -304,6 +325,16 @@ UnaryOperatorNode :: ExpressionNode
         <pre>
         x++
         </pre>
+
+UnqualifiedClassInstantiationNode :: ClassInstantiationNode
+    @props
+    type                    DeclaredTypeNode                            | the type being instantiated
+    @docs
+        A node representing the instantiation of a class, as in:
+        <pre>
+        new <i>type</i>(<i>arg...</i>)
+        </pre>
+        If this class is not anonymous, the <tt>body</tt> field is <tt>null</tt>.
 
 ### Statement Nodes ###################################################################################################
 

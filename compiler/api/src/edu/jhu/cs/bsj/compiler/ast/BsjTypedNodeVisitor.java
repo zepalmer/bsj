@@ -25,7 +25,6 @@ import edu.jhu.cs.bsj.compiler.ast.node.CatchNode;
 import edu.jhu.cs.bsj.compiler.ast.node.CharLiteralNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassDeclarationNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ClassInstantiationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassLiteralNode;
 import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ConditionalExpressionNode;
@@ -68,6 +67,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.PackageDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ParameterizedTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ParenthesizedExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.PrimitiveTypeNode;
+import edu.jhu.cs.bsj.compiler.ast.node.QualifiedClassInstantiationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.QualifiedNameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.RawTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ReturnNode;
@@ -83,6 +83,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.TryNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeCastNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeParameterNode;
 import edu.jhu.cs.bsj.compiler.ast.node.UnaryOperatorNode;
+import edu.jhu.cs.bsj.compiler.ast.node.UnqualifiedClassInstantiationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclaratorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableNode;
@@ -144,6 +145,12 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
         } else if (node instanceof CodeLiteralNode)
         {
             visitCodeLiteralNodeStart((CodeLiteralNode)node);
+        } else if (node instanceof UnqualifiedClassInstantiationNode)
+        {
+            visitUnqualifiedClassInstantiationNodeStart((UnqualifiedClassInstantiationNode)node);
+        } else if (node instanceof QualifiedClassInstantiationNode)
+        {
+            visitQualifiedClassInstantiationNodeStart((QualifiedClassInstantiationNode)node);
         } else if (node instanceof RawTypeNode)
         {
             visitRawTypeNodeStart((RawTypeNode)node);
@@ -165,9 +172,6 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
         } else if (node instanceof MethodInvocationNode)
         {
             visitMethodInvocationNodeStart((MethodInvocationNode)node);
-        } else if (node instanceof ClassInstantiationNode)
-        {
-            visitClassInstantiationNodeStart((ClassInstantiationNode)node);
         } else if (node instanceof EnumDeclarationNode)
         {
             visitEnumDeclarationNodeStart((EnumDeclarationNode)node);
@@ -429,6 +433,12 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
         } else if (node instanceof CodeLiteralNode)
         {
             visitCodeLiteralNodeStop((CodeLiteralNode)node);
+        } else if (node instanceof UnqualifiedClassInstantiationNode)
+        {
+            visitUnqualifiedClassInstantiationNodeStop((UnqualifiedClassInstantiationNode)node);
+        } else if (node instanceof QualifiedClassInstantiationNode)
+        {
+            visitQualifiedClassInstantiationNodeStop((QualifiedClassInstantiationNode)node);
         } else if (node instanceof RawTypeNode)
         {
             visitRawTypeNodeStop((RawTypeNode)node);
@@ -450,9 +460,6 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
         } else if (node instanceof MethodInvocationNode)
         {
             visitMethodInvocationNodeStop((MethodInvocationNode)node);
-        } else if (node instanceof ClassInstantiationNode)
-        {
-            visitClassInstantiationNodeStop((ClassInstantiationNode)node);
         } else if (node instanceof EnumDeclarationNode)
         {
             visitEnumDeclarationNodeStop((EnumDeclarationNode)node);
@@ -769,6 +776,22 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
     }
 
     /**
+     * Starts a visit for nodes of type UnqualifiedClassInstantiationNode.
+     * @param node The node being visited.
+     */
+    public void visitUnqualifiedClassInstantiationNodeStart(UnqualifiedClassInstantiationNode node)
+    {
+    }
+
+    /**
+     * Starts a visit for nodes of type QualifiedClassInstantiationNode.
+     * @param node The node being visited.
+     */
+    public void visitQualifiedClassInstantiationNodeStart(QualifiedClassInstantiationNode node)
+    {
+    }
+
+    /**
      * Starts a visit for nodes of type RawTypeNode.
      * @param node The node being visited.
      */
@@ -821,14 +844,6 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
      * @param node The node being visited.
      */
     public void visitMethodInvocationNodeStart(MethodInvocationNode node)
-    {
-    }
-
-    /**
-     * Starts a visit for nodes of type ClassInstantiationNode.
-     * @param node The node being visited.
-     */
-    public void visitClassInstantiationNodeStart(ClassInstantiationNode node)
     {
     }
 
@@ -1497,6 +1512,22 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
     }
 
     /**
+     * Stops a visit for nodes of type UnqualifiedClassInstantiationNode.
+     * @param node The node being visited.
+     */
+    public void visitUnqualifiedClassInstantiationNodeStop(UnqualifiedClassInstantiationNode node)
+    {
+    }
+
+    /**
+     * Stops a visit for nodes of type QualifiedClassInstantiationNode.
+     * @param node The node being visited.
+     */
+    public void visitQualifiedClassInstantiationNodeStop(QualifiedClassInstantiationNode node)
+    {
+    }
+
+    /**
      * Stops a visit for nodes of type RawTypeNode.
      * @param node The node being visited.
      */
@@ -1549,14 +1580,6 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
      * @param node The node being visited.
      */
     public void visitMethodInvocationNodeStop(MethodInvocationNode node)
-    {
-    }
-
-    /**
-     * Stops a visit for nodes of type ClassInstantiationNode.
-     * @param node The node being visited.
-     */
-    public void visitClassInstantiationNodeStop(ClassInstantiationNode node)
     {
     }
 
