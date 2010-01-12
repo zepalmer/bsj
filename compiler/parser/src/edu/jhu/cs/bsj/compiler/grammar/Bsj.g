@@ -2104,11 +2104,11 @@ forInit returns [ForInitializerNode ret]
         }
     ;
 
-parExpression returns [ParenthesizedExpressionNode ret]
+parExpression returns [ExpressionNode ret]
     :   
         '(' expression ')'
         {
-            $ret = factory.makeParenthesizedExpressionNode($expression.ret);
+            $ret = $expression.ret;
         }
     ;
 
@@ -2598,38 +2598,59 @@ castExpression returns [TypeCastNode ret]
         }
     ;
 
-/**
- * have to use scope here, parameter passing isn't well supported in antlr.
- */
-primary //TODO
+primary returns [PrimaryExpression ret]
+    :
+        restrictedPrimary
+        {
+            $ret = $restrictedPrimary.ret;
+        }
+        // TODO: array creation expressions should be here
+    ;
+
+// Corresponds to the "PrimaryNoNewArray" target in the JLS
+restrictedPrimary returns [RestrictedPrimaryExpression ret]
     :   
-        parExpression            
+        parExpression
+        {
+            $ret = factory.makeParenthesizedExpressionNode($parExpression.ret);
+        }
     |   
         'this'
         ('.' IDENTIFIER
         )*
         (identifierSuffix
         )?
+        // TODO
     |   
         IDENTIFIER
         ('.' IDENTIFIER
         )*
         (identifierSuffix
         )?
+        // TODO
     |   
         'super'
         superSuffix
+        // TODO
     |   
         literal
+        {
+            $ret = $literal.ret;
+        }
     |   
         creator
+        // TODO
     |   
         primitiveType
         ('[' ']'
         )*
         '.' 'class'
+        // TODO
     |   
         'void' '.' 'class'
+        {
+            $ret = factory.makeClassLiteralNode(factory.makeVoidTypeNode());
+        }
     ;
     
 
