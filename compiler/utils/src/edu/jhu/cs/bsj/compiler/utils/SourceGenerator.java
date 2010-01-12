@@ -273,6 +273,7 @@ public class SourceGenerator
 			String errorPrefix = "#" + line.number + ": " + classname + ": ";
 			String orig = line.string;
 			String s = orig.trim();
+			s = s.replaceAll("\\s", " ");
 			if (s.startsWith("@"))
 			{
 				if (s.equals("@props"))

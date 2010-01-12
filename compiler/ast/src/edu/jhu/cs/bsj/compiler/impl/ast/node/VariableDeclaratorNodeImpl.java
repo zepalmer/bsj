@@ -1,10 +1,10 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
-import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclaratorNode;
+import edu.jhu.cs.bsj.compiler.ast.node.VariableInitializerNode;
 
 public class VariableDeclaratorNodeImpl extends StatementNodeImpl implements VariableDeclaratorNode
 {
@@ -15,13 +15,13 @@ public class VariableDeclaratorNodeImpl extends StatementNodeImpl implements Var
     private IdentifierNode name;
 
     /** The initializer to use. */
-    private ExpressionNode initializer;
+    private VariableInitializerNode initializer;
 
     /** General constructor. */
     public VariableDeclaratorNodeImpl(
             TypeNode type,
             IdentifierNode name,
-            ExpressionNode initializer)
+            VariableInitializerNode initializer)
     {
         super();
         this.type = type;
@@ -85,7 +85,7 @@ public class VariableDeclaratorNodeImpl extends StatementNodeImpl implements Var
      * Gets the initializer to use.
      * @return The initializer to use.
      */
-    public ExpressionNode getInitializer()
+    public VariableInitializerNode getInitializer()
     {
         return this.initializer;
     }
@@ -94,7 +94,7 @@ public class VariableDeclaratorNodeImpl extends StatementNodeImpl implements Var
      * Changes the initializer to use.
      * @param initializer The initializer to use.
      */
-    public void setInitializer(ExpressionNode initializer)
+    public void setInitializer(VariableInitializerNode initializer)
     {
         if (this.initializer instanceof NodeImpl)
         {

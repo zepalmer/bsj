@@ -5,7 +5,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
  * A node describing a variable, as in:
  *     <pre>
  *     <i>type identifier</i>
- *     </pre>
+ *     </pre>        
  */
 public interface VariableNode extends Node
 {

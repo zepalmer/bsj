@@ -10,106 +10,11 @@ import edu.jhu.cs.bsj.compiler.ast.Modifier;
 import edu.jhu.cs.bsj.compiler.ast.NameCategory;
 import edu.jhu.cs.bsj.compiler.ast.PrimitiveType;
 import edu.jhu.cs.bsj.compiler.ast.UnaryOperator;
-import edu.jhu.cs.bsj.compiler.ast.node.AlternateConstructorInvocationNode;
-import edu.jhu.cs.bsj.compiler.ast.node.AnnotationAnnotationValueNode;
-import edu.jhu.cs.bsj.compiler.ast.node.AnnotationArrayValueNode;
-import edu.jhu.cs.bsj.compiler.ast.node.AnnotationBodyNode;
-import edu.jhu.cs.bsj.compiler.ast.node.AnnotationDeclarationNode;
-import edu.jhu.cs.bsj.compiler.ast.node.AnnotationElementNode;
-import edu.jhu.cs.bsj.compiler.ast.node.AnnotationExpressionValueNode;
-import edu.jhu.cs.bsj.compiler.ast.node.AnnotationMethodDeclarationNode;
-import edu.jhu.cs.bsj.compiler.ast.node.AnnotationNode;
-import edu.jhu.cs.bsj.compiler.ast.node.AnnotationValueNode;
-import edu.jhu.cs.bsj.compiler.ast.node.AnonymousClassBodyNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ArrayAccessNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ArrayInitializerNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ArrayInstantiatonNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ArrayTypeNode;
-import edu.jhu.cs.bsj.compiler.ast.node.AssertStatementNode;
-import edu.jhu.cs.bsj.compiler.ast.node.AssignmentNode;
-import edu.jhu.cs.bsj.compiler.ast.node.BinaryOperatorNode;
-import edu.jhu.cs.bsj.compiler.ast.node.BlockStatementNode;
-import edu.jhu.cs.bsj.compiler.ast.node.BooleanLiteralNode;
-import edu.jhu.cs.bsj.compiler.ast.node.BreakNode;
-import edu.jhu.cs.bsj.compiler.ast.node.CaseNode;
-import edu.jhu.cs.bsj.compiler.ast.node.CatchNode;
-import edu.jhu.cs.bsj.compiler.ast.node.CharLiteralNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ClassBodyNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ClassDeclarationNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ClassInstantiationNode;
-import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ConditionalExpressionNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ConstructorBodyNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ConstructorDeclarationNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ConstructorInvocationNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ContinueNode;
-import edu.jhu.cs.bsj.compiler.ast.node.DeclaredTypeNode;
-import edu.jhu.cs.bsj.compiler.ast.node.DoWhileLoopNode;
-import edu.jhu.cs.bsj.compiler.ast.node.DoubleLiteralNode;
-import edu.jhu.cs.bsj.compiler.ast.node.EnhancedForLoopNode;
-import edu.jhu.cs.bsj.compiler.ast.node.EnumBodyNode;
-import edu.jhu.cs.bsj.compiler.ast.node.EnumConstantDeclarationNode;
-import edu.jhu.cs.bsj.compiler.ast.node.EnumDeclarationNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ExpressionStatementNode;
-import edu.jhu.cs.bsj.compiler.ast.node.FieldDeclarationNode;
-import edu.jhu.cs.bsj.compiler.ast.node.FloatLiteralNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ForInitializerDeclarationNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ForInitializerExpressionNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ForInitializerNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ForLoopNode;
-import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
-import edu.jhu.cs.bsj.compiler.ast.node.IfNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ImportNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ImportOnDemandNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ImportSingleTypeNode;
-import edu.jhu.cs.bsj.compiler.ast.node.InitializerDeclarationNode;
-import edu.jhu.cs.bsj.compiler.ast.node.InlineTypeDeclarationNode;
-import edu.jhu.cs.bsj.compiler.ast.node.InstanceOfNode;
-import edu.jhu.cs.bsj.compiler.ast.node.IntLiteralNode;
-import edu.jhu.cs.bsj.compiler.ast.node.InterfaceBodyNode;
-import edu.jhu.cs.bsj.compiler.ast.node.InterfaceDeclarationNode;
-import edu.jhu.cs.bsj.compiler.ast.node.LabeledStatementNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.LongLiteralNode;
-import edu.jhu.cs.bsj.compiler.ast.node.MethodDeclarationNode;
-import edu.jhu.cs.bsj.compiler.ast.node.MethodInvocationNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ModifiersNode;
-import edu.jhu.cs.bsj.compiler.ast.node.NameNode;
-import edu.jhu.cs.bsj.compiler.ast.node.Node;
-import edu.jhu.cs.bsj.compiler.ast.node.NormalAnnotationNode;
-import edu.jhu.cs.bsj.compiler.ast.node.NullLiteralNode;
-import edu.jhu.cs.bsj.compiler.ast.node.PackageDeclarationNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ParameterizedTypeNode;
-import edu.jhu.cs.bsj.compiler.ast.node.PrimitiveTypeNode;
-import edu.jhu.cs.bsj.compiler.ast.node.QualifiedNameNode;
-import edu.jhu.cs.bsj.compiler.ast.node.RawTypeNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ReturnNode;
-import edu.jhu.cs.bsj.compiler.ast.node.SimpleNameNode;
-import edu.jhu.cs.bsj.compiler.ast.node.SingleElementAnnotationNode;
-import edu.jhu.cs.bsj.compiler.ast.node.StatementNode;
-import edu.jhu.cs.bsj.compiler.ast.node.StringLiteralNode;
-import edu.jhu.cs.bsj.compiler.ast.node.SuperclassConstructorInvocationNode;
-import edu.jhu.cs.bsj.compiler.ast.node.SwitchNode;
-import edu.jhu.cs.bsj.compiler.ast.node.SynchronizedNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ThrowNode;
-import edu.jhu.cs.bsj.compiler.ast.node.TryNode;
-import edu.jhu.cs.bsj.compiler.ast.node.TypeCastNode;
-import edu.jhu.cs.bsj.compiler.ast.node.TypeDeclarationNode;
-import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
-import edu.jhu.cs.bsj.compiler.ast.node.TypeParameterNode;
-import edu.jhu.cs.bsj.compiler.ast.node.UnaryOperatorNode;
-import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclarationNode;
-import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclaratorNode;
-import edu.jhu.cs.bsj.compiler.ast.node.VariableNode;
-import edu.jhu.cs.bsj.compiler.ast.node.VoidStatementNode;
-import edu.jhu.cs.bsj.compiler.ast.node.VoidTypeDeclarationNode;
-import edu.jhu.cs.bsj.compiler.ast.node.VoidTypeNode;
-import edu.jhu.cs.bsj.compiler.ast.node.WhileLoopNode;
-import edu.jhu.cs.bsj.compiler.ast.node.WildcardTypeNode;
+import edu.jhu.cs.bsj.compiler.ast.node.*;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.CodeLiteralNode;
 import edu.jhu.cs.bsj.compiler.ast.tags.AnnotationMember;
 import edu.jhu.cs.bsj.compiler.ast.tags.AnonymousClassMember;
+import edu.jhu.cs.bsj.compiler.ast.tags.BaseType;
 import edu.jhu.cs.bsj.compiler.ast.tags.BoundType;
 import edu.jhu.cs.bsj.compiler.ast.tags.ClassMember;
 import edu.jhu.cs.bsj.compiler.ast.tags.InlineTypeDeclarable;
@@ -125,8 +30,9 @@ import edu.jhu.cs.bsj.compiler.impl.ast.node.AnnotationExpressionValueNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.AnnotationMethodDeclarationNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.AnonymousClassBodyNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.ArrayAccessNodeImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.node.ArrayInitializerCreationNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.ArrayInitializerNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.ArrayInstantiatonNodeImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.node.ArrayInstantiatorCreationNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.ArrayTypeNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.AssertStatementNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.AssignmentNodeImpl;
@@ -469,7 +375,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public VariableDeclaratorNode makeVariableDeclaratorNode(
             TypeNode type,
             IdentifierNode name,
-            ExpressionNode initializer)
+            VariableInitializerNode initializer)
     {
         VariableDeclaratorNode ret = new VariableDeclaratorNodeImpl(type, name, initializer);
         return ret;
@@ -855,6 +761,18 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
 
     /**
+     * Creates a ArrayInitializerCreationNode.
+     */
+    public ArrayInitializerCreationNode makeArrayInitializerCreationNode(
+            ArrayInitializerNode initializer,
+            BaseType baseType,
+            int arrayLevels)
+    {
+        ArrayInitializerCreationNode ret = new ArrayInitializerCreationNodeImpl(initializer, baseType, arrayLevels);
+        return ret;
+    }
+
+    /**
      * Creates a TypeParameterNode.
      */
     public TypeParameterNode makeTypeParameterNode(
@@ -939,10 +857,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      * Creates a ArrayInitializerNode.
      */
     public ArrayInitializerNode makeArrayInitializerNode(
-            TypeNode type,
-            ListNode<? extends ExpressionNode> initializers)
+            ListNode<? extends VariableInitializerNode> initializers)
     {
-        ArrayInitializerNode ret = new ArrayInitializerNodeImpl(type, initializers);
+        ArrayInitializerNode ret = new ArrayInitializerNodeImpl(initializers);
         return ret;
     }
 
@@ -1008,17 +925,6 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             Float value)
     {
         FloatLiteralNode ret = new FloatLiteralNodeImpl(value);
-        return ret;
-    }
-
-    /**
-     * Creates a ArrayInstantiatonNode.
-     */
-    public ArrayInstantiatonNode makeArrayInstantiatonNode(
-            TypeNode type,
-            ListNode<? extends ExpressionNode> dimensions)
-    {
-        ArrayInstantiatonNode ret = new ArrayInstantiatonNodeImpl(type, dimensions);
         return ret;
     }
 
@@ -1098,6 +1004,18 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             NameCategory category)
     {
         SimpleNameNode ret = new SimpleNameNodeImpl(identifier, category);
+        return ret;
+    }
+
+    /**
+     * Creates a ArrayInstantiatorCreationNode.
+     */
+    public ArrayInstantiatorCreationNode makeArrayInstantiatorCreationNode(
+            ListNode<? extends ExpressionNode> dimExpressions,
+            BaseType baseType,
+            int arrayLevels)
+    {
+        ArrayInstantiatorCreationNode ret = new ArrayInstantiatorCreationNodeImpl(dimExpressions, baseType, arrayLevels);
         return ret;
     }
 

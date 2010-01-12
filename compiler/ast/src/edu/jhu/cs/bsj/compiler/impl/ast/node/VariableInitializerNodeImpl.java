@@ -1,12 +1,12 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
-import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
+import edu.jhu.cs.bsj.compiler.ast.node.VariableInitializerNode;
 
-public abstract class ExpressionNodeImpl extends VariableInitializerNodeImpl implements ExpressionNode
+public abstract class VariableInitializerNodeImpl extends NodeImpl implements VariableInitializerNode
 {
     /** General constructor. */
-    protected ExpressionNodeImpl()
+    protected VariableInitializerNodeImpl()
     {
         super();
     }

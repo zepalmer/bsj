@@ -2,59 +2,27 @@ package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.ArrayInitializerNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
+import edu.jhu.cs.bsj.compiler.ast.node.VariableInitializerNode;
 
-public class ArrayInitializerNodeImpl extends ExpressionNodeImpl implements ArrayInitializerNode
+public class ArrayInitializerNodeImpl extends VariableInitializerNodeImpl implements ArrayInitializerNode
 {
-    /** The type of the elements in the array. */
-    private TypeNode type;
-
     /** The initializers for the array. */
-    private ListNode<? extends ExpressionNode> initializers;
+    private ListNode<? extends VariableInitializerNode> initializers;
 
     /** General constructor. */
     public ArrayInitializerNodeImpl(
-            TypeNode type,
-            ListNode<? extends ExpressionNode> initializers)
+            ListNode<? extends VariableInitializerNode> initializers)
     {
         super();
-        this.type = type;
         this.initializers = initializers;
-    }
-
-    /**
-     * Gets the type of the elements in the array.
-     * @return The type of the elements in the array.
-     */
-    public TypeNode getType()
-    {
-        return this.type;
-    }
-
-    /**
-     * Changes the type of the elements in the array.
-     * @param type The type of the elements in the array.
-     */
-    public void setType(TypeNode type)
-    {
-        if (this.type instanceof NodeImpl)
-        {
-            ((NodeImpl)this.type).setParent(null);
-        }
-        this.type = type;
-        if (this.type instanceof NodeImpl)
-        {
-            ((NodeImpl)this.type).setParent(this);
-        }
     }
 
     /**
      * Gets the initializers for the array.
      * @return The initializers for the array.
      */
-    public ListNode<? extends ExpressionNode> getInitializers()
+    public ListNode<? extends VariableInitializerNode> getInitializers()
     {
         return this.initializers;
     }
@@ -63,7 +31,7 @@ public class ArrayInitializerNodeImpl extends ExpressionNodeImpl implements Arra
      * Changes the initializers for the array.
      * @param initializers The initializers for the array.
      */
-    public void setInitializers(ListNode<? extends ExpressionNode> initializers)
+    public void setInitializers(ListNode<? extends VariableInitializerNode> initializers)
     {
         if (this.initializers instanceof NodeImpl)
         {
@@ -87,7 +55,6 @@ public class ArrayInitializerNodeImpl extends ExpressionNodeImpl implements Arra
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        this.type.receive(visitor);
         this.initializers.receive(visitor);
     }
 }

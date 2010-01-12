@@ -114,29 +114,32 @@ ArrayAccessNode :: ExpressionNode
         <pre>
         <i>expression</i>[<i>index</i>]
         </pre>
+        
+ArrayCreationNode* :: ExpressionNode
+	@props
+	baseType				BaseType									| the base type for this array
+	arrayLevels				int											| the number of levels for this array
+	@docs
+		Represents the creation of an array, including both instantiation and initialization.
+	
+ArrayInitializerCreationNode :: ArrayCreationNode
+	@props
+	initializer				ArrayInitializerNode						| the initializer for this array
+	@docs
+		Represents the creation of an array with initializer, as in
+		<pre>
+		new <i>type</i> []... {<i>initializer</i>,...}
+		</pre>
 
-ArrayInstantiatonNode :: ExpressionNode
-    @props
-    type                    TypeNode                                    | the type of the elements in the array
-    dimensions              ListNode<? extends ExpressionNode>          | the dimensions of the array to create
-    @docs
-        A node representing the creation of a new array, as in:
-        <pre>
-        new <i>type</i>[<i>dim</i>]<i>...</i>
-        </pre>
-        The resulting array contains default values based upon the array's type (0, false, or null).
-
-ArrayInitializerNode :: ExpressionNode
-    @props
-    type                    TypeNode                                    | the type of the elements in the array
-    initializers            ListNode<? extends ExpressionNode>          | the initializers for the array
-    @docs
-        A node representing the creation of a new array, as in:
-        <pre>
-        new <i>type</i>[]{<i>initializer...</i>}
-        </pre>
-        The resulting array contains one element for each initializer expression.
-
+ArrayInstantiatorCreationNode :: ArrayCreationNode
+	@props
+	dimExpressions			ListNode<? extends ExpressionNode>			| the dimension expressions for this array
+	@docs
+		Represents the creation of an array with instantiator, as in
+		<pre>
+		new <i>type</i> [<i>expression</i>]... []...
+		</pre>
+			
 AssignmentNode :: ExpressionNode
     @props
     variable                ExpressionNode                              | the variable to which to assign a value
@@ -444,7 +447,7 @@ VariableDeclaratorNode :: StatementNode
     @props
     type                    TypeNode                                    | the type of this variable
     name                    IdentifierNode                              | the name of this variable
-    initializer             ExpressionNode                              | the initializer to use
+    initializer             VariableInitializerNode                     | the initializer to use
     @docs
         Represents a declarator for a variable declaration.  For example, in
         <pre>int x = 5, y;</pre>
@@ -816,6 +819,16 @@ AlternateConstructorInvocationNode :: ConstructorInvocationNode
         Note that this only applies to <i>alternate</i> constructor invocations (those using the <tt>this</tt> keyword).
         For superclass constructor invocations, see {@link SuperclassConstructorInvocationNode}.
 
+ArrayInitializerNode :: VariableInitializerNode
+    @props
+	initializers            ListNode<? extends VariableInitializerNode> | the initializers for the array
+    @docs
+        A node representing the initialization of an array, as in:
+        <pre>
+        {<i>initializer</i>,...}
+        </pre>
+        The resulting array contains one element for each initializer expression.
+
 CaseNode :: Node
     @props
     expression              ExpressionNode                              | the expression used in this case label
@@ -884,7 +897,7 @@ ConstructorInvocationNode* :: Node
         language specification treats these two entities as distinct (and there are some corner cases for the superclass
         constructor syntax which are best contained
 
-ExpressionNode* :: Node
+ExpressionNode* :: VariableInitializerNode
     @docs
         This class is a common superclass of all BSJ AST nodes representing expressions.
 
@@ -989,17 +1002,6 @@ SuperclassConstructorInvocationNode :: ConstructorInvocationNode
         .  Note that this only applies to <i>superclass</i> constructor invocations (those using the <tt>super</tt>
         keyword).  For alternate constructor invocations, see {@link AlternateConstructorInvocationNode}.
 
-VariableNode :: Node
-    @props
-    modifiers               ModifiersNode                               | the modifiers of this parameter
-    type                    TypeNode                                    | the type of the variable
-    identifier              IdentifierNode                              | the name of the variable
-    @docs
-        A node describing a variable, as in:
-            <pre>
-            <i>type identifier</i>
-            </pre>
-
 StatementNode* :: Node
     @docs
         Common superclass for statements.
@@ -1025,6 +1027,21 @@ TypeParameterNode :: Node
         <pre>
         <i>ident</i> extends <i>type</i> &amp; <i>type...</i>
         </pre>
+        
+VariableInitializerNode* :: Node
+	@docs
+		A node that initializes a variable using either an expression or an array initializer.	        
+        
+VariableNode :: Node
+    @props
+    modifiers               ModifiersNode                               | the modifiers of this parameter
+    type                    TypeNode                                    | the type of the variable
+    identifier              IdentifierNode                              | the name of the variable
+    @docs
+        A node describing a variable, as in:
+            <pre>
+            <i>type identifier</i>
+            </pre>        
 
 WildcardTypeNode :: Node + TypeArgument
     @props

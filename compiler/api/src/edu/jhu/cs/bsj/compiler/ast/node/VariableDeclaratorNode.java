@@ -43,12 +43,12 @@ public interface VariableDeclaratorNode extends StatementNode
      * Gets the initializer to use.
      * @return The initializer to use.
      */
-    public ExpressionNode getInitializer();
+    public VariableInitializerNode getInitializer();
 
     /**
      * Changes the initializer to use.
      * @param initializer The initializer to use.
      */
-    public void setInitializer(ExpressionNode initializer);
+    public void setInitializer(VariableInitializerNode initializer);
 
 }
