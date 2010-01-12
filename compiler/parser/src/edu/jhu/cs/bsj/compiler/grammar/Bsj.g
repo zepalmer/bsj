@@ -2755,9 +2755,16 @@ arrayInitializer returns [ArrayInitializerNode ret]
     ;
 
 
-createdName returns [BaseType ret]//TODO
-    :   classOrInterfaceType
+createdName returns [BaseType ret]
+    :   
+        classOrInterfaceType
+        {
+            $ret = $classOrInterfaceType.ret;
+        }
     |   primitiveType
+        {
+            $ret = $primitiveType.ret;
+        }    
     ;
 
 innerCreator  //TODO
