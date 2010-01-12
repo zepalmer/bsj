@@ -195,10 +195,10 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      * Creates a ArrayAccessNode.
      */
     public ArrayAccessNode makeArrayAccessNode(
-            ExpressionNode expression,
-            ExpressionNode index)
+            ArrayIndexable arrayExpression,
+            ExpressionNode indexExpression)
     {
-        ArrayAccessNode ret = new ArrayAccessNodeImpl(expression, index);
+        ArrayAccessNode ret = new ArrayAccessNodeImpl(arrayExpression, indexExpression);
         return ret;
     }
 

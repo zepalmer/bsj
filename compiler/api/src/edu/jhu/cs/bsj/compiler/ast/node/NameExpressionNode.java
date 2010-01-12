@@ -14,7 +14,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
  * <li><tt>foo(x)</tt></li>
  * </ul>
  */
-public interface NameExpressionNode extends ExpressionNode
+public interface NameExpressionNode extends ExpressionNode, ArrayIndexable
 {
     /**
      * Gets the name to evaluate for this expression.

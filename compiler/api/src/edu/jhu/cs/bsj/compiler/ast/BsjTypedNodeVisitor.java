@@ -344,12 +344,12 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
         } else if (node instanceof PackageDeclarationNode)
         {
             visitPackageDeclarationNodeStart((PackageDeclarationNode)node);
-        } else if (node instanceof ListNode<?>)
-        {
-            visitListNodeStart((ListNode<?>)node);
         } else if (node instanceof EnumConstantDeclarationNode)
         {
             visitEnumConstantDeclarationNodeStart((EnumConstantDeclarationNode)node);
+        } else if (node instanceof ListNode<?>)
+        {
+            visitListNodeStart((ListNode<?>)node);
         } else if (node instanceof ConstructorDeclarationNode)
         {
             visitConstructorDeclarationNodeStart((ConstructorDeclarationNode)node);
@@ -635,12 +635,12 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
         } else if (node instanceof PackageDeclarationNode)
         {
             visitPackageDeclarationNodeStop((PackageDeclarationNode)node);
-        } else if (node instanceof ListNode<?>)
-        {
-            visitListNodeStop((ListNode<?>)node);
         } else if (node instanceof EnumConstantDeclarationNode)
         {
             visitEnumConstantDeclarationNodeStop((EnumConstantDeclarationNode)node);
+        } else if (node instanceof ListNode<?>)
+        {
+            visitListNodeStop((ListNode<?>)node);
         } else if (node instanceof ConstructorDeclarationNode)
         {
             visitConstructorDeclarationNodeStop((ConstructorDeclarationNode)node);
@@ -1311,18 +1311,18 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
     }
 
     /**
-     * Starts a visit for nodes of type ListNode.
-     * @param node The node being visited.
-     */
-    public void visitListNodeStart(ListNode<?> node)
-    {
-    }
-
-    /**
      * Starts a visit for nodes of type EnumConstantDeclarationNode.
      * @param node The node being visited.
      */
     public void visitEnumConstantDeclarationNodeStart(EnumConstantDeclarationNode node)
+    {
+    }
+
+    /**
+     * Starts a visit for nodes of type ListNode.
+     * @param node The node being visited.
+     */
+    public void visitListNodeStart(ListNode<?> node)
     {
     }
 
@@ -2055,18 +2055,18 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
     }
 
     /**
-     * Stops a visit for nodes of type ListNode.
-     * @param node The node being visited.
-     */
-    public void visitListNodeStop(ListNode<?> node)
-    {
-    }
-
-    /**
      * Stops a visit for nodes of type EnumConstantDeclarationNode.
      * @param node The node being visited.
      */
     public void visitEnumConstantDeclarationNodeStop(EnumConstantDeclarationNode node)
+    {
+    }
+
+    /**
+     * Stops a visit for nodes of type ListNode.
+     * @param node The node being visited.
+     */
+    public void visitListNodeStop(ListNode<?> node)
     {
     }
 

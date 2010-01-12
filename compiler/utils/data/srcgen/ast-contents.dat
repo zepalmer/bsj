@@ -58,6 +58,14 @@
 !set iPackage=edu.jhu.cs.bsj.compiler.ast.node
 !set cPackage=edu.jhu.cs.bsj.compiler.impl.ast.node
 
+### Tagging Interfaces ################################################################################################
+
+# TODO: ArrayIndexable should be a type of ExpressionNode once ExpressionNode is a tagging interface
+ArrayIndexable+ :: Node
+    @docs
+        This tagging interface is used to denote AST nodes which can be used as array reference expressions inside of
+        an array access node.
+
 ### Naming Nodes ######################################################################################################
 
 IdentifierNode :: Node
@@ -108,8 +116,8 @@ SimpleNameNode :: NameNode
 
 ArrayAccessNode :: RestrictedPrimaryExpressionNode
     @props
-    expression              ExpressionNode                              | the expression identifying the array
-    index                   ExpressionNode                              | the index into the array
+    arrayExpression         ArrayIndexable                              | the expression identifying the array
+    indexExpression         ExpressionNode                              | the index into the array
     @docs
         Represents an array access, as in:
         <pre>
@@ -227,7 +235,7 @@ MethodInvocationNode :: RestrictedPrimaryExpressionNode
         <i>expr</i>.&lt;<i>typeArgs</i>&gt;<i>identifier</i>(<i>arg...</i>)
         </pre>
 
-NameExpressionNode :: ExpressionNode
+NameExpressionNode :: ExpressionNode + ArrayIndexable
     @props
     name                    NameNode                                    | the name to evaluate for this expression
     @docs
@@ -291,7 +299,7 @@ QualifiedClassInstantiationNode :: ClassInstantiationNode
         }
         </pre>
 
-RestrictedPrimaryExpressionNode* :: ExpressionNode
+RestrictedPrimaryExpressionNode* :: ExpressionNode + ArrayIndexable
     @docs
         A superclass for restricted primary expressions.  This maps to the <i>PrimaryNoNewArray</i> parse target in the
         JLS.

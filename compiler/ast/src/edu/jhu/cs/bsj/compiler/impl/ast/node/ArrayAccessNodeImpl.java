@@ -2,49 +2,50 @@ package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.ArrayAccessNode;
+import edu.jhu.cs.bsj.compiler.ast.node.ArrayIndexable;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 
 public class ArrayAccessNodeImpl extends RestrictedPrimaryExpressionNodeImpl implements ArrayAccessNode
 {
     /** The expression identifying the array. */
-    private ExpressionNode expression;
+    private ArrayIndexable arrayExpression;
 
     /** The index into the array. */
-    private ExpressionNode index;
+    private ExpressionNode indexExpression;
 
     /** General constructor. */
     public ArrayAccessNodeImpl(
-            ExpressionNode expression,
-            ExpressionNode index)
+            ArrayIndexable arrayExpression,
+            ExpressionNode indexExpression)
     {
         super();
-        this.expression = expression;
-        this.index = index;
+        this.arrayExpression = arrayExpression;
+        this.indexExpression = indexExpression;
     }
 
     /**
      * Gets the expression identifying the array.
      * @return The expression identifying the array.
      */
-    public ExpressionNode getExpression()
+    public ArrayIndexable getArrayExpression()
     {
-        return this.expression;
+        return this.arrayExpression;
     }
 
     /**
      * Changes the expression identifying the array.
-     * @param expression The expression identifying the array.
+     * @param arrayExpression The expression identifying the array.
      */
-    public void setExpression(ExpressionNode expression)
+    public void setArrayExpression(ArrayIndexable arrayExpression)
     {
-        if (this.expression instanceof NodeImpl)
+        if (this.arrayExpression instanceof NodeImpl)
         {
-            ((NodeImpl)this.expression).setParent(null);
+            ((NodeImpl)this.arrayExpression).setParent(null);
         }
-        this.expression = expression;
-        if (this.expression instanceof NodeImpl)
+        this.arrayExpression = arrayExpression;
+        if (this.arrayExpression instanceof NodeImpl)
         {
-            ((NodeImpl)this.expression).setParent(this);
+            ((NodeImpl)this.arrayExpression).setParent(this);
         }
     }
 
@@ -52,25 +53,25 @@ public class ArrayAccessNodeImpl extends RestrictedPrimaryExpressionNodeImpl imp
      * Gets the index into the array.
      * @return The index into the array.
      */
-    public ExpressionNode getIndex()
+    public ExpressionNode getIndexExpression()
     {
-        return this.index;
+        return this.indexExpression;
     }
 
     /**
      * Changes the index into the array.
-     * @param index The index into the array.
+     * @param indexExpression The index into the array.
      */
-    public void setIndex(ExpressionNode index)
+    public void setIndexExpression(ExpressionNode indexExpression)
     {
-        if (this.index instanceof NodeImpl)
+        if (this.indexExpression instanceof NodeImpl)
         {
-            ((NodeImpl)this.index).setParent(null);
+            ((NodeImpl)this.indexExpression).setParent(null);
         }
-        this.index = index;
-        if (this.index instanceof NodeImpl)
+        this.indexExpression = indexExpression;
+        if (this.indexExpression instanceof NodeImpl)
         {
-            ((NodeImpl)this.index).setParent(this);
+            ((NodeImpl)this.indexExpression).setParent(this);
         }
     }
 
@@ -85,7 +86,7 @@ public class ArrayAccessNodeImpl extends RestrictedPrimaryExpressionNodeImpl imp
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        this.expression.receive(visitor);
-        this.index.receive(visitor);
+        this.arrayExpression.receive(visitor);
+        this.indexExpression.receive(visitor);
     }
 }

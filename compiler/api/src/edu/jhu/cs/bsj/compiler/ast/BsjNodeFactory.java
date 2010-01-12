@@ -73,8 +73,8 @@ public interface BsjNodeFactory
      * Creates a ArrayAccessNode.
      */
     public ArrayAccessNode makeArrayAccessNode(
-            ExpressionNode expression,
-            ExpressionNode index);
+            ArrayIndexable arrayExpression,
+            ExpressionNode indexExpression);
 
     /**
      * Creates a LongLiteralNode.
