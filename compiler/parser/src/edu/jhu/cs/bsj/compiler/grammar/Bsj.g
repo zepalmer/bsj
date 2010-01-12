@@ -55,9 +55,9 @@
 grammar Bsj;
 
 options {
+    language=Java;
     backtrack=true;
     memoize=true;
-    language=Java;
 }
 
 scope Global {   
@@ -189,10 +189,10 @@ scope Global {
 // indicators, an in/out type is also required.  This construct is necessary on its own to support the multiple
 // declaration sugar ("int x,y;").
 variableDeclarator[TypeNode inType] returns [VariableDeclaratorNode ret]
-	    @init {
-	        TypeNode type = $inType;
-	        ExpressionNode initializer = null;
-	    }
+        @init {
+            TypeNode type = $inType;
+            ExpressionNode initializer = null;
+        }
     :
         id=identifier
         (
@@ -215,9 +215,9 @@ variableDeclarator[TypeNode inType] returns [VariableDeclaratorNode ret]
 // Represents the declaration of an array type over a normal type.  This construct only handles the parsing of the []
 // symbols and the modification of a type.
 arrayTypeIndicator[TypeNode inType] returns [TypeNode ret]
-	    @init {
-	        $ret = $inType;
-	    }
+        @init {
+            $ret = $inType;
+        }
     :
         (
             '[' ']'
@@ -230,14 +230,14 @@ arrayTypeIndicator[TypeNode inType] returns [TypeNode ret]
 // Represents an abstraction for field declarations which allows legal modifiers to be specified (to differentiate
 // between interface and class fields).
 abstractFieldDeclaration[List<Modifier> legalModifiers] returns [FieldDeclarationNode ret]
-	    @init {
-	        List<VariableDeclaratorNode> list = new ArrayList<VariableDeclaratorNode>();
-	    }
-	    @after {
+        @init {
+            List<VariableDeclaratorNode> list = new ArrayList<VariableDeclaratorNode>();
+        }
+        @after {
             $ret = factory.makeFieldDeclarationNode(
                     $modifiers.ret,
                     factory.makeListNode(list));
-	    }
+        }
     :   
         modifiers[legalModifiers]
         type
@@ -368,10 +368,10 @@ typeDeclaration returns [TypeDeclarationNode ret]
 
 voidTypeDeclaration returns [VoidTypeDeclarationNode ret]
     :
-	    ';'
-	    {
-	        $ret = factory.makeVoidTypeDeclarationNode();
-	    }
+        ';'
+        {
+            $ret = factory.makeVoidTypeDeclarationNode();
+        }
     ;
 
 classOrInterfaceDeclaration returns [TypeDeclarationNode ret]
@@ -500,12 +500,12 @@ normalClassDeclaration returns [ClassDeclarationNode ret]
 
 
 typeParameters returns [ListNode<TypeParameterNode> ret]
-	    @init {
-	            List<TypeParameterNode> list = new ArrayList<TypeParameterNode>();
-	    }
-	    @after {
-	            $ret = factory.<TypeParameterNode>makeListNode(list);
-	    }
+        @init {
+                List<TypeParameterNode> list = new ArrayList<TypeParameterNode>();
+        }
+        @after {
+                $ret = factory.<TypeParameterNode>makeListNode(list);
+        }
     :   
         '<'
             a=typeParameter
@@ -542,12 +542,12 @@ typeParameter returns [TypeParameterNode ret]
 
 
 typeBound returns [ListNode<BoundType> ret]
-	    @init {
-	        List<BoundType> list = new ArrayList<BoundType>();
-	    }
-	    @after {
-	        $ret = factory.makeListNode(list);
-	    }
+        @init {
+            List<BoundType> list = new ArrayList<BoundType>();
+        }
+        @after {
+            $ret = factory.makeListNode(list);
+        }
     :   
         a=classOrInterfaceType
         {
@@ -753,12 +753,12 @@ typeList returns [ListNode<TypeNode> ret]
     ;
 
 classBody returns [ClassBodyNode ret]
-	    @init {
-	            List<ClassMember> list = new ArrayList<ClassMember>();
-	    }
-	    @after {
-	            $ret = factory.makeClassBodyNode(list);
-	    }
+        @init {
+                List<ClassMember> list = new ArrayList<ClassMember>();
+        }
+        @after {
+                $ret = factory.makeClassBodyNode(list);
+        }
     :   
         '{' 
         (
@@ -939,15 +939,15 @@ constructorDeclaration returns [ConstructorDeclarationNode ret]
     ;
 
 constructorBody returns [ConstructorBodyNode ret]
-	    @init {
-	        List<StatementNode> list = new ArrayList<StatementNode>();
-	        ConstructorInvocationNode constructorInvocationNode = null;
-	    }
-	    @after {
-	        $ret = factory.makeConstructorBodyNode(
-	                constructorInvocationNode,
-	                factory.makeBlockStatementNode(list));
-	    }
+        @init {
+            List<StatementNode> list = new ArrayList<StatementNode>();
+            ConstructorInvocationNode constructorInvocationNode = null;
+        }
+        @after {
+            $ret = factory.makeConstructorBodyNode(
+                    constructorInvocationNode,
+                    factory.makeBlockStatementNode(list));
+        }
     :
         '{' 
         (
@@ -1324,7 +1324,7 @@ typeArgument returns [TypeArgument ret]
         (
             'extends' { upper = true; }
         |
-            'super' { upper = false; }
+            SUPER { upper = false; }
         )
         nonprimitiveType
         {
@@ -1427,7 +1427,7 @@ alternateConstructorInvocation returns [AlternateConstructorInvocationNode ret]
 superclassConstructorInvocation returns [SuperclassConstructorInvocationNode ret]
     :
         (primary '.')?
-        nonWildcardTypeArguments? 'super' arguments ';'
+        nonWildcardTypeArguments? SUPER arguments ';'
         {
             $ret = factory.makeSuperclassConstructorInvocationNode(
                         $primary == null? null : $primary.ret,
@@ -1450,18 +1450,18 @@ explicitConstructorInvocation returns [ConstructorInvocationNode ret]
     ;
 
 annotations returns [ListNode<AnnotationNode> ret]
-	    @init {
-	            List<AnnotationNode> list = new ArrayList<AnnotationNode>();
-	    }
-	    @after {
-	            $ret = factory.makeListNode(list);
-	    }
+        @init {
+                List<AnnotationNode> list = new ArrayList<AnnotationNode>();
+        }
+        @after {
+                $ret = factory.makeListNode(list);
+        }
     :   
         (
-	        annotation
-	        {
-	            list.add($annotation.ret);
-	        }
+            annotation
+            {
+                list.add($annotation.ret);
+            }
         )+
     ;
 
@@ -1621,19 +1621,19 @@ annotationTypeDeclaration returns [AnnotationDeclarationNode ret]
 
 
 annotationTypeBody returns [AnnotationBodyNode ret]
-	    @init {
-	            List<AnnotationMember> list = new ArrayList<AnnotationMember>();
-	    }
-	    @after {
-	            $ret = factory.makeAnnotationBodyNode(factory.makeListNode(list));
-	    }
+        @init {
+                List<AnnotationMember> list = new ArrayList<AnnotationMember>();
+        }
+        @after {
+                $ret = factory.makeAnnotationBodyNode(factory.makeListNode(list));
+        }
     :   
         '{' 
         (
             annotationTypeElementDeclaration
-	        {
-	            list.add($annotationTypeElementDeclaration.ret);
-	        }
+            {
+                list.add($annotationTypeElementDeclaration.ret);
+            }
         )* 
         '}'
     ;
@@ -1700,12 +1700,12 @@ annotationMethodDeclaration returns [AnnotationMethodDeclarationNode ret]
         ;
 
 block returns [BlockStatementNode ret]
-	    @init {
-	            List<StatementNode> list = new ArrayList<StatementNode>();
-	    }
-	    @after {
-	            $ret = factory.makeBlockStatementNode(list);
-	    }
+        @init {
+                List<StatementNode> list = new ArrayList<StatementNode>();
+        }
+        @after {
+                $ret = factory.makeBlockStatementNode(list);
+        }
     :   
         '{'
         (blockStatement
@@ -1768,7 +1768,7 @@ localVariableDeclaration returns [VariableDeclarationNode ret]
         (
             ',' b=variableDeclarator[$type.ret]
             {
-	            list.add($b.ret); 
+                list.add($b.ret); 
             }
         )*
     ;
@@ -2113,12 +2113,12 @@ parExpression returns [ExpressionNode ret]
     ;
 
 expressionList returns [ListNode<ExpressionNode> ret]
-	    @init {
-	        List<ExpressionNode> list = new ArrayList<ExpressionNode>();
-	    }
-	    @after {
-	        $ret = factory.<ExpressionNode>makeListNode(list);
-	    }
+        @init {
+            List<ExpressionNode> list = new ArrayList<ExpressionNode>();
+        }
+        @after {
+            $ret = factory.<ExpressionNode>makeListNode(list);
+        }
     :   
         a=expression
         {
@@ -2223,13 +2223,13 @@ conditionalExpression returns [ExpressionNode ret]
             $ret = $conditionalOrExpression.ret;
         }
         (
-	        '?' e1=expression ':' e2=conditionalExpression
-	        {
-	            $ret = factory.makeConditionalExpressionNode(
-	                $ret, 
-	                $e1.ret, 
-	                $e2.ret);
-	        }
+            '?' e1=expression ':' e2=conditionalExpression
+            {
+                $ret = factory.makeConditionalExpressionNode(
+                    $ret, 
+                    $e1.ret, 
+                    $e2.ret);
+            }
         )?
     ;
 
@@ -2573,12 +2573,8 @@ unaryExpressionNotPlusMinus returns [ExpressionNode ret] // TODO primary
             $ret = $castExpression.ret;
         }
     |   
-        primary
-        (selector
-        )*
-        (   '++'
-        |   '--'
-        )?
+        postfixExpression
+        // TODO
     ;
 
 castExpression returns [TypeCastNode ret]
@@ -2598,71 +2594,80 @@ castExpression returns [TypeCastNode ret]
         }
     ;
 
-primary returns [PrimaryExpression ret]
+postfixExpression returns [ExpressionNode ret]
     :
-        restrictedPrimary
-        {
-            $ret = $restrictedPrimary.ret;
-        }
-        // TODO: array creation expressions should be here
+    // Note: primary must be before expressionName in the following.  Otherwise, this postfixExpression rule will match
+    // "this" out of "this.x" and leave the ".x" lying around.  Because primary is first, backtracking will try to match
+    // it first and only try expressionName if primary fails.
+    (
+        primary
+        // TODO
+    |
+        expressionName
+        // TODO
+    )
+    (
+        '++'
+        // TODO
+    |
+        '--'
+        // TODO
+    )*
     ;
 
-// Corresponds to the "PrimaryNoNewArray" target in the JLS
-restrictedPrimary returns [RestrictedPrimaryExpression ret]
-    :   
-        parExpression
-        {
-            $ret = factory.makeParenthesizedExpressionNode($parExpression.ret);
-        }
-    |   
-        'this'
-        {
-            $ret = factory.makeThisNode(null);
-        }
+primary returns [PrimaryExpression ret]
+    :
         (
-            '.' identifier
-            {
-                $ret = factory.makeFieldAccessNode($ret, $identifier.ret);
-            }
-        )*
-        (
-            // TODO: currently broken - makes a field access node when it shouldn't
-            // this is a somewhat deeper problem, in fact: this grammar allows things like "this.X[].class"
-            identifierSuffix
-            {
-                $ret = identifierSuffix[$ret];
-            }
-        )?
-    |   
-        IDENTIFIER
-        ('.' IDENTIFIER
-        )*
-        (identifierSuffix
-        )?
-        // TODO
-    |   
-        'super'
-        superSuffix
-        // TODO
-    |   
-        lexicalLiteral
-        {
-            $ret = $lexicalLiteral.ret;
-        }
-    |   
-        creator
-        // TODO
-    |   
-        primitiveClassLiteral
-        {
-            $ret = $primitiveClassLiteral.ret;
-        }
-    |
-        voidClassLiteral
-        {
-            $ret = $voidClassLiteral.ret;
-        }
-    ;
+        	arrayCreator
+        	// TODO: array creation
+ 		|
+ 			lexicalLiteral ( '[' expression ']' /* TODO: array access */ )*
+			// TODO: lexical literal
+ 		|
+ 			typeName '.' 'class' ( '[' expression ']' /* TODO: array access */ )*
+			// TODO: declared class literal
+ 		|
+ 			voidClassLiteral ( '[' expression ']' /* TODO: array access */ )*
+			// TODO: void class literal
+ 		|
+ 			(typeName '.')? THIS ( '[' expression ']' /* TODO: array access */ )*
+			// TODO: qualified or unqualified this expression
+ 		|
+ 			parExpression ( '[' expression ']' /* TODO: array access */ )*
+			// TODO: (remember ParenthesizedExpressionNode)
+ 		|
+ 			NEW typeArguments? classOrInterfaceType arguments anonymousClassBody? ( '[' expression ']' /* TODO: array access */ )*
+			// TODO: class instance creation
+ 		|
+ 			(typeName '.')? SUPER '.' identifier ( '[' expression ']' /* TODO: array access */ )*
+			// TODO: field access (typeName is like B.super.myvar
+ 		|
+ 			methodName arguments ( '[' expression ']' /* TODO: array access */ )*
+			// TODO: method invocation
+ 		|
+ 			SUPER '.' nonWildcardTypeArguments? identifier arguments ( '[' expression ']' /* TODO: array access */ )*
+			// TODO: method invocation
+ 		|
+ 			typeName '.' SUPER '.' nonWildcardTypeArguments? identifier arguments ( '[' expression ']' /* TODO: array access */ )*
+			// TODO: method invocation
+ 		|
+ 			typeName '.' nonWildcardTypeArguments? identifier arguments ( '[' expression ']' /* TODO: array access */ )*
+			// TODO: method invocation
+ 		|
+ 			expressionName '[' expression ']' ( '[' expression ']' /* TODO: array access */ )*
+			// TODO: array access		
+		)
+		(
+			'.' NEW typeArguments? identifier typeArguments? arguments anonymousClassBody? ( '[' expression ']' /* TODO: array access */ )*
+			// TODO: class instance creation
+ 		|
+ 			'.' identifier ( '[' expression ']' /* TODO: array access */ )*
+			// TODO: field access
+ 		|
+ 			'.' nonWildcardTypeArguments? identifier arguments ( '[' expression ']' /* TODO: array access */ )*
+			// TODO: method invocation
+		)*
+	;
 
 primitiveClassLiteral returns [ClassLiteralNode ret]
         @init {
@@ -2693,58 +2698,6 @@ voidClassLiteral returns [ClassLiteralNode ret]
         }
     ;
 
-superSuffix  //TODO
-    :   arguments
-    |   '.' (typeArguments
-        )?
-        IDENTIFIER
-        (arguments
-        )?
-    ;
-
-
-identifierSuffix[RestrictedPrimaryExpression in] returns [RestrictedPrimaryExpression ret]
-    :   
-        (
-            '[' ']'
-        )+
-        '.' 'class'
-    |   
-        (
-            '[' expression ']'
-        )+
-    |   
-        arguments
-    |   
-        '.' 'class'
-    |   
-        '.' nonWildcardTypeArguments IDENTIFIER arguments
-    |   
-        '.' 'this'
-    |   
-        '.' 'super' arguments
-    |   
-        innerCreator
-    ;
-
-
-selector  //TODO
-    :   '.' IDENTIFIER
-        (arguments
-        )?
-    |   '.' 'this'
-    |   '.' 'super'
-        superSuffix
-    |   innerCreator
-    |   '[' expression ']'
-    ;
-
-creator //TODO
-    :   'new' nonWildcardTypeArguments classOrInterfaceType classCreatorRest
-    |   'new' classOrInterfaceType classCreatorRest
-    |   arrayCreator
-    ;
-
 // Parses an array creater from one of two forms.
 // Either:
 //     new int[][]{{1,1},{2,2}};
@@ -2756,7 +2709,7 @@ arrayCreator returns [ArrayCreationNode ret]
         List<ExpressionNode> list = new ArrayList<ExpressionNode>();
     }
     :   
-        'new' createdName
+        NEW createdName
         '[' ']'
         {
             levels = 1;
@@ -2775,7 +2728,7 @@ arrayCreator returns [ArrayCreationNode ret]
                 levels);
         }
     |   
-        'new' createdName
+        NEW createdName
         '[' e1=expression ']'
         {
             list.add($e1.ret);
@@ -2851,24 +2804,6 @@ createdName returns [BaseType ret]
             $ret = $primitiveType.ret;
         }    
     ;
-
-innerCreator  //TODO
-    :   '.' 'new'
-        (nonWildcardTypeArguments
-        )?
-        IDENTIFIER
-        (typeArguments
-        )?
-        classCreatorRest
-    ;
-
-
-classCreatorRest //TODO
-    :   arguments
-        (anonymousClassBody
-        )?
-    ;
-
 
 nonWildcardTypeArguments returns [ListNode<TypeNode> ret]
     :   
