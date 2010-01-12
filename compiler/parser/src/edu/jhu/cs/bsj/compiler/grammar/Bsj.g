@@ -896,13 +896,27 @@ methodReturnType returns [TypeNode ret]
 
 constructorDeclaration returns [ConstructorDeclarationNode ret]
     scope Global;
+        @init {
+            ListNode<TypeParameterNode> typeParametersNode =
+                    factory.makeListNode(Collections.<TypeParameterNode>emptyList());
+            ListNode<RawTypeNode> throwsNode = factory.makeListNode(Collections.<RawTypeNode>emptyList());
+        }
     :
-        // TODO: null handling
         modifiers[constructorModifiers]
-        typeParameters?
+        (
+            typeParameters
+            {
+                typeParametersNode = $typeParameters.ret;
+            }
+        )?
         identifier
         formalParameters
-        throwsClause?
+        (
+            throwsClause
+            {
+                throwsNode = $throwsClause.ret;
+            }
+        )?
         constructorBody
         {
             if ($Global::className.empty())
@@ -918,8 +932,8 @@ constructorDeclaration returns [ConstructorDeclarationNode ret]
                     $modifiers.ret,
                     $formalParameters.parameters,
                     $formalParameters.varargParameter,
-                    $qualifiedNameList.ret,
-                    $typeParameters.ret);
+                    throwsNode,
+                    typeParametersNode);
             }
         }
     ;
@@ -956,6 +970,7 @@ methodDeclaration returns [MethodDeclarationNode ret]
             BlockStatementNode blockStatementNode = null;
             ListNode<TypeParameterNode> typeParametersNode =
                     factory.makeListNode(Collections.<TypeParameterNode>emptyList());
+            ListNode<RawTypeNode> throwsNode = factory.makeListNode(Collections.<RawTypeNode>emptyList());
             TypeNode returnTypeNode;
         }
     :
@@ -978,7 +993,12 @@ methodDeclaration returns [MethodDeclarationNode ret]
                 returnTypeNode = $arrayTypeIndicator.ret;
             }
         )?
-        throwsClause?
+        (
+            throwsClause
+            {
+                throwsNode = $throwsClause.ret;
+            }
+        )?
         (        
             block
             {
@@ -995,7 +1015,7 @@ methodDeclaration returns [MethodDeclarationNode ret]
                     $formalParameters.parameters,
                     $formalParameters.varargParameter,
                     returnTypeNode,
-                    $qualifiedNameList.ret,
+                    throwsNode,
                     typeParametersNode;
         }        
     ;
@@ -1039,6 +1059,7 @@ interfaceBodyDeclaration returns [InterfaceMember ret]
 interfaceMethodDeclaration returns [MethodDeclarationNode ret]
         @init {
             TypeNode returnTypeNode;
+            ListNode<RawTypeNode> throwsNode = factory.makeListNode(Collections.<RawTypeNode>emptyList());
         }
     :   
         modifiers[interfaceModifiers]
@@ -1055,7 +1076,12 @@ interfaceMethodDeclaration returns [MethodDeclarationNode ret]
                 returnTypeNode = $arrayTypeIndicator.ret;
             }
         )?
-        throwsClause?
+        (
+            throwsClause
+            {
+                throwsNode = $throwsClause.ret;
+            }
+        )?
         ';'
         {
             $ret = factory.makeMethodDeclarationNode(
@@ -1065,7 +1091,7 @@ interfaceMethodDeclaration returns [MethodDeclarationNode ret]
                     $formalParameters.parameters,
                     $formalParameters.varargParameter,
                     returnTypeNode,
-                    $qualifiedNameList.ret,
+                    throwsNode,
                     $typeParameters.ret);
         }         
     ;
