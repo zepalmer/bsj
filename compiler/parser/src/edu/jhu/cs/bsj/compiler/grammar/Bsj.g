@@ -2104,11 +2104,11 @@ forInit returns [ForInitializerNode ret]
         }
     ;
 
-parExpression returns [ExpressionNode ret]
+parExpression returns [ParenthesizedExpressionNode ret]
     :   
         '(' expression ')'
         {
-            $ret = $expression.ret;
+            $ret = factory.makeParenthesizedExpressionNode($expression.ret);
         }
     ;
 
