@@ -80,6 +80,7 @@ import edu.jhu.cs.bsj.compiler.impl.ast.node.LongLiteralNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.MethodDeclarationNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.MethodInvocationNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.ModifiersNodeImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.node.NameExpressionNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.NormalAnnotationNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.NullLiteralNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.PackageDeclarationNodeImpl;
@@ -414,6 +415,16 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ExpressionNode expression)
     {
         ThrowNode ret = new ThrowNodeImpl(expression);
+        return ret;
+    }
+
+    /**
+     * Creates a NameExpressionNode.
+     */
+    public NameExpressionNode makeNameExpressionNode(
+            NameNode name)
+    {
+        NameExpressionNode ret = new NameExpressionNodeImpl(name);
         return ret;
     }
 

@@ -21,7 +21,8 @@
 # The class's name and immediate superclass are separated by "::".  Additionally, the class's name may be suffixed in a
 # '*' character.  If this is the case, no concrete implementation is expected.  This is used in cases in which parts of
 # the interface hierarchy are not to be used directly (such as LiteralNode, which is simply a superclass for specific
-# types of LiteralNodes).
+# types of LiteralNodes).  The class name may instead be suffixed by a + character; in this case, the class itself is
+# not created; only the interface is generated.  This is particularly useful for the creation of tagging interfaces.
 #
 # The immediate superclass may be suffixed by a "+" and a comma-separated list of interface names.  If this occurs, the
 # interfaces are extended by interface implementations.  Note that no properties can be conveyed by this functionality;
@@ -225,6 +226,22 @@ MethodInvocationNode :: RestrictedPrimaryExpressionNode
         <pre>
         <i>expr</i>.&lt;<i>typeArgs</i>&gt;<i>identifier</i>(<i>arg...</i>)
         </pre>
+
+NameExpressionNode :: ExpressionNode
+    @props
+    name                    NameNode                                    | the name to evaluate for this expression
+    @docs
+        A node representing a name evaluated as an expression, as in
+        <pre>
+        <i>expr</i>
+        </pre>
+        This is a very common form of expression.  For instance, this node would be present in the <tt>x</tt> portion of
+        all of the following:
+        <ul>
+        <li><tt>x</tt></li>
+        <li><tt>x[0]</tt></li>
+        <li><tt>foo(x)</tt></li>
+        </ul>
 
 ParenthesizedExpressionNode :: RestrictedPrimaryExpressionNode
     @props

@@ -310,10 +310,14 @@ public class SourceGenerator
 			}
 		}
 
-		boolean concrete = true;
+		ClassMode classMode = ClassMode.CONCRETE;
 		if (classname.endsWith("*"))
 		{
-			concrete = false;
+			classMode = ClassMode.ABSTRACT;
+			classname = classname.substring(0, classname.length() - 1);
+		} else if (classname.endsWith("+"))
+		{
+			classMode = ClassMode.INTERFACE;
 			classname = classname.substring(0, classname.length() - 1);
 		}
 
@@ -336,7 +340,7 @@ public class SourceGenerator
 			}
 		}
 
-		ClassDef def = new ClassDef(classname, supername, taggingInterfaces, props, includeFilenames, concrete,
+		ClassDef def = new ClassDef(classname, supername, taggingInterfaces, props, includeFilenames, classMode,
 				classDocBuilder.toString());
 
 		for (ClassDefHandler handler : handlers)
@@ -393,6 +397,13 @@ public class SourceGenerator
 			this.readOnly = readOnly;
 		}
 	}
+	
+	static enum ClassMode
+	{
+		CONCRETE,
+		ABSTRACT,
+		INTERFACE
+	}
 
 	static class ClassDef
 	{
@@ -401,11 +412,11 @@ public class SourceGenerator
 		List<String> tags; // tagging interface names
 		List<Prop> props;
 		List<String> includeFilenames;
-		boolean concrete;
+		ClassMode mode;
 		String classDoc;
 
 		public ClassDef(String name, String sname, List<String> tags, List<Prop> props, List<String> includeFilenames,
-				boolean concrete, String classDoc)
+				ClassMode mode, String classDoc)
 		{
 			super();
 			this.name = name;
@@ -413,7 +424,7 @@ public class SourceGenerator
 			this.tags = tags;
 			this.props = props;
 			this.includeFilenames = includeFilenames;
-			this.concrete = concrete;
+			this.mode = mode;
 			this.classDoc = classDoc;
 		}
 
@@ -865,6 +876,11 @@ public class SourceGenerator
 
 		public void useDefinition(ClassDef def) throws IOException
 		{
+			if (def.mode == ClassMode.INTERFACE)
+			{
+				return;
+			}
+			
 			String rawclassname = def.getRawName() + "Impl";
 			String classname = rawclassname + def.getNameParam();
 			String superclassname = def.getRawSname() + "Impl" + def.getSnameParam();
@@ -890,7 +906,7 @@ public class SourceGenerator
 			printImports(ps, true);
 			includeAllImports(ps, def.includeFilenames, "classes");
 			
-			ps.println("public " + (def.concrete ? "" : "abstract ") + "class " + classname
+			ps.println("public " + (def.mode == ClassMode.CONCRETE ? "" : "abstract ") + "class " + classname
 					+ (def.sname == null ? "" : " extends " + superclassname) + " implements " + def.getRawName()
 					+ def.getNameArg());
 			ps.println("{");
@@ -907,7 +923,7 @@ public class SourceGenerator
 			ps.println("    /** General constructor. */");
 			if (stopGen.contains("cons"))
 				ps.println("/* // stopGen=" + stopGenStr); // stopGen logic
-			ps.print("    " + (def.concrete ? "public" : "protected") + " " + rawclassname);
+			ps.print("    " + (def.mode == ClassMode.CONCRETE ? "public" : "protected") + " " + rawclassname);
 			List<Prop> recProps = getRecursiveProps(def);
 			printParameterList(ps, recProps);
 			ps.println();
@@ -1033,7 +1049,7 @@ public class SourceGenerator
 				subtypeMap.put(sname, new HashSet<String>());
 			subtypeMap.get(sname).add(tname);
 			supertypeMap.put(tname, sname);
-			if (!def.concrete)
+			if (def.mode != ClassMode.CONCRETE)
 				abstractTypes.add(tname);
 		}
 
@@ -1187,7 +1203,7 @@ public class SourceGenerator
 		@Override
 		public void useDefinition(ClassDef def) throws IOException
 		{
-			if (def.concrete)
+			if (def.mode == ClassMode.CONCRETE)
 			{
 				List<Prop> recProps = getRecursiveProps(def);
 				String typeParam;

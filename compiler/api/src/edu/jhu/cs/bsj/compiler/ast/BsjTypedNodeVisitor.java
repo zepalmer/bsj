@@ -60,6 +60,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.LongLiteralNode;
 import edu.jhu.cs.bsj.compiler.ast.node.MethodDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.MethodInvocationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ModifiersNode;
+import edu.jhu.cs.bsj.compiler.ast.node.NameExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.NormalAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.NullLiteralNode;
@@ -190,6 +191,9 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
         } else if (node instanceof BinaryOperatorNode)
         {
             visitBinaryOperatorNodeStart((BinaryOperatorNode)node);
+        } else if (node instanceof NameExpressionNode)
+        {
+            visitNameExpressionNodeStart((NameExpressionNode)node);
         } else if (node instanceof ConditionalExpressionNode)
         {
             visitConditionalExpressionNodeStart((ConditionalExpressionNode)node);
@@ -478,6 +482,9 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
         } else if (node instanceof BinaryOperatorNode)
         {
             visitBinaryOperatorNodeStop((BinaryOperatorNode)node);
+        } else if (node instanceof NameExpressionNode)
+        {
+            visitNameExpressionNodeStop((NameExpressionNode)node);
         } else if (node instanceof ConditionalExpressionNode)
         {
             visitConditionalExpressionNodeStop((ConditionalExpressionNode)node);
@@ -892,6 +899,14 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
      * @param node The node being visited.
      */
     public void visitBinaryOperatorNodeStart(BinaryOperatorNode node)
+    {
+    }
+
+    /**
+     * Starts a visit for nodes of type NameExpressionNode.
+     * @param node The node being visited.
+     */
+    public void visitNameExpressionNodeStart(NameExpressionNode node)
     {
     }
 
@@ -1628,6 +1643,14 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
      * @param node The node being visited.
      */
     public void visitBinaryOperatorNodeStop(BinaryOperatorNode node)
+    {
+    }
+
+    /**
+     * Stops a visit for nodes of type NameExpressionNode.
+     * @param node The node being visited.
+     */
+    public void visitNameExpressionNodeStop(NameExpressionNode node)
     {
     }
 
