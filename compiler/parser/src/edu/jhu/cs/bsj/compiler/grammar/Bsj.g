@@ -2727,14 +2727,22 @@ creator //TODO
     |   arrayCreator
     ;
 
+// Parses an array creater from one of two forms.
+// Either:
+//     new int[][]{{1,1},{2,2}};
+// Or:
+//     new int[2][][];
 arrayCreator returns [ArrayCreationNode ret]
     @init{
-        int levels = 1;
+        int levels = 0;
         List<ExpressionNode> list = new ArrayList<ExpressionNode>();
     }
     :   
         'new' createdName
         '[' ']'
+        {
+            levels = 1;
+        }
         (
             '[' ']'
             {
@@ -2758,7 +2766,6 @@ arrayCreator returns [ArrayCreationNode ret]
             '[' e2=expression ']'
             {
                 list.add($e2.ret);
-                levels++;
             }            
         )*
         (
