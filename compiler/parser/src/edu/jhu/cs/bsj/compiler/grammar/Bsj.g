@@ -2626,6 +2626,8 @@ restrictedPrimary returns [RestrictedPrimaryExpression ret]
             }
         )*
         (
+            // TODO: currently broken - makes a field access node when it shouldn't
+            // this is a somewhat deeper problem, in fact: this grammar allows things like "this.X[].class"
             identifierSuffix
             {
                 $ret = identifierSuffix[$ret];
@@ -2655,6 +2657,11 @@ restrictedPrimary returns [RestrictedPrimaryExpression ret]
         {
             $ret = $primitiveClassLiteral.ret;
         }
+    |
+        voidClassLiteral
+        {
+            $ret = $voidClassLiteral.ret;
+        }
     ;
 
 primitiveClassLiteral returns [ClassLiteralNode ret]
@@ -2665,17 +2672,10 @@ primitiveClassLiteral returns [ClassLiteralNode ret]
             $ret = factory.makeClassLiteralNode(typeNode);
         }
     :
-        (
-            primitiveType
-	        {
-	            typeNode = $primitiveType.ret;
-	        }
-	    |
-	        'void'
-	        {
-	           typeNode = factory.makeVoidTypeNode();
-	        }
-        )
+        primitiveType
+        {
+            typeNode = $primitiveType.ret;
+        }
         (
             arrayTypeIndicator[typeNode]
             {
@@ -2683,6 +2683,14 @@ primitiveClassLiteral returns [ClassLiteralNode ret]
             }
         )?
         '.' 'class'
+    ;
+
+voidClassLiteral returns [ClassLiteralNode ret]
+    :
+        'void' '.' 'class'
+        {
+            $ret = factory.makeClassLiteralNode(factory.makeVoidTypeNode());
+        }
     ;
 
 superSuffix  //TODO
@@ -2695,18 +2703,28 @@ superSuffix  //TODO
     ;
 
 
-identifierSuffix //TODO
-    :   ('[' ']'
+identifierSuffix[RestrictedPrimaryExpression in] returns [RestrictedPrimaryExpression ret]
+    :   
+        (
+            '[' ']'
         )+
         '.' 'class'
-    |   ('[' expression ']'
+    |   
+        (
+            '[' expression ']'
         )+
-    |   arguments
-    |   '.' 'class'
-    |   '.' nonWildcardTypeArguments IDENTIFIER arguments
-    |   '.' 'this'
-    |   '.' 'super' arguments
-    |   innerCreator
+    |   
+        arguments
+    |   
+        '.' 'class'
+    |   
+        '.' nonWildcardTypeArguments IDENTIFIER arguments
+    |   
+        '.' 'this'
+    |   
+        '.' 'super' arguments
+    |   
+        innerCreator
     ;
 
 
