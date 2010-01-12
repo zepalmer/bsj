@@ -2616,11 +2616,21 @@ restrictedPrimary returns [RestrictedPrimaryExpression ret]
         }
     |   
         'this'
-        ('.' IDENTIFIER
+        {
+            $ret = factory.makeThisNode(null);
+        }
+        (
+            '.' identifier
+            {
+                $ret = factory.makeFieldAccessNode($ret, $identifier.ret);
+            }
         )*
-        (identifierSuffix
+        (
+            identifierSuffix
+            {
+                $ret = identifierSuffix[$ret];
+            }
         )?
-        // TODO
     |   
         IDENTIFIER
         ('.' IDENTIFIER
@@ -2633,26 +2643,47 @@ restrictedPrimary returns [RestrictedPrimaryExpression ret]
         superSuffix
         // TODO
     |   
-        literal
+        lexicalLiteral
         {
-            $ret = $literal.ret;
+            $ret = $lexicalLiteral.ret;
         }
     |   
         creator
         // TODO
     |   
-        primitiveType
-        ('[' ']'
-        )*
-        '.' 'class'
-        // TODO
-    |   
-        'void' '.' 'class'
+        primitiveClassLiteral
         {
-            $ret = factory.makeClassLiteralNode(factory.makeVoidTypeNode());
+            $ret = $primitiveClassLiteral.ret;
         }
     ;
-    
+
+primitiveClassLiteral returns [ClassLiteralNode ret]
+        @init {
+            TypeNode typeNode;
+        }
+        @after {
+            $ret = factory.makeClassLiteralNode(typeNode);
+        }
+    :
+        (
+            primitiveType
+	        {
+	            typeNode = $primitiveType.ret;
+	        }
+	    |
+	        'void'
+	        {
+	           typeNode = factory.makeVoidTypeNode();
+	        }
+        )
+        (
+            arrayTypeIndicator[typeNode]
+            {
+                typeNode = $arrayTypeIndicator.ret;
+            }
+        )?
+        '.' 'class'
+    ;
 
 superSuffix  //TODO
     :   arguments
@@ -2951,7 +2982,7 @@ longLiteral [boolean isNegative] returns [LiteralNode<?> ret]
         }    
     ;
 
-literal returns [LiteralNode<?> ret]
+lexicalLiteral returns [LiteralNode<?> ret]
     :
         intLiteral[false]
         {
