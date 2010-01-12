@@ -2603,7 +2603,7 @@ postfixExpression returns [ExpressionNode ret]
         primary
         // TODO
     |
-        expressionName
+        expressionName ( '[' expression ']' /* TODO: array access */ )*
         // TODO
     )
     (
