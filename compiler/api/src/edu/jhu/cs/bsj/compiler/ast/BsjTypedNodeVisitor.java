@@ -26,6 +26,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.CharLiteralNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassInstantiationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.ClassLiteralNode;
 import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ConditionalExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ConstructorBodyNode;
@@ -125,6 +126,9 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
         } else if (node instanceof StringLiteralNode)
         {
             visitStringLiteralNodeStart((StringLiteralNode)node);
+        } else if (node instanceof ClassLiteralNode)
+        {
+            visitClassLiteralNodeStart((ClassLiteralNode)node);
         } else if (node instanceof DoubleLiteralNode)
         {
             visitDoubleLiteralNodeStart((DoubleLiteralNode)node);
@@ -398,6 +402,9 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
         } else if (node instanceof StringLiteralNode)
         {
             visitStringLiteralNodeStop((StringLiteralNode)node);
+        } else if (node instanceof ClassLiteralNode)
+        {
+            visitClassLiteralNodeStop((ClassLiteralNode)node);
         } else if (node instanceof DoubleLiteralNode)
         {
             visitDoubleLiteralNodeStop((DoubleLiteralNode)node);
@@ -697,6 +704,14 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
      * @param node The node being visited.
      */
     public void visitStringLiteralNodeStart(StringLiteralNode node)
+    {
+    }
+
+    /**
+     * Starts a visit for nodes of type ClassLiteralNode.
+     * @param node The node being visited.
+     */
+    public void visitClassLiteralNodeStart(ClassLiteralNode node)
     {
     }
 
@@ -1393,6 +1408,14 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
      * @param node The node being visited.
      */
     public void visitStringLiteralNodeStop(StringLiteralNode node)
+    {
+    }
+
+    /**
+     * Stops a visit for nodes of type ClassLiteralNode.
+     * @param node The node being visited.
+     */
+    public void visitClassLiteralNodeStop(ClassLiteralNode node)
     {
     }
 

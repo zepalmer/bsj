@@ -46,6 +46,7 @@ import edu.jhu.cs.bsj.compiler.impl.ast.node.CharLiteralNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.ClassBodyNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.ClassDeclarationNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.ClassInstantiationNodeImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.node.ClassLiteralNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.CompilationUnitNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.ConditionalExpressionNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.ConstructorBodyNodeImpl;
@@ -260,16 +261,6 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
 
     /**
-     * Creates a PrimitiveTypeNode.
-     */
-    public PrimitiveTypeNode makePrimitiveTypeNode(
-            PrimitiveType primitiveType)
-    {
-        PrimitiveTypeNode ret = new PrimitiveTypeNodeImpl(primitiveType);
-        return ret;
-    }
-
-    /**
      * Creates a SuperclassConstructorInvocationNode.
      */
     public SuperclassConstructorInvocationNode makeSuperclassConstructorInvocationNode(
@@ -278,6 +269,16 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ListNode<? extends TypeNode> typeArguments)
     {
         SuperclassConstructorInvocationNode ret = new SuperclassConstructorInvocationNodeImpl(qualifyingExpression, arguments, typeArguments);
+        return ret;
+    }
+
+    /**
+     * Creates a PrimitiveTypeNode.
+     */
+    public PrimitiveTypeNode makePrimitiveTypeNode(
+            PrimitiveType primitiveType)
+    {
+        PrimitiveTypeNode ret = new PrimitiveTypeNodeImpl(primitiveType);
         return ret;
     }
 
@@ -825,6 +826,16 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ListNode<? extends AnnotationValueNode> values)
     {
         AnnotationArrayValueNode ret = new AnnotationArrayValueNodeImpl(values);
+        return ret;
+    }
+
+    /**
+     * Creates a ClassLiteralNode.
+     */
+    public ClassLiteralNode makeClassLiteralNode(
+            TypeNode value)
+    {
+        ClassLiteralNode ret = new ClassLiteralNodeImpl(value);
         return ret;
     }
 

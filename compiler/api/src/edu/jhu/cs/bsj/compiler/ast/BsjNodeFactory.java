@@ -116,18 +116,18 @@ public interface BsjNodeFactory
             boolean staticImport);
 
     /**
-     * Creates a PrimitiveTypeNode.
-     */
-    public PrimitiveTypeNode makePrimitiveTypeNode(
-            PrimitiveType primitiveType);
-
-    /**
      * Creates a SuperclassConstructorInvocationNode.
      */
     public SuperclassConstructorInvocationNode makeSuperclassConstructorInvocationNode(
             ExpressionNode qualifyingExpression,
             ListNode<? extends ExpressionNode> arguments,
             ListNode<? extends TypeNode> typeArguments);
+
+    /**
+     * Creates a PrimitiveTypeNode.
+     */
+    public PrimitiveTypeNode makePrimitiveTypeNode(
+            PrimitiveType primitiveType);
 
     /**
      * Creates a InitializerDeclarationNode.
@@ -475,6 +475,12 @@ public interface BsjNodeFactory
      */
     public AnnotationArrayValueNode makeAnnotationArrayValueNode(
             ListNode<? extends AnnotationValueNode> values);
+
+    /**
+     * Creates a ClassLiteralNode.
+     */
+    public ClassLiteralNode makeClassLiteralNode(
+            TypeNode value);
 
     /**
      * Creates a SingleElementAnnotationNode.
