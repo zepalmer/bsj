@@ -1,6 +1,5 @@
 package edu.jhu.cs.bsj.compiler.ast.node;
 
-import edu.jhu.cs.bsj.compiler.ast.tags.InlineTypeDeclarable;
 
 /**
  * A node representing an inline type declaration.  This is used to allow classes and enums to be declared

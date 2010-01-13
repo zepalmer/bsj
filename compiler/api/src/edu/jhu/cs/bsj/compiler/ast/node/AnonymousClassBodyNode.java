@@ -1,6 +1,5 @@
 package edu.jhu.cs.bsj.compiler.ast.node;
 
-import edu.jhu.cs.bsj.compiler.ast.tags.AnonymousClassMember;
 
 /**
  * Represents the body of an anonymous class declaration.  This body is distinct from {@link ClassBodyNode} in that

@@ -1,6 +1,5 @@
 package edu.jhu.cs.bsj.compiler.ast.node;
 
-import edu.jhu.cs.bsj.compiler.ast.tags.TypeArgument;
 
 /**
  * A node representing parameterized types.  This node represents the use of a type which has type arguments, such

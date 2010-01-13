@@ -2,8 +2,8 @@ package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassBodyNode;
+import edu.jhu.cs.bsj.compiler.ast.node.ClassMember;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
-import edu.jhu.cs.bsj.compiler.ast.tags.ClassMember;
 
 public class ClassBodyNodeImpl extends NodeImpl implements ClassBodyNode
 {

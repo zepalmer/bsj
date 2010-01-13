@@ -1,6 +1,5 @@
 package edu.jhu.cs.bsj.compiler.ast.node;
 
-import edu.jhu.cs.bsj.compiler.ast.tags.BaseType;
 
 /**
  * A node representing any declared type.  In the BSJ API, a "declared type" refers to any type which has been

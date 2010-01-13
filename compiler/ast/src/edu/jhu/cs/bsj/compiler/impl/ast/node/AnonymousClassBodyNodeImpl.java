@@ -2,8 +2,8 @@ package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.AnonymousClassBodyNode;
+import edu.jhu.cs.bsj.compiler.ast.node.AnonymousClassMember;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
-import edu.jhu.cs.bsj.compiler.ast.tags.AnonymousClassMember;
 
 public class AnonymousClassBodyNodeImpl extends NodeImpl implements AnonymousClassBodyNode
 {

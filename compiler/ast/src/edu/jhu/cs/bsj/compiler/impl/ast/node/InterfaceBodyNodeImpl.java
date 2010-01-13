@@ -2,8 +2,8 @@ package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.InterfaceBodyNode;
+import edu.jhu.cs.bsj.compiler.ast.node.InterfaceMember;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
-import edu.jhu.cs.bsj.compiler.ast.tags.InterfaceMember;
 
 public class InterfaceBodyNodeImpl extends NodeImpl implements InterfaceBodyNode
 {

@@ -12,14 +12,6 @@ import edu.jhu.cs.bsj.compiler.ast.PrimitiveType;
 import edu.jhu.cs.bsj.compiler.ast.UnaryOperator;
 import edu.jhu.cs.bsj.compiler.ast.node.*;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.CodeLiteralNode;
-import edu.jhu.cs.bsj.compiler.ast.tags.AnnotationMember;
-import edu.jhu.cs.bsj.compiler.ast.tags.AnonymousClassMember;
-import edu.jhu.cs.bsj.compiler.ast.tags.BaseType;
-import edu.jhu.cs.bsj.compiler.ast.tags.BoundType;
-import edu.jhu.cs.bsj.compiler.ast.tags.ClassMember;
-import edu.jhu.cs.bsj.compiler.ast.tags.InlineTypeDeclarable;
-import edu.jhu.cs.bsj.compiler.ast.tags.InterfaceMember;
-import edu.jhu.cs.bsj.compiler.ast.tags.TypeArgument;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.AlternateConstructorInvocationNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.AnnotationAnnotationValueNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.AnnotationArrayValueNodeImpl;
@@ -225,15 +217,6 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
 
     /**
-     * Creates a VoidStatementNode.
-     */
-    public VoidStatementNode makeVoidStatementNode()
-    {
-        VoidStatementNode ret = new VoidStatementNodeImpl();
-        return ret;
-    }
-
-    /**
      * Creates a CaseNode.
      */
     public CaseNode makeCaseNode(
@@ -241,6 +224,15 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ListNode<? extends StatementNode> statements)
     {
         CaseNode ret = new CaseNodeImpl(expression, statements);
+        return ret;
+    }
+
+    /**
+     * Creates a VoidStatementNode.
+     */
+    public VoidStatementNode makeVoidStatementNode()
+    {
+        VoidStatementNode ret = new VoidStatementNodeImpl();
         return ret;
     }
 
@@ -736,17 +728,6 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
 
     /**
-     * Creates a WhileLoopNode.
-     */
-    public WhileLoopNode makeWhileLoopNode(
-            ExpressionNode condition,
-            StatementNode statement)
-    {
-        WhileLoopNode ret = new WhileLoopNodeImpl(condition, statement);
-        return ret;
-    }
-
-    /**
      * Creates a ForLoopNode.
      */
     public ForLoopNode makeForLoopNode(
@@ -756,6 +737,17 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             StatementNode statement)
     {
         ForLoopNode ret = new ForLoopNodeImpl(initializer, update, condition, statement);
+        return ret;
+    }
+
+    /**
+     * Creates a WhileLoopNode.
+     */
+    public WhileLoopNode makeWhileLoopNode(
+            ExpressionNode condition,
+            StatementNode statement)
+    {
+        WhileLoopNode ret = new WhileLoopNodeImpl(condition, statement);
         return ret;
     }
 
@@ -793,22 +785,22 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
 
     /**
-     * Creates a ArrayTypeNode.
-     */
-    public ArrayTypeNode makeArrayTypeNode(
-            TypeNode type)
-    {
-        ArrayTypeNode ret = new ArrayTypeNodeImpl(type);
-        return ret;
-    }
-
-    /**
      * Creates a IdentifierNode.
      */
     public IdentifierNode makeIdentifierNode(
             String identifier)
     {
         IdentifierNode ret = new IdentifierNodeImpl(identifier);
+        return ret;
+    }
+
+    /**
+     * Creates a ArrayTypeNode.
+     */
+    public ArrayTypeNode makeArrayTypeNode(
+            TypeNode type)
+    {
+        ArrayTypeNode ret = new ArrayTypeNodeImpl(type);
         return ret;
     }
 

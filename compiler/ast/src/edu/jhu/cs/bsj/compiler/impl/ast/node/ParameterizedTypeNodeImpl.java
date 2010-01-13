@@ -4,7 +4,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ParameterizedTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.RawTypeNode;
-import edu.jhu.cs.bsj.compiler.ast.tags.TypeArgument;
+import edu.jhu.cs.bsj.compiler.ast.node.TypeArgument;
 
 public class ParameterizedTypeNodeImpl extends DeclaredTypeNodeImpl implements ParameterizedTypeNode
 {

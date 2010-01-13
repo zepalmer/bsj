@@ -1,7 +1,6 @@
 package edu.jhu.cs.bsj.compiler.ast.node;
 
 import edu.jhu.cs.bsj.compiler.ast.PrimitiveType;
-import edu.jhu.cs.bsj.compiler.ast.tags.BaseType;
 
 /**
  * A node representing a primitive type.

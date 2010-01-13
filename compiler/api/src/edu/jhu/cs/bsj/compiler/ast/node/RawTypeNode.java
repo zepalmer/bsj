@@ -1,6 +1,5 @@
 package edu.jhu.cs.bsj.compiler.ast.node;
 
-import edu.jhu.cs.bsj.compiler.ast.tags.ParameterizableType;
 
 /**
  * Represents a raw type.  Examples of raw types in Java include most of the API: String, InputStream, and so on.

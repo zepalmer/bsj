@@ -2,8 +2,8 @@ package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationBodyNode;
+import edu.jhu.cs.bsj.compiler.ast.node.AnnotationMember;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
-import edu.jhu.cs.bsj.compiler.ast.tags.AnnotationMember;
 
 public class AnnotationBodyNodeImpl extends NodeImpl implements AnnotationBodyNode
 {

@@ -2,7 +2,7 @@ package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.ArrayCreationNode;
-import edu.jhu.cs.bsj.compiler.ast.tags.BaseType;
+import edu.jhu.cs.bsj.compiler.ast.node.BaseType;
 
 public abstract class ArrayCreationNodeImpl extends PrimaryExpressionNodeImpl implements ArrayCreationNode
 {
@@ -37,7 +37,15 @@ public abstract class ArrayCreationNodeImpl extends PrimaryExpressionNodeImpl im
      */
     public void setBaseType(BaseType baseType)
     {
+        if (this.baseType instanceof NodeImpl)
+        {
+            ((NodeImpl)this.baseType).setParent(null);
+        }
         this.baseType = baseType;
+        if (this.baseType instanceof NodeImpl)
+        {
+            ((NodeImpl)this.baseType).setParent(this);
+        }
     }
 
     /**
@@ -69,5 +77,6 @@ public abstract class ArrayCreationNodeImpl extends PrimaryExpressionNodeImpl im
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
+        this.baseType.receive(visitor);
     }
 }

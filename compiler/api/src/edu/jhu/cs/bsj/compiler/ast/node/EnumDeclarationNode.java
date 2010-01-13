@@ -1,6 +1,5 @@
 package edu.jhu.cs.bsj.compiler.ast.node;
 
-import edu.jhu.cs.bsj.compiler.ast.tags.InlineTypeDeclarable;
 
 /**
  * Represents the declaration of a class, as in:

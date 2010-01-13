@@ -1,6 +1,5 @@
 package edu.jhu.cs.bsj.compiler.ast.node;
 
-import edu.jhu.cs.bsj.compiler.ast.tags.InterfaceMember;
 
 /**
  * Represents the body of an interface declaration.

@@ -5,14 +5,6 @@ import java.util.Set;
 
 import edu.jhu.cs.bsj.compiler.ast.node.*;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.CodeLiteralNode;
-import edu.jhu.cs.bsj.compiler.ast.tags.AnnotationMember;
-import edu.jhu.cs.bsj.compiler.ast.tags.AnonymousClassMember;
-import edu.jhu.cs.bsj.compiler.ast.tags.BaseType;
-import edu.jhu.cs.bsj.compiler.ast.tags.BoundType;
-import edu.jhu.cs.bsj.compiler.ast.tags.ClassMember;
-import edu.jhu.cs.bsj.compiler.ast.tags.InlineTypeDeclarable;
-import edu.jhu.cs.bsj.compiler.ast.tags.InterfaceMember;
-import edu.jhu.cs.bsj.compiler.ast.tags.TypeArgument;
 
 /**
  * This interface is implemented by any object which can act as a factory for BSJ nodes.  It
@@ -91,16 +83,16 @@ public interface BsjNodeFactory
             NameCategory category);
 
     /**
-     * Creates a VoidStatementNode.
-     */
-    public VoidStatementNode makeVoidStatementNode();
-
-    /**
      * Creates a CaseNode.
      */
     public CaseNode makeCaseNode(
             ExpressionNode expression,
             ListNode<? extends StatementNode> statements);
+
+    /**
+     * Creates a VoidStatementNode.
+     */
+    public VoidStatementNode makeVoidStatementNode();
 
     /**
      * Creates a CodeLiteralNode.
@@ -414,18 +406,18 @@ public interface BsjNodeFactory
             AnnotationNode annotation);
 
     /**
-     * Creates a WhileLoopNode.
-     */
-    public WhileLoopNode makeWhileLoopNode(
-            ExpressionNode condition,
-            StatementNode statement);
-
-    /**
      * Creates a ForLoopNode.
      */
     public ForLoopNode makeForLoopNode(
             ForInitializerNode initializer,
             ListNode<? extends ExpressionStatementNode> update,
+            ExpressionNode condition,
+            StatementNode statement);
+
+    /**
+     * Creates a WhileLoopNode.
+     */
+    public WhileLoopNode makeWhileLoopNode(
             ExpressionNode condition,
             StatementNode statement);
 
@@ -451,16 +443,16 @@ public interface BsjNodeFactory
             IdentifierNode label);
 
     /**
-     * Creates a ArrayTypeNode.
-     */
-    public ArrayTypeNode makeArrayTypeNode(
-            TypeNode type);
-
-    /**
      * Creates a IdentifierNode.
      */
     public IdentifierNode makeIdentifierNode(
             String identifier);
+
+    /**
+     * Creates a ArrayTypeNode.
+     */
+    public ArrayTypeNode makeArrayTypeNode(
+            TypeNode type);
 
     /**
      * Creates a ArrayInitializerCreationNode.

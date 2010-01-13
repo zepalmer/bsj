@@ -1,8 +1,8 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.node.InlineTypeDeclarable;
 import edu.jhu.cs.bsj.compiler.ast.node.InlineTypeDeclarationNode;
-import edu.jhu.cs.bsj.compiler.ast.tags.InlineTypeDeclarable;
 
 public class InlineTypeDeclarationNodeImpl extends StatementNodeImpl implements InlineTypeDeclarationNode
 {
@@ -32,7 +32,15 @@ public class InlineTypeDeclarationNodeImpl extends StatementNodeImpl implements 
      */
     public void setDeclaration(InlineTypeDeclarable declaration)
     {
+        if (this.declaration instanceof NodeImpl)
+        {
+            ((NodeImpl)this.declaration).setParent(null);
+        }
         this.declaration = declaration;
+        if (this.declaration instanceof NodeImpl)
+        {
+            ((NodeImpl)this.declaration).setParent(this);
+        }
     }
 
     /**
@@ -46,5 +54,6 @@ public class InlineTypeDeclarationNodeImpl extends StatementNodeImpl implements 
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
+        this.declaration.receive(visitor);
     }
 }

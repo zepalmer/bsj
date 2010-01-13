@@ -65,6 +65,45 @@ ArrayIndexable+ :: Node
     @docs
         This tagging interface is used to denote AST nodes which can be used as array reference expressions inside of
         an array access node.
+        
+AnnotationMember+ :: Node
+	@docs
+		This tagging interface is used to denote AST nodes which can be used as members of an annotation declaration's body.
+
+AnonymousClassMember+ :: Node + ClassMember
+	@docs
+		This tagging interface is used to denote AST nodes which can be used as members of an anonymous class's body.  Since
+		the set of declarations which may appear in an anonymous class is a subset of that which may appear in a named class,
+ 		this type is a subtype of {@link ClassMember}.
+ 		
+BaseType+ :: Node
+	@docs
+		This tagging interface is used to denote AST nodes which can be used as array base types.
+		
+BoundType+ :: TypeNode
+	@docs
+		This tagging interface is used to denote AST nodes which can be used as type parameter bounds.
+		
+ClassMember+ :: Node
+	@docs
+		This tagging interface is used to denote AST nodes which can be used as members of a class declaration's body.
+		
+InlineTypeDeclarable+ :: Node
+	@docs
+		This tagging interface is used to denote AST nodes which represent type declarations and can be declared inline
+		as a statement.
+		
+InterfaceMember+ :: Node
+	@docs
+		This tagging interface is used to denote AST nodes which can be used as members of an interface declaration's body.
+		
+ParameterizableType+ :: TypeNode
+	@docs
+		This tagging interface is used to denote AST nodes which can be parameterized.
+		
+TypeArgument+ :: Node
+	@docs
+		This tagging interface is used to denote AST nodes which can be used as type arguments.
 
 ### Naming Nodes ######################################################################################################
 

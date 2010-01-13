@@ -1,6 +1,5 @@
 package edu.jhu.cs.bsj.compiler.ast.node;
 
-import edu.jhu.cs.bsj.compiler.ast.tags.BaseType;
 
 /**
  * Represents the creation of an array, including both instantiation and initialization.

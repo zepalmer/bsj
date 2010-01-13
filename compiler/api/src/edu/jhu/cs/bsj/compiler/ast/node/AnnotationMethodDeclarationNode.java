@@ -1,6 +1,5 @@
 package edu.jhu.cs.bsj.compiler.ast.node;
 
-import edu.jhu.cs.bsj.compiler.ast.tags.AnnotationMember;
 
 /**
  * A node representing an annotation method declaration, as in:
