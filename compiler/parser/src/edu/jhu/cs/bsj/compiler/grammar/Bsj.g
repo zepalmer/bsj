@@ -817,7 +817,7 @@ initializerBlock returns [InitializerDeclarationNode ret]
         }
     ;
     
-classBodyDeclaration returns [ClassMember ret]
+classBodyDeclaration returns [ClassMemberNode ret]
     :
         voidTypeDeclaration
         {
@@ -840,7 +840,7 @@ classBodyDeclaration returns [ClassMember ret]
         }
     ;
 
-anonymousClassBodyDeclaration returns [AnonymousClassMember ret]
+anonymousClassBodyDeclaration returns [AnonymousClassMemberNode ret]
     :
         voidTypeDeclaration
         {
@@ -858,7 +858,7 @@ anonymousClassBodyDeclaration returns [AnonymousClassMember ret]
         }
     ;
 
-memberDecl returns [AnonymousClassMember ret]
+memberDecl returns [AnonymousClassMemberNode ret]
     :    
         fieldDeclaration
         {
@@ -1028,7 +1028,7 @@ fieldDeclaration returns [FieldDeclarationNode ret]
         }   
     ;
 
-interfaceBodyDeclaration returns [InterfaceMember ret]
+interfaceBodyDeclaration returns [InterfaceMemberNode ret]
     :
         interfaceFieldDeclaration
         {
@@ -1288,7 +1288,7 @@ typeArguments returns [ListNode<TypeArgument> ret]
 //     Foo<? extends Bar>
 // this node would parse
 //     ? extends Bar
-typeArgument returns [TypeArgument ret]
+typeArgument returns [TypeArgumentNode ret]
         @init {
             boolean upper = false;
         } 
@@ -1622,7 +1622,7 @@ annotationTypeBody returns [AnnotationBodyNode ret]
         '}'
     ;
 
-annotationTypeElementDeclaration returns [AnnotationMember ret]
+annotationTypeElementDeclaration returns [AnnotationMemberNode ret]
     :   
         annotationMethodDeclaration
         {
@@ -2602,7 +2602,7 @@ postfixExpression returns [ExpressionNode ret]
         )*
     ;
 
-primary returns [PrimaryExpression ret]
+primary returns [PrimaryExpressionNode ret]
     :
         (
             arrayCreator
@@ -2623,7 +2623,7 @@ primary returns [PrimaryExpression ret]
         )?
     ;
 
-restrictedPrimary returns [RestrictedPrimaryExpression ret]
+restrictedPrimary returns [RestrictedPrimaryExpressionNode ret]
     :
         (
             // lexical literal
@@ -2714,7 +2714,7 @@ restrictedPrimary returns [RestrictedPrimaryExpression ret]
         )?
     ;
     
-primarySuffixes[PrimaryExpression in] returns [PrimaryExpression ret]
+primarySuffixes[PrimaryExpressionNode in] returns [PrimaryExpressionNode ret]
         @init {
             $ret = $in;
         }
@@ -2727,7 +2727,7 @@ primarySuffixes[PrimaryExpression in] returns [PrimaryExpression ret]
         )+
     ;
 
-primarySuffix[PrimaryExpression in] returns [RestrictedPrimaryExpression ret]
+primarySuffix[PrimaryExpressionNode in] returns [RestrictedPrimaryExpressionNode ret]
     :
         '.' NEW typeArguments? identifier typeArguments? arguments anonymousClassBody? arrayAccess?
         // TODO: class instance creation
@@ -2990,7 +2990,7 @@ arrayInitializer returns [ArrayInitializerNode ret]
     ;
 
 
-createdName returns [BaseType ret]
+createdName returns [BaseTypeNode ret]
     :   
         classOrInterfaceType
         {
