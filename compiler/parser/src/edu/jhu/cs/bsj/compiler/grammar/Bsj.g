@@ -2624,10 +2624,16 @@ primary returns [PrimaryExpression ret]
             }
         |
             restrictedPrimary
-            // TODO
+            {
+                $ret  = $restrictedPrimary.ret;
+            }
         )
-        primarySuffixes?
-        // TODO
+        (
+            primarySuffixes[$ret]
+            {
+                $ret = $primarySuffixes.ret;
+            }
+        )?
     ;
 
 restrictedPrimary returns [RestrictedPrimaryExpression ret]
@@ -2639,8 +2645,11 @@ restrictedPrimary returns [RestrictedPrimaryExpression ret]
                 $ret = $lexicalLiteral.ret;
 		    }
 		|
-		    typeName '.' 'class' 
-		    // TODO: declared class literal
+		    // class literal for declared types
+		    typeName '.' 'class'
+		    {
+		        $ret = factory.makeRawTypeNode($typeName.ret);
+		    } 
 		|
 		    // void class literal
 		    voidClassLiteral 
@@ -2686,12 +2695,20 @@ restrictedPrimary returns [RestrictedPrimaryExpression ret]
 	    )?
     ;
     
-primarySuffixes // TODO
+primarySuffixes[PrimaryExpression in] returns [PrimaryExpression ret] // TODO
+        @init {
+            $ret = $in;
+        }
     :
-        primarySuffix+
+        (
+            primarySuffix[$ret]
+            {
+                $ret = $primarySuffix.ret;
+            }
+        )+
     ;
 
-primarySuffix // TODO
+primarySuffix[PrimaryExpression in] returns [PrimaryExpression ret] // TODO
     :
         '.' NEW typeArguments? identifier typeArguments? arguments anonymousClassBody? ( '[' expression ']' /* TODO: array access */ )*
         // TODO: class instance creation

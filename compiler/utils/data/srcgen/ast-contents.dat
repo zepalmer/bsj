@@ -652,6 +652,8 @@ CharLiteralNode :: LiteralNode<Character>
     @docs
         A node representing a character literal.
 
+# TODO: change TypeNode to UnparameterizedTypeNode and introduce appropriate tagging interface
+# (After all, Set<String>.class is illegal)
 ClassLiteralNode :: LiteralNode<TypeNode>
     @docs
         A note representing a class literal, such as <tt>String.class</tt>.  Note that the BSJ compiler API includes a
