@@ -5,7 +5,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.BlockStatementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.SynchronizedNode;
 
-public class SynchronizedNodeImpl extends StatementNodeImpl implements SynchronizedNode
+public class SynchronizedNodeImpl extends NodeImpl implements SynchronizedNode
 {
     /** The synchronization expression. */
     private ExpressionNode expression;

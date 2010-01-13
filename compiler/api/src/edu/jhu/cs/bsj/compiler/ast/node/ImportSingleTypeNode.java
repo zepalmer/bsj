@@ -4,7 +4,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
 /**
  * A node representing a single type import statement, such as "<tt>import java.util.Set</tt>".
  */
-public interface ImportSingleTypeNode extends ImportNode
+public interface ImportSingleTypeNode extends Node, ImportNode
 {
     /**
      * Gets the name of the type to import.

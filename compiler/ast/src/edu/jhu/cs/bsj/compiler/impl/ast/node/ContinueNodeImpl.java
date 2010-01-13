@@ -4,7 +4,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.ContinueNode;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 
-public class ContinueNodeImpl extends StatementNodeImpl implements ContinueNode
+public class ContinueNodeImpl extends NodeImpl implements ContinueNode
 {
     /** The continue label. */
     private IdentifierNode label;

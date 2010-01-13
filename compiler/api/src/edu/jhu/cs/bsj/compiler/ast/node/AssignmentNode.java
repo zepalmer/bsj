@@ -9,7 +9,7 @@ import edu.jhu.cs.bsj.compiler.ast.AssignmentOperator;
  * </pre>
  * where <i>op</i> is one of <tt>=</tt>, <tt>+=</tt>, <tt>%=</tt>, etc.
  */
-public interface AssignmentNode extends ExpressionNode
+public interface AssignmentNode extends Node, ExpressionNode
 {
     /**
      * Gets the variable to which to assign a value.

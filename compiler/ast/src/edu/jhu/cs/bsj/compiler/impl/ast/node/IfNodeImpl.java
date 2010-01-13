@@ -5,7 +5,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.IfNode;
 import edu.jhu.cs.bsj.compiler.ast.node.StatementNode;
 
-public class IfNodeImpl extends StatementNodeImpl implements IfNode
+public class IfNodeImpl extends NodeImpl implements IfNode
 {
     /** The condition. */
     private ExpressionNode condition;

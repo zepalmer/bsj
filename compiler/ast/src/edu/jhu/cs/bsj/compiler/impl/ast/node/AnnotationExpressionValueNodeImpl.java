@@ -4,7 +4,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationExpressionValueNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 
-public class AnnotationExpressionValueNodeImpl extends AnnotationValueNodeImpl implements AnnotationExpressionValueNode
+public class AnnotationExpressionValueNodeImpl extends NodeImpl implements AnnotationExpressionValueNode
 {
     /** The expression. */
     private ExpressionNode expression;

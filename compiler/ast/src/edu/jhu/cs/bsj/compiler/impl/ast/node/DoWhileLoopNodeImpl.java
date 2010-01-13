@@ -5,7 +5,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.DoWhileLoopNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.StatementNode;
 
-public class DoWhileLoopNodeImpl extends StatementNodeImpl implements DoWhileLoopNode
+public class DoWhileLoopNodeImpl extends NodeImpl implements DoWhileLoopNode
 {
     /** The loop's condition. */
     private ExpressionNode condition;

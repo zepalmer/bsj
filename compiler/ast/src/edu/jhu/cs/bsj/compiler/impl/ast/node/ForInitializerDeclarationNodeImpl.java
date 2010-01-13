@@ -4,7 +4,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.ForInitializerDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclarationNode;
 
-public class ForInitializerDeclarationNodeImpl extends ForInitializerNodeImpl implements ForInitializerDeclarationNode
+public class ForInitializerDeclarationNodeImpl extends NodeImpl implements ForInitializerDeclarationNode
 {
     /** The variables declared in this initializer. */
     private VariableDeclarationNode declaration;

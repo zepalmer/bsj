@@ -5,7 +5,7 @@ import edu.jhu.cs.bsj.compiler.ast.UnaryOperator;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.UnaryOperatorNode;
 
-public class UnaryOperatorNodeImpl extends ExpressionNodeImpl implements UnaryOperatorNode
+public class UnaryOperatorNodeImpl extends NodeImpl implements UnaryOperatorNode
 {
     /** The expression on which to operate. */
     private ExpressionNode expression;

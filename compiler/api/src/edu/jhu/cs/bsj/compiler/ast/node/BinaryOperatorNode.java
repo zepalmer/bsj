@@ -5,7 +5,7 @@ import edu.jhu.cs.bsj.compiler.ast.BinaryOperator;
 /**
  * Represents the application of a binary operator.
  */
-public interface BinaryOperatorNode extends ExpressionNode
+public interface BinaryOperatorNode extends Node, ExpressionNode
 {
     /**
      * Gets the left operand of the expression.

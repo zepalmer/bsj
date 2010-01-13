@@ -13,7 +13,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
  * Hence, type exists on this node instead of its parent.  If the variable is not initialized, the
  * <tt>initializer</tt> field is <tt>null</tt>.
  */
-public interface VariableDeclaratorNode extends StatementNode
+public interface VariableDeclaratorNode extends Node, StatementNode
 {
     /**
      * Gets the type of this variable.

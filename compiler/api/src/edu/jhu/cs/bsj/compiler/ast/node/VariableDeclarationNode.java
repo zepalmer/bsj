@@ -14,7 +14,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
  *     <pre>
  *     <i>type identifier</i> = <i>expression</i>, <i>identifier</i> = <i>expression</i>, ...;
  */
-public interface VariableDeclarationNode extends StatementNode
+public interface VariableDeclarationNode extends Node, StatementNode
 {
     /**
      * Gets the modifiers for this variable.

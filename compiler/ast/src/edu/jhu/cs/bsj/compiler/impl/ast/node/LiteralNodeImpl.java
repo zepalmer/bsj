@@ -3,7 +3,7 @@ package edu.jhu.cs.bsj.compiler.impl.ast.node;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.LiteralNode;
 
-public abstract class LiteralNodeImpl<T> extends RestrictedPrimaryExpressionNodeImpl implements LiteralNode<T>
+public abstract class LiteralNodeImpl<T> extends NodeImpl implements LiteralNode<T>
 {
     /** The literal value for this node. */
     private T value;

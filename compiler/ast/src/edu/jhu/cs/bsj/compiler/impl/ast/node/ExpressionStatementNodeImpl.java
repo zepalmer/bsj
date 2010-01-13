@@ -4,7 +4,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionStatementNode;
 
-public class ExpressionStatementNodeImpl extends StatementNodeImpl implements ExpressionStatementNode
+public class ExpressionStatementNodeImpl extends NodeImpl implements ExpressionStatementNode
 {
     /** This statement's expression. */
     private ExpressionNode expression;

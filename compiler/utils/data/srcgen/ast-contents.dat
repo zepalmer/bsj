@@ -68,13 +68,18 @@ ArrayIndexable+ :: Node
         
 AnnotationMember+ :: Node
 	@docs
-		This tagging interface is used to denote AST nodes which can be used as members of an annotation declaration's body.
+		This tagging interface is used to denote AST nodes which can be used as members of an annotation declaration's
+		body.
+
+AnnotationValueNode+ :: Node
+    @docs
+        This tagging interface is used to denote AST nodes which represent annotation values.
 
 AnonymousClassMember+ :: Node + ClassMember
 	@docs
-		This tagging interface is used to denote AST nodes which can be used as members of an anonymous class's body.  Since
-		the set of declarations which may appear in an anonymous class is a subset of that which may appear in a named class,
- 		this type is a subtype of {@link ClassMember}.
+		This tagging interface is used to denote AST nodes which can be used as members of an anonymous class's body.
+		Since the set of declarations which may appear in an anonymous class is a subset of that which may appear in a
+		named class, this type is a subtype of {@link ClassMember}.
  		
 BaseType+ :: Node
 	@docs
@@ -88,6 +93,24 @@ ClassMember+ :: Node
 	@docs
 		This tagging interface is used to denote AST nodes which can be used as members of a class declaration's body.
 		
+DeclaredTypeNode+ :: Node + ReferenceTypeNode, BaseType
+    @docs
+        A node representing any declared type.  In the BSJ API, a "declared type" refers to any type which has been
+        created by a declaration statement.  Arrays and primitives are not declared types because they are not declared.
+
+ExpressionNode+ :: VariableInitializerNode
+    @docs
+        This tagging interface is used to denote BSJ AST nodes which represent expressions.
+
+ForInitializerNode+ :: Node
+    @docs
+        This tagging interface is used to denote AST nodes which are used as standard for-loop initializers.  It exists
+        to allow the two different types of for loop initializers to be used coherently.
+
+ImportNode+ :: Node
+    @docs
+        This tagging interface is used to denote AST nodes which represent import statements.
+
 InlineTypeDeclarable+ :: Node
 	@docs
 		This tagging interface is used to denote AST nodes which represent type declarations and can be declared inline
@@ -95,16 +118,44 @@ InlineTypeDeclarable+ :: Node
 		
 InterfaceMember+ :: Node
 	@docs
-		This tagging interface is used to denote AST nodes which can be used as members of an interface declaration's body.
+		This tagging interface is used to denote AST nodes which can be used as members of an interface declaration's
+		body.
 		
-ParameterizableType+ :: TypeNode
+ParameterizableType+ :: Node + TypeNode
 	@docs
 		This tagging interface is used to denote AST nodes which can be parameterized.
+
+PrimaryExpressionNode+ :: Node + ExpressionNode
+    @docs
+        A tagging interface for all nodes considered "primary expressions" by the Java Language Specification.  Primary
+        expressions include the basic building blocks of more complex expressions.
+
+ReferenceTypeNode+ :: Node + TypeNode, TypeArgument, BoundType
+    @docs
+        A node representing a reference type.  A reference type in Java is any non-primitive type.
+
+RestrictedPrimaryExpressionNode+ :: Node + PrimaryExpressionNode, ArrayIndexable
+    @docs
+        A tagging interface for restricted primary expressions.  This maps to the <i>PrimaryNoNewArray</i> parse target
+        in the JLS.
+
+StatementNode+ :: Node
+    @docs
+        This tagging interface is used to denote AST nodes which represent statements.
 		
 TypeArgument+ :: Node
 	@docs
 		This tagging interface is used to denote AST nodes which can be used as type arguments.
 
+TypeNode+ :: Node
+    @docs
+        This tagging interface is used to denote AST nodes which refer to types.
+
+VariableInitializerNode+ :: Node
+    @docs
+        This tagging interface is used to denote AST nodes which represent a variable initialization using either an
+        expression or an array initializer.          
+        
 ### Naming Nodes ######################################################################################################
 
 IdentifierNode :: Node
@@ -153,7 +204,7 @@ SimpleNameNode :: NameNode
 
 ### Expression Nodes ##################################################################################################
 
-ArrayAccessNode :: RestrictedPrimaryExpressionNode
+ArrayAccessNode :: Node + RestrictedPrimaryExpressionNode
     @props
     arrayExpression         ArrayIndexable                              | the expression identifying the array
     indexExpression         ExpressionNode                              | the index into the array
@@ -163,7 +214,7 @@ ArrayAccessNode :: RestrictedPrimaryExpressionNode
         <i>expression</i>[<i>index</i>]
         </pre>
         
-ArrayCreationNode* :: PrimaryExpressionNode
+ArrayCreationNode* :: Node + PrimaryExpressionNode
 	@props
 	baseType				BaseType									| the base type for this array
 	arrayLevels				int											| the number of uninitialized levels for this array
@@ -192,7 +243,7 @@ ArrayInstantiatorCreationNode :: ArrayCreationNode
 		Levels for this array creator refer to square braces without initializers,
 		for example <code>new int[2][][]</code> would have two levels.
 			
-AssignmentNode :: ExpressionNode
+AssignmentNode :: Node + ExpressionNode
     @props
     variable                ExpressionNode                              | the variable to which to assign a value
     operator                AssignmentOperator                          | the assignment operator indicating the operation to perform
@@ -204,7 +255,7 @@ AssignmentNode :: ExpressionNode
         </pre>
         where <i>op</i> is one of <tt>=</tt>, <tt>+=</tt>, <tt>%=</tt>, etc.
 
-BinaryOperatorNode :: ExpressionNode
+BinaryOperatorNode :: Node + ExpressionNode
     @props
     leftOperand             ExpressionNode                              | the left operand of the expression
     rightOperand            ExpressionNode                              | the right operand of the expression
@@ -212,7 +263,7 @@ BinaryOperatorNode :: ExpressionNode
     @docs
         Represents the application of a binary operator.
 
-ClassInstantiationNode* :: RestrictedPrimaryExpressionNode
+ClassInstantiationNode* :: Node + RestrictedPrimaryExpressionNode
     @props
     constructorTypeArguments ListNode<? extends TypeNode>               | the type arguments for the constructor
     arguments               ListNode<? extends ExpressionNode>          | the arguments to the constructor
@@ -220,7 +271,7 @@ ClassInstantiationNode* :: RestrictedPrimaryExpressionNode
     @docs
         Acts as a parent to class instantiation nodes. 
 
-ConditionalExpressionNode :: ExpressionNode
+ConditionalExpressionNode :: Node + ExpressionNode
     @props
     condition               ExpressionNode                              | the condition of the expression
     trueExpression          ExpressionNode                              | the value of this expression when the condition is true
@@ -233,7 +284,7 @@ ConditionalExpressionNode :: ExpressionNode
 
 # TODO: how do we want to handle ErroneousNode or the equivalent error nodes?
 
-FieldAccessNode :: RestrictedPrimaryExpressionNode
+FieldAccessNode :: Node + RestrictedPrimaryExpressionNode
     @props
     expression              PrimaryExpressionNode                       | the expression from which the field is being selected
     identifier              IdentifierNode                              | the name of the field
@@ -247,7 +298,7 @@ FieldAccessNode :: RestrictedPrimaryExpressionNode
         new int[1].length
         </pre>
 
-InstanceOfNode :: ExpressionNode
+InstanceOfNode :: Node + ExpressionNode
     @props
     expression              ExpressionNode                              | the expression being evaluated
     type                    TypeNode                                    | the type being checked
@@ -257,13 +308,13 @@ InstanceOfNode :: ExpressionNode
         <i>expression</i> instanceof <i>type</i>
         </pre>
 
-LiteralNode<T>* :: RestrictedPrimaryExpressionNode
+LiteralNode<T>* :: Node + RestrictedPrimaryExpressionNode
     @props
     value                   T                                           | the literal value for this node
     @docs
         A superclass for all types of literal nodes.
 
-MethodInvocationNode :: RestrictedPrimaryExpressionNode
+MethodInvocationNode :: Node + RestrictedPrimaryExpressionNode
     @props
     method                  NameNode                                    | the name of the method to invoke
     arguments               ListNode<? extends ExpressionNode>          | the arguments to pass to the method
@@ -274,7 +325,7 @@ MethodInvocationNode :: RestrictedPrimaryExpressionNode
         <i>expr</i>.&lt;<i>typeArgs</i>&gt;<i>identifier</i>(<i>arg...</i>)
         </pre>
 
-NameExpressionNode :: ExpressionNode + ArrayIndexable
+NameExpressionNode :: Node + ExpressionNode, ArrayIndexable
     @props
     name                    NameNode                                    | the name to evaluate for this expression
     @docs
@@ -290,7 +341,7 @@ NameExpressionNode :: ExpressionNode + ArrayIndexable
         <li><tt>foo(x)</tt></li>
         </ul>
 
-ParenthesizedExpressionNode :: RestrictedPrimaryExpressionNode
+ParenthesizedExpressionNode :: Node + RestrictedPrimaryExpressionNode
     @props
     expression              ExpressionNode                              | the expression contained in this node
     @docs
@@ -303,11 +354,6 @@ ParenthesizedExpressionNode :: RestrictedPrimaryExpressionNode
         there is a big difference between <tt>b?x:y.z</tt> and <tt>(b?x:y).z</tt>.  However, the field selection node
         (which represents <tt>a.z</tt>) expects a primary expression; thus, without this node, there would be no way
         to express <tt>(b?x:y).z</tt>.
-
-PrimaryExpressionNode* :: ExpressionNode
-    @docs
-        A superclass for all nodes considered "primary expressions" by the Java Language Specification.  Primary
-        expressions include the basic building blocks of more complex expressions.
 
 QualifiedClassInstantiationNode :: ClassInstantiationNode
     @props
@@ -338,12 +384,7 @@ QualifiedClassInstantiationNode :: ClassInstantiationNode
         }
         </pre>
 
-RestrictedPrimaryExpressionNode* :: ExpressionNode + ArrayIndexable
-    @docs
-        A superclass for restricted primary expressions.  This maps to the <i>PrimaryNoNewArray</i> parse target in the
-        JLS.
-
-ThisNode :: RestrictedPrimaryExpressionNode
+ThisNode :: Node + RestrictedPrimaryExpressionNode
     @props
     type                    RawTypeNode                                 | the qualifying type
     @docs
@@ -366,7 +407,7 @@ ThisNode :: RestrictedPrimaryExpressionNode
         In that case, the <tt>type</tt> field contains the name of the qualified <tt>this</tt>.  Usually, <tt>this</tt>
         is unqualified and the <tt>type</tt> field is <tt>null</tt>.
 
-TypeCastNode :: ExpressionNode
+TypeCastNode :: Node + ExpressionNode
     @props
     expression              ExpressionNode                              | the expression to cast
     type                    TypeNode                                    | the type to which to cast
@@ -376,7 +417,7 @@ TypeCastNode :: ExpressionNode
         (<i>type</i>) <i>expr</i>
         </pre>
 
-UnaryOperatorNode :: ExpressionNode
+UnaryOperatorNode :: Node + ExpressionNode
     @props
     expression              ExpressionNode                              | the expression on which to operate
     operator                UnaryOperator                               | the operator to apply
@@ -402,7 +443,7 @@ UnqualifiedClassInstantiationNode :: ClassInstantiationNode
 
 ### Statement Nodes ###################################################################################################
 
-AssertStatementNode :: StatementNode
+AssertStatementNode :: Node + StatementNode
     @props
     testExpression          ExpressionNode                              | the assertion's test expression
     messageExpression       ExpressionNode                              | the assertion's message expression
@@ -416,7 +457,7 @@ AssertStatementNode :: StatementNode
             assert <i>expr</i> : <i>expr</i>;
         </pre>
 
-BlockStatementNode :: StatementNode
+BlockStatementNode :: Node + StatementNode
     @props
     statements              ListNode<? extends StatementNode>           | the statements contained in this block statement
     @docs
@@ -428,7 +469,7 @@ BlockStatementNode :: StatementNode
         }
         </pre>
     
-BreakNode :: StatementNode
+BreakNode :: Node + StatementNode
     @props
     label                   IdentifierNode                              | the break label
     @docs
@@ -437,7 +478,7 @@ BreakNode :: StatementNode
             break <i>label</i>;
         </pre>
 
-ContinueNode :: StatementNode
+ContinueNode :: Node + StatementNode
     @props
     label                   IdentifierNode                              | the continue label
     @docs
@@ -446,7 +487,7 @@ ContinueNode :: StatementNode
             continue <i>label</i>;
         </pre>
 
-DoWhileLoopNode :: StatementNode
+DoWhileLoopNode :: Node + StatementNode
     @props
     condition               ExpressionNode                              | the loop's condition
     statement               StatementNode                               | the loop's statement
@@ -456,7 +497,7 @@ DoWhileLoopNode :: StatementNode
         do <i>body</i> while (<i>condition</i>);
         </pre>
 
-EnhancedForLoopNode :: StatementNode
+EnhancedForLoopNode :: Node + StatementNode
     @props
     variable                VariableNode                                | the iterator variable
     expression              ExpressionNode                              | the loop's iterable expression
@@ -469,14 +510,14 @@ EnhancedForLoopNode :: StatementNode
         </pre>
 
 # TODO: not every expression can be a statement in Java.  Create a suitable tagging interface.
-ExpressionStatementNode :: StatementNode
+ExpressionStatementNode :: Node + StatementNode
     @props
     expression              ExpressionNode                              | this statement's expression
     @docs
         A node representing an expression statement.  This allows any expression to be used as a statement and its
         value discarded.
     
-ForLoopNode :: StatementNode
+ForLoopNode :: Node + StatementNode
     @props
     initializer             ForInitializerNode                          | the initializer used for this for loop
     update                  ListNode<? extends ExpressionStatementNode> | the loop's update operation
@@ -492,7 +533,7 @@ ForLoopNode :: StatementNode
         the <tt>update</tt> field is a {@link ListNode} with no children.  If the loop has no termination condition, the
         <tt>condition</tt> field is <tt>null</tt>.  The <tt>update</tt> field should never be <tt>null</tt>.
     
-IfNode :: StatementNode
+IfNode :: Node + StatementNode
     @props
     condition               ExpressionNode                              | the condition
     thenStatement           StatementNode                               | the then branch's statement
@@ -503,14 +544,14 @@ IfNode :: StatementNode
         if (<i>condition</i>) then <i>statement</i> else <i>statement</i>
         </pre>
 
-InlineTypeDeclarationNode :: StatementNode
+InlineTypeDeclarationNode :: Node + StatementNode
     @props
     declaration             InlineTypeDeclarable                        | the type declaration
     @docs
         A node representing an inline type declaration.  This is used to allow classes and enums to be declared
         within a method body or similar environment.
     
-LabeledStatementNode :: StatementNode
+LabeledStatementNode :: Node + StatementNode
     @props
     label                   IdentifierNode                              | the statement's label
     statement               StatementNode                               | the statement being labeled
@@ -520,7 +561,7 @@ LabeledStatementNode :: StatementNode
         <i>identifier</i>: <i>statement</i>
         </pre>
 
-ReturnNode :: StatementNode
+ReturnNode :: Node + StatementNode
     @props
     expression              ExpressionNode                              | the expression to return
     @docs
@@ -531,7 +572,7 @@ ReturnNode :: StatementNode
         For void return statements, the <tt>expression</tt> is <tt>null</tt>.
 # TODO: should we be using null object for things like this?
     
-SwitchNode :: StatementNode
+SwitchNode :: Node + StatementNode
     @props
     expression              ExpressionNode                              | the expression over which to switch
     cases                   ListNode<? extends CaseNode>                | the cases in this switch
@@ -544,7 +585,7 @@ SwitchNode :: StatementNode
         }
         </pre>
 
-SynchronizedNode :: StatementNode
+SynchronizedNode :: Node + StatementNode
     @props
     expression              ExpressionNode                              | the synchronization expression
     block                   BlockStatementNode                          | the block of statements to synchronize
@@ -556,7 +597,7 @@ SynchronizedNode :: StatementNode
         }
         </pre>
 
-ThrowNode :: StatementNode
+ThrowNode :: Node + StatementNode
     @props
     expression              ExpressionNode                              | the Throwable to throw
     @docs
@@ -565,7 +606,7 @@ ThrowNode :: StatementNode
         throw <i>expr</i>;
         </pre>
 
-TryNode :: StatementNode
+TryNode :: Node + StatementNode
     @props
     block                   BlockStatementNode                          | the block in which to try
     catches                 ListNode<? extends CatchNode>               | the catch conditions
@@ -586,7 +627,7 @@ TryNode :: StatementNode
         If no catch block exists, the <tt>catches</tt> list node will contain no children.  If no finally block exists,
         <tt>finallyBlock</tt> will be <tt>null</tt>.  <tt>catches</tt> is not permitted to be <tt>null</tt>.
 
-VariableDeclarationNode :: StatementNode
+VariableDeclarationNode :: Node + StatementNode
     @props
     modifiers               ModifiersNode                               | the modifiers for this variable
     declarators             ListNode<VariableDeclaratorNode>            | the variable declarators for this node
@@ -603,7 +644,7 @@ VariableDeclarationNode :: StatementNode
             <pre>
             <i>type identifier</i> = <i>expression</i>, <i>identifier</i> = <i>expression</i>, ...;
 
-VariableDeclaratorNode :: StatementNode
+VariableDeclaratorNode :: Node + StatementNode
     @props
     type                    TypeNode                                    | the type of this variable
     name                    IdentifierNode                              | the name of this variable
@@ -620,12 +661,12 @@ VariableDeclaratorNode :: StatementNode
         Hence, type exists on this node instead of its parent.  If the variable is not initialized, the
         <tt>initializer</tt> field is <tt>null</tt>.
         
-VoidStatementNode :: StatementNode
+VoidStatementNode :: Node + StatementNode
     @docs
         A node representing a void statement, as in
         <pre>;</pre>        
 
-WhileLoopNode :: StatementNode
+WhileLoopNode :: Node + StatementNode
     @props
     condition               ExpressionNode                              | the loop's condition
     statement               StatementNode                               | the loop's statement
@@ -638,18 +679,13 @@ WhileLoopNode :: StatementNode
 
 ### Type Nodes ########################################################################################################
 
-ArrayTypeNode :: ReferenceTypeNode
+ArrayTypeNode :: Node + ReferenceTypeNode
     @props
     type                    TypeNode                                    | the element type of the array
     @docs
         Represents an array type.
 
-DeclaredTypeNode* :: ReferenceTypeNode + BaseType
-    @docs
-        A node representing any declared type.  In the BSJ API, a "declared type" refers to any type which has been
-        created by a declaration statement.  Arrays and primitives are not declared types because they are not declared.
-
-ParameterizedTypeNode :: DeclaredTypeNode
+ParameterizedTypeNode :: Node + DeclaredTypeNode
     @props
     rawType                 RawTypeNode                                 | the raw type being parameterized
     typeArguments           ListNode<TypeArgument>                      | the type arguments for this node
@@ -658,14 +694,14 @@ ParameterizedTypeNode :: DeclaredTypeNode
         as Set<String> (which would be represented by the raw type Set and the single-element argument list containing
         the raw type for String).
 
-PrimitiveTypeNode :: TypeNode + BaseType
+PrimitiveTypeNode :: Node + TypeNode, BaseType
     @props
     primitiveType           PrimitiveType                               | the primitive type being represented
     @docs
         A node representing a primitive type.
 
 # TODO: add information which tracks whether we have determined this node to represent a true raw type or type parameter
-RawTypeNode :: DeclaredTypeNode + ParameterizableType
+RawTypeNode :: Node + DeclaredTypeNode, ParameterizableType
     @props
     name                    NameNode                                    | the name of the type
     @docs
@@ -673,11 +709,7 @@ RawTypeNode :: DeclaredTypeNode + ParameterizableType
         Parameterized types, such as Set<String>, are not represented in this way.  Raw types also represent type
         parameters.
 
-ReferenceTypeNode* :: TypeNode + TypeArgument, BoundType
-    @docs
-        A node representing a reference type.  A reference type in Java is any non-primitive type.
-
-VoidTypeNode :: TypeNode
+VoidTypeNode :: Node + TypeNode
     @docs
         A node representing the void type.  This is used, for example, in method return values.
 
@@ -913,7 +945,7 @@ VoidTypeDeclarationNode :: TypeDeclarationNode
 
 ### Annotation Nodes ##################################################################################################
 
-AnnotationAnnotationValueNode :: AnnotationValueNode
+AnnotationAnnotationValueNode :: Node + AnnotationValueNode
     @props
     annotation              AnnotationNode                              | the annotation
     @docs
@@ -923,7 +955,7 @@ AnnotationAnnotationValueNode :: AnnotationValueNode
         <pre>@Bar</pre>
         portion.
 
-AnnotationArrayValueNode :: AnnotationValueNode
+AnnotationArrayValueNode :: Node + AnnotationValueNode
     @props
     values                  ListNode<? extends AnnotationValueNode>     | the array values
     @docs
@@ -931,7 +963,7 @@ AnnotationArrayValueNode :: AnnotationValueNode
         because it allows annotations (by way of {@link AnnotationAnnotationValueNode}) as well as expressions.
 
 # TODO: is there a nice way for us to type-encode that this expression may not be an assignment expression?
-AnnotationExpressionValueNode :: AnnotationValueNode
+AnnotationExpressionValueNode :: Node + AnnotationValueNode
     @props
     expression              ExpressionNode                              | the expression
     @docs
@@ -953,10 +985,6 @@ AnnotationElementNode :: Node
         <pre>
         <i>ident</i>=<i>value</i>
         </pre>
-
-AnnotationValueNode* :: Node
-    @docs
-        Acts as a common base class for all annotation values.
 
 NormalAnnotationNode :: AnnotationNode
     @props
@@ -987,7 +1015,7 @@ AlternateConstructorInvocationNode :: ConstructorInvocationNode
         Note that this only applies to <i>alternate</i> constructor invocations (those using the <tt>this</tt> keyword).
         For superclass constructor invocations, see {@link SuperclassConstructorInvocationNode}.
 
-ArrayInitializerNode :: VariableInitializerNode
+ArrayInitializerNode :: Node + VariableInitializerNode
     @props
 	initializers            ListNode<? extends VariableInitializerNode> | the initializers for the array
     @docs
@@ -1065,11 +1093,7 @@ ConstructorInvocationNode* :: Node
         language specification treats these two entities as distinct (and there are some corner cases for the superclass
         constructor syntax which are best contained
 
-ExpressionNode* :: VariableInitializerNode
-    @docs
-        This class is a common superclass of all BSJ AST nodes representing expressions.
-
-ForInitializerDeclarationNode :: ForInitializerNode
+ForInitializerDeclarationNode :: Node + ForInitializerNode
     @props
     declaration             VariableDeclarationNode                     | the variables declared in this initializer
     @docs
@@ -1079,7 +1103,7 @@ ForInitializerDeclarationNode :: ForInitializerNode
         <pre>int i=0</pre>
         Note that, due to the nature of {@link VariableDeclarationNode}, this can be a variable muilti-declaration.
 
-ForInitializerExpressionNode :: ForInitializerNode
+ForInitializerExpressionNode :: Node + ForInitializerNode
     @props
     expressions             ListNode<? extends ExpressionNode>          | the expressions used in this initializer
     @docs
@@ -1089,23 +1113,14 @@ ForInitializerExpressionNode :: ForInitializerNode
         <pre>i=0,j=0</pre>
 # TODO: this node should not be able to use any expression which is not applicable as a statement - fix the type
 
-ForInitializerNode* :: Node
-    @docs
-        This class is a common superclass for standard for-loop initializers.  It exists to allow the two different
-        types of for loop initializers to be used coherently.
-
-ImportNode* :: Node
-    @docs
-        A common base class for import statements.
-
-ImportOnDemandNode :: ImportNode
+ImportOnDemandNode :: Node + ImportNode
     @props
     name                    NameNode                                    | the name of the package to import
     staticImport            boolean                                     | the static-ness of the import
     @docs
         A node representing an on-demand import statement, such as "<tt>import java.util.*</tt>".
 
-ImportSingleTypeNode :: ImportNode
+ImportSingleTypeNode :: Node + ImportNode
     @props
     name                    NameNode                                    | the name of the type to import
     staticImport            boolean                                     | the static-ness of the import
@@ -1170,14 +1185,6 @@ SuperclassConstructorInvocationNode :: ConstructorInvocationNode
         .  Note that this only applies to <i>superclass</i> constructor invocations (those using the <tt>super</tt>
         keyword).  For alternate constructor invocations, see {@link AlternateConstructorInvocationNode}.
 
-StatementNode* :: Node
-    @docs
-        Common superclass for statements.
-
-TypeNode* :: Node
-    @docs
-        Common superclass for types.
-
 TypeParameterNode :: Node
     @props
     identifier              IdentifierNode                              | the base type name for the parameter
@@ -1195,10 +1202,6 @@ TypeParameterNode :: Node
         <pre>
         <i>ident</i> extends <i>type</i> &amp; <i>type...</i>
         </pre>
-        
-VariableInitializerNode* :: Node
-	@docs
-		A node that initializes a variable using either an expression or an array initializer.	        
         
 VariableNode :: Node
     @props

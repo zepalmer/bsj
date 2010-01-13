@@ -4,7 +4,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.PrimitiveType;
 import edu.jhu.cs.bsj.compiler.ast.node.PrimitiveTypeNode;
 
-public class PrimitiveTypeNodeImpl extends TypeNodeImpl implements PrimitiveTypeNode
+public class PrimitiveTypeNodeImpl extends NodeImpl implements PrimitiveTypeNode
 {
     /** The primitive type being represented. */
     private PrimitiveType primitiveType;

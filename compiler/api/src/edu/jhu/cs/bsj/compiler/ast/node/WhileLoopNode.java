@@ -8,7 +8,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
  *     statement
  * </pre>
  */
-public interface WhileLoopNode extends StatementNode
+public interface WhileLoopNode extends Node, StatementNode
 {
     /**
      * Gets the loop's condition.

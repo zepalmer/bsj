@@ -5,7 +5,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
  * A value in an annotation representing an array.  This node is distinct from the {@link ArrayInitializerNode}
  * because it allows annotations (by way of {@link AnnotationAnnotationValueNode}) as well as expressions.
  */
-public interface AnnotationArrayValueNode extends AnnotationValueNode
+public interface AnnotationArrayValueNode extends Node, AnnotationValueNode
 {
     /**
      * Gets the array values.

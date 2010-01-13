@@ -8,7 +8,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
  * <pre>@Bar</pre>
  * portion.
  */
-public interface AnnotationAnnotationValueNode extends AnnotationValueNode
+public interface AnnotationAnnotationValueNode extends Node, AnnotationValueNode
 {
     /**
      * Gets the annotation.

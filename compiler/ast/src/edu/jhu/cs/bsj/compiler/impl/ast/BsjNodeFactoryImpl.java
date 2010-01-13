@@ -873,16 +873,6 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
 
     /**
-     * Creates a ClassLiteralNode.
-     */
-    public ClassLiteralNode makeClassLiteralNode(
-            TypeNode value)
-    {
-        ClassLiteralNode ret = new ClassLiteralNodeImpl(value);
-        return ret;
-    }
-
-    /**
      * Creates a SingleElementAnnotationNode.
      */
     public SingleElementAnnotationNode makeSingleElementAnnotationNode(
@@ -890,6 +880,16 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             RawTypeNode annotationType)
     {
         SingleElementAnnotationNode ret = new SingleElementAnnotationNodeImpl(value, annotationType);
+        return ret;
+    }
+
+    /**
+     * Creates a ClassLiteralNode.
+     */
+    public ClassLiteralNode makeClassLiteralNode(
+            TypeNode value)
+    {
+        ClassLiteralNode ret = new ClassLiteralNodeImpl(value);
         return ret;
     }
 

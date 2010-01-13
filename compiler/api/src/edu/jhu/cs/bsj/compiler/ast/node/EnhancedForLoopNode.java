@@ -8,7 +8,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
  *     <i>body</i>
  * </pre>
  */
-public interface EnhancedForLoopNode extends StatementNode
+public interface EnhancedForLoopNode extends Node, StatementNode
 {
     /**
      * Gets the iterator variable.

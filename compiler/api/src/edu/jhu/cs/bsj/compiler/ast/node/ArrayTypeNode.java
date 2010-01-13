@@ -4,7 +4,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
 /**
  * Represents an array type.
  */
-public interface ArrayTypeNode extends ReferenceTypeNode
+public interface ArrayTypeNode extends Node, ReferenceTypeNode
 {
     /**
      * Gets the element type of the array.

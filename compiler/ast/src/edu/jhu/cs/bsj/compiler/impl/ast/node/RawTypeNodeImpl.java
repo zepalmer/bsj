@@ -4,7 +4,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.NameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.RawTypeNode;
 
-public class RawTypeNodeImpl extends DeclaredTypeNodeImpl implements RawTypeNode
+public class RawTypeNodeImpl extends NodeImpl implements RawTypeNode
 {
     /** The name of the type. */
     private NameNode name;

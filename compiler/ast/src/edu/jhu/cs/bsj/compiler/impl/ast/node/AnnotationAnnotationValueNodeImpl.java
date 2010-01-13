@@ -4,7 +4,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationAnnotationValueNode;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationNode;
 
-public class AnnotationAnnotationValueNodeImpl extends AnnotationValueNodeImpl implements AnnotationAnnotationValueNode
+public class AnnotationAnnotationValueNodeImpl extends NodeImpl implements AnnotationAnnotationValueNode
 {
     /** The annotation. */
     private AnnotationNode annotation;

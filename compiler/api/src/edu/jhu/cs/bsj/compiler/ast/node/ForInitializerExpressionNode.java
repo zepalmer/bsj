@@ -7,7 +7,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
  * this node represents
  * <pre>i=0,j=0</pre>
  */
-public interface ForInitializerExpressionNode extends ForInitializerNode
+public interface ForInitializerExpressionNode extends Node, ForInitializerNode
 {
     /**
      * Gets the expressions used in this initializer.

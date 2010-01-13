@@ -4,7 +4,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.RawTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ThisNode;
 
-public class ThisNodeImpl extends RestrictedPrimaryExpressionNodeImpl implements ThisNode
+public class ThisNodeImpl extends NodeImpl implements ThisNode
 {
     /** The qualifying type. */
     private RawTypeNode type;

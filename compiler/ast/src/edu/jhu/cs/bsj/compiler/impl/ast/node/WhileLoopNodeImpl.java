@@ -5,7 +5,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.StatementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.WhileLoopNode;
 
-public class WhileLoopNodeImpl extends StatementNodeImpl implements WhileLoopNode
+public class WhileLoopNodeImpl extends NodeImpl implements WhileLoopNode
 {
     /** The loop's condition. */
     private ExpressionNode condition;

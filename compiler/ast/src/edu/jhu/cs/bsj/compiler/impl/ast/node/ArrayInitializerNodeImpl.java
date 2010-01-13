@@ -5,7 +5,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.ArrayInitializerNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableInitializerNode;
 
-public class ArrayInitializerNodeImpl extends VariableInitializerNodeImpl implements ArrayInitializerNode
+public class ArrayInitializerNodeImpl extends NodeImpl implements ArrayInitializerNode
 {
     /** The initializers for the array. */
     private ListNode<? extends VariableInitializerNode> initializers;

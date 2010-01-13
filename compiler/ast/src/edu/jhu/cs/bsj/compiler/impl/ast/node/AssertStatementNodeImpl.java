@@ -4,7 +4,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.AssertStatementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 
-public class AssertStatementNodeImpl extends StatementNodeImpl implements AssertStatementNode
+public class AssertStatementNodeImpl extends NodeImpl implements AssertStatementNode
 {
     /** The assertion's test expression. */
     private ExpressionNode testExpression;

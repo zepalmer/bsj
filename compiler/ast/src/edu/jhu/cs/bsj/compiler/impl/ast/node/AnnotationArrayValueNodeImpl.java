@@ -5,7 +5,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.AnnotationArrayValueNode;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationValueNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
 
-public class AnnotationArrayValueNodeImpl extends AnnotationValueNodeImpl implements AnnotationArrayValueNode
+public class AnnotationArrayValueNodeImpl extends NodeImpl implements AnnotationArrayValueNode
 {
     /** The array values. */
     private ListNode<? extends AnnotationValueNode> values;

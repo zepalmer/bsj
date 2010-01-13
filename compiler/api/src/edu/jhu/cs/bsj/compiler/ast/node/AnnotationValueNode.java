@@ -2,7 +2,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
 
 
 /**
- * Acts as a common base class for all annotation values.
+ * This tagging interface is used to denote AST nodes which represent annotation values.
  */
 public interface AnnotationValueNode extends Node
 {

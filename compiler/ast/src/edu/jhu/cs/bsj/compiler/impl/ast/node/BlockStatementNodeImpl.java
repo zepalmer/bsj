@@ -5,7 +5,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.BlockStatementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.StatementNode;
 
-public class BlockStatementNodeImpl extends StatementNodeImpl implements BlockStatementNode
+public class BlockStatementNodeImpl extends NodeImpl implements BlockStatementNode
 {
     /** The statements contained in this block statement. */
     private ListNode<? extends StatementNode> statements;

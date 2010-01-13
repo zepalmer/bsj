@@ -2,7 +2,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
 
 
 /**
- * This class is a common superclass of all BSJ AST nodes representing expressions.
+ * This tagging interface is used to denote BSJ AST nodes which represent expressions.
  */
 public interface ExpressionNode extends VariableInitializerNode
 {

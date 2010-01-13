@@ -21,7 +21,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
  * In that case, the <tt>type</tt> field contains the name of the qualified <tt>this</tt>.  Usually, <tt>this</tt>
  * is unqualified and the <tt>type</tt> field is <tt>null</tt>.
  */
-public interface ThisNode extends RestrictedPrimaryExpressionNode
+public interface ThisNode extends Node, RestrictedPrimaryExpressionNode
 {
     /**
      * Gets the qualifying type.

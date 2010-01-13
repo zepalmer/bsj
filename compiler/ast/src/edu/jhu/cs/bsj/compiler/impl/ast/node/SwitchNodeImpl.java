@@ -6,7 +6,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.SwitchNode;
 
-public class SwitchNodeImpl extends StatementNodeImpl implements SwitchNode
+public class SwitchNodeImpl extends NodeImpl implements SwitchNode
 {
     /** The expression over which to switch. */
     private ExpressionNode expression;

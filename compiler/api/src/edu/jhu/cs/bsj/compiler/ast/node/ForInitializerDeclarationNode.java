@@ -8,7 +8,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
  * <pre>int i=0</pre>
  * Note that, due to the nature of {@link VariableDeclarationNode}, this can be a variable muilti-declaration.
  */
-public interface ForInitializerDeclarationNode extends ForInitializerNode
+public interface ForInitializerDeclarationNode extends Node, ForInitializerNode
 {
     /**
      * Gets the variables declared in this initializer.

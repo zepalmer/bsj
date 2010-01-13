@@ -4,7 +4,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
 /**
  * Acts as a parent to class instantiation nodes. 
  */
-public interface ClassInstantiationNode extends RestrictedPrimaryExpressionNode
+public interface ClassInstantiationNode extends Node, RestrictedPrimaryExpressionNode
 {
     /**
      * Gets the type arguments for the constructor.

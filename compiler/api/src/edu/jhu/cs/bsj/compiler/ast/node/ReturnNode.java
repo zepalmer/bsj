@@ -8,7 +8,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
  * <pre>return;</pre>
  * For void return statements, the <tt>expression</tt> is <tt>null</tt>.
  */
-public interface ReturnNode extends StatementNode
+public interface ReturnNode extends Node, StatementNode
 {
     /**
      * Gets the expression to return.

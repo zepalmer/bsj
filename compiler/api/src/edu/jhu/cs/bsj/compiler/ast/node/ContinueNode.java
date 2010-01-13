@@ -7,7 +7,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
  *     continue <i>label</i>;
  * </pre>
  */
-public interface ContinueNode extends StatementNode
+public interface ContinueNode extends Node, StatementNode
 {
     /**
      * Gets the continue label.

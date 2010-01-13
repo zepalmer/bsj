@@ -4,7 +4,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.BreakNode;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 
-public class BreakNodeImpl extends StatementNodeImpl implements BreakNode
+public class BreakNodeImpl extends NodeImpl implements BreakNode
 {
     /** The break label. */
     private IdentifierNode label;

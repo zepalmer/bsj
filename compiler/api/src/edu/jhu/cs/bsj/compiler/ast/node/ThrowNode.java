@@ -7,7 +7,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
  * throw <i>expr</i>;
  * </pre>
  */
-public interface ThrowNode extends StatementNode
+public interface ThrowNode extends Node, StatementNode
 {
     /**
      * Gets the Throwable to throw.

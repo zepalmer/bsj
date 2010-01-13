@@ -6,7 +6,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclaratorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableInitializerNode;
 
-public class VariableDeclaratorNodeImpl extends StatementNodeImpl implements VariableDeclaratorNode
+public class VariableDeclaratorNodeImpl extends NodeImpl implements VariableDeclaratorNode
 {
     /** The type of this variable. */
     private TypeNode type;

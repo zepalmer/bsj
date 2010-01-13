@@ -2,7 +2,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
 
 
 /**
- * Common superclass for types.
+ * This tagging interface is used to denote AST nodes which refer to types.
  */
 public interface TypeNode extends Node
 {

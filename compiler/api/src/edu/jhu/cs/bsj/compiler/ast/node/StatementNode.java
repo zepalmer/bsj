@@ -2,7 +2,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
 
 
 /**
- * Common superclass for statements.
+ * This tagging interface is used to denote AST nodes which represent statements.
  */
 public interface StatementNode extends Node
 {

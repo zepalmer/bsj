@@ -5,7 +5,7 @@ import edu.jhu.cs.bsj.compiler.ast.PrimitiveType;
 /**
  * A node representing a primitive type.
  */
-public interface PrimitiveTypeNode extends TypeNode, BaseType
+public interface PrimitiveTypeNode extends Node, TypeNode,  BaseType
 {
     /**
      * Gets the primitive type being represented.

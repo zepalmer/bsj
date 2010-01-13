@@ -5,7 +5,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
  * A node representing an expression statement.  This allows any expression to be used as a statement and its
  * value discarded.
  */
-public interface ExpressionStatementNode extends StatementNode
+public interface ExpressionStatementNode extends Node, StatementNode
 {
     /**
      * Gets this statement's expression.

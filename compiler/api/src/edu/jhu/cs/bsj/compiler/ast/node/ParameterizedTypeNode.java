@@ -6,7 +6,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
  * as Set<String> (which would be represented by the raw type Set and the single-element argument list containing
  * the raw type for String).
  */
-public interface ParameterizedTypeNode extends DeclaredTypeNode
+public interface ParameterizedTypeNode extends Node, DeclaredTypeNode
 {
     /**
      * Gets the raw type being parameterized.

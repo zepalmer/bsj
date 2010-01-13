@@ -10,7 +10,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
  * }
  * </pre>
  */
-public interface SwitchNode extends StatementNode
+public interface SwitchNode extends Node, StatementNode
 {
     /**
      * Gets the expression over which to switch.

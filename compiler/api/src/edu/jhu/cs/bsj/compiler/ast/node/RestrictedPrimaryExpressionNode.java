@@ -2,9 +2,9 @@ package edu.jhu.cs.bsj.compiler.ast.node;
 
 
 /**
- * A superclass for restricted primary expressions.  This maps to the <i>PrimaryNoNewArray</i> parse target in the
- * JLS.
+ * A tagging interface for restricted primary expressions.  This maps to the <i>PrimaryNoNewArray</i> parse target
+ * in the JLS.
  */
-public interface RestrictedPrimaryExpressionNode extends ExpressionNode, ArrayIndexable
+public interface RestrictedPrimaryExpressionNode extends Node, PrimaryExpressionNode,  ArrayIndexable
 {
 }

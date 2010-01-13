@@ -4,7 +4,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.NameExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.NameNode;
 
-public class NameExpressionNodeImpl extends ExpressionNodeImpl implements NameExpressionNode
+public class NameExpressionNodeImpl extends NodeImpl implements NameExpressionNode
 {
     /** The name to evaluate for this expression. */
     private NameNode name;

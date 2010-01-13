@@ -12,7 +12,7 @@ import edu.jhu.cs.bsj.compiler.ast.UnaryOperator;
  * x++
  * </pre>
  */
-public interface UnaryOperatorNode extends ExpressionNode
+public interface UnaryOperatorNode extends Node, ExpressionNode
 {
     /**
      * Gets the expression on which to operate.

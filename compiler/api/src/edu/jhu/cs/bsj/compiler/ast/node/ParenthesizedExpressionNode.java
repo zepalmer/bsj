@@ -12,7 +12,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
  * (which represents <tt>a.z</tt>) expects a primary expression; thus, without this node, there would be no way
  * to express <tt>(b?x:y).z</tt>.
  */
-public interface ParenthesizedExpressionNode extends RestrictedPrimaryExpressionNode
+public interface ParenthesizedExpressionNode extends Node, RestrictedPrimaryExpressionNode
 {
     /**
      * Gets the expression contained in this node.

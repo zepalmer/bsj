@@ -2,7 +2,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
 
 
 /**
- * A common base class for import statements.
+ * This tagging interface is used to denote AST nodes which represent import statements.
  */
 public interface ImportNode extends Node
 {

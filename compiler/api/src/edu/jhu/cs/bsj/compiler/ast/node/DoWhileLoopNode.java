@@ -7,7 +7,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
  * do <i>body</i> while (<i>condition</i>);
  * </pre>
  */
-public interface DoWhileLoopNode extends StatementNode
+public interface DoWhileLoopNode extends Node, StatementNode
 {
     /**
      * Gets the loop's condition.

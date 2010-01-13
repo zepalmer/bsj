@@ -4,7 +4,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.ImportOnDemandNode;
 import edu.jhu.cs.bsj.compiler.ast.node.NameNode;
 
-public class ImportOnDemandNodeImpl extends ImportNodeImpl implements ImportOnDemandNode
+public class ImportOnDemandNodeImpl extends NodeImpl implements ImportOnDemandNode
 {
     /** The name of the package to import. */
     private NameNode name;

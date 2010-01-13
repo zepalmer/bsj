@@ -5,7 +5,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeCastNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
 
-public class TypeCastNodeImpl extends ExpressionNodeImpl implements TypeCastNode
+public class TypeCastNodeImpl extends NodeImpl implements TypeCastNode
 {
     /** The expression to cast. */
     private ExpressionNode expression;

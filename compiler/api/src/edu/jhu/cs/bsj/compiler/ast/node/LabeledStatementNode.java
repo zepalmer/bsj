@@ -7,7 +7,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
  * <i>identifier</i>: <i>statement</i>
  * </pre>
  */
-public interface LabeledStatementNode extends StatementNode
+public interface LabeledStatementNode extends Node, StatementNode
 {
     /**
      * Gets the statement's label.

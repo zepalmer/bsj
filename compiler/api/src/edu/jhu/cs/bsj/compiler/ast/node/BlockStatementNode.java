@@ -10,7 +10,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
  * }
  * </pre>
  */
-public interface BlockStatementNode extends StatementNode
+public interface BlockStatementNode extends Node, StatementNode
 {
     /**
      * Gets the statements contained in this block statement.

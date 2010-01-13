@@ -11,7 +11,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
  * the <tt>update</tt> field is a {@link ListNode} with no children.  If the loop has no termination condition, the
  * <tt>condition</tt> field is <tt>null</tt>.  The <tt>update</tt> field should never be <tt>null</tt>.
  */
-public interface ForLoopNode extends StatementNode
+public interface ForLoopNode extends Node, StatementNode
 {
     /**
      * Gets the initializer used for this for loop.

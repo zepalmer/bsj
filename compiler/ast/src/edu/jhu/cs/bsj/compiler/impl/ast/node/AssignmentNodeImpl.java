@@ -5,7 +5,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.AssignmentNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 
-public class AssignmentNodeImpl extends ExpressionNodeImpl implements AssignmentNode
+public class AssignmentNodeImpl extends NodeImpl implements AssignmentNode
 {
     /** The variable to which to assign a value. */
     private ExpressionNode variable;

@@ -5,7 +5,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.LabeledStatementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.StatementNode;
 
-public class LabeledStatementNodeImpl extends StatementNodeImpl implements LabeledStatementNode
+public class LabeledStatementNodeImpl extends NodeImpl implements LabeledStatementNode
 {
     /** The statement's label. */
     private IdentifierNode label;

@@ -6,7 +6,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.CatchNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TryNode;
 
-public class TryNodeImpl extends StatementNodeImpl implements TryNode
+public class TryNodeImpl extends NodeImpl implements TryNode
 {
     /** The block in which to try. */
     private BlockStatementNode block;

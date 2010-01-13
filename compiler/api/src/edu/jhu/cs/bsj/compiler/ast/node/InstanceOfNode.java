@@ -7,7 +7,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
  * <i>expression</i> instanceof <i>type</i>
  * </pre>
  */
-public interface InstanceOfNode extends ExpressionNode
+public interface InstanceOfNode extends Node, ExpressionNode
 {
     /**
      * Gets the expression being evaluated.

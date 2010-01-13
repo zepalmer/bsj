@@ -4,7 +4,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ParenthesizedExpressionNode;
 
-public class ParenthesizedExpressionNodeImpl extends RestrictedPrimaryExpressionNodeImpl implements ParenthesizedExpressionNode
+public class ParenthesizedExpressionNodeImpl extends NodeImpl implements ParenthesizedExpressionNode
 {
     /** The expression contained in this node. */
     private ExpressionNode expression;

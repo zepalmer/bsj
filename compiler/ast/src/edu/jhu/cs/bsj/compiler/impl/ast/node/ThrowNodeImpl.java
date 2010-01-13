@@ -4,7 +4,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ThrowNode;
 
-public class ThrowNodeImpl extends StatementNodeImpl implements ThrowNode
+public class ThrowNodeImpl extends NodeImpl implements ThrowNode
 {
     /** The Throwable to throw. */
     private ExpressionNode expression;

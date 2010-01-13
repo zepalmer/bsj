@@ -5,7 +5,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ForInitializerExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
 
-public class ForInitializerExpressionNodeImpl extends ForInitializerNodeImpl implements ForInitializerExpressionNode
+public class ForInitializerExpressionNodeImpl extends NodeImpl implements ForInitializerExpressionNode
 {
     /** The expressions used in this initializer. */
     private ListNode<? extends ExpressionNode> expressions;

@@ -6,7 +6,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
  * Parameterized types, such as Set<String>, are not represented in this way.  Raw types also represent type
  * parameters.
  */
-public interface RawTypeNode extends DeclaredTypeNode, ParameterizableType
+public interface RawTypeNode extends Node, DeclaredTypeNode,  ParameterizableType
 {
     /**
      * Gets the name of the type.

@@ -4,7 +4,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.ConditionalExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 
-public class ConditionalExpressionNodeImpl extends ExpressionNodeImpl implements ConditionalExpressionNode
+public class ConditionalExpressionNodeImpl extends NodeImpl implements ConditionalExpressionNode
 {
     /** The condition of the expression. */
     private ExpressionNode condition;

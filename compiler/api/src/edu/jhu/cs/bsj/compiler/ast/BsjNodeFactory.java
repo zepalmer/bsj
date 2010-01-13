@@ -499,17 +499,17 @@ public interface BsjNodeFactory
             ListNode<? extends AnnotationValueNode> values);
 
     /**
-     * Creates a ClassLiteralNode.
-     */
-    public ClassLiteralNode makeClassLiteralNode(
-            TypeNode value);
-
-    /**
      * Creates a SingleElementAnnotationNode.
      */
     public SingleElementAnnotationNode makeSingleElementAnnotationNode(
             AnnotationValueNode value,
             RawTypeNode annotationType);
+
+    /**
+     * Creates a ClassLiteralNode.
+     */
+    public ClassLiteralNode makeClassLiteralNode(
+            TypeNode value);
 
     /**
      * Creates a ArrayInitializerNode.

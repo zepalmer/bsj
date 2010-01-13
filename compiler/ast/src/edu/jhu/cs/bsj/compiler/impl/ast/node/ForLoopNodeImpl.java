@@ -8,7 +8,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.ForLoopNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.StatementNode;
 
-public class ForLoopNodeImpl extends StatementNodeImpl implements ForLoopNode
+public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
 {
     /** The initializer used for this for loop. */
     private ForInitializerNode initializer;

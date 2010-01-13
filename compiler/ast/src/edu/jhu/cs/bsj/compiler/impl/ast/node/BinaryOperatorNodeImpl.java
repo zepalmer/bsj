@@ -5,7 +5,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.BinaryOperatorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 
-public class BinaryOperatorNodeImpl extends ExpressionNodeImpl implements BinaryOperatorNode
+public class BinaryOperatorNodeImpl extends NodeImpl implements BinaryOperatorNode
 {
     /** The left operand of the expression. */
     private ExpressionNode leftOperand;

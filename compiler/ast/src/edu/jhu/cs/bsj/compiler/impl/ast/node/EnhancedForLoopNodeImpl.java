@@ -6,7 +6,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.StatementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableNode;
 
-public class EnhancedForLoopNodeImpl extends StatementNodeImpl implements EnhancedForLoopNode
+public class EnhancedForLoopNodeImpl extends NodeImpl implements EnhancedForLoopNode
 {
     /** The iterator variable. */
     private VariableNode variable;

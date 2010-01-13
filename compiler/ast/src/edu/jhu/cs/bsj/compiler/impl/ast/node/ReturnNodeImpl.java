@@ -4,7 +4,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ReturnNode;
 
-public class ReturnNodeImpl extends StatementNodeImpl implements ReturnNode
+public class ReturnNodeImpl extends NodeImpl implements ReturnNode
 {
     /** The expression to return. */
     private ExpressionNode expression;

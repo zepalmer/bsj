@@ -6,7 +6,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.ModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclaratorNode;
 
-public class VariableDeclarationNodeImpl extends StatementNodeImpl implements VariableDeclarationNode
+public class VariableDeclarationNodeImpl extends NodeImpl implements VariableDeclarationNode
 {
     /** The modifiers for this variable. */
     private ModifiersNode modifiers;

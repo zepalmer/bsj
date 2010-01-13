@@ -7,7 +7,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
  *     break <i>label</i>;
  * </pre>
  */
-public interface BreakNode extends StatementNode
+public interface BreakNode extends Node, StatementNode
 {
     /**
      * Gets the break label.

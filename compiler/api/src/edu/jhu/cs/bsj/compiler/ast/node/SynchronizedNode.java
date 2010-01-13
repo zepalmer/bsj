@@ -9,7 +9,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
  * }
  * </pre>
  */
-public interface SynchronizedNode extends StatementNode
+public interface SynchronizedNode extends Node, StatementNode
 {
     /**
      * Gets the synchronization expression.

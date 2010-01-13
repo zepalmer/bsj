@@ -4,7 +4,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
 /**
  * Represents the creation of an array, including both instantiation and initialization.
  */
-public interface ArrayCreationNode extends PrimaryExpressionNode
+public interface ArrayCreationNode extends Node, PrimaryExpressionNode
 {
     /**
      * Gets the base type for this array.

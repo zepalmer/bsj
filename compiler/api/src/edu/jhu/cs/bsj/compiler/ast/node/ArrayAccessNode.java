@@ -7,7 +7,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
  * <i>expression</i>[<i>index</i>]
  * </pre>
  */
-public interface ArrayAccessNode extends RestrictedPrimaryExpressionNode
+public interface ArrayAccessNode extends Node, RestrictedPrimaryExpressionNode
 {
     /**
      * Gets the expression identifying the array.

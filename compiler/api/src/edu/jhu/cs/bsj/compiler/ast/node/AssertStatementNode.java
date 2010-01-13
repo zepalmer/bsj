@@ -11,7 +11,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
  *     assert <i>expr</i> : <i>expr</i>;
  * </pre>
  */
-public interface AssertStatementNode extends StatementNode
+public interface AssertStatementNode extends Node, StatementNode
 {
     /**
      * Gets the assertion's test expression.

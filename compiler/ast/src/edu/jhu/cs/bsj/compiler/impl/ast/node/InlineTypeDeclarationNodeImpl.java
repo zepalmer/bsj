@@ -4,7 +4,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.InlineTypeDeclarable;
 import edu.jhu.cs.bsj.compiler.ast.node.InlineTypeDeclarationNode;
 
-public class InlineTypeDeclarationNodeImpl extends StatementNodeImpl implements InlineTypeDeclarationNode
+public class InlineTypeDeclarationNodeImpl extends NodeImpl implements InlineTypeDeclarationNode
 {
     /** The type declaration. */
     private InlineTypeDeclarable declaration;

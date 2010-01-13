@@ -7,7 +7,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
  * if (<i>condition</i>) then <i>statement</i> else <i>statement</i>
  * </pre>
  */
-public interface IfNode extends StatementNode
+public interface IfNode extends Node, StatementNode
 {
     /**
      * Gets the condition.

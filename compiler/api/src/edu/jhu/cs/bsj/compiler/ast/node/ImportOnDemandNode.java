@@ -4,7 +4,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
 /**
  * A node representing an on-demand import statement, such as "<tt>import java.util.*</tt>".
  */
-public interface ImportOnDemandNode extends ImportNode
+public interface ImportOnDemandNode extends Node, ImportNode
 {
     /**
      * Gets the name of the package to import.

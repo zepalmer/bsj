@@ -8,7 +8,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
  * </pre>
  * The resulting array contains one element for each initializer expression.
  */
-public interface ArrayInitializerNode extends VariableInitializerNode
+public interface ArrayInitializerNode extends Node, VariableInitializerNode
 {
     /**
      * Gets the initializers for the array.

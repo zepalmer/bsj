@@ -11,7 +11,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
  * new int[1].length
  * </pre>
  */
-public interface FieldAccessNode extends RestrictedPrimaryExpressionNode
+public interface FieldAccessNode extends Node, RestrictedPrimaryExpressionNode
 {
     /**
      * Gets the expression from which the field is being selected.
