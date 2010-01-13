@@ -1168,33 +1168,6 @@ type returns [TypeNode ret]
         )?
     ;
 
-// The following rule does not exist in the language standard; it is solely for the purpose of making
-// classOrInterfaceType less repetetive.
-unqualifiedClassOrInterfaceType[BoundType in] returns [BoundType ret]
-        @init {
-            $ret = $in;
-        }
-    :
-        a=identifier
-        {
-            DeclaredTypeNode selected = factory.makeDeclaredTypeNode($a.ret);
-            if ($ret == null)
-            {
-                $ret = selected;
-            } else
-            {
-                $ret = factory.makeTypeSelectNode($ret, selected);
-            }
-        }        
-        (
-            typeArguments
-            {
-                $ret = factory.makeParameterizedTypeNode($ret, $typeArguments.ret);
-            }
-        )?
-    ;
-        
-
 // Parses a class or interface type.
 // For example, in
 //     Map.Entry<K,V> entry;
@@ -1202,22 +1175,30 @@ unqualifiedClassOrInterfaceType[BoundType in] returns [BoundType ret]
 //     Map.Entry<K,V>
 // Note that the legal types can get pretty complex, as in
 //     A<X,Y>.B.C<Z>.D
-// TODO: should this be BoundType?  or DeclaredTypeNode?  BoundType includes arrays.  Who is using this and needing it
-// to be a BoundType? 
-// TODO: in general, revisit this rule.  It's using type select nodes, which don't exist anymore.
-classOrInterfaceType returns [BoundType ret]
-    :   
-        a=unqualifiedClassOrInterfaceType[null]
+classOrInterfaceType returns [DeclaredTypeNode ret]
+        @init {
+            RawTypeNode rawTypeNode;
+            ParameterizedTypeNode parameterizedTypeNode = null;
+        }
+    :
+        typeName
         {
-            $ret = $a.ret;
+            rawTypeNode = factory.makeRawTypeNode($typeName.ret);
+            $ret = rawTypeNode;
         }
         (
-            '.'
-            b=unqualifiedClassOrInterfaceType[$ret]
+            typeArguments
             {
-                $ret = $b.ret;
+                parameterizedTypeNode = factory.makeParameterizedTypeNode(rawTypeNode, $typeArguments.ret);
+                $ret = parameterizedTypeNode;
             }
-        )*
+            (
+                classOrInterfaceType
+                {
+                    $ret = factory.makeParameterizedTypeSelectNode(parameterizedTypeNode, $classOrInterfaceType.ret);
+                }
+            )?
+        )?
     ;
 
 // Parses a primitive type.
