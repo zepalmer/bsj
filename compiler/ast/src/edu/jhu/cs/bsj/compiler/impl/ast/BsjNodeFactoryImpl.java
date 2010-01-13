@@ -328,7 +328,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      * Creates a ThisNode.
      */
     public ThisNode makeThisNode(
-            NameNode type)
+            RawTypeNode type)
     {
         ThisNode ret = new ThisNodeImpl(type);
         return ret;

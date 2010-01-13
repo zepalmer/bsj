@@ -154,7 +154,7 @@ public interface BsjNodeFactory
      * Creates a ThisNode.
      */
     public ThisNode makeThisNode(
-            NameNode type);
+            RawTypeNode type);
 
     /**
      * Creates a EnumDeclarationNode.

@@ -1,36 +1,36 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
-import edu.jhu.cs.bsj.compiler.ast.node.NameNode;
+import edu.jhu.cs.bsj.compiler.ast.node.RawTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ThisNode;
 
 public class ThisNodeImpl extends RestrictedPrimaryExpressionNodeImpl implements ThisNode
 {
-    /** The name of the qualifying type. */
-    private NameNode type;
+    /** The qualifying type. */
+    private RawTypeNode type;
 
     /** General constructor. */
     public ThisNodeImpl(
-            NameNode type)
+            RawTypeNode type)
     {
         super();
         this.type = type;
     }
 
     /**
-     * Gets the name of the qualifying type.
-     * @return The name of the qualifying type.
+     * Gets the qualifying type.
+     * @return The qualifying type.
      */
-    public NameNode getType()
+    public RawTypeNode getType()
     {
         return this.type;
     }
 
     /**
-     * Changes the name of the qualifying type.
-     * @param type The name of the qualifying type.
+     * Changes the qualifying type.
+     * @param type The qualifying type.
      */
-    public void setType(NameNode type)
+    public void setType(RawTypeNode type)
     {
         if (this.type instanceof NodeImpl)
         {

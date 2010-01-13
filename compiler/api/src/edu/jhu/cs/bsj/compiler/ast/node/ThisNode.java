@@ -24,15 +24,15 @@ package edu.jhu.cs.bsj.compiler.ast.node;
 public interface ThisNode extends RestrictedPrimaryExpressionNode
 {
     /**
-     * Gets the name of the qualifying type.
-     * @return The name of the qualifying type.
+     * Gets the qualifying type.
+     * @return The qualifying type.
      */
-    public NameNode getType();
+    public RawTypeNode getType();
 
     /**
-     * Changes the name of the qualifying type.
-     * @param type The name of the qualifying type.
+     * Changes the qualifying type.
+     * @param type The qualifying type.
      */
-    public void setType(NameNode type);
+    public void setType(RawTypeNode type);
 
 }
