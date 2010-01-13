@@ -345,7 +345,7 @@ RestrictedPrimaryExpressionNode* :: ExpressionNode + ArrayIndexable
 
 ThisNode :: RestrictedPrimaryExpressionNode
     @props
-    type                    NameNode                                    | the name of the qualifying type
+    type                    RawTypeNode                                 | the qualifying type
     @docs
         A node representing the code snippet <tt>this</tt> in terms of a value, such as in the expression
         <pre>
