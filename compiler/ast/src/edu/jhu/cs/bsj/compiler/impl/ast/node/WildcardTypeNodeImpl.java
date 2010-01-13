@@ -1,20 +1,20 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
-import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
+import edu.jhu.cs.bsj.compiler.ast.node.ReferenceTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.WildcardTypeNode;
 
 public class WildcardTypeNodeImpl extends NodeImpl implements WildcardTypeNode
 {
     /** The wildcard's bound. */
-    private TypeNode bound;
+    private ReferenceTypeNode bound;
 
     /** Whether or not the wildcard's bound is an upper (<tt>extends</tt>) bound. */
     private boolean upperBound;
 
     /** General constructor. */
     public WildcardTypeNodeImpl(
-            TypeNode bound,
+            ReferenceTypeNode bound,
             boolean upperBound)
     {
         super();
@@ -26,7 +26,7 @@ public class WildcardTypeNodeImpl extends NodeImpl implements WildcardTypeNode
      * Gets the wildcard's bound.
      * @return The wildcard's bound.
      */
-    public TypeNode getBound()
+    public ReferenceTypeNode getBound()
     {
         return this.bound;
     }
@@ -35,7 +35,7 @@ public class WildcardTypeNodeImpl extends NodeImpl implements WildcardTypeNode
      * Changes the wildcard's bound.
      * @param bound The wildcard's bound.
      */
-    public void setBound(TypeNode bound)
+    public void setBound(ReferenceTypeNode bound)
     {
         if (this.bound instanceof NodeImpl)
         {

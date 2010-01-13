@@ -22,13 +22,13 @@ public interface WildcardTypeNode extends Node, TypeArgumentNode
      * Gets the wildcard's bound.
      * @return The wildcard's bound.
      */
-    public TypeNode getBound();
+    public ReferenceTypeNode getBound();
 
     /**
      * Changes the wildcard's bound.
      * @param bound The wildcard's bound.
      */
-    public void setBound(TypeNode bound);
+    public void setBound(ReferenceTypeNode bound);
 
     /**
      * Gets whether or not the wildcard's bound is an upper (<tt>extends</tt>) bound.

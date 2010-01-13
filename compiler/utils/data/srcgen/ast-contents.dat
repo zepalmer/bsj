@@ -805,6 +805,7 @@ PrimitiveTypeNode :: Node + TypeNode, BaseTypeNode
         A node representing a primitive type.
 
 # TODO: add information which tracks whether we have determined this node to represent a true raw type or type parameter
+# TODO: is "raw type" the right term?  Or does that refer specifically to a generic with no presented type arguments
 RawTypeNode :: Node + DeclaredTypeNode
     @props
     name                    NameNode                                    | the name of the type
@@ -1316,7 +1317,7 @@ VariableNode :: Node
 
 WildcardTypeNode :: Node + TypeArgumentNode
     @props
-    bound                   TypeNode                                    | the wildcard's bound
+    bound                   ReferenceTypeNode                           | the wildcard's bound
     upperBound              boolean                                     | whether or not the wildcard's bound is an upper (<tt>extends</tt>) bound
     @docs
         A nore for wildcard type parameters, as in:

@@ -358,7 +358,7 @@ public interface BsjNodeFactory
      * Creates a WildcardTypeNode.
      */
     public WildcardTypeNode makeWildcardTypeNode(
-            TypeNode bound,
+            ReferenceTypeNode bound,
             boolean upperBound);
 
     /**

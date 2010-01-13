@@ -656,7 +656,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      * Creates a WildcardTypeNode.
      */
     public WildcardTypeNode makeWildcardTypeNode(
-            TypeNode bound,
+            ReferenceTypeNode bound,
             boolean upperBound)
     {
         WildcardTypeNode ret = new WildcardTypeNodeImpl(bound, upperBound);
