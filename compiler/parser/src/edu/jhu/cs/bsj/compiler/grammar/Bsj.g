@@ -2668,8 +2668,14 @@ restrictedPrimary returns [RestrictedPrimaryExpression ret]
                 $ret = $superFieldAccess.ret;
             }
         |
+            // standard method invocation
             methodName arguments
-            // TODO: method invocation
+            {
+                $ret = factory.makeMethodInvocationNode(
+                        $methodName.ret,
+                        $arguments.ret,
+                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+            }
         |
             // method invocation from super
             superMethodInvocation
@@ -2677,8 +2683,18 @@ restrictedPrimary returns [RestrictedPrimaryExpression ret]
                 $ret = $superMethodInvocation
             }
         |
-            methodQualifierName=typeName '.' nonWildcardTypeArguments? identifier arguments
-            // TODO: method invocation
+            // method invocation against a type with type arguments
+            methodQualifierName=typeName '.' nonWildcardTypeArguments identifier arguments
+            {
+                NameNode methodName = factory.makeQualifiedNameNode(
+                        $typeName.ret,
+                        $identifier.ret,
+                        NameCategory.METHOD);
+                $ret = factory.makeMethodInvocationNode(
+                        methodName,
+                        $arguments.ret,
+                        $nonWildcardTypeArguments.ret);
+            }
         |
             // Array access against a simple field access by name.  This rule is located here to support chained
             // array access expressions such as "x[5][6]".  The arrayAccess rule below would cover every array access
