@@ -232,11 +232,6 @@ abstractFieldDeclaration[List<Modifier> legalModifiers] returns [FieldDeclaratio
         @init {
             List<VariableDeclaratorNode> list = new ArrayList<VariableDeclaratorNode>();
         }
-        @after {
-            $ret = factory.makeFieldDeclarationNode(
-                    $modifiers.ret,
-                    factory.makeListNode(list));
-        }
     :   
         modifiers[legalModifiers]
         type
@@ -251,6 +246,11 @@ abstractFieldDeclaration[List<Modifier> legalModifiers] returns [FieldDeclaratio
             }
         )*
         ';'
+        {
+            $ret = factory.makeFieldDeclarationNode(
+                    $modifiers.ret,
+                    factory.makeListNode(list));
+        }
     ;
 
 /** These are the actual grammar rules. */
@@ -522,7 +522,7 @@ typeParameters returns [ListNode<TypeParameterNode> ret]
 
 typeParameter returns [TypeParameterNode ret]
         @init {
-            ListNode<DeclaredTypeNode> typeBoundNode = factory.<DeclaredTypeNode>makeNode(Collections.emptyList());
+            ListNode<DeclaredTypeNode> typeBoundNode = factory.<DeclaredTypeNode>makeListNode(Collections.emptyList());
         }
     :   
         id=identifier
@@ -754,7 +754,7 @@ typeList returns [ListNode<TypeNode> ret]
 
 classBody returns [ClassBodyNode ret]
         @init {
-                List<ClassMember> list = new ArrayList<ClassMember>();
+                List<ClassMemberNode> list = new ArrayList<ClassMemberNode>();
         }
         @after {
                 $ret = factory.makeClassBodyNode(list);
@@ -772,7 +772,7 @@ classBody returns [ClassBodyNode ret]
 
 anonymousClassBody returns [AnonymousClassBodyNode ret]
         @init {
-                List<AnonymousClassMember> list = new ArrayList<AnonymousClassMember>();
+                List<AnonymousClassMemberNode> list = new ArrayList<AnonymousClassMemberNode>();
         }
         @after {
                 $ret = factory.makeAnonymousClassBodyNode(list);
@@ -790,7 +790,7 @@ anonymousClassBody returns [AnonymousClassBodyNode ret]
 
 interfaceBody returns [InterfaceBodyNode ret]
         @init {
-                List<InterfaceMember> list = new ArrayList<InterfaceMember>();
+                List<InterfaceMemberNode> list = new ArrayList<InterfaceMemberNode>();
         }
         @after {
                 $ret = factory.makeInterfaceBodyNode(list);
