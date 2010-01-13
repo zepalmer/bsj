@@ -848,7 +848,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ModifiersNode modifiers,
             TypeNode type,
             IdentifierNode identifier,
-            ExpressionNode defaultValue)
+            AnnotationValueNode defaultValue)
     {
         AnnotationMethodDeclarationNode ret = new AnnotationMethodDeclarationNodeImpl(modifiers, type, identifier, defaultValue);
         return ret;

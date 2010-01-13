@@ -867,7 +867,7 @@ AnnotationMethodDeclarationNode :: Node + AnnotationMemberNode
     modifiers               ModifiersNode                               | the modifiers for this annotation method
     type                    TypeNode                                    | the return type of this annotation method
     identifier              IdentifierNode                              | this annotation method's name
-    defaultValue            ExpressionNode                              | the default value for this method
+    defaultValue            AnnotationValueNode                         | the default value for this method
     @docs
         A node representing an annotation method declaration, as in:
         <pre>

@@ -49,12 +49,12 @@ public interface AnnotationMethodDeclarationNode extends Node, AnnotationMemberN
      * Gets the default value for this method.
      * @return The default value for this method.
      */
-    public ExpressionNode getDefaultValue();
+    public AnnotationValueNode getDefaultValue();
 
     /**
      * Changes the default value for this method.
      * @param defaultValue The default value for this method.
      */
-    public void setDefaultValue(ExpressionNode defaultValue);
+    public void setDefaultValue(AnnotationValueNode defaultValue);
 
 }

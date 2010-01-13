@@ -2,7 +2,7 @@ package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationMethodDeclarationNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
+import edu.jhu.cs.bsj.compiler.ast.node.AnnotationValueNode;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
@@ -19,14 +19,14 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
     private IdentifierNode identifier;
 
     /** The default value for this method. */
-    private ExpressionNode defaultValue;
+    private AnnotationValueNode defaultValue;
 
     /** General constructor. */
     public AnnotationMethodDeclarationNodeImpl(
             ModifiersNode modifiers,
             TypeNode type,
             IdentifierNode identifier,
-            ExpressionNode defaultValue)
+            AnnotationValueNode defaultValue)
     {
         super();
         this.modifiers = modifiers;
@@ -117,7 +117,7 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
      * Gets the default value for this method.
      * @return The default value for this method.
      */
-    public ExpressionNode getDefaultValue()
+    public AnnotationValueNode getDefaultValue()
     {
         return this.defaultValue;
     }
@@ -126,7 +126,7 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
      * Changes the default value for this method.
      * @param defaultValue The default value for this method.
      */
-    public void setDefaultValue(ExpressionNode defaultValue)
+    public void setDefaultValue(AnnotationValueNode defaultValue)
     {
         if (this.defaultValue instanceof NodeImpl)
         {

@@ -482,7 +482,7 @@ public interface BsjNodeFactory
             ModifiersNode modifiers,
             TypeNode type,
             IdentifierNode identifier,
-            ExpressionNode defaultValue);
+            AnnotationValueNode defaultValue);
 
     /**
      * Creates a ImportSingleTypeNode.
