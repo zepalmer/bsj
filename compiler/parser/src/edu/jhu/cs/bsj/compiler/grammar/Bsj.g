@@ -2677,8 +2677,15 @@ restrictedPrimary returns [RestrictedPrimaryExpression ret]
 		    methodQualifierName=typeName '.' nonWildcardTypeArguments? identifier arguments
 		    // TODO: method invocation
 		|
-		    expressionName '[' expression ']' 
-		    // TODO: array access
+		    // Array access against a simple field access by name.  This rule is located here to support chained
+		    // array access expressions such as "x[5][6]".  The arrayAccess rule below would cover every array access
+		    // after the first, whereas this part of the rule covers the first.  This is done to disambiguate this rule
+		    // from the simple expressionName clause in the postfixExpression rule; otherwise "x" would be parseable
+		    // by both that rule and this one.
+		    expressionName '[' expression ']'
+		    {
+		        $ret = factory.makeArrayAccessNode(factory.makeFieldAccessNode($expressionName.ret), $expression.ret);
+		    }
 	    )
 	    (
 	        arrayAccess[$ret]
