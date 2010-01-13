@@ -1202,6 +1202,9 @@ unqualifiedClassOrInterfaceType[BoundType in] returns [BoundType ret]
 //     Map.Entry<K,V>
 // Note that the legal types can get pretty complex, as in
 //     A<X,Y>.B.C<Z>.D
+// TODO: should this be BoundType?  or DeclaredTypeNode?  BoundType includes arrays.  Who is using this and needing it
+// to be a BoundType? 
+// TODO: in general, revisit this rule.  It's using type select nodes, which don't exist anymore.
 classOrInterfaceType returns [BoundType ret]
     :   
         a=unqualifiedClassOrInterfaceType[null]
@@ -2666,6 +2669,7 @@ restrictedPrimary returns [RestrictedPrimaryExpression ret]
 		        $ret = factory.makeParenthesizedExpressionNode($parExpression.ret);
 		    }
 		|
+		    // TODO: is "classOrInterfaceType" the right rule?  it should include type args?
 		    NEW typeArguments? classOrInterfaceType arguments anonymousClassBody?
 		    // TODO: class instance creation
 		|
