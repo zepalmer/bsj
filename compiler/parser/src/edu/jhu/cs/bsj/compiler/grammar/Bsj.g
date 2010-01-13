@@ -946,7 +946,7 @@ constructorBody returns [ConstructorBodyNode ret]
         @after {
             $ret = factory.makeConstructorBodyNode(
                     constructorInvocationNode,
-                    factory.makeBlockStatementNode(factory.makeListNode(list)));
+                    factory.makeListNode(list));
         }
     :
         '{' 
