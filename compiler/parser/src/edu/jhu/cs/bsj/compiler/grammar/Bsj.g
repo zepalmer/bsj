@@ -2928,11 +2928,31 @@ qualifiedClassInstantiationPrimarySuffix[PrimaryExpression in] returns [Qualifie
                     $anonymousClassBody.ret);
         }
     ;
-    
+
+// Parses a method invocation based on an expression, such as
+//     array[4].toString()
+// or
+//     foo().bar()    
 typeArgumentMethodInvocationSuffix[PrimaryExpression in] returns [RestrictedPrimaryExpression ret]
+        @init {
+            ListNode<TypeNode> typeArgumentsNode = factory.makeListNode(Collections.<TypeNode>emptyList());
+        }
     :
-        '.' nonWildcardTypeArguments? identifier arguments
-        // TODO
+        '.'
+        (
+            nonWildcardTypeArguments
+            {
+                typeArgumentsNode = $nonWildcardTypeArguments.ret;
+            }
+        )?
+        identifier arguments
+        {
+            $ret = factory.makeMethodInvocationByExpressionNode(
+                    in,
+                    $identifier.ret,
+                    $arguments.ret,
+                    typeArgumentsNode);
+        }
     ;
     
 arrayAccess[ArrayIndexable in] returns [ArrayAccessNode ret]
