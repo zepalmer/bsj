@@ -116,10 +116,6 @@ InterfaceMemberNode+ :: Node
 		This tagging interface is used to denote AST nodes which can be used as members of an interface declaration's
 		body.
 		
-ParameterizableTypeNode+ :: Node + TypeNode
-	@docs
-		This tagging interface is used to denote AST nodes which can be parameterized.
-
 PrimaryExpressionNode+ :: Node + ExpressionNode
     @docs
         A tagging interface for all nodes considered "primary expressions" by the Java Language Specification.  Primary
@@ -693,7 +689,7 @@ ParameterizedTypeNode :: Node + DeclaredTypeNode
         as Set<String> (which would be represented by the raw type Set and the single-element argument list containing
         the raw type for String).
 
-ParameterizedTypeSelectNode :: Node + DeclaredTypeNode, ParameterizableTypeNode
+ParameterizedTypeSelectNode :: Node + DeclaredTypeNode
     @props
     base                    ParameterizedTypeNode                       | the parameterized type from which a type is selected
     select                  DeclaredTypeNode                            | the type which is selected from the base
@@ -712,7 +708,7 @@ PrimitiveTypeNode :: Node + TypeNode, BaseTypeNode
         A node representing a primitive type.
 
 # TODO: add information which tracks whether we have determined this node to represent a true raw type or type parameter
-RawTypeNode :: Node + DeclaredTypeNode, ParameterizableTypeNode
+RawTypeNode :: Node + DeclaredTypeNode
     @props
     name                    NameNode                                    | the name of the type
     @docs

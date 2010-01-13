@@ -9,7 +9,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
  * {@link RawTypeNode} containing the name "A" and a {@link ListNode} containing the type argument with the name
  * "X".
  */
-public interface ParameterizedTypeSelectNode extends Node, DeclaredTypeNode,  ParameterizableTypeNode
+public interface ParameterizedTypeSelectNode extends Node, DeclaredTypeNode
 {
     /**
      * Gets the parameterized type from which a type is selected.
