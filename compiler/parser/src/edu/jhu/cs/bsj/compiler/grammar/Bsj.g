@@ -458,7 +458,7 @@ variableModifiers returns [ModifiersNode ret]
         }
     ;
 
-classDeclaration returns [TypeDeclarationNode ret] 
+classDeclaration returns [InlineTypeDeclarableNode ret] 
     :
         normalClassDeclaration
         {
@@ -1692,9 +1692,12 @@ annotationMethodDeclaration returns [AnnotationMethodDeclarationNode ret]
         AnnotationValueNode elementValueNode = null;
     }
     :   
-        modifiers[interfaceModifiers] type id=identifier
+        modifiers[interfaceModifiers]
+        type
+        id=identifier
         '(' ')'
-        ('default' 
+        (
+            'default' 
             elementValue
             {
                 elementValueNode = $elementValue.ret;
@@ -1715,11 +1718,12 @@ block returns [BlockStatementNode ret]
                 List<StatementNode> list = new ArrayList<StatementNode>();
         }
         @after {
-                $ret = factory.makeBlockStatementNode(list);
+                $ret = factory.makeBlockStatementNode(factory.makeListNode(list));
         }
     :   
         '{'
-        (blockStatement
+        (
+            blockStatement
             {
                 list.add($blockStatement.ret);
             }
@@ -1765,11 +1769,6 @@ localVariableDeclaration returns [VariableDeclarationNode ret]
         @init {
             List<VariableDeclaratorNode> list = new ArrayList<VariableDeclaratorNode>();
         }
-        @after {
-            $ret = factory.makeVariableDeclarationNode(
-                    $variableModifiers.ret,
-                    factory.makeListNode(list));
-        }
     :   
         variableModifiers type
         a=variableDeclarator[$type.ret]
@@ -1782,6 +1781,11 @@ localVariableDeclaration returns [VariableDeclarationNode ret]
                 list.add($b.ret); 
             }
         )*
+        {
+            $ret = factory.makeVariableDeclarationNode(
+                    $variableModifiers.ret,
+                    factory.makeListNode(list));
+        }
     ;
 
 statement returns [StatementNode ret]
