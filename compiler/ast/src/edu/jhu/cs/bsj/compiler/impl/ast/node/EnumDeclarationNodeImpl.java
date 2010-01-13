@@ -11,14 +11,14 @@ import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
 public class EnumDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl implements EnumDeclarationNode
 {
     /** The implements clause. */
-    private ListNode<? extends TypeNode> implementsClause;
+    private ListNode<TypeNode> implementsClause;
 
     /** This enum's body. */
     private EnumBodyNode body;
 
     /** General constructor. */
     public EnumDeclarationNodeImpl(
-            ListNode<? extends TypeNode> implementsClause,
+            ListNode<TypeNode> implementsClause,
             EnumBodyNode body,
             IdentifierNode identifier,
             ModifiersNode modifiers)
@@ -32,7 +32,7 @@ public class EnumDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl implem
      * Gets the implements clause.
      * @return The implements clause.
      */
-    public ListNode<? extends TypeNode> getImplementsClause()
+    public ListNode<TypeNode> getImplementsClause()
     {
         return this.implementsClause;
     }
@@ -41,7 +41,7 @@ public class EnumDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl implem
      * Changes the implements clause.
      * @param implementsClause The implements clause.
      */
-    public void setImplementsClause(ListNode<? extends TypeNode> implementsClause)
+    public void setImplementsClause(ListNode<TypeNode> implementsClause)
     {
         if (this.implementsClause instanceof NodeImpl)
         {

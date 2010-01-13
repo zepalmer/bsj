@@ -229,7 +229,7 @@ ArrayInitializerCreationNode :: ArrayCreationNode
 
 ArrayInstantiatorCreationNode :: ArrayCreationNode
 	@props
-	dimExpressions			ListNode<? extends ExpressionNode>			| the dimension expressions for this array
+	dimExpressions			ListNode<ExpressionNode>			        | the dimension expressions for this array
 	@docs
 		Represents the creation of an array with instantiator, as in
 		<pre>
@@ -260,8 +260,8 @@ BinaryOperatorNode :: Node + ExpressionNode
 
 ClassInstantiationNode* :: Node + RestrictedPrimaryExpressionNode
     @props
-    constructorTypeArguments ListNode<? extends TypeNode>               | the type arguments for the constructor
-    arguments               ListNode<? extends ExpressionNode>          | the arguments to the constructor
+    constructorTypeArguments ListNode<TypeNode>                         | the type arguments for the constructor
+    arguments               ListNode<ExpressionNode>                    | the arguments to the constructor
     body                    AnonymousClassBodyNode                      | the body of the anonymous class
     @docs
         Acts as a parent to class instantiation nodes. 
@@ -347,8 +347,8 @@ MethodInvocationByNameNode :: MethodInvocationNode
 
 MethodInvocationNode* :: Node + RestrictedPrimaryExpressionNode
     @props
-    arguments               ListNode<? extends ExpressionNode>          | the arguments to pass to the method
-    typeArguments           ListNode<? extends TypeNode>                | the type arguments for the method
+    arguments               ListNode<ExpressionNode>                    | the arguments to pass to the method
+    typeArguments           ListNode<TypeNode>                          | the type arguments for the method
     @docs
         A superclass for method invocation nodes.
 
@@ -387,7 +387,7 @@ QualifiedClassInstantiationNode :: ClassInstantiationNode
     @props
     enclosingExpression     ExpressionNode                              | the expression enclosing the non-static inner class
     identifier              IdentifierNode                              | the name of the class being instantiated
-    typeArguments           ListNode<? extends TypeNode>                | the type arguments to apply to the class being instantiated
+    typeArguments           ListNode<TypeNode>                          | the type arguments to apply to the class being instantiated
     @docs
         A node representing the qualified instantiation of a class, as in:
         <pre>
@@ -445,8 +445,8 @@ SuperMethodInvocationNode :: Node + RestrictedPrimaryExpressionNode
     @props
     type                    RawTypeNode                                 | the qualifying type
     identifier              IdentifierNode                              | the identifier of the method being invoked
-    arguments               ListNode<? extends ExpressionNode>          | the arguments to pass to the method
-    typeArguments           ListNode<? extends TypeNode>                | the type arguments for the method
+    arguments               ListNode<ExpressionNode>                    | the arguments to pass to the method
+    typeArguments           ListNode<TypeNode>                          | the type arguments for the method
     @docs
         A node representing a method invocation from <tt>super</tt>, such as in the expression
         <pre>
@@ -551,7 +551,7 @@ AssertStatementNode :: Node + StatementNode
 
 BlockStatementNode :: Node + StatementNode
     @props
-    statements              ListNode<? extends StatementNode>           | the statements contained in this block statement
+    statements              ListNode<StatementNode>                     | the statements contained in this block statement
     @docs
         Represents a block of statements, as in
         <pre>
@@ -612,7 +612,7 @@ ExpressionStatementNode :: Node + StatementNode
 ForLoopNode :: Node + StatementNode
     @props
     initializer             ForInitializerNode                          | the initializer used for this for loop
-    update                  ListNode<? extends ExpressionStatementNode> | the loop's update operation
+    update                  ListNode<ExpressionStatementNode>           | the loop's update operation
     condition               ExpressionNode                              | the loop's termination condition
     statement               StatementNode                               | the loop's statement
     @docs
@@ -667,7 +667,7 @@ ReturnNode :: Node + StatementNode
 SwitchNode :: Node + StatementNode
     @props
     expression              ExpressionNode                              | the expression over which to switch
-    cases                   ListNode<? extends CaseNode>                | the cases in this switch
+    cases                   ListNode<CaseNode>                          | the cases in this switch
     @docs
         A node to represent switch statements, as in:
         <pre>
@@ -701,7 +701,7 @@ ThrowNode :: Node + StatementNode
 TryNode :: Node + StatementNode
     @props
     block                   BlockStatementNode                          | the block in which to try
-    catches                 ListNode<? extends CatchNode>               | the catch conditions
+    catches                 ListNode<CatchNode>                         | the catch conditions
     finallyBlock            BlockStatementNode                          | the finally block
     @docs
         A node to represent a try-catch block, as in:
@@ -877,10 +877,10 @@ ConstructorDeclarationNode :: Node + ClassMemberNode
     @props
     body                    ConstructorBodyNode                         | the body of this constructor
     modifiers               ModifiersNode                               | the modifiers for this constructor
-    parameters              ListNode<? extends VariableNode>            | the parameters declared by this constructor
+    parameters              ListNode<VariableNode>                      | the parameters declared by this constructor
     varargParameter         VariableNode                                | the vararg parameter declared by this method
-    throwTypes              ListNode<? extends RawTypeNode>             | the types of exceptions thrown by this constructor
-    typeParameters          ListNode<? extends TypeParameterNode>       | this constructor's applicable type parameters
+    throwTypes              ListNode<RawTypeNode>                       | the types of exceptions thrown by this constructor
+    typeParameters          ListNode<TypeParameterNode>                 | this constructor's applicable type parameters
     @docs
         A node representing a constructor declaration, as in:
         <pre>
@@ -891,9 +891,9 @@ ConstructorDeclarationNode :: Node + ClassMemberNode
 
 EnumConstantDeclarationNode :: Node
     @props
-    annotations             ListNode<? extends AnnotationNode>          | the annotations on this constant
+    annotations             ListNode<AnnotationNode>                    | the annotations on this constant
     identifier              IdentifierNode                              | the name of this constant
-    arguments               ListNode<? extends ExpressionNode>          | the arguments to the enum constructor
+    arguments               ListNode<ExpressionNode>                    | the arguments to the enum constructor
     body                    AnonymousClassBodyNode                      | the body used to anonymously subclass the constant
     @docs
         A node representing an enum constant.  While enum constants typically consist of a single name, many optional
@@ -917,11 +917,11 @@ MethodDeclarationNode :: Node + ClassMemberNode, InterfaceMemberNode, AnonymousC
     body                    BlockStatementNode                          | the body of this method
     modifiers               ModifiersNode                               | the modifiers for this method
     identifier              IdentifierNode                              | this method's name
-    parameters              ListNode<? extends VariableNode>            | the parameters declared by this method
+    parameters              ListNode<VariableNode>                      | the parameters declared by this method
     varargParameter         VariableNode                                | the vararg parameter declared by this method
     returnType              TypeNode                                    | the type of value returned
-    throwTypes              ListNode<? extends RawTypeNode>             | the types of exceptions thrown by this method
-    typeParameters          ListNode<? extends TypeParameterNode>       | this method's applicable type parameters
+    throwTypes              ListNode<RawTypeNode>                       | the types of exceptions thrown by this method
+    typeParameters          ListNode<TypeParameterNode>                 | this method's applicable type parameters
     @docs
         A node representing a method declaration, as in:
         <pre>
@@ -941,13 +941,13 @@ MethodDeclarationNode :: Node + ClassMemberNode, InterfaceMemberNode, AnonymousC
 
 AnnotationBodyNode :: Node
     @props
-    members             ListNode<? extends AnnotationMemberNode>        | the members of this annotation body
+    members             ListNode<AnnotationMemberNode>                  | the members of this annotation body
     @docs
         Represents the body of an annotation declaration.
 
 AnonymousClassBodyNode :: Node
     @props
-    members             ListNode<? extends AnonymousClassMemberNode>    | the members of this anonymous class body
+    members             ListNode<AnonymousClassMemberNode>              | the members of this anonymous class body
     @docs
         Represents the body of an anonymous class declaration.  This body is distinct from {@link ClassBodyNode} in that
         it does not permit constructors.  There is no corresponding <tt>AnonymousClassDeclarationNode</tt> because the
@@ -955,20 +955,20 @@ AnonymousClassBodyNode :: Node
 
 ClassBodyNode :: Node
     @props
-    members             ListNode<? extends ClassMemberNode>             | the members of this class body
+    members             ListNode<ClassMemberNode>                       | the members of this class body
     @docs
         Represents the body of a class declaration.
 
 EnumBodyNode :: Node
     @props
-    constants           ListNode<? extends EnumConstantDeclarationNode> | the enumeration constants
-    members             ListNode<? extends ClassMemberNode>             | the members of the class body part
+    constants           ListNode<EnumConstantDeclarationNode>           | the enumeration constants
+    members             ListNode<ClassMemberNode>                       | the members of the class body part
     @docs
         Represents the body of an enum declaration.
 
 InterfaceBodyNode :: Node
     @props
-    members             ListNode<? extends InterfaceMemberNode>             | the members of this interface body
+    members             ListNode<InterfaceMemberNode>                       | the members of this interface body
     @docs
         Represents the body of an interface declaration.
 
@@ -990,9 +990,9 @@ AnnotationDeclarationNode :: NamedTypeDeclarationNode
 ClassDeclarationNode :: NamedTypeDeclarationNode + InlineTypeDeclarableNode
     @props
     extendsClause           TypeNode                                    | the extends clause
-    implementsClause        ListNode<? extends TypeNode>                | the implements clause
+    implementsClause        ListNode<TypeNode>                          | the implements clause
     body                    ClassBodyNode                               | the body of this class
-    typeParameters          ListNode<? extends TypeParameterNode>       | this class's type parameters
+    typeParameters          ListNode<TypeParameterNode>                 | this class's type parameters
     @docs
         Represents the declaration of a class, as in:
         <pre>
@@ -1005,7 +1005,7 @@ ClassDeclarationNode :: NamedTypeDeclarationNode + InlineTypeDeclarableNode
         
 EnumDeclarationNode :: NamedTypeDeclarationNode + InlineTypeDeclarableNode
     @props
-    implementsClause        ListNode<? extends TypeNode>                | the implements clause
+    implementsClause        ListNode<TypeNode>                          | the implements clause
     body                    EnumBodyNode                                | this enum's body
     @docs
         Represents the declaration of a class, as in:
@@ -1019,9 +1019,9 @@ EnumDeclarationNode :: NamedTypeDeclarationNode + InlineTypeDeclarableNode
 
 InterfaceDeclarationNode :: NamedTypeDeclarationNode
     @props
-    extendsClause           ListNode<? extends TypeNode>                | the extends clause
+    extendsClause           ListNode<TypeNode>                          | the extends clause
     body                    InterfaceBodyNode                           | this interface's body
-    typeParameters          ListNode<? extends TypeParameterNode>       | this class's type parameters
+    typeParameters          ListNode<TypeParameterNode>                 | this class's type parameters
     @docs
         Represents the declaration of an interface, as in:
         <pre>
@@ -1057,7 +1057,7 @@ AnnotationAnnotationValueNode :: Node + AnnotationValueNode
 
 AnnotationArrayValueNode :: Node + AnnotationValueNode
     @props
-    values                  ListNode<? extends AnnotationValueNode>     | the array values
+    values                  ListNode<AnnotationValueNode>               | the array values
     @docs
         A value in an annotation representing an array.  This node is distinct from the {@link ArrayInitializerNode}
         because it allows annotations (by way of {@link AnnotationAnnotationValueNode}) as well as expressions.
@@ -1088,7 +1088,7 @@ AnnotationElementNode :: Node
 
 NormalAnnotationNode :: AnnotationNode
     @props
-    arguments               ListNode<? extends AnnotationElementNode>   | the arguments
+    arguments               ListNode<AnnotationElementNode>             | the arguments
     @docs
         Represents the usage of an annotation, as in:
         <pre>@<i>type</i></pre>
@@ -1117,7 +1117,7 @@ AlternateConstructorInvocationNode :: ConstructorInvocationNode
 
 ArrayInitializerNode :: Node + VariableInitializerNode
     @props
-	initializers            ListNode<? extends VariableInitializerNode> | the initializers for the array
+	initializers            ListNode<VariableInitializerNode>           | the initializers for the array
     @docs
         A node representing the initialization of an array, as in:
         <pre>
@@ -1128,7 +1128,7 @@ ArrayInitializerNode :: Node + VariableInitializerNode
 CaseNode :: Node
     @props
     expression              ExpressionNode                              | the expression used in this case label
-    statements              ListNode<? extends StatementNode>           | the statements to execute in this case node
+    statements              ListNode<StatementNode>                     | the statements to execute in this case node
     @docs
         A node representing a switch's case block, as in:
         <pre>
@@ -1158,8 +1158,8 @@ CatchNode :: Node
 CompilationUnitNode :: Node
     @props
     packageDeclaration      PackageDeclarationNode                      | the package declaration for this unit
-    imports                 ListNode<? extends ImportNode>              | the imports used in this unit
-    typeDecls               ListNode<? extends TypeDeclarationNode>     | the type declarations of this unit
+    imports                 ListNode<ImportNode>                        | the imports used in this unit
+    typeDecls               ListNode<TypeDeclarationNode>               | the type declarations of this unit
     @docs
         Represents a BSJ compilation unit.
     # TODO: do we want sourceFile of type JavaFileObject here or something similar?
@@ -1167,7 +1167,7 @@ CompilationUnitNode :: Node
 ConstructorBodyNode :: Node
     @props
     constructorInvocation   ConstructorInvocationNode                   | the (nullable) constructor invocation
-    statements              ListNode<? extends StatementNode>           | the statements contained in this constructor
+    statements              ListNode<StatementNode>                     | the statements contained in this constructor
     @docs
         Represents a constructor body.  For example, in
         <pre>
@@ -1184,8 +1184,8 @@ ConstructorBodyNode :: Node
 # TODO: the language specification says that the type nodes in the list can't be wild - can we type-encode this?
 ConstructorInvocationNode* :: Node
     @props
-    arguments               ListNode<? extends ExpressionNode>          | the arguments to pass to the method
-    typeArguments           ListNode<? extends TypeNode>                | the type arguments for the method
+    arguments               ListNode<ExpressionNode>                    | the arguments to pass to the method
+    typeArguments           ListNode<TypeNode>                          | the type arguments for the method
     @docs
         This class is a common superclass to both types of explicit constructor invocations: alternate constructor
         invocations (those using the <tt>this</tt> keyword) and superclass constructor invocations (those using the
@@ -1205,7 +1205,7 @@ ForInitializerDeclarationNode :: Node + ForInitializerNode
 
 ForInitializerExpressionNode :: Node + ForInitializerNode
     @props
-    expressions             ListNode<? extends ExpressionNode>          | the expressions used in this initializer
+    expressions             ListNode<ExpressionNode>                    | the expressions used in this initializer
     @docs
         Represents a for loop initializer which contains expressions.  For example, in
         <pre>for (i=0,j=0;i<n || j<m;i++,j++)</pre>
@@ -1231,7 +1231,7 @@ ImportSingleTypeNode :: Node + ImportNode
 
 ListNode<T extends Node> :: Node
     @props
-    children*               List<? extends T>                           | the list of children  
+    children*               List<T>                                     | the list of children  
     @docs
         Represents a list of nodes.  Nodes do not simply have lists as properties as the ListNode allows additional
         information to be tracked as necessary.
@@ -1242,7 +1242,7 @@ ListNode<T extends Node> :: Node
 
 ModifiersNode :: Node
     @props
-    annotations             ListNode<? extends AnnotationNode>          | the annotations modifying the subject
+    annotations             ListNode<AnnotationNode>                    | the annotations modifying the subject
     flags                   Set<Modifier>                               | the modifiers set on the subject
     @docs
         A node representing the modifiers applied to another node.  Modifiers may include flags (such as <tt>final</tt>
@@ -1258,7 +1258,7 @@ Node*
 PackageDeclarationNode :: Node
     @props
     name                    NameNode                                    | the name of the package
-    annotations             ListNode<? extends AnnotationNode>          | the annotations on the package declaration
+    annotations             ListNode<AnnotationNode>                    | the annotations on the package declaration
     @docs
         A node representing a package declaration, as in
         <pre>
@@ -1288,7 +1288,7 @@ SuperclassConstructorInvocationNode :: ConstructorInvocationNode
 TypeParameterNode :: Node
     @props
     identifier              IdentifierNode                              | the base type name for the parameter
-    bounds                  ListNode<? extends ReferenceTypeNode>       | the bounds over the base type
+    bounds                  ListNode<ReferenceTypeNode>                 | the bounds over the base type
     @docs
         A node for type parameters, as in:
         <pre>

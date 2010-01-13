@@ -13,12 +13,12 @@ public interface ForInitializerExpressionNode extends Node, ForInitializerNode
      * Gets the expressions used in this initializer.
      * @return The expressions used in this initializer.
      */
-    public ListNode<? extends ExpressionNode> getExpressions();
+    public ListNode<ExpressionNode> getExpressions();
 
     /**
      * Changes the expressions used in this initializer.
      * @param expressions The expressions used in this initializer.
      */
-    public void setExpressions(ListNode<? extends ExpressionNode> expressions);
+    public void setExpressions(ListNode<ExpressionNode> expressions);
 
 }

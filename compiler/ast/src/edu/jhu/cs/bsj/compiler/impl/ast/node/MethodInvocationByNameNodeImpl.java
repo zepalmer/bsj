@@ -15,8 +15,8 @@ public class MethodInvocationByNameNodeImpl extends MethodInvocationNodeImpl imp
     /** General constructor. */
     public MethodInvocationByNameNodeImpl(
             NameNode name,
-            ListNode<? extends ExpressionNode> arguments,
-            ListNode<? extends TypeNode> typeArguments)
+            ListNode<ExpressionNode> arguments,
+            ListNode<TypeNode> typeArguments)
     {
         super(arguments, typeArguments);
         this.name = name;

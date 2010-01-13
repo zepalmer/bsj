@@ -14,13 +14,13 @@ public interface ModifiersNode extends Node
      * Gets the annotations modifying the subject.
      * @return The annotations modifying the subject.
      */
-    public ListNode<? extends AnnotationNode> getAnnotations();
+    public ListNode<AnnotationNode> getAnnotations();
 
     /**
      * Changes the annotations modifying the subject.
      * @param annotations The annotations modifying the subject.
      */
-    public void setAnnotations(ListNode<? extends AnnotationNode> annotations);
+    public void setAnnotations(ListNode<AnnotationNode> annotations);
 
     /**
      * Gets the modifiers set on the subject.

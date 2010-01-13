@@ -8,11 +8,11 @@ import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
 public class InterfaceBodyNodeImpl extends NodeImpl implements InterfaceBodyNode
 {
     /** The members of this interface body. */
-    private ListNode<? extends InterfaceMemberNode> members;
+    private ListNode<InterfaceMemberNode> members;
 
     /** General constructor. */
     public InterfaceBodyNodeImpl(
-            ListNode<? extends InterfaceMemberNode> members)
+            ListNode<InterfaceMemberNode> members)
     {
         super();
         this.members = members;
@@ -22,7 +22,7 @@ public class InterfaceBodyNodeImpl extends NodeImpl implements InterfaceBodyNode
      * Gets the members of this interface body.
      * @return The members of this interface body.
      */
-    public ListNode<? extends InterfaceMemberNode> getMembers()
+    public ListNode<InterfaceMemberNode> getMembers()
     {
         return this.members;
     }
@@ -31,7 +31,7 @@ public class InterfaceBodyNodeImpl extends NodeImpl implements InterfaceBodyNode
      * Changes the members of this interface body.
      * @param members The members of this interface body.
      */
-    public void setMembers(ListNode<? extends InterfaceMemberNode> members)
+    public void setMembers(ListNode<InterfaceMemberNode> members)
     {
         if (this.members instanceof NodeImpl)
         {

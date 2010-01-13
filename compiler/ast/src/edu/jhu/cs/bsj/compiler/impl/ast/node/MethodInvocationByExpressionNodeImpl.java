@@ -20,8 +20,8 @@ public class MethodInvocationByExpressionNodeImpl extends MethodInvocationNodeIm
     public MethodInvocationByExpressionNodeImpl(
             PrimaryExpressionNode expression,
             IdentifierNode identifier,
-            ListNode<? extends ExpressionNode> arguments,
-            ListNode<? extends TypeNode> typeArguments)
+            ListNode<ExpressionNode> arguments,
+            ListNode<TypeNode> typeArguments)
     {
         super(arguments, typeArguments);
         this.expression = expression;

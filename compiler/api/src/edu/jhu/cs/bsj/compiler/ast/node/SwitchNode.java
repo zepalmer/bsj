@@ -28,12 +28,12 @@ public interface SwitchNode extends Node, StatementNode
      * Gets the cases in this switch.
      * @return The cases in this switch.
      */
-    public ListNode<? extends CaseNode> getCases();
+    public ListNode<CaseNode> getCases();
 
     /**
      * Changes the cases in this switch.
      * @param cases The cases in this switch.
      */
-    public void setCases(ListNode<? extends CaseNode> cases);
+    public void setCases(ListNode<CaseNode> cases);
 
 }

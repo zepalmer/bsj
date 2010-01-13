@@ -12,19 +12,19 @@ import edu.jhu.cs.bsj.compiler.ast.node.TypeParameterNode;
 public class InterfaceDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl implements InterfaceDeclarationNode
 {
     /** The extends clause. */
-    private ListNode<? extends TypeNode> extendsClause;
+    private ListNode<TypeNode> extendsClause;
 
     /** This interface's body. */
     private InterfaceBodyNode body;
 
     /** This class's type parameters. */
-    private ListNode<? extends TypeParameterNode> typeParameters;
+    private ListNode<TypeParameterNode> typeParameters;
 
     /** General constructor. */
     public InterfaceDeclarationNodeImpl(
-            ListNode<? extends TypeNode> extendsClause,
+            ListNode<TypeNode> extendsClause,
             InterfaceBodyNode body,
-            ListNode<? extends TypeParameterNode> typeParameters,
+            ListNode<TypeParameterNode> typeParameters,
             IdentifierNode identifier,
             ModifiersNode modifiers)
     {
@@ -38,7 +38,7 @@ public class InterfaceDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl i
      * Gets the extends clause.
      * @return The extends clause.
      */
-    public ListNode<? extends TypeNode> getExtendsClause()
+    public ListNode<TypeNode> getExtendsClause()
     {
         return this.extendsClause;
     }
@@ -47,7 +47,7 @@ public class InterfaceDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl i
      * Changes the extends clause.
      * @param extendsClause The extends clause.
      */
-    public void setExtendsClause(ListNode<? extends TypeNode> extendsClause)
+    public void setExtendsClause(ListNode<TypeNode> extendsClause)
     {
         if (this.extendsClause instanceof NodeImpl)
         {
@@ -90,7 +90,7 @@ public class InterfaceDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl i
      * Gets this class's type parameters.
      * @return This class's type parameters.
      */
-    public ListNode<? extends TypeParameterNode> getTypeParameters()
+    public ListNode<TypeParameterNode> getTypeParameters()
     {
         return this.typeParameters;
     }
@@ -99,7 +99,7 @@ public class InterfaceDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl i
      * Changes this class's type parameters.
      * @param typeParameters This class's type parameters.
      */
-    public void setTypeParameters(ListNode<? extends TypeParameterNode> typeParameters)
+    public void setTypeParameters(ListNode<TypeParameterNode> typeParameters)
     {
         if (this.typeParameters instanceof NodeImpl)
         {

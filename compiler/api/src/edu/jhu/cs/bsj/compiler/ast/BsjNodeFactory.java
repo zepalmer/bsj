@@ -32,7 +32,7 @@ public interface BsjNodeFactory
      * Creates a InterfaceBodyNode.
      */
     public InterfaceBodyNode makeInterfaceBodyNode(
-            ListNode<? extends InterfaceMemberNode> members);
+            ListNode<InterfaceMemberNode> members);
 
     /**
      * Creates a EnhancedForLoopNode.
@@ -47,9 +47,9 @@ public interface BsjNodeFactory
      */
     public ClassDeclarationNode makeClassDeclarationNode(
             TypeNode extendsClause,
-            ListNode<? extends TypeNode> implementsClause,
+            ListNode<TypeNode> implementsClause,
             ClassBodyNode body,
-            ListNode<? extends TypeParameterNode> typeParameters,
+            ListNode<TypeParameterNode> typeParameters,
             IdentifierNode identifier,
             ModifiersNode modifiers);
 
@@ -79,7 +79,7 @@ public interface BsjNodeFactory
      */
     public CaseNode makeCaseNode(
             ExpressionNode expression,
-            ListNode<? extends StatementNode> statements);
+            ListNode<StatementNode> statements);
 
     /**
      * Creates a VoidStatementNode.
@@ -104,8 +104,8 @@ public interface BsjNodeFactory
      */
     public SuperclassConstructorInvocationNode makeSuperclassConstructorInvocationNode(
             PrimaryExpressionNode qualifyingExpression,
-            ListNode<? extends ExpressionNode> arguments,
-            ListNode<? extends TypeNode> typeArguments);
+            ListNode<ExpressionNode> arguments,
+            ListNode<TypeNode> typeArguments);
 
     /**
      * Creates a PrimitiveTypeNode.
@@ -124,22 +124,22 @@ public interface BsjNodeFactory
      * Creates a ModifiersNode.
      */
     public ModifiersNode makeModifiersNode(
-            ListNode<? extends AnnotationNode> annotations,
+            ListNode<AnnotationNode> annotations,
             Set<Modifier> flags);
 
     /**
      * Creates a EnumBodyNode.
      */
     public EnumBodyNode makeEnumBodyNode(
-            ListNode<? extends EnumConstantDeclarationNode> constants,
-            ListNode<? extends ClassMemberNode> members);
+            ListNode<EnumConstantDeclarationNode> constants,
+            ListNode<ClassMemberNode> members);
 
     /**
      * Creates a TryNode.
      */
     public TryNode makeTryNode(
             BlockStatementNode block,
-            ListNode<? extends CatchNode> catches,
+            ListNode<CatchNode> catches,
             BlockStatementNode finallyBlock);
 
     /**
@@ -152,7 +152,7 @@ public interface BsjNodeFactory
      * Creates a EnumDeclarationNode.
      */
     public EnumDeclarationNode makeEnumDeclarationNode(
-            ListNode<? extends TypeNode> implementsClause,
+            ListNode<TypeNode> implementsClause,
             EnumBodyNode body,
             IdentifierNode identifier,
             ModifiersNode modifiers);
@@ -173,7 +173,7 @@ public interface BsjNodeFactory
      * Creates a AnnotationBodyNode.
      */
     public AnnotationBodyNode makeAnnotationBodyNode(
-            ListNode<? extends AnnotationMemberNode> members);
+            ListNode<AnnotationMemberNode> members);
 
     /**
      * Creates a VariableDeclaratorNode.
@@ -225,7 +225,7 @@ public interface BsjNodeFactory
      * Creates a NormalAnnotationNode.
      */
     public NormalAnnotationNode makeNormalAnnotationNode(
-            ListNode<? extends AnnotationElementNode> arguments,
+            ListNode<AnnotationElementNode> arguments,
             RawTypeNode annotationType);
 
     /**
@@ -241,9 +241,9 @@ public interface BsjNodeFactory
     public QualifiedClassInstantiationNode makeQualifiedClassInstantiationNode(
             ExpressionNode enclosingExpression,
             IdentifierNode identifier,
-            ListNode<? extends TypeNode> typeArguments,
-            ListNode<? extends TypeNode> constructorTypeArguments,
-            ListNode<? extends ExpressionNode> arguments,
+            ListNode<TypeNode> typeArguments,
+            ListNode<TypeNode> constructorTypeArguments,
+            ListNode<ExpressionNode> arguments,
             AnonymousClassBodyNode body);
 
     /**
@@ -264,20 +264,20 @@ public interface BsjNodeFactory
      * Creates a BlockStatementNode.
      */
     public BlockStatementNode makeBlockStatementNode(
-            ListNode<? extends StatementNode> statements);
+            ListNode<StatementNode> statements);
 
     /**
      * Creates a ForInitializerExpressionNode.
      */
     public ForInitializerExpressionNode makeForInitializerExpressionNode(
-            ListNode<? extends ExpressionNode> expressions);
+            ListNode<ExpressionNode> expressions);
 
     /**
      * Creates a PackageDeclarationNode.
      */
     public PackageDeclarationNode makePackageDeclarationNode(
             NameNode name,
-            ListNode<? extends AnnotationNode> annotations);
+            ListNode<AnnotationNode> annotations);
 
     /**
      * Creates a AnnotationDeclarationNode.
@@ -292,8 +292,8 @@ public interface BsjNodeFactory
      */
     public CompilationUnitNode makeCompilationUnitNode(
             PackageDeclarationNode packageDeclaration,
-            ListNode<? extends ImportNode> imports,
-            ListNode<? extends TypeDeclarationNode> typeDecls);
+            ListNode<ImportNode> imports,
+            ListNode<TypeDeclarationNode> typeDecls);
 
     /**
      * Creates a ContinueNode.
@@ -324,7 +324,7 @@ public interface BsjNodeFactory
      * Creates a AnonymousClassBodyNode.
      */
     public AnonymousClassBodyNode makeAnonymousClassBodyNode(
-            ListNode<? extends AnonymousClassMemberNode> members);
+            ListNode<AnonymousClassMemberNode> members);
 
     /**
      * Creates a UnaryOperatorNode.
@@ -378,14 +378,14 @@ public interface BsjNodeFactory
      */
     public SwitchNode makeSwitchNode(
             ExpressionNode expression,
-            ListNode<? extends CaseNode> cases);
+            ListNode<CaseNode> cases);
 
     /**
      * Creates a AlternateConstructorInvocationNode.
      */
     public AlternateConstructorInvocationNode makeAlternateConstructorInvocationNode(
-            ListNode<? extends ExpressionNode> arguments,
-            ListNode<? extends TypeNode> typeArguments);
+            ListNode<ExpressionNode> arguments,
+            ListNode<TypeNode> typeArguments);
 
     /**
      * Creates a ConstructorDeclarationNode.
@@ -393,10 +393,10 @@ public interface BsjNodeFactory
     public ConstructorDeclarationNode makeConstructorDeclarationNode(
             ConstructorBodyNode body,
             ModifiersNode modifiers,
-            ListNode<? extends VariableNode> parameters,
+            ListNode<VariableNode> parameters,
             VariableNode varargParameter,
-            ListNode<? extends RawTypeNode> throwTypes,
-            ListNode<? extends TypeParameterNode> typeParameters);
+            ListNode<RawTypeNode> throwTypes,
+            ListNode<TypeParameterNode> typeParameters);
 
     /**
      * Creates a AnnotationAnnotationValueNode.
@@ -409,7 +409,7 @@ public interface BsjNodeFactory
      */
     public ForLoopNode makeForLoopNode(
             ForInitializerNode initializer,
-            ListNode<? extends ExpressionStatementNode> update,
+            ListNode<ExpressionStatementNode> update,
             ExpressionNode condition,
             StatementNode statement);
 
@@ -424,15 +424,15 @@ public interface BsjNodeFactory
      * Creates a ListNode.
      */
     public <T extends Node> ListNode<T> makeListNode(
-            List<? extends T> children);
+            List<T> children);
 
     /**
      * Creates a EnumConstantDeclarationNode.
      */
     public EnumConstantDeclarationNode makeEnumConstantDeclarationNode(
-            ListNode<? extends AnnotationNode> annotations,
+            ListNode<AnnotationNode> annotations,
             IdentifierNode identifier,
-            ListNode<? extends ExpressionNode> arguments,
+            ListNode<ExpressionNode> arguments,
             AnonymousClassBodyNode body);
 
     /**
@@ -473,7 +473,7 @@ public interface BsjNodeFactory
      */
     public TypeParameterNode makeTypeParameterNode(
             IdentifierNode identifier,
-            ListNode<? extends ReferenceTypeNode> bounds);
+            ListNode<ReferenceTypeNode> bounds);
 
     /**
      * Creates a AnnotationMethodDeclarationNode.
@@ -502,7 +502,7 @@ public interface BsjNodeFactory
      * Creates a AnnotationArrayValueNode.
      */
     public AnnotationArrayValueNode makeAnnotationArrayValueNode(
-            ListNode<? extends AnnotationValueNode> values);
+            ListNode<AnnotationValueNode> values);
 
     /**
      * Creates a SingleElementAnnotationNode.
@@ -523,14 +523,14 @@ public interface BsjNodeFactory
     public SuperMethodInvocationNode makeSuperMethodInvocationNode(
             RawTypeNode type,
             IdentifierNode identifier,
-            ListNode<? extends ExpressionNode> arguments,
-            ListNode<? extends TypeNode> typeArguments);
+            ListNode<ExpressionNode> arguments,
+            ListNode<TypeNode> typeArguments);
 
     /**
      * Creates a ArrayInitializerNode.
      */
     public ArrayInitializerNode makeArrayInitializerNode(
-            ListNode<? extends VariableInitializerNode> initializers);
+            ListNode<VariableInitializerNode> initializers);
 
     /**
      * Creates a AnnotationExpressionValueNode.
@@ -558,8 +558,8 @@ public interface BsjNodeFactory
     public MethodInvocationByExpressionNode makeMethodInvocationByExpressionNode(
             PrimaryExpressionNode expression,
             IdentifierNode identifier,
-            ListNode<? extends ExpressionNode> arguments,
-            ListNode<? extends TypeNode> typeArguments);
+            ListNode<ExpressionNode> arguments,
+            ListNode<TypeNode> typeArguments);
 
     /**
      * Creates a InstanceOfNode.
@@ -601,8 +601,8 @@ public interface BsjNodeFactory
      */
     public MethodInvocationByNameNode makeMethodInvocationByNameNode(
             NameNode name,
-            ListNode<? extends ExpressionNode> arguments,
-            ListNode<? extends TypeNode> typeArguments);
+            ListNode<ExpressionNode> arguments,
+            ListNode<TypeNode> typeArguments);
 
     /**
      * Creates a ParameterizedTypeNode.
@@ -615,9 +615,9 @@ public interface BsjNodeFactory
      * Creates a InterfaceDeclarationNode.
      */
     public InterfaceDeclarationNode makeInterfaceDeclarationNode(
-            ListNode<? extends TypeNode> extendsClause,
+            ListNode<TypeNode> extendsClause,
             InterfaceBodyNode body,
-            ListNode<? extends TypeParameterNode> typeParameters,
+            ListNode<TypeParameterNode> typeParameters,
             IdentifierNode identifier,
             ModifiersNode modifiers);
 
@@ -638,15 +638,15 @@ public interface BsjNodeFactory
      */
     public ConstructorBodyNode makeConstructorBodyNode(
             ConstructorInvocationNode constructorInvocation,
-            ListNode<? extends StatementNode> statements);
+            ListNode<StatementNode> statements);
 
     /**
      * Creates a UnqualifiedClassInstantiationNode.
      */
     public UnqualifiedClassInstantiationNode makeUnqualifiedClassInstantiationNode(
             DeclaredTypeNode type,
-            ListNode<? extends TypeNode> constructorTypeArguments,
-            ListNode<? extends ExpressionNode> arguments,
+            ListNode<TypeNode> constructorTypeArguments,
+            ListNode<ExpressionNode> arguments,
             AnonymousClassBodyNode body);
 
     /**
@@ -660,7 +660,7 @@ public interface BsjNodeFactory
      * Creates a ArrayInstantiatorCreationNode.
      */
     public ArrayInstantiatorCreationNode makeArrayInstantiatorCreationNode(
-            ListNode<? extends ExpressionNode> dimExpressions,
+            ListNode<ExpressionNode> dimExpressions,
             BaseTypeNode baseType,
             int arrayLevels);
 
@@ -676,7 +676,7 @@ public interface BsjNodeFactory
      * Creates a ClassBodyNode.
      */
     public ClassBodyNode makeClassBodyNode(
-            ListNode<? extends ClassMemberNode> members);
+            ListNode<ClassMemberNode> members);
 
     /**
      * Creates a IntLiteralNode.
@@ -697,10 +697,10 @@ public interface BsjNodeFactory
             BlockStatementNode body,
             ModifiersNode modifiers,
             IdentifierNode identifier,
-            ListNode<? extends VariableNode> parameters,
+            ListNode<VariableNode> parameters,
             VariableNode varargParameter,
             TypeNode returnType,
-            ListNode<? extends RawTypeNode> throwTypes,
-            ListNode<? extends TypeParameterNode> typeParameters);
+            ListNode<RawTypeNode> throwTypes,
+            ListNode<TypeParameterNode> typeParameters);
 
 }

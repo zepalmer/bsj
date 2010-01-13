@@ -8,11 +8,11 @@ import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
 public class ForInitializerExpressionNodeImpl extends NodeImpl implements ForInitializerExpressionNode
 {
     /** The expressions used in this initializer. */
-    private ListNode<? extends ExpressionNode> expressions;
+    private ListNode<ExpressionNode> expressions;
 
     /** General constructor. */
     public ForInitializerExpressionNodeImpl(
-            ListNode<? extends ExpressionNode> expressions)
+            ListNode<ExpressionNode> expressions)
     {
         super();
         this.expressions = expressions;
@@ -22,7 +22,7 @@ public class ForInitializerExpressionNodeImpl extends NodeImpl implements ForIni
      * Gets the expressions used in this initializer.
      * @return The expressions used in this initializer.
      */
-    public ListNode<? extends ExpressionNode> getExpressions()
+    public ListNode<ExpressionNode> getExpressions()
     {
         return this.expressions;
     }
@@ -31,7 +31,7 @@ public class ForInitializerExpressionNodeImpl extends NodeImpl implements ForIni
      * Changes the expressions used in this initializer.
      * @param expressions The expressions used in this initializer.
      */
-    public void setExpressions(ListNode<? extends ExpressionNode> expressions)
+    public void setExpressions(ListNode<ExpressionNode> expressions)
     {
         if (this.expressions instanceof NodeImpl)
         {

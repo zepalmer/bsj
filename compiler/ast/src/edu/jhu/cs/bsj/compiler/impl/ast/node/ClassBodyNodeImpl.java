@@ -8,11 +8,11 @@ import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
 public class ClassBodyNodeImpl extends NodeImpl implements ClassBodyNode
 {
     /** The members of this class body. */
-    private ListNode<? extends ClassMemberNode> members;
+    private ListNode<ClassMemberNode> members;
 
     /** General constructor. */
     public ClassBodyNodeImpl(
-            ListNode<? extends ClassMemberNode> members)
+            ListNode<ClassMemberNode> members)
     {
         super();
         this.members = members;
@@ -22,7 +22,7 @@ public class ClassBodyNodeImpl extends NodeImpl implements ClassBodyNode
      * Gets the members of this class body.
      * @return The members of this class body.
      */
-    public ListNode<? extends ClassMemberNode> getMembers()
+    public ListNode<ClassMemberNode> getMembers()
     {
         return this.members;
     }
@@ -31,7 +31,7 @@ public class ClassBodyNodeImpl extends NodeImpl implements ClassBodyNode
      * Changes the members of this class body.
      * @param members The members of this class body.
      */
-    public void setMembers(ListNode<? extends ClassMemberNode> members)
+    public void setMembers(ListNode<ClassMemberNode> members)
     {
         if (this.members instanceof NodeImpl)
         {

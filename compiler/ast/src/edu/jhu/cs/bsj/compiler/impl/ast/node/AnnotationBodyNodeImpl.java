@@ -8,11 +8,11 @@ import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
 public class AnnotationBodyNodeImpl extends NodeImpl implements AnnotationBodyNode
 {
     /** The members of this annotation body. */
-    private ListNode<? extends AnnotationMemberNode> members;
+    private ListNode<AnnotationMemberNode> members;
 
     /** General constructor. */
     public AnnotationBodyNodeImpl(
-            ListNode<? extends AnnotationMemberNode> members)
+            ListNode<AnnotationMemberNode> members)
     {
         super();
         this.members = members;
@@ -22,7 +22,7 @@ public class AnnotationBodyNodeImpl extends NodeImpl implements AnnotationBodyNo
      * Gets the members of this annotation body.
      * @return The members of this annotation body.
      */
-    public ListNode<? extends AnnotationMemberNode> getMembers()
+    public ListNode<AnnotationMemberNode> getMembers()
     {
         return this.members;
     }
@@ -31,7 +31,7 @@ public class AnnotationBodyNodeImpl extends NodeImpl implements AnnotationBodyNo
      * Changes the members of this annotation body.
      * @param members The members of this annotation body.
      */
-    public void setMembers(ListNode<? extends AnnotationMemberNode> members)
+    public void setMembers(ListNode<AnnotationMemberNode> members)
     {
         if (this.members instanceof NodeImpl)
         {

@@ -8,11 +8,11 @@ import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
 public class AnonymousClassBodyNodeImpl extends NodeImpl implements AnonymousClassBodyNode
 {
     /** The members of this anonymous class body. */
-    private ListNode<? extends AnonymousClassMemberNode> members;
+    private ListNode<AnonymousClassMemberNode> members;
 
     /** General constructor. */
     public AnonymousClassBodyNodeImpl(
-            ListNode<? extends AnonymousClassMemberNode> members)
+            ListNode<AnonymousClassMemberNode> members)
     {
         super();
         this.members = members;
@@ -22,7 +22,7 @@ public class AnonymousClassBodyNodeImpl extends NodeImpl implements AnonymousCla
      * Gets the members of this anonymous class body.
      * @return The members of this anonymous class body.
      */
-    public ListNode<? extends AnonymousClassMemberNode> getMembers()
+    public ListNode<AnonymousClassMemberNode> getMembers()
     {
         return this.members;
     }
@@ -31,7 +31,7 @@ public class AnonymousClassBodyNodeImpl extends NodeImpl implements AnonymousCla
      * Changes the members of this anonymous class body.
      * @param members The members of this anonymous class body.
      */
-    public void setMembers(ListNode<? extends AnonymousClassMemberNode> members)
+    public void setMembers(ListNode<AnonymousClassMemberNode> members)
     {
         if (this.members instanceof NodeImpl)
         {

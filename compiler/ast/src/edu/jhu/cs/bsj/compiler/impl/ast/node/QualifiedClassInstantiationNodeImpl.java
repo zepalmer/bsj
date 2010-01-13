@@ -17,15 +17,15 @@ public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeI
     private IdentifierNode identifier;
 
     /** The type arguments to apply to the class being instantiated. */
-    private ListNode<? extends TypeNode> typeArguments;
+    private ListNode<TypeNode> typeArguments;
 
     /** General constructor. */
     public QualifiedClassInstantiationNodeImpl(
             ExpressionNode enclosingExpression,
             IdentifierNode identifier,
-            ListNode<? extends TypeNode> typeArguments,
-            ListNode<? extends TypeNode> constructorTypeArguments,
-            ListNode<? extends ExpressionNode> arguments,
+            ListNode<TypeNode> typeArguments,
+            ListNode<TypeNode> constructorTypeArguments,
+            ListNode<ExpressionNode> arguments,
             AnonymousClassBodyNode body)
     {
         super(constructorTypeArguments, arguments, body);
@@ -90,7 +90,7 @@ public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeI
      * Gets the type arguments to apply to the class being instantiated.
      * @return The type arguments to apply to the class being instantiated.
      */
-    public ListNode<? extends TypeNode> getTypeArguments()
+    public ListNode<TypeNode> getTypeArguments()
     {
         return this.typeArguments;
     }
@@ -99,7 +99,7 @@ public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeI
      * Changes the type arguments to apply to the class being instantiated.
      * @param typeArguments The type arguments to apply to the class being instantiated.
      */
-    public void setTypeArguments(ListNode<? extends TypeNode> typeArguments)
+    public void setTypeArguments(ListNode<TypeNode> typeArguments)
     {
         if (this.typeArguments instanceof NodeImpl)
         {

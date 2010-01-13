@@ -15,12 +15,12 @@ public interface ArrayInstantiatorCreationNode extends ArrayCreationNode
      * Gets the dimension expressions for this array.
      * @return The dimension expressions for this array.
      */
-    public ListNode<? extends ExpressionNode> getDimExpressions();
+    public ListNode<ExpressionNode> getDimExpressions();
 
     /**
      * Changes the dimension expressions for this array.
      * @param dimExpressions The dimension expressions for this array.
      */
-    public void setDimExpressions(ListNode<? extends ExpressionNode> dimExpressions);
+    public void setDimExpressions(ListNode<ExpressionNode> dimExpressions);
 
 }

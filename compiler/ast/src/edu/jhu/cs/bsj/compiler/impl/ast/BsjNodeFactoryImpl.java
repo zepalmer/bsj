@@ -142,7 +142,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      * Creates a InterfaceBodyNode.
      */
     public InterfaceBodyNode makeInterfaceBodyNode(
-            ListNode<? extends InterfaceMemberNode> members)
+            ListNode<InterfaceMemberNode> members)
     {
         InterfaceBodyNode ret = new InterfaceBodyNodeImpl(members);
         return ret;
@@ -165,9 +165,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     public ClassDeclarationNode makeClassDeclarationNode(
             TypeNode extendsClause,
-            ListNode<? extends TypeNode> implementsClause,
+            ListNode<TypeNode> implementsClause,
             ClassBodyNode body,
-            ListNode<? extends TypeParameterNode> typeParameters,
+            ListNode<TypeParameterNode> typeParameters,
             IdentifierNode identifier,
             ModifiersNode modifiers)
     {
@@ -213,7 +213,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     public CaseNode makeCaseNode(
             ExpressionNode expression,
-            ListNode<? extends StatementNode> statements)
+            ListNode<StatementNode> statements)
     {
         CaseNode ret = new CaseNodeImpl(expression, statements);
         return ret;
@@ -254,8 +254,8 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     public SuperclassConstructorInvocationNode makeSuperclassConstructorInvocationNode(
             PrimaryExpressionNode qualifyingExpression,
-            ListNode<? extends ExpressionNode> arguments,
-            ListNode<? extends TypeNode> typeArguments)
+            ListNode<ExpressionNode> arguments,
+            ListNode<TypeNode> typeArguments)
     {
         SuperclassConstructorInvocationNode ret = new SuperclassConstructorInvocationNodeImpl(qualifyingExpression, arguments, typeArguments);
         return ret;
@@ -286,7 +286,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      * Creates a ModifiersNode.
      */
     public ModifiersNode makeModifiersNode(
-            ListNode<? extends AnnotationNode> annotations,
+            ListNode<AnnotationNode> annotations,
             Set<Modifier> flags)
     {
         ModifiersNode ret = new ModifiersNodeImpl(annotations, flags);
@@ -297,8 +297,8 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      * Creates a EnumBodyNode.
      */
     public EnumBodyNode makeEnumBodyNode(
-            ListNode<? extends EnumConstantDeclarationNode> constants,
-            ListNode<? extends ClassMemberNode> members)
+            ListNode<EnumConstantDeclarationNode> constants,
+            ListNode<ClassMemberNode> members)
     {
         EnumBodyNode ret = new EnumBodyNodeImpl(constants, members);
         return ret;
@@ -309,7 +309,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     public TryNode makeTryNode(
             BlockStatementNode block,
-            ListNode<? extends CatchNode> catches,
+            ListNode<CatchNode> catches,
             BlockStatementNode finallyBlock)
     {
         TryNode ret = new TryNodeImpl(block, catches, finallyBlock);
@@ -330,7 +330,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      * Creates a EnumDeclarationNode.
      */
     public EnumDeclarationNode makeEnumDeclarationNode(
-            ListNode<? extends TypeNode> implementsClause,
+            ListNode<TypeNode> implementsClause,
             EnumBodyNode body,
             IdentifierNode identifier,
             ModifiersNode modifiers)
@@ -363,7 +363,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      * Creates a AnnotationBodyNode.
      */
     public AnnotationBodyNode makeAnnotationBodyNode(
-            ListNode<? extends AnnotationMemberNode> members)
+            ListNode<AnnotationMemberNode> members)
     {
         AnnotationBodyNode ret = new AnnotationBodyNodeImpl(members);
         return ret;
@@ -447,7 +447,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      * Creates a NormalAnnotationNode.
      */
     public NormalAnnotationNode makeNormalAnnotationNode(
-            ListNode<? extends AnnotationElementNode> arguments,
+            ListNode<AnnotationElementNode> arguments,
             RawTypeNode annotationType)
     {
         NormalAnnotationNode ret = new NormalAnnotationNodeImpl(arguments, annotationType);
@@ -471,9 +471,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public QualifiedClassInstantiationNode makeQualifiedClassInstantiationNode(
             ExpressionNode enclosingExpression,
             IdentifierNode identifier,
-            ListNode<? extends TypeNode> typeArguments,
-            ListNode<? extends TypeNode> constructorTypeArguments,
-            ListNode<? extends ExpressionNode> arguments,
+            ListNode<TypeNode> typeArguments,
+            ListNode<TypeNode> constructorTypeArguments,
+            ListNode<ExpressionNode> arguments,
             AnonymousClassBodyNode body)
     {
         QualifiedClassInstantiationNode ret = new QualifiedClassInstantiationNodeImpl(enclosingExpression, identifier, typeArguments, constructorTypeArguments, arguments, body);
@@ -506,7 +506,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      * Creates a BlockStatementNode.
      */
     public BlockStatementNode makeBlockStatementNode(
-            ListNode<? extends StatementNode> statements)
+            ListNode<StatementNode> statements)
     {
         BlockStatementNode ret = new BlockStatementNodeImpl(statements);
         return ret;
@@ -516,7 +516,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      * Creates a ForInitializerExpressionNode.
      */
     public ForInitializerExpressionNode makeForInitializerExpressionNode(
-            ListNode<? extends ExpressionNode> expressions)
+            ListNode<ExpressionNode> expressions)
     {
         ForInitializerExpressionNode ret = new ForInitializerExpressionNodeImpl(expressions);
         return ret;
@@ -527,7 +527,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     public PackageDeclarationNode makePackageDeclarationNode(
             NameNode name,
-            ListNode<? extends AnnotationNode> annotations)
+            ListNode<AnnotationNode> annotations)
     {
         PackageDeclarationNode ret = new PackageDeclarationNodeImpl(name, annotations);
         return ret;
@@ -550,8 +550,8 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     public CompilationUnitNode makeCompilationUnitNode(
             PackageDeclarationNode packageDeclaration,
-            ListNode<? extends ImportNode> imports,
-            ListNode<? extends TypeDeclarationNode> typeDecls)
+            ListNode<ImportNode> imports,
+            ListNode<TypeDeclarationNode> typeDecls)
     {
         CompilationUnitNode ret = new CompilationUnitNodeImpl(packageDeclaration, imports, typeDecls);
         return ret;
@@ -602,7 +602,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      * Creates a AnonymousClassBodyNode.
      */
     public AnonymousClassBodyNode makeAnonymousClassBodyNode(
-            ListNode<? extends AnonymousClassMemberNode> members)
+            ListNode<AnonymousClassMemberNode> members)
     {
         AnonymousClassBodyNode ret = new AnonymousClassBodyNodeImpl(members);
         return ret;
@@ -688,7 +688,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     public SwitchNode makeSwitchNode(
             ExpressionNode expression,
-            ListNode<? extends CaseNode> cases)
+            ListNode<CaseNode> cases)
     {
         SwitchNode ret = new SwitchNodeImpl(expression, cases);
         return ret;
@@ -698,8 +698,8 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      * Creates a AlternateConstructorInvocationNode.
      */
     public AlternateConstructorInvocationNode makeAlternateConstructorInvocationNode(
-            ListNode<? extends ExpressionNode> arguments,
-            ListNode<? extends TypeNode> typeArguments)
+            ListNode<ExpressionNode> arguments,
+            ListNode<TypeNode> typeArguments)
     {
         AlternateConstructorInvocationNode ret = new AlternateConstructorInvocationNodeImpl(arguments, typeArguments);
         return ret;
@@ -711,10 +711,10 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public ConstructorDeclarationNode makeConstructorDeclarationNode(
             ConstructorBodyNode body,
             ModifiersNode modifiers,
-            ListNode<? extends VariableNode> parameters,
+            ListNode<VariableNode> parameters,
             VariableNode varargParameter,
-            ListNode<? extends RawTypeNode> throwTypes,
-            ListNode<? extends TypeParameterNode> typeParameters)
+            ListNode<RawTypeNode> throwTypes,
+            ListNode<TypeParameterNode> typeParameters)
     {
         ConstructorDeclarationNode ret = new ConstructorDeclarationNodeImpl(body, modifiers, parameters, varargParameter, throwTypes, typeParameters);
         return ret;
@@ -735,7 +735,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     public ForLoopNode makeForLoopNode(
             ForInitializerNode initializer,
-            ListNode<? extends ExpressionStatementNode> update,
+            ListNode<ExpressionStatementNode> update,
             ExpressionNode condition,
             StatementNode statement)
     {
@@ -758,7 +758,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      * Creates a ListNode.
      */
     public <T extends Node> ListNode<T> makeListNode(
-            List<? extends T> children)
+            List<T> children)
     {
         ListNode<T> ret = new ListNodeImpl<T>(children);
         return ret;
@@ -768,9 +768,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      * Creates a EnumConstantDeclarationNode.
      */
     public EnumConstantDeclarationNode makeEnumConstantDeclarationNode(
-            ListNode<? extends AnnotationNode> annotations,
+            ListNode<AnnotationNode> annotations,
             IdentifierNode identifier,
-            ListNode<? extends ExpressionNode> arguments,
+            ListNode<ExpressionNode> arguments,
             AnonymousClassBodyNode body)
     {
         EnumConstantDeclarationNode ret = new EnumConstantDeclarationNodeImpl(annotations, identifier, arguments, body);
@@ -835,7 +835,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     public TypeParameterNode makeTypeParameterNode(
             IdentifierNode identifier,
-            ListNode<? extends ReferenceTypeNode> bounds)
+            ListNode<ReferenceTypeNode> bounds)
     {
         TypeParameterNode ret = new TypeParameterNodeImpl(identifier, bounds);
         return ret;
@@ -880,7 +880,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      * Creates a AnnotationArrayValueNode.
      */
     public AnnotationArrayValueNode makeAnnotationArrayValueNode(
-            ListNode<? extends AnnotationValueNode> values)
+            ListNode<AnnotationValueNode> values)
     {
         AnnotationArrayValueNode ret = new AnnotationArrayValueNodeImpl(values);
         return ret;
@@ -913,8 +913,8 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public SuperMethodInvocationNode makeSuperMethodInvocationNode(
             RawTypeNode type,
             IdentifierNode identifier,
-            ListNode<? extends ExpressionNode> arguments,
-            ListNode<? extends TypeNode> typeArguments)
+            ListNode<ExpressionNode> arguments,
+            ListNode<TypeNode> typeArguments)
     {
         SuperMethodInvocationNode ret = new SuperMethodInvocationNodeImpl(type, identifier, arguments, typeArguments);
         return ret;
@@ -924,7 +924,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      * Creates a ArrayInitializerNode.
      */
     public ArrayInitializerNode makeArrayInitializerNode(
-            ListNode<? extends VariableInitializerNode> initializers)
+            ListNode<VariableInitializerNode> initializers)
     {
         ArrayInitializerNode ret = new ArrayInitializerNodeImpl(initializers);
         return ret;
@@ -968,8 +968,8 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public MethodInvocationByExpressionNode makeMethodInvocationByExpressionNode(
             PrimaryExpressionNode expression,
             IdentifierNode identifier,
-            ListNode<? extends ExpressionNode> arguments,
-            ListNode<? extends TypeNode> typeArguments)
+            ListNode<ExpressionNode> arguments,
+            ListNode<TypeNode> typeArguments)
     {
         MethodInvocationByExpressionNode ret = new MethodInvocationByExpressionNodeImpl(expression, identifier, arguments, typeArguments);
         return ret;
@@ -1035,8 +1035,8 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     public MethodInvocationByNameNode makeMethodInvocationByNameNode(
             NameNode name,
-            ListNode<? extends ExpressionNode> arguments,
-            ListNode<? extends TypeNode> typeArguments)
+            ListNode<ExpressionNode> arguments,
+            ListNode<TypeNode> typeArguments)
     {
         MethodInvocationByNameNode ret = new MethodInvocationByNameNodeImpl(name, arguments, typeArguments);
         return ret;
@@ -1057,9 +1057,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      * Creates a InterfaceDeclarationNode.
      */
     public InterfaceDeclarationNode makeInterfaceDeclarationNode(
-            ListNode<? extends TypeNode> extendsClause,
+            ListNode<TypeNode> extendsClause,
             InterfaceBodyNode body,
-            ListNode<? extends TypeParameterNode> typeParameters,
+            ListNode<TypeParameterNode> typeParameters,
             IdentifierNode identifier,
             ModifiersNode modifiers)
     {
@@ -1092,7 +1092,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     public ConstructorBodyNode makeConstructorBodyNode(
             ConstructorInvocationNode constructorInvocation,
-            ListNode<? extends StatementNode> statements)
+            ListNode<StatementNode> statements)
     {
         ConstructorBodyNode ret = new ConstructorBodyNodeImpl(constructorInvocation, statements);
         return ret;
@@ -1103,8 +1103,8 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     public UnqualifiedClassInstantiationNode makeUnqualifiedClassInstantiationNode(
             DeclaredTypeNode type,
-            ListNode<? extends TypeNode> constructorTypeArguments,
-            ListNode<? extends ExpressionNode> arguments,
+            ListNode<TypeNode> constructorTypeArguments,
+            ListNode<ExpressionNode> arguments,
             AnonymousClassBodyNode body)
     {
         UnqualifiedClassInstantiationNode ret = new UnqualifiedClassInstantiationNodeImpl(type, constructorTypeArguments, arguments, body);
@@ -1126,7 +1126,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      * Creates a ArrayInstantiatorCreationNode.
      */
     public ArrayInstantiatorCreationNode makeArrayInstantiatorCreationNode(
-            ListNode<? extends ExpressionNode> dimExpressions,
+            ListNode<ExpressionNode> dimExpressions,
             BaseTypeNode baseType,
             int arrayLevels)
     {
@@ -1150,7 +1150,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      * Creates a ClassBodyNode.
      */
     public ClassBodyNode makeClassBodyNode(
-            ListNode<? extends ClassMemberNode> members)
+            ListNode<ClassMemberNode> members)
     {
         ClassBodyNode ret = new ClassBodyNodeImpl(members);
         return ret;
@@ -1183,11 +1183,11 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BlockStatementNode body,
             ModifiersNode modifiers,
             IdentifierNode identifier,
-            ListNode<? extends VariableNode> parameters,
+            ListNode<VariableNode> parameters,
             VariableNode varargParameter,
             TypeNode returnType,
-            ListNode<? extends RawTypeNode> throwTypes,
-            ListNode<? extends TypeParameterNode> typeParameters)
+            ListNode<RawTypeNode> throwTypes,
+            ListNode<TypeParameterNode> typeParameters)
     {
         MethodDeclarationNode ret = new MethodDeclarationNodeImpl(body, modifiers, identifier, parameters, varargParameter, returnType, throwTypes, typeParameters);
         return ret;

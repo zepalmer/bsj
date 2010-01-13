@@ -15,9 +15,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-// TODO: we are too aggressively assigning "? extends" to some of our types.  For example, we will need to modify
-// the list of ClassMember objects returned by a ClassBodyNode; it probably shouldn't use the ? extends form.
-
 /**
  * This class generates some patternistic sources for the BSJ parser. The code is awful; it's not intended for long-term
  * maintenance, as it will become obsolete once the BSJ compiler has been reimplemented in BSJ.

@@ -12,12 +12,12 @@ public class CaseNodeImpl extends NodeImpl implements CaseNode
     private ExpressionNode expression;
 
     /** The statements to execute in this case node. */
-    private ListNode<? extends StatementNode> statements;
+    private ListNode<StatementNode> statements;
 
     /** General constructor. */
     public CaseNodeImpl(
             ExpressionNode expression,
-            ListNode<? extends StatementNode> statements)
+            ListNode<StatementNode> statements)
     {
         super();
         this.expression = expression;
@@ -54,7 +54,7 @@ public class CaseNodeImpl extends NodeImpl implements CaseNode
      * Gets the statements to execute in this case node.
      * @return The statements to execute in this case node.
      */
-    public ListNode<? extends StatementNode> getStatements()
+    public ListNode<StatementNode> getStatements()
     {
         return this.statements;
     }
@@ -63,7 +63,7 @@ public class CaseNodeImpl extends NodeImpl implements CaseNode
      * Changes the statements to execute in this case node.
      * @param statements The statements to execute in this case node.
      */
-    public void setStatements(ListNode<? extends StatementNode> statements)
+    public void setStatements(ListNode<StatementNode> statements)
     {
         if (this.statements instanceof NodeImpl)
         {

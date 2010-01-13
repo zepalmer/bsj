@@ -10,24 +10,24 @@ public interface MethodInvocationNode extends Node, RestrictedPrimaryExpressionN
      * Gets the arguments to pass to the method.
      * @return The arguments to pass to the method.
      */
-    public ListNode<? extends ExpressionNode> getArguments();
+    public ListNode<ExpressionNode> getArguments();
 
     /**
      * Changes the arguments to pass to the method.
      * @param arguments The arguments to pass to the method.
      */
-    public void setArguments(ListNode<? extends ExpressionNode> arguments);
+    public void setArguments(ListNode<ExpressionNode> arguments);
 
     /**
      * Gets the type arguments for the method.
      * @return The type arguments for the method.
      */
-    public ListNode<? extends TypeNode> getTypeArguments();
+    public ListNode<TypeNode> getTypeArguments();
 
     /**
      * Changes the type arguments for the method.
      * @param typeArguments The type arguments for the method.
      */
-    public void setTypeArguments(ListNode<? extends TypeNode> typeArguments);
+    public void setTypeArguments(ListNode<TypeNode> typeArguments);
 
 }

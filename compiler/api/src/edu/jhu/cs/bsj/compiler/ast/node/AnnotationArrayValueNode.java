@@ -11,12 +11,12 @@ public interface AnnotationArrayValueNode extends Node, AnnotationValueNode
      * Gets the array values.
      * @return The array values.
      */
-    public ListNode<? extends AnnotationValueNode> getValues();
+    public ListNode<AnnotationValueNode> getValues();
 
     /**
      * Changes the array values.
      * @param values The array values.
      */
-    public void setValues(ListNode<? extends AnnotationValueNode> values);
+    public void setValues(ListNode<AnnotationValueNode> values);
 
 }

@@ -8,11 +8,11 @@ import edu.jhu.cs.bsj.compiler.ast.node.VariableInitializerNode;
 public class ArrayInitializerNodeImpl extends NodeImpl implements ArrayInitializerNode
 {
     /** The initializers for the array. */
-    private ListNode<? extends VariableInitializerNode> initializers;
+    private ListNode<VariableInitializerNode> initializers;
 
     /** General constructor. */
     public ArrayInitializerNodeImpl(
-            ListNode<? extends VariableInitializerNode> initializers)
+            ListNode<VariableInitializerNode> initializers)
     {
         super();
         this.initializers = initializers;
@@ -22,7 +22,7 @@ public class ArrayInitializerNodeImpl extends NodeImpl implements ArrayInitializ
      * Gets the initializers for the array.
      * @return The initializers for the array.
      */
-    public ListNode<? extends VariableInitializerNode> getInitializers()
+    public ListNode<VariableInitializerNode> getInitializers()
     {
         return this.initializers;
     }
@@ -31,7 +31,7 @@ public class ArrayInitializerNodeImpl extends NodeImpl implements ArrayInitializ
      * Changes the initializers for the array.
      * @param initializers The initializers for the array.
      */
-    public void setInitializers(ListNode<? extends VariableInitializerNode> initializers)
+    public void setInitializers(ListNode<VariableInitializerNode> initializers)
     {
         if (this.initializers instanceof NodeImpl)
         {

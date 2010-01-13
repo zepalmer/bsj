@@ -12,12 +12,12 @@ public class SwitchNodeImpl extends NodeImpl implements SwitchNode
     private ExpressionNode expression;
 
     /** The cases in this switch. */
-    private ListNode<? extends CaseNode> cases;
+    private ListNode<CaseNode> cases;
 
     /** General constructor. */
     public SwitchNodeImpl(
             ExpressionNode expression,
-            ListNode<? extends CaseNode> cases)
+            ListNode<CaseNode> cases)
     {
         super();
         this.expression = expression;
@@ -54,7 +54,7 @@ public class SwitchNodeImpl extends NodeImpl implements SwitchNode
      * Gets the cases in this switch.
      * @return The cases in this switch.
      */
-    public ListNode<? extends CaseNode> getCases()
+    public ListNode<CaseNode> getCases()
     {
         return this.cases;
     }
@@ -63,7 +63,7 @@ public class SwitchNodeImpl extends NodeImpl implements SwitchNode
      * Changes the cases in this switch.
      * @param cases The cases in this switch.
      */
-    public void setCases(ListNode<? extends CaseNode> cases)
+    public void setCases(ListNode<CaseNode> cases)
     {
         if (this.cases instanceof NodeImpl)
         {

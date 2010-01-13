@@ -15,12 +15,12 @@ public interface NormalAnnotationNode extends AnnotationNode
      * Gets the arguments.
      * @return The arguments.
      */
-    public ListNode<? extends AnnotationElementNode> getArguments();
+    public ListNode<AnnotationElementNode> getArguments();
 
     /**
      * Changes the arguments.
      * @param arguments The arguments.
      */
-    public void setArguments(ListNode<? extends AnnotationElementNode> arguments);
+    public void setArguments(ListNode<AnnotationElementNode> arguments);
 
 }

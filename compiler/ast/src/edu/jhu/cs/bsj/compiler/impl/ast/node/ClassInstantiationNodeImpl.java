@@ -10,18 +10,18 @@ import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
 public abstract class ClassInstantiationNodeImpl extends NodeImpl implements ClassInstantiationNode
 {
     /** The type arguments for the constructor. */
-    private ListNode<? extends TypeNode> constructorTypeArguments;
+    private ListNode<TypeNode> constructorTypeArguments;
 
     /** The arguments to the constructor. */
-    private ListNode<? extends ExpressionNode> arguments;
+    private ListNode<ExpressionNode> arguments;
 
     /** The body of the anonymous class. */
     private AnonymousClassBodyNode body;
 
     /** General constructor. */
     protected ClassInstantiationNodeImpl(
-            ListNode<? extends TypeNode> constructorTypeArguments,
-            ListNode<? extends ExpressionNode> arguments,
+            ListNode<TypeNode> constructorTypeArguments,
+            ListNode<ExpressionNode> arguments,
             AnonymousClassBodyNode body)
     {
         super();
@@ -34,7 +34,7 @@ public abstract class ClassInstantiationNodeImpl extends NodeImpl implements Cla
      * Gets the type arguments for the constructor.
      * @return The type arguments for the constructor.
      */
-    public ListNode<? extends TypeNode> getConstructorTypeArguments()
+    public ListNode<TypeNode> getConstructorTypeArguments()
     {
         return this.constructorTypeArguments;
     }
@@ -43,7 +43,7 @@ public abstract class ClassInstantiationNodeImpl extends NodeImpl implements Cla
      * Changes the type arguments for the constructor.
      * @param constructorTypeArguments The type arguments for the constructor.
      */
-    public void setConstructorTypeArguments(ListNode<? extends TypeNode> constructorTypeArguments)
+    public void setConstructorTypeArguments(ListNode<TypeNode> constructorTypeArguments)
     {
         if (this.constructorTypeArguments instanceof NodeImpl)
         {
@@ -60,7 +60,7 @@ public abstract class ClassInstantiationNodeImpl extends NodeImpl implements Cla
      * Gets the arguments to the constructor.
      * @return The arguments to the constructor.
      */
-    public ListNode<? extends ExpressionNode> getArguments()
+    public ListNode<ExpressionNode> getArguments()
     {
         return this.arguments;
     }
@@ -69,7 +69,7 @@ public abstract class ClassInstantiationNodeImpl extends NodeImpl implements Cla
      * Changes the arguments to the constructor.
      * @param arguments The arguments to the constructor.
      */
-    public void setArguments(ListNode<? extends ExpressionNode> arguments)
+    public void setArguments(ListNode<ExpressionNode> arguments)
     {
         if (this.arguments instanceof NodeImpl)
         {

@@ -10,12 +10,12 @@ public interface ClassBodyNode extends Node
      * Gets the members of this class body.
      * @return The members of this class body.
      */
-    public ListNode<? extends ClassMemberNode> getMembers();
+    public ListNode<ClassMemberNode> getMembers();
 
     /**
      * Changes the members of this class body.
      * @param members The members of this class body.
      */
-    public void setMembers(ListNode<? extends ClassMemberNode> members);
+    public void setMembers(ListNode<ClassMemberNode> members);
 
 }

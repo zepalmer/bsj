@@ -16,8 +16,8 @@ public class UnqualifiedClassInstantiationNodeImpl extends ClassInstantiationNod
     /** General constructor. */
     public UnqualifiedClassInstantiationNodeImpl(
             DeclaredTypeNode type,
-            ListNode<? extends TypeNode> constructorTypeArguments,
-            ListNode<? extends ExpressionNode> arguments,
+            ListNode<TypeNode> constructorTypeArguments,
+            ListNode<ExpressionNode> arguments,
             AnonymousClassBodyNode body)
     {
         super(constructorTypeArguments, arguments, body);

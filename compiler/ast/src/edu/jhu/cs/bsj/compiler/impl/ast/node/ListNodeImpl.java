@@ -10,12 +10,12 @@ import edu.jhu.cs.bsj.compiler.ast.node.Node;
 public class ListNodeImpl<T extends Node> extends NodeImpl implements ListNode<T>
 {
     /** The list of children. */
-    private List<? extends T> children;
+    private List<T> children;
 
     /** General constructor. */
 /* // stopGen=cons
     public ListNodeImpl(
-            List<? extends T> children)
+            List<T> children)
     {
         super();
         this.children = children;
@@ -25,7 +25,7 @@ public class ListNodeImpl<T extends Node> extends NodeImpl implements ListNode<T
      * Gets the list of children.
      * @return The list of children.
      */
-    public List<? extends T> getChildren()
+    public List<T> getChildren()
     {
         return this.children;
     }

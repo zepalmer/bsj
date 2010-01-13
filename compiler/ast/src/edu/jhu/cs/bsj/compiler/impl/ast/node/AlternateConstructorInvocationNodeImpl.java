@@ -10,8 +10,8 @@ public class AlternateConstructorInvocationNodeImpl extends ConstructorInvocatio
 {
     /** General constructor. */
     public AlternateConstructorInvocationNodeImpl(
-            ListNode<? extends ExpressionNode> arguments,
-            ListNode<? extends TypeNode> typeArguments)
+            ListNode<ExpressionNode> arguments,
+            ListNode<TypeNode> typeArguments)
     {
         super(arguments, typeArguments);
     }

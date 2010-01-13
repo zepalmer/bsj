@@ -17,13 +17,13 @@ public interface InterfaceDeclarationNode extends NamedTypeDeclarationNode
      * Gets the extends clause.
      * @return The extends clause.
      */
-    public ListNode<? extends TypeNode> getExtendsClause();
+    public ListNode<TypeNode> getExtendsClause();
 
     /**
      * Changes the extends clause.
      * @param extendsClause The extends clause.
      */
-    public void setExtendsClause(ListNode<? extends TypeNode> extendsClause);
+    public void setExtendsClause(ListNode<TypeNode> extendsClause);
 
     /**
      * Gets this interface's body.
@@ -41,12 +41,12 @@ public interface InterfaceDeclarationNode extends NamedTypeDeclarationNode
      * Gets this class's type parameters.
      * @return This class's type parameters.
      */
-    public ListNode<? extends TypeParameterNode> getTypeParameters();
+    public ListNode<TypeParameterNode> getTypeParameters();
 
     /**
      * Changes this class's type parameters.
      * @param typeParameters This class's type parameters.
      */
-    public void setTypeParameters(ListNode<? extends TypeParameterNode> typeParameters);
+    public void setTypeParameters(ListNode<TypeParameterNode> typeParameters);
 
 }

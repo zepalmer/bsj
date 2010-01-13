@@ -9,15 +9,15 @@ import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
 public abstract class MethodInvocationNodeImpl extends NodeImpl implements MethodInvocationNode
 {
     /** The arguments to pass to the method. */
-    private ListNode<? extends ExpressionNode> arguments;
+    private ListNode<ExpressionNode> arguments;
 
     /** The type arguments for the method. */
-    private ListNode<? extends TypeNode> typeArguments;
+    private ListNode<TypeNode> typeArguments;
 
     /** General constructor. */
     protected MethodInvocationNodeImpl(
-            ListNode<? extends ExpressionNode> arguments,
-            ListNode<? extends TypeNode> typeArguments)
+            ListNode<ExpressionNode> arguments,
+            ListNode<TypeNode> typeArguments)
     {
         super();
         this.arguments = arguments;
@@ -28,7 +28,7 @@ public abstract class MethodInvocationNodeImpl extends NodeImpl implements Metho
      * Gets the arguments to pass to the method.
      * @return The arguments to pass to the method.
      */
-    public ListNode<? extends ExpressionNode> getArguments()
+    public ListNode<ExpressionNode> getArguments()
     {
         return this.arguments;
     }
@@ -37,7 +37,7 @@ public abstract class MethodInvocationNodeImpl extends NodeImpl implements Metho
      * Changes the arguments to pass to the method.
      * @param arguments The arguments to pass to the method.
      */
-    public void setArguments(ListNode<? extends ExpressionNode> arguments)
+    public void setArguments(ListNode<ExpressionNode> arguments)
     {
         if (this.arguments instanceof NodeImpl)
         {
@@ -54,7 +54,7 @@ public abstract class MethodInvocationNodeImpl extends NodeImpl implements Metho
      * Gets the type arguments for the method.
      * @return The type arguments for the method.
      */
-    public ListNode<? extends TypeNode> getTypeArguments()
+    public ListNode<TypeNode> getTypeArguments()
     {
         return this.typeArguments;
     }
@@ -63,7 +63,7 @@ public abstract class MethodInvocationNodeImpl extends NodeImpl implements Metho
      * Changes the type arguments for the method.
      * @param typeArguments The type arguments for the method.
      */
-    public void setTypeArguments(ListNode<? extends TypeNode> typeArguments)
+    public void setTypeArguments(ListNode<TypeNode> typeArguments)
     {
         if (this.typeArguments instanceof NodeImpl)
         {

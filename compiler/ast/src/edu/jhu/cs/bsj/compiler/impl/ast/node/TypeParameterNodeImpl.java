@@ -12,12 +12,12 @@ public class TypeParameterNodeImpl extends NodeImpl implements TypeParameterNode
     private IdentifierNode identifier;
 
     /** The bounds over the base type. */
-    private ListNode<? extends ReferenceTypeNode> bounds;
+    private ListNode<ReferenceTypeNode> bounds;
 
     /** General constructor. */
     public TypeParameterNodeImpl(
             IdentifierNode identifier,
-            ListNode<? extends ReferenceTypeNode> bounds)
+            ListNode<ReferenceTypeNode> bounds)
     {
         super();
         this.identifier = identifier;
@@ -54,7 +54,7 @@ public class TypeParameterNodeImpl extends NodeImpl implements TypeParameterNode
      * Gets the bounds over the base type.
      * @return The bounds over the base type.
      */
-    public ListNode<? extends ReferenceTypeNode> getBounds()
+    public ListNode<ReferenceTypeNode> getBounds()
     {
         return this.bounds;
     }
@@ -63,7 +63,7 @@ public class TypeParameterNodeImpl extends NodeImpl implements TypeParameterNode
      * Changes the bounds over the base type.
      * @param bounds The bounds over the base type.
      */
-    public void setBounds(ListNode<? extends ReferenceTypeNode> bounds)
+    public void setBounds(ListNode<ReferenceTypeNode> bounds)
     {
         if (this.bounds instanceof NodeImpl)
         {

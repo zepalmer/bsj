@@ -9,11 +9,11 @@ import edu.jhu.cs.bsj.compiler.ast.node.RawTypeNode;
 public class NormalAnnotationNodeImpl extends AnnotationNodeImpl implements NormalAnnotationNode
 {
     /** The arguments. */
-    private ListNode<? extends AnnotationElementNode> arguments;
+    private ListNode<AnnotationElementNode> arguments;
 
     /** General constructor. */
     public NormalAnnotationNodeImpl(
-            ListNode<? extends AnnotationElementNode> arguments,
+            ListNode<AnnotationElementNode> arguments,
             RawTypeNode annotationType)
     {
         super(annotationType);
@@ -24,7 +24,7 @@ public class NormalAnnotationNodeImpl extends AnnotationNodeImpl implements Norm
      * Gets the arguments.
      * @return The arguments.
      */
-    public ListNode<? extends AnnotationElementNode> getArguments()
+    public ListNode<AnnotationElementNode> getArguments()
     {
         return this.arguments;
     }
@@ -33,7 +33,7 @@ public class NormalAnnotationNodeImpl extends AnnotationNodeImpl implements Norm
      * Changes the arguments.
      * @param arguments The arguments.
      */
-    public void setArguments(ListNode<? extends AnnotationElementNode> arguments)
+    public void setArguments(ListNode<AnnotationElementNode> arguments)
     {
         if (this.arguments instanceof NodeImpl)
         {

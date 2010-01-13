@@ -18,25 +18,25 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
     private ModifiersNode modifiers;
 
     /** The parameters declared by this constructor. */
-    private ListNode<? extends VariableNode> parameters;
+    private ListNode<VariableNode> parameters;
 
     /** The vararg parameter declared by this method. */
     private VariableNode varargParameter;
 
     /** The types of exceptions thrown by this constructor. */
-    private ListNode<? extends RawTypeNode> throwTypes;
+    private ListNode<RawTypeNode> throwTypes;
 
     /** This constructor's applicable type parameters. */
-    private ListNode<? extends TypeParameterNode> typeParameters;
+    private ListNode<TypeParameterNode> typeParameters;
 
     /** General constructor. */
     public ConstructorDeclarationNodeImpl(
             ConstructorBodyNode body,
             ModifiersNode modifiers,
-            ListNode<? extends VariableNode> parameters,
+            ListNode<VariableNode> parameters,
             VariableNode varargParameter,
-            ListNode<? extends RawTypeNode> throwTypes,
-            ListNode<? extends TypeParameterNode> typeParameters)
+            ListNode<RawTypeNode> throwTypes,
+            ListNode<TypeParameterNode> typeParameters)
     {
         super();
         this.body = body;
@@ -103,7 +103,7 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
      * Gets the parameters declared by this constructor.
      * @return The parameters declared by this constructor.
      */
-    public ListNode<? extends VariableNode> getParameters()
+    public ListNode<VariableNode> getParameters()
     {
         return this.parameters;
     }
@@ -112,7 +112,7 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
      * Changes the parameters declared by this constructor.
      * @param parameters The parameters declared by this constructor.
      */
-    public void setParameters(ListNode<? extends VariableNode> parameters)
+    public void setParameters(ListNode<VariableNode> parameters)
     {
         if (this.parameters instanceof NodeImpl)
         {
@@ -155,7 +155,7 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
      * Gets the types of exceptions thrown by this constructor.
      * @return The types of exceptions thrown by this constructor.
      */
-    public ListNode<? extends RawTypeNode> getThrowTypes()
+    public ListNode<RawTypeNode> getThrowTypes()
     {
         return this.throwTypes;
     }
@@ -164,7 +164,7 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
      * Changes the types of exceptions thrown by this constructor.
      * @param throwTypes The types of exceptions thrown by this constructor.
      */
-    public void setThrowTypes(ListNode<? extends RawTypeNode> throwTypes)
+    public void setThrowTypes(ListNode<RawTypeNode> throwTypes)
     {
         if (this.throwTypes instanceof NodeImpl)
         {
@@ -181,7 +181,7 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
      * Gets this constructor's applicable type parameters.
      * @return This constructor's applicable type parameters.
      */
-    public ListNode<? extends TypeParameterNode> getTypeParameters()
+    public ListNode<TypeParameterNode> getTypeParameters()
     {
         return this.typeParameters;
     }
@@ -190,7 +190,7 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
      * Changes this constructor's applicable type parameters.
      * @param typeParameters This constructor's applicable type parameters.
      */
-    public void setTypeParameters(ListNode<? extends TypeParameterNode> typeParameters)
+    public void setTypeParameters(ListNode<TypeParameterNode> typeParameters)
     {
         if (this.typeParameters instanceof NodeImpl)
         {

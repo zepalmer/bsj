@@ -15,8 +15,8 @@ public class SuperclassConstructorInvocationNodeImpl extends ConstructorInvocati
     /** General constructor. */
     public SuperclassConstructorInvocationNodeImpl(
             PrimaryExpressionNode qualifyingExpression,
-            ListNode<? extends ExpressionNode> arguments,
-            ListNode<? extends TypeNode> typeArguments)
+            ListNode<ExpressionNode> arguments,
+            ListNode<TypeNode> typeArguments)
     {
         super(arguments, typeArguments);
         this.qualifyingExpression = qualifyingExpression;

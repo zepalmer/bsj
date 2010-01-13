@@ -14,7 +14,7 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
     private ForInitializerNode initializer;
 
     /** The loop's update operation. */
-    private ListNode<? extends ExpressionStatementNode> update;
+    private ListNode<ExpressionStatementNode> update;
 
     /** The loop's termination condition. */
     private ExpressionNode condition;
@@ -25,7 +25,7 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
     /** General constructor. */
     public ForLoopNodeImpl(
             ForInitializerNode initializer,
-            ListNode<? extends ExpressionStatementNode> update,
+            ListNode<ExpressionStatementNode> update,
             ExpressionNode condition,
             StatementNode statement)
     {
@@ -66,7 +66,7 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
      * Gets the loop's update operation.
      * @return The loop's update operation.
      */
-    public ListNode<? extends ExpressionStatementNode> getUpdate()
+    public ListNode<ExpressionStatementNode> getUpdate()
     {
         return this.update;
     }
@@ -75,7 +75,7 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
      * Changes the loop's update operation.
      * @param update The loop's update operation.
      */
-    public void setUpdate(ListNode<? extends ExpressionStatementNode> update)
+    public void setUpdate(ListNode<ExpressionStatementNode> update)
     {
         if (this.update instanceof NodeImpl)
         {

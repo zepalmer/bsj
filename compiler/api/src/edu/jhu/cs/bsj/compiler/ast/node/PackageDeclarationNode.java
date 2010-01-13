@@ -30,12 +30,12 @@ public interface PackageDeclarationNode extends Node
      * Gets the annotations on the package declaration.
      * @return The annotations on the package declaration.
      */
-    public ListNode<? extends AnnotationNode> getAnnotations();
+    public ListNode<AnnotationNode> getAnnotations();
 
     /**
      * Changes the annotations on the package declaration.
      * @param annotations The annotations on the package declaration.
      */
-    public void setAnnotations(ListNode<? extends AnnotationNode> annotations);
+    public void setAnnotations(ListNode<AnnotationNode> annotations);
 
 }

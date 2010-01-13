@@ -9,11 +9,11 @@ import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
 public class ArrayInstantiatorCreationNodeImpl extends ArrayCreationNodeImpl implements ArrayInstantiatorCreationNode
 {
     /** The dimension expressions for this array. */
-    private ListNode<? extends ExpressionNode> dimExpressions;
+    private ListNode<ExpressionNode> dimExpressions;
 
     /** General constructor. */
     public ArrayInstantiatorCreationNodeImpl(
-            ListNode<? extends ExpressionNode> dimExpressions,
+            ListNode<ExpressionNode> dimExpressions,
             BaseTypeNode baseType,
             int arrayLevels)
     {
@@ -25,7 +25,7 @@ public class ArrayInstantiatorCreationNodeImpl extends ArrayCreationNodeImpl imp
      * Gets the dimension expressions for this array.
      * @return The dimension expressions for this array.
      */
-    public ListNode<? extends ExpressionNode> getDimExpressions()
+    public ListNode<ExpressionNode> getDimExpressions()
     {
         return this.dimExpressions;
     }
@@ -34,7 +34,7 @@ public class ArrayInstantiatorCreationNodeImpl extends ArrayCreationNodeImpl imp
      * Changes the dimension expressions for this array.
      * @param dimExpressions The dimension expressions for this array.
      */
-    public void setDimExpressions(ListNode<? extends ExpressionNode> dimExpressions)
+    public void setDimExpressions(ListNode<ExpressionNode> dimExpressions)
     {
         if (this.dimExpressions instanceof NodeImpl)
         {

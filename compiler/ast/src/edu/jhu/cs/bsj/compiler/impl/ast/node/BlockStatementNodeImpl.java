@@ -8,11 +8,11 @@ import edu.jhu.cs.bsj.compiler.ast.node.StatementNode;
 public class BlockStatementNodeImpl extends NodeImpl implements BlockStatementNode
 {
     /** The statements contained in this block statement. */
-    private ListNode<? extends StatementNode> statements;
+    private ListNode<StatementNode> statements;
 
     /** General constructor. */
     public BlockStatementNodeImpl(
-            ListNode<? extends StatementNode> statements)
+            ListNode<StatementNode> statements)
     {
         super();
         this.statements = statements;
@@ -22,7 +22,7 @@ public class BlockStatementNodeImpl extends NodeImpl implements BlockStatementNo
      * Gets the statements contained in this block statement.
      * @return The statements contained in this block statement.
      */
-    public ListNode<? extends StatementNode> getStatements()
+    public ListNode<StatementNode> getStatements()
     {
         return this.statements;
     }
@@ -31,7 +31,7 @@ public class BlockStatementNodeImpl extends NodeImpl implements BlockStatementNo
      * Changes the statements contained in this block statement.
      * @param statements The statements contained in this block statement.
      */
-    public void setStatements(ListNode<? extends StatementNode> statements)
+    public void setStatements(ListNode<StatementNode> statements)
     {
         if (this.statements instanceof NodeImpl)
         {

@@ -12,13 +12,13 @@ public interface EnumConstantDeclarationNode extends Node
      * Gets the annotations on this constant.
      * @return The annotations on this constant.
      */
-    public ListNode<? extends AnnotationNode> getAnnotations();
+    public ListNode<AnnotationNode> getAnnotations();
 
     /**
      * Changes the annotations on this constant.
      * @param annotations The annotations on this constant.
      */
-    public void setAnnotations(ListNode<? extends AnnotationNode> annotations);
+    public void setAnnotations(ListNode<AnnotationNode> annotations);
 
     /**
      * Gets the name of this constant.
@@ -36,13 +36,13 @@ public interface EnumConstantDeclarationNode extends Node
      * Gets the arguments to the enum constructor.
      * @return The arguments to the enum constructor.
      */
-    public ListNode<? extends ExpressionNode> getArguments();
+    public ListNode<ExpressionNode> getArguments();
 
     /**
      * Changes the arguments to the enum constructor.
      * @param arguments The arguments to the enum constructor.
      */
-    public void setArguments(ListNode<? extends ExpressionNode> arguments);
+    public void setArguments(ListNode<ExpressionNode> arguments);
 
     /**
      * Gets the body used to anonymously subclass the constant.

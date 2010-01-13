@@ -8,11 +8,11 @@ import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
 public class AnnotationArrayValueNodeImpl extends NodeImpl implements AnnotationArrayValueNode
 {
     /** The array values. */
-    private ListNode<? extends AnnotationValueNode> values;
+    private ListNode<AnnotationValueNode> values;
 
     /** General constructor. */
     public AnnotationArrayValueNodeImpl(
-            ListNode<? extends AnnotationValueNode> values)
+            ListNode<AnnotationValueNode> values)
     {
         super();
         this.values = values;
@@ -22,7 +22,7 @@ public class AnnotationArrayValueNodeImpl extends NodeImpl implements Annotation
      * Gets the array values.
      * @return The array values.
      */
-    public ListNode<? extends AnnotationValueNode> getValues()
+    public ListNode<AnnotationValueNode> getValues()
     {
         return this.values;
     }
@@ -31,7 +31,7 @@ public class AnnotationArrayValueNodeImpl extends NodeImpl implements Annotation
      * Changes the array values.
      * @param values The array values.
      */
-    public void setValues(ListNode<? extends AnnotationValueNode> values)
+    public void setValues(ListNode<AnnotationValueNode> values)
     {
         if (this.values instanceof NodeImpl)
         {

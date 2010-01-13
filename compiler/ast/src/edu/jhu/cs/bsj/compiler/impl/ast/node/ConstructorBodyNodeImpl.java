@@ -12,12 +12,12 @@ public class ConstructorBodyNodeImpl extends NodeImpl implements ConstructorBody
     private ConstructorInvocationNode constructorInvocation;
 
     /** The statements contained in this constructor. */
-    private ListNode<? extends StatementNode> statements;
+    private ListNode<StatementNode> statements;
 
     /** General constructor. */
     public ConstructorBodyNodeImpl(
             ConstructorInvocationNode constructorInvocation,
-            ListNode<? extends StatementNode> statements)
+            ListNode<StatementNode> statements)
     {
         super();
         this.constructorInvocation = constructorInvocation;
@@ -54,7 +54,7 @@ public class ConstructorBodyNodeImpl extends NodeImpl implements ConstructorBody
      * Gets the statements contained in this constructor.
      * @return The statements contained in this constructor.
      */
-    public ListNode<? extends StatementNode> getStatements()
+    public ListNode<StatementNode> getStatements()
     {
         return this.statements;
     }
@@ -63,7 +63,7 @@ public class ConstructorBodyNodeImpl extends NodeImpl implements ConstructorBody
      * Changes the statements contained in this constructor.
      * @param statements The statements contained in this constructor.
      */
-    public void setStatements(ListNode<? extends StatementNode> statements)
+    public void setStatements(ListNode<StatementNode> statements)
     {
         if (this.statements instanceof NodeImpl)
         {

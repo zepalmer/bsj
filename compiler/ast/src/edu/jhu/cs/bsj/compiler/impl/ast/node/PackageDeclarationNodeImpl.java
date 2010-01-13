@@ -12,12 +12,12 @@ public class PackageDeclarationNodeImpl extends NodeImpl implements PackageDecla
     private NameNode name;
 
     /** The annotations on the package declaration. */
-    private ListNode<? extends AnnotationNode> annotations;
+    private ListNode<AnnotationNode> annotations;
 
     /** General constructor. */
     public PackageDeclarationNodeImpl(
             NameNode name,
-            ListNode<? extends AnnotationNode> annotations)
+            ListNode<AnnotationNode> annotations)
     {
         super();
         this.name = name;
@@ -54,7 +54,7 @@ public class PackageDeclarationNodeImpl extends NodeImpl implements PackageDecla
      * Gets the annotations on the package declaration.
      * @return The annotations on the package declaration.
      */
-    public ListNode<? extends AnnotationNode> getAnnotations()
+    public ListNode<AnnotationNode> getAnnotations()
     {
         return this.annotations;
     }
@@ -63,7 +63,7 @@ public class PackageDeclarationNodeImpl extends NodeImpl implements PackageDecla
      * Changes the annotations on the package declaration.
      * @param annotations The annotations on the package declaration.
      */
-    public void setAnnotations(ListNode<? extends AnnotationNode> annotations)
+    public void setAnnotations(ListNode<AnnotationNode> annotations)
     {
         if (this.annotations instanceof NodeImpl)
         {

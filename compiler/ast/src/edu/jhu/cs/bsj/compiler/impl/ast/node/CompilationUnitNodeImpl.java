@@ -13,16 +13,16 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
     private PackageDeclarationNode packageDeclaration;
 
     /** The imports used in this unit. */
-    private ListNode<? extends ImportNode> imports;
+    private ListNode<ImportNode> imports;
 
     /** The type declarations of this unit. */
-    private ListNode<? extends TypeDeclarationNode> typeDecls;
+    private ListNode<TypeDeclarationNode> typeDecls;
 
     /** General constructor. */
     public CompilationUnitNodeImpl(
             PackageDeclarationNode packageDeclaration,
-            ListNode<? extends ImportNode> imports,
-            ListNode<? extends TypeDeclarationNode> typeDecls)
+            ListNode<ImportNode> imports,
+            ListNode<TypeDeclarationNode> typeDecls)
     {
         super();
         this.packageDeclaration = packageDeclaration;
@@ -60,7 +60,7 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
      * Gets the imports used in this unit.
      * @return The imports used in this unit.
      */
-    public ListNode<? extends ImportNode> getImports()
+    public ListNode<ImportNode> getImports()
     {
         return this.imports;
     }
@@ -69,7 +69,7 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
      * Changes the imports used in this unit.
      * @param imports The imports used in this unit.
      */
-    public void setImports(ListNode<? extends ImportNode> imports)
+    public void setImports(ListNode<ImportNode> imports)
     {
         if (this.imports instanceof NodeImpl)
         {
@@ -86,7 +86,7 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
      * Gets the type declarations of this unit.
      * @return The type declarations of this unit.
      */
-    public ListNode<? extends TypeDeclarationNode> getTypeDecls()
+    public ListNode<TypeDeclarationNode> getTypeDecls()
     {
         return this.typeDecls;
     }
@@ -95,7 +95,7 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
      * Changes the type declarations of this unit.
      * @param typeDecls The type declarations of this unit.
      */
-    public void setTypeDecls(ListNode<? extends TypeDeclarationNode> typeDecls)
+    public void setTypeDecls(ListNode<TypeDeclarationNode> typeDecls)
     {
         if (this.typeDecls instanceof NodeImpl)
         {

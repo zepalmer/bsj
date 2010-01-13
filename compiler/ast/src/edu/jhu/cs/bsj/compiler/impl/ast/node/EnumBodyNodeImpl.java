@@ -9,15 +9,15 @@ import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
 public class EnumBodyNodeImpl extends NodeImpl implements EnumBodyNode
 {
     /** The enumeration constants. */
-    private ListNode<? extends EnumConstantDeclarationNode> constants;
+    private ListNode<EnumConstantDeclarationNode> constants;
 
     /** The members of the class body part. */
-    private ListNode<? extends ClassMemberNode> members;
+    private ListNode<ClassMemberNode> members;
 
     /** General constructor. */
     public EnumBodyNodeImpl(
-            ListNode<? extends EnumConstantDeclarationNode> constants,
-            ListNode<? extends ClassMemberNode> members)
+            ListNode<EnumConstantDeclarationNode> constants,
+            ListNode<ClassMemberNode> members)
     {
         super();
         this.constants = constants;
@@ -28,7 +28,7 @@ public class EnumBodyNodeImpl extends NodeImpl implements EnumBodyNode
      * Gets the enumeration constants.
      * @return The enumeration constants.
      */
-    public ListNode<? extends EnumConstantDeclarationNode> getConstants()
+    public ListNode<EnumConstantDeclarationNode> getConstants()
     {
         return this.constants;
     }
@@ -37,7 +37,7 @@ public class EnumBodyNodeImpl extends NodeImpl implements EnumBodyNode
      * Changes the enumeration constants.
      * @param constants The enumeration constants.
      */
-    public void setConstants(ListNode<? extends EnumConstantDeclarationNode> constants)
+    public void setConstants(ListNode<EnumConstantDeclarationNode> constants)
     {
         if (this.constants instanceof NodeImpl)
         {
@@ -54,7 +54,7 @@ public class EnumBodyNodeImpl extends NodeImpl implements EnumBodyNode
      * Gets the members of the class body part.
      * @return The members of the class body part.
      */
-    public ListNode<? extends ClassMemberNode> getMembers()
+    public ListNode<ClassMemberNode> getMembers()
     {
         return this.members;
     }
@@ -63,7 +63,7 @@ public class EnumBodyNodeImpl extends NodeImpl implements EnumBodyNode
      * Changes the members of the class body part.
      * @param members The members of the class body part.
      */
-    public void setMembers(ListNode<? extends ClassMemberNode> members)
+    public void setMembers(ListNode<ClassMemberNode> members)
     {
         if (this.members instanceof NodeImpl)
         {

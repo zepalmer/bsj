@@ -34,12 +34,12 @@ public interface CaseNode extends Node
      * Gets the statements to execute in this case node.
      * @return The statements to execute in this case node.
      */
-    public ListNode<? extends StatementNode> getStatements();
+    public ListNode<StatementNode> getStatements();
 
     /**
      * Changes the statements to execute in this case node.
      * @param statements The statements to execute in this case node.
      */
-    public void setStatements(ListNode<? extends StatementNode> statements);
+    public void setStatements(ListNode<StatementNode> statements);
 
 }

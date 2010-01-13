@@ -15,20 +15,20 @@ public class ClassDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl imple
     private TypeNode extendsClause;
 
     /** The implements clause. */
-    private ListNode<? extends TypeNode> implementsClause;
+    private ListNode<TypeNode> implementsClause;
 
     /** The body of this class. */
     private ClassBodyNode body;
 
     /** This class's type parameters. */
-    private ListNode<? extends TypeParameterNode> typeParameters;
+    private ListNode<TypeParameterNode> typeParameters;
 
     /** General constructor. */
     public ClassDeclarationNodeImpl(
             TypeNode extendsClause,
-            ListNode<? extends TypeNode> implementsClause,
+            ListNode<TypeNode> implementsClause,
             ClassBodyNode body,
-            ListNode<? extends TypeParameterNode> typeParameters,
+            ListNode<TypeParameterNode> typeParameters,
             IdentifierNode identifier,
             ModifiersNode modifiers)
     {
@@ -69,7 +69,7 @@ public class ClassDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl imple
      * Gets the implements clause.
      * @return The implements clause.
      */
-    public ListNode<? extends TypeNode> getImplementsClause()
+    public ListNode<TypeNode> getImplementsClause()
     {
         return this.implementsClause;
     }
@@ -78,7 +78,7 @@ public class ClassDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl imple
      * Changes the implements clause.
      * @param implementsClause The implements clause.
      */
-    public void setImplementsClause(ListNode<? extends TypeNode> implementsClause)
+    public void setImplementsClause(ListNode<TypeNode> implementsClause)
     {
         if (this.implementsClause instanceof NodeImpl)
         {
@@ -121,7 +121,7 @@ public class ClassDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl imple
      * Gets this class's type parameters.
      * @return This class's type parameters.
      */
-    public ListNode<? extends TypeParameterNode> getTypeParameters()
+    public ListNode<TypeParameterNode> getTypeParameters()
     {
         return this.typeParameters;
     }
@@ -130,7 +130,7 @@ public class ClassDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl imple
      * Changes this class's type parameters.
      * @param typeParameters This class's type parameters.
      */
-    public void setTypeParameters(ListNode<? extends TypeParameterNode> typeParameters)
+    public void setTypeParameters(ListNode<TypeParameterNode> typeParameters)
     {
         if (this.typeParameters instanceof NodeImpl)
         {

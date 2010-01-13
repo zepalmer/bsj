@@ -12,6 +12,6 @@ public interface ListNode<T extends Node> extends Node
      * Gets the list of children.
      * @return The list of children.
      */
-    public List<? extends T> getChildren();
+    public List<T> getChildren();
 
 }

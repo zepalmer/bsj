@@ -32,12 +32,12 @@ public interface ConstructorBodyNode extends Node
      * Gets the statements contained in this constructor.
      * @return The statements contained in this constructor.
      */
-    public ListNode<? extends StatementNode> getStatements();
+    public ListNode<StatementNode> getStatements();
 
     /**
      * Changes the statements contained in this constructor.
      * @param statements The statements contained in this constructor.
      */
-    public void setStatements(ListNode<? extends StatementNode> statements);
+    public void setStatements(ListNode<StatementNode> statements);
 
 }

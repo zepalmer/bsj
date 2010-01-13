@@ -11,22 +11,22 @@ import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
 public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumConstantDeclarationNode
 {
     /** The annotations on this constant. */
-    private ListNode<? extends AnnotationNode> annotations;
+    private ListNode<AnnotationNode> annotations;
 
     /** The name of this constant. */
     private IdentifierNode identifier;
 
     /** The arguments to the enum constructor. */
-    private ListNode<? extends ExpressionNode> arguments;
+    private ListNode<ExpressionNode> arguments;
 
     /** The body used to anonymously subclass the constant. */
     private AnonymousClassBodyNode body;
 
     /** General constructor. */
     public EnumConstantDeclarationNodeImpl(
-            ListNode<? extends AnnotationNode> annotations,
+            ListNode<AnnotationNode> annotations,
             IdentifierNode identifier,
-            ListNode<? extends ExpressionNode> arguments,
+            ListNode<ExpressionNode> arguments,
             AnonymousClassBodyNode body)
     {
         super();
@@ -40,7 +40,7 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
      * Gets the annotations on this constant.
      * @return The annotations on this constant.
      */
-    public ListNode<? extends AnnotationNode> getAnnotations()
+    public ListNode<AnnotationNode> getAnnotations()
     {
         return this.annotations;
     }
@@ -49,7 +49,7 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
      * Changes the annotations on this constant.
      * @param annotations The annotations on this constant.
      */
-    public void setAnnotations(ListNode<? extends AnnotationNode> annotations)
+    public void setAnnotations(ListNode<AnnotationNode> annotations)
     {
         if (this.annotations instanceof NodeImpl)
         {
@@ -92,7 +92,7 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
      * Gets the arguments to the enum constructor.
      * @return The arguments to the enum constructor.
      */
-    public ListNode<? extends ExpressionNode> getArguments()
+    public ListNode<ExpressionNode> getArguments()
     {
         return this.arguments;
     }
@@ -101,7 +101,7 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
      * Changes the arguments to the enum constructor.
      * @param arguments The arguments to the enum constructor.
      */
-    public void setArguments(ListNode<? extends ExpressionNode> arguments)
+    public void setArguments(ListNode<ExpressionNode> arguments)
     {
         if (this.arguments instanceof NodeImpl)
         {

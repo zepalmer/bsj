@@ -35,13 +35,13 @@ public interface TryNode extends Node, StatementNode
      * Gets the catch conditions.
      * @return The catch conditions.
      */
-    public ListNode<? extends CatchNode> getCatches();
+    public ListNode<CatchNode> getCatches();
 
     /**
      * Changes the catch conditions.
      * @param catches The catch conditions.
      */
-    public void setCatches(ListNode<? extends CatchNode> catches);
+    public void setCatches(ListNode<CatchNode> catches);
 
     /**
      * Gets the finally block.

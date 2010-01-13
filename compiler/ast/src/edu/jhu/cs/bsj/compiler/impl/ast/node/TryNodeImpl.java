@@ -12,7 +12,7 @@ public class TryNodeImpl extends NodeImpl implements TryNode
     private BlockStatementNode block;
 
     /** The catch conditions. */
-    private ListNode<? extends CatchNode> catches;
+    private ListNode<CatchNode> catches;
 
     /** The finally block. */
     private BlockStatementNode finallyBlock;
@@ -20,7 +20,7 @@ public class TryNodeImpl extends NodeImpl implements TryNode
     /** General constructor. */
     public TryNodeImpl(
             BlockStatementNode block,
-            ListNode<? extends CatchNode> catches,
+            ListNode<CatchNode> catches,
             BlockStatementNode finallyBlock)
     {
         super();
@@ -59,7 +59,7 @@ public class TryNodeImpl extends NodeImpl implements TryNode
      * Gets the catch conditions.
      * @return The catch conditions.
      */
-    public ListNode<? extends CatchNode> getCatches()
+    public ListNode<CatchNode> getCatches()
     {
         return this.catches;
     }
@@ -68,7 +68,7 @@ public class TryNodeImpl extends NodeImpl implements TryNode
      * Changes the catch conditions.
      * @param catches The catch conditions.
      */
-    public void setCatches(ListNode<? extends CatchNode> catches)
+    public void setCatches(ListNode<CatchNode> catches)
     {
         if (this.catches instanceof NodeImpl)
         {

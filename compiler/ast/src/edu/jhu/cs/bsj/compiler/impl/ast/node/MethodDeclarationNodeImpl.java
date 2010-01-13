@@ -23,7 +23,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
     private IdentifierNode identifier;
 
     /** The parameters declared by this method. */
-    private ListNode<? extends VariableNode> parameters;
+    private ListNode<VariableNode> parameters;
 
     /** The vararg parameter declared by this method. */
     private VariableNode varargParameter;
@@ -32,21 +32,21 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
     private TypeNode returnType;
 
     /** The types of exceptions thrown by this method. */
-    private ListNode<? extends RawTypeNode> throwTypes;
+    private ListNode<RawTypeNode> throwTypes;
 
     /** This method's applicable type parameters. */
-    private ListNode<? extends TypeParameterNode> typeParameters;
+    private ListNode<TypeParameterNode> typeParameters;
 
     /** General constructor. */
     public MethodDeclarationNodeImpl(
             BlockStatementNode body,
             ModifiersNode modifiers,
             IdentifierNode identifier,
-            ListNode<? extends VariableNode> parameters,
+            ListNode<VariableNode> parameters,
             VariableNode varargParameter,
             TypeNode returnType,
-            ListNode<? extends RawTypeNode> throwTypes,
-            ListNode<? extends TypeParameterNode> typeParameters)
+            ListNode<RawTypeNode> throwTypes,
+            ListNode<TypeParameterNode> typeParameters)
     {
         super();
         this.body = body;
@@ -141,7 +141,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
      * Gets the parameters declared by this method.
      * @return The parameters declared by this method.
      */
-    public ListNode<? extends VariableNode> getParameters()
+    public ListNode<VariableNode> getParameters()
     {
         return this.parameters;
     }
@@ -150,7 +150,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
      * Changes the parameters declared by this method.
      * @param parameters The parameters declared by this method.
      */
-    public void setParameters(ListNode<? extends VariableNode> parameters)
+    public void setParameters(ListNode<VariableNode> parameters)
     {
         if (this.parameters instanceof NodeImpl)
         {
@@ -219,7 +219,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
      * Gets the types of exceptions thrown by this method.
      * @return The types of exceptions thrown by this method.
      */
-    public ListNode<? extends RawTypeNode> getThrowTypes()
+    public ListNode<RawTypeNode> getThrowTypes()
     {
         return this.throwTypes;
     }
@@ -228,7 +228,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
      * Changes the types of exceptions thrown by this method.
      * @param throwTypes The types of exceptions thrown by this method.
      */
-    public void setThrowTypes(ListNode<? extends RawTypeNode> throwTypes)
+    public void setThrowTypes(ListNode<RawTypeNode> throwTypes)
     {
         if (this.throwTypes instanceof NodeImpl)
         {
@@ -245,7 +245,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
      * Gets this method's applicable type parameters.
      * @return This method's applicable type parameters.
      */
-    public ListNode<? extends TypeParameterNode> getTypeParameters()
+    public ListNode<TypeParameterNode> getTypeParameters()
     {
         return this.typeParameters;
     }
@@ -254,7 +254,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
      * Changes this method's applicable type parameters.
      * @param typeParameters This method's applicable type parameters.
      */
-    public void setTypeParameters(ListNode<? extends TypeParameterNode> typeParameters)
+    public void setTypeParameters(ListNode<TypeParameterNode> typeParameters)
     {
         if (this.typeParameters instanceof NodeImpl)
         {

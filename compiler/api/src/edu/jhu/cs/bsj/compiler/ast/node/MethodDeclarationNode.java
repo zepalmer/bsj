@@ -58,13 +58,13 @@ public interface MethodDeclarationNode extends Node, ClassMemberNode,  Interface
      * Gets the parameters declared by this method.
      * @return The parameters declared by this method.
      */
-    public ListNode<? extends VariableNode> getParameters();
+    public ListNode<VariableNode> getParameters();
 
     /**
      * Changes the parameters declared by this method.
      * @param parameters The parameters declared by this method.
      */
-    public void setParameters(ListNode<? extends VariableNode> parameters);
+    public void setParameters(ListNode<VariableNode> parameters);
 
     /**
      * Gets the vararg parameter declared by this method.
@@ -94,24 +94,24 @@ public interface MethodDeclarationNode extends Node, ClassMemberNode,  Interface
      * Gets the types of exceptions thrown by this method.
      * @return The types of exceptions thrown by this method.
      */
-    public ListNode<? extends RawTypeNode> getThrowTypes();
+    public ListNode<RawTypeNode> getThrowTypes();
 
     /**
      * Changes the types of exceptions thrown by this method.
      * @param throwTypes The types of exceptions thrown by this method.
      */
-    public void setThrowTypes(ListNode<? extends RawTypeNode> throwTypes);
+    public void setThrowTypes(ListNode<RawTypeNode> throwTypes);
 
     /**
      * Gets this method's applicable type parameters.
      * @return This method's applicable type parameters.
      */
-    public ListNode<? extends TypeParameterNode> getTypeParameters();
+    public ListNode<TypeParameterNode> getTypeParameters();
 
     /**
      * Changes this method's applicable type parameters.
      * @param typeParameters This method's applicable type parameters.
      */
-    public void setTypeParameters(ListNode<? extends TypeParameterNode> typeParameters);
+    public void setTypeParameters(ListNode<TypeParameterNode> typeParameters);
 
 }

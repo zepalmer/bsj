@@ -11,14 +11,14 @@ import edu.jhu.cs.bsj.compiler.ast.node.ModifiersNode;
 public class ModifiersNodeImpl extends NodeImpl implements ModifiersNode
 {
     /** The annotations modifying the subject. */
-    private ListNode<? extends AnnotationNode> annotations;
+    private ListNode<AnnotationNode> annotations;
 
     /** The modifiers set on the subject. */
     private Set<Modifier> flags;
 
     /** General constructor. */
     public ModifiersNodeImpl(
-            ListNode<? extends AnnotationNode> annotations,
+            ListNode<AnnotationNode> annotations,
             Set<Modifier> flags)
     {
         super();
@@ -30,7 +30,7 @@ public class ModifiersNodeImpl extends NodeImpl implements ModifiersNode
      * Gets the annotations modifying the subject.
      * @return The annotations modifying the subject.
      */
-    public ListNode<? extends AnnotationNode> getAnnotations()
+    public ListNode<AnnotationNode> getAnnotations()
     {
         return this.annotations;
     }
@@ -39,7 +39,7 @@ public class ModifiersNodeImpl extends NodeImpl implements ModifiersNode
      * Changes the annotations modifying the subject.
      * @param annotations The annotations modifying the subject.
      */
-    public void setAnnotations(ListNode<? extends AnnotationNode> annotations)
+    public void setAnnotations(ListNode<AnnotationNode> annotations)
     {
         if (this.annotations instanceof NodeImpl)
         {

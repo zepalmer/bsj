@@ -10,25 +10,25 @@ public interface ClassInstantiationNode extends Node, RestrictedPrimaryExpressio
      * Gets the type arguments for the constructor.
      * @return The type arguments for the constructor.
      */
-    public ListNode<? extends TypeNode> getConstructorTypeArguments();
+    public ListNode<TypeNode> getConstructorTypeArguments();
 
     /**
      * Changes the type arguments for the constructor.
      * @param constructorTypeArguments The type arguments for the constructor.
      */
-    public void setConstructorTypeArguments(ListNode<? extends TypeNode> constructorTypeArguments);
+    public void setConstructorTypeArguments(ListNode<TypeNode> constructorTypeArguments);
 
     /**
      * Gets the arguments to the constructor.
      * @return The arguments to the constructor.
      */
-    public ListNode<? extends ExpressionNode> getArguments();
+    public ListNode<ExpressionNode> getArguments();
 
     /**
      * Changes the arguments to the constructor.
      * @param arguments The arguments to the constructor.
      */
-    public void setArguments(ListNode<? extends ExpressionNode> arguments);
+    public void setArguments(ListNode<ExpressionNode> arguments);
 
     /**
      * Gets the body of the anonymous class.
