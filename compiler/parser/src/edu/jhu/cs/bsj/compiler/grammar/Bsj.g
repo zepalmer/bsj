@@ -189,7 +189,7 @@ scope Global {
 // declaration sugar ("int x,y;").
 variableDeclarator[TypeNode inType] returns [VariableDeclaratorNode ret]
         @init {
-            TypeNode type = $inType;
+            TypeNode type = inType;
             VariableInitializerNode initializer = null;
         }
     :
@@ -212,12 +212,14 @@ variableDeclarator[TypeNode inType] returns [VariableDeclaratorNode ret]
     ;
 
 // Represents the declaration of an array type over a normal type.  This construct only handles the parsing of the []
-// symbols and the modification of a type.
-arrayTypeIndicator[TypeNode inType] returns [TypeNode ret]
-        @init {
-            $ret = $inType;
-        }
+// symbols and the modification of a type.  Note that this rule must parse at least one pair of brackets; thus, it
+// should be optional anywhere that a non-array type is permissible.
+arrayTypeIndicator[TypeNode inType] returns [ReferenceTypeNode ret]
     :
+        '[' ']'
+        {
+            $ret = factory.makeArrayTypeNode(in);
+        }
         (
             '[' ']'
             {
@@ -1125,7 +1127,7 @@ throwsClause returns [ListNode<RawTypeNode> ret]
         )*
     ;
 
-nonprimitiveType returns [TypeNode ret]
+nonprimitiveType returns [ReferenceTypeNode ret]
     :
         classOrInterfaceType
         {
@@ -1293,11 +1295,9 @@ typeArgument returns [TypeArgumentNode ret]
             boolean upper = false;
         } 
     :
-        nonprimitiveType
+        unboundedType=classOrInterfaceType
         {
-            // All nonprimitive types are potential type arguments.
-            // TODO: can we do this in a cleaner fashion?  Please?  :-P
-            $ret = (TypeArgumentNode)($nonprimitiveType.ret);
+            $ret = $unboundedType.ret;
         }
     |   
         '?'
@@ -1311,12 +1311,9 @@ typeArgument returns [TypeArgumentNode ret]
         |
             SUPER { upper = false; }
         )
-        nonprimitiveType
+        boundedType=classOrInterfaceType
         {
-            // TODO: This cast is also pretty nasty.
-            $ret = factory.makeWildcardTypeNode(
-                        (TypeArgumentNode)($nonprimitiveType.ret),
-                        upper);
+            $ret = factory.makeWildcardTypeNode($boundedType.ret, upper);
         }
     ;
 
@@ -1384,9 +1381,22 @@ formalParameterDecls returns [ListNode<VariableNode> parameters, VariableNode va
     ;
 
 normalParameterDecl returns [VariableNode ret]
+        @init {
+            TypeNode typeNode;
+        }
     :
-        mod=variableModifiers t=type id=identifier
-        t=arrayTypeIndicator[$t.ret]
+        mod=variableModifiers
+        t=type
+        {
+            typeNode = $t.ret;
+        }
+        id=identifier
+        (
+            arrayTypeIndicator[typeNode]
+            {
+                typeNode = $arrayTypeIndicator.ret;
+            }
+        )?
         {
             $ret = factory.makeVariableNode($mod.ret, $t.ret, $id.ret);
         }
@@ -2028,13 +2038,26 @@ catchClause returns [CatchNode ret]
 // this rule would match
 //     IOException e
 formalParameter returns [VariableNode ret]
+        @init {
+            TypeNode typeNode;
+        }
     :   
-        variableModifiers type id=identifier
-        arrayTypeIndicator[$type.ret]
+        variableModifiers
+        type
+        {
+            typeNode = $type.ret;
+        }
+        id=identifier
+        (
+            arrayTypeIndicator[typeNode]
+            {
+                typeNode = $arrayTypeIndicator.ret;
+            }
+        )?
         {
             $ret = factory.makeVariableNode(
                 $variableModifiers.ret, 
-                $arrayTypeIndicator.ret,
+                typeNode,
                 $id.ret);
         }
     ;
