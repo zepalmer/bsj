@@ -1817,7 +1817,7 @@ statement returns [StatementNode ret]
         (
             'else' s2=statement
             {
-                stmtNode = $e2.ret;
+                stmtNode = $s2.ret;
             }
         )?    
         {
