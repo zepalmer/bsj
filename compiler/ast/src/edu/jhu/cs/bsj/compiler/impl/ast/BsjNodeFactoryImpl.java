@@ -264,7 +264,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      * Creates a SuperclassConstructorInvocationNode.
      */
     public SuperclassConstructorInvocationNode makeSuperclassConstructorInvocationNode(
-            ExpressionNode qualifyingExpression,
+            PrimaryExpressionNode qualifyingExpression,
             ListNode<? extends ExpressionNode> arguments,
             ListNode<? extends TypeNode> typeArguments)
     {

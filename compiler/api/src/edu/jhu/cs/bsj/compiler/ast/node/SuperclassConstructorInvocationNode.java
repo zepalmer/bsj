@@ -19,12 +19,12 @@ public interface SuperclassConstructorInvocationNode extends ConstructorInvocati
      * Gets the qualifying expression for the enclosing object.
      * @return The qualifying expression for the enclosing object.
      */
-    public ExpressionNode getQualifyingExpression();
+    public PrimaryExpressionNode getQualifyingExpression();
 
     /**
      * Changes the qualifying expression for the enclosing object.
      * @param qualifyingExpression The qualifying expression for the enclosing object.
      */
-    public void setQualifyingExpression(ExpressionNode qualifyingExpression);
+    public void setQualifyingExpression(PrimaryExpressionNode qualifyingExpression);
 
 }

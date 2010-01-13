@@ -3,17 +3,18 @@ package edu.jhu.cs.bsj.compiler.impl.ast.node;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.PrimaryExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.SuperclassConstructorInvocationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
 
 public class SuperclassConstructorInvocationNodeImpl extends ConstructorInvocationNodeImpl implements SuperclassConstructorInvocationNode
 {
     /** The qualifying expression for the enclosing object. */
-    private ExpressionNode qualifyingExpression;
+    private PrimaryExpressionNode qualifyingExpression;
 
     /** General constructor. */
     public SuperclassConstructorInvocationNodeImpl(
-            ExpressionNode qualifyingExpression,
+            PrimaryExpressionNode qualifyingExpression,
             ListNode<? extends ExpressionNode> arguments,
             ListNode<? extends TypeNode> typeArguments)
     {
@@ -25,7 +26,7 @@ public class SuperclassConstructorInvocationNodeImpl extends ConstructorInvocati
      * Gets the qualifying expression for the enclosing object.
      * @return The qualifying expression for the enclosing object.
      */
-    public ExpressionNode getQualifyingExpression()
+    public PrimaryExpressionNode getQualifyingExpression()
     {
         return this.qualifyingExpression;
     }
@@ -34,7 +35,7 @@ public class SuperclassConstructorInvocationNodeImpl extends ConstructorInvocati
      * Changes the qualifying expression for the enclosing object.
      * @param qualifyingExpression The qualifying expression for the enclosing object.
      */
-    public void setQualifyingExpression(ExpressionNode qualifyingExpression)
+    public void setQualifyingExpression(PrimaryExpressionNode qualifyingExpression)
     {
         if (this.qualifyingExpression instanceof NodeImpl)
         {

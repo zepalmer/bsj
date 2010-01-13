@@ -1239,7 +1239,7 @@ PackageDeclarationNode :: Node
 
 SuperclassConstructorInvocationNode :: ConstructorInvocationNode
     @props
-    qualifyingExpression    ExpressionNode                              | the qualifying expression for the enclosing object
+    qualifyingExpression    PrimaryExpressionNode                       | the qualifying expression for the enclosing object
     @docs
         Represents an alternate constructor invocation, as in
         <pre>
