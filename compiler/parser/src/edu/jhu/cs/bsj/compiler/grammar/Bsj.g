@@ -2660,8 +2660,11 @@ restrictedPrimary returns [RestrictedPrimaryExpression ret]
 		        $ret = $voidClassLiteral.ret;
 		    }
 		|
-		    (thisQualifierName=typeName '.')? THIS 
-		    // TODO: qualified or unqualified this expression
+		    // qualified or unqualified this
+		    thisClause
+		    {
+		        $ret = $thisClause.ret;
+		    }
 		|
 		    // parenthesized expression (used as a primary expression)
 		    parExpression
@@ -2722,6 +2725,23 @@ primarySuffix[PrimaryExpression in] returns [PrimaryExpression ret] // TODO
     |
          '.' nonWildcardTypeArguments? identifier arguments ( '[' expression ']' /* TODO: array access */ )*
         // TODO: method invocation
+    ;
+
+thisClause returns [ThisNode ret]
+        @init {
+            RawTypeNode qualifyingType = null;
+        }
+        @after {
+            $ret = factory.makeThisNode(qualifyingType);
+        }
+    :
+        (
+            thisQualifierName=typeName '.'
+            {
+                qualifyingType = factory.makeRawTypeNode($thisQualifierName.ret);
+            }
+        )?
+        THIS
     ;
 
 arrayAccess[ArrayIndexable in] returns [ArrayAccessNode ret]
