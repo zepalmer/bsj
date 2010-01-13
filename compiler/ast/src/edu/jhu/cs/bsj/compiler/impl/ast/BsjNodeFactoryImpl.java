@@ -87,6 +87,8 @@ import edu.jhu.cs.bsj.compiler.impl.ast.node.ReturnNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.SimpleNameNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.SingleElementAnnotationNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.StringLiteralNodeImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.node.SuperFieldAccessNodeImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.node.SuperMethodInvocationNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.SuperclassConstructorInvocationNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.SwitchNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.SynchronizedNodeImpl;
@@ -398,6 +400,17 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             IdentifierNode identifier)
     {
         FieldAccessNode ret = new FieldAccessNodeImpl(expression, identifier);
+        return ret;
+    }
+
+    /**
+     * Creates a SuperFieldAccessNode.
+     */
+    public SuperFieldAccessNode makeSuperFieldAccessNode(
+            RawTypeNode type,
+            IdentifierNode identifier)
+    {
+        SuperFieldAccessNode ret = new SuperFieldAccessNodeImpl(type, identifier);
         return ret;
     }
 
@@ -902,6 +915,19 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             TypeNode value)
     {
         ClassLiteralNode ret = new ClassLiteralNodeImpl(value);
+        return ret;
+    }
+
+    /**
+     * Creates a SuperMethodInvocationNode.
+     */
+    public SuperMethodInvocationNode makeSuperMethodInvocationNode(
+            RawTypeNode type,
+            IdentifierNode identifier,
+            ListNode<? extends ExpressionNode> arguments,
+            ListNode<? extends TypeNode> typeArguments)
+    {
+        SuperMethodInvocationNode ret = new SuperMethodInvocationNodeImpl(type, identifier, arguments, typeArguments);
         return ret;
     }
 

@@ -199,6 +199,13 @@ public interface BsjNodeFactory
             IdentifierNode identifier);
 
     /**
+     * Creates a SuperFieldAccessNode.
+     */
+    public SuperFieldAccessNode makeSuperFieldAccessNode(
+            RawTypeNode type,
+            IdentifierNode identifier);
+
+    /**
      * Creates a ThrowNode.
      */
     public ThrowNode makeThrowNode(
@@ -517,6 +524,15 @@ public interface BsjNodeFactory
      */
     public ClassLiteralNode makeClassLiteralNode(
             TypeNode value);
+
+    /**
+     * Creates a SuperMethodInvocationNode.
+     */
+    public SuperMethodInvocationNode makeSuperMethodInvocationNode(
+            RawTypeNode type,
+            IdentifierNode identifier,
+            ListNode<? extends ExpressionNode> arguments,
+            ListNode<? extends TypeNode> typeArguments);
 
     /**
      * Creates a ArrayInitializerNode.
