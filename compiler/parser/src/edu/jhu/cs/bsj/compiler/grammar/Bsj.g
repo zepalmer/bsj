@@ -2656,9 +2656,11 @@ restrictedPrimary returns [RestrictedPrimaryExpression ret]
 		        $ret = factory.makeParenthesizedExpressionNode($parExpression.ret);
 		    }
 		|
-		    // TODO: is "classOrInterfaceType" the right rule?  it should include type args?
-		    NEW typeArguments? classOrInterfaceType arguments anonymousClassBody?
-		    // TODO: class instance creation
+		    // unqualified class instantiation
+		    unqualifiedClassInstantiation
+		    {
+		        $ret = $unqualifiedClassInstantiation.ret;
+		    }
 		|
 		    (superQualifierName=typeName '.')? SUPER '.' identifier
 		    // TODO: field access (typeName is like B.super.myvar
@@ -2728,6 +2730,35 @@ thisClause returns [ThisNode ret]
         THIS
     ;
 
+unqualifiedClassInstantiation returns [UnqualifiedClassInstantiationNode]
+        @init {
+            AnonymousClassBodyNode anonymousClassBodyNode = null;
+            ListNode<TypeArgument> typeArgumentsNode = factory.makeListNode(Collections.<TypeArgument>emptyList());
+        }
+    :
+        NEW
+        (
+            typeArguments
+            {
+                typeArgumentsNode = $typeArguments.ret;
+            }
+        )?
+        classOrInterfaceType arguments
+        (
+            anonymousClassBody
+            {
+                anonymousClassBodyNode = $anonymousClassBody.ret;
+            }
+        )?
+        {
+            $ret = factory.makeUnqualifiedClassInstantiationNode(
+                    $classOrInterfaceType.ret,
+                    typeArgumentsNode,
+                    $arguments.ret,
+                    anonymousClassBodyNode);
+        }
+    ;
+    
 arrayAccess[ArrayIndexable in] returns [ArrayAccessNode ret]
     :
         '[' a=expression ']'
