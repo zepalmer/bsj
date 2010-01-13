@@ -612,8 +612,8 @@ ExpressionStatementNode :: Node + StatementNode
 ForLoopNode :: Node + StatementNode
     @props
     initializer             ForInitializerNode                          | the initializer used for this for loop
-    update                  ListNode<ExpressionStatementNode>           | the loop's update operation
     condition               ExpressionNode                              | the loop's termination condition
+    update                  ListNode<ExpressionStatementNode>           | the loop's update operation
     statement               StatementNode                               | the loop's statement
     @docs
         A node representing a for-loop, as in:

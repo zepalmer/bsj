@@ -1904,9 +1904,11 @@ statement returns [StatementNode ret]
             $ret = factory.makeContinueNode(idNode);
         }
     |   
+        // TODO: this is not quite correct; only certain expressions may be kept within an ExpressionStatement
+        // how do we resolve this?
         expression  ';'  
         {
-            $ret = $expression.ret;
+            $ret = factory.makeExpressionStatementNode($expression.ret);
         }   
     |   
         a=identifier ':' s=statement
@@ -1944,7 +1946,7 @@ switchBlockStatementGroup returns [CaseNode ret]
             ExpressionNode label;
     }
     @after {
-            $ret = factory.makeCaseNode(label, list);
+            $ret = factory.makeCaseNode(label, factory.makeListNode(list));
     }
     :
         switchLabel
@@ -1975,7 +1977,7 @@ switchLabel returns [ExpressionNode ret]
 
 trystatement returns [TryNode ret]
         @init {
-            List<CatchNode> catchList = factory.makeListNode(new ArrayList<CatchNode>());
+            ListNode<CatchNode> catchList = factory.makeListNode(new ArrayList<CatchNode>());
             BlockStatementNode finallyBlock = null;
         }    
     :   
@@ -2070,8 +2072,8 @@ forstatement returns [StatementNode ret]
     @init{
         ExpressionNode forInitNode = null;
         ExpressionNode expNode = null;
-        ListNode<ExpressionNode> expListNode = factory.<ExpressionStatementNode>makeListNode(
-            Collections.<ExpressionStatementNode>emptyList());
+        ListNode<ExpressionStatementNode> expListNode =
+                factory.makeListNode(Collections.<ExpressionStatementNode>emptyList());
     }
     :   
         // enhanced for loop
@@ -2102,17 +2104,18 @@ forstatement returns [StatementNode ret]
             }
         )? ';' 
         (
-            expressionList
+            statementExpressionList
             {
-                expListNode = $expressionList.ret;
+                expListNode = $statementExpressionList.ret;
             }
-        )? ')'
+        )?
+        ')'
         statement
         {
             $ret = factory.makeForLoopNode(
                     forInitNode, 
-                    expListNode,
                     expNode,
+                    expListNode,
                     $statement.ret);
         }                 
     ;
@@ -2140,12 +2143,33 @@ parExpression returns [ExpressionNode ret]
         }
     ;
 
+statementExpressionList returns [ListNode<ExpressionStatementNode> ret]
+        @init {
+            List<ExpressionStatementNode> list = new ArrayList<ExpressionStatementNode>();
+        }
+        @after {
+            $ret = factory.makeListNode(list);
+        }
+    :   
+        // TODO: expression statements are limited to a certain set of expressions; can we fix this?
+        a=expression
+        {
+            list.add(factory.makeExpressionStatementNode($a.ret));
+        }
+        (
+            ',' b=expression
+            {
+                list.add(factory.makeExpressionStatementNode($b.ret));
+            }
+        )*
+    ;
+
 expressionList returns [ListNode<ExpressionNode> ret]
         @init {
             List<ExpressionNode> list = new ArrayList<ExpressionNode>();
         }
         @after {
-            $ret = factory.<ExpressionNode>makeListNode(list);
+            $ret = factory.makeListNode(list);
         }
     :   
         a=expression
