@@ -82,7 +82,6 @@ scope Global {
     
     import edu.jhu.cs.bsj.compiler.ast.*;
     import edu.jhu.cs.bsj.compiler.ast.node.*;
-    import edu.jhu.cs.bsj.compiler.ast.tags.*;
     import edu.jhu.cs.bsj.compiler.ast.node.meta.*;
 }
 
@@ -523,7 +522,7 @@ typeParameters returns [ListNode<TypeParameterNode> ret]
 
 typeParameter returns [TypeParameterNode ret]
         @init {
-            ListNode<BoundType> typeBoundNode = factory.<BoundType>makeNode(Collections.emptyList());
+            ListNode<DeclaredTypeNode> typeBoundNode = factory.<DeclaredTypeNode>makeNode(Collections.emptyList());
         }
     :   
         id=identifier
@@ -541,9 +540,9 @@ typeParameter returns [TypeParameterNode ret]
     ;
 
 
-typeBound returns [ListNode<BoundType> ret]
+typeBound returns [ListNode<DeclaredTypeNode> ret]
         @init {
-            List<BoundType> list = new ArrayList<BoundType>();
+            List<DeclaredTypeNode> list = new ArrayList<DeclaredTypeNode>();
         }
         @after {
             $ret = factory.makeListNode(list);
@@ -592,7 +591,8 @@ enumBody returns [EnumBodyNode ret]
         @init {
             ListNode<EnumConstantDeclarationNode> enumConstantsNode = factory.makeListNode(
                     Collections.<EnumConstantDeclarationNode>emptyList());
-            ListNode<ClassMember> enumBodyDeclarationsNode = factory.makeListNode(Collections.<ClassMember>emptyList());
+            ListNode<ClassMemberNode> enumBodyDeclarationsNode =
+                    factory.makeListNode(Collections.<ClassMemberNode>emptyList());
         }
     :   
         '{'
@@ -673,19 +673,19 @@ enumConstant returns [EnumConstantDeclarationNode ret]
         }
     ;
 
-enumBodyDeclarations returns [ListNode<EnumBodyDeclaration> ret]
+enumBodyDeclarations returns [ListNode<ClassMemberNode> ret]
         @init {
-            List<EnumBodyDeclaration> list = new ArrayList<EnumBodyDeclaration>();
+            List<ClassMemberNode> list = new ArrayList<ClassMemberNode>();
         }
         @after {
-            $ret = factory.<EnumBodyDeclaration>makeListNode(list);
+            $ret = factory.makeListNode(list);
         }
     :
         ';'
         (
-            classDeclaration
+            classBodyDeclaration
             {
-                list.add($classDeclaration.ret);
+                list.add($classBodyDeclaration.ret);
             }
         )*
     ;
@@ -1260,12 +1260,12 @@ primitiveType returns [PrimitiveTypeNode ret]
 //     Map.Entry<K,V> entry;
 // this node would parse
 //     <K,V>
-typeArguments returns [ListNode<TypeArgument> ret]
+typeArguments returns [ListNode<TypeArgumentNode> ret]
         @init {
-            List<TypeArgument> list = new ArrayList<TypeArgument>();
+            List<TypeArgumentNode> list = new ArrayList<TypeArgumentNode>();
         }
         @after {
-            $ret = factory.<TypeArgument>makeListNode(list);
+            $ret = factory.<TypeArgumentNode>makeListNode(list);
         }
     :   
         '<' a=typeArgument
@@ -1296,7 +1296,8 @@ typeArgument returns [TypeArgumentNode ret]
         nonprimitiveType
         {
             // All nonprimitive types are potential type arguments.
-            $ret = (TypeArgument)($nonprimitiveType.ret);
+            // TODO: can we do this in a cleaner fashion?  Please?  :-P
+            $ret = (TypeArgumentNode)($nonprimitiveType.ret);
         }
     |   
         '?'
@@ -1312,8 +1313,9 @@ typeArgument returns [TypeArgumentNode ret]
         )
         nonprimitiveType
         {
+            // TODO: This cast is also pretty nasty.
             $ret = factory.makeWildcardTypeNode(
-                        (TypeArgument)($nonprimitiveType.ret),
+                        (TypeArgumentNode)($nonprimitiveType.ret),
                         upper);
         }
     ;
@@ -1410,7 +1412,7 @@ alternateConstructorInvocation returns [AlternateConstructorInvocationNode ret]
 
 superclassConstructorInvocation returns [SuperclassConstructorInvocationNode ret]
         @init {
-            PrimaryExpression qualifyingExpression = null;
+            PrimaryExpressionNode qualifyingExpression = null;
             ListNode<TypeNode> typeArgumentsNode = factory.makeListNode(Collections.<TypeNode>emptyList());
         }
     :
@@ -2791,7 +2793,8 @@ thisClause returns [ThisNode ret]
 unqualifiedClassInstantiation returns [UnqualifiedClassInstantiationNode ret]
         @init {
             AnonymousClassBodyNode anonymousClassBodyNode = null;
-            ListNode<TypeArgument> typeArgumentsNode = factory.makeListNode(Collections.<TypeArgument>emptyList());
+            ListNode<TypeArgumentNode> typeArgumentsNode =
+                    factory.makeListNode(Collections.<TypeArgumentNode>emptyList());
         }
     :
         NEW
@@ -2878,12 +2881,12 @@ superMethodInvocation returns [SuperMethodInvocationNode ret]
 // This rule instantiates a class using the expression before the suffix as the enclosing instance.
 // For example:
 //     (foo.bar()).new MyClass()
-qualifiedClassInstantiationPrimarySuffix[PrimaryExpression in] returns [QualifiedClassInstantiationNode ret]
+qualifiedClassInstantiationPrimarySuffix[PrimaryExpressionNode in] returns [QualifiedClassInstantiationNode ret]
         @init {
-            ListNode<TypeArgument> constructorTypeArgumentsNode =
-                    factory.makeListNode(Collections.<TypeArgument>emptySet());
-            ListNode<TypeArgument> classTypeArgumentsNode =
-                    factory.makeListNode(Collections.<TypeArgument>emptySet());
+            ListNode<TypeArgumentNode> constructorTypeArgumentsNode =
+                    factory.makeListNode(Collections.<TypeArgumentNode>emptySet());
+            ListNode<TypeArgumentNode> classTypeArgumentsNode =
+                    factory.makeListNode(Collections.<TypeArgumentNode>emptySet());
             AnonymousClassBodyNode anonymousClassBodyNode = null;
         }
     :
@@ -2923,7 +2926,7 @@ qualifiedClassInstantiationPrimarySuffix[PrimaryExpression in] returns [Qualifie
 //     array[4].toString()
 // or
 //     foo().bar()    
-typeArgumentMethodInvocationSuffix[PrimaryExpression in] returns [RestrictedPrimaryExpression ret]
+typeArgumentMethodInvocationSuffix[PrimaryExpressionNode in] returns [RestrictedPrimaryExpressionNode ret]
         @init {
             ListNode<TypeNode> typeArgumentsNode = factory.makeListNode(Collections.<TypeNode>emptyList());
         }
