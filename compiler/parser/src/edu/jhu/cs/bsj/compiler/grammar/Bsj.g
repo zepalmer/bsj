@@ -2935,9 +2935,9 @@ superMethodInvocation returns [SuperMethodInvocationNode ret]
 qualifiedClassInstantiationPrimarySuffix[PrimaryExpressionNode in] returns [QualifiedClassInstantiationNode ret]
         @init {
             ListNode<TypeArgumentNode> constructorTypeArgumentsNode =
-                    factory.makeListNode(Collections.<TypeArgumentNode>emptySet());
+                    factory.makeListNode(Collections.<TypeArgumentNode>emptyList());
             ListNode<TypeArgumentNode> classTypeArgumentsNode =
-                    factory.makeListNode(Collections.<TypeArgumentNode>emptySet());
+                    factory.makeListNode(Collections.<TypeArgumentNode>emptyList());
             AnonymousClassBodyNode anonymousClassBodyNode = null;
         }
     :
