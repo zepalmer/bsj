@@ -162,7 +162,7 @@ scope Global {
             {
                 this.base = 8;
                 this.string = string.substring(1);
-            } else if (s.startsWith("0x") || s.startsWith("0X"))
+            } else if (string.startsWith("0x") || string.startsWith("0X"))
             {
                 this.base = 16;
                 this.string = string.substring(2);
@@ -190,7 +190,7 @@ scope Global {
 variableDeclarator[TypeNode inType] returns [VariableDeclaratorNode ret]
         @init {
             TypeNode type = $inType;
-            ExpressionNode initializer = null;
+            VariableInitializerNode initializer = null;
         }
     :
         id=identifier
@@ -2948,7 +2948,7 @@ typeArgumentMethodInvocationSuffix[PrimaryExpressionNode in] returns [Restricted
         }
     ;
     
-arrayAccess[ArrayIndexable in] returns [ArrayAccessNode ret]
+arrayAccess[ArrayIndexableNode in] returns [ArrayAccessNode ret]
     :
         '[' a=expression ']'
         {
