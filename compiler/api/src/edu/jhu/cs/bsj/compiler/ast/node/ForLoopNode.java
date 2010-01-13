@@ -26,18 +26,6 @@ public interface ForLoopNode extends Node, StatementNode
     public void setInitializer(ForInitializerNode initializer);
 
     /**
-     * Gets the loop's update operation.
-     * @return The loop's update operation.
-     */
-    public ListNode<ExpressionStatementNode> getUpdate();
-
-    /**
-     * Changes the loop's update operation.
-     * @param update The loop's update operation.
-     */
-    public void setUpdate(ListNode<ExpressionStatementNode> update);
-
-    /**
      * Gets the loop's termination condition.
      * @return The loop's termination condition.
      */
@@ -48,6 +36,18 @@ public interface ForLoopNode extends Node, StatementNode
      * @param condition The loop's termination condition.
      */
     public void setCondition(ExpressionNode condition);
+
+    /**
+     * Gets the loop's update operation.
+     * @return The loop's update operation.
+     */
+    public ListNode<ExpressionStatementNode> getUpdate();
+
+    /**
+     * Changes the loop's update operation.
+     * @param update The loop's update operation.
+     */
+    public void setUpdate(ListNode<ExpressionStatementNode> update);
 
     /**
      * Gets the loop's statement.

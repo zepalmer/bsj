@@ -13,11 +13,11 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
     /** The initializer used for this for loop. */
     private ForInitializerNode initializer;
 
-    /** The loop's update operation. */
-    private ListNode<ExpressionStatementNode> update;
-
     /** The loop's termination condition. */
     private ExpressionNode condition;
+
+    /** The loop's update operation. */
+    private ListNode<ExpressionStatementNode> update;
 
     /** The loop's statement. */
     private StatementNode statement;
@@ -25,14 +25,14 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
     /** General constructor. */
     public ForLoopNodeImpl(
             ForInitializerNode initializer,
-            ListNode<ExpressionStatementNode> update,
             ExpressionNode condition,
+            ListNode<ExpressionStatementNode> update,
             StatementNode statement)
     {
         super();
         this.initializer = initializer;
-        this.update = update;
         this.condition = condition;
+        this.update = update;
         this.statement = statement;
     }
 
@@ -63,32 +63,6 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
     }
 
     /**
-     * Gets the loop's update operation.
-     * @return The loop's update operation.
-     */
-    public ListNode<ExpressionStatementNode> getUpdate()
-    {
-        return this.update;
-    }
-
-    /**
-     * Changes the loop's update operation.
-     * @param update The loop's update operation.
-     */
-    public void setUpdate(ListNode<ExpressionStatementNode> update)
-    {
-        if (this.update instanceof NodeImpl)
-        {
-            ((NodeImpl)this.update).setParent(null);
-        }
-        this.update = update;
-        if (this.update instanceof NodeImpl)
-        {
-            ((NodeImpl)this.update).setParent(this);
-        }
-    }
-
-    /**
      * Gets the loop's termination condition.
      * @return The loop's termination condition.
      */
@@ -111,6 +85,32 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
         if (this.condition instanceof NodeImpl)
         {
             ((NodeImpl)this.condition).setParent(this);
+        }
+    }
+
+    /**
+     * Gets the loop's update operation.
+     * @return The loop's update operation.
+     */
+    public ListNode<ExpressionStatementNode> getUpdate()
+    {
+        return this.update;
+    }
+
+    /**
+     * Changes the loop's update operation.
+     * @param update The loop's update operation.
+     */
+    public void setUpdate(ListNode<ExpressionStatementNode> update)
+    {
+        if (this.update instanceof NodeImpl)
+        {
+            ((NodeImpl)this.update).setParent(null);
+        }
+        this.update = update;
+        if (this.update instanceof NodeImpl)
+        {
+            ((NodeImpl)this.update).setParent(this);
         }
     }
 
@@ -152,8 +152,8 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
     {
         super.receiveToChildren(visitor);
         this.initializer.receive(visitor);
-        this.update.receive(visitor);
         this.condition.receive(visitor);
+        this.update.receive(visitor);
         this.statement.receive(visitor);
     }
 }

@@ -735,11 +735,11 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     public ForLoopNode makeForLoopNode(
             ForInitializerNode initializer,
-            ListNode<ExpressionStatementNode> update,
             ExpressionNode condition,
+            ListNode<ExpressionStatementNode> update,
             StatementNode statement)
     {
-        ForLoopNode ret = new ForLoopNodeImpl(initializer, update, condition, statement);
+        ForLoopNode ret = new ForLoopNodeImpl(initializer, condition, update, statement);
         return ret;
     }
 
