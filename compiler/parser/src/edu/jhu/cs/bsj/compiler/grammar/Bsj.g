@@ -3262,7 +3262,7 @@ intLiteral [boolean isNegative] returns [LiteralNode<?> ret]
             {
                 // TODO: report and handle error
             }
-            $ret = factory.makeLiteralNode(i);
+            $ret = factory.makeIntLiteralNode(i);
         }
     ;   
     
