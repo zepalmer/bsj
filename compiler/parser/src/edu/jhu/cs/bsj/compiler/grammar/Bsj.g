@@ -218,7 +218,7 @@ arrayTypeIndicator[TypeNode inType] returns [ReferenceTypeNode ret]
     :
         '[' ']'
         {
-            $ret = factory.makeArrayTypeNode(in);
+            $ret = factory.makeArrayTypeNode(inType);
         }
         (
             '[' ']'
@@ -1633,7 +1633,7 @@ annotationTypeDeclaration returns [AnnotationDeclarationNode ret]
 
 annotationTypeBody returns [AnnotationBodyNode ret]
         @init {
-                List<AnnotationMember> list = new ArrayList<AnnotationMember>();
+                List<AnnotationMemberNode> list = new ArrayList<AnnotationMemberNode>();
         }
         @after {
                 $ret = factory.makeAnnotationBodyNode(factory.makeListNode(list));
