@@ -2575,31 +2575,31 @@ castExpression returns [TypeCastNode ret]
 
 postfixExpression returns [ExpressionNode ret]
     :
-	    // Note: primary must be before expressionName in the following.  Otherwise, this postfixExpression rule will
-	    // match "this" out of "this.x" and leave the ".x" lying around.  Because primary is first, backtracking will
-	    // try to match it first and only try expressionName if primary fails.
-	    (
-	        primary
-	        {
-	            $ret = $primary.ret;
-	        }
-	    |
-	        expressionName
-	        {
-	            $ret = factory.makeFieldAccessNode($expressionName.ret);
-	        }
-	    )
-	    (
-	        '++'
-	        {
-	            $ret = factory.makeUnaryOperatorNode($ret, UnaryOperator.POSTFIX_INCREMENT);
-	        }
-	    |
-	        '--'
-	        {
-	            $ret = factory.makeUnaryOperatorNode($ret, UnaryOperator.POSTFIX_DECREMENT);
-	        }
-	    )*
+        // Note: primary must be before expressionName in the following.  Otherwise, this postfixExpression rule will
+        // match "this" out of "this.x" and leave the ".x" lying around.  Because primary is first, backtracking will
+        // try to match it first and only try expressionName if primary fails.
+        (
+            primary
+            {
+                $ret = $primary.ret;
+            }
+        |
+            expressionName
+            {
+                $ret = factory.makeFieldAccessNode($expressionName.ret);
+            }
+        )
+        (
+            '++'
+            {
+                $ret = factory.makeUnaryOperatorNode($ret, UnaryOperator.POSTFIX_INCREMENT);
+            }
+        |
+            '--'
+            {
+                $ret = factory.makeUnaryOperatorNode($ret, UnaryOperator.POSTFIX_DECREMENT);
+            }
+        )*
     ;
 
 primary returns [PrimaryExpression ret]
@@ -2627,72 +2627,75 @@ restrictedPrimary returns [RestrictedPrimaryExpression ret]
     :
         (
             // lexical literal
-		    lexicalLiteral 
-		    {
+            lexicalLiteral 
+            {
                 $ret = $lexicalLiteral.ret;
-		    }
-		|
-		    // class literal for declared types
-		    classLiteralName=typeName '.' 'class'
-		    {
-		        $ret = factory.makeRawTypeNode($classLiteralName.ret);
-		    } 
-		|
-		    // void class literal
-		    voidClassLiteral 
-		    {
-		        $ret = $voidClassLiteral.ret;
-		    }
-		|
-		    // qualified or unqualified this
-		    thisClause
-		    {
-		        $ret = $thisClause.ret;
-		    }
-		|
-		    // parenthesized expression (used as a primary expression)
-		    parExpression
-		    {
-		        $ret = factory.makeParenthesizedExpressionNode($parExpression.ret);
-		    }
-		|
-		    // unqualified class instantiation
-		    unqualifiedClassInstantiation
-		    {
-		        $ret = $unqualifiedClassInstantiation.ret;
-		    }
-		|
-		    (superQualifierName=typeName '.')? SUPER '.' identifier
-		    // TODO: field access (typeName is like B.super.myvar
-		|
-		    methodName arguments
-		    // TODO: method invocation
-		|
-		    SUPER '.' nonWildcardTypeArguments? identifier arguments
-		    // TODO: method invocation
-		|
-		    superMethodQualifierName=typeName '.' SUPER '.' nonWildcardTypeArguments? identifier arguments
-		    // TODO: method invocation
-		|
-		    methodQualifierName=typeName '.' nonWildcardTypeArguments? identifier arguments
-		    // TODO: method invocation
-		|
-		    // Array access against a simple field access by name.  This rule is located here to support chained
-		    // array access expressions such as "x[5][6]".  The arrayAccess rule below would cover every array access
-		    // after the first, whereas this part of the rule covers the first.  This is done to disambiguate this rule
-		    // from the simple expressionName clause in the postfixExpression rule; otherwise "x" would be parseable
-		    // by both that rule and this one.
-		    expressionName '[' expression ']'
-		    {
-		        $ret = factory.makeArrayAccessNode(factory.makeFieldAccessNode($expressionName.ret), $expression.ret);
-		    }
-	    )
-	    (
-	        arrayAccess[$ret]
-	        {
-	            $ret = $arrayAccess.ret;
-	        }
-	    )?
+            }
+        |
+            // class literal for declared types
+            classLiteralName=typeName '.' 'class'
+            {
+                $ret = factory.makeRawTypeNode($classLiteralName.ret);
+            } 
+        |
+            // void class literal
+            voidClassLiteral 
+            {
+                $ret = $voidClassLiteral.ret;
+            }
+        |
+            // qualified or unqualified this
+            thisClause
+            {
+                $ret = $thisClause.ret;
+            }
+        |
+            // parenthesized expression (used as a primary expression)
+            parExpression
+            {
+                $ret = factory.makeParenthesizedExpressionNode($parExpression.ret);
+            }
+        |
+            // unqualified class instantiation
+            unqualifiedClassInstantiation
+            {
+                $ret = $unqualifiedClassInstantiation.ret;
+            }
+        |
+            // field access from super
+            superFieldAccess
+            {
+                $ret = $superFieldAccess.ret;
+            }
+        |
+            methodName arguments
+            // TODO: method invocation
+        |
+            // method invocation from super
+            superMethodInvocation
+            {
+                $ret = $superMethodInvocation
+            }
+        |
+            methodQualifierName=typeName '.' nonWildcardTypeArguments? identifier arguments
+            // TODO: method invocation
+        |
+            // Array access against a simple field access by name.  This rule is located here to support chained
+            // array access expressions such as "x[5][6]".  The arrayAccess rule below would cover every array access
+            // after the first, whereas this part of the rule covers the first.  This is done to disambiguate this rule
+            // from the simple expressionName clause in the postfixExpression rule; otherwise "x" would be parseable
+            // by both that rule and this one.
+            expressionName '[' expression ']'
+            {
+                $ret = factory.makeArrayAccessNode(factory.makeFieldAccessNode($expressionName.ret), $expression.ret);
+            }
+        )
+        (
+            arrayAccess[$ret]
+            {
+                $ret = $arrayAccess.ret;
+            }
+        )?
     ;
     
 primarySuffixes[PrimaryExpression in] returns [PrimaryExpression ret] // TODO
@@ -2763,6 +2766,64 @@ unqualifiedClassInstantiation returns [UnqualifiedClassInstantiationNode]
                     typeArgumentsNode,
                     $arguments.ret,
                     anonymousClassBodyNode);
+        }
+    ;
+
+// Parses a super field access.  For example, this rule would parse
+//     super.x;
+// or
+//     X.super.x;
+// The latter case is used to specify which enclosing type's supertype should be accessed.  (See the documentation of
+// SuperFieldAccessNode for more information.)
+superFieldAccess returns [SuperFieldAccessNode ret]
+        @init {
+            RawTypeNode qualifyingTypeNode = null;
+        }
+    :
+        (
+            typeName '.'
+            {
+                qualifyingTypeNode = factory.makeRawTypeNode($typeName.ret);
+            }
+        )?
+        SUPER '.' identifier
+        {
+            $ret = factory.makeSuperFieldAccessNode(qualifyingTypeNode, $identifier.ret);
+        }
+    ;
+
+// Parses a super method invocation.  For example, this rule would parse
+//     super.toString();
+// or
+//     X.super.foo();
+// The latter case is used to specify which enclosing type's supertype should be accessed.  (See the documentation of
+// SuperMethodInvocationNode for more information.)
+superMethodInvocation returns [SuperMethodInvocationNode ret]
+        @init {
+            RawTypeNode qualifyingTypeNode = null;
+            ListNode<TypeNode> typeArgumentsNode = factory.makeListNode(Collections.<TypeNode>emptyList());
+        }
+    :
+        (
+            typeName '.'
+            {
+                qualifyingTypeNode = factory.makeRawTypeNode($typeName.ret);
+            }
+        )?
+        SUPER '.'
+        (
+            nonWildcardTypeArguments
+            {
+                typeArgumentsNode = $nonWildcardTypeArguments.ret;
+            }
+        )?
+        identifier arguments
+        {
+            $ret = factory.makeSuperMethodInvocationNode(
+                    qualifyingTypeNode,
+                    $identifier.ret,
+                    $arguments.ret,
+                    typeArgumentsNode);
         }
     ;
     
