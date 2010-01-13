@@ -2070,7 +2070,7 @@ formalParameter returns [VariableNode ret]
 
 forstatement returns [StatementNode ret]
     @init{
-        ExpressionNode forInitNode = null;
+        ForInitializerNode forInitNode = null;
         ExpressionNode expNode = null;
         ListNode<ExpressionStatementNode> expListNode =
                 factory.makeListNode(Collections.<ExpressionStatementNode>emptyList());
@@ -2386,7 +2386,7 @@ equalityExpression returns [ExpressionNode ret]
                 }
             |   '!='
                 {
-                    op = BinaryOperator.NOT_EQUALS;
+                    op = BinaryOperator.NOT_EQUAL;
                 }            
             )
             e2=instanceOfExpression
