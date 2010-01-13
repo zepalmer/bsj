@@ -522,7 +522,7 @@ typeParameters returns [ListNode<TypeParameterNode> ret]
 
 typeParameter returns [TypeParameterNode ret]
         @init {
-            ListNode<DeclaredTypeNode> typeBoundNode = factory.<DeclaredTypeNode>makeListNode(Collections.emptyList());
+            ListNode<DeclaredTypeNode> typeBoundNode = factory.makeListNode(Collections.<DeclaredTypeNode>emptyList());
         }
     :   
         id=identifier
@@ -757,7 +757,7 @@ classBody returns [ClassBodyNode ret]
                 List<ClassMemberNode> list = new ArrayList<ClassMemberNode>();
         }
         @after {
-                $ret = factory.makeClassBodyNode(list);
+                $ret = factory.makeClassBodyNode(factory.makeListNode(list));
         }
     :   
         '{' 
@@ -775,7 +775,7 @@ anonymousClassBody returns [AnonymousClassBodyNode ret]
                 List<AnonymousClassMemberNode> list = new ArrayList<AnonymousClassMemberNode>();
         }
         @after {
-                $ret = factory.makeAnonymousClassBodyNode(list);
+                $ret = factory.makeAnonymousClassBodyNode(factory.makeListNode(list));
         }
     :   
         '{' 
@@ -793,7 +793,7 @@ interfaceBody returns [InterfaceBodyNode ret]
                 List<InterfaceMemberNode> list = new ArrayList<InterfaceMemberNode>();
         }
         @after {
-                $ret = factory.makeInterfaceBodyNode(list);
+                $ret = factory.makeInterfaceBodyNode(factory.makeListNode(list));
         }
     :   
         '{' 
@@ -946,7 +946,7 @@ constructorBody returns [ConstructorBodyNode ret]
         @after {
             $ret = factory.makeConstructorBodyNode(
                     constructorInvocationNode,
-                    factory.makeBlockStatementNode(list));
+                    factory.makeBlockStatementNode(factory.makeListNode(list)));
         }
     :
         '{' 
@@ -1106,7 +1106,7 @@ interfaceFieldDeclaration returns [FieldDeclarationNode ret]
 
 throwsClause returns [ListNode<RawTypeNode> ret]
         @init {
-            List<RawTypeNode> list = new ArrayList<RawType>();
+            List<RawTypeNode> list = new ArrayList<RawTypeNode>();
         }
         @after {
             $ret = factory.makeListNode(list);
@@ -1134,7 +1134,7 @@ nonprimitiveType returns [TypeNode ret]
         (
             arrayTypeIndicator[ret]
             {
-                $ret = factory.$ret;
+                $ret = $arrayTypeIndicator.ret;
             }
         )?
     ;
@@ -1163,7 +1163,7 @@ type returns [TypeNode ret]
         (
             arrayTypeIndicator[ret]
             {
-                $ret = factory.$ret;
+                $ret = $arrayTypeIndicator.ret;
             }
         )?
     ;
