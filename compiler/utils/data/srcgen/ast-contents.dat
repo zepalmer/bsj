@@ -106,7 +106,7 @@ ImportNode+ :: Node
     @docs
         This tagging interface is used to denote AST nodes which represent import statements.
 
-InlineTypeDeclarableNode+ :: Node
+InlineTypeDeclarableNode+ :: Node + TypeDeclarationNode
 	@docs
 		This tagging interface is used to denote AST nodes which represent type declarations and can be declared inline
 		as a statement.
