@@ -2714,7 +2714,7 @@ restrictedPrimary returns [RestrictedPrimaryExpression ret]
         )?
     ;
     
-primarySuffixes[PrimaryExpression in] returns [PrimaryExpression ret] // TODO
+primarySuffixes[PrimaryExpression in] returns [PrimaryExpression ret]
         @init {
             $ret = $in;
         }
@@ -2727,15 +2727,24 @@ primarySuffixes[PrimaryExpression in] returns [PrimaryExpression ret] // TODO
         )+
     ;
 
-primarySuffix[PrimaryExpression in] returns [PrimaryExpression ret] // TODO
+primarySuffix[PrimaryExpression in] returns [RestrictedPrimaryExpression ret]
     :
-        '.' NEW typeArguments? identifier typeArguments? arguments anonymousClassBody? ( '[' expression ']' /* TODO: array access */ )*
+        '.' NEW typeArguments? identifier typeArguments? arguments anonymousClassBody? arrayAccess?
         // TODO: class instance creation
     |
-         '.' identifier ( '[' expression ']' /* TODO: array access */ )*
-        // TODO: field access
+        // field access on an expression
+        '.' identifier
+        {
+            $ret = makeFieldAccessNode($in, $identifier.ret);
+        }
+        (
+            arrayAccess[$ret]
+            {
+                $ret = $arrayAccess.ret;
+            }
+        )
     |
-         '.' nonWildcardTypeArguments? identifier arguments ( '[' expression ']' /* TODO: array access */ )*
+        '.' nonWildcardTypeArguments? identifier arguments arrayAccess?
         // TODO: method invocation
     ;
 
