@@ -443,6 +443,13 @@ public interface BsjNodeFactory
             IdentifierNode label);
 
     /**
+     * Creates a ParameterizedTypeSelectNode.
+     */
+    public ParameterizedTypeSelectNode makeParameterizedTypeSelectNode(
+            ParameterizedTypeNode base,
+            DeclaredTypeNode select);
+
+    /**
      * Creates a IdentifierNode.
      */
     public IdentifierNode makeIdentifierNode(

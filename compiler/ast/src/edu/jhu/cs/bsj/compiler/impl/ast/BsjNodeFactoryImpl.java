@@ -77,6 +77,7 @@ import edu.jhu.cs.bsj.compiler.impl.ast.node.NormalAnnotationNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.NullLiteralNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.PackageDeclarationNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.ParameterizedTypeNodeImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.node.ParameterizedTypeSelectNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.ParenthesizedExpressionNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.PrimitiveTypeNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.QualifiedClassInstantiationNodeImpl;
@@ -781,6 +782,17 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             IdentifierNode label)
     {
         BreakNode ret = new BreakNodeImpl(label);
+        return ret;
+    }
+
+    /**
+     * Creates a ParameterizedTypeSelectNode.
+     */
+    public ParameterizedTypeSelectNode makeParameterizedTypeSelectNode(
+            ParameterizedTypeNode base,
+            DeclaredTypeNode select)
+    {
+        ParameterizedTypeSelectNode ret = new ParameterizedTypeSelectNodeImpl(base, select);
         return ret;
     }
 

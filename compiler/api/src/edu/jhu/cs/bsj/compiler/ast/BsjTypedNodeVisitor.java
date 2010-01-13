@@ -66,6 +66,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.NormalAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.NullLiteralNode;
 import edu.jhu.cs.bsj.compiler.ast.node.PackageDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ParameterizedTypeNode;
+import edu.jhu.cs.bsj.compiler.ast.node.ParameterizedTypeSelectNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ParenthesizedExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.PrimitiveTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.QualifiedClassInstantiationNode;
@@ -110,37 +111,7 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
      */
     public void visitStart(Node node)
     {
-        if (node instanceof BooleanLiteralNode)
-        {
-            visitBooleanLiteralNodeStart((BooleanLiteralNode)node);
-        } else if (node instanceof FloatLiteralNode)
-        {
-            visitFloatLiteralNodeStart((FloatLiteralNode)node);
-        } else if (node instanceof LongLiteralNode)
-        {
-            visitLongLiteralNodeStart((LongLiteralNode)node);
-        } else if (node instanceof IntLiteralNode)
-        {
-            visitIntLiteralNodeStart((IntLiteralNode)node);
-        } else if (node instanceof NullLiteralNode)
-        {
-            visitNullLiteralNodeStart((NullLiteralNode)node);
-        } else if (node instanceof StringLiteralNode)
-        {
-            visitStringLiteralNodeStart((StringLiteralNode)node);
-        } else if (node instanceof ClassLiteralNode)
-        {
-            visitClassLiteralNodeStart((ClassLiteralNode)node);
-        } else if (node instanceof DoubleLiteralNode)
-        {
-            visitDoubleLiteralNodeStart((DoubleLiteralNode)node);
-        } else if (node instanceof CharLiteralNode)
-        {
-            visitCharLiteralNodeStart((CharLiteralNode)node);
-        } else if (node instanceof CodeLiteralNode)
-        {
-            visitCodeLiteralNodeStart((CodeLiteralNode)node);
-        } else if (node instanceof QualifiedNameNode)
+        if (node instanceof QualifiedNameNode)
         {
             visitQualifiedNameNodeStart((QualifiedNameNode)node);
         } else if (node instanceof SimpleNameNode)
@@ -182,51 +153,57 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
         } else if (node instanceof AnnotationDeclarationNode)
         {
             visitAnnotationDeclarationNodeStart((AnnotationDeclarationNode)node);
+        } else if (node instanceof BooleanLiteralNode)
+        {
+            visitBooleanLiteralNodeStart((BooleanLiteralNode)node);
+        } else if (node instanceof FloatLiteralNode)
+        {
+            visitFloatLiteralNodeStart((FloatLiteralNode)node);
+        } else if (node instanceof LongLiteralNode)
+        {
+            visitLongLiteralNodeStart((LongLiteralNode)node);
+        } else if (node instanceof IntLiteralNode)
+        {
+            visitIntLiteralNodeStart((IntLiteralNode)node);
+        } else if (node instanceof NullLiteralNode)
+        {
+            visitNullLiteralNodeStart((NullLiteralNode)node);
+        } else if (node instanceof StringLiteralNode)
+        {
+            visitStringLiteralNodeStart((StringLiteralNode)node);
+        } else if (node instanceof ClassLiteralNode)
+        {
+            visitClassLiteralNodeStart((ClassLiteralNode)node);
+        } else if (node instanceof DoubleLiteralNode)
+        {
+            visitDoubleLiteralNodeStart((DoubleLiteralNode)node);
+        } else if (node instanceof CharLiteralNode)
+        {
+            visitCharLiteralNodeStart((CharLiteralNode)node);
+        } else if (node instanceof CodeLiteralNode)
+        {
+            visitCodeLiteralNodeStart((CodeLiteralNode)node);
         } else if (node instanceof MethodDeclarationNode)
         {
             visitMethodDeclarationNodeStart((MethodDeclarationNode)node);
-        } else if (node instanceof IfNode)
-        {
-            visitIfNodeStart((IfNode)node);
         } else if (node instanceof ClassBodyNode)
         {
             visitClassBodyNodeStart((ClassBodyNode)node);
-        } else if (node instanceof ContinueNode)
+        } else if (node instanceof IfNode)
         {
-            visitContinueNodeStart((ContinueNode)node);
-        } else if (node instanceof CompilationUnitNode)
-        {
-            visitCompilationUnitNodeStart((CompilationUnitNode)node);
+            visitIfNodeStart((IfNode)node);
         } else if (node instanceof ConstructorBodyNode)
         {
             visitConstructorBodyNodeStart((ConstructorBodyNode)node);
-        } else if (node instanceof PackageDeclarationNode)
-        {
-            visitPackageDeclarationNodeStart((PackageDeclarationNode)node);
-        } else if (node instanceof ForInitializerExpressionNode)
-        {
-            visitForInitializerExpressionNodeStart((ForInitializerExpressionNode)node);
         } else if (node instanceof RawTypeNode)
         {
             visitRawTypeNodeStart((RawTypeNode)node);
         } else if (node instanceof ForInitializerDeclarationNode)
         {
             visitForInitializerDeclarationNodeStart((ForInitializerDeclarationNode)node);
-        } else if (node instanceof BlockStatementNode)
-        {
-            visitBlockStatementNodeStart((BlockStatementNode)node);
-        } else if (node instanceof LabeledStatementNode)
-        {
-            visitLabeledStatementNodeStart((LabeledStatementNode)node);
-        } else if (node instanceof TypeCastNode)
-        {
-            visitTypeCastNodeStart((TypeCastNode)node);
         } else if (node instanceof ParameterizedTypeNode)
         {
             visitParameterizedTypeNodeStart((ParameterizedTypeNode)node);
-        } else if (node instanceof DoWhileLoopNode)
-        {
-            visitDoWhileLoopNodeStart((DoWhileLoopNode)node);
         } else if (node instanceof BinaryOperatorNode)
         {
             visitBinaryOperatorNodeStart((BinaryOperatorNode)node);
@@ -242,120 +219,69 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
         } else if (node instanceof AssignmentNode)
         {
             visitAssignmentNodeStart((AssignmentNode)node);
-        } else if (node instanceof VoidTypeDeclarationNode)
-        {
-            visitVoidTypeDeclarationNodeStart((VoidTypeDeclarationNode)node);
         } else if (node instanceof ReturnNode)
         {
             visitReturnNodeStart((ReturnNode)node);
-        } else if (node instanceof CatchNode)
-        {
-            visitCatchNodeStart((CatchNode)node);
         } else if (node instanceof AnnotationExpressionValueNode)
         {
             visitAnnotationExpressionValueNodeStart((AnnotationExpressionValueNode)node);
         } else if (node instanceof ArrayInitializerNode)
         {
             visitArrayInitializerNodeStart((ArrayInitializerNode)node);
-        } else if (node instanceof NameExpressionNode)
-        {
-            visitNameExpressionNodeStart((NameExpressionNode)node);
-        } else if (node instanceof ThrowNode)
-        {
-            visitThrowNodeStart((ThrowNode)node);
-        } else if (node instanceof FieldAccessNode)
-        {
-            visitFieldAccessNodeStart((FieldAccessNode)node);
         } else if (node instanceof AnnotationArrayValueNode)
         {
             visitAnnotationArrayValueNodeStart((AnnotationArrayValueNode)node);
-        } else if (node instanceof FieldDeclarationNode)
-        {
-            visitFieldDeclarationNodeStart((FieldDeclarationNode)node);
         } else if (node instanceof ImportSingleTypeNode)
         {
             visitImportSingleTypeNodeStart((ImportSingleTypeNode)node);
+        } else if (node instanceof FieldDeclarationNode)
+        {
+            visitFieldDeclarationNodeStart((FieldDeclarationNode)node);
         } else if (node instanceof AnnotationMethodDeclarationNode)
         {
             visitAnnotationMethodDeclarationNodeStart((AnnotationMethodDeclarationNode)node);
         } else if (node instanceof TypeParameterNode)
         {
             visitTypeParameterNodeStart((TypeParameterNode)node);
-        } else if (node instanceof VariableDeclaratorNode)
-        {
-            visitVariableDeclaratorNodeStart((VariableDeclaratorNode)node);
-        } else if (node instanceof AnnotationBodyNode)
-        {
-            visitAnnotationBodyNodeStart((AnnotationBodyNode)node);
-        } else if (node instanceof VariableDeclarationNode)
-        {
-            visitVariableDeclarationNodeStart((VariableDeclarationNode)node);
-        } else if (node instanceof IdentifierNode)
-        {
-            visitIdentifierNodeStart((IdentifierNode)node);
         } else if (node instanceof ArrayTypeNode)
         {
             visitArrayTypeNodeStart((ArrayTypeNode)node);
-        } else if (node instanceof VoidTypeNode)
+        } else if (node instanceof IdentifierNode)
         {
-            visitVoidTypeNodeStart((VoidTypeNode)node);
+            visitIdentifierNodeStart((IdentifierNode)node);
+        } else if (node instanceof ParameterizedTypeSelectNode)
+        {
+            visitParameterizedTypeSelectNodeStart((ParameterizedTypeSelectNode)node);
         } else if (node instanceof BreakNode)
         {
             visitBreakNodeStart((BreakNode)node);
-        } else if (node instanceof EnumConstantDeclarationNode)
-        {
-            visitEnumConstantDeclarationNodeStart((EnumConstantDeclarationNode)node);
         } else if (node instanceof ListNode<?>)
         {
             visitListNodeStart((ListNode<?>)node);
-        } else if (node instanceof ForLoopNode)
+        } else if (node instanceof EnumConstantDeclarationNode)
         {
-            visitForLoopNodeStart((ForLoopNode)node);
+            visitEnumConstantDeclarationNodeStart((EnumConstantDeclarationNode)node);
         } else if (node instanceof WhileLoopNode)
         {
             visitWhileLoopNodeStart((WhileLoopNode)node);
-        } else if (node instanceof ThisNode)
+        } else if (node instanceof ForLoopNode)
         {
-            visitThisNodeStart((ThisNode)node);
+            visitForLoopNodeStart((ForLoopNode)node);
         } else if (node instanceof AnnotationAnnotationValueNode)
         {
             visitAnnotationAnnotationValueNodeStart((AnnotationAnnotationValueNode)node);
         } else if (node instanceof ConstructorDeclarationNode)
         {
             visitConstructorDeclarationNodeStart((ConstructorDeclarationNode)node);
-        } else if (node instanceof TryNode)
-        {
-            visitTryNodeStart((TryNode)node);
         } else if (node instanceof SwitchNode)
         {
             visitSwitchNodeStart((SwitchNode)node);
-        } else if (node instanceof EnumBodyNode)
-        {
-            visitEnumBodyNodeStart((EnumBodyNode)node);
-        } else if (node instanceof ModifiersNode)
-        {
-            visitModifiersNodeStart((ModifiersNode)node);
-        } else if (node instanceof InitializerDeclarationNode)
-        {
-            visitInitializerDeclarationNodeStart((InitializerDeclarationNode)node);
-        } else if (node instanceof PrimitiveTypeNode)
-        {
-            visitPrimitiveTypeNodeStart((PrimitiveTypeNode)node);
         } else if (node instanceof InlineTypeDeclarationNode)
         {
             visitInlineTypeDeclarationNodeStart((InlineTypeDeclarationNode)node);
-        } else if (node instanceof ImportOnDemandNode)
-        {
-            visitImportOnDemandNodeStart((ImportOnDemandNode)node);
         } else if (node instanceof WildcardTypeNode)
         {
             visitWildcardTypeNodeStart((WildcardTypeNode)node);
-        } else if (node instanceof VoidStatementNode)
-        {
-            visitVoidStatementNodeStart((VoidStatementNode)node);
-        } else if (node instanceof CaseNode)
-        {
-            visitCaseNodeStart((CaseNode)node);
         } else if (node instanceof VariableNode)
         {
             visitVariableNodeStart((VariableNode)node);
@@ -368,6 +294,87 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
         } else if (node instanceof AnonymousClassBodyNode)
         {
             visitAnonymousClassBodyNodeStart((AnonymousClassBodyNode)node);
+        } else if (node instanceof AnnotationElementNode)
+        {
+            visitAnnotationElementNodeStart((AnnotationElementNode)node);
+        } else if (node instanceof ContinueNode)
+        {
+            visitContinueNodeStart((ContinueNode)node);
+        } else if (node instanceof CompilationUnitNode)
+        {
+            visitCompilationUnitNodeStart((CompilationUnitNode)node);
+        } else if (node instanceof PackageDeclarationNode)
+        {
+            visitPackageDeclarationNodeStart((PackageDeclarationNode)node);
+        } else if (node instanceof ForInitializerExpressionNode)
+        {
+            visitForInitializerExpressionNodeStart((ForInitializerExpressionNode)node);
+        } else if (node instanceof BlockStatementNode)
+        {
+            visitBlockStatementNodeStart((BlockStatementNode)node);
+        } else if (node instanceof LabeledStatementNode)
+        {
+            visitLabeledStatementNodeStart((LabeledStatementNode)node);
+        } else if (node instanceof TypeCastNode)
+        {
+            visitTypeCastNodeStart((TypeCastNode)node);
+        } else if (node instanceof DoWhileLoopNode)
+        {
+            visitDoWhileLoopNodeStart((DoWhileLoopNode)node);
+        } else if (node instanceof VoidTypeDeclarationNode)
+        {
+            visitVoidTypeDeclarationNodeStart((VoidTypeDeclarationNode)node);
+        } else if (node instanceof CatchNode)
+        {
+            visitCatchNodeStart((CatchNode)node);
+        } else if (node instanceof NameExpressionNode)
+        {
+            visitNameExpressionNodeStart((NameExpressionNode)node);
+        } else if (node instanceof ThrowNode)
+        {
+            visitThrowNodeStart((ThrowNode)node);
+        } else if (node instanceof FieldAccessNode)
+        {
+            visitFieldAccessNodeStart((FieldAccessNode)node);
+        } else if (node instanceof VariableDeclaratorNode)
+        {
+            visitVariableDeclaratorNodeStart((VariableDeclaratorNode)node);
+        } else if (node instanceof AnnotationBodyNode)
+        {
+            visitAnnotationBodyNodeStart((AnnotationBodyNode)node);
+        } else if (node instanceof VariableDeclarationNode)
+        {
+            visitVariableDeclarationNodeStart((VariableDeclarationNode)node);
+        } else if (node instanceof VoidTypeNode)
+        {
+            visitVoidTypeNodeStart((VoidTypeNode)node);
+        } else if (node instanceof ThisNode)
+        {
+            visitThisNodeStart((ThisNode)node);
+        } else if (node instanceof TryNode)
+        {
+            visitTryNodeStart((TryNode)node);
+        } else if (node instanceof EnumBodyNode)
+        {
+            visitEnumBodyNodeStart((EnumBodyNode)node);
+        } else if (node instanceof ModifiersNode)
+        {
+            visitModifiersNodeStart((ModifiersNode)node);
+        } else if (node instanceof InitializerDeclarationNode)
+        {
+            visitInitializerDeclarationNodeStart((InitializerDeclarationNode)node);
+        } else if (node instanceof PrimitiveTypeNode)
+        {
+            visitPrimitiveTypeNodeStart((PrimitiveTypeNode)node);
+        } else if (node instanceof ImportOnDemandNode)
+        {
+            visitImportOnDemandNodeStart((ImportOnDemandNode)node);
+        } else if (node instanceof CaseNode)
+        {
+            visitCaseNodeStart((CaseNode)node);
+        } else if (node instanceof VoidStatementNode)
+        {
+            visitVoidStatementNodeStart((VoidStatementNode)node);
         } else if (node instanceof ArrayAccessNode)
         {
             visitArrayAccessNodeStart((ArrayAccessNode)node);
@@ -377,18 +384,15 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
         } else if (node instanceof MethodInvocationNode)
         {
             visitMethodInvocationNodeStart((MethodInvocationNode)node);
-        } else if (node instanceof ExpressionStatementNode)
-        {
-            visitExpressionStatementNodeStart((ExpressionStatementNode)node);
         } else if (node instanceof InterfaceBodyNode)
         {
             visitInterfaceBodyNodeStart((InterfaceBodyNode)node);
+        } else if (node instanceof ExpressionStatementNode)
+        {
+            visitExpressionStatementNodeStart((ExpressionStatementNode)node);
         } else if (node instanceof AssertStatementNode)
         {
             visitAssertStatementNodeStart((AssertStatementNode)node);
-        } else if (node instanceof AnnotationElementNode)
-        {
-            visitAnnotationElementNodeStart((AnnotationElementNode)node);
         } else
         {
             throw new IllegalStateException("Unrecognized node type " + node.getClass());
@@ -401,37 +405,7 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
      */
     public void visitStop(Node node)
     {
-        if (node instanceof BooleanLiteralNode)
-        {
-            visitBooleanLiteralNodeStop((BooleanLiteralNode)node);
-        } else if (node instanceof FloatLiteralNode)
-        {
-            visitFloatLiteralNodeStop((FloatLiteralNode)node);
-        } else if (node instanceof LongLiteralNode)
-        {
-            visitLongLiteralNodeStop((LongLiteralNode)node);
-        } else if (node instanceof IntLiteralNode)
-        {
-            visitIntLiteralNodeStop((IntLiteralNode)node);
-        } else if (node instanceof NullLiteralNode)
-        {
-            visitNullLiteralNodeStop((NullLiteralNode)node);
-        } else if (node instanceof StringLiteralNode)
-        {
-            visitStringLiteralNodeStop((StringLiteralNode)node);
-        } else if (node instanceof ClassLiteralNode)
-        {
-            visitClassLiteralNodeStop((ClassLiteralNode)node);
-        } else if (node instanceof DoubleLiteralNode)
-        {
-            visitDoubleLiteralNodeStop((DoubleLiteralNode)node);
-        } else if (node instanceof CharLiteralNode)
-        {
-            visitCharLiteralNodeStop((CharLiteralNode)node);
-        } else if (node instanceof CodeLiteralNode)
-        {
-            visitCodeLiteralNodeStop((CodeLiteralNode)node);
-        } else if (node instanceof QualifiedNameNode)
+        if (node instanceof QualifiedNameNode)
         {
             visitQualifiedNameNodeStop((QualifiedNameNode)node);
         } else if (node instanceof SimpleNameNode)
@@ -473,51 +447,57 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
         } else if (node instanceof AnnotationDeclarationNode)
         {
             visitAnnotationDeclarationNodeStop((AnnotationDeclarationNode)node);
+        } else if (node instanceof BooleanLiteralNode)
+        {
+            visitBooleanLiteralNodeStop((BooleanLiteralNode)node);
+        } else if (node instanceof FloatLiteralNode)
+        {
+            visitFloatLiteralNodeStop((FloatLiteralNode)node);
+        } else if (node instanceof LongLiteralNode)
+        {
+            visitLongLiteralNodeStop((LongLiteralNode)node);
+        } else if (node instanceof IntLiteralNode)
+        {
+            visitIntLiteralNodeStop((IntLiteralNode)node);
+        } else if (node instanceof NullLiteralNode)
+        {
+            visitNullLiteralNodeStop((NullLiteralNode)node);
+        } else if (node instanceof StringLiteralNode)
+        {
+            visitStringLiteralNodeStop((StringLiteralNode)node);
+        } else if (node instanceof ClassLiteralNode)
+        {
+            visitClassLiteralNodeStop((ClassLiteralNode)node);
+        } else if (node instanceof DoubleLiteralNode)
+        {
+            visitDoubleLiteralNodeStop((DoubleLiteralNode)node);
+        } else if (node instanceof CharLiteralNode)
+        {
+            visitCharLiteralNodeStop((CharLiteralNode)node);
+        } else if (node instanceof CodeLiteralNode)
+        {
+            visitCodeLiteralNodeStop((CodeLiteralNode)node);
         } else if (node instanceof MethodDeclarationNode)
         {
             visitMethodDeclarationNodeStop((MethodDeclarationNode)node);
-        } else if (node instanceof IfNode)
-        {
-            visitIfNodeStop((IfNode)node);
         } else if (node instanceof ClassBodyNode)
         {
             visitClassBodyNodeStop((ClassBodyNode)node);
-        } else if (node instanceof ContinueNode)
+        } else if (node instanceof IfNode)
         {
-            visitContinueNodeStop((ContinueNode)node);
-        } else if (node instanceof CompilationUnitNode)
-        {
-            visitCompilationUnitNodeStop((CompilationUnitNode)node);
+            visitIfNodeStop((IfNode)node);
         } else if (node instanceof ConstructorBodyNode)
         {
             visitConstructorBodyNodeStop((ConstructorBodyNode)node);
-        } else if (node instanceof PackageDeclarationNode)
-        {
-            visitPackageDeclarationNodeStop((PackageDeclarationNode)node);
-        } else if (node instanceof ForInitializerExpressionNode)
-        {
-            visitForInitializerExpressionNodeStop((ForInitializerExpressionNode)node);
         } else if (node instanceof RawTypeNode)
         {
             visitRawTypeNodeStop((RawTypeNode)node);
         } else if (node instanceof ForInitializerDeclarationNode)
         {
             visitForInitializerDeclarationNodeStop((ForInitializerDeclarationNode)node);
-        } else if (node instanceof BlockStatementNode)
-        {
-            visitBlockStatementNodeStop((BlockStatementNode)node);
-        } else if (node instanceof LabeledStatementNode)
-        {
-            visitLabeledStatementNodeStop((LabeledStatementNode)node);
-        } else if (node instanceof TypeCastNode)
-        {
-            visitTypeCastNodeStop((TypeCastNode)node);
         } else if (node instanceof ParameterizedTypeNode)
         {
             visitParameterizedTypeNodeStop((ParameterizedTypeNode)node);
-        } else if (node instanceof DoWhileLoopNode)
-        {
-            visitDoWhileLoopNodeStop((DoWhileLoopNode)node);
         } else if (node instanceof BinaryOperatorNode)
         {
             visitBinaryOperatorNodeStop((BinaryOperatorNode)node);
@@ -533,120 +513,69 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
         } else if (node instanceof AssignmentNode)
         {
             visitAssignmentNodeStop((AssignmentNode)node);
-        } else if (node instanceof VoidTypeDeclarationNode)
-        {
-            visitVoidTypeDeclarationNodeStop((VoidTypeDeclarationNode)node);
         } else if (node instanceof ReturnNode)
         {
             visitReturnNodeStop((ReturnNode)node);
-        } else if (node instanceof CatchNode)
-        {
-            visitCatchNodeStop((CatchNode)node);
         } else if (node instanceof AnnotationExpressionValueNode)
         {
             visitAnnotationExpressionValueNodeStop((AnnotationExpressionValueNode)node);
         } else if (node instanceof ArrayInitializerNode)
         {
             visitArrayInitializerNodeStop((ArrayInitializerNode)node);
-        } else if (node instanceof NameExpressionNode)
-        {
-            visitNameExpressionNodeStop((NameExpressionNode)node);
-        } else if (node instanceof ThrowNode)
-        {
-            visitThrowNodeStop((ThrowNode)node);
-        } else if (node instanceof FieldAccessNode)
-        {
-            visitFieldAccessNodeStop((FieldAccessNode)node);
         } else if (node instanceof AnnotationArrayValueNode)
         {
             visitAnnotationArrayValueNodeStop((AnnotationArrayValueNode)node);
-        } else if (node instanceof FieldDeclarationNode)
-        {
-            visitFieldDeclarationNodeStop((FieldDeclarationNode)node);
         } else if (node instanceof ImportSingleTypeNode)
         {
             visitImportSingleTypeNodeStop((ImportSingleTypeNode)node);
+        } else if (node instanceof FieldDeclarationNode)
+        {
+            visitFieldDeclarationNodeStop((FieldDeclarationNode)node);
         } else if (node instanceof AnnotationMethodDeclarationNode)
         {
             visitAnnotationMethodDeclarationNodeStop((AnnotationMethodDeclarationNode)node);
         } else if (node instanceof TypeParameterNode)
         {
             visitTypeParameterNodeStop((TypeParameterNode)node);
-        } else if (node instanceof VariableDeclaratorNode)
-        {
-            visitVariableDeclaratorNodeStop((VariableDeclaratorNode)node);
-        } else if (node instanceof AnnotationBodyNode)
-        {
-            visitAnnotationBodyNodeStop((AnnotationBodyNode)node);
-        } else if (node instanceof VariableDeclarationNode)
-        {
-            visitVariableDeclarationNodeStop((VariableDeclarationNode)node);
-        } else if (node instanceof IdentifierNode)
-        {
-            visitIdentifierNodeStop((IdentifierNode)node);
         } else if (node instanceof ArrayTypeNode)
         {
             visitArrayTypeNodeStop((ArrayTypeNode)node);
-        } else if (node instanceof VoidTypeNode)
+        } else if (node instanceof IdentifierNode)
         {
-            visitVoidTypeNodeStop((VoidTypeNode)node);
+            visitIdentifierNodeStop((IdentifierNode)node);
+        } else if (node instanceof ParameterizedTypeSelectNode)
+        {
+            visitParameterizedTypeSelectNodeStop((ParameterizedTypeSelectNode)node);
         } else if (node instanceof BreakNode)
         {
             visitBreakNodeStop((BreakNode)node);
-        } else if (node instanceof EnumConstantDeclarationNode)
-        {
-            visitEnumConstantDeclarationNodeStop((EnumConstantDeclarationNode)node);
         } else if (node instanceof ListNode<?>)
         {
             visitListNodeStop((ListNode<?>)node);
-        } else if (node instanceof ForLoopNode)
+        } else if (node instanceof EnumConstantDeclarationNode)
         {
-            visitForLoopNodeStop((ForLoopNode)node);
+            visitEnumConstantDeclarationNodeStop((EnumConstantDeclarationNode)node);
         } else if (node instanceof WhileLoopNode)
         {
             visitWhileLoopNodeStop((WhileLoopNode)node);
-        } else if (node instanceof ThisNode)
+        } else if (node instanceof ForLoopNode)
         {
-            visitThisNodeStop((ThisNode)node);
+            visitForLoopNodeStop((ForLoopNode)node);
         } else if (node instanceof AnnotationAnnotationValueNode)
         {
             visitAnnotationAnnotationValueNodeStop((AnnotationAnnotationValueNode)node);
         } else if (node instanceof ConstructorDeclarationNode)
         {
             visitConstructorDeclarationNodeStop((ConstructorDeclarationNode)node);
-        } else if (node instanceof TryNode)
-        {
-            visitTryNodeStop((TryNode)node);
         } else if (node instanceof SwitchNode)
         {
             visitSwitchNodeStop((SwitchNode)node);
-        } else if (node instanceof EnumBodyNode)
-        {
-            visitEnumBodyNodeStop((EnumBodyNode)node);
-        } else if (node instanceof ModifiersNode)
-        {
-            visitModifiersNodeStop((ModifiersNode)node);
-        } else if (node instanceof InitializerDeclarationNode)
-        {
-            visitInitializerDeclarationNodeStop((InitializerDeclarationNode)node);
-        } else if (node instanceof PrimitiveTypeNode)
-        {
-            visitPrimitiveTypeNodeStop((PrimitiveTypeNode)node);
         } else if (node instanceof InlineTypeDeclarationNode)
         {
             visitInlineTypeDeclarationNodeStop((InlineTypeDeclarationNode)node);
-        } else if (node instanceof ImportOnDemandNode)
-        {
-            visitImportOnDemandNodeStop((ImportOnDemandNode)node);
         } else if (node instanceof WildcardTypeNode)
         {
             visitWildcardTypeNodeStop((WildcardTypeNode)node);
-        } else if (node instanceof VoidStatementNode)
-        {
-            visitVoidStatementNodeStop((VoidStatementNode)node);
-        } else if (node instanceof CaseNode)
-        {
-            visitCaseNodeStop((CaseNode)node);
         } else if (node instanceof VariableNode)
         {
             visitVariableNodeStop((VariableNode)node);
@@ -659,6 +588,87 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
         } else if (node instanceof AnonymousClassBodyNode)
         {
             visitAnonymousClassBodyNodeStop((AnonymousClassBodyNode)node);
+        } else if (node instanceof AnnotationElementNode)
+        {
+            visitAnnotationElementNodeStop((AnnotationElementNode)node);
+        } else if (node instanceof ContinueNode)
+        {
+            visitContinueNodeStop((ContinueNode)node);
+        } else if (node instanceof CompilationUnitNode)
+        {
+            visitCompilationUnitNodeStop((CompilationUnitNode)node);
+        } else if (node instanceof PackageDeclarationNode)
+        {
+            visitPackageDeclarationNodeStop((PackageDeclarationNode)node);
+        } else if (node instanceof ForInitializerExpressionNode)
+        {
+            visitForInitializerExpressionNodeStop((ForInitializerExpressionNode)node);
+        } else if (node instanceof BlockStatementNode)
+        {
+            visitBlockStatementNodeStop((BlockStatementNode)node);
+        } else if (node instanceof LabeledStatementNode)
+        {
+            visitLabeledStatementNodeStop((LabeledStatementNode)node);
+        } else if (node instanceof TypeCastNode)
+        {
+            visitTypeCastNodeStop((TypeCastNode)node);
+        } else if (node instanceof DoWhileLoopNode)
+        {
+            visitDoWhileLoopNodeStop((DoWhileLoopNode)node);
+        } else if (node instanceof VoidTypeDeclarationNode)
+        {
+            visitVoidTypeDeclarationNodeStop((VoidTypeDeclarationNode)node);
+        } else if (node instanceof CatchNode)
+        {
+            visitCatchNodeStop((CatchNode)node);
+        } else if (node instanceof NameExpressionNode)
+        {
+            visitNameExpressionNodeStop((NameExpressionNode)node);
+        } else if (node instanceof ThrowNode)
+        {
+            visitThrowNodeStop((ThrowNode)node);
+        } else if (node instanceof FieldAccessNode)
+        {
+            visitFieldAccessNodeStop((FieldAccessNode)node);
+        } else if (node instanceof VariableDeclaratorNode)
+        {
+            visitVariableDeclaratorNodeStop((VariableDeclaratorNode)node);
+        } else if (node instanceof AnnotationBodyNode)
+        {
+            visitAnnotationBodyNodeStop((AnnotationBodyNode)node);
+        } else if (node instanceof VariableDeclarationNode)
+        {
+            visitVariableDeclarationNodeStop((VariableDeclarationNode)node);
+        } else if (node instanceof VoidTypeNode)
+        {
+            visitVoidTypeNodeStop((VoidTypeNode)node);
+        } else if (node instanceof ThisNode)
+        {
+            visitThisNodeStop((ThisNode)node);
+        } else if (node instanceof TryNode)
+        {
+            visitTryNodeStop((TryNode)node);
+        } else if (node instanceof EnumBodyNode)
+        {
+            visitEnumBodyNodeStop((EnumBodyNode)node);
+        } else if (node instanceof ModifiersNode)
+        {
+            visitModifiersNodeStop((ModifiersNode)node);
+        } else if (node instanceof InitializerDeclarationNode)
+        {
+            visitInitializerDeclarationNodeStop((InitializerDeclarationNode)node);
+        } else if (node instanceof PrimitiveTypeNode)
+        {
+            visitPrimitiveTypeNodeStop((PrimitiveTypeNode)node);
+        } else if (node instanceof ImportOnDemandNode)
+        {
+            visitImportOnDemandNodeStop((ImportOnDemandNode)node);
+        } else if (node instanceof CaseNode)
+        {
+            visitCaseNodeStop((CaseNode)node);
+        } else if (node instanceof VoidStatementNode)
+        {
+            visitVoidStatementNodeStop((VoidStatementNode)node);
         } else if (node instanceof ArrayAccessNode)
         {
             visitArrayAccessNodeStop((ArrayAccessNode)node);
@@ -668,102 +678,19 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
         } else if (node instanceof MethodInvocationNode)
         {
             visitMethodInvocationNodeStop((MethodInvocationNode)node);
-        } else if (node instanceof ExpressionStatementNode)
-        {
-            visitExpressionStatementNodeStop((ExpressionStatementNode)node);
         } else if (node instanceof InterfaceBodyNode)
         {
             visitInterfaceBodyNodeStop((InterfaceBodyNode)node);
+        } else if (node instanceof ExpressionStatementNode)
+        {
+            visitExpressionStatementNodeStop((ExpressionStatementNode)node);
         } else if (node instanceof AssertStatementNode)
         {
             visitAssertStatementNodeStop((AssertStatementNode)node);
-        } else if (node instanceof AnnotationElementNode)
-        {
-            visitAnnotationElementNodeStop((AnnotationElementNode)node);
         } else
         {
             throw new IllegalStateException("Unrecognized node type " + node.getClass());
         }
-    }
-
-    /**
-     * Starts a visit for nodes of type BooleanLiteralNode.
-     * @param node The node being visited.
-     */
-    public void visitBooleanLiteralNodeStart(BooleanLiteralNode node)
-    {
-    }
-
-    /**
-     * Starts a visit for nodes of type FloatLiteralNode.
-     * @param node The node being visited.
-     */
-    public void visitFloatLiteralNodeStart(FloatLiteralNode node)
-    {
-    }
-
-    /**
-     * Starts a visit for nodes of type LongLiteralNode.
-     * @param node The node being visited.
-     */
-    public void visitLongLiteralNodeStart(LongLiteralNode node)
-    {
-    }
-
-    /**
-     * Starts a visit for nodes of type IntLiteralNode.
-     * @param node The node being visited.
-     */
-    public void visitIntLiteralNodeStart(IntLiteralNode node)
-    {
-    }
-
-    /**
-     * Starts a visit for nodes of type NullLiteralNode.
-     * @param node The node being visited.
-     */
-    public void visitNullLiteralNodeStart(NullLiteralNode node)
-    {
-    }
-
-    /**
-     * Starts a visit for nodes of type StringLiteralNode.
-     * @param node The node being visited.
-     */
-    public void visitStringLiteralNodeStart(StringLiteralNode node)
-    {
-    }
-
-    /**
-     * Starts a visit for nodes of type ClassLiteralNode.
-     * @param node The node being visited.
-     */
-    public void visitClassLiteralNodeStart(ClassLiteralNode node)
-    {
-    }
-
-    /**
-     * Starts a visit for nodes of type DoubleLiteralNode.
-     * @param node The node being visited.
-     */
-    public void visitDoubleLiteralNodeStart(DoubleLiteralNode node)
-    {
-    }
-
-    /**
-     * Starts a visit for nodes of type CharLiteralNode.
-     * @param node The node being visited.
-     */
-    public void visitCharLiteralNodeStart(CharLiteralNode node)
-    {
-    }
-
-    /**
-     * Starts a visit for nodes of type CodeLiteralNode.
-     * @param node The node being visited.
-     */
-    public void visitCodeLiteralNodeStart(CodeLiteralNode node)
-    {
     }
 
     /**
@@ -879,18 +806,90 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
     }
 
     /**
-     * Starts a visit for nodes of type MethodDeclarationNode.
+     * Starts a visit for nodes of type BooleanLiteralNode.
      * @param node The node being visited.
      */
-    public void visitMethodDeclarationNodeStart(MethodDeclarationNode node)
+    public void visitBooleanLiteralNodeStart(BooleanLiteralNode node)
     {
     }
 
     /**
-     * Starts a visit for nodes of type IfNode.
+     * Starts a visit for nodes of type FloatLiteralNode.
      * @param node The node being visited.
      */
-    public void visitIfNodeStart(IfNode node)
+    public void visitFloatLiteralNodeStart(FloatLiteralNode node)
+    {
+    }
+
+    /**
+     * Starts a visit for nodes of type LongLiteralNode.
+     * @param node The node being visited.
+     */
+    public void visitLongLiteralNodeStart(LongLiteralNode node)
+    {
+    }
+
+    /**
+     * Starts a visit for nodes of type IntLiteralNode.
+     * @param node The node being visited.
+     */
+    public void visitIntLiteralNodeStart(IntLiteralNode node)
+    {
+    }
+
+    /**
+     * Starts a visit for nodes of type NullLiteralNode.
+     * @param node The node being visited.
+     */
+    public void visitNullLiteralNodeStart(NullLiteralNode node)
+    {
+    }
+
+    /**
+     * Starts a visit for nodes of type StringLiteralNode.
+     * @param node The node being visited.
+     */
+    public void visitStringLiteralNodeStart(StringLiteralNode node)
+    {
+    }
+
+    /**
+     * Starts a visit for nodes of type ClassLiteralNode.
+     * @param node The node being visited.
+     */
+    public void visitClassLiteralNodeStart(ClassLiteralNode node)
+    {
+    }
+
+    /**
+     * Starts a visit for nodes of type DoubleLiteralNode.
+     * @param node The node being visited.
+     */
+    public void visitDoubleLiteralNodeStart(DoubleLiteralNode node)
+    {
+    }
+
+    /**
+     * Starts a visit for nodes of type CharLiteralNode.
+     * @param node The node being visited.
+     */
+    public void visitCharLiteralNodeStart(CharLiteralNode node)
+    {
+    }
+
+    /**
+     * Starts a visit for nodes of type CodeLiteralNode.
+     * @param node The node being visited.
+     */
+    public void visitCodeLiteralNodeStart(CodeLiteralNode node)
+    {
+    }
+
+    /**
+     * Starts a visit for nodes of type MethodDeclarationNode.
+     * @param node The node being visited.
+     */
+    public void visitMethodDeclarationNodeStart(MethodDeclarationNode node)
     {
     }
 
@@ -903,18 +902,10 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
     }
 
     /**
-     * Starts a visit for nodes of type ContinueNode.
+     * Starts a visit for nodes of type IfNode.
      * @param node The node being visited.
      */
-    public void visitContinueNodeStart(ContinueNode node)
-    {
-    }
-
-    /**
-     * Starts a visit for nodes of type CompilationUnitNode.
-     * @param node The node being visited.
-     */
-    public void visitCompilationUnitNodeStart(CompilationUnitNode node)
+    public void visitIfNodeStart(IfNode node)
     {
     }
 
@@ -923,22 +914,6 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
      * @param node The node being visited.
      */
     public void visitConstructorBodyNodeStart(ConstructorBodyNode node)
-    {
-    }
-
-    /**
-     * Starts a visit for nodes of type PackageDeclarationNode.
-     * @param node The node being visited.
-     */
-    public void visitPackageDeclarationNodeStart(PackageDeclarationNode node)
-    {
-    }
-
-    /**
-     * Starts a visit for nodes of type ForInitializerExpressionNode.
-     * @param node The node being visited.
-     */
-    public void visitForInitializerExpressionNodeStart(ForInitializerExpressionNode node)
     {
     }
 
@@ -959,42 +934,10 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
     }
 
     /**
-     * Starts a visit for nodes of type BlockStatementNode.
-     * @param node The node being visited.
-     */
-    public void visitBlockStatementNodeStart(BlockStatementNode node)
-    {
-    }
-
-    /**
-     * Starts a visit for nodes of type LabeledStatementNode.
-     * @param node The node being visited.
-     */
-    public void visitLabeledStatementNodeStart(LabeledStatementNode node)
-    {
-    }
-
-    /**
-     * Starts a visit for nodes of type TypeCastNode.
-     * @param node The node being visited.
-     */
-    public void visitTypeCastNodeStart(TypeCastNode node)
-    {
-    }
-
-    /**
      * Starts a visit for nodes of type ParameterizedTypeNode.
      * @param node The node being visited.
      */
     public void visitParameterizedTypeNodeStart(ParameterizedTypeNode node)
-    {
-    }
-
-    /**
-     * Starts a visit for nodes of type DoWhileLoopNode.
-     * @param node The node being visited.
-     */
-    public void visitDoWhileLoopNodeStart(DoWhileLoopNode node)
     {
     }
 
@@ -1039,26 +982,10 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
     }
 
     /**
-     * Starts a visit for nodes of type VoidTypeDeclarationNode.
-     * @param node The node being visited.
-     */
-    public void visitVoidTypeDeclarationNodeStart(VoidTypeDeclarationNode node)
-    {
-    }
-
-    /**
      * Starts a visit for nodes of type ReturnNode.
      * @param node The node being visited.
      */
     public void visitReturnNodeStart(ReturnNode node)
-    {
-    }
-
-    /**
-     * Starts a visit for nodes of type CatchNode.
-     * @param node The node being visited.
-     */
-    public void visitCatchNodeStart(CatchNode node)
     {
     }
 
@@ -1079,30 +1006,6 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
     }
 
     /**
-     * Starts a visit for nodes of type NameExpressionNode.
-     * @param node The node being visited.
-     */
-    public void visitNameExpressionNodeStart(NameExpressionNode node)
-    {
-    }
-
-    /**
-     * Starts a visit for nodes of type ThrowNode.
-     * @param node The node being visited.
-     */
-    public void visitThrowNodeStart(ThrowNode node)
-    {
-    }
-
-    /**
-     * Starts a visit for nodes of type FieldAccessNode.
-     * @param node The node being visited.
-     */
-    public void visitFieldAccessNodeStart(FieldAccessNode node)
-    {
-    }
-
-    /**
      * Starts a visit for nodes of type AnnotationArrayValueNode.
      * @param node The node being visited.
      */
@@ -1111,18 +1014,18 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
     }
 
     /**
-     * Starts a visit for nodes of type FieldDeclarationNode.
-     * @param node The node being visited.
-     */
-    public void visitFieldDeclarationNodeStart(FieldDeclarationNode node)
-    {
-    }
-
-    /**
      * Starts a visit for nodes of type ImportSingleTypeNode.
      * @param node The node being visited.
      */
     public void visitImportSingleTypeNodeStart(ImportSingleTypeNode node)
+    {
+    }
+
+    /**
+     * Starts a visit for nodes of type FieldDeclarationNode.
+     * @param node The node being visited.
+     */
+    public void visitFieldDeclarationNodeStart(FieldDeclarationNode node)
     {
     }
 
@@ -1143,26 +1046,10 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
     }
 
     /**
-     * Starts a visit for nodes of type VariableDeclaratorNode.
+     * Starts a visit for nodes of type ArrayTypeNode.
      * @param node The node being visited.
      */
-    public void visitVariableDeclaratorNodeStart(VariableDeclaratorNode node)
-    {
-    }
-
-    /**
-     * Starts a visit for nodes of type AnnotationBodyNode.
-     * @param node The node being visited.
-     */
-    public void visitAnnotationBodyNodeStart(AnnotationBodyNode node)
-    {
-    }
-
-    /**
-     * Starts a visit for nodes of type VariableDeclarationNode.
-     * @param node The node being visited.
-     */
-    public void visitVariableDeclarationNodeStart(VariableDeclarationNode node)
+    public void visitArrayTypeNodeStart(ArrayTypeNode node)
     {
     }
 
@@ -1175,18 +1062,10 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
     }
 
     /**
-     * Starts a visit for nodes of type ArrayTypeNode.
+     * Starts a visit for nodes of type ParameterizedTypeSelectNode.
      * @param node The node being visited.
      */
-    public void visitArrayTypeNodeStart(ArrayTypeNode node)
-    {
-    }
-
-    /**
-     * Starts a visit for nodes of type VoidTypeNode.
-     * @param node The node being visited.
-     */
-    public void visitVoidTypeNodeStart(VoidTypeNode node)
+    public void visitParameterizedTypeSelectNodeStart(ParameterizedTypeSelectNode node)
     {
     }
 
@@ -1199,14 +1078,6 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
     }
 
     /**
-     * Starts a visit for nodes of type EnumConstantDeclarationNode.
-     * @param node The node being visited.
-     */
-    public void visitEnumConstantDeclarationNodeStart(EnumConstantDeclarationNode node)
-    {
-    }
-
-    /**
      * Starts a visit for nodes of type ListNode.
      * @param node The node being visited.
      */
@@ -1215,10 +1086,10 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
     }
 
     /**
-     * Starts a visit for nodes of type ForLoopNode.
+     * Starts a visit for nodes of type EnumConstantDeclarationNode.
      * @param node The node being visited.
      */
-    public void visitForLoopNodeStart(ForLoopNode node)
+    public void visitEnumConstantDeclarationNodeStart(EnumConstantDeclarationNode node)
     {
     }
 
@@ -1231,10 +1102,10 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
     }
 
     /**
-     * Starts a visit for nodes of type ThisNode.
+     * Starts a visit for nodes of type ForLoopNode.
      * @param node The node being visited.
      */
-    public void visitThisNodeStart(ThisNode node)
+    public void visitForLoopNodeStart(ForLoopNode node)
     {
     }
 
@@ -1255,50 +1126,10 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
     }
 
     /**
-     * Starts a visit for nodes of type TryNode.
-     * @param node The node being visited.
-     */
-    public void visitTryNodeStart(TryNode node)
-    {
-    }
-
-    /**
      * Starts a visit for nodes of type SwitchNode.
      * @param node The node being visited.
      */
     public void visitSwitchNodeStart(SwitchNode node)
-    {
-    }
-
-    /**
-     * Starts a visit for nodes of type EnumBodyNode.
-     * @param node The node being visited.
-     */
-    public void visitEnumBodyNodeStart(EnumBodyNode node)
-    {
-    }
-
-    /**
-     * Starts a visit for nodes of type ModifiersNode.
-     * @param node The node being visited.
-     */
-    public void visitModifiersNodeStart(ModifiersNode node)
-    {
-    }
-
-    /**
-     * Starts a visit for nodes of type InitializerDeclarationNode.
-     * @param node The node being visited.
-     */
-    public void visitInitializerDeclarationNodeStart(InitializerDeclarationNode node)
-    {
-    }
-
-    /**
-     * Starts a visit for nodes of type PrimitiveTypeNode.
-     * @param node The node being visited.
-     */
-    public void visitPrimitiveTypeNodeStart(PrimitiveTypeNode node)
     {
     }
 
@@ -1311,34 +1142,10 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
     }
 
     /**
-     * Starts a visit for nodes of type ImportOnDemandNode.
-     * @param node The node being visited.
-     */
-    public void visitImportOnDemandNodeStart(ImportOnDemandNode node)
-    {
-    }
-
-    /**
      * Starts a visit for nodes of type WildcardTypeNode.
      * @param node The node being visited.
      */
     public void visitWildcardTypeNodeStart(WildcardTypeNode node)
-    {
-    }
-
-    /**
-     * Starts a visit for nodes of type VoidStatementNode.
-     * @param node The node being visited.
-     */
-    public void visitVoidStatementNodeStart(VoidStatementNode node)
-    {
-    }
-
-    /**
-     * Starts a visit for nodes of type CaseNode.
-     * @param node The node being visited.
-     */
-    public void visitCaseNodeStart(CaseNode node)
     {
     }
 
@@ -1375,6 +1182,222 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
     }
 
     /**
+     * Starts a visit for nodes of type AnnotationElementNode.
+     * @param node The node being visited.
+     */
+    public void visitAnnotationElementNodeStart(AnnotationElementNode node)
+    {
+    }
+
+    /**
+     * Starts a visit for nodes of type ContinueNode.
+     * @param node The node being visited.
+     */
+    public void visitContinueNodeStart(ContinueNode node)
+    {
+    }
+
+    /**
+     * Starts a visit for nodes of type CompilationUnitNode.
+     * @param node The node being visited.
+     */
+    public void visitCompilationUnitNodeStart(CompilationUnitNode node)
+    {
+    }
+
+    /**
+     * Starts a visit for nodes of type PackageDeclarationNode.
+     * @param node The node being visited.
+     */
+    public void visitPackageDeclarationNodeStart(PackageDeclarationNode node)
+    {
+    }
+
+    /**
+     * Starts a visit for nodes of type ForInitializerExpressionNode.
+     * @param node The node being visited.
+     */
+    public void visitForInitializerExpressionNodeStart(ForInitializerExpressionNode node)
+    {
+    }
+
+    /**
+     * Starts a visit for nodes of type BlockStatementNode.
+     * @param node The node being visited.
+     */
+    public void visitBlockStatementNodeStart(BlockStatementNode node)
+    {
+    }
+
+    /**
+     * Starts a visit for nodes of type LabeledStatementNode.
+     * @param node The node being visited.
+     */
+    public void visitLabeledStatementNodeStart(LabeledStatementNode node)
+    {
+    }
+
+    /**
+     * Starts a visit for nodes of type TypeCastNode.
+     * @param node The node being visited.
+     */
+    public void visitTypeCastNodeStart(TypeCastNode node)
+    {
+    }
+
+    /**
+     * Starts a visit for nodes of type DoWhileLoopNode.
+     * @param node The node being visited.
+     */
+    public void visitDoWhileLoopNodeStart(DoWhileLoopNode node)
+    {
+    }
+
+    /**
+     * Starts a visit for nodes of type VoidTypeDeclarationNode.
+     * @param node The node being visited.
+     */
+    public void visitVoidTypeDeclarationNodeStart(VoidTypeDeclarationNode node)
+    {
+    }
+
+    /**
+     * Starts a visit for nodes of type CatchNode.
+     * @param node The node being visited.
+     */
+    public void visitCatchNodeStart(CatchNode node)
+    {
+    }
+
+    /**
+     * Starts a visit for nodes of type NameExpressionNode.
+     * @param node The node being visited.
+     */
+    public void visitNameExpressionNodeStart(NameExpressionNode node)
+    {
+    }
+
+    /**
+     * Starts a visit for nodes of type ThrowNode.
+     * @param node The node being visited.
+     */
+    public void visitThrowNodeStart(ThrowNode node)
+    {
+    }
+
+    /**
+     * Starts a visit for nodes of type FieldAccessNode.
+     * @param node The node being visited.
+     */
+    public void visitFieldAccessNodeStart(FieldAccessNode node)
+    {
+    }
+
+    /**
+     * Starts a visit for nodes of type VariableDeclaratorNode.
+     * @param node The node being visited.
+     */
+    public void visitVariableDeclaratorNodeStart(VariableDeclaratorNode node)
+    {
+    }
+
+    /**
+     * Starts a visit for nodes of type AnnotationBodyNode.
+     * @param node The node being visited.
+     */
+    public void visitAnnotationBodyNodeStart(AnnotationBodyNode node)
+    {
+    }
+
+    /**
+     * Starts a visit for nodes of type VariableDeclarationNode.
+     * @param node The node being visited.
+     */
+    public void visitVariableDeclarationNodeStart(VariableDeclarationNode node)
+    {
+    }
+
+    /**
+     * Starts a visit for nodes of type VoidTypeNode.
+     * @param node The node being visited.
+     */
+    public void visitVoidTypeNodeStart(VoidTypeNode node)
+    {
+    }
+
+    /**
+     * Starts a visit for nodes of type ThisNode.
+     * @param node The node being visited.
+     */
+    public void visitThisNodeStart(ThisNode node)
+    {
+    }
+
+    /**
+     * Starts a visit for nodes of type TryNode.
+     * @param node The node being visited.
+     */
+    public void visitTryNodeStart(TryNode node)
+    {
+    }
+
+    /**
+     * Starts a visit for nodes of type EnumBodyNode.
+     * @param node The node being visited.
+     */
+    public void visitEnumBodyNodeStart(EnumBodyNode node)
+    {
+    }
+
+    /**
+     * Starts a visit for nodes of type ModifiersNode.
+     * @param node The node being visited.
+     */
+    public void visitModifiersNodeStart(ModifiersNode node)
+    {
+    }
+
+    /**
+     * Starts a visit for nodes of type InitializerDeclarationNode.
+     * @param node The node being visited.
+     */
+    public void visitInitializerDeclarationNodeStart(InitializerDeclarationNode node)
+    {
+    }
+
+    /**
+     * Starts a visit for nodes of type PrimitiveTypeNode.
+     * @param node The node being visited.
+     */
+    public void visitPrimitiveTypeNodeStart(PrimitiveTypeNode node)
+    {
+    }
+
+    /**
+     * Starts a visit for nodes of type ImportOnDemandNode.
+     * @param node The node being visited.
+     */
+    public void visitImportOnDemandNodeStart(ImportOnDemandNode node)
+    {
+    }
+
+    /**
+     * Starts a visit for nodes of type CaseNode.
+     * @param node The node being visited.
+     */
+    public void visitCaseNodeStart(CaseNode node)
+    {
+    }
+
+    /**
+     * Starts a visit for nodes of type VoidStatementNode.
+     * @param node The node being visited.
+     */
+    public void visitVoidStatementNodeStart(VoidStatementNode node)
+    {
+    }
+
+    /**
      * Starts a visit for nodes of type ArrayAccessNode.
      * @param node The node being visited.
      */
@@ -1399,14 +1422,6 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
     }
 
     /**
-     * Starts a visit for nodes of type ExpressionStatementNode.
-     * @param node The node being visited.
-     */
-    public void visitExpressionStatementNodeStart(ExpressionStatementNode node)
-    {
-    }
-
-    /**
      * Starts a visit for nodes of type InterfaceBodyNode.
      * @param node The node being visited.
      */
@@ -1415,98 +1430,18 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
     }
 
     /**
+     * Starts a visit for nodes of type ExpressionStatementNode.
+     * @param node The node being visited.
+     */
+    public void visitExpressionStatementNodeStart(ExpressionStatementNode node)
+    {
+    }
+
+    /**
      * Starts a visit for nodes of type AssertStatementNode.
      * @param node The node being visited.
      */
     public void visitAssertStatementNodeStart(AssertStatementNode node)
-    {
-    }
-
-    /**
-     * Starts a visit for nodes of type AnnotationElementNode.
-     * @param node The node being visited.
-     */
-    public void visitAnnotationElementNodeStart(AnnotationElementNode node)
-    {
-    }
-
-    /**
-     * Stops a visit for nodes of type BooleanLiteralNode.
-     * @param node The node being visited.
-     */
-    public void visitBooleanLiteralNodeStop(BooleanLiteralNode node)
-    {
-    }
-
-    /**
-     * Stops a visit for nodes of type FloatLiteralNode.
-     * @param node The node being visited.
-     */
-    public void visitFloatLiteralNodeStop(FloatLiteralNode node)
-    {
-    }
-
-    /**
-     * Stops a visit for nodes of type LongLiteralNode.
-     * @param node The node being visited.
-     */
-    public void visitLongLiteralNodeStop(LongLiteralNode node)
-    {
-    }
-
-    /**
-     * Stops a visit for nodes of type IntLiteralNode.
-     * @param node The node being visited.
-     */
-    public void visitIntLiteralNodeStop(IntLiteralNode node)
-    {
-    }
-
-    /**
-     * Stops a visit for nodes of type NullLiteralNode.
-     * @param node The node being visited.
-     */
-    public void visitNullLiteralNodeStop(NullLiteralNode node)
-    {
-    }
-
-    /**
-     * Stops a visit for nodes of type StringLiteralNode.
-     * @param node The node being visited.
-     */
-    public void visitStringLiteralNodeStop(StringLiteralNode node)
-    {
-    }
-
-    /**
-     * Stops a visit for nodes of type ClassLiteralNode.
-     * @param node The node being visited.
-     */
-    public void visitClassLiteralNodeStop(ClassLiteralNode node)
-    {
-    }
-
-    /**
-     * Stops a visit for nodes of type DoubleLiteralNode.
-     * @param node The node being visited.
-     */
-    public void visitDoubleLiteralNodeStop(DoubleLiteralNode node)
-    {
-    }
-
-    /**
-     * Stops a visit for nodes of type CharLiteralNode.
-     * @param node The node being visited.
-     */
-    public void visitCharLiteralNodeStop(CharLiteralNode node)
-    {
-    }
-
-    /**
-     * Stops a visit for nodes of type CodeLiteralNode.
-     * @param node The node being visited.
-     */
-    public void visitCodeLiteralNodeStop(CodeLiteralNode node)
     {
     }
 
@@ -1623,18 +1558,90 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
     }
 
     /**
-     * Stops a visit for nodes of type MethodDeclarationNode.
+     * Stops a visit for nodes of type BooleanLiteralNode.
      * @param node The node being visited.
      */
-    public void visitMethodDeclarationNodeStop(MethodDeclarationNode node)
+    public void visitBooleanLiteralNodeStop(BooleanLiteralNode node)
     {
     }
 
     /**
-     * Stops a visit for nodes of type IfNode.
+     * Stops a visit for nodes of type FloatLiteralNode.
      * @param node The node being visited.
      */
-    public void visitIfNodeStop(IfNode node)
+    public void visitFloatLiteralNodeStop(FloatLiteralNode node)
+    {
+    }
+
+    /**
+     * Stops a visit for nodes of type LongLiteralNode.
+     * @param node The node being visited.
+     */
+    public void visitLongLiteralNodeStop(LongLiteralNode node)
+    {
+    }
+
+    /**
+     * Stops a visit for nodes of type IntLiteralNode.
+     * @param node The node being visited.
+     */
+    public void visitIntLiteralNodeStop(IntLiteralNode node)
+    {
+    }
+
+    /**
+     * Stops a visit for nodes of type NullLiteralNode.
+     * @param node The node being visited.
+     */
+    public void visitNullLiteralNodeStop(NullLiteralNode node)
+    {
+    }
+
+    /**
+     * Stops a visit for nodes of type StringLiteralNode.
+     * @param node The node being visited.
+     */
+    public void visitStringLiteralNodeStop(StringLiteralNode node)
+    {
+    }
+
+    /**
+     * Stops a visit for nodes of type ClassLiteralNode.
+     * @param node The node being visited.
+     */
+    public void visitClassLiteralNodeStop(ClassLiteralNode node)
+    {
+    }
+
+    /**
+     * Stops a visit for nodes of type DoubleLiteralNode.
+     * @param node The node being visited.
+     */
+    public void visitDoubleLiteralNodeStop(DoubleLiteralNode node)
+    {
+    }
+
+    /**
+     * Stops a visit for nodes of type CharLiteralNode.
+     * @param node The node being visited.
+     */
+    public void visitCharLiteralNodeStop(CharLiteralNode node)
+    {
+    }
+
+    /**
+     * Stops a visit for nodes of type CodeLiteralNode.
+     * @param node The node being visited.
+     */
+    public void visitCodeLiteralNodeStop(CodeLiteralNode node)
+    {
+    }
+
+    /**
+     * Stops a visit for nodes of type MethodDeclarationNode.
+     * @param node The node being visited.
+     */
+    public void visitMethodDeclarationNodeStop(MethodDeclarationNode node)
     {
     }
 
@@ -1647,18 +1654,10 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
     }
 
     /**
-     * Stops a visit for nodes of type ContinueNode.
+     * Stops a visit for nodes of type IfNode.
      * @param node The node being visited.
      */
-    public void visitContinueNodeStop(ContinueNode node)
-    {
-    }
-
-    /**
-     * Stops a visit for nodes of type CompilationUnitNode.
-     * @param node The node being visited.
-     */
-    public void visitCompilationUnitNodeStop(CompilationUnitNode node)
+    public void visitIfNodeStop(IfNode node)
     {
     }
 
@@ -1667,22 +1666,6 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
      * @param node The node being visited.
      */
     public void visitConstructorBodyNodeStop(ConstructorBodyNode node)
-    {
-    }
-
-    /**
-     * Stops a visit for nodes of type PackageDeclarationNode.
-     * @param node The node being visited.
-     */
-    public void visitPackageDeclarationNodeStop(PackageDeclarationNode node)
-    {
-    }
-
-    /**
-     * Stops a visit for nodes of type ForInitializerExpressionNode.
-     * @param node The node being visited.
-     */
-    public void visitForInitializerExpressionNodeStop(ForInitializerExpressionNode node)
     {
     }
 
@@ -1703,42 +1686,10 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
     }
 
     /**
-     * Stops a visit for nodes of type BlockStatementNode.
-     * @param node The node being visited.
-     */
-    public void visitBlockStatementNodeStop(BlockStatementNode node)
-    {
-    }
-
-    /**
-     * Stops a visit for nodes of type LabeledStatementNode.
-     * @param node The node being visited.
-     */
-    public void visitLabeledStatementNodeStop(LabeledStatementNode node)
-    {
-    }
-
-    /**
-     * Stops a visit for nodes of type TypeCastNode.
-     * @param node The node being visited.
-     */
-    public void visitTypeCastNodeStop(TypeCastNode node)
-    {
-    }
-
-    /**
      * Stops a visit for nodes of type ParameterizedTypeNode.
      * @param node The node being visited.
      */
     public void visitParameterizedTypeNodeStop(ParameterizedTypeNode node)
-    {
-    }
-
-    /**
-     * Stops a visit for nodes of type DoWhileLoopNode.
-     * @param node The node being visited.
-     */
-    public void visitDoWhileLoopNodeStop(DoWhileLoopNode node)
     {
     }
 
@@ -1783,26 +1734,10 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
     }
 
     /**
-     * Stops a visit for nodes of type VoidTypeDeclarationNode.
-     * @param node The node being visited.
-     */
-    public void visitVoidTypeDeclarationNodeStop(VoidTypeDeclarationNode node)
-    {
-    }
-
-    /**
      * Stops a visit for nodes of type ReturnNode.
      * @param node The node being visited.
      */
     public void visitReturnNodeStop(ReturnNode node)
-    {
-    }
-
-    /**
-     * Stops a visit for nodes of type CatchNode.
-     * @param node The node being visited.
-     */
-    public void visitCatchNodeStop(CatchNode node)
     {
     }
 
@@ -1823,30 +1758,6 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
     }
 
     /**
-     * Stops a visit for nodes of type NameExpressionNode.
-     * @param node The node being visited.
-     */
-    public void visitNameExpressionNodeStop(NameExpressionNode node)
-    {
-    }
-
-    /**
-     * Stops a visit for nodes of type ThrowNode.
-     * @param node The node being visited.
-     */
-    public void visitThrowNodeStop(ThrowNode node)
-    {
-    }
-
-    /**
-     * Stops a visit for nodes of type FieldAccessNode.
-     * @param node The node being visited.
-     */
-    public void visitFieldAccessNodeStop(FieldAccessNode node)
-    {
-    }
-
-    /**
      * Stops a visit for nodes of type AnnotationArrayValueNode.
      * @param node The node being visited.
      */
@@ -1855,18 +1766,18 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
     }
 
     /**
-     * Stops a visit for nodes of type FieldDeclarationNode.
-     * @param node The node being visited.
-     */
-    public void visitFieldDeclarationNodeStop(FieldDeclarationNode node)
-    {
-    }
-
-    /**
      * Stops a visit for nodes of type ImportSingleTypeNode.
      * @param node The node being visited.
      */
     public void visitImportSingleTypeNodeStop(ImportSingleTypeNode node)
+    {
+    }
+
+    /**
+     * Stops a visit for nodes of type FieldDeclarationNode.
+     * @param node The node being visited.
+     */
+    public void visitFieldDeclarationNodeStop(FieldDeclarationNode node)
     {
     }
 
@@ -1887,26 +1798,10 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
     }
 
     /**
-     * Stops a visit for nodes of type VariableDeclaratorNode.
+     * Stops a visit for nodes of type ArrayTypeNode.
      * @param node The node being visited.
      */
-    public void visitVariableDeclaratorNodeStop(VariableDeclaratorNode node)
-    {
-    }
-
-    /**
-     * Stops a visit for nodes of type AnnotationBodyNode.
-     * @param node The node being visited.
-     */
-    public void visitAnnotationBodyNodeStop(AnnotationBodyNode node)
-    {
-    }
-
-    /**
-     * Stops a visit for nodes of type VariableDeclarationNode.
-     * @param node The node being visited.
-     */
-    public void visitVariableDeclarationNodeStop(VariableDeclarationNode node)
+    public void visitArrayTypeNodeStop(ArrayTypeNode node)
     {
     }
 
@@ -1919,18 +1814,10 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
     }
 
     /**
-     * Stops a visit for nodes of type ArrayTypeNode.
+     * Stops a visit for nodes of type ParameterizedTypeSelectNode.
      * @param node The node being visited.
      */
-    public void visitArrayTypeNodeStop(ArrayTypeNode node)
-    {
-    }
-
-    /**
-     * Stops a visit for nodes of type VoidTypeNode.
-     * @param node The node being visited.
-     */
-    public void visitVoidTypeNodeStop(VoidTypeNode node)
+    public void visitParameterizedTypeSelectNodeStop(ParameterizedTypeSelectNode node)
     {
     }
 
@@ -1943,14 +1830,6 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
     }
 
     /**
-     * Stops a visit for nodes of type EnumConstantDeclarationNode.
-     * @param node The node being visited.
-     */
-    public void visitEnumConstantDeclarationNodeStop(EnumConstantDeclarationNode node)
-    {
-    }
-
-    /**
      * Stops a visit for nodes of type ListNode.
      * @param node The node being visited.
      */
@@ -1959,10 +1838,10 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
     }
 
     /**
-     * Stops a visit for nodes of type ForLoopNode.
+     * Stops a visit for nodes of type EnumConstantDeclarationNode.
      * @param node The node being visited.
      */
-    public void visitForLoopNodeStop(ForLoopNode node)
+    public void visitEnumConstantDeclarationNodeStop(EnumConstantDeclarationNode node)
     {
     }
 
@@ -1975,10 +1854,10 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
     }
 
     /**
-     * Stops a visit for nodes of type ThisNode.
+     * Stops a visit for nodes of type ForLoopNode.
      * @param node The node being visited.
      */
-    public void visitThisNodeStop(ThisNode node)
+    public void visitForLoopNodeStop(ForLoopNode node)
     {
     }
 
@@ -1999,50 +1878,10 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
     }
 
     /**
-     * Stops a visit for nodes of type TryNode.
-     * @param node The node being visited.
-     */
-    public void visitTryNodeStop(TryNode node)
-    {
-    }
-
-    /**
      * Stops a visit for nodes of type SwitchNode.
      * @param node The node being visited.
      */
     public void visitSwitchNodeStop(SwitchNode node)
-    {
-    }
-
-    /**
-     * Stops a visit for nodes of type EnumBodyNode.
-     * @param node The node being visited.
-     */
-    public void visitEnumBodyNodeStop(EnumBodyNode node)
-    {
-    }
-
-    /**
-     * Stops a visit for nodes of type ModifiersNode.
-     * @param node The node being visited.
-     */
-    public void visitModifiersNodeStop(ModifiersNode node)
-    {
-    }
-
-    /**
-     * Stops a visit for nodes of type InitializerDeclarationNode.
-     * @param node The node being visited.
-     */
-    public void visitInitializerDeclarationNodeStop(InitializerDeclarationNode node)
-    {
-    }
-
-    /**
-     * Stops a visit for nodes of type PrimitiveTypeNode.
-     * @param node The node being visited.
-     */
-    public void visitPrimitiveTypeNodeStop(PrimitiveTypeNode node)
     {
     }
 
@@ -2055,34 +1894,10 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
     }
 
     /**
-     * Stops a visit for nodes of type ImportOnDemandNode.
-     * @param node The node being visited.
-     */
-    public void visitImportOnDemandNodeStop(ImportOnDemandNode node)
-    {
-    }
-
-    /**
      * Stops a visit for nodes of type WildcardTypeNode.
      * @param node The node being visited.
      */
     public void visitWildcardTypeNodeStop(WildcardTypeNode node)
-    {
-    }
-
-    /**
-     * Stops a visit for nodes of type VoidStatementNode.
-     * @param node The node being visited.
-     */
-    public void visitVoidStatementNodeStop(VoidStatementNode node)
-    {
-    }
-
-    /**
-     * Stops a visit for nodes of type CaseNode.
-     * @param node The node being visited.
-     */
-    public void visitCaseNodeStop(CaseNode node)
     {
     }
 
@@ -2119,6 +1934,222 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
     }
 
     /**
+     * Stops a visit for nodes of type AnnotationElementNode.
+     * @param node The node being visited.
+     */
+    public void visitAnnotationElementNodeStop(AnnotationElementNode node)
+    {
+    }
+
+    /**
+     * Stops a visit for nodes of type ContinueNode.
+     * @param node The node being visited.
+     */
+    public void visitContinueNodeStop(ContinueNode node)
+    {
+    }
+
+    /**
+     * Stops a visit for nodes of type CompilationUnitNode.
+     * @param node The node being visited.
+     */
+    public void visitCompilationUnitNodeStop(CompilationUnitNode node)
+    {
+    }
+
+    /**
+     * Stops a visit for nodes of type PackageDeclarationNode.
+     * @param node The node being visited.
+     */
+    public void visitPackageDeclarationNodeStop(PackageDeclarationNode node)
+    {
+    }
+
+    /**
+     * Stops a visit for nodes of type ForInitializerExpressionNode.
+     * @param node The node being visited.
+     */
+    public void visitForInitializerExpressionNodeStop(ForInitializerExpressionNode node)
+    {
+    }
+
+    /**
+     * Stops a visit for nodes of type BlockStatementNode.
+     * @param node The node being visited.
+     */
+    public void visitBlockStatementNodeStop(BlockStatementNode node)
+    {
+    }
+
+    /**
+     * Stops a visit for nodes of type LabeledStatementNode.
+     * @param node The node being visited.
+     */
+    public void visitLabeledStatementNodeStop(LabeledStatementNode node)
+    {
+    }
+
+    /**
+     * Stops a visit for nodes of type TypeCastNode.
+     * @param node The node being visited.
+     */
+    public void visitTypeCastNodeStop(TypeCastNode node)
+    {
+    }
+
+    /**
+     * Stops a visit for nodes of type DoWhileLoopNode.
+     * @param node The node being visited.
+     */
+    public void visitDoWhileLoopNodeStop(DoWhileLoopNode node)
+    {
+    }
+
+    /**
+     * Stops a visit for nodes of type VoidTypeDeclarationNode.
+     * @param node The node being visited.
+     */
+    public void visitVoidTypeDeclarationNodeStop(VoidTypeDeclarationNode node)
+    {
+    }
+
+    /**
+     * Stops a visit for nodes of type CatchNode.
+     * @param node The node being visited.
+     */
+    public void visitCatchNodeStop(CatchNode node)
+    {
+    }
+
+    /**
+     * Stops a visit for nodes of type NameExpressionNode.
+     * @param node The node being visited.
+     */
+    public void visitNameExpressionNodeStop(NameExpressionNode node)
+    {
+    }
+
+    /**
+     * Stops a visit for nodes of type ThrowNode.
+     * @param node The node being visited.
+     */
+    public void visitThrowNodeStop(ThrowNode node)
+    {
+    }
+
+    /**
+     * Stops a visit for nodes of type FieldAccessNode.
+     * @param node The node being visited.
+     */
+    public void visitFieldAccessNodeStop(FieldAccessNode node)
+    {
+    }
+
+    /**
+     * Stops a visit for nodes of type VariableDeclaratorNode.
+     * @param node The node being visited.
+     */
+    public void visitVariableDeclaratorNodeStop(VariableDeclaratorNode node)
+    {
+    }
+
+    /**
+     * Stops a visit for nodes of type AnnotationBodyNode.
+     * @param node The node being visited.
+     */
+    public void visitAnnotationBodyNodeStop(AnnotationBodyNode node)
+    {
+    }
+
+    /**
+     * Stops a visit for nodes of type VariableDeclarationNode.
+     * @param node The node being visited.
+     */
+    public void visitVariableDeclarationNodeStop(VariableDeclarationNode node)
+    {
+    }
+
+    /**
+     * Stops a visit for nodes of type VoidTypeNode.
+     * @param node The node being visited.
+     */
+    public void visitVoidTypeNodeStop(VoidTypeNode node)
+    {
+    }
+
+    /**
+     * Stops a visit for nodes of type ThisNode.
+     * @param node The node being visited.
+     */
+    public void visitThisNodeStop(ThisNode node)
+    {
+    }
+
+    /**
+     * Stops a visit for nodes of type TryNode.
+     * @param node The node being visited.
+     */
+    public void visitTryNodeStop(TryNode node)
+    {
+    }
+
+    /**
+     * Stops a visit for nodes of type EnumBodyNode.
+     * @param node The node being visited.
+     */
+    public void visitEnumBodyNodeStop(EnumBodyNode node)
+    {
+    }
+
+    /**
+     * Stops a visit for nodes of type ModifiersNode.
+     * @param node The node being visited.
+     */
+    public void visitModifiersNodeStop(ModifiersNode node)
+    {
+    }
+
+    /**
+     * Stops a visit for nodes of type InitializerDeclarationNode.
+     * @param node The node being visited.
+     */
+    public void visitInitializerDeclarationNodeStop(InitializerDeclarationNode node)
+    {
+    }
+
+    /**
+     * Stops a visit for nodes of type PrimitiveTypeNode.
+     * @param node The node being visited.
+     */
+    public void visitPrimitiveTypeNodeStop(PrimitiveTypeNode node)
+    {
+    }
+
+    /**
+     * Stops a visit for nodes of type ImportOnDemandNode.
+     * @param node The node being visited.
+     */
+    public void visitImportOnDemandNodeStop(ImportOnDemandNode node)
+    {
+    }
+
+    /**
+     * Stops a visit for nodes of type CaseNode.
+     * @param node The node being visited.
+     */
+    public void visitCaseNodeStop(CaseNode node)
+    {
+    }
+
+    /**
+     * Stops a visit for nodes of type VoidStatementNode.
+     * @param node The node being visited.
+     */
+    public void visitVoidStatementNodeStop(VoidStatementNode node)
+    {
+    }
+
+    /**
      * Stops a visit for nodes of type ArrayAccessNode.
      * @param node The node being visited.
      */
@@ -2143,14 +2174,6 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
     }
 
     /**
-     * Stops a visit for nodes of type ExpressionStatementNode.
-     * @param node The node being visited.
-     */
-    public void visitExpressionStatementNodeStop(ExpressionStatementNode node)
-    {
-    }
-
-    /**
      * Stops a visit for nodes of type InterfaceBodyNode.
      * @param node The node being visited.
      */
@@ -2159,18 +2182,18 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
     }
 
     /**
-     * Stops a visit for nodes of type AssertStatementNode.
+     * Stops a visit for nodes of type ExpressionStatementNode.
      * @param node The node being visited.
      */
-    public void visitAssertStatementNodeStop(AssertStatementNode node)
+    public void visitExpressionStatementNodeStop(ExpressionStatementNode node)
     {
     }
 
     /**
-     * Stops a visit for nodes of type AnnotationElementNode.
+     * Stops a visit for nodes of type AssertStatementNode.
      * @param node The node being visited.
      */
-    public void visitAnnotationElementNodeStop(AnnotationElementNode node)
+    public void visitAssertStatementNodeStop(AssertStatementNode node)
     {
     }
 
