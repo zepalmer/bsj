@@ -1016,7 +1016,7 @@ methodDeclaration returns [MethodDeclarationNode ret]
                     $formalParameters.varargParameter,
                     returnTypeNode,
                     throwsNode,
-                    typeParametersNode;
+                    typeParametersNode);
         }        
     ;
 
@@ -1132,7 +1132,7 @@ nonprimitiveType returns [TypeNode ret]
             $ret = $classOrInterfaceType.ret;
         }
         (
-            arrayTypeIndicator[$ret]
+            arrayTypeIndicator[ret]
             {
                 $ret = factory.$ret;
             }
@@ -1161,7 +1161,7 @@ type returns [TypeNode ret]
             }
         )
         (
-            arrayTypeIndicator[$ret]
+            arrayTypeIndicator[ret]
             {
                 $ret = factory.$ret;
             }
@@ -1806,7 +1806,7 @@ statement returns [StatementNode ret]
         )?    
         {
             $ret = factory.makeIfNode(
-                $parExpression.ret
+                $parExpression.ret,
                 $s1.ret,
                 stmtNode);
         }   
@@ -2042,7 +2042,7 @@ forstatement returns [StatementNode ret]
         ExpressionNode forInitNode = null;
         ExpressionNode expNode = null;
         ListNode<ExpressionNode> expListNode = factory.<ExpressionStatementNode>makeListNode(
-            new ArrayList<ExpressionStatementNode>();
+            Collections.<ExpressionStatementNode>emptyList());
     }
     :   
         // enhanced for loop
@@ -2631,7 +2631,7 @@ primary returns [PrimaryExpressionNode ret]
             }
         )
         (
-            primarySuffixes[$ret]
+            primarySuffixes[ret]
             {
                 $ret = $primarySuffixes.ret;
             }
@@ -2722,7 +2722,7 @@ restrictedPrimary returns [RestrictedPrimaryExpressionNode ret]
             }
         )
         (
-            arrayAccess[$ret]
+            arrayAccess[ret]
             {
                 $ret = $arrayAccess.ret;
             }
@@ -2735,7 +2735,7 @@ primarySuffixes[PrimaryExpressionNode in] returns [PrimaryExpressionNode ret]
         }
     :
         (
-            primarySuffix[$ret]
+            primarySuffix[ret]
             {
                 $ret = $primarySuffix.ret;
             }
@@ -2764,7 +2764,7 @@ primarySuffix[PrimaryExpressionNode in] returns [RestrictedPrimaryExpressionNode
 	        }
         )
         (
-            arrayAccess[$ret]
+            arrayAccess[ret]
             {
                 $ret = $arrayAccess.ret;
             }
