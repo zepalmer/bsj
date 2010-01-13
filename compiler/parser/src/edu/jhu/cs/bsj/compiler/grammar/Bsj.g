@@ -2744,35 +2744,25 @@ primarySuffixes[PrimaryExpressionNode in] returns [PrimaryExpressionNode ret]
 
 primarySuffix[PrimaryExpressionNode in] returns [RestrictedPrimaryExpressionNode ret]
     :
-        // qualified class instantiation
-        qualifiedClassInstantiationPrimarySuffix[in]
-        {
-            $ret = $qualifiedClassInstantiationPrimarySuffix.ret;
-        }
         (
-            arrayAccess[$ret]
-            {
-                $ret = $arrayAccess.ret;
-            }
-        )?
-    |
-        // field access on an expression
-        '.' identifier
-        {
-            $ret = makeFieldAccessNode(in, $identifier.ret);
-        }
-        (
-            arrayAccess[$ret]
-            {
-                $ret = $arrayAccess.ret;
-            }
+	        // qualified class instantiation
+	        qualifiedClassInstantiationPrimarySuffix[in]
+	        {
+	            $ret = $qualifiedClassInstantiationPrimarySuffix.ret;
+	        }
+	    |
+	        // field access on an expression
+	        '.' identifier
+	        {
+	            $ret = makeFieldAccessNode(in, $identifier.ret);
+	        }
+	    |
+	        // method invocation with type arguments
+	        typeArgumentMethodInvocationSuffix[in]
+	        {
+	            $ret = $typeArgumentMethodInvocationSuffix.ret;
+	        }
         )
-    |
-        // method invocation with type arguments
-        typeArgumentMethodInvocationSuffix[in]
-        {
-            $ret = $typeArgumentMethodInvocationSuffix.ret;
-        }
         (
             arrayAccess[$ret]
             {
