@@ -2649,9 +2649,9 @@ restrictedPrimary returns [RestrictedPrimaryExpression ret]
 		    }
 		|
 		    // class literal for declared types
-		    typeName '.' 'class'
+		    classLiteralName=typeName '.' 'class'
 		    {
-		        $ret = factory.makeRawTypeNode($typeName.ret);
+		        $ret = factory.makeRawTypeNode($classLiteralName.ret);
 		    } 
 		|
 		    // void class literal
@@ -2660,7 +2660,7 @@ restrictedPrimary returns [RestrictedPrimaryExpression ret]
 		        $ret = $voidClassLiteral.ret;
 		    }
 		|
-		    (typeName '.')? THIS 
+		    (thisQualifierName=typeName '.')? THIS 
 		    // TODO: qualified or unqualified this expression
 		|
 		    // parenthesized expression (used as a primary expression)
@@ -2673,7 +2673,7 @@ restrictedPrimary returns [RestrictedPrimaryExpression ret]
 		    NEW typeArguments? classOrInterfaceType arguments anonymousClassBody?
 		    // TODO: class instance creation
 		|
-		    (typeName '.')? SUPER '.' identifier
+		    (superQualifierName=typeName '.')? SUPER '.' identifier
 		    // TODO: field access (typeName is like B.super.myvar
 		|
 		    methodName arguments
@@ -2682,10 +2682,10 @@ restrictedPrimary returns [RestrictedPrimaryExpression ret]
 		    SUPER '.' nonWildcardTypeArguments? identifier arguments
 		    // TODO: method invocation
 		|
-		    typeName '.' SUPER '.' nonWildcardTypeArguments? identifier arguments
+		    superMethodQualifierName=typeName '.' SUPER '.' nonWildcardTypeArguments? identifier arguments
 		    // TODO: method invocation
 		|
-		    typeName '.' nonWildcardTypeArguments? identifier arguments
+		    methodQualifierName=typeName '.' nonWildcardTypeArguments? identifier arguments
 		    // TODO: method invocation
 		|
 		    expressionName '[' expression ']' 
