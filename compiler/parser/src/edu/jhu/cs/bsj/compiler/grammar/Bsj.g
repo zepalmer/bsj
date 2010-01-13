@@ -2536,7 +2536,7 @@ unaryExpression returns [ExpressionNode ret]
         }
     ;
 
-unaryExpressionNotPlusMinus returns [ExpressionNode ret] // TODO primary
+unaryExpressionNotPlusMinus returns [ExpressionNode ret]
     :   
         '~' unaryExpression
         {
@@ -2558,18 +2558,13 @@ unaryExpressionNotPlusMinus returns [ExpressionNode ret] // TODO primary
         }
     |   
         postfixExpression
-        // TODO
+        {
+            $ret = $postfixExpression.ret;
+        }
     ;
 
 castExpression returns [TypeCastNode ret]
     :   
-        '(' primitiveType ')' unaryExpression
-        {
-            $ret = factory.makeTypeCastNode(
-                $unaryExpression.ret,
-                $primitiveType.ret);
-        }
-    |   
         '(' type ')' unaryExpressionNotPlusMinus
         {
             $ret = factory.makeTypeCastNode(
@@ -2580,23 +2575,31 @@ castExpression returns [TypeCastNode ret]
 
 postfixExpression returns [ExpressionNode ret]
     :
-    // Note: primary must be before expressionName in the following.  Otherwise, this postfixExpression rule will match
-    // "this" out of "this.x" and leave the ".x" lying around.  Because primary is first, backtracking will try to match
-    // it first and only try expressionName if primary fails.
-    (
-        primary
-        // TODO
-    |
-        expressionName
-        // TODO
-    )
-    (
-        '++'
-        // TODO
-    |
-        '--'
-        // TODO
-    )*
+	    // Note: primary must be before expressionName in the following.  Otherwise, this postfixExpression rule will
+	    // match "this" out of "this.x" and leave the ".x" lying around.  Because primary is first, backtracking will
+	    // try to match it first and only try expressionName if primary fails.
+	    (
+	        primary
+	        {
+	            $ret = $primary.ret;
+	        }
+	    |
+	        expressionName
+	        {
+	            $ret = factory.makeFieldAccessNode($expressionName.ret);
+	        }
+	    )
+	    (
+	        '++'
+	        {
+	            $ret = factory.makeUnaryOperatorNode($ret, UnaryOperator.POSTFIX_INCREMENT);
+	        }
+	    |
+	        '--'
+	        {
+	            $ret = factory.makeUnaryOperatorNode($ret, UnaryOperator.POSTFIX_DECREMENT);
+	        }
+	    )*
     ;
 
 primary returns [PrimaryExpression ret]
