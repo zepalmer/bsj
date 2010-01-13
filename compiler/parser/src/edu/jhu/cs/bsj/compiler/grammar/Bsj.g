@@ -1409,14 +1409,29 @@ alternateConstructorInvocation returns [AlternateConstructorInvocationNode ret]
     ;
 
 superclassConstructorInvocation returns [SuperclassConstructorInvocationNode ret]
+        @init {
+            PrimaryExpression qualifyingExpression = null;
+            ListNode<TypeNode> typeArgumentsNode = factory.makeListNode(Collections.<TypeNode>emptyList());
+        }
     :
-        (primary '.')?
-        nonWildcardTypeArguments? SUPER arguments ';'
+        (
+            primary '.'
+            {
+                qualifyingExpression = $primary.ret;
+            }
+        )?
+        (
+            nonWildcardTypeArguments
+            {
+                typeArgumentsNode = $nonWildcardTypeArguments.ret;
+            }
+        )?
+        SUPER arguments ';'
         {
             $ret = factory.makeSuperclassConstructorInvocationNode(
-                        $primary == null? null : $primary.ret,
+                        qualifyingExpression,
                         $arguments.ret,
-                        $nonWildcardTypeArguments.ret);
+                        typeArgumentsNode);
         }
     ;
 
