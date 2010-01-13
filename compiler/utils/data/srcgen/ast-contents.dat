@@ -85,10 +85,6 @@ BaseType+ :: Node
 	@docs
 		This tagging interface is used to denote AST nodes which can be used as array base types.
 		
-BoundType+ :: TypeNode
-	@docs
-		This tagging interface is used to denote AST nodes which can be used as type parameter bounds.
-		
 ClassMember+ :: Node
 	@docs
 		This tagging interface is used to denote AST nodes which can be used as members of a class declaration's body.
@@ -130,7 +126,7 @@ PrimaryExpressionNode+ :: Node + ExpressionNode
         A tagging interface for all nodes considered "primary expressions" by the Java Language Specification.  Primary
         expressions include the basic building blocks of more complex expressions.
 
-ReferenceTypeNode+ :: Node + TypeNode, TypeArgument, BoundType
+ReferenceTypeNode+ :: Node + TypeNode, TypeArgument
     @docs
         A node representing a reference type.  A reference type in Java is any non-primitive type.
 
@@ -1188,7 +1184,7 @@ SuperclassConstructorInvocationNode :: ConstructorInvocationNode
 TypeParameterNode :: Node
     @props
     identifier              IdentifierNode                              | the base type name for the parameter
-    bounds                  ListNode<? extends BoundType>               | the bounds over the base type
+    bounds                  ListNode<? extends ReferenceTypeNode>       | the bounds over the base type
     @docs
         A node for type parameters, as in:
         <pre>
