@@ -473,7 +473,7 @@ public interface BsjNodeFactory
      */
     public TypeParameterNode makeTypeParameterNode(
             IdentifierNode identifier,
-            ListNode<ReferenceTypeNode> bounds);
+            ListNode<DeclaredTypeNode> bounds);
 
     /**
      * Creates a AnnotationMethodDeclarationNode.

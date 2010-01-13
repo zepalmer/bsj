@@ -1288,7 +1288,7 @@ SuperclassConstructorInvocationNode :: ConstructorInvocationNode
 TypeParameterNode :: Node
     @props
     identifier              IdentifierNode                              | the base type name for the parameter
-    bounds                  ListNode<ReferenceTypeNode>                 | the bounds over the base type
+    bounds                  ListNode<DeclaredTypeNode>                  | the bounds over the base type
     @docs
         A node for type parameters, as in:
         <pre>

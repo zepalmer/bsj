@@ -835,7 +835,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     public TypeParameterNode makeTypeParameterNode(
             IdentifierNode identifier,
-            ListNode<ReferenceTypeNode> bounds)
+            ListNode<DeclaredTypeNode> bounds)
     {
         TypeParameterNode ret = new TypeParameterNodeImpl(identifier, bounds);
         return ret;
