@@ -4,14 +4,10 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.MethodInvocationNode;
-import edu.jhu.cs.bsj.compiler.ast.node.NameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
 
-public class MethodInvocationNodeImpl extends NodeImpl implements MethodInvocationNode
+public abstract class MethodInvocationNodeImpl extends NodeImpl implements MethodInvocationNode
 {
-    /** The name of the method to invoke. */
-    private NameNode method;
-
     /** The arguments to pass to the method. */
     private ListNode<? extends ExpressionNode> arguments;
 
@@ -19,41 +15,13 @@ public class MethodInvocationNodeImpl extends NodeImpl implements MethodInvocati
     private ListNode<? extends TypeNode> typeArguments;
 
     /** General constructor. */
-    public MethodInvocationNodeImpl(
-            NameNode method,
+    protected MethodInvocationNodeImpl(
             ListNode<? extends ExpressionNode> arguments,
             ListNode<? extends TypeNode> typeArguments)
     {
         super();
-        this.method = method;
         this.arguments = arguments;
         this.typeArguments = typeArguments;
-    }
-
-    /**
-     * Gets the name of the method to invoke.
-     * @return The name of the method to invoke.
-     */
-    public NameNode getMethod()
-    {
-        return this.method;
-    }
-
-    /**
-     * Changes the name of the method to invoke.
-     * @param method The name of the method to invoke.
-     */
-    public void setMethod(NameNode method)
-    {
-        if (this.method instanceof NodeImpl)
-        {
-            ((NodeImpl)this.method).setParent(null);
-        }
-        this.method = method;
-        if (this.method instanceof NodeImpl)
-        {
-            ((NodeImpl)this.method).setParent(this);
-        }
     }
 
     /**
@@ -119,7 +87,6 @@ public class MethodInvocationNodeImpl extends NodeImpl implements MethodInvocati
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        this.method.receive(visitor);
         this.arguments.receive(visitor);
         this.typeArguments.receive(visitor);
     }

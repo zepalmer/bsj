@@ -58,7 +58,8 @@ import edu.jhu.cs.bsj.compiler.ast.node.LabeledStatementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.LongLiteralNode;
 import edu.jhu.cs.bsj.compiler.ast.node.MethodDeclarationNode;
-import edu.jhu.cs.bsj.compiler.ast.node.MethodInvocationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.MethodInvocationByExpressionNode;
+import edu.jhu.cs.bsj.compiler.ast.node.MethodInvocationByNameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.NameExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
@@ -185,6 +186,12 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
         } else if (node instanceof CodeLiteralNode)
         {
             visitCodeLiteralNodeStart((CodeLiteralNode)node);
+        } else if (node instanceof MethodInvocationByExpressionNode)
+        {
+            visitMethodInvocationByExpressionNodeStart((MethodInvocationByExpressionNode)node);
+        } else if (node instanceof MethodInvocationByNameNode)
+        {
+            visitMethodInvocationByNameNodeStart((MethodInvocationByNameNode)node);
         } else if (node instanceof MethodDeclarationNode)
         {
             visitMethodDeclarationNodeStart((MethodDeclarationNode)node);
@@ -389,9 +396,6 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
         } else if (node instanceof EnhancedForLoopNode)
         {
             visitEnhancedForLoopNodeStart((EnhancedForLoopNode)node);
-        } else if (node instanceof MethodInvocationNode)
-        {
-            visitMethodInvocationNodeStart((MethodInvocationNode)node);
         } else if (node instanceof InterfaceBodyNode)
         {
             visitInterfaceBodyNodeStart((InterfaceBodyNode)node);
@@ -485,6 +489,12 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
         } else if (node instanceof CodeLiteralNode)
         {
             visitCodeLiteralNodeStop((CodeLiteralNode)node);
+        } else if (node instanceof MethodInvocationByExpressionNode)
+        {
+            visitMethodInvocationByExpressionNodeStop((MethodInvocationByExpressionNode)node);
+        } else if (node instanceof MethodInvocationByNameNode)
+        {
+            visitMethodInvocationByNameNodeStop((MethodInvocationByNameNode)node);
         } else if (node instanceof MethodDeclarationNode)
         {
             visitMethodDeclarationNodeStop((MethodDeclarationNode)node);
@@ -689,9 +699,6 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
         } else if (node instanceof EnhancedForLoopNode)
         {
             visitEnhancedForLoopNodeStop((EnhancedForLoopNode)node);
-        } else if (node instanceof MethodInvocationNode)
-        {
-            visitMethodInvocationNodeStop((MethodInvocationNode)node);
         } else if (node instanceof InterfaceBodyNode)
         {
             visitInterfaceBodyNodeStop((InterfaceBodyNode)node);
@@ -896,6 +903,22 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
      * @param node The node being visited.
      */
     public void visitCodeLiteralNodeStart(CodeLiteralNode node)
+    {
+    }
+
+    /**
+     * Starts a visit for nodes of type MethodInvocationByExpressionNode.
+     * @param node The node being visited.
+     */
+    public void visitMethodInvocationByExpressionNodeStart(MethodInvocationByExpressionNode node)
+    {
+    }
+
+    /**
+     * Starts a visit for nodes of type MethodInvocationByNameNode.
+     * @param node The node being visited.
+     */
+    public void visitMethodInvocationByNameNodeStart(MethodInvocationByNameNode node)
     {
     }
 
@@ -1444,14 +1467,6 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
     }
 
     /**
-     * Starts a visit for nodes of type MethodInvocationNode.
-     * @param node The node being visited.
-     */
-    public void visitMethodInvocationNodeStart(MethodInvocationNode node)
-    {
-    }
-
-    /**
      * Starts a visit for nodes of type InterfaceBodyNode.
      * @param node The node being visited.
      */
@@ -1664,6 +1679,22 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
      * @param node The node being visited.
      */
     public void visitCodeLiteralNodeStop(CodeLiteralNode node)
+    {
+    }
+
+    /**
+     * Stops a visit for nodes of type MethodInvocationByExpressionNode.
+     * @param node The node being visited.
+     */
+    public void visitMethodInvocationByExpressionNodeStop(MethodInvocationByExpressionNode node)
+    {
+    }
+
+    /**
+     * Stops a visit for nodes of type MethodInvocationByNameNode.
+     * @param node The node being visited.
+     */
+    public void visitMethodInvocationByNameNodeStop(MethodInvocationByNameNode node)
     {
     }
 
@@ -2208,14 +2239,6 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
      * @param node The node being visited.
      */
     public void visitEnhancedForLoopNodeStop(EnhancedForLoopNode node)
-    {
-    }
-
-    /**
-     * Stops a visit for nodes of type MethodInvocationNode.
-     * @param node The node being visited.
-     */
-    public void visitMethodInvocationNodeStop(MethodInvocationNode node)
     {
     }
 

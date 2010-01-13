@@ -70,7 +70,8 @@ import edu.jhu.cs.bsj.compiler.impl.ast.node.LabeledStatementNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.ListNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.LongLiteralNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.MethodDeclarationNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.MethodInvocationNodeImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.node.MethodInvocationByExpressionNodeImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.node.MethodInvocationByNameNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.ModifiersNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.NameExpressionNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.NormalAnnotationNodeImpl;
@@ -144,18 +145,6 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ListNode<? extends InterfaceMemberNode> members)
     {
         InterfaceBodyNode ret = new InterfaceBodyNodeImpl(members);
-        return ret;
-    }
-
-    /**
-     * Creates a MethodInvocationNode.
-     */
-    public MethodInvocationNode makeMethodInvocationNode(
-            NameNode method,
-            ListNode<? extends ExpressionNode> arguments,
-            ListNode<? extends TypeNode> typeArguments)
-    {
-        MethodInvocationNode ret = new MethodInvocationNodeImpl(method, arguments, typeArguments);
         return ret;
     }
 
@@ -974,6 +963,19 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
 
     /**
+     * Creates a MethodInvocationByExpressionNode.
+     */
+    public MethodInvocationByExpressionNode makeMethodInvocationByExpressionNode(
+            PrimaryExpressionNode expression,
+            IdentifierNode identifier,
+            ListNode<? extends ExpressionNode> arguments,
+            ListNode<? extends TypeNode> typeArguments)
+    {
+        MethodInvocationByExpressionNode ret = new MethodInvocationByExpressionNodeImpl(expression, identifier, arguments, typeArguments);
+        return ret;
+    }
+
+    /**
      * Creates a InstanceOfNode.
      */
     public InstanceOfNode makeInstanceOfNode(
@@ -1025,6 +1027,18 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BinaryOperator operator)
     {
         BinaryOperatorNode ret = new BinaryOperatorNodeImpl(leftOperand, rightOperand, operator);
+        return ret;
+    }
+
+    /**
+     * Creates a MethodInvocationByNameNode.
+     */
+    public MethodInvocationByNameNode makeMethodInvocationByNameNode(
+            NameNode name,
+            ListNode<? extends ExpressionNode> arguments,
+            ListNode<? extends TypeNode> typeArguments)
+    {
+        MethodInvocationByNameNode ret = new MethodInvocationByNameNodeImpl(name, arguments, typeArguments);
         return ret;
     }
 

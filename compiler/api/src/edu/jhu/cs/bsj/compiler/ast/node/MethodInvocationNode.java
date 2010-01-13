@@ -2,25 +2,10 @@ package edu.jhu.cs.bsj.compiler.ast.node;
 
 
 /**
- * A node representing method invocation, as in:
- * <pre>
- * <i>expr</i>.&lt;<i>typeArgs</i>&gt;<i>identifier</i>(<i>arg...</i>)
- * </pre>
+ * A superclass for method invocation nodes.
  */
 public interface MethodInvocationNode extends Node, RestrictedPrimaryExpressionNode
 {
-    /**
-     * Gets the name of the method to invoke.
-     * @return The name of the method to invoke.
-     */
-    public NameNode getMethod();
-
-    /**
-     * Changes the name of the method to invoke.
-     * @param method The name of the method to invoke.
-     */
-    public void setMethod(NameNode method);
-
     /**
      * Gets the arguments to pass to the method.
      * @return The arguments to pass to the method.

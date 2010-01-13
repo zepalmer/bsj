@@ -309,17 +309,50 @@ LiteralNode<T>* :: Node + RestrictedPrimaryExpressionNode
     @docs
         A superclass for all types of literal nodes.
 
-MethodInvocationNode :: Node + RestrictedPrimaryExpressionNode
+MethodInvocationByExpressionNode :: MethodInvocationNode
     @props
-    method                  NameNode                                    | the name of the method to invoke
-    arguments               ListNode<? extends ExpressionNode>          | the arguments to pass to the method
-    typeArguments           ListNode<? extends TypeNode>                | the type arguments for the method
+    expression              PrimaryExpressionNode                       | the expression against which to invoke the method
+    identifier              IdentifierNode                              | the name of the method to invoke
     @docs
-        A node representing method invocation, as in:
+        A node representing method invocation by expression, as in:
         <pre>
         <i>expr</i>.&lt;<i>typeArgs</i>&gt;<i>identifier</i>(<i>arg...</i>)
         </pre>
+        For example, this node might be used when an expression produces an object against which we want to call a
+        method as in
+        <pre>
+        new Object().toString()
+        </pre>
+        or
+        <pre>
+        foo().bar()
+        </pre>
+        For simple method invocations (such as <tt>myObjectReference.myMethod()</tt>), see
+        {@link MethodInvocationByNameNode}.
 
+MethodInvocationByNameNode :: MethodInvocationNode
+    @props
+    name                    NameNode                                    | the name of the method to invoke
+    @docs
+        A node representing method invocation by name, as in:
+        <pre>
+        <i>ambiguousName</i>.&lt;<i>typeArgs</i>&gt;<i>identifier</i>(<i>arg...</i>)
+        </pre>
+        or
+        <pre>
+        <i>methodName</i>(<i>arg...</i>)
+        </pre>
+        This node is used for simple method calls (such as <tt>x.y()</tt>) and not for expression-based method calls
+        (such as <tt>x().y()</tt>).  For expression-based method calls, see {@link MethodInvocationByExpressionNode}.
+
+MethodInvocationNode* :: Node + RestrictedPrimaryExpressionNode
+    @props
+    arguments               ListNode<? extends ExpressionNode>          | the arguments to pass to the method
+    typeArguments           ListNode<? extends TypeNode>                | the type arguments for the method
+    @docs
+        A superclass for method invocation nodes.
+
+# TODO: redundant?
 NameExpressionNode :: Node + ExpressionNode, ArrayIndexableNode
     @props
     name                    NameNode                                    | the name to evaluate for this expression

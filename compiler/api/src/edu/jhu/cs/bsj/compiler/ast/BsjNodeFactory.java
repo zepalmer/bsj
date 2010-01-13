@@ -35,14 +35,6 @@ public interface BsjNodeFactory
             ListNode<? extends InterfaceMemberNode> members);
 
     /**
-     * Creates a MethodInvocationNode.
-     */
-    public MethodInvocationNode makeMethodInvocationNode(
-            NameNode method,
-            ListNode<? extends ExpressionNode> arguments,
-            ListNode<? extends TypeNode> typeArguments);
-
-    /**
      * Creates a EnhancedForLoopNode.
      */
     public EnhancedForLoopNode makeEnhancedForLoopNode(
@@ -561,6 +553,15 @@ public interface BsjNodeFactory
             ExpressionNode expression);
 
     /**
+     * Creates a MethodInvocationByExpressionNode.
+     */
+    public MethodInvocationByExpressionNode makeMethodInvocationByExpressionNode(
+            PrimaryExpressionNode expression,
+            IdentifierNode identifier,
+            ListNode<? extends ExpressionNode> arguments,
+            ListNode<? extends TypeNode> typeArguments);
+
+    /**
      * Creates a InstanceOfNode.
      */
     public InstanceOfNode makeInstanceOfNode(
@@ -594,6 +595,14 @@ public interface BsjNodeFactory
             ExpressionNode leftOperand,
             ExpressionNode rightOperand,
             BinaryOperator operator);
+
+    /**
+     * Creates a MethodInvocationByNameNode.
+     */
+    public MethodInvocationByNameNode makeMethodInvocationByNameNode(
+            NameNode name,
+            ListNode<? extends ExpressionNode> arguments,
+            ListNode<? extends TypeNode> typeArguments);
 
     /**
      * Creates a ParameterizedTypeNode.

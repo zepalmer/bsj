@@ -2686,7 +2686,7 @@ restrictedPrimary returns [RestrictedPrimaryExpressionNode ret]
             // standard method invocation
             methodName methodArguments=arguments
             {
-                $ret = factory.makeMethodInvocationNode(
+                $ret = factory.makeMethodInvocationByNameNode(
                         $methodName.ret,
                         $methodArguments.ret,
                         factory.makeListNode(Collections.<TypeNode>emptyList()));
@@ -2705,7 +2705,7 @@ restrictedPrimary returns [RestrictedPrimaryExpressionNode ret]
                         $methodQualifierName.ret,
                         $identifier.ret,
                         NameCategory.METHOD);
-                $ret = factory.makeMethodInvocationNode(
+                $ret = factory.makeMethodInvocationByNameNode(
                         methodName,
                         $typeMethodArguments.ret,
                         $nonWildcardTypeArguments.ret);
@@ -2768,8 +2768,17 @@ primarySuffix[PrimaryExpressionNode in] returns [RestrictedPrimaryExpressionNode
             }
         )
     |
-        '.' nonWildcardTypeArguments? identifier arguments arrayAccess?
-        // TODO: method invocation
+        // method invocation with type arguments
+        typeArgumentMethodInvocationSuffix[in]
+        {
+            $ret = $typeArgumentMethodInvocationSuffix.ret;
+        }
+        (
+            arrayAccess[$ret]
+            {
+                $ret = $arrayAccess.ret;
+            }
+        )?
     ;
 
 thisClause returns [ThisNode ret]
@@ -2918,6 +2927,12 @@ qualifiedClassInstantiationPrimarySuffix[PrimaryExpression in] returns [Qualifie
                     $arguments.ret,
                     $anonymousClassBody.ret);
         }
+    ;
+    
+typeArgumentMethodInvocationSuffix[PrimaryExpression in] returns [RestrictedPrimaryExpression ret]
+    :
+        '.' nonWildcardTypeArguments? identifier arguments
+        // TODO
     ;
     
 arrayAccess[ArrayIndexable in] returns [ArrayAccessNode ret]
