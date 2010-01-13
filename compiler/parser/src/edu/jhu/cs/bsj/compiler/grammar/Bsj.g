@@ -1193,9 +1193,9 @@ classOrInterfaceType returns [DeclaredTypeNode ret]
                 $ret = parameterizedTypeNode;
             }
             (
-                classOrInterfaceType
+                next=classOrInterfaceType
                 {
-                    $ret = factory.makeParameterizedTypeSelectNode(parameterizedTypeNode, $classOrInterfaceType.ret);
+                    $ret = factory.makeParameterizedTypeSelectNode(parameterizedTypeNode, $next.ret);
                 }
             )?
         )?
@@ -2669,30 +2669,30 @@ restrictedPrimary returns [RestrictedPrimaryExpressionNode ret]
             }
         |
             // standard method invocation
-            methodName arguments
+            methodName methodArguments=arguments
             {
                 $ret = factory.makeMethodInvocationNode(
                         $methodName.ret,
-                        $arguments.ret,
+                        $methodArguments.ret,
                         factory.makeListNode(Collections.<TypeNode>emptyList()));
             }
         |
             // method invocation from super
             superMethodInvocation
             {
-                $ret = $superMethodInvocation
+                $ret = $superMethodInvocation.ret;
             }
         |
             // method invocation against a type with type arguments
-            methodQualifierName=typeName '.' nonWildcardTypeArguments identifier arguments
+            methodQualifierName=typeName '.' nonWildcardTypeArguments identifier typeMethodArguments=arguments
             {
                 NameNode methodName = factory.makeQualifiedNameNode(
-                        $typeName.ret,
+                        $methodQualifierName.ret,
                         $identifier.ret,
                         NameCategory.METHOD);
                 $ret = factory.makeMethodInvocationNode(
                         methodName,
-                        $arguments.ret,
+                        $typeMethodArguments.ret,
                         $nonWildcardTypeArguments.ret);
             }
         |
@@ -2716,7 +2716,7 @@ restrictedPrimary returns [RestrictedPrimaryExpressionNode ret]
     
 primarySuffixes[PrimaryExpressionNode in] returns [PrimaryExpressionNode ret]
         @init {
-            $ret = $in;
+            $ret = in;
         }
     :
         (
@@ -2729,13 +2729,22 @@ primarySuffixes[PrimaryExpressionNode in] returns [PrimaryExpressionNode ret]
 
 primarySuffix[PrimaryExpressionNode in] returns [RestrictedPrimaryExpressionNode ret]
     :
-        '.' NEW typeArguments? identifier typeArguments? arguments anonymousClassBody? arrayAccess?
-        // TODO: class instance creation
+        // qualified class instantiation
+        qualifiedClassInstantiationPrimarySuffix[in]
+        {
+            $ret = $qualifiedClassInstantiationPrimarySuffix.ret;
+        }
+        (
+            arrayAccess[$ret]
+            {
+                $ret = $arrayAccess.ret;
+            }
+        )?
     |
         // field access on an expression
         '.' identifier
         {
-            $ret = makeFieldAccessNode($in, $identifier.ret);
+            $ret = makeFieldAccessNode(in, $identifier.ret);
         }
         (
             arrayAccess[$ret]
@@ -2765,7 +2774,7 @@ thisClause returns [ThisNode ret]
         THIS
     ;
 
-unqualifiedClassInstantiation returns [UnqualifiedClassInstantiationNode]
+unqualifiedClassInstantiation returns [UnqualifiedClassInstantiationNode ret]
         @init {
             AnonymousClassBodyNode anonymousClassBodyNode = null;
             ListNode<TypeArgument> typeArgumentsNode = factory.makeListNode(Collections.<TypeArgument>emptyList());
@@ -2849,6 +2858,50 @@ superMethodInvocation returns [SuperMethodInvocationNode ret]
                     $identifier.ret,
                     $arguments.ret,
                     typeArgumentsNode);
+        }
+    ;
+
+// This rule instantiates a class using the expression before the suffix as the enclosing instance.
+// For example:
+//     (foo.bar()).new MyClass()
+qualifiedClassInstantiationPrimarySuffix[PrimaryExpression in] returns [QualifiedClassInstantiationNode ret]
+        @init {
+            ListNode<TypeArgument> constructorTypeArgumentsNode =
+                    factory.makeListNode(Collections.<TypeArgument>emptySet());
+            ListNode<TypeArgument> classTypeArgumentsNode =
+                    factory.makeListNode(Collections.<TypeArgument>emptySet());
+            AnonymousClassBodyNode anonymousClassBodyNode = null;
+        }
+    :
+        '.' NEW
+        (
+            constructorTypeArguments=typeArguments
+            {
+                constructorTypeArgumentsNode = $constructorTypeArguments.ret;
+            }
+        )?
+        identifier
+        (
+            classTypeArguments=typeArguments
+            {
+                classTypeArgumentsNode = $classTypeArguments.ret;
+            }
+        )?
+        arguments
+        (
+            anonymousClassBody
+            {
+                anonymousClassBodyNode = $anonymousClassBody.ret;
+            }
+        )?
+        {
+            $ret = factory.makeQualifiedClassInstantiationNode(
+                    $in,
+                    $identifier.ret,
+                    classTypeArgumentsNode,
+                    constructorTypeArgumentsNode,
+                    $arguments.ret,
+                    $anonymousClassBody.ret);
         }
     ;
     
@@ -4454,4 +4507,3 @@ IdentifierPart
     |   '\ufff9'..'\ufffb' 
     |   ('\ud800'..'\udbff') ('\udc00'..'\udfff')
     ;
-
