@@ -11,7 +11,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
  * }
  * </pre>
  */
-public interface EnumDeclarationNode extends NamedTypeDeclarationNode, InlineTypeDeclarable
+public interface EnumDeclarationNode extends NamedTypeDeclarationNode, InlineTypeDeclarableNode
 {
     /**
      * Gets the implements clause.

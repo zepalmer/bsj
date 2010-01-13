@@ -4,7 +4,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ParameterizedTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.RawTypeNode;
-import edu.jhu.cs.bsj.compiler.ast.node.TypeArgument;
+import edu.jhu.cs.bsj.compiler.ast.node.TypeArgumentNode;
 
 public class ParameterizedTypeNodeImpl extends NodeImpl implements ParameterizedTypeNode
 {
@@ -12,12 +12,12 @@ public class ParameterizedTypeNodeImpl extends NodeImpl implements Parameterized
     private RawTypeNode rawType;
 
     /** The type arguments for this node. */
-    private ListNode<TypeArgument> typeArguments;
+    private ListNode<TypeArgumentNode> typeArguments;
 
     /** General constructor. */
     public ParameterizedTypeNodeImpl(
             RawTypeNode rawType,
-            ListNode<TypeArgument> typeArguments)
+            ListNode<TypeArgumentNode> typeArguments)
     {
         super();
         this.rawType = rawType;
@@ -54,7 +54,7 @@ public class ParameterizedTypeNodeImpl extends NodeImpl implements Parameterized
      * Gets the type arguments for this node.
      * @return The type arguments for this node.
      */
-    public ListNode<TypeArgument> getTypeArguments()
+    public ListNode<TypeArgumentNode> getTypeArguments()
     {
         return this.typeArguments;
     }
@@ -63,7 +63,7 @@ public class ParameterizedTypeNodeImpl extends NodeImpl implements Parameterized
      * Changes the type arguments for this node.
      * @param typeArguments The type arguments for this node.
      */
-    public void setTypeArguments(ListNode<TypeArgument> typeArguments)
+    public void setTypeArguments(ListNode<TypeArgumentNode> typeArguments)
     {
         if (this.typeArguments instanceof NodeImpl)
         {

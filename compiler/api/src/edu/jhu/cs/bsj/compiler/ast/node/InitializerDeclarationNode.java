@@ -4,7 +4,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
 /**
  * 
  */
-public interface InitializerDeclarationNode extends Node, ClassMember,  AnonymousClassMember
+public interface InitializerDeclarationNode extends Node, ClassMemberNode,  AnonymousClassMemberNode
 {
     /**
      * Gets whether or not the initializer is static.

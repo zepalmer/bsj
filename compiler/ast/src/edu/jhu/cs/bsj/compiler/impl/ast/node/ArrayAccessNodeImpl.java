@@ -2,20 +2,20 @@ package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.ArrayAccessNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ArrayIndexable;
+import edu.jhu.cs.bsj.compiler.ast.node.ArrayIndexableNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 
 public class ArrayAccessNodeImpl extends NodeImpl implements ArrayAccessNode
 {
     /** The expression identifying the array. */
-    private ArrayIndexable arrayExpression;
+    private ArrayIndexableNode arrayExpression;
 
     /** The index into the array. */
     private ExpressionNode indexExpression;
 
     /** General constructor. */
     public ArrayAccessNodeImpl(
-            ArrayIndexable arrayExpression,
+            ArrayIndexableNode arrayExpression,
             ExpressionNode indexExpression)
     {
         super();
@@ -27,7 +27,7 @@ public class ArrayAccessNodeImpl extends NodeImpl implements ArrayAccessNode
      * Gets the expression identifying the array.
      * @return The expression identifying the array.
      */
-    public ArrayIndexable getArrayExpression()
+    public ArrayIndexableNode getArrayExpression()
     {
         return this.arrayExpression;
     }
@@ -36,7 +36,7 @@ public class ArrayAccessNodeImpl extends NodeImpl implements ArrayAccessNode
      * Changes the expression identifying the array.
      * @param arrayExpression The expression identifying the array.
      */
-    public void setArrayExpression(ArrayIndexable arrayExpression)
+    public void setArrayExpression(ArrayIndexableNode arrayExpression)
     {
         if (this.arrayExpression instanceof NodeImpl)
         {

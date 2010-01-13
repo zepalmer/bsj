@@ -6,6 +6,6 @@ package edu.jhu.cs.bsj.compiler.ast.node;
  * Since the set of declarations which may appear in an anonymous class is a subset of that which may appear in a
  * named class, this type is a subtype of {@link ClassMember}.
  */
-public interface AnonymousClassMember extends Node, ClassMember
+public interface AnonymousClassMemberNode extends Node, ClassMemberNode
 {
 }

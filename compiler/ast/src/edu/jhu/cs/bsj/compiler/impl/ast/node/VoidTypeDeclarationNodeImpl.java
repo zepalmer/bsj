@@ -3,7 +3,7 @@ package edu.jhu.cs.bsj.compiler.impl.ast.node;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.VoidTypeDeclarationNode;
 
-public class VoidTypeDeclarationNodeImpl extends TypeDeclarationNodeImpl implements VoidTypeDeclarationNode
+public class VoidTypeDeclarationNodeImpl extends NodeImpl implements VoidTypeDeclarationNode
 {
     /** General constructor. */
     public VoidTypeDeclarationNodeImpl()

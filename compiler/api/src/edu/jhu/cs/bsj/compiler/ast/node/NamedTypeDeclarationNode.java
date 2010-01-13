@@ -4,7 +4,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
 /**
  * Acts as a superclass for all named type declarations.
  */
-public interface NamedTypeDeclarationNode extends TypeDeclarationNode
+public interface NamedTypeDeclarationNode extends Node, TypeDeclarationNode
 {
     /**
      * Gets the name of this declared type.

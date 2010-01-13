@@ -24,12 +24,12 @@ public interface ParameterizedTypeNode extends Node, DeclaredTypeNode
      * Gets the type arguments for this node.
      * @return The type arguments for this node.
      */
-    public ListNode<TypeArgument> getTypeArguments();
+    public ListNode<TypeArgumentNode> getTypeArguments();
 
     /**
      * Changes the type arguments for this node.
      * @param typeArguments The type arguments for this node.
      */
-    public void setTypeArguments(ListNode<TypeArgument> typeArguments);
+    public void setTypeArguments(ListNode<TypeArgumentNode> typeArguments);
 
 }

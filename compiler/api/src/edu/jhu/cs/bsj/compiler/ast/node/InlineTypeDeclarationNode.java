@@ -11,12 +11,12 @@ public interface InlineTypeDeclarationNode extends Node, StatementNode
      * Gets the type declaration.
      * @return The type declaration.
      */
-    public InlineTypeDeclarable getDeclaration();
+    public InlineTypeDeclarableNode getDeclaration();
 
     /**
      * Changes the type declaration.
      * @param declaration The type declaration.
      */
-    public void setDeclaration(InlineTypeDeclarable declaration);
+    public void setDeclaration(InlineTypeDeclarableNode declaration);
 
 }

@@ -12,12 +12,12 @@ public interface AnonymousClassBodyNode extends Node
      * Gets the members of this anonymous class body.
      * @return The members of this anonymous class body.
      */
-    public ListNode<? extends AnonymousClassMember> getMembers();
+    public ListNode<? extends AnonymousClassMemberNode> getMembers();
 
     /**
      * Changes the members of this anonymous class body.
      * @param members The members of this anonymous class body.
      */
-    public void setMembers(ListNode<? extends AnonymousClassMember> members);
+    public void setMembers(ListNode<? extends AnonymousClassMemberNode> members);
 
 }

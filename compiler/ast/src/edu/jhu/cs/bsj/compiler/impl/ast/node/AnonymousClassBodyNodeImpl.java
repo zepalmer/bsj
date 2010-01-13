@@ -2,17 +2,17 @@ package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.AnonymousClassBodyNode;
-import edu.jhu.cs.bsj.compiler.ast.node.AnonymousClassMember;
+import edu.jhu.cs.bsj.compiler.ast.node.AnonymousClassMemberNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
 
 public class AnonymousClassBodyNodeImpl extends NodeImpl implements AnonymousClassBodyNode
 {
     /** The members of this anonymous class body. */
-    private ListNode<? extends AnonymousClassMember> members;
+    private ListNode<? extends AnonymousClassMemberNode> members;
 
     /** General constructor. */
     public AnonymousClassBodyNodeImpl(
-            ListNode<? extends AnonymousClassMember> members)
+            ListNode<? extends AnonymousClassMemberNode> members)
     {
         super();
         this.members = members;
@@ -22,7 +22,7 @@ public class AnonymousClassBodyNodeImpl extends NodeImpl implements AnonymousCla
      * Gets the members of this anonymous class body.
      * @return The members of this anonymous class body.
      */
-    public ListNode<? extends AnonymousClassMember> getMembers()
+    public ListNode<? extends AnonymousClassMemberNode> getMembers()
     {
         return this.members;
     }
@@ -31,7 +31,7 @@ public class AnonymousClassBodyNodeImpl extends NodeImpl implements AnonymousCla
      * Changes the members of this anonymous class body.
      * @param members The members of this anonymous class body.
      */
-    public void setMembers(ListNode<? extends AnonymousClassMember> members)
+    public void setMembers(ListNode<? extends AnonymousClassMemberNode> members)
     {
         if (this.members instanceof NodeImpl)
         {

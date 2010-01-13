@@ -9,7 +9,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
  * </pre>
  * See {@link MethodDeclarationNode} for more information.
  */
-public interface ConstructorDeclarationNode extends Node, ClassMember
+public interface ConstructorDeclarationNode extends Node, ClassMemberNode
 {
     /**
      * Gets the body of this constructor.

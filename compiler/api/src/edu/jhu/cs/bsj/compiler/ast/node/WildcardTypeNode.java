@@ -16,7 +16,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
  * </pre>
  * (in which case <tt>bound</tt> is <tt>null</tt>).
  */
-public interface WildcardTypeNode extends Node, TypeArgument
+public interface WildcardTypeNode extends Node, TypeArgumentNode
 {
     /**
      * Gets the wildcard's bound.

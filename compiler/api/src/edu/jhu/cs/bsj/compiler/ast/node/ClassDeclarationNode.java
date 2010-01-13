@@ -11,7 +11,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
  * }
  * </pre>
  */
-public interface ClassDeclarationNode extends NamedTypeDeclarationNode, InlineTypeDeclarable
+public interface ClassDeclarationNode extends NamedTypeDeclarationNode, InlineTypeDeclarableNode
 {
     /**
      * Gets the extends clause.

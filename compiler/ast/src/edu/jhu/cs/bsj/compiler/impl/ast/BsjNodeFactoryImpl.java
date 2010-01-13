@@ -138,7 +138,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      * Creates a InterfaceBodyNode.
      */
     public InterfaceBodyNode makeInterfaceBodyNode(
-            ListNode<? extends InterfaceMember> members)
+            ListNode<? extends InterfaceMemberNode> members)
     {
         InterfaceBodyNode ret = new InterfaceBodyNodeImpl(members);
         return ret;
@@ -187,7 +187,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      * Creates a ArrayAccessNode.
      */
     public ArrayAccessNode makeArrayAccessNode(
-            ArrayIndexable arrayExpression,
+            ArrayIndexableNode arrayExpression,
             ExpressionNode indexExpression)
     {
         ArrayAccessNode ret = new ArrayAccessNodeImpl(arrayExpression, indexExpression);
@@ -306,7 +306,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     public EnumBodyNode makeEnumBodyNode(
             ListNode<? extends EnumConstantDeclarationNode> constants,
-            ListNode<? extends ClassMember> members)
+            ListNode<? extends ClassMemberNode> members)
     {
         EnumBodyNode ret = new EnumBodyNodeImpl(constants, members);
         return ret;
@@ -371,7 +371,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      * Creates a AnnotationBodyNode.
      */
     public AnnotationBodyNode makeAnnotationBodyNode(
-            ListNode<? extends AnnotationMember> members)
+            ListNode<? extends AnnotationMemberNode> members)
     {
         AnnotationBodyNode ret = new AnnotationBodyNodeImpl(members);
         return ret;
@@ -599,7 +599,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      * Creates a AnonymousClassBodyNode.
      */
     public AnonymousClassBodyNode makeAnonymousClassBodyNode(
-            ListNode<? extends AnonymousClassMember> members)
+            ListNode<? extends AnonymousClassMemberNode> members)
     {
         AnonymousClassBodyNode ret = new AnonymousClassBodyNodeImpl(members);
         return ret;
@@ -664,7 +664,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      * Creates a InlineTypeDeclarationNode.
      */
     public InlineTypeDeclarationNode makeInlineTypeDeclarationNode(
-            InlineTypeDeclarable declaration)
+            InlineTypeDeclarableNode declaration)
     {
         InlineTypeDeclarationNode ret = new InlineTypeDeclarationNodeImpl(declaration);
         return ret;
@@ -809,7 +809,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     public ArrayInitializerCreationNode makeArrayInitializerCreationNode(
             ArrayInitializerNode initializer,
-            BaseType baseType,
+            BaseTypeNode baseType,
             int arrayLevels)
     {
         ArrayInitializerCreationNode ret = new ArrayInitializerCreationNodeImpl(initializer, baseType, arrayLevels);
@@ -995,7 +995,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     public ParameterizedTypeNode makeParameterizedTypeNode(
             RawTypeNode rawType,
-            ListNode<TypeArgument> typeArguments)
+            ListNode<TypeArgumentNode> typeArguments)
     {
         ParameterizedTypeNode ret = new ParameterizedTypeNodeImpl(rawType, typeArguments);
         return ret;
@@ -1075,7 +1075,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     public ArrayInstantiatorCreationNode makeArrayInstantiatorCreationNode(
             ListNode<? extends ExpressionNode> dimExpressions,
-            BaseType baseType,
+            BaseTypeNode baseType,
             int arrayLevels)
     {
         ArrayInstantiatorCreationNode ret = new ArrayInstantiatorCreationNodeImpl(dimExpressions, baseType, arrayLevels);
@@ -1098,7 +1098,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      * Creates a ClassBodyNode.
      */
     public ClassBodyNode makeClassBodyNode(
-            ListNode<? extends ClassMember> members)
+            ListNode<? extends ClassMemberNode> members)
     {
         ClassBodyNode ret = new ClassBodyNodeImpl(members);
         return ret;

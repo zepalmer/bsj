@@ -1,7 +1,7 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
-import edu.jhu.cs.bsj.compiler.ast.node.ClassMember;
+import edu.jhu.cs.bsj.compiler.ast.node.ClassMemberNode;
 import edu.jhu.cs.bsj.compiler.ast.node.EnumBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.EnumConstantDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
@@ -12,12 +12,12 @@ public class EnumBodyNodeImpl extends NodeImpl implements EnumBodyNode
     private ListNode<? extends EnumConstantDeclarationNode> constants;
 
     /** The members of the class body part. */
-    private ListNode<? extends ClassMember> members;
+    private ListNode<? extends ClassMemberNode> members;
 
     /** General constructor. */
     public EnumBodyNodeImpl(
             ListNode<? extends EnumConstantDeclarationNode> constants,
-            ListNode<? extends ClassMember> members)
+            ListNode<? extends ClassMemberNode> members)
     {
         super();
         this.constants = constants;
@@ -54,7 +54,7 @@ public class EnumBodyNodeImpl extends NodeImpl implements EnumBodyNode
      * Gets the members of the class body part.
      * @return The members of the class body part.
      */
-    public ListNode<? extends ClassMember> getMembers()
+    public ListNode<? extends ClassMemberNode> getMembers()
     {
         return this.members;
     }
@@ -63,7 +63,7 @@ public class EnumBodyNodeImpl extends NodeImpl implements EnumBodyNode
      * Changes the members of the class body part.
      * @param members The members of the class body part.
      */
-    public void setMembers(ListNode<? extends ClassMember> members)
+    public void setMembers(ListNode<? extends ClassMemberNode> members)
     {
         if (this.members instanceof NodeImpl)
         {

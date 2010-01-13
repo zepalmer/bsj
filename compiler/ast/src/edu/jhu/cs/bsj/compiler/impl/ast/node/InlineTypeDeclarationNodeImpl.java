@@ -1,17 +1,17 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
-import edu.jhu.cs.bsj.compiler.ast.node.InlineTypeDeclarable;
+import edu.jhu.cs.bsj.compiler.ast.node.InlineTypeDeclarableNode;
 import edu.jhu.cs.bsj.compiler.ast.node.InlineTypeDeclarationNode;
 
 public class InlineTypeDeclarationNodeImpl extends NodeImpl implements InlineTypeDeclarationNode
 {
     /** The type declaration. */
-    private InlineTypeDeclarable declaration;
+    private InlineTypeDeclarableNode declaration;
 
     /** General constructor. */
     public InlineTypeDeclarationNodeImpl(
-            InlineTypeDeclarable declaration)
+            InlineTypeDeclarableNode declaration)
     {
         super();
         this.declaration = declaration;
@@ -21,7 +21,7 @@ public class InlineTypeDeclarationNodeImpl extends NodeImpl implements InlineTyp
      * Gets the type declaration.
      * @return The type declaration.
      */
-    public InlineTypeDeclarable getDeclaration()
+    public InlineTypeDeclarableNode getDeclaration()
     {
         return this.declaration;
     }
@@ -30,7 +30,7 @@ public class InlineTypeDeclarationNodeImpl extends NodeImpl implements InlineTyp
      * Changes the type declaration.
      * @param declaration The type declaration.
      */
-    public void setDeclaration(InlineTypeDeclarable declaration)
+    public void setDeclaration(InlineTypeDeclarableNode declaration)
     {
         if (this.declaration instanceof NodeImpl)
         {

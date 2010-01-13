@@ -3,7 +3,7 @@ package edu.jhu.cs.bsj.compiler.impl.ast.node;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.ArrayInitializerCreationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ArrayInitializerNode;
-import edu.jhu.cs.bsj.compiler.ast.node.BaseType;
+import edu.jhu.cs.bsj.compiler.ast.node.BaseTypeNode;
 
 public class ArrayInitializerCreationNodeImpl extends ArrayCreationNodeImpl implements ArrayInitializerCreationNode
 {
@@ -13,7 +13,7 @@ public class ArrayInitializerCreationNodeImpl extends ArrayCreationNodeImpl impl
     /** General constructor. */
     public ArrayInitializerCreationNodeImpl(
             ArrayInitializerNode initializer,
-            BaseType baseType,
+            BaseTypeNode baseType,
             int arrayLevels)
     {
         super(baseType, arrayLevels);

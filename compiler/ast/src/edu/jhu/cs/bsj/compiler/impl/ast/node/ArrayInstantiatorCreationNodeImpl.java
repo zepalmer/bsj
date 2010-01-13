@@ -2,7 +2,7 @@ package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.ArrayInstantiatorCreationNode;
-import edu.jhu.cs.bsj.compiler.ast.node.BaseType;
+import edu.jhu.cs.bsj.compiler.ast.node.BaseTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
 
@@ -14,7 +14,7 @@ public class ArrayInstantiatorCreationNodeImpl extends ArrayCreationNodeImpl imp
     /** General constructor. */
     public ArrayInstantiatorCreationNodeImpl(
             ListNode<? extends ExpressionNode> dimExpressions,
-            BaseType baseType,
+            BaseTypeNode baseType,
             int arrayLevels)
     {
         super(baseType, arrayLevels);

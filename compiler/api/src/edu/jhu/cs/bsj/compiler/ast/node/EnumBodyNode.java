@@ -22,12 +22,12 @@ public interface EnumBodyNode extends Node
      * Gets the members of the class body part.
      * @return The members of the class body part.
      */
-    public ListNode<? extends ClassMember> getMembers();
+    public ListNode<? extends ClassMemberNode> getMembers();
 
     /**
      * Changes the members of the class body part.
      * @param members The members of the class body part.
      */
-    public void setMembers(ListNode<? extends ClassMember> members);
+    public void setMembers(ListNode<? extends ClassMemberNode> members);
 
 }

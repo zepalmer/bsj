@@ -110,19 +110,7 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
      */
     public void visitStart(Node node)
     {
-        if (node instanceof EnumDeclarationNode)
-        {
-            visitEnumDeclarationNodeStart((EnumDeclarationNode)node);
-        } else if (node instanceof InterfaceDeclarationNode)
-        {
-            visitInterfaceDeclarationNodeStart((InterfaceDeclarationNode)node);
-        } else if (node instanceof ClassDeclarationNode)
-        {
-            visitClassDeclarationNodeStart((ClassDeclarationNode)node);
-        } else if (node instanceof AnnotationDeclarationNode)
-        {
-            visitAnnotationDeclarationNodeStart((AnnotationDeclarationNode)node);
-        } else if (node instanceof BooleanLiteralNode)
+        if (node instanceof BooleanLiteralNode)
         {
             visitBooleanLiteralNodeStart((BooleanLiteralNode)node);
         } else if (node instanceof FloatLiteralNode)
@@ -152,9 +140,6 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
         } else if (node instanceof CodeLiteralNode)
         {
             visitCodeLiteralNodeStart((CodeLiteralNode)node);
-        } else if (node instanceof VoidTypeDeclarationNode)
-        {
-            visitVoidTypeDeclarationNodeStart((VoidTypeDeclarationNode)node);
         } else if (node instanceof QualifiedNameNode)
         {
             visitQualifiedNameNodeStart((QualifiedNameNode)node);
@@ -185,6 +170,18 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
         } else if (node instanceof QualifiedClassInstantiationNode)
         {
             visitQualifiedClassInstantiationNodeStart((QualifiedClassInstantiationNode)node);
+        } else if (node instanceof EnumDeclarationNode)
+        {
+            visitEnumDeclarationNodeStart((EnumDeclarationNode)node);
+        } else if (node instanceof InterfaceDeclarationNode)
+        {
+            visitInterfaceDeclarationNodeStart((InterfaceDeclarationNode)node);
+        } else if (node instanceof ClassDeclarationNode)
+        {
+            visitClassDeclarationNodeStart((ClassDeclarationNode)node);
+        } else if (node instanceof AnnotationDeclarationNode)
+        {
+            visitAnnotationDeclarationNodeStart((AnnotationDeclarationNode)node);
         } else if (node instanceof MethodDeclarationNode)
         {
             visitMethodDeclarationNodeStart((MethodDeclarationNode)node);
@@ -245,6 +242,9 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
         } else if (node instanceof AssignmentNode)
         {
             visitAssignmentNodeStart((AssignmentNode)node);
+        } else if (node instanceof VoidTypeDeclarationNode)
+        {
+            visitVoidTypeDeclarationNodeStart((VoidTypeDeclarationNode)node);
         } else if (node instanceof ReturnNode)
         {
             visitReturnNodeStart((ReturnNode)node);
@@ -401,19 +401,7 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
      */
     public void visitStop(Node node)
     {
-        if (node instanceof EnumDeclarationNode)
-        {
-            visitEnumDeclarationNodeStop((EnumDeclarationNode)node);
-        } else if (node instanceof InterfaceDeclarationNode)
-        {
-            visitInterfaceDeclarationNodeStop((InterfaceDeclarationNode)node);
-        } else if (node instanceof ClassDeclarationNode)
-        {
-            visitClassDeclarationNodeStop((ClassDeclarationNode)node);
-        } else if (node instanceof AnnotationDeclarationNode)
-        {
-            visitAnnotationDeclarationNodeStop((AnnotationDeclarationNode)node);
-        } else if (node instanceof BooleanLiteralNode)
+        if (node instanceof BooleanLiteralNode)
         {
             visitBooleanLiteralNodeStop((BooleanLiteralNode)node);
         } else if (node instanceof FloatLiteralNode)
@@ -443,9 +431,6 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
         } else if (node instanceof CodeLiteralNode)
         {
             visitCodeLiteralNodeStop((CodeLiteralNode)node);
-        } else if (node instanceof VoidTypeDeclarationNode)
-        {
-            visitVoidTypeDeclarationNodeStop((VoidTypeDeclarationNode)node);
         } else if (node instanceof QualifiedNameNode)
         {
             visitQualifiedNameNodeStop((QualifiedNameNode)node);
@@ -476,6 +461,18 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
         } else if (node instanceof QualifiedClassInstantiationNode)
         {
             visitQualifiedClassInstantiationNodeStop((QualifiedClassInstantiationNode)node);
+        } else if (node instanceof EnumDeclarationNode)
+        {
+            visitEnumDeclarationNodeStop((EnumDeclarationNode)node);
+        } else if (node instanceof InterfaceDeclarationNode)
+        {
+            visitInterfaceDeclarationNodeStop((InterfaceDeclarationNode)node);
+        } else if (node instanceof ClassDeclarationNode)
+        {
+            visitClassDeclarationNodeStop((ClassDeclarationNode)node);
+        } else if (node instanceof AnnotationDeclarationNode)
+        {
+            visitAnnotationDeclarationNodeStop((AnnotationDeclarationNode)node);
         } else if (node instanceof MethodDeclarationNode)
         {
             visitMethodDeclarationNodeStop((MethodDeclarationNode)node);
@@ -536,6 +533,9 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
         } else if (node instanceof AssignmentNode)
         {
             visitAssignmentNodeStop((AssignmentNode)node);
+        } else if (node instanceof VoidTypeDeclarationNode)
+        {
+            visitVoidTypeDeclarationNodeStop((VoidTypeDeclarationNode)node);
         } else if (node instanceof ReturnNode)
         {
             visitReturnNodeStop((ReturnNode)node);
@@ -687,38 +687,6 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
     }
 
     /**
-     * Starts a visit for nodes of type EnumDeclarationNode.
-     * @param node The node being visited.
-     */
-    public void visitEnumDeclarationNodeStart(EnumDeclarationNode node)
-    {
-    }
-
-    /**
-     * Starts a visit for nodes of type InterfaceDeclarationNode.
-     * @param node The node being visited.
-     */
-    public void visitInterfaceDeclarationNodeStart(InterfaceDeclarationNode node)
-    {
-    }
-
-    /**
-     * Starts a visit for nodes of type ClassDeclarationNode.
-     * @param node The node being visited.
-     */
-    public void visitClassDeclarationNodeStart(ClassDeclarationNode node)
-    {
-    }
-
-    /**
-     * Starts a visit for nodes of type AnnotationDeclarationNode.
-     * @param node The node being visited.
-     */
-    public void visitAnnotationDeclarationNodeStart(AnnotationDeclarationNode node)
-    {
-    }
-
-    /**
      * Starts a visit for nodes of type BooleanLiteralNode.
      * @param node The node being visited.
      */
@@ -799,14 +767,6 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
     }
 
     /**
-     * Starts a visit for nodes of type VoidTypeDeclarationNode.
-     * @param node The node being visited.
-     */
-    public void visitVoidTypeDeclarationNodeStart(VoidTypeDeclarationNode node)
-    {
-    }
-
-    /**
      * Starts a visit for nodes of type QualifiedNameNode.
      * @param node The node being visited.
      */
@@ -883,6 +843,38 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
      * @param node The node being visited.
      */
     public void visitQualifiedClassInstantiationNodeStart(QualifiedClassInstantiationNode node)
+    {
+    }
+
+    /**
+     * Starts a visit for nodes of type EnumDeclarationNode.
+     * @param node The node being visited.
+     */
+    public void visitEnumDeclarationNodeStart(EnumDeclarationNode node)
+    {
+    }
+
+    /**
+     * Starts a visit for nodes of type InterfaceDeclarationNode.
+     * @param node The node being visited.
+     */
+    public void visitInterfaceDeclarationNodeStart(InterfaceDeclarationNode node)
+    {
+    }
+
+    /**
+     * Starts a visit for nodes of type ClassDeclarationNode.
+     * @param node The node being visited.
+     */
+    public void visitClassDeclarationNodeStart(ClassDeclarationNode node)
+    {
+    }
+
+    /**
+     * Starts a visit for nodes of type AnnotationDeclarationNode.
+     * @param node The node being visited.
+     */
+    public void visitAnnotationDeclarationNodeStart(AnnotationDeclarationNode node)
     {
     }
 
@@ -1043,6 +1035,14 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
      * @param node The node being visited.
      */
     public void visitAssignmentNodeStart(AssignmentNode node)
+    {
+    }
+
+    /**
+     * Starts a visit for nodes of type VoidTypeDeclarationNode.
+     * @param node The node being visited.
+     */
+    public void visitVoidTypeDeclarationNodeStart(VoidTypeDeclarationNode node)
     {
     }
 
@@ -1431,38 +1431,6 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
     }
 
     /**
-     * Stops a visit for nodes of type EnumDeclarationNode.
-     * @param node The node being visited.
-     */
-    public void visitEnumDeclarationNodeStop(EnumDeclarationNode node)
-    {
-    }
-
-    /**
-     * Stops a visit for nodes of type InterfaceDeclarationNode.
-     * @param node The node being visited.
-     */
-    public void visitInterfaceDeclarationNodeStop(InterfaceDeclarationNode node)
-    {
-    }
-
-    /**
-     * Stops a visit for nodes of type ClassDeclarationNode.
-     * @param node The node being visited.
-     */
-    public void visitClassDeclarationNodeStop(ClassDeclarationNode node)
-    {
-    }
-
-    /**
-     * Stops a visit for nodes of type AnnotationDeclarationNode.
-     * @param node The node being visited.
-     */
-    public void visitAnnotationDeclarationNodeStop(AnnotationDeclarationNode node)
-    {
-    }
-
-    /**
      * Stops a visit for nodes of type BooleanLiteralNode.
      * @param node The node being visited.
      */
@@ -1543,14 +1511,6 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
     }
 
     /**
-     * Stops a visit for nodes of type VoidTypeDeclarationNode.
-     * @param node The node being visited.
-     */
-    public void visitVoidTypeDeclarationNodeStop(VoidTypeDeclarationNode node)
-    {
-    }
-
-    /**
      * Stops a visit for nodes of type QualifiedNameNode.
      * @param node The node being visited.
      */
@@ -1627,6 +1587,38 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
      * @param node The node being visited.
      */
     public void visitQualifiedClassInstantiationNodeStop(QualifiedClassInstantiationNode node)
+    {
+    }
+
+    /**
+     * Stops a visit for nodes of type EnumDeclarationNode.
+     * @param node The node being visited.
+     */
+    public void visitEnumDeclarationNodeStop(EnumDeclarationNode node)
+    {
+    }
+
+    /**
+     * Stops a visit for nodes of type InterfaceDeclarationNode.
+     * @param node The node being visited.
+     */
+    public void visitInterfaceDeclarationNodeStop(InterfaceDeclarationNode node)
+    {
+    }
+
+    /**
+     * Stops a visit for nodes of type ClassDeclarationNode.
+     * @param node The node being visited.
+     */
+    public void visitClassDeclarationNodeStop(ClassDeclarationNode node)
+    {
+    }
+
+    /**
+     * Stops a visit for nodes of type AnnotationDeclarationNode.
+     * @param node The node being visited.
+     */
+    public void visitAnnotationDeclarationNodeStop(AnnotationDeclarationNode node)
     {
     }
 
@@ -1787,6 +1779,14 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
      * @param node The node being visited.
      */
     public void visitAssignmentNodeStop(AssignmentNode node)
+    {
+    }
+
+    /**
+     * Stops a visit for nodes of type VoidTypeDeclarationNode.
+     * @param node The node being visited.
+     */
+    public void visitVoidTypeDeclarationNodeStop(VoidTypeDeclarationNode node)
     {
     }
 

@@ -7,7 +7,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
  *     <i>modifiers type identifier</i> () default <i>defaultValue</i>;
  * </pre>
  */
-public interface AnnotationMethodDeclarationNode extends Node, AnnotationMember
+public interface AnnotationMethodDeclarationNode extends Node, AnnotationMemberNode
 {
     /**
      * Gets the modifiers for this annotation method.

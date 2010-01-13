@@ -2,19 +2,19 @@ package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.ArrayCreationNode;
-import edu.jhu.cs.bsj.compiler.ast.node.BaseType;
+import edu.jhu.cs.bsj.compiler.ast.node.BaseTypeNode;
 
 public abstract class ArrayCreationNodeImpl extends NodeImpl implements ArrayCreationNode
 {
     /** The base type for this array. */
-    private BaseType baseType;
+    private BaseTypeNode baseType;
 
     /** The number of uninitialized levels for this array. */
     private int arrayLevels;
 
     /** General constructor. */
     protected ArrayCreationNodeImpl(
-            BaseType baseType,
+            BaseTypeNode baseType,
             int arrayLevels)
     {
         super();
@@ -26,7 +26,7 @@ public abstract class ArrayCreationNodeImpl extends NodeImpl implements ArrayCre
      * Gets the base type for this array.
      * @return The base type for this array.
      */
-    public BaseType getBaseType()
+    public BaseTypeNode getBaseType()
     {
         return this.baseType;
     }
@@ -35,7 +35,7 @@ public abstract class ArrayCreationNodeImpl extends NodeImpl implements ArrayCre
      * Changes the base type for this array.
      * @param baseType The base type for this array.
      */
-    public void setBaseType(BaseType baseType)
+    public void setBaseType(BaseTypeNode baseType)
     {
         if (this.baseType instanceof NodeImpl)
         {

@@ -16,7 +16,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
  * <pre>public abstract void foo();</pre>
  * will have a <tt>null</tt> body.
  */
-public interface MethodDeclarationNode extends Node, ClassMember,  InterfaceMember,  AnonymousClassMember
+public interface MethodDeclarationNode extends Node, ClassMemberNode,  InterfaceMemberNode,  AnonymousClassMemberNode
 {
     /**
      * Gets the body of this method.

@@ -4,7 +4,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
 /**
  * A node representing a field declaration.  Constants are represented by this node as well.
  */
-public interface FieldDeclarationNode extends Node, ClassMember,  InterfaceMember,  AnnotationMember,  AnonymousClassMember
+public interface FieldDeclarationNode extends Node, ClassMemberNode,  InterfaceMemberNode,  AnnotationMemberNode,  AnonymousClassMemberNode
 {
     /**
      * Gets the modifiers for this field.

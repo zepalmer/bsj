@@ -10,13 +10,13 @@ public interface ArrayCreationNode extends Node, PrimaryExpressionNode
      * Gets the base type for this array.
      * @return The base type for this array.
      */
-    public BaseType getBaseType();
+    public BaseTypeNode getBaseType();
 
     /**
      * Changes the base type for this array.
      * @param baseType The base type for this array.
      */
-    public void setBaseType(BaseType baseType);
+    public void setBaseType(BaseTypeNode baseType);
 
     /**
      * Gets the number of uninitialized levels for this array.

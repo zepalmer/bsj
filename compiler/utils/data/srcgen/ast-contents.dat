@@ -60,13 +60,12 @@
 
 ### Tagging Interfaces ################################################################################################
 
-# TODO: ArrayIndexable should be a type of ExpressionNode once ExpressionNode is a tagging interface
-ArrayIndexable+ :: Node
+ArrayIndexableNode+ :: Node + ExpressionNode
     @docs
         This tagging interface is used to denote AST nodes which can be used as array reference expressions inside of
         an array access node.
         
-AnnotationMember+ :: Node
+AnnotationMemberNode+ :: Node
 	@docs
 		This tagging interface is used to denote AST nodes which can be used as members of an annotation declaration's
 		body.
@@ -75,21 +74,21 @@ AnnotationValueNode+ :: Node
     @docs
         This tagging interface is used to denote AST nodes which represent annotation values.
 
-AnonymousClassMember+ :: Node + ClassMember
+AnonymousClassMemberNode+ :: Node + ClassMemberNode
 	@docs
 		This tagging interface is used to denote AST nodes which can be used as members of an anonymous class's body.
 		Since the set of declarations which may appear in an anonymous class is a subset of that which may appear in a
 		named class, this type is a subtype of {@link ClassMember}.
  		
-BaseType+ :: Node
+BaseTypeNode+ :: Node
 	@docs
 		This tagging interface is used to denote AST nodes which can be used as array base types.
 		
-ClassMember+ :: Node
+ClassMemberNode+ :: Node
 	@docs
 		This tagging interface is used to denote AST nodes which can be used as members of a class declaration's body.
 		
-DeclaredTypeNode+ :: Node + ReferenceTypeNode, BaseType
+DeclaredTypeNode+ :: Node + ReferenceTypeNode, BaseTypeNode
     @docs
         A node representing any declared type.  In the BSJ API, a "declared type" refers to any type which has been
         created by a declaration statement.  Arrays and primitives are not declared types because they are not declared.
@@ -107,17 +106,17 @@ ImportNode+ :: Node
     @docs
         This tagging interface is used to denote AST nodes which represent import statements.
 
-InlineTypeDeclarable+ :: Node
+InlineTypeDeclarableNode+ :: Node
 	@docs
 		This tagging interface is used to denote AST nodes which represent type declarations and can be declared inline
 		as a statement.
 		
-InterfaceMember+ :: Node
+InterfaceMemberNode+ :: Node
 	@docs
 		This tagging interface is used to denote AST nodes which can be used as members of an interface declaration's
 		body.
 		
-ParameterizableType+ :: Node + TypeNode
+ParameterizableTypeNode+ :: Node + TypeNode
 	@docs
 		This tagging interface is used to denote AST nodes which can be parameterized.
 
@@ -126,11 +125,11 @@ PrimaryExpressionNode+ :: Node + ExpressionNode
         A tagging interface for all nodes considered "primary expressions" by the Java Language Specification.  Primary
         expressions include the basic building blocks of more complex expressions.
 
-ReferenceTypeNode+ :: Node + TypeNode, TypeArgument
+ReferenceTypeNode+ :: Node + TypeNode, TypeArgumentNode
     @docs
         A node representing a reference type.  A reference type in Java is any non-primitive type.
 
-RestrictedPrimaryExpressionNode+ :: Node + PrimaryExpressionNode, ArrayIndexable
+RestrictedPrimaryExpressionNode+ :: Node + PrimaryExpressionNode, ArrayIndexableNode
     @docs
         A tagging interface for restricted primary expressions.  This maps to the <i>PrimaryNoNewArray</i> parse target
         in the JLS.
@@ -139,9 +138,13 @@ StatementNode+ :: Node
     @docs
         This tagging interface is used to denote AST nodes which represent statements.
 		
-TypeArgument+ :: Node
+TypeArgumentNode+ :: Node
 	@docs
 		This tagging interface is used to denote AST nodes which can be used as type arguments.
+
+TypeDeclarationNode+ :: Node + ClassMemberNode, InterfaceMemberNode, AnnotationMemberNode, AnonymousClassMemberNode
+    @docs
+        This tagging interface is used to denoate AST nodes which declare types.
 
 TypeNode+ :: Node
     @docs
@@ -202,7 +205,7 @@ SimpleNameNode :: NameNode
 
 ArrayAccessNode :: Node + RestrictedPrimaryExpressionNode
     @props
-    arrayExpression         ArrayIndexable                              | the expression identifying the array
+    arrayExpression         ArrayIndexableNode                          | the expression identifying the array
     indexExpression         ExpressionNode                              | the index into the array
     @docs
         Represents an array access, as in:
@@ -212,7 +215,7 @@ ArrayAccessNode :: Node + RestrictedPrimaryExpressionNode
         
 ArrayCreationNode* :: Node + PrimaryExpressionNode
 	@props
-	baseType				BaseType									| the base type for this array
+	baseType				BaseTypeNode								| the base type for this array
 	arrayLevels				int											| the number of uninitialized levels for this array
 	@docs
 		Represents the creation of an array, including both instantiation and initialization.
@@ -321,7 +324,7 @@ MethodInvocationNode :: Node + RestrictedPrimaryExpressionNode
         <i>expr</i>.&lt;<i>typeArgs</i>&gt;<i>identifier</i>(<i>arg...</i>)
         </pre>
 
-NameExpressionNode :: Node + ExpressionNode, ArrayIndexable
+NameExpressionNode :: Node + ExpressionNode, ArrayIndexableNode
     @props
     name                    NameNode                                    | the name to evaluate for this expression
     @docs
@@ -542,7 +545,7 @@ IfNode :: Node + StatementNode
 
 InlineTypeDeclarationNode :: Node + StatementNode
     @props
-    declaration             InlineTypeDeclarable                        | the type declaration
+    declaration             InlineTypeDeclarableNode                    | the type declaration
     @docs
         A node representing an inline type declaration.  This is used to allow classes and enums to be declared
         within a method body or similar environment.
@@ -684,20 +687,20 @@ ArrayTypeNode :: Node + ReferenceTypeNode
 ParameterizedTypeNode :: Node + DeclaredTypeNode
     @props
     rawType                 RawTypeNode                                 | the raw type being parameterized
-    typeArguments           ListNode<TypeArgument>                      | the type arguments for this node
+    typeArguments           ListNode<TypeArgumentNode>                  | the type arguments for this node
     @docs
         A node representing parameterized types.  This node represents the use of a type which has type arguments, such
         as Set<String> (which would be represented by the raw type Set and the single-element argument list containing
         the raw type for String).
 
-PrimitiveTypeNode :: Node + TypeNode, BaseType
+PrimitiveTypeNode :: Node + TypeNode, BaseTypeNode
     @props
     primitiveType           PrimitiveType                               | the primitive type being represented
     @docs
         A node representing a primitive type.
 
 # TODO: add information which tracks whether we have determined this node to represent a true raw type or type parameter
-RawTypeNode :: Node + DeclaredTypeNode, ParameterizableType
+RawTypeNode :: Node + DeclaredTypeNode, ParameterizableTypeNode
     @props
     name                    NameNode                                    | the name of the type
     @docs
@@ -753,7 +756,7 @@ StringLiteralNode :: LiteralNode<String>
         
 ### Member Nodes ######################################################################################################
 
-AnnotationMethodDeclarationNode :: Node + AnnotationMember
+AnnotationMethodDeclarationNode :: Node + AnnotationMemberNode
     @props
     modifiers               ModifiersNode                               | the modifiers for this annotation method
     type                    TypeNode                                    | the return type of this annotation method
@@ -765,7 +768,7 @@ AnnotationMethodDeclarationNode :: Node + AnnotationMember
             <i>modifiers type identifier</i> () default <i>defaultValue</i>;
         </pre>
 
-ConstructorDeclarationNode :: Node + ClassMember
+ConstructorDeclarationNode :: Node + ClassMemberNode
     @props
     body                    ConstructorBodyNode                         | the body of this constructor
     modifiers               ModifiersNode                               | the modifiers for this constructor
@@ -792,19 +795,19 @@ EnumConstantDeclarationNode :: Node
         extensions exist.  In the likely case that this constant is not an anonymous subclass, <tt>body</tt> is
         <tt>null</tt>.
 
-FieldDeclarationNode :: Node + ClassMember, InterfaceMember, AnnotationMember, AnonymousClassMember
+FieldDeclarationNode :: Node + ClassMemberNode, InterfaceMemberNode, AnnotationMemberNode, AnonymousClassMemberNode
     @props
     modifiers               ModifiersNode                               | the modifiers for this field
     declarators             ListNode<VariableDeclaratorNode>            | the variable declarators for this node
     @docs
         A node representing a field declaration.  Constants are represented by this node as well.
 
-InitializerDeclarationNode :: Node + ClassMember, AnonymousClassMember
+InitializerDeclarationNode :: Node + ClassMemberNode, AnonymousClassMemberNode
     @props
     staticInitializer       boolean                                     | whether or not the initializer is static
     body                    BlockStatementNode                          | the body of the initializer
 
-MethodDeclarationNode :: Node + ClassMember, InterfaceMember, AnonymousClassMember
+MethodDeclarationNode :: Node + ClassMemberNode, InterfaceMemberNode, AnonymousClassMemberNode
     @props
     body                    BlockStatementNode                          | the body of this method
     modifiers               ModifiersNode                               | the modifiers for this method
@@ -833,13 +836,13 @@ MethodDeclarationNode :: Node + ClassMember, InterfaceMember, AnonymousClassMemb
 
 AnnotationBodyNode :: Node
     @props
-    members             ListNode<? extends AnnotationMember>            | the members of this annotation body
+    members             ListNode<? extends AnnotationMemberNode>        | the members of this annotation body
     @docs
         Represents the body of an annotation declaration.
 
 AnonymousClassBodyNode :: Node
     @props
-    members             ListNode<? extends AnonymousClassMember>        | the members of this anonymous class body
+    members             ListNode<? extends AnonymousClassMemberNode>    | the members of this anonymous class body
     @docs
         Represents the body of an anonymous class declaration.  This body is distinct from {@link ClassBodyNode} in that
         it does not permit constructors.  There is no corresponding <tt>AnonymousClassDeclarationNode</tt> because the
@@ -847,20 +850,20 @@ AnonymousClassBodyNode :: Node
 
 ClassBodyNode :: Node
     @props
-    members             ListNode<? extends ClassMember>                 | the members of this class body
+    members             ListNode<? extends ClassMemberNode>             | the members of this class body
     @docs
         Represents the body of a class declaration.
 
 EnumBodyNode :: Node
     @props
     constants           ListNode<? extends EnumConstantDeclarationNode> | the enumeration constants
-    members             ListNode<? extends ClassMember>                 | the members of the class body part
+    members             ListNode<? extends ClassMemberNode>             | the members of the class body part
     @docs
         Represents the body of an enum declaration.
 
 InterfaceBodyNode :: Node
     @props
-    members             ListNode<? extends InterfaceMember>             | the members of this interface body
+    members             ListNode<? extends InterfaceMemberNode>             | the members of this interface body
     @docs
         Represents the body of an interface declaration.
 
@@ -879,7 +882,7 @@ AnnotationDeclarationNode :: NamedTypeDeclarationNode
         }
         </pre>
 
-ClassDeclarationNode :: NamedTypeDeclarationNode + InlineTypeDeclarable
+ClassDeclarationNode :: NamedTypeDeclarationNode + InlineTypeDeclarableNode
     @props
     extendsClause           TypeNode                                    | the extends clause
     implementsClause        ListNode<? extends TypeNode>                | the implements clause
@@ -895,7 +898,7 @@ ClassDeclarationNode :: NamedTypeDeclarationNode + InlineTypeDeclarable
         }
         </pre>
         
-EnumDeclarationNode :: NamedTypeDeclarationNode + InlineTypeDeclarable
+EnumDeclarationNode :: NamedTypeDeclarationNode + InlineTypeDeclarableNode
     @props
     implementsClause        ListNode<? extends TypeNode>                | the implements clause
     body                    EnumBodyNode                                | this enum's body
@@ -924,18 +927,14 @@ InterfaceDeclarationNode :: NamedTypeDeclarationNode
         }
         </pre>
 
-NamedTypeDeclarationNode* :: TypeDeclarationNode
+NamedTypeDeclarationNode* :: Node + TypeDeclarationNode
     @props
     identifier              IdentifierNode                              | the name of this declared type
     modifiers               ModifiersNode                               | the modifiers for this declared type
     @docs
         Acts as a superclass for all named type declarations.
 
-TypeDeclarationNode* :: Node + ClassMember, InterfaceMember, AnnotationMember, AnonymousClassMember
-    @docs
-        Acts as a superclass for all type declarations.
-
-VoidTypeDeclarationNode :: TypeDeclarationNode
+VoidTypeDeclarationNode :: Node + TypeDeclarationNode
     @docs
         Represents the void declaration (a single semi-colon).
 
@@ -1210,7 +1209,7 @@ VariableNode :: Node
             <i>type identifier</i>
             </pre>        
 
-WildcardTypeNode :: Node + TypeArgument
+WildcardTypeNode :: Node + TypeArgumentNode
     @props
     bound                   TypeNode                                    | the wildcard's bound
     upperBound              boolean                                     | whether or not the wildcard's bound is an upper (<tt>extends</tt>) bound

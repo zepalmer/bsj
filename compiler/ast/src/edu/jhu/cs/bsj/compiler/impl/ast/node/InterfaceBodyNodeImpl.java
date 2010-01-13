@@ -2,17 +2,17 @@ package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.InterfaceBodyNode;
-import edu.jhu.cs.bsj.compiler.ast.node.InterfaceMember;
+import edu.jhu.cs.bsj.compiler.ast.node.InterfaceMemberNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
 
 public class InterfaceBodyNodeImpl extends NodeImpl implements InterfaceBodyNode
 {
     /** The members of this interface body. */
-    private ListNode<? extends InterfaceMember> members;
+    private ListNode<? extends InterfaceMemberNode> members;
 
     /** General constructor. */
     public InterfaceBodyNodeImpl(
-            ListNode<? extends InterfaceMember> members)
+            ListNode<? extends InterfaceMemberNode> members)
     {
         super();
         this.members = members;
@@ -22,7 +22,7 @@ public class InterfaceBodyNodeImpl extends NodeImpl implements InterfaceBodyNode
      * Gets the members of this interface body.
      * @return The members of this interface body.
      */
-    public ListNode<? extends InterfaceMember> getMembers()
+    public ListNode<? extends InterfaceMemberNode> getMembers()
     {
         return this.members;
     }
@@ -31,7 +31,7 @@ public class InterfaceBodyNodeImpl extends NodeImpl implements InterfaceBodyNode
      * Changes the members of this interface body.
      * @param members The members of this interface body.
      */
-    public void setMembers(ListNode<? extends InterfaceMember> members)
+    public void setMembers(ListNode<? extends InterfaceMemberNode> members)
     {
         if (this.members instanceof NodeImpl)
         {

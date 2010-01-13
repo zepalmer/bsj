@@ -32,7 +32,7 @@ public interface BsjNodeFactory
      * Creates a InterfaceBodyNode.
      */
     public InterfaceBodyNode makeInterfaceBodyNode(
-            ListNode<? extends InterfaceMember> members);
+            ListNode<? extends InterfaceMemberNode> members);
 
     /**
      * Creates a MethodInvocationNode.
@@ -65,7 +65,7 @@ public interface BsjNodeFactory
      * Creates a ArrayAccessNode.
      */
     public ArrayAccessNode makeArrayAccessNode(
-            ArrayIndexable arrayExpression,
+            ArrayIndexableNode arrayExpression,
             ExpressionNode indexExpression);
 
     /**
@@ -140,7 +140,7 @@ public interface BsjNodeFactory
      */
     public EnumBodyNode makeEnumBodyNode(
             ListNode<? extends EnumConstantDeclarationNode> constants,
-            ListNode<? extends ClassMember> members);
+            ListNode<? extends ClassMemberNode> members);
 
     /**
      * Creates a TryNode.
@@ -181,7 +181,7 @@ public interface BsjNodeFactory
      * Creates a AnnotationBodyNode.
      */
     public AnnotationBodyNode makeAnnotationBodyNode(
-            ListNode<? extends AnnotationMember> members);
+            ListNode<? extends AnnotationMemberNode> members);
 
     /**
      * Creates a VariableDeclaratorNode.
@@ -325,7 +325,7 @@ public interface BsjNodeFactory
      * Creates a AnonymousClassBodyNode.
      */
     public AnonymousClassBodyNode makeAnonymousClassBodyNode(
-            ListNode<? extends AnonymousClassMember> members);
+            ListNode<? extends AnonymousClassMemberNode> members);
 
     /**
      * Creates a UnaryOperatorNode.
@@ -366,7 +366,7 @@ public interface BsjNodeFactory
      * Creates a InlineTypeDeclarationNode.
      */
     public InlineTypeDeclarationNode makeInlineTypeDeclarationNode(
-            InlineTypeDeclarable declaration);
+            InlineTypeDeclarableNode declaration);
 
     /**
      * Creates a BooleanLiteralNode.
@@ -459,7 +459,7 @@ public interface BsjNodeFactory
      */
     public ArrayInitializerCreationNode makeArrayInitializerCreationNode(
             ArrayInitializerNode initializer,
-            BaseType baseType,
+            BaseTypeNode baseType,
             int arrayLevels);
 
     /**
@@ -577,7 +577,7 @@ public interface BsjNodeFactory
      */
     public ParameterizedTypeNode makeParameterizedTypeNode(
             RawTypeNode rawType,
-            ListNode<TypeArgument> typeArguments);
+            ListNode<TypeArgumentNode> typeArguments);
 
     /**
      * Creates a InterfaceDeclarationNode.
@@ -629,7 +629,7 @@ public interface BsjNodeFactory
      */
     public ArrayInstantiatorCreationNode makeArrayInstantiatorCreationNode(
             ListNode<? extends ExpressionNode> dimExpressions,
-            BaseType baseType,
+            BaseTypeNode baseType,
             int arrayLevels);
 
     /**
@@ -644,7 +644,7 @@ public interface BsjNodeFactory
      * Creates a ClassBodyNode.
      */
     public ClassBodyNode makeClassBodyNode(
-            ListNode<? extends ClassMember> members);
+            ListNode<? extends ClassMemberNode> members);
 
     /**
      * Creates a IntLiteralNode.
