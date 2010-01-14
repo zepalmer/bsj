@@ -3228,26 +3228,40 @@ ambiguousName returns [NameNode ret]
     ;
 
 // Parses a name (a dot-separated sequence of identifiers) and assigns each of them the specified category.  The top
-// name node is then assigned another category (which obviously must be a subcategory of the first).  This rule does
-// not correspond directly to anything in the JLS; it is used as a parsing subroutine.
+// name node is assigned another category.  This rule does not correspond directly to anything in the JLS; it is used as
+// a parsing subroutine.
 categorizedName[NameCategory category, NameCategory lastCategory] returns [NameNode ret]
+        @init {
+            List<IdentifierNode> identifierNodes = new ArrayList<IdentifierNode>();
+        }
+        @after {
+            $ret = null;
+            for (int i=0;i<identifierNodes.size();i++)
+            {
+                NameCategory currentCategory = (i==identifierNodes.size()-1) ? lastCategory : category;
+                if (i==0)
+                {
+                    $ret = factory.makeSimpleNameNode(identifierNodes.get(0), currentCategory);
+                } else
+                {
+	                $ret = factory.makeQualifiedNameNode(
+	                        $ret,
+	                        identifierNodes.get(i),
+	                        currentCategory);
+                }
+            }
+        }
     :
         a=identifier
         {
-            $ret = factory.makeSimpleNameNode($a.ret, category);
+            identifierNodes.add($a.ret);
         }
         (
             '.' b=identifier
             {
-                $ret = factory.makeQualifiedNameNode(
-                        $ret,
-                        $b.ret,
-                        category);
+                identifierNodes.add($b.ret);
             }
         )*
-        {
-            $ret.assertCategory(lastCategory);
-        }
     ;
 
 intLiteral [boolean isNegative] returns [LiteralNode<?> ret]
