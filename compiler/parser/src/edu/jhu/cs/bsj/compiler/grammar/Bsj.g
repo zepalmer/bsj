@@ -2656,7 +2656,7 @@ postfixExpression returns [ExpressionNode ret]
         |
             expressionName
             {
-                $ret = factory.makeFieldAccessNode($expressionName.ret);
+                $ret = factory.makeFieldAccessByNameNode($expressionName.ret);
             }
         )
         (
@@ -2773,7 +2773,8 @@ restrictedPrimary returns [RestrictedPrimaryExpressionNode ret]
             // by both that rule and this one.
             expressionName '[' expression ']'
             {
-                $ret = factory.makeArrayAccessNode(factory.makeFieldAccessNode($expressionName.ret), $expression.ret);
+                $ret = factory.makeArrayAccessNode(
+                        factory.makeFieldAccessByNameNode($expressionName.ret), $expression.ret);
             }
         )
         (
@@ -2809,7 +2810,7 @@ primarySuffix[PrimaryExpressionNode in] returns [RestrictedPrimaryExpressionNode
 	        // field access on an expression
 	        '.' identifier
 	        {
-	            $ret = factory.makeFieldAccessNode(in, $identifier.ret);
+	            $ret = factory.makeFieldAccessByExpressionNode(in, $identifier.ret);
 	        }
 	    |
 	        // method invocation with type arguments
