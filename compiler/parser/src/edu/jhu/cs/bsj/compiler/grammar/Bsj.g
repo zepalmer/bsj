@@ -2673,24 +2673,32 @@ postfixExpression returns [ExpressionNode ret]
     ;
 
 primary returns [PrimaryExpressionNode ret]
+        // This rule is complex enough that ANTLR's parameter passing breaks down.  Using scope instead.
+        // Note that ANTLR is clever enough to create a new scope for each rule; this recurses appropriately.
+        scope {
+            PrimaryExpressionNode result;
+        }
     :
         (
             arrayCreator
             {
-                $ret = $arrayCreator.ret;
+                $primary::result = $arrayCreator.ret;
             }
         |
             restrictedPrimary
             {
-                $ret  = $restrictedPrimary.ret;
+                $primary::result  = $restrictedPrimary.ret;
             }
         )
         (
-            primarySuffix[ret]
+            primarySuffix
             {
-                $ret = $primarySuffix.ret;
+                $primary::result = $primarySuffix.ret;
             }
         )*
+        {
+            $ret = $primary::result;
+        }
     ;
 
 restrictedPrimary returns [RestrictedPrimaryExpressionNode ret]
@@ -2785,7 +2793,12 @@ restrictedPrimary returns [RestrictedPrimaryExpressionNode ret]
         )?
     ;
     
-primarySuffix[PrimaryExpressionNode in] returns [RestrictedPrimaryExpressionNode ret]
+// ANTLR's parameter passing has broken down by this point due to the complexity of this rule.  Using scope instead;
+// thankfully, we know which rule is calling this one.
+primarySuffix returns [RestrictedPrimaryExpressionNode ret]
+        @init {
+            PrimaryExpressionNode in = $primary::result;
+        }
     :
         (
 	        // qualified class instantiation
