@@ -10,13 +10,13 @@ public interface ClassInstantiationNode extends Node, RestrictedPrimaryExpressio
      * Gets the type arguments for the constructor.
      * @return The type arguments for the constructor.
      */
-    public ListNode<TypeNode> getConstructorTypeArguments();
+    public ListNode<TypeArgumentNode> getConstructorTypeArguments();
 
     /**
      * Changes the type arguments for the constructor.
      * @param constructorTypeArguments The type arguments for the constructor.
      */
-    public void setConstructorTypeArguments(ListNode<TypeNode> constructorTypeArguments);
+    public void setConstructorTypeArguments(ListNode<TypeArgumentNode> constructorTypeArguments);
 
     /**
      * Gets the arguments to the constructor.

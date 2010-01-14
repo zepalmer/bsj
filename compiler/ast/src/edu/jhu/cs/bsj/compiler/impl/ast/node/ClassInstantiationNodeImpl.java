@@ -5,12 +5,12 @@ import edu.jhu.cs.bsj.compiler.ast.node.AnonymousClassBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassInstantiationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
+import edu.jhu.cs.bsj.compiler.ast.node.TypeArgumentNode;
 
 public abstract class ClassInstantiationNodeImpl extends NodeImpl implements ClassInstantiationNode
 {
     /** The type arguments for the constructor. */
-    private ListNode<TypeNode> constructorTypeArguments;
+    private ListNode<TypeArgumentNode> constructorTypeArguments;
 
     /** The arguments to the constructor. */
     private ListNode<ExpressionNode> arguments;
@@ -20,7 +20,7 @@ public abstract class ClassInstantiationNodeImpl extends NodeImpl implements Cla
 
     /** General constructor. */
     protected ClassInstantiationNodeImpl(
-            ListNode<TypeNode> constructorTypeArguments,
+            ListNode<TypeArgumentNode> constructorTypeArguments,
             ListNode<ExpressionNode> arguments,
             AnonymousClassBodyNode body)
     {
@@ -34,7 +34,7 @@ public abstract class ClassInstantiationNodeImpl extends NodeImpl implements Cla
      * Gets the type arguments for the constructor.
      * @return The type arguments for the constructor.
      */
-    public ListNode<TypeNode> getConstructorTypeArguments()
+    public ListNode<TypeArgumentNode> getConstructorTypeArguments()
     {
         return this.constructorTypeArguments;
     }
@@ -43,7 +43,7 @@ public abstract class ClassInstantiationNodeImpl extends NodeImpl implements Cla
      * Changes the type arguments for the constructor.
      * @param constructorTypeArguments The type arguments for the constructor.
      */
-    public void setConstructorTypeArguments(ListNode<TypeNode> constructorTypeArguments)
+    public void setConstructorTypeArguments(ListNode<TypeArgumentNode> constructorTypeArguments)
     {
         if (this.constructorTypeArguments instanceof NodeImpl)
         {

@@ -6,7 +6,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.QualifiedClassInstantiationNode;
-import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
+import edu.jhu.cs.bsj.compiler.ast.node.TypeArgumentNode;
 
 public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeImpl implements QualifiedClassInstantiationNode
 {
@@ -17,14 +17,14 @@ public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeI
     private IdentifierNode identifier;
 
     /** The type arguments to apply to the class being instantiated. */
-    private ListNode<TypeNode> typeArguments;
+    private ListNode<TypeArgumentNode> typeArguments;
 
     /** General constructor. */
     public QualifiedClassInstantiationNodeImpl(
             ExpressionNode enclosingExpression,
             IdentifierNode identifier,
-            ListNode<TypeNode> typeArguments,
-            ListNode<TypeNode> constructorTypeArguments,
+            ListNode<TypeArgumentNode> typeArguments,
+            ListNode<TypeArgumentNode> constructorTypeArguments,
             ListNode<ExpressionNode> arguments,
             AnonymousClassBodyNode body)
     {
@@ -90,7 +90,7 @@ public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeI
      * Gets the type arguments to apply to the class being instantiated.
      * @return The type arguments to apply to the class being instantiated.
      */
-    public ListNode<TypeNode> getTypeArguments()
+    public ListNode<TypeArgumentNode> getTypeArguments()
     {
         return this.typeArguments;
     }
@@ -99,7 +99,7 @@ public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeI
      * Changes the type arguments to apply to the class being instantiated.
      * @param typeArguments The type arguments to apply to the class being instantiated.
      */
-    public void setTypeArguments(ListNode<TypeNode> typeArguments)
+    public void setTypeArguments(ListNode<TypeArgumentNode> typeArguments)
     {
         if (this.typeArguments instanceof NodeImpl)
         {

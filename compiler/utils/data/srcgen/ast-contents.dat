@@ -264,7 +264,7 @@ BinaryOperatorNode :: Node + ExpressionNode
 
 ClassInstantiationNode* :: Node + RestrictedPrimaryExpressionNode
     @props
-    constructorTypeArguments ListNode<TypeNode>                         | the type arguments for the constructor
+    constructorTypeArguments ListNode<TypeArgumentNode>                 | the type arguments for the constructor
     arguments               ListNode<ExpressionNode>                    | the arguments to the constructor
     body                    AnonymousClassBodyNode                      | the body of the anonymous class
     @docs
@@ -412,7 +412,7 @@ QualifiedClassInstantiationNode :: ClassInstantiationNode
     @props
     enclosingExpression     ExpressionNode                              | the expression enclosing the non-static inner class
     identifier              IdentifierNode                              | the name of the class being instantiated
-    typeArguments           ListNode<TypeNode>                          | the type arguments to apply to the class being instantiated
+    typeArguments           ListNode<TypeArgumentNode>                  | the type arguments to apply to the class being instantiated
     @docs
         A node representing the qualified instantiation of a class, as in:
         <pre>

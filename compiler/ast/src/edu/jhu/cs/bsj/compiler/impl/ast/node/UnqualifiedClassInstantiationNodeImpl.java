@@ -5,7 +5,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.AnonymousClassBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.DeclaredTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
+import edu.jhu.cs.bsj.compiler.ast.node.TypeArgumentNode;
 import edu.jhu.cs.bsj.compiler.ast.node.UnqualifiedClassInstantiationNode;
 
 public class UnqualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeImpl implements UnqualifiedClassInstantiationNode
@@ -16,7 +16,7 @@ public class UnqualifiedClassInstantiationNodeImpl extends ClassInstantiationNod
     /** General constructor. */
     public UnqualifiedClassInstantiationNodeImpl(
             DeclaredTypeNode type,
-            ListNode<TypeNode> constructorTypeArguments,
+            ListNode<TypeArgumentNode> constructorTypeArguments,
             ListNode<ExpressionNode> arguments,
             AnonymousClassBodyNode body)
     {

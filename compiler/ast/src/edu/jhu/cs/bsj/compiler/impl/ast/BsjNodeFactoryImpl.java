@@ -472,8 +472,8 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public QualifiedClassInstantiationNode makeQualifiedClassInstantiationNode(
             ExpressionNode enclosingExpression,
             IdentifierNode identifier,
-            ListNode<TypeNode> typeArguments,
-            ListNode<TypeNode> constructorTypeArguments,
+            ListNode<TypeArgumentNode> typeArguments,
+            ListNode<TypeArgumentNode> constructorTypeArguments,
             ListNode<ExpressionNode> arguments,
             AnonymousClassBodyNode body)
     {
@@ -1114,7 +1114,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     public UnqualifiedClassInstantiationNode makeUnqualifiedClassInstantiationNode(
             DeclaredTypeNode type,
-            ListNode<TypeNode> constructorTypeArguments,
+            ListNode<TypeArgumentNode> constructorTypeArguments,
             ListNode<ExpressionNode> arguments,
             AnonymousClassBodyNode body)
     {
