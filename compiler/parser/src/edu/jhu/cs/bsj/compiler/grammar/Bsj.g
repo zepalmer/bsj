@@ -83,6 +83,8 @@ scope Global {
     import edu.jhu.cs.bsj.compiler.ast.*;
     import edu.jhu.cs.bsj.compiler.ast.node.*;
     import edu.jhu.cs.bsj.compiler.ast.node.meta.*;
+    
+    import edu.jhu.cs.bsj.compiler.tool.parser.antlr.util.BsjAntlrParserUtils;
 }
 
 @parser::members {

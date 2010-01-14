@@ -1,4 +1,4 @@
-package edu.jhu.cs.bsj.compiler.tool.parser;
+package edu.jhu.cs.bsj.compiler.tool.parser.antlr.util;
 
 public class BsjAntlrParserUtils
 {
