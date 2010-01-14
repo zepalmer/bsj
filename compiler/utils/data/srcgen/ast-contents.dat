@@ -93,9 +93,13 @@ DeclaredTypeNode+ :: Node + ReferenceTypeNode, BaseTypeNode
         A node representing any declared type.  In the BSJ API, a "declared type" refers to any type which has been
         created by a declaration statement.  Arrays and primitives are not declared types because they are not declared.
 
-ExpressionNode+ :: VariableInitializerNode
+ExpressionNode+ :: Node + VariableInitializerNode
     @docs
         This tagging interface is used to denote BSJ AST nodes which represent expressions.
+
+FieldAccessNode+ :: Node + RestrictedPrimaryExpressionNode
+    @docs
+        This tagging interface is used to denote BSJ AST nodes which represent field access.
 
 ForInitializerNode+ :: Node
     @docs
@@ -279,19 +283,40 @@ ConditionalExpressionNode :: Node + ExpressionNode
 
 # TODO: how do we want to handle ErroneousNode or the equivalent error nodes?
 
-FieldAccessNode :: Node + RestrictedPrimaryExpressionNode
+FieldAccessByExpressionNode :: Node + FieldAccessNode
     @props
     expression              PrimaryExpressionNode                       | the expression from which the field is being selected
     identifier              IdentifierNode                              | the name of the field
     @docs
         Represents a field access, as in
         <pre>
-        <i>expr</i> . <i>field</i>
+        <i>expr</i>.<i>ident</i>
         </pre>
-        One example of field access is
+        For example, this node would allow the access of a fieldon the result of a method call using the code
         <pre>
-        new int[1].length
+        foo().bar
         </pre>
+        This node is not used for simple expressions such as <tt>x</tt> or <tt>y.z</tt>.  For those forms of field
+        access, see {@link FieldAccessByNameNode}.
+
+FieldAccessByNameNode :: Node + FieldAccessNode
+    @props
+    name                    NameNode                                    | the name of the field to access
+    @docs
+        Represents a field access, as in
+        <pre>
+        <i>name</i>
+        </pre>
+        For example, this node would allow the access of a local variable <tt>x</tt> using the code
+        <pre>
+        x
+        </pre>
+        and allow the access of a <tt>bar</tt> field on a class <tt>Foo</tt> using the code
+        <pre>
+        Foo.bar
+        </pre>
+        This node is not used to represent field access from the evaluation result of a subexpression (such as in the
+        code <tt>foo().bar</tt>).  For that form of access, see {@link FieldAccessByExpressionNode}.
 
 InstanceOfNode :: Node + ExpressionNode
     @props

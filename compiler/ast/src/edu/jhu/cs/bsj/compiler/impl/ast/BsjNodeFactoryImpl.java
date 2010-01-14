@@ -50,7 +50,8 @@ import edu.jhu.cs.bsj.compiler.impl.ast.node.EnumBodyNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.EnumConstantDeclarationNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.EnumDeclarationNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.ExpressionStatementNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.FieldAccessNodeImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.node.FieldAccessByExpressionNodeImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.node.FieldAccessByNameNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.FieldDeclarationNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.FloatLiteralNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.ForInitializerDeclarationNodeImpl;
@@ -382,13 +383,13 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
 
     /**
-     * Creates a FieldAccessNode.
+     * Creates a FieldAccessByExpressionNode.
      */
-    public FieldAccessNode makeFieldAccessNode(
+    public FieldAccessByExpressionNode makeFieldAccessByExpressionNode(
             PrimaryExpressionNode expression,
             IdentifierNode identifier)
     {
-        FieldAccessNode ret = new FieldAccessNodeImpl(expression, identifier);
+        FieldAccessByExpressionNode ret = new FieldAccessByExpressionNodeImpl(expression, identifier);
         return ret;
     }
 
@@ -1095,6 +1096,16 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ListNode<StatementNode> statements)
     {
         ConstructorBodyNode ret = new ConstructorBodyNodeImpl(constructorInvocation, statements);
+        return ret;
+    }
+
+    /**
+     * Creates a FieldAccessByNameNode.
+     */
+    public FieldAccessByNameNode makeFieldAccessByNameNode(
+            NameNode name)
+    {
+        FieldAccessByNameNode ret = new FieldAccessByNameNodeImpl(name);
         return ret;
     }
 

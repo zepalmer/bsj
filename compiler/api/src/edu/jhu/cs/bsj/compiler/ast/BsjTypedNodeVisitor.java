@@ -38,7 +38,8 @@ import edu.jhu.cs.bsj.compiler.ast.node.EnumBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.EnumConstantDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.EnumDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionStatementNode;
-import edu.jhu.cs.bsj.compiler.ast.node.FieldAccessNode;
+import edu.jhu.cs.bsj.compiler.ast.node.FieldAccessByExpressionNode;
+import edu.jhu.cs.bsj.compiler.ast.node.FieldAccessByNameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.FieldDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.FloatLiteralNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ForInitializerDeclarationNode;
@@ -204,6 +205,9 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
         } else if (node instanceof ConstructorBodyNode)
         {
             visitConstructorBodyNodeStart((ConstructorBodyNode)node);
+        } else if (node instanceof FieldAccessByNameNode)
+        {
+            visitFieldAccessByNameNodeStart((FieldAccessByNameNode)node);
         } else if (node instanceof RawTypeNode)
         {
             visitRawTypeNodeStart((RawTypeNode)node);
@@ -348,9 +352,9 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
         } else if (node instanceof SuperFieldAccessNode)
         {
             visitSuperFieldAccessNodeStart((SuperFieldAccessNode)node);
-        } else if (node instanceof FieldAccessNode)
+        } else if (node instanceof FieldAccessByExpressionNode)
         {
-            visitFieldAccessNodeStart((FieldAccessNode)node);
+            visitFieldAccessByExpressionNodeStart((FieldAccessByExpressionNode)node);
         } else if (node instanceof VariableDeclaratorNode)
         {
             visitVariableDeclaratorNodeStart((VariableDeclaratorNode)node);
@@ -507,6 +511,9 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
         } else if (node instanceof ConstructorBodyNode)
         {
             visitConstructorBodyNodeStop((ConstructorBodyNode)node);
+        } else if (node instanceof FieldAccessByNameNode)
+        {
+            visitFieldAccessByNameNodeStop((FieldAccessByNameNode)node);
         } else if (node instanceof RawTypeNode)
         {
             visitRawTypeNodeStop((RawTypeNode)node);
@@ -651,9 +658,9 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
         } else if (node instanceof SuperFieldAccessNode)
         {
             visitSuperFieldAccessNodeStop((SuperFieldAccessNode)node);
-        } else if (node instanceof FieldAccessNode)
+        } else if (node instanceof FieldAccessByExpressionNode)
         {
-            visitFieldAccessNodeStop((FieldAccessNode)node);
+            visitFieldAccessByExpressionNodeStop((FieldAccessByExpressionNode)node);
         } else if (node instanceof VariableDeclaratorNode)
         {
             visitVariableDeclaratorNodeStop((VariableDeclaratorNode)node);
@@ -951,6 +958,14 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
      * @param node The node being visited.
      */
     public void visitConstructorBodyNodeStart(ConstructorBodyNode node)
+    {
+    }
+
+    /**
+     * Starts a visit for nodes of type FieldAccessByNameNode.
+     * @param node The node being visited.
+     */
+    public void visitFieldAccessByNameNodeStart(FieldAccessByNameNode node)
     {
     }
 
@@ -1339,10 +1354,10 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
     }
 
     /**
-     * Starts a visit for nodes of type FieldAccessNode.
+     * Starts a visit for nodes of type FieldAccessByExpressionNode.
      * @param node The node being visited.
      */
-    public void visitFieldAccessNodeStart(FieldAccessNode node)
+    public void visitFieldAccessByExpressionNodeStart(FieldAccessByExpressionNode node)
     {
     }
 
@@ -1731,6 +1746,14 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
     }
 
     /**
+     * Stops a visit for nodes of type FieldAccessByNameNode.
+     * @param node The node being visited.
+     */
+    public void visitFieldAccessByNameNodeStop(FieldAccessByNameNode node)
+    {
+    }
+
+    /**
      * Stops a visit for nodes of type RawTypeNode.
      * @param node The node being visited.
      */
@@ -2115,10 +2138,10 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
     }
 
     /**
-     * Stops a visit for nodes of type FieldAccessNode.
+     * Stops a visit for nodes of type FieldAccessByExpressionNode.
      * @param node The node being visited.
      */
-    public void visitFieldAccessNodeStop(FieldAccessNode node)
+    public void visitFieldAccessByExpressionNodeStop(FieldAccessByExpressionNode node)
     {
     }
 

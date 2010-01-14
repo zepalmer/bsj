@@ -184,9 +184,9 @@ public interface BsjNodeFactory
             VariableInitializerNode initializer);
 
     /**
-     * Creates a FieldAccessNode.
+     * Creates a FieldAccessByExpressionNode.
      */
-    public FieldAccessNode makeFieldAccessNode(
+    public FieldAccessByExpressionNode makeFieldAccessByExpressionNode(
             PrimaryExpressionNode expression,
             IdentifierNode identifier);
 
@@ -639,6 +639,12 @@ public interface BsjNodeFactory
     public ConstructorBodyNode makeConstructorBodyNode(
             ConstructorInvocationNode constructorInvocation,
             ListNode<StatementNode> statements);
+
+    /**
+     * Creates a FieldAccessByNameNode.
+     */
+    public FieldAccessByNameNode makeFieldAccessByNameNode(
+            NameNode name);
 
     /**
      * Creates a UnqualifiedClassInstantiationNode.

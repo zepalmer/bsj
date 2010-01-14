@@ -1,11 +1,11 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
-import edu.jhu.cs.bsj.compiler.ast.node.FieldAccessNode;
+import edu.jhu.cs.bsj.compiler.ast.node.FieldAccessByExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.PrimaryExpressionNode;
 
-public class FieldAccessNodeImpl extends NodeImpl implements FieldAccessNode
+public class FieldAccessByExpressionNodeImpl extends NodeImpl implements FieldAccessByExpressionNode
 {
     /** The expression from which the field is being selected. */
     private PrimaryExpressionNode expression;
@@ -14,7 +14,7 @@ public class FieldAccessNodeImpl extends NodeImpl implements FieldAccessNode
     private IdentifierNode identifier;
 
     /** General constructor. */
-    public FieldAccessNodeImpl(
+    public FieldAccessByExpressionNodeImpl(
             PrimaryExpressionNode expression,
             IdentifierNode identifier)
     {
