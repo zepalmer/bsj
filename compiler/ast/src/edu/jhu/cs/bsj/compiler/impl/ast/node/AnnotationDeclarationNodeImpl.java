@@ -1,5 +1,7 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
+import java.util.List;
+
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationDeclarationNode;
@@ -59,5 +61,18 @@ public class AnnotationDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl 
     {
         super.receiveToChildren(visitor);
         this.body.receive(visitor);
+    }
+
+    /**
+     * Produces a mutable list of this node's children.  Modifying this list will have no
+     * effect on this node.
+     * @return A list of this node's children.
+     */
+    @Override
+    public List<Object> getChildObjects()
+    {
+        List<Object> list = super.getChildObjects();
+        list.add(this.body);
+        return list;
     }
 }

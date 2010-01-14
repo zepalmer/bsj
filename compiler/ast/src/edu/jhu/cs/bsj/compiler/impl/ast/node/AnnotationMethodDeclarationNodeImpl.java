@@ -1,5 +1,7 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
+import java.util.List;
+
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationMethodDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationValueNode;
@@ -154,5 +156,21 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
         this.type.receive(visitor);
         this.identifier.receive(visitor);
         this.defaultValue.receive(visitor);
+    }
+
+    /**
+     * Produces a mutable list of this node's children.  Modifying this list will have no
+     * effect on this node.
+     * @return A list of this node's children.
+     */
+    @Override
+    public List<Object> getChildObjects()
+    {
+        List<Object> list = super.getChildObjects();
+        list.add(this.modifiers);
+        list.add(this.type);
+        list.add(this.identifier);
+        list.add(this.defaultValue);
+        return list;
     }
 }

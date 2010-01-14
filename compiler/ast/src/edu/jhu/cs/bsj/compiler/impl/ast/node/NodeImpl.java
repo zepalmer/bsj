@@ -1,5 +1,7 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
@@ -22,6 +24,17 @@ public abstract class NodeImpl implements Node
      */
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
+    }
+
+    /**
+     * Produces a mutable list of this node's children.  Modifying this list will have no
+     * effect on this node.
+     * @return A list of this node's children.
+     */
+    public List<Object> getChildObjects()
+    {
+        List<Object> list = new ArrayList<Object>();
+        return list;
     }
 	/**
 	 * The next globally unique UID to assign.

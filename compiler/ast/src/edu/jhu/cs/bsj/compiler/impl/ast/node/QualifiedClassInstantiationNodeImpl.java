@@ -1,5 +1,7 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
+import java.util.List;
+
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.AnonymousClassBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
@@ -126,5 +128,20 @@ public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeI
         this.enclosingExpression.receive(visitor);
         this.identifier.receive(visitor);
         this.typeArguments.receive(visitor);
+    }
+
+    /**
+     * Produces a mutable list of this node's children.  Modifying this list will have no
+     * effect on this node.
+     * @return A list of this node's children.
+     */
+    @Override
+    public List<Object> getChildObjects()
+    {
+        List<Object> list = super.getChildObjects();
+        list.add(this.enclosingExpression);
+        list.add(this.identifier);
+        list.add(this.typeArguments);
+        return list;
     }
 }

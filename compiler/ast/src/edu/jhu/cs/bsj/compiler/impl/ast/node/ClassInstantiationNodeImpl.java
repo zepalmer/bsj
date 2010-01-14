@@ -1,5 +1,7 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
+import java.util.List;
+
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.AnonymousClassBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassInstantiationNode;
@@ -122,5 +124,20 @@ public abstract class ClassInstantiationNodeImpl extends NodeImpl implements Cla
         this.constructorTypeArguments.receive(visitor);
         this.arguments.receive(visitor);
         this.body.receive(visitor);
+    }
+
+    /**
+     * Produces a mutable list of this node's children.  Modifying this list will have no
+     * effect on this node.
+     * @return A list of this node's children.
+     */
+    @Override
+    public List<Object> getChildObjects()
+    {
+        List<Object> list = super.getChildObjects();
+        list.add(this.constructorTypeArguments);
+        list.add(this.arguments);
+        list.add(this.body);
+        return list;
     }
 }

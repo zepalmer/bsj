@@ -1,5 +1,7 @@
 package edu.jhu.cs.bsj.compiler.ast.node;
 
+import java.util.List;
+
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 
 /**
@@ -29,4 +31,16 @@ public interface Node
 	 * @return This node's parent, or <code>null</code> if this node has no parent.
 	 */
 	public Node getParent();
+	
+	/**
+	 * Retrieves the children of this node.  The children are not in any guaranteed order.  This method is intended to
+	 * be used primarily for debugging purposes.  It should not be called routinely at runtime for performance reasons.
+	 * <p/>
+	 * Note that the children of this node may not be nodes themselves (such as when a node property is of a primitive
+	 * type).
+	 * 
+	 * @return A list of this node's children.  The list in question is for reference purposes; it is mutable and
+	 *         changing it has no effect on this node.
+	 */
+	public List<Object> getChildObjects();
 }

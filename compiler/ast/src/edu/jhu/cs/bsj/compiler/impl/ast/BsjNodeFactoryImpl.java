@@ -121,6 +121,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     /**
      * Creates a AssertStatementNode.
      */
+    @Override
     public AssertStatementNode makeAssertStatementNode(
             ExpressionNode testExpression,
             ExpressionNode messageExpression)
@@ -132,6 +133,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     /**
      * Creates a ExpressionStatementNode.
      */
+    @Override
     public ExpressionStatementNode makeExpressionStatementNode(
             ExpressionNode expression)
     {
@@ -142,6 +144,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     /**
      * Creates a InterfaceBodyNode.
      */
+    @Override
     public InterfaceBodyNode makeInterfaceBodyNode(
             ListNode<InterfaceMemberNode> members)
     {
@@ -152,6 +155,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     /**
      * Creates a EnhancedForLoopNode.
      */
+    @Override
     public EnhancedForLoopNode makeEnhancedForLoopNode(
             VariableNode variable,
             ExpressionNode expression,
@@ -164,6 +168,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     /**
      * Creates a ClassDeclarationNode.
      */
+    @Override
     public ClassDeclarationNode makeClassDeclarationNode(
             TypeNode extendsClause,
             ListNode<TypeNode> implementsClause,
@@ -179,6 +184,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     /**
      * Creates a ArrayAccessNode.
      */
+    @Override
     public ArrayAccessNode makeArrayAccessNode(
             ArrayIndexableNode arrayExpression,
             ExpressionNode indexExpression)
@@ -190,6 +196,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     /**
      * Creates a LongLiteralNode.
      */
+    @Override
     public LongLiteralNode makeLongLiteralNode(
             Long value)
     {
@@ -200,6 +207,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     /**
      * Creates a QualifiedNameNode.
      */
+    @Override
     public QualifiedNameNode makeQualifiedNameNode(
             NameNode base,
             IdentifierNode identifier,
@@ -212,6 +220,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     /**
      * Creates a CaseNode.
      */
+    @Override
     public CaseNode makeCaseNode(
             ExpressionNode expression,
             ListNode<StatementNode> statements)
@@ -223,6 +232,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     /**
      * Creates a VoidStatementNode.
      */
+    @Override
     public VoidStatementNode makeVoidStatementNode()
     {
         VoidStatementNode ret = new VoidStatementNodeImpl();
@@ -232,6 +242,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     /**
      * Creates a CodeLiteralNode.
      */
+    @Override
     public CodeLiteralNode makeCodeLiteralNode(
             Node value)
     {
@@ -242,6 +253,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     /**
      * Creates a ImportOnDemandNode.
      */
+    @Override
     public ImportOnDemandNode makeImportOnDemandNode(
             NameNode name,
             boolean staticImport)
@@ -253,6 +265,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     /**
      * Creates a SuperclassConstructorInvocationNode.
      */
+    @Override
     public SuperclassConstructorInvocationNode makeSuperclassConstructorInvocationNode(
             PrimaryExpressionNode qualifyingExpression,
             ListNode<ExpressionNode> arguments,
@@ -265,6 +278,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     /**
      * Creates a PrimitiveTypeNode.
      */
+    @Override
     public PrimitiveTypeNode makePrimitiveTypeNode(
             PrimitiveType primitiveType)
     {
@@ -275,6 +289,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     /**
      * Creates a InitializerDeclarationNode.
      */
+    @Override
     public InitializerDeclarationNode makeInitializerDeclarationNode(
             boolean staticInitializer,
             BlockStatementNode body)
@@ -286,6 +301,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     /**
      * Creates a ModifiersNode.
      */
+    @Override
     public ModifiersNode makeModifiersNode(
             ListNode<AnnotationNode> annotations,
             Set<Modifier> flags)
@@ -297,6 +313,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     /**
      * Creates a EnumBodyNode.
      */
+    @Override
     public EnumBodyNode makeEnumBodyNode(
             ListNode<EnumConstantDeclarationNode> constants,
             ListNode<ClassMemberNode> members)
@@ -308,6 +325,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     /**
      * Creates a TryNode.
      */
+    @Override
     public TryNode makeTryNode(
             BlockStatementNode block,
             ListNode<CatchNode> catches,
@@ -320,6 +338,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     /**
      * Creates a ThisNode.
      */
+    @Override
     public ThisNode makeThisNode(
             RawTypeNode type)
     {
@@ -330,6 +349,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     /**
      * Creates a EnumDeclarationNode.
      */
+    @Override
     public EnumDeclarationNode makeEnumDeclarationNode(
             ListNode<TypeNode> implementsClause,
             EnumBodyNode body,
@@ -343,6 +363,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     /**
      * Creates a VoidTypeNode.
      */
+    @Override
     public VoidTypeNode makeVoidTypeNode()
     {
         VoidTypeNode ret = new VoidTypeNodeImpl();
@@ -352,6 +373,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     /**
      * Creates a VariableDeclarationNode.
      */
+    @Override
     public VariableDeclarationNode makeVariableDeclarationNode(
             ModifiersNode modifiers,
             ListNode<VariableDeclaratorNode> declarators)
@@ -363,6 +385,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     /**
      * Creates a AnnotationBodyNode.
      */
+    @Override
     public AnnotationBodyNode makeAnnotationBodyNode(
             ListNode<AnnotationMemberNode> members)
     {
@@ -373,6 +396,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     /**
      * Creates a VariableDeclaratorNode.
      */
+    @Override
     public VariableDeclaratorNode makeVariableDeclaratorNode(
             TypeNode type,
             IdentifierNode name,
@@ -385,6 +409,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     /**
      * Creates a FieldAccessByExpressionNode.
      */
+    @Override
     public FieldAccessByExpressionNode makeFieldAccessByExpressionNode(
             PrimaryExpressionNode expression,
             IdentifierNode identifier)
@@ -396,6 +421,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     /**
      * Creates a SuperFieldAccessNode.
      */
+    @Override
     public SuperFieldAccessNode makeSuperFieldAccessNode(
             RawTypeNode type,
             IdentifierNode identifier)
@@ -407,6 +433,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     /**
      * Creates a ThrowNode.
      */
+    @Override
     public ThrowNode makeThrowNode(
             ExpressionNode expression)
     {
@@ -417,6 +444,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     /**
      * Creates a NameExpressionNode.
      */
+    @Override
     public NameExpressionNode makeNameExpressionNode(
             NameNode name)
     {
@@ -427,6 +455,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     /**
      * Creates a CatchNode.
      */
+    @Override
     public CatchNode makeCatchNode(
             BlockStatementNode block,
             VariableNode parameter)
@@ -438,6 +467,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     /**
      * Creates a VoidTypeDeclarationNode.
      */
+    @Override
     public VoidTypeDeclarationNode makeVoidTypeDeclarationNode()
     {
         VoidTypeDeclarationNode ret = new VoidTypeDeclarationNodeImpl();
@@ -447,6 +477,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     /**
      * Creates a NormalAnnotationNode.
      */
+    @Override
     public NormalAnnotationNode makeNormalAnnotationNode(
             ListNode<AnnotationElementNode> arguments,
             RawTypeNode annotationType)
@@ -458,6 +489,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     /**
      * Creates a DoWhileLoopNode.
      */
+    @Override
     public DoWhileLoopNode makeDoWhileLoopNode(
             ExpressionNode condition,
             StatementNode statement)
@@ -469,6 +501,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     /**
      * Creates a QualifiedClassInstantiationNode.
      */
+    @Override
     public QualifiedClassInstantiationNode makeQualifiedClassInstantiationNode(
             ExpressionNode enclosingExpression,
             IdentifierNode identifier,
@@ -484,6 +517,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     /**
      * Creates a TypeCastNode.
      */
+    @Override
     public TypeCastNode makeTypeCastNode(
             ExpressionNode expression,
             TypeNode type)
@@ -495,6 +529,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     /**
      * Creates a LabeledStatementNode.
      */
+    @Override
     public LabeledStatementNode makeLabeledStatementNode(
             IdentifierNode label,
             StatementNode statement)
@@ -506,6 +541,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     /**
      * Creates a BlockStatementNode.
      */
+    @Override
     public BlockStatementNode makeBlockStatementNode(
             ListNode<StatementNode> statements)
     {
@@ -516,6 +552,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     /**
      * Creates a ForInitializerExpressionNode.
      */
+    @Override
     public ForInitializerExpressionNode makeForInitializerExpressionNode(
             ListNode<ExpressionNode> expressions)
     {
@@ -526,6 +563,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     /**
      * Creates a PackageDeclarationNode.
      */
+    @Override
     public PackageDeclarationNode makePackageDeclarationNode(
             NameNode name,
             ListNode<AnnotationNode> annotations)
@@ -537,6 +575,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     /**
      * Creates a AnnotationDeclarationNode.
      */
+    @Override
     public AnnotationDeclarationNode makeAnnotationDeclarationNode(
             AnnotationBodyNode body,
             IdentifierNode identifier,
@@ -549,6 +588,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     /**
      * Creates a CompilationUnitNode.
      */
+    @Override
     public CompilationUnitNode makeCompilationUnitNode(
             PackageDeclarationNode packageDeclaration,
             ListNode<ImportNode> imports,
@@ -561,6 +601,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     /**
      * Creates a ContinueNode.
      */
+    @Override
     public ContinueNode makeContinueNode(
             IdentifierNode label)
     {
@@ -571,6 +612,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     /**
      * Creates a StringLiteralNode.
      */
+    @Override
     public StringLiteralNode makeStringLiteralNode(
             String value)
     {
@@ -581,6 +623,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     /**
      * Creates a AnnotationElementNode.
      */
+    @Override
     public AnnotationElementNode makeAnnotationElementNode(
             IdentifierNode identifier,
             AnnotationValueNode value)
@@ -592,6 +635,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     /**
      * Creates a DoubleLiteralNode.
      */
+    @Override
     public DoubleLiteralNode makeDoubleLiteralNode(
             Double value)
     {
@@ -602,6 +646,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     /**
      * Creates a AnonymousClassBodyNode.
      */
+    @Override
     public AnonymousClassBodyNode makeAnonymousClassBodyNode(
             ListNode<AnonymousClassMemberNode> members)
     {
@@ -612,6 +657,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     /**
      * Creates a UnaryOperatorNode.
      */
+    @Override
     public UnaryOperatorNode makeUnaryOperatorNode(
             ExpressionNode expression,
             UnaryOperator operator)
@@ -623,6 +669,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     /**
      * Creates a SynchronizedNode.
      */
+    @Override
     public SynchronizedNode makeSynchronizedNode(
             ExpressionNode expression,
             BlockStatementNode block)
@@ -634,6 +681,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     /**
      * Creates a VariableNode.
      */
+    @Override
     public VariableNode makeVariableNode(
             ModifiersNode modifiers,
             TypeNode type,
@@ -646,6 +694,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     /**
      * Creates a CharLiteralNode.
      */
+    @Override
     public CharLiteralNode makeCharLiteralNode(
             Character value)
     {
@@ -656,6 +705,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     /**
      * Creates a WildcardTypeNode.
      */
+    @Override
     public WildcardTypeNode makeWildcardTypeNode(
             ReferenceTypeNode bound,
             boolean upperBound)
@@ -667,6 +717,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     /**
      * Creates a InlineTypeDeclarationNode.
      */
+    @Override
     public InlineTypeDeclarationNode makeInlineTypeDeclarationNode(
             InlineTypeDeclarableNode declaration)
     {
@@ -677,6 +728,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     /**
      * Creates a BooleanLiteralNode.
      */
+    @Override
     public BooleanLiteralNode makeBooleanLiteralNode(
             Boolean value)
     {
@@ -687,6 +739,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     /**
      * Creates a SwitchNode.
      */
+    @Override
     public SwitchNode makeSwitchNode(
             ExpressionNode expression,
             ListNode<CaseNode> cases)
@@ -698,6 +751,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     /**
      * Creates a AlternateConstructorInvocationNode.
      */
+    @Override
     public AlternateConstructorInvocationNode makeAlternateConstructorInvocationNode(
             ListNode<ExpressionNode> arguments,
             ListNode<TypeNode> typeArguments)
@@ -709,6 +763,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     /**
      * Creates a ConstructorDeclarationNode.
      */
+    @Override
     public ConstructorDeclarationNode makeConstructorDeclarationNode(
             ConstructorBodyNode body,
             ModifiersNode modifiers,
@@ -724,6 +779,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     /**
      * Creates a AnnotationAnnotationValueNode.
      */
+    @Override
     public AnnotationAnnotationValueNode makeAnnotationAnnotationValueNode(
             AnnotationNode annotation)
     {
@@ -734,6 +790,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     /**
      * Creates a ForLoopNode.
      */
+    @Override
     public ForLoopNode makeForLoopNode(
             ForInitializerNode initializer,
             ExpressionNode condition,
@@ -747,6 +804,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     /**
      * Creates a WhileLoopNode.
      */
+    @Override
     public WhileLoopNode makeWhileLoopNode(
             ExpressionNode condition,
             StatementNode statement)
@@ -758,6 +816,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     /**
      * Creates a ListNode.
      */
+    @Override
     public <T extends Node> ListNode<T> makeListNode(
             List<T> children)
     {
@@ -768,6 +827,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     /**
      * Creates a EnumConstantDeclarationNode.
      */
+    @Override
     public EnumConstantDeclarationNode makeEnumConstantDeclarationNode(
             ListNode<AnnotationNode> annotations,
             IdentifierNode identifier,
@@ -781,6 +841,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     /**
      * Creates a BreakNode.
      */
+    @Override
     public BreakNode makeBreakNode(
             IdentifierNode label)
     {
@@ -791,6 +852,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     /**
      * Creates a ParameterizedTypeSelectNode.
      */
+    @Override
     public ParameterizedTypeSelectNode makeParameterizedTypeSelectNode(
             ParameterizedTypeNode base,
             DeclaredTypeNode select)
@@ -802,6 +864,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     /**
      * Creates a IdentifierNode.
      */
+    @Override
     public IdentifierNode makeIdentifierNode(
             String identifier)
     {
@@ -812,6 +875,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     /**
      * Creates a ArrayTypeNode.
      */
+    @Override
     public ArrayTypeNode makeArrayTypeNode(
             TypeNode type)
     {
@@ -822,6 +886,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     /**
      * Creates a ArrayInitializerCreationNode.
      */
+    @Override
     public ArrayInitializerCreationNode makeArrayInitializerCreationNode(
             ArrayInitializerNode initializer,
             BaseTypeNode baseType,
@@ -834,6 +899,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     /**
      * Creates a TypeParameterNode.
      */
+    @Override
     public TypeParameterNode makeTypeParameterNode(
             IdentifierNode identifier,
             ListNode<DeclaredTypeNode> bounds)
@@ -845,6 +911,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     /**
      * Creates a AnnotationMethodDeclarationNode.
      */
+    @Override
     public AnnotationMethodDeclarationNode makeAnnotationMethodDeclarationNode(
             ModifiersNode modifiers,
             TypeNode type,
@@ -858,6 +925,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     /**
      * Creates a ImportSingleTypeNode.
      */
+    @Override
     public ImportSingleTypeNode makeImportSingleTypeNode(
             NameNode name,
             boolean staticImport)
@@ -869,6 +937,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     /**
      * Creates a FieldDeclarationNode.
      */
+    @Override
     public FieldDeclarationNode makeFieldDeclarationNode(
             ModifiersNode modifiers,
             ListNode<VariableDeclaratorNode> declarators)
@@ -880,6 +949,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     /**
      * Creates a AnnotationArrayValueNode.
      */
+    @Override
     public AnnotationArrayValueNode makeAnnotationArrayValueNode(
             ListNode<AnnotationValueNode> values)
     {
@@ -890,6 +960,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     /**
      * Creates a SingleElementAnnotationNode.
      */
+    @Override
     public SingleElementAnnotationNode makeSingleElementAnnotationNode(
             AnnotationValueNode value,
             RawTypeNode annotationType)
@@ -901,6 +972,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     /**
      * Creates a ClassLiteralNode.
      */
+    @Override
     public ClassLiteralNode makeClassLiteralNode(
             TypeNode value)
     {
@@ -911,6 +983,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     /**
      * Creates a SuperMethodInvocationNode.
      */
+    @Override
     public SuperMethodInvocationNode makeSuperMethodInvocationNode(
             RawTypeNode type,
             IdentifierNode identifier,
@@ -924,6 +997,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     /**
      * Creates a ArrayInitializerNode.
      */
+    @Override
     public ArrayInitializerNode makeArrayInitializerNode(
             ListNode<VariableInitializerNode> initializers)
     {
@@ -934,6 +1008,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     /**
      * Creates a AnnotationExpressionValueNode.
      */
+    @Override
     public AnnotationExpressionValueNode makeAnnotationExpressionValueNode(
             ExpressionNode expression)
     {
@@ -944,6 +1019,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     /**
      * Creates a ReturnNode.
      */
+    @Override
     public ReturnNode makeReturnNode(
             ExpressionNode expression)
     {
@@ -954,6 +1030,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     /**
      * Creates a AssignmentNode.
      */
+    @Override
     public AssignmentNode makeAssignmentNode(
             ExpressionNode variable,
             AssignmentOperator operator,
@@ -966,6 +1043,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     /**
      * Creates a MethodInvocationByExpressionNode.
      */
+    @Override
     public MethodInvocationByExpressionNode makeMethodInvocationByExpressionNode(
             PrimaryExpressionNode expression,
             IdentifierNode identifier,
@@ -979,6 +1057,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     /**
      * Creates a InstanceOfNode.
      */
+    @Override
     public InstanceOfNode makeInstanceOfNode(
             ExpressionNode expression,
             TypeNode type)
@@ -990,6 +1069,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     /**
      * Creates a ConditionalExpressionNode.
      */
+    @Override
     public ConditionalExpressionNode makeConditionalExpressionNode(
             ExpressionNode condition,
             ExpressionNode trueExpression,
@@ -1002,6 +1082,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     /**
      * Creates a ParenthesizedExpressionNode.
      */
+    @Override
     public ParenthesizedExpressionNode makeParenthesizedExpressionNode(
             ExpressionNode expression)
     {
@@ -1012,6 +1093,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     /**
      * Creates a FloatLiteralNode.
      */
+    @Override
     public FloatLiteralNode makeFloatLiteralNode(
             Float value)
     {
@@ -1022,6 +1104,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     /**
      * Creates a BinaryOperatorNode.
      */
+    @Override
     public BinaryOperatorNode makeBinaryOperatorNode(
             ExpressionNode leftOperand,
             ExpressionNode rightOperand,
@@ -1034,6 +1117,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     /**
      * Creates a MethodInvocationByNameNode.
      */
+    @Override
     public MethodInvocationByNameNode makeMethodInvocationByNameNode(
             NameNode name,
             ListNode<ExpressionNode> arguments,
@@ -1046,6 +1130,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     /**
      * Creates a ParameterizedTypeNode.
      */
+    @Override
     public ParameterizedTypeNode makeParameterizedTypeNode(
             RawTypeNode rawType,
             ListNode<TypeArgumentNode> typeArguments)
@@ -1057,6 +1142,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     /**
      * Creates a InterfaceDeclarationNode.
      */
+    @Override
     public InterfaceDeclarationNode makeInterfaceDeclarationNode(
             ListNode<TypeNode> extendsClause,
             InterfaceBodyNode body,
@@ -1071,6 +1157,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     /**
      * Creates a ForInitializerDeclarationNode.
      */
+    @Override
     public ForInitializerDeclarationNode makeForInitializerDeclarationNode(
             VariableDeclarationNode declaration)
     {
@@ -1081,6 +1168,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     /**
      * Creates a RawTypeNode.
      */
+    @Override
     public RawTypeNode makeRawTypeNode(
             NameNode name)
     {
@@ -1091,6 +1179,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     /**
      * Creates a ConstructorBodyNode.
      */
+    @Override
     public ConstructorBodyNode makeConstructorBodyNode(
             ConstructorInvocationNode constructorInvocation,
             ListNode<StatementNode> statements)
@@ -1102,6 +1191,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     /**
      * Creates a FieldAccessByNameNode.
      */
+    @Override
     public FieldAccessByNameNode makeFieldAccessByNameNode(
             NameNode name)
     {
@@ -1112,6 +1202,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     /**
      * Creates a UnqualifiedClassInstantiationNode.
      */
+    @Override
     public UnqualifiedClassInstantiationNode makeUnqualifiedClassInstantiationNode(
             DeclaredTypeNode type,
             ListNode<TypeArgumentNode> constructorTypeArguments,
@@ -1125,6 +1216,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     /**
      * Creates a SimpleNameNode.
      */
+    @Override
     public SimpleNameNode makeSimpleNameNode(
             IdentifierNode identifier,
             NameCategory category)
@@ -1136,6 +1228,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     /**
      * Creates a ArrayInstantiatorCreationNode.
      */
+    @Override
     public ArrayInstantiatorCreationNode makeArrayInstantiatorCreationNode(
             ListNode<ExpressionNode> dimExpressions,
             BaseTypeNode baseType,
@@ -1148,6 +1241,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     /**
      * Creates a IfNode.
      */
+    @Override
     public IfNode makeIfNode(
             ExpressionNode condition,
             StatementNode thenStatement,
@@ -1160,6 +1254,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     /**
      * Creates a ClassBodyNode.
      */
+    @Override
     public ClassBodyNode makeClassBodyNode(
             ListNode<ClassMemberNode> members)
     {
@@ -1170,6 +1265,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     /**
      * Creates a IntLiteralNode.
      */
+    @Override
     public IntLiteralNode makeIntLiteralNode(
             Integer value)
     {
@@ -1180,6 +1276,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     /**
      * Creates a NullLiteralNode.
      */
+    @Override
     public NullLiteralNode makeNullLiteralNode(
             Void value)
     {
@@ -1190,6 +1287,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     /**
      * Creates a MethodDeclarationNode.
      */
+    @Override
     public MethodDeclarationNode makeMethodDeclarationNode(
             BlockStatementNode body,
             ModifiersNode modifiers,

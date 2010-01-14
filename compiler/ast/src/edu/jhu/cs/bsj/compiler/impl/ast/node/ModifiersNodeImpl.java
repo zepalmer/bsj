@@ -1,5 +1,6 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
+import java.util.List;
 import java.util.Set;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
@@ -82,5 +83,19 @@ public class ModifiersNodeImpl extends NodeImpl implements ModifiersNode
     {
         super.receiveToChildren(visitor);
         this.annotations.receive(visitor);
+    }
+
+    /**
+     * Produces a mutable list of this node's children.  Modifying this list will have no
+     * effect on this node.
+     * @return A list of this node's children.
+     */
+    @Override
+    public List<Object> getChildObjects()
+    {
+        List<Object> list = super.getChildObjects();
+        list.add(this.annotations);
+        list.add(this.flags);
+        return list;
     }
 }

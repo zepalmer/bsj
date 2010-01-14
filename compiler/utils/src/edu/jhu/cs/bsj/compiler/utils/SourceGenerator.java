@@ -29,7 +29,7 @@ public class SourceGenerator
 	private static final File TARGET_DIR = new File("out/");
 	private static final String[] IFACE_IMPORTS = new String[] { "edu.jhu.cs.bsj.compiler.ast.*",
 			"edu.jhu.cs.bsj.compiler.ast.node.*", "edu.jhu.cs.bsj.compiler.ast.node.meta.*",
-			"edu.jhu.cs.bsj.compiler.ast.tags.*", "java.util.*" };
+			"java.util.*" };
 	private static final String[] CLASS_IMPORTS = new String[] { "edu.jhu.cs.bsj.compiler.impl.ast.*",
 			"edu.jhu.cs.bsj.compiler.impl.ast.node.*", "edu.jhu.cs.bsj.compiler.impl.ast.node.meta.*" };
 
@@ -1005,6 +1005,28 @@ public class SourceGenerator
 				}
 			}
 			ps.println("    }");
+			ps.println();
+			
+			// add logic for getting list of children
+			ps.println("    /**");
+			ps.println("     * Produces a mutable list of this node's children.  Modifying this list will have no");
+			ps.println("     * effect on this node.");
+			ps.println("     * @return A list of this node's children.");
+			ps.println("     */");
+			if (def.sname!=null)
+			{
+				ps.println("    @Override");
+			}
+			ps.println("    public List<Object> getChildObjects()");
+			ps.println("    {");
+			ps.println("        List<Object> list = " +
+						(def.sname==null?"new ArrayList<Object>();":"super.getChildObjects();"));
+			for (Prop p : def.props)
+			{
+				ps.println("        list.add(this." + p.name + ");");
+			}
+			ps.println("        return list;");
+			ps.println("    }");
 
 			// add supplements
 			includeAllBodies(ps, def.includeFilenames, "classes");
@@ -1244,6 +1266,7 @@ public class SourceGenerator
 				cps.println("    /**");
 				cps.println("     * Creates a " + def.getRawName() + ".");
 				cps.println("     */");
+				cps.println("    @Override");
 				cps.print("    public " + typeParamS + typeName + " make" + def.getRawName());
 				printParameterList(cps, recProps);
 				cps.println();

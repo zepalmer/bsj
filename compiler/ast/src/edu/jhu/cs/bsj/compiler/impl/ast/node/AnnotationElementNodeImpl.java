@@ -1,5 +1,7 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
+import java.util.List;
+
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationElementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationValueNode;
@@ -88,5 +90,19 @@ public class AnnotationElementNodeImpl extends NodeImpl implements AnnotationEle
         super.receiveToChildren(visitor);
         this.identifier.receive(visitor);
         this.value.receive(visitor);
+    }
+
+    /**
+     * Produces a mutable list of this node's children.  Modifying this list will have no
+     * effect on this node.
+     * @return A list of this node's children.
+     */
+    @Override
+    public List<Object> getChildObjects()
+    {
+        List<Object> list = super.getChildObjects();
+        list.add(this.identifier);
+        list.add(this.value);
+        return list;
     }
 }

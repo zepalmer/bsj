@@ -1,5 +1,7 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
+import java.util.List;
+
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.BlockStatementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
@@ -286,5 +288,25 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
         this.returnType.receive(visitor);
         this.throwTypes.receive(visitor);
         this.typeParameters.receive(visitor);
+    }
+
+    /**
+     * Produces a mutable list of this node's children.  Modifying this list will have no
+     * effect on this node.
+     * @return A list of this node's children.
+     */
+    @Override
+    public List<Object> getChildObjects()
+    {
+        List<Object> list = super.getChildObjects();
+        list.add(this.body);
+        list.add(this.modifiers);
+        list.add(this.identifier);
+        list.add(this.parameters);
+        list.add(this.varargParameter);
+        list.add(this.returnType);
+        list.add(this.throwTypes);
+        list.add(this.typeParameters);
+        return list;
     }
 }

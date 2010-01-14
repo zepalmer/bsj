@@ -42,6 +42,19 @@ public class ListNodeImpl<T extends Node> extends NodeImpl implements ListNode<T
     {
         super.receiveToChildren(visitor);
     }
+
+    /**
+     * Produces a mutable list of this node's children.  Modifying this list will have no
+     * effect on this node.
+     * @return A list of this node's children.
+     */
+    @Override
+    public List<Object> getChildObjects()
+    {
+        List<Object> list = super.getChildObjects();
+        list.add(this.children);
+        return list;
+    }
 	/** General constructor */
     public ListNodeImpl(List<? extends T> children)
     {
