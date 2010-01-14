@@ -127,16 +127,16 @@ public class AntlrAstViewer
 
 	public static void printTree(Object element, int indent)
 	{
+		StringBuffer sb = new StringBuffer();
+		for (int i = 0; i < indent; i++)
+			sb.append("    ");
+		String indentString = sb.toString();
+
 		if (element == null)
 		{
-			System.out.println("null");
+			System.out.println(indentString + "null");
 		} else
 		{
-			StringBuffer sb = new StringBuffer();
-			for (int i = 0; i < indent; i++)
-				sb.append("    ");
-			String indentString = sb.toString();
-
 			System.out.println(indentString + element.toString());
 			if (element instanceof Node)
 			{
