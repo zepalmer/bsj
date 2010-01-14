@@ -7,7 +7,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
  * (<i>type</i>) <i>expr</i>
  * </pre>
  */
-public interface TypeCastNode extends Node, ExpressionNode
+public interface TypeCastNode extends Node, NonAssignmentExpressionNode
 {
     /**
      * Gets the expression to cast.

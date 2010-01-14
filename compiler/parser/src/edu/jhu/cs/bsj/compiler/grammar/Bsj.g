@@ -2270,7 +2270,7 @@ assignmentOperator returns [AssignmentOperator ret]
     ;
 
 
-conditionalExpression returns [ExpressionNode ret]
+conditionalExpression returns [NonAssignmentExpressionNode ret]
     :   
         conditionalOrExpression
         {
@@ -2287,7 +2287,7 @@ conditionalExpression returns [ExpressionNode ret]
         )?
     ;
 
-conditionalOrExpression returns [ExpressionNode ret]
+conditionalOrExpression returns [NonAssignmentExpressionNode ret]
     :   
         e1=conditionalAndExpression
         {
@@ -2304,7 +2304,7 @@ conditionalOrExpression returns [ExpressionNode ret]
         )*
     ;
 
-conditionalAndExpression returns [ExpressionNode ret]
+conditionalAndExpression returns [NonAssignmentExpressionNode ret]
     :   
         e1=inclusiveOrExpression
         {
@@ -2321,7 +2321,7 @@ conditionalAndExpression returns [ExpressionNode ret]
         )*
     ;
 
-inclusiveOrExpression returns [ExpressionNode ret]
+inclusiveOrExpression returns [NonAssignmentExpressionNode ret]
     :   
         e1=exclusiveOrExpression
         {
@@ -2338,7 +2338,7 @@ inclusiveOrExpression returns [ExpressionNode ret]
         )*
     ;
 
-exclusiveOrExpression returns [ExpressionNode ret]
+exclusiveOrExpression returns [NonAssignmentExpressionNode ret]
     :   
         e1=andExpression
         {
@@ -2355,7 +2355,7 @@ exclusiveOrExpression returns [ExpressionNode ret]
         )*
     ;
 
-andExpression returns [ExpressionNode ret]
+andExpression returns [NonAssignmentExpressionNode ret]
     :   
         e1=equalityExpression
         {
@@ -2372,7 +2372,7 @@ andExpression returns [ExpressionNode ret]
         )*
     ;
 
-equalityExpression returns [ExpressionNode ret]
+equalityExpression returns [NonAssignmentExpressionNode ret]
         @init{
             BinaryOperator op = null;
         }
@@ -2401,7 +2401,7 @@ equalityExpression returns [ExpressionNode ret]
         )*
     ;
 
-instanceOfExpression returns [ExpressionNode ret]
+instanceOfExpression returns [NonAssignmentExpressionNode ret]
     :   
         e1=relationalExpression
         {
@@ -2417,7 +2417,7 @@ instanceOfExpression returns [ExpressionNode ret]
         )?
     ;
 
-relationalExpression returns [ExpressionNode ret]
+relationalExpression returns [NonAssignmentExpressionNode ret]
     :   
         e1=shiftExpression
         {
@@ -2457,7 +2457,7 @@ relationalOp returns [BinaryOperator ret]
         }         
     ;
 
-shiftExpression returns [ExpressionNode ret]
+shiftExpression returns [NonAssignmentExpressionNode ret]
     :   
         e1=additiveExpression
         {
@@ -2494,7 +2494,7 @@ shiftOp returns [BinaryOperator ret]
     ;
 
 
-additiveExpression returns [ExpressionNode ret]
+additiveExpression returns [NonAssignmentExpressionNode ret]
         @init{
             BinaryOperator op = null;
         }
@@ -2523,7 +2523,7 @@ additiveExpression returns [ExpressionNode ret]
         )*
     ;
 
-multiplicativeExpression returns [ExpressionNode ret]
+multiplicativeExpression returns [NonAssignmentExpressionNode ret]
         @init{
             BinaryOperator op = null;
         }
@@ -2560,7 +2560,7 @@ multiplicativeExpression returns [ExpressionNode ret]
  * NOTE: for '+' and '-', if the next token is int or long literal, then it's not a unary expression.
  *       it's a literal with signed value. INTLITERAL AND LONG LITERAL are added here for this.
  */
-unaryExpression returns [ExpressionNode ret]
+unaryExpression returns [NonAssignmentExpressionNode ret]
     :   
         '+'  e=unaryExpression
         {
@@ -2606,7 +2606,7 @@ unaryExpression returns [ExpressionNode ret]
         }
     ;
 
-unaryExpressionNotPlusMinus returns [ExpressionNode ret]
+unaryExpressionNotPlusMinus returns [NonAssignmentExpressionNode ret]
     :   
         '~' unaryExpression
         {
@@ -2643,7 +2643,7 @@ castExpression returns [TypeCastNode ret]
         }
     ;
 
-postfixExpression returns [ExpressionNode ret]
+postfixExpression returns [NonAssignmentExpressionNode ret]
     :
         // Note: primary must be before expressionName in the following.  Otherwise, this postfixExpression rule will
         // match "this" out of "this.x" and leave the ".x" lying around.  Because primary is first, backtracking will

@@ -7,7 +7,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
  * <i>condition</i> ? <i>expression</i> : <i>expression</i>
  * </pre>
  */
-public interface ConditionalExpressionNode extends Node, ExpressionNode
+public interface ConditionalExpressionNode extends Node, NonAssignmentExpressionNode
 {
     /**
      * Gets the condition of the expression.

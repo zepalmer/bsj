@@ -35,14 +35,6 @@ public interface BsjNodeFactory
             ListNode<InterfaceMemberNode> members);
 
     /**
-     * Creates a EnhancedForLoopNode.
-     */
-    public EnhancedForLoopNode makeEnhancedForLoopNode(
-            VariableNode variable,
-            ExpressionNode expression,
-            StatementNode statement);
-
-    /**
      * Creates a ClassDeclarationNode.
      */
     public ClassDeclarationNode makeClassDeclarationNode(
@@ -52,6 +44,14 @@ public interface BsjNodeFactory
             ListNode<TypeParameterNode> typeParameters,
             IdentifierNode identifier,
             ModifiersNode modifiers);
+
+    /**
+     * Creates a EnhancedForLoopNode.
+     */
+    public EnhancedForLoopNode makeEnhancedForLoopNode(
+            VariableNode variable,
+            ExpressionNode expression,
+            StatementNode statement);
 
     /**
      * Creates a ArrayAccessNode.
@@ -536,7 +536,7 @@ public interface BsjNodeFactory
      * Creates a AnnotationExpressionValueNode.
      */
     public AnnotationExpressionValueNode makeAnnotationExpressionValueNode(
-            ExpressionNode expression);
+            NonAssignmentExpressionNode expression);
 
     /**
      * Creates a ReturnNode.

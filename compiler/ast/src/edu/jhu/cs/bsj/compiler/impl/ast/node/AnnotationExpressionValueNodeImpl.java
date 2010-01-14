@@ -4,16 +4,16 @@ import java.util.List;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationExpressionValueNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
+import edu.jhu.cs.bsj.compiler.ast.node.NonAssignmentExpressionNode;
 
 public class AnnotationExpressionValueNodeImpl extends NodeImpl implements AnnotationExpressionValueNode
 {
     /** The expression. */
-    private ExpressionNode expression;
+    private NonAssignmentExpressionNode expression;
 
     /** General constructor. */
     public AnnotationExpressionValueNodeImpl(
-            ExpressionNode expression)
+            NonAssignmentExpressionNode expression)
     {
         super();
         this.expression = expression;
@@ -23,7 +23,7 @@ public class AnnotationExpressionValueNodeImpl extends NodeImpl implements Annot
      * Gets the expression.
      * @return The expression.
      */
-    public ExpressionNode getExpression()
+    public NonAssignmentExpressionNode getExpression()
     {
         return this.expression;
     }
@@ -32,7 +32,7 @@ public class AnnotationExpressionValueNodeImpl extends NodeImpl implements Annot
      * Changes the expression.
      * @param expression The expression.
      */
-    public void setExpression(ExpressionNode expression)
+    public void setExpression(NonAssignmentExpressionNode expression)
     {
         if (this.expression instanceof NodeImpl)
         {

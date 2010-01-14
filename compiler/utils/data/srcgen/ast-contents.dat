@@ -61,7 +61,8 @@
 
 ### Tagging Interfaces ################################################################################################
 
-ArrayIndexableNode+ :: Node + ExpressionNode
+# TODO: this is now redundant since our AST represents single expression names as FieldAccessByNameNodes.
+ArrayIndexableNode+ :: Node + NonAssignmentExpressionNode
     @docs
         This tagging interface is used to denote AST nodes which can be used as array reference expressions inside of
         an array access node.
@@ -127,7 +128,12 @@ LiteralizableTypeNode+ :: Node + TypeNode
         literal (such as <tt>String.class</tt>, <tt>int.class</tt>, or <tt>String[].class</tt>).  Note that
         parameterized types may not be used to create literals; that is, <tt>Set&lt;String&gt;.class</tt> is illegal.
 
-PrimaryExpressionNode+ :: Node + ExpressionNode
+NonAssignmentExpressionNode+ :: Node + ExpressionNode
+    @docs
+        This tagging interface describes expressions which are not assignment expressions.  In some contexts, assignment
+        expressions are not permitted (such as in the initializers of annotation values).
+
+PrimaryExpressionNode+ :: Node + NonAssignmentExpressionNode
     @docs
         A tagging interface for all nodes considered "primary expressions" by the Java Language Specification.  Primary
         expressions include the basic building blocks of more complex expressions.
@@ -261,7 +267,7 @@ AssignmentNode :: Node + ExpressionNode
         </pre>
         where <i>op</i> is one of <tt>=</tt>, <tt>+=</tt>, <tt>%=</tt>, etc.
 
-BinaryOperatorNode :: Node + ExpressionNode
+BinaryOperatorNode :: Node + NonAssignmentExpressionNode
     @props
     leftOperand             ExpressionNode                              | the left operand of the expression
     rightOperand            ExpressionNode                              | the right operand of the expression
@@ -277,7 +283,7 @@ ClassInstantiationNode* :: Node + RestrictedPrimaryExpressionNode
     @docs
         Acts as a parent to class instantiation nodes. 
 
-ConditionalExpressionNode :: Node + ExpressionNode
+ConditionalExpressionNode :: Node + NonAssignmentExpressionNode
     @props
     condition               ExpressionNode                              | the condition of the expression
     trueExpression          ExpressionNode                              | the value of this expression when the condition is true
@@ -325,7 +331,7 @@ FieldAccessByNameNode :: Node + FieldAccessNode
         This node is not used to represent field access from the evaluation result of a subexpression (such as in the
         code <tt>foo().bar</tt>).  For that form of access, see {@link FieldAccessByExpressionNode}.
 
-InstanceOfNode :: Node + ExpressionNode
+InstanceOfNode :: Node + NonAssignmentExpressionNode
     @props
     expression              ExpressionNode                              | the expression being evaluated
     type                    TypeNode                                    | the type being checked
@@ -514,7 +520,7 @@ ThisNode :: Node + RestrictedPrimaryExpressionNode
         In that case, the <tt>type</tt> field contains the name of the qualified <tt>this</tt>.  Usually, <tt>this</tt>
         is unqualified and the <tt>type</tt> field is <tt>null</tt>.
 
-TypeCastNode :: Node + ExpressionNode
+TypeCastNode :: Node + NonAssignmentExpressionNode
     @props
     expression              ExpressionNode                              | the expression to cast
     type                    TypeNode                                    | the type to which to cast
@@ -524,7 +530,7 @@ TypeCastNode :: Node + ExpressionNode
         (<i>type</i>) <i>expr</i>
         </pre>
 
-UnaryOperatorNode :: Node + ExpressionNode
+UnaryOperatorNode :: Node + NonAssignmentExpressionNode
     @props
     expression              ExpressionNode                              | the expression on which to operate
     operator                UnaryOperator                               | the operator to apply
@@ -1074,10 +1080,9 @@ AnnotationArrayValueNode :: Node + AnnotationValueNode
         A value in an annotation representing an array.  This node is distinct from the {@link ArrayInitializerNode}
         because it allows annotations (by way of {@link AnnotationAnnotationValueNode}) as well as expressions.
 
-# TODO: is there a nice way for us to type-encode that this expression may not be an assignment expression?
 AnnotationExpressionValueNode :: Node + AnnotationValueNode
     @props
-    expression              ExpressionNode                              | the expression
+    expression              NonAssignmentExpressionNode                 | the expression
     @docs
         A value in an annotation which is an expression.  This value may not be an assignment expression.
 

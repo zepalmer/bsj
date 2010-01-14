@@ -152,19 +152,6 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
 
     /**
-     * Creates a EnhancedForLoopNode.
-     */
-    @Override
-    public EnhancedForLoopNode makeEnhancedForLoopNode(
-            VariableNode variable,
-            ExpressionNode expression,
-            StatementNode statement)
-    {
-        EnhancedForLoopNode ret = new EnhancedForLoopNodeImpl(variable, expression, statement);
-        return ret;
-    }
-
-    /**
      * Creates a ClassDeclarationNode.
      */
     @Override
@@ -177,6 +164,19 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ModifiersNode modifiers)
     {
         ClassDeclarationNode ret = new ClassDeclarationNodeImpl(extendsClause, implementsClause, body, typeParameters, identifier, modifiers);
+        return ret;
+    }
+
+    /**
+     * Creates a EnhancedForLoopNode.
+     */
+    @Override
+    public EnhancedForLoopNode makeEnhancedForLoopNode(
+            VariableNode variable,
+            ExpressionNode expression,
+            StatementNode statement)
+    {
+        EnhancedForLoopNode ret = new EnhancedForLoopNodeImpl(variable, expression, statement);
         return ret;
     }
 
@@ -1009,7 +1009,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     @Override
     public AnnotationExpressionValueNode makeAnnotationExpressionValueNode(
-            ExpressionNode expression)
+            NonAssignmentExpressionNode expression)
     {
         AnnotationExpressionValueNode ret = new AnnotationExpressionValueNodeImpl(expression);
         return ret;

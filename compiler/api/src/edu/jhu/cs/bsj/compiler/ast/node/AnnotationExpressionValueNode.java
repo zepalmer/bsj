@@ -10,12 +10,12 @@ public interface AnnotationExpressionValueNode extends Node, AnnotationValueNode
      * Gets the expression.
      * @return The expression.
      */
-    public ExpressionNode getExpression();
+    public NonAssignmentExpressionNode getExpression();
 
     /**
      * Changes the expression.
      * @param expression The expression.
      */
-    public void setExpression(ExpressionNode expression);
+    public void setExpression(NonAssignmentExpressionNode expression);
 
 }
