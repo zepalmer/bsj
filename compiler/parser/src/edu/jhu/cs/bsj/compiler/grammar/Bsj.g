@@ -975,7 +975,7 @@ methodDeclaration returns [MethodDeclarationNode ret]
             ListNode<TypeParameterNode> typeParametersNode =
                     factory.makeListNode(Collections.<TypeParameterNode>emptyList());
             ListNode<RawTypeNode> throwsNode = factory.makeListNode(Collections.<RawTypeNode>emptyList());
-            TypeNode returnTypeNode;
+            TypeNode returnTypeNode = null;
         }
     :
         modifiers[methodModifiers]
@@ -1004,7 +1004,7 @@ methodDeclaration returns [MethodDeclarationNode ret]
             }
         )?
         (        
-            block
+            block   
             {
                 blockStatementNode = $block.ret;
             }
@@ -1062,7 +1062,7 @@ interfaceBodyDeclaration returns [InterfaceMemberNode ret]
 
 interfaceMethodDeclaration returns [MethodDeclarationNode ret]
         @init {
-            TypeNode returnTypeNode;
+            TypeNode returnTypeNode = null;
             ListNode<RawTypeNode> throwsNode = factory.makeListNode(Collections.<RawTypeNode>emptyList());
         }
     :   
@@ -1181,7 +1181,7 @@ type returns [TypeNode ret]
 //     A<X,Y>.B.C<Z>.D
 classOrInterfaceType returns [DeclaredTypeNode ret]
         @init {
-            RawTypeNode rawTypeNode;
+            RawTypeNode rawTypeNode = null;
             ParameterizedTypeNode parameterizedTypeNode = null;
         }
     :
@@ -1212,7 +1212,7 @@ classOrInterfaceType returns [DeclaredTypeNode ret]
 //     boolean
 primitiveType returns [PrimitiveTypeNode ret]
         @init {
-                PrimitiveType temp;
+                PrimitiveType temp = null;
         }
         @after {
                 $ret = factory.makePrimitiveTypeNode(temp);
@@ -1384,7 +1384,7 @@ formalParameterDecls returns [ListNode<VariableNode> parameters, VariableNode va
 
 normalParameterDecl returns [VariableNode ret]
         @init {
-            TypeNode typeNode;
+            TypeNode typeNode = null;
         }
     :
         mod=variableModifiers
@@ -1945,7 +1945,7 @@ switchBlockStatementGroups returns [ListNode<CaseNode> ret]
 switchBlockStatementGroup returns [CaseNode ret]
     @init {
             List<StatementNode> list = new ArrayList<StatementNode>();
-            ExpressionNode label;
+            ExpressionNode label = null;
     }
     @after {
             $ret = factory.makeCaseNode(label, factory.makeListNode(list));
@@ -2047,7 +2047,7 @@ catchClause returns [CatchNode ret]
 //     IOException e
 formalParameter returns [VariableNode ret]
         @init {
-            TypeNode typeNode;
+            TypeNode typeNode = null;
         }
     :   
         variableModifiers
@@ -2374,7 +2374,7 @@ andExpression returns [ExpressionNode ret]
 
 equalityExpression returns [ExpressionNode ret]
         @init{
-            BinaryOperator op;
+            BinaryOperator op = null;
         }
     :   
         e1=instanceOfExpression
@@ -2496,7 +2496,7 @@ shiftOp returns [BinaryOperator ret]
 
 additiveExpression returns [ExpressionNode ret]
         @init{
-            BinaryOperator op;
+            BinaryOperator op = null;
         }
     :   
         e1=multiplicativeExpression
@@ -2525,7 +2525,7 @@ additiveExpression returns [ExpressionNode ret]
 
 multiplicativeExpression returns [ExpressionNode ret]
         @init{
-            BinaryOperator op;
+            BinaryOperator op = null;
         }
     :
         e1=unaryExpression
@@ -3018,7 +3018,7 @@ arrayAccess[ArrayIndexableNode in] returns [ArrayAccessNode ret]
 
 primitiveClassLiteral returns [ClassLiteralNode ret]
         @init {
-            TypeNode typeNode;
+            TypeNode typeNode = null;
         }
         @after {
             $ret = factory.makeClassLiteralNode(typeNode);
@@ -3256,7 +3256,7 @@ intLiteral [boolean isNegative] returns [LiteralNode<?> ret]
         INTLITERAL
         {
             IntegerBaseResult ibr = new IntegerBaseResult($INTLITERAL.text);
-            Integer i;
+            Integer i = null;
             try
             {
                 i = Integer.parseInt(
@@ -3276,7 +3276,7 @@ longLiteral [boolean isNegative] returns [LiteralNode<?> ret]
             String s = $LONGLITERAL.text;
             s = s.substring(0, s.length()-1);
             IntegerBaseResult ibr = new IntegerBaseResult(s);
-            Long l;
+            Long l = null;
             try
             {
                 l = Long.parseLong(
@@ -3305,7 +3305,7 @@ lexicalLiteral returns [LiteralNode<?> ret]
         {
             String s = $FLOATLITERAL.text;
             s = s.substring(0,s.length()-1);
-            Float f;
+            Float f = null;
             try
             {
                 f = Float.parseFloat(s);
@@ -3323,7 +3323,7 @@ lexicalLiteral returns [LiteralNode<?> ret]
             {
                 s = s.substring(0,s.length()-1);
             }
-            Double d;
+            Double d = null;
             try
             {
                 d = Double.parseDouble(s);
