@@ -204,12 +204,6 @@ public interface BsjNodeFactory
             ExpressionNode expression);
 
     /**
-     * Creates a NameExpressionNode.
-     */
-    public NameExpressionNode makeNameExpressionNode(
-            NameNode name);
-
-    /**
      * Creates a CatchNode.
      */
     public CatchNode makeCatchNode(

@@ -62,7 +62,6 @@ import edu.jhu.cs.bsj.compiler.ast.node.MethodDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.MethodInvocationByExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.MethodInvocationByNameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ModifiersNode;
-import edu.jhu.cs.bsj.compiler.ast.node.NameExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.NormalAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.NullLiteralNode;
@@ -343,9 +342,6 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
         } else if (node instanceof CatchNode)
         {
             visitCatchNodeStart((CatchNode)node);
-        } else if (node instanceof NameExpressionNode)
-        {
-            visitNameExpressionNodeStart((NameExpressionNode)node);
         } else if (node instanceof ThrowNode)
         {
             visitThrowNodeStart((ThrowNode)node);
@@ -649,9 +645,6 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
         } else if (node instanceof CatchNode)
         {
             visitCatchNodeStop((CatchNode)node);
-        } else if (node instanceof NameExpressionNode)
-        {
-            visitNameExpressionNodeStop((NameExpressionNode)node);
         } else if (node instanceof ThrowNode)
         {
             visitThrowNodeStop((ThrowNode)node);
@@ -1326,14 +1319,6 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
      * @param node The node being visited.
      */
     public void visitCatchNodeStart(CatchNode node)
-    {
-    }
-
-    /**
-     * Starts a visit for nodes of type NameExpressionNode.
-     * @param node The node being visited.
-     */
-    public void visitNameExpressionNodeStart(NameExpressionNode node)
     {
     }
 
@@ -2110,14 +2095,6 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
      * @param node The node being visited.
      */
     public void visitCatchNodeStop(CatchNode node)
-    {
-    }
-
-    /**
-     * Stops a visit for nodes of type NameExpressionNode.
-     * @param node The node being visited.
-     */
-    public void visitNameExpressionNodeStop(NameExpressionNode node)
     {
     }
 

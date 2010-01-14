@@ -378,23 +378,6 @@ MethodInvocationNode* :: Node + RestrictedPrimaryExpressionNode
     @docs
         A superclass for method invocation nodes.
 
-# TODO: redundant?
-NameExpressionNode :: Node + ExpressionNode, ArrayIndexableNode
-    @props
-    name                    NameNode                                    | the name to evaluate for this expression
-    @docs
-        A node representing a name evaluated as an expression, as in
-        <pre>
-        <i>expr</i>
-        </pre>
-        This is a very common form of expression.  For instance, this node would be present in the <tt>x</tt> portion of
-        all of the following:
-        <ul>
-        <li><tt>x</tt></li>
-        <li><tt>x[0]</tt></li>
-        <li><tt>foo(x)</tt></li>
-        </ul>
-
 ParenthesizedExpressionNode :: Node + RestrictedPrimaryExpressionNode
     @props
     expression              ExpressionNode                              | the expression contained in this node
@@ -688,7 +671,6 @@ ReturnNode :: Node + StatementNode
         or
         <pre>return;</pre>
         For void return statements, the <tt>expression</tt> is <tt>null</tt>.
-# TODO: should we be using null object for things like this?
     
 SwitchNode :: Node + StatementNode
     @props
@@ -1208,7 +1190,6 @@ ConstructorBodyNode :: Node
         that there be exactly one explicit constructor invocation and that it appears at the top of the constructor
         body.
 
-# TODO: the language specification says that the type nodes in the list can't be wild - can we type-encode this?
 ConstructorInvocationNode* :: Node
     @props
     arguments               ListNode<ExpressionNode>                    | the arguments to pass to the method
