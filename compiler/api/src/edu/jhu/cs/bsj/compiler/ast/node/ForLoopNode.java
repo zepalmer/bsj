@@ -41,13 +41,13 @@ public interface ForLoopNode extends Node, StatementNode
      * Gets the loop's update operation.
      * @return The loop's update operation.
      */
-    public ListNode<ExpressionStatementNode> getUpdate();
+    public ListNode<ExpressionNode> getUpdate();
 
     /**
      * Changes the loop's update operation.
      * @param update The loop's update operation.
      */
-    public void setUpdate(ListNode<ExpressionStatementNode> update);
+    public void setUpdate(ListNode<ExpressionNode> update);
 
     /**
      * Gets the loop's statement.

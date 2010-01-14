@@ -624,11 +624,12 @@ ExpressionStatementNode :: Node + StatementNode
         A node representing an expression statement.  This allows any expression to be used as a statement and its
         value discarded.
     
+# TODO: for loop updates should only allow those expressions which can be used as statements
 ForLoopNode :: Node + StatementNode
     @props
     initializer             ForInitializerNode                          | the initializer used for this for loop
     condition               ExpressionNode                              | the loop's termination condition
-    update                  ListNode<ExpressionStatementNode>           | the loop's update operation
+    update                  ListNode<ExpressionNode>                    | the loop's update operation
     statement               StatementNode                               | the loop's statement
     @docs
         A node representing a for-loop, as in:

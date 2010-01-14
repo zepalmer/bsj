@@ -2074,8 +2074,7 @@ forstatement returns [StatementNode ret]
     @init{
         ForInitializerNode forInitNode = null;
         ExpressionNode expNode = null;
-        ListNode<ExpressionStatementNode> expListNode =
-                factory.makeListNode(Collections.<ExpressionStatementNode>emptyList());
+        ListNode<ExpressionNode> expListNode = factory.makeListNode(Collections.<ExpressionNode>emptyList());
     }
     :   
         // enhanced for loop
@@ -2145,9 +2144,9 @@ parExpression returns [ExpressionNode ret]
         }
     ;
 
-statementExpressionList returns [ListNode<ExpressionStatementNode> ret]
+statementExpressionList returns [ListNode<ExpressionNode> ret]
         @init {
-            List<ExpressionStatementNode> list = new ArrayList<ExpressionStatementNode>();
+            List<ExpressionNode> list = new ArrayList<ExpressionNode>();
         }
         @after {
             $ret = factory.makeListNode(list);
@@ -2156,12 +2155,12 @@ statementExpressionList returns [ListNode<ExpressionStatementNode> ret]
         // TODO: expression statements are limited to a certain set of expressions; can we fix this?
         a=expression
         {
-            list.add(factory.makeExpressionStatementNode($a.ret));
+            list.add($a.ret);
         }
         (
             ',' b=expression
             {
-                list.add(factory.makeExpressionStatementNode($b.ret));
+                list.add($b.ret);
             }
         )*
     ;

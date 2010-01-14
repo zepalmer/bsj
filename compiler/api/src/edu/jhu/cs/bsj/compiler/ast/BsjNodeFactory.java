@@ -410,7 +410,7 @@ public interface BsjNodeFactory
     public ForLoopNode makeForLoopNode(
             ForInitializerNode initializer,
             ExpressionNode condition,
-            ListNode<ExpressionStatementNode> update,
+            ListNode<ExpressionNode> update,
             StatementNode statement);
 
     /**
