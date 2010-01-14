@@ -2809,7 +2809,7 @@ primarySuffix[PrimaryExpressionNode in] returns [RestrictedPrimaryExpressionNode
 	        // field access on an expression
 	        '.' identifier
 	        {
-	            $ret = makeFieldAccessNode(in, $identifier.ret);
+	            $ret = factory.makeFieldAccessNode(in, $identifier.ret);
 	        }
 	    |
 	        // method invocation with type arguments
