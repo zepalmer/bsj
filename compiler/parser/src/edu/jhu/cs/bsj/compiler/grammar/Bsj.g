@@ -61,7 +61,7 @@ options {
 }
 
 scope Global {   
-    Stack<String> className;
+    String className;
 }
 
 @lexer::header{
@@ -479,11 +479,7 @@ normalClassDeclaration returns [ClassDeclarationNode ret]
         modifiers[classModifiers]
         'class' id=identifier
         {
-            if ($Global::className == null)
-            {
-                $Global::className = new Stack<String>();
-            }
-            $Global::className.push($id.ret.getIdentifier());
+            $Global::className = $id.ret.getIdentifier();
         }
         typeParameters?
         ('extends' type)?
@@ -497,7 +493,6 @@ normalClassDeclaration returns [ClassDeclarationNode ret]
                     $typeParameters.ret,
                     $id.ret,
                     $modifiers.ret);
-            $Global::className.pop();
         }
     ;
 
@@ -572,11 +567,7 @@ enumDeclaration returns [EnumDeclarationNode ret]
         'enum' 
         id=identifier
         {
-            if ($Global::className == null)
-            {
-                $Global::className = new Stack<String>();
-            }        
-            $Global::className.push($id.ret.getIdentifier());
+            $Global::className = $id.ret.getIdentifier();
         }
         ('implements' typeList)?
         enumBody
@@ -586,7 +577,6 @@ enumDeclaration returns [EnumDeclarationNode ret]
                         $enumBody.ret,
                         $id.ret,
                         $modifiers.ret);
-            $Global::className.pop();                        
         }
     ;
 
@@ -714,11 +704,7 @@ normalInterfaceDeclaration returns [InterfaceDeclarationNode ret]
         modifiers[interfaceModifiers]
         'interface' id=identifier
         {
-            if ($Global::className == null)
-            {
-                $Global::className = new Stack<String>();
-            }        
-            $Global::className.push($id.ret.getIdentifier());
+            $Global::className = $id.ret.getIdentifier();
         }        
         (typeParameters
         )?
@@ -732,7 +718,6 @@ normalInterfaceDeclaration returns [InterfaceDeclarationNode ret]
                     $typeParameters.ret,
                     $id.ret,
                     $modifiers.ret);
-            $Global::className.pop();                    
         }
     ;
 
@@ -923,10 +908,7 @@ constructorDeclaration returns [ConstructorDeclarationNode ret]
         )?
         constructorBody
         {
-            if ($Global::className.empty())
-            {
-                //TODO error handling            
-            } else if (!$identifier.ret.getIdentifier().equals($Global::className.peek()))
+            if (!$identifier.ret.getIdentifier().equals($Global::className))
             {
                 //TODO error handling
             } else

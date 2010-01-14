@@ -7,6 +7,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/BSJ Compiler API"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/BSJ AST Implementation"/>
-	<classpathentry exported="true" kind="lib" path=".gen/bin"/>
+	<classpathentry exported="true" kind="lib" path=".gen/bin" sourcepath=".gen/src"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
