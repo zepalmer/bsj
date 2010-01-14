@@ -4,20 +4,20 @@ import java.util.List;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.ArrayAccessNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ArrayIndexableNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
+import edu.jhu.cs.bsj.compiler.ast.node.RestrictedPrimaryExpressionNode;
 
 public class ArrayAccessNodeImpl extends NodeImpl implements ArrayAccessNode
 {
     /** The expression identifying the array. */
-    private ArrayIndexableNode arrayExpression;
+    private RestrictedPrimaryExpressionNode arrayExpression;
 
     /** The index into the array. */
     private ExpressionNode indexExpression;
 
     /** General constructor. */
     public ArrayAccessNodeImpl(
-            ArrayIndexableNode arrayExpression,
+            RestrictedPrimaryExpressionNode arrayExpression,
             ExpressionNode indexExpression)
     {
         super();
@@ -29,7 +29,7 @@ public class ArrayAccessNodeImpl extends NodeImpl implements ArrayAccessNode
      * Gets the expression identifying the array.
      * @return The expression identifying the array.
      */
-    public ArrayIndexableNode getArrayExpression()
+    public RestrictedPrimaryExpressionNode getArrayExpression()
     {
         return this.arrayExpression;
     }
@@ -38,7 +38,7 @@ public class ArrayAccessNodeImpl extends NodeImpl implements ArrayAccessNode
      * Changes the expression identifying the array.
      * @param arrayExpression The expression identifying the array.
      */
-    public void setArrayExpression(ArrayIndexableNode arrayExpression)
+    public void setArrayExpression(RestrictedPrimaryExpressionNode arrayExpression)
     {
         if (this.arrayExpression instanceof NodeImpl)
         {

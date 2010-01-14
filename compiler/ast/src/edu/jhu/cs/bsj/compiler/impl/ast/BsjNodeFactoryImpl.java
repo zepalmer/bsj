@@ -152,6 +152,19 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
 
     /**
+     * Creates a EnhancedForLoopNode.
+     */
+    @Override
+    public EnhancedForLoopNode makeEnhancedForLoopNode(
+            VariableNode variable,
+            ExpressionNode expression,
+            StatementNode statement)
+    {
+        EnhancedForLoopNode ret = new EnhancedForLoopNodeImpl(variable, expression, statement);
+        return ret;
+    }
+
+    /**
      * Creates a ClassDeclarationNode.
      */
     @Override
@@ -168,24 +181,11 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
 
     /**
-     * Creates a EnhancedForLoopNode.
-     */
-    @Override
-    public EnhancedForLoopNode makeEnhancedForLoopNode(
-            VariableNode variable,
-            ExpressionNode expression,
-            StatementNode statement)
-    {
-        EnhancedForLoopNode ret = new EnhancedForLoopNodeImpl(variable, expression, statement);
-        return ret;
-    }
-
-    /**
      * Creates a ArrayAccessNode.
      */
     @Override
     public ArrayAccessNode makeArrayAccessNode(
-            ArrayIndexableNode arrayExpression,
+            RestrictedPrimaryExpressionNode arrayExpression,
             ExpressionNode indexExpression)
     {
         ArrayAccessNode ret = new ArrayAccessNodeImpl(arrayExpression, indexExpression);

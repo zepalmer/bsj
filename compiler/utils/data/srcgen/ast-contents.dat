@@ -61,12 +61,6 @@
 
 ### Tagging Interfaces ################################################################################################
 
-# TODO: this is now redundant since our AST represents single expression names as FieldAccessByNameNodes.
-ArrayIndexableNode+ :: Node + NonAssignmentExpressionNode
-    @docs
-        This tagging interface is used to denote AST nodes which can be used as array reference expressions inside of
-        an array access node.
-        
 AnnotationMemberNode+ :: Node
 	@docs
 		This tagging interface is used to denote AST nodes which can be used as members of an annotation declaration's
@@ -142,7 +136,7 @@ ReferenceTypeNode+ :: Node + TypeNode, TypeArgumentNode
     @docs
         A node representing a reference type.  A reference type in Java is any non-primitive type.
 
-RestrictedPrimaryExpressionNode+ :: Node + PrimaryExpressionNode, ArrayIndexableNode
+RestrictedPrimaryExpressionNode+ :: Node + PrimaryExpressionNode
     @docs
         A tagging interface for restricted primary expressions.  This maps to the <i>PrimaryNoNewArray</i> parse target
         in the JLS.
@@ -218,7 +212,7 @@ SimpleNameNode :: NameNode
 
 ArrayAccessNode :: Node + RestrictedPrimaryExpressionNode
     @props
-    arrayExpression         ArrayIndexableNode                          | the expression identifying the array
+    arrayExpression         RestrictedPrimaryExpressionNode             | the expression identifying the array
     indexExpression         ExpressionNode                              | the index into the array
     @docs
         Represents an array access, as in:

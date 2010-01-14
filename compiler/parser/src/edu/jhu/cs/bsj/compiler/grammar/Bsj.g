@@ -3002,7 +3002,7 @@ typeArgumentMethodInvocationSuffix[PrimaryExpressionNode in] returns [Restricted
         }
     ;
     
-arrayAccess[ArrayIndexableNode in] returns [ArrayAccessNode ret]
+arrayAccess[RestrictedPrimaryExpressionNode in] returns [ArrayAccessNode ret]
     :
         '[' a=expression ']'
         {

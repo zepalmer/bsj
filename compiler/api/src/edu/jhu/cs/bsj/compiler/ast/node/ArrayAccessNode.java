@@ -13,13 +13,13 @@ public interface ArrayAccessNode extends Node, RestrictedPrimaryExpressionNode
      * Gets the expression identifying the array.
      * @return The expression identifying the array.
      */
-    public ArrayIndexableNode getArrayExpression();
+    public RestrictedPrimaryExpressionNode getArrayExpression();
 
     /**
      * Changes the expression identifying the array.
      * @param arrayExpression The expression identifying the array.
      */
-    public void setArrayExpression(ArrayIndexableNode arrayExpression);
+    public void setArrayExpression(RestrictedPrimaryExpressionNode arrayExpression);
 
     /**
      * Gets the index into the array.
