@@ -2705,7 +2705,7 @@ restrictedPrimary returns [RestrictedPrimaryExpressionNode ret]
             // class literal for declared types
             classLiteralName=typeName '.' 'class'
             {
-                $ret = factory.makeRawTypeNode($classLiteralName.ret);
+                $ret = factory.makeClassLiteralNode(factory.makeRawTypeNode($classLiteralName.ret));
             } 
         |
             // void class literal
