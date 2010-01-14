@@ -6,7 +6,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
  * InputStream, and so on.  Parameterized types, such as Set<String>, are not represented in this way.
  * Unparameterized types also represent type parameters, such as the <tt>T</tt> in <tt>Set<T></tt>.
  */
-public interface UnparameterizedTypeNode extends Node, DeclaredTypeNode
+public interface UnparameterizedTypeNode extends Node, DeclaredTypeNode,  LiteralizableTypeNode
 {
     /**
      * Gets the name of the type.

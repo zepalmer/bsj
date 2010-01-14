@@ -973,7 +973,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     @Override
     public ClassLiteralNode makeClassLiteralNode(
-            TypeNode value)
+            LiteralizableTypeNode value)
     {
         ClassLiteralNode ret = new ClassLiteralNodeImpl(value);
         return ret;

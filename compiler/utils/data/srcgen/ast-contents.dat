@@ -121,6 +121,12 @@ InterfaceMemberNode+ :: Node
 		This tagging interface is used to denote AST nodes which can be used as members of an interface declaration's
 		body.
 		
+LiteralizableTypeNode+ :: Node + TypeNode
+    @docs
+        This tagging interface is used to denote AST nodes which refer to a type which can be used to define a class
+        literal (such as <tt>String.class</tt>, <tt>int.class</tt>, or <tt>String[].class</tt>).  Note that
+        parameterized types may not be used to create literals; that is, <tt>Set&lt;String&gt;.class</tt> is illegal.
+
 PrimaryExpressionNode+ :: Node + ExpressionNode
     @docs
         A tagging interface for all nodes considered "primary expressions" by the Java Language Specification.  Primary
@@ -779,7 +785,7 @@ WhileLoopNode :: Node + StatementNode
 
 ### Type Nodes ########################################################################################################
 
-ArrayTypeNode :: Node + ReferenceTypeNode
+ArrayTypeNode :: Node + ReferenceTypeNode, LiteralizableTypeNode
     @props
     type                    TypeNode                                    | the element type of the array
     @docs
@@ -806,14 +812,14 @@ ParameterizedTypeSelectNode :: Node + DeclaredTypeNode
         children of an {@link UnparameterizedTypeNode} containing the name "A" and a {@link ListNode} containing the
         type argument with the name "X".
 
-PrimitiveTypeNode :: Node + TypeNode, BaseTypeNode
+PrimitiveTypeNode :: Node + TypeNode, BaseTypeNode, LiteralizableTypeNode
     @props
     primitiveType           PrimitiveType                               | the primitive type being represented
     @docs
         A node representing a primitive type.
 
 # TODO: add information which tracks whether we have determined this node to represent a true declared type or type parameter
-UnparameterizedTypeNode :: Node + DeclaredTypeNode
+UnparameterizedTypeNode :: Node + DeclaredTypeNode, LiteralizableTypeNode
     @props
     name                    NameNode                                    | the name of the type
     @docs
@@ -821,7 +827,7 @@ UnparameterizedTypeNode :: Node + DeclaredTypeNode
         InputStream, and so on.  Parameterized types, such as Set<String>, are not represented in this way.
         Unparameterized types also represent type parameters, such as the <tt>T</tt> in <tt>Set<T></tt>.
 
-VoidTypeNode :: Node + TypeNode
+VoidTypeNode :: Node + TypeNode, LiteralizableTypeNode
     @docs
         A node representing the void type.  This is used, for example, in method return values.
 
@@ -835,9 +841,7 @@ CharLiteralNode :: LiteralNode<Character>
     @docs
         A node representing a character literal.
 
-# TODO: change TypeNode to UnparameterizedTypeNode and introduce appropriate tagging interface
-# (After all, Set<String>.class is illegal)
-ClassLiteralNode :: LiteralNode<TypeNode>
+ClassLiteralNode :: LiteralNode<LiteralizableTypeNode>
     @docs
         A note representing a class literal, such as <tt>String.class</tt>.  Note that the BSJ compiler API includes a
         {@link VoidTypeNode}.  This is technically a violation (as Java does not treat <tt>void</tt> as a type) but

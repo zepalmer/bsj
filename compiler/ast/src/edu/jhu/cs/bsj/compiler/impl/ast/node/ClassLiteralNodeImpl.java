@@ -4,13 +4,13 @@ import java.util.List;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassLiteralNode;
-import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
+import edu.jhu.cs.bsj.compiler.ast.node.LiteralizableTypeNode;
 
-public class ClassLiteralNodeImpl extends LiteralNodeImpl<TypeNode> implements ClassLiteralNode
+public class ClassLiteralNodeImpl extends LiteralNodeImpl<LiteralizableTypeNode> implements ClassLiteralNode
 {
     /** General constructor. */
     public ClassLiteralNodeImpl(
-            TypeNode value)
+            LiteralizableTypeNode value)
     {
         super(value);
     }

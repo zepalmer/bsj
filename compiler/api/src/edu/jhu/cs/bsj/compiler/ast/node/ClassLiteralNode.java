@@ -6,6 +6,6 @@ package edu.jhu.cs.bsj.compiler.ast.node;
  * {@link VoidTypeNode}.  This is technically a violation (as Java does not treat <tt>void</tt> as a type) but
  * allows this node to represent <tt>void.class</tt>.
  */
-public interface ClassLiteralNode extends LiteralNode<TypeNode>
+public interface ClassLiteralNode extends LiteralNode<LiteralizableTypeNode>
 {
 }

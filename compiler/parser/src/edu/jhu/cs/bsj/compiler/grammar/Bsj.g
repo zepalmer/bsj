@@ -216,7 +216,7 @@ variableDeclarator[TypeNode inType] returns [VariableDeclaratorNode ret]
 // Represents the declaration of an array type over a normal type.  This construct only handles the parsing of the []
 // symbols and the modification of a type.  Note that this rule must parse at least one pair of brackets; thus, it
 // should be optional anywhere that a non-array type is permissible.
-arrayTypeIndicator[TypeNode inType] returns [ReferenceTypeNode ret]
+arrayTypeIndicator[TypeNode inType] returns [ArrayTypeNode ret]
     :
         '[' ']'
         {
@@ -3018,7 +3018,7 @@ arrayAccess[ArrayIndexableNode in] returns [ArrayAccessNode ret]
 
 primitiveClassLiteral returns [ClassLiteralNode ret]
         @init {
-            TypeNode typeNode = null;
+            LiteralizableTypeNode typeNode = null;
         }
         @after {
             $ret = factory.makeClassLiteralNode(typeNode);

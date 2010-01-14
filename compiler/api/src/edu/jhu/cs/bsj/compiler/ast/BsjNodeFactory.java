@@ -515,7 +515,7 @@ public interface BsjNodeFactory
      * Creates a ClassLiteralNode.
      */
     public ClassLiteralNode makeClassLiteralNode(
-            TypeNode value);
+            LiteralizableTypeNode value);
 
     /**
      * Creates a SuperMethodInvocationNode.
