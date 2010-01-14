@@ -12,11 +12,12 @@
 #
 #     * !set: Sets a variable for the generator.  All class descriptions which appear after this operation will be
 #             affected accordingly.  The syntax is "!set name=value".  Valid names are:
-#         + iPackage: Changes the package for generated interface files.
-#         + cPackage: Changes the package for generated backing class files.
-#         + stopGen:  A comma-separated list of items to avoid generating.  The items are generated anyway, but within
-#                     a comment.  The legal items are:
-#             - cons: Prevents a concrete class's constructor from being generated.
+#         + iPackage:     Changes the package for generated interface files.
+#         + cPackage:     Changes the package for generated backing class files.
+#         + stopGen:      A comma-separated list of items to avoid generating.  The items are generated anyway, but
+#                         within a comment.  The legal items are:
+#             - cons:     Prevents a concrete class's constructor from being generated.
+#             - children: Prevents a class's getChildObjects method from being generated.
 #
 # The class's name and immediate superclass are separated by "::".  Additionally, the class's name may be suffixed in a
 # '*' character.  If this is the case, no concrete implementation is expected.  This is used in cases in which parts of
@@ -1253,7 +1254,7 @@ ImportSingleTypeNode :: Node + ImportNode
     @docs
         A node representing a single type import statement, such as "<tt>import java.util.Set</tt>".
 
-!set stopGen=cons
+!set stopGen=cons,children
 
 ListNode<T extends Node> :: Node
     @props

@@ -1013,6 +1013,8 @@ public class SourceGenerator
 			ps.println("     * effect on this node.");
 			ps.println("     * @return A list of this node's children.");
 			ps.println("     */");
+			if (stopGen.contains("children"))
+				ps.println("/* // stopGen=" + stopGenStr); // stopGen logic
 			if (def.sname!=null)
 			{
 				ps.println("    @Override");
@@ -1027,6 +1029,8 @@ public class SourceGenerator
 			}
 			ps.println("        return list;");
 			ps.println("    }");
+			if (stopGen.contains("children"))
+				ps.print("*/"); // stopGen logic
 
 			// add supplements
 			includeAllBodies(ps, def.includeFilenames, "classes");

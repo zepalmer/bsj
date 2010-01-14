@@ -61,7 +61,7 @@ public class AntlrAstViewer
 					this.children.add(new SwingCommonTreeNode(this, child));
 				}
 			}
-			this.string = backer.toString();
+			this.string = String.valueOf(backer);
 		}
 
 		public Enumeration<SwingCommonTreeNode> children()
@@ -292,6 +292,7 @@ public class AntlrAstViewer
 					saveProperties();
 
 					Node node = stringToAst(getSource());
+					printTree(node, 0);
 					tree.setModel(new DefaultTreeModel(new SwingCommonTreeNode(null, node)));
 					error.setText("(no error)");
 				} catch (Exception e)

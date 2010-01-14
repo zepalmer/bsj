@@ -13,7 +13,7 @@ public class ListNodeImpl<T extends Node> extends NodeImpl implements ListNode<T
     private List<T> children;
 
     /** General constructor. */
-/* // stopGen=cons
+/* // stopGen=cons,children
     public ListNodeImpl(
             List<T> children)
     {
@@ -48,6 +48,7 @@ public class ListNodeImpl<T extends Node> extends NodeImpl implements ListNode<T
      * effect on this node.
      * @return A list of this node's children.
      */
+/* // stopGen=cons,children
     @Override
     public List<Object> getChildObjects()
     {
@@ -55,11 +56,22 @@ public class ListNodeImpl<T extends Node> extends NodeImpl implements ListNode<T
         list.add(this.children);
         return list;
     }
-	/** General constructor */
+*/	/** General constructor */
     public ListNodeImpl(List<? extends T> children)
     {
         super();
         this.children = new ArrayList<T>(children);
+    }
+    
+    /**
+     * Creates a list of this node's child objects.  Modifying the list has no effect on this node.
+     * @return A mutable list of this node's child objects.
+     */
+    public List<Object> getChildObjects()
+    {
+    	List<Object> list = super.getChildObjects();
+    	list.addAll(this.children);
+    	return list;
     }
 
 	// TODO: implement the List<T> interface
