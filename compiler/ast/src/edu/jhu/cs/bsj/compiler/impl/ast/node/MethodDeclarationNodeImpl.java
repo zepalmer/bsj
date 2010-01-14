@@ -8,9 +8,9 @@ import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.MethodDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ModifiersNode;
-import edu.jhu.cs.bsj.compiler.ast.node.RawTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeParameterNode;
+import edu.jhu.cs.bsj.compiler.ast.node.UnparameterizedTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableNode;
 
 public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclarationNode
@@ -34,7 +34,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
     private TypeNode returnType;
 
     /** The types of exceptions thrown by this method. */
-    private ListNode<RawTypeNode> throwTypes;
+    private ListNode<UnparameterizedTypeNode> throwTypes;
 
     /** This method's applicable type parameters. */
     private ListNode<TypeParameterNode> typeParameters;
@@ -47,7 +47,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
             ListNode<VariableNode> parameters,
             VariableNode varargParameter,
             TypeNode returnType,
-            ListNode<RawTypeNode> throwTypes,
+            ListNode<UnparameterizedTypeNode> throwTypes,
             ListNode<TypeParameterNode> typeParameters)
     {
         super();
@@ -221,7 +221,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
      * Gets the types of exceptions thrown by this method.
      * @return The types of exceptions thrown by this method.
      */
-    public ListNode<RawTypeNode> getThrowTypes()
+    public ListNode<UnparameterizedTypeNode> getThrowTypes()
     {
         return this.throwTypes;
     }
@@ -230,7 +230,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
      * Changes the types of exceptions thrown by this method.
      * @param throwTypes The types of exceptions thrown by this method.
      */
-    public void setThrowTypes(ListNode<RawTypeNode> throwTypes)
+    public void setThrowTypes(ListNode<UnparameterizedTypeNode> throwTypes)
     {
         if (this.throwTypes instanceof NodeImpl)
         {

@@ -4,8 +4,8 @@ import java.util.List;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationValueNode;
-import edu.jhu.cs.bsj.compiler.ast.node.RawTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.SingleElementAnnotationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.UnparameterizedTypeNode;
 
 public class SingleElementAnnotationNodeImpl extends AnnotationNodeImpl implements SingleElementAnnotationNode
 {
@@ -15,7 +15,7 @@ public class SingleElementAnnotationNodeImpl extends AnnotationNodeImpl implemen
     /** General constructor. */
     public SingleElementAnnotationNodeImpl(
             AnnotationValueNode value,
-            RawTypeNode annotationType)
+            UnparameterizedTypeNode annotationType)
     {
         super(annotationType);
         this.value = value;

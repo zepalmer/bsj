@@ -83,7 +83,6 @@ import edu.jhu.cs.bsj.compiler.impl.ast.node.ParenthesizedExpressionNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.PrimitiveTypeNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.QualifiedClassInstantiationNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.QualifiedNameNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.RawTypeNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.ReturnNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.SimpleNameNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.SingleElementAnnotationNodeImpl;
@@ -99,6 +98,7 @@ import edu.jhu.cs.bsj.compiler.impl.ast.node.TryNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.TypeCastNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.TypeParameterNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.UnaryOperatorNodeImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.node.UnparameterizedTypeNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.UnqualifiedClassInstantiationNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.VariableDeclarationNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.VariableDeclaratorNodeImpl;
@@ -339,7 +339,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     @Override
     public ThisNode makeThisNode(
-            RawTypeNode type)
+            UnparameterizedTypeNode type)
     {
         ThisNode ret = new ThisNodeImpl(type);
         return ret;
@@ -393,6 +393,17 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
 
     /**
+     * Creates a UnparameterizedTypeNode.
+     */
+    @Override
+    public UnparameterizedTypeNode makeUnparameterizedTypeNode(
+            NameNode name)
+    {
+        UnparameterizedTypeNode ret = new UnparameterizedTypeNodeImpl(name);
+        return ret;
+    }
+
+    /**
      * Creates a VariableDeclaratorNode.
      */
     @Override
@@ -422,7 +433,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     @Override
     public SuperFieldAccessNode makeSuperFieldAccessNode(
-            RawTypeNode type,
+            UnparameterizedTypeNode type,
             IdentifierNode identifier)
     {
         SuperFieldAccessNode ret = new SuperFieldAccessNodeImpl(type, identifier);
@@ -468,7 +479,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     @Override
     public NormalAnnotationNode makeNormalAnnotationNode(
             ListNode<AnnotationElementNode> arguments,
-            RawTypeNode annotationType)
+            UnparameterizedTypeNode annotationType)
     {
         NormalAnnotationNode ret = new NormalAnnotationNodeImpl(arguments, annotationType);
         return ret;
@@ -757,7 +768,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ModifiersNode modifiers,
             ListNode<VariableNode> parameters,
             VariableNode varargParameter,
-            ListNode<RawTypeNode> throwTypes,
+            ListNode<UnparameterizedTypeNode> throwTypes,
             ListNode<TypeParameterNode> typeParameters)
     {
         ConstructorDeclarationNode ret = new ConstructorDeclarationNodeImpl(body, modifiers, parameters, varargParameter, throwTypes, typeParameters);
@@ -951,7 +962,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     @Override
     public SingleElementAnnotationNode makeSingleElementAnnotationNode(
             AnnotationValueNode value,
-            RawTypeNode annotationType)
+            UnparameterizedTypeNode annotationType)
     {
         SingleElementAnnotationNode ret = new SingleElementAnnotationNodeImpl(value, annotationType);
         return ret;
@@ -973,7 +984,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     @Override
     public SuperMethodInvocationNode makeSuperMethodInvocationNode(
-            RawTypeNode type,
+            UnparameterizedTypeNode type,
             IdentifierNode identifier,
             ListNode<ExpressionNode> arguments,
             ListNode<TypeNode> typeArguments)
@@ -1120,10 +1131,10 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     @Override
     public ParameterizedTypeNode makeParameterizedTypeNode(
-            RawTypeNode rawType,
+            UnparameterizedTypeNode baseType,
             ListNode<TypeArgumentNode> typeArguments)
     {
-        ParameterizedTypeNode ret = new ParameterizedTypeNodeImpl(rawType, typeArguments);
+        ParameterizedTypeNode ret = new ParameterizedTypeNodeImpl(baseType, typeArguments);
         return ret;
     }
 
@@ -1150,17 +1161,6 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             VariableDeclarationNode declaration)
     {
         ForInitializerDeclarationNode ret = new ForInitializerDeclarationNodeImpl(declaration);
-        return ret;
-    }
-
-    /**
-     * Creates a RawTypeNode.
-     */
-    @Override
-    public RawTypeNode makeRawTypeNode(
-            NameNode name)
-    {
-        RawTypeNode ret = new RawTypeNodeImpl(name);
         return ret;
     }
 
@@ -1283,7 +1283,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ListNode<VariableNode> parameters,
             VariableNode varargParameter,
             TypeNode returnType,
-            ListNode<RawTypeNode> throwTypes,
+            ListNode<UnparameterizedTypeNode> throwTypes,
             ListNode<TypeParameterNode> typeParameters)
     {
         MethodDeclarationNode ret = new MethodDeclarationNodeImpl(body, modifiers, identifier, parameters, varargParameter, returnType, throwTypes, typeParameters);

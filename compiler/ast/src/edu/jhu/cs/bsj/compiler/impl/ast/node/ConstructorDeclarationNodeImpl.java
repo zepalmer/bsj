@@ -7,8 +7,8 @@ import edu.jhu.cs.bsj.compiler.ast.node.ConstructorBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ConstructorDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ModifiersNode;
-import edu.jhu.cs.bsj.compiler.ast.node.RawTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeParameterNode;
+import edu.jhu.cs.bsj.compiler.ast.node.UnparameterizedTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableNode;
 
 public class ConstructorDeclarationNodeImpl extends NodeImpl implements ConstructorDeclarationNode
@@ -26,7 +26,7 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
     private VariableNode varargParameter;
 
     /** The types of exceptions thrown by this constructor. */
-    private ListNode<RawTypeNode> throwTypes;
+    private ListNode<UnparameterizedTypeNode> throwTypes;
 
     /** This constructor's applicable type parameters. */
     private ListNode<TypeParameterNode> typeParameters;
@@ -37,7 +37,7 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
             ModifiersNode modifiers,
             ListNode<VariableNode> parameters,
             VariableNode varargParameter,
-            ListNode<RawTypeNode> throwTypes,
+            ListNode<UnparameterizedTypeNode> throwTypes,
             ListNode<TypeParameterNode> typeParameters)
     {
         super();
@@ -157,7 +157,7 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
      * Gets the types of exceptions thrown by this constructor.
      * @return The types of exceptions thrown by this constructor.
      */
-    public ListNode<RawTypeNode> getThrowTypes()
+    public ListNode<UnparameterizedTypeNode> getThrowTypes()
     {
         return this.throwTypes;
     }
@@ -166,7 +166,7 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
      * Changes the types of exceptions thrown by this constructor.
      * @param throwTypes The types of exceptions thrown by this constructor.
      */
-    public void setThrowTypes(ListNode<RawTypeNode> throwTypes)
+    public void setThrowTypes(ListNode<UnparameterizedTypeNode> throwTypes)
     {
         if (this.throwTypes instanceof NodeImpl)
         {

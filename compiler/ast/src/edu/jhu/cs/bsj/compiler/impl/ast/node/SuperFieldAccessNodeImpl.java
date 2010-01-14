@@ -4,20 +4,20 @@ import java.util.List;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
-import edu.jhu.cs.bsj.compiler.ast.node.RawTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.SuperFieldAccessNode;
+import edu.jhu.cs.bsj.compiler.ast.node.UnparameterizedTypeNode;
 
 public class SuperFieldAccessNodeImpl extends NodeImpl implements SuperFieldAccessNode
 {
     /** The qualifying type. */
-    private RawTypeNode type;
+    private UnparameterizedTypeNode type;
 
     /** The identifier of the field being accessed. */
     private IdentifierNode identifier;
 
     /** General constructor. */
     public SuperFieldAccessNodeImpl(
-            RawTypeNode type,
+            UnparameterizedTypeNode type,
             IdentifierNode identifier)
     {
         super();
@@ -29,7 +29,7 @@ public class SuperFieldAccessNodeImpl extends NodeImpl implements SuperFieldAcce
      * Gets the qualifying type.
      * @return The qualifying type.
      */
-    public RawTypeNode getType()
+    public UnparameterizedTypeNode getType()
     {
         return this.type;
     }
@@ -38,7 +38,7 @@ public class SuperFieldAccessNodeImpl extends NodeImpl implements SuperFieldAcce
      * Changes the qualifying type.
      * @param type The qualifying type.
      */
-    public void setType(RawTypeNode type)
+    public void setType(UnparameterizedTypeNode type)
     {
         if (this.type instanceof NodeImpl)
         {

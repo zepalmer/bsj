@@ -3,17 +3,17 @@ package edu.jhu.cs.bsj.compiler.impl.ast.node;
 import java.util.List;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
-import edu.jhu.cs.bsj.compiler.ast.node.RawTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ThisNode;
+import edu.jhu.cs.bsj.compiler.ast.node.UnparameterizedTypeNode;
 
 public class ThisNodeImpl extends NodeImpl implements ThisNode
 {
     /** The qualifying type. */
-    private RawTypeNode type;
+    private UnparameterizedTypeNode type;
 
     /** General constructor. */
     public ThisNodeImpl(
-            RawTypeNode type)
+            UnparameterizedTypeNode type)
     {
         super();
         this.type = type;
@@ -23,7 +23,7 @@ public class ThisNodeImpl extends NodeImpl implements ThisNode
      * Gets the qualifying type.
      * @return The qualifying type.
      */
-    public RawTypeNode getType()
+    public UnparameterizedTypeNode getType()
     {
         return this.type;
     }
@@ -32,7 +32,7 @@ public class ThisNodeImpl extends NodeImpl implements ThisNode
      * Changes the qualifying type.
      * @param type The qualifying type.
      */
-    public void setType(RawTypeNode type)
+    public void setType(UnparameterizedTypeNode type)
     {
         if (this.type instanceof NodeImpl)
         {

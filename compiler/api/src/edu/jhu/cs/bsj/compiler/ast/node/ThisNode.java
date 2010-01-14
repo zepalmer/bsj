@@ -27,12 +27,12 @@ public interface ThisNode extends Node, RestrictedPrimaryExpressionNode
      * Gets the qualifying type.
      * @return The qualifying type.
      */
-    public RawTypeNode getType();
+    public UnparameterizedTypeNode getType();
 
     /**
      * Changes the qualifying type.
      * @param type The qualifying type.
      */
-    public void setType(RawTypeNode type);
+    public void setType(UnparameterizedTypeNode type);
 
 }

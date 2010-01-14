@@ -4,16 +4,16 @@ import java.util.List;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationNode;
-import edu.jhu.cs.bsj.compiler.ast.node.RawTypeNode;
+import edu.jhu.cs.bsj.compiler.ast.node.UnparameterizedTypeNode;
 
 public abstract class AnnotationNodeImpl extends NodeImpl implements AnnotationNode
 {
     /** The annotation type. */
-    private RawTypeNode annotationType;
+    private UnparameterizedTypeNode annotationType;
 
     /** General constructor. */
     protected AnnotationNodeImpl(
-            RawTypeNode annotationType)
+            UnparameterizedTypeNode annotationType)
     {
         super();
         this.annotationType = annotationType;
@@ -23,7 +23,7 @@ public abstract class AnnotationNodeImpl extends NodeImpl implements AnnotationN
      * Gets the annotation type.
      * @return The annotation type.
      */
-    public RawTypeNode getAnnotationType()
+    public UnparameterizedTypeNode getAnnotationType()
     {
         return this.annotationType;
     }
@@ -32,7 +32,7 @@ public abstract class AnnotationNodeImpl extends NodeImpl implements AnnotationN
      * Changes the annotation type.
      * @param annotationType The annotation type.
      */
-    public void setAnnotationType(RawTypeNode annotationType)
+    public void setAnnotationType(UnparameterizedTypeNode annotationType)
     {
         if (this.annotationType instanceof NodeImpl)
         {

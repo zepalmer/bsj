@@ -3,22 +3,22 @@ package edu.jhu.cs.bsj.compiler.ast.node;
 
 /**
  * A node representing parameterized types.  This node represents the use of a type which has type arguments, such
- * as Set<String> (which would be represented by the raw type Set and the single-element argument list containing
- * the raw type for String).
+ * as Set<String> (which would be represented by the unparameterized type Set and the single-element argument list
+ * containing the unparameterized type for String).
  */
 public interface ParameterizedTypeNode extends Node, DeclaredTypeNode
 {
     /**
-     * Gets the raw type being parameterized.
-     * @return The raw type being parameterized.
+     * Gets the base type being parameterized.
+     * @return The base type being parameterized.
      */
-    public RawTypeNode getRawType();
+    public UnparameterizedTypeNode getBaseType();
 
     /**
-     * Changes the raw type being parameterized.
-     * @param rawType The raw type being parameterized.
+     * Changes the base type being parameterized.
+     * @param baseType The base type being parameterized.
      */
-    public void setRawType(RawTypeNode rawType);
+    public void setBaseType(UnparameterizedTypeNode baseType);
 
     /**
      * Gets the type arguments for this node.

@@ -903,7 +903,7 @@ constructorDeclaration returns [ConstructorDeclarationNode ret]
         @init {
             ListNode<TypeParameterNode> typeParametersNode =
                     factory.makeListNode(Collections.<TypeParameterNode>emptyList());
-            ListNode<RawTypeNode> throwsNode = factory.makeListNode(Collections.<RawTypeNode>emptyList());
+            ListNode<UnparameterizedTypeNode> throwsNode = factory.makeListNode(Collections.<UnparameterizedTypeNode>emptyList());
         }
     :
         modifiers[constructorModifiers]
@@ -974,7 +974,7 @@ methodDeclaration returns [MethodDeclarationNode ret]
             BlockStatementNode blockStatementNode = null;
             ListNode<TypeParameterNode> typeParametersNode =
                     factory.makeListNode(Collections.<TypeParameterNode>emptyList());
-            ListNode<RawTypeNode> throwsNode = factory.makeListNode(Collections.<RawTypeNode>emptyList());
+            ListNode<UnparameterizedTypeNode> throwsNode = factory.makeListNode(Collections.<UnparameterizedTypeNode>emptyList());
             TypeNode returnTypeNode = null;
         }
     :
@@ -1063,7 +1063,7 @@ interfaceBodyDeclaration returns [InterfaceMemberNode ret]
 interfaceMethodDeclaration returns [MethodDeclarationNode ret]
         @init {
             TypeNode returnTypeNode = null;
-            ListNode<RawTypeNode> throwsNode = factory.makeListNode(Collections.<RawTypeNode>emptyList());
+            ListNode<UnparameterizedTypeNode> throwsNode = factory.makeListNode(Collections.<UnparameterizedTypeNode>emptyList());
         }
     :   
         modifiers[interfaceModifiers]
@@ -1108,9 +1108,9 @@ interfaceFieldDeclaration returns [FieldDeclarationNode ret]
         }
     ;
 
-throwsClause returns [ListNode<RawTypeNode> ret]
+throwsClause returns [ListNode<UnparameterizedTypeNode> ret]
         @init {
-            List<RawTypeNode> list = new ArrayList<RawTypeNode>();
+            List<UnparameterizedTypeNode> list = new ArrayList<UnparameterizedTypeNode>();
         }
         @after {
             $ret = factory.makeListNode(list);
@@ -1119,12 +1119,12 @@ throwsClause returns [ListNode<RawTypeNode> ret]
         THROWS
         a=typeName
         {
-            list.add(factory.makeRawTypeNode($a.ret));
+            list.add(factory.makeUnparameterizedTypeNode($a.ret));
         }
         (
             ',' b=typeName
             {
-                list.add(factory.makeRawTypeNode($b.ret));
+                list.add(factory.makeUnparameterizedTypeNode($b.ret));
             }
         )*
     ;
@@ -1181,19 +1181,19 @@ type returns [TypeNode ret]
 //     A<X,Y>.B.C<Z>.D
 classOrInterfaceType returns [DeclaredTypeNode ret]
         @init {
-            RawTypeNode rawTypeNode = null;
+            UnparameterizedTypeNode unparameterizedTypeNode = null;
             ParameterizedTypeNode parameterizedTypeNode = null;
         }
     :
         typeName
         {
-            rawTypeNode = factory.makeRawTypeNode($typeName.ret);
-            $ret = rawTypeNode;
+            unparameterizedTypeNode = factory.makeUnparameterizedTypeNode($typeName.ret);
+            $ret = unparameterizedTypeNode;
         }
         (
             typeArguments
             {
-                parameterizedTypeNode = factory.makeParameterizedTypeNode(rawTypeNode, $typeArguments.ret);
+                parameterizedTypeNode = factory.makeParameterizedTypeNode(unparameterizedTypeNode, $typeArguments.ret);
                 $ret = parameterizedTypeNode;
             }
             (
@@ -1490,7 +1490,7 @@ annotation returns [AnnotationNode ret]
         {
             $ret = factory.makeNormalAnnotationNode(
                     factory.makeListNode(new ArrayList<AnnotationElementNode>()),
-                    factory.makeRawTypeNode($typeName.ret));
+                    factory.makeUnparameterizedTypeNode($typeName.ret));
         }
         (
             '('   
@@ -1499,14 +1499,14 @@ annotation returns [AnnotationNode ret]
                 {
                     $ret = factory.makeNormalAnnotationNode(
                             $elementValuePairs.ret,
-                            factory.makeRawTypeNode($typeName.ret));
+                            factory.makeUnparameterizedTypeNode($typeName.ret));
                 }
             |
                 elementValue
                 {
                     $ret = factory.makeSingleElementAnnotationNode(
                             $elementValue.ret,
-                            factory.makeRawTypeNode($typeName.ret));
+                            factory.makeUnparameterizedTypeNode($typeName.ret));
                 }
             )? 
             ')' 
@@ -2713,7 +2713,7 @@ restrictedPrimary returns [RestrictedPrimaryExpressionNode ret]
             // class literal for declared types
             classLiteralName=typeName '.' 'class'
             {
-                $ret = factory.makeClassLiteralNode(factory.makeRawTypeNode($classLiteralName.ret));
+                $ret = factory.makeClassLiteralNode(factory.makeUnparameterizedTypeNode($classLiteralName.ret));
             } 
         |
             // void class literal
@@ -2829,7 +2829,7 @@ primarySuffix returns [RestrictedPrimaryExpressionNode ret]
 
 thisClause returns [ThisNode ret]
         @init {
-            RawTypeNode qualifyingType = null;
+            UnparameterizedTypeNode qualifyingType = null;
         }
         @after {
             $ret = factory.makeThisNode(qualifyingType);
@@ -2838,7 +2838,7 @@ thisClause returns [ThisNode ret]
         (
             thisQualifierName=typeName '.'
             {
-                qualifyingType = factory.makeRawTypeNode($thisQualifierName.ret);
+                qualifyingType = factory.makeUnparameterizedTypeNode($thisQualifierName.ret);
             }
         )?
         THIS
@@ -2882,13 +2882,13 @@ unqualifiedClassInstantiation returns [UnqualifiedClassInstantiationNode ret]
 // SuperFieldAccessNode for more information.)
 superFieldAccess returns [SuperFieldAccessNode ret]
         @init {
-            RawTypeNode qualifyingTypeNode = null;
+            UnparameterizedTypeNode qualifyingTypeNode = null;
         }
     :
         (
             typeName '.'
             {
-                qualifyingTypeNode = factory.makeRawTypeNode($typeName.ret);
+                qualifyingTypeNode = factory.makeUnparameterizedTypeNode($typeName.ret);
             }
         )?
         SUPER '.' identifier
@@ -2905,14 +2905,14 @@ superFieldAccess returns [SuperFieldAccessNode ret]
 // SuperMethodInvocationNode for more information.)
 superMethodInvocation returns [SuperMethodInvocationNode ret]
         @init {
-            RawTypeNode qualifyingTypeNode = null;
+            UnparameterizedTypeNode qualifyingTypeNode = null;
             ListNode<TypeNode> typeArgumentsNode = factory.makeListNode(Collections.<TypeNode>emptyList());
         }
     :
         (
             typeName '.'
             {
-                qualifyingTypeNode = factory.makeRawTypeNode($typeName.ret);
+                qualifyingTypeNode = factory.makeUnparameterizedTypeNode($typeName.ret);
             }
         )?
         SUPER '.'

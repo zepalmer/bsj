@@ -4,15 +4,15 @@ import java.util.List;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.NameNode;
-import edu.jhu.cs.bsj.compiler.ast.node.RawTypeNode;
+import edu.jhu.cs.bsj.compiler.ast.node.UnparameterizedTypeNode;
 
-public class RawTypeNodeImpl extends NodeImpl implements RawTypeNode
+public class UnparameterizedTypeNodeImpl extends NodeImpl implements UnparameterizedTypeNode
 {
     /** The name of the type. */
     private NameNode name;
 
     /** General constructor. */
-    public RawTypeNodeImpl(
+    public UnparameterizedTypeNodeImpl(
             NameNode name)
     {
         super();

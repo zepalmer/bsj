@@ -72,7 +72,6 @@ import edu.jhu.cs.bsj.compiler.ast.node.ParenthesizedExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.PrimitiveTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.QualifiedClassInstantiationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.QualifiedNameNode;
-import edu.jhu.cs.bsj.compiler.ast.node.RawTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ReturnNode;
 import edu.jhu.cs.bsj.compiler.ast.node.SimpleNameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.SingleElementAnnotationNode;
@@ -88,6 +87,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.TryNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeCastNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeParameterNode;
 import edu.jhu.cs.bsj.compiler.ast.node.UnaryOperatorNode;
+import edu.jhu.cs.bsj.compiler.ast.node.UnparameterizedTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.UnqualifiedClassInstantiationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclaratorNode;
@@ -207,9 +207,6 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
         } else if (node instanceof FieldAccessByNameNode)
         {
             visitFieldAccessByNameNodeStart((FieldAccessByNameNode)node);
-        } else if (node instanceof RawTypeNode)
-        {
-            visitRawTypeNodeStart((RawTypeNode)node);
         } else if (node instanceof ForInitializerDeclarationNode)
         {
             visitForInitializerDeclarationNodeStart((ForInitializerDeclarationNode)node);
@@ -354,6 +351,9 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
         } else if (node instanceof VariableDeclaratorNode)
         {
             visitVariableDeclaratorNodeStart((VariableDeclaratorNode)node);
+        } else if (node instanceof UnparameterizedTypeNode)
+        {
+            visitUnparameterizedTypeNodeStart((UnparameterizedTypeNode)node);
         } else if (node instanceof AnnotationBodyNode)
         {
             visitAnnotationBodyNodeStart((AnnotationBodyNode)node);
@@ -510,9 +510,6 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
         } else if (node instanceof FieldAccessByNameNode)
         {
             visitFieldAccessByNameNodeStop((FieldAccessByNameNode)node);
-        } else if (node instanceof RawTypeNode)
-        {
-            visitRawTypeNodeStop((RawTypeNode)node);
         } else if (node instanceof ForInitializerDeclarationNode)
         {
             visitForInitializerDeclarationNodeStop((ForInitializerDeclarationNode)node);
@@ -657,6 +654,9 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
         } else if (node instanceof VariableDeclaratorNode)
         {
             visitVariableDeclaratorNodeStop((VariableDeclaratorNode)node);
+        } else if (node instanceof UnparameterizedTypeNode)
+        {
+            visitUnparameterizedTypeNodeStop((UnparameterizedTypeNode)node);
         } else if (node instanceof AnnotationBodyNode)
         {
             visitAnnotationBodyNodeStop((AnnotationBodyNode)node);
@@ -959,14 +959,6 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
      * @param node The node being visited.
      */
     public void visitFieldAccessByNameNodeStart(FieldAccessByNameNode node)
-    {
-    }
-
-    /**
-     * Starts a visit for nodes of type RawTypeNode.
-     * @param node The node being visited.
-     */
-    public void visitRawTypeNodeStart(RawTypeNode node)
     {
     }
 
@@ -1355,6 +1347,14 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
     }
 
     /**
+     * Starts a visit for nodes of type UnparameterizedTypeNode.
+     * @param node The node being visited.
+     */
+    public void visitUnparameterizedTypeNodeStart(UnparameterizedTypeNode node)
+    {
+    }
+
+    /**
      * Starts a visit for nodes of type AnnotationBodyNode.
      * @param node The node being visited.
      */
@@ -1739,14 +1739,6 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
     }
 
     /**
-     * Stops a visit for nodes of type RawTypeNode.
-     * @param node The node being visited.
-     */
-    public void visitRawTypeNodeStop(RawTypeNode node)
-    {
-    }
-
-    /**
      * Stops a visit for nodes of type ForInitializerDeclarationNode.
      * @param node The node being visited.
      */
@@ -2127,6 +2119,14 @@ public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
      * @param node The node being visited.
      */
     public void visitVariableDeclaratorNodeStop(VariableDeclaratorNode node)
+    {
+    }
+
+    /**
+     * Stops a visit for nodes of type UnparameterizedTypeNode.
+     * @param node The node being visited.
+     */
+    public void visitUnparameterizedTypeNodeStop(UnparameterizedTypeNode node)
     {
     }
 

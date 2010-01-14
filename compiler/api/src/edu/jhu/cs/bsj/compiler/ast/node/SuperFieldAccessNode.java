@@ -32,13 +32,13 @@ public interface SuperFieldAccessNode extends Node, RestrictedPrimaryExpressionN
      * Gets the qualifying type.
      * @return The qualifying type.
      */
-    public RawTypeNode getType();
+    public UnparameterizedTypeNode getType();
 
     /**
      * Changes the qualifying type.
      * @param type The qualifying type.
      */
-    public void setType(RawTypeNode type);
+    public void setType(UnparameterizedTypeNode type);
 
     /**
      * Gets the identifier of the field being accessed.

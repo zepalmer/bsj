@@ -5,50 +5,50 @@ import java.util.List;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ParameterizedTypeNode;
-import edu.jhu.cs.bsj.compiler.ast.node.RawTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeArgumentNode;
+import edu.jhu.cs.bsj.compiler.ast.node.UnparameterizedTypeNode;
 
 public class ParameterizedTypeNodeImpl extends NodeImpl implements ParameterizedTypeNode
 {
-    /** The raw type being parameterized. */
-    private RawTypeNode rawType;
+    /** The base type being parameterized. */
+    private UnparameterizedTypeNode baseType;
 
     /** The type arguments for this node. */
     private ListNode<TypeArgumentNode> typeArguments;
 
     /** General constructor. */
     public ParameterizedTypeNodeImpl(
-            RawTypeNode rawType,
+            UnparameterizedTypeNode baseType,
             ListNode<TypeArgumentNode> typeArguments)
     {
         super();
-        this.rawType = rawType;
+        this.baseType = baseType;
         this.typeArguments = typeArguments;
     }
 
     /**
-     * Gets the raw type being parameterized.
-     * @return The raw type being parameterized.
+     * Gets the base type being parameterized.
+     * @return The base type being parameterized.
      */
-    public RawTypeNode getRawType()
+    public UnparameterizedTypeNode getBaseType()
     {
-        return this.rawType;
+        return this.baseType;
     }
 
     /**
-     * Changes the raw type being parameterized.
-     * @param rawType The raw type being parameterized.
+     * Changes the base type being parameterized.
+     * @param baseType The base type being parameterized.
      */
-    public void setRawType(RawTypeNode rawType)
+    public void setBaseType(UnparameterizedTypeNode baseType)
     {
-        if (this.rawType instanceof NodeImpl)
+        if (this.baseType instanceof NodeImpl)
         {
-            ((NodeImpl)this.rawType).setParent(null);
+            ((NodeImpl)this.baseType).setParent(null);
         }
-        this.rawType = rawType;
-        if (this.rawType instanceof NodeImpl)
+        this.baseType = baseType;
+        if (this.baseType instanceof NodeImpl)
         {
-            ((NodeImpl)this.rawType).setParent(this);
+            ((NodeImpl)this.baseType).setParent(this);
         }
     }
 
@@ -89,7 +89,7 @@ public class ParameterizedTypeNodeImpl extends NodeImpl implements Parameterized
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        this.rawType.receive(visitor);
+        this.baseType.receive(visitor);
         this.typeArguments.receive(visitor);
     }
 
@@ -102,7 +102,7 @@ public class ParameterizedTypeNodeImpl extends NodeImpl implements Parameterized
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(this.rawType);
+        list.add(this.baseType);
         list.add(this.typeArguments);
         return list;
     }

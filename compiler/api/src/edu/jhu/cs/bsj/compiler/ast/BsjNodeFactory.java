@@ -146,7 +146,7 @@ public interface BsjNodeFactory
      * Creates a ThisNode.
      */
     public ThisNode makeThisNode(
-            RawTypeNode type);
+            UnparameterizedTypeNode type);
 
     /**
      * Creates a EnumDeclarationNode.
@@ -176,6 +176,12 @@ public interface BsjNodeFactory
             ListNode<AnnotationMemberNode> members);
 
     /**
+     * Creates a UnparameterizedTypeNode.
+     */
+    public UnparameterizedTypeNode makeUnparameterizedTypeNode(
+            NameNode name);
+
+    /**
      * Creates a VariableDeclaratorNode.
      */
     public VariableDeclaratorNode makeVariableDeclaratorNode(
@@ -194,7 +200,7 @@ public interface BsjNodeFactory
      * Creates a SuperFieldAccessNode.
      */
     public SuperFieldAccessNode makeSuperFieldAccessNode(
-            RawTypeNode type,
+            UnparameterizedTypeNode type,
             IdentifierNode identifier);
 
     /**
@@ -220,7 +226,7 @@ public interface BsjNodeFactory
      */
     public NormalAnnotationNode makeNormalAnnotationNode(
             ListNode<AnnotationElementNode> arguments,
-            RawTypeNode annotationType);
+            UnparameterizedTypeNode annotationType);
 
     /**
      * Creates a DoWhileLoopNode.
@@ -389,7 +395,7 @@ public interface BsjNodeFactory
             ModifiersNode modifiers,
             ListNode<VariableNode> parameters,
             VariableNode varargParameter,
-            ListNode<RawTypeNode> throwTypes,
+            ListNode<UnparameterizedTypeNode> throwTypes,
             ListNode<TypeParameterNode> typeParameters);
 
     /**
@@ -503,7 +509,7 @@ public interface BsjNodeFactory
      */
     public SingleElementAnnotationNode makeSingleElementAnnotationNode(
             AnnotationValueNode value,
-            RawTypeNode annotationType);
+            UnparameterizedTypeNode annotationType);
 
     /**
      * Creates a ClassLiteralNode.
@@ -515,7 +521,7 @@ public interface BsjNodeFactory
      * Creates a SuperMethodInvocationNode.
      */
     public SuperMethodInvocationNode makeSuperMethodInvocationNode(
-            RawTypeNode type,
+            UnparameterizedTypeNode type,
             IdentifierNode identifier,
             ListNode<ExpressionNode> arguments,
             ListNode<TypeNode> typeArguments);
@@ -602,7 +608,7 @@ public interface BsjNodeFactory
      * Creates a ParameterizedTypeNode.
      */
     public ParameterizedTypeNode makeParameterizedTypeNode(
-            RawTypeNode rawType,
+            UnparameterizedTypeNode baseType,
             ListNode<TypeArgumentNode> typeArguments);
 
     /**
@@ -620,12 +626,6 @@ public interface BsjNodeFactory
      */
     public ForInitializerDeclarationNode makeForInitializerDeclarationNode(
             VariableDeclarationNode declaration);
-
-    /**
-     * Creates a RawTypeNode.
-     */
-    public RawTypeNode makeRawTypeNode(
-            NameNode name);
 
     /**
      * Creates a ConstructorBodyNode.
@@ -700,7 +700,7 @@ public interface BsjNodeFactory
             ListNode<VariableNode> parameters,
             VariableNode varargParameter,
             TypeNode returnType,
-            ListNode<RawTypeNode> throwTypes,
+            ListNode<UnparameterizedTypeNode> throwTypes,
             ListNode<TypeParameterNode> typeParameters);
 
 }

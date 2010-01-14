@@ -6,14 +6,14 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.RawTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.SuperMethodInvocationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
+import edu.jhu.cs.bsj.compiler.ast.node.UnparameterizedTypeNode;
 
 public class SuperMethodInvocationNodeImpl extends NodeImpl implements SuperMethodInvocationNode
 {
     /** The qualifying type. */
-    private RawTypeNode type;
+    private UnparameterizedTypeNode type;
 
     /** The identifier of the method being invoked. */
     private IdentifierNode identifier;
@@ -26,7 +26,7 @@ public class SuperMethodInvocationNodeImpl extends NodeImpl implements SuperMeth
 
     /** General constructor. */
     public SuperMethodInvocationNodeImpl(
-            RawTypeNode type,
+            UnparameterizedTypeNode type,
             IdentifierNode identifier,
             ListNode<ExpressionNode> arguments,
             ListNode<TypeNode> typeArguments)
@@ -42,7 +42,7 @@ public class SuperMethodInvocationNodeImpl extends NodeImpl implements SuperMeth
      * Gets the qualifying type.
      * @return The qualifying type.
      */
-    public RawTypeNode getType()
+    public UnparameterizedTypeNode getType()
     {
         return this.type;
     }
@@ -51,7 +51,7 @@ public class SuperMethodInvocationNodeImpl extends NodeImpl implements SuperMeth
      * Changes the qualifying type.
      * @param type The qualifying type.
      */
-    public void setType(RawTypeNode type)
+    public void setType(UnparameterizedTypeNode type)
     {
         if (this.type instanceof NodeImpl)
         {

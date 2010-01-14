@@ -94,13 +94,13 @@ public interface MethodDeclarationNode extends Node, ClassMemberNode,  Interface
      * Gets the types of exceptions thrown by this method.
      * @return The types of exceptions thrown by this method.
      */
-    public ListNode<RawTypeNode> getThrowTypes();
+    public ListNode<UnparameterizedTypeNode> getThrowTypes();
 
     /**
      * Changes the types of exceptions thrown by this method.
      * @param throwTypes The types of exceptions thrown by this method.
      */
-    public void setThrowTypes(ListNode<RawTypeNode> throwTypes);
+    public void setThrowTypes(ListNode<UnparameterizedTypeNode> throwTypes);
 
     /**
      * Gets this method's applicable type parameters.

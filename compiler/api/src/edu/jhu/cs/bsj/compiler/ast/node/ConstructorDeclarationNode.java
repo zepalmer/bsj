@@ -63,13 +63,13 @@ public interface ConstructorDeclarationNode extends Node, ClassMemberNode
      * Gets the types of exceptions thrown by this constructor.
      * @return The types of exceptions thrown by this constructor.
      */
-    public ListNode<RawTypeNode> getThrowTypes();
+    public ListNode<UnparameterizedTypeNode> getThrowTypes();
 
     /**
      * Changes the types of exceptions thrown by this constructor.
      * @param throwTypes The types of exceptions thrown by this constructor.
      */
-    public void setThrowTypes(ListNode<RawTypeNode> throwTypes);
+    public void setThrowTypes(ListNode<UnparameterizedTypeNode> throwTypes);
 
     /**
      * Gets this constructor's applicable type parameters.

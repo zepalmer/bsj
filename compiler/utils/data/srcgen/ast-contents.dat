@@ -423,7 +423,7 @@ QualifiedClassInstantiationNode :: ClassInstantiationNode
 
 SuperFieldAccessNode :: Node + RestrictedPrimaryExpressionNode
     @props
-    type                    RawTypeNode                                 | the qualifying type
+    type                    UnparameterizedTypeNode                     | the qualifying type
     identifier              IdentifierNode                              | the identifier of the field being accessed
     @docs
         A node representing a field selection from <tt>super</tt>, such as in the expression
@@ -452,7 +452,7 @@ SuperFieldAccessNode :: Node + RestrictedPrimaryExpressionNode
 
 SuperMethodInvocationNode :: Node + RestrictedPrimaryExpressionNode
     @props
-    type                    RawTypeNode                                 | the qualifying type
+    type                    UnparameterizedTypeNode                     | the qualifying type
     identifier              IdentifierNode                              | the identifier of the method being invoked
     arguments               ListNode<ExpressionNode>                    | the arguments to pass to the method
     typeArguments           ListNode<TypeNode>                          | the type arguments for the method
@@ -487,7 +487,7 @@ SuperMethodInvocationNode :: Node + RestrictedPrimaryExpressionNode
 
 ThisNode :: Node + RestrictedPrimaryExpressionNode
     @props
-    type                    RawTypeNode                                 | the qualifying type
+    type                    UnparameterizedTypeNode                     | the qualifying type
     @docs
         A node representing the code snippet <tt>this</tt> in terms of a value, such as in the expression
         <pre>
@@ -787,12 +787,12 @@ ArrayTypeNode :: Node + ReferenceTypeNode
 
 ParameterizedTypeNode :: Node + DeclaredTypeNode
     @props
-    rawType                 RawTypeNode                                 | the raw type being parameterized
+    baseType                UnparameterizedTypeNode                     | the base type being parameterized
     typeArguments           ListNode<TypeArgumentNode>                  | the type arguments for this node
     @docs
         A node representing parameterized types.  This node represents the use of a type which has type arguments, such
-        as Set<String> (which would be represented by the raw type Set and the single-element argument list containing
-        the raw type for String).
+        as Set<String> (which would be represented by the unparameterized type Set and the single-element argument list
+        containing the unparameterized type for String).
 
 ParameterizedTypeSelectNode :: Node + DeclaredTypeNode
     @props
@@ -801,10 +801,10 @@ ParameterizedTypeSelectNode :: Node + DeclaredTypeNode
     @docs
         A node representing a type selection from a parameterized type.  This node is used when a type is selected from
         another type which is parameterized, such as in <tt>A&lt;X&gt;.B</tt>.  In that case, the root node is a
-        <tt>ParameterizedTypeSelectNode</tt>.  The <tt>select</tt> child is a <tt>RawTypeNode</tt> containing the name
-        "B"; the <tt>base</tt> child is a {@link ParameterizedTypeNode}.  The <tt>base</tt> has children of a
-        {@link RawTypeNode} containing the name "A" and a {@link ListNode} containing the type argument with the name
-        "X".
+        <tt>ParameterizedTypeSelectNode</tt>.  The <tt>select</tt> child is an <tt>UnparameterizedTypeNode</tt>
+        containing the name "B"; the <tt>base</tt> child is a {@link ParameterizedTypeNode}.  The <tt>base</tt> has
+        children of an {@link UnparameterizedTypeNode} containing the name "A" and a {@link ListNode} containing the
+        type argument with the name "X".
 
 PrimitiveTypeNode :: Node + TypeNode, BaseTypeNode
     @props
@@ -812,15 +812,14 @@ PrimitiveTypeNode :: Node + TypeNode, BaseTypeNode
     @docs
         A node representing a primitive type.
 
-# TODO: add information which tracks whether we have determined this node to represent a true raw type or type parameter
-# TODO: is "raw type" the right term?  Or does that refer specifically to a generic with no presented type arguments
-RawTypeNode :: Node + DeclaredTypeNode
+# TODO: add information which tracks whether we have determined this node to represent a true declared type or type parameter
+UnparameterizedTypeNode :: Node + DeclaredTypeNode
     @props
     name                    NameNode                                    | the name of the type
     @docs
-        Represents a raw type.  Examples of raw types in Java include most of the API: String, InputStream, and so on.
-        Parameterized types, such as Set<String>, are not represented in this way.  Raw types also represent type
-        parameters.
+        Represents an unparameterized type.  Examples of unparameterized types in Java include most of the API: String,
+        InputStream, and so on.  Parameterized types, such as Set<String>, are not represented in this way.
+        Unparameterized types also represent type parameters, such as the <tt>T</tt> in <tt>Set<T></tt>.
 
 VoidTypeNode :: Node + TypeNode
     @docs
@@ -888,7 +887,7 @@ ConstructorDeclarationNode :: Node + ClassMemberNode
     modifiers               ModifiersNode                               | the modifiers for this constructor
     parameters              ListNode<VariableNode>                      | the parameters declared by this constructor
     varargParameter         VariableNode                                | the vararg parameter declared by this method
-    throwTypes              ListNode<RawTypeNode>                       | the types of exceptions thrown by this constructor
+    throwTypes              ListNode<UnparameterizedTypeNode>           | the types of exceptions thrown by this constructor
     typeParameters          ListNode<TypeParameterNode>                 | this constructor's applicable type parameters
     @docs
         A node representing a constructor declaration, as in:
@@ -929,7 +928,7 @@ MethodDeclarationNode :: Node + ClassMemberNode, InterfaceMemberNode, AnonymousC
     parameters              ListNode<VariableNode>                      | the parameters declared by this method
     varargParameter         VariableNode                                | the vararg parameter declared by this method
     returnType              TypeNode                                    | the type of value returned
-    throwTypes              ListNode<RawTypeNode>                       | the types of exceptions thrown by this method
+    throwTypes              ListNode<UnparameterizedTypeNode>           | the types of exceptions thrown by this method
     typeParameters          ListNode<TypeParameterNode>                 | this method's applicable type parameters
     @docs
         A node representing a method declaration, as in:
@@ -1080,7 +1079,7 @@ AnnotationExpressionValueNode :: Node + AnnotationValueNode
 
 AnnotationNode* :: Node
     @props
-    annotationType          RawTypeNode                                 | the annotation type
+    annotationType          UnparameterizedTypeNode                     | the annotation type
     @docs
         Acts as a base class for annotation nodes.  Subclasses distinguish between the different types of annotation
         sugar.

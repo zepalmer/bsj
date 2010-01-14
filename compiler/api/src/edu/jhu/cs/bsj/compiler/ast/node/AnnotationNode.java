@@ -11,12 +11,12 @@ public interface AnnotationNode extends Node
      * Gets the annotation type.
      * @return The annotation type.
      */
-    public RawTypeNode getAnnotationType();
+    public UnparameterizedTypeNode getAnnotationType();
 
     /**
      * Changes the annotation type.
      * @param annotationType The annotation type.
      */
-    public void setAnnotationType(RawTypeNode annotationType);
+    public void setAnnotationType(UnparameterizedTypeNode annotationType);
 
 }
