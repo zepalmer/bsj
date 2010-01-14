@@ -2686,11 +2686,11 @@ primary returns [PrimaryExpressionNode ret]
             }
         )
         (
-            primarySuffixes[ret]
+            primarySuffix[ret]
             {
-                $ret = $primarySuffixes.ret;
+                $ret = $primarySuffix.ret;
             }
-        )?
+        )*
     ;
 
 restrictedPrimary returns [RestrictedPrimaryExpressionNode ret]
@@ -2785,19 +2785,6 @@ restrictedPrimary returns [RestrictedPrimaryExpressionNode ret]
         )?
     ;
     
-primarySuffixes[PrimaryExpressionNode in] returns [PrimaryExpressionNode ret]
-        @init {
-            $ret = in;
-        }
-    :
-        (
-            primarySuffix[ret]
-            {
-                $ret = $primarySuffix.ret;
-            }
-        )+
-    ;
-
 primarySuffix[PrimaryExpressionNode in] returns [RestrictedPrimaryExpressionNode ret]
     :
         (
