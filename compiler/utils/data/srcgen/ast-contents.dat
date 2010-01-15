@@ -51,6 +51,10 @@
 # the file until a "stop" is encountered.  Lines which appear after an "importstart" are copied into the header of the
 # file until an "importstop" is encountered.  If an include is specified, it must be present in both the classes and
 # ifaces directories, even if one of them is empty.
+#
+# The fourth available mode is toString.  When in toString mode, each line is taken to be in the context of a custom
+# toString method for that class.  The lines are placed in a context in which a StringBuilder named "sb" has been
+# created.  The line "return sb.toString();" is executed automatically, so the custom code should not contain a return.
 
 #######################################################################################################################
 # JAVA AST NODES
@@ -172,6 +176,8 @@ IdentifierNode :: Node
         <pre>
         <i>ident</i>
         </pre>
+    @toString
+        sb.append("Identifier[" + this.identifier + "]");
 
 NameNode* :: Node
     @props
@@ -198,6 +204,13 @@ QualifiedNameNode :: NameNode
         <pre>
         <i>name.ident</i>
         </pre>
+    @toString
+        sb.append(this.base.toString());
+        sb.append('.');
+        sb.append(identifier.getIdentifier());
+        sb.append('[');
+        sb.append(this.getCategory());
+        sb.append(']');
 
 SimpleNameNode :: NameNode
     @props
@@ -207,6 +220,11 @@ SimpleNameNode :: NameNode
         <pre>
         <i>name</i>
         </pre>
+    @toString
+        sb.append(identifier.getIdentifier());
+        sb.append('[');
+        sb.append(this.getCategory());
+        sb.append(']');
 
 ### Expression Nodes ##################################################################################################
 

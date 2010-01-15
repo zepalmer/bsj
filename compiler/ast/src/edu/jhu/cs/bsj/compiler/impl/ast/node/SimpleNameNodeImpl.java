@@ -81,10 +81,9 @@ public class SimpleNameNodeImpl extends NameNodeImpl implements SimpleNameNode
     public String toString()
     {
         StringBuilder sb = new StringBuilder();
-        sb.append(this.getClass().getSimpleName());
+        sb.append(identifier.getIdentifier());
         sb.append('[');
-        sb.append("identifier=");
-        sb.append(this.identifier == null? "null" : this.identifier.getClass().getSimpleName());
+        sb.append(this.getCategory());
         sb.append(']');
         return sb.toString();
     }

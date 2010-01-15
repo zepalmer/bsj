@@ -262,6 +262,7 @@ public class SourceGenerator
 
 		List<String> docStrings = new ArrayList<String>();
 		List<String> includeFilenames = new ArrayList<String>();
+		List<String> toStringLines = null;
 
 		Mode mode = null;
 		List<Prop> props = new ArrayList<Prop>();
@@ -283,6 +284,9 @@ public class SourceGenerator
 				} else if (s.equals("@include"))
 				{
 					mode = Mode.INCLUDE;
+				} else if (s.equals("@toString"))
+				{
+					mode = Mode.TOSTRING;
 				} else
 				{
 					throw new IllegalArgumentException(errorPrefix + "Unknown mode " + s);
@@ -298,6 +302,13 @@ public class SourceGenerator
 				} else if (mode == Mode.INCLUDE)
 				{
 					includeFilenames.add(s);
+				} else if (mode == Mode.TOSTRING)
+				{
+					if (toStringLines == null)
+					{
+						toStringLines = new ArrayList<String>();
+					}
+					toStringLines.add(s);
 				} else if (mode == null)
 				{
 					throw new IllegalArgumentException(errorPrefix + "Mode not set");
@@ -339,7 +350,7 @@ public class SourceGenerator
 		}
 
 		ClassDef def = new ClassDef(classname, supername, taggingInterfaces, props, includeFilenames, classMode,
-				classDocBuilder.toString());
+				classDocBuilder.toString(), toStringLines);
 
 		for (ClassDefHandler handler : handlers)
 		{
@@ -376,7 +387,7 @@ public class SourceGenerator
 
 	static enum Mode
 	{
-		PROP, DOC, INCLUDE;
+		PROP, DOC, INCLUDE, TOSTRING
 	}
 
 	static class Prop
@@ -410,9 +421,10 @@ public class SourceGenerator
 		List<String> includeFilenames;
 		ClassMode mode;
 		String classDoc;
+		List<String> toStringLines;
 
 		public ClassDef(String name, String sname, List<String> tags, List<Prop> props, List<String> includeFilenames,
-				ClassMode mode, String classDoc)
+				ClassMode mode, String classDoc, List<String> toStringLines)
 		{
 			super();
 			this.name = name;
@@ -422,6 +434,7 @@ public class SourceGenerator
 			this.includeFilenames = includeFilenames;
 			this.mode = mode;
 			this.classDoc = classDoc;
+			this.toStringLines = toStringLines;
 		}
 
 		public String getRawName()
@@ -1042,33 +1055,42 @@ public class SourceGenerator
 			ps.println("    public String toString()");
 			ps.println("    {");
 			ps.println("        StringBuilder sb = new StringBuilder();");
-			ps.println("        sb.append(this.getClass().getSimpleName());");
-			ps.println("        sb.append('[');");
-			boolean firstProp = true;
-			for (Prop p : def.props)
+			if (def.toStringLines == null)
 			{
-				if (firstProp)
+				ps.println("        sb.append(this.getClass().getSimpleName());");
+				ps.println("        sb.append('[');");
+				boolean firstProp = true;
+				for (Prop p : def.props)
 				{
-					firstProp = false;
-				} else
-				{
-					ps.println("        sb.append(',');");
+					if (firstProp)
+					{
+						firstProp = false;
+					} else
+					{
+						ps.println("        sb.append(',');");
+					}
+					ps.println("        sb.append(\"" + p.name + "=\");");
+					if (propInstanceOf(p.type, "Node"))
+					{
+						ps.println("        sb.append(this." + p.name + " == null? \"null\" : this." + p.name
+								+ ".getClass().getSimpleName());");
+					} else
+					{
+						ps.println("        sb.append(String.valueOf(this."
+								+ p.name
+								+ ") + \":\" + "
+								+ ((PRIMITIVE_TYPES.contains(p.type)) ? "\"" + p.type + "\"" : "this." + p.name
+										+ ".getClass().getSimpleName()") + ");");
+					}
 				}
-				ps.println("        sb.append(\"" + p.name + "=\");");
-				if (propInstanceOf(p.type, "Node"))
+				ps.println("        sb.append(']');");
+			} else
+			{
+				for (String toStringLine : def.toStringLines)
 				{
-					ps.println("        sb.append(this." + p.name + " == null? \"null\" : this." + p.name
-							+ ".getClass().getSimpleName());");
-				} else
-				{
-					ps.println("        sb.append(String.valueOf(this." + p.name + ") + \":\" + " +
-							((PRIMITIVE_TYPES.contains(p.type))?
-									"\"" + p.type + "\"" :
-									"this." + p.name + ".getClass().getSimpleName()")
-							+ ");");
+					ps.println("        " + toStringLine);
 				}
 			}
-			ps.println("        sb.append(']');");
 			ps.println("        return sb.toString();");
 			ps.println("    }");
 
