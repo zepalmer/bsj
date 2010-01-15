@@ -121,6 +121,7 @@ public class CaseNodeImpl extends NodeImpl implements CaseNode
         sb.append(',');
         sb.append("statements=");
         sb.append(this.statements == null? "null" : this.statements.getClass().getSimpleName());
+        sb.append('[');
         return sb.toString();
     }
 }

@@ -110,6 +110,7 @@ public class ImportSingleTypeNodeImpl extends NodeImpl implements ImportSingleTy
         sb.append(',');
         sb.append("staticImport=");
         sb.append(String.valueOf(this.staticImport) + ":" + "boolean");
+        sb.append('[');
         return sb.toString();
     }
 }

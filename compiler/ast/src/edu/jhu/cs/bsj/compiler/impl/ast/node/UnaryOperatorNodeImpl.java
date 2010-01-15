@@ -111,6 +111,7 @@ public class UnaryOperatorNodeImpl extends NodeImpl implements UnaryOperatorNode
         sb.append(',');
         sb.append("operator=");
         sb.append(String.valueOf(this.operator) + ":" + this.operator.getClass().getSimpleName());
+        sb.append('[');
         return sb.toString();
     }
 }

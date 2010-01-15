@@ -85,6 +85,7 @@ public class SingleElementAnnotationNodeImpl extends AnnotationNodeImpl implemen
         sb.append('[');
         sb.append("value=");
         sb.append(this.value == null? "null" : this.value.getClass().getSimpleName());
+        sb.append('[');
         return sb.toString();
     }
 }

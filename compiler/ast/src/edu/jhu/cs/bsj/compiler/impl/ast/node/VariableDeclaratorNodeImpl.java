@@ -157,6 +157,7 @@ public class VariableDeclaratorNodeImpl extends NodeImpl implements VariableDecl
         sb.append(',');
         sb.append("initializer=");
         sb.append(this.initializer == null? "null" : this.initializer.getClass().getSimpleName());
+        sb.append('[');
         return sb.toString();
     }
 }

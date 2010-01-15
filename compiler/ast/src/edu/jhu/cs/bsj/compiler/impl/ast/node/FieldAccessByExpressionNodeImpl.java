@@ -120,6 +120,7 @@ public class FieldAccessByExpressionNodeImpl extends NodeImpl implements FieldAc
         sb.append(',');
         sb.append("identifier=");
         sb.append(this.identifier == null? "null" : this.identifier.getClass().getSimpleName());
+        sb.append('[');
         return sb.toString();
     }
 }

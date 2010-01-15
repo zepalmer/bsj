@@ -73,6 +73,7 @@ public class IdentifierNodeImpl extends NodeImpl implements IdentifierNode
         sb.append('[');
         sb.append("identifier=");
         sb.append(String.valueOf(this.identifier) + ":" + this.identifier.getClass().getSimpleName());
+        sb.append('[');
         return sb.toString();
     }
 }

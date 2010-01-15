@@ -84,6 +84,7 @@ public class AnonymousClassBodyNodeImpl extends NodeImpl implements AnonymousCla
         sb.append('[');
         sb.append("members=");
         sb.append(this.members == null? "null" : this.members.getClass().getSimpleName());
+        sb.append('[');
         return sb.toString();
     }
 }

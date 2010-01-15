@@ -84,6 +84,7 @@ public class ArrayInitializerNodeImpl extends NodeImpl implements ArrayInitializ
         sb.append('[');
         sb.append("initializers=");
         sb.append(this.initializers == null? "null" : this.initializers.getClass().getSimpleName());
+        sb.append('[');
         return sb.toString();
     }
 }

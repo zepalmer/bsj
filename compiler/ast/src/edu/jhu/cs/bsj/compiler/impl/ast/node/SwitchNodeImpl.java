@@ -121,6 +121,7 @@ public class SwitchNodeImpl extends NodeImpl implements SwitchNode
         sb.append(',');
         sb.append("cases=");
         sb.append(this.cases == null? "null" : this.cases.getClass().getSimpleName());
+        sb.append('[');
         return sb.toString();
     }
 }

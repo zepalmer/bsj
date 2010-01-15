@@ -120,6 +120,7 @@ public class InstanceOfNodeImpl extends NodeImpl implements InstanceOfNode
         sb.append(',');
         sb.append("type=");
         sb.append(this.type == null? "null" : this.type.getClass().getSimpleName());
+        sb.append('[');
         return sb.toString();
     }
 }

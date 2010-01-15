@@ -162,6 +162,7 @@ public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeI
         sb.append(',');
         sb.append("typeArguments=");
         sb.append(this.typeArguments == null? "null" : this.typeArguments.getClass().getSimpleName());
+        sb.append('[');
         return sb.toString();
     }
 }

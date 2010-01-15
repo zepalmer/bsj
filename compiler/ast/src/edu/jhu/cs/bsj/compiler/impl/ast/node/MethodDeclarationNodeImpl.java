@@ -342,6 +342,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
         sb.append(',');
         sb.append("typeParameters=");
         sb.append(this.typeParameters == null? "null" : this.typeParameters.getClass().getSimpleName());
+        sb.append('[');
         return sb.toString();
     }
 }

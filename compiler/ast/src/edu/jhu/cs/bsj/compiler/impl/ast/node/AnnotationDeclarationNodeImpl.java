@@ -87,6 +87,7 @@ public class AnnotationDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl 
         sb.append('[');
         sb.append("body=");
         sb.append(this.body == null? "null" : this.body.getClass().getSimpleName());
+        sb.append('[');
         return sb.toString();
     }
 }

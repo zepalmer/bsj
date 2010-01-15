@@ -83,6 +83,7 @@ public class ParenthesizedExpressionNodeImpl extends NodeImpl implements Parenth
         sb.append('[');
         sb.append("expression=");
         sb.append(this.expression == null? "null" : this.expression.getClass().getSimpleName());
+        sb.append('[');
         return sb.toString();
     }
 }

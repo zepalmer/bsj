@@ -113,6 +113,7 @@ public class ModifiersNodeImpl extends NodeImpl implements ModifiersNode
         sb.append(',');
         sb.append("flags=");
         sb.append(String.valueOf(this.flags) + ":" + this.flags.getClass().getSimpleName());
+        sb.append('[');
         return sb.toString();
     }
 }

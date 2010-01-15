@@ -83,6 +83,7 @@ public class AnnotationAnnotationValueNodeImpl extends NodeImpl implements Annot
         sb.append('[');
         sb.append("annotation=");
         sb.append(this.annotation == null? "null" : this.annotation.getClass().getSimpleName());
+        sb.append('[');
         return sb.toString();
     }
 }

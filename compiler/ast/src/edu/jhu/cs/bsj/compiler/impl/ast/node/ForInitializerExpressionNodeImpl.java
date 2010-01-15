@@ -84,6 +84,7 @@ public class ForInitializerExpressionNodeImpl extends NodeImpl implements ForIni
         sb.append('[');
         sb.append("expressions=");
         sb.append(this.expressions == null? "null" : this.expressions.getClass().getSimpleName());
+        sb.append('[');
         return sb.toString();
     }
 }

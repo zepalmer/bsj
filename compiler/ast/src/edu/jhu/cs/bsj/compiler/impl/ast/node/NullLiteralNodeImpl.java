@@ -48,6 +48,7 @@ public class NullLiteralNodeImpl extends LiteralNodeImpl<Void> implements NullLi
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
+        sb.append('[');
         return sb.toString();
     }
 }

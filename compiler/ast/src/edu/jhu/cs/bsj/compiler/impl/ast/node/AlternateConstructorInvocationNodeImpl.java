@@ -52,6 +52,7 @@ public class AlternateConstructorInvocationNodeImpl extends ConstructorInvocatio
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
+        sb.append('[');
         return sb.toString();
     }
 }

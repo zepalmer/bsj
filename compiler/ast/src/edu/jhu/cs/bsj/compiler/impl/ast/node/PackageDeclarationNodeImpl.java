@@ -121,6 +121,7 @@ public class PackageDeclarationNodeImpl extends NodeImpl implements PackageDecla
         sb.append(',');
         sb.append("annotations=");
         sb.append(this.annotations == null? "null" : this.annotations.getClass().getSimpleName());
+        sb.append('[');
         return sb.toString();
     }
 }

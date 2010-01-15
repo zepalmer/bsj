@@ -49,6 +49,7 @@ public class ClassLiteralNodeImpl extends LiteralNodeImpl<LiteralizableTypeNode>
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
+        sb.append('[');
         return sb.toString();
     }
 }

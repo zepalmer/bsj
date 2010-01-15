@@ -46,6 +46,7 @@ public abstract class NodeImpl implements Node
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
+        sb.append('[');
         return sb.toString();
     }
 	/**

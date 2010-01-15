@@ -48,6 +48,7 @@ public class IntLiteralNodeImpl extends LiteralNodeImpl<Integer> implements IntL
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
+        sb.append('[');
         return sb.toString();
     }
 }

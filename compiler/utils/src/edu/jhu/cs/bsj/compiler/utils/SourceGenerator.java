@@ -1068,6 +1068,7 @@ public class SourceGenerator
 							+ ");");
 				}
 			}
+			ps.println("        sb.append('[');");
 			ps.println("        return sb.toString();");
 			ps.println("    }");
 

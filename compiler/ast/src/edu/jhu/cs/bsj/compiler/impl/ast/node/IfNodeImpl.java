@@ -156,6 +156,7 @@ public class IfNodeImpl extends NodeImpl implements IfNode
         sb.append(',');
         sb.append("elseStatement=");
         sb.append(this.elseStatement == null? "null" : this.elseStatement.getClass().getSimpleName());
+        sb.append('[');
         return sb.toString();
     }
 }

@@ -48,6 +48,7 @@ public class CharLiteralNodeImpl extends LiteralNodeImpl<Character> implements C
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
+        sb.append('[');
         return sb.toString();
     }
 }

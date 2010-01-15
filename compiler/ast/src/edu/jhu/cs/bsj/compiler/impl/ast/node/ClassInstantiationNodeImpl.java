@@ -158,6 +158,7 @@ public abstract class ClassInstantiationNodeImpl extends NodeImpl implements Cla
         sb.append(',');
         sb.append("body=");
         sb.append(this.body == null? "null" : this.body.getClass().getSimpleName());
+        sb.append('[');
         return sb.toString();
     }
 }

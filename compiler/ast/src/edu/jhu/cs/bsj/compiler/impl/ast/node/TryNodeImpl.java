@@ -157,6 +157,7 @@ public class TryNodeImpl extends NodeImpl implements TryNode
         sb.append(',');
         sb.append("finallyBlock=");
         sb.append(this.finallyBlock == null? "null" : this.finallyBlock.getClass().getSimpleName());
+        sb.append('[');
         return sb.toString();
     }
 }

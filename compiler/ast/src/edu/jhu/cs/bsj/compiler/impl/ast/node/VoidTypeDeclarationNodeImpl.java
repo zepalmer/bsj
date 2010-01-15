@@ -47,6 +47,7 @@ public class VoidTypeDeclarationNodeImpl extends NodeImpl implements VoidTypeDec
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
+        sb.append('[');
         return sb.toString();
     }
 }

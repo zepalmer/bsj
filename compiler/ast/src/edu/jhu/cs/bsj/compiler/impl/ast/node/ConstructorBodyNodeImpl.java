@@ -121,6 +121,7 @@ public class ConstructorBodyNodeImpl extends NodeImpl implements ConstructorBody
         sb.append(',');
         sb.append("statements=");
         sb.append(this.statements == null? "null" : this.statements.getClass().getSimpleName());
+        sb.append('[');
         return sb.toString();
     }
 }

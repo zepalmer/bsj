@@ -120,6 +120,7 @@ public class ParameterizedTypeSelectNodeImpl extends NodeImpl implements Paramet
         sb.append(',');
         sb.append("select=");
         sb.append(this.select == null? "null" : this.select.getClass().getSimpleName());
+        sb.append('[');
         return sb.toString();
     }
 }

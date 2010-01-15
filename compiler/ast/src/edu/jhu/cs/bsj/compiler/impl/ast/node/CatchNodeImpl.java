@@ -120,6 +120,7 @@ public class CatchNodeImpl extends NodeImpl implements CatchNode
         sb.append(',');
         sb.append("parameter=");
         sb.append(this.parameter == null? "null" : this.parameter.getClass().getSimpleName());
+        sb.append('[');
         return sb.toString();
     }
 }

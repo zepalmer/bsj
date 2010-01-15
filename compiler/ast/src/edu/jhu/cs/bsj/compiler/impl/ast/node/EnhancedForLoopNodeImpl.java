@@ -157,6 +157,7 @@ public class EnhancedForLoopNodeImpl extends NodeImpl implements EnhancedForLoop
         sb.append(',');
         sb.append("statement=");
         sb.append(this.statement == null? "null" : this.statement.getClass().getSimpleName());
+        sb.append('[');
         return sb.toString();
     }
 }

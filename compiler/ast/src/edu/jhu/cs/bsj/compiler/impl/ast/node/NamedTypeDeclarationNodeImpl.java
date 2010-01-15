@@ -120,6 +120,7 @@ public abstract class NamedTypeDeclarationNodeImpl extends NodeImpl implements N
         sb.append(',');
         sb.append("modifiers=");
         sb.append(this.modifiers == null? "null" : this.modifiers.getClass().getSimpleName());
+        sb.append('[');
         return sb.toString();
     }
 }

@@ -83,6 +83,7 @@ public class ThisNodeImpl extends NodeImpl implements ThisNode
         sb.append('[');
         sb.append("type=");
         sb.append(this.type == null? "null" : this.type.getClass().getSimpleName());
+        sb.append('[');
         return sb.toString();
     }
 }

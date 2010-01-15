@@ -120,6 +120,7 @@ public class ArrayAccessNodeImpl extends NodeImpl implements ArrayAccessNode
         sb.append(',');
         sb.append("indexExpression=");
         sb.append(this.indexExpression == null? "null" : this.indexExpression.getClass().getSimpleName());
+        sb.append('[');
         return sb.toString();
     }
 }
