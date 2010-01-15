@@ -2,10 +2,13 @@ package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import java.util.List;
 
+import javax.annotation.Generated;
+
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.ContinueNode;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
 public class ContinueNodeImpl extends NodeImpl implements ContinueNode
 {
     /** The continue label. */

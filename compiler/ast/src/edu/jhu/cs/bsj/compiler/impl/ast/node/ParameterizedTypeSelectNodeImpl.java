@@ -2,11 +2,14 @@ package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import java.util.List;
 
+import javax.annotation.Generated;
+
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.DeclaredTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ParameterizedTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ParameterizedTypeSelectNode;
 
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
 public class ParameterizedTypeSelectNodeImpl extends NodeImpl implements ParameterizedTypeSelectNode
 {
     /** The parameterized type from which a type is selected. */

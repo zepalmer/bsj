@@ -1,5 +1,6 @@
 package edu.jhu.cs.bsj.compiler.ast.node;
 
+import javax.annotation.Generated;
 
 /**
  * Represents a conditional <i>expression</i>, as in:
@@ -7,6 +8,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
  * <i>condition</i> ? <i>expression</i> : <i>expression</i>
  * </pre>
  */
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
 public interface ConditionalExpressionNode extends Node, NonAssignmentExpressionNode
 {
     /**

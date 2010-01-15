@@ -1,5 +1,6 @@
 package edu.jhu.cs.bsj.compiler.ast.node;
 
+import javax.annotation.Generated;
 
 /**
  * A node for the declaration of a variable, as in:
@@ -14,6 +15,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
  *     <pre>
  *     <i>type identifier</i> = <i>expression</i>, <i>identifier</i> = <i>expression</i>, ...;
  */
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
 public interface VariableDeclarationNode extends Node, StatementNode
 {
     /**

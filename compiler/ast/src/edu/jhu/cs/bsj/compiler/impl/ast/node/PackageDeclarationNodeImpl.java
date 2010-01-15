@@ -2,12 +2,15 @@ package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import java.util.List;
 
+import javax.annotation.Generated;
+
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.NameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.PackageDeclarationNode;
 
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
 public class PackageDeclarationNodeImpl extends NodeImpl implements PackageDeclarationNode
 {
     /** The name of the package. */

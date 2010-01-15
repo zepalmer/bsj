@@ -1,9 +1,11 @@
 package edu.jhu.cs.bsj.compiler.ast.node;
 
+import javax.annotation.Generated;
 
 /**
  * 
  */
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
 public interface InitializerDeclarationNode extends Node, ClassMemberNode,  AnonymousClassMemberNode
 {
     /**

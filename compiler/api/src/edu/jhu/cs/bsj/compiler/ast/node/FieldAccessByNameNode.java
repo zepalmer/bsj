@@ -1,5 +1,6 @@
 package edu.jhu.cs.bsj.compiler.ast.node;
 
+import javax.annotation.Generated;
 
 /**
  * Represents a field access, as in
@@ -17,6 +18,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
  * This node is not used to represent field access from the evaluation result of a subexpression (such as in the
  * code <tt>foo().bar</tt>).  For that form of access, see {@link FieldAccessByExpressionNode}.
  */
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
 public interface FieldAccessByNameNode extends Node, FieldAccessNode
 {
     /**

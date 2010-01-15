@@ -1,5 +1,6 @@
 package edu.jhu.cs.bsj.compiler.ast.node;
 
+import javax.annotation.Generated;
 
 /**
  * Represents an alternate constructor invocation, as in
@@ -13,6 +14,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
  * .  Note that this only applies to <i>superclass</i> constructor invocations (those using the <tt>super</tt>
  * keyword).  For alternate constructor invocations, see {@link AlternateConstructorInvocationNode}.
  */
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
 public interface SuperclassConstructorInvocationNode extends ConstructorInvocationNode
 {
     /**

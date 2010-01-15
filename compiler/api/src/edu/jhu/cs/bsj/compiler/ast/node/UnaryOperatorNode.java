@@ -1,5 +1,7 @@
 package edu.jhu.cs.bsj.compiler.ast.node;
 
+import javax.annotation.Generated;
+
 import edu.jhu.cs.bsj.compiler.ast.UnaryOperator;
 
 /**
@@ -12,6 +14,7 @@ import edu.jhu.cs.bsj.compiler.ast.UnaryOperator;
  * x++
  * </pre>
  */
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
 public interface UnaryOperatorNode extends Node, NonAssignmentExpressionNode
 {
     /**

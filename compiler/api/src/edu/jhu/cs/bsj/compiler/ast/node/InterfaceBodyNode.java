@@ -1,9 +1,11 @@
 package edu.jhu.cs.bsj.compiler.ast.node;
 
+import javax.annotation.Generated;
 
 /**
  * Represents the body of an interface declaration.
  */
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
 public interface InterfaceBodyNode extends Node
 {
     /**

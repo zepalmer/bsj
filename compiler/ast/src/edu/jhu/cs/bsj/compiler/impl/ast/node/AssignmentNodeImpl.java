@@ -2,11 +2,14 @@ package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import java.util.List;
 
+import javax.annotation.Generated;
+
 import edu.jhu.cs.bsj.compiler.ast.AssignmentOperator;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.AssignmentNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
 public class AssignmentNodeImpl extends NodeImpl implements AssignmentNode
 {
     /** The variable to which to assign a value. */

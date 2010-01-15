@@ -1,5 +1,7 @@
 package edu.jhu.cs.bsj.compiler.ast;
 
+import javax.annotation.Generated;
+
 import edu.jhu.cs.bsj.compiler.ast.node.AlternateConstructorInvocationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationAnnotationValueNode;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationArrayValueNode;
@@ -106,6 +108,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.CodeLiteralNode;
  *
  * @author Zachary Palmer
  */
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
 public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor
 {
     /**

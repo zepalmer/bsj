@@ -1,5 +1,6 @@
 package edu.jhu.cs.bsj.compiler.ast.node;
 
+import javax.annotation.Generated;
 
 /**
  * A node to represent synchronization statements, as in:
@@ -9,6 +10,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
  * }
  * </pre>
  */
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
 public interface SynchronizedNode extends Node, StatementNode
 {
     /**

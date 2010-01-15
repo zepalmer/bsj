@@ -3,10 +3,13 @@ package edu.jhu.cs.bsj.compiler.impl.ast.node;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Generated;
+
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
 public class ListNodeImpl<T extends Node> extends NodeImpl implements ListNode<T>
 {
     /** The list of children. */

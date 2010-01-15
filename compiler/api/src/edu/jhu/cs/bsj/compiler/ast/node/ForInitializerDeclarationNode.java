@@ -1,5 +1,6 @@
 package edu.jhu.cs.bsj.compiler.ast.node;
 
+import javax.annotation.Generated;
 
 /**
  * Represents a for loop initializer which declares variables.  For example, in
@@ -8,6 +9,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
  * <pre>int i=0</pre>
  * Note that, due to the nature of {@link VariableDeclarationNode}, this can be a variable muilti-declaration.
  */
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
 public interface ForInitializerDeclarationNode extends Node, ForInitializerNode
 {
     /**

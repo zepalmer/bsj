@@ -1,5 +1,6 @@
 package edu.jhu.cs.bsj.compiler.ast.node;
 
+import javax.annotation.Generated;
 
 /**
  * A node representing an annotation method declaration, as in:
@@ -7,6 +8,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
  *     <i>modifiers type identifier</i> () default <i>defaultValue</i>;
  * </pre>
  */
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
 public interface AnnotationMethodDeclarationNode extends Node, AnnotationMemberNode
 {
     /**

@@ -1,10 +1,13 @@
 package edu.jhu.cs.bsj.compiler.ast.node;
 
+import javax.annotation.Generated;
+
 import edu.jhu.cs.bsj.compiler.ast.BinaryOperator;
 
 /**
  * Represents the application of a binary operator.
  */
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
 public interface BinaryOperatorNode extends Node, NonAssignmentExpressionNode
 {
     /**

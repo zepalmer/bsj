@@ -1,10 +1,12 @@
 package edu.jhu.cs.bsj.compiler.ast.node;
 
+import javax.annotation.Generated;
 
 /**
  * Represents a single element annotation, as in:
  * <pre>@<i>type</i>(<i>value</i>)</pre>
  */
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
 public interface SingleElementAnnotationNode extends AnnotationNode
 {
     /**

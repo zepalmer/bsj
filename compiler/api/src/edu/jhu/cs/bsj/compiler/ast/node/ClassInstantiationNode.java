@@ -1,9 +1,11 @@
 package edu.jhu.cs.bsj.compiler.ast.node;
 
+import javax.annotation.Generated;
 
 /**
  * Acts as a parent to class instantiation nodes. 
  */
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
 public interface ClassInstantiationNode extends Node, RestrictedPrimaryExpressionNode
 {
     /**

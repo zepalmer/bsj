@@ -3,6 +3,8 @@ package edu.jhu.cs.bsj.compiler.ast.util;
 import java.util.List;
 import java.util.Set;
 
+import javax.annotation.Generated;
+
 import edu.jhu.cs.bsj.compiler.ast.AssignmentOperator;
 import edu.jhu.cs.bsj.compiler.ast.BinaryOperator;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
@@ -18,6 +20,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.CodeLiteralNode;
  *
  * @author Zachary Palmer
  */
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
 public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
 {
     /** The backing factory. */

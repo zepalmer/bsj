@@ -1,11 +1,13 @@
 package edu.jhu.cs.bsj.compiler.ast.node;
 
+import javax.annotation.Generated;
 
 /**
  * A node representing parameterized types.  This node represents the use of a type which has type arguments, such
  * as Set<String> (which would be represented by the unparameterized type Set and the single-element argument list
  * containing the unparameterized type for String).
  */
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
 public interface ParameterizedTypeNode extends Node, DeclaredTypeNode
 {
     /**

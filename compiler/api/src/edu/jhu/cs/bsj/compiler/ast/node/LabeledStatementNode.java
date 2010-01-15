@@ -1,5 +1,6 @@
 package edu.jhu.cs.bsj.compiler.ast.node;
 
+import javax.annotation.Generated;
 
 /**
  * A node representing labeled statements, as in:
@@ -7,6 +8,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
  * <i>identifier</i>: <i>statement</i>
  * </pre>
  */
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
 public interface LabeledStatementNode extends Node, StatementNode
 {
     /**

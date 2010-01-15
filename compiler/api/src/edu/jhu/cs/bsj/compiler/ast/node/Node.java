@@ -2,11 +2,14 @@ package edu.jhu.cs.bsj.compiler.ast.node;
 
 import java.util.List;
 
+import javax.annotation.Generated;
+
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 
 /**
  * The parent class for all BSJ AST nodes.
  */
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
 public interface Node
 {
 	/**

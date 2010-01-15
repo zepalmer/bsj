@@ -1,5 +1,6 @@
 package edu.jhu.cs.bsj.compiler.ast.node;
 
+import javax.annotation.Generated;
 
 /**
  * A node for type parameters, as in:
@@ -15,6 +16,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
  * <i>ident</i> extends <i>type</i> &amp; <i>type...</i>
  * </pre>
  */
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
 public interface TypeParameterNode extends Node
 {
     /**

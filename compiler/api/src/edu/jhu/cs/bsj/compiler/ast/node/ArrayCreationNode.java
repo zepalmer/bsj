@@ -1,9 +1,11 @@
 package edu.jhu.cs.bsj.compiler.ast.node;
 
+import javax.annotation.Generated;
 
 /**
  * Represents the creation of an array, including both instantiation and initialization.
  */
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
 public interface ArrayCreationNode extends Node, PrimaryExpressionNode
 {
     /**

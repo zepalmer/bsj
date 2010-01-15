@@ -1,5 +1,6 @@
 package edu.jhu.cs.bsj.compiler.ast.node;
 
+import javax.annotation.Generated;
 
 /**
  * A node representing method invocation by name, as in:
@@ -13,6 +14,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
  * This node is used for simple method calls (such as <tt>x.y()</tt>) and not for expression-based method calls
  * (such as <tt>x().y()</tt>).  For expression-based method calls, see {@link MethodInvocationByExpressionNode}.
  */
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
 public interface MethodInvocationByNameNode extends MethodInvocationNode
 {
     /**

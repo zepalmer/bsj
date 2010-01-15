@@ -2,10 +2,13 @@ package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import java.util.List;
 
+import javax.annotation.Generated;
+
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassLiteralNode;
 import edu.jhu.cs.bsj.compiler.ast.node.LiteralizableTypeNode;
 
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
 public class ClassLiteralNodeImpl extends LiteralNodeImpl<LiteralizableTypeNode> implements ClassLiteralNode
 {
     /** General constructor. */

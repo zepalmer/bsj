@@ -1,5 +1,6 @@
 package edu.jhu.cs.bsj.compiler.ast.node;
 
+import javax.annotation.Generated;
 
 /**
  * A node representing a for-each loop, as in:
@@ -8,6 +9,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
  *     <i>body</i>
  * </pre>
  */
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
 public interface EnhancedForLoopNode extends Node, StatementNode
 {
     /**

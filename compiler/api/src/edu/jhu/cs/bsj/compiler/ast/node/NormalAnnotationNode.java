@@ -1,5 +1,6 @@
 package edu.jhu.cs.bsj.compiler.ast.node;
 
+import javax.annotation.Generated;
 
 /**
  * Represents the usage of an annotation, as in:
@@ -9,6 +10,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
  * Note that this node does not handle the single element annotation format (<pre>@Foo("bar")</pre>).  That is
  * handled by the {@link SingleElementAnnotationNode} class.
  */
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
 public interface NormalAnnotationNode extends AnnotationNode
 {
     /**

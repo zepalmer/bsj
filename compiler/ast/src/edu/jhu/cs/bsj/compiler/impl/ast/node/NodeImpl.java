@@ -4,9 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
 
+import javax.annotation.Generated;
+
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
 public abstract class NodeImpl implements Node
 {
     /** General constructor. */

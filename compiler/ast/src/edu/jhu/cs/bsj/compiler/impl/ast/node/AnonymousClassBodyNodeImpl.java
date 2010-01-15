@@ -2,11 +2,14 @@ package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import java.util.List;
 
+import javax.annotation.Generated;
+
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.AnonymousClassBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.AnonymousClassMemberNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
 
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
 public class AnonymousClassBodyNodeImpl extends NodeImpl implements AnonymousClassBodyNode
 {
     /** The members of this anonymous class body. */

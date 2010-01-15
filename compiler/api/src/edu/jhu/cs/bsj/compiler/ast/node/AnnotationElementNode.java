@@ -1,5 +1,6 @@
 package edu.jhu.cs.bsj.compiler.ast.node;
 
+import javax.annotation.Generated;
 
 /**
  * Represents an annotation element, as in
@@ -7,6 +8,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
  * <i>ident</i>=<i>value</i>
  * </pre>
  */
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
 public interface AnnotationElementNode extends Node
 {
     /**

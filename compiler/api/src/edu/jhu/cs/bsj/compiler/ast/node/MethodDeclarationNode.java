@@ -1,5 +1,6 @@
 package edu.jhu.cs.bsj.compiler.ast.node;
 
+import javax.annotation.Generated;
 
 /**
  * A node representing a method declaration, as in:
@@ -16,6 +17,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
  * <pre>public abstract void foo();</pre>
  * will have a <tt>null</tt> body.
  */
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
 public interface MethodDeclarationNode extends Node, ClassMemberNode,  InterfaceMemberNode,  AnonymousClassMemberNode
 {
     /**

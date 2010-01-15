@@ -1,5 +1,6 @@
 package edu.jhu.cs.bsj.compiler.ast.node;
 
+import javax.annotation.Generated;
 
 /**
  * A tree node representing a simple identifier, as in:
@@ -7,6 +8,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
  * <i>ident</i>
  * </pre>
  */
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
 public interface IdentifierNode extends Node
 {
     /**

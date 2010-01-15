@@ -1,5 +1,6 @@
 package edu.jhu.cs.bsj.compiler.ast.node;
 
+import javax.annotation.Generated;
 
 /**
  * A nore for wildcard type parameters, as in:
@@ -16,6 +17,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
  * </pre>
  * (in which case <tt>bound</tt> is <tt>null</tt>).
  */
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
 public interface WildcardTypeNode extends Node, TypeArgumentNode
 {
     /**

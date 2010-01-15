@@ -1,5 +1,6 @@
 package edu.jhu.cs.bsj.compiler.ast.node;
 
+import javax.annotation.Generated;
 
 /**
  * A node representing a package declaration, as in
@@ -12,6 +13,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
  *     package <i>packageName</i>;
  * </pre>
  */
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
 public interface PackageDeclarationNode extends Node
 {
     /**

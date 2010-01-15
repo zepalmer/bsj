@@ -1,5 +1,6 @@
 package edu.jhu.cs.bsj.compiler.ast.node;
 
+import javax.annotation.Generated;
 
 /**
  * This class is a common superclass to both types of explicit constructor invocations: alternate constructor
@@ -8,6 +9,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
  * language specification treats these two entities as distinct (and there are some corner cases for the superclass
  * constructor syntax which are best contained
  */
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
 public interface ConstructorInvocationNode extends Node
 {
     /**

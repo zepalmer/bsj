@@ -1,5 +1,6 @@
 package edu.jhu.cs.bsj.compiler.ast.node;
 
+import javax.annotation.Generated;
 
 /**
  * A node representing a for-loop, as in:
@@ -11,6 +12,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
  * the <tt>update</tt> field is a {@link ListNode} with no children.  If the loop has no termination condition, the
  * <tt>condition</tt> field is <tt>null</tt>.  The <tt>update</tt> field should never be <tt>null</tt>.
  */
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
 public interface ForLoopNode extends Node, StatementNode
 {
     /**

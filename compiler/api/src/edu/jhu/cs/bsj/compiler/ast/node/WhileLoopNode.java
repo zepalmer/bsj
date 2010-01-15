@@ -1,5 +1,6 @@
 package edu.jhu.cs.bsj.compiler.ast.node;
 
+import javax.annotation.Generated;
 
 /**
  * A node for a while loop, as in:
@@ -8,6 +9,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
  *     statement
  * </pre>
  */
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
 public interface WhileLoopNode extends Node, StatementNode
 {
     /**

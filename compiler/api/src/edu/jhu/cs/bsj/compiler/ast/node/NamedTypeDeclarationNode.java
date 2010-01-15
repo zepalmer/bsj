@@ -1,9 +1,11 @@
 package edu.jhu.cs.bsj.compiler.ast.node;
 
+import javax.annotation.Generated;
 
 /**
  * Acts as a superclass for all named type declarations.
  */
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
 public interface NamedTypeDeclarationNode extends Node, TypeDeclarationNode
 {
     /**

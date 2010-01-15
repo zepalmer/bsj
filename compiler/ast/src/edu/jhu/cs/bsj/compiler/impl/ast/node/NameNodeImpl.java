@@ -2,9 +2,12 @@ package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import java.util.List;
 
+import javax.annotation.Generated;
+
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.NameCategory;
 import edu.jhu.cs.bsj.compiler.ast.node.NameNode;
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
 public abstract class NameNodeImpl extends NodeImpl implements NameNode
 {
     /** The category for this name. */

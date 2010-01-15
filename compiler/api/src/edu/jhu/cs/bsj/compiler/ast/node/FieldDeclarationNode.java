@@ -1,9 +1,11 @@
 package edu.jhu.cs.bsj.compiler.ast.node;
 
+import javax.annotation.Generated;
 
 /**
  * A node representing a field declaration.  Constants are represented by this node as well.
  */
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
 public interface FieldDeclarationNode extends Node, ClassMemberNode,  InterfaceMemberNode,  AnnotationMemberNode,  AnonymousClassMemberNode
 {
     /**

@@ -1,5 +1,6 @@
 package edu.jhu.cs.bsj.compiler.ast.node;
 
+import javax.annotation.Generated;
 
 /**
  * A node representing a type selection from a parameterized type.  This node is used when a type is selected from
@@ -9,6 +10,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
  * children of an {@link UnparameterizedTypeNode} containing the name "A" and a {@link ListNode} containing the
  * type argument with the name "X".
  */
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
 public interface ParameterizedTypeSelectNode extends Node, DeclaredTypeNode
 {
     /**

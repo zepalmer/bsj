@@ -1,5 +1,6 @@
 package edu.jhu.cs.bsj.compiler.ast.node;
 
+import javax.annotation.Generated;
 
 /**
  * Represents the creation of an array with instantiator, as in
@@ -9,6 +10,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
  * Levels for this array creator refer to square braces without initializers,
  * for example <code>new int[2][][]</code> would have two levels.
  */
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
 public interface ArrayInstantiatorCreationNode extends ArrayCreationNode
 {
     /**

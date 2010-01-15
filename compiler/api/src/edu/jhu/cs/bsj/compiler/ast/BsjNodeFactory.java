@@ -3,6 +3,8 @@ package edu.jhu.cs.bsj.compiler.ast;
 import java.util.List;
 import java.util.Set;
 
+import javax.annotation.Generated;
+
 import edu.jhu.cs.bsj.compiler.ast.node.*;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.CodeLiteralNode;
 
@@ -13,6 +15,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.CodeLiteralNode;
  *
  * @author Zachary Palmer
  */
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
 public interface BsjNodeFactory
 {
     /**

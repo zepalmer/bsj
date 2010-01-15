@@ -1,5 +1,6 @@
 package edu.jhu.cs.bsj.compiler.ast.node;
 
+import javax.annotation.Generated;
 
 /**
  * A node representing a constructor declaration, as in:
@@ -9,6 +10,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
  * </pre>
  * See {@link MethodDeclarationNode} for more information.
  */
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
 public interface ConstructorDeclarationNode extends Node, ClassMemberNode
 {
     /**

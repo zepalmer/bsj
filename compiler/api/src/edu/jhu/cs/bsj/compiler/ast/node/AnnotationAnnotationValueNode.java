@@ -1,5 +1,6 @@
 package edu.jhu.cs.bsj.compiler.ast.node;
 
+import javax.annotation.Generated;
 
 /**
  * A value in an annotation which is another annotation.  This node is used for complex annotations, such as
@@ -8,6 +9,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
  * <pre>@Bar</pre>
  * portion.
  */
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
 public interface AnnotationAnnotationValueNode extends Node, AnnotationValueNode
 {
     /**

@@ -1,5 +1,6 @@
 package edu.jhu.cs.bsj.compiler.ast.node;
 
+import javax.annotation.Generated;
 
 /**
  * Represents a for loop initializer which contains expressions.  For example, in
@@ -7,6 +8,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
  * this node represents
  * <pre>i=0,j=0</pre>
  */
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
 public interface ForInitializerExpressionNode extends Node, ForInitializerNode
 {
     /**

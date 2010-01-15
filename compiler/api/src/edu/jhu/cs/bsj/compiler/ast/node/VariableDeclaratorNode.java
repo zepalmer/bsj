@@ -1,5 +1,6 @@
 package edu.jhu.cs.bsj.compiler.ast.node;
 
+import javax.annotation.Generated;
 
 /**
  * Represents a declarator for a variable declaration.  For example, in
@@ -13,6 +14,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
  * Hence, type exists on this node instead of its parent.  If the variable is not initialized, the
  * <tt>initializer</tt> field is <tt>null</tt>.
  */
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
 public interface VariableDeclaratorNode extends Node, StatementNode
 {
     /**

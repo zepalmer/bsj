@@ -1,11 +1,13 @@
 package edu.jhu.cs.bsj.compiler.ast.node;
 
+import javax.annotation.Generated;
 
 /**
  * A node representing an enum constant.  While enum constants typically consist of a single name, many optional
  * extensions exist.  In the likely case that this constant is not an anonymous subclass, <tt>body</tt> is
  * <tt>null</tt>.
  */
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
 public interface EnumConstantDeclarationNode extends Node
 {
     /**

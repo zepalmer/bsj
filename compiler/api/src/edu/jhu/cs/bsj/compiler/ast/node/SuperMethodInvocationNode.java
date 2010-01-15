@@ -1,5 +1,6 @@
 package edu.jhu.cs.bsj.compiler.ast.node;
 
+import javax.annotation.Generated;
 
 /**
  * A node representing a method invocation from <tt>super</tt>, such as in the expression
@@ -30,6 +31,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
  * enclosing instance's superclass (<tt>A</tt>) rather than the inner class's superclass (<tt>Object</tt>).  If a
  * type qualification is not necessary (and it usually won't be), <tt>type</tt> should be <tt>null</tt>.
  */
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
 public interface SuperMethodInvocationNode extends Node, RestrictedPrimaryExpressionNode
 {
     /**

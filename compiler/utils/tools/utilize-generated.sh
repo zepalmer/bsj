@@ -15,8 +15,10 @@ fi
 
 for d in "$apisrc/$apipkg" "$astsrc/$astpkg"; do
     find "$d" -name '*.java' | while read line; do
-        echo "deleted $line"
-        rm "$line"
+        if [ -n "$(cat "$line" | grep '@Generated' | grep 'edu.jhu.cs.bsj.compiler.utils.SourceGenerator')" ]; then
+            echo "deleted $line"
+            rm "$line"
+        fi
     done
 	mkdir -p "$d"
 done

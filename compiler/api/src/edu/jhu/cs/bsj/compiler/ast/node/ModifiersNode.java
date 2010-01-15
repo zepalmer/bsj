@@ -2,12 +2,15 @@ package edu.jhu.cs.bsj.compiler.ast.node;
 
 import java.util.Set;
 
+import javax.annotation.Generated;
+
 import edu.jhu.cs.bsj.compiler.ast.Modifier;
 
 /**
  * A node representing the modifiers applied to another node.  Modifiers may include flags (such as <tt>final</tt>
  * or <tt>strictfp</tt>) and annotations (such as <tt>@Override</tt>).
  */
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
 public interface ModifiersNode extends Node
 {
     /**

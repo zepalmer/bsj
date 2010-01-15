@@ -1,5 +1,6 @@
 package edu.jhu.cs.bsj.compiler.ast.node;
 
+import javax.annotation.Generated;
 
 /**
  * A node representing a return statement, as in;
@@ -8,6 +9,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
  * <pre>return;</pre>
  * For void return statements, the <tt>expression</tt> is <tt>null</tt>.
  */
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
 public interface ReturnNode extends Node, StatementNode
 {
     /**

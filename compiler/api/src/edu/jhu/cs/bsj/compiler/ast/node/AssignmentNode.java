@@ -1,5 +1,7 @@
 package edu.jhu.cs.bsj.compiler.ast.node;
 
+import javax.annotation.Generated;
+
 import edu.jhu.cs.bsj.compiler.ast.AssignmentOperator;
 
 /**
@@ -9,6 +11,7 @@ import edu.jhu.cs.bsj.compiler.ast.AssignmentOperator;
  * </pre>
  * where <i>op</i> is one of <tt>=</tt>, <tt>+=</tt>, <tt>%=</tt>, etc.
  */
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
 public interface AssignmentNode extends Node, ExpressionNode
 {
     /**

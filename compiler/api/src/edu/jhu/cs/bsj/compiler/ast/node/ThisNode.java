@@ -1,5 +1,6 @@
 package edu.jhu.cs.bsj.compiler.ast.node;
 
+import javax.annotation.Generated;
 
 /**
  * A node representing the code snippet <tt>this</tt> in terms of a value, such as in the expression
@@ -21,6 +22,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
  * In that case, the <tt>type</tt> field contains the name of the qualified <tt>this</tt>.  Usually, <tt>this</tt>
  * is unqualified and the <tt>type</tt> field is <tt>null</tt>.
  */
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
 public interface ThisNode extends Node, RestrictedPrimaryExpressionNode
 {
     /**

@@ -1,10 +1,12 @@
 package edu.jhu.cs.bsj.compiler.ast.node;
 
+import javax.annotation.Generated;
 
 /**
  * A node representing an inline type declaration.  This is used to allow classes and enums to be declared
  * within a method body or similar environment.
  */
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
 public interface InlineTypeDeclarationNode extends Node, StatementNode
 {
     /**

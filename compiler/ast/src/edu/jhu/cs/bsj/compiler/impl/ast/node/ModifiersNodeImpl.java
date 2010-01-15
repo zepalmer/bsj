@@ -3,12 +3,15 @@ package edu.jhu.cs.bsj.compiler.impl.ast.node;
 import java.util.List;
 import java.util.Set;
 
+import javax.annotation.Generated;
+
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.Modifier;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ModifiersNode;
 
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
 public class ModifiersNodeImpl extends NodeImpl implements ModifiersNode
 {
     /** The annotations modifying the subject. */

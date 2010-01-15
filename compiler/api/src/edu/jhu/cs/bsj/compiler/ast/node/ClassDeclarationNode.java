@@ -1,5 +1,6 @@
 package edu.jhu.cs.bsj.compiler.ast.node;
 
+import javax.annotation.Generated;
 
 /**
  * Represents the declaration of a class, as in:
@@ -11,6 +12,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
  * }
  * </pre>
  */
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
 public interface ClassDeclarationNode extends NamedTypeDeclarationNode, InlineTypeDeclarableNode
 {
     /**

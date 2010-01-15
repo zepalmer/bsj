@@ -1,5 +1,6 @@
 package edu.jhu.cs.bsj.compiler.ast.node;
 
+import javax.annotation.Generated;
 
 /**
  * A node representing the instantiation of a class, as in:
@@ -8,6 +9,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
  * </pre>
  * If this class is not anonymous, the <tt>body</tt> field is <tt>null</tt>.
  */
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
 public interface UnqualifiedClassInstantiationNode extends ClassInstantiationNode
 {
     /**

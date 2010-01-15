@@ -1,9 +1,11 @@
 package edu.jhu.cs.bsj.compiler.ast.node;
 
+import javax.annotation.Generated;
 
 /**
  * A node representing a single type import statement, such as "<tt>import java.util.Set</tt>".
  */
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
 public interface ImportSingleTypeNode extends Node, ImportNode
 {
     /**

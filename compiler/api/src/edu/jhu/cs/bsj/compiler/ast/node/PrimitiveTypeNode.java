@@ -1,10 +1,13 @@
 package edu.jhu.cs.bsj.compiler.ast.node;
 
+import javax.annotation.Generated;
+
 import edu.jhu.cs.bsj.compiler.ast.PrimitiveType;
 
 /**
  * A node representing a primitive type.
  */
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
 public interface PrimitiveTypeNode extends Node, TypeNode,  BaseTypeNode,  LiteralizableTypeNode
 {
     /**

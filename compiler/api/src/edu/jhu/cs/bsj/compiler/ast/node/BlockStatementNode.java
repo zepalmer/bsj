@@ -1,5 +1,6 @@
 package edu.jhu.cs.bsj.compiler.ast.node;
 
+import javax.annotation.Generated;
 
 /**
  * Represents a block of statements, as in
@@ -10,6 +11,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
  * }
  * </pre>
  */
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
 public interface BlockStatementNode extends Node, StatementNode
 {
     /**

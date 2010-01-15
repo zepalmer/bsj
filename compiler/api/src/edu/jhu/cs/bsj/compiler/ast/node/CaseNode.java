@@ -1,5 +1,6 @@
 package edu.jhu.cs.bsj.compiler.ast.node;
 
+import javax.annotation.Generated;
 
 /**
  * A node representing a switch's case block, as in:
@@ -16,6 +17,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
  * </pre>
  * If the switch label is <tt>default</tt>, <tt>expression</tt> is <tt>null</tt>. 
  */
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
 public interface CaseNode extends Node
 {
     /**

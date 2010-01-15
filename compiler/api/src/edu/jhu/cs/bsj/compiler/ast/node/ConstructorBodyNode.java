@@ -1,5 +1,6 @@
 package edu.jhu.cs.bsj.compiler.ast.node;
 
+import javax.annotation.Generated;
 
 /**
  * Represents a constructor body.  For example, in
@@ -14,6 +15,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
  * that there be exactly one explicit constructor invocation and that it appears at the top of the constructor
  * body.
  */
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
 public interface ConstructorBodyNode extends Node
 {
     /**

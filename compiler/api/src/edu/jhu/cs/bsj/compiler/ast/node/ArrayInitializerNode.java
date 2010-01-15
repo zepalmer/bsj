@@ -1,5 +1,6 @@
 package edu.jhu.cs.bsj.compiler.ast.node;
 
+import javax.annotation.Generated;
 
 /**
  * A node representing the initialization of an array, as in:
@@ -8,6 +9,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
  * </pre>
  * The resulting array contains one element for each initializer expression.
  */
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
 public interface ArrayInitializerNode extends Node, VariableInitializerNode
 {
     /**

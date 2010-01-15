@@ -2,11 +2,14 @@ package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import java.util.List;
 
+import javax.annotation.Generated;
+
 import edu.jhu.cs.bsj.compiler.ast.BinaryOperator;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.BinaryOperatorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
 public class BinaryOperatorNodeImpl extends NodeImpl implements BinaryOperatorNode
 {
     /** The left operand of the expression. */

@@ -1,9 +1,11 @@
 package edu.jhu.cs.bsj.compiler.ast.node;
 
+import javax.annotation.Generated;
 
 /**
  * A node representing an on-demand import statement, such as "<tt>import java.util.*</tt>".
  */
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
 public interface ImportOnDemandNode extends Node, ImportNode
 {
     /**
