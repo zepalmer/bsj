@@ -1055,7 +1055,7 @@ public class SourceGenerator
 					ps.println("        sb.append(',');");
 				}
 				ps.println("        sb.append(\"" + p.name + "=\");");
-				if (p.type.contains("Node"))
+				if (propInstanceOf(p.type, "Node"))
 				{
 					ps.println("        sb.append(this." + p.name + " == null? \"null\" : this." + p.name
 							+ ".getClass().getSimpleName());");
