@@ -1243,8 +1243,12 @@ public class SourceGenerator
 	 */
 	static class FactoryWriter extends ClassHierarchyBuildingHandler
 	{
+		/** Print stream for the interface. */
 		PrintStream ips;
+		/** Print stream for the implementation. */
 		PrintStream cps;
+		/** Print stream for the decorator utility class. */
+		PrintStream dps;
 
 		@Override
 		public void init() throws IOException
@@ -1263,7 +1267,7 @@ public class SourceGenerator
 			ips.println(" * is strongly advisable to ensure that all nodes in a given AST are produced from the same");
 			ips.println(" * factory, although the urgency of this restriction is implementation-dependent.");
 			ips.println(" *");
-			ips.println("* @author Zachary Palmer");
+			ips.println(" * @author Zachary Palmer");
 			ips.println(" */");
 			ips.println("public interface BsjNodeFactory");
 			ips.println("{");
@@ -1279,10 +1283,44 @@ public class SourceGenerator
 			cps.println("/**");
 			cps.println(" * This class acts as a BSJ node factory for the standard BSJ compiler.");
 			cps.println(" *");
-			cps.println("* @author Zachary Palmer");
+			cps.println(" * @author Zachary Palmer");
 			cps.println(" */");
 			cps.println("public class BsjNodeFactoryImpl implements BsjNodeFactory");
 			cps.println("{");
+			
+			pkg = "edu.jhu.cs.bsj.compiler.ast.util";
+			f = new File(TARGET_DIR.getPath() + File.separator + "ifaces" + File.separator
+					+ pkg.replaceAll("\\.", File.separator) + File.separator + "BsjNodeFactoryDecorator.java");
+			f.getParentFile().mkdirs();
+			dps = new PrintStream(new FileOutputStream(f));
+			dps.println("package " + pkg + ";");
+			dps.println();
+			printImports(dps, true);
+			dps.println("/**");
+			dps.println(" * This class allows simple decoration of all node construction methods on a node factory.");
+			dps.println(" *");
+			dps.println(" * @author Zachary Palmer");
+			dps.println(" */");
+			dps.println("public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory");
+			dps.println("{");
+			dps.println("    /** The backing factory. */");
+			dps.println("    BsjNodeFactory factory;");
+			dps.println();
+			dps.println("    /**");
+			dps.println("     * Creates a new decorating factory.");
+			dps.println("     * @param factory The backing factory.");
+			dps.println("     */");
+			dps.println("    public BsjNodeFactoryDecorator(BsjNodeFactory factory)");
+			dps.println("    {");
+			dps.println("        this.factory = factory;");
+			dps.println("    }");
+			dps.println();
+			dps.println("    /**");
+			dps.println("     * The decoration method.  This method is called after every node creation.");
+			dps.println("     * @param node The node that was just created.");
+			dps.println("     */");
+			dps.println("    protected abstract void decorate(Node node);");
+			dps.println();
 		}
 
 		@Override
@@ -1345,6 +1383,22 @@ public class SourceGenerator
 				cps.println("        return ret;");
 				cps.println("    }");
 				cps.println();
+
+				dps.println("    /**");
+				dps.println("     * Creates a " + def.getRawName() + ".");
+				dps.println("     */");
+				dps.println("    @Override");
+				dps.print("    public " + typeParamS + typeName + " make" + def.getRawName());
+				printParameterList(dps, recProps);
+				dps.println();
+				dps.println("    {");
+				dps.print("        " + typeName + " node = factory.make" + def.getRawName());
+				printArgumentList(dps, recProps);
+				dps.println(";");
+				dps.println("        this.decorate(node);");
+				dps.println("        return node;");
+				dps.println("    }");
+				dps.println();
 			}
 		}
 
@@ -1358,6 +1412,9 @@ public class SourceGenerator
 
 			cps.println("}");
 			cps.close();
+			
+			dps.println("}");
+			dps.close();
 		}
 	}
 }

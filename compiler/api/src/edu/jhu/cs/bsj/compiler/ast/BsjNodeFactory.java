@@ -11,7 +11,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.CodeLiteralNode;
  * is strongly advisable to ensure that all nodes in a given AST are produced from the same
  * factory, although the urgency of this restriction is implementation-dependent.
  *
-* @author Zachary Palmer
+ * @author Zachary Palmer
  */
 public interface BsjNodeFactory
 {

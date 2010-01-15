@@ -1,4 +1,4 @@
-package edu.jhu.cs.bsj.compiler.impl.ast;
+package edu.jhu.cs.bsj.compiler.ast.util;
 
 import java.util.List;
 import java.util.Set;
@@ -12,111 +12,32 @@ import edu.jhu.cs.bsj.compiler.ast.PrimitiveType;
 import edu.jhu.cs.bsj.compiler.ast.UnaryOperator;
 import edu.jhu.cs.bsj.compiler.ast.node.*;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.CodeLiteralNode;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.AlternateConstructorInvocationNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.AnnotationAnnotationValueNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.AnnotationArrayValueNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.AnnotationBodyNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.AnnotationDeclarationNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.AnnotationElementNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.AnnotationExpressionValueNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.AnnotationMethodDeclarationNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.AnonymousClassBodyNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.ArrayAccessNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.ArrayInitializerCreationNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.ArrayInitializerNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.ArrayInstantiatorCreationNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.ArrayTypeNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.AssertStatementNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.AssignmentNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.BinaryOperatorNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.BlockStatementNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.BooleanLiteralNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.BreakNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.CaseNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.CatchNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.CharLiteralNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.ClassBodyNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.ClassDeclarationNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.ClassLiteralNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.CompilationUnitNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.ConditionalExpressionNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.ConstructorBodyNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.ConstructorDeclarationNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.ContinueNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.DoWhileLoopNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.DoubleLiteralNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.EnhancedForLoopNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.EnumBodyNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.EnumConstantDeclarationNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.EnumDeclarationNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.ExpressionStatementNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.FieldAccessByExpressionNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.FieldAccessByNameNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.FieldDeclarationNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.FloatLiteralNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.ForInitializerDeclarationNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.ForInitializerExpressionNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.ForLoopNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.IdentifierNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.IfNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.ImportOnDemandNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.ImportSingleTypeNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.InitializerDeclarationNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.InlineTypeDeclarationNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.InstanceOfNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.IntLiteralNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.InterfaceBodyNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.InterfaceDeclarationNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.LabeledStatementNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.ListNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.LongLiteralNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.MethodDeclarationNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.MethodInvocationByExpressionNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.MethodInvocationByNameNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.ModifiersNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.NormalAnnotationNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.NullLiteralNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.PackageDeclarationNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.ParameterizedTypeNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.ParameterizedTypeSelectNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.ParenthesizedExpressionNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.PrimitiveTypeNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.QualifiedClassInstantiationNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.QualifiedNameNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.ReturnNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.SimpleNameNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.SingleElementAnnotationNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.StringLiteralNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.SuperFieldAccessNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.SuperMethodInvocationNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.SuperclassConstructorInvocationNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.SwitchNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.SynchronizedNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.ThisNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.ThrowNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.TryNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.TypeCastNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.TypeParameterNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.UnaryOperatorNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.UnparameterizedTypeNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.UnqualifiedClassInstantiationNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.VariableDeclarationNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.VariableDeclaratorNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.VariableNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.VoidStatementNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.VoidTypeDeclarationNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.VoidTypeNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.WhileLoopNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.WildcardTypeNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.meta.CodeLiteralNodeImpl;
 
 /**
- * This class acts as a BSJ node factory for the standard BSJ compiler.
+ * This class allows simple decoration of all node construction methods on a node factory.
  *
  * @author Zachary Palmer
  */
-public class BsjNodeFactoryImpl implements BsjNodeFactory
+public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
 {
+    /** The backing factory. */
+    BsjNodeFactory factory;
+
+    /**
+     * Creates a new decorating factory.
+     * @param factory The backing factory.
+     */
+    public BsjNodeFactoryDecorator(BsjNodeFactory factory)
+    {
+        this.factory = factory;
+    }
+
+    /**
+     * The decoration method.  This method is called after every node creation.
+     * @param node The node that was just created.
+     */
+    protected abstract void decorate(Node node);
+
     /**
      * Creates a AssertStatementNode.
      */
@@ -125,8 +46,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ExpressionNode testExpression,
             ExpressionNode messageExpression)
     {
-        AssertStatementNode ret = new AssertStatementNodeImpl(testExpression, messageExpression);
-        return ret;
+        AssertStatementNode node = factory.makeAssertStatementNode(testExpression, messageExpression);
+        this.decorate(node);
+        return node;
     }
 
     /**
@@ -136,8 +58,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public ExpressionStatementNode makeExpressionStatementNode(
             ExpressionNode expression)
     {
-        ExpressionStatementNode ret = new ExpressionStatementNodeImpl(expression);
-        return ret;
+        ExpressionStatementNode node = factory.makeExpressionStatementNode(expression);
+        this.decorate(node);
+        return node;
     }
 
     /**
@@ -147,8 +70,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public InterfaceBodyNode makeInterfaceBodyNode(
             ListNode<InterfaceMemberNode> members)
     {
-        InterfaceBodyNode ret = new InterfaceBodyNodeImpl(members);
-        return ret;
+        InterfaceBodyNode node = factory.makeInterfaceBodyNode(members);
+        this.decorate(node);
+        return node;
     }
 
     /**
@@ -160,8 +84,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ExpressionNode expression,
             StatementNode statement)
     {
-        EnhancedForLoopNode ret = new EnhancedForLoopNodeImpl(variable, expression, statement);
-        return ret;
+        EnhancedForLoopNode node = factory.makeEnhancedForLoopNode(variable, expression, statement);
+        this.decorate(node);
+        return node;
     }
 
     /**
@@ -176,8 +101,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             IdentifierNode identifier,
             ModifiersNode modifiers)
     {
-        ClassDeclarationNode ret = new ClassDeclarationNodeImpl(extendsClause, implementsClause, body, typeParameters, identifier, modifiers);
-        return ret;
+        ClassDeclarationNode node = factory.makeClassDeclarationNode(extendsClause, implementsClause, body, typeParameters, identifier, modifiers);
+        this.decorate(node);
+        return node;
     }
 
     /**
@@ -188,8 +114,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             RestrictedPrimaryExpressionNode arrayExpression,
             ExpressionNode indexExpression)
     {
-        ArrayAccessNode ret = new ArrayAccessNodeImpl(arrayExpression, indexExpression);
-        return ret;
+        ArrayAccessNode node = factory.makeArrayAccessNode(arrayExpression, indexExpression);
+        this.decorate(node);
+        return node;
     }
 
     /**
@@ -199,8 +126,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public LongLiteralNode makeLongLiteralNode(
             Long value)
     {
-        LongLiteralNode ret = new LongLiteralNodeImpl(value);
-        return ret;
+        LongLiteralNode node = factory.makeLongLiteralNode(value);
+        this.decorate(node);
+        return node;
     }
 
     /**
@@ -212,8 +140,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             IdentifierNode identifier,
             NameCategory category)
     {
-        QualifiedNameNode ret = new QualifiedNameNodeImpl(base, identifier, category);
-        return ret;
+        QualifiedNameNode node = factory.makeQualifiedNameNode(base, identifier, category);
+        this.decorate(node);
+        return node;
     }
 
     /**
@@ -224,8 +153,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ExpressionNode expression,
             ListNode<StatementNode> statements)
     {
-        CaseNode ret = new CaseNodeImpl(expression, statements);
-        return ret;
+        CaseNode node = factory.makeCaseNode(expression, statements);
+        this.decorate(node);
+        return node;
     }
 
     /**
@@ -234,8 +164,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     @Override
     public VoidStatementNode makeVoidStatementNode()
     {
-        VoidStatementNode ret = new VoidStatementNodeImpl();
-        return ret;
+        VoidStatementNode node = factory.makeVoidStatementNode();
+        this.decorate(node);
+        return node;
     }
 
     /**
@@ -245,8 +176,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public CodeLiteralNode makeCodeLiteralNode(
             Node value)
     {
-        CodeLiteralNode ret = new CodeLiteralNodeImpl(value);
-        return ret;
+        CodeLiteralNode node = factory.makeCodeLiteralNode(value);
+        this.decorate(node);
+        return node;
     }
 
     /**
@@ -257,8 +189,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             NameNode name,
             boolean staticImport)
     {
-        ImportOnDemandNode ret = new ImportOnDemandNodeImpl(name, staticImport);
-        return ret;
+        ImportOnDemandNode node = factory.makeImportOnDemandNode(name, staticImport);
+        this.decorate(node);
+        return node;
     }
 
     /**
@@ -270,8 +203,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ListNode<ExpressionNode> arguments,
             ListNode<TypeNode> typeArguments)
     {
-        SuperclassConstructorInvocationNode ret = new SuperclassConstructorInvocationNodeImpl(qualifyingExpression, arguments, typeArguments);
-        return ret;
+        SuperclassConstructorInvocationNode node = factory.makeSuperclassConstructorInvocationNode(qualifyingExpression, arguments, typeArguments);
+        this.decorate(node);
+        return node;
     }
 
     /**
@@ -281,8 +215,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public PrimitiveTypeNode makePrimitiveTypeNode(
             PrimitiveType primitiveType)
     {
-        PrimitiveTypeNode ret = new PrimitiveTypeNodeImpl(primitiveType);
-        return ret;
+        PrimitiveTypeNode node = factory.makePrimitiveTypeNode(primitiveType);
+        this.decorate(node);
+        return node;
     }
 
     /**
@@ -293,8 +228,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             boolean staticInitializer,
             BlockStatementNode body)
     {
-        InitializerDeclarationNode ret = new InitializerDeclarationNodeImpl(staticInitializer, body);
-        return ret;
+        InitializerDeclarationNode node = factory.makeInitializerDeclarationNode(staticInitializer, body);
+        this.decorate(node);
+        return node;
     }
 
     /**
@@ -305,8 +241,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ListNode<AnnotationNode> annotations,
             Set<Modifier> flags)
     {
-        ModifiersNode ret = new ModifiersNodeImpl(annotations, flags);
-        return ret;
+        ModifiersNode node = factory.makeModifiersNode(annotations, flags);
+        this.decorate(node);
+        return node;
     }
 
     /**
@@ -317,8 +254,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ListNode<EnumConstantDeclarationNode> constants,
             ListNode<ClassMemberNode> members)
     {
-        EnumBodyNode ret = new EnumBodyNodeImpl(constants, members);
-        return ret;
+        EnumBodyNode node = factory.makeEnumBodyNode(constants, members);
+        this.decorate(node);
+        return node;
     }
 
     /**
@@ -330,8 +268,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ListNode<CatchNode> catches,
             BlockStatementNode finallyBlock)
     {
-        TryNode ret = new TryNodeImpl(block, catches, finallyBlock);
-        return ret;
+        TryNode node = factory.makeTryNode(block, catches, finallyBlock);
+        this.decorate(node);
+        return node;
     }
 
     /**
@@ -341,8 +280,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public ThisNode makeThisNode(
             UnparameterizedTypeNode type)
     {
-        ThisNode ret = new ThisNodeImpl(type);
-        return ret;
+        ThisNode node = factory.makeThisNode(type);
+        this.decorate(node);
+        return node;
     }
 
     /**
@@ -355,8 +295,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             IdentifierNode identifier,
             ModifiersNode modifiers)
     {
-        EnumDeclarationNode ret = new EnumDeclarationNodeImpl(implementsClause, body, identifier, modifiers);
-        return ret;
+        EnumDeclarationNode node = factory.makeEnumDeclarationNode(implementsClause, body, identifier, modifiers);
+        this.decorate(node);
+        return node;
     }
 
     /**
@@ -365,8 +306,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     @Override
     public VoidTypeNode makeVoidTypeNode()
     {
-        VoidTypeNode ret = new VoidTypeNodeImpl();
-        return ret;
+        VoidTypeNode node = factory.makeVoidTypeNode();
+        this.decorate(node);
+        return node;
     }
 
     /**
@@ -377,8 +319,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ModifiersNode modifiers,
             ListNode<VariableDeclaratorNode> declarators)
     {
-        VariableDeclarationNode ret = new VariableDeclarationNodeImpl(modifiers, declarators);
-        return ret;
+        VariableDeclarationNode node = factory.makeVariableDeclarationNode(modifiers, declarators);
+        this.decorate(node);
+        return node;
     }
 
     /**
@@ -388,8 +331,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public AnnotationBodyNode makeAnnotationBodyNode(
             ListNode<AnnotationMemberNode> members)
     {
-        AnnotationBodyNode ret = new AnnotationBodyNodeImpl(members);
-        return ret;
+        AnnotationBodyNode node = factory.makeAnnotationBodyNode(members);
+        this.decorate(node);
+        return node;
     }
 
     /**
@@ -399,8 +343,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public UnparameterizedTypeNode makeUnparameterizedTypeNode(
             NameNode name)
     {
-        UnparameterizedTypeNode ret = new UnparameterizedTypeNodeImpl(name);
-        return ret;
+        UnparameterizedTypeNode node = factory.makeUnparameterizedTypeNode(name);
+        this.decorate(node);
+        return node;
     }
 
     /**
@@ -412,8 +357,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             IdentifierNode name,
             VariableInitializerNode initializer)
     {
-        VariableDeclaratorNode ret = new VariableDeclaratorNodeImpl(type, name, initializer);
-        return ret;
+        VariableDeclaratorNode node = factory.makeVariableDeclaratorNode(type, name, initializer);
+        this.decorate(node);
+        return node;
     }
 
     /**
@@ -424,8 +370,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             PrimaryExpressionNode expression,
             IdentifierNode identifier)
     {
-        FieldAccessByExpressionNode ret = new FieldAccessByExpressionNodeImpl(expression, identifier);
-        return ret;
+        FieldAccessByExpressionNode node = factory.makeFieldAccessByExpressionNode(expression, identifier);
+        this.decorate(node);
+        return node;
     }
 
     /**
@@ -436,8 +383,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             UnparameterizedTypeNode type,
             IdentifierNode identifier)
     {
-        SuperFieldAccessNode ret = new SuperFieldAccessNodeImpl(type, identifier);
-        return ret;
+        SuperFieldAccessNode node = factory.makeSuperFieldAccessNode(type, identifier);
+        this.decorate(node);
+        return node;
     }
 
     /**
@@ -447,8 +395,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public ThrowNode makeThrowNode(
             ExpressionNode expression)
     {
-        ThrowNode ret = new ThrowNodeImpl(expression);
-        return ret;
+        ThrowNode node = factory.makeThrowNode(expression);
+        this.decorate(node);
+        return node;
     }
 
     /**
@@ -459,8 +408,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BlockStatementNode block,
             VariableNode parameter)
     {
-        CatchNode ret = new CatchNodeImpl(block, parameter);
-        return ret;
+        CatchNode node = factory.makeCatchNode(block, parameter);
+        this.decorate(node);
+        return node;
     }
 
     /**
@@ -469,8 +419,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     @Override
     public VoidTypeDeclarationNode makeVoidTypeDeclarationNode()
     {
-        VoidTypeDeclarationNode ret = new VoidTypeDeclarationNodeImpl();
-        return ret;
+        VoidTypeDeclarationNode node = factory.makeVoidTypeDeclarationNode();
+        this.decorate(node);
+        return node;
     }
 
     /**
@@ -481,8 +432,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ListNode<AnnotationElementNode> arguments,
             UnparameterizedTypeNode annotationType)
     {
-        NormalAnnotationNode ret = new NormalAnnotationNodeImpl(arguments, annotationType);
-        return ret;
+        NormalAnnotationNode node = factory.makeNormalAnnotationNode(arguments, annotationType);
+        this.decorate(node);
+        return node;
     }
 
     /**
@@ -493,8 +445,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ExpressionNode condition,
             StatementNode statement)
     {
-        DoWhileLoopNode ret = new DoWhileLoopNodeImpl(condition, statement);
-        return ret;
+        DoWhileLoopNode node = factory.makeDoWhileLoopNode(condition, statement);
+        this.decorate(node);
+        return node;
     }
 
     /**
@@ -509,8 +462,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ListNode<ExpressionNode> arguments,
             AnonymousClassBodyNode body)
     {
-        QualifiedClassInstantiationNode ret = new QualifiedClassInstantiationNodeImpl(enclosingExpression, identifier, typeArguments, constructorTypeArguments, arguments, body);
-        return ret;
+        QualifiedClassInstantiationNode node = factory.makeQualifiedClassInstantiationNode(enclosingExpression, identifier, typeArguments, constructorTypeArguments, arguments, body);
+        this.decorate(node);
+        return node;
     }
 
     /**
@@ -521,8 +475,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ExpressionNode expression,
             TypeNode type)
     {
-        TypeCastNode ret = new TypeCastNodeImpl(expression, type);
-        return ret;
+        TypeCastNode node = factory.makeTypeCastNode(expression, type);
+        this.decorate(node);
+        return node;
     }
 
     /**
@@ -533,8 +488,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             IdentifierNode label,
             StatementNode statement)
     {
-        LabeledStatementNode ret = new LabeledStatementNodeImpl(label, statement);
-        return ret;
+        LabeledStatementNode node = factory.makeLabeledStatementNode(label, statement);
+        this.decorate(node);
+        return node;
     }
 
     /**
@@ -544,8 +500,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public BlockStatementNode makeBlockStatementNode(
             ListNode<StatementNode> statements)
     {
-        BlockStatementNode ret = new BlockStatementNodeImpl(statements);
-        return ret;
+        BlockStatementNode node = factory.makeBlockStatementNode(statements);
+        this.decorate(node);
+        return node;
     }
 
     /**
@@ -555,8 +512,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public ForInitializerExpressionNode makeForInitializerExpressionNode(
             ListNode<ExpressionNode> expressions)
     {
-        ForInitializerExpressionNode ret = new ForInitializerExpressionNodeImpl(expressions);
-        return ret;
+        ForInitializerExpressionNode node = factory.makeForInitializerExpressionNode(expressions);
+        this.decorate(node);
+        return node;
     }
 
     /**
@@ -567,8 +525,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             NameNode name,
             ListNode<AnnotationNode> annotations)
     {
-        PackageDeclarationNode ret = new PackageDeclarationNodeImpl(name, annotations);
-        return ret;
+        PackageDeclarationNode node = factory.makePackageDeclarationNode(name, annotations);
+        this.decorate(node);
+        return node;
     }
 
     /**
@@ -580,8 +539,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             IdentifierNode identifier,
             ModifiersNode modifiers)
     {
-        AnnotationDeclarationNode ret = new AnnotationDeclarationNodeImpl(body, identifier, modifiers);
-        return ret;
+        AnnotationDeclarationNode node = factory.makeAnnotationDeclarationNode(body, identifier, modifiers);
+        this.decorate(node);
+        return node;
     }
 
     /**
@@ -593,8 +553,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ListNode<ImportNode> imports,
             ListNode<TypeDeclarationNode> typeDecls)
     {
-        CompilationUnitNode ret = new CompilationUnitNodeImpl(packageDeclaration, imports, typeDecls);
-        return ret;
+        CompilationUnitNode node = factory.makeCompilationUnitNode(packageDeclaration, imports, typeDecls);
+        this.decorate(node);
+        return node;
     }
 
     /**
@@ -604,8 +565,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public ContinueNode makeContinueNode(
             IdentifierNode label)
     {
-        ContinueNode ret = new ContinueNodeImpl(label);
-        return ret;
+        ContinueNode node = factory.makeContinueNode(label);
+        this.decorate(node);
+        return node;
     }
 
     /**
@@ -615,8 +577,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public StringLiteralNode makeStringLiteralNode(
             String value)
     {
-        StringLiteralNode ret = new StringLiteralNodeImpl(value);
-        return ret;
+        StringLiteralNode node = factory.makeStringLiteralNode(value);
+        this.decorate(node);
+        return node;
     }
 
     /**
@@ -627,8 +590,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             IdentifierNode identifier,
             AnnotationValueNode value)
     {
-        AnnotationElementNode ret = new AnnotationElementNodeImpl(identifier, value);
-        return ret;
+        AnnotationElementNode node = factory.makeAnnotationElementNode(identifier, value);
+        this.decorate(node);
+        return node;
     }
 
     /**
@@ -638,8 +602,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public DoubleLiteralNode makeDoubleLiteralNode(
             Double value)
     {
-        DoubleLiteralNode ret = new DoubleLiteralNodeImpl(value);
-        return ret;
+        DoubleLiteralNode node = factory.makeDoubleLiteralNode(value);
+        this.decorate(node);
+        return node;
     }
 
     /**
@@ -649,8 +614,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public AnonymousClassBodyNode makeAnonymousClassBodyNode(
             ListNode<AnonymousClassMemberNode> members)
     {
-        AnonymousClassBodyNode ret = new AnonymousClassBodyNodeImpl(members);
-        return ret;
+        AnonymousClassBodyNode node = factory.makeAnonymousClassBodyNode(members);
+        this.decorate(node);
+        return node;
     }
 
     /**
@@ -661,8 +627,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ExpressionNode expression,
             UnaryOperator operator)
     {
-        UnaryOperatorNode ret = new UnaryOperatorNodeImpl(expression, operator);
-        return ret;
+        UnaryOperatorNode node = factory.makeUnaryOperatorNode(expression, operator);
+        this.decorate(node);
+        return node;
     }
 
     /**
@@ -673,8 +640,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ExpressionNode expression,
             BlockStatementNode block)
     {
-        SynchronizedNode ret = new SynchronizedNodeImpl(expression, block);
-        return ret;
+        SynchronizedNode node = factory.makeSynchronizedNode(expression, block);
+        this.decorate(node);
+        return node;
     }
 
     /**
@@ -686,8 +654,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             TypeNode type,
             IdentifierNode identifier)
     {
-        VariableNode ret = new VariableNodeImpl(modifiers, type, identifier);
-        return ret;
+        VariableNode node = factory.makeVariableNode(modifiers, type, identifier);
+        this.decorate(node);
+        return node;
     }
 
     /**
@@ -697,8 +666,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public CharLiteralNode makeCharLiteralNode(
             Character value)
     {
-        CharLiteralNode ret = new CharLiteralNodeImpl(value);
-        return ret;
+        CharLiteralNode node = factory.makeCharLiteralNode(value);
+        this.decorate(node);
+        return node;
     }
 
     /**
@@ -709,8 +679,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ReferenceTypeNode bound,
             boolean upperBound)
     {
-        WildcardTypeNode ret = new WildcardTypeNodeImpl(bound, upperBound);
-        return ret;
+        WildcardTypeNode node = factory.makeWildcardTypeNode(bound, upperBound);
+        this.decorate(node);
+        return node;
     }
 
     /**
@@ -720,8 +691,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public InlineTypeDeclarationNode makeInlineTypeDeclarationNode(
             InlineTypeDeclarableNode declaration)
     {
-        InlineTypeDeclarationNode ret = new InlineTypeDeclarationNodeImpl(declaration);
-        return ret;
+        InlineTypeDeclarationNode node = factory.makeInlineTypeDeclarationNode(declaration);
+        this.decorate(node);
+        return node;
     }
 
     /**
@@ -731,8 +703,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public BooleanLiteralNode makeBooleanLiteralNode(
             Boolean value)
     {
-        BooleanLiteralNode ret = new BooleanLiteralNodeImpl(value);
-        return ret;
+        BooleanLiteralNode node = factory.makeBooleanLiteralNode(value);
+        this.decorate(node);
+        return node;
     }
 
     /**
@@ -743,8 +716,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ExpressionNode expression,
             ListNode<CaseNode> cases)
     {
-        SwitchNode ret = new SwitchNodeImpl(expression, cases);
-        return ret;
+        SwitchNode node = factory.makeSwitchNode(expression, cases);
+        this.decorate(node);
+        return node;
     }
 
     /**
@@ -755,8 +729,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ListNode<ExpressionNode> arguments,
             ListNode<TypeNode> typeArguments)
     {
-        AlternateConstructorInvocationNode ret = new AlternateConstructorInvocationNodeImpl(arguments, typeArguments);
-        return ret;
+        AlternateConstructorInvocationNode node = factory.makeAlternateConstructorInvocationNode(arguments, typeArguments);
+        this.decorate(node);
+        return node;
     }
 
     /**
@@ -771,8 +746,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ListNode<UnparameterizedTypeNode> throwTypes,
             ListNode<TypeParameterNode> typeParameters)
     {
-        ConstructorDeclarationNode ret = new ConstructorDeclarationNodeImpl(body, modifiers, parameters, varargParameter, throwTypes, typeParameters);
-        return ret;
+        ConstructorDeclarationNode node = factory.makeConstructorDeclarationNode(body, modifiers, parameters, varargParameter, throwTypes, typeParameters);
+        this.decorate(node);
+        return node;
     }
 
     /**
@@ -782,8 +758,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public AnnotationAnnotationValueNode makeAnnotationAnnotationValueNode(
             AnnotationNode annotation)
     {
-        AnnotationAnnotationValueNode ret = new AnnotationAnnotationValueNodeImpl(annotation);
-        return ret;
+        AnnotationAnnotationValueNode node = factory.makeAnnotationAnnotationValueNode(annotation);
+        this.decorate(node);
+        return node;
     }
 
     /**
@@ -796,8 +773,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ListNode<ExpressionNode> update,
             StatementNode statement)
     {
-        ForLoopNode ret = new ForLoopNodeImpl(initializer, condition, update, statement);
-        return ret;
+        ForLoopNode node = factory.makeForLoopNode(initializer, condition, update, statement);
+        this.decorate(node);
+        return node;
     }
 
     /**
@@ -808,8 +786,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ExpressionNode condition,
             StatementNode statement)
     {
-        WhileLoopNode ret = new WhileLoopNodeImpl(condition, statement);
-        return ret;
+        WhileLoopNode node = factory.makeWhileLoopNode(condition, statement);
+        this.decorate(node);
+        return node;
     }
 
     /**
@@ -819,8 +798,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public <T extends Node> ListNode<T> makeListNode(
             List<T> children)
     {
-        ListNode<T> ret = new ListNodeImpl<T>(children);
-        return ret;
+        ListNode<T> node = factory.makeListNode(children);
+        this.decorate(node);
+        return node;
     }
 
     /**
@@ -833,8 +813,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ListNode<ExpressionNode> arguments,
             AnonymousClassBodyNode body)
     {
-        EnumConstantDeclarationNode ret = new EnumConstantDeclarationNodeImpl(annotations, identifier, arguments, body);
-        return ret;
+        EnumConstantDeclarationNode node = factory.makeEnumConstantDeclarationNode(annotations, identifier, arguments, body);
+        this.decorate(node);
+        return node;
     }
 
     /**
@@ -844,8 +825,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public BreakNode makeBreakNode(
             IdentifierNode label)
     {
-        BreakNode ret = new BreakNodeImpl(label);
-        return ret;
+        BreakNode node = factory.makeBreakNode(label);
+        this.decorate(node);
+        return node;
     }
 
     /**
@@ -856,8 +838,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ParameterizedTypeNode base,
             DeclaredTypeNode select)
     {
-        ParameterizedTypeSelectNode ret = new ParameterizedTypeSelectNodeImpl(base, select);
-        return ret;
+        ParameterizedTypeSelectNode node = factory.makeParameterizedTypeSelectNode(base, select);
+        this.decorate(node);
+        return node;
     }
 
     /**
@@ -867,8 +850,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public IdentifierNode makeIdentifierNode(
             String identifier)
     {
-        IdentifierNode ret = new IdentifierNodeImpl(identifier);
-        return ret;
+        IdentifierNode node = factory.makeIdentifierNode(identifier);
+        this.decorate(node);
+        return node;
     }
 
     /**
@@ -878,8 +862,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public ArrayTypeNode makeArrayTypeNode(
             TypeNode type)
     {
-        ArrayTypeNode ret = new ArrayTypeNodeImpl(type);
-        return ret;
+        ArrayTypeNode node = factory.makeArrayTypeNode(type);
+        this.decorate(node);
+        return node;
     }
 
     /**
@@ -891,8 +876,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BaseTypeNode baseType,
             int arrayLevels)
     {
-        ArrayInitializerCreationNode ret = new ArrayInitializerCreationNodeImpl(initializer, baseType, arrayLevels);
-        return ret;
+        ArrayInitializerCreationNode node = factory.makeArrayInitializerCreationNode(initializer, baseType, arrayLevels);
+        this.decorate(node);
+        return node;
     }
 
     /**
@@ -903,8 +889,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             IdentifierNode identifier,
             ListNode<DeclaredTypeNode> bounds)
     {
-        TypeParameterNode ret = new TypeParameterNodeImpl(identifier, bounds);
-        return ret;
+        TypeParameterNode node = factory.makeTypeParameterNode(identifier, bounds);
+        this.decorate(node);
+        return node;
     }
 
     /**
@@ -917,8 +904,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             IdentifierNode identifier,
             AnnotationValueNode defaultValue)
     {
-        AnnotationMethodDeclarationNode ret = new AnnotationMethodDeclarationNodeImpl(modifiers, type, identifier, defaultValue);
-        return ret;
+        AnnotationMethodDeclarationNode node = factory.makeAnnotationMethodDeclarationNode(modifiers, type, identifier, defaultValue);
+        this.decorate(node);
+        return node;
     }
 
     /**
@@ -929,8 +917,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             NameNode name,
             boolean staticImport)
     {
-        ImportSingleTypeNode ret = new ImportSingleTypeNodeImpl(name, staticImport);
-        return ret;
+        ImportSingleTypeNode node = factory.makeImportSingleTypeNode(name, staticImport);
+        this.decorate(node);
+        return node;
     }
 
     /**
@@ -941,8 +930,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ModifiersNode modifiers,
             ListNode<VariableDeclaratorNode> declarators)
     {
-        FieldDeclarationNode ret = new FieldDeclarationNodeImpl(modifiers, declarators);
-        return ret;
+        FieldDeclarationNode node = factory.makeFieldDeclarationNode(modifiers, declarators);
+        this.decorate(node);
+        return node;
     }
 
     /**
@@ -952,8 +942,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public AnnotationArrayValueNode makeAnnotationArrayValueNode(
             ListNode<AnnotationValueNode> values)
     {
-        AnnotationArrayValueNode ret = new AnnotationArrayValueNodeImpl(values);
-        return ret;
+        AnnotationArrayValueNode node = factory.makeAnnotationArrayValueNode(values);
+        this.decorate(node);
+        return node;
     }
 
     /**
@@ -964,8 +955,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             AnnotationValueNode value,
             UnparameterizedTypeNode annotationType)
     {
-        SingleElementAnnotationNode ret = new SingleElementAnnotationNodeImpl(value, annotationType);
-        return ret;
+        SingleElementAnnotationNode node = factory.makeSingleElementAnnotationNode(value, annotationType);
+        this.decorate(node);
+        return node;
     }
 
     /**
@@ -975,8 +967,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public ClassLiteralNode makeClassLiteralNode(
             LiteralizableTypeNode value)
     {
-        ClassLiteralNode ret = new ClassLiteralNodeImpl(value);
-        return ret;
+        ClassLiteralNode node = factory.makeClassLiteralNode(value);
+        this.decorate(node);
+        return node;
     }
 
     /**
@@ -989,8 +982,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ListNode<ExpressionNode> arguments,
             ListNode<TypeNode> typeArguments)
     {
-        SuperMethodInvocationNode ret = new SuperMethodInvocationNodeImpl(type, identifier, arguments, typeArguments);
-        return ret;
+        SuperMethodInvocationNode node = factory.makeSuperMethodInvocationNode(type, identifier, arguments, typeArguments);
+        this.decorate(node);
+        return node;
     }
 
     /**
@@ -1000,8 +994,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public ArrayInitializerNode makeArrayInitializerNode(
             ListNode<VariableInitializerNode> initializers)
     {
-        ArrayInitializerNode ret = new ArrayInitializerNodeImpl(initializers);
-        return ret;
+        ArrayInitializerNode node = factory.makeArrayInitializerNode(initializers);
+        this.decorate(node);
+        return node;
     }
 
     /**
@@ -1011,8 +1006,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public AnnotationExpressionValueNode makeAnnotationExpressionValueNode(
             NonAssignmentExpressionNode expression)
     {
-        AnnotationExpressionValueNode ret = new AnnotationExpressionValueNodeImpl(expression);
-        return ret;
+        AnnotationExpressionValueNode node = factory.makeAnnotationExpressionValueNode(expression);
+        this.decorate(node);
+        return node;
     }
 
     /**
@@ -1022,8 +1018,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public ReturnNode makeReturnNode(
             ExpressionNode expression)
     {
-        ReturnNode ret = new ReturnNodeImpl(expression);
-        return ret;
+        ReturnNode node = factory.makeReturnNode(expression);
+        this.decorate(node);
+        return node;
     }
 
     /**
@@ -1035,8 +1032,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             AssignmentOperator operator,
             ExpressionNode expression)
     {
-        AssignmentNode ret = new AssignmentNodeImpl(variable, operator, expression);
-        return ret;
+        AssignmentNode node = factory.makeAssignmentNode(variable, operator, expression);
+        this.decorate(node);
+        return node;
     }
 
     /**
@@ -1049,8 +1047,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ListNode<ExpressionNode> arguments,
             ListNode<TypeNode> typeArguments)
     {
-        MethodInvocationByExpressionNode ret = new MethodInvocationByExpressionNodeImpl(expression, identifier, arguments, typeArguments);
-        return ret;
+        MethodInvocationByExpressionNode node = factory.makeMethodInvocationByExpressionNode(expression, identifier, arguments, typeArguments);
+        this.decorate(node);
+        return node;
     }
 
     /**
@@ -1061,8 +1060,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ExpressionNode expression,
             TypeNode type)
     {
-        InstanceOfNode ret = new InstanceOfNodeImpl(expression, type);
-        return ret;
+        InstanceOfNode node = factory.makeInstanceOfNode(expression, type);
+        this.decorate(node);
+        return node;
     }
 
     /**
@@ -1074,8 +1074,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ExpressionNode trueExpression,
             ExpressionNode falseExpression)
     {
-        ConditionalExpressionNode ret = new ConditionalExpressionNodeImpl(condition, trueExpression, falseExpression);
-        return ret;
+        ConditionalExpressionNode node = factory.makeConditionalExpressionNode(condition, trueExpression, falseExpression);
+        this.decorate(node);
+        return node;
     }
 
     /**
@@ -1085,8 +1086,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public ParenthesizedExpressionNode makeParenthesizedExpressionNode(
             ExpressionNode expression)
     {
-        ParenthesizedExpressionNode ret = new ParenthesizedExpressionNodeImpl(expression);
-        return ret;
+        ParenthesizedExpressionNode node = factory.makeParenthesizedExpressionNode(expression);
+        this.decorate(node);
+        return node;
     }
 
     /**
@@ -1096,8 +1098,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public FloatLiteralNode makeFloatLiteralNode(
             Float value)
     {
-        FloatLiteralNode ret = new FloatLiteralNodeImpl(value);
-        return ret;
+        FloatLiteralNode node = factory.makeFloatLiteralNode(value);
+        this.decorate(node);
+        return node;
     }
 
     /**
@@ -1109,8 +1112,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ExpressionNode rightOperand,
             BinaryOperator operator)
     {
-        BinaryOperatorNode ret = new BinaryOperatorNodeImpl(leftOperand, rightOperand, operator);
-        return ret;
+        BinaryOperatorNode node = factory.makeBinaryOperatorNode(leftOperand, rightOperand, operator);
+        this.decorate(node);
+        return node;
     }
 
     /**
@@ -1122,8 +1126,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ListNode<ExpressionNode> arguments,
             ListNode<TypeNode> typeArguments)
     {
-        MethodInvocationByNameNode ret = new MethodInvocationByNameNodeImpl(name, arguments, typeArguments);
-        return ret;
+        MethodInvocationByNameNode node = factory.makeMethodInvocationByNameNode(name, arguments, typeArguments);
+        this.decorate(node);
+        return node;
     }
 
     /**
@@ -1134,8 +1139,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             UnparameterizedTypeNode baseType,
             ListNode<TypeArgumentNode> typeArguments)
     {
-        ParameterizedTypeNode ret = new ParameterizedTypeNodeImpl(baseType, typeArguments);
-        return ret;
+        ParameterizedTypeNode node = factory.makeParameterizedTypeNode(baseType, typeArguments);
+        this.decorate(node);
+        return node;
     }
 
     /**
@@ -1149,8 +1155,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             IdentifierNode identifier,
             ModifiersNode modifiers)
     {
-        InterfaceDeclarationNode ret = new InterfaceDeclarationNodeImpl(extendsClause, body, typeParameters, identifier, modifiers);
-        return ret;
+        InterfaceDeclarationNode node = factory.makeInterfaceDeclarationNode(extendsClause, body, typeParameters, identifier, modifiers);
+        this.decorate(node);
+        return node;
     }
 
     /**
@@ -1160,8 +1167,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public ForInitializerDeclarationNode makeForInitializerDeclarationNode(
             VariableDeclarationNode declaration)
     {
-        ForInitializerDeclarationNode ret = new ForInitializerDeclarationNodeImpl(declaration);
-        return ret;
+        ForInitializerDeclarationNode node = factory.makeForInitializerDeclarationNode(declaration);
+        this.decorate(node);
+        return node;
     }
 
     /**
@@ -1172,8 +1180,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ConstructorInvocationNode constructorInvocation,
             ListNode<StatementNode> statements)
     {
-        ConstructorBodyNode ret = new ConstructorBodyNodeImpl(constructorInvocation, statements);
-        return ret;
+        ConstructorBodyNode node = factory.makeConstructorBodyNode(constructorInvocation, statements);
+        this.decorate(node);
+        return node;
     }
 
     /**
@@ -1183,8 +1192,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public FieldAccessByNameNode makeFieldAccessByNameNode(
             NameNode name)
     {
-        FieldAccessByNameNode ret = new FieldAccessByNameNodeImpl(name);
-        return ret;
+        FieldAccessByNameNode node = factory.makeFieldAccessByNameNode(name);
+        this.decorate(node);
+        return node;
     }
 
     /**
@@ -1197,8 +1207,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ListNode<ExpressionNode> arguments,
             AnonymousClassBodyNode body)
     {
-        UnqualifiedClassInstantiationNode ret = new UnqualifiedClassInstantiationNodeImpl(type, constructorTypeArguments, arguments, body);
-        return ret;
+        UnqualifiedClassInstantiationNode node = factory.makeUnqualifiedClassInstantiationNode(type, constructorTypeArguments, arguments, body);
+        this.decorate(node);
+        return node;
     }
 
     /**
@@ -1209,8 +1220,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             IdentifierNode identifier,
             NameCategory category)
     {
-        SimpleNameNode ret = new SimpleNameNodeImpl(identifier, category);
-        return ret;
+        SimpleNameNode node = factory.makeSimpleNameNode(identifier, category);
+        this.decorate(node);
+        return node;
     }
 
     /**
@@ -1222,8 +1234,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BaseTypeNode baseType,
             int arrayLevels)
     {
-        ArrayInstantiatorCreationNode ret = new ArrayInstantiatorCreationNodeImpl(dimExpressions, baseType, arrayLevels);
-        return ret;
+        ArrayInstantiatorCreationNode node = factory.makeArrayInstantiatorCreationNode(dimExpressions, baseType, arrayLevels);
+        this.decorate(node);
+        return node;
     }
 
     /**
@@ -1235,8 +1248,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             StatementNode thenStatement,
             StatementNode elseStatement)
     {
-        IfNode ret = new IfNodeImpl(condition, thenStatement, elseStatement);
-        return ret;
+        IfNode node = factory.makeIfNode(condition, thenStatement, elseStatement);
+        this.decorate(node);
+        return node;
     }
 
     /**
@@ -1246,8 +1260,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public ClassBodyNode makeClassBodyNode(
             ListNode<ClassMemberNode> members)
     {
-        ClassBodyNode ret = new ClassBodyNodeImpl(members);
-        return ret;
+        ClassBodyNode node = factory.makeClassBodyNode(members);
+        this.decorate(node);
+        return node;
     }
 
     /**
@@ -1257,8 +1272,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public IntLiteralNode makeIntLiteralNode(
             Integer value)
     {
-        IntLiteralNode ret = new IntLiteralNodeImpl(value);
-        return ret;
+        IntLiteralNode node = factory.makeIntLiteralNode(value);
+        this.decorate(node);
+        return node;
     }
 
     /**
@@ -1268,8 +1284,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public NullLiteralNode makeNullLiteralNode(
             Void value)
     {
-        NullLiteralNode ret = new NullLiteralNodeImpl(value);
-        return ret;
+        NullLiteralNode node = factory.makeNullLiteralNode(value);
+        this.decorate(node);
+        return node;
     }
 
     /**
@@ -1286,8 +1303,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ListNode<UnparameterizedTypeNode> throwTypes,
             ListNode<TypeParameterNode> typeParameters)
     {
-        MethodDeclarationNode ret = new MethodDeclarationNodeImpl(body, modifiers, identifier, parameters, varargParameter, returnType, throwTypes, typeParameters);
-        return ret;
+        MethodDeclarationNode node = factory.makeMethodDeclarationNode(body, modifiers, identifier, parameters, varargParameter, returnType, throwTypes, typeParameters);
+        this.decorate(node);
+        return node;
     }
 
 }
