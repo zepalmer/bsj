@@ -87,7 +87,7 @@ public class ArrayInstantiatorCreationNodeImpl extends ArrayCreationNodeImpl imp
         sb.append('[');
         sb.append("dimExpressions=");
         sb.append(this.dimExpressions == null? "null" : this.dimExpressions.getClass().getSimpleName());
-        sb.append('[');
+        sb.append(']');
         return sb.toString();
     }
 }

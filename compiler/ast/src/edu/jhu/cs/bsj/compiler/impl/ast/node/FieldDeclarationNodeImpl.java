@@ -121,7 +121,7 @@ public class FieldDeclarationNodeImpl extends NodeImpl implements FieldDeclarati
         sb.append(',');
         sb.append("declarators=");
         sb.append(this.declarators == null? "null" : this.declarators.getClass().getSimpleName());
-        sb.append('[');
+        sb.append(']');
         return sb.toString();
     }
 }

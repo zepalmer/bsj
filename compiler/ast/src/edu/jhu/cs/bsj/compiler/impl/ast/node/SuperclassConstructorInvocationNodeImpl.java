@@ -88,7 +88,7 @@ public class SuperclassConstructorInvocationNodeImpl extends ConstructorInvocati
         sb.append('[');
         sb.append("qualifyingExpression=");
         sb.append(this.qualifyingExpression == null? "null" : this.qualifyingExpression.getClass().getSimpleName());
-        sb.append('[');
+        sb.append(']');
         return sb.toString();
     }
 }

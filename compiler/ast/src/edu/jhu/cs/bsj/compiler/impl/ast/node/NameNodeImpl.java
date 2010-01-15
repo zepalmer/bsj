@@ -64,7 +64,7 @@ public abstract class NameNodeImpl extends NodeImpl implements NameNode
         sb.append('[');
         sb.append("category=");
         sb.append(String.valueOf(this.category) + ":" + this.category.getClass().getSimpleName());
-        sb.append('[');
+        sb.append(']');
         return sb.toString();
     }
 	/**

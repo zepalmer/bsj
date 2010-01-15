@@ -147,7 +147,7 @@ public class AssignmentNodeImpl extends NodeImpl implements AssignmentNode
         sb.append(',');
         sb.append("expression=");
         sb.append(this.expression == null? "null" : this.expression.getClass().getSimpleName());
-        sb.append('[');
+        sb.append(']');
         return sb.toString();
     }
 }

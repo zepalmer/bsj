@@ -119,7 +119,7 @@ public class AssertStatementNodeImpl extends NodeImpl implements AssertStatement
         sb.append(',');
         sb.append("messageExpression=");
         sb.append(this.messageExpression == null? "null" : this.messageExpression.getClass().getSimpleName());
-        sb.append('[');
+        sb.append(']');
         return sb.toString();
     }
 }

@@ -83,7 +83,7 @@ public class FieldAccessByNameNodeImpl extends NodeImpl implements FieldAccessBy
         sb.append('[');
         sb.append("name=");
         sb.append(this.name == null? "null" : this.name.getClass().getSimpleName());
-        sb.append('[');
+        sb.append(']');
         return sb.toString();
     }
 }

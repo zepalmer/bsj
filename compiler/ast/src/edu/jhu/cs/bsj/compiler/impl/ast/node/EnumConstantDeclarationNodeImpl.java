@@ -195,7 +195,7 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
         sb.append(',');
         sb.append("body=");
         sb.append(this.body == null? "null" : this.body.getClass().getSimpleName());
-        sb.append('[');
+        sb.append(']');
         return sb.toString();
     }
 }

@@ -68,7 +68,7 @@ public class ListNodeImpl<T extends Node> extends NodeImpl implements ListNode<T
         sb.append('[');
         sb.append("children=");
         sb.append(String.valueOf(this.children) + ":" + this.children.getClass().getSimpleName());
-        sb.append('[');
+        sb.append(']');
         return sb.toString();
     }
 	/** General constructor */

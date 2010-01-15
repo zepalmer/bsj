@@ -110,7 +110,7 @@ public abstract class ArrayCreationNodeImpl extends NodeImpl implements ArrayCre
         sb.append(',');
         sb.append("arrayLevels=");
         sb.append(String.valueOf(this.arrayLevels) + ":" + "int");
-        sb.append('[');
+        sb.append(']');
         return sb.toString();
     }
 }

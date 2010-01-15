@@ -48,7 +48,7 @@ public class DoubleLiteralNodeImpl extends LiteralNodeImpl<Double> implements Do
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
-        sb.append('[');
+        sb.append(']');
         return sb.toString();
     }
 }

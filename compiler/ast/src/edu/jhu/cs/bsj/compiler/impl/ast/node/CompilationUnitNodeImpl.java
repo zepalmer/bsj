@@ -158,7 +158,7 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
         sb.append(',');
         sb.append("typeDecls=");
         sb.append(this.typeDecls == null? "null" : this.typeDecls.getClass().getSimpleName());
-        sb.append('[');
+        sb.append(']');
         return sb.toString();
     }
 }

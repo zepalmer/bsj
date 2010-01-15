@@ -73,7 +73,7 @@ public abstract class LiteralNodeImpl<T> extends NodeImpl implements LiteralNode
         sb.append('[');
         sb.append("value=");
         sb.append(String.valueOf(this.value) + ":" + this.value.getClass().getSimpleName());
-        sb.append('[');
+        sb.append(']');
         return sb.toString();
     }
 }

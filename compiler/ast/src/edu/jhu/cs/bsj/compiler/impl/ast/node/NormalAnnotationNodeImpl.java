@@ -86,7 +86,7 @@ public class NormalAnnotationNodeImpl extends AnnotationNodeImpl implements Norm
         sb.append('[');
         sb.append("arguments=");
         sb.append(this.arguments == null? "null" : this.arguments.getClass().getSimpleName());
-        sb.append('[');
+        sb.append(']');
         return sb.toString();
     }
 }

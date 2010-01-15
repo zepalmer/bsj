@@ -74,7 +74,7 @@ public class PrimitiveTypeNodeImpl extends NodeImpl implements PrimitiveTypeNode
         sb.append('[');
         sb.append("primitiveType=");
         sb.append(String.valueOf(this.primitiveType) + ":" + this.primitiveType.getClass().getSimpleName());
-        sb.append('[');
+        sb.append(']');
         return sb.toString();
     }
 }

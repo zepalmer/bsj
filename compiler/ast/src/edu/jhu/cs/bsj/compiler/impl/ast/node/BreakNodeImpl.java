@@ -83,7 +83,7 @@ public class BreakNodeImpl extends NodeImpl implements BreakNode
         sb.append('[');
         sb.append("label=");
         sb.append(this.label == null? "null" : this.label.getClass().getSimpleName());
-        sb.append('[');
+        sb.append(']');
         return sb.toString();
     }
 }

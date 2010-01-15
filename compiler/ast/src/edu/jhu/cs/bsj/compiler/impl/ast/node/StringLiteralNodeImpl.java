@@ -48,7 +48,7 @@ public class StringLiteralNodeImpl extends LiteralNodeImpl<String> implements St
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
-        sb.append('[');
+        sb.append(']');
         return sb.toString();
     }
 }

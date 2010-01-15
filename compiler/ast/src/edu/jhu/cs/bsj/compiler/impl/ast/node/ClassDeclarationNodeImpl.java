@@ -198,7 +198,7 @@ public class ClassDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl imple
         sb.append(',');
         sb.append("typeParameters=");
         sb.append(this.typeParameters == null? "null" : this.typeParameters.getClass().getSimpleName());
-        sb.append('[');
+        sb.append(']');
         return sb.toString();
     }
 }

@@ -47,7 +47,7 @@ public class VoidStatementNodeImpl extends NodeImpl implements VoidStatementNode
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
-        sb.append('[');
+        sb.append(']');
         return sb.toString();
     }
 }

@@ -83,7 +83,7 @@ public abstract class AnnotationNodeImpl extends NodeImpl implements AnnotationN
         sb.append('[');
         sb.append("annotationType=");
         sb.append(this.annotationType == null? "null" : this.annotationType.getClass().getSimpleName());
-        sb.append('[');
+        sb.append(']');
         return sb.toString();
     }
 }

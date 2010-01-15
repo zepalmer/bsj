@@ -120,7 +120,7 @@ public class TypeCastNodeImpl extends NodeImpl implements TypeCastNode
         sb.append(',');
         sb.append("type=");
         sb.append(this.type == null? "null" : this.type.getClass().getSimpleName());
-        sb.append('[');
+        sb.append(']');
         return sb.toString();
     }
 }

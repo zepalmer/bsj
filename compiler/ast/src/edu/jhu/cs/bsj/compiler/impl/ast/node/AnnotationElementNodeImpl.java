@@ -120,7 +120,7 @@ public class AnnotationElementNodeImpl extends NodeImpl implements AnnotationEle
         sb.append(',');
         sb.append("value=");
         sb.append(this.value == null? "null" : this.value.getClass().getSimpleName());
-        sb.append('[');
+        sb.append(']');
         return sb.toString();
     }
 }

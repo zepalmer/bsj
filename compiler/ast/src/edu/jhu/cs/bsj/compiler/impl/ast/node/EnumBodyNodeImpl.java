@@ -121,7 +121,7 @@ public class EnumBodyNodeImpl extends NodeImpl implements EnumBodyNode
         sb.append(',');
         sb.append("members=");
         sb.append(this.members == null? "null" : this.members.getClass().getSimpleName());
-        sb.append('[');
+        sb.append(']');
         return sb.toString();
     }
 }

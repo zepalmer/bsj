@@ -83,7 +83,7 @@ public class ForInitializerDeclarationNodeImpl extends NodeImpl implements ForIn
         sb.append('[');
         sb.append("declaration=");
         sb.append(this.declaration == null? "null" : this.declaration.getClass().getSimpleName());
-        sb.append('[');
+        sb.append(']');
         return sb.toString();
     }
 }

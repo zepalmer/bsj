@@ -120,7 +120,7 @@ public class LabeledStatementNodeImpl extends NodeImpl implements LabeledStateme
         sb.append(',');
         sb.append("statement=");
         sb.append(this.statement == null? "null" : this.statement.getClass().getSimpleName());
-        sb.append('[');
+        sb.append(']');
         return sb.toString();
     }
 }

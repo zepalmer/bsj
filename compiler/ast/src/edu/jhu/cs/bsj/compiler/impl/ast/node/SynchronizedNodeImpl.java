@@ -120,7 +120,7 @@ public class SynchronizedNodeImpl extends NodeImpl implements SynchronizedNode
         sb.append(',');
         sb.append("block=");
         sb.append(this.block == null? "null" : this.block.getClass().getSimpleName());
-        sb.append('[');
+        sb.append(']');
         return sb.toString();
     }
 }

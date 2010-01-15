@@ -84,7 +84,7 @@ public class BlockStatementNodeImpl extends NodeImpl implements BlockStatementNo
         sb.append('[');
         sb.append("statements=");
         sb.append(this.statements == null? "null" : this.statements.getClass().getSimpleName());
-        sb.append('[');
+        sb.append(']');
         return sb.toString();
     }
 }

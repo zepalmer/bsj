@@ -84,7 +84,7 @@ public class AnnotationArrayValueNodeImpl extends NodeImpl implements Annotation
         sb.append('[');
         sb.append("values=");
         sb.append(this.values == null? "null" : this.values.getClass().getSimpleName());
-        sb.append('[');
+        sb.append(']');
         return sb.toString();
     }
 }

@@ -155,7 +155,7 @@ public class ConditionalExpressionNodeImpl extends NodeImpl implements Condition
         sb.append(',');
         sb.append("falseExpression=");
         sb.append(this.falseExpression == null? "null" : this.falseExpression.getClass().getSimpleName());
-        sb.append('[');
+        sb.append(']');
         return sb.toString();
     }
 }

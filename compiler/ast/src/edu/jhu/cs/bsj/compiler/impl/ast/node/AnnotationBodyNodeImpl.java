@@ -84,7 +84,7 @@ public class AnnotationBodyNodeImpl extends NodeImpl implements AnnotationBodyNo
         sb.append('[');
         sb.append("members=");
         sb.append(this.members == null? "null" : this.members.getClass().getSimpleName());
-        sb.append('[');
+        sb.append(']');
         return sb.toString();
     }
 }

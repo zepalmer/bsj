@@ -110,7 +110,7 @@ public class WildcardTypeNodeImpl extends NodeImpl implements WildcardTypeNode
         sb.append(',');
         sb.append("upperBound=");
         sb.append(String.valueOf(this.upperBound) + ":" + "boolean");
-        sb.append('[');
+        sb.append(']');
         return sb.toString();
     }
 }

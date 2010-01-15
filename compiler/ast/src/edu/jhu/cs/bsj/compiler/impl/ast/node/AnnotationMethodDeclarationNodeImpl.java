@@ -194,7 +194,7 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
         sb.append(',');
         sb.append("defaultValue=");
         sb.append(this.defaultValue == null? "null" : this.defaultValue.getClass().getSimpleName());
-        sb.append('[');
+        sb.append(']');
         return sb.toString();
     }
 }

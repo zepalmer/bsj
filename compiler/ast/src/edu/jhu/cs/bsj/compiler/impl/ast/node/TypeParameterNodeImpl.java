@@ -121,7 +121,7 @@ public class TypeParameterNodeImpl extends NodeImpl implements TypeParameterNode
         sb.append(',');
         sb.append("bounds=");
         sb.append(this.bounds == null? "null" : this.bounds.getClass().getSimpleName());
-        sb.append('[');
+        sb.append(']');
         return sb.toString();
     }
 }
