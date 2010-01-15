@@ -27,7 +27,7 @@
 	<!-- Indicates the classpath for a build of the parser. -->
 	<path id="parser.classpath">
         <fileset dir="lib">
-            <include name="**/*.jar"/>
+            <include name="*.jar"/>
         </fileset>
 		<pathelement path="${genbin}"/>
 		<pathelement path="${compilerApiPath}"/>
