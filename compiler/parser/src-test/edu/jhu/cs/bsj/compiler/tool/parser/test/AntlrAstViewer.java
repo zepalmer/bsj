@@ -34,6 +34,8 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
 
+import org.apache.log4j.PropertyConfigurator;
+
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeFactoryImpl;
 import edu.jhu.cs.bsj.compiler.tool.parser.BsjParser;
@@ -244,6 +246,13 @@ public class AntlrAstViewer
 
 	public static void main(String arg[]) throws Exception
 	{
+		Properties loggingProperties = new Properties();
+		loggingProperties.setProperty("log4j.rootLogger", "trace, stdout");
+		loggingProperties.setProperty("log4j.appender.stdout", "org.apache.log4j.ConsoleAppender");
+		loggingProperties.setProperty("log4j.appender.stdout.layout", "org.apache.log4j.PatternLayout");
+		loggingProperties.setProperty("log4j.appender.stdout.layout.ConversionPattern", "%5p [%t] (%F:%L) - %m%n");
+		PropertyConfigurator.configure(loggingProperties);
+
 		loadProperties();
 		String defaultText = getSource();
 
