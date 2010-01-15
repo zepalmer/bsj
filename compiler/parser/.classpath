@@ -8,5 +8,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/BSJ Compiler API"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/BSJ AST Implementation"/>
 	<classpathentry exported="true" kind="lib" path=".gen/bin" sourcepath=".gen/src"/>
+	<classpathentry kind="lib" path="lib/log4j-1.2.15.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

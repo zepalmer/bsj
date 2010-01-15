@@ -24,16 +24,25 @@
 	<property name="parserPackage" value="${gensrc}/edu/jhu/cs/bsj/compiler/tool/parser/antlr" />
 	<!-- Names the directory containing compiled binaries for the BSJ Compiler API. -->
 	<property name="compilerApiPath" value="../api/bin" />
+	<!-- Indicates the classpath for a build of the parser. -->
+	<path id="parser.classpath">
+        <fileset dir="lib">
+            <include name="**/*.jar"/>
+        </fileset>
+		<pathelement path="${genbin}"/>
+		<pathelement path="${compilerApiPath}"/>
+	</path>
 	
     <!-- - - - - - - - - - - - - - - - - - 
           target: antlr                      
          - - - - - - - - - - - - - - - - - -->
 	<target name="prebuild" description="Builds the sources on which the ANTLR parser depends">
 		<javac
-		    destdir="${genbin}"
-		    srcdir="${presrc}"
-            debug="true"
-		    />
+		        destdir="${genbin}"
+		        srcdir="${presrc}"
+                debug="true">
+			<classpath refid="parser.classpath"/>
+		</javac>
 	</target>
 
     <!-- - - - - - - - - - - - - - - - - - 
@@ -47,11 +56,12 @@
     		conversiontimeout="100000"/>
     	<mkdir dir="${genbin}"/>
     	<javac
-    		destdir="${genbin}"
-    		srcdir="${gensrc}"
-    		classpath="lib/antlr-3.1.3.jar:${compilerApiPath}:${genbin}"
-    		debug="true"
-    		/>
+    		    destdir="${genbin}"
+    		    srcdir="${gensrc}"
+    		    debug="true">
+    		<classpath refid="parser.classpath"/>
+        </javac>
+    	
     </target>
 
     <!-- - - - - - - - - - - - - - - - - - 
