@@ -66,6 +66,25 @@ scope Global {
 
 @lexer::header{
     package edu.jhu.cs.bsj.compiler.tool.parser.antlr;
+
+    import org.apache.log4j.Logger;
+}
+
+@lexer::members{
+    // *** LOG4J **************************************************************
+    private Logger logger = Logger.getLogger(this.getClass());
+    
+    // *** TOKEN LOGGING ******************************************************
+    public Token nextToken()
+    {
+        Token token = super.nextToken();
+        if (logger.isTraceEnabled())
+        {
+            logger.trace("Token processed at " + token.getLine() + ":" + token.getCharPositionInLine() +
+                    " with text: " + token.getText());
+        }
+        return token;
+    }
 }
 
 @parser::header{
@@ -80,6 +99,8 @@ scope Global {
     import java.util.Set;
     import java.util.Stack;
     
+    import org.apache.log4j.Logger;
+
     import edu.jhu.cs.bsj.compiler.ast.*;
     import edu.jhu.cs.bsj.compiler.ast.node.*;
     import edu.jhu.cs.bsj.compiler.ast.node.meta.*;
@@ -88,6 +109,9 @@ scope Global {
 }
 
 @parser::members {
+    // *** LOG4J **************************************************************
+    private Logger logger = Logger.getLogger(this.getClass());
+
     // *** FACTORY NODE PROPERTY **********************************************
     /**
      * Factory used to generate nodes for the parser.
@@ -148,7 +172,8 @@ scope Global {
             Modifier.PUBLIC,
             Modifier.PROTECTED,
             Modifier.PRIVATE);
-    
+
+    // *** DATA STRUCTURE FOR LITERAL PARSING *********************************
     static class IntegerBaseResult
     {
         public int base;
@@ -175,7 +200,25 @@ scope Global {
             }
         }
     }
+    
+    // *** ERROR REPORTING AND HANDLING ***************************************
+    /**
+     * Overrides the mechanism for displaying recognition errors.  While it is possible to do something very similar by
+     * overriding emitErrorMessage, this method is extracted instead in order to allow the exception itself to be
+     * trapped for more informative error handling.
+     */
+    @Override
+    public void displayRecognitionError(String[] tokenNames, RecognitionException e)
+    {
+        // TODO: more elaborate error handling: extract info from exception and create a non-ANTLR error object to be
+        // provided to BSJ users through the API.
+        String hdr = getErrorHeader(e);
+        String msg = getErrorMessage(e, tokenNames);
+        logger.error(hdr+" "+msg);
+    }
 }
+
+
 
 /********************************************************************************************
                           Parser section
