@@ -106,4 +106,21 @@ public class TypeParameterNodeImpl extends NodeImpl implements TypeParameterNode
         list.add(this.bounds);
         return list;
     }
+
+    /**
+     * Obtains a human-readable description of this node.
+     * @return A human-readable description of this node.
+     */
+    public String toString()
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.append(this.getClass().getSimpleName());
+        sb.append('[');
+        sb.append("identifier=");
+        sb.append(this.identifier == null? "null" : this.identifier.getClass().getSimpleName());
+        sb.append(',');
+        sb.append("bounds=");
+        sb.append(this.bounds == null? "null" : this.bounds.getClass().getSimpleName());
+        return sb.toString();
+    }
 }

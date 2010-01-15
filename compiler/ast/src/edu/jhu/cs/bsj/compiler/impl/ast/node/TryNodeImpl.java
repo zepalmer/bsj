@@ -139,4 +139,24 @@ public class TryNodeImpl extends NodeImpl implements TryNode
         list.add(this.finallyBlock);
         return list;
     }
+
+    /**
+     * Obtains a human-readable description of this node.
+     * @return A human-readable description of this node.
+     */
+    public String toString()
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.append(this.getClass().getSimpleName());
+        sb.append('[');
+        sb.append("block=");
+        sb.append(this.block == null? "null" : this.block.getClass().getSimpleName());
+        sb.append(',');
+        sb.append("catches=");
+        sb.append(this.catches == null? "null" : this.catches.getClass().getSimpleName());
+        sb.append(',');
+        sb.append("finallyBlock=");
+        sb.append(this.finallyBlock == null? "null" : this.finallyBlock.getClass().getSimpleName());
+        return sb.toString();
+    }
 }

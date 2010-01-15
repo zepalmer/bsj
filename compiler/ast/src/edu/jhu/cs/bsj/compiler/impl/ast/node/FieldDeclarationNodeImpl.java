@@ -106,4 +106,21 @@ public class FieldDeclarationNodeImpl extends NodeImpl implements FieldDeclarati
         list.add(this.declarators);
         return list;
     }
+
+    /**
+     * Obtains a human-readable description of this node.
+     * @return A human-readable description of this node.
+     */
+    public String toString()
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.append(this.getClass().getSimpleName());
+        sb.append('[');
+        sb.append("modifiers=");
+        sb.append(this.modifiers == null? "null" : this.modifiers.getClass().getSimpleName());
+        sb.append(',');
+        sb.append("declarators=");
+        sb.append(this.declarators == null? "null" : this.declarators.getClass().getSimpleName());
+        return sb.toString();
+    }
 }

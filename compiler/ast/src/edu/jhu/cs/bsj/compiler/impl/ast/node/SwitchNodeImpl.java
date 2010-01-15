@@ -106,4 +106,21 @@ public class SwitchNodeImpl extends NodeImpl implements SwitchNode
         list.add(this.cases);
         return list;
     }
+
+    /**
+     * Obtains a human-readable description of this node.
+     * @return A human-readable description of this node.
+     */
+    public String toString()
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.append(this.getClass().getSimpleName());
+        sb.append('[');
+        sb.append("expression=");
+        sb.append(this.expression == null? "null" : this.expression.getClass().getSimpleName());
+        sb.append(',');
+        sb.append("cases=");
+        sb.append(this.cases == null? "null" : this.cases.getClass().getSimpleName());
+        return sb.toString();
+    }
 }

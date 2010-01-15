@@ -98,4 +98,21 @@ public class ModifiersNodeImpl extends NodeImpl implements ModifiersNode
         list.add(this.flags);
         return list;
     }
+
+    /**
+     * Obtains a human-readable description of this node.
+     * @return A human-readable description of this node.
+     */
+    public String toString()
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.append(this.getClass().getSimpleName());
+        sb.append('[');
+        sb.append("annotations=");
+        sb.append(this.annotations == null? "null" : this.annotations.getClass().getSimpleName());
+        sb.append(',');
+        sb.append("flags=");
+        sb.append(String.valueOf(this.flags) + ":" + this.flags.getClass().getSimpleName());
+        return sb.toString();
+    }
 }

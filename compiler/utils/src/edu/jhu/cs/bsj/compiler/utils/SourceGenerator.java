@@ -27,11 +27,12 @@ public class SourceGenerator
 	private static final File VERBATIM_DIR = new File("data/srcgen/verbatim/");
 	private static final File SUPPLEMENTS_DIR = new File("data/srcgen/supplement/");
 	private static final File TARGET_DIR = new File("out/");
-	private static final String[] IFACE_IMPORTS = new String[] { "edu.jhu.cs.bsj.compiler.ast.*",
-			"edu.jhu.cs.bsj.compiler.ast.node.*", "edu.jhu.cs.bsj.compiler.ast.node.meta.*",
-			"java.util.*" };
-	private static final String[] CLASS_IMPORTS = new String[] { "edu.jhu.cs.bsj.compiler.impl.ast.*",
+	private static final String[] IFACE_IMPORTS = { "edu.jhu.cs.bsj.compiler.ast.*",
+			"edu.jhu.cs.bsj.compiler.ast.node.*", "edu.jhu.cs.bsj.compiler.ast.node.meta.*", "java.util.*" };
+	private static final String[] CLASS_IMPORTS = { "edu.jhu.cs.bsj.compiler.impl.ast.*",
 			"edu.jhu.cs.bsj.compiler.impl.ast.node.*", "edu.jhu.cs.bsj.compiler.impl.ast.node.meta.*" };
+	private static final Set<String> PRIMITIVE_TYPES = new HashSet<String>(Arrays.asList(new String[] { "int", "long",
+			"boolean", "float", "double", "short", "byte", "char" }));
 
 	// private static final String[] DEFAULT_IMPORTS =
 
@@ -394,12 +395,10 @@ public class SourceGenerator
 			this.readOnly = readOnly;
 		}
 	}
-	
+
 	static enum ClassMode
 	{
-		CONCRETE,
-		ABSTRACT,
-		INTERFACE
+		CONCRETE, ABSTRACT, INTERFACE
 	}
 
 	static class ClassDef
@@ -573,7 +572,7 @@ public class SourceGenerator
 	{
 		includeFileParts(f, ps, "start", "stop");
 	}
-	
+
 	/**
 	 * Performs a source file import inclusion.
 	 * 
@@ -596,12 +595,12 @@ public class SourceGenerator
 	{
 		for (String name : names)
 		{
-			File f = new File(SUPPLEMENTS_DIR.getParent() + File.separator + "supplement" + File.separator
-					+ dir + File.separator + name);
+			File f = new File(SUPPLEMENTS_DIR.getParent() + File.separator + "supplement" + File.separator + dir
+					+ File.separator + name);
 			includeBody(f, ps);
 		}
 	}
-	
+
 	/**
 	 * Performs a source file body inclusion.
 	 * 
@@ -613,12 +612,12 @@ public class SourceGenerator
 	{
 		for (String name : names)
 		{
-			File f = new File(SUPPLEMENTS_DIR.getParent() + File.separator + "supplement" + File.separator
-					+ dir + File.separator + name);
+			File f = new File(SUPPLEMENTS_DIR.getParent() + File.separator + "supplement" + File.separator + dir
+					+ File.separator + name);
 			includeImports(f, ps);
 		}
 	}
-	
+
 	/**
 	 * Writes a list of parameters suitable for the provided properties.
 	 * 
@@ -726,11 +725,11 @@ public class SourceGenerator
 			if (pkg.length() > 0)
 				ps.println("package " + pkg + ";");
 			ps.println("");
-			
+
 			// imports
 			printImports(ps, false);
 			includeAllImports(ps, def.includeFilenames, "ifaces");
-			
+
 			ps.println("/**");
 			ps.println(" * " + def.classDoc.replaceAll("\n", "\n * "));
 			ps.println(" */");
@@ -768,7 +767,7 @@ public class SourceGenerator
 					ps.println();
 				}
 			}
-			
+
 			includeAllBodies(ps, def.includeFilenames, "ifaces");
 			ps.println("}");
 		}
@@ -802,20 +801,22 @@ public class SourceGenerator
 				useDefinition(def);
 			}
 		}
-		
+
 		protected boolean defInstanceOf(ClassDef def, String classname)
 		{
-			while (def!=null)
+			while (def != null)
 			{
-				if (def.getRawName().equals(classname)) return true;
+				if (def.getRawName().equals(classname))
+					return true;
 				def = map.get(def.getRawSname());
 			}
 			return false;
 		}
-		
+
 		protected boolean propInstanceOf(String propType, String classname)
 		{
-			if (propType.contains("<")) propType = propType.substring(0,propType.indexOf('<')).trim();
+			if (propType.contains("<"))
+				propType = propType.substring(0, propType.indexOf('<')).trim();
 			return defInstanceOf(map.get(propType), classname);
 		}
 
@@ -877,7 +878,7 @@ public class SourceGenerator
 			{
 				return;
 			}
-			
+
 			String rawclassname = def.getRawName() + "Impl";
 			String classname = rawclassname + def.getNameParam();
 			String superclassname = def.getRawSname() + "Impl" + def.getSnameParam();
@@ -899,10 +900,10 @@ public class SourceGenerator
 			if (pkg.length() > 0)
 				ps.println("package " + pkg + ";");
 			ps.println("");
-			
+
 			printImports(ps, true);
 			includeAllImports(ps, def.includeFilenames, "classes");
-			
+
 			ps.println("public " + (def.mode == ClassMode.CONCRETE ? "" : "abstract ") + "class " + classname
 					+ (def.sname == null ? "" : " extends " + superclassname) + " implements " + def.getRawName()
 					+ def.getNameArg());
@@ -963,7 +964,7 @@ public class SourceGenerator
 					{
 						ps.println("        if (this." + p.name + " instanceof NodeImpl)");
 						ps.println("        {");
-						ps.println("            ((NodeImpl)this."+p.name+").setParent(null);");
+						ps.println("            ((NodeImpl)this." + p.name + ").setParent(null);");
 						ps.println("        }");
 					}
 					ps.println("        this." + p.name + " = " + p.name + ";");
@@ -971,7 +972,7 @@ public class SourceGenerator
 					{
 						ps.println("        if (this." + p.name + " instanceof NodeImpl)");
 						ps.println("        {");
-						ps.println("            ((NodeImpl)this."+p.name+").setParent(this);");
+						ps.println("            ((NodeImpl)this." + p.name + ").setParent(this);");
 						ps.println("        }");
 					}
 					ps.println("    }");
@@ -987,13 +988,13 @@ public class SourceGenerator
 			ps.println("     *");
 			ps.println("     * @param visitor The visitor to visit this node's children.");
 			ps.println("     */");
-			if (def.sname!=null)
+			if (def.sname != null)
 			{
 				ps.println("    @Override");
 			}
 			ps.println("    protected void receiveToChildren(BsjNodeVisitor visitor)");
 			ps.println("    {");
-			if (def.sname!=null)
+			if (def.sname != null)
 			{
 				ps.println("        super.receiveToChildren(visitor);");
 			}
@@ -1006,7 +1007,7 @@ public class SourceGenerator
 			}
 			ps.println("    }");
 			ps.println();
-			
+
 			// add logic for getting list of children
 			ps.println("    /**");
 			ps.println("     * Produces a mutable list of this node's children.  Modifying this list will have no");
@@ -1015,14 +1016,14 @@ public class SourceGenerator
 			ps.println("     */");
 			if (stopGen.contains("children"))
 				ps.println("/* // stopGen=" + stopGenStr); // stopGen logic
-			if (def.sname!=null)
+			if (def.sname != null)
 			{
 				ps.println("    @Override");
 			}
 			ps.println("    public List<Object> getChildObjects()");
 			ps.println("    {");
-			ps.println("        List<Object> list = " +
-						(def.sname==null?"new ArrayList<Object>();":"super.getChildObjects();"));
+			ps.println("        List<Object> list = "
+					+ (def.sname == null ? "new ArrayList<Object>();" : "super.getChildObjects();"));
 			for (Prop p : def.props)
 			{
 				ps.println("        list.add(this." + p.name + ");");
@@ -1031,6 +1032,44 @@ public class SourceGenerator
 			ps.println("    }");
 			if (stopGen.contains("children"))
 				ps.print("*/"); // stopGen logic
+			ps.println();
+
+			// add logic for toString
+			ps.println("    /**");
+			ps.println("     * Obtains a human-readable description of this node.");
+			ps.println("     * @return A human-readable description of this node.");
+			ps.println("     */");
+			ps.println("    public String toString()");
+			ps.println("    {");
+			ps.println("        StringBuilder sb = new StringBuilder();");
+			ps.println("        sb.append(this.getClass().getSimpleName());");
+			ps.println("        sb.append('[');");
+			boolean firstProp = true;
+			for (Prop p : def.props)
+			{
+				if (firstProp)
+				{
+					firstProp = false;
+				} else
+				{
+					ps.println("        sb.append(',');");
+				}
+				ps.println("        sb.append(\"" + p.name + "=\");");
+				if (p.type.contains("Node"))
+				{
+					ps.println("        sb.append(this." + p.name + " == null? \"null\" : this." + p.name
+							+ ".getClass().getSimpleName());");
+				} else
+				{
+					ps.println("        sb.append(String.valueOf(this." + p.name + ") + \":\" + " +
+							((PRIMITIVE_TYPES.contains(p.type))?
+									"\"" + p.type + "\"" :
+									"this." + p.name + ".getClass().getSimpleName()")
+							+ ");");
+				}
+			}
+			ps.println("        return sb.toString();");
+			ps.println("    }");
 
 			// add supplements
 			includeAllBodies(ps, def.includeFilenames, "classes");

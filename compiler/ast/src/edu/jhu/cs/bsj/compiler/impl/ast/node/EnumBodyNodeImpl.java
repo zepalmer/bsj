@@ -106,4 +106,21 @@ public class EnumBodyNodeImpl extends NodeImpl implements EnumBodyNode
         list.add(this.members);
         return list;
     }
+
+    /**
+     * Obtains a human-readable description of this node.
+     * @return A human-readable description of this node.
+     */
+    public String toString()
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.append(this.getClass().getSimpleName());
+        sb.append('[');
+        sb.append("constants=");
+        sb.append(this.constants == null? "null" : this.constants.getClass().getSimpleName());
+        sb.append(',');
+        sb.append("members=");
+        sb.append(this.members == null? "null" : this.members.getClass().getSimpleName());
+        return sb.toString();
+    }
 }

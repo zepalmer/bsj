@@ -140,4 +140,24 @@ public abstract class ClassInstantiationNodeImpl extends NodeImpl implements Cla
         list.add(this.body);
         return list;
     }
+
+    /**
+     * Obtains a human-readable description of this node.
+     * @return A human-readable description of this node.
+     */
+    public String toString()
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.append(this.getClass().getSimpleName());
+        sb.append('[');
+        sb.append("constructorTypeArguments=");
+        sb.append(this.constructorTypeArguments == null? "null" : this.constructorTypeArguments.getClass().getSimpleName());
+        sb.append(',');
+        sb.append("arguments=");
+        sb.append(this.arguments == null? "null" : this.arguments.getClass().getSimpleName());
+        sb.append(',');
+        sb.append("body=");
+        sb.append(this.body == null? "null" : this.body.getClass().getSimpleName());
+        return sb.toString();
+    }
 }

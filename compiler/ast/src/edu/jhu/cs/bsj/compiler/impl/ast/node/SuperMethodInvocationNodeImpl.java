@@ -174,4 +174,27 @@ public class SuperMethodInvocationNodeImpl extends NodeImpl implements SuperMeth
         list.add(this.typeArguments);
         return list;
     }
+
+    /**
+     * Obtains a human-readable description of this node.
+     * @return A human-readable description of this node.
+     */
+    public String toString()
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.append(this.getClass().getSimpleName());
+        sb.append('[');
+        sb.append("type=");
+        sb.append(this.type == null? "null" : this.type.getClass().getSimpleName());
+        sb.append(',');
+        sb.append("identifier=");
+        sb.append(this.identifier == null? "null" : this.identifier.getClass().getSimpleName());
+        sb.append(',');
+        sb.append("arguments=");
+        sb.append(this.arguments == null? "null" : this.arguments.getClass().getSimpleName());
+        sb.append(',');
+        sb.append("typeArguments=");
+        sb.append(this.typeArguments == null? "null" : this.typeArguments.getClass().getSimpleName());
+        return sb.toString();
+    }
 }

@@ -110,4 +110,21 @@ public class EnumDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl implem
         list.add(this.body);
         return list;
     }
+
+    /**
+     * Obtains a human-readable description of this node.
+     * @return A human-readable description of this node.
+     */
+    public String toString()
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.append(this.getClass().getSimpleName());
+        sb.append('[');
+        sb.append("implementsClause=");
+        sb.append(this.implementsClause == null? "null" : this.implementsClause.getClass().getSimpleName());
+        sb.append(',');
+        sb.append("body=");
+        sb.append(this.body == null? "null" : this.body.getClass().getSimpleName());
+        return sb.toString();
+    }
 }

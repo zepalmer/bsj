@@ -52,6 +52,20 @@ public abstract class NameNodeImpl extends NodeImpl implements NameNode
         list.add(this.category);
         return list;
     }
+
+    /**
+     * Obtains a human-readable description of this node.
+     * @return A human-readable description of this node.
+     */
+    public String toString()
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.append(this.getClass().getSimpleName());
+        sb.append('[');
+        sb.append("category=");
+        sb.append(String.valueOf(this.category) + ":" + this.category.getClass().getSimpleName());
+        return sb.toString();
+    }
 	/**
 	 * Asserts that this node should fall into the specified category.
 	 * @param category The category into which this node should fall.

@@ -73,4 +73,18 @@ public class SingleElementAnnotationNodeImpl extends AnnotationNodeImpl implemen
         list.add(this.value);
         return list;
     }
+
+    /**
+     * Obtains a human-readable description of this node.
+     * @return A human-readable description of this node.
+     */
+    public String toString()
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.append(this.getClass().getSimpleName());
+        sb.append('[');
+        sb.append("value=");
+        sb.append(this.value == null? "null" : this.value.getClass().getSimpleName());
+        return sb.toString();
+    }
 }

@@ -95,4 +95,21 @@ public class WildcardTypeNodeImpl extends NodeImpl implements WildcardTypeNode
         list.add(this.upperBound);
         return list;
     }
+
+    /**
+     * Obtains a human-readable description of this node.
+     * @return A human-readable description of this node.
+     */
+    public String toString()
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.append(this.getClass().getSimpleName());
+        sb.append('[');
+        sb.append("bound=");
+        sb.append(this.bound == null? "null" : this.bound.getClass().getSimpleName());
+        sb.append(',');
+        sb.append("upperBound=");
+        sb.append(String.valueOf(this.upperBound) + ":" + "boolean");
+        return sb.toString();
+    }
 }

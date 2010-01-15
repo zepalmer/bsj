@@ -71,4 +71,18 @@ public class AnnotationAnnotationValueNodeImpl extends NodeImpl implements Annot
         list.add(this.annotation);
         return list;
     }
+
+    /**
+     * Obtains a human-readable description of this node.
+     * @return A human-readable description of this node.
+     */
+    public String toString()
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.append(this.getClass().getSimpleName());
+        sb.append('[');
+        sb.append("annotation=");
+        sb.append(this.annotation == null? "null" : this.annotation.getClass().getSimpleName());
+        return sb.toString();
+    }
 }

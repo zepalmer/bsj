@@ -106,4 +106,21 @@ public class CaseNodeImpl extends NodeImpl implements CaseNode
         list.add(this.statements);
         return list;
     }
+
+    /**
+     * Obtains a human-readable description of this node.
+     * @return A human-readable description of this node.
+     */
+    public String toString()
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.append(this.getClass().getSimpleName());
+        sb.append('[');
+        sb.append("expression=");
+        sb.append(this.expression == null? "null" : this.expression.getClass().getSimpleName());
+        sb.append(',');
+        sb.append("statements=");
+        sb.append(this.statements == null? "null" : this.statements.getClass().getSimpleName());
+        return sb.toString();
+    }
 }

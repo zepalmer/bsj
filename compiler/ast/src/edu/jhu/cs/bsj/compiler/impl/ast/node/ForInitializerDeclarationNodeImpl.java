@@ -71,4 +71,18 @@ public class ForInitializerDeclarationNodeImpl extends NodeImpl implements ForIn
         list.add(this.declaration);
         return list;
     }
+
+    /**
+     * Obtains a human-readable description of this node.
+     * @return A human-readable description of this node.
+     */
+    public String toString()
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.append(this.getClass().getSimpleName());
+        sb.append('[');
+        sb.append("declaration=");
+        sb.append(this.declaration == null? "null" : this.declaration.getClass().getSimpleName());
+        return sb.toString();
+    }
 }

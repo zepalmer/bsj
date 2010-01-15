@@ -95,4 +95,21 @@ public abstract class ArrayCreationNodeImpl extends NodeImpl implements ArrayCre
         list.add(this.arrayLevels);
         return list;
     }
+
+    /**
+     * Obtains a human-readable description of this node.
+     * @return A human-readable description of this node.
+     */
+    public String toString()
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.append(this.getClass().getSimpleName());
+        sb.append('[');
+        sb.append("baseType=");
+        sb.append(this.baseType == null? "null" : this.baseType.getClass().getSimpleName());
+        sb.append(',');
+        sb.append("arrayLevels=");
+        sb.append(String.valueOf(this.arrayLevels) + ":" + "int");
+        return sb.toString();
+    }
 }

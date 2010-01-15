@@ -174,4 +174,27 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
         list.add(this.body);
         return list;
     }
+
+    /**
+     * Obtains a human-readable description of this node.
+     * @return A human-readable description of this node.
+     */
+    public String toString()
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.append(this.getClass().getSimpleName());
+        sb.append('[');
+        sb.append("annotations=");
+        sb.append(this.annotations == null? "null" : this.annotations.getClass().getSimpleName());
+        sb.append(',');
+        sb.append("identifier=");
+        sb.append(this.identifier == null? "null" : this.identifier.getClass().getSimpleName());
+        sb.append(',');
+        sb.append("arguments=");
+        sb.append(this.arguments == null? "null" : this.arguments.getClass().getSimpleName());
+        sb.append(',');
+        sb.append("body=");
+        sb.append(this.body == null? "null" : this.body.getClass().getSimpleName());
+        return sb.toString();
+    }
 }

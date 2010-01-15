@@ -106,4 +106,21 @@ public abstract class ConstructorInvocationNodeImpl extends NodeImpl implements 
         list.add(this.typeArguments);
         return list;
     }
+
+    /**
+     * Obtains a human-readable description of this node.
+     * @return A human-readable description of this node.
+     */
+    public String toString()
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.append(this.getClass().getSimpleName());
+        sb.append('[');
+        sb.append("arguments=");
+        sb.append(this.arguments == null? "null" : this.arguments.getClass().getSimpleName());
+        sb.append(',');
+        sb.append("typeArguments=");
+        sb.append(this.typeArguments == null? "null" : this.typeArguments.getClass().getSimpleName());
+        return sb.toString();
+    }
 }

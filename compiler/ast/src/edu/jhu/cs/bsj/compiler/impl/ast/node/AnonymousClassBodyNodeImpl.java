@@ -72,4 +72,18 @@ public class AnonymousClassBodyNodeImpl extends NodeImpl implements AnonymousCla
         list.add(this.members);
         return list;
     }
+
+    /**
+     * Obtains a human-readable description of this node.
+     * @return A human-readable description of this node.
+     */
+    public String toString()
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.append(this.getClass().getSimpleName());
+        sb.append('[');
+        sb.append("members=");
+        sb.append(this.members == null? "null" : this.members.getClass().getSimpleName());
+        return sb.toString();
+    }
 }

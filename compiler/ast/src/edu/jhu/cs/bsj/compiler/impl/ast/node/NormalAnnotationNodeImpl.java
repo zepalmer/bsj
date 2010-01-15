@@ -74,4 +74,18 @@ public class NormalAnnotationNodeImpl extends AnnotationNodeImpl implements Norm
         list.add(this.arguments);
         return list;
     }
+
+    /**
+     * Obtains a human-readable description of this node.
+     * @return A human-readable description of this node.
+     */
+    public String toString()
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.append(this.getClass().getSimpleName());
+        sb.append('[');
+        sb.append("arguments=");
+        sb.append(this.arguments == null? "null" : this.arguments.getClass().getSimpleName());
+        return sb.toString();
+    }
 }

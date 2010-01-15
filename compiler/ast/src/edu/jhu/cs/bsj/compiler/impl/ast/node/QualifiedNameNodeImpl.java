@@ -107,4 +107,21 @@ public class QualifiedNameNodeImpl extends NameNodeImpl implements QualifiedName
         list.add(this.identifier);
         return list;
     }
+
+    /**
+     * Obtains a human-readable description of this node.
+     * @return A human-readable description of this node.
+     */
+    public String toString()
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.append(this.getClass().getSimpleName());
+        sb.append('[');
+        sb.append("base=");
+        sb.append(this.base == null? "null" : this.base.getClass().getSimpleName());
+        sb.append(',');
+        sb.append("identifier=");
+        sb.append(this.identifier == null? "null" : this.identifier.getClass().getSimpleName());
+        return sb.toString();
+    }
 }

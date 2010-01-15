@@ -106,4 +106,21 @@ public class ConstructorBodyNodeImpl extends NodeImpl implements ConstructorBody
         list.add(this.statements);
         return list;
     }
+
+    /**
+     * Obtains a human-readable description of this node.
+     * @return A human-readable description of this node.
+     */
+    public String toString()
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.append(this.getClass().getSimpleName());
+        sb.append('[');
+        sb.append("constructorInvocation=");
+        sb.append(this.constructorInvocation == null? "null" : this.constructorInvocation.getClass().getSimpleName());
+        sb.append(',');
+        sb.append("statements=");
+        sb.append(this.statements == null? "null" : this.statements.getClass().getSimpleName());
+        return sb.toString();
+    }
 }

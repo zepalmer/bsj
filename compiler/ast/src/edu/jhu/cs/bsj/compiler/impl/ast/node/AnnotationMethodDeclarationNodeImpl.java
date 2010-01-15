@@ -173,4 +173,27 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
         list.add(this.defaultValue);
         return list;
     }
+
+    /**
+     * Obtains a human-readable description of this node.
+     * @return A human-readable description of this node.
+     */
+    public String toString()
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.append(this.getClass().getSimpleName());
+        sb.append('[');
+        sb.append("modifiers=");
+        sb.append(this.modifiers == null? "null" : this.modifiers.getClass().getSimpleName());
+        sb.append(',');
+        sb.append("type=");
+        sb.append(this.type == null? "null" : this.type.getClass().getSimpleName());
+        sb.append(',');
+        sb.append("identifier=");
+        sb.append(this.identifier == null? "null" : this.identifier.getClass().getSimpleName());
+        sb.append(',');
+        sb.append("defaultValue=");
+        sb.append(this.defaultValue == null? "null" : this.defaultValue.getClass().getSimpleName());
+        return sb.toString();
+    }
 }

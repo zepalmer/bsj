@@ -95,4 +95,21 @@ public class ImportSingleTypeNodeImpl extends NodeImpl implements ImportSingleTy
         list.add(this.staticImport);
         return list;
     }
+
+    /**
+     * Obtains a human-readable description of this node.
+     * @return A human-readable description of this node.
+     */
+    public String toString()
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.append(this.getClass().getSimpleName());
+        sb.append('[');
+        sb.append("name=");
+        sb.append(this.name == null? "null" : this.name.getClass().getSimpleName());
+        sb.append(',');
+        sb.append("staticImport=");
+        sb.append(String.valueOf(this.staticImport) + ":" + "boolean");
+        return sb.toString();
+    }
 }

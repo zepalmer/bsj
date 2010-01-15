@@ -105,4 +105,21 @@ public class CatchNodeImpl extends NodeImpl implements CatchNode
         list.add(this.parameter);
         return list;
     }
+
+    /**
+     * Obtains a human-readable description of this node.
+     * @return A human-readable description of this node.
+     */
+    public String toString()
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.append(this.getClass().getSimpleName());
+        sb.append('[');
+        sb.append("block=");
+        sb.append(this.block == null? "null" : this.block.getClass().getSimpleName());
+        sb.append(',');
+        sb.append("parameter=");
+        sb.append(this.parameter == null? "null" : this.parameter.getClass().getSimpleName());
+        return sb.toString();
+    }
 }

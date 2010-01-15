@@ -137,4 +137,24 @@ public class ConditionalExpressionNodeImpl extends NodeImpl implements Condition
         list.add(this.falseExpression);
         return list;
     }
+
+    /**
+     * Obtains a human-readable description of this node.
+     * @return A human-readable description of this node.
+     */
+    public String toString()
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.append(this.getClass().getSimpleName());
+        sb.append('[');
+        sb.append("condition=");
+        sb.append(this.condition == null? "null" : this.condition.getClass().getSimpleName());
+        sb.append(',');
+        sb.append("trueExpression=");
+        sb.append(this.trueExpression == null? "null" : this.trueExpression.getClass().getSimpleName());
+        sb.append(',');
+        sb.append("falseExpression=");
+        sb.append(this.falseExpression == null? "null" : this.falseExpression.getClass().getSimpleName());
+        return sb.toString();
+    }
 }

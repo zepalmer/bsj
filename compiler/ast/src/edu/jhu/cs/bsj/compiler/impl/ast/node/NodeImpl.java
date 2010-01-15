@@ -36,6 +36,18 @@ public abstract class NodeImpl implements Node
         List<Object> list = new ArrayList<Object>();
         return list;
     }
+
+    /**
+     * Obtains a human-readable description of this node.
+     * @return A human-readable description of this node.
+     */
+    public String toString()
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.append(this.getClass().getSimpleName());
+        sb.append('[');
+        return sb.toString();
+    }
 	/**
 	 * The next globally unique UID to assign.
 	 */

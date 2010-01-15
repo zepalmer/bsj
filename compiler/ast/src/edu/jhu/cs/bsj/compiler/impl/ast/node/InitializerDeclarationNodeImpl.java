@@ -95,4 +95,21 @@ public class InitializerDeclarationNodeImpl extends NodeImpl implements Initiali
         list.add(this.body);
         return list;
     }
+
+    /**
+     * Obtains a human-readable description of this node.
+     * @return A human-readable description of this node.
+     */
+    public String toString()
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.append(this.getClass().getSimpleName());
+        sb.append('[');
+        sb.append("staticInitializer=");
+        sb.append(String.valueOf(this.staticInitializer) + ":" + "boolean");
+        sb.append(',');
+        sb.append("body=");
+        sb.append(this.body == null? "null" : this.body.getClass().getSimpleName());
+        return sb.toString();
+    }
 }

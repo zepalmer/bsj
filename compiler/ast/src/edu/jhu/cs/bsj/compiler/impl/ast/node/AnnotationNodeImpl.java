@@ -71,4 +71,18 @@ public abstract class AnnotationNodeImpl extends NodeImpl implements AnnotationN
         list.add(this.annotationType);
         return list;
     }
+
+    /**
+     * Obtains a human-readable description of this node.
+     * @return A human-readable description of this node.
+     */
+    public String toString()
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.append(this.getClass().getSimpleName());
+        sb.append('[');
+        sb.append("annotationType=");
+        sb.append(this.annotationType == null? "null" : this.annotationType.getClass().getSimpleName());
+        return sb.toString();
+    }
 }

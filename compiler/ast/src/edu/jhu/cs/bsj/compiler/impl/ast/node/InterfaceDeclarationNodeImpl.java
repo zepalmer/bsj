@@ -144,4 +144,24 @@ public class InterfaceDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl i
         list.add(this.typeParameters);
         return list;
     }
+
+    /**
+     * Obtains a human-readable description of this node.
+     * @return A human-readable description of this node.
+     */
+    public String toString()
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.append(this.getClass().getSimpleName());
+        sb.append('[');
+        sb.append("extendsClause=");
+        sb.append(this.extendsClause == null? "null" : this.extendsClause.getClass().getSimpleName());
+        sb.append(',');
+        sb.append("body=");
+        sb.append(this.body == null? "null" : this.body.getClass().getSimpleName());
+        sb.append(',');
+        sb.append("typeParameters=");
+        sb.append(this.typeParameters == null? "null" : this.typeParameters.getClass().getSimpleName());
+        return sb.toString();
+    }
 }

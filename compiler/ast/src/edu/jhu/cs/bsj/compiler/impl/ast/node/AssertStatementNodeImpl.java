@@ -104,4 +104,21 @@ public class AssertStatementNodeImpl extends NodeImpl implements AssertStatement
         list.add(this.messageExpression);
         return list;
     }
+
+    /**
+     * Obtains a human-readable description of this node.
+     * @return A human-readable description of this node.
+     */
+    public String toString()
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.append(this.getClass().getSimpleName());
+        sb.append('[');
+        sb.append("testExpression=");
+        sb.append(this.testExpression == null? "null" : this.testExpression.getClass().getSimpleName());
+        sb.append(',');
+        sb.append("messageExpression=");
+        sb.append(this.messageExpression == null? "null" : this.messageExpression.getClass().getSimpleName());
+        return sb.toString();
+    }
 }

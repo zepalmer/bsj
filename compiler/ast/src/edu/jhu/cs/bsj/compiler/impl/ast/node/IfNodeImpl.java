@@ -138,4 +138,24 @@ public class IfNodeImpl extends NodeImpl implements IfNode
         list.add(this.elseStatement);
         return list;
     }
+
+    /**
+     * Obtains a human-readable description of this node.
+     * @return A human-readable description of this node.
+     */
+    public String toString()
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.append(this.getClass().getSimpleName());
+        sb.append('[');
+        sb.append("condition=");
+        sb.append(this.condition == null? "null" : this.condition.getClass().getSimpleName());
+        sb.append(',');
+        sb.append("thenStatement=");
+        sb.append(this.thenStatement == null? "null" : this.thenStatement.getClass().getSimpleName());
+        sb.append(',');
+        sb.append("elseStatement=");
+        sb.append(this.elseStatement == null? "null" : this.elseStatement.getClass().getSimpleName());
+        return sb.toString();
+    }
 }

@@ -106,4 +106,21 @@ public class ParameterizedTypeNodeImpl extends NodeImpl implements Parameterized
         list.add(this.typeArguments);
         return list;
     }
+
+    /**
+     * Obtains a human-readable description of this node.
+     * @return A human-readable description of this node.
+     */
+    public String toString()
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.append(this.getClass().getSimpleName());
+        sb.append('[');
+        sb.append("baseType=");
+        sb.append(this.baseType == null? "null" : this.baseType.getClass().getSimpleName());
+        sb.append(',');
+        sb.append("typeArguments=");
+        sb.append(this.typeArguments == null? "null" : this.typeArguments.getClass().getSimpleName());
+        return sb.toString();
+    }
 }

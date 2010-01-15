@@ -62,4 +62,18 @@ public class PrimitiveTypeNodeImpl extends NodeImpl implements PrimitiveTypeNode
         list.add(this.primitiveType);
         return list;
     }
+
+    /**
+     * Obtains a human-readable description of this node.
+     * @return A human-readable description of this node.
+     */
+    public String toString()
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.append(this.getClass().getSimpleName());
+        sb.append('[');
+        sb.append("primitiveType=");
+        sb.append(String.valueOf(this.primitiveType) + ":" + this.primitiveType.getClass().getSimpleName());
+        return sb.toString();
+    }
 }

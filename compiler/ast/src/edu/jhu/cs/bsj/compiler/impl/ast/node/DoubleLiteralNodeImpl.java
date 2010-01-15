@@ -38,4 +38,16 @@ public class DoubleLiteralNodeImpl extends LiteralNodeImpl<Double> implements Do
         List<Object> list = super.getChildObjects();
         return list;
     }
+
+    /**
+     * Obtains a human-readable description of this node.
+     * @return A human-readable description of this node.
+     */
+    public String toString()
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.append(this.getClass().getSimpleName());
+        sb.append('[');
+        return sb.toString();
+    }
 }

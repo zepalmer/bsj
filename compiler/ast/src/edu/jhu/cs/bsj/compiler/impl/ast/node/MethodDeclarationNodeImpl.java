@@ -309,4 +309,39 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
         list.add(this.typeParameters);
         return list;
     }
+
+    /**
+     * Obtains a human-readable description of this node.
+     * @return A human-readable description of this node.
+     */
+    public String toString()
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.append(this.getClass().getSimpleName());
+        sb.append('[');
+        sb.append("body=");
+        sb.append(this.body == null? "null" : this.body.getClass().getSimpleName());
+        sb.append(',');
+        sb.append("modifiers=");
+        sb.append(this.modifiers == null? "null" : this.modifiers.getClass().getSimpleName());
+        sb.append(',');
+        sb.append("identifier=");
+        sb.append(this.identifier == null? "null" : this.identifier.getClass().getSimpleName());
+        sb.append(',');
+        sb.append("parameters=");
+        sb.append(this.parameters == null? "null" : this.parameters.getClass().getSimpleName());
+        sb.append(',');
+        sb.append("varargParameter=");
+        sb.append(this.varargParameter == null? "null" : this.varargParameter.getClass().getSimpleName());
+        sb.append(',');
+        sb.append("returnType=");
+        sb.append(this.returnType == null? "null" : this.returnType.getClass().getSimpleName());
+        sb.append(',');
+        sb.append("throwTypes=");
+        sb.append(this.throwTypes == null? "null" : this.throwTypes.getClass().getSimpleName());
+        sb.append(',');
+        sb.append("typeParameters=");
+        sb.append(this.typeParameters == null? "null" : this.typeParameters.getClass().getSimpleName());
+        return sb.toString();
+    }
 }

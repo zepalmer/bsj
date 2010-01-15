@@ -144,4 +144,24 @@ public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeI
         list.add(this.typeArguments);
         return list;
     }
+
+    /**
+     * Obtains a human-readable description of this node.
+     * @return A human-readable description of this node.
+     */
+    public String toString()
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.append(this.getClass().getSimpleName());
+        sb.append('[');
+        sb.append("enclosingExpression=");
+        sb.append(this.enclosingExpression == null? "null" : this.enclosingExpression.getClass().getSimpleName());
+        sb.append(',');
+        sb.append("identifier=");
+        sb.append(this.identifier == null? "null" : this.identifier.getClass().getSimpleName());
+        sb.append(',');
+        sb.append("typeArguments=");
+        sb.append(this.typeArguments == null? "null" : this.typeArguments.getClass().getSimpleName());
+        return sb.toString();
+    }
 }

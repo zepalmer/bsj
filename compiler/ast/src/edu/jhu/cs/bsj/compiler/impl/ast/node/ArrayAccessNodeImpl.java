@@ -105,4 +105,21 @@ public class ArrayAccessNodeImpl extends NodeImpl implements ArrayAccessNode
         list.add(this.indexExpression);
         return list;
     }
+
+    /**
+     * Obtains a human-readable description of this node.
+     * @return A human-readable description of this node.
+     */
+    public String toString()
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.append(this.getClass().getSimpleName());
+        sb.append('[');
+        sb.append("arrayExpression=");
+        sb.append(this.arrayExpression == null? "null" : this.arrayExpression.getClass().getSimpleName());
+        sb.append(',');
+        sb.append("indexExpression=");
+        sb.append(this.indexExpression == null? "null" : this.indexExpression.getClass().getSimpleName());
+        return sb.toString();
+    }
 }

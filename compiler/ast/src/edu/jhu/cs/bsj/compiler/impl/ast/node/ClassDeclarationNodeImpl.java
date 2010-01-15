@@ -177,4 +177,27 @@ public class ClassDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl imple
         list.add(this.typeParameters);
         return list;
     }
+
+    /**
+     * Obtains a human-readable description of this node.
+     * @return A human-readable description of this node.
+     */
+    public String toString()
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.append(this.getClass().getSimpleName());
+        sb.append('[');
+        sb.append("extendsClause=");
+        sb.append(this.extendsClause == null? "null" : this.extendsClause.getClass().getSimpleName());
+        sb.append(',');
+        sb.append("implementsClause=");
+        sb.append(this.implementsClause == null? "null" : this.implementsClause.getClass().getSimpleName());
+        sb.append(',');
+        sb.append("body=");
+        sb.append(this.body == null? "null" : this.body.getClass().getSimpleName());
+        sb.append(',');
+        sb.append("typeParameters=");
+        sb.append(this.typeParameters == null? "null" : this.typeParameters.getClass().getSimpleName());
+        return sb.toString();
+    }
 }

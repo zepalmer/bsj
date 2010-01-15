@@ -74,4 +74,18 @@ public class ArrayInitializerCreationNodeImpl extends ArrayCreationNodeImpl impl
         list.add(this.initializer);
         return list;
     }
+
+    /**
+     * Obtains a human-readable description of this node.
+     * @return A human-readable description of this node.
+     */
+    public String toString()
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.append(this.getClass().getSimpleName());
+        sb.append('[');
+        sb.append("initializer=");
+        sb.append(this.initializer == null? "null" : this.initializer.getClass().getSimpleName());
+        return sb.toString();
+    }
 }

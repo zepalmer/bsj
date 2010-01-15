@@ -173,4 +173,27 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
         list.add(this.statement);
         return list;
     }
+
+    /**
+     * Obtains a human-readable description of this node.
+     * @return A human-readable description of this node.
+     */
+    public String toString()
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.append(this.getClass().getSimpleName());
+        sb.append('[');
+        sb.append("initializer=");
+        sb.append(this.initializer == null? "null" : this.initializer.getClass().getSimpleName());
+        sb.append(',');
+        sb.append("condition=");
+        sb.append(this.condition == null? "null" : this.condition.getClass().getSimpleName());
+        sb.append(',');
+        sb.append("update=");
+        sb.append(this.update == null? "null" : this.update.getClass().getSimpleName());
+        sb.append(',');
+        sb.append("statement=");
+        sb.append(this.statement == null? "null" : this.statement.getClass().getSimpleName());
+        return sb.toString();
+    }
 }

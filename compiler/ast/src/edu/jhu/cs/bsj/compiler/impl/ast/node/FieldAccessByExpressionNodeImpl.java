@@ -105,4 +105,21 @@ public class FieldAccessByExpressionNodeImpl extends NodeImpl implements FieldAc
         list.add(this.identifier);
         return list;
     }
+
+    /**
+     * Obtains a human-readable description of this node.
+     * @return A human-readable description of this node.
+     */
+    public String toString()
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.append(this.getClass().getSimpleName());
+        sb.append('[');
+        sb.append("expression=");
+        sb.append(this.expression == null? "null" : this.expression.getClass().getSimpleName());
+        sb.append(',');
+        sb.append("identifier=");
+        sb.append(this.identifier == null? "null" : this.identifier.getClass().getSimpleName());
+        return sb.toString();
+    }
 }

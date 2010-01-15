@@ -140,4 +140,24 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
         list.add(this.typeDecls);
         return list;
     }
+
+    /**
+     * Obtains a human-readable description of this node.
+     * @return A human-readable description of this node.
+     */
+    public String toString()
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.append(this.getClass().getSimpleName());
+        sb.append('[');
+        sb.append("packageDeclaration=");
+        sb.append(this.packageDeclaration == null? "null" : this.packageDeclaration.getClass().getSimpleName());
+        sb.append(',');
+        sb.append("imports=");
+        sb.append(this.imports == null? "null" : this.imports.getClass().getSimpleName());
+        sb.append(',');
+        sb.append("typeDecls=");
+        sb.append(this.typeDecls == null? "null" : this.typeDecls.getClass().getSimpleName());
+        return sb.toString();
+    }
 }

@@ -76,4 +76,18 @@ public class MethodInvocationByNameNodeImpl extends MethodInvocationNodeImpl imp
         list.add(this.name);
         return list;
     }
+
+    /**
+     * Obtains a human-readable description of this node.
+     * @return A human-readable description of this node.
+     */
+    public String toString()
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.append(this.getClass().getSimpleName());
+        sb.append('[');
+        sb.append("name=");
+        sb.append(this.name == null? "null" : this.name.getClass().getSimpleName());
+        return sb.toString();
+    }
 }

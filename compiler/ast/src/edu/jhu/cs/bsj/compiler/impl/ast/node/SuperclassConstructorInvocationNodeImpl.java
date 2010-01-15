@@ -76,4 +76,18 @@ public class SuperclassConstructorInvocationNodeImpl extends ConstructorInvocati
         list.add(this.qualifyingExpression);
         return list;
     }
+
+    /**
+     * Obtains a human-readable description of this node.
+     * @return A human-readable description of this node.
+     */
+    public String toString()
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.append(this.getClass().getSimpleName());
+        sb.append('[');
+        sb.append("qualifyingExpression=");
+        sb.append(this.qualifyingExpression == null? "null" : this.qualifyingExpression.getClass().getSimpleName());
+        return sb.toString();
+    }
 }
