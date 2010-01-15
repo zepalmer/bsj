@@ -1,5 +1,7 @@
 package edu.jhu.cs.bsj.compiler.tool.parser.antlr.util;
 
+import org.antlr.runtime.Token;
+
 public class BsjAntlrParserUtils
 {
 	/**
@@ -71,4 +73,13 @@ public class BsjAntlrParserUtils
 		}
 		return sb.toString();
 	}
+
+    /**
+     * Produces a location for the specified token.
+     * @param token The token for which a location string is desired.
+     */
+    public static String getTokenLocation(Token token)
+    {
+        return token.getLine() + ":" + token.getCharPositionInLine();
+    }
 }

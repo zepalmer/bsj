@@ -68,6 +68,8 @@ scope Global {
     package edu.jhu.cs.bsj.compiler.tool.parser.antlr;
 
     import org.apache.log4j.Logger;
+    
+    import edu.jhu.cs.bsj.compiler.tool.parser.antlr.util.BsjAntlrParserUtils;
 }
 
 @lexer::members{
@@ -80,7 +82,7 @@ scope Global {
         Token token = super.nextToken();
         if (logger.isTraceEnabled())
         {
-            logger.trace("Token processed at " + token.getLine() + ":" + token.getCharPositionInLine() +
+            logger.trace("Token processed at " + BsjAntlrParserUtils.getTokenLocation(token) +
                     " with text: " + token.getText());
         }
         return token;
@@ -90,6 +92,8 @@ scope Global {
 @parser::header{
     package edu.jhu.cs.bsj.compiler.tool.parser.antlr;
     
+    import java.io.ByteArrayOutputStream;
+    import java.io.PrintStream;
     import java.util.ArrayList;
     import java.util.Arrays;
     import java.util.Collection;
@@ -145,6 +149,8 @@ scope Global {
             Modifier.STATIC,
             Modifier.FINAL,
             Modifier.STRICTFP);
+    /* Contains modifiers legal for classes or interfaces */
+    private static final List<Modifier> classOrInterfaceModifiers = classModifiers;
     private static final List<Modifier> variableModifiers = Arrays.asList(Modifier.FINAL);
     private static final List<Modifier> fieldModifiers = Arrays.asList(
             Modifier.PUBLIC,
@@ -214,7 +220,11 @@ scope Global {
         // provided to BSJ users through the API.
         String hdr = getErrorHeader(e);
         String msg = getErrorMessage(e, tokenNames);
-        logger.error(hdr+" "+msg);
+        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+        PrintStream printStream = new PrintStream(buffer);
+        e.printStackTrace(printStream);
+        printStream.close();
+        logger.error(hdr+" "+msg+"\n"+buffer.toString());
     }
 }
 
@@ -239,6 +249,12 @@ variableDeclarator[TypeNode inType] returns [VariableDeclaratorNode ret]
         }
     :
         id=identifier
+        {
+            if (logger.isTraceEnabled())
+            {
+                logger.trace("Parsing variable declarator with name " + $id.ret.getIdentifier());
+            }
+        }
         (
             arrayTypeIndicator[inType]
             {
@@ -422,7 +438,7 @@ voidTypeDeclaration returns [VoidTypeDeclarationNode ret]
 
 classOrInterfaceDeclaration returns [TypeDeclarationNode ret]
     :
-        classDeclaration
+        (classHeader | enumHeader) => classDeclaration
         {
             $ret = $classDeclaration.ret;
         }
@@ -454,6 +470,10 @@ modifiers[Collection<Modifier> legalModifiers] returns [ModifiersNode ret]
                     list.add($modifier.ann);
                 } else
                 {
+                    if (logger.isTraceEnabled())
+                    {
+                        logger.trace("Parsed modifier " + $modifier.mod);
+                    }
                     if ($legalModifiers==null || $legalModifiers.contains($modifier.mod))
                     {
                         // TODO: if this next call returns true, that's something like "public public void".  Figure out
@@ -505,7 +525,7 @@ variableModifiers returns [ModifiersNode ret]
 
 classDeclaration returns [InlineTypeDeclarableNode ret] 
     :
-        normalClassDeclaration
+        (classHeader)=>normalClassDeclaration
         {
             $ret = $normalClassDeclaration.ret;
         }
@@ -730,15 +750,15 @@ enumBodyDeclarations returns [ListNode<ClassMemberNode> ret]
 
 interfaceDeclaration returns [TypeDeclarationNode ret] 
     :   
-        a=normalInterfaceDeclaration
-            {
-                $ret = $a.ret;
-            }
+        (interfaceHeader)=>a=normalInterfaceDeclaration
+        {
+            $ret = $a.ret;
+        }
     |
         b=annotationTypeDeclaration
-            {
-                $ret = $b.ret;
-            }
+        {
+            $ret = $b.ret;
+        }
     ;
     
 normalInterfaceDeclaration returns [InterfaceDeclarationNode ret]
@@ -892,22 +912,22 @@ anonymousClassBodyDeclaration returns [AnonymousClassMemberNode ret]
 
 memberDecl returns [AnonymousClassMemberNode ret]
     :    
-        fieldDeclaration
+        (fieldHeader)=>fieldDeclaration
         {
             $ret = $fieldDeclaration.ret;
         }
     |   
-        methodDeclaration
+        (methodHeader)=>methodDeclaration
         {
             $ret = $methodDeclaration.ret;
         }
     |   
-        classDeclaration
+        (classHeader|enumHeader)=>classDeclaration
         {
             $ret = $classDeclaration.ret;
         }
     |   
-        interfaceDeclaration
+        (interfaceHeader|annotationHeader)=>interfaceDeclaration
         {
             $ret = $interfaceDeclaration.ret;
         }
@@ -1222,7 +1242,7 @@ classOrInterfaceType returns [DeclaredTypeNode ret]
                 $ret = parameterizedTypeNode;
             }
             (
-                next=classOrInterfaceType
+                '.' next=classOrInterfaceType
                 {
                     $ret = factory.makeParameterizedTypeSelectNode(parameterizedTypeNode, $next.ret);
                 }
@@ -1761,12 +1781,12 @@ block returns [BlockStatementNode ret]
 // Parses a statement from a block of statements.
 blockStatement returns [StatementNode ret]
     :   
-        localVariableDeclarationStatement
+        (localVariableHeader)=>localVariableDeclarationStatement
         {
             $ret = $localVariableDeclarationStatement.ret;
         }
     |   
-        classDeclaration
+        (typeHeader)=>classDeclaration
         {
             $ret = factory.makeInlineTypeDeclarationNode($classDeclaration.ret);
         }
@@ -3261,6 +3281,7 @@ categorizedName[NameCategory category, NameCategory lastCategory] returns [NameN
         }
         @after {
             $ret = null;
+            StringBuilder nameToLog = new StringBuilder(); // TODO: replace this with a toString on the node
             for (int i=0;i<identifierNodes.size();i++)
             {
                 NameCategory currentCategory = (i==identifierNodes.size()-1) ? lastCategory : category;
@@ -3273,7 +3294,13 @@ categorizedName[NameCategory category, NameCategory lastCategory] returns [NameN
 	                        $ret,
 	                        identifierNodes.get(i),
 	                        currentCategory);
+	                nameToLog.append('.');
                 }
+                nameToLog.append(identifierNodes.get(0).getIdentifier());
+            }
+            if (logger.isTraceEnabled())
+            {
+                logger.trace("Parsed name " + nameToLog.toString());
             }
         }
     :
@@ -3413,8 +3440,49 @@ identifier returns [IdentifierNode ret]
     :
         IDENTIFIER
         {
+            if (logger.isTraceEnabled())
+            {
+                logger.trace("Parsed identifier at " + BsjAntlrParserUtils.getTokenLocation($IDENTIFIER) +
+                        " with text " + $IDENTIFIER.text);
+            }
             $ret = factory.makeIdentifierNode($IDENTIFIER.text);
         }
+    ;
+
+// The following rules are for performance and error recovery purposes.  They are used as semantic hinting predicates to
+// direct the parser down the correct path (so that a failed parse of "public class Foo ..." results in an error inside
+// of the class rather than claiming that "class" should be an "@" for an annotation declaration).
+
+classHeader 
+    :   modifiers[classModifiers] 'class' IDENTIFIER
+    ;
+
+enumHeader 
+    :   modifiers[classModifiers] ('enum'|IDENTIFIER) IDENTIFIER
+    ;
+
+interfaceHeader 
+    :   modifiers[interfaceModifiers] 'interface' IDENTIFIER
+    ;
+
+annotationHeader 
+    :   modifiers[interfaceModifiers] '@' 'interface' IDENTIFIER
+    ;
+
+typeHeader
+    :   modifiers[classOrInterfaceModifiers] ('class'|'enum'|('@' ? 'interface')) IDENTIFIER
+    ;
+
+methodHeader 
+    :   modifiers[methodModifiers] typeParameters? (type|'void')? IDENTIFIER '('
+    ;
+
+fieldHeader 
+    :   modifiers[fieldModifiers] type IDENTIFIER ('['']')* ('='|','|';')
+    ;
+
+localVariableHeader 
+    :   variableModifiers type IDENTIFIER ('['']')* ('='|','|';')
     ;
 
 /********************************************************************************************
