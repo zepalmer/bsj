@@ -759,8 +759,8 @@ public class SourceGenerator
 
 	static abstract class ClassHierarchyBuildingHandler implements ClassDefHandler
 	{
-		protected static Map<String, ClassDef> map;
-		protected static Map<ClassDef, Map<String, String>> envs;
+		protected Map<String, ClassDef> map;
+		protected Map<ClassDef, Map<String, String>> envs;
 
 		public void init() throws IOException
 		{
@@ -961,7 +961,7 @@ public class SourceGenerator
 				}
 			}
 
-			// add visitor implementation
+			// add simple visitor implementation
 			ps.println("    /**");
 			ps.println("     * Handles the visitation of this node's children for the provided visitor.  Each");
 			ps.println("     * subclass should override this method, having the subclass implementation call this");
@@ -986,6 +986,79 @@ public class SourceGenerator
 					ps.println("        this." + p.name + ".receive(visitor);");
 				}
 			}
+			ps.println("    }");
+			ps.println();
+			
+			// add typed visitor implementation
+			ps.println("    /**");
+			ps.println("     * Handles the visitation of this node's children for the provided typed visitor.  Each");
+			ps.println("     * subclass should override this method, having the subclass implementation call this");
+			ps.println("     * method first and then visit its subclass-specific children.");
+			ps.println("     *");
+			ps.println("     * @param visitor The visitor to visit this node's children.");
+			ps.println("     */");
+			if (def.sname != null)
+			{
+				ps.println("    @Override");
+			}
+			ps.println("    protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)");
+			ps.println("    {");
+			if (def.sname != null)
+			{
+				ps.println("        super.receiveTypedToChildren(visitor);");
+			}
+			for (Prop p : def.props)
+			{
+				if (propInstanceOf(p.type, "Node"))
+				{
+					ps.println("        this." + p.name + ".receiveTyped(visitor);");
+				}
+			}
+			ps.println("    }");
+			ps.println();
+			if (def.sname != null)
+			{
+				ps.println("    @Override");
+			}
+			ps.println("    public void receiveTyped(BsjTypedNodeVisitor visitor)");
+			ps.println("    {");
+			ps.println("        visitor.visitStartBegin(this);");
+			ClassDef cur = def;
+			List<ClassDef> backtrack = new LinkedList<ClassDef>();
+			while (cur != null)
+			{
+				ps.print("        visitor.visit" + cur.getRawName() + "Start(this");
+				if (cur.mode == ClassMode.CONCRETE)
+				{
+					ps.print(", ");
+					ps.print(String.valueOf(cur==def));
+				}
+				ps.println(");");
+				backtrack.add(0, cur);
+				cur = this.map.get(cur.getRawSname());
+			}
+			for (String tag : def.tags)
+			{
+				ps.println("        visitor.visit" + tag.trim() + "Start(this);");
+			}
+			ps.println("        visitor.visitStartEnd(this);");
+			ps.println("        receiveTypedToChildren(visitor);");
+			ps.println("        visitor.visitStopBegin(this);");
+			for (String tag : def.tags)
+			{
+				ps.println("        visitor.visit" + tag.trim() + "Stop(this);");
+			}
+			for (ClassDef edef : backtrack)
+			{
+				ps.print("        visitor.visit" + edef.getRawName() + "Start(this");
+				if (edef.mode == ClassMode.CONCRETE)
+				{
+					ps.print(", ");
+					ps.print(String.valueOf(edef==def));
+				}
+				ps.println(");");
+			}
+			ps.println("        visitor.visitStopEnd(this);");
 			ps.println("    }");
 			ps.println();
 
@@ -1016,6 +1089,7 @@ public class SourceGenerator
 			ps.println();
 
 			// add logic for toString
+			// TODO: this only uses immediate properties - we need to include properties for superclasses as well
 			ps.println("    /**");
 			ps.println("     * Obtains a human-readable description of this node.");
 			ps.println("     * @return A human-readable description of this node.");
@@ -1070,7 +1144,7 @@ public class SourceGenerator
 	}
 
 	/**
-	 * Writes the BsjTypedNodeVisitor abstract class.
+	 * Writes the BsjTypedNodeVisitor interface.
 	 */
 	static class BsjTypedNodeVisitorWriter implements ClassDefHandler
 	{
@@ -1079,6 +1153,7 @@ public class SourceGenerator
 		private Map<String, String> supertypeMap;
 		private List<String> abstractTypes;
 		private Set<String> parameterizedTypes;
+		private static final String[] MODES = {"Start","Stop"};
 
 		@Override
 		public void init() throws IOException
@@ -1126,9 +1201,10 @@ public class SourceGenerator
 				}
 			}
 
-			List<String> concreteTypeNames = new ArrayList<String>(names);
-			concreteTypeNames.removeAll(abstractTypes);
-			Collections.reverse(concreteTypeNames);
+			Set<String> concreteTypeNameSet = new HashSet<String>(names);
+			concreteTypeNameSet.removeAll(abstractTypes);
+			List<String> sortedNames = new ArrayList<String>(names);
+			Collections.sort(sortedNames);
 
 			// Write class header
 			String pkg = "edu.jhu.cs.bsj.compiler.ast";
@@ -1139,62 +1215,106 @@ public class SourceGenerator
 			ps.println();
 			printImports(ps, false);
 			ps.println("/**");
-			ps.println(" * This default implementation of the BsjNodeVisitor separates nodes based on type.  Each");
-			ps.println(" * type of node is routed to a different method to be handled; the default implementation of");
-			ps.println(" * each of the type-specific methods does nothing.");
+			ps.println(" * This interface is implemented by those classes which wish to perform visitation operations");
+			ps.println(" * over a BSJ AST.  Each node visits a method for its own class as well as all of its");
+			ps.println(" * superclasses in order from most specific type to least specific type (when the visit");
+			ps.println(" * starts) or from least specific type to most specific type (when the visit ends).  Each");
+			ps.println(" * method representing a concrete type also accepts a boolean argument from the node");
+			ps.println(" * indicating whether or not that type is the most specific type for that node.  A method is");
+			ps.println(" * also called (after or before the previous calls for start and stop, respectively) for each");
+			ps.println(" * interface the node implements.  Finally, each node's sequence of starting calls begins");
+			ps.println(" * with a call to <tt>visitStartBegin</tt> and ends with a call to <tt>visitStartEnd</tt>;");
+			ps.println(" * likewise, each sequence of ending calls begins with a call to <tt>visitStopBegin</tt> and");
+			ps.println(" * ends with a call to <tt>visitStopEnd</tt>.");
+			ps.println(" * <p/>");
+			ps.println(" * For example, imagine a simple type hierarchy in which <tt>C</tt> extends from <tt>B</tt>");
+			ps.println(" * and <tt>B</tt> extends from <tt>A</tt>.  Assume that <tt>C</tt> and <tt>B</tt> are");
+			ps.println(" * concrete classes while <tt>A</tt> is not.  In that case, the following sequence of methods");
+			ps.println(" * would be called if an instance this visitor interface were to visit an instance of node");
+			ps.println(" * <tt>C</tt>:");
+			ps.println(" * <ul>");
+			ps.println(" * <li><tt>visitStartBegin(node)</tt></li>");
+			ps.println(" * <li><tt>visitCStart(node,true)</tt></li>");
+			ps.println(" * <li><tt>visitBStart(node,false)</tt></li>");
+			ps.println(" * <li><tt>visitAStart(node)</tt></li>");
+			ps.println(" * <li><tt>visitStartEnd(node)</tt></li>");
+			ps.println(" * <li><tt>visitStopBegin(node)</tt></li>");
+			ps.println(" * <li><tt>visitAStop(node)</tt></li>");
+			ps.println(" * <li><tt>visitBStop(node,false)</tt></li>");
+			ps.println(" * <li><tt>visitCStop(node,true)</tt></li>");
+			ps.println(" * <li><tt>visitStopEnd(node)</tt></li>");
+			ps.println(" * </ul>");
+			ps.println(" * As usual for a tree visitor pattern, each node is visited around their child visits.  If");
+			ps.println(" * <tt>node</tt> above had a <tt>child</tt> of type <tt>B</tt>, the executed sequence of");
+			ps.println(" * calls would be extended as shown below.");
+			ps.println(" * <ul>");
+			ps.println(" * <li><tt>visitStartBegin(node)</tt></li>");
+			ps.println(" * <li><tt>visitCStart(node,true)</tt></li>");
+			ps.println(" * <li><tt>visitBStart(node,false)</tt></li>");
+			ps.println(" * <li><tt>visitAStart(node)</tt></li>");
+			ps.println(" * <li><tt>visitStartEnd(node)</tt></li>");
+			ps.println(" * <li><tt>visitStartBegin(child)</tt></li>");
+			ps.println(" * <li><tt>visitBStart(child,true)</tt></li>");
+			ps.println(" * <li><tt>visitAStart(child)</tt></li>");
+			ps.println(" * <li><tt>visitStartEnd(child)</tt></li>");
+			ps.println(" * <li><tt>visitStopBegin(child)</tt></li>");
+			ps.println(" * <li><tt>visitAStop(child)</tt></li>");
+			ps.println(" * <li><tt>visitBStop(child,true)</tt></li>");
+			ps.println(" * <li><tt>visitStopEnd(child)</tt></li>");
+			ps.println(" * <li><tt>visitStopBegin(node)</tt></li>");
+			ps.println(" * <li><tt>visitAStop(node)</tt></li>");
+			ps.println(" * <li><tt>visitBStop(node,false)</tt></li>");
+			ps.println(" * <li><tt>visitCStop(node,true)</tt></li>");
+			ps.println(" * <li><tt>visitStopEnd(node)</tt></li>");
+			ps.println(" * </ul>");
+			ps.println(" * This interface is very efficient at providing for the needs of visitors which regularly");
+			ps.println(" * need to condition behavior based on node type and have a number of types to service.  If");
+			ps.println(" * a simpler traversal of the nodes in the tree is desired, {@link BsjNodeVisitor} may be");
+			ps.println(" * more suitable.");
 			ps.println(" *");
 			ps.println(" * @author Zachary Palmer");
 			ps.println(" */");
 			printGeneratedClause(ps);
-			ps.println("public abstract class BsjTypedNodeVisitor implements BsjNodeVisitor");
+			ps.println("public interface BsjTypedNodeVisitor");
 			ps.println("{");
-
-			// Write visitStart and visitStop methods
-			for (String mode : new String[] { "Start", "Stop" })
+			
+			// write visit{Start,Stop}{Begin,End} methods
+			for (String mode : MODES)
 			{
-				// Write header
-				ps.println("    /**");
-				ps.println("     * " + mode + "s visiting the specified node.");
-				ps.println("     * @param node The node to visit.");
-				ps.println("     */");
-				ps.println("    public void visit" + mode + "(Node node)");
-				ps.println("    {");
-
-				// Write body
-				boolean first = true;
-				for (String name : concreteTypeNames)
+				for (String event : new String[]{"Begin","End"})
 				{
-					String pname = name + (parameterizedTypes.contains(name) ? "<?>" : "");
-					ps.println((first ? "        " : " else ") + "if (node instanceof " + pname + ")");
-					ps.println("        {");
-					ps.println("            visit" + name + mode + "((" + pname + ")node);");
-					ps.print("        }");
-					first = false;
+					ps.println("    /**");
+					ps.println("     * " + event +"s a sequence of visit " + mode.toLowerCase() + " calls on a node.");
+					ps.println("     * @param node The node in question.");
+					ps.println("     */");
+					ps.println("    public void visit" + mode + event + "(Node node);");
+					ps.println();
 				}
-
-				// Write footer
-				ps.println(" else");
-				ps.println("        {");
-				ps
-						.println("            throw new IllegalStateException(\"Unrecognized node type \" + node.getClass());");
-				ps.println("        }");
-				ps.println("    }");
-				ps.println();
 			}
-
+			
 			// Write type-specific visit methods.
-			for (String mode : new String[] { "Start", "Stop" })
+			for (String mode : MODES)
 			{
-				for (String name : concreteTypeNames)
+				for (String name : sortedNames)
 				{
+					boolean concrete = concreteTypeNameSet.contains(name);
 					ps.println("    /**");
 					ps.println("     * " + mode + "s a visit for nodes of type " + name + ".");
 					ps.println("     * @param node The node being visited.");
+					if (concrete)
+					{
+						ps.println("     * @param mostSpecific <code>true</code> if this is the most specific call");
+						ps.println("     *                     which can be made for this node; <code>false</code>");
+						ps.println("     *                     otherwise.");
+					}
 					ps.println("     */");
-					ps.println("    public void visit" + name + mode + "(" + name
-							+ (parameterizedTypes.contains(name) ? "<?>" : "") + " node)");
-					ps.println("    {");
-					ps.println("    }");
+					ps.print("    public void visit" + name + mode + "(" + name
+							+ (parameterizedTypes.contains(name) ? "<?>" : "") + " node");
+					if (concrete)
+					{
+						ps.print(", boolean mostSpecific");
+					}
+					ps.println(");");
 					ps.println();
 				}
 			}

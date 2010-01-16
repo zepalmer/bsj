@@ -5,6 +5,7 @@ import java.util.List;
 import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.BlockStatementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.CatchNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
@@ -126,6 +127,38 @@ public class TryNodeImpl extends NodeImpl implements TryNode
         this.block.receive(visitor);
         this.catches.receive(visitor);
         this.finallyBlock.receive(visitor);
+    }
+
+    /**
+     * Handles the visitation of this node's children for the provided typed visitor.  Each
+     * subclass should override this method, having the subclass implementation call this
+     * method first and then visit its subclass-specific children.
+     *
+     * @param visitor The visitor to visit this node's children.
+     */
+    @Override
+    protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
+    {
+        super.receiveTypedToChildren(visitor);
+        this.block.receiveTyped(visitor);
+        this.catches.receiveTyped(visitor);
+        this.finallyBlock.receiveTyped(visitor);
+    }
+
+    @Override
+    public void receiveTyped(BsjTypedNodeVisitor visitor)
+    {
+        visitor.visitStartBegin(this);
+        visitor.visitTryNodeStart(this, true);
+        visitor.visitNodeStart(this);
+        visitor.visitStatementNodeStart(this);
+        visitor.visitStartEnd(this);
+        receiveTypedToChildren(visitor);
+        visitor.visitStopBegin(this);
+        visitor.visitStatementNodeStop(this);
+        visitor.visitNodeStart(this);
+        visitor.visitTryNodeStart(this, true);
+        visitor.visitStopEnd(this);
     }
 
     /**

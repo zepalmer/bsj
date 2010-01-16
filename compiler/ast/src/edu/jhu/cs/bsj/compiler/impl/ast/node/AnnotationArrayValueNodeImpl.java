@@ -5,6 +5,7 @@ import java.util.List;
 import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationArrayValueNode;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationValueNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
@@ -61,6 +62,36 @@ public class AnnotationArrayValueNodeImpl extends NodeImpl implements Annotation
     {
         super.receiveToChildren(visitor);
         this.values.receive(visitor);
+    }
+
+    /**
+     * Handles the visitation of this node's children for the provided typed visitor.  Each
+     * subclass should override this method, having the subclass implementation call this
+     * method first and then visit its subclass-specific children.
+     *
+     * @param visitor The visitor to visit this node's children.
+     */
+    @Override
+    protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
+    {
+        super.receiveTypedToChildren(visitor);
+        this.values.receiveTyped(visitor);
+    }
+
+    @Override
+    public void receiveTyped(BsjTypedNodeVisitor visitor)
+    {
+        visitor.visitStartBegin(this);
+        visitor.visitAnnotationArrayValueNodeStart(this, true);
+        visitor.visitNodeStart(this);
+        visitor.visitAnnotationValueNodeStart(this);
+        visitor.visitStartEnd(this);
+        receiveTypedToChildren(visitor);
+        visitor.visitStopBegin(this);
+        visitor.visitAnnotationValueNodeStop(this);
+        visitor.visitNodeStart(this);
+        visitor.visitAnnotationArrayValueNodeStart(this, true);
+        visitor.visitStopEnd(this);
     }
 
     /**

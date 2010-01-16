@@ -5,6 +5,7 @@ import java.util.List;
 import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.ConstructorBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ConstructorDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
@@ -225,6 +226,41 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
         this.varargParameter.receive(visitor);
         this.throwTypes.receive(visitor);
         this.typeParameters.receive(visitor);
+    }
+
+    /**
+     * Handles the visitation of this node's children for the provided typed visitor.  Each
+     * subclass should override this method, having the subclass implementation call this
+     * method first and then visit its subclass-specific children.
+     *
+     * @param visitor The visitor to visit this node's children.
+     */
+    @Override
+    protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
+    {
+        super.receiveTypedToChildren(visitor);
+        this.body.receiveTyped(visitor);
+        this.modifiers.receiveTyped(visitor);
+        this.parameters.receiveTyped(visitor);
+        this.varargParameter.receiveTyped(visitor);
+        this.throwTypes.receiveTyped(visitor);
+        this.typeParameters.receiveTyped(visitor);
+    }
+
+    @Override
+    public void receiveTyped(BsjTypedNodeVisitor visitor)
+    {
+        visitor.visitStartBegin(this);
+        visitor.visitConstructorDeclarationNodeStart(this, true);
+        visitor.visitNodeStart(this);
+        visitor.visitClassMemberNodeStart(this);
+        visitor.visitStartEnd(this);
+        receiveTypedToChildren(visitor);
+        visitor.visitStopBegin(this);
+        visitor.visitClassMemberNodeStop(this);
+        visitor.visitNodeStart(this);
+        visitor.visitConstructorDeclarationNodeStart(this, true);
+        visitor.visitStopEnd(this);
     }
 
     /**

@@ -5,6 +5,7 @@ import java.util.List;
 import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.VoidStatementNode;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
@@ -27,6 +28,35 @@ public class VoidStatementNodeImpl extends NodeImpl implements VoidStatementNode
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
+    }
+
+    /**
+     * Handles the visitation of this node's children for the provided typed visitor.  Each
+     * subclass should override this method, having the subclass implementation call this
+     * method first and then visit its subclass-specific children.
+     *
+     * @param visitor The visitor to visit this node's children.
+     */
+    @Override
+    protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
+    {
+        super.receiveTypedToChildren(visitor);
+    }
+
+    @Override
+    public void receiveTyped(BsjTypedNodeVisitor visitor)
+    {
+        visitor.visitStartBegin(this);
+        visitor.visitVoidStatementNodeStart(this, true);
+        visitor.visitNodeStart(this);
+        visitor.visitStatementNodeStart(this);
+        visitor.visitStartEnd(this);
+        receiveTypedToChildren(visitor);
+        visitor.visitStopBegin(this);
+        visitor.visitStatementNodeStop(this);
+        visitor.visitNodeStart(this);
+        visitor.visitVoidStatementNodeStart(this, true);
+        visitor.visitStopEnd(this);
     }
 
     /**

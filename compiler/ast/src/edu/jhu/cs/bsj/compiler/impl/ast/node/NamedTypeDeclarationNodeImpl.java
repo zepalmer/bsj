@@ -5,6 +5,7 @@ import java.util.List;
 import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.NamedTypeDeclarationNode;
@@ -93,6 +94,37 @@ public abstract class NamedTypeDeclarationNodeImpl extends NodeImpl implements N
         super.receiveToChildren(visitor);
         this.identifier.receive(visitor);
         this.modifiers.receive(visitor);
+    }
+
+    /**
+     * Handles the visitation of this node's children for the provided typed visitor.  Each
+     * subclass should override this method, having the subclass implementation call this
+     * method first and then visit its subclass-specific children.
+     *
+     * @param visitor The visitor to visit this node's children.
+     */
+    @Override
+    protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
+    {
+        super.receiveTypedToChildren(visitor);
+        this.identifier.receiveTyped(visitor);
+        this.modifiers.receiveTyped(visitor);
+    }
+
+    @Override
+    public void receiveTyped(BsjTypedNodeVisitor visitor)
+    {
+        visitor.visitStartBegin(this);
+        visitor.visitNamedTypeDeclarationNodeStart(this);
+        visitor.visitNodeStart(this);
+        visitor.visitTypeDeclarationNodeStart(this);
+        visitor.visitStartEnd(this);
+        receiveTypedToChildren(visitor);
+        visitor.visitStopBegin(this);
+        visitor.visitTypeDeclarationNodeStop(this);
+        visitor.visitNodeStart(this);
+        visitor.visitNamedTypeDeclarationNodeStart(this);
+        visitor.visitStopEnd(this);
     }
 
     /**

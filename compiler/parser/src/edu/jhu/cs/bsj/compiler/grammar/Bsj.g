@@ -108,6 +108,7 @@ scope Global {
     import edu.jhu.cs.bsj.compiler.ast.*;
     import edu.jhu.cs.bsj.compiler.ast.node.*;
     import edu.jhu.cs.bsj.compiler.ast.node.meta.*;
+    import edu.jhu.cs.bsj.compiler.ast.util.*;
     
     import edu.jhu.cs.bsj.compiler.tool.parser.antlr.util.BsjAntlrParserUtils;
 }
@@ -129,7 +130,20 @@ scope Global {
     
     public void setFactory(BsjNodeFactory factory)
     {
-        this.factory = factory;
+        this.factory = new BsjNodeFactoryDecorator(factory)
+        {
+            protected void decorate(Node node)
+            {
+                if (logger.isTraceEnabled())
+                {
+                    logger.trace("Instantiated node of type " + node.getClass().getSimpleName() + " as " +
+                            node.toString());
+                    logger.trace("input.LT(1) = " + input.LT(1));
+                    logger.trace("input.LT(-1) = " + input.LT(-1));
+                }
+            }
+        };
+        //this.factory = factory;
     }
     
     // *** COMMONLY USED MODIFIERS ********************************************

@@ -5,6 +5,7 @@ import java.util.List;
 import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ParameterizedTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeArgumentNode;
@@ -94,6 +95,37 @@ public class ParameterizedTypeNodeImpl extends NodeImpl implements Parameterized
         super.receiveToChildren(visitor);
         this.baseType.receive(visitor);
         this.typeArguments.receive(visitor);
+    }
+
+    /**
+     * Handles the visitation of this node's children for the provided typed visitor.  Each
+     * subclass should override this method, having the subclass implementation call this
+     * method first and then visit its subclass-specific children.
+     *
+     * @param visitor The visitor to visit this node's children.
+     */
+    @Override
+    protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
+    {
+        super.receiveTypedToChildren(visitor);
+        this.baseType.receiveTyped(visitor);
+        this.typeArguments.receiveTyped(visitor);
+    }
+
+    @Override
+    public void receiveTyped(BsjTypedNodeVisitor visitor)
+    {
+        visitor.visitStartBegin(this);
+        visitor.visitParameterizedTypeNodeStart(this, true);
+        visitor.visitNodeStart(this);
+        visitor.visitDeclaredTypeNodeStart(this);
+        visitor.visitStartEnd(this);
+        receiveTypedToChildren(visitor);
+        visitor.visitStopBegin(this);
+        visitor.visitDeclaredTypeNodeStop(this);
+        visitor.visitNodeStart(this);
+        visitor.visitParameterizedTypeNodeStart(this, true);
+        visitor.visitStopEnd(this);
     }
 
     /**

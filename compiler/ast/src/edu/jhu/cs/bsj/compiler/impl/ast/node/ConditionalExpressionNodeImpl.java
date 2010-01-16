@@ -5,6 +5,7 @@ import java.util.List;
 import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.ConditionalExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 
@@ -124,6 +125,38 @@ public class ConditionalExpressionNodeImpl extends NodeImpl implements Condition
         this.condition.receive(visitor);
         this.trueExpression.receive(visitor);
         this.falseExpression.receive(visitor);
+    }
+
+    /**
+     * Handles the visitation of this node's children for the provided typed visitor.  Each
+     * subclass should override this method, having the subclass implementation call this
+     * method first and then visit its subclass-specific children.
+     *
+     * @param visitor The visitor to visit this node's children.
+     */
+    @Override
+    protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
+    {
+        super.receiveTypedToChildren(visitor);
+        this.condition.receiveTyped(visitor);
+        this.trueExpression.receiveTyped(visitor);
+        this.falseExpression.receiveTyped(visitor);
+    }
+
+    @Override
+    public void receiveTyped(BsjTypedNodeVisitor visitor)
+    {
+        visitor.visitStartBegin(this);
+        visitor.visitConditionalExpressionNodeStart(this, true);
+        visitor.visitNodeStart(this);
+        visitor.visitNonAssignmentExpressionNodeStart(this);
+        visitor.visitStartEnd(this);
+        receiveTypedToChildren(visitor);
+        visitor.visitStopBegin(this);
+        visitor.visitNonAssignmentExpressionNodeStop(this);
+        visitor.visitNodeStart(this);
+        visitor.visitConditionalExpressionNodeStart(this, true);
+        visitor.visitStopEnd(this);
     }
 
     /**

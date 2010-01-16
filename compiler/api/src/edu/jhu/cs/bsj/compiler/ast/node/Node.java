@@ -5,6 +5,7 @@ import java.util.List;
 import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 
 /**
  * The parent class for all BSJ AST nodes.
@@ -20,6 +21,16 @@ public interface Node
 	 * @param visitor The visitor which should visit this node.
 	 */
 	public void receive(BsjNodeVisitor visitor);
+	
+	/**
+	 * Causes this node to receive a type-specific visitor.  Visitors are received by nodes in a depth-first fashion.
+	 * The order of the children receiving the visitor is dependent upon the type of node; however, a superclass's child
+	 * nodes are always visited before the subclass's child nodes.  For more information on exactly what calls are made,
+	 * please see {@link BsjTypedNodeVisitor}.
+	 * 
+	 * @param visitor The visitor which should visit this node.
+	 */
+	public void receiveTyped(BsjTypedNodeVisitor visitor);
 	
 	/**
 	 * Retrieves the unique ID number of this node.

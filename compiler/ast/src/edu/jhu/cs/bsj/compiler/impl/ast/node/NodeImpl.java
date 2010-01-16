@@ -7,6 +7,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
@@ -27,6 +28,28 @@ public abstract class NodeImpl implements Node
      */
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
+    }
+
+    /**
+     * Handles the visitation of this node's children for the provided typed visitor.  Each
+     * subclass should override this method, having the subclass implementation call this
+     * method first and then visit its subclass-specific children.
+     *
+     * @param visitor The visitor to visit this node's children.
+     */
+    protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
+    {
+    }
+
+    public void receiveTyped(BsjTypedNodeVisitor visitor)
+    {
+        visitor.visitStartBegin(this);
+        visitor.visitNodeStart(this);
+        visitor.visitStartEnd(this);
+        receiveTypedToChildren(visitor);
+        visitor.visitStopBegin(this);
+        visitor.visitNodeStart(this);
+        visitor.visitStopEnd(this);
     }
 
     /**
