@@ -1148,7 +1148,6 @@ public class SourceGenerator
 	 */
 	static class BsjTypedNodeVisitorWriter implements ClassDefHandler
 	{
-		private PrintStream ps;
 		private Map<String, Set<String>> subtypeMap;
 		private Map<String, String> supertypeMap;
 		private List<String> abstractTypes;
@@ -1206,8 +1205,9 @@ public class SourceGenerator
 			List<String> sortedNames = new ArrayList<String>(names);
 			Collections.sort(sortedNames);
 
-			// Write class header
+			// Write interface
 			String pkg = "edu.jhu.cs.bsj.compiler.ast";
+			PrintStream ps;
 			ps = new PrintStream(new FileOutputStream(new File(TARGET_DIR.getPath() + File.separator + "ifaces"
 					+ File.separator + pkg.replaceAll("\\.", File.separator) + File.separator
 					+ "BsjTypedNodeVisitor.java")));
@@ -1277,6 +1277,36 @@ public class SourceGenerator
 			printGeneratedClause(ps);
 			ps.println("public interface BsjTypedNodeVisitor");
 			ps.println("{");
+			writeTypeBody(ps, false, sortedNames, concreteTypeNameSet);
+			ps.println("}");
+			ps.close();
+			
+			// Write default implementation
+			pkg = "edu.jhu.cs.bsj.compiler.ast.util";
+			ps = new PrintStream(new FileOutputStream(new File(TARGET_DIR.getPath() + File.separator + "ifaces"
+					+ File.separator + pkg.replaceAll("\\.", File.separator) + File.separator
+					+ "BsjTypedNodeNoOpVisitor.java")));
+			ps.println("package " + pkg + ";");
+			ps.println();
+			printImports(ps, false);
+			ps.println("/**");
+			ps.println(" * This default implementation of {@link BsjTypedNodeVisitor} provides no-op versions of each");
+			ps.println(" * of the interface's methods.  This is meant for convenience; implementations (especially");
+			ps.println(" * anonymous classes) can make use of this class to reduce lines of code.");
+			ps.println(" *");
+			ps.println(" * @author Zachary Palmer");
+			ps.println(" */");
+			printGeneratedClause(ps);
+			ps.println("public class BsjTypedNodeNoOpVisitor");
+			ps.println("{");
+			writeTypeBody(ps, true, sortedNames, concreteTypeNameSet);
+			ps.println("}");
+			ps.close();
+		}
+		
+		private void writeTypeBody(PrintStream ps, boolean concreteType, List<String> sortedNames, Set<String> concreteTypeNameSet)
+		{
+			String methodSuffix = concreteType ? "\n    {\n    }" : ";";
 			
 			// write visit{Start,Stop}{Begin,End} methods
 			for (String mode : MODES)
@@ -1287,7 +1317,7 @@ public class SourceGenerator
 					ps.println("     * " + event +"s a sequence of visit " + mode.toLowerCase() + " calls on a node.");
 					ps.println("     * @param node The node in question.");
 					ps.println("     */");
-					ps.println("    public void visit" + mode + event + "(Node node);");
+					ps.println("    public void visit" + mode + event + "(Node node)" + methodSuffix);
 					ps.println();
 				}
 			}
@@ -1314,16 +1344,11 @@ public class SourceGenerator
 					{
 						ps.print(", boolean mostSpecific");
 					}
-					ps.println(");");
+					ps.print(")");
+					ps.println(methodSuffix);
 					ps.println();
 				}
 			}
-
-			// Write class footer
-			ps.println("}");
-
-			// Complete write
-			ps.close();
 		}
 	}
 
