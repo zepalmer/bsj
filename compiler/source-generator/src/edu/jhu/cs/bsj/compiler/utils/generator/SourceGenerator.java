@@ -135,8 +135,17 @@ public class SourceGenerator
 			String s = strings.get(i);
 			if (s.contains("#"))
 			{
-				s = s.substring(0, s.indexOf("#"));
-				strings.set(i, s);
+				int index = s.indexOf("#");
+				while (index != -1)
+				{
+					if (index == 0 || s.charAt(index-1) != '&')
+					{
+						s = s.substring(0, s.indexOf("#"));
+						strings.set(i, s);
+						break;
+					}
+					index = s.indexOf('#', index+1);
+				}
 			}
 		}
 
