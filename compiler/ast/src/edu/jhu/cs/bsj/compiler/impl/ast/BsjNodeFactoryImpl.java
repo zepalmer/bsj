@@ -12,6 +12,7 @@ import edu.jhu.cs.bsj.compiler.ast.Modifier;
 import edu.jhu.cs.bsj.compiler.ast.NameCategory;
 import edu.jhu.cs.bsj.compiler.ast.PrimitiveType;
 import edu.jhu.cs.bsj.compiler.ast.UnaryOperator;
+import edu.jhu.cs.bsj.compiler.ast.UnaryStatementOperator;
 import edu.jhu.cs.bsj.compiler.ast.node.*;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.CodeLiteralNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.AlternateConstructorInvocationNodeImpl;
@@ -30,7 +31,7 @@ import edu.jhu.cs.bsj.compiler.impl.ast.node.ArrayInstantiatorCreationNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.ArrayTypeNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.AssertStatementNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.AssignmentNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.BinaryOperatorNodeImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.node.BinaryExpressionNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.BlockStatementNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.BooleanLiteralNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.BreakNodeImpl;
@@ -99,7 +100,9 @@ import edu.jhu.cs.bsj.compiler.impl.ast.node.ThrowNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.TryNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.TypeCastNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.TypeParameterNodeImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.node.UnaryExpressionNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.UnaryOperatorNodeImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.node.UnaryStatementExpressionNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.UnparameterizedTypeNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.UnqualifiedClassInstantiationNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.VariableDeclarationNodeImpl;
@@ -133,6 +136,18 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
 
     /**
+     * Creates a UnaryStatementExpressionNode.
+     */
+    @Override
+    public UnaryStatementExpressionNode makeUnaryStatementExpressionNode(
+            ExpressionNode expression,
+            UnaryStatementOperator operator)
+    {
+        UnaryStatementExpressionNode ret = new UnaryStatementExpressionNodeImpl(expression, operator);
+        return ret;
+    }
+
+    /**
      * Creates a ExpressionStatementNode.
      */
     @Override
@@ -155,19 +170,6 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
 
     /**
-     * Creates a EnhancedForLoopNode.
-     */
-    @Override
-    public EnhancedForLoopNode makeEnhancedForLoopNode(
-            VariableNode variable,
-            ExpressionNode expression,
-            StatementNode statement)
-    {
-        EnhancedForLoopNode ret = new EnhancedForLoopNodeImpl(variable, expression, statement);
-        return ret;
-    }
-
-    /**
      * Creates a ClassDeclarationNode.
      */
     @Override
@@ -180,6 +182,19 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ModifiersNode modifiers)
     {
         ClassDeclarationNode ret = new ClassDeclarationNodeImpl(extendsClause, implementsClause, body, typeParameters, identifier, modifiers);
+        return ret;
+    }
+
+    /**
+     * Creates a EnhancedForLoopNode.
+     */
+    @Override
+    public EnhancedForLoopNode makeEnhancedForLoopNode(
+            VariableNode variable,
+            ExpressionNode expression,
+            StatementNode statement)
+    {
+        EnhancedForLoopNode ret = new EnhancedForLoopNodeImpl(variable, expression, statement);
         return ret;
     }
 
@@ -552,6 +567,19 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
 
     /**
+     * Creates a BinaryExpressionNode.
+     */
+    @Override
+    public BinaryExpressionNode makeBinaryExpressionNode(
+            ExpressionNode leftOperand,
+            ExpressionNode rightOperand,
+            BinaryOperator operator)
+    {
+        BinaryExpressionNode ret = new BinaryExpressionNodeImpl(leftOperand, rightOperand, operator);
+        return ret;
+    }
+
+    /**
      * Creates a ForInitializerExpressionNode.
      */
     @Override
@@ -724,6 +752,18 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             InlineTypeDeclarableNode declaration)
     {
         InlineTypeDeclarationNode ret = new InlineTypeDeclarationNodeImpl(declaration);
+        return ret;
+    }
+
+    /**
+     * Creates a UnaryExpressionNode.
+     */
+    @Override
+    public UnaryExpressionNode makeUnaryExpressionNode(
+            ExpressionNode expression,
+            UnaryOperator operator)
+    {
+        UnaryExpressionNode ret = new UnaryExpressionNodeImpl(expression, operator);
         return ret;
     }
 
@@ -1100,19 +1140,6 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             Float value)
     {
         FloatLiteralNode ret = new FloatLiteralNodeImpl(value);
-        return ret;
-    }
-
-    /**
-     * Creates a BinaryOperatorNode.
-     */
-    @Override
-    public BinaryOperatorNode makeBinaryOperatorNode(
-            ExpressionNode leftOperand,
-            ExpressionNode rightOperand,
-            BinaryOperator operator)
-    {
-        BinaryOperatorNode ret = new BinaryOperatorNodeImpl(leftOperand, rightOperand, operator);
         return ret;
     }
 

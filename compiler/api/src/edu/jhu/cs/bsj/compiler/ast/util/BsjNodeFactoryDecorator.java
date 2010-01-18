@@ -12,6 +12,7 @@ import edu.jhu.cs.bsj.compiler.ast.Modifier;
 import edu.jhu.cs.bsj.compiler.ast.NameCategory;
 import edu.jhu.cs.bsj.compiler.ast.PrimitiveType;
 import edu.jhu.cs.bsj.compiler.ast.UnaryOperator;
+import edu.jhu.cs.bsj.compiler.ast.UnaryStatementOperator;
 import edu.jhu.cs.bsj.compiler.ast.node.*;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.CodeLiteralNode;
 
@@ -55,6 +56,19 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     }
 
     /**
+     * Creates a UnaryStatementExpressionNode.
+     */
+    @Override
+    public UnaryStatementExpressionNode makeUnaryStatementExpressionNode(
+            ExpressionNode expression,
+            UnaryStatementOperator operator)
+    {
+        UnaryStatementExpressionNode node = factory.makeUnaryStatementExpressionNode(expression, operator);
+        this.decorate(node);
+        return node;
+    }
+
+    /**
      * Creates a ExpressionStatementNode.
      */
     @Override
@@ -79,20 +93,6 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     }
 
     /**
-     * Creates a EnhancedForLoopNode.
-     */
-    @Override
-    public EnhancedForLoopNode makeEnhancedForLoopNode(
-            VariableNode variable,
-            ExpressionNode expression,
-            StatementNode statement)
-    {
-        EnhancedForLoopNode node = factory.makeEnhancedForLoopNode(variable, expression, statement);
-        this.decorate(node);
-        return node;
-    }
-
-    /**
      * Creates a ClassDeclarationNode.
      */
     @Override
@@ -105,6 +105,20 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
             ModifiersNode modifiers)
     {
         ClassDeclarationNode node = factory.makeClassDeclarationNode(extendsClause, implementsClause, body, typeParameters, identifier, modifiers);
+        this.decorate(node);
+        return node;
+    }
+
+    /**
+     * Creates a EnhancedForLoopNode.
+     */
+    @Override
+    public EnhancedForLoopNode makeEnhancedForLoopNode(
+            VariableNode variable,
+            ExpressionNode expression,
+            StatementNode statement)
+    {
+        EnhancedForLoopNode node = factory.makeEnhancedForLoopNode(variable, expression, statement);
         this.decorate(node);
         return node;
     }
@@ -509,6 +523,20 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     }
 
     /**
+     * Creates a BinaryExpressionNode.
+     */
+    @Override
+    public BinaryExpressionNode makeBinaryExpressionNode(
+            ExpressionNode leftOperand,
+            ExpressionNode rightOperand,
+            BinaryOperator operator)
+    {
+        BinaryExpressionNode node = factory.makeBinaryExpressionNode(leftOperand, rightOperand, operator);
+        this.decorate(node);
+        return node;
+    }
+
+    /**
      * Creates a ForInitializerExpressionNode.
      */
     @Override
@@ -695,6 +723,19 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
             InlineTypeDeclarableNode declaration)
     {
         InlineTypeDeclarationNode node = factory.makeInlineTypeDeclarationNode(declaration);
+        this.decorate(node);
+        return node;
+    }
+
+    /**
+     * Creates a UnaryExpressionNode.
+     */
+    @Override
+    public UnaryExpressionNode makeUnaryExpressionNode(
+            ExpressionNode expression,
+            UnaryOperator operator)
+    {
+        UnaryExpressionNode node = factory.makeUnaryExpressionNode(expression, operator);
         this.decorate(node);
         return node;
     }
@@ -1102,20 +1143,6 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
             Float value)
     {
         FloatLiteralNode node = factory.makeFloatLiteralNode(value);
-        this.decorate(node);
-        return node;
-    }
-
-    /**
-     * Creates a BinaryOperatorNode.
-     */
-    @Override
-    public BinaryOperatorNode makeBinaryOperatorNode(
-            ExpressionNode leftOperand,
-            ExpressionNode rightOperand,
-            BinaryOperator operator)
-    {
-        BinaryOperatorNode node = factory.makeBinaryOperatorNode(leftOperand, rightOperand, operator);
         this.decorate(node);
         return node;
     }

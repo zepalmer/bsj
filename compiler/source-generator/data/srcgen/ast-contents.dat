@@ -279,7 +279,7 @@ AssignmentNode :: Node + ExpressionNode
         </pre>
         where <i>op</i> is one of <tt>=</tt>, <tt>+=</tt>, <tt>%=</tt>, etc.
 
-BinaryOperatorNode :: Node + NonAssignmentExpressionNode
+BinaryExpressionNode :: Node + NonAssignmentExpressionNode
     @props
     leftOperand             ExpressionNode                              | the left operand of the expression
     rightOperand            ExpressionNode                              | the right operand of the expression
@@ -541,6 +541,38 @@ TypeCastNode :: Node + NonAssignmentExpressionNode
         <pre>
         (<i>type</i>) <i>expr</i>
         </pre>
+
+UnaryExpressionNode :: Node + NonAssignmentExpressionNode
+    @props
+    expression              ExpressionNode                              | the expression on which to operate
+    operator                UnaryOperator                               | the operator to apply
+    @docs
+        A node for non-statement unary expressions, such as
+        <pre>
+        ~0
+        </pre>
+        or
+        <pre>
+        -x
+        </pre>
+        Note that this node does not cover those unary expressions which are also statement expressions (increment and
+        decrement); for those expressions, nodes of type {@link UnaryStatementExpressionNode} should be used.
+
+UnaryStatementExpressionNode :: Node + NonAssignmentExpressionNode
+    @props
+    expression              ExpressionNode                              | the expression on which to operate
+    operator                UnaryStatementOperator                      | the operator to apply
+    @docs
+        A node for unary statement expression, such as
+        <pre>
+        ++x
+        </pre>
+        or
+        <pre>
+        y--
+        </pre>
+        Note that this node does not cover those unary expressions which cannot be used as statement expressions.  For
+        those expressions, nodes of type {@link UnaryExpressionNode} should be used.
 
 UnaryOperatorNode :: Node + NonAssignmentExpressionNode
     @props

@@ -2354,7 +2354,7 @@ conditionalOrExpression returns [NonAssignmentExpressionNode ret]
         (
             '||' e2=conditionalAndExpression
             {
-                $ret = factory.makeBinaryOperatorNode(
+                $ret = factory.makeBinaryExpressionNode(
                     $ret, 
                     $e2.ret, 
                     BinaryOperator.CONDITIONAL_OR);
@@ -2371,7 +2371,7 @@ conditionalAndExpression returns [NonAssignmentExpressionNode ret]
         (
             '&&' e2=inclusiveOrExpression
             {
-                $ret = factory.makeBinaryOperatorNode(
+                $ret = factory.makeBinaryExpressionNode(
                     $ret, 
                     $e2.ret, 
                     BinaryOperator.CONDITIONAL_AND);
@@ -2388,7 +2388,7 @@ inclusiveOrExpression returns [NonAssignmentExpressionNode ret]
         (
             '|' e2=exclusiveOrExpression
             {
-                $ret = factory.makeBinaryOperatorNode(
+                $ret = factory.makeBinaryExpressionNode(
                     $ret, 
                     $e2.ret, 
                     BinaryOperator.LOGICAL_OR);
@@ -2405,7 +2405,7 @@ exclusiveOrExpression returns [NonAssignmentExpressionNode ret]
         (
             '^' e2=andExpression
             {
-                $ret = factory.makeBinaryOperatorNode(
+                $ret = factory.makeBinaryExpressionNode(
                     $ret, 
                     $e2.ret, 
                     BinaryOperator.XOR);
@@ -2422,7 +2422,7 @@ andExpression returns [NonAssignmentExpressionNode ret]
         (
             '&' e2=equalityExpression
             {
-                $ret = factory.makeBinaryOperatorNode(
+                $ret = factory.makeBinaryExpressionNode(
                     $ret, 
                     $e2.ret, 
                     BinaryOperator.LOGICAL_AND);
@@ -2451,7 +2451,7 @@ equalityExpression returns [NonAssignmentExpressionNode ret]
             )
             e2=instanceOfExpression
             {
-                $ret = factory.makeBinaryOperatorNode(
+                $ret = factory.makeBinaryExpressionNode(
                     $ret, 
                     $e2.ret, 
                     op);
@@ -2484,7 +2484,7 @@ relationalExpression returns [NonAssignmentExpressionNode ret]
         (
             op=relationalOp e2=shiftExpression
             {
-                $ret = factory.makeBinaryOperatorNode(
+                $ret = factory.makeBinaryExpressionNode(
                     $ret, 
                     $e2.ret, 
                     $op.ret);
@@ -2524,7 +2524,7 @@ shiftExpression returns [NonAssignmentExpressionNode ret]
         (
             op=shiftOp e2=additiveExpression
             {
-                $ret = factory.makeBinaryOperatorNode(
+                $ret = factory.makeBinaryExpressionNode(
                     $ret, 
                     $e2.ret, 
                     $op.ret);
@@ -2573,7 +2573,7 @@ additiveExpression returns [NonAssignmentExpressionNode ret]
             )
             e2=multiplicativeExpression
             {
-                $ret = factory.makeBinaryOperatorNode(
+                $ret = factory.makeBinaryExpressionNode(
                     $ret, 
                     $e2.ret, 
                     op);
@@ -2606,7 +2606,7 @@ multiplicativeExpression returns [NonAssignmentExpressionNode ret]
             )
             e2=unaryExpression
             {
-                $ret = factory.makeBinaryOperatorNode(
+                $ret = factory.makeBinaryExpressionNode(
                     $ret, 
                     $e2.ret, 
                     op);
@@ -2622,7 +2622,7 @@ unaryExpression returns [NonAssignmentExpressionNode ret]
     :   
         '+'  e=unaryExpression
         {
-            $ret = factory.makeUnaryOperatorNode(
+            $ret = factory.makeUnaryExpressionNode(
                 $e.ret,
                 UnaryOperator.UNARY_PLUS);
         }        
@@ -2639,23 +2639,23 @@ unaryExpression returns [NonAssignmentExpressionNode ret]
     |
         '-' e=unaryExpression
         {
-            $ret = factory.makeUnaryOperatorNode(
+            $ret = factory.makeUnaryExpressionNode(
                 $e.ret,
                 UnaryOperator.UNARY_MINUS);
         }        
     |   
         '++' e=unaryExpression
         {
-            $ret = factory.makeUnaryOperatorNode(
+            $ret = factory.makeUnaryStatementExpressionNode(
                 $e.ret,
-                UnaryOperator.PREFIX_INCREMENT);
+                UnaryStatementOperator.PREFIX_INCREMENT);
         }
     |   
         '--' e=unaryExpression
         {
-            $ret = factory.makeUnaryOperatorNode(
+            $ret = factory.makeUnaryStatementExpressionNode(
                 $e.ret,
-                UnaryOperator.PREFIX_DECREMENT);
+                UnaryStatementOperator.PREFIX_DECREMENT);
         }        
     |   
         unaryExpressionNotPlusMinus
@@ -2668,14 +2668,14 @@ unaryExpressionNotPlusMinus returns [NonAssignmentExpressionNode ret]
     :   
         '~' unaryExpression
         {
-            $ret = factory.makeUnaryOperatorNode(
+            $ret = factory.makeUnaryExpressionNode(
                 $unaryExpression.ret,
                 UnaryOperator.BITWISE_COMPLEMENT);
         }        
     |   
         '!' unaryExpression
         {
-            $ret = factory.makeUnaryOperatorNode(
+            $ret = factory.makeUnaryExpressionNode(
                 $unaryExpression.ret,
                 UnaryOperator.LOGICAL_COMPLEMENT);
         }        
@@ -2720,12 +2720,12 @@ postfixExpression returns [NonAssignmentExpressionNode ret]
         (
             '++'
             {
-                $ret = factory.makeUnaryOperatorNode($ret, UnaryOperator.POSTFIX_INCREMENT);
+                $ret = factory.makeUnaryStatementExpressionNode($ret, UnaryStatementOperator.POSTFIX_INCREMENT);
             }
         |
             '--'
             {
-                $ret = factory.makeUnaryOperatorNode($ret, UnaryOperator.POSTFIX_DECREMENT);
+                $ret = factory.makeUnaryStatementExpressionNode($ret, UnaryStatementOperator.POSTFIX_DECREMENT);
             }
         )*
     ;

@@ -8,7 +8,7 @@ import edu.jhu.cs.bsj.compiler.ast.BinaryOperator;
  * Represents the application of a binary operator.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public interface BinaryOperatorNode extends Node, NonAssignmentExpressionNode
+public interface BinaryExpressionNode extends Node, NonAssignmentExpressionNode
 {
     /**
      * Gets the left operand of the expression.

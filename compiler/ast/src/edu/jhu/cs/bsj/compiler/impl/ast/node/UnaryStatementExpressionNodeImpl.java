@@ -4,102 +4,71 @@ import java.util.List;
 
 import javax.annotation.Generated;
 
-import edu.jhu.cs.bsj.compiler.ast.BinaryOperator;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
-import edu.jhu.cs.bsj.compiler.ast.node.BinaryOperatorNode;
+import edu.jhu.cs.bsj.compiler.ast.UnaryStatementOperator;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
+import edu.jhu.cs.bsj.compiler.ast.node.UnaryStatementExpressionNode;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public class BinaryOperatorNodeImpl extends NodeImpl implements BinaryOperatorNode
+public class UnaryStatementExpressionNodeImpl extends NodeImpl implements UnaryStatementExpressionNode
 {
-    /** The left operand of the expression. */
-    private ExpressionNode leftOperand;
+    /** The expression on which to operate. */
+    private ExpressionNode expression;
 
-    /** The right operand of the expression. */
-    private ExpressionNode rightOperand;
-
-    /** The binary operator to apply. */
-    private BinaryOperator operator;
+    /** The operator to apply. */
+    private UnaryStatementOperator operator;
 
     /** General constructor. */
-    public BinaryOperatorNodeImpl(
-            ExpressionNode leftOperand,
-            ExpressionNode rightOperand,
-            BinaryOperator operator)
+    public UnaryStatementExpressionNodeImpl(
+            ExpressionNode expression,
+            UnaryStatementOperator operator)
     {
         super();
-        this.leftOperand = leftOperand;
-        this.rightOperand = rightOperand;
+        this.expression = expression;
         this.operator = operator;
     }
 
     /**
-     * Gets the left operand of the expression.
-     * @return The left operand of the expression.
+     * Gets the expression on which to operate.
+     * @return The expression on which to operate.
      */
-    public ExpressionNode getLeftOperand()
+    public ExpressionNode getExpression()
     {
-        return this.leftOperand;
+        return this.expression;
     }
 
     /**
-     * Changes the left operand of the expression.
-     * @param leftOperand The left operand of the expression.
+     * Changes the expression on which to operate.
+     * @param expression The expression on which to operate.
      */
-    public void setLeftOperand(ExpressionNode leftOperand)
+    public void setExpression(ExpressionNode expression)
     {
-        if (this.leftOperand instanceof NodeImpl)
+        if (this.expression instanceof NodeImpl)
         {
-            ((NodeImpl)this.leftOperand).setParent(null);
+            ((NodeImpl)this.expression).setParent(null);
         }
-        this.leftOperand = leftOperand;
-        if (this.leftOperand instanceof NodeImpl)
+        this.expression = expression;
+        if (this.expression instanceof NodeImpl)
         {
-            ((NodeImpl)this.leftOperand).setParent(this);
-        }
-    }
-
-    /**
-     * Gets the right operand of the expression.
-     * @return The right operand of the expression.
-     */
-    public ExpressionNode getRightOperand()
-    {
-        return this.rightOperand;
-    }
-
-    /**
-     * Changes the right operand of the expression.
-     * @param rightOperand The right operand of the expression.
-     */
-    public void setRightOperand(ExpressionNode rightOperand)
-    {
-        if (this.rightOperand instanceof NodeImpl)
-        {
-            ((NodeImpl)this.rightOperand).setParent(null);
-        }
-        this.rightOperand = rightOperand;
-        if (this.rightOperand instanceof NodeImpl)
-        {
-            ((NodeImpl)this.rightOperand).setParent(this);
+            ((NodeImpl)this.expression).setParent(this);
         }
     }
 
     /**
-     * Gets the binary operator to apply.
-     * @return The binary operator to apply.
+     * Gets the operator to apply.
+     * @return The operator to apply.
      */
-    public BinaryOperator getOperator()
+    public UnaryStatementOperator getOperator()
     {
         return this.operator;
     }
 
     /**
-     * Changes the binary operator to apply.
-     * @param operator The binary operator to apply.
+     * Changes the operator to apply.
+     * @param operator The operator to apply.
      */
-    public void setOperator(BinaryOperator operator)
+    public void setOperator(UnaryStatementOperator operator)
     {
         this.operator = operator;
     }
@@ -115,8 +84,7 @@ public class BinaryOperatorNodeImpl extends NodeImpl implements BinaryOperatorNo
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        this.leftOperand.receive(visitor);
-        this.rightOperand.receive(visitor);
+        this.expression.receive(visitor);
     }
 
     /**
@@ -130,15 +98,14 @@ public class BinaryOperatorNodeImpl extends NodeImpl implements BinaryOperatorNo
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        this.leftOperand.receiveTyped(visitor);
-        this.rightOperand.receiveTyped(visitor);
+        this.expression.receiveTyped(visitor);
     }
 
     @Override
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
         visitor.visitStartBegin(this);
-        visitor.visitBinaryOperatorNodeStart(this, true);
+        visitor.visitUnaryStatementExpressionNodeStart(this, true);
         visitor.visitNodeStart(this);
         visitor.visitNonAssignmentExpressionNodeStart(this);
         visitor.visitStartEnd(this);
@@ -146,7 +113,7 @@ public class BinaryOperatorNodeImpl extends NodeImpl implements BinaryOperatorNo
         visitor.visitStopBegin(this);
         visitor.visitNonAssignmentExpressionNodeStop(this);
         visitor.visitNodeStart(this);
-        visitor.visitBinaryOperatorNodeStart(this, true);
+        visitor.visitUnaryStatementExpressionNodeStart(this, true);
         visitor.visitStopEnd(this);
     }
 
@@ -159,8 +126,7 @@ public class BinaryOperatorNodeImpl extends NodeImpl implements BinaryOperatorNo
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(this.leftOperand);
-        list.add(this.rightOperand);
+        list.add(this.expression);
         list.add(this.operator);
         return list;
     }
@@ -174,11 +140,8 @@ public class BinaryOperatorNodeImpl extends NodeImpl implements BinaryOperatorNo
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
-        sb.append("leftOperand=");
-        sb.append(this.leftOperand == null? "null" : this.leftOperand.getClass().getSimpleName());
-        sb.append(',');
-        sb.append("rightOperand=");
-        sb.append(this.rightOperand == null? "null" : this.rightOperand.getClass().getSimpleName());
+        sb.append("expression=");
+        sb.append(this.expression == null? "null" : this.expression.getClass().getSimpleName());
         sb.append(',');
         sb.append("operator=");
         sb.append(String.valueOf(this.operator) + ":" + this.operator.getClass().getSimpleName());

@@ -26,6 +26,13 @@ public interface BsjNodeFactory
             ExpressionNode messageExpression);
 
     /**
+     * Creates a UnaryStatementExpressionNode.
+     */
+    public UnaryStatementExpressionNode makeUnaryStatementExpressionNode(
+            ExpressionNode expression,
+            UnaryStatementOperator operator);
+
+    /**
      * Creates a ExpressionStatementNode.
      */
     public ExpressionStatementNode makeExpressionStatementNode(
@@ -38,14 +45,6 @@ public interface BsjNodeFactory
             ListNode<InterfaceMemberNode> members);
 
     /**
-     * Creates a EnhancedForLoopNode.
-     */
-    public EnhancedForLoopNode makeEnhancedForLoopNode(
-            VariableNode variable,
-            ExpressionNode expression,
-            StatementNode statement);
-
-    /**
      * Creates a ClassDeclarationNode.
      */
     public ClassDeclarationNode makeClassDeclarationNode(
@@ -55,6 +54,14 @@ public interface BsjNodeFactory
             ListNode<TypeParameterNode> typeParameters,
             IdentifierNode identifier,
             ModifiersNode modifiers);
+
+    /**
+     * Creates a EnhancedForLoopNode.
+     */
+    public EnhancedForLoopNode makeEnhancedForLoopNode(
+            VariableNode variable,
+            ExpressionNode expression,
+            StatementNode statement);
 
     /**
      * Creates a ArrayAccessNode.
@@ -270,6 +277,14 @@ public interface BsjNodeFactory
             ListNode<StatementNode> statements);
 
     /**
+     * Creates a BinaryExpressionNode.
+     */
+    public BinaryExpressionNode makeBinaryExpressionNode(
+            ExpressionNode leftOperand,
+            ExpressionNode rightOperand,
+            BinaryOperator operator);
+
+    /**
      * Creates a ForInitializerExpressionNode.
      */
     public ForInitializerExpressionNode makeForInitializerExpressionNode(
@@ -369,6 +384,13 @@ public interface BsjNodeFactory
      */
     public InlineTypeDeclarationNode makeInlineTypeDeclarationNode(
             InlineTypeDeclarableNode declaration);
+
+    /**
+     * Creates a UnaryExpressionNode.
+     */
+    public UnaryExpressionNode makeUnaryExpressionNode(
+            ExpressionNode expression,
+            UnaryOperator operator);
 
     /**
      * Creates a BooleanLiteralNode.
@@ -590,14 +612,6 @@ public interface BsjNodeFactory
      */
     public FloatLiteralNode makeFloatLiteralNode(
             Float value);
-
-    /**
-     * Creates a BinaryOperatorNode.
-     */
-    public BinaryOperatorNode makeBinaryOperatorNode(
-            ExpressionNode leftOperand,
-            ExpressionNode rightOperand,
-            BinaryOperator operator);
 
     /**
      * Creates a MethodInvocationByNameNode.

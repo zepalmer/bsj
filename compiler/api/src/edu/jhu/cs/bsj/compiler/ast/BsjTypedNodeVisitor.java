@@ -273,13 +273,13 @@ public interface BsjTypedNodeVisitor
     public void visitBaseTypeNodeStart(BaseTypeNode node);
 
     /**
-     * Starts a visit for nodes of type BinaryOperatorNode.
+     * Starts a visit for nodes of type BinaryExpressionNode.
      * @param node The node being visited.
      * @param mostSpecific <code>true</code> if this is the most specific call
      *                     which can be made for this node; <code>false</code>
      *                     otherwise.
      */
-    public void visitBinaryOperatorNodeStart(BinaryOperatorNode node, boolean mostSpecific);
+    public void visitBinaryExpressionNodeStart(BinaryExpressionNode node, boolean mostSpecific);
 
     /**
      * Starts a visit for nodes of type BlockStatementNode.
@@ -1047,6 +1047,15 @@ public interface BsjTypedNodeVisitor
     public void visitTypeParameterNodeStart(TypeParameterNode node, boolean mostSpecific);
 
     /**
+     * Starts a visit for nodes of type UnaryExpressionNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitUnaryExpressionNodeStart(UnaryExpressionNode node, boolean mostSpecific);
+
+    /**
      * Starts a visit for nodes of type UnaryOperatorNode.
      * @param node The node being visited.
      * @param mostSpecific <code>true</code> if this is the most specific call
@@ -1054,6 +1063,15 @@ public interface BsjTypedNodeVisitor
      *                     otherwise.
      */
     public void visitUnaryOperatorNodeStart(UnaryOperatorNode node, boolean mostSpecific);
+
+    /**
+     * Starts a visit for nodes of type UnaryStatementExpressionNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitUnaryStatementExpressionNodeStart(UnaryStatementExpressionNode node, boolean mostSpecific);
 
     /**
      * Starts a visit for nodes of type UnparameterizedTypeNode.
@@ -1332,13 +1350,13 @@ public interface BsjTypedNodeVisitor
     public void visitBaseTypeNodeStop(BaseTypeNode node);
 
     /**
-     * Stops a visit for nodes of type BinaryOperatorNode.
+     * Stops a visit for nodes of type BinaryExpressionNode.
      * @param node The node being visited.
      * @param mostSpecific <code>true</code> if this is the most specific call
      *                     which can be made for this node; <code>false</code>
      *                     otherwise.
      */
-    public void visitBinaryOperatorNodeStop(BinaryOperatorNode node, boolean mostSpecific);
+    public void visitBinaryExpressionNodeStop(BinaryExpressionNode node, boolean mostSpecific);
 
     /**
      * Stops a visit for nodes of type BlockStatementNode.
@@ -2106,6 +2124,15 @@ public interface BsjTypedNodeVisitor
     public void visitTypeParameterNodeStop(TypeParameterNode node, boolean mostSpecific);
 
     /**
+     * Stops a visit for nodes of type UnaryExpressionNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitUnaryExpressionNodeStop(UnaryExpressionNode node, boolean mostSpecific);
+
+    /**
      * Stops a visit for nodes of type UnaryOperatorNode.
      * @param node The node being visited.
      * @param mostSpecific <code>true</code> if this is the most specific call
@@ -2113,6 +2140,15 @@ public interface BsjTypedNodeVisitor
      *                     otherwise.
      */
     public void visitUnaryOperatorNodeStop(UnaryOperatorNode node, boolean mostSpecific);
+
+    /**
+     * Stops a visit for nodes of type UnaryStatementExpressionNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitUnaryStatementExpressionNodeStop(UnaryStatementExpressionNode node, boolean mostSpecific);
 
     /**
      * Stops a visit for nodes of type UnparameterizedTypeNode.
