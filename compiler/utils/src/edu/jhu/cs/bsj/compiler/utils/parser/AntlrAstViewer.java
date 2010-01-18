@@ -1,4 +1,4 @@
-package edu.jhu.cs.bsj.compiler.tool.parser.test;
+package edu.jhu.cs.bsj.compiler.utils.parser;
 
 import java.awt.BorderLayout;
 import java.awt.Color;

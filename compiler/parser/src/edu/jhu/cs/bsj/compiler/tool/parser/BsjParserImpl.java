@@ -41,15 +41,22 @@ public class BsjParserImpl
 	 * This method generates a BSJ heterogeneous AST from the provided source stream.
 	 * 
 	 * @throws IOException If an I/O error occurs.
-	 * @throws RecognitionException If a recognition error occurs while parsing the provided stream.
+	 * TODO: some other kind of exception if ANTLR throws a RecognitionException
 	 */
-	public CompilationUnitNode parse(InputStream is) throws IOException, RecognitionException
+	public CompilationUnitNode parse(InputStream is) throws IOException
 	{
 		BsjAntlrLexer lexer = new BsjAntlrLexer(new ANTLRInputStream(is));
 		BsjAntlrParser parser = new BsjAntlrParser(new TokenRewriteStream(lexer));
 		parser.setFactory(factory);
 		
-		CompilationUnitNode compilationUnitNode = parser.compilationUnit();
+		CompilationUnitNode compilationUnitNode;
+		try
+		{
+			compilationUnitNode = parser.compilationUnit();
+		} catch (RecognitionException re)
+		{
+			throw new RuntimeException(re); // throw an exception of our own instead (to avoid passing ANTLR deps)
+		}
 		return compilationUnitNode;
 	}
 }
