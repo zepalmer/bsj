@@ -571,23 +571,37 @@ classDeclaration returns [InlineTypeDeclarableNode ret]
     ;
 
 normalClassDeclaration returns [ClassDeclarationNode ret]
-    scope Global;
+        scope Global;
+        @init {
+            ListNode<TypeNode> typeListNode = factory.makeListNode(new ArrayList<TypeNode>());
+            ListNode<TypeParameterNode> typeParamsNode = factory.makeListNode(new ArrayList<TypeParameterNode>());
+        }         
     :   
         javadoc modifiers[classModifiers]
         'class' id=identifier
         {
             $Global::className = $id.ret.getIdentifier();
         }
-        typeParameters?
+        (
+            typeParameters
+            {
+                typeParamsNode = $typeParameters.ret;
+            }
+        )?
         ('extends' type)?
-        ('implements' typeList)?            
+        (
+            'implements' typeList
+            {
+                typeListNode = $typeList.ret;
+            }
+        )?            
         classBody
         {            
             $ret = factory.makeClassDeclarationNode(
                     $type.ret,
-                    $typeList.ret,
+                    typeListNode,
                     $classBody.ret,
-                    $typeParameters.ret,                    
+                    typeParamsNode,                    
                     $id.ret,
                     $modifiers.ret,
                     $javadoc.ret);
@@ -811,6 +825,7 @@ normalInterfaceDeclaration returns [InterfaceDeclarationNode ret]
         scope Global;
         @init {
             ListNode<TypeNode> typeListNode = factory.makeListNode(new ArrayList<TypeNode>());
+            ListNode<TypeParameterNode> typeParamsNode = factory.makeListNode(new ArrayList<TypeParameterNode>());
         } 
     :   
         javadoc modifiers[interfaceModifiers]
@@ -818,7 +833,11 @@ normalInterfaceDeclaration returns [InterfaceDeclarationNode ret]
         {
             $Global::className = $id.ret.getIdentifier();
         }        
-        (typeParameters
+        (
+            typeParameters
+            {
+                typeParamsNode = $typeParameters.ret;
+            }
         )?
         (
             'extends' typeList
@@ -831,7 +850,7 @@ normalInterfaceDeclaration returns [InterfaceDeclarationNode ret]
             $ret = factory.makeInterfaceDeclarationNode(
                     typeListNode,
                     $interfaceBody.ret,
-                    $typeParameters.ret,
+                    typeParamsNode,
                     $id.ret,
                     $modifiers.ret,
                     $javadoc.ret);
