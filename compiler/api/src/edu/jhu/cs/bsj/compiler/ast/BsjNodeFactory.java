@@ -52,9 +52,9 @@ public interface BsjNodeFactory
             ListNode<TypeNode> implementsClause,
             ClassBodyNode body,
             ListNode<TypeParameterNode> typeParameters,
-            JavadocNode javadoc,
             IdentifierNode identifier,
-            ModifiersNode modifiers);
+            ModifiersNode modifiers,
+            JavadocNode javadoc);
 
     /**
      * Creates a EnhancedForLoopNode.
@@ -165,9 +165,9 @@ public interface BsjNodeFactory
     public EnumDeclarationNode makeEnumDeclarationNode(
             ListNode<TypeNode> implementsClause,
             EnumBodyNode body,
-            JavadocNode javadoc,
             IdentifierNode identifier,
-            ModifiersNode modifiers);
+            ModifiersNode modifiers,
+            JavadocNode javadoc);
 
     /**
      * Creates a VoidTypeNode.
@@ -305,7 +305,8 @@ public interface BsjNodeFactory
     public AnnotationDeclarationNode makeAnnotationDeclarationNode(
             AnnotationBodyNode body,
             IdentifierNode identifier,
-            ModifiersNode modifiers);
+            ModifiersNode modifiers,
+            JavadocNode javadoc);
 
     /**
      * Creates a CompilationUnitNode.
@@ -454,7 +455,8 @@ public interface BsjNodeFactory
             ListNode<AnnotationNode> annotations,
             IdentifierNode identifier,
             ListNode<ExpressionNode> arguments,
-            AnonymousClassBodyNode body);
+            AnonymousClassBodyNode body,
+            JavadocNode javadoc);
 
     /**
      * Creates a BreakNode.
@@ -503,7 +505,8 @@ public interface BsjNodeFactory
             ModifiersNode modifiers,
             TypeNode type,
             IdentifierNode identifier,
-            AnnotationValueNode defaultValue);
+            AnnotationValueNode defaultValue,
+            JavadocNode javadoc);
 
     /**
      * Creates a ImportSingleTypeNode.
@@ -632,9 +635,9 @@ public interface BsjNodeFactory
             ListNode<TypeNode> extendsClause,
             InterfaceBodyNode body,
             ListNode<TypeParameterNode> typeParameters,
-            JavadocNode javadoc,
             IdentifierNode identifier,
-            ModifiersNode modifiers);
+            ModifiersNode modifiers,
+            JavadocNode javadoc);
 
     /**
      * Creates a ForInitializerDeclarationNode.

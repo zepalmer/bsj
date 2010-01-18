@@ -101,11 +101,11 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
             ListNode<TypeNode> implementsClause,
             ClassBodyNode body,
             ListNode<TypeParameterNode> typeParameters,
-            JavadocNode javadoc,
             IdentifierNode identifier,
-            ModifiersNode modifiers)
+            ModifiersNode modifiers,
+            JavadocNode javadoc)
     {
-        ClassDeclarationNode node = factory.makeClassDeclarationNode(extendsClause, implementsClause, body, typeParameters, javadoc, identifier, modifiers);
+        ClassDeclarationNode node = factory.makeClassDeclarationNode(extendsClause, implementsClause, body, typeParameters, identifier, modifiers, javadoc);
         this.decorate(node);
         return node;
     }
@@ -310,11 +310,11 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     public EnumDeclarationNode makeEnumDeclarationNode(
             ListNode<TypeNode> implementsClause,
             EnumBodyNode body,
-            JavadocNode javadoc,
             IdentifierNode identifier,
-            ModifiersNode modifiers)
+            ModifiersNode modifiers,
+            JavadocNode javadoc)
     {
-        EnumDeclarationNode node = factory.makeEnumDeclarationNode(implementsClause, body, javadoc, identifier, modifiers);
+        EnumDeclarationNode node = factory.makeEnumDeclarationNode(implementsClause, body, identifier, modifiers, javadoc);
         this.decorate(node);
         return node;
     }
@@ -570,9 +570,10 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     public AnnotationDeclarationNode makeAnnotationDeclarationNode(
             AnnotationBodyNode body,
             IdentifierNode identifier,
-            ModifiersNode modifiers)
+            ModifiersNode modifiers,
+            JavadocNode javadoc)
     {
-        AnnotationDeclarationNode node = factory.makeAnnotationDeclarationNode(body, identifier, modifiers);
+        AnnotationDeclarationNode node = factory.makeAnnotationDeclarationNode(body, identifier, modifiers, javadoc);
         this.decorate(node);
         return node;
     }
@@ -845,9 +846,10 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
             ListNode<AnnotationNode> annotations,
             IdentifierNode identifier,
             ListNode<ExpressionNode> arguments,
-            AnonymousClassBodyNode body)
+            AnonymousClassBodyNode body,
+            JavadocNode javadoc)
     {
-        EnumConstantDeclarationNode node = factory.makeEnumConstantDeclarationNode(annotations, identifier, arguments, body);
+        EnumConstantDeclarationNode node = factory.makeEnumConstantDeclarationNode(annotations, identifier, arguments, body, javadoc);
         this.decorate(node);
         return node;
     }
@@ -936,9 +938,10 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
             ModifiersNode modifiers,
             TypeNode type,
             IdentifierNode identifier,
-            AnnotationValueNode defaultValue)
+            AnnotationValueNode defaultValue,
+            JavadocNode javadoc)
     {
-        AnnotationMethodDeclarationNode node = factory.makeAnnotationMethodDeclarationNode(modifiers, type, identifier, defaultValue);
+        AnnotationMethodDeclarationNode node = factory.makeAnnotationMethodDeclarationNode(modifiers, type, identifier, defaultValue, javadoc);
         this.decorate(node);
         return node;
     }
@@ -1173,11 +1176,11 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
             ListNode<TypeNode> extendsClause,
             InterfaceBodyNode body,
             ListNode<TypeParameterNode> typeParameters,
-            JavadocNode javadoc,
             IdentifierNode identifier,
-            ModifiersNode modifiers)
+            ModifiersNode modifiers,
+            JavadocNode javadoc)
     {
-        InterfaceDeclarationNode node = factory.makeInterfaceDeclarationNode(extendsClause, body, typeParameters, javadoc, identifier, modifiers);
+        InterfaceDeclarationNode node = factory.makeInterfaceDeclarationNode(extendsClause, body, typeParameters, identifier, modifiers, javadoc);
         this.decorate(node);
         return node;
     }

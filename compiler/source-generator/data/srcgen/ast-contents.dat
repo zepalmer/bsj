@@ -926,6 +926,7 @@ AnnotationMethodDeclarationNode :: Node + AnnotationMemberNode
     type                    TypeNode                                    | the return type of this annotation method
     identifier              IdentifierNode                              | this annotation method's name
     defaultValue            AnnotationValueNode                         | the default value for this method
+    javadoc					JavadocNode									| the associated javadoc comment for this node
     @docs
         A node representing an annotation method declaration, as in:
         <pre>
@@ -955,6 +956,7 @@ EnumConstantDeclarationNode :: Node
     identifier              IdentifierNode                              | the name of this constant
     arguments               ListNode<ExpressionNode>                    | the arguments to the enum constructor
     body                    AnonymousClassBodyNode                      | the body used to anonymously subclass the constant
+    javadoc					JavadocNode									| the associated javadoc comment for this node
     @docs
         A node representing an enum constant.  While enum constants typically consist of a single name, many optional
         extensions exist.  In the likely case that this constant is not an anonymous subclass, <tt>body</tt> is
@@ -1055,7 +1057,6 @@ ClassDeclarationNode :: NamedTypeDeclarationNode + InlineTypeDeclarableNode
     implementsClause        ListNode<TypeNode>                          | the implements clause
     body                    ClassBodyNode                               | the body of this class
     typeParameters          ListNode<TypeParameterNode>                 | this class's type parameters
-    javadoc					JavadocNode									| the associated javadoc comment for this node
     @docs
         Represents the declaration of a class, as in:
         <pre>
@@ -1070,7 +1071,6 @@ EnumDeclarationNode :: NamedTypeDeclarationNode + InlineTypeDeclarableNode
     @props
     implementsClause        ListNode<TypeNode>                          | the implements clause
     body                    EnumBodyNode                                | this enum's body
-    javadoc					JavadocNode									| the associated javadoc comment for this node
     @docs
         Represents the declaration of a class, as in:
         <pre>
@@ -1086,7 +1086,6 @@ InterfaceDeclarationNode :: NamedTypeDeclarationNode
     extendsClause           ListNode<TypeNode>                          | the extends clause
     body                    InterfaceBodyNode                           | this interface's body
     typeParameters          ListNode<TypeParameterNode>                 | this class's type parameters
-    javadoc					JavadocNode									| the associated javadoc comment for this node
     @docs
         Represents the declaration of an interface, as in:
         <pre>
@@ -1114,6 +1113,7 @@ NamedTypeDeclarationNode* :: Node + TypeDeclarationNode
     @props
     identifier              IdentifierNode                              | the name of this declared type
     modifiers               ModifiersNode                               | the modifiers for this declared type
+    javadoc					JavadocNode									| the associated javadoc comment for this node
     @docs
         Acts as a superclass for all named type declarations.
 

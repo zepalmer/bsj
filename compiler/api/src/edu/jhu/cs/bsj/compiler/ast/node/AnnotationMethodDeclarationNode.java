@@ -59,4 +59,16 @@ public interface AnnotationMethodDeclarationNode extends Node, AnnotationMemberN
      */
     public void setDefaultValue(AnnotationValueNode defaultValue);
 
+    /**
+     * Gets the associated javadoc comment for this node.
+     * @return The associated javadoc comment for this node.
+     */
+    public JavadocNode getJavadoc();
+
+    /**
+     * Changes the associated javadoc comment for this node.
+     * @param javadoc The associated javadoc comment for this node.
+     */
+    public void setJavadoc(JavadocNode javadoc);
+
 }

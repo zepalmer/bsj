@@ -9,6 +9,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationMethodDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationValueNode;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
+import edu.jhu.cs.bsj.compiler.ast.node.JavadocNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
 
@@ -27,18 +28,23 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
     /** The default value for this method. */
     private AnnotationValueNode defaultValue;
 
+    /** The associated javadoc comment for this node. */
+    private JavadocNode javadoc;
+
     /** General constructor. */
     public AnnotationMethodDeclarationNodeImpl(
             ModifiersNode modifiers,
             TypeNode type,
             IdentifierNode identifier,
-            AnnotationValueNode defaultValue)
+            AnnotationValueNode defaultValue,
+            JavadocNode javadoc)
     {
         super();
         this.modifiers = modifiers;
         this.type = type;
         this.identifier = identifier;
         this.defaultValue = defaultValue;
+        this.javadoc = javadoc;
     }
 
     /**
@@ -146,6 +152,32 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
     }
 
     /**
+     * Gets the associated javadoc comment for this node.
+     * @return The associated javadoc comment for this node.
+     */
+    public JavadocNode getJavadoc()
+    {
+        return this.javadoc;
+    }
+
+    /**
+     * Changes the associated javadoc comment for this node.
+     * @param javadoc The associated javadoc comment for this node.
+     */
+    public void setJavadoc(JavadocNode javadoc)
+    {
+        if (this.javadoc instanceof NodeImpl)
+        {
+            ((NodeImpl)this.javadoc).setParent(null);
+        }
+        this.javadoc = javadoc;
+        if (this.javadoc instanceof NodeImpl)
+        {
+            ((NodeImpl)this.javadoc).setParent(this);
+        }
+    }
+
+    /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
      * method first and then visit its subclass-specific children.
@@ -160,6 +192,7 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
         this.type.receive(visitor);
         this.identifier.receive(visitor);
         this.defaultValue.receive(visitor);
+        this.javadoc.receive(visitor);
     }
 
     /**
@@ -177,6 +210,7 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
         this.type.receiveTyped(visitor);
         this.identifier.receiveTyped(visitor);
         this.defaultValue.receiveTyped(visitor);
+        this.javadoc.receiveTyped(visitor);
     }
 
     @Override
@@ -208,6 +242,7 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
         list.add(this.type);
         list.add(this.identifier);
         list.add(this.defaultValue);
+        list.add(this.javadoc);
         return list;
     }
 
@@ -231,6 +266,9 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
         sb.append(',');
         sb.append("defaultValue=");
         sb.append(this.defaultValue == null? "null" : this.defaultValue.getClass().getSimpleName());
+        sb.append(',');
+        sb.append("javadoc=");
+        sb.append(this.javadoc == null? "null" : this.javadoc.getClass().getSimpleName());
         sb.append(']');
         return sb.toString();
     }

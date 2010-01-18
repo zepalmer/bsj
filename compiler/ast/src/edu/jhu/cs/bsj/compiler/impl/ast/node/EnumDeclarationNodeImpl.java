@@ -23,21 +23,17 @@ public class EnumDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl implem
     /** This enum's body. */
     private EnumBodyNode body;
 
-    /** The associated javadoc comment for this node. */
-    private JavadocNode javadoc;
-
     /** General constructor. */
     public EnumDeclarationNodeImpl(
             ListNode<TypeNode> implementsClause,
             EnumBodyNode body,
-            JavadocNode javadoc,
             IdentifierNode identifier,
-            ModifiersNode modifiers)
+            ModifiersNode modifiers,
+            JavadocNode javadoc)
     {
-        super(identifier, modifiers);
+        super(identifier, modifiers, javadoc);
         this.implementsClause = implementsClause;
         this.body = body;
-        this.javadoc = javadoc;
     }
 
     /**
@@ -93,32 +89,6 @@ public class EnumDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl implem
     }
 
     /**
-     * Gets the associated javadoc comment for this node.
-     * @return The associated javadoc comment for this node.
-     */
-    public JavadocNode getJavadoc()
-    {
-        return this.javadoc;
-    }
-
-    /**
-     * Changes the associated javadoc comment for this node.
-     * @param javadoc The associated javadoc comment for this node.
-     */
-    public void setJavadoc(JavadocNode javadoc)
-    {
-        if (this.javadoc instanceof NodeImpl)
-        {
-            ((NodeImpl)this.javadoc).setParent(null);
-        }
-        this.javadoc = javadoc;
-        if (this.javadoc instanceof NodeImpl)
-        {
-            ((NodeImpl)this.javadoc).setParent(this);
-        }
-    }
-
-    /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
      * method first and then visit its subclass-specific children.
@@ -131,7 +101,6 @@ public class EnumDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl implem
         super.receiveToChildren(visitor);
         this.implementsClause.receive(visitor);
         this.body.receive(visitor);
-        this.javadoc.receive(visitor);
     }
 
     /**
@@ -147,7 +116,6 @@ public class EnumDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl implem
         super.receiveTypedToChildren(visitor);
         this.implementsClause.receiveTyped(visitor);
         this.body.receiveTyped(visitor);
-        this.javadoc.receiveTyped(visitor);
     }
 
     @Override
@@ -179,7 +147,6 @@ public class EnumDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl implem
         List<Object> list = super.getChildObjects();
         list.add(this.implementsClause);
         list.add(this.body);
-        list.add(this.javadoc);
         return list;
     }
 
@@ -197,9 +164,6 @@ public class EnumDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl implem
         sb.append(',');
         sb.append("body=");
         sb.append(this.body == null? "null" : this.body.getClass().getSimpleName());
-        sb.append(',');
-        sb.append("javadoc=");
-        sb.append(this.javadoc == null? "null" : this.javadoc.getClass().getSimpleName());
         sb.append(']');
         return sb.toString();
     }

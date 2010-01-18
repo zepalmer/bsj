@@ -11,6 +11,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.AnonymousClassBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.EnumConstantDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
+import edu.jhu.cs.bsj.compiler.ast.node.JavadocNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
@@ -28,18 +29,23 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
     /** The body used to anonymously subclass the constant. */
     private AnonymousClassBodyNode body;
 
+    /** The associated javadoc comment for this node. */
+    private JavadocNode javadoc;
+
     /** General constructor. */
     public EnumConstantDeclarationNodeImpl(
             ListNode<AnnotationNode> annotations,
             IdentifierNode identifier,
             ListNode<ExpressionNode> arguments,
-            AnonymousClassBodyNode body)
+            AnonymousClassBodyNode body,
+            JavadocNode javadoc)
     {
         super();
         this.annotations = annotations;
         this.identifier = identifier;
         this.arguments = arguments;
         this.body = body;
+        this.javadoc = javadoc;
     }
 
     /**
@@ -147,6 +153,32 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
     }
 
     /**
+     * Gets the associated javadoc comment for this node.
+     * @return The associated javadoc comment for this node.
+     */
+    public JavadocNode getJavadoc()
+    {
+        return this.javadoc;
+    }
+
+    /**
+     * Changes the associated javadoc comment for this node.
+     * @param javadoc The associated javadoc comment for this node.
+     */
+    public void setJavadoc(JavadocNode javadoc)
+    {
+        if (this.javadoc instanceof NodeImpl)
+        {
+            ((NodeImpl)this.javadoc).setParent(null);
+        }
+        this.javadoc = javadoc;
+        if (this.javadoc instanceof NodeImpl)
+        {
+            ((NodeImpl)this.javadoc).setParent(this);
+        }
+    }
+
+    /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
      * method first and then visit its subclass-specific children.
@@ -161,6 +193,7 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
         this.identifier.receive(visitor);
         this.arguments.receive(visitor);
         this.body.receive(visitor);
+        this.javadoc.receive(visitor);
     }
 
     /**
@@ -178,6 +211,7 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
         this.identifier.receiveTyped(visitor);
         this.arguments.receiveTyped(visitor);
         this.body.receiveTyped(visitor);
+        this.javadoc.receiveTyped(visitor);
     }
 
     @Override
@@ -207,6 +241,7 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
         list.add(this.identifier);
         list.add(this.arguments);
         list.add(this.body);
+        list.add(this.javadoc);
         return list;
     }
 
@@ -230,6 +265,9 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
         sb.append(',');
         sb.append("body=");
         sb.append(this.body == null? "null" : this.body.getClass().getSimpleName());
+        sb.append(',');
+        sb.append("javadoc=");
+        sb.append(this.javadoc == null? "null" : this.javadoc.getClass().getSimpleName());
         sb.append(']');
         return sb.toString();
     }

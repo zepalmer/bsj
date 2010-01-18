@@ -178,11 +178,11 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ListNode<TypeNode> implementsClause,
             ClassBodyNode body,
             ListNode<TypeParameterNode> typeParameters,
-            JavadocNode javadoc,
             IdentifierNode identifier,
-            ModifiersNode modifiers)
+            ModifiersNode modifiers,
+            JavadocNode javadoc)
     {
-        ClassDeclarationNode ret = new ClassDeclarationNodeImpl(extendsClause, implementsClause, body, typeParameters, javadoc, identifier, modifiers);
+        ClassDeclarationNode ret = new ClassDeclarationNodeImpl(extendsClause, implementsClause, body, typeParameters, identifier, modifiers, javadoc);
         return ret;
     }
 
@@ -371,11 +371,11 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public EnumDeclarationNode makeEnumDeclarationNode(
             ListNode<TypeNode> implementsClause,
             EnumBodyNode body,
-            JavadocNode javadoc,
             IdentifierNode identifier,
-            ModifiersNode modifiers)
+            ModifiersNode modifiers,
+            JavadocNode javadoc)
     {
-        EnumDeclarationNode ret = new EnumDeclarationNodeImpl(implementsClause, body, javadoc, identifier, modifiers);
+        EnumDeclarationNode ret = new EnumDeclarationNodeImpl(implementsClause, body, identifier, modifiers, javadoc);
         return ret;
     }
 
@@ -611,9 +611,10 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public AnnotationDeclarationNode makeAnnotationDeclarationNode(
             AnnotationBodyNode body,
             IdentifierNode identifier,
-            ModifiersNode modifiers)
+            ModifiersNode modifiers,
+            JavadocNode javadoc)
     {
-        AnnotationDeclarationNode ret = new AnnotationDeclarationNodeImpl(body, identifier, modifiers);
+        AnnotationDeclarationNode ret = new AnnotationDeclarationNodeImpl(body, identifier, modifiers, javadoc);
         return ret;
     }
 
@@ -865,9 +866,10 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ListNode<AnnotationNode> annotations,
             IdentifierNode identifier,
             ListNode<ExpressionNode> arguments,
-            AnonymousClassBodyNode body)
+            AnonymousClassBodyNode body,
+            JavadocNode javadoc)
     {
-        EnumConstantDeclarationNode ret = new EnumConstantDeclarationNodeImpl(annotations, identifier, arguments, body);
+        EnumConstantDeclarationNode ret = new EnumConstantDeclarationNodeImpl(annotations, identifier, arguments, body, javadoc);
         return ret;
     }
 
@@ -949,9 +951,10 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ModifiersNode modifiers,
             TypeNode type,
             IdentifierNode identifier,
-            AnnotationValueNode defaultValue)
+            AnnotationValueNode defaultValue,
+            JavadocNode javadoc)
     {
-        AnnotationMethodDeclarationNode ret = new AnnotationMethodDeclarationNodeImpl(modifiers, type, identifier, defaultValue);
+        AnnotationMethodDeclarationNode ret = new AnnotationMethodDeclarationNodeImpl(modifiers, type, identifier, defaultValue, javadoc);
         return ret;
     }
 
@@ -1168,11 +1171,11 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ListNode<TypeNode> extendsClause,
             InterfaceBodyNode body,
             ListNode<TypeParameterNode> typeParameters,
-            JavadocNode javadoc,
             IdentifierNode identifier,
-            ModifiersNode modifiers)
+            ModifiersNode modifiers,
+            JavadocNode javadoc)
     {
-        InterfaceDeclarationNode ret = new InterfaceDeclarationNodeImpl(extendsClause, body, typeParameters, javadoc, identifier, modifiers);
+        InterfaceDeclarationNode ret = new InterfaceDeclarationNodeImpl(extendsClause, body, typeParameters, identifier, modifiers, javadoc);
         return ret;
     }
 

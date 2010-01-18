@@ -9,6 +9,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
+import edu.jhu.cs.bsj.compiler.ast.node.JavadocNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ModifiersNode;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
@@ -21,9 +22,10 @@ public class AnnotationDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl 
     public AnnotationDeclarationNodeImpl(
             AnnotationBodyNode body,
             IdentifierNode identifier,
-            ModifiersNode modifiers)
+            ModifiersNode modifiers,
+            JavadocNode javadoc)
     {
-        super(identifier, modifiers);
+        super(identifier, modifiers, javadoc);
         this.body = body;
     }
 

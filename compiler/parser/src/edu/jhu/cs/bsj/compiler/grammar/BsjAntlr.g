@@ -587,10 +587,10 @@ normalClassDeclaration returns [ClassDeclarationNode ret]
                     $type.ret,
                     $typeList.ret,
                     $classBody.ret,
-                    $typeParameters.ret,
-                    $javadoc.ret,
+                    $typeParameters.ret,                    
                     $id.ret,
-                    $modifiers.ret);
+                    $modifiers.ret,
+                    $javadoc.ret);
         }
     ;
 
@@ -659,7 +659,10 @@ typeBound returns [ListNode<DeclaredTypeNode> ret]
 
 
 enumDeclaration returns [EnumDeclarationNode ret]
-    scope Global;
+        scope Global;
+        @init {
+            ListNode<TypeNode> typeListNode = factory.makeListNode(new ArrayList<TypeNode>());
+        } 
     :   
         javadoc modifiers[classModifiers]
         'enum' 
@@ -667,15 +670,20 @@ enumDeclaration returns [EnumDeclarationNode ret]
         {
             $Global::className = $id.ret.getIdentifier();
         }
-        ('implements' typeList)?
+        (
+            'implements' typeList
+            {
+                typeListNode = $typeList.ret;
+            }
+        )?
         enumBody
         {
             $ret = factory.makeEnumDeclarationNode(
-                        $typeList.ret,
+                        typeListNode,
                         $enumBody.ret,
-                        $javadoc.ret,
                         $id.ret,
-                        $modifiers.ret);
+                        $modifiers.ret,
+                        $javadoc.ret);
         }
     ;
 
@@ -738,6 +746,7 @@ enumConstant returns [EnumConstantDeclarationNode ret]
             AnonymousClassBodyNode anonymousClassBodyNode = null;
         }
     :   
+        javadoc
         (
             annotations
             {
@@ -762,7 +771,8 @@ enumConstant returns [EnumConstantDeclarationNode ret]
                 annotationsNode,
                 $id.ret,
                 argumentsNode,
-                anonymousClassBodyNode);
+                anonymousClassBodyNode,
+                $javadoc.ret);
         }
     ;
 
@@ -798,7 +808,10 @@ interfaceDeclaration returns [TypeDeclarationNode ret]
     ;
     
 normalInterfaceDeclaration returns [InterfaceDeclarationNode ret]
-    scope Global;
+        scope Global;
+        @init {
+            ListNode<TypeNode> typeListNode = factory.makeListNode(new ArrayList<TypeNode>());
+        } 
     :   
         javadoc modifiers[interfaceModifiers]
         'interface' id=identifier
@@ -807,17 +820,21 @@ normalInterfaceDeclaration returns [InterfaceDeclarationNode ret]
         }        
         (typeParameters
         )?
-        ('extends' typeList
-        )?
+        (
+            'extends' typeList
+            {
+                typeListNode = $typeList.ret;
+            }
+        )?        
         interfaceBody
         {
             $ret = factory.makeInterfaceDeclarationNode(
-                    $typeList.ret,
+                    typeListNode,
                     $interfaceBody.ret,
                     $typeParameters.ret,
-                    $javadoc.ret,
                     $id.ret,
-                    $modifiers.ret);
+                    $modifiers.ret,
+                    $javadoc.ret);
         }
     ;
 
@@ -1705,7 +1722,7 @@ elementValueArrayInitializer returns [AnnotationArrayValueNode ret]
  */
 annotationTypeDeclaration returns [AnnotationDeclarationNode ret]
     :   
-        modifiers[interfaceModifiers] '@'
+        javadoc modifiers[interfaceModifiers] '@'
         'interface'
         id=identifier
         annotationTypeBody
@@ -1713,7 +1730,8 @@ annotationTypeDeclaration returns [AnnotationDeclarationNode ret]
             $ret = factory.makeAnnotationDeclarationNode(
                 $annotationTypeBody.ret,
                 $id.ret,
-                $modifiers.ret);
+                $modifiers.ret,
+                $javadoc.ret);
         }
     ;
 
@@ -1779,7 +1797,7 @@ annotationMethodDeclaration returns [AnnotationMethodDeclarationNode ret]
         AnnotationValueNode elementValueNode = null;
     }
     :   
-        modifiers[interfaceModifiers]
+        javadoc modifiers[interfaceModifiers]
         type
         id=identifier
         '(' ')'
@@ -1796,7 +1814,8 @@ annotationMethodDeclaration returns [AnnotationMethodDeclarationNode ret]
                 $modifiers.ret,
                 $type.ret,
                 $id.ret,
-                elementValueNode);
+                elementValueNode,
+                $javadoc.ret);
         }
         ;
 

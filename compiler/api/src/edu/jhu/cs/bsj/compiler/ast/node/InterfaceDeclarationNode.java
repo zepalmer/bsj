@@ -51,16 +51,4 @@ public interface InterfaceDeclarationNode extends NamedTypeDeclarationNode
      */
     public void setTypeParameters(ListNode<TypeParameterNode> typeParameters);
 
-    /**
-     * Gets the associated javadoc comment for this node.
-     * @return The associated javadoc comment for this node.
-     */
-    public JavadocNode getJavadoc();
-
-    /**
-     * Changes the associated javadoc comment for this node.
-     * @param javadoc The associated javadoc comment for this node.
-     */
-    public void setJavadoc(JavadocNode javadoc);
-
 }

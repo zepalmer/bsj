@@ -7,6 +7,7 @@ import javax.annotation.Generated;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
+import edu.jhu.cs.bsj.compiler.ast.node.JavadocNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.NamedTypeDeclarationNode;
 
@@ -19,14 +20,19 @@ public abstract class NamedTypeDeclarationNodeImpl extends NodeImpl implements N
     /** The modifiers for this declared type. */
     private ModifiersNode modifiers;
 
+    /** The associated javadoc comment for this node. */
+    private JavadocNode javadoc;
+
     /** General constructor. */
     protected NamedTypeDeclarationNodeImpl(
             IdentifierNode identifier,
-            ModifiersNode modifiers)
+            ModifiersNode modifiers,
+            JavadocNode javadoc)
     {
         super();
         this.identifier = identifier;
         this.modifiers = modifiers;
+        this.javadoc = javadoc;
     }
 
     /**
@@ -82,6 +88,32 @@ public abstract class NamedTypeDeclarationNodeImpl extends NodeImpl implements N
     }
 
     /**
+     * Gets the associated javadoc comment for this node.
+     * @return The associated javadoc comment for this node.
+     */
+    public JavadocNode getJavadoc()
+    {
+        return this.javadoc;
+    }
+
+    /**
+     * Changes the associated javadoc comment for this node.
+     * @param javadoc The associated javadoc comment for this node.
+     */
+    public void setJavadoc(JavadocNode javadoc)
+    {
+        if (this.javadoc instanceof NodeImpl)
+        {
+            ((NodeImpl)this.javadoc).setParent(null);
+        }
+        this.javadoc = javadoc;
+        if (this.javadoc instanceof NodeImpl)
+        {
+            ((NodeImpl)this.javadoc).setParent(this);
+        }
+    }
+
+    /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
      * method first and then visit its subclass-specific children.
@@ -94,6 +126,7 @@ public abstract class NamedTypeDeclarationNodeImpl extends NodeImpl implements N
         super.receiveToChildren(visitor);
         this.identifier.receive(visitor);
         this.modifiers.receive(visitor);
+        this.javadoc.receive(visitor);
     }
 
     /**
@@ -109,6 +142,7 @@ public abstract class NamedTypeDeclarationNodeImpl extends NodeImpl implements N
         super.receiveTypedToChildren(visitor);
         this.identifier.receiveTyped(visitor);
         this.modifiers.receiveTyped(visitor);
+        this.javadoc.receiveTyped(visitor);
     }
 
     @Override
@@ -138,6 +172,7 @@ public abstract class NamedTypeDeclarationNodeImpl extends NodeImpl implements N
         List<Object> list = super.getChildObjects();
         list.add(this.identifier);
         list.add(this.modifiers);
+        list.add(this.javadoc);
         return list;
     }
 
@@ -155,6 +190,9 @@ public abstract class NamedTypeDeclarationNodeImpl extends NodeImpl implements N
         sb.append(',');
         sb.append("modifiers=");
         sb.append(this.modifiers == null? "null" : this.modifiers.getClass().getSimpleName());
+        sb.append(',');
+        sb.append("javadoc=");
+        sb.append(this.javadoc == null? "null" : this.javadoc.getClass().getSimpleName());
         sb.append(']');
         return sb.toString();
     }
