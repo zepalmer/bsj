@@ -9,6 +9,8 @@ import org.antlr.runtime.TokenRewriteStream;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
+import edu.jhu.cs.bsj.compiler.tool.parser.antlr.BsjAntlrLexer;
+import edu.jhu.cs.bsj.compiler.tool.parser.antlr.BsjAntlrParser;
 
 /**
  * This class contains the functionality necessary to parse BSJ source files into BSJ heterogeneous ASTs. It relies on a
@@ -17,7 +19,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
  * 
  * @author Zachary Palmer
  */
-public class BsjParser
+public class BsjParserImpl
 {
 	/**
 	 * The factory that this parser will use to construct AST nodes.
@@ -29,7 +31,7 @@ public class BsjParser
 	 * 
 	 * @param factory The factory that this parser should use to construct AST nodes.
 	 */
-	public BsjParser(BsjNodeFactory factory)
+	public BsjParserImpl(BsjNodeFactory factory)
 	{
 		super();
 		this.factory = factory;
@@ -43,10 +45,8 @@ public class BsjParser
 	 */
 	public CompilationUnitNode parse(InputStream is) throws IOException, RecognitionException
 	{
-		edu.jhu.cs.bsj.compiler.tool.parser.antlr.BsjLexer lexer = new edu.jhu.cs.bsj.compiler.tool.parser.antlr.BsjLexer(
-				new ANTLRInputStream(is));
-		edu.jhu.cs.bsj.compiler.tool.parser.antlr.BsjParser parser = new edu.jhu.cs.bsj.compiler.tool.parser.antlr.BsjParser(
-				new TokenRewriteStream(lexer));
+		BsjAntlrLexer lexer = new BsjAntlrLexer(new ANTLRInputStream(is));
+		BsjAntlrParser parser = new BsjAntlrParser(new TokenRewriteStream(lexer));
 		parser.setFactory(factory);
 		
 		CompilationUnitNode compilationUnitNode = parser.compilationUnit();

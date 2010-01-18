@@ -13,7 +13,7 @@
     </description>
 	
 	<!-- Names the ANTLR grammar file. -->
-	<property name="grammar" value="src/edu/jhu/cs/bsj/compiler/grammar/Bsj.g"/>
+	<property name="grammar" value="src/edu/jhu/cs/bsj/compiler/grammar/BsjAntlr.g"/>
 	<!-- Names the directory which should contain the sources on which the parser depends. -->
 	<property name="presrc" value="src-pre" />
 	<!-- Names the directory which will contain the generated sources. -->

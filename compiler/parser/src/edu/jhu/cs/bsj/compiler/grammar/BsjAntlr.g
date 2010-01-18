@@ -52,7 +52,7 @@
  */
 
 
-grammar Bsj;
+grammar BsjAntlr;
 
 options {
     language=Java;

@@ -38,7 +38,7 @@ import org.apache.log4j.PropertyConfigurator;
 
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeFactoryImpl;
-import edu.jhu.cs.bsj.compiler.tool.parser.BsjParser;
+import edu.jhu.cs.bsj.compiler.tool.parser.BsjParserImpl;
 
 public class AntlrAstViewer
 {
@@ -173,7 +173,7 @@ public class AntlrAstViewer
 
 	public static Node stringToAst(String s) throws Exception
 	{
-		BsjParser parser = new BsjParser(new BsjNodeFactoryImpl());
+		BsjParserImpl parser = new BsjParserImpl(new BsjNodeFactoryImpl());
 		return parser.parse(new ByteArrayInputStream(s.getBytes()));
 	}
 
