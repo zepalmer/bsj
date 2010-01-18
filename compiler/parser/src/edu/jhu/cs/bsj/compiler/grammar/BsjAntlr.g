@@ -3335,7 +3335,6 @@ categorizedName[NameCategory category, NameCategory lastCategory] returns [NameN
         }
         @after {
             $ret = null;
-            StringBuilder nameToLog = new StringBuilder(); // TODO: replace this with a toString on the node
             for (int i=0;i<identifierNodes.size();i++)
             {
                 NameCategory currentCategory = (i==identifierNodes.size()-1) ? lastCategory : category;
@@ -3348,13 +3347,11 @@ categorizedName[NameCategory category, NameCategory lastCategory] returns [NameN
 	                        $ret,
 	                        identifierNodes.get(i),
 	                        currentCategory);
-	                nameToLog.append('.');
                 }
-                nameToLog.append(identifierNodes.get(0).getIdentifier());
             }
             if (logger.isTraceEnabled())
             {
-                logger.trace("Parsed name " + nameToLog.toString());
+                logger.trace("Parsed name " + $ret.toString());
             }
         }
     :
