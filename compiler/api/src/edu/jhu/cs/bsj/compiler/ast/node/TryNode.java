@@ -18,7 +18,7 @@ import javax.annotation.Generated;
  * If no catch block exists, the <tt>catches</tt> list node will contain no children.  If no finally block exists,
  * <tt>finallyBlock</tt> will be <tt>null</tt>.  <tt>catches</tt> is not permitted to be <tt>null</tt>.
  */
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public interface TryNode extends Node, StatementNode
 {
     /**

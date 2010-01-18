@@ -6,7 +6,7 @@ import javax.annotation.Generated;
  * Acts as a base class for annotation nodes.  Subclasses distinguish between the different types of annotation
  * sugar.
  */
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public interface AnnotationNode extends Node
 {
     /**

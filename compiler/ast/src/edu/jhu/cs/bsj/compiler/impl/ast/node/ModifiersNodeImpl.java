@@ -12,7 +12,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.AnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ModifiersNode;
 
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class ModifiersNodeImpl extends NodeImpl implements ModifiersNode
 {
     /** The annotations modifying the subject. */

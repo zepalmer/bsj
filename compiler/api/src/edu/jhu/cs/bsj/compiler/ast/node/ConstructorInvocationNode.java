@@ -9,7 +9,7 @@ import javax.annotation.Generated;
  * language specification treats these two entities as distinct (and there are some corner cases for the superclass
  * constructor syntax which are best contained
  */
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public interface ConstructorInvocationNode extends Node
 {
     /**

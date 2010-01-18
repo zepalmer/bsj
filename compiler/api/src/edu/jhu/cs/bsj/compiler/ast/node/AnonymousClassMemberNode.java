@@ -7,7 +7,7 @@ import javax.annotation.Generated;
  * Since the set of declarations which may appear in an anonymous class is a subset of that which may appear in a
  * named class, this type is a subtype of {@link ClassMember}.
  */
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public interface AnonymousClassMemberNode extends Node, ClassMemberNode
 {
 }

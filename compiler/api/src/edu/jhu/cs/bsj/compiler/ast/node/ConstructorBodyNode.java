@@ -15,7 +15,7 @@ import javax.annotation.Generated;
  * that there be exactly one explicit constructor invocation and that it appears at the top of the constructor
  * body.
  */
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public interface ConstructorBodyNode extends Node
 {
     /**

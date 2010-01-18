@@ -9,7 +9,7 @@ import javax.annotation.Generated;
  * </pre>
  * If this class is not anonymous, the <tt>body</tt> field is <tt>null</tt>.
  */
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public interface UnqualifiedClassInstantiationNode extends ClassInstantiationNode
 {
     /**

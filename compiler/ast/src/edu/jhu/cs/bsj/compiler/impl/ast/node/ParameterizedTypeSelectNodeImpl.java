@@ -10,7 +10,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.DeclaredTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ParameterizedTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ParameterizedTypeSelectNode;
 
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class ParameterizedTypeSelectNodeImpl extends NodeImpl implements ParameterizedTypeSelectNode
 {
     /** The parameterized type from which a type is selected. */

@@ -22,7 +22,7 @@ import javax.annotation.Generated;
  * In that case, the <tt>type</tt> field contains the name of the qualified <tt>this</tt>.  Usually, <tt>this</tt>
  * is unqualified and the <tt>type</tt> field is <tt>null</tt>.
  */
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public interface ThisNode extends Node, RestrictedPrimaryExpressionNode
 {
     /**

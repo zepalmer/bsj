@@ -6,7 +6,7 @@ import javax.annotation.Generated;
  * A value in an annotation representing an array.  This node is distinct from the {@link ArrayInitializerNode}
  * because it allows annotations (by way of {@link AnnotationAnnotationValueNode}) as well as expressions.
  */
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public interface AnnotationArrayValueNode extends Node, AnnotationValueNode
 {
     /**

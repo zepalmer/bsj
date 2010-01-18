@@ -10,7 +10,7 @@ import javax.annotation.Generated;
  * Levels for this array creator refer to square brace pairs,
  * for example <code>new int[][][]</code> would have three levels.
  */
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public interface ArrayInitializerCreationNode extends ArrayCreationNode
 {
     /**

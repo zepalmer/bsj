@@ -9,7 +9,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ThrowNode;
 
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class ThrowNodeImpl extends NodeImpl implements ThrowNode
 {
     /** The Throwable to throw. */

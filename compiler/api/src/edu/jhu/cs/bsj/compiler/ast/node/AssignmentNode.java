@@ -11,7 +11,7 @@ import edu.jhu.cs.bsj.compiler.ast.AssignmentOperator;
  * </pre>
  * where <i>op</i> is one of <tt>=</tt>, <tt>+=</tt>, <tt>%=</tt>, etc.
  */
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public interface AssignmentNode extends Node, ExpressionNode
 {
     /**

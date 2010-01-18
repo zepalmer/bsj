@@ -14,7 +14,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.TypeParameterNode;
 import edu.jhu.cs.bsj.compiler.ast.node.UnparameterizedTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableNode;
 
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class ConstructorDeclarationNodeImpl extends NodeImpl implements ConstructorDeclarationNode
 {
     /** The body of this constructor. */

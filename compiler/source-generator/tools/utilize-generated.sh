@@ -15,7 +15,7 @@ fi
 
 for d in "$apisrc/$apipkg" "$astsrc/$astpkg"; do
     find "$d" -name '*.java' | while read line; do
-        if [ -n "$(cat "$line" | grep '@Generated' | grep 'edu.jhu.cs.bsj.compiler.utils.SourceGenerator')" ]; then
+        if [ -n "$(cat "$line" | grep '@Generated' | grep 'edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator')" ]; then
             echo "deleted $line"
             rm "$line"
         fi

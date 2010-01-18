@@ -9,7 +9,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.PrimitiveType;
 import edu.jhu.cs.bsj.compiler.ast.node.PrimitiveTypeNode;
 
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class PrimitiveTypeNodeImpl extends NodeImpl implements PrimitiveTypeNode
 {
     /** The primitive type being represented. */

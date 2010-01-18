@@ -5,7 +5,7 @@ import javax.annotation.Generated;
 /**
  * Represents the creation of an array, including both instantiation and initialization.
  */
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public interface ArrayCreationNode extends Node, PrimaryExpressionNode
 {
     /**

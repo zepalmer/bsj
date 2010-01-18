@@ -9,7 +9,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.ConditionalExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class ConditionalExpressionNodeImpl extends NodeImpl implements ConditionalExpressionNode
 {
     /** The condition of the expression. */

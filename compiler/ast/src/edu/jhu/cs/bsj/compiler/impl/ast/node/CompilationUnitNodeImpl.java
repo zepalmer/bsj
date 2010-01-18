@@ -12,7 +12,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.PackageDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeDeclarationNode;
 
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnitNode
 {
     /** The package declaration for this unit. */

@@ -8,7 +8,7 @@ import javax.annotation.Generated;
  * (<i>type</i>) <i>expr</i>
  * </pre>
  */
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public interface TypeCastNode extends Node, NonAssignmentExpressionNode
 {
     /**

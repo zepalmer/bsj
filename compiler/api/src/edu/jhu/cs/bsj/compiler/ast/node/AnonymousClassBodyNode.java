@@ -7,7 +7,7 @@ import javax.annotation.Generated;
  * it does not permit constructors.  There is no corresponding <tt>AnonymousClassDeclarationNode</tt> because the
  * expression which contains this body implicitly stands as the declaration of that type.
  */
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public interface AnonymousClassBodyNode extends Node
 {
     /**

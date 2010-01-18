@@ -12,7 +12,7 @@ import javax.annotation.Generated;
  * the <tt>update</tt> field is a {@link ListNode} with no children.  If the loop has no termination condition, the
  * <tt>condition</tt> field is <tt>null</tt>.  The <tt>update</tt> field should never be <tt>null</tt>.
  */
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public interface ForLoopNode extends Node, StatementNode
 {
     /**

@@ -10,7 +10,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.AnonymousClassBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.AnonymousClassMemberNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
 
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class AnonymousClassBodyNodeImpl extends NodeImpl implements AnonymousClassBodyNode
 {
     /** The members of this anonymous class body. */

@@ -665,7 +665,7 @@ public class SourceGenerator
 	 */
 	private static void printGeneratedClause(PrintStream ps)
 	{
-		ps.println("@Generated(value={\"edu.jhu.cs.bsj.compiler.utils.SourceGenerator\"})");
+		ps.println("@Generated(value={\"" + SourceGenerator.class.getName()+ "\"})");
 	}
 
 	/**

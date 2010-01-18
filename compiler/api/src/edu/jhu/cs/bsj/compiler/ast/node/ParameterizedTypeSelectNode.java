@@ -10,7 +10,7 @@ import javax.annotation.Generated;
  * children of an {@link UnparameterizedTypeNode} containing the name "A" and a {@link ListNode} containing the
  * type argument with the name "X".
  */
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public interface ParameterizedTypeSelectNode extends Node, DeclaredTypeNode
 {
     /**

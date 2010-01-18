@@ -19,7 +19,7 @@ import javax.annotation.Generated;
  * For simple method invocations (such as <tt>myObjectReference.myMethod()</tt>), see
  * {@link MethodInvocationByNameNode}.
  */
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public interface MethodInvocationByExpressionNode extends MethodInvocationNode
 {
     /**

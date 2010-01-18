@@ -7,7 +7,7 @@ import javax.annotation.Generated;
  * extensions exist.  In the likely case that this constant is not an anonymous subclass, <tt>body</tt> is
  * <tt>null</tt>.
  */
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public interface EnumConstantDeclarationNode extends Node
 {
     /**

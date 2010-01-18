@@ -17,7 +17,7 @@ import javax.annotation.Generated;
  * </pre>
  * (in which case <tt>bound</tt> is <tt>null</tt>).
  */
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public interface WildcardTypeNode extends Node, TypeArgumentNode
 {
     /**

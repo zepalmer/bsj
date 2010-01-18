@@ -7,7 +7,7 @@ import javax.annotation.Generated;
  * literal (such as <tt>String.class</tt>, <tt>int.class</tt>, or <tt>String[].class</tt>).  Note that
  * parameterized types may not be used to create literals; that is, <tt>Set&lt;String&gt;.class</tt> is illegal.
  */
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public interface LiteralizableTypeNode extends Node, TypeNode
 {
 }

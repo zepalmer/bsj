@@ -16,7 +16,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.TypeParameterNode;
 import edu.jhu.cs.bsj.compiler.ast.node.UnparameterizedTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableNode;
 
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclarationNode
 {
     /** The body of this method. */

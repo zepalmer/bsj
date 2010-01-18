@@ -10,7 +10,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class ListNodeImpl<T extends Node> extends NodeImpl implements ListNode<T>
 {
     /** The list of children. */

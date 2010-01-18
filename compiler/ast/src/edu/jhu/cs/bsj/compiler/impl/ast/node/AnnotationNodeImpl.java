@@ -9,7 +9,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.UnparameterizedTypeNode;
 
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public abstract class AnnotationNodeImpl extends NodeImpl implements AnnotationNode
 {
     /** The annotation type. */

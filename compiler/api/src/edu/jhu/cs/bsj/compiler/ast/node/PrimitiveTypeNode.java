@@ -7,7 +7,7 @@ import edu.jhu.cs.bsj.compiler.ast.PrimitiveType;
 /**
  * A node representing a primitive type.
  */
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public interface PrimitiveTypeNode extends Node, TypeNode,  BaseTypeNode,  LiteralizableTypeNode
 {
     /**

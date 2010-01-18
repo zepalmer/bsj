@@ -13,7 +13,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.SuperMethodInvocationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.UnparameterizedTypeNode;
 
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class SuperMethodInvocationNodeImpl extends NodeImpl implements SuperMethodInvocationNode
 {
     /** The qualifying type. */

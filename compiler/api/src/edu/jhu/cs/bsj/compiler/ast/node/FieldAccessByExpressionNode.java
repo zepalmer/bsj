@@ -14,7 +14,7 @@ import javax.annotation.Generated;
  * This node is not used for simple expressions such as <tt>x</tt> or <tt>y.z</tt>.  For those forms of field
  * access, see {@link FieldAccessByNameNode}.
  */
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public interface FieldAccessByExpressionNode extends Node, FieldAccessNode
 {
     /**

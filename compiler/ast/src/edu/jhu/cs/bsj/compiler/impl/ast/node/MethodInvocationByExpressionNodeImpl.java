@@ -13,7 +13,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.MethodInvocationByExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.PrimaryExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
 
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class MethodInvocationByExpressionNodeImpl extends MethodInvocationNodeImpl implements MethodInvocationByExpressionNode
 {
     /** The expression against which to invoke the method. */

@@ -12,7 +12,7 @@ import javax.annotation.Generated;
  * }
  * </pre>
  */
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public interface EnumDeclarationNode extends NamedTypeDeclarationNode, InlineTypeDeclarableNode
 {
     /**

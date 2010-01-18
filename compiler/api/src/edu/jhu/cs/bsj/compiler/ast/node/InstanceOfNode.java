@@ -8,7 +8,7 @@ import javax.annotation.Generated;
  * <i>expression</i> instanceof <i>type</i>
  * </pre>
  */
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public interface InstanceOfNode extends Node, NonAssignmentExpressionNode
 {
     /**

@@ -8,7 +8,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.NameCategory;
 import edu.jhu.cs.bsj.compiler.ast.node.NameNode;
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public abstract class NameNodeImpl extends NodeImpl implements NameNode
 {
     /** The category for this name. */

@@ -10,7 +10,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.AssignmentNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class AssignmentNodeImpl extends NodeImpl implements AssignmentNode
 {
     /** The variable to which to assign a value. */

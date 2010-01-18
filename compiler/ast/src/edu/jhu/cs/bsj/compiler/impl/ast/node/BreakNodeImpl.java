@@ -9,7 +9,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.BreakNode;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class BreakNodeImpl extends NodeImpl implements BreakNode
 {
     /** The break label. */

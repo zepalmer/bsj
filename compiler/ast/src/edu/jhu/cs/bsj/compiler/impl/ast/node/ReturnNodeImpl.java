@@ -9,7 +9,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ReturnNode;
 
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class ReturnNodeImpl extends NodeImpl implements ReturnNode
 {
     /** The expression to return. */

@@ -9,7 +9,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.ImportSingleTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.NameNode;
 
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class ImportSingleTypeNodeImpl extends NodeImpl implements ImportSingleTypeNode
 {
     /** The name of the type to import. */

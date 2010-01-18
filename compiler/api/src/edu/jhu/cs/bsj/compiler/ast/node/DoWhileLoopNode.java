@@ -8,7 +8,7 @@ import javax.annotation.Generated;
  * do <i>body</i> while (<i>condition</i>);
  * </pre>
  */
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public interface DoWhileLoopNode extends Node, StatementNode
 {
     /**

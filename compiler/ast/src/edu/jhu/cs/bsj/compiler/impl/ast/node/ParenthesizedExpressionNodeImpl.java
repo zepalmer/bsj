@@ -9,7 +9,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ParenthesizedExpressionNode;
 
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class ParenthesizedExpressionNodeImpl extends NodeImpl implements ParenthesizedExpressionNode
 {
     /** The expression contained in this node. */

@@ -9,7 +9,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.ArrayCreationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.BaseTypeNode;
 
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public abstract class ArrayCreationNodeImpl extends NodeImpl implements ArrayCreationNode
 {
     /** The base type for this array. */

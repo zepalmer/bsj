@@ -9,7 +9,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.BlockStatementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.InitializerDeclarationNode;
 
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class InitializerDeclarationNodeImpl extends NodeImpl implements InitializerDeclarationNode
 {
     /** Whether or not the initializer is static. */

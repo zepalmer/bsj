@@ -10,7 +10,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.ArrayInitializerNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableInitializerNode;
 
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class ArrayInitializerNodeImpl extends NodeImpl implements ArrayInitializerNode
 {
     /** The initializers for the array. */

@@ -18,7 +18,7 @@ import javax.annotation.Generated;
  * This node is not used to represent field access from the evaluation result of a subexpression (such as in the
  * code <tt>foo().bar</tt>).  For that form of access, see {@link FieldAccessByExpressionNode}.
  */
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public interface FieldAccessByNameNode extends Node, FieldAccessNode
 {
     /**

@@ -14,7 +14,7 @@ import javax.annotation.Generated;
  * .  Note that this only applies to <i>superclass</i> constructor invocations (those using the <tt>super</tt>
  * keyword).  For alternate constructor invocations, see {@link AlternateConstructorInvocationNode}.
  */
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public interface SuperclassConstructorInvocationNode extends ConstructorInvocationNode
 {
     /**

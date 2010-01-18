@@ -9,7 +9,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.ForInitializerDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclarationNode;
 
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class ForInitializerDeclarationNodeImpl extends NodeImpl implements ForInitializerDeclarationNode
 {
     /** The variables declared in this initializer. */

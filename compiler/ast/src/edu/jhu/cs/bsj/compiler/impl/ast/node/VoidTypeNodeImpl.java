@@ -8,7 +8,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.VoidTypeNode;
 
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class VoidTypeNodeImpl extends NodeImpl implements VoidTypeNode
 {
     /** General constructor. */

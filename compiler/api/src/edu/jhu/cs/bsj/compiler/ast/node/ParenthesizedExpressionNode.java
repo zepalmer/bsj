@@ -13,7 +13,7 @@ import javax.annotation.Generated;
  * (which represents <tt>a.z</tt>) expects a primary expression; thus, without this node, there would be no way
  * to express <tt>(b?x:y).z</tt>.
  */
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public interface ParenthesizedExpressionNode extends Node, RestrictedPrimaryExpressionNode
 {
     /**

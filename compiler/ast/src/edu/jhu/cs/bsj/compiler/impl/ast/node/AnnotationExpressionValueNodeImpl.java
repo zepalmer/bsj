@@ -9,7 +9,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationExpressionValueNode;
 import edu.jhu.cs.bsj.compiler.ast.node.NonAssignmentExpressionNode;
 
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class AnnotationExpressionValueNodeImpl extends NodeImpl implements AnnotationExpressionValueNode
 {
     /** The expression. */

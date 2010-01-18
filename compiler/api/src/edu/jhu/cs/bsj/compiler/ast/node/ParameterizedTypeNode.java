@@ -7,7 +7,7 @@ import javax.annotation.Generated;
  * as Set<String> (which would be represented by the unparameterized type Set and the single-element argument list
  * containing the unparameterized type for String).
  */
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public interface ParameterizedTypeNode extends Node, DeclaredTypeNode
 {
     /**

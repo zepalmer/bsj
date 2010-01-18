@@ -10,7 +10,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.DoWhileLoopNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.StatementNode;
 
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class DoWhileLoopNodeImpl extends NodeImpl implements DoWhileLoopNode
 {
     /** The loop's condition. */

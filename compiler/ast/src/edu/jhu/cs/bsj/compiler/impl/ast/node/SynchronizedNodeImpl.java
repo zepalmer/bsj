@@ -10,7 +10,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.BlockStatementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.SynchronizedNode;
 
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class SynchronizedNodeImpl extends NodeImpl implements SynchronizedNode
 {
     /** The synchronization expression. */

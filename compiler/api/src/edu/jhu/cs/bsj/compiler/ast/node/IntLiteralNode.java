@@ -5,7 +5,7 @@ import javax.annotation.Generated;
 /**
  * A node representing an int literal.
  */
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public interface IntLiteralNode extends LiteralNode<Integer>
 {
 }

@@ -5,7 +5,7 @@ import javax.annotation.Generated;
 /**
  * Represents the body of a class declaration.
  */
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public interface ClassBodyNode extends Node
 {
     /**

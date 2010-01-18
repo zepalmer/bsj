@@ -13,7 +13,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.CodeLiteralNode;
  *
  * @author Zachary Palmer
  */
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class BsjTypedNodeNoOpVisitor
 {
     /**

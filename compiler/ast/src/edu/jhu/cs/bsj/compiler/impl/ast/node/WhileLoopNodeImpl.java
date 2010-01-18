@@ -10,7 +10,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.StatementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.WhileLoopNode;
 
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class WhileLoopNodeImpl extends NodeImpl implements WhileLoopNode
 {
     /** The loop's condition. */

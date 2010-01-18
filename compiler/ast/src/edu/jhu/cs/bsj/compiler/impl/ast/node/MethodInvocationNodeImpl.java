@@ -11,7 +11,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.MethodInvocationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
 
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public abstract class MethodInvocationNodeImpl extends NodeImpl implements MethodInvocationNode
 {
     /** The arguments to pass to the method. */

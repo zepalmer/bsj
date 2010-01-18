@@ -10,7 +10,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.SuperFieldAccessNode;
 import edu.jhu.cs.bsj.compiler.ast.node.UnparameterizedTypeNode;
 
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class SuperFieldAccessNodeImpl extends NodeImpl implements SuperFieldAccessNode
 {
     /** The qualifying type. */

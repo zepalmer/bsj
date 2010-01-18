@@ -5,7 +5,7 @@ import javax.annotation.Generated;
 /**
  * Represents the void declaration (a single semi-colon).
  */
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public interface VoidTypeDeclarationNode extends Node, TypeDeclarationNode
 {
 }

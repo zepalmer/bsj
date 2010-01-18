@@ -5,7 +5,7 @@ import javax.annotation.Generated;
 /**
  * Represents the body of an enum declaration.
  */
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public interface EnumBodyNode extends Node
 {
     /**

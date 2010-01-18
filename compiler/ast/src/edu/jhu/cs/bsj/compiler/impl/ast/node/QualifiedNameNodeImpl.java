@@ -11,7 +11,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.NameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.QualifiedNameNode;
 
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class QualifiedNameNodeImpl extends NameNodeImpl implements QualifiedNameNode
 {
     /** The name being qualified. */

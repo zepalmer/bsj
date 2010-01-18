@@ -11,7 +11,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeParameterNode;
 
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class TypeParameterNodeImpl extends NodeImpl implements TypeParameterNode
 {
     /** The base type name for the parameter. */

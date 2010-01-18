@@ -11,7 +11,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.StatementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableNode;
 
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class EnhancedForLoopNodeImpl extends NodeImpl implements EnhancedForLoopNode
 {
     /** The iterator variable. */

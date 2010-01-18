@@ -10,7 +10,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeCastNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
 
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class TypeCastNodeImpl extends NodeImpl implements TypeCastNode
 {
     /** The expression to cast. */

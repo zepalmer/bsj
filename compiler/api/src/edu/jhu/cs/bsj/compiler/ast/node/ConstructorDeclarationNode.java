@@ -10,7 +10,7 @@ import javax.annotation.Generated;
  * </pre>
  * See {@link MethodDeclarationNode} for more information.
  */
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public interface ConstructorDeclarationNode extends Node, ClassMemberNode
 {
     /**

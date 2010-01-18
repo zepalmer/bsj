@@ -11,7 +11,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.EnumBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.EnumConstantDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
 
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class EnumBodyNodeImpl extends NodeImpl implements EnumBodyNode
 {
     /** The enumeration constants. */

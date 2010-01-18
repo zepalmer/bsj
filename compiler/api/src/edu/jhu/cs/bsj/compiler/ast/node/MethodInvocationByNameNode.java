@@ -14,7 +14,7 @@ import javax.annotation.Generated;
  * This node is used for simple method calls (such as <tt>x.y()</tt>) and not for expression-based method calls
  * (such as <tt>x().y()</tt>).  For expression-based method calls, see {@link MethodInvocationByExpressionNode}.
  */
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public interface MethodInvocationByNameNode extends MethodInvocationNode
 {
     /**

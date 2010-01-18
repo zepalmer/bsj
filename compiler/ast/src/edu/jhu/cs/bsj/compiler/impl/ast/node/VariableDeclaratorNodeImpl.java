@@ -11,7 +11,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclaratorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableInitializerNode;
 
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class VariableDeclaratorNodeImpl extends NodeImpl implements VariableDeclaratorNode
 {
     /** The type of this variable. */

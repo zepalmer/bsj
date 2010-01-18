@@ -7,7 +7,7 @@ import javax.annotation.Generated;
  * {@link VoidTypeNode}.  This is technically a violation (as Java does not treat <tt>void</tt> as a type) but
  * allows this node to represent <tt>void.class</tt>.
  */
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public interface ClassLiteralNode extends LiteralNode<LiteralizableTypeNode>
 {
 }

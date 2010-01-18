@@ -8,7 +8,7 @@ import javax.annotation.Generated;
  * if (<i>condition</i>) then <i>statement</i> else <i>statement</i>
  * </pre>
  */
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public interface IfNode extends Node, StatementNode
 {
     /**

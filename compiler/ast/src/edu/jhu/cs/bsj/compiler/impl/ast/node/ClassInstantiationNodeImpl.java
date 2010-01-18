@@ -12,7 +12,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeArgumentNode;
 
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public abstract class ClassInstantiationNodeImpl extends NodeImpl implements ClassInstantiationNode
 {
     /** The type arguments for the constructor. */

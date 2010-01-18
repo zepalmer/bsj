@@ -5,7 +5,7 @@ import javax.annotation.Generated;
 /**
  * A node representing the void type.  This is used, for example, in method return values.
  */
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public interface VoidTypeNode extends Node, TypeNode,  LiteralizableTypeNode
 {
 }

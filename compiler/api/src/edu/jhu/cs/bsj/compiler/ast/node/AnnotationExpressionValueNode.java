@@ -5,7 +5,7 @@ import javax.annotation.Generated;
 /**
  * A value in an annotation which is an expression.  This value may not be an assignment expression.
  */
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public interface AnnotationExpressionValueNode extends Node, AnnotationValueNode
 {
     /**

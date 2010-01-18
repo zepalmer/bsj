@@ -13,7 +13,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
 
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumConstantDeclarationNode
 {
     /** The annotations on this constant. */

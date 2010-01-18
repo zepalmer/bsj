@@ -9,7 +9,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.FieldAccessByNameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.NameNode;
 
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class FieldAccessByNameNodeImpl extends NodeImpl implements FieldAccessByNameNode
 {
     /** The name of the field to access. */

@@ -13,7 +13,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeArgumentNode;
 import edu.jhu.cs.bsj.compiler.ast.node.UnqualifiedClassInstantiationNode;
 
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class UnqualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeImpl implements UnqualifiedClassInstantiationNode
 {
     /** The type being instantiated. */

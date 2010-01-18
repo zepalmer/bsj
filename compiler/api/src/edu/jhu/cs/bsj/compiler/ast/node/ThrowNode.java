@@ -8,7 +8,7 @@ import javax.annotation.Generated;
  * throw <i>expr</i>;
  * </pre>
  */
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public interface ThrowNode extends Node, StatementNode
 {
     /**

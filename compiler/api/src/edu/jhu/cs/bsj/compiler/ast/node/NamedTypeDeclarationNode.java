@@ -5,7 +5,7 @@ import javax.annotation.Generated;
 /**
  * Acts as a superclass for all named type declarations.
  */
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public interface NamedTypeDeclarationNode extends Node, TypeDeclarationNode
 {
     /**

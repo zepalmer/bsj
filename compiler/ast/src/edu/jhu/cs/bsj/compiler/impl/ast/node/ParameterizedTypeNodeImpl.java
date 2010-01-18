@@ -11,7 +11,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.ParameterizedTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeArgumentNode;
 import edu.jhu.cs.bsj.compiler.ast.node.UnparameterizedTypeNode;
 
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class ParameterizedTypeNodeImpl extends NodeImpl implements ParameterizedTypeNode
 {
     /** The base type being parameterized. */

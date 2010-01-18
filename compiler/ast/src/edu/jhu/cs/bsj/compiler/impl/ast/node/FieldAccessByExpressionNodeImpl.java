@@ -10,7 +10,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.FieldAccessByExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.PrimaryExpressionNode;
 
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class FieldAccessByExpressionNodeImpl extends NodeImpl implements FieldAccessByExpressionNode
 {
     /** The expression from which the field is being selected. */

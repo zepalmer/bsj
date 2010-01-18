@@ -17,7 +17,7 @@ import javax.annotation.Generated;
  * <pre>public abstract void foo();</pre>
  * will have a <tt>null</tt> body.
  */
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public interface MethodDeclarationNode extends Node, ClassMemberNode,  InterfaceMemberNode,  AnonymousClassMemberNode
 {
     /**

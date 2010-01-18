@@ -9,7 +9,7 @@ import javax.annotation.Generated;
  * <pre>return;</pre>
  * For void return statements, the <tt>expression</tt> is <tt>null</tt>.
  */
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public interface ReturnNode extends Node, StatementNode
 {
     /**

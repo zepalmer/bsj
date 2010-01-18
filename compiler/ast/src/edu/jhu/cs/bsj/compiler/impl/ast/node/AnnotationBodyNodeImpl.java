@@ -10,7 +10,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.AnnotationBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationMemberNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
 
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class AnnotationBodyNodeImpl extends NodeImpl implements AnnotationBodyNode
 {
     /** The members of this annotation body. */

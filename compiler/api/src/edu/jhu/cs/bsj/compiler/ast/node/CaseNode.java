@@ -17,7 +17,7 @@ import javax.annotation.Generated;
  * </pre>
  * If the switch label is <tt>default</tt>, <tt>expression</tt> is <tt>null</tt>. 
  */
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public interface CaseNode extends Node
 {
     /**

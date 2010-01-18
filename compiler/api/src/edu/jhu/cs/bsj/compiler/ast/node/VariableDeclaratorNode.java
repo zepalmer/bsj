@@ -14,7 +14,7 @@ import javax.annotation.Generated;
  * Hence, type exists on this node instead of its parent.  If the variable is not initialized, the
  * <tt>initializer</tt> field is <tt>null</tt>.
  */
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public interface VariableDeclaratorNode extends Node, StatementNode
 {
     /**

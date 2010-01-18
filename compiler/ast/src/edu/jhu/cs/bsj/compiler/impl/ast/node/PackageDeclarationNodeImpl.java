@@ -11,7 +11,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.NameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.PackageDeclarationNode;
 
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class PackageDeclarationNodeImpl extends NodeImpl implements PackageDeclarationNode
 {
     /** The name of the package. */

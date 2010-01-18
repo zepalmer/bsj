@@ -8,7 +8,7 @@ import javax.annotation.Generated;
  * <i>condition</i> ? <i>expression</i> : <i>expression</i>
  * </pre>
  */
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public interface ConditionalExpressionNode extends Node, NonAssignmentExpressionNode
 {
     /**

@@ -10,7 +10,7 @@ import edu.jhu.cs.bsj.compiler.ast.NameCategory;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.SimpleNameNode;
 
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class SimpleNameNodeImpl extends NameNodeImpl implements SimpleNameNode
 {
     /** The identifier used as a simple name. */

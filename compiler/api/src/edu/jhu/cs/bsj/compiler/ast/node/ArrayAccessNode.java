@@ -8,7 +8,7 @@ import javax.annotation.Generated;
  * <i>expression</i>[<i>index</i>]
  * </pre>
  */
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public interface ArrayAccessNode extends Node, RestrictedPrimaryExpressionNode
 {
     /**

@@ -9,7 +9,7 @@ import javax.annotation.Generated;
  * </pre>
  * The resulting array contains one element for each initializer expression.
  */
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public interface ArrayInitializerNode extends Node, VariableInitializerNode
 {
     /**

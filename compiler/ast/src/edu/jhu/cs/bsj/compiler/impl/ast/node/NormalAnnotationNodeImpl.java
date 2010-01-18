@@ -11,7 +11,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.NormalAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.UnparameterizedTypeNode;
 
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class NormalAnnotationNodeImpl extends AnnotationNodeImpl implements NormalAnnotationNode
 {
     /** The arguments. */

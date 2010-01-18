@@ -10,7 +10,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.CodeLiteralNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.LiteralNodeImpl;
 
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class CodeLiteralNodeImpl extends LiteralNodeImpl<Node> implements CodeLiteralNode
 {
     /** General constructor. */

@@ -11,7 +11,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.ModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableNode;
 
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class VariableNodeImpl extends NodeImpl implements VariableNode
 {
     /** The modifiers of this parameter. */

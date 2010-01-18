@@ -9,7 +9,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.AssertStatementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class AssertStatementNodeImpl extends NodeImpl implements AssertStatementNode
 {
     /** The assertion's test expression. */

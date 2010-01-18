@@ -8,7 +8,7 @@ import javax.annotation.Generated;
  *     continue <i>label</i>;
  * </pre>
  */
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public interface ContinueNode extends Node, StatementNode
 {
     /**

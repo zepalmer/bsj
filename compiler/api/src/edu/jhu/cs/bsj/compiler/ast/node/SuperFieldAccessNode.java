@@ -27,7 +27,7 @@ import javax.annotation.Generated;
  * enclosing instance's superclass (<tt>A</tt>) rather than the inner class's superclass (<tt>Object</tt>).  If a
  * type qualification is not necessary (and it usually won't be), <tt>type</tt> should be <tt>null</tt>.
  */
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public interface SuperFieldAccessNode extends Node, RestrictedPrimaryExpressionNode
 {
     /**

@@ -11,7 +11,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.ConstructorInvocationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.StatementNode;
 
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class ConstructorBodyNodeImpl extends NodeImpl implements ConstructorBodyNode
 {
     /** The (nullable) constructor invocation. */

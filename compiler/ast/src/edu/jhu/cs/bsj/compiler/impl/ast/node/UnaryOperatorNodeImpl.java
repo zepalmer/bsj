@@ -10,7 +10,7 @@ import edu.jhu.cs.bsj.compiler.ast.UnaryOperator;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.UnaryOperatorNode;
 
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class UnaryOperatorNodeImpl extends NodeImpl implements UnaryOperatorNode
 {
     /** The expression on which to operate. */

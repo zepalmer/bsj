@@ -10,7 +10,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.BlockStatementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.CatchNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableNode;
 
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class CatchNodeImpl extends NodeImpl implements CatchNode
 {
     /** The block to execute when this catch occurs. */

@@ -10,7 +10,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.NamedTypeDeclarationNode;
 
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public abstract class NamedTypeDeclarationNodeImpl extends NodeImpl implements NamedTypeDeclarationNode
 {
     /** The name of this declared type. */

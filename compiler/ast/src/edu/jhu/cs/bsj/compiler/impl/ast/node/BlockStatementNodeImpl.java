@@ -10,7 +10,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.BlockStatementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.StatementNode;
 
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class BlockStatementNodeImpl extends NodeImpl implements BlockStatementNode
 {
     /** The statements contained in this block statement. */

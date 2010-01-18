@@ -10,7 +10,7 @@ import edu.jhu.cs.bsj.compiler.ast.Modifier;
  * A node representing the modifiers applied to another node.  Modifiers may include flags (such as <tt>final</tt>
  * or <tt>strictfp</tt>) and annotations (such as <tt>@Override</tt>).
  */
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public interface ModifiersNode extends Node
 {
     /**

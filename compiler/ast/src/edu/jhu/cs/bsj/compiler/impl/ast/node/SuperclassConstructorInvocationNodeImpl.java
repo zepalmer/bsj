@@ -12,7 +12,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.PrimaryExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.SuperclassConstructorInvocationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
 
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class SuperclassConstructorInvocationNodeImpl extends ConstructorInvocationNodeImpl implements SuperclassConstructorInvocationNode
 {
     /** The qualifying expression for the enclosing object. */

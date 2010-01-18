@@ -8,7 +8,7 @@ import javax.annotation.Generated;
  *     <i>modifiers type identifier</i> () default <i>defaultValue</i>;
  * </pre>
  */
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public interface AnnotationMethodDeclarationNode extends Node, AnnotationMemberNode
 {
     /**

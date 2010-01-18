@@ -10,7 +10,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.InterfaceBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.InterfaceMemberNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
 
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class InterfaceBodyNodeImpl extends NodeImpl implements InterfaceBodyNode
 {
     /** The members of this interface body. */

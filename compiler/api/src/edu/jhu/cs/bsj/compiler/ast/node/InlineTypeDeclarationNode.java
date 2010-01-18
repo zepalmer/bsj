@@ -6,7 +6,7 @@ import javax.annotation.Generated;
  * A node representing an inline type declaration.  This is used to allow classes and enums to be declared
  * within a method body or similar environment.
  */
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public interface InlineTypeDeclarationNode extends Node, StatementNode
 {
     /**

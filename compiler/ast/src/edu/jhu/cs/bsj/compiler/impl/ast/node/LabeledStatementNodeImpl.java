@@ -10,7 +10,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.LabeledStatementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.StatementNode;
 
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class LabeledStatementNodeImpl extends NodeImpl implements LabeledStatementNode
 {
     /** The statement's label. */

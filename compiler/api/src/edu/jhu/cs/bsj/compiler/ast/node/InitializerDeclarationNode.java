@@ -5,7 +5,7 @@ import javax.annotation.Generated;
 /**
  * 
  */
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public interface InitializerDeclarationNode extends Node, ClassMemberNode,  AnonymousClassMemberNode
 {
     /**

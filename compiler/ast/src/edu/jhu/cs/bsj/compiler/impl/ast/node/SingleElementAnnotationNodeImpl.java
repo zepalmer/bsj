@@ -10,7 +10,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.AnnotationValueNode;
 import edu.jhu.cs.bsj.compiler.ast.node.SingleElementAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.UnparameterizedTypeNode;
 
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class SingleElementAnnotationNodeImpl extends AnnotationNodeImpl implements SingleElementAnnotationNode
 {
     /** The value of the "value" element. */

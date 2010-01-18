@@ -8,7 +8,7 @@ import javax.annotation.Generated;
  * this node represents
  * <pre>i=0,j=0</pre>
  */
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public interface ForInitializerExpressionNode extends Node, ForInitializerNode
 {
     /**

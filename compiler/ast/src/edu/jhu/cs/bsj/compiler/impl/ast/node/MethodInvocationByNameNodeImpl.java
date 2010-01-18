@@ -12,7 +12,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.MethodInvocationByNameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.NameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
 
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class MethodInvocationByNameNodeImpl extends MethodInvocationNodeImpl implements MethodInvocationByNameNode
 {
     /** The name of the method to invoke. */

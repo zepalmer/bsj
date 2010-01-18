@@ -11,7 +11,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.AnnotationDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ModifiersNode;
 
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class AnnotationDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl implements AnnotationDeclarationNode
 {
     /** This annotation's body. */

@@ -10,7 +10,7 @@ import javax.annotation.Generated;
  * Note that this node does not handle the single element annotation format (<pre>@Foo("bar")</pre>).  That is
  * handled by the {@link SingleElementAnnotationNode} class.
  */
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public interface NormalAnnotationNode extends AnnotationNode
 {
     /**

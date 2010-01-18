@@ -15,7 +15,7 @@ import javax.annotation.Generated;
  *     <pre>
  *     <i>type identifier</i> = <i>expression</i>, <i>identifier</i> = <i>expression</i>, ...;
  */
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public interface VariableDeclarationNode extends Node, StatementNode
 {
     /**

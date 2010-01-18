@@ -5,7 +5,7 @@ import javax.annotation.Generated;
 /**
  * Represents an array type.
  */
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public interface ArrayTypeNode extends Node, ReferenceTypeNode,  LiteralizableTypeNode
 {
     /**

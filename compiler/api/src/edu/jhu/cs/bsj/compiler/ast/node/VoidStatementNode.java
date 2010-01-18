@@ -6,7 +6,7 @@ import javax.annotation.Generated;
  * A node representing a void statement, as in
  * <pre>;</pre>        
  */
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public interface VoidStatementNode extends Node, StatementNode
 {
 }

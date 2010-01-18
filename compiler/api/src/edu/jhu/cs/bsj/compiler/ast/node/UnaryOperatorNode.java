@@ -14,7 +14,7 @@ import edu.jhu.cs.bsj.compiler.ast.UnaryOperator;
  * x++
  * </pre>
  */
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public interface UnaryOperatorNode extends Node, NonAssignmentExpressionNode
 {
     /**

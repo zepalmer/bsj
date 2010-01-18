@@ -15,7 +15,7 @@ import edu.jhu.cs.bsj.compiler.ast.NameCategory;
  * is not technically a name because it is being used to create a name which does not exist.  For more information,
  * please see the Java Language Specification v3.0 &
  */
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public interface NameNode extends Node
 {
     /**

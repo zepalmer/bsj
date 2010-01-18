@@ -8,7 +8,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.IntLiteralNode;
 
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class IntLiteralNodeImpl extends LiteralNodeImpl<Integer> implements IntLiteralNode
 {
     /** General constructor. */

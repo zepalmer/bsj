@@ -7,7 +7,7 @@ import javax.annotation.Generated;
  * InputStream, and so on.  Parameterized types, such as Set<String>, are not represented in this way.
  * Unparameterized types also represent type parameters, such as the <tt>T</tt> in <tt>Set<T></tt>.
  */
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public interface UnparameterizedTypeNode extends Node, DeclaredTypeNode,  LiteralizableTypeNode
 {
     /**

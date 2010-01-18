@@ -9,7 +9,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.ReferenceTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.WildcardTypeNode;
 
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class WildcardTypeNodeImpl extends NodeImpl implements WildcardTypeNode
 {
     /** The wildcard's bound. */

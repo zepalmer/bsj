@@ -9,7 +9,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.InlineTypeDeclarableNode;
 import edu.jhu.cs.bsj.compiler.ast.node.InlineTypeDeclarationNode;
 
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class InlineTypeDeclarationNodeImpl extends NodeImpl implements InlineTypeDeclarationNode
 {
     /** The type declaration. */

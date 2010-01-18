@@ -8,7 +8,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.Node;
 /**
  * A node representing a code literal.
  */
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public interface CodeLiteralNode extends LiteralNode<Node>
 {
 }

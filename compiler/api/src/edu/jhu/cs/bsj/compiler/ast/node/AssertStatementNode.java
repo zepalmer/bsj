@@ -12,7 +12,7 @@ import javax.annotation.Generated;
  *     assert <i>expr</i> : <i>expr</i>;
  * </pre>
  */
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public interface AssertStatementNode extends Node, StatementNode
 {
     /**

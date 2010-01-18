@@ -8,7 +8,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.LiteralNode;
 
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public abstract class LiteralNodeImpl<T> extends NodeImpl implements LiteralNode<T>
 {
     /** The literal value for this node. */

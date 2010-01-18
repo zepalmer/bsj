@@ -11,7 +11,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.CatchNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TryNode;
 
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class TryNodeImpl extends NodeImpl implements TryNode
 {
     /** The block in which to try. */

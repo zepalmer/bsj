@@ -14,7 +14,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.ModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeParameterNode;
 
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class ClassDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl implements ClassDeclarationNode
 {
     /** The extends clause. */

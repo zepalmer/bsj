@@ -9,7 +9,7 @@ import javax.annotation.Generated;
  *     <i>block</i>
  * </pre>
  */
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public interface CatchNode extends Node
 {
     /**

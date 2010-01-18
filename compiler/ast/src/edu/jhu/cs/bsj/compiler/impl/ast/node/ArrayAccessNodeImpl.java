@@ -10,7 +10,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.ArrayAccessNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.RestrictedPrimaryExpressionNode;
 
-@Generated(value={"edu.jhu.cs.bsj.compiler.utils.SourceGenerator"})
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class ArrayAccessNodeImpl extends NodeImpl implements ArrayAccessNode
 {
     /** The expression identifying the array. */
