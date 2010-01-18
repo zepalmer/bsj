@@ -8,6 +8,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.ConstructorBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ConstructorDeclarationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.JavadocNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeParameterNode;
@@ -35,6 +36,9 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
     /** This constructor's applicable type parameters. */
     private ListNode<TypeParameterNode> typeParameters;
 
+    /** The associated javadoc comment for this node. */
+    private JavadocNode javadoc;
+
     /** General constructor. */
     public ConstructorDeclarationNodeImpl(
             ConstructorBodyNode body,
@@ -42,7 +46,8 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
             ListNode<VariableNode> parameters,
             VariableNode varargParameter,
             ListNode<UnparameterizedTypeNode> throwTypes,
-            ListNode<TypeParameterNode> typeParameters)
+            ListNode<TypeParameterNode> typeParameters,
+            JavadocNode javadoc)
     {
         super();
         this.body = body;
@@ -51,6 +56,7 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
         this.varargParameter = varargParameter;
         this.throwTypes = throwTypes;
         this.typeParameters = typeParameters;
+        this.javadoc = javadoc;
     }
 
     /**
@@ -210,6 +216,32 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
     }
 
     /**
+     * Gets the associated javadoc comment for this node.
+     * @return The associated javadoc comment for this node.
+     */
+    public JavadocNode getJavadoc()
+    {
+        return this.javadoc;
+    }
+
+    /**
+     * Changes the associated javadoc comment for this node.
+     * @param javadoc The associated javadoc comment for this node.
+     */
+    public void setJavadoc(JavadocNode javadoc)
+    {
+        if (this.javadoc instanceof NodeImpl)
+        {
+            ((NodeImpl)this.javadoc).setParent(null);
+        }
+        this.javadoc = javadoc;
+        if (this.javadoc instanceof NodeImpl)
+        {
+            ((NodeImpl)this.javadoc).setParent(this);
+        }
+    }
+
+    /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
      * method first and then visit its subclass-specific children.
@@ -226,6 +258,7 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
         this.varargParameter.receive(visitor);
         this.throwTypes.receive(visitor);
         this.typeParameters.receive(visitor);
+        this.javadoc.receive(visitor);
     }
 
     /**
@@ -245,6 +278,7 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
         this.varargParameter.receiveTyped(visitor);
         this.throwTypes.receiveTyped(visitor);
         this.typeParameters.receiveTyped(visitor);
+        this.javadoc.receiveTyped(visitor);
     }
 
     @Override
@@ -278,6 +312,7 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
         list.add(this.varargParameter);
         list.add(this.throwTypes);
         list.add(this.typeParameters);
+        list.add(this.javadoc);
         return list;
     }
 
@@ -307,6 +342,9 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
         sb.append(',');
         sb.append("typeParameters=");
         sb.append(this.typeParameters == null? "null" : this.typeParameters.getClass().getSimpleName());
+        sb.append(',');
+        sb.append("javadoc=");
+        sb.append(this.javadoc == null? "null" : this.javadoc.getClass().getSimpleName());
         sb.append(']');
         return sb.toString();
     }

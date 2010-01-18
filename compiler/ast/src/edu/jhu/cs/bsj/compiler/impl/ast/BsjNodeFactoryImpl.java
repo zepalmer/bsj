@@ -70,6 +70,7 @@ import edu.jhu.cs.bsj.compiler.impl.ast.node.InstanceOfNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.IntLiteralNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.InterfaceBodyNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.InterfaceDeclarationNodeImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.node.JavadocNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.LabeledStatementNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.ListNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.LongLiteralNodeImpl;
@@ -177,10 +178,11 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ListNode<TypeNode> implementsClause,
             ClassBodyNode body,
             ListNode<TypeParameterNode> typeParameters,
+            JavadocNode javadoc,
             IdentifierNode identifier,
             ModifiersNode modifiers)
     {
-        ClassDeclarationNode ret = new ClassDeclarationNodeImpl(extendsClause, implementsClause, body, typeParameters, identifier, modifiers);
+        ClassDeclarationNode ret = new ClassDeclarationNodeImpl(extendsClause, implementsClause, body, typeParameters, javadoc, identifier, modifiers);
         return ret;
     }
 
@@ -369,10 +371,11 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public EnumDeclarationNode makeEnumDeclarationNode(
             ListNode<TypeNode> implementsClause,
             EnumBodyNode body,
+            JavadocNode javadoc,
             IdentifierNode identifier,
             ModifiersNode modifiers)
     {
-        EnumDeclarationNode ret = new EnumDeclarationNodeImpl(implementsClause, body, identifier, modifiers);
+        EnumDeclarationNode ret = new EnumDeclarationNodeImpl(implementsClause, body, javadoc, identifier, modifiers);
         return ret;
     }
 
@@ -799,9 +802,10 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ListNode<VariableNode> parameters,
             VariableNode varargParameter,
             ListNode<UnparameterizedTypeNode> throwTypes,
-            ListNode<TypeParameterNode> typeParameters)
+            ListNode<TypeParameterNode> typeParameters,
+            JavadocNode javadoc)
     {
-        ConstructorDeclarationNode ret = new ConstructorDeclarationNodeImpl(body, modifiers, parameters, varargParameter, throwTypes, typeParameters);
+        ConstructorDeclarationNode ret = new ConstructorDeclarationNodeImpl(body, modifiers, parameters, varargParameter, throwTypes, typeParameters, javadoc);
         return ret;
     }
 
@@ -969,9 +973,10 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     @Override
     public FieldDeclarationNode makeFieldDeclarationNode(
             ModifiersNode modifiers,
-            ListNode<VariableDeclaratorNode> declarators)
+            ListNode<VariableDeclaratorNode> declarators,
+            JavadocNode javadoc)
     {
-        FieldDeclarationNode ret = new FieldDeclarationNodeImpl(modifiers, declarators);
+        FieldDeclarationNode ret = new FieldDeclarationNodeImpl(modifiers, declarators, javadoc);
         return ret;
     }
 
@@ -1163,10 +1168,11 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ListNode<TypeNode> extendsClause,
             InterfaceBodyNode body,
             ListNode<TypeParameterNode> typeParameters,
+            JavadocNode javadoc,
             IdentifierNode identifier,
             ModifiersNode modifiers)
     {
-        InterfaceDeclarationNode ret = new InterfaceDeclarationNodeImpl(extendsClause, body, typeParameters, identifier, modifiers);
+        InterfaceDeclarationNode ret = new InterfaceDeclarationNodeImpl(extendsClause, body, typeParameters, javadoc, identifier, modifiers);
         return ret;
     }
 
@@ -1290,6 +1296,17 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
 
     /**
+     * Creates a JavadocNode.
+     */
+    @Override
+    public JavadocNode makeJavadocNode(
+            String text)
+    {
+        JavadocNode ret = new JavadocNodeImpl(text);
+        return ret;
+    }
+
+    /**
      * Creates a MethodDeclarationNode.
      */
     @Override
@@ -1301,9 +1318,10 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             VariableNode varargParameter,
             TypeNode returnType,
             ListNode<UnparameterizedTypeNode> throwTypes,
-            ListNode<TypeParameterNode> typeParameters)
+            ListNode<TypeParameterNode> typeParameters,
+            JavadocNode javadoc)
     {
-        MethodDeclarationNode ret = new MethodDeclarationNodeImpl(body, modifiers, identifier, parameters, varargParameter, returnType, throwTypes, typeParameters);
+        MethodDeclarationNode ret = new MethodDeclarationNodeImpl(body, modifiers, identifier, parameters, varargParameter, returnType, throwTypes, typeParameters, javadoc);
         return ret;
     }
 

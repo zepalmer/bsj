@@ -101,10 +101,11 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
             ListNode<TypeNode> implementsClause,
             ClassBodyNode body,
             ListNode<TypeParameterNode> typeParameters,
+            JavadocNode javadoc,
             IdentifierNode identifier,
             ModifiersNode modifiers)
     {
-        ClassDeclarationNode node = factory.makeClassDeclarationNode(extendsClause, implementsClause, body, typeParameters, identifier, modifiers);
+        ClassDeclarationNode node = factory.makeClassDeclarationNode(extendsClause, implementsClause, body, typeParameters, javadoc, identifier, modifiers);
         this.decorate(node);
         return node;
     }
@@ -309,10 +310,11 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     public EnumDeclarationNode makeEnumDeclarationNode(
             ListNode<TypeNode> implementsClause,
             EnumBodyNode body,
+            JavadocNode javadoc,
             IdentifierNode identifier,
             ModifiersNode modifiers)
     {
-        EnumDeclarationNode node = factory.makeEnumDeclarationNode(implementsClause, body, identifier, modifiers);
+        EnumDeclarationNode node = factory.makeEnumDeclarationNode(implementsClause, body, javadoc, identifier, modifiers);
         this.decorate(node);
         return node;
     }
@@ -775,9 +777,10 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
             ListNode<VariableNode> parameters,
             VariableNode varargParameter,
             ListNode<UnparameterizedTypeNode> throwTypes,
-            ListNode<TypeParameterNode> typeParameters)
+            ListNode<TypeParameterNode> typeParameters,
+            JavadocNode javadoc)
     {
-        ConstructorDeclarationNode node = factory.makeConstructorDeclarationNode(body, modifiers, parameters, varargParameter, throwTypes, typeParameters);
+        ConstructorDeclarationNode node = factory.makeConstructorDeclarationNode(body, modifiers, parameters, varargParameter, throwTypes, typeParameters, javadoc);
         this.decorate(node);
         return node;
     }
@@ -959,9 +962,10 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     @Override
     public FieldDeclarationNode makeFieldDeclarationNode(
             ModifiersNode modifiers,
-            ListNode<VariableDeclaratorNode> declarators)
+            ListNode<VariableDeclaratorNode> declarators,
+            JavadocNode javadoc)
     {
-        FieldDeclarationNode node = factory.makeFieldDeclarationNode(modifiers, declarators);
+        FieldDeclarationNode node = factory.makeFieldDeclarationNode(modifiers, declarators, javadoc);
         this.decorate(node);
         return node;
     }
@@ -1169,10 +1173,11 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
             ListNode<TypeNode> extendsClause,
             InterfaceBodyNode body,
             ListNode<TypeParameterNode> typeParameters,
+            JavadocNode javadoc,
             IdentifierNode identifier,
             ModifiersNode modifiers)
     {
-        InterfaceDeclarationNode node = factory.makeInterfaceDeclarationNode(extendsClause, body, typeParameters, identifier, modifiers);
+        InterfaceDeclarationNode node = factory.makeInterfaceDeclarationNode(extendsClause, body, typeParameters, javadoc, identifier, modifiers);
         this.decorate(node);
         return node;
     }
@@ -1307,6 +1312,18 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     }
 
     /**
+     * Creates a JavadocNode.
+     */
+    @Override
+    public JavadocNode makeJavadocNode(
+            String text)
+    {
+        JavadocNode node = factory.makeJavadocNode(text);
+        this.decorate(node);
+        return node;
+    }
+
+    /**
      * Creates a MethodDeclarationNode.
      */
     @Override
@@ -1318,9 +1335,10 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
             VariableNode varargParameter,
             TypeNode returnType,
             ListNode<UnparameterizedTypeNode> throwTypes,
-            ListNode<TypeParameterNode> typeParameters)
+            ListNode<TypeParameterNode> typeParameters,
+            JavadocNode javadoc)
     {
-        MethodDeclarationNode node = factory.makeMethodDeclarationNode(body, modifiers, identifier, parameters, varargParameter, returnType, throwTypes, typeParameters);
+        MethodDeclarationNode node = factory.makeMethodDeclarationNode(body, modifiers, identifier, parameters, varargParameter, returnType, throwTypes, typeParameters, javadoc);
         this.decorate(node);
         return node;
     }

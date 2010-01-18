@@ -9,6 +9,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
+import edu.jhu.cs.bsj.compiler.ast.node.JavadocNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
@@ -29,12 +30,16 @@ public class ClassDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl imple
     /** This class's type parameters. */
     private ListNode<TypeParameterNode> typeParameters;
 
+    /** The associated javadoc comment for this node. */
+    private JavadocNode javadoc;
+
     /** General constructor. */
     public ClassDeclarationNodeImpl(
             TypeNode extendsClause,
             ListNode<TypeNode> implementsClause,
             ClassBodyNode body,
             ListNode<TypeParameterNode> typeParameters,
+            JavadocNode javadoc,
             IdentifierNode identifier,
             ModifiersNode modifiers)
     {
@@ -43,6 +48,7 @@ public class ClassDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl imple
         this.implementsClause = implementsClause;
         this.body = body;
         this.typeParameters = typeParameters;
+        this.javadoc = javadoc;
     }
 
     /**
@@ -150,6 +156,32 @@ public class ClassDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl imple
     }
 
     /**
+     * Gets the associated javadoc comment for this node.
+     * @return The associated javadoc comment for this node.
+     */
+    public JavadocNode getJavadoc()
+    {
+        return this.javadoc;
+    }
+
+    /**
+     * Changes the associated javadoc comment for this node.
+     * @param javadoc The associated javadoc comment for this node.
+     */
+    public void setJavadoc(JavadocNode javadoc)
+    {
+        if (this.javadoc instanceof NodeImpl)
+        {
+            ((NodeImpl)this.javadoc).setParent(null);
+        }
+        this.javadoc = javadoc;
+        if (this.javadoc instanceof NodeImpl)
+        {
+            ((NodeImpl)this.javadoc).setParent(this);
+        }
+    }
+
+    /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
      * method first and then visit its subclass-specific children.
@@ -164,6 +196,7 @@ public class ClassDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl imple
         this.implementsClause.receive(visitor);
         this.body.receive(visitor);
         this.typeParameters.receive(visitor);
+        this.javadoc.receive(visitor);
     }
 
     /**
@@ -181,6 +214,7 @@ public class ClassDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl imple
         this.implementsClause.receiveTyped(visitor);
         this.body.receiveTyped(visitor);
         this.typeParameters.receiveTyped(visitor);
+        this.javadoc.receiveTyped(visitor);
     }
 
     @Override
@@ -214,6 +248,7 @@ public class ClassDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl imple
         list.add(this.implementsClause);
         list.add(this.body);
         list.add(this.typeParameters);
+        list.add(this.javadoc);
         return list;
     }
 
@@ -237,6 +272,9 @@ public class ClassDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl imple
         sb.append(',');
         sb.append("typeParameters=");
         sb.append(this.typeParameters == null? "null" : this.typeParameters.getClass().getSimpleName());
+        sb.append(',');
+        sb.append("javadoc=");
+        sb.append(this.javadoc == null? "null" : this.javadoc.getClass().getSimpleName());
         sb.append(']');
         return sb.toString();
     }

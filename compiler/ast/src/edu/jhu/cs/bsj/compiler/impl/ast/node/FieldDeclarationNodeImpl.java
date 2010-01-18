@@ -7,6 +7,7 @@ import javax.annotation.Generated;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.FieldDeclarationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.JavadocNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclaratorNode;
@@ -20,14 +21,19 @@ public class FieldDeclarationNodeImpl extends NodeImpl implements FieldDeclarati
     /** The variable declarators for this node. */
     private ListNode<VariableDeclaratorNode> declarators;
 
+    /** The associated javadoc comment for this node. */
+    private JavadocNode javadoc;
+
     /** General constructor. */
     public FieldDeclarationNodeImpl(
             ModifiersNode modifiers,
-            ListNode<VariableDeclaratorNode> declarators)
+            ListNode<VariableDeclaratorNode> declarators,
+            JavadocNode javadoc)
     {
         super();
         this.modifiers = modifiers;
         this.declarators = declarators;
+        this.javadoc = javadoc;
     }
 
     /**
@@ -83,6 +89,32 @@ public class FieldDeclarationNodeImpl extends NodeImpl implements FieldDeclarati
     }
 
     /**
+     * Gets the associated javadoc comment for this node.
+     * @return The associated javadoc comment for this node.
+     */
+    public JavadocNode getJavadoc()
+    {
+        return this.javadoc;
+    }
+
+    /**
+     * Changes the associated javadoc comment for this node.
+     * @param javadoc The associated javadoc comment for this node.
+     */
+    public void setJavadoc(JavadocNode javadoc)
+    {
+        if (this.javadoc instanceof NodeImpl)
+        {
+            ((NodeImpl)this.javadoc).setParent(null);
+        }
+        this.javadoc = javadoc;
+        if (this.javadoc instanceof NodeImpl)
+        {
+            ((NodeImpl)this.javadoc).setParent(this);
+        }
+    }
+
+    /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
      * method first and then visit its subclass-specific children.
@@ -95,6 +127,7 @@ public class FieldDeclarationNodeImpl extends NodeImpl implements FieldDeclarati
         super.receiveToChildren(visitor);
         this.modifiers.receive(visitor);
         this.declarators.receive(visitor);
+        this.javadoc.receive(visitor);
     }
 
     /**
@@ -110,6 +143,7 @@ public class FieldDeclarationNodeImpl extends NodeImpl implements FieldDeclarati
         super.receiveTypedToChildren(visitor);
         this.modifiers.receiveTyped(visitor);
         this.declarators.receiveTyped(visitor);
+        this.javadoc.receiveTyped(visitor);
     }
 
     @Override
@@ -145,6 +179,7 @@ public class FieldDeclarationNodeImpl extends NodeImpl implements FieldDeclarati
         List<Object> list = super.getChildObjects();
         list.add(this.modifiers);
         list.add(this.declarators);
+        list.add(this.javadoc);
         return list;
     }
 
@@ -162,6 +197,9 @@ public class FieldDeclarationNodeImpl extends NodeImpl implements FieldDeclarati
         sb.append(',');
         sb.append("declarators=");
         sb.append(this.declarators == null? "null" : this.declarators.getClass().getSimpleName());
+        sb.append(',');
+        sb.append("javadoc=");
+        sb.append(this.javadoc == null? "null" : this.javadoc.getClass().getSimpleName());
         sb.append(']');
         return sb.toString();
     }

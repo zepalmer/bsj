@@ -940,6 +940,7 @@ ConstructorDeclarationNode :: Node + ClassMemberNode
     varargParameter         VariableNode                                | the vararg parameter declared by this method
     throwTypes              ListNode<UnparameterizedTypeNode>           | the types of exceptions thrown by this constructor
     typeParameters          ListNode<TypeParameterNode>                 | this constructor's applicable type parameters
+    javadoc					JavadocNode									| the associated javadoc comment for this node
     @docs
         A node representing a constructor declaration, as in:
         <pre>
@@ -963,6 +964,7 @@ FieldDeclarationNode :: Node + ClassMemberNode, InterfaceMemberNode, AnnotationM
     @props
     modifiers               ModifiersNode                               | the modifiers for this field
     declarators             ListNode<VariableDeclaratorNode>            | the variable declarators for this node
+    javadoc					JavadocNode									| the associated javadoc comment for this node
     @docs
         A node representing a field declaration.  Constants are represented by this node as well.
 
@@ -981,6 +983,7 @@ MethodDeclarationNode :: Node + ClassMemberNode, InterfaceMemberNode, AnonymousC
     returnType              TypeNode                                    | the type of value returned
     throwTypes              ListNode<UnparameterizedTypeNode>           | the types of exceptions thrown by this method
     typeParameters          ListNode<TypeParameterNode>                 | this method's applicable type parameters
+    javadoc					JavadocNode									| the associated javadoc comment for this node
     @docs
         A node representing a method declaration, as in:
         <pre>
@@ -1052,6 +1055,7 @@ ClassDeclarationNode :: NamedTypeDeclarationNode + InlineTypeDeclarableNode
     implementsClause        ListNode<TypeNode>                          | the implements clause
     body                    ClassBodyNode                               | the body of this class
     typeParameters          ListNode<TypeParameterNode>                 | this class's type parameters
+    javadoc					JavadocNode									| the associated javadoc comment for this node
     @docs
         Represents the declaration of a class, as in:
         <pre>
@@ -1066,6 +1070,7 @@ EnumDeclarationNode :: NamedTypeDeclarationNode + InlineTypeDeclarableNode
     @props
     implementsClause        ListNode<TypeNode>                          | the implements clause
     body                    EnumBodyNode                                | this enum's body
+    javadoc					JavadocNode									| the associated javadoc comment for this node
     @docs
         Represents the declaration of a class, as in:
         <pre>
@@ -1081,6 +1086,7 @@ InterfaceDeclarationNode :: NamedTypeDeclarationNode
     extendsClause           ListNode<TypeNode>                          | the extends clause
     body                    InterfaceBodyNode                           | this interface's body
     typeParameters          ListNode<TypeParameterNode>                 | this class's type parameters
+    javadoc					JavadocNode									| the associated javadoc comment for this node
     @docs
         Represents the declaration of an interface, as in:
         <pre>
@@ -1090,6 +1096,19 @@ InterfaceDeclarationNode :: NamedTypeDeclarationNode
             <i>...</i>
         }
         </pre>
+        
+JavadocNode :: Node
+	@props
+	text					String										| the parsed text of this Javadoc comment
+	@docs
+		Represents a complete javadoc comment, as in:
+		<pre>
+		/** 
+		 * Methodname.
+		 * @param x parameter x.
+		 * @returns a value.
+		 *&#47;
+		</pre>
 
 NamedTypeDeclarationNode* :: Node + TypeDeclarationNode
     @props

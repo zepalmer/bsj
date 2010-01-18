@@ -52,6 +52,7 @@ public interface BsjNodeFactory
             ListNode<TypeNode> implementsClause,
             ClassBodyNode body,
             ListNode<TypeParameterNode> typeParameters,
+            JavadocNode javadoc,
             IdentifierNode identifier,
             ModifiersNode modifiers);
 
@@ -164,6 +165,7 @@ public interface BsjNodeFactory
     public EnumDeclarationNode makeEnumDeclarationNode(
             ListNode<TypeNode> implementsClause,
             EnumBodyNode body,
+            JavadocNode javadoc,
             IdentifierNode identifier,
             ModifiersNode modifiers);
 
@@ -414,7 +416,8 @@ public interface BsjNodeFactory
             ListNode<VariableNode> parameters,
             VariableNode varargParameter,
             ListNode<UnparameterizedTypeNode> throwTypes,
-            ListNode<TypeParameterNode> typeParameters);
+            ListNode<TypeParameterNode> typeParameters,
+            JavadocNode javadoc);
 
     /**
      * Creates a AnnotationAnnotationValueNode.
@@ -514,7 +517,8 @@ public interface BsjNodeFactory
      */
     public FieldDeclarationNode makeFieldDeclarationNode(
             ModifiersNode modifiers,
-            ListNode<VariableDeclaratorNode> declarators);
+            ListNode<VariableDeclaratorNode> declarators,
+            JavadocNode javadoc);
 
     /**
      * Creates a AnnotationArrayValueNode.
@@ -628,6 +632,7 @@ public interface BsjNodeFactory
             ListNode<TypeNode> extendsClause,
             InterfaceBodyNode body,
             ListNode<TypeParameterNode> typeParameters,
+            JavadocNode javadoc,
             IdentifierNode identifier,
             ModifiersNode modifiers);
 
@@ -701,6 +706,12 @@ public interface BsjNodeFactory
             Void value);
 
     /**
+     * Creates a JavadocNode.
+     */
+    public JavadocNode makeJavadocNode(
+            String text);
+
+    /**
      * Creates a MethodDeclarationNode.
      */
     public MethodDeclarationNode makeMethodDeclarationNode(
@@ -711,6 +722,7 @@ public interface BsjNodeFactory
             VariableNode varargParameter,
             TypeNode returnType,
             ListNode<UnparameterizedTypeNode> throwTypes,
-            ListNode<TypeParameterNode> typeParameters);
+            ListNode<TypeParameterNode> typeParameters,
+            JavadocNode javadoc);
 
 }

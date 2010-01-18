@@ -793,6 +793,17 @@ public class BsjTypedNodeNoOpVisitor
     }
 
     /**
+     * Starts a visit for nodes of type JavadocNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitJavadocNodeStart(JavadocNode node, boolean mostSpecific)
+    {
+    }
+
+    /**
      * Starts a visit for nodes of type LabeledStatementNode.
      * @param node The node being visited.
      * @param mostSpecific <code>true</code> if this is the most specific call
@@ -2123,6 +2134,17 @@ public class BsjTypedNodeNoOpVisitor
      * @param node The node being visited.
      */
     public void visitInterfaceMemberNodeStop(InterfaceMemberNode node)
+    {
+    }
+
+    /**
+     * Stops a visit for nodes of type JavadocNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitJavadocNodeStop(JavadocNode node, boolean mostSpecific)
     {
     }
 

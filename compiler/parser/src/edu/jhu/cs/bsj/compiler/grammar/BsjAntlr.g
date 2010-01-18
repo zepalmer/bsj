@@ -310,7 +310,7 @@ abstractFieldDeclaration[List<Modifier> legalModifiers] returns [FieldDeclaratio
             List<VariableDeclaratorNode> list = new ArrayList<VariableDeclaratorNode>();
         }
     :   
-        modifiers[legalModifiers]
+        javadoc modifiers[legalModifiers]
         type
         a=variableDeclarator[$type.ret] // process type in case identifier has [] after it
         {
@@ -326,7 +326,8 @@ abstractFieldDeclaration[List<Modifier> legalModifiers] returns [FieldDeclaratio
         {
             $ret = factory.makeFieldDeclarationNode(
                     $modifiers.ret,
-                    factory.makeListNode(list));
+                    factory.makeListNode(list),
+                    $javadoc.ret);
         }
     ;
 
@@ -411,6 +412,25 @@ importDeclaration returns [ImportNode ret]
                 $ret = factory.makeImportSingleTypeNode($packageOrTypeName.ret, staticImport);
             }
         }
+    ;
+
+javadoc returns [JavadocNode ret]//TODO
+        @init{
+            int index = input.index();
+            while(--index >= 0)
+            {
+                if (input.get(index).getType() == BsjAntlrLexer.COMMENT)
+                {
+                    $ret = factory.makeJavadocNode(input.get(index).getText());
+                    break;
+                }
+	            else if  (input.get(index).getChannel() == org.antlr.runtime.Token.DEFAULT_CHANNEL)
+	            {
+	                break;
+	            }       
+            }
+        }
+    :
     ;
 
 typeDeclarations returns [ListNode<TypeDeclarationNode> ret]
@@ -553,7 +573,7 @@ classDeclaration returns [InlineTypeDeclarableNode ret]
 normalClassDeclaration returns [ClassDeclarationNode ret]
     scope Global;
     :   
-        modifiers[classModifiers]
+        javadoc modifiers[classModifiers]
         'class' id=identifier
         {
             $Global::className = $id.ret.getIdentifier();
@@ -568,6 +588,7 @@ normalClassDeclaration returns [ClassDeclarationNode ret]
                     $typeList.ret,
                     $classBody.ret,
                     $typeParameters.ret,
+                    $javadoc.ret,
                     $id.ret,
                     $modifiers.ret);
         }
@@ -640,7 +661,7 @@ typeBound returns [ListNode<DeclaredTypeNode> ret]
 enumDeclaration returns [EnumDeclarationNode ret]
     scope Global;
     :   
-        modifiers[classModifiers]
+        javadoc modifiers[classModifiers]
         'enum' 
         id=identifier
         {
@@ -652,6 +673,7 @@ enumDeclaration returns [EnumDeclarationNode ret]
             $ret = factory.makeEnumDeclarationNode(
                         $typeList.ret,
                         $enumBody.ret,
+                        $javadoc.ret,
                         $id.ret,
                         $modifiers.ret);
         }
@@ -778,7 +800,7 @@ interfaceDeclaration returns [TypeDeclarationNode ret]
 normalInterfaceDeclaration returns [InterfaceDeclarationNode ret]
     scope Global;
     :   
-        modifiers[interfaceModifiers]
+        javadoc modifiers[interfaceModifiers]
         'interface' id=identifier
         {
             $Global::className = $id.ret.getIdentifier();
@@ -793,6 +815,7 @@ normalInterfaceDeclaration returns [InterfaceDeclarationNode ret]
                     $typeList.ret,
                     $interfaceBody.ret,
                     $typeParameters.ret,
+                    $javadoc.ret,
                     $id.ret,
                     $modifiers.ret);
         }
@@ -968,7 +991,7 @@ constructorDeclaration returns [ConstructorDeclarationNode ret]
             ListNode<UnparameterizedTypeNode> throwsNode = factory.makeListNode(Collections.<UnparameterizedTypeNode>emptyList());
         }
     :
-        modifiers[constructorModifiers]
+        javadoc modifiers[constructorModifiers]
         (
             typeParameters
             {
@@ -996,7 +1019,8 @@ constructorDeclaration returns [ConstructorDeclarationNode ret]
                     $formalParameters.parameters,
                     $formalParameters.varargParameter,
                     throwsNode,
-                    typeParametersNode);
+                    typeParametersNode,
+                    $javadoc.ret);
             }
         }
     ;
@@ -1037,7 +1061,7 @@ methodDeclaration returns [MethodDeclarationNode ret]
             TypeNode returnTypeNode = null;
         }
     :
-        modifiers[methodModifiers]
+        javadoc modifiers[methodModifiers]
         (
             typeParameters
             {
@@ -1079,7 +1103,8 @@ methodDeclaration returns [MethodDeclarationNode ret]
                     $formalParameters.varargParameter,
                     returnTypeNode,
                     throwsNode,
-                    typeParametersNode);
+                    typeParametersNode,
+                    $javadoc.ret);
         }        
     ;
 
@@ -1125,7 +1150,7 @@ interfaceMethodDeclaration returns [MethodDeclarationNode ret]
             ListNode<UnparameterizedTypeNode> throwsNode = factory.makeListNode(Collections.<UnparameterizedTypeNode>emptyList());
         }
     :   
-        modifiers[interfaceModifiers]
+        javadoc modifiers[interfaceModifiers]
         typeParameters?
         methodReturnType
         {
@@ -1155,7 +1180,8 @@ interfaceMethodDeclaration returns [MethodDeclarationNode ret]
                     $formalParameters.varargParameter,
                     returnTypeNode,
                     throwsNode,
-                    $typeParameters.ret);
+                    $typeParameters.ret,
+                    $javadoc.ret);
         }         
     ;
 
