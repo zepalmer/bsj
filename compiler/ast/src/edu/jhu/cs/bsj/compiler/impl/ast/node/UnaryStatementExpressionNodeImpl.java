@@ -108,10 +108,12 @@ public class UnaryStatementExpressionNodeImpl extends NodeImpl implements UnaryS
         visitor.visitUnaryStatementExpressionNodeStart(this, true);
         visitor.visitNodeStart(this);
         visitor.visitNonAssignmentExpressionNodeStart(this);
+        visitor.visitStatementExpressionNodeStart(this);
         visitor.visitStartEnd(this);
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
         visitor.visitNonAssignmentExpressionNodeStop(this);
+        visitor.visitStatementExpressionNodeStop(this);
         visitor.visitNodeStart(this);
         visitor.visitUnaryStatementExpressionNodeStart(this, true);
         visitor.visitStopEnd(this);

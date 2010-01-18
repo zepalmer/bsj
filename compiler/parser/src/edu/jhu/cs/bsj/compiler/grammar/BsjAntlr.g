@@ -1965,11 +1965,9 @@ statement returns [StatementNode ret]
             $ret = factory.makeContinueNode(idNode);
         }
     |   
-        // TODO: this is not quite correct; only certain expressions may be kept within an ExpressionStatement
-        // how do we resolve this?
-        expression  ';'  
+        statementExpression  ';'  
         {
-            $ret = factory.makeExpressionStatementNode($expression.ret);
+            $ret = factory.makeExpressionStatementNode($statementExpression.ret);
         }   
     |   
         a=identifier ':' s=statement
@@ -2133,7 +2131,8 @@ forstatement returns [StatementNode ret]
     @init{
         ForInitializerNode forInitNode = null;
         ExpressionNode expNode = null;
-        ListNode<ExpressionNode> expListNode = factory.makeListNode(Collections.<ExpressionNode>emptyList());
+        ListNode<StatementExpressionNode> expListNode =
+                factory.makeListNode(Collections.<StatementExpressionNode>emptyList());
     }
     :   
         // enhanced for loop
@@ -2189,9 +2188,9 @@ forInit returns [ForInitializerNode ret]
             $ret = factory.makeForInitializerDeclarationNode($localVariableDeclaration.ret);
         }
     |   
-        expressionList
+        statementExpressionList
         {
-            $ret = factory.makeForInitializerExpressionNode($expressionList.ret);
+            $ret = factory.makeForInitializerExpressionNode($statementExpressionList.ret);
         }
     ;
 
@@ -2203,21 +2202,20 @@ parExpression returns [ExpressionNode ret]
         }
     ;
 
-statementExpressionList returns [ListNode<ExpressionNode> ret]
+statementExpressionList returns [ListNode<StatementExpressionNode> ret]
         @init {
-            List<ExpressionNode> list = new ArrayList<ExpressionNode>();
+            List<StatementExpressionNode> list = new ArrayList<StatementExpressionNode>();
         }
         @after {
             $ret = factory.makeListNode(list);
         }
     :   
-        // TODO: expression statements are limited to a certain set of expressions; can we fix this?
-        a=expression
+        a=statementExpression
         {
             list.add($a.ret);
         }
         (
-            ',' b=expression
+            ',' b=statementExpression
             {
                 list.add($b.ret);
             }
@@ -2244,6 +2242,24 @@ expressionList returns [ListNode<ExpressionNode> ret]
         )*
     ;
 
+/* This rule parses a statement expression.  A statement expression is one of those types of expressions which may be
+ * used as a statement (such as x++) but not any other kind of expression (such as ~x). */
+statementExpression returns [StatementExpressionNode ret]
+    :
+        // Okay, this is a bit hacky but seriously reduces duplication as well as maintenance.
+        // We'll just grab any expression we can.  If it's not a statement expression, we raise a RecognitionException.
+        expression
+        {
+            if ($expression.ret instanceof StatementExpressionNode)
+            {
+                $ret = (StatementExpressionNode)($expression.ret);
+            } else
+            {
+                throw new FailedPredicateException(input, "statementExpression",
+                        "$expression.ret instanceof StatementExpressionNode ");
+            }
+        }
+    ;
 
 expression returns [ExpressionNode ret]
     :   
@@ -2805,12 +2821,9 @@ restrictedPrimary returns [RestrictedPrimaryExpressionNode ret]
             }
         |
             // standard method invocation
-            methodName methodArguments=arguments
+            methodInvocationByName
             {
-                $ret = factory.makeMethodInvocationByNameNode(
-                        $methodName.ret,
-                        $methodArguments.ret,
-                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+                $ret = $methodInvocationByName.ret;
             }
         |
             // method invocation from super
@@ -2820,16 +2833,9 @@ restrictedPrimary returns [RestrictedPrimaryExpressionNode ret]
             }
         |
             // method invocation against a type with type arguments
-            methodQualifierName=typeName '.' nonWildcardTypeArguments identifier typeMethodArguments=arguments
+            typeQualifiedTypeArgumentMethodInvocation
             {
-                NameNode methodName = factory.makeQualifiedNameNode(
-                        $methodQualifierName.ret,
-                        $identifier.ret,
-                        NameCategory.METHOD);
-                $ret = factory.makeMethodInvocationByNameNode(
-                        methodName,
-                        $typeMethodArguments.ret,
-                        $nonWildcardTypeArguments.ret);
+                $ret = $typeQualifiedTypeArgumentMethodInvocation.ret;
             }
         |
             // Array access against a simple field access by name.  This rule is located here to support chained
@@ -2955,6 +2961,23 @@ superFieldAccess returns [SuperFieldAccessNode ret]
         }
     ;
 
+// Parses a method invocation by name.  For example, this rule would parse
+//     foo();
+// or
+//     someField.aMethod();
+// or
+//     Utils.stuff();
+methodInvocationByName returns [MethodInvocationByNameNode ret]
+    :
+        methodName arguments
+        {
+            $ret = factory.makeMethodInvocationByNameNode(
+                    $methodName.ret,
+                    $arguments.ret,
+                    factory.makeListNode(Collections.<TypeNode>emptyList()));
+        }
+    ;
+
 // Parses a super method invocation.  For example, this rule would parse
 //     super.toString();
 // or
@@ -2987,6 +3010,23 @@ superMethodInvocation returns [SuperMethodInvocationNode ret]
                     $identifier.ret,
                     $arguments.ret,
                     typeArgumentsNode);
+        }
+    ;
+
+// This rule invokes a method against a type while providing type arguments, as in
+//     Collections.<Integer>emptySet();
+typeQualifiedTypeArgumentMethodInvocation returns [MethodInvocationByNameNode ret]
+    :
+        typeName '.' nonWildcardTypeArguments identifier arguments
+        {
+            NameNode methodName = factory.makeQualifiedNameNode(
+                    $typeName.ret,
+                    $identifier.ret,
+                    NameCategory.METHOD);
+            $ret = factory.makeMethodInvocationByNameNode(
+                    methodName,
+                    $arguments.ret,
+                    $nonWildcardTypeArguments.ret);
         }
     ;
 

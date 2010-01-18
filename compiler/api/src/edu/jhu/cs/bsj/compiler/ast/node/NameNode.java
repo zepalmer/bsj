@@ -13,7 +13,7 @@ import edu.jhu.cs.bsj.compiler.ast.NameCategory;
  * Note that some identifiers are not used as names; as a result, not all identifiers are children of this class
  * or one of its subclasses.  Examples of such cases include variable and type declarations, where the identifier
  * is not technically a name because it is being used to create a name which does not exist.  For more information,
- * please see the Java Language Specification v3.0 &
+ * please see the Java Language Specification v3.0 &#167;6.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public interface NameNode extends Node

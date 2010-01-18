@@ -6,18 +6,18 @@ import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
-import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionStatementNode;
+import edu.jhu.cs.bsj.compiler.ast.node.StatementExpressionNode;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class ExpressionStatementNodeImpl extends NodeImpl implements ExpressionStatementNode
 {
     /** This statement's expression. */
-    private ExpressionNode expression;
+    private StatementExpressionNode expression;
 
     /** General constructor. */
     public ExpressionStatementNodeImpl(
-            ExpressionNode expression)
+            StatementExpressionNode expression)
     {
         super();
         this.expression = expression;
@@ -27,7 +27,7 @@ public class ExpressionStatementNodeImpl extends NodeImpl implements ExpressionS
      * Gets this statement's expression.
      * @return This statement's expression.
      */
-    public ExpressionNode getExpression()
+    public StatementExpressionNode getExpression()
     {
         return this.expression;
     }
@@ -36,7 +36,7 @@ public class ExpressionStatementNodeImpl extends NodeImpl implements ExpressionS
      * Changes this statement's expression.
      * @param expression This statement's expression.
      */
-    public void setExpression(ExpressionNode expression)
+    public void setExpression(StatementExpressionNode expression)
     {
         if (this.expression instanceof NodeImpl)
         {

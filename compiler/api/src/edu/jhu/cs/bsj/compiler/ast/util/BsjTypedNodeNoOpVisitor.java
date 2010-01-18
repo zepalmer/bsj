@@ -1082,6 +1082,14 @@ public class BsjTypedNodeNoOpVisitor
     }
 
     /**
+     * Starts a visit for nodes of type StatementExpressionNode.
+     * @param node The node being visited.
+     */
+    public void visitStatementExpressionNodeStart(StatementExpressionNode node)
+    {
+    }
+
+    /**
      * Starts a visit for nodes of type StatementNode.
      * @param node The node being visited.
      */
@@ -1242,17 +1250,6 @@ public class BsjTypedNodeNoOpVisitor
      *                     otherwise.
      */
     public void visitUnaryExpressionNodeStart(UnaryExpressionNode node, boolean mostSpecific)
-    {
-    }
-
-    /**
-     * Starts a visit for nodes of type UnaryOperatorNode.
-     * @param node The node being visited.
-     * @param mostSpecific <code>true</code> if this is the most specific call
-     *                     which can be made for this node; <code>false</code>
-     *                     otherwise.
-     */
-    public void visitUnaryOperatorNodeStart(UnaryOperatorNode node, boolean mostSpecific)
     {
     }
 
@@ -2419,6 +2416,14 @@ public class BsjTypedNodeNoOpVisitor
     }
 
     /**
+     * Stops a visit for nodes of type StatementExpressionNode.
+     * @param node The node being visited.
+     */
+    public void visitStatementExpressionNodeStop(StatementExpressionNode node)
+    {
+    }
+
+    /**
      * Stops a visit for nodes of type StatementNode.
      * @param node The node being visited.
      */
@@ -2579,17 +2584,6 @@ public class BsjTypedNodeNoOpVisitor
      *                     otherwise.
      */
     public void visitUnaryExpressionNodeStop(UnaryExpressionNode node, boolean mostSpecific)
-    {
-    }
-
-    /**
-     * Stops a visit for nodes of type UnaryOperatorNode.
-     * @param node The node being visited.
-     * @param mostSpecific <code>true</code> if this is the most specific call
-     *                     which can be made for this node; <code>false</code>
-     *                     otherwise.
-     */
-    public void visitUnaryOperatorNodeStop(UnaryOperatorNode node, boolean mostSpecific)
     {
     }
 

@@ -73,7 +73,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
      */
     @Override
     public ExpressionStatementNode makeExpressionStatementNode(
-            ExpressionNode expression)
+            StatementExpressionNode expression)
     {
         ExpressionStatementNode node = factory.makeExpressionStatementNode(expression);
         this.decorate(node);
@@ -541,7 +541,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
      */
     @Override
     public ForInitializerExpressionNode makeForInitializerExpressionNode(
-            ListNode<ExpressionNode> expressions)
+            ListNode<StatementExpressionNode> expressions)
     {
         ForInitializerExpressionNode node = factory.makeForInitializerExpressionNode(expressions);
         this.decorate(node);
@@ -646,19 +646,6 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
             ListNode<AnonymousClassMemberNode> members)
     {
         AnonymousClassBodyNode node = factory.makeAnonymousClassBodyNode(members);
-        this.decorate(node);
-        return node;
-    }
-
-    /**
-     * Creates a UnaryOperatorNode.
-     */
-    @Override
-    public UnaryOperatorNode makeUnaryOperatorNode(
-            ExpressionNode expression,
-            UnaryOperator operator)
-    {
-        UnaryOperatorNode node = factory.makeUnaryOperatorNode(expression, operator);
         this.decorate(node);
         return node;
     }
@@ -814,7 +801,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     public ForLoopNode makeForLoopNode(
             ForInitializerNode initializer,
             ExpressionNode condition,
-            ListNode<ExpressionNode> update,
+            ListNode<StatementExpressionNode> update,
             StatementNode statement)
     {
         ForLoopNode node = factory.makeForLoopNode(initializer, condition, update, statement);

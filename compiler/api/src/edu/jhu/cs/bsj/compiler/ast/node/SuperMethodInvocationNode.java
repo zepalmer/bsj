@@ -32,7 +32,7 @@ import javax.annotation.Generated;
  * type qualification is not necessary (and it usually won't be), <tt>type</tt> should be <tt>null</tt>.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public interface SuperMethodInvocationNode extends Node, RestrictedPrimaryExpressionNode
+public interface SuperMethodInvocationNode extends Node, RestrictedPrimaryExpressionNode,  StatementExpressionNode
 {
     /**
      * Gets the qualifying type.

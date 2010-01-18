@@ -145,6 +145,10 @@ RestrictedPrimaryExpressionNode+ :: Node + PrimaryExpressionNode
         A tagging interface for restricted primary expressions.  This maps to the <i>PrimaryNoNewArray</i> parse target
         in the JLS.
 
+StatementExpressionNode+ :: Node + ExpressionNode
+    @docs
+        A tagging interface which marks all expressions which may be used as statements.
+
 StatementNode+ :: Node
     @docs
         This tagging interface is used to denote AST nodes which represent statements.
@@ -267,7 +271,7 @@ ArrayInstantiatorCreationNode :: ArrayCreationNode
 		Levels for this array creator refer to square braces without initializers,
 		for example <code>new int[2][][]</code> would have two levels.
 			
-AssignmentNode :: Node + ExpressionNode
+AssignmentNode :: Node + StatementExpressionNode
     @props
     variable                ExpressionNode                              | the variable to which to assign a value
     operator                AssignmentOperator                          | the assignment operator indicating the operation to perform
@@ -287,7 +291,7 @@ BinaryExpressionNode :: Node + NonAssignmentExpressionNode
     @docs
         Represents the application of a binary operator.
 
-ClassInstantiationNode* :: Node + RestrictedPrimaryExpressionNode
+ClassInstantiationNode* :: Node + RestrictedPrimaryExpressionNode, StatementExpressionNode
     @props
     constructorTypeArguments ListNode<TypeArgumentNode>                 | the type arguments for the constructor
     arguments               ListNode<ExpressionNode>                    | the arguments to the constructor
@@ -395,7 +399,7 @@ MethodInvocationByNameNode :: MethodInvocationNode
         This node is used for simple method calls (such as <tt>x.y()</tt>) and not for expression-based method calls
         (such as <tt>x().y()</tt>).  For expression-based method calls, see {@link MethodInvocationByExpressionNode}.
 
-MethodInvocationNode* :: Node + RestrictedPrimaryExpressionNode
+MethodInvocationNode* :: Node + RestrictedPrimaryExpressionNode, StatementExpressionNode
     @props
     arguments               ListNode<ExpressionNode>                    | the arguments to pass to the method
     typeArguments           ListNode<TypeNode>                          | the type arguments for the method
@@ -474,7 +478,7 @@ SuperFieldAccessNode :: Node + RestrictedPrimaryExpressionNode
         enclosing instance's superclass (<tt>A</tt>) rather than the inner class's superclass (<tt>Object</tt>).  If a
         type qualification is not necessary (and it usually won't be), <tt>type</tt> should be <tt>null</tt>.
 
-SuperMethodInvocationNode :: Node + RestrictedPrimaryExpressionNode
+SuperMethodInvocationNode :: Node + RestrictedPrimaryExpressionNode, StatementExpressionNode
     @props
     type                    UnparameterizedTypeNode                     | the qualifying type
     identifier              IdentifierNode                              | the identifier of the method being invoked
@@ -558,7 +562,7 @@ UnaryExpressionNode :: Node + NonAssignmentExpressionNode
         Note that this node does not cover those unary expressions which are also statement expressions (increment and
         decrement); for those expressions, nodes of type {@link UnaryStatementExpressionNode} should be used.
 
-UnaryStatementExpressionNode :: Node + NonAssignmentExpressionNode
+UnaryStatementExpressionNode :: Node + NonAssignmentExpressionNode, StatementExpressionNode
     @props
     expression              ExpressionNode                              | the expression on which to operate
     operator                UnaryStatementOperator                      | the operator to apply
@@ -573,20 +577,6 @@ UnaryStatementExpressionNode :: Node + NonAssignmentExpressionNode
         </pre>
         Note that this node does not cover those unary expressions which cannot be used as statement expressions.  For
         those expressions, nodes of type {@link UnaryExpressionNode} should be used.
-
-UnaryOperatorNode :: Node + NonAssignmentExpressionNode
-    @props
-    expression              ExpressionNode                              | the expression on which to operate
-    operator                UnaryOperator                               | the operator to apply
-    @docs
-        A node for unary expressions, such as:
-        <pre>
-        ~0
-        </pre>
-        or
-        <pre>
-        x++
-        </pre>
 
 UnqualifiedClassInstantiationNode :: ClassInstantiationNode
     @props
@@ -666,20 +656,26 @@ EnhancedForLoopNode :: Node + StatementNode
             <i>body</i>
         </pre>
 
-# TODO: not every expression can be a statement in Java.  Create a suitable tagging interface.
 ExpressionStatementNode :: Node + StatementNode
     @props
-    expression              ExpressionNode                              | this statement's expression
+    expression              StatementExpressionNode                     | this statement's expression
     @docs
-        A node representing an expression statement.  This allows any expression to be used as a statement and its
-        value discarded.
+        A node representing an expression statement.  This allows expressions to be used as statements, as in
+        <pre>
+        foo();
+        </pre>
+        or
+        <pre>
+        x++;
+        </pre>
+        Note that not every expression can be used in Java as a statement.  For instance, <tt>~0</tt> and <tt>5+3</tt>
+        are not valid statements.
     
-# TODO: for loop updates should only allow those expressions which can be used as statements
 ForLoopNode :: Node + StatementNode
     @props
     initializer             ForInitializerNode                          | the initializer used for this for loop
     condition               ExpressionNode                              | the loop's termination condition
-    update                  ListNode<ExpressionNode>                    | the loop's update operation
+    update                  ListNode<StatementExpressionNode>           | the loop's update operation
     statement               StatementNode                               | the loop's statement
     @docs
         A node representing a for-loop, as in:
@@ -1266,13 +1262,12 @@ ForInitializerDeclarationNode :: Node + ForInitializerNode
 
 ForInitializerExpressionNode :: Node + ForInitializerNode
     @props
-    expressions             ListNode<ExpressionNode>                    | the expressions used in this initializer
+    expressions             ListNode<StatementExpressionNode>           | the expressions used in this initializer
     @docs
         Represents a for loop initializer which contains expressions.  For example, in
         <pre>for (i=0,j=0;i<n || j<m;i++,j++)</pre>
         this node represents
         <pre>i=0,j=0</pre>
-# TODO: this node should not be able to use any expression which is not applicable as a statement - fix the type
 
 ImportOnDemandNode :: Node + ImportNode
     @props

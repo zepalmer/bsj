@@ -36,7 +36,7 @@ public interface BsjNodeFactory
      * Creates a ExpressionStatementNode.
      */
     public ExpressionStatementNode makeExpressionStatementNode(
-            ExpressionNode expression);
+            StatementExpressionNode expression);
 
     /**
      * Creates a InterfaceBodyNode.
@@ -288,7 +288,7 @@ public interface BsjNodeFactory
      * Creates a ForInitializerExpressionNode.
      */
     public ForInitializerExpressionNode makeForInitializerExpressionNode(
-            ListNode<ExpressionNode> expressions);
+            ListNode<StatementExpressionNode> expressions);
 
     /**
      * Creates a PackageDeclarationNode.
@@ -343,13 +343,6 @@ public interface BsjNodeFactory
      */
     public AnonymousClassBodyNode makeAnonymousClassBodyNode(
             ListNode<AnonymousClassMemberNode> members);
-
-    /**
-     * Creates a UnaryOperatorNode.
-     */
-    public UnaryOperatorNode makeUnaryOperatorNode(
-            ExpressionNode expression,
-            UnaryOperator operator);
 
     /**
      * Creates a SynchronizedNode.
@@ -435,7 +428,7 @@ public interface BsjNodeFactory
     public ForLoopNode makeForLoopNode(
             ForInitializerNode initializer,
             ExpressionNode condition,
-            ListNode<ExpressionNode> update,
+            ListNode<StatementExpressionNode> update,
             StatementNode statement);
 
     /**

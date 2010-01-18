@@ -6,7 +6,7 @@ import javax.annotation.Generated;
  * Acts as a parent to class instantiation nodes. 
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public interface ClassInstantiationNode extends Node, RestrictedPrimaryExpressionNode
+public interface ClassInstantiationNode extends Node, RestrictedPrimaryExpressionNode,  StatementExpressionNode
 {
     /**
      * Gets the type arguments for the constructor.

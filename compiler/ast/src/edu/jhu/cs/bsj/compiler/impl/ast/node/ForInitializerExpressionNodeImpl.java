@@ -6,19 +6,19 @@ import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
-import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ForInitializerExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.StatementExpressionNode;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class ForInitializerExpressionNodeImpl extends NodeImpl implements ForInitializerExpressionNode
 {
     /** The expressions used in this initializer. */
-    private ListNode<ExpressionNode> expressions;
+    private ListNode<StatementExpressionNode> expressions;
 
     /** General constructor. */
     public ForInitializerExpressionNodeImpl(
-            ListNode<ExpressionNode> expressions)
+            ListNode<StatementExpressionNode> expressions)
     {
         super();
         this.expressions = expressions;
@@ -28,7 +28,7 @@ public class ForInitializerExpressionNodeImpl extends NodeImpl implements ForIni
      * Gets the expressions used in this initializer.
      * @return The expressions used in this initializer.
      */
-    public ListNode<ExpressionNode> getExpressions()
+    public ListNode<StatementExpressionNode> getExpressions()
     {
         return this.expressions;
     }
@@ -37,7 +37,7 @@ public class ForInitializerExpressionNodeImpl extends NodeImpl implements ForIni
      * Changes the expressions used in this initializer.
      * @param expressions The expressions used in this initializer.
      */
-    public void setExpressions(ListNode<ExpressionNode> expressions)
+    public void setExpressions(ListNode<StatementExpressionNode> expressions)
     {
         if (this.expressions instanceof NodeImpl)
         {

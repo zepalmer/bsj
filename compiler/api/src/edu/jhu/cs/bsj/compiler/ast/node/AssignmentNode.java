@@ -12,7 +12,7 @@ import edu.jhu.cs.bsj.compiler.ast.AssignmentOperator;
  * where <i>op</i> is one of <tt>=</tt>, <tt>+=</tt>, <tt>%=</tt>, etc.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public interface AssignmentNode extends Node, ExpressionNode
+public interface AssignmentNode extends Node, StatementExpressionNode
 {
     /**
      * Gets the variable to which to assign a value.

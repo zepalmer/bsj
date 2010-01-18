@@ -101,7 +101,6 @@ import edu.jhu.cs.bsj.compiler.impl.ast.node.TryNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.TypeCastNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.TypeParameterNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.UnaryExpressionNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.UnaryOperatorNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.UnaryStatementExpressionNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.UnparameterizedTypeNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.UnqualifiedClassInstantiationNodeImpl;
@@ -152,7 +151,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     @Override
     public ExpressionStatementNode makeExpressionStatementNode(
-            ExpressionNode expression)
+            StatementExpressionNode expression)
     {
         ExpressionStatementNode ret = new ExpressionStatementNodeImpl(expression);
         return ret;
@@ -584,7 +583,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     @Override
     public ForInitializerExpressionNode makeForInitializerExpressionNode(
-            ListNode<ExpressionNode> expressions)
+            ListNode<StatementExpressionNode> expressions)
     {
         ForInitializerExpressionNode ret = new ForInitializerExpressionNodeImpl(expressions);
         return ret;
@@ -681,18 +680,6 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ListNode<AnonymousClassMemberNode> members)
     {
         AnonymousClassBodyNode ret = new AnonymousClassBodyNodeImpl(members);
-        return ret;
-    }
-
-    /**
-     * Creates a UnaryOperatorNode.
-     */
-    @Override
-    public UnaryOperatorNode makeUnaryOperatorNode(
-            ExpressionNode expression,
-            UnaryOperator operator)
-    {
-        UnaryOperatorNode ret = new UnaryOperatorNodeImpl(expression, operator);
         return ret;
     }
 
@@ -836,7 +823,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public ForLoopNode makeForLoopNode(
             ForInitializerNode initializer,
             ExpressionNode condition,
-            ListNode<ExpressionNode> update,
+            ListNode<StatementExpressionNode> update,
             StatementNode statement)
     {
         ForLoopNode ret = new ForLoopNodeImpl(initializer, condition, update, statement);

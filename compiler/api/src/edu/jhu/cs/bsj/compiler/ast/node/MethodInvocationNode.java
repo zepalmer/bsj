@@ -6,7 +6,7 @@ import javax.annotation.Generated;
  * A superclass for method invocation nodes.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public interface MethodInvocationNode extends Node, RestrictedPrimaryExpressionNode
+public interface MethodInvocationNode extends Node, RestrictedPrimaryExpressionNode,  StatementExpressionNode
 {
     /**
      * Gets the arguments to pass to the method.

@@ -10,6 +10,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ForInitializerNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ForLoopNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.StatementExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.StatementNode;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
@@ -22,7 +23,7 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
     private ExpressionNode condition;
 
     /** The loop's update operation. */
-    private ListNode<ExpressionNode> update;
+    private ListNode<StatementExpressionNode> update;
 
     /** The loop's statement. */
     private StatementNode statement;
@@ -31,7 +32,7 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
     public ForLoopNodeImpl(
             ForInitializerNode initializer,
             ExpressionNode condition,
-            ListNode<ExpressionNode> update,
+            ListNode<StatementExpressionNode> update,
             StatementNode statement)
     {
         super();
@@ -97,7 +98,7 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
      * Gets the loop's update operation.
      * @return The loop's update operation.
      */
-    public ListNode<ExpressionNode> getUpdate()
+    public ListNode<StatementExpressionNode> getUpdate()
     {
         return this.update;
     }
@@ -106,7 +107,7 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
      * Changes the loop's update operation.
      * @param update The loop's update operation.
      */
-    public void setUpdate(ListNode<ExpressionNode> update)
+    public void setUpdate(ListNode<StatementExpressionNode> update)
     {
         if (this.update instanceof NodeImpl)
         {
