@@ -210,10 +210,10 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
         handleListNode(node.getTypeParameters(), "<", ", ", ">", p, true);
         if (node.getExtendsClause() != null)
         {
-            p.print(" ");
+            p.print(" extends ");
             node.getExtendsClause().executeOperation(this, p);
         }
-        handleListNode(node.getImplementsClause(), " ", ", ", "", p, true);
+        handleListNode(node.getImplementsClause(), " implements ", ", ", "", p, true);
         p.print("\n");
         node.getBody().executeOperation(this, p);
         return null;
@@ -524,28 +524,51 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
     @Override
     public Void executeInterfaceBodyNode(InterfaceBodyNode node, PrependablePrintStream p)
     {
-        // TODO Auto-generated method stub
+        p.print("{\n");
+        p.incPrependCount();
+        handleListNode(node.getMembers(), "", "\n", "", p, true);  
+        p.decPrependCount();
+        p.print("}\n");
         return null;
     }
 
     @Override
     public Void executeInterfaceDeclarationNode(InterfaceDeclarationNode node, PrependablePrintStream p)
     {
-        // TODO Auto-generated method stub
+        // TODO done?
+        node.getModifiers().executeOperation(this, p);
+        p.print("interface ");
+        node.getIdentifier().executeOperation(this, p);
+        handleListNode(node.getTypeParameters(), "<", ", ", ">", p, true);
+        handleListNode(node.getExtendsClause(), " extends ", ", ", "", p, true);
+        p.print("\n");
+        node.getBody().executeOperation(this, p);
         return null;
     }
 
     @Override
     public Void executeInterfaceModifiersNode(InterfaceModifiersNode node, PrependablePrintStream p)
     {
-        // TODO Auto-generated method stub
+        //TODO annotations
+        p.print(accessModifierToString(node.getAccess()));
+
+        if (node.getStaticFlag())
+        {
+            p.print("static ");
+        }
+        
+        if (node.getStrictfpFlag())
+        {
+            p.print("strictfp ");
+        }
         return null;
     }
 
     @Override
     public Void executeJavadocNode(JavadocNode node, PrependablePrintStream p)
     {
-        // TODO Auto-generated method stub
+        // TODO parse text? or do that when building AST instead?
+        p.print(node.getText());
         return null;
     }
 
@@ -944,7 +967,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
     protected void handleListNode(ListNode<? extends Node> node, 
             String begin, String separator, String end, PrependablePrintStream p, boolean doNothingIfEmpty)
     {
-        if (doNothingIfEmpty && node.getChildren().isEmpty())
+        if (node == null || (doNothingIfEmpty && node.getChildren().isEmpty()))
         {
             return;
         }
