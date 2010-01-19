@@ -337,9 +337,7 @@ public class AntlrAstViewer
 					saveProperties();
 
 					Node node = stringToAst(getSource());
-					StringBuilder sb = new StringBuilder();
-					node.executeOperation(new BsjSourceSerializerImpl(), sb);
-					String serializedSourceStr = sb.toString();
+					String serializedSourceStr = node.executeOperation(new BsjSourceSerializerImpl(), null);
 					serializedSource.setText(serializedSourceStr);
 					
 					tree.setModel(new DefaultTreeModel(new SwingCommonTreeNode(null, node)));
