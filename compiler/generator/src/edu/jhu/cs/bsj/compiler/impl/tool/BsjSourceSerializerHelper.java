@@ -1,556 +1,559 @@
 package edu.jhu.cs.bsj.compiler.impl.tool;
 
 import edu.jhu.cs.bsj.compiler.ast.AccessModifier;
-import edu.jhu.cs.bsj.compiler.ast.BsjSourceSerializer;
+import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.PrimitiveType;
 import edu.jhu.cs.bsj.compiler.ast.node.*;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.CodeLiteralNode;
+import edu.jhu.cs.bsj.compiler.impl.utils.PrependablePrintStream;
 
-public class BsjSourceSerializerImpl implements BsjSourceSerializer
+public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePrintStream, Void>
 {
     @Override
-    public Void executeAlternateConstructorInvocationNode(AlternateConstructorInvocationNode node, StringBuilder p)
+    public Void executeAlternateConstructorInvocationNode(AlternateConstructorInvocationNode node, PrependablePrintStream p)
+    {
+        // TODO Auto-generated method stub
+        return null;
+    } 
+
+    @Override
+    public Void executeAnnotationAnnotationValueNode(AnnotationAnnotationValueNode node, PrependablePrintStream p)
     {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Void executeAnnotationAnnotationValueNode(AnnotationAnnotationValueNode node, StringBuilder p)
+    public Void executeAnnotationArrayValueNode(AnnotationArrayValueNode node, PrependablePrintStream p)
     {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Void executeAnnotationArrayValueNode(AnnotationArrayValueNode node, StringBuilder p)
+    public Void executeAnnotationBodyNode(AnnotationBodyNode node, PrependablePrintStream p)
     {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Void executeAnnotationBodyNode(AnnotationBodyNode node, StringBuilder p)
+    public Void executeAnnotationDeclarationNode(AnnotationDeclarationNode node, PrependablePrintStream p)
     {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Void executeAnnotationDeclarationNode(AnnotationDeclarationNode node, StringBuilder p)
+    public Void executeAnnotationElementNode(AnnotationElementNode node, PrependablePrintStream p)
     {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Void executeAnnotationElementNode(AnnotationElementNode node, StringBuilder p)
+    public Void executeAnnotationExpressionValueNode(AnnotationExpressionValueNode node, PrependablePrintStream p)
     {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Void executeAnnotationExpressionValueNode(AnnotationExpressionValueNode node, StringBuilder p)
+    public Void executeAnnotationMethodDeclarationNode(AnnotationMethodDeclarationNode node, PrependablePrintStream p)
     {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Void executeAnnotationMethodDeclarationNode(AnnotationMethodDeclarationNode node, StringBuilder p)
+    public Void executeAnnotationMethodModifiersNode(AnnotationMethodModifiersNode node, PrependablePrintStream p)
     {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Void executeAnnotationMethodModifiersNode(AnnotationMethodModifiersNode node, StringBuilder p)
+    public Void executeAnnotationModifiersNode(AnnotationModifiersNode node, PrependablePrintStream p)
     {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Void executeAnnotationModifiersNode(AnnotationModifiersNode node, StringBuilder p)
+    public Void executeAnonymousClassBodyNode(AnonymousClassBodyNode node, PrependablePrintStream p)
     {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Void executeAnonymousClassBodyNode(AnonymousClassBodyNode node, StringBuilder p)
+    public Void executeArrayAccessNode(ArrayAccessNode node, PrependablePrintStream p)
     {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Void executeArrayAccessNode(ArrayAccessNode node, StringBuilder p)
+    public Void executeArrayInitializerCreationNode(ArrayInitializerCreationNode node, PrependablePrintStream p)
     {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Void executeArrayInitializerCreationNode(ArrayInitializerCreationNode node, StringBuilder p)
+    public Void executeArrayInitializerNode(ArrayInitializerNode node, PrependablePrintStream p)
     {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Void executeArrayInitializerNode(ArrayInitializerNode node, StringBuilder p)
+    public Void executeArrayInstantiatorCreationNode(ArrayInstantiatorCreationNode node, PrependablePrintStream p)
     {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Void executeArrayInstantiatorCreationNode(ArrayInstantiatorCreationNode node, StringBuilder p)
+    public Void executeArrayTypeNode(ArrayTypeNode node, PrependablePrintStream p)
     {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Void executeArrayTypeNode(ArrayTypeNode node, StringBuilder p)
+    public Void executeAssertStatementNode(AssertStatementNode node, PrependablePrintStream p)
     {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Void executeAssertStatementNode(AssertStatementNode node, StringBuilder p)
+    public Void executeAssignmentNode(AssignmentNode node, PrependablePrintStream p)
     {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Void executeAssignmentNode(AssignmentNode node, StringBuilder p)
+    public Void executeBinaryExpressionNode(BinaryExpressionNode node, PrependablePrintStream p)
     {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Void executeBinaryExpressionNode(BinaryExpressionNode node, StringBuilder p)
+    public Void executeBlockStatementNode(BlockStatementNode node, PrependablePrintStream p)
     {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Void executeBlockStatementNode(BlockStatementNode node, StringBuilder p)
+    public Void executeBooleanLiteralNode(BooleanLiteralNode node, PrependablePrintStream p)
+    {
+        p.print(node.getValue() ? "true" : "false");
+        return null;
+    }
+
+    @Override
+    public Void executeBreakNode(BreakNode node, PrependablePrintStream p)
     {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Void executeBooleanLiteralNode(BooleanLiteralNode node, StringBuilder p)
-    {
-        p.append(node.getValue() ? "true" : "false");
-        return null;
-    }
-
-    @Override
-    public Void executeBreakNode(BreakNode node, StringBuilder p)
+    public Void executeCaseNode(CaseNode node, PrependablePrintStream p)
     {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Void executeCaseNode(CaseNode node, StringBuilder p)
+    public Void executeCatchNode(CatchNode node, PrependablePrintStream p)
     {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Void executeCatchNode(CatchNode node, StringBuilder p)
+    public Void executeCharLiteralNode(CharLiteralNode node, PrependablePrintStream p)
     {
-        // TODO Auto-generated method stub
+        p.print("'");
+        p.print(node.getValue());
+        p.print("'");
         return null;
     }
 
     @Override
-    public Void executeCharLiteralNode(CharLiteralNode node, StringBuilder p)
+    public Void executeClassBodyNode(ClassBodyNode node, PrependablePrintStream p)
     {
-        p.append("'");
-        p.append(node.getValue());
-        p.append("'");
+        p.print("{\n");
+        p.incPrependCount();
+        handleListNode(node.getMembers(), "", "\n", "", p, true);  
+        p.decPrependCount();
+        p.print("}");
         return null;
     }
 
     @Override
-    public Void executeClassBodyNode(ClassBodyNode node, StringBuilder p)
-    {
-        p.append("{\n");
-        handleListNode(node.getMembers(), "", "\n", "", p, true);        
-        p.append("}");
-        return null;
-    }
-
-    @Override
-    public Void executeClassDeclarationNode(ClassDeclarationNode node, StringBuilder p)
+    public Void executeClassDeclarationNode(ClassDeclarationNode node, PrependablePrintStream p)
     {
         node.getModifiers().executeOperation(this, p);
-        p.append("class ");
+        p.print("class ");
         node.getIdentifier().executeOperation(this, p);
         handleListNode(node.getTypeParameters(), "<", ", ", ">", p, true);
         if (node.getExtendsClause() != null)
         {
-            p.append(" ");
+            p.print(" ");
             node.getExtendsClause().executeOperation(this, p);
         }
         handleListNode(node.getImplementsClause(), " ", ", ", "", p, true);
-        p.append("\n");
+        p.print("\n");
         node.getBody().executeOperation(this, p);
         return null;
     }
 
     @Override
-    public Void executeClassLiteralNode(ClassLiteralNode node, StringBuilder p)
+    public Void executeClassLiteralNode(ClassLiteralNode node, PrependablePrintStream p)
     {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Void executeClassModifiersNode(ClassModifiersNode node, StringBuilder p)
+    public Void executeClassModifiersNode(ClassModifiersNode node, PrependablePrintStream p)
     {
         //TODO annotations
-        p.append(accessModifierToString(node.getAccess()));
+        p.print(accessModifierToString(node.getAccess()));
 
         if (node.getAbstractFlag())
         {
-            p.append("abstract ");
+            p.print("abstract ");
         }
         
         if (node.getFinalFlag())
         {
-            p.append("final ");
+            p.print("final ");
         }
         
         if (node.getStaticFlag())
         {
-            p.append("static ");
+            p.print("static ");
         }
         
         if (node.getStrictfpFlag())
         {
-            p.append("strictfp ");
+            p.print("strictfp ");
         }
         
         return null;
     }
 
     @Override
-    public Void executeCodeLiteralNode(CodeLiteralNode node, StringBuilder p)
+    public Void executeCodeLiteralNode(CodeLiteralNode node, PrependablePrintStream p)
     {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Void executeCompilationUnitNode(CompilationUnitNode node, StringBuilder p)
+    public Void executeCompilationUnitNode(CompilationUnitNode node, PrependablePrintStream p)
     {
         node.getPackageDeclaration().executeOperation(this, p);
-        p.append("\n\n");
+        p.print("\n\n");
         handleListNode(node.getImports(), "", "\n", "\n", p, true);
-        p.append("\n");
+        p.print("\n");
         handleListNode(node.getTypeDecls(), "", "\n\n", "\n", p, true);
         return null;
     }
 
     @Override
-    public Void executeConditionalExpressionNode(ConditionalExpressionNode node, StringBuilder p)
+    public Void executeConditionalExpressionNode(ConditionalExpressionNode node, PrependablePrintStream p)
     {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Void executeConstructorBodyNode(ConstructorBodyNode node, StringBuilder p)
+    public Void executeConstructorBodyNode(ConstructorBodyNode node, PrependablePrintStream p)
     {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Void executeConstructorDeclarationNode(ConstructorDeclarationNode node, StringBuilder p)
+    public Void executeConstructorDeclarationNode(ConstructorDeclarationNode node, PrependablePrintStream p)
     {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Void executeConstructorModifiersNode(ConstructorModifiersNode node, StringBuilder p)
+    public Void executeConstructorModifiersNode(ConstructorModifiersNode node, PrependablePrintStream p)
     {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Void executeContinueNode(ContinueNode node, StringBuilder p)
+    public Void executeContinueNode(ContinueNode node, PrependablePrintStream p)
     {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Void executeDoWhileLoopNode(DoWhileLoopNode node, StringBuilder p)
+    public Void executeDoWhileLoopNode(DoWhileLoopNode node, PrependablePrintStream p)
     {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Void executeDoubleLiteralNode(DoubleLiteralNode node, StringBuilder p)
+    public Void executeDoubleLiteralNode(DoubleLiteralNode node, PrependablePrintStream p)
     {
-        p.append(node.getValue().toString());
+        p.print(node.getValue().toString());
         return null;
     }
 
     @Override
-    public Void executeEnhancedForLoopNode(EnhancedForLoopNode node, StringBuilder p)
-    {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Void executeEnumBodyNode(EnumBodyNode node, StringBuilder p)
+    public Void executeEnhancedForLoopNode(EnhancedForLoopNode node, PrependablePrintStream p)
     {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Void executeEnumConstantDeclarationNode(EnumConstantDeclarationNode node, StringBuilder p)
+    public Void executeEnumBodyNode(EnumBodyNode node, PrependablePrintStream p)
     {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Void executeEnumDeclarationNode(EnumDeclarationNode node, StringBuilder p)
+    public Void executeEnumConstantDeclarationNode(EnumConstantDeclarationNode node, PrependablePrintStream p)
     {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Void executeEnumModifiersNode(EnumModifiersNode node, StringBuilder p)
+    public Void executeEnumDeclarationNode(EnumDeclarationNode node, PrependablePrintStream p)
     {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Void executeExpressionStatementNode(ExpressionStatementNode node, StringBuilder p)
+    public Void executeEnumModifiersNode(EnumModifiersNode node, PrependablePrintStream p)
     {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Void executeFieldAccessByExpressionNode(FieldAccessByExpressionNode node, StringBuilder p)
+    public Void executeExpressionStatementNode(ExpressionStatementNode node, PrependablePrintStream p)
     {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Void executeFieldAccessByNameNode(FieldAccessByNameNode node, StringBuilder p)
+    public Void executeFieldAccessByExpressionNode(FieldAccessByExpressionNode node, PrependablePrintStream p)
     {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Void executeFieldDeclarationNode(FieldDeclarationNode node, StringBuilder p)
+    public Void executeFieldAccessByNameNode(FieldAccessByNameNode node, PrependablePrintStream p)
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void executeFieldDeclarationNode(FieldDeclarationNode node, PrependablePrintStream p)
     {
         for (Node item : node.getDeclarators().getChildren())
         {
             if (node.getJavadoc() != null)
             {
                 node.getJavadoc().executeOperation(this, p);
-                p.append("\n");
+                p.print("\n");
             }
             node.getModifiers().executeOperation(this, p);            
             item.executeOperation(this, p);
-            p.append(";\n");
+            p.print(";\n");
         }
 
         return null;
     }
 
     @Override
-    public Void executeFieldModifiersNode(FieldModifiersNode node, StringBuilder p)
+    public Void executeFieldModifiersNode(FieldModifiersNode node, PrependablePrintStream p)
     {
         // TODO annotations
-        p.append(accessModifierToString(node.getAccess()));
+        p.print(accessModifierToString(node.getAccess()));
         
         if (node.getFinalFlag())
         {
-            p.append("final ");
+            p.print("final ");
         }
         
         if (node.getStaticFlag())
         {
-            p.append("static ");
+            p.print("static ");
         }
         
         if (node.getTransientFlag())
         {
-            p.append("transient ");
+            p.print("transient ");
         }
         
         if (node.getVolatileFlag())
         {
-            p.append("volatile ");
+            p.print("volatile ");
         }
 
         return null;
     }
 
     @Override
-    public Void executeFloatLiteralNode(FloatLiteralNode node, StringBuilder p)
+    public Void executeFloatLiteralNode(FloatLiteralNode node, PrependablePrintStream p)
     {
-        p.append(node.getValue().toString());
+        p.print(node.getValue().toString());
         return null;
     }
 
     @Override
-    public Void executeForInitializerDeclarationNode(ForInitializerDeclarationNode node, StringBuilder p)
+    public Void executeForInitializerDeclarationNode(ForInitializerDeclarationNode node, PrependablePrintStream p)
     {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Void executeForInitializerExpressionNode(ForInitializerExpressionNode node, StringBuilder p)
+    public Void executeForInitializerExpressionNode(ForInitializerExpressionNode node, PrependablePrintStream p)
     {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Void executeForLoopNode(ForLoopNode node, StringBuilder p)
+    public Void executeForLoopNode(ForLoopNode node, PrependablePrintStream p)
     {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Void executeIdentifierNode(IdentifierNode node, StringBuilder p)
+    public Void executeIdentifierNode(IdentifierNode node, PrependablePrintStream p)
     {
-        p.append(node.getIdentifier());
+        p.print(node.getIdentifier());
         return null;
     }
 
     @Override
-    public Void executeIfNode(IfNode node, StringBuilder p)
+    public Void executeIfNode(IfNode node, PrependablePrintStream p)
     {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Void executeImportOnDemandNode(ImportOnDemandNode node, StringBuilder p)
+    public Void executeImportOnDemandNode(ImportOnDemandNode node, PrependablePrintStream p)
     {
-        p.append("import ");
+        p.print("import ");
         if (node.getStaticImport())
         {
-            p.append("static ");
+            p.print("static ");
         }
         node.getName().executeOperation(this, p);
-        p.append(".*;");
+        p.print(".*;");
         return null;
     }
 
     @Override
-    public Void executeImportSingleTypeNode(ImportSingleTypeNode node, StringBuilder p)
+    public Void executeImportSingleTypeNode(ImportSingleTypeNode node, PrependablePrintStream p)
     {
-        p.append("import ");
+        p.print("import ");
         if (node.getStaticImport())
         {
-            p.append("static ");
+            p.print("static ");
         }
         node.getName().executeOperation(this, p);
-        p.append(";");
+        p.print(";");
         return null;
     }
 
     @Override
-    public Void executeInitializerDeclarationNode(InitializerDeclarationNode node, StringBuilder p)
+    public Void executeInitializerDeclarationNode(InitializerDeclarationNode node, PrependablePrintStream p)
     {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Void executeInlineTypeDeclarationNode(InlineTypeDeclarationNode node, StringBuilder p)
+    public Void executeInlineTypeDeclarationNode(InlineTypeDeclarationNode node, PrependablePrintStream p)
     {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Void executeInstanceOfNode(InstanceOfNode node, StringBuilder p)
+    public Void executeInstanceOfNode(InstanceOfNode node, PrependablePrintStream p)
     {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Void executeIntLiteralNode(IntLiteralNode node, StringBuilder p)
+    public Void executeIntLiteralNode(IntLiteralNode node, PrependablePrintStream p)
     {
-        p.append(node.getValue().toString());
+        p.print(node.getValue().toString());
         return null;
     }
 
     @Override
-    public Void executeInterfaceBodyNode(InterfaceBodyNode node, StringBuilder p)
-    {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Void executeInterfaceDeclarationNode(InterfaceDeclarationNode node, StringBuilder p)
+    public Void executeInterfaceBodyNode(InterfaceBodyNode node, PrependablePrintStream p)
     {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Void executeInterfaceModifiersNode(InterfaceModifiersNode node, StringBuilder p)
+    public Void executeInterfaceDeclarationNode(InterfaceDeclarationNode node, PrependablePrintStream p)
     {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Void executeJavadocNode(JavadocNode node, StringBuilder p)
+    public Void executeInterfaceModifiersNode(InterfaceModifiersNode node, PrependablePrintStream p)
     {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Void executeLabeledStatementNode(LabeledStatementNode node, StringBuilder p)
+    public Void executeJavadocNode(JavadocNode node, PrependablePrintStream p)
     {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public <T extends Node> Void executeListNode(ListNode<T> node, StringBuilder p)
+    public Void executeLabeledStatementNode(LabeledStatementNode node, PrependablePrintStream p)
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public <T extends Node> Void executeListNode(ListNode<T> node, PrependablePrintStream p)
     {
         // TODO done?
         
@@ -560,315 +563,315 @@ public class BsjSourceSerializerImpl implements BsjSourceSerializer
     }
 
     @Override
-    public Void executeLongLiteralNode(LongLiteralNode node, StringBuilder p)
+    public Void executeLongLiteralNode(LongLiteralNode node, PrependablePrintStream p)
     {
-        p.append(node.getValue().toString());
+        p.print(node.getValue().toString());
         return null;
     }
 
     @Override
-    public Void executeMethodDeclarationNode(MethodDeclarationNode node, StringBuilder p)
-    {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Void executeMethodInvocationByExpressionNode(MethodInvocationByExpressionNode node, StringBuilder p)
+    public Void executeMethodDeclarationNode(MethodDeclarationNode node, PrependablePrintStream p)
     {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Void executeMethodInvocationByNameNode(MethodInvocationByNameNode node, StringBuilder p)
+    public Void executeMethodInvocationByExpressionNode(MethodInvocationByExpressionNode node, PrependablePrintStream p)
     {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Void executeMethodModifiersNode(MethodModifiersNode node, StringBuilder p)
+    public Void executeMethodInvocationByNameNode(MethodInvocationByNameNode node, PrependablePrintStream p)
     {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Void executeNormalAnnotationNode(NormalAnnotationNode node, StringBuilder p)
+    public Void executeMethodModifiersNode(MethodModifiersNode node, PrependablePrintStream p)
     {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Void executeNullLiteralNode(NullLiteralNode node, StringBuilder p)
+    public Void executeNormalAnnotationNode(NormalAnnotationNode node, PrependablePrintStream p)
     {
-        p.append("null");
+        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Void executePackageDeclarationNode(PackageDeclarationNode node, StringBuilder p)
+    public Void executeNullLiteralNode(NullLiteralNode node, PrependablePrintStream p)
+    {
+        p.print("null");
+        return null;
+    }
+
+    @Override
+    public Void executePackageDeclarationNode(PackageDeclarationNode node, PrependablePrintStream p)
     {
         // TODO annotations
-        p.append("package ");
+        p.print("package ");
         node.getName().executeOperation(this, p);
-        p.append(";");
+        p.print(";");
         return null;
     }
 
     @Override
-    public Void executeParameterizedTypeNode(ParameterizedTypeNode node, StringBuilder p)
+    public Void executeParameterizedTypeNode(ParameterizedTypeNode node, PrependablePrintStream p)
     {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Void executeParameterizedTypeSelectNode(ParameterizedTypeSelectNode node, StringBuilder p)
+    public Void executeParameterizedTypeSelectNode(ParameterizedTypeSelectNode node, PrependablePrintStream p)
     {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Void executeParenthesizedExpressionNode(ParenthesizedExpressionNode node, StringBuilder p)
+    public Void executeParenthesizedExpressionNode(ParenthesizedExpressionNode node, PrependablePrintStream p)
     {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Void executePrimitiveTypeNode(PrimitiveTypeNode node, StringBuilder p)
+    public Void executePrimitiveTypeNode(PrimitiveTypeNode node, PrependablePrintStream p)
     {
-        p.append(primitiveTypeToString(node.getPrimitiveType()));
+        p.print(primitiveTypeToString(node.getPrimitiveType()));
         return null;
     }
 
     @Override
-    public Void executeQualifiedClassInstantiationNode(QualifiedClassInstantiationNode node, StringBuilder p)
+    public Void executeQualifiedClassInstantiationNode(QualifiedClassInstantiationNode node, PrependablePrintStream p)
     {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Void executeQualifiedNameNode(QualifiedNameNode node, StringBuilder p)
+    public Void executeQualifiedNameNode(QualifiedNameNode node, PrependablePrintStream p)
     {
         node.getBase().executeOperation(this, p);
-        p.append('.');
+        p.print('.');
         executeIdentifierNode(node.getIdentifier(), p);
         return null;
     }
 
     @Override
-    public Void executeReturnNode(ReturnNode node, StringBuilder p)
+    public Void executeReturnNode(ReturnNode node, PrependablePrintStream p)
     {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Void executeSimpleNameNode(SimpleNameNode node, StringBuilder p)
+    public Void executeSimpleNameNode(SimpleNameNode node, PrependablePrintStream p)
     {
         executeIdentifierNode(node.getIdentifier(), p);
         return null;
     }
 
     @Override
-    public Void executeSingleElementAnnotationNode(SingleElementAnnotationNode node, StringBuilder p)
+    public Void executeSingleElementAnnotationNode(SingleElementAnnotationNode node, PrependablePrintStream p)
     {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Void executeStringLiteralNode(StringLiteralNode node, StringBuilder p)
+    public Void executeStringLiteralNode(StringLiteralNode node, PrependablePrintStream p)
     {
-        p.append("\"");
-        p.append(node.getValue());
-        p.append("\"");
+        p.print("\"");
+        p.print(node.getValue());
+        p.print("\"");
         return null;
     }
 
     @Override
-    public Void executeSuperFieldAccessNode(SuperFieldAccessNode node, StringBuilder p)
-    {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Void executeSuperMethodInvocationNode(SuperMethodInvocationNode node, StringBuilder p)
+    public Void executeSuperFieldAccessNode(SuperFieldAccessNode node, PrependablePrintStream p)
     {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Void executeSuperclassConstructorInvocationNode(SuperclassConstructorInvocationNode node, StringBuilder p)
+    public Void executeSuperMethodInvocationNode(SuperMethodInvocationNode node, PrependablePrintStream p)
     {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Void executeSwitchNode(SwitchNode node, StringBuilder p)
+    public Void executeSuperclassConstructorInvocationNode(SuperclassConstructorInvocationNode node, PrependablePrintStream p)
     {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Void executeSynchronizedNode(SynchronizedNode node, StringBuilder p)
+    public Void executeSwitchNode(SwitchNode node, PrependablePrintStream p)
     {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Void executeThisNode(ThisNode node, StringBuilder p)
+    public Void executeSynchronizedNode(SynchronizedNode node, PrependablePrintStream p)
     {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Void executeThrowNode(ThrowNode node, StringBuilder p)
+    public Void executeThisNode(ThisNode node, PrependablePrintStream p)
     {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Void executeTryNode(TryNode node, StringBuilder p)
+    public Void executeThrowNode(ThrowNode node, PrependablePrintStream p)
     {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Void executeTypeCastNode(TypeCastNode node, StringBuilder p)
+    public Void executeTryNode(TryNode node, PrependablePrintStream p)
     {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Void executeTypeParameterNode(TypeParameterNode node, StringBuilder p)
+    public Void executeTypeCastNode(TypeCastNode node, PrependablePrintStream p)
     {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Void executeUnaryExpressionNode(UnaryExpressionNode node, StringBuilder p)
+    public Void executeTypeParameterNode(TypeParameterNode node, PrependablePrintStream p)
     {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Void executeUnaryStatementExpressionNode(UnaryStatementExpressionNode node, StringBuilder p)
+    public Void executeUnaryExpressionNode(UnaryExpressionNode node, PrependablePrintStream p)
     {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Void executeUnparameterizedTypeNode(UnparameterizedTypeNode node, StringBuilder p)
+    public Void executeUnaryStatementExpressionNode(UnaryStatementExpressionNode node, PrependablePrintStream p)
     {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Void executeUnqualifiedClassInstantiationNode(UnqualifiedClassInstantiationNode node, StringBuilder p)
+    public Void executeUnparameterizedTypeNode(UnparameterizedTypeNode node, PrependablePrintStream p)
     {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Void executeVariableDeclarationNode(VariableDeclarationNode node, StringBuilder p)
+    public Void executeUnqualifiedClassInstantiationNode(UnqualifiedClassInstantiationNode node, PrependablePrintStream p)
     {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Void executeVariableDeclaratorNode(VariableDeclaratorNode node, StringBuilder p)
+    public Void executeVariableDeclarationNode(VariableDeclarationNode node, PrependablePrintStream p)
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Void executeVariableDeclaratorNode(VariableDeclaratorNode node, PrependablePrintStream p)
     {
         node.getType().executeOperation(this, p);
-        p.append(" ");
+        p.print(" ");
         node.getName().executeOperation(this, p);
         if (node.getInitializer() != null)
         {
-            p.append(" ");
+            p.print(" ");
             node.getInitializer().executeOperation(this, p);
         }
         return null;
     }
 
     @Override
-    public Void executeVariableModifiersNode(VariableModifiersNode node, StringBuilder p)
+    public Void executeVariableModifiersNode(VariableModifiersNode node, PrependablePrintStream p)
     {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Void executeVariableNode(VariableNode node, StringBuilder p)
+    public Void executeVariableNode(VariableNode node, PrependablePrintStream p)
     {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Void executeVoidStatementNode(VoidStatementNode node, StringBuilder p)
+    public Void executeVoidStatementNode(VoidStatementNode node, PrependablePrintStream p)
     {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Void executeVoidTypeDeclarationNode(VoidTypeDeclarationNode node, StringBuilder p)
+    public Void executeVoidTypeDeclarationNode(VoidTypeDeclarationNode node, PrependablePrintStream p)
     {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Void executeVoidTypeNode(VoidTypeNode node, StringBuilder p)
+    public Void executeVoidTypeNode(VoidTypeNode node, PrependablePrintStream p)
     {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Void executeWhileLoopNode(WhileLoopNode node, StringBuilder p)
+    public Void executeWhileLoopNode(WhileLoopNode node, PrependablePrintStream p)
     {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Void executeWildcardTypeNode(WildcardTypeNode node, StringBuilder p)
+    public Void executeWildcardTypeNode(WildcardTypeNode node, PrependablePrintStream p)
     {
         // TODO Auto-generated method stub
         return null;
     }
     
     protected void handleListNode(ListNode<? extends Node> node, 
-            String begin, String separator, String end, StringBuilder p, boolean doNothingIfEmpty)
+            String begin, String separator, String end, PrependablePrintStream p, boolean doNothingIfEmpty)
     {
         if (doNothingIfEmpty && node.getChildren().isEmpty())
         {
             return;
         }
         
-        p.append(begin);
+        p.print(begin);
         boolean first = true;
         
         for (Node item : node.getChildren())
@@ -878,12 +881,12 @@ public class BsjSourceSerializerImpl implements BsjSourceSerializer
                 first = false;
             } else
             {
-                p.append(separator);
+                p.print(separator);
             }
             item.executeOperation(this, p);
         }
         
-        p.append(end);
+        p.print(end);
     }
     
     protected String accessModifierToString(AccessModifier modifier)
