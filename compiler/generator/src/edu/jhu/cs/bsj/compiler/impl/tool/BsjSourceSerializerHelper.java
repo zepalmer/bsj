@@ -609,7 +609,6 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
             p.print(";");
         }
         p.print("\n");
-        //TODO done?
         return null;
     }
 
@@ -906,14 +905,14 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
     @Override
     public Void executeVoidStatementNode(VoidStatementNode node, PrependablePrintStream p)
     {
-        // TODO Auto-generated method stub
+        p.print(";");
         return null;
     }
 
     @Override
     public Void executeVoidTypeDeclarationNode(VoidTypeDeclarationNode node, PrependablePrintStream p)
     {
-        // TODO Auto-generated method stub
+        p.print(";");
         return null;
     }
 
