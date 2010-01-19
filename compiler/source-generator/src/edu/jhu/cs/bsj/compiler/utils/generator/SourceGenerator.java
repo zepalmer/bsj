@@ -1571,6 +1571,8 @@ public class SourceGenerator
 		PrintStream ips;
 		/** Print stream for the implementation. */
 		PrintStream nps;
+		/** Print stream for all-methods proxy. */
+		PrintStream pps;
 
 		@Override
 		public void init() throws IOException
@@ -1619,6 +1621,58 @@ public class SourceGenerator
 			printGeneratedClause(nps);
 			nps.println("public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>");
 			nps.println("{");
+			
+			pkg = "edu.jhu.cs.bsj.compiler.ast.util";
+			f = new File(TARGET_DIR.getPath() + File.separator + "ifaces" + File.separator
+					+ pkg.replaceAll("\\.", File.separator) + File.separator + "BsjNodeOperationProxy.java");
+			f.getParentFile().mkdirs();
+			pps = new PrintStream(new FileOutputStream(f));
+			pps.println("package " + pkg + ";");
+			pps.println();
+			printImports(pps, false);
+			pps.println("/**");
+			pps.println(" * This implementation of the BSJ node operation decorates every method of a backing");
+			pps.println(" * operation with a uniform before and after call.  This permits allows proxying, adjusting");
+			pps.println(" * or logging the parameters and results of calls, or adaptation of the backing operation");
+			pps.println(" * to a different set of data types.  Note that only the first call is proxied; if the");
+			pps.println(" * backing operation calls itself, those calls are not intercepted.");
+			pps.println(" *");
+			pps.println(" * @param <POrig> The data parameter type for the original backing operation.");
+			pps.println(" * @param <ROrig> The return type for the original backing operation.");
+			pps.println(" * @param <PNew> The data parameter type for the new decorated operation.");
+			pps.println(" * @param <RNew> The return type for the decorated operation.");
+			pps.println(" *");
+			pps.println(" * @author Zachary Palmer");
+			pps.println(" */");
+			printGeneratedClause(pps);
+			pps.println("public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements BsjNodeOperation<PNew,RNew>");
+			pps.println("{");
+			pps.println("    /** The backing operation to proxy. */");
+			pps.println("    private BsjNodeOperation<POrig,ROrig> backingOp;");
+			pps.println();
+			pps.println("    /**");
+			pps.println("     * Creates a new node operation proxy.");
+			pps.println("     * @param backingOp The backing operation to proxy.");
+			pps.println("     */");
+			pps.println("    public BsjNodeOperationProxy(BsjNodeOperation<POrig,ROrig> backingOp)");
+			pps.println("    {");
+			pps.println("        this.backingOp = backingOp;");
+			pps.println("    }");
+			pps.println();
+			pps.println("    /**");
+			pps.println("     * Called before every call to the backing operation.");
+			pps.println("     * @param p The incoming parameter data (compatible with the proxy interface).");
+			pps.println("     * @return The resulting parameter data (compatible with the backing interface).");
+			pps.println("     */");
+			pps.println("    protected abstract POrig before(PNew p);");
+			pps.println();
+			pps.println("    /**");
+			pps.println("     * Called after every call to the backing operation.");
+			pps.println("     * @param p The incoming return data (compatible with the backing interface).");
+			pps.println("     * @return The resulting return data (compatible with the return interface).");
+			pps.println("     */");
+			pps.println("    protected abstract RNew after(ROrig r);");
+			pps.println();
 		}
 
 		@Override
@@ -1678,6 +1732,21 @@ public class SourceGenerator
 				nps.println("        return null;");
 				nps.println("    }");
 				nps.println();
+				
+				pps.println("    /**");
+				pps.println("     * Decorates this operation, turning it over to the backing operation.");
+				pps.println("     * @param node The node to affect.");
+				pps.println("     * @param p The value to pass through the proxy filter and into the backing operation.");
+				pps.println("     * @return The result of this operation (after being passed through the proxy filter).");
+				pps.println("     */");
+				pps.println("    public " + typeParamS + "RNew execute" + def.getRawName() + "(" + typeName +
+						" node, PNew p)");
+				pps.println("    {");
+				pps.println("        POrig porig = before(p);");
+				pps.println("        ROrig rorig = this.backingOp.execute" + def.getRawName() + "(node, porig);");
+				pps.println("        return after(rorig);");
+				pps.println("    }");
+				pps.println();
 			}
 		}
 
@@ -1691,6 +1760,9 @@ public class SourceGenerator
 
 			nps.println("}");
 			nps.close();
+			
+			pps.println("}");
+			pps.close();
 		}
 	}
 }
