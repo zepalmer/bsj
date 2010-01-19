@@ -2,6 +2,7 @@ package edu.jhu.cs.bsj.compiler.impl.tool;
 
 import edu.jhu.cs.bsj.compiler.ast.AccessModifier;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceSerializer;
+import edu.jhu.cs.bsj.compiler.ast.PrimitiveType;
 import edu.jhu.cs.bsj.compiler.ast.node.*;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.CodeLiteralNode;
 
@@ -223,7 +224,6 @@ public class BsjSourceSerializerImpl implements BsjSourceSerializer
     {
         //TODO annotations
         p.append(accessModifierToString(node.getAccess()));
-        p.append(" ");
 
         if (node.getAbstractFlag())
         {
@@ -374,16 +374,26 @@ public class BsjSourceSerializerImpl implements BsjSourceSerializer
     @Override
     public Void executeFieldDeclarationNode(FieldDeclarationNode node, StringBuilder p)
     {
-        // TODO Auto-generated method stub
+        for (Node item : node.getDeclarators().getChildren())
+        {
+            if (node.getJavadoc() != null)
+            {
+                node.getJavadoc().executeOperation(this, p);
+                p.append("\n");
+            }
+            node.getModifiers().executeOperation(this, p);            
+            item.executeOperation(this, p);
+            p.append(";\n");
+        }
+
         return null;
     }
 
     @Override
     public Void executeFieldModifiersNode(FieldModifiersNode node, StringBuilder p)
     {
-        // TODO annoations
+        // TODO annotations
         p.append(accessModifierToString(node.getAccess()));
-        p.append(" ");
         
         if (node.getFinalFlag())
         {
@@ -632,7 +642,7 @@ public class BsjSourceSerializerImpl implements BsjSourceSerializer
     @Override
     public Void executePrimitiveTypeNode(PrimitiveTypeNode node, StringBuilder p)
     {
-        // TODO Auto-generated method stub
+        p.append(primitiveTypeToString(node.getPrimitiveType()));
         return null;
     }
 
@@ -790,7 +800,14 @@ public class BsjSourceSerializerImpl implements BsjSourceSerializer
     @Override
     public Void executeVariableDeclaratorNode(VariableDeclaratorNode node, StringBuilder p)
     {
-        // TODO Auto-generated method stub
+        node.getType().executeOperation(this, p);
+        p.append(" ");
+        node.getName().executeOperation(this, p);
+        if (node.getInitializer() != null)
+        {
+            p.append(" ");
+            node.getInitializer().executeOperation(this, p);
+        }
         return null;
     }
 
@@ -843,7 +860,7 @@ public class BsjSourceSerializerImpl implements BsjSourceSerializer
         return null;
     }
     
-    public void handleListNode(ListNode<? extends Node> node, 
+    protected void handleListNode(ListNode<? extends Node> node, 
             String begin, String separator, String end, StringBuilder p, boolean doNothingIfEmpty)
     {
         if (doNothingIfEmpty && node.getChildren().isEmpty())
@@ -869,7 +886,7 @@ public class BsjSourceSerializerImpl implements BsjSourceSerializer
         p.append(end);
     }
     
-    public String accessModifierToString(AccessModifier modifier)
+    protected String accessModifierToString(AccessModifier modifier)
     {
         if (modifier == null)
         {
@@ -881,13 +898,45 @@ public class BsjSourceSerializerImpl implements BsjSourceSerializer
             case PACKAGE:
                 return "";
             case PRIVATE:
-                return "private";
+                return "private ";
             case PROTECTED:
-                return "protected";
+                return "protected ";
             case PUBLIC:
-                return "public";
+                return "public ";
             default:
                 throw new IllegalStateException("Invalid AccessModifier");
+        }
+    }
+    
+    protected String primitiveTypeToString(PrimitiveType type)
+    {
+        if (type == null)
+        {
+            throw new IllegalStateException("Null PrimitiveType");
+        }
+        
+        switch (type)
+        {
+            case BOOLEAN:
+                return "boolean";
+            case BYTE:
+                return "byte";
+            case CHAR:
+                return "char";
+            case DOUBLE:
+                return "double";
+            case FLOAT:
+                return "float";
+            case INT:
+                return "int";
+            case LONG:
+                return "long";
+            case SHORT:
+                return "short";
+            case VOID:
+                return "void";
+            default:
+                throw new IllegalStateException("Invalid PrimitiveType");
         }
     }
 }
