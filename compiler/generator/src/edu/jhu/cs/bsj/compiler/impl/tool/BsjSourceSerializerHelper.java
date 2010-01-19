@@ -145,7 +145,11 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
     @Override
     public Void executeBlockStatementNode(BlockStatementNode node, PrependablePrintStream p)
     {
-        // TODO Auto-generated method stub
+        p.print("{\n");
+        p.incPrependCount();
+        handleListNode(node.getStatements(), "", ";\n", ";\n", p, true);
+        p.decPrependCount();
+        p.print("}\n");
         return null;
     }
 
@@ -193,7 +197,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
         p.incPrependCount();
         handleListNode(node.getMembers(), "", "\n", "", p, true);  
         p.decPrependCount();
-        p.print("}");
+        p.print("}\n");
         return null;
     }
 
@@ -572,14 +576,39 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
     @Override
     public Void executeMethodDeclarationNode(MethodDeclarationNode node, PrependablePrintStream p)
     {
-        // TODO Auto-generated method stub
         if (node.getJavadoc() != null)
         {
             node.getJavadoc().executeOperation(this, p);
             p.print("\n");
         }
         node.getModifiers().executeOperation(this, p);
-        //TODO FINISH
+        handleListNode(node.getTypeParameters(), "<", ", ", "> ", p, true);
+        node.getReturnType().executeOperation(this, p);
+        node.getIdentifier().executeOperation(this, p);
+        handleListNode(node.getParameters(), "(", ", ", "", p, false);
+        if (node.getVarargParameter() != null)
+        {
+            // note this section is performed manually due to the formatting
+            // of variable arguments parameters
+            p.print(", ");
+            node.getVarargParameter().getModifiers().executeOperation(this, p);
+            node.getVarargParameter().getType().executeOperation(this, p);
+            p.print("... ");
+            node.getVarargParameter().getIdentifier().executeOperation(this, p);
+        }
+        p.print(")");
+        handleListNode(node.getThrowTypes(), " throws ", ", ", "", p, true);
+        p.print("\n");
+        if (node.getBody() != null)
+        {
+            node.getBody().executeOperation(this, p);
+        }
+        else
+        {
+            p.print(";");
+        }
+        p.print("\n");
+        //TODO done?
         return null;
     }
 
@@ -856,7 +885,10 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
     @Override
     public Void executeVariableModifiersNode(VariableModifiersNode node, PrependablePrintStream p)
     {
-        // TODO Auto-generated method stub
+        if (node.getFinalFlag())
+        {
+            p.print("final ");
+        }
         return null;
     }
 
@@ -902,6 +934,10 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
         return null;
     }
     
+    // ========================================================================
+    // ============================ Utility Methods ===========================
+    // ========================================================================
+        
     protected void handleListNode(ListNode<? extends Node> node, 
             String begin, String separator, String end, PrependablePrintStream p, boolean doNothingIfEmpty)
     {
