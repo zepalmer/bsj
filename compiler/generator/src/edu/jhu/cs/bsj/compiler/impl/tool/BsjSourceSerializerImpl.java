@@ -6,7 +6,6 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.CodeLiteralNode;
 
 public class BsjSourceSerializerImpl implements BsjSourceSerializer
 {
-
     @Override
     public Void executeAlternateConstructorInvocationNode(AlternateConstructorInvocationNode node, StringBuilder p)
     {
@@ -193,6 +192,9 @@ public class BsjSourceSerializerImpl implements BsjSourceSerializer
     public Void executeClassDeclarationNode(ClassDeclarationNode node, StringBuilder p)
     {
         // TODO Auto-generated method stub
+        node.getModifiers().executeOperation(this, p);
+        p.append("class");
+        node.getIdentifier().executeOperation(this, p);
         return null;
     }
 
@@ -220,7 +222,11 @@ public class BsjSourceSerializerImpl implements BsjSourceSerializer
     @Override
     public Void executeCompilationUnitNode(CompilationUnitNode node, StringBuilder p)
     {
-        // TODO Auto-generated method stub
+        node.getPackageDeclaration().executeOperation(this, p);
+        p.append("\n\n");
+        handleListNode(node.getImports(), "", "\n", "\n", p);
+        p.append("\n");
+        handleListNode(node.getTypeDecls(), "", "\n\n", "\n", p);
         return null;
     }
 
@@ -388,14 +394,26 @@ public class BsjSourceSerializerImpl implements BsjSourceSerializer
     @Override
     public Void executeImportOnDemandNode(ImportOnDemandNode node, StringBuilder p)
     {
-        // TODO Auto-generated method stub
+        p.append("import ");
+        if (node.getStaticImport())
+        {
+            p.append("static ");
+        }
+        node.getName().executeOperation(this, p);
+        p.append(".*;");
         return null;
     }
 
     @Override
     public Void executeImportSingleTypeNode(ImportSingleTypeNode node, StringBuilder p)
     {
-        // TODO Auto-generated method stub
+        p.append("import ");
+        if (node.getStaticImport())
+        {
+            p.append("static ");
+        }
+        node.getName().executeOperation(this, p);
+        p.append(";");
         return null;
     }
 
@@ -465,7 +483,10 @@ public class BsjSourceSerializerImpl implements BsjSourceSerializer
     @Override
     public <T extends Node> Void executeListNode(ListNode<T> node, StringBuilder p)
     {
-        // TODO call down to util method
+        // TODO done?
+        
+        // just call the utility method with some defaults
+        handleListNode(node, "", ",", "\n", p);
         return null;
     }
 
@@ -524,7 +545,7 @@ public class BsjSourceSerializerImpl implements BsjSourceSerializer
         // TODO annotations
         p.append("package ");
         node.getName().executeOperation(this, p);
-        p.append(";\n");
+        p.append(";");
         return null;
     }
 
@@ -761,9 +782,24 @@ public class BsjSourceSerializerImpl implements BsjSourceSerializer
         return null;
     }
     
-    public void handleListNode()
+    public void handleListNode(ListNode<? extends Node> node, 
+            String begin, String separator, String end, StringBuilder p)
     {
-        //TODO
+        p.append(begin);
+        boolean first = true;
+        
+        for (Node item : node.getChildren())
+        {   
+            if (first == true)
+            {
+                first = false;
+            } else
+            {
+                p.append(separator);
+            }
+            item.executeOperation(this, p);
+        }
+        
+        p.append(end);
     }
-
 }
