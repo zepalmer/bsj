@@ -158,4 +158,5 @@ public abstract class NamedTypeDeclarationNodeImpl extends NodeImpl implements N
         sb.append(']');
         return sb.toString();
     }
+
 }

@@ -157,4 +157,5 @@ public abstract class ConstructorInvocationNodeImpl extends NodeImpl implements 
         sb.append(']');
         return sb.toString();
     }
+
 }

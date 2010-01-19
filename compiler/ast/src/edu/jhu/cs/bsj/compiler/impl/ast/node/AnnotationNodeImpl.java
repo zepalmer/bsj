@@ -118,4 +118,5 @@ public abstract class AnnotationNodeImpl extends NodeImpl implements AnnotationN
         sb.append(']');
         return sb.toString();
     }
+
 }

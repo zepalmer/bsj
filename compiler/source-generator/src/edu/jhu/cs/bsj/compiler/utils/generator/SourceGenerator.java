@@ -1145,6 +1145,22 @@ public class SourceGenerator
 			}
 			ps.println("        return sb.toString();");
 			ps.println("    }");
+			ps.println();
+			
+			// add node operation implementation
+			if (def.mode == ClassMode.CONCRETE)
+			{
+				ps.println("    /**");
+				ps.println("     * Executes an operation on this node.");
+				ps.println("     * @param operation The operation to perform.");
+				ps.println("     * @param p The parameter to pass to the operation.");
+				ps.println("     * @return The result of the operation.");
+				ps.println("     */");
+				ps.println("    public <P,R> R executeOperation(BsjNodeOperation<P,R> operation, P p)");
+				ps.println("    {");
+				ps.println("        return operation.execute" + def.getRawName() + "(this, p);");
+				ps.println("    }");
+			}
 
 			// add supplements
 			includeAllBodies(ps, def.includeFilenames, "classes");
@@ -1542,6 +1558,138 @@ public class SourceGenerator
 			
 			dps.println("}");
 			dps.close();
+		}
+	}
+	
+	/**
+	 * Writes the BSJ node operation interface and no-op class.
+	 */
+	static class NodeOperationWriter extends ClassHierarchyBuildingHandler
+	{
+		/** Print stream for the interface. */
+		PrintStream ips;
+		/** Print stream for the implementation. */
+		PrintStream nps;
+
+		@Override
+		public void init() throws IOException
+		{
+			super.init();
+			String pkg = "edu.jhu.cs.bsj.compiler.ast";
+			File f = new File(TARGET_DIR.getPath() + File.separator + "ifaces" + File.separator
+					+ pkg.replaceAll("\\.", File.separator) + File.separator + "BsjNodeOperation.java");
+			f.getParentFile().mkdirs();
+			ips = new PrintStream(new FileOutputStream(f));
+			ips.println("package " + pkg + ";");
+			ips.println();
+			printImports(ips, false);
+			ips.println("/**");
+			ips.println(" * This interface specifies an operation to be carried out on a node.  The purpose of this");
+			ips.println(" * mechanism is effectively to allow the addition of operations to the node hierarchy");
+			ips.println(" * requiring that the hierarchy itself be modified.  Note that while this interface is");
+			ips.println(" * similar to that of the visitor pattern (see {@link BsjNodeVisitor}), it does not function");
+			ips.println(" * the same way.  This mechanism does not abstract node traversal; the implementation is");
+			ips.println(" * required to do that itself if it wishes to walk the tree.");
+			ips.println(" *");
+			ips.println(" * @param <P> A parameter type for all methods to accept.  If no return type is desired, use");
+			ips.println(" * {@link java.lang.Void}.");
+			ips.println(" * @param <R> A return type for all methods to return.  If no return type is desired, use");
+			ips.println(" * {@link java.lang.Void}.");
+			ips.println(" *");
+			ips.println(" * @author Zachary Palmer");
+			ips.println(" */");
+			printGeneratedClause(ips);
+			ips.println("public interface BsjNodeOperation<P,R>");
+			ips.println("{");
+
+			pkg = "edu.jhu.cs.bsj.compiler.ast.util";
+			f = new File(TARGET_DIR.getPath() + File.separator + "ifaces" + File.separator
+					+ pkg.replaceAll("\\.", File.separator) + File.separator + "BsjNodeNoOpOperation.java");
+			f.getParentFile().mkdirs();
+			nps = new PrintStream(new FileOutputStream(f));
+			nps.println("package " + pkg + ";");
+			nps.println();
+			printImports(nps, false);
+			nps.println("/**");
+			nps.println(" * This implementation of the BSJ node operation implements every method with a no-op.");
+			nps.println(" *");
+			nps.println(" * @author Zachary Palmer");
+			nps.println(" */");
+			printGeneratedClause(nps);
+			nps.println("public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>");
+			nps.println("{");
+		}
+
+		@Override
+		public void useDefinition(ClassDef def) throws IOException
+		{
+			if (def.mode == ClassMode.CONCRETE)
+			{
+				String typeParam;
+				String typeName;
+				String typeArg;
+				if (def.getNameParam().length() > 0)
+				{
+					typeParam = def.getNameParam();
+					String[] args = typeParam.substring(1, typeParam.length() - 1).split(",");
+					for (int i = 0; i < args.length; i++)
+					{
+						if (args[i].contains(" "))
+							args[i] = args[i].substring(0, args[i].indexOf(' ')).trim();
+					}
+					StringBuilder sb = new StringBuilder();
+					for (String s : args)
+					{
+						if (sb.length() > 0)
+							sb.append(",");
+						sb.append(s);
+					}
+					sb.insert(0, "<");
+					sb.append(">");
+					typeArg = sb.toString();
+				} else
+				{
+					typeParam = null;
+					typeArg = "";
+				}
+				typeName = def.getRawName() + typeArg;
+				String typeParamS = typeParam == null ? "" : (typeParam + " ");
+
+				ips.println("    /**");
+				ips.println("     * Executes this operation against a " + def.getRawName() + ".");
+				ips.println("     * @param node The " + def.getRawName() + " in question.");
+				ips.println("     * @param p The parameter to use.");
+				ips.println("     * @return The result of the operation.");
+				ips.println("     */");
+				ips.println("    public " + typeParamS + "R execute" + def.getRawName() + "(" + typeName +
+						" node, P p);");
+				ips.println();
+				
+				nps.println("    /**");
+				nps.println("     * Performs no operation.");
+				nps.println("     * @param node Ignored.");
+				nps.println("     * @param p Ignored.");
+				nps.println("     * @return <code>null</code>, always.");
+				nps.println("     */");
+				nps.println("    public " + typeParamS + "R execute" + def.getRawName() + "(" + typeName +
+						" node, P p)");
+				nps.println("    {");
+				nps.println("        return null;");
+				nps.println("    }");
+				nps.println();
+			}
+		}
+
+		@Override
+		public void finish() throws IOException
+		{
+			super.finish();
+
+			ips.println("}");
+			ips.close();
+
+			nps.println("}");
+			nps.close();
 		}
 	}
 }

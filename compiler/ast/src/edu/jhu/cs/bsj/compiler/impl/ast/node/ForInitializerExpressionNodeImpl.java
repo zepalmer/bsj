@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.annotation.Generated;
 
+import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.ForInitializerExpressionNode;
@@ -120,5 +121,16 @@ public class ForInitializerExpressionNodeImpl extends NodeImpl implements ForIni
         sb.append(this.expressions == null? "null" : this.expressions.getClass().getSimpleName());
         sb.append(']');
         return sb.toString();
+    }
+
+    /**
+     * Executes an operation on this node.
+     * @param operation The operation to perform.
+     * @param p The parameter to pass to the operation.
+     * @return The result of the operation.
+     */
+    public <P,R> R executeOperation(BsjNodeOperation<P,R> operation, P p)
+    {
+        return operation.executeForInitializerExpressionNode(this, p);
     }
 }

@@ -109,4 +109,5 @@ public abstract class LiteralNodeImpl<T> extends NodeImpl implements LiteralNode
         sb.append(']');
         return sb.toString();
     }
+
 }

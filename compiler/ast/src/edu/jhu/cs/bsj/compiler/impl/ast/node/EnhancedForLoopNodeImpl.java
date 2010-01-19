@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.annotation.Generated;
 
+import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.EnhancedForLoopNode;
@@ -195,5 +196,16 @@ public class EnhancedForLoopNodeImpl extends NodeImpl implements EnhancedForLoop
         sb.append(this.statement == null? "null" : this.statement.getClass().getSimpleName());
         sb.append(']');
         return sb.toString();
+    }
+
+    /**
+     * Executes an operation on this node.
+     * @param operation The operation to perform.
+     * @param p The parameter to pass to the operation.
+     * @return The result of the operation.
+     */
+    public <P,R> R executeOperation(BsjNodeOperation<P,R> operation, P p)
+    {
+        return operation.executeEnhancedForLoopNode(this, p);
     }
 }
