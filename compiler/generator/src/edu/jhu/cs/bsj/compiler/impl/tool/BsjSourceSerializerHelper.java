@@ -573,6 +573,13 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
     public Void executeMethodDeclarationNode(MethodDeclarationNode node, PrependablePrintStream p)
     {
         // TODO Auto-generated method stub
+        if (node.getJavadoc() != null)
+        {
+            node.getJavadoc().executeOperation(this, p);
+            p.print("\n");
+        }
+        node.getModifiers().executeOperation(this, p);
+        //TODO FINISH
         return null;
     }
 
@@ -593,7 +600,39 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
     @Override
     public Void executeMethodModifiersNode(MethodModifiersNode node, PrependablePrintStream p)
     {
-        // TODO Auto-generated method stub
+        // TODO annotations
+        p.print(accessModifierToString(node.getAccess()));
+        
+        if (node.getAbstractFlag())
+        {
+            p.print("abstract ");
+        }
+        
+        if (node.getFinalFlag())
+        {
+            p.print("final ");
+        }
+        
+        if (node.getNativeFlag())
+        {
+            p.print("native ");
+        }
+        
+        if (node.getStaticFlag())
+        {
+            p.print("static ");
+        }
+        
+        if (node.getStrictfpFlag())
+        {
+            p.print("strictfp ");
+        }
+        
+        if (node.getSynchronizedFlag())
+        {
+            p.print("synchronized ");
+        }
+
         return null;
     }
 
