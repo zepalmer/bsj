@@ -109,6 +109,8 @@ scope Global {
     import edu.jhu.cs.bsj.compiler.ast.node.*;
     import edu.jhu.cs.bsj.compiler.ast.node.meta.*;
     import edu.jhu.cs.bsj.compiler.ast.util.*;
+    import edu.jhu.cs.bsj.compiler.error.*;
+    import edu.jhu.cs.bsj.compiler.error.parser.*;
     
     import edu.jhu.cs.bsj.compiler.tool.parser.antlr.util.BsjAntlrParserUtils;
 }
@@ -143,56 +145,8 @@ scope Global {
                 }
             }
         };
-        //this.factory = factory;
     }
     
-//    // *** COMMONLY USED MODIFIERS ********************************************
-//    private static final List<Modifier> classModifiers = Arrays.asList(
-//            Modifier.PUBLIC,
-//            Modifier.PROTECTED,
-//            Modifier.PRIVATE,
-//            Modifier.ABSTRACT,
-//            Modifier.STATIC,
-//            Modifier.FINAL,
-//            Modifier.STRICTFP);
-//    private static final List<Modifier> interfaceModifiers = Arrays.asList(
-//            Modifier.PUBLIC,
-//            Modifier.PROTECTED,
-//            Modifier.PRIVATE,
-//            Modifier.ABSTRACT,
-//            Modifier.STATIC,
-//            Modifier.FINAL,
-//            Modifier.STRICTFP);
-//    /* Contains modifiers legal for classes or interfaces */
-//    private static final List<Modifier> classOrInterfaceModifiers = classModifiers;
-//    private static final List<Modifier> variableModifiers = Arrays.asList(Modifier.FINAL);
-//    private static final List<Modifier> fieldModifiers = Arrays.asList(
-//            Modifier.PUBLIC,
-//            Modifier.PROTECTED,
-//            Modifier.PRIVATE,
-//            Modifier.STATIC,
-//            Modifier.FINAL,
-//            Modifier.TRANSIENT,
-//            Modifier.VOLATILE);
-//    private static final List<Modifier> constantModifiers = Arrays.asList(
-//            Modifier.PUBLIC,
-//            Modifier.STATIC,
-//            Modifier.FINAL);
-//    private static final List<Modifier> methodModifiers = Arrays.asList(
-//            Modifier.PUBLIC,
-//            Modifier.PROTECTED,
-//            Modifier.PRIVATE,
-//            Modifier.ABSTRACT,
-//            Modifier.STATIC,
-//            Modifier.FINAL,
-//            Modifier.SYNCHRONIZED,
-//            Modifier.NATIVE,
-//            Modifier.STRICTFP);
-//    private static final List<Modifier> constructorModifiers = Arrays.asList(
-//            Modifier.PUBLIC,
-//            Modifier.PROTECTED,
-//            Modifier.PRIVATE);
-
     // *** DATA STRUCTURE FOR LITERAL PARSING *********************************
     static class IntegerBaseResult
     {
@@ -278,6 +232,20 @@ scope Global {
     }
     
     // *** ERROR REPORTING AND HANDLING ***************************************
+    /** A list of errors which have occurred since this parser was created. */
+    private List<BsjParserError> bsjErrors = new ArrayList<BsjParserError>();
+    
+    /**
+     * Retrieves the list of errors that has been accumulated since the creation of this parser.  A standard use case
+     * for the BSJ ANTLR parser is to instantiate it, parse one source element, and then check this list.  If the list
+     * has a size of zero, it is safe to assume that everything went smoothly.
+     * @return The list of errors this parser has accumulated.
+     */
+    private List<BsjParserError> getErrors()
+    {
+        return this.bsjErrors;
+    }
+    
     /**
      * Overrides the mechanism for displaying recognition errors.  While it is possible to do something very similar by
      * overriding emitErrorMessage, this method is extracted instead in order to allow the exception itself to be
@@ -366,6 +334,7 @@ compilationUnit returns [CompilationUnitNode ret]
         packageDeclaration?
         importDeclarations
         typeDeclarations
+        EOF
         {
             $ret = factory.makeCompilationUnitNode(
                         $packageDeclaration.ret,
