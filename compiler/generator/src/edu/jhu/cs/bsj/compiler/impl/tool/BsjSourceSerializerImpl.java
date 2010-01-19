@@ -1,5 +1,6 @@
 package edu.jhu.cs.bsj.compiler.impl.tool;
 
+import edu.jhu.cs.bsj.compiler.ast.AccessModifier;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceSerializer;
 import edu.jhu.cs.bsj.compiler.ast.node.*;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.CodeLiteralNode;
@@ -193,8 +194,15 @@ public class BsjSourceSerializerImpl implements BsjSourceSerializer
     {
         // TODO Auto-generated method stub
         node.getModifiers().executeOperation(this, p);
-        p.append("class");
+        p.append("class ");
         node.getIdentifier().executeOperation(this, p);
+        p.append(" ");
+        if (node.getExtendsClause() != null)
+        {
+            node.getExtendsClause().executeOperation(this, p);
+            p.append(" ");
+        }
+        handleListNode(node.getImplementsClause(), "", ", ", "", p);
         return null;
     }
 
@@ -208,7 +216,29 @@ public class BsjSourceSerializerImpl implements BsjSourceSerializer
     @Override
     public Void executeClassModifiersNode(ClassModifiersNode node, StringBuilder p)
     {
-        // TODO Auto-generated method stub
+        p.append(accessModifierToString(node.getAccess()));
+        p.append(" ");
+        
+        if (node.getAbstractFlag())
+        {
+            p.append("abstract ");
+        }
+        
+        if (node.getFinalFlag())
+        {
+            p.append("final ");
+        }
+        
+        if (node.getStaticFlag())
+        {
+            p.append("static ");
+        }
+        
+        if (node.getStrictfpFlag())
+        {
+            p.append("strictfp ");
+        }
+        
         return null;
     }
 
@@ -801,5 +831,27 @@ public class BsjSourceSerializerImpl implements BsjSourceSerializer
         }
         
         p.append(end);
+    }
+    
+    public String accessModifierToString(AccessModifier modifier)
+    {
+        if (modifier == null)
+        {
+            throw new IllegalStateException("Null AccessModifier");
+        }
+        
+        switch (modifier)
+        {
+            case PACKAGE:
+                return "";
+            case PRIVATE:
+                return "private";
+            case PROTECTED:
+                return "protected";
+            case PUBLIC:
+                return "public";
+            default:
+                throw new IllegalStateException("Invalid AccessModifier");
+        }
     }
 }
