@@ -152,12 +152,24 @@ public class QualifiedNameNodeImpl extends NameNodeImpl implements QualifiedName
     public String toString()
     {
         StringBuilder sb = new StringBuilder();
+        if (base == null)
+        {
+        sb.append("[null]");
+        } else
+        {
         sb.append(this.base.toString());
+        }
         sb.append('.');
+        if (identifier == null)
+        {
+        sb.append("[null]");
+        } else
+        {
         sb.append(identifier.getIdentifier());
         sb.append('[');
         sb.append(this.getCategory());
         sb.append(']');
+        }
         return sb.toString();
     }
 
