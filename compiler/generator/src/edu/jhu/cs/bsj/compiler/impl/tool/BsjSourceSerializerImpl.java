@@ -150,7 +150,7 @@ public class BsjSourceSerializerImpl implements BsjSourceSerializer
     @Override
     public Void executeBooleanLiteralNode(BooleanLiteralNode node, StringBuilder p)
     {
-        // TODO Auto-generated method stub
+        p.append(node.getValue() ? "true" : "false");
         return null;
     }
 
@@ -178,15 +178,18 @@ public class BsjSourceSerializerImpl implements BsjSourceSerializer
     @Override
     public Void executeCharLiteralNode(CharLiteralNode node, StringBuilder p)
     {
-        // TODO Auto-generated method stub
+        p.append("'");
+        p.append(node.getValue());
+        p.append("'");
         return null;
     }
 
     @Override
     public Void executeClassBodyNode(ClassBodyNode node, StringBuilder p)
     {
-        // TODO Auto-generated method stub
-        
+        p.append("{\n");
+        handleListNode(node.getMembers(), "", "\n", "", p, true);        
+        p.append("}");
         return null;
     }
 
@@ -218,9 +221,10 @@ public class BsjSourceSerializerImpl implements BsjSourceSerializer
     @Override
     public Void executeClassModifiersNode(ClassModifiersNode node, StringBuilder p)
     {
+        //TODO annotations
         p.append(accessModifierToString(node.getAccess()));
         p.append(" ");
-        
+
         if (node.getAbstractFlag())
         {
             p.append("abstract ");
@@ -307,7 +311,7 @@ public class BsjSourceSerializerImpl implements BsjSourceSerializer
     @Override
     public Void executeDoubleLiteralNode(DoubleLiteralNode node, StringBuilder p)
     {
-        // TODO Auto-generated method stub
+        p.append(node.getValue().toString());
         return null;
     }
 
@@ -377,14 +381,37 @@ public class BsjSourceSerializerImpl implements BsjSourceSerializer
     @Override
     public Void executeFieldModifiersNode(FieldModifiersNode node, StringBuilder p)
     {
-        // TODO Auto-generated method stub
+        // TODO annoations
+        p.append(accessModifierToString(node.getAccess()));
+        p.append(" ");
+        
+        if (node.getFinalFlag())
+        {
+            p.append("final ");
+        }
+        
+        if (node.getStaticFlag())
+        {
+            p.append("static ");
+        }
+        
+        if (node.getTransientFlag())
+        {
+            p.append("transient ");
+        }
+        
+        if (node.getVolatileFlag())
+        {
+            p.append("volatile ");
+        }
+
         return null;
     }
 
     @Override
     public Void executeFloatLiteralNode(FloatLiteralNode node, StringBuilder p)
     {
-        // TODO Auto-generated method stub
+        p.append(node.getValue().toString());
         return null;
     }
 
@@ -473,7 +500,7 @@ public class BsjSourceSerializerImpl implements BsjSourceSerializer
     @Override
     public Void executeIntLiteralNode(IntLiteralNode node, StringBuilder p)
     {
-        // TODO Auto-generated method stub
+        p.append(node.getValue().toString());
         return null;
     }
 
@@ -525,7 +552,7 @@ public class BsjSourceSerializerImpl implements BsjSourceSerializer
     @Override
     public Void executeLongLiteralNode(LongLiteralNode node, StringBuilder p)
     {
-        // TODO Auto-generated method stub
+        p.append(node.getValue().toString());
         return null;
     }
 
@@ -567,7 +594,7 @@ public class BsjSourceSerializerImpl implements BsjSourceSerializer
     @Override
     public Void executeNullLiteralNode(NullLiteralNode node, StringBuilder p)
     {
-        // TODO Auto-generated method stub
+        p.append("null");
         return null;
     }
 
@@ -649,7 +676,9 @@ public class BsjSourceSerializerImpl implements BsjSourceSerializer
     @Override
     public Void executeStringLiteralNode(StringLiteralNode node, StringBuilder p)
     {
-        // TODO Auto-generated method stub
+        p.append("\"");
+        p.append(node.getValue());
+        p.append("\"");
         return null;
     }
 
