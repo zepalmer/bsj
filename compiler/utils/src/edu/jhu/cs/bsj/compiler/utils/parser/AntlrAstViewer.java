@@ -26,6 +26,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
+import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.JTree;
 import javax.swing.border.LineBorder;
@@ -38,6 +39,7 @@ import org.apache.log4j.PropertyConfigurator;
 
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeFactoryImpl;
+import edu.jhu.cs.bsj.compiler.impl.tool.BsjSourceSerializerImpl;
 import edu.jhu.cs.bsj.compiler.tool.parser.BsjParserImpl;
 
 public class AntlrAstViewer
@@ -271,15 +273,24 @@ public class AntlrAstViewer
 		JPanel treePanel = new JPanel(new BorderLayout());
 		treePanel.add(sp, BorderLayout.CENTER);
 		treePanel.setBorder(new TitledBorder(new LineBorder(Color.BLACK), "AST"));
+		
+		final JTextArea serializedSource = new JTextArea(13, 40);
+		serializedSource.setBorder(new TitledBorder(new LineBorder(Color.BLACK), "Serialized Source"));
+		serializedSource.setEditable(false);
+		JScrollPane serializedSourceScrollPane = new JScrollPane(serializedSource);
 
 		JPanel leftPanel = new JPanel();
 		leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
 		leftPanel.add(new JScrollPane(error));
 		leftPanel.add(new JScrollPane(source));
+		
+		JTabbedPane tabPanel = new JTabbedPane();
+		tabPanel.addTab("AST", treePanel);
+		tabPanel.addTab("Source", serializedSourceScrollPane);
 
 		JPanel rightPanel = new JPanel();
 		rightPanel.setLayout(new BorderLayout());
-		rightPanel.add(treePanel, BorderLayout.CENTER);
+		rightPanel.add(tabPanel, BorderLayout.CENTER);
 		rightPanel.add(parse, BorderLayout.SOUTH);
 
 		JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, true, leftPanel, rightPanel);
@@ -301,7 +312,11 @@ public class AntlrAstViewer
 					saveProperties();
 
 					Node node = stringToAst(getSource());
-					printTree(node, 0);
+					StringBuilder sb = new StringBuilder();
+					node.executeOperation(new BsjSourceSerializerImpl(), sb);
+					String serializedSourceStr = sb.toString();
+					serializedSource.setText(serializedSourceStr);
+					
 					tree.setModel(new DefaultTreeModel(new SwingCommonTreeNode(null, node)));
 					error.setText("(no error)");
 				} catch (Exception e)
