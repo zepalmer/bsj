@@ -7,6 +7,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -22,6 +24,7 @@ import java.util.Properties;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -245,16 +248,19 @@ public class AntlrAstViewer
 	{
 		properties.setProperty("size", ((int) (d.getWidth())) + "," + ((int) (d.getHeight())));
 	}
-
-	public static void main(String arg[]) throws Exception
+	
+	private static void log4jConfigure(String level)
 	{
 		Properties loggingProperties = new Properties();
-		loggingProperties.setProperty("log4j.rootLogger", "trace, stdout");
+		loggingProperties.setProperty("log4j.rootLogger", level + ", stdout");
 		loggingProperties.setProperty("log4j.appender.stdout", "org.apache.log4j.ConsoleAppender");
 		loggingProperties.setProperty("log4j.appender.stdout.layout", "org.apache.log4j.PatternLayout");
 		loggingProperties.setProperty("log4j.appender.stdout.layout.ConversionPattern", "%5p [%t] (%F:%L) - %m%n");
 		PropertyConfigurator.configure(loggingProperties);
+	}
 
+	public static void main(String arg[]) throws Exception
+	{
 		loadProperties();
 		String defaultText = getSource();
 
@@ -263,6 +269,21 @@ public class AntlrAstViewer
 		final JTextArea error = new JTextArea(6, 40);
 		error.setBorder(new TitledBorder(new LineBorder(Color.BLACK), "Error"));
 		error.setEditable(false);
+		final JComboBox logLevel = new JComboBox(new Object[]{"trace","debug"});
+		logLevel.setBorder(new TitledBorder(new LineBorder(Color.BLACK), "Log4J Level"));
+		logLevel.addItemListener(new ItemListener()
+		{
+			@Override
+			public void itemStateChanged(ItemEvent e)
+			{
+				if (logLevel.getSelectedItem() != null)
+				{
+					log4jConfigure(logLevel.getSelectedItem().toString());
+				}
+			}
+		});
+		logLevel.setSelectedItem("debug");
+		
 		final JTextArea source = new JTextArea(8, 40);
 		source.setBorder(new TitledBorder(new LineBorder(Color.BLACK), "Source"));
 		JButton parse = new JButton("Parse");
@@ -279,10 +300,14 @@ public class AntlrAstViewer
 		serializedSource.setEditable(false);
 		JScrollPane serializedSourceScrollPane = new JScrollPane(serializedSource);
 
-		JPanel leftPanel = new JPanel();
-		leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
-		leftPanel.add(new JScrollPane(error));
-		leftPanel.add(new JScrollPane(source));
+		JPanel leftMainPanel = new JPanel();
+		leftMainPanel.setLayout(new BoxLayout(leftMainPanel, BoxLayout.Y_AXIS));
+		leftMainPanel.add(new JScrollPane(error));
+		leftMainPanel.add(new JScrollPane(source));
+		
+		JPanel leftPanel = new JPanel(new BorderLayout());
+		leftPanel.add(leftMainPanel, BorderLayout.CENTER);
+		leftPanel.add(logLevel, BorderLayout.SOUTH);
 		
 		JTabbedPane tabPanel = new JTabbedPane();
 		tabPanel.addTab("AST", treePanel);
