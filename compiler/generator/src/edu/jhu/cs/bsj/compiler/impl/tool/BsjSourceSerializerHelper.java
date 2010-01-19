@@ -584,6 +584,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
         node.getModifiers().executeOperation(this, p);
         handleListNode(node.getTypeParameters(), "<", ", ", "> ", p, true);
         node.getReturnType().executeOperation(this, p);
+        p.print(" ");
         node.getIdentifier().executeOperation(this, p);
         handleListNode(node.getParameters(), "(", ", ", "", p, false);
         if (node.getVarargParameter() != null)
@@ -598,9 +599,9 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
         }
         p.print(")");
         handleListNode(node.getThrowTypes(), " throws ", ", ", "", p, true);
-        p.print("\n");
         if (node.getBody() != null)
         {
+            p.print("\n");
             node.getBody().executeOperation(this, p);
         }
         else
@@ -895,7 +896,10 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
     @Override
     public Void executeVariableNode(VariableNode node, PrependablePrintStream p)
     {
-        // TODO Auto-generated method stub
+        node.getModifiers().executeOperation(this, p);
+        node.getType().executeOperation(this, p);
+        p.print(" ");
+        node.getIdentifier().executeOperation(this, p);
         return null;
     }
 
@@ -916,7 +920,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
     @Override
     public Void executeVoidTypeNode(VoidTypeNode node, PrependablePrintStream p)
     {
-        // TODO Auto-generated method stub
+        p.print("void");
         return null;
     }
 
