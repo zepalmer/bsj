@@ -187,11 +187,12 @@ public class FieldModifiersNodeImpl extends ModifiersNodeImpl implements FieldMo
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(this.access);
-        list.add(this.staticFlag);
-        list.add(this.finalFlag);
-        list.add(this.transientFlag);
-        list.add(this.volatileFlag);
+        list.add(getAccess());
+        list.add(getStaticFlag());
+        list.add(getFinalFlag());
+        list.add(getTransientFlag());
+        list.add(getVolatileFlag());
+        list.add(getAnnotations());
         return list;
     }
 

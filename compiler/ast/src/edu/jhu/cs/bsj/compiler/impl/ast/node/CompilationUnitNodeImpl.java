@@ -169,9 +169,9 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(this.packageDeclaration);
-        list.add(this.imports);
-        list.add(this.typeDecls);
+        list.add(getPackageDeclaration());
+        list.add(getImports());
+        list.add(getTypeDecls());
         return list;
     }
 

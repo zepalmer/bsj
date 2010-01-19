@@ -100,7 +100,7 @@ public abstract class AnnotationNodeImpl extends NodeImpl implements AnnotationN
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(this.annotationType);
+        list.add(getAnnotationType());
         return list;
     }
 

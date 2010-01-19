@@ -101,7 +101,7 @@ public class AnonymousClassBodyNodeImpl extends NodeImpl implements AnonymousCla
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(this.members);
+        list.add(getMembers());
         return list;
     }
 

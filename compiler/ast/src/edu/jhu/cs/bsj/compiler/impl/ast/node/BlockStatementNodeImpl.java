@@ -103,7 +103,7 @@ public class BlockStatementNodeImpl extends NodeImpl implements BlockStatementNo
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(this.statements);
+        list.add(getStatements());
         return list;
     }
 

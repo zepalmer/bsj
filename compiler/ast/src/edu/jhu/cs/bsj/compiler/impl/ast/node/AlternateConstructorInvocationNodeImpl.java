@@ -73,6 +73,8 @@ public class AlternateConstructorInvocationNodeImpl extends ConstructorInvocatio
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
+        list.add(getArguments());
+        list.add(getTypeArguments());
         return list;
     }
 

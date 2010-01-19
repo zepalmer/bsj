@@ -94,7 +94,8 @@ public class VariableModifiersNodeImpl extends ModifiersNodeImpl implements Vari
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(this.finalFlag);
+        list.add(getFinalFlag());
+        list.add(getAnnotations());
         return list;
     }
 

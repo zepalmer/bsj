@@ -89,7 +89,7 @@ public class JavadocNodeImpl extends NodeImpl implements JavadocNode
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(this.text);
+        list.add(getText());
         return list;
     }
 

@@ -71,6 +71,7 @@ public class CodeLiteralNodeImpl extends LiteralNodeImpl<Node> implements CodeLi
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
+        list.add(getValue());
         return list;
     }
 

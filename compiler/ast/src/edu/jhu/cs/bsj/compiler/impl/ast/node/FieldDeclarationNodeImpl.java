@@ -177,9 +177,9 @@ public class FieldDeclarationNodeImpl extends NodeImpl implements FieldDeclarati
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(this.modifiers);
-        list.add(this.declarators);
-        list.add(this.javadoc);
+        list.add(getModifiers());
+        list.add(getDeclarators());
+        list.add(getJavadoc());
         return list;
     }
 

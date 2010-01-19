@@ -69,6 +69,7 @@ public class CharLiteralNodeImpl extends LiteralNodeImpl<Character> implements C
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
+        list.add(getValue());
         return list;
     }
 

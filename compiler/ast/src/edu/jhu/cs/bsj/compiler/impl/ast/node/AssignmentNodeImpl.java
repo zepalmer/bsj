@@ -159,9 +159,9 @@ public class AssignmentNodeImpl extends NodeImpl implements AssignmentNode
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(this.variable);
-        list.add(this.operator);
-        list.add(this.expression);
+        list.add(getVariable());
+        list.add(getOperator());
+        list.add(getExpression());
         return list;
     }
 

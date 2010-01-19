@@ -136,8 +136,8 @@ public class DoWhileLoopNodeImpl extends NodeImpl implements DoWhileLoopNode
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(this.condition);
-        list.add(this.statement);
+        list.add(getCondition());
+        list.add(getStatement());
         return list;
     }
 

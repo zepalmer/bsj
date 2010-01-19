@@ -102,7 +102,7 @@ public class ThisNodeImpl extends NodeImpl implements ThisNode
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(this.type);
+        list.add(getType());
         return list;
     }
 

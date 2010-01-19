@@ -159,9 +159,9 @@ public class BinaryExpressionNodeImpl extends NodeImpl implements BinaryExpressi
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(this.leftOperand);
-        list.add(this.rightOperand);
-        list.add(this.operator);
+        list.add(getLeftOperand());
+        list.add(getRightOperand());
+        list.add(getOperator());
         return list;
     }
 

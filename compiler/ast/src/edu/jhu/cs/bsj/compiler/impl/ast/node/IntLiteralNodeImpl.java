@@ -69,6 +69,7 @@ public class IntLiteralNodeImpl extends LiteralNodeImpl<Integer> implements IntL
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
+        list.add(getValue());
         return list;
     }
 

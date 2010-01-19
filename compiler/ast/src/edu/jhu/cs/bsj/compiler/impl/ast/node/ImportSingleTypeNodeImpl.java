@@ -125,8 +125,8 @@ public class ImportSingleTypeNodeImpl extends NodeImpl implements ImportSingleTy
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(this.name);
-        list.add(this.staticImport);
+        list.add(getName());
+        list.add(getStaticImport());
         return list;
     }
 

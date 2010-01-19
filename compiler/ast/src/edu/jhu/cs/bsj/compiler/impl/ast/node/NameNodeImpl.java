@@ -80,7 +80,7 @@ public abstract class NameNodeImpl extends NodeImpl implements NameNode
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(this.category);
+        list.add(getCategory());
         return list;
     }
 

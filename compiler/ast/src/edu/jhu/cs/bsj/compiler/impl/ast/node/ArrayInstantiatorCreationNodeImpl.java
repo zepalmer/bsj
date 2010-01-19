@@ -106,7 +106,9 @@ public class ArrayInstantiatorCreationNodeImpl extends ArrayCreationNodeImpl imp
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(this.dimExpressions);
+        list.add(getDimExpressions());
+        list.add(getBaseType());
+        list.add(getArrayLevels());
         return list;
     }
 

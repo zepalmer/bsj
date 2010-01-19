@@ -136,8 +136,8 @@ public class ParameterizedTypeSelectNodeImpl extends NodeImpl implements Paramet
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(this.base);
-        list.add(this.select);
+        list.add(getBase());
+        list.add(getSelect());
         return list;
     }
 

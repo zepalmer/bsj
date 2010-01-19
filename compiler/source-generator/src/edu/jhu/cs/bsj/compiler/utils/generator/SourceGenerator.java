@@ -1087,9 +1087,10 @@ public class SourceGenerator
 			ps.println("    {");
 			ps.println("        List<Object> list = "
 					+ (def.sname == null ? "new ArrayList<Object>();" : "super.getChildObjects();"));
-			for (Prop p : def.props)
+			for (Prop p : recProps)
 			{
-				ps.println("        list.add(this." + p.name + ");");
+				ps.println("        list.add(get" + Character.toUpperCase(p.name.charAt(0)) + p.name.substring(1) +
+						"());");
 			}
 			ps.println("        return list;");
 			ps.println("    }");

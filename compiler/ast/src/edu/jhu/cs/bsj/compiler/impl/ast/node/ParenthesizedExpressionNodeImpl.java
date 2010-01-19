@@ -102,7 +102,7 @@ public class ParenthesizedExpressionNodeImpl extends NodeImpl implements Parenth
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(this.expression);
+        list.add(getExpression());
         return list;
     }
 

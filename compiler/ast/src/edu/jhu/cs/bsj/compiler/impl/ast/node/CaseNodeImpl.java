@@ -135,8 +135,8 @@ public class CaseNodeImpl extends NodeImpl implements CaseNode
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(this.expression);
-        list.add(this.statements);
+        list.add(getExpression());
+        list.add(getStatements());
         return list;
     }
 

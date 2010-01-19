@@ -107,7 +107,9 @@ public class MethodInvocationByNameNodeImpl extends MethodInvocationNodeImpl imp
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(this.name);
+        list.add(getName());
+        list.add(getArguments());
+        list.add(getTypeArguments());
         return list;
     }
 

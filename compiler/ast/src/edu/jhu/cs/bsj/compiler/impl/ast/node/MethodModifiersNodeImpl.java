@@ -233,13 +233,14 @@ public class MethodModifiersNodeImpl extends ModifiersNodeImpl implements Method
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(this.access);
-        list.add(this.abstractFlag);
-        list.add(this.staticFlag);
-        list.add(this.finalFlag);
-        list.add(this.synchronizedFlag);
-        list.add(this.nativeFlag);
-        list.add(this.strictfpFlag);
+        list.add(getAccess());
+        list.add(getAbstractFlag());
+        list.add(getStaticFlag());
+        list.add(getFinalFlag());
+        list.add(getSynchronizedFlag());
+        list.add(getNativeFlag());
+        list.add(getStrictfpFlag());
+        list.add(getAnnotations());
         return list;
     }
 

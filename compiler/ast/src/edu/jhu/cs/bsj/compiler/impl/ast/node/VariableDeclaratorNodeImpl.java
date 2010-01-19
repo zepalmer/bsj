@@ -170,9 +170,9 @@ public class VariableDeclaratorNodeImpl extends NodeImpl implements VariableDecl
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(this.type);
-        list.add(this.name);
-        list.add(this.initializer);
+        list.add(getType());
+        list.add(getName());
+        list.add(getInitializer());
         return list;
     }
 

@@ -102,7 +102,7 @@ public class ExpressionStatementNodeImpl extends NodeImpl implements ExpressionS
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(this.expression);
+        list.add(getExpression());
         return list;
     }
 

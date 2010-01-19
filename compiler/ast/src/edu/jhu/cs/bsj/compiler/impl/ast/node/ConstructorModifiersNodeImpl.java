@@ -95,7 +95,8 @@ public class ConstructorModifiersNodeImpl extends ModifiersNodeImpl implements C
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(this.access);
+        list.add(getAccess());
+        list.add(getAnnotations());
         return list;
     }
 

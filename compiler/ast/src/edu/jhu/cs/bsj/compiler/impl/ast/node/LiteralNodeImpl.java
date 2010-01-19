@@ -91,7 +91,7 @@ public abstract class LiteralNodeImpl<T> extends NodeImpl implements LiteralNode
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(this.value);
+        list.add(getValue());
         return list;
     }
 

@@ -139,8 +139,8 @@ public abstract class MethodInvocationNodeImpl extends NodeImpl implements Metho
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(this.arguments);
-        list.add(this.typeArguments);
+        list.add(getArguments());
+        list.add(getTypeArguments());
         return list;
     }
 

@@ -134,8 +134,8 @@ public class CatchNodeImpl extends NodeImpl implements CatchNode
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(this.block);
-        list.add(this.parameter);
+        list.add(getBlock());
+        list.add(getParameter());
         return list;
     }
 

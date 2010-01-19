@@ -103,7 +103,7 @@ public class ArrayInitializerNodeImpl extends NodeImpl implements ArrayInitializ
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(this.initializers);
+        list.add(getInitializers());
         return list;
     }
 

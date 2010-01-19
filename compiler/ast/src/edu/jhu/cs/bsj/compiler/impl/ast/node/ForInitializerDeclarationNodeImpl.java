@@ -102,7 +102,7 @@ public class ForInitializerDeclarationNodeImpl extends NodeImpl implements ForIn
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(this.declaration);
+        list.add(getDeclaration());
         return list;
     }
 

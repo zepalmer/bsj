@@ -104,7 +104,7 @@ public class ArrayTypeNodeImpl extends NodeImpl implements ArrayTypeNode
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(this.type);
+        list.add(getType());
         return list;
     }
 

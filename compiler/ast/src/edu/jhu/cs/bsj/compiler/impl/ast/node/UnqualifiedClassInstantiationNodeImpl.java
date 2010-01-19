@@ -109,7 +109,10 @@ public class UnqualifiedClassInstantiationNodeImpl extends ClassInstantiationNod
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(this.type);
+        list.add(getType());
+        list.add(getConstructorTypeArguments());
+        list.add(getArguments());
+        list.add(getBody());
         return list;
     }
 

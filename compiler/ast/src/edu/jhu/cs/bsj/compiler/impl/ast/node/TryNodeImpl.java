@@ -170,9 +170,9 @@ public class TryNodeImpl extends NodeImpl implements TryNode
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(this.block);
-        list.add(this.catches);
-        list.add(this.finallyBlock);
+        list.add(getBlock());
+        list.add(getCatches());
+        list.add(getFinallyBlock());
         return list;
     }
 

@@ -69,6 +69,7 @@ public class LongLiteralNodeImpl extends LiteralNodeImpl<Long> implements LongLi
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
+        list.add(getValue());
         return list;
     }
 

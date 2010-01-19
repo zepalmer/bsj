@@ -69,6 +69,7 @@ public class FloatLiteralNodeImpl extends LiteralNodeImpl<Float> implements Floa
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
+        list.add(getValue());
         return list;
     }
 

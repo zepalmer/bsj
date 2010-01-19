@@ -102,7 +102,7 @@ public class InlineTypeDeclarationNodeImpl extends NodeImpl implements InlineTyp
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(this.declaration);
+        list.add(getDeclaration());
         return list;
     }
 

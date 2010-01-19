@@ -96,7 +96,7 @@ public class PrimitiveTypeNodeImpl extends NodeImpl implements PrimitiveTypeNode
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(this.primitiveType);
+        list.add(getPrimitiveType());
         return list;
     }
 

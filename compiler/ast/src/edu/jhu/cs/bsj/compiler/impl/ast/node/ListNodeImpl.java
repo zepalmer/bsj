@@ -84,7 +84,7 @@ public class ListNodeImpl<T extends Node> extends NodeImpl implements ListNode<T
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(this.children);
+        list.add(getChildren());
         return list;
     }
 */

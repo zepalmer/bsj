@@ -69,6 +69,7 @@ public class DoubleLiteralNodeImpl extends LiteralNodeImpl<Double> implements Do
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
+        list.add(getValue());
         return list;
     }
 

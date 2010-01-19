@@ -205,10 +205,10 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(this.initializer);
-        list.add(this.condition);
-        list.add(this.update);
-        list.add(this.statement);
+        list.add(getInitializer());
+        list.add(getCondition());
+        list.add(getUpdate());
+        list.add(getStatement());
         return list;
     }
 

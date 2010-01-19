@@ -101,7 +101,7 @@ public class ClassBodyNodeImpl extends NodeImpl implements ClassBodyNode
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(this.members);
+        list.add(getMembers());
         return list;
     }
 

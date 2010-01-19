@@ -207,10 +207,10 @@ public class SuperMethodInvocationNodeImpl extends NodeImpl implements SuperMeth
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(this.type);
-        list.add(this.identifier);
-        list.add(this.arguments);
-        list.add(this.typeArguments);
+        list.add(getType());
+        list.add(getIdentifier());
+        list.add(getArguments());
+        list.add(getTypeArguments());
         return list;
     }
 

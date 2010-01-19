@@ -127,8 +127,8 @@ public class InitializerDeclarationNodeImpl extends NodeImpl implements Initiali
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(this.staticInitializer);
-        list.add(this.body);
+        list.add(getStaticInitializer());
+        list.add(getBody());
         return list;
     }
 

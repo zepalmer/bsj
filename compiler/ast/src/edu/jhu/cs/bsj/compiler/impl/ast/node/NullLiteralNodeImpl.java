@@ -69,6 +69,7 @@ public class NullLiteralNodeImpl extends LiteralNodeImpl<Void> implements NullLi
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
+        list.add(getValue());
         return list;
     }
 

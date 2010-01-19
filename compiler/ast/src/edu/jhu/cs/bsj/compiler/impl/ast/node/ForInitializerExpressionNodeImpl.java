@@ -103,7 +103,7 @@ public class ForInitializerExpressionNodeImpl extends NodeImpl implements ForIni
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(this.expressions);
+        list.add(getExpressions());
         return list;
     }
 

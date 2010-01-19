@@ -135,8 +135,8 @@ public class EnumBodyNodeImpl extends NodeImpl implements EnumBodyNode
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(this.constants);
-        list.add(this.members);
+        list.add(getConstants());
+        list.add(getMembers());
         return list;
     }
 

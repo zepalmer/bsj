@@ -101,7 +101,7 @@ public abstract class ModifiersNodeImpl extends NodeImpl implements ModifiersNod
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(this.annotations);
+        list.add(getAnnotations());
         return list;
     }
 

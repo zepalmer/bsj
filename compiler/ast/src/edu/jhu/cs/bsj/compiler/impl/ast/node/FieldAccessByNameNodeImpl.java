@@ -102,7 +102,7 @@ public class FieldAccessByNameNodeImpl extends NodeImpl implements FieldAccessBy
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(this.name);
+        list.add(getName());
         return list;
     }
 

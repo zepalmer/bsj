@@ -306,13 +306,13 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(this.body);
-        list.add(this.modifiers);
-        list.add(this.parameters);
-        list.add(this.varargParameter);
-        list.add(this.throwTypes);
-        list.add(this.typeParameters);
-        list.add(this.javadoc);
+        list.add(getBody());
+        list.add(getModifiers());
+        list.add(getParameters());
+        list.add(getVarargParameter());
+        list.add(getThrowTypes());
+        list.add(getTypeParameters());
+        list.add(getJavadoc());
         return list;
     }
 

@@ -69,6 +69,7 @@ public class StringLiteralNodeImpl extends LiteralNodeImpl<String> implements St
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
+        list.add(getValue());
         return list;
     }
 

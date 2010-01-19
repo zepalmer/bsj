@@ -209,10 +209,12 @@ public class InterfaceDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl i
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(this.modifiers);
-        list.add(this.extendsClause);
-        list.add(this.body);
-        list.add(this.typeParameters);
+        list.add(getModifiers());
+        list.add(getExtendsClause());
+        list.add(getBody());
+        list.add(getTypeParameters());
+        list.add(getIdentifier());
+        list.add(getJavadoc());
         return list;
     }
 

@@ -105,7 +105,9 @@ public class ArrayInitializerCreationNodeImpl extends ArrayCreationNodeImpl impl
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(this.initializer);
+        list.add(getInitializer());
+        list.add(getBaseType());
+        list.add(getArrayLevels());
         return list;
     }
 

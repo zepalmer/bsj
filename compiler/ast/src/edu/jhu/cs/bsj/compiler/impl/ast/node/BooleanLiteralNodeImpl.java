@@ -69,6 +69,7 @@ public class BooleanLiteralNodeImpl extends LiteralNodeImpl<Boolean> implements 
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
+        list.add(getValue());
         return list;
     }
 

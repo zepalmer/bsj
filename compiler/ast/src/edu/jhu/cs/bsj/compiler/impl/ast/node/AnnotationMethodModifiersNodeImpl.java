@@ -71,6 +71,7 @@ public class AnnotationMethodModifiersNodeImpl extends ModifiersNodeImpl impleme
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
+        list.add(getAnnotations());
         return list;
     }
 

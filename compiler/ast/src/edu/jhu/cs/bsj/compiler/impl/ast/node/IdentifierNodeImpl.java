@@ -89,7 +89,7 @@ public class IdentifierNodeImpl extends NodeImpl implements IdentifierNode
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(this.identifier);
+        list.add(getIdentifier());
         return list;
     }
 

@@ -140,8 +140,10 @@ public class AnnotationDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl 
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(this.modifiers);
-        list.add(this.body);
+        list.add(getModifiers());
+        list.add(getBody());
+        list.add(getIdentifier());
+        list.add(getJavadoc());
         return list;
     }
 

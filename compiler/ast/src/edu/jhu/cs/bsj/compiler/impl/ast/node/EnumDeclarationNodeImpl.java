@@ -177,9 +177,11 @@ public class EnumDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl implem
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(this.modifiers);
-        list.add(this.implementsClause);
-        list.add(this.body);
+        list.add(getModifiers());
+        list.add(getImplementsClause());
+        list.add(getBody());
+        list.add(getIdentifier());
+        list.add(getJavadoc());
         return list;
     }
 

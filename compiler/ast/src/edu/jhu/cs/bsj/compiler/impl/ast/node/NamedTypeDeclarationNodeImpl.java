@@ -136,8 +136,8 @@ public abstract class NamedTypeDeclarationNodeImpl extends NodeImpl implements N
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(this.identifier);
-        list.add(this.javadoc);
+        list.add(getIdentifier());
+        list.add(getJavadoc());
         return list;
     }
 
