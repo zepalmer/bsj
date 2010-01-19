@@ -118,6 +118,27 @@ scope Global {
 @parser::members {
     // *** LOG4J **************************************************************
     private Logger logger = Logger.getLogger(this.getClass());
+    
+    // *** SOURCE LOCATION TRACKING *******************************************
+    /** The current resource name to store in source locations. */
+    private String resourceName = "?";
+    /** Getter for the resource name indicating which resource is being parsed. */
+    public String getResourceName()
+    {
+        return resourceName;
+    }
+    public void setResourceName(String resourceName)
+    {
+        this.resourceName = resourceName;
+    }
+    /**
+     * Retrieves a source location object describing the start of the specified relative token index (as per input.LT).
+     */
+    protected BsjSourceLocation getSourceLocation(int rel)
+    {
+        Token token = input.LT(rel);
+        return new BsjSourceLocation(this.resourceName, token.getLine(), token.getCharPositionInLine());
+    }
 
     // *** FACTORY NODE PROPERTY **********************************************
     /**
@@ -196,7 +217,7 @@ scope Global {
         NOT_SEEN,
         SEEN
     }
-    static class ModifierSet
+    class ModifierSet
     {
         ModifierState[] state = new ModifierState[Modifier.values().length];
         public ModifierSet(Modifier... allowed)
@@ -219,13 +240,13 @@ scope Global {
             switch (state[mod.ordinal()])
             {
                 case DISALLOWED:
-                    // TODO: error reporting (modifier foo not allowed here)
+                    errors.add(new InvalidModifierError(getSourceLocation(-1), mod.toString().toLowerCase()));
                     break;
                 case NOT_SEEN:
                     state[mod.ordinal()] = ModifierState.SEEN;
                     break;
                 case SEEN:
-                    // TODO: error reporting (duplicate modifier)
+                    errors.add(new DuplicateModifierError(getSourceLocation(-1), mod.toString().toLowerCase()));
                     break;
             }
         }
@@ -233,7 +254,7 @@ scope Global {
     
     // *** ERROR REPORTING AND HANDLING ***************************************
     /** A list of errors which have occurred since this parser was created. */
-    private List<BsjParserError> bsjErrors = new ArrayList<BsjParserError>();
+    private List<BsjParserError> errors = new ArrayList<BsjParserError>();
     
     /**
      * Retrieves the list of errors that has been accumulated since the creation of this parser.  A standard use case
@@ -241,9 +262,9 @@ scope Global {
      * has a size of zero, it is safe to assume that everything went smoothly.
      * @return The list of errors this parser has accumulated.
      */
-    private List<BsjParserError> getErrors()
+    public List<BsjParserError> getErrors()
     {
-        return this.bsjErrors;
+        return this.errors;
     }
     
     /**

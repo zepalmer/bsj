@@ -2,6 +2,7 @@ package edu.jhu.cs.bsj.compiler.tool.parser;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 
 import org.antlr.runtime.ANTLRInputStream;
 import org.antlr.runtime.RecognitionException;
@@ -9,6 +10,9 @@ import org.antlr.runtime.TokenRewriteStream;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
+import edu.jhu.cs.bsj.compiler.error.BsjCompilerError;
+import edu.jhu.cs.bsj.compiler.error.BsjCompositeCompilerError;
+import edu.jhu.cs.bsj.compiler.error.parser.BsjParserError;
 import edu.jhu.cs.bsj.compiler.tool.parser.antlr.BsjAntlrLexer;
 import edu.jhu.cs.bsj.compiler.tool.parser.antlr.BsjAntlrParser;
 
@@ -41,14 +45,14 @@ public class BsjParserImpl
 	 * This method generates a BSJ heterogeneous AST from the provided source stream.
 	 * 
 	 * @throws IOException If an I/O error occurs.
-	 * TODO: some other kind of exception if ANTLR throws a RecognitionException
+	 * @throws BsjCompositeCompilerError If one or more parse errors occur.
 	 */
-	public CompilationUnitNode parse(InputStream is) throws IOException
+	public CompilationUnitNode parse(InputStream is) throws IOException, BsjParserError, BsjCompositeCompilerError
 	{
 		BsjAntlrLexer lexer = new BsjAntlrLexer(new ANTLRInputStream(is));
 		BsjAntlrParser parser = new BsjAntlrParser(new TokenRewriteStream(lexer));
 		parser.setFactory(factory);
-		
+
 		CompilationUnitNode compilationUnitNode;
 		try
 		{
@@ -56,6 +60,10 @@ public class BsjParserImpl
 		} catch (RecognitionException re)
 		{
 			throw new RuntimeException(re); // throw an exception of our own instead (to avoid passing ANTLR deps)
+		}
+		if (parser.getErrors().size()>0)
+		{
+			throw new BsjCompositeCompilerError(new ArrayList<BsjCompilerError>(parser.getErrors()));
 		}
 		return compilationUnitNode;
 	}
