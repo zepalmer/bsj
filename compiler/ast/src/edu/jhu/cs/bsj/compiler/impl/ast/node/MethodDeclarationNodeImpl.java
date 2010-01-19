@@ -436,6 +436,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
      * @param p The parameter to pass to the operation.
      * @return The result of the operation.
      */
+    @Override
     public <P,R> R executeOperation(BsjNodeOperation<P,R> operation, P p)
     {
         return operation.executeMethodDeclarationNode(this, p);

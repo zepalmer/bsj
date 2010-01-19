@@ -166,6 +166,7 @@ public class InstanceOfNodeImpl extends NodeImpl implements InstanceOfNode
      * @param p The parameter to pass to the operation.
      * @return The result of the operation.
      */
+    @Override
     public <P,R> R executeOperation(BsjNodeOperation<P,R> operation, P p)
     {
         return operation.executeInstanceOfNode(this, p);

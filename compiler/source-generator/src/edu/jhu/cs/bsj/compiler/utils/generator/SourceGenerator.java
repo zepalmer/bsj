@@ -1156,6 +1156,7 @@ public class SourceGenerator
 				ps.println("     * @param p The parameter to pass to the operation.");
 				ps.println("     * @return The result of the operation.");
 				ps.println("     */");
+				ps.println("    @Override");
 				ps.println("    public <P,R> R executeOperation(BsjNodeOperation<P,R> operation, P p)");
 				ps.println("    {");
 				ps.println("        return operation.execute" + def.getRawName() + "(this, p);");

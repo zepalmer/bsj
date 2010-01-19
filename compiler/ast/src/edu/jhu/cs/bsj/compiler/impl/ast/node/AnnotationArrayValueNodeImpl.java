@@ -129,6 +129,7 @@ public class AnnotationArrayValueNodeImpl extends NodeImpl implements Annotation
      * @param p The parameter to pass to the operation.
      * @return The result of the operation.
      */
+    @Override
     public <P,R> R executeOperation(BsjNodeOperation<P,R> operation, P p)
     {
         return operation.executeAnnotationArrayValueNode(this, p);

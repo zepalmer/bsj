@@ -203,6 +203,7 @@ public class IfNodeImpl extends NodeImpl implements IfNode
      * @param p The parameter to pass to the operation.
      * @return The result of the operation.
      */
+    @Override
     public <P,R> R executeOperation(BsjNodeOperation<P,R> operation, P p)
     {
         return operation.executeIfNode(this, p);

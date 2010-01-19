@@ -93,6 +93,7 @@ public class FloatLiteralNodeImpl extends LiteralNodeImpl<Float> implements Floa
      * @param p The parameter to pass to the operation.
      * @return The result of the operation.
      */
+    @Override
     public <P,R> R executeOperation(BsjNodeOperation<P,R> operation, P p)
     {
         return operation.executeFloatLiteralNode(this, p);

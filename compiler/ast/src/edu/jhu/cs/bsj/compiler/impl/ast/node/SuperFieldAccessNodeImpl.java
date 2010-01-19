@@ -166,6 +166,7 @@ public class SuperFieldAccessNodeImpl extends NodeImpl implements SuperFieldAcce
      * @param p The parameter to pass to the operation.
      * @return The result of the operation.
      */
+    @Override
     public <P,R> R executeOperation(BsjNodeOperation<P,R> operation, P p)
     {
         return operation.executeSuperFieldAccessNode(this, p);

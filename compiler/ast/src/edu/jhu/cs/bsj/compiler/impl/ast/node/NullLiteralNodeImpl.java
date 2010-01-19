@@ -93,6 +93,7 @@ public class NullLiteralNodeImpl extends LiteralNodeImpl<Void> implements NullLi
      * @param p The parameter to pass to the operation.
      * @return The result of the operation.
      */
+    @Override
     public <P,R> R executeOperation(BsjNodeOperation<P,R> operation, P p)
     {
         return operation.executeNullLiteralNode(this, p);

@@ -193,6 +193,7 @@ public class BinaryExpressionNodeImpl extends NodeImpl implements BinaryExpressi
      * @param p The parameter to pass to the operation.
      * @return The result of the operation.
      */
+    @Override
     public <P,R> R executeOperation(BsjNodeOperation<P,R> operation, P p)
     {
         return operation.executeBinaryExpressionNode(this, p);

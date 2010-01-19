@@ -127,6 +127,7 @@ public class AnnotationBodyNodeImpl extends NodeImpl implements AnnotationBodyNo
      * @param p The parameter to pass to the operation.
      * @return The result of the operation.
      */
+    @Override
     public <P,R> R executeOperation(BsjNodeOperation<P,R> operation, P p)
     {
         return operation.executeAnnotationBodyNode(this, p);

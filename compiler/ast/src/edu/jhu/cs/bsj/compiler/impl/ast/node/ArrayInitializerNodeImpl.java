@@ -129,6 +129,7 @@ public class ArrayInitializerNodeImpl extends NodeImpl implements ArrayInitializ
      * @param p The parameter to pass to the operation.
      * @return The result of the operation.
      */
+    @Override
     public <P,R> R executeOperation(BsjNodeOperation<P,R> operation, P p)
     {
         return operation.executeArrayInitializerNode(this, p);
