@@ -392,7 +392,6 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
             item.executeOperation(this, p);
             p.print(";\n");
         }
-
         return null;
     }
 
@@ -887,7 +886,9 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
     @Override
     public Void executeVariableDeclarationNode(VariableDeclarationNode node, PrependablePrintStream p)
     {
-        // TODO Auto-generated method stub
+        node.getModifiers().executeOperation(this, p);
+        handleListNode(node.getDeclarators(), "", ", ", "", p, true);
+        //TODO done?
         return null;
     }
 
@@ -899,7 +900,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
         node.getName().executeOperation(this, p);
         if (node.getInitializer() != null)
         {
-            p.print(" ");
+            p.print(" = ");
             node.getInitializer().executeOperation(this, p);
         }
         return null;
