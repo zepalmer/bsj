@@ -8,9 +8,9 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.ConstructorBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ConstructorDeclarationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.ConstructorModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.JavadocNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeParameterNode;
 import edu.jhu.cs.bsj.compiler.ast.node.UnparameterizedTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableNode;
@@ -22,7 +22,7 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
     private ConstructorBodyNode body;
 
     /** The modifiers for this constructor. */
-    private ModifiersNode modifiers;
+    private ConstructorModifiersNode modifiers;
 
     /** The parameters declared by this constructor. */
     private ListNode<VariableNode> parameters;
@@ -42,7 +42,7 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
     /** General constructor. */
     public ConstructorDeclarationNodeImpl(
             ConstructorBodyNode body,
-            ModifiersNode modifiers,
+            ConstructorModifiersNode modifiers,
             ListNode<VariableNode> parameters,
             VariableNode varargParameter,
             ListNode<UnparameterizedTypeNode> throwTypes,
@@ -89,7 +89,7 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
      * Gets the modifiers for this constructor.
      * @return The modifiers for this constructor.
      */
-    public ModifiersNode getModifiers()
+    public ConstructorModifiersNode getModifiers()
     {
         return this.modifiers;
     }
@@ -98,7 +98,7 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
      * Changes the modifiers for this constructor.
      * @param modifiers The modifiers for this constructor.
      */
-    public void setModifiers(ModifiersNode modifiers)
+    public void setModifiers(ConstructorModifiersNode modifiers)
     {
         if (this.modifiers instanceof NodeImpl)
         {

@@ -146,52 +146,52 @@ scope Global {
         //this.factory = factory;
     }
     
-    // *** COMMONLY USED MODIFIERS ********************************************
-    private static final List<Modifier> classModifiers = Arrays.asList(
-            Modifier.PUBLIC,
-            Modifier.PROTECTED,
-            Modifier.PRIVATE,
-            Modifier.ABSTRACT,
-            Modifier.STATIC,
-            Modifier.FINAL,
-            Modifier.STRICTFP);
-    private static final List<Modifier> interfaceModifiers = Arrays.asList(
-            Modifier.PUBLIC,
-            Modifier.PROTECTED,
-            Modifier.PRIVATE,
-            Modifier.ABSTRACT,
-            Modifier.STATIC,
-            Modifier.FINAL,
-            Modifier.STRICTFP);
-    /* Contains modifiers legal for classes or interfaces */
-    private static final List<Modifier> classOrInterfaceModifiers = classModifiers;
-    private static final List<Modifier> variableModifiers = Arrays.asList(Modifier.FINAL);
-    private static final List<Modifier> fieldModifiers = Arrays.asList(
-            Modifier.PUBLIC,
-            Modifier.PROTECTED,
-            Modifier.PRIVATE,
-            Modifier.STATIC,
-            Modifier.FINAL,
-            Modifier.TRANSIENT,
-            Modifier.VOLATILE);
-    private static final List<Modifier> constantModifiers = Arrays.asList(
-            Modifier.PUBLIC,
-            Modifier.STATIC,
-            Modifier.FINAL);
-    private static final List<Modifier> methodModifiers = Arrays.asList(
-            Modifier.PUBLIC,
-            Modifier.PROTECTED,
-            Modifier.PRIVATE,
-            Modifier.ABSTRACT,
-            Modifier.STATIC,
-            Modifier.FINAL,
-            Modifier.SYNCHRONIZED,
-            Modifier.NATIVE,
-            Modifier.STRICTFP);
-    private static final List<Modifier> constructorModifiers = Arrays.asList(
-            Modifier.PUBLIC,
-            Modifier.PROTECTED,
-            Modifier.PRIVATE);
+//    // *** COMMONLY USED MODIFIERS ********************************************
+//    private static final List<Modifier> classModifiers = Arrays.asList(
+//            Modifier.PUBLIC,
+//            Modifier.PROTECTED,
+//            Modifier.PRIVATE,
+//            Modifier.ABSTRACT,
+//            Modifier.STATIC,
+//            Modifier.FINAL,
+//            Modifier.STRICTFP);
+//    private static final List<Modifier> interfaceModifiers = Arrays.asList(
+//            Modifier.PUBLIC,
+//            Modifier.PROTECTED,
+//            Modifier.PRIVATE,
+//            Modifier.ABSTRACT,
+//            Modifier.STATIC,
+//            Modifier.FINAL,
+//            Modifier.STRICTFP);
+//    /* Contains modifiers legal for classes or interfaces */
+//    private static final List<Modifier> classOrInterfaceModifiers = classModifiers;
+//    private static final List<Modifier> variableModifiers = Arrays.asList(Modifier.FINAL);
+//    private static final List<Modifier> fieldModifiers = Arrays.asList(
+//            Modifier.PUBLIC,
+//            Modifier.PROTECTED,
+//            Modifier.PRIVATE,
+//            Modifier.STATIC,
+//            Modifier.FINAL,
+//            Modifier.TRANSIENT,
+//            Modifier.VOLATILE);
+//    private static final List<Modifier> constantModifiers = Arrays.asList(
+//            Modifier.PUBLIC,
+//            Modifier.STATIC,
+//            Modifier.FINAL);
+//    private static final List<Modifier> methodModifiers = Arrays.asList(
+//            Modifier.PUBLIC,
+//            Modifier.PROTECTED,
+//            Modifier.PRIVATE,
+//            Modifier.ABSTRACT,
+//            Modifier.STATIC,
+//            Modifier.FINAL,
+//            Modifier.SYNCHRONIZED,
+//            Modifier.NATIVE,
+//            Modifier.STRICTFP);
+//    private static final List<Modifier> constructorModifiers = Arrays.asList(
+//            Modifier.PUBLIC,
+//            Modifier.PROTECTED,
+//            Modifier.PRIVATE);
 
     // *** DATA STRUCTURE FOR LITERAL PARSING *********************************
     static class IntegerBaseResult
@@ -217,6 +217,62 @@ scope Global {
             {
                 this.base = 10;
                 this.string = string;
+            }
+        }
+    }
+    
+    // *** DATA STRUCTURE FOR MODIFIER PARSING ********************************
+    enum Modifier // does not cover access modifiers
+    {
+	    ABSTRACT, 
+	    FINAL,
+	    NATIVE,
+	    PRIVATE,
+	    PROTECTED,
+	    PUBLIC,
+	    STATIC,
+	    STRICTFP,
+	    SYNCHRONIZED,
+	    TRANSIENT,
+	    VOLATILE
+    }
+    enum ModifierState
+    {
+        DISALLOWED,
+        NOT_SEEN,
+        SEEN
+    }
+    static class ModifierSet
+    {
+        ModifierState[] state = new ModifierState[Modifier.values().length];
+        public ModifierSet(Modifier... allowed)
+        {
+            for (int i=0;i<state.length;i++)
+            {
+                state[i] = ModifierState.DISALLOWED;
+            }
+            for (int i=0;i<allowed.length;i++)
+            {
+                state[allowed[i].ordinal()] = ModifierState.NOT_SEEN;
+            }
+        }
+        public boolean has(Modifier mod)
+        {
+            return (state[mod.ordinal()] == ModifierState.SEEN);
+        }
+        public void notifySeen(Modifier mod)
+        {
+            switch (state[mod.ordinal()])
+            {
+                case DISALLOWED:
+                    // TODO: error reporting (modifier foo not allowed here)
+                    break;
+                case NOT_SEEN:
+                    state[mod.ordinal()] = ModifierState.SEEN;
+                    break;
+                case SEEN:
+                    // TODO: error reporting (duplicate modifier)
+                    break;
             }
         }
     }
@@ -301,34 +357,6 @@ arrayTypeIndicator[TypeNode inType] returns [ArrayTypeNode ret]
                 $ret = factory.makeArrayTypeNode($ret);
             }
         )*
-    ;
-
-// Represents an abstraction for field declarations which allows legal modifiers to be specified (to differentiate
-// between interface and class fields).
-abstractFieldDeclaration[List<Modifier> legalModifiers] returns [FieldDeclarationNode ret]
-        @init {
-            List<VariableDeclaratorNode> list = new ArrayList<VariableDeclaratorNode>();
-        }
-    :   
-        javadoc modifiers[legalModifiers]
-        type
-        a=variableDeclarator[$type.ret] // process type in case identifier has [] after it
-        {
-            list.add($a.ret);
-        }
-        (
-            ',' b=variableDeclarator[$type.ret]
-            {
-                list.add($b.ret);
-            }
-        )*
-        ';'
-        {
-            $ret = factory.makeFieldDeclarationNode(
-                    $modifiers.ret,
-                    factory.makeListNode(list),
-                    $javadoc.ret);
-        }
     ;
 
 /** These are the actual grammar rules. */
@@ -483,77 +511,208 @@ classOrInterfaceDeclaration returns [TypeDeclarationNode ret]
         }
     ;
     
-// Accepts as a parameter the set of legal modifiers.  null means all of them are legal.
-// TODO: which modifiers are legal should be in the *type system!*  (Oops)
-modifiers[Collection<Modifier> legalModifiers] returns [ModifiersNode ret]
+// Parses a set of modifiers.  As input, the caller must specify:
+// * whether or not access modifiers are allowed (if false, access modifiers are parsed like normal modifiers)
+// * a list of those modifiers which are allowed
+modifiers[boolean accessAllowed, Modifier... mods]
+    returns [ModifierSet modifiers, AccessModifier access, ListNode<AnnotationNode> annotations]
         @init {
-            List<AnnotationNode> list = new ArrayList<AnnotationNode>();
-            Set<Modifier> modifiers = new HashSet<Modifier>();
+            List<AnnotationNode> annotationList = new ArrayList<AnnotationNode>();
+            $access = AccessModifier.PACKAGE;
+            $modifiers = new ModifierSet(mods);
+            AccessModifier currentAccess = null;
+            Modifier accessAsModifier = null;
         }
         @after {
-            $ret = factory.makeModifiersNode(
-                        factory.makeListNode(list),
-                        modifiers);
+            $annotations = factory.makeListNode(annotationList);
         }
     :
         (
-            modifier
+            annotation
             {
-                if ($modifier.mod==null)
+                annotationList.add($annotation.ret);
+            }
+        |
+            (
+                'public'
                 {
-                    list.add($modifier.ann);
-                } else
+                    currentAccess = AccessModifier.PUBLIC;
+                    accessAsModifier = Modifier.PUBLIC;
+                }
+            |
+                'protected'
                 {
-                    if (logger.isTraceEnabled())
+                    currentAccess = AccessModifier.PROTECTED;
+                    accessAsModifier = Modifier.PROTECTED;
+                }
+            |
+                'private'
+                {
+                    currentAccess = AccessModifier.PRIVATE;
+                    accessAsModifier = Modifier.PRIVATE;
+                }
+            )
+            {
+                if (accessAllowed)
+                {
+                    if ($access != AccessModifier.PACKAGE)
                     {
-                        logger.trace("Parsed modifier " + $modifier.mod);
-                    }
-                    if ($legalModifiers==null || $legalModifiers.contains($modifier.mod))
-                    {
-                        // TODO: if this next call returns true, that's something like "public public void".  Figure out
-                        // error handling.
-                        modifiers.add($modifier.mod);
+                        // TODO: error handling (duplicate or conflicting access modifier)
                     } else
                     {
-                        // TODO: if we get here, that's like "volatile" on a class declaration.  Figure out error
-                        // handling.
-                        // TODO: We should handle the error here, but it should be recognized in the factory, the node,
-                        // or somewhere else like that.  That will ensure that the type system handles the problem and
-                        // it's caught automatically in metaprograms.
+                        $access = currentAccess;
                     }
+                } else
+                {
+                    $modifiers.notifySeen(accessAsModifier);
                 }
+            }
+        |
+            'abstract'
+            {
+                $modifiers.notifySeen(Modifier.ABSTRACT);
+            }
+        |
+            'final'
+            {
+                $modifiers.notifySeen(Modifier.FINAL);
+            }
+        |
+            'native'
+            {
+                $modifiers.notifySeen(Modifier.NATIVE);
+            }
+        |
+            'static'
+            {
+                $modifiers.notifySeen(Modifier.STATIC);
+            }
+        |
+            'strictfp'
+            {
+                $modifiers.notifySeen(Modifier.STRICTFP);
+            }
+        |
+            'synchronized'
+            {
+                $modifiers.notifySeen(Modifier.SYNCHRONIZED);
+            }
+        |
+            'transient'
+            {
+                $modifiers.notifySeen(Modifier.TRANSIENT);
+            }
+        |
+            'volatile'
+            {
+                $modifiers.notifySeen(Modifier.VOLATILE);
             }
         )*
     ;
 
-modifier returns [Modifier mod, AnnotationNode ann]
-        @init {
-            $ann = null;
-            $mod = null;
-        }
+annotationMethodModifiers returns [AnnotationMethodModifiersNode ret]
     :
-            annotation
+        modifiers[false, Modifier.PUBLIC, Modifier.ABSTRACT]
         {
-            $ann = $annotation.ret;
+            $ret = factory.makeAnnotationMethodModifiersNode($modifiers.annotations);
         }
-        |   'public'        { $mod = Modifier.PUBLIC; }
-        |   'protected'     { $mod = Modifier.PROTECTED; }
-        |   'private'       { $mod = Modifier.PRIVATE; }
-        |   'static'        { $mod = Modifier.STATIC; }
-        |   'abstract'      { $mod = Modifier.ABSTRACT; }
-        |   'final'         { $mod = Modifier.FINAL; }
-        |   'native'        { $mod = Modifier.NATIVE; }
-        |   'synchronized'  { $mod = Modifier.SYNCHRONIZED; }
-        |   'transient'     { $mod = Modifier.TRANSIENT; }
-        |   'volatile'      { $mod = Modifier.VOLATILE; }
-        |   'strictfp'      { $mod = Modifier.STRICTFP; }
     ;
 
-variableModifiers returns [ModifiersNode ret]
+annotationModifiers returns [AnnotationModifiersNode ret]
     :
-        modifiers[variableModifiers]
+        modifiers[true, Modifier.ABSTRACT, Modifier.STATIC, Modifier.STRICTFP]
         {
-            $ret = $modifiers.ret;
+            $ret = factory.makeAnnotationModifiersNode(
+                    $modifiers.access,
+                    $modifiers.modifiers.has(Modifier.STATIC),
+                    $modifiers.modifiers.has(Modifier.STRICTFP),
+                    $modifiers.annotations);
+        }
+    ;
+    
+classModifiers returns [ClassModifiersNode ret]
+    :
+        modifiers[true, Modifier.ABSTRACT, Modifier.STATIC, Modifier.FINAL, Modifier.STRICTFP]
+        {
+            $ret = factory.makeClassModifiersNode(
+                    $modifiers.access,
+                    $modifiers.modifiers.has(Modifier.ABSTRACT),
+                    $modifiers.modifiers.has(Modifier.STATIC),
+                    $modifiers.modifiers.has(Modifier.FINAL),
+                    $modifiers.modifiers.has(Modifier.STRICTFP),
+                    $modifiers.annotations);
+        }
+    ;
+    
+constructorModifiers returns [ConstructorModifiersNode ret]
+    :
+        modifiers[true]
+        {
+            $ret = factory.makeConstructorModifiersNode($modifiers.access, $modifiers.annotations);
+        }
+    ;
+    
+enumModifiers returns [EnumModifiersNode ret]
+    :
+        modifiers[true, Modifier.STATIC, Modifier.STRICTFP]
+        {
+            $ret = factory.makeEnumModifiersNode(
+                    $modifiers.access,
+                    $modifiers.modifiers.has(Modifier.STRICTFP),
+                    $modifiers.annotations);
+        }
+    ;
+    
+fieldModifiers returns [FieldModifiersNode ret]
+    :
+        modifiers[true, Modifier.STATIC, Modifier.FINAL, Modifier.TRANSIENT, Modifier.VOLATILE]
+        {
+            $ret = factory.makeFieldModifiersNode(
+                    $modifiers.access,
+                    $modifiers.modifiers.has(Modifier.STATIC),
+                    $modifiers.modifiers.has(Modifier.FINAL),
+                    $modifiers.modifiers.has(Modifier.TRANSIENT),
+                    $modifiers.modifiers.has(Modifier.VOLATILE),
+                    $modifiers.annotations);
+        }
+    ;
+    
+interfaceModifiers returns [InterfaceModifiersNode ret]
+    :
+        modifiers[true, Modifier.ABSTRACT, Modifier.STATIC, Modifier.STRICTFP]
+        {
+            $ret = factory.makeInterfaceModifiersNode(
+                    $modifiers.access,
+                    $modifiers.modifiers.has(Modifier.STATIC),
+                    $modifiers.modifiers.has(Modifier.STRICTFP),
+                    $modifiers.annotations);
+        }
+    ;
+    
+methodModifiers returns [MethodModifiersNode ret]
+    :
+        modifiers[true, Modifier.ABSTRACT, Modifier.STATIC, Modifier.FINAL, Modifier.SYNCHRONIZED, Modifier.NATIVE,
+            Modifier.STRICTFP]
+        {
+            $ret = factory.makeMethodModifiersNode(
+                    $modifiers.access,
+                    $modifiers.modifiers.has(Modifier.ABSTRACT),
+                    $modifiers.modifiers.has(Modifier.STATIC),
+                    $modifiers.modifiers.has(Modifier.FINAL),
+                    $modifiers.modifiers.has(Modifier.SYNCHRONIZED),
+                    $modifiers.modifiers.has(Modifier.NATIVE),
+                    $modifiers.modifiers.has(Modifier.STRICTFP),
+                    $modifiers.annotations);
+        }
+    ;
+    
+variableModifiers returns [VariableModifiersNode ret]
+    :
+        modifiers[false, Modifier.FINAL]
+        {
+            $ret = factory.makeVariableModifiersNode(
+                    $modifiers.modifiers.has(Modifier.FINAL),
+                    $modifiers.annotations);
         }
     ;
 
@@ -577,7 +736,7 @@ normalClassDeclaration returns [ClassDeclarationNode ret]
             ListNode<TypeParameterNode> typeParamsNode = factory.makeListNode(new ArrayList<TypeParameterNode>());
         }         
     :   
-        javadoc modifiers[classModifiers]
+        javadoc classModifiers
         'class' id=identifier
         {
             $Global::className = $id.ret.getIdentifier();
@@ -598,12 +757,12 @@ normalClassDeclaration returns [ClassDeclarationNode ret]
         classBody
         {            
             $ret = factory.makeClassDeclarationNode(
+                    $classModifiers.ret,
                     $type.ret,
                     typeListNode,
                     $classBody.ret,
                     typeParamsNode,                    
                     $id.ret,
-                    $modifiers.ret,
                     $javadoc.ret);
         }
     ;
@@ -678,7 +837,7 @@ enumDeclaration returns [EnumDeclarationNode ret]
             ListNode<TypeNode> typeListNode = factory.makeListNode(new ArrayList<TypeNode>());
         } 
     :   
-        javadoc modifiers[classModifiers]
+        javadoc enumModifiers
         'enum' 
         id=identifier
         {
@@ -693,10 +852,10 @@ enumDeclaration returns [EnumDeclarationNode ret]
         enumBody
         {
             $ret = factory.makeEnumDeclarationNode(
+                        $enumModifiers.ret,
                         typeListNode,
                         $enumBody.ret,
                         $id.ret,
-                        $modifiers.ret,
                         $javadoc.ret);
         }
     ;
@@ -828,7 +987,7 @@ normalInterfaceDeclaration returns [InterfaceDeclarationNode ret]
             ListNode<TypeParameterNode> typeParamsNode = factory.makeListNode(new ArrayList<TypeParameterNode>());
         } 
     :   
-        javadoc modifiers[interfaceModifiers]
+        javadoc interfaceModifiers
         'interface' id=identifier
         {
             $Global::className = $id.ret.getIdentifier();
@@ -848,11 +1007,11 @@ normalInterfaceDeclaration returns [InterfaceDeclarationNode ret]
         interfaceBody
         {
             $ret = factory.makeInterfaceDeclarationNode(
+                    $interfaceModifiers.ret,
                     typeListNode,
                     $interfaceBody.ret,
                     typeParamsNode,
                     $id.ret,
-                    $modifiers.ret,
                     $javadoc.ret);
         }
     ;
@@ -1027,7 +1186,7 @@ constructorDeclaration returns [ConstructorDeclarationNode ret]
             ListNode<UnparameterizedTypeNode> throwsNode = factory.makeListNode(Collections.<UnparameterizedTypeNode>emptyList());
         }
     :
-        javadoc modifiers[constructorModifiers]
+        javadoc constructorModifiers
         (
             typeParameters
             {
@@ -1051,7 +1210,7 @@ constructorDeclaration returns [ConstructorDeclarationNode ret]
             {
                 $ret = factory.makeConstructorDeclarationNode(
                     $constructorBody.ret,
-                    $modifiers.ret,
+                    $constructorModifiers.ret,
                     $formalParameters.parameters,
                     $formalParameters.varargParameter,
                     throwsNode,
@@ -1097,7 +1256,7 @@ methodDeclaration returns [MethodDeclarationNode ret]
             TypeNode returnTypeNode = null;
         }
     :
-        javadoc modifiers[methodModifiers]
+        javadoc methodModifiers
         (
             typeParameters
             {
@@ -1133,7 +1292,7 @@ methodDeclaration returns [MethodDeclarationNode ret]
         {
             $ret = factory.makeMethodDeclarationNode(
                     blockStatementNode,
-                    $modifiers.ret,
+                    $methodModifiers.ret,
                     $id.ret,
                     $formalParameters.parameters,
                     $formalParameters.varargParameter,
@@ -1145,11 +1304,29 @@ methodDeclaration returns [MethodDeclarationNode ret]
     ;
 
 fieldDeclaration returns [FieldDeclarationNode ret]
-    :
-        abstractFieldDeclaration[fieldModifiers]
+        @init {
+            List<VariableDeclaratorNode> list = new ArrayList<VariableDeclaratorNode>();
+        }
+    :   
+        javadoc fieldModifiers
+        type
+        a=variableDeclarator[$type.ret] // process type in case identifier has [] after it
         {
-            $ret = $abstractFieldDeclaration.ret;
-        }   
+            list.add($a.ret);
+        }
+        (
+            ',' b=variableDeclarator[$type.ret]
+            {
+                list.add($b.ret);
+            }
+        )*
+        ';'
+        {
+            $ret = factory.makeFieldDeclarationNode(
+                    $fieldModifiers.ret,
+                    factory.makeListNode(list),
+                    $javadoc.ret);
+        }
     ;
 
 interfaceBodyDeclaration returns [InterfaceMemberNode ret]
@@ -1186,7 +1363,7 @@ interfaceMethodDeclaration returns [MethodDeclarationNode ret]
             ListNode<UnparameterizedTypeNode> throwsNode = factory.makeListNode(Collections.<UnparameterizedTypeNode>emptyList());
         }
     :   
-        javadoc modifiers[interfaceModifiers]
+        javadoc methodModifiers
         typeParameters?
         methodReturnType
         {
@@ -1210,7 +1387,7 @@ interfaceMethodDeclaration returns [MethodDeclarationNode ret]
         {
             $ret = factory.makeMethodDeclarationNode(
                     null, // No body for interface methods; thus null
-                    $modifiers.ret,
+                    $methodModifiers.ret,
                     $id.ret,
                     $formalParameters.parameters,
                     $formalParameters.varargParameter,
@@ -1223,9 +1400,9 @@ interfaceMethodDeclaration returns [MethodDeclarationNode ret]
 
 interfaceFieldDeclaration returns [FieldDeclarationNode ret]
     :   
-        abstractFieldDeclaration[constantModifiers]
+        fieldDeclaration
         {
-            $ret = $abstractFieldDeclaration.ret;
+            $ret = $fieldDeclaration.ret;
         }
     ;
 
@@ -1741,15 +1918,15 @@ elementValueArrayInitializer returns [AnnotationArrayValueNode ret]
  */
 annotationTypeDeclaration returns [AnnotationDeclarationNode ret]
     :   
-        javadoc modifiers[interfaceModifiers] '@'
+        javadoc annotationModifiers '@'
         'interface'
         id=identifier
         annotationTypeBody
         {
             $ret = factory.makeAnnotationDeclarationNode(
+                $annotationModifiers.ret,
                 $annotationTypeBody.ret,
                 $id.ret,
-                $modifiers.ret,
                 $javadoc.ret);
         }
     ;
@@ -1816,7 +1993,7 @@ annotationMethodDeclaration returns [AnnotationMethodDeclarationNode ret]
         AnnotationValueNode elementValueNode = null;
     }
     :   
-        javadoc modifiers[interfaceModifiers]
+        javadoc annotationMethodModifiers
         type
         id=identifier
         '(' ')'
@@ -1830,7 +2007,7 @@ annotationMethodDeclaration returns [AnnotationMethodDeclarationNode ret]
         ';'
         {
             $ret = factory.makeAnnotationMethodDeclarationNode(
-                $modifiers.ret,
+                $annotationMethodModifiers.ret,
                 $type.ret,
                 $id.ret,
                 elementValueNode,
@@ -3569,31 +3746,31 @@ identifier returns [IdentifierNode ret]
 // of the class rather than claiming that "class" should be an "@" for an annotation declaration).
 
 classHeader 
-    :   modifiers[classModifiers] 'class' IDENTIFIER
+    :   classModifiers 'class' IDENTIFIER
     ;
 
 enumHeader 
-    :   modifiers[classModifiers] ('enum'|IDENTIFIER) IDENTIFIER
+    :   enumModifiers ('enum'|IDENTIFIER) IDENTIFIER
     ;
 
 interfaceHeader 
-    :   modifiers[interfaceModifiers] 'interface' IDENTIFIER
+    :   interfaceModifiers 'interface' IDENTIFIER
     ;
 
 annotationHeader 
-    :   modifiers[interfaceModifiers] '@' 'interface' IDENTIFIER
+    :   annotationModifiers '@' 'interface' IDENTIFIER
     ;
 
 typeHeader
-    :   modifiers[classOrInterfaceModifiers] ('class'|'enum'|('@' ? 'interface')) IDENTIFIER
+    :   (classModifiers | enumModifiers | interfaceModifiers | annotationModifiers) ('class'|'enum'|('@' ? 'interface')) IDENTIFIER
     ;
 
 methodHeader 
-    :   modifiers[methodModifiers] typeParameters? (type|'void')? IDENTIFIER '('
+    :   methodModifiers typeParameters? (type|'void')? IDENTIFIER '('
     ;
 
 fieldHeader 
-    :   modifiers[fieldModifiers] type IDENTIFIER ('['']')* ('='|','|';')
+    :   fieldModifiers type IDENTIFIER ('['']')* ('='|','|';')
     ;
 
 localVariableHeader 

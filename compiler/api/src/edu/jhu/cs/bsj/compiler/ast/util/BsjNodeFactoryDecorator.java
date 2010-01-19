@@ -1,14 +1,13 @@
 package edu.jhu.cs.bsj.compiler.ast.util;
 
 import java.util.List;
-import java.util.Set;
 
 import javax.annotation.Generated;
 
+import edu.jhu.cs.bsj.compiler.ast.AccessModifier;
 import edu.jhu.cs.bsj.compiler.ast.AssignmentOperator;
 import edu.jhu.cs.bsj.compiler.ast.BinaryOperator;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
-import edu.jhu.cs.bsj.compiler.ast.Modifier;
 import edu.jhu.cs.bsj.compiler.ast.NameCategory;
 import edu.jhu.cs.bsj.compiler.ast.PrimitiveType;
 import edu.jhu.cs.bsj.compiler.ast.UnaryOperator;
@@ -69,18 +68,6 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     }
 
     /**
-     * Creates a ExpressionStatementNode.
-     */
-    @Override
-    public ExpressionStatementNode makeExpressionStatementNode(
-            StatementExpressionNode expression)
-    {
-        ExpressionStatementNode node = factory.makeExpressionStatementNode(expression);
-        this.decorate(node);
-        return node;
-    }
-
-    /**
      * Creates a InterfaceBodyNode.
      */
     @Override
@@ -93,19 +80,31 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     }
 
     /**
+     * Creates a ExpressionStatementNode.
+     */
+    @Override
+    public ExpressionStatementNode makeExpressionStatementNode(
+            StatementExpressionNode expression)
+    {
+        ExpressionStatementNode node = factory.makeExpressionStatementNode(expression);
+        this.decorate(node);
+        return node;
+    }
+
+    /**
      * Creates a ClassDeclarationNode.
      */
     @Override
     public ClassDeclarationNode makeClassDeclarationNode(
+            ClassModifiersNode modifiers,
             TypeNode extendsClause,
             ListNode<TypeNode> implementsClause,
             ClassBodyNode body,
             ListNode<TypeParameterNode> typeParameters,
             IdentifierNode identifier,
-            ModifiersNode modifiers,
             JavadocNode javadoc)
     {
-        ClassDeclarationNode node = factory.makeClassDeclarationNode(extendsClause, implementsClause, body, typeParameters, identifier, modifiers, javadoc);
+        ClassDeclarationNode node = factory.makeClassDeclarationNode(modifiers, extendsClause, implementsClause, body, typeParameters, identifier, javadoc);
         this.decorate(node);
         return node;
     }
@@ -213,6 +212,34 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     }
 
     /**
+     * Creates a VariableModifiersNode.
+     */
+    @Override
+    public VariableModifiersNode makeVariableModifiersNode(
+            boolean finalFlag,
+            ListNode<AnnotationNode> annotations)
+    {
+        VariableModifiersNode node = factory.makeVariableModifiersNode(finalFlag, annotations);
+        this.decorate(node);
+        return node;
+    }
+
+    /**
+     * Creates a InterfaceModifiersNode.
+     */
+    @Override
+    public InterfaceModifiersNode makeInterfaceModifiersNode(
+            AccessModifier access,
+            boolean staticFlag,
+            boolean strictfpFlag,
+            ListNode<AnnotationNode> annotations)
+    {
+        InterfaceModifiersNode node = factory.makeInterfaceModifiersNode(access, staticFlag, strictfpFlag, annotations);
+        this.decorate(node);
+        return node;
+    }
+
+    /**
      * Creates a SuperclassConstructorInvocationNode.
      */
     @Override
@@ -247,19 +274,6 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
             BlockStatementNode body)
     {
         InitializerDeclarationNode node = factory.makeInitializerDeclarationNode(staticInitializer, body);
-        this.decorate(node);
-        return node;
-    }
-
-    /**
-     * Creates a ModifiersNode.
-     */
-    @Override
-    public ModifiersNode makeModifiersNode(
-            ListNode<AnnotationNode> annotations,
-            Set<Modifier> flags)
-    {
-        ModifiersNode node = factory.makeModifiersNode(annotations, flags);
         this.decorate(node);
         return node;
     }
@@ -308,13 +322,13 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
      */
     @Override
     public EnumDeclarationNode makeEnumDeclarationNode(
+            EnumModifiersNode modifiers,
             ListNode<TypeNode> implementsClause,
             EnumBodyNode body,
             IdentifierNode identifier,
-            ModifiersNode modifiers,
             JavadocNode javadoc)
     {
-        EnumDeclarationNode node = factory.makeEnumDeclarationNode(implementsClause, body, identifier, modifiers, javadoc);
+        EnumDeclarationNode node = factory.makeEnumDeclarationNode(modifiers, implementsClause, body, identifier, javadoc);
         this.decorate(node);
         return node;
     }
@@ -335,7 +349,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
      */
     @Override
     public VariableDeclarationNode makeVariableDeclarationNode(
-            ModifiersNode modifiers,
+            VariableModifiersNode modifiers,
             ListNode<VariableDeclaratorNode> declarators)
     {
         VariableDeclarationNode node = factory.makeVariableDeclarationNode(modifiers, declarators);
@@ -382,6 +396,21 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     }
 
     /**
+     * Creates a AnnotationModifiersNode.
+     */
+    @Override
+    public AnnotationModifiersNode makeAnnotationModifiersNode(
+            AccessModifier access,
+            boolean staticFlag,
+            boolean strictfpFlag,
+            ListNode<AnnotationNode> annotations)
+    {
+        AnnotationModifiersNode node = factory.makeAnnotationModifiersNode(access, staticFlag, strictfpFlag, annotations);
+        this.decorate(node);
+        return node;
+    }
+
+    /**
      * Creates a FieldAccessByExpressionNode.
      */
     @Override
@@ -415,6 +444,20 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
             ExpressionNode expression)
     {
         ThrowNode node = factory.makeThrowNode(expression);
+        this.decorate(node);
+        return node;
+    }
+
+    /**
+     * Creates a EnumModifiersNode.
+     */
+    @Override
+    public EnumModifiersNode makeEnumModifiersNode(
+            AccessModifier access,
+            boolean strictfpFlag,
+            ListNode<AnnotationNode> annotations)
+    {
+        EnumModifiersNode node = factory.makeEnumModifiersNode(access, strictfpFlag, annotations);
         this.decorate(node);
         return node;
     }
@@ -568,12 +611,12 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
      */
     @Override
     public AnnotationDeclarationNode makeAnnotationDeclarationNode(
+            AnnotationModifiersNode modifiers,
             AnnotationBodyNode body,
             IdentifierNode identifier,
-            ModifiersNode modifiers,
             JavadocNode javadoc)
     {
-        AnnotationDeclarationNode node = factory.makeAnnotationDeclarationNode(body, identifier, modifiers, javadoc);
+        AnnotationDeclarationNode node = factory.makeAnnotationDeclarationNode(modifiers, body, identifier, javadoc);
         this.decorate(node);
         return node;
     }
@@ -671,7 +714,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
      */
     @Override
     public VariableNode makeVariableNode(
-            ModifiersNode modifiers,
+            VariableModifiersNode modifiers,
             TypeNode type,
             IdentifierNode identifier)
     {
@@ -769,12 +812,24 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     }
 
     /**
+     * Creates a AnnotationMethodModifiersNode.
+     */
+    @Override
+    public AnnotationMethodModifiersNode makeAnnotationMethodModifiersNode(
+            ListNode<AnnotationNode> annotations)
+    {
+        AnnotationMethodModifiersNode node = factory.makeAnnotationMethodModifiersNode(annotations);
+        this.decorate(node);
+        return node;
+    }
+
+    /**
      * Creates a ConstructorDeclarationNode.
      */
     @Override
     public ConstructorDeclarationNode makeConstructorDeclarationNode(
             ConstructorBodyNode body,
-            ModifiersNode modifiers,
+            ConstructorModifiersNode modifiers,
             ListNode<VariableNode> parameters,
             VariableNode varargParameter,
             ListNode<UnparameterizedTypeNode> throwTypes,
@@ -867,6 +922,19 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     }
 
     /**
+     * Creates a ConstructorModifiersNode.
+     */
+    @Override
+    public ConstructorModifiersNode makeConstructorModifiersNode(
+            AccessModifier access,
+            ListNode<AnnotationNode> annotations)
+    {
+        ConstructorModifiersNode node = factory.makeConstructorModifiersNode(access, annotations);
+        this.decorate(node);
+        return node;
+    }
+
+    /**
      * Creates a ParameterizedTypeSelectNode.
      */
     @Override
@@ -918,6 +986,23 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     }
 
     /**
+     * Creates a FieldModifiersNode.
+     */
+    @Override
+    public FieldModifiersNode makeFieldModifiersNode(
+            AccessModifier access,
+            boolean staticFlag,
+            boolean finalFlag,
+            boolean transientFlag,
+            boolean volatileFlag,
+            ListNode<AnnotationNode> annotations)
+    {
+        FieldModifiersNode node = factory.makeFieldModifiersNode(access, staticFlag, finalFlag, transientFlag, volatileFlag, annotations);
+        this.decorate(node);
+        return node;
+    }
+
+    /**
      * Creates a TypeParameterNode.
      */
     @Override
@@ -935,7 +1020,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
      */
     @Override
     public AnnotationMethodDeclarationNode makeAnnotationMethodDeclarationNode(
-            ModifiersNode modifiers,
+            AnnotationMethodModifiersNode modifiers,
             TypeNode type,
             IdentifierNode identifier,
             AnnotationValueNode defaultValue,
@@ -964,7 +1049,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
      */
     @Override
     public FieldDeclarationNode makeFieldDeclarationNode(
-            ModifiersNode modifiers,
+            FieldModifiersNode modifiers,
             ListNode<VariableDeclaratorNode> declarators,
             JavadocNode javadoc)
     {
@@ -1021,6 +1106,23 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
             ListNode<TypeNode> typeArguments)
     {
         SuperMethodInvocationNode node = factory.makeSuperMethodInvocationNode(type, identifier, arguments, typeArguments);
+        this.decorate(node);
+        return node;
+    }
+
+    /**
+     * Creates a ClassModifiersNode.
+     */
+    @Override
+    public ClassModifiersNode makeClassModifiersNode(
+            AccessModifier access,
+            boolean abstractFlag,
+            boolean staticFlag,
+            boolean finalFlag,
+            boolean strictfpFlag,
+            ListNode<AnnotationNode> annotations)
+    {
+        ClassModifiersNode node = factory.makeClassModifiersNode(access, abstractFlag, staticFlag, finalFlag, strictfpFlag, annotations);
         this.decorate(node);
         return node;
     }
@@ -1173,14 +1275,14 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
      */
     @Override
     public InterfaceDeclarationNode makeInterfaceDeclarationNode(
+            InterfaceModifiersNode modifiers,
             ListNode<TypeNode> extendsClause,
             InterfaceBodyNode body,
             ListNode<TypeParameterNode> typeParameters,
             IdentifierNode identifier,
-            ModifiersNode modifiers,
             JavadocNode javadoc)
     {
-        InterfaceDeclarationNode node = factory.makeInterfaceDeclarationNode(extendsClause, body, typeParameters, identifier, modifiers, javadoc);
+        InterfaceDeclarationNode node = factory.makeInterfaceDeclarationNode(modifiers, extendsClause, body, typeParameters, identifier, javadoc);
         this.decorate(node);
         return node;
     }
@@ -1265,15 +1367,20 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     }
 
     /**
-     * Creates a IfNode.
+     * Creates a MethodModifiersNode.
      */
     @Override
-    public IfNode makeIfNode(
-            ExpressionNode condition,
-            StatementNode thenStatement,
-            StatementNode elseStatement)
+    public MethodModifiersNode makeMethodModifiersNode(
+            AccessModifier access,
+            boolean abstractFlag,
+            boolean staticFlag,
+            boolean finalFlag,
+            boolean synchronizedFlag,
+            boolean nativeFlag,
+            boolean strictfpFlag,
+            ListNode<AnnotationNode> annotations)
     {
-        IfNode node = factory.makeIfNode(condition, thenStatement, elseStatement);
+        MethodModifiersNode node = factory.makeMethodModifiersNode(access, abstractFlag, staticFlag, finalFlag, synchronizedFlag, nativeFlag, strictfpFlag, annotations);
         this.decorate(node);
         return node;
     }
@@ -1286,6 +1393,20 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
             ListNode<ClassMemberNode> members)
     {
         ClassBodyNode node = factory.makeClassBodyNode(members);
+        this.decorate(node);
+        return node;
+    }
+
+    /**
+     * Creates a IfNode.
+     */
+    @Override
+    public IfNode makeIfNode(
+            ExpressionNode condition,
+            StatementNode thenStatement,
+            StatementNode elseStatement)
+    {
+        IfNode node = factory.makeIfNode(condition, thenStatement, elseStatement);
         this.decorate(node);
         return node;
     }
@@ -1332,7 +1453,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     @Override
     public MethodDeclarationNode makeMethodDeclarationNode(
             BlockStatementNode body,
-            ModifiersNode modifiers,
+            MethodModifiersNode modifiers,
             IdentifierNode identifier,
             ListNode<VariableNode> parameters,
             VariableNode varargParameter,

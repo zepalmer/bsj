@@ -8,46 +8,39 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ModifiersNode;
+import edu.jhu.cs.bsj.compiler.ast.node.VariableModifiersNode;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public abstract class ModifiersNodeImpl extends NodeImpl implements ModifiersNode
+public class VariableModifiersNodeImpl extends ModifiersNodeImpl implements VariableModifiersNode
 {
-    /** The annotations modifying the subject. */
-    private ListNode<AnnotationNode> annotations;
+    /** Whether or not the associated variable is final. */
+    private boolean finalFlag;
 
     /** General constructor. */
-    protected ModifiersNodeImpl(
+    public VariableModifiersNodeImpl(
+            boolean finalFlag,
             ListNode<AnnotationNode> annotations)
     {
-        super();
-        this.annotations = annotations;
+        super(annotations);
+        this.finalFlag = finalFlag;
     }
 
     /**
-     * Gets the annotations modifying the subject.
-     * @return The annotations modifying the subject.
+     * Gets whether or not the associated variable is final.
+     * @return Whether or not the associated variable is final.
      */
-    public ListNode<AnnotationNode> getAnnotations()
+    public boolean getFinalFlag()
     {
-        return this.annotations;
+        return this.finalFlag;
     }
 
     /**
-     * Changes the annotations modifying the subject.
-     * @param annotations The annotations modifying the subject.
+     * Changes whether or not the associated variable is final.
+     * @param finalFlag Whether or not the associated variable is final.
      */
-    public void setAnnotations(ListNode<AnnotationNode> annotations)
+    public void setFinalFlag(boolean finalFlag)
     {
-        if (this.annotations instanceof NodeImpl)
-        {
-            ((NodeImpl)this.annotations).setParent(null);
-        }
-        this.annotations = annotations;
-        if (this.annotations instanceof NodeImpl)
-        {
-            ((NodeImpl)this.annotations).setParent(this);
-        }
+        this.finalFlag = finalFlag;
     }
 
     /**
@@ -61,7 +54,6 @@ public abstract class ModifiersNodeImpl extends NodeImpl implements ModifiersNod
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        this.annotations.receive(visitor);
     }
 
     /**
@@ -75,13 +67,13 @@ public abstract class ModifiersNodeImpl extends NodeImpl implements ModifiersNod
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        this.annotations.receiveTyped(visitor);
     }
 
     @Override
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
         visitor.visitStartBegin(this);
+        visitor.visitVariableModifiersNodeStart(this, true);
         visitor.visitModifiersNodeStart(this);
         visitor.visitNodeStart(this);
         visitor.visitStartEnd(this);
@@ -89,6 +81,7 @@ public abstract class ModifiersNodeImpl extends NodeImpl implements ModifiersNod
         visitor.visitStopBegin(this);
         visitor.visitNodeStart(this);
         visitor.visitModifiersNodeStart(this);
+        visitor.visitVariableModifiersNodeStart(this, true);
         visitor.visitStopEnd(this);
     }
 
@@ -101,7 +94,7 @@ public abstract class ModifiersNodeImpl extends NodeImpl implements ModifiersNod
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(this.annotations);
+        list.add(this.finalFlag);
         return list;
     }
 
@@ -114,8 +107,8 @@ public abstract class ModifiersNodeImpl extends NodeImpl implements ModifiersNod
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
-        sb.append("annotations=");
-        sb.append(this.annotations == null? "null" : this.annotations.getClass().getSimpleName());
+        sb.append("finalFlag=");
+        sb.append(String.valueOf(this.finalFlag) + ":" + "boolean");
         sb.append(']');
         return sb.toString();
     }

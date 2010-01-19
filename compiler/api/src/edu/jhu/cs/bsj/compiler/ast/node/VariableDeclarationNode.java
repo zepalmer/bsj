@@ -22,13 +22,13 @@ public interface VariableDeclarationNode extends Node, StatementNode
      * Gets the modifiers for this variable.
      * @return The modifiers for this variable.
      */
-    public ModifiersNode getModifiers();
+    public VariableModifiersNode getModifiers();
 
     /**
      * Changes the modifiers for this variable.
      * @param modifiers The modifiers for this variable.
      */
-    public void setModifiers(ModifiersNode modifiers);
+    public void setModifiers(VariableModifiersNode modifiers);
 
     /**
      * Gets the variable declarators for this node.

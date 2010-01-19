@@ -15,13 +15,13 @@ public interface AnnotationMethodDeclarationNode extends Node, AnnotationMemberN
      * Gets the modifiers for this annotation method.
      * @return The modifiers for this annotation method.
      */
-    public ModifiersNode getModifiers();
+    public AnnotationMethodModifiersNode getModifiers();
 
     /**
      * Changes the modifiers for this annotation method.
      * @param modifiers The modifiers for this annotation method.
      */
-    public void setModifiers(ModifiersNode modifiers);
+    public void setModifiers(AnnotationMethodModifiersNode modifiers);
 
     /**
      * Gets the return type of this annotation method.

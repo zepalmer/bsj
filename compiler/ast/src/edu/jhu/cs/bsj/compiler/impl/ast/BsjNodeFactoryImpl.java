@@ -1,118 +1,20 @@
 package edu.jhu.cs.bsj.compiler.impl.ast;
 
 import java.util.List;
-import java.util.Set;
 
 import javax.annotation.Generated;
 
+import edu.jhu.cs.bsj.compiler.ast.AccessModifier;
 import edu.jhu.cs.bsj.compiler.ast.AssignmentOperator;
 import edu.jhu.cs.bsj.compiler.ast.BinaryOperator;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
-import edu.jhu.cs.bsj.compiler.ast.Modifier;
 import edu.jhu.cs.bsj.compiler.ast.NameCategory;
 import edu.jhu.cs.bsj.compiler.ast.PrimitiveType;
 import edu.jhu.cs.bsj.compiler.ast.UnaryOperator;
 import edu.jhu.cs.bsj.compiler.ast.UnaryStatementOperator;
 import edu.jhu.cs.bsj.compiler.ast.node.*;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.CodeLiteralNode;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.AlternateConstructorInvocationNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.AnnotationAnnotationValueNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.AnnotationArrayValueNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.AnnotationBodyNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.AnnotationDeclarationNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.AnnotationElementNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.AnnotationExpressionValueNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.AnnotationMethodDeclarationNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.AnonymousClassBodyNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.ArrayAccessNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.ArrayInitializerCreationNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.ArrayInitializerNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.ArrayInstantiatorCreationNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.ArrayTypeNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.AssertStatementNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.AssignmentNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.BinaryExpressionNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.BlockStatementNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.BooleanLiteralNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.BreakNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.CaseNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.CatchNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.CharLiteralNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.ClassBodyNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.ClassDeclarationNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.ClassLiteralNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.CompilationUnitNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.ConditionalExpressionNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.ConstructorBodyNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.ConstructorDeclarationNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.ContinueNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.DoWhileLoopNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.DoubleLiteralNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.EnhancedForLoopNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.EnumBodyNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.EnumConstantDeclarationNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.EnumDeclarationNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.ExpressionStatementNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.FieldAccessByExpressionNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.FieldAccessByNameNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.FieldDeclarationNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.FloatLiteralNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.ForInitializerDeclarationNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.ForInitializerExpressionNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.ForLoopNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.IdentifierNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.IfNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.ImportOnDemandNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.ImportSingleTypeNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.InitializerDeclarationNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.InlineTypeDeclarationNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.InstanceOfNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.IntLiteralNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.InterfaceBodyNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.InterfaceDeclarationNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.JavadocNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.LabeledStatementNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.ListNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.LongLiteralNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.MethodDeclarationNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.MethodInvocationByExpressionNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.MethodInvocationByNameNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.ModifiersNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.NormalAnnotationNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.NullLiteralNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.PackageDeclarationNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.ParameterizedTypeNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.ParameterizedTypeSelectNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.ParenthesizedExpressionNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.PrimitiveTypeNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.QualifiedClassInstantiationNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.QualifiedNameNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.ReturnNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.SimpleNameNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.SingleElementAnnotationNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.StringLiteralNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.SuperFieldAccessNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.SuperMethodInvocationNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.SuperclassConstructorInvocationNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.SwitchNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.SynchronizedNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.ThisNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.ThrowNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.TryNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.TypeCastNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.TypeParameterNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.UnaryExpressionNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.UnaryStatementExpressionNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.UnparameterizedTypeNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.UnqualifiedClassInstantiationNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.VariableDeclarationNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.VariableDeclaratorNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.VariableNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.VoidStatementNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.VoidTypeDeclarationNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.VoidTypeNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.WhileLoopNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.WildcardTypeNodeImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.node.*;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.meta.CodeLiteralNodeImpl;
 
 /**
@@ -148,17 +50,6 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
 
     /**
-     * Creates a ExpressionStatementNode.
-     */
-    @Override
-    public ExpressionStatementNode makeExpressionStatementNode(
-            StatementExpressionNode expression)
-    {
-        ExpressionStatementNode ret = new ExpressionStatementNodeImpl(expression);
-        return ret;
-    }
-
-    /**
      * Creates a InterfaceBodyNode.
      */
     @Override
@@ -170,19 +61,30 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
 
     /**
+     * Creates a ExpressionStatementNode.
+     */
+    @Override
+    public ExpressionStatementNode makeExpressionStatementNode(
+            StatementExpressionNode expression)
+    {
+        ExpressionStatementNode ret = new ExpressionStatementNodeImpl(expression);
+        return ret;
+    }
+
+    /**
      * Creates a ClassDeclarationNode.
      */
     @Override
     public ClassDeclarationNode makeClassDeclarationNode(
+            ClassModifiersNode modifiers,
             TypeNode extendsClause,
             ListNode<TypeNode> implementsClause,
             ClassBodyNode body,
             ListNode<TypeParameterNode> typeParameters,
             IdentifierNode identifier,
-            ModifiersNode modifiers,
             JavadocNode javadoc)
     {
-        ClassDeclarationNode ret = new ClassDeclarationNodeImpl(extendsClause, implementsClause, body, typeParameters, identifier, modifiers, javadoc);
+        ClassDeclarationNode ret = new ClassDeclarationNodeImpl(modifiers, extendsClause, implementsClause, body, typeParameters, identifier, javadoc);
         return ret;
     }
 
@@ -281,6 +183,32 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
 
     /**
+     * Creates a VariableModifiersNode.
+     */
+    @Override
+    public VariableModifiersNode makeVariableModifiersNode(
+            boolean finalFlag,
+            ListNode<AnnotationNode> annotations)
+    {
+        VariableModifiersNode ret = new VariableModifiersNodeImpl(finalFlag, annotations);
+        return ret;
+    }
+
+    /**
+     * Creates a InterfaceModifiersNode.
+     */
+    @Override
+    public InterfaceModifiersNode makeInterfaceModifiersNode(
+            AccessModifier access,
+            boolean staticFlag,
+            boolean strictfpFlag,
+            ListNode<AnnotationNode> annotations)
+    {
+        InterfaceModifiersNode ret = new InterfaceModifiersNodeImpl(access, staticFlag, strictfpFlag, annotations);
+        return ret;
+    }
+
+    /**
      * Creates a SuperclassConstructorInvocationNode.
      */
     @Override
@@ -313,18 +241,6 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BlockStatementNode body)
     {
         InitializerDeclarationNode ret = new InitializerDeclarationNodeImpl(staticInitializer, body);
-        return ret;
-    }
-
-    /**
-     * Creates a ModifiersNode.
-     */
-    @Override
-    public ModifiersNode makeModifiersNode(
-            ListNode<AnnotationNode> annotations,
-            Set<Modifier> flags)
-    {
-        ModifiersNode ret = new ModifiersNodeImpl(annotations, flags);
         return ret;
     }
 
@@ -369,13 +285,13 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     @Override
     public EnumDeclarationNode makeEnumDeclarationNode(
+            EnumModifiersNode modifiers,
             ListNode<TypeNode> implementsClause,
             EnumBodyNode body,
             IdentifierNode identifier,
-            ModifiersNode modifiers,
             JavadocNode javadoc)
     {
-        EnumDeclarationNode ret = new EnumDeclarationNodeImpl(implementsClause, body, identifier, modifiers, javadoc);
+        EnumDeclarationNode ret = new EnumDeclarationNodeImpl(modifiers, implementsClause, body, identifier, javadoc);
         return ret;
     }
 
@@ -394,7 +310,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     @Override
     public VariableDeclarationNode makeVariableDeclarationNode(
-            ModifiersNode modifiers,
+            VariableModifiersNode modifiers,
             ListNode<VariableDeclaratorNode> declarators)
     {
         VariableDeclarationNode ret = new VariableDeclarationNodeImpl(modifiers, declarators);
@@ -437,6 +353,20 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
 
     /**
+     * Creates a AnnotationModifiersNode.
+     */
+    @Override
+    public AnnotationModifiersNode makeAnnotationModifiersNode(
+            AccessModifier access,
+            boolean staticFlag,
+            boolean strictfpFlag,
+            ListNode<AnnotationNode> annotations)
+    {
+        AnnotationModifiersNode ret = new AnnotationModifiersNodeImpl(access, staticFlag, strictfpFlag, annotations);
+        return ret;
+    }
+
+    /**
      * Creates a FieldAccessByExpressionNode.
      */
     @Override
@@ -468,6 +398,19 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ExpressionNode expression)
     {
         ThrowNode ret = new ThrowNodeImpl(expression);
+        return ret;
+    }
+
+    /**
+     * Creates a EnumModifiersNode.
+     */
+    @Override
+    public EnumModifiersNode makeEnumModifiersNode(
+            AccessModifier access,
+            boolean strictfpFlag,
+            ListNode<AnnotationNode> annotations)
+    {
+        EnumModifiersNode ret = new EnumModifiersNodeImpl(access, strictfpFlag, annotations);
         return ret;
     }
 
@@ -609,12 +552,12 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     @Override
     public AnnotationDeclarationNode makeAnnotationDeclarationNode(
+            AnnotationModifiersNode modifiers,
             AnnotationBodyNode body,
             IdentifierNode identifier,
-            ModifiersNode modifiers,
             JavadocNode javadoc)
     {
-        AnnotationDeclarationNode ret = new AnnotationDeclarationNodeImpl(body, identifier, modifiers, javadoc);
+        AnnotationDeclarationNode ret = new AnnotationDeclarationNodeImpl(modifiers, body, identifier, javadoc);
         return ret;
     }
 
@@ -704,7 +647,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     @Override
     public VariableNode makeVariableNode(
-            ModifiersNode modifiers,
+            VariableModifiersNode modifiers,
             TypeNode type,
             IdentifierNode identifier)
     {
@@ -794,12 +737,23 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
 
     /**
+     * Creates a AnnotationMethodModifiersNode.
+     */
+    @Override
+    public AnnotationMethodModifiersNode makeAnnotationMethodModifiersNode(
+            ListNode<AnnotationNode> annotations)
+    {
+        AnnotationMethodModifiersNode ret = new AnnotationMethodModifiersNodeImpl(annotations);
+        return ret;
+    }
+
+    /**
      * Creates a ConstructorDeclarationNode.
      */
     @Override
     public ConstructorDeclarationNode makeConstructorDeclarationNode(
             ConstructorBodyNode body,
-            ModifiersNode modifiers,
+            ConstructorModifiersNode modifiers,
             ListNode<VariableNode> parameters,
             VariableNode varargParameter,
             ListNode<UnparameterizedTypeNode> throwTypes,
@@ -885,6 +839,18 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
 
     /**
+     * Creates a ConstructorModifiersNode.
+     */
+    @Override
+    public ConstructorModifiersNode makeConstructorModifiersNode(
+            AccessModifier access,
+            ListNode<AnnotationNode> annotations)
+    {
+        ConstructorModifiersNode ret = new ConstructorModifiersNodeImpl(access, annotations);
+        return ret;
+    }
+
+    /**
      * Creates a ParameterizedTypeSelectNode.
      */
     @Override
@@ -932,6 +898,22 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
 
     /**
+     * Creates a FieldModifiersNode.
+     */
+    @Override
+    public FieldModifiersNode makeFieldModifiersNode(
+            AccessModifier access,
+            boolean staticFlag,
+            boolean finalFlag,
+            boolean transientFlag,
+            boolean volatileFlag,
+            ListNode<AnnotationNode> annotations)
+    {
+        FieldModifiersNode ret = new FieldModifiersNodeImpl(access, staticFlag, finalFlag, transientFlag, volatileFlag, annotations);
+        return ret;
+    }
+
+    /**
      * Creates a TypeParameterNode.
      */
     @Override
@@ -948,7 +930,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     @Override
     public AnnotationMethodDeclarationNode makeAnnotationMethodDeclarationNode(
-            ModifiersNode modifiers,
+            AnnotationMethodModifiersNode modifiers,
             TypeNode type,
             IdentifierNode identifier,
             AnnotationValueNode defaultValue,
@@ -975,7 +957,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     @Override
     public FieldDeclarationNode makeFieldDeclarationNode(
-            ModifiersNode modifiers,
+            FieldModifiersNode modifiers,
             ListNode<VariableDeclaratorNode> declarators,
             JavadocNode javadoc)
     {
@@ -1028,6 +1010,22 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ListNode<TypeNode> typeArguments)
     {
         SuperMethodInvocationNode ret = new SuperMethodInvocationNodeImpl(type, identifier, arguments, typeArguments);
+        return ret;
+    }
+
+    /**
+     * Creates a ClassModifiersNode.
+     */
+    @Override
+    public ClassModifiersNode makeClassModifiersNode(
+            AccessModifier access,
+            boolean abstractFlag,
+            boolean staticFlag,
+            boolean finalFlag,
+            boolean strictfpFlag,
+            ListNode<AnnotationNode> annotations)
+    {
+        ClassModifiersNode ret = new ClassModifiersNodeImpl(access, abstractFlag, staticFlag, finalFlag, strictfpFlag, annotations);
         return ret;
     }
 
@@ -1168,14 +1166,14 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     @Override
     public InterfaceDeclarationNode makeInterfaceDeclarationNode(
+            InterfaceModifiersNode modifiers,
             ListNode<TypeNode> extendsClause,
             InterfaceBodyNode body,
             ListNode<TypeParameterNode> typeParameters,
             IdentifierNode identifier,
-            ModifiersNode modifiers,
             JavadocNode javadoc)
     {
-        InterfaceDeclarationNode ret = new InterfaceDeclarationNodeImpl(extendsClause, body, typeParameters, identifier, modifiers, javadoc);
+        InterfaceDeclarationNode ret = new InterfaceDeclarationNodeImpl(modifiers, extendsClause, body, typeParameters, identifier, javadoc);
         return ret;
     }
 
@@ -1253,15 +1251,20 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
 
     /**
-     * Creates a IfNode.
+     * Creates a MethodModifiersNode.
      */
     @Override
-    public IfNode makeIfNode(
-            ExpressionNode condition,
-            StatementNode thenStatement,
-            StatementNode elseStatement)
+    public MethodModifiersNode makeMethodModifiersNode(
+            AccessModifier access,
+            boolean abstractFlag,
+            boolean staticFlag,
+            boolean finalFlag,
+            boolean synchronizedFlag,
+            boolean nativeFlag,
+            boolean strictfpFlag,
+            ListNode<AnnotationNode> annotations)
     {
-        IfNode ret = new IfNodeImpl(condition, thenStatement, elseStatement);
+        MethodModifiersNode ret = new MethodModifiersNodeImpl(access, abstractFlag, staticFlag, finalFlag, synchronizedFlag, nativeFlag, strictfpFlag, annotations);
         return ret;
     }
 
@@ -1273,6 +1276,19 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ListNode<ClassMemberNode> members)
     {
         ClassBodyNode ret = new ClassBodyNodeImpl(members);
+        return ret;
+    }
+
+    /**
+     * Creates a IfNode.
+     */
+    @Override
+    public IfNode makeIfNode(
+            ExpressionNode condition,
+            StatementNode thenStatement,
+            StatementNode elseStatement)
+    {
+        IfNode ret = new IfNodeImpl(condition, thenStatement, elseStatement);
         return ret;
     }
 
@@ -1315,7 +1331,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     @Override
     public MethodDeclarationNode makeMethodDeclarationNode(
             BlockStatementNode body,
-            ModifiersNode modifiers,
+            MethodModifiersNode modifiers,
             IdentifierNode identifier,
             ListNode<VariableNode> parameters,
             VariableNode varargParameter,

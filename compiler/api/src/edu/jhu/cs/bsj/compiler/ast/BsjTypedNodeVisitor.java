@@ -171,6 +171,24 @@ public interface BsjTypedNodeVisitor
     public void visitAnnotationMethodDeclarationNodeStart(AnnotationMethodDeclarationNode node, boolean mostSpecific);
 
     /**
+     * Starts a visit for nodes of type AnnotationMethodModifiersNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitAnnotationMethodModifiersNodeStart(AnnotationMethodModifiersNode node, boolean mostSpecific);
+
+    /**
+     * Starts a visit for nodes of type AnnotationModifiersNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitAnnotationModifiersNodeStart(AnnotationModifiersNode node, boolean mostSpecific);
+
+    /**
      * Starts a visit for nodes of type AnnotationNode.
      * @param node The node being visited.
      */
@@ -375,6 +393,15 @@ public interface BsjTypedNodeVisitor
     public void visitClassMemberNodeStart(ClassMemberNode node);
 
     /**
+     * Starts a visit for nodes of type ClassModifiersNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitClassModifiersNodeStart(ClassModifiersNode node, boolean mostSpecific);
+
+    /**
      * Starts a visit for nodes of type CodeLiteralNode.
      * @param node The node being visited.
      * @param mostSpecific <code>true</code> if this is the most specific call
@@ -424,6 +451,15 @@ public interface BsjTypedNodeVisitor
      * @param node The node being visited.
      */
     public void visitConstructorInvocationNodeStart(ConstructorInvocationNode node);
+
+    /**
+     * Starts a visit for nodes of type ConstructorModifiersNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitConstructorModifiersNodeStart(ConstructorModifiersNode node, boolean mostSpecific);
 
     /**
      * Starts a visit for nodes of type ContinueNode.
@@ -495,6 +531,15 @@ public interface BsjTypedNodeVisitor
     public void visitEnumDeclarationNodeStart(EnumDeclarationNode node, boolean mostSpecific);
 
     /**
+     * Starts a visit for nodes of type EnumModifiersNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitEnumModifiersNodeStart(EnumModifiersNode node, boolean mostSpecific);
+
+    /**
      * Starts a visit for nodes of type ExpressionNode.
      * @param node The node being visited.
      */
@@ -541,6 +586,15 @@ public interface BsjTypedNodeVisitor
      *                     otherwise.
      */
     public void visitFieldDeclarationNodeStart(FieldDeclarationNode node, boolean mostSpecific);
+
+    /**
+     * Starts a visit for nodes of type FieldModifiersNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitFieldModifiersNodeStart(FieldModifiersNode node, boolean mostSpecific);
 
     /**
      * Starts a visit for nodes of type FloatLiteralNode.
@@ -693,6 +747,15 @@ public interface BsjTypedNodeVisitor
     public void visitInterfaceMemberNodeStart(InterfaceMemberNode node);
 
     /**
+     * Starts a visit for nodes of type InterfaceModifiersNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitInterfaceModifiersNodeStart(InterfaceModifiersNode node, boolean mostSpecific);
+
+    /**
      * Starts a visit for nodes of type JavadocNode.
      * @param node The node being visited.
      * @param mostSpecific <code>true</code> if this is the most specific call
@@ -774,13 +837,19 @@ public interface BsjTypedNodeVisitor
     public void visitMethodInvocationNodeStart(MethodInvocationNode node);
 
     /**
-     * Starts a visit for nodes of type ModifiersNode.
+     * Starts a visit for nodes of type MethodModifiersNode.
      * @param node The node being visited.
      * @param mostSpecific <code>true</code> if this is the most specific call
      *                     which can be made for this node; <code>false</code>
      *                     otherwise.
      */
-    public void visitModifiersNodeStart(ModifiersNode node, boolean mostSpecific);
+    public void visitMethodModifiersNodeStart(MethodModifiersNode node, boolean mostSpecific);
+
+    /**
+     * Starts a visit for nodes of type ModifiersNode.
+     * @param node The node being visited.
+     */
+    public void visitModifiersNodeStart(ModifiersNode node);
 
     /**
      * Starts a visit for nodes of type NameNode.
@@ -1122,6 +1191,15 @@ public interface BsjTypedNodeVisitor
     public void visitVariableInitializerNodeStart(VariableInitializerNode node);
 
     /**
+     * Starts a visit for nodes of type VariableModifiersNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitVariableModifiersNodeStart(VariableModifiersNode node, boolean mostSpecific);
+
+    /**
      * Starts a visit for nodes of type VariableNode.
      * @param node The node being visited.
      * @param mostSpecific <code>true</code> if this is the most specific call
@@ -1252,6 +1330,24 @@ public interface BsjTypedNodeVisitor
      *                     otherwise.
      */
     public void visitAnnotationMethodDeclarationNodeStop(AnnotationMethodDeclarationNode node, boolean mostSpecific);
+
+    /**
+     * Stops a visit for nodes of type AnnotationMethodModifiersNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitAnnotationMethodModifiersNodeStop(AnnotationMethodModifiersNode node, boolean mostSpecific);
+
+    /**
+     * Stops a visit for nodes of type AnnotationModifiersNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitAnnotationModifiersNodeStop(AnnotationModifiersNode node, boolean mostSpecific);
 
     /**
      * Stops a visit for nodes of type AnnotationNode.
@@ -1458,6 +1554,15 @@ public interface BsjTypedNodeVisitor
     public void visitClassMemberNodeStop(ClassMemberNode node);
 
     /**
+     * Stops a visit for nodes of type ClassModifiersNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitClassModifiersNodeStop(ClassModifiersNode node, boolean mostSpecific);
+
+    /**
      * Stops a visit for nodes of type CodeLiteralNode.
      * @param node The node being visited.
      * @param mostSpecific <code>true</code> if this is the most specific call
@@ -1507,6 +1612,15 @@ public interface BsjTypedNodeVisitor
      * @param node The node being visited.
      */
     public void visitConstructorInvocationNodeStop(ConstructorInvocationNode node);
+
+    /**
+     * Stops a visit for nodes of type ConstructorModifiersNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitConstructorModifiersNodeStop(ConstructorModifiersNode node, boolean mostSpecific);
 
     /**
      * Stops a visit for nodes of type ContinueNode.
@@ -1578,6 +1692,15 @@ public interface BsjTypedNodeVisitor
     public void visitEnumDeclarationNodeStop(EnumDeclarationNode node, boolean mostSpecific);
 
     /**
+     * Stops a visit for nodes of type EnumModifiersNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitEnumModifiersNodeStop(EnumModifiersNode node, boolean mostSpecific);
+
+    /**
      * Stops a visit for nodes of type ExpressionNode.
      * @param node The node being visited.
      */
@@ -1624,6 +1747,15 @@ public interface BsjTypedNodeVisitor
      *                     otherwise.
      */
     public void visitFieldDeclarationNodeStop(FieldDeclarationNode node, boolean mostSpecific);
+
+    /**
+     * Stops a visit for nodes of type FieldModifiersNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitFieldModifiersNodeStop(FieldModifiersNode node, boolean mostSpecific);
 
     /**
      * Stops a visit for nodes of type FloatLiteralNode.
@@ -1776,6 +1908,15 @@ public interface BsjTypedNodeVisitor
     public void visitInterfaceMemberNodeStop(InterfaceMemberNode node);
 
     /**
+     * Stops a visit for nodes of type InterfaceModifiersNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitInterfaceModifiersNodeStop(InterfaceModifiersNode node, boolean mostSpecific);
+
+    /**
      * Stops a visit for nodes of type JavadocNode.
      * @param node The node being visited.
      * @param mostSpecific <code>true</code> if this is the most specific call
@@ -1857,13 +1998,19 @@ public interface BsjTypedNodeVisitor
     public void visitMethodInvocationNodeStop(MethodInvocationNode node);
 
     /**
-     * Stops a visit for nodes of type ModifiersNode.
+     * Stops a visit for nodes of type MethodModifiersNode.
      * @param node The node being visited.
      * @param mostSpecific <code>true</code> if this is the most specific call
      *                     which can be made for this node; <code>false</code>
      *                     otherwise.
      */
-    public void visitModifiersNodeStop(ModifiersNode node, boolean mostSpecific);
+    public void visitMethodModifiersNodeStop(MethodModifiersNode node, boolean mostSpecific);
+
+    /**
+     * Stops a visit for nodes of type ModifiersNode.
+     * @param node The node being visited.
+     */
+    public void visitModifiersNodeStop(ModifiersNode node);
 
     /**
      * Stops a visit for nodes of type NameNode.
@@ -2203,6 +2350,15 @@ public interface BsjTypedNodeVisitor
      * @param node The node being visited.
      */
     public void visitVariableInitializerNodeStop(VariableInitializerNode node);
+
+    /**
+     * Stops a visit for nodes of type VariableModifiersNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitVariableModifiersNodeStop(VariableModifiersNode node, boolean mostSpecific);
 
     /**
      * Stops a visit for nodes of type VariableNode.

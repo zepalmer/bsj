@@ -16,6 +16,18 @@ import javax.annotation.Generated;
 public interface AnnotationDeclarationNode extends NamedTypeDeclarationNode
 {
     /**
+     * Gets the modifiers for this type.
+     * @return The modifiers for this type.
+     */
+    public AnnotationModifiersNode getModifiers();
+
+    /**
+     * Changes the modifiers for this type.
+     * @param modifiers The modifiers for this type.
+     */
+    public void setModifiers(AnnotationModifiersNode modifiers);
+
+    /**
      * Gets this annotation's body.
      * @return This annotation's body.
      */

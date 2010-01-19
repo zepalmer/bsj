@@ -7,16 +7,16 @@ import javax.annotation.Generated;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.FieldDeclarationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.FieldModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.JavadocNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclaratorNode;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class FieldDeclarationNodeImpl extends NodeImpl implements FieldDeclarationNode
 {
     /** The modifiers for this field. */
-    private ModifiersNode modifiers;
+    private FieldModifiersNode modifiers;
 
     /** The variable declarators for this node. */
     private ListNode<VariableDeclaratorNode> declarators;
@@ -26,7 +26,7 @@ public class FieldDeclarationNodeImpl extends NodeImpl implements FieldDeclarati
 
     /** General constructor. */
     public FieldDeclarationNodeImpl(
-            ModifiersNode modifiers,
+            FieldModifiersNode modifiers,
             ListNode<VariableDeclaratorNode> declarators,
             JavadocNode javadoc)
     {
@@ -40,7 +40,7 @@ public class FieldDeclarationNodeImpl extends NodeImpl implements FieldDeclarati
      * Gets the modifiers for this field.
      * @return The modifiers for this field.
      */
-    public ModifiersNode getModifiers()
+    public FieldModifiersNode getModifiers()
     {
         return this.modifiers;
     }
@@ -49,7 +49,7 @@ public class FieldDeclarationNodeImpl extends NodeImpl implements FieldDeclarati
      * Changes the modifiers for this field.
      * @param modifiers The modifiers for this field.
      */
-    public void setModifiers(ModifiersNode modifiers)
+    public void setModifiers(FieldModifiersNode modifiers)
     {
         if (this.modifiers instanceof NodeImpl)
         {

@@ -15,13 +15,13 @@ public interface VariableNode extends Node
      * Gets the modifiers of this parameter.
      * @return The modifiers of this parameter.
      */
-    public ModifiersNode getModifiers();
+    public VariableModifiersNode getModifiers();
 
     /**
      * Changes the modifiers of this parameter.
      * @param modifiers The modifiers of this parameter.
      */
-    public void setModifiers(ModifiersNode modifiers);
+    public void setModifiers(VariableModifiersNode modifiers);
 
     /**
      * Gets the type of the variable.

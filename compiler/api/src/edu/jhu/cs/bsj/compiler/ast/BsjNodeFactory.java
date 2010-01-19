@@ -1,7 +1,6 @@
 package edu.jhu.cs.bsj.compiler.ast;
 
 import java.util.List;
-import java.util.Set;
 
 import javax.annotation.Generated;
 
@@ -33,27 +32,27 @@ public interface BsjNodeFactory
             UnaryStatementOperator operator);
 
     /**
-     * Creates a ExpressionStatementNode.
-     */
-    public ExpressionStatementNode makeExpressionStatementNode(
-            StatementExpressionNode expression);
-
-    /**
      * Creates a InterfaceBodyNode.
      */
     public InterfaceBodyNode makeInterfaceBodyNode(
             ListNode<InterfaceMemberNode> members);
 
     /**
+     * Creates a ExpressionStatementNode.
+     */
+    public ExpressionStatementNode makeExpressionStatementNode(
+            StatementExpressionNode expression);
+
+    /**
      * Creates a ClassDeclarationNode.
      */
     public ClassDeclarationNode makeClassDeclarationNode(
+            ClassModifiersNode modifiers,
             TypeNode extendsClause,
             ListNode<TypeNode> implementsClause,
             ClassBodyNode body,
             ListNode<TypeParameterNode> typeParameters,
             IdentifierNode identifier,
-            ModifiersNode modifiers,
             JavadocNode javadoc);
 
     /**
@@ -111,6 +110,22 @@ public interface BsjNodeFactory
             boolean staticImport);
 
     /**
+     * Creates a VariableModifiersNode.
+     */
+    public VariableModifiersNode makeVariableModifiersNode(
+            boolean finalFlag,
+            ListNode<AnnotationNode> annotations);
+
+    /**
+     * Creates a InterfaceModifiersNode.
+     */
+    public InterfaceModifiersNode makeInterfaceModifiersNode(
+            AccessModifier access,
+            boolean staticFlag,
+            boolean strictfpFlag,
+            ListNode<AnnotationNode> annotations);
+
+    /**
      * Creates a SuperclassConstructorInvocationNode.
      */
     public SuperclassConstructorInvocationNode makeSuperclassConstructorInvocationNode(
@@ -130,13 +145,6 @@ public interface BsjNodeFactory
     public InitializerDeclarationNode makeInitializerDeclarationNode(
             boolean staticInitializer,
             BlockStatementNode body);
-
-    /**
-     * Creates a ModifiersNode.
-     */
-    public ModifiersNode makeModifiersNode(
-            ListNode<AnnotationNode> annotations,
-            Set<Modifier> flags);
 
     /**
      * Creates a EnumBodyNode.
@@ -163,10 +171,10 @@ public interface BsjNodeFactory
      * Creates a EnumDeclarationNode.
      */
     public EnumDeclarationNode makeEnumDeclarationNode(
+            EnumModifiersNode modifiers,
             ListNode<TypeNode> implementsClause,
             EnumBodyNode body,
             IdentifierNode identifier,
-            ModifiersNode modifiers,
             JavadocNode javadoc);
 
     /**
@@ -178,7 +186,7 @@ public interface BsjNodeFactory
      * Creates a VariableDeclarationNode.
      */
     public VariableDeclarationNode makeVariableDeclarationNode(
-            ModifiersNode modifiers,
+            VariableModifiersNode modifiers,
             ListNode<VariableDeclaratorNode> declarators);
 
     /**
@@ -202,6 +210,15 @@ public interface BsjNodeFactory
             VariableInitializerNode initializer);
 
     /**
+     * Creates a AnnotationModifiersNode.
+     */
+    public AnnotationModifiersNode makeAnnotationModifiersNode(
+            AccessModifier access,
+            boolean staticFlag,
+            boolean strictfpFlag,
+            ListNode<AnnotationNode> annotations);
+
+    /**
      * Creates a FieldAccessByExpressionNode.
      */
     public FieldAccessByExpressionNode makeFieldAccessByExpressionNode(
@@ -220,6 +237,14 @@ public interface BsjNodeFactory
      */
     public ThrowNode makeThrowNode(
             ExpressionNode expression);
+
+    /**
+     * Creates a EnumModifiersNode.
+     */
+    public EnumModifiersNode makeEnumModifiersNode(
+            AccessModifier access,
+            boolean strictfpFlag,
+            ListNode<AnnotationNode> annotations);
 
     /**
      * Creates a CatchNode.
@@ -303,9 +328,9 @@ public interface BsjNodeFactory
      * Creates a AnnotationDeclarationNode.
      */
     public AnnotationDeclarationNode makeAnnotationDeclarationNode(
+            AnnotationModifiersNode modifiers,
             AnnotationBodyNode body,
             IdentifierNode identifier,
-            ModifiersNode modifiers,
             JavadocNode javadoc);
 
     /**
@@ -358,7 +383,7 @@ public interface BsjNodeFactory
      * Creates a VariableNode.
      */
     public VariableNode makeVariableNode(
-            ModifiersNode modifiers,
+            VariableModifiersNode modifiers,
             TypeNode type,
             IdentifierNode identifier);
 
@@ -409,11 +434,17 @@ public interface BsjNodeFactory
             ListNode<TypeNode> typeArguments);
 
     /**
+     * Creates a AnnotationMethodModifiersNode.
+     */
+    public AnnotationMethodModifiersNode makeAnnotationMethodModifiersNode(
+            ListNode<AnnotationNode> annotations);
+
+    /**
      * Creates a ConstructorDeclarationNode.
      */
     public ConstructorDeclarationNode makeConstructorDeclarationNode(
             ConstructorBodyNode body,
-            ModifiersNode modifiers,
+            ConstructorModifiersNode modifiers,
             ListNode<VariableNode> parameters,
             VariableNode varargParameter,
             ListNode<UnparameterizedTypeNode> throwTypes,
@@ -465,6 +496,13 @@ public interface BsjNodeFactory
             IdentifierNode label);
 
     /**
+     * Creates a ConstructorModifiersNode.
+     */
+    public ConstructorModifiersNode makeConstructorModifiersNode(
+            AccessModifier access,
+            ListNode<AnnotationNode> annotations);
+
+    /**
      * Creates a ParameterizedTypeSelectNode.
      */
     public ParameterizedTypeSelectNode makeParameterizedTypeSelectNode(
@@ -492,6 +530,17 @@ public interface BsjNodeFactory
             int arrayLevels);
 
     /**
+     * Creates a FieldModifiersNode.
+     */
+    public FieldModifiersNode makeFieldModifiersNode(
+            AccessModifier access,
+            boolean staticFlag,
+            boolean finalFlag,
+            boolean transientFlag,
+            boolean volatileFlag,
+            ListNode<AnnotationNode> annotations);
+
+    /**
      * Creates a TypeParameterNode.
      */
     public TypeParameterNode makeTypeParameterNode(
@@ -502,7 +551,7 @@ public interface BsjNodeFactory
      * Creates a AnnotationMethodDeclarationNode.
      */
     public AnnotationMethodDeclarationNode makeAnnotationMethodDeclarationNode(
-            ModifiersNode modifiers,
+            AnnotationMethodModifiersNode modifiers,
             TypeNode type,
             IdentifierNode identifier,
             AnnotationValueNode defaultValue,
@@ -519,7 +568,7 @@ public interface BsjNodeFactory
      * Creates a FieldDeclarationNode.
      */
     public FieldDeclarationNode makeFieldDeclarationNode(
-            ModifiersNode modifiers,
+            FieldModifiersNode modifiers,
             ListNode<VariableDeclaratorNode> declarators,
             JavadocNode javadoc);
 
@@ -550,6 +599,17 @@ public interface BsjNodeFactory
             IdentifierNode identifier,
             ListNode<ExpressionNode> arguments,
             ListNode<TypeNode> typeArguments);
+
+    /**
+     * Creates a ClassModifiersNode.
+     */
+    public ClassModifiersNode makeClassModifiersNode(
+            AccessModifier access,
+            boolean abstractFlag,
+            boolean staticFlag,
+            boolean finalFlag,
+            boolean strictfpFlag,
+            ListNode<AnnotationNode> annotations);
 
     /**
      * Creates a ArrayInitializerNode.
@@ -632,11 +692,11 @@ public interface BsjNodeFactory
      * Creates a InterfaceDeclarationNode.
      */
     public InterfaceDeclarationNode makeInterfaceDeclarationNode(
+            InterfaceModifiersNode modifiers,
             ListNode<TypeNode> extendsClause,
             InterfaceBodyNode body,
             ListNode<TypeParameterNode> typeParameters,
             IdentifierNode identifier,
-            ModifiersNode modifiers,
             JavadocNode javadoc);
 
     /**
@@ -683,18 +743,31 @@ public interface BsjNodeFactory
             int arrayLevels);
 
     /**
-     * Creates a IfNode.
+     * Creates a MethodModifiersNode.
      */
-    public IfNode makeIfNode(
-            ExpressionNode condition,
-            StatementNode thenStatement,
-            StatementNode elseStatement);
+    public MethodModifiersNode makeMethodModifiersNode(
+            AccessModifier access,
+            boolean abstractFlag,
+            boolean staticFlag,
+            boolean finalFlag,
+            boolean synchronizedFlag,
+            boolean nativeFlag,
+            boolean strictfpFlag,
+            ListNode<AnnotationNode> annotations);
 
     /**
      * Creates a ClassBodyNode.
      */
     public ClassBodyNode makeClassBodyNode(
             ListNode<ClassMemberNode> members);
+
+    /**
+     * Creates a IfNode.
+     */
+    public IfNode makeIfNode(
+            ExpressionNode condition,
+            StatementNode thenStatement,
+            StatementNode elseStatement);
 
     /**
      * Creates a IntLiteralNode.
@@ -719,7 +792,7 @@ public interface BsjNodeFactory
      */
     public MethodDeclarationNode makeMethodDeclarationNode(
             BlockStatementNode body,
-            ModifiersNode modifiers,
+            MethodModifiersNode modifiers,
             IdentifierNode identifier,
             ListNode<VariableNode> parameters,
             VariableNode varargParameter,

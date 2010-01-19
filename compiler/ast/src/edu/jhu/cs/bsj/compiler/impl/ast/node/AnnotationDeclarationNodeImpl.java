@@ -8,25 +8,55 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationDeclarationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.AnnotationModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.JavadocNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ModifiersNode;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class AnnotationDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl implements AnnotationDeclarationNode
 {
+    /** The modifiers for this type. */
+    private AnnotationModifiersNode modifiers;
+
     /** This annotation's body. */
     private AnnotationBodyNode body;
 
     /** General constructor. */
     public AnnotationDeclarationNodeImpl(
+            AnnotationModifiersNode modifiers,
             AnnotationBodyNode body,
             IdentifierNode identifier,
-            ModifiersNode modifiers,
             JavadocNode javadoc)
     {
-        super(identifier, modifiers, javadoc);
+        super(identifier, javadoc);
+        this.modifiers = modifiers;
         this.body = body;
+    }
+
+    /**
+     * Gets the modifiers for this type.
+     * @return The modifiers for this type.
+     */
+    public AnnotationModifiersNode getModifiers()
+    {
+        return this.modifiers;
+    }
+
+    /**
+     * Changes the modifiers for this type.
+     * @param modifiers The modifiers for this type.
+     */
+    public void setModifiers(AnnotationModifiersNode modifiers)
+    {
+        if (this.modifiers instanceof NodeImpl)
+        {
+            ((NodeImpl)this.modifiers).setParent(null);
+        }
+        this.modifiers = modifiers;
+        if (this.modifiers instanceof NodeImpl)
+        {
+            ((NodeImpl)this.modifiers).setParent(this);
+        }
     }
 
     /**
@@ -66,6 +96,7 @@ public class AnnotationDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl 
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
+        this.modifiers.receive(visitor);
         this.body.receive(visitor);
     }
 
@@ -80,6 +111,7 @@ public class AnnotationDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl 
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
+        this.modifiers.receiveTyped(visitor);
         this.body.receiveTyped(visitor);
     }
 
@@ -108,6 +140,7 @@ public class AnnotationDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl 
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
+        list.add(this.modifiers);
         list.add(this.body);
         return list;
     }
@@ -121,6 +154,9 @@ public class AnnotationDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl 
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
+        sb.append("modifiers=");
+        sb.append(this.modifiers == null? "null" : this.modifiers.getClass().getSimpleName());
+        sb.append(',');
         sb.append("body=");
         sb.append(this.body == null? "null" : this.body.getClass().getSimpleName());
         sb.append(']');

@@ -12,13 +12,13 @@ public interface FieldDeclarationNode extends Node, ClassMemberNode,  InterfaceM
      * Gets the modifiers for this field.
      * @return The modifiers for this field.
      */
-    public ModifiersNode getModifiers();
+    public FieldModifiersNode getModifiers();
 
     /**
      * Changes the modifiers for this field.
      * @param modifiers The modifiers for this field.
      */
-    public void setModifiers(ModifiersNode modifiers);
+    public void setModifiers(FieldModifiersNode modifiers);
 
     /**
      * Gets the variable declarators for this node.

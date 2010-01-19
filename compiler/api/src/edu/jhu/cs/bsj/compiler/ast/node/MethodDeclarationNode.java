@@ -36,13 +36,13 @@ public interface MethodDeclarationNode extends Node, ClassMemberNode,  Interface
      * Gets the modifiers for this method.
      * @return The modifiers for this method.
      */
-    public ModifiersNode getModifiers();
+    public MethodModifiersNode getModifiers();
 
     /**
      * Changes the modifiers for this method.
      * @param modifiers The modifiers for this method.
      */
-    public void setModifiers(ModifiersNode modifiers);
+    public void setModifiers(MethodModifiersNode modifiers);
 
     /**
      * Gets this method's name.

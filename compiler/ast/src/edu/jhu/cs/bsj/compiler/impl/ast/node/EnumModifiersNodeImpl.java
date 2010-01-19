@@ -4,50 +4,67 @@ import java.util.List;
 
 import javax.annotation.Generated;
 
+import edu.jhu.cs.bsj.compiler.ast.AccessModifier;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.EnumModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ModifiersNode;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public abstract class ModifiersNodeImpl extends NodeImpl implements ModifiersNode
+public class EnumModifiersNodeImpl extends ModifiersNodeImpl implements EnumModifiersNode
 {
-    /** The annotations modifying the subject. */
-    private ListNode<AnnotationNode> annotations;
+    /** The access for the associated enum. */
+    private AccessModifier access;
+
+    /** Whether or not the associated enum uses strict floating-point. */
+    private boolean strictfpFlag;
 
     /** General constructor. */
-    protected ModifiersNodeImpl(
+    public EnumModifiersNodeImpl(
+            AccessModifier access,
+            boolean strictfpFlag,
             ListNode<AnnotationNode> annotations)
     {
-        super();
-        this.annotations = annotations;
+        super(annotations);
+        this.access = access;
+        this.strictfpFlag = strictfpFlag;
     }
 
     /**
-     * Gets the annotations modifying the subject.
-     * @return The annotations modifying the subject.
+     * Gets the access for the associated enum.
+     * @return The access for the associated enum.
      */
-    public ListNode<AnnotationNode> getAnnotations()
+    public AccessModifier getAccess()
     {
-        return this.annotations;
+        return this.access;
     }
 
     /**
-     * Changes the annotations modifying the subject.
-     * @param annotations The annotations modifying the subject.
+     * Changes the access for the associated enum.
+     * @param access The access for the associated enum.
      */
-    public void setAnnotations(ListNode<AnnotationNode> annotations)
+    public void setAccess(AccessModifier access)
     {
-        if (this.annotations instanceof NodeImpl)
-        {
-            ((NodeImpl)this.annotations).setParent(null);
-        }
-        this.annotations = annotations;
-        if (this.annotations instanceof NodeImpl)
-        {
-            ((NodeImpl)this.annotations).setParent(this);
-        }
+        this.access = access;
+    }
+
+    /**
+     * Gets whether or not the associated enum uses strict floating-point.
+     * @return Whether or not the associated enum uses strict floating-point.
+     */
+    public boolean getStrictfpFlag()
+    {
+        return this.strictfpFlag;
+    }
+
+    /**
+     * Changes whether or not the associated enum uses strict floating-point.
+     * @param strictfpFlag Whether or not the associated enum uses strict floating-point.
+     */
+    public void setStrictfpFlag(boolean strictfpFlag)
+    {
+        this.strictfpFlag = strictfpFlag;
     }
 
     /**
@@ -61,7 +78,6 @@ public abstract class ModifiersNodeImpl extends NodeImpl implements ModifiersNod
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        this.annotations.receive(visitor);
     }
 
     /**
@@ -75,13 +91,13 @@ public abstract class ModifiersNodeImpl extends NodeImpl implements ModifiersNod
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        this.annotations.receiveTyped(visitor);
     }
 
     @Override
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
         visitor.visitStartBegin(this);
+        visitor.visitEnumModifiersNodeStart(this, true);
         visitor.visitModifiersNodeStart(this);
         visitor.visitNodeStart(this);
         visitor.visitStartEnd(this);
@@ -89,6 +105,7 @@ public abstract class ModifiersNodeImpl extends NodeImpl implements ModifiersNod
         visitor.visitStopBegin(this);
         visitor.visitNodeStart(this);
         visitor.visitModifiersNodeStart(this);
+        visitor.visitEnumModifiersNodeStart(this, true);
         visitor.visitStopEnd(this);
     }
 
@@ -101,7 +118,8 @@ public abstract class ModifiersNodeImpl extends NodeImpl implements ModifiersNod
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(this.annotations);
+        list.add(this.access);
+        list.add(this.strictfpFlag);
         return list;
     }
 
@@ -114,8 +132,11 @@ public abstract class ModifiersNodeImpl extends NodeImpl implements ModifiersNod
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
-        sb.append("annotations=");
-        sb.append(this.annotations == null? "null" : this.annotations.getClass().getSimpleName());
+        sb.append("access=");
+        sb.append(String.valueOf(this.access) + ":" + this.access.getClass().getSimpleName());
+        sb.append(',');
+        sb.append("strictfpFlag=");
+        sb.append(String.valueOf(this.strictfpFlag) + ":" + "boolean");
         sb.append(']');
         return sb.toString();
     }

@@ -11,7 +11,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.JavadocNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.MethodDeclarationNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ModifiersNode;
+import edu.jhu.cs.bsj.compiler.ast.node.MethodModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeParameterNode;
 import edu.jhu.cs.bsj.compiler.ast.node.UnparameterizedTypeNode;
@@ -24,7 +24,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
     private BlockStatementNode body;
 
     /** The modifiers for this method. */
-    private ModifiersNode modifiers;
+    private MethodModifiersNode modifiers;
 
     /** This method's name. */
     private IdentifierNode identifier;
@@ -50,7 +50,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
     /** General constructor. */
     public MethodDeclarationNodeImpl(
             BlockStatementNode body,
-            ModifiersNode modifiers,
+            MethodModifiersNode modifiers,
             IdentifierNode identifier,
             ListNode<VariableNode> parameters,
             VariableNode varargParameter,
@@ -101,7 +101,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
      * Gets the modifiers for this method.
      * @return The modifiers for this method.
      */
-    public ModifiersNode getModifiers()
+    public MethodModifiersNode getModifiers()
     {
         return this.modifiers;
     }
@@ -110,7 +110,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
      * Changes the modifiers for this method.
      * @param modifiers The modifiers for this method.
      */
-    public void setModifiers(ModifiersNode modifiers)
+    public void setModifiers(MethodModifiersNode modifiers)
     {
         if (this.modifiers instanceof NodeImpl)
         {

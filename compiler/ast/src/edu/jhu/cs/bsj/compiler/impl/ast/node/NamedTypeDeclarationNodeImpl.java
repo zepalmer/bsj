@@ -8,7 +8,6 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.JavadocNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.NamedTypeDeclarationNode;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
@@ -17,21 +16,16 @@ public abstract class NamedTypeDeclarationNodeImpl extends NodeImpl implements N
     /** The name of this declared type. */
     private IdentifierNode identifier;
 
-    /** The modifiers for this declared type. */
-    private ModifiersNode modifiers;
-
     /** The associated javadoc comment for this node. */
     private JavadocNode javadoc;
 
     /** General constructor. */
     protected NamedTypeDeclarationNodeImpl(
             IdentifierNode identifier,
-            ModifiersNode modifiers,
             JavadocNode javadoc)
     {
         super();
         this.identifier = identifier;
-        this.modifiers = modifiers;
         this.javadoc = javadoc;
     }
 
@@ -58,32 +52,6 @@ public abstract class NamedTypeDeclarationNodeImpl extends NodeImpl implements N
         if (this.identifier instanceof NodeImpl)
         {
             ((NodeImpl)this.identifier).setParent(this);
-        }
-    }
-
-    /**
-     * Gets the modifiers for this declared type.
-     * @return The modifiers for this declared type.
-     */
-    public ModifiersNode getModifiers()
-    {
-        return this.modifiers;
-    }
-
-    /**
-     * Changes the modifiers for this declared type.
-     * @param modifiers The modifiers for this declared type.
-     */
-    public void setModifiers(ModifiersNode modifiers)
-    {
-        if (this.modifiers instanceof NodeImpl)
-        {
-            ((NodeImpl)this.modifiers).setParent(null);
-        }
-        this.modifiers = modifiers;
-        if (this.modifiers instanceof NodeImpl)
-        {
-            ((NodeImpl)this.modifiers).setParent(this);
         }
     }
 
@@ -125,7 +93,6 @@ public abstract class NamedTypeDeclarationNodeImpl extends NodeImpl implements N
     {
         super.receiveToChildren(visitor);
         this.identifier.receive(visitor);
-        this.modifiers.receive(visitor);
         this.javadoc.receive(visitor);
     }
 
@@ -141,7 +108,6 @@ public abstract class NamedTypeDeclarationNodeImpl extends NodeImpl implements N
     {
         super.receiveTypedToChildren(visitor);
         this.identifier.receiveTyped(visitor);
-        this.modifiers.receiveTyped(visitor);
         this.javadoc.receiveTyped(visitor);
     }
 
@@ -171,7 +137,6 @@ public abstract class NamedTypeDeclarationNodeImpl extends NodeImpl implements N
     {
         List<Object> list = super.getChildObjects();
         list.add(this.identifier);
-        list.add(this.modifiers);
         list.add(this.javadoc);
         return list;
     }
@@ -187,9 +152,6 @@ public abstract class NamedTypeDeclarationNodeImpl extends NodeImpl implements N
         sb.append('[');
         sb.append("identifier=");
         sb.append(this.identifier == null? "null" : this.identifier.getClass().getSimpleName());
-        sb.append(',');
-        sb.append("modifiers=");
-        sb.append(this.modifiers == null? "null" : this.modifiers.getClass().getSimpleName());
         sb.append(',');
         sb.append("javadoc=");
         sb.append(this.javadoc == null? "null" : this.javadoc.getClass().getSimpleName());

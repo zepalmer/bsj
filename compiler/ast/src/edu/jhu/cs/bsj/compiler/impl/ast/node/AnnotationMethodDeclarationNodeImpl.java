@@ -7,17 +7,17 @@ import javax.annotation.Generated;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationMethodDeclarationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.AnnotationMethodModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationValueNode;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.JavadocNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements AnnotationMethodDeclarationNode
 {
     /** The modifiers for this annotation method. */
-    private ModifiersNode modifiers;
+    private AnnotationMethodModifiersNode modifiers;
 
     /** The return type of this annotation method. */
     private TypeNode type;
@@ -33,7 +33,7 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
 
     /** General constructor. */
     public AnnotationMethodDeclarationNodeImpl(
-            ModifiersNode modifiers,
+            AnnotationMethodModifiersNode modifiers,
             TypeNode type,
             IdentifierNode identifier,
             AnnotationValueNode defaultValue,
@@ -51,7 +51,7 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
      * Gets the modifiers for this annotation method.
      * @return The modifiers for this annotation method.
      */
-    public ModifiersNode getModifiers()
+    public AnnotationMethodModifiersNode getModifiers()
     {
         return this.modifiers;
     }
@@ -60,7 +60,7 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
      * Changes the modifiers for this annotation method.
      * @param modifiers The modifiers for this annotation method.
      */
-    public void setModifiers(ModifiersNode modifiers)
+    public void setModifiers(AnnotationMethodModifiersNode modifiers)
     {
         if (this.modifiers instanceof NodeImpl)
         {

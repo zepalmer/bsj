@@ -16,6 +16,18 @@ import javax.annotation.Generated;
 public interface EnumDeclarationNode extends NamedTypeDeclarationNode, InlineTypeDeclarableNode
 {
     /**
+     * Gets the modifiers for this type.
+     * @return The modifiers for this type.
+     */
+    public EnumModifiersNode getModifiers();
+
+    /**
+     * Changes the modifiers for this type.
+     * @param modifiers The modifiers for this type.
+     */
+    public void setModifiers(EnumModifiersNode modifiers);
+
+    /**
      * Gets the implements clause.
      * @return The implements clause.
      */

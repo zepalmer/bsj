@@ -8,15 +8,18 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.EnumBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.EnumDeclarationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.EnumModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.JavadocNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class EnumDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl implements EnumDeclarationNode
 {
+    /** The modifiers for this type. */
+    private EnumModifiersNode modifiers;
+
     /** The implements clause. */
     private ListNode<TypeNode> implementsClause;
 
@@ -25,15 +28,42 @@ public class EnumDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl implem
 
     /** General constructor. */
     public EnumDeclarationNodeImpl(
+            EnumModifiersNode modifiers,
             ListNode<TypeNode> implementsClause,
             EnumBodyNode body,
             IdentifierNode identifier,
-            ModifiersNode modifiers,
             JavadocNode javadoc)
     {
-        super(identifier, modifiers, javadoc);
+        super(identifier, javadoc);
+        this.modifiers = modifiers;
         this.implementsClause = implementsClause;
         this.body = body;
+    }
+
+    /**
+     * Gets the modifiers for this type.
+     * @return The modifiers for this type.
+     */
+    public EnumModifiersNode getModifiers()
+    {
+        return this.modifiers;
+    }
+
+    /**
+     * Changes the modifiers for this type.
+     * @param modifiers The modifiers for this type.
+     */
+    public void setModifiers(EnumModifiersNode modifiers)
+    {
+        if (this.modifiers instanceof NodeImpl)
+        {
+            ((NodeImpl)this.modifiers).setParent(null);
+        }
+        this.modifiers = modifiers;
+        if (this.modifiers instanceof NodeImpl)
+        {
+            ((NodeImpl)this.modifiers).setParent(this);
+        }
     }
 
     /**
@@ -99,6 +129,7 @@ public class EnumDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl implem
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
+        this.modifiers.receive(visitor);
         this.implementsClause.receive(visitor);
         this.body.receive(visitor);
     }
@@ -114,6 +145,7 @@ public class EnumDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl implem
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
+        this.modifiers.receiveTyped(visitor);
         this.implementsClause.receiveTyped(visitor);
         this.body.receiveTyped(visitor);
     }
@@ -145,6 +177,7 @@ public class EnumDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl implem
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
+        list.add(this.modifiers);
         list.add(this.implementsClause);
         list.add(this.body);
         return list;
@@ -159,6 +192,9 @@ public class EnumDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl implem
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
+        sb.append("modifiers=");
+        sb.append(this.modifiers == null? "null" : this.modifiers.getClass().getSimpleName());
+        sb.append(',');
         sb.append("implementsClause=");
         sb.append(this.implementsClause == null? "null" : this.implementsClause.getClass().getSimpleName());
         sb.append(',');

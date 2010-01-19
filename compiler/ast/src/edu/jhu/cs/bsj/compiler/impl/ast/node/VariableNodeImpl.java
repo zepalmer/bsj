@@ -7,15 +7,15 @@ import javax.annotation.Generated;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
+import edu.jhu.cs.bsj.compiler.ast.node.VariableModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableNode;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class VariableNodeImpl extends NodeImpl implements VariableNode
 {
     /** The modifiers of this parameter. */
-    private ModifiersNode modifiers;
+    private VariableModifiersNode modifiers;
 
     /** The type of the variable. */
     private TypeNode type;
@@ -25,7 +25,7 @@ public class VariableNodeImpl extends NodeImpl implements VariableNode
 
     /** General constructor. */
     public VariableNodeImpl(
-            ModifiersNode modifiers,
+            VariableModifiersNode modifiers,
             TypeNode type,
             IdentifierNode identifier)
     {
@@ -39,7 +39,7 @@ public class VariableNodeImpl extends NodeImpl implements VariableNode
      * Gets the modifiers of this parameter.
      * @return The modifiers of this parameter.
      */
-    public ModifiersNode getModifiers()
+    public VariableModifiersNode getModifiers()
     {
         return this.modifiers;
     }
@@ -48,7 +48,7 @@ public class VariableNodeImpl extends NodeImpl implements VariableNode
      * Changes the modifiers of this parameter.
      * @param modifiers The modifiers of this parameter.
      */
-    public void setModifiers(ModifiersNode modifiers)
+    public void setModifiers(VariableModifiersNode modifiers)
     {
         if (this.modifiers instanceof NodeImpl)
         {

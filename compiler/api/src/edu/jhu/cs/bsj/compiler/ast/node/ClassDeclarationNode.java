@@ -16,6 +16,18 @@ import javax.annotation.Generated;
 public interface ClassDeclarationNode extends NamedTypeDeclarationNode, InlineTypeDeclarableNode
 {
     /**
+     * Gets the modifiers for this type.
+     * @return The modifiers for this type.
+     */
+    public ClassModifiersNode getModifiers();
+
+    /**
+     * Changes the modifiers for this type.
+     * @param modifiers The modifiers for this type.
+     */
+    public void setModifiers(ClassModifiersNode modifiers);
+
+    /**
      * Gets the extends clause.
      * @return The extends clause.
      */

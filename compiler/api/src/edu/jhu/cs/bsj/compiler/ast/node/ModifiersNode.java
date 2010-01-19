@@ -1,14 +1,11 @@
 package edu.jhu.cs.bsj.compiler.ast.node;
 
-import java.util.Set;
-
 import javax.annotation.Generated;
-
-import edu.jhu.cs.bsj.compiler.ast.Modifier;
 
 /**
  * A node representing the modifiers applied to another node.  Modifiers may include flags (such as <tt>final</tt>
- * or <tt>strictfp</tt>) and annotations (such as <tt>@Override</tt>).
+ * or <tt>strictfp</tt>) and annotations (such as <tt>@Override</tt>).  Subclasses of this node dictate precisely
+ * which flags are permitted for their parent nodes.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public interface ModifiersNode extends Node
@@ -24,17 +21,5 @@ public interface ModifiersNode extends Node
      * @param annotations The annotations modifying the subject.
      */
     public void setAnnotations(ListNode<AnnotationNode> annotations);
-
-    /**
-     * Gets the modifiers set on the subject.
-     * @return The modifiers set on the subject.
-     */
-    public Set<Modifier> getFlags();
-
-    /**
-     * Changes the modifiers set on the subject.
-     * @param flags The modifiers set on the subject.
-     */
-    public void setFlags(Set<Modifier> flags);
 
 }

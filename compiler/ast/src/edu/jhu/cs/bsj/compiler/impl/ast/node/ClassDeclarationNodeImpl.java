@@ -8,16 +8,19 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassDeclarationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.ClassModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.JavadocNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeParameterNode;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class ClassDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl implements ClassDeclarationNode
 {
+    /** The modifiers for this type. */
+    private ClassModifiersNode modifiers;
+
     /** The extends clause. */
     private TypeNode extendsClause;
 
@@ -32,19 +35,46 @@ public class ClassDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl imple
 
     /** General constructor. */
     public ClassDeclarationNodeImpl(
+            ClassModifiersNode modifiers,
             TypeNode extendsClause,
             ListNode<TypeNode> implementsClause,
             ClassBodyNode body,
             ListNode<TypeParameterNode> typeParameters,
             IdentifierNode identifier,
-            ModifiersNode modifiers,
             JavadocNode javadoc)
     {
-        super(identifier, modifiers, javadoc);
+        super(identifier, javadoc);
+        this.modifiers = modifiers;
         this.extendsClause = extendsClause;
         this.implementsClause = implementsClause;
         this.body = body;
         this.typeParameters = typeParameters;
+    }
+
+    /**
+     * Gets the modifiers for this type.
+     * @return The modifiers for this type.
+     */
+    public ClassModifiersNode getModifiers()
+    {
+        return this.modifiers;
+    }
+
+    /**
+     * Changes the modifiers for this type.
+     * @param modifiers The modifiers for this type.
+     */
+    public void setModifiers(ClassModifiersNode modifiers)
+    {
+        if (this.modifiers instanceof NodeImpl)
+        {
+            ((NodeImpl)this.modifiers).setParent(null);
+        }
+        this.modifiers = modifiers;
+        if (this.modifiers instanceof NodeImpl)
+        {
+            ((NodeImpl)this.modifiers).setParent(this);
+        }
     }
 
     /**
@@ -162,6 +192,7 @@ public class ClassDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl imple
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
+        this.modifiers.receive(visitor);
         this.extendsClause.receive(visitor);
         this.implementsClause.receive(visitor);
         this.body.receive(visitor);
@@ -179,6 +210,7 @@ public class ClassDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl imple
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
+        this.modifiers.receiveTyped(visitor);
         this.extendsClause.receiveTyped(visitor);
         this.implementsClause.receiveTyped(visitor);
         this.body.receiveTyped(visitor);
@@ -212,6 +244,7 @@ public class ClassDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl imple
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
+        list.add(this.modifiers);
         list.add(this.extendsClause);
         list.add(this.implementsClause);
         list.add(this.body);
@@ -228,6 +261,9 @@ public class ClassDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl imple
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
+        sb.append("modifiers=");
+        sb.append(this.modifiers == null? "null" : this.modifiers.getClass().getSimpleName());
+        sb.append(',');
         sb.append("extendsClause=");
         sb.append(this.extendsClause == null? "null" : this.extendsClause.getClass().getSimpleName());
         sb.append(',');

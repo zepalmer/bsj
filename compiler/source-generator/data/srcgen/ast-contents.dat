@@ -230,6 +230,91 @@ SimpleNameNode :: NameNode
         sb.append(this.getCategory());
         sb.append(']');
 
+### Modifier Nodes ####################################################################################################
+
+AnnotationMethodModifiersNode :: ModifiersNode
+    @docs
+        Represents the modifiers which can be associated with an annotation method.  As all annotation methods are
+        implicitly <tt>public</tt> and <tt>abstract</tt> and these are the only legal modifiers, no flags exist for
+        annotation methods.
+
+AnnotationModifiersNode :: ModifiersNode
+    @props
+    access                  AccessModifier                              | the access for the associated annotation
+    staticFlag              boolean                                     | whether or not the associated annotation is static
+    strictfpFlag            boolean                                     | whether or not the associated annotation uses strict floating-point
+    @docs
+        Represents the modifiers which can be associated with an annotation.  While <tt>public</tt> and
+        <tt>abstract</tt> are syntactically legal modifiers, they are not included here because they are implicit to all
+        annotations.
+
+ClassModifiersNode :: ModifiersNode
+    @props
+    access                  AccessModifier                              | the access for the associated class
+    abstractFlag            boolean                                     | whether or not the associated class is abstract
+    staticFlag              boolean                                     | whether or not the associated class is static
+    finalFlag               boolean                                     | whether or not the associated class is final
+    strictfpFlag            boolean                                     | whether or not the associated class uses strict floating-point
+    @docs
+        Represents the modifiers which can be associated with a class.
+
+ConstructorModifiersNode :: ModifiersNode
+    @props
+    access                  AccessModifier                              | the access for the associated constructor
+    @docs
+        Represents the modifiers which can be associated with a constructor.
+        
+EnumModifiersNode :: ModifiersNode
+    @props
+    access                  AccessModifier                              | the access for the associated enum
+    strictfpFlag            boolean                                     | whether or not the associated enum uses strict floating-point
+    @docs
+        Represents the modifiers which can be associated with an enum.  The <tt>static</tt> modifier is syntactically
+        legal but also implicit, so it does not appear here.
+
+FieldModifiersNode :: ModifiersNode
+    @props
+    access                  AccessModifier                              | the access for the associated fields
+    staticFlag              boolean                                     | whether or not the associated class is static
+    finalFlag               boolean                                     | whether or not the associated class is final
+    transientFlag           boolean                                     | whether or not the associated class is transient
+    volatileFlag            boolean                                     | whether or not the associated class is volatile
+
+InterfaceModifiersNode :: ModifiersNode
+    @props
+    access                  AccessModifier                              | the access for the associated interface
+    staticFlag              boolean                                     | whether or not the associated interface is static
+    strictfpFlag            boolean                                     | whether or not the associated interface uses strict floating-point
+    @docs
+        Represents the modifiers which can be associated with an interface.  While <tt>public</tt> and <tt>abstract</tt>
+        are syntactically legal modifiers, they are not included here because they are implicit to all interfaces.
+
+MethodModifiersNode :: ModifiersNode
+    @props
+    access                  AccessModifier                              | the access for the associated method
+    abstractFlag            boolean                                     | whether or not the associated method is abstract
+    staticFlag              boolean                                     | whether or not the associated method is static
+    finalFlag               boolean                                     | whether or not the associated method is final
+    synchronizedFlag        boolean                                     | whether or not the associated method is synchronized
+    nativeFlag              boolean                                     | whether or not the associated method is native
+    strictfpFlag            boolean                                     | whether or not the associated method uses strict floating-point
+    @docs
+        Represents the modifiers which can be associated with a method.
+
+ModifiersNode* :: Node
+    @props
+    annotations             ListNode<AnnotationNode>                    | the annotations modifying the subject
+    @docs
+        A node representing the modifiers applied to another node.  Modifiers may include flags (such as <tt>final</tt>
+        or <tt>strictfp</tt>) and annotations (such as <tt>@Override</tt>).  Subclasses of this node dictate precisely
+        which flags are permitted for their parent nodes.
+
+VariableModifiersNode :: ModifiersNode
+    @props
+    finalFlag               boolean                                     | whether or not the associated variable is final
+    @docs
+        Represents the modifiers which can be associated with a variable.
+
 ### Expression Nodes ##################################################################################################
 
 ArrayAccessNode :: Node + RestrictedPrimaryExpressionNode
@@ -782,7 +867,7 @@ TryNode :: Node + StatementNode
 
 VariableDeclarationNode :: Node + StatementNode
     @props
-    modifiers               ModifiersNode                               | the modifiers for this variable
+    modifiers               VariableModifiersNode                       | the modifiers for this variable
     declarators             ListNode<VariableDeclaratorNode>            | the variable declarators for this node
     @docs
         A node for the declaration of a variable, as in:
@@ -922,7 +1007,7 @@ StringLiteralNode :: LiteralNode<String>
 
 AnnotationMethodDeclarationNode :: Node + AnnotationMemberNode
     @props
-    modifiers               ModifiersNode                               | the modifiers for this annotation method
+    modifiers               AnnotationMethodModifiersNode               | the modifiers for this annotation method
     type                    TypeNode                                    | the return type of this annotation method
     identifier              IdentifierNode                              | this annotation method's name
     defaultValue            AnnotationValueNode                         | the default value for this method
@@ -936,7 +1021,7 @@ AnnotationMethodDeclarationNode :: Node + AnnotationMemberNode
 ConstructorDeclarationNode :: Node + ClassMemberNode
     @props
     body                    ConstructorBodyNode                         | the body of this constructor
-    modifiers               ModifiersNode                               | the modifiers for this constructor
+    modifiers               ConstructorModifiersNode                    | the modifiers for this constructor
     parameters              ListNode<VariableNode>                      | the parameters declared by this constructor
     varargParameter         VariableNode                                | the vararg parameter declared by this method
     throwTypes              ListNode<UnparameterizedTypeNode>           | the types of exceptions thrown by this constructor
@@ -964,7 +1049,7 @@ EnumConstantDeclarationNode :: Node
 
 FieldDeclarationNode :: Node + ClassMemberNode, InterfaceMemberNode, AnnotationMemberNode, AnonymousClassMemberNode
     @props
-    modifiers               ModifiersNode                               | the modifiers for this field
+    modifiers               FieldModifiersNode                          | the modifiers for this field
     declarators             ListNode<VariableDeclaratorNode>            | the variable declarators for this node
     javadoc					JavadocNode									| the associated javadoc comment for this node
     @docs
@@ -978,7 +1063,7 @@ InitializerDeclarationNode :: Node + ClassMemberNode, AnonymousClassMemberNode
 MethodDeclarationNode :: Node + ClassMemberNode, InterfaceMemberNode, AnonymousClassMemberNode
     @props
     body                    BlockStatementNode                          | the body of this method
-    modifiers               ModifiersNode                               | the modifiers for this method
+    modifiers               MethodModifiersNode                         | the modifiers for this method
     identifier              IdentifierNode                              | this method's name
     parameters              ListNode<VariableNode>                      | the parameters declared by this method
     varargParameter         VariableNode                                | the vararg parameter declared by this method
@@ -1040,6 +1125,7 @@ InterfaceBodyNode :: Node
 
 AnnotationDeclarationNode :: NamedTypeDeclarationNode
     @props
+    modifiers               AnnotationModifiersNode                     | the modifiers for this type
     body                    AnnotationBodyNode                          | this annotation's body
     @docs
         Represents the declaration of an annotation, as in:
@@ -1053,6 +1139,7 @@ AnnotationDeclarationNode :: NamedTypeDeclarationNode
 
 ClassDeclarationNode :: NamedTypeDeclarationNode + InlineTypeDeclarableNode
     @props
+    modifiers               ClassModifiersNode                          | the modifiers for this type
     extendsClause           TypeNode                                    | the extends clause
     implementsClause        ListNode<TypeNode>                          | the implements clause
     body                    ClassBodyNode                               | the body of this class
@@ -1069,6 +1156,7 @@ ClassDeclarationNode :: NamedTypeDeclarationNode + InlineTypeDeclarableNode
         
 EnumDeclarationNode :: NamedTypeDeclarationNode + InlineTypeDeclarableNode
     @props
+    modifiers               EnumModifiersNode                           | the modifiers for this type
     implementsClause        ListNode<TypeNode>                          | the implements clause
     body                    EnumBodyNode                                | this enum's body
     @docs
@@ -1083,6 +1171,7 @@ EnumDeclarationNode :: NamedTypeDeclarationNode + InlineTypeDeclarableNode
 
 InterfaceDeclarationNode :: NamedTypeDeclarationNode
     @props
+    modifiers               InterfaceModifiersNode                      | the modifiers for this type
     extendsClause           ListNode<TypeNode>                          | the extends clause
     body                    InterfaceBodyNode                           | this interface's body
     typeParameters          ListNode<TypeParameterNode>                 | this class's type parameters
@@ -1112,7 +1201,6 @@ JavadocNode :: Node
 NamedTypeDeclarationNode* :: Node + TypeDeclarationNode
     @props
     identifier              IdentifierNode                              | the name of this declared type
-    modifiers               ModifiersNode                               | the modifiers for this declared type
     javadoc					JavadocNode									| the associated javadoc comment for this node
     @docs
         Acts as a superclass for all named type declarations.
@@ -1315,14 +1403,6 @@ ListNode<T extends Node> :: Node
 
 !set stopGen=
 
-ModifiersNode :: Node
-    @props
-    annotations             ListNode<AnnotationNode>                    | the annotations modifying the subject
-    flags                   Set<Modifier>                               | the modifiers set on the subject
-    @docs
-        A node representing the modifiers applied to another node.  Modifiers may include flags (such as <tt>final</tt>
-        or <tt>strictfp</tt>) and annotations (such as <tt>@Override</tt>).
-    
 Node*
     @props
     @include
@@ -1380,7 +1460,7 @@ TypeParameterNode :: Node
         
 VariableNode :: Node
     @props
-    modifiers               ModifiersNode                               | the modifiers of this parameter
+    modifiers               VariableModifiersNode                       | the modifiers of this parameter
     type                    TypeNode                                    | the type of the variable
     identifier              IdentifierNode                              | the name of the variable
     @docs

@@ -29,13 +29,13 @@ public interface ConstructorDeclarationNode extends Node, ClassMemberNode
      * Gets the modifiers for this constructor.
      * @return The modifiers for this constructor.
      */
-    public ModifiersNode getModifiers();
+    public ConstructorModifiersNode getModifiers();
 
     /**
      * Changes the modifiers for this constructor.
      * @param modifiers The modifiers for this constructor.
      */
-    public void setModifiers(ModifiersNode modifiers);
+    public void setModifiers(ConstructorModifiersNode modifiers);
 
     /**
      * Gets the parameters declared by this constructor.

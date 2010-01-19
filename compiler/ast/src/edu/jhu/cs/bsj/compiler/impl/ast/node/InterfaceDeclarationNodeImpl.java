@@ -9,15 +9,18 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.InterfaceBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.InterfaceDeclarationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.InterfaceModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.JavadocNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeParameterNode;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class InterfaceDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl implements InterfaceDeclarationNode
 {
+    /** The modifiers for this type. */
+    private InterfaceModifiersNode modifiers;
+
     /** The extends clause. */
     private ListNode<TypeNode> extendsClause;
 
@@ -29,17 +32,44 @@ public class InterfaceDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl i
 
     /** General constructor. */
     public InterfaceDeclarationNodeImpl(
+            InterfaceModifiersNode modifiers,
             ListNode<TypeNode> extendsClause,
             InterfaceBodyNode body,
             ListNode<TypeParameterNode> typeParameters,
             IdentifierNode identifier,
-            ModifiersNode modifiers,
             JavadocNode javadoc)
     {
-        super(identifier, modifiers, javadoc);
+        super(identifier, javadoc);
+        this.modifiers = modifiers;
         this.extendsClause = extendsClause;
         this.body = body;
         this.typeParameters = typeParameters;
+    }
+
+    /**
+     * Gets the modifiers for this type.
+     * @return The modifiers for this type.
+     */
+    public InterfaceModifiersNode getModifiers()
+    {
+        return this.modifiers;
+    }
+
+    /**
+     * Changes the modifiers for this type.
+     * @param modifiers The modifiers for this type.
+     */
+    public void setModifiers(InterfaceModifiersNode modifiers)
+    {
+        if (this.modifiers instanceof NodeImpl)
+        {
+            ((NodeImpl)this.modifiers).setParent(null);
+        }
+        this.modifiers = modifiers;
+        if (this.modifiers instanceof NodeImpl)
+        {
+            ((NodeImpl)this.modifiers).setParent(this);
+        }
     }
 
     /**
@@ -131,6 +161,7 @@ public class InterfaceDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl i
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
+        this.modifiers.receive(visitor);
         this.extendsClause.receive(visitor);
         this.body.receive(visitor);
         this.typeParameters.receive(visitor);
@@ -147,6 +178,7 @@ public class InterfaceDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl i
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
+        this.modifiers.receiveTyped(visitor);
         this.extendsClause.receiveTyped(visitor);
         this.body.receiveTyped(visitor);
         this.typeParameters.receiveTyped(visitor);
@@ -177,6 +209,7 @@ public class InterfaceDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl i
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
+        list.add(this.modifiers);
         list.add(this.extendsClause);
         list.add(this.body);
         list.add(this.typeParameters);
@@ -192,6 +225,9 @@ public class InterfaceDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl i
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
+        sb.append("modifiers=");
+        sb.append(this.modifiers == null? "null" : this.modifiers.getClass().getSimpleName());
+        sb.append(',');
         sb.append("extendsClause=");
         sb.append(this.extendsClause == null? "null" : this.extendsClause.getClass().getSimpleName());
         sb.append(',');

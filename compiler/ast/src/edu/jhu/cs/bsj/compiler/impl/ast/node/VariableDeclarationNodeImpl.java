@@ -7,22 +7,22 @@ import javax.annotation.Generated;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclaratorNode;
+import edu.jhu.cs.bsj.compiler.ast.node.VariableModifiersNode;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class VariableDeclarationNodeImpl extends NodeImpl implements VariableDeclarationNode
 {
     /** The modifiers for this variable. */
-    private ModifiersNode modifiers;
+    private VariableModifiersNode modifiers;
 
     /** The variable declarators for this node. */
     private ListNode<VariableDeclaratorNode> declarators;
 
     /** General constructor. */
     public VariableDeclarationNodeImpl(
-            ModifiersNode modifiers,
+            VariableModifiersNode modifiers,
             ListNode<VariableDeclaratorNode> declarators)
     {
         super();
@@ -34,7 +34,7 @@ public class VariableDeclarationNodeImpl extends NodeImpl implements VariableDec
      * Gets the modifiers for this variable.
      * @return The modifiers for this variable.
      */
-    public ModifiersNode getModifiers()
+    public VariableModifiersNode getModifiers()
     {
         return this.modifiers;
     }
@@ -43,7 +43,7 @@ public class VariableDeclarationNodeImpl extends NodeImpl implements VariableDec
      * Changes the modifiers for this variable.
      * @param modifiers The modifiers for this variable.
      */
-    public void setModifiers(ModifiersNode modifiers)
+    public void setModifiers(VariableModifiersNode modifiers)
     {
         if (this.modifiers instanceof NodeImpl)
         {
