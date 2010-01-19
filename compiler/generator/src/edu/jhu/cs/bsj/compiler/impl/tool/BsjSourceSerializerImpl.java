@@ -186,23 +186,25 @@ public class BsjSourceSerializerImpl implements BsjSourceSerializer
     public Void executeClassBodyNode(ClassBodyNode node, StringBuilder p)
     {
         // TODO Auto-generated method stub
+        
         return null;
     }
 
     @Override
     public Void executeClassDeclarationNode(ClassDeclarationNode node, StringBuilder p)
     {
-        // TODO Auto-generated method stub
         node.getModifiers().executeOperation(this, p);
         p.append("class ");
         node.getIdentifier().executeOperation(this, p);
-        p.append(" ");
+        handleListNode(node.getTypeParameters(), "<", ", ", ">", p, true);
         if (node.getExtendsClause() != null)
         {
-            node.getExtendsClause().executeOperation(this, p);
             p.append(" ");
+            node.getExtendsClause().executeOperation(this, p);
         }
-        handleListNode(node.getImplementsClause(), "", ", ", "", p);
+        handleListNode(node.getImplementsClause(), " ", ", ", "", p, true);
+        p.append("\n");
+        node.getBody().executeOperation(this, p);
         return null;
     }
 
@@ -254,9 +256,9 @@ public class BsjSourceSerializerImpl implements BsjSourceSerializer
     {
         node.getPackageDeclaration().executeOperation(this, p);
         p.append("\n\n");
-        handleListNode(node.getImports(), "", "\n", "\n", p);
+        handleListNode(node.getImports(), "", "\n", "\n", p, true);
         p.append("\n");
-        handleListNode(node.getTypeDecls(), "", "\n\n", "\n", p);
+        handleListNode(node.getTypeDecls(), "", "\n\n", "\n", p, true);
         return null;
     }
 
@@ -516,7 +518,7 @@ public class BsjSourceSerializerImpl implements BsjSourceSerializer
         // TODO done?
         
         // just call the utility method with some defaults
-        handleListNode(node, "", ",", "\n", p);
+        handleListNode(node, "", ",", "\n", p, false);
         return null;
     }
 
@@ -813,8 +815,13 @@ public class BsjSourceSerializerImpl implements BsjSourceSerializer
     }
     
     public void handleListNode(ListNode<? extends Node> node, 
-            String begin, String separator, String end, StringBuilder p)
+            String begin, String separator, String end, StringBuilder p, boolean doNothingIfEmpty)
     {
+        if (doNothingIfEmpty && node.getChildren().isEmpty())
+        {
+            return;
+        }
+        
         p.append(begin);
         boolean first = true;
         
