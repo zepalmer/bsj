@@ -3597,7 +3597,9 @@ intLiteral [boolean isNegative] returns [LiteralNode<?> ret]
                     (isNegative ? "-" : "") + ibr.string, ibr.base);
             } catch (NumberFormatException nfe)
             {
-                // TODO: report and handle error
+                exceptions.add(new InvalidIntegerLiteralException(
+                        getSourceLocation(-1),
+                        (isNegative?"-":"")+$INTLITERAL.text));
             }
             $ret = factory.makeIntLiteralNode(i);
         }
@@ -3617,7 +3619,9 @@ longLiteral [boolean isNegative] returns [LiteralNode<?> ret]
                     (isNegative ? "-" : "") + ibr.string, ibr.base);
             } catch (NumberFormatException nfe)
             {
-                // TODO: report and handle error
+                exceptions.add(new InvalidIntegerLiteralException(
+                        getSourceLocation(-1),
+                        (isNegative?"-":"")+$LONGLITERAL.text));
             }
             $ret = factory.makeLongLiteralNode(l);
         }    
