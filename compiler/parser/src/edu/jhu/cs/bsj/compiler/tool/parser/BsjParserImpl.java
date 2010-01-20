@@ -10,9 +10,9 @@ import org.antlr.runtime.TokenRewriteStream;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
-import edu.jhu.cs.bsj.compiler.error.BsjCompilerError;
-import edu.jhu.cs.bsj.compiler.error.BsjCompositeCompilerError;
-import edu.jhu.cs.bsj.compiler.error.parser.BsjParserError;
+import edu.jhu.cs.bsj.compiler.exception.BsjCompilerException;
+import edu.jhu.cs.bsj.compiler.exception.BsjCompositeCompilerException;
+import edu.jhu.cs.bsj.compiler.exception.parser.BsjParserException;
 import edu.jhu.cs.bsj.compiler.tool.parser.antlr.BsjAntlrLexer;
 import edu.jhu.cs.bsj.compiler.tool.parser.antlr.BsjAntlrParser;
 
@@ -47,7 +47,7 @@ public class BsjParserImpl
 	 * @throws IOException If an I/O error occurs.
 	 * @throws BsjCompositeCompilerError If one or more parse errors occur.
 	 */
-	public CompilationUnitNode parse(InputStream is) throws IOException, BsjParserError, BsjCompositeCompilerError
+	public CompilationUnitNode parse(InputStream is) throws IOException, BsjParserException, BsjCompositeCompilerException
 	{
 		BsjAntlrLexer lexer = new BsjAntlrLexer(new ANTLRInputStream(is));
 		BsjAntlrParser parser = new BsjAntlrParser(new TokenRewriteStream(lexer));
@@ -61,9 +61,9 @@ public class BsjParserImpl
 		{
 			throw new RuntimeException(re); // throw an exception of our own instead (to avoid passing ANTLR deps)
 		}
-		if (parser.getErrors().size()>0)
+		if (parser.getExceptions().size()>0)
 		{
-			throw new BsjCompositeCompilerError(new ArrayList<BsjCompilerError>(parser.getErrors()));
+			throw new BsjCompositeCompilerException(new ArrayList<BsjCompilerException>(parser.getExceptions()));
 		}
 		return compilationUnitNode;
 	}

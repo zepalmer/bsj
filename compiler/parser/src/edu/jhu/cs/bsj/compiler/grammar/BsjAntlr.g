@@ -105,8 +105,8 @@ options {
     import edu.jhu.cs.bsj.compiler.ast.node.*;
     import edu.jhu.cs.bsj.compiler.ast.node.meta.*;
     import edu.jhu.cs.bsj.compiler.ast.util.*;
-    import edu.jhu.cs.bsj.compiler.error.*;
-    import edu.jhu.cs.bsj.compiler.error.parser.*;
+    import edu.jhu.cs.bsj.compiler.exception.*;
+    import edu.jhu.cs.bsj.compiler.exception.parser.*;
     
     import edu.jhu.cs.bsj.compiler.tool.parser.antlr.util.BsjAntlrParserUtils;
 }
@@ -236,31 +236,31 @@ options {
             switch (state[mod.ordinal()])
             {
                 case DISALLOWED:
-                    errors.add(new InvalidModifierError(getSourceLocation(-1), mod.toString().toLowerCase()));
+                    exceptions.add(new InvalidModifierException(getSourceLocation(-1), mod.toString().toLowerCase()));
                     break;
                 case NOT_SEEN:
                     state[mod.ordinal()] = ModifierState.SEEN;
                     break;
                 case SEEN:
-                    errors.add(new DuplicateModifierError(getSourceLocation(-1), mod.toString().toLowerCase()));
+                    exceptions.add(new DuplicateModifierException(getSourceLocation(-1), mod.toString().toLowerCase()));
                     break;
             }
         }
     }
     
     // *** ERROR REPORTING AND HANDLING ***************************************
-    /** A list of errors which have occurred since this parser was created. */
-    private List<BsjParserError> errors = new ArrayList<BsjParserError>();
+    /** A list of exceptions which have occurred since this parser was created. */
+    private List<BsjParserException> exceptions = new ArrayList<BsjParserException>();
     
     /**
-     * Retrieves the list of errors that has been accumulated since the creation of this parser.  A standard use case
-     * for the BSJ ANTLR parser is to instantiate it, parse one source element, and then check this list.  If the list
-     * has a size of zero, it is safe to assume that everything went smoothly.
+     * Retrieves the list of exceptions that has been accumulated since the creation of this parser.  A standard use
+     * case for the BSJ ANTLR parser is to instantiate it, parse one source element, and then check this list.  If the
+     * list has a size of zero, it is safe to assume that everything went smoothly.
      * @return The list of errors this parser has accumulated.
      */
-    public List<BsjParserError> getErrors()
+    public List<BsjParserException> getExceptions()
     {
-        return this.errors;
+        return this.exceptions;
     }
     
     /**
@@ -545,10 +545,11 @@ modifiers[boolean accessAllowed, Modifier... mods]
                     {
                         if ($access == currentAccess)
                         {
-                            errors.add(new DuplicateModifierError(getSourceLocation(-1), currentAccess.toString().toLowerCase()));
+                            exceptions.add(new DuplicateModifierException(getSourceLocation(-1),
+                                    currentAccess.toString().toLowerCase()));
                         } else
                         {
-                            errors.add(new ConflictingAccessModifierError(getSourceLocation(-1),
+                            exceptions.add(new ConflictingAccessModifierException(getSourceLocation(-1),
                                     $access.toString().toLowerCase(),
                                     currentAccess.toString().toLowerCase()));
                         }

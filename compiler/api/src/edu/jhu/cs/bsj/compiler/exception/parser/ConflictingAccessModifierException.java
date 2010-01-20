@@ -1,4 +1,4 @@
-package edu.jhu.cs.bsj.compiler.error.parser;
+package edu.jhu.cs.bsj.compiler.exception.parser;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 
@@ -7,7 +7,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
  * declaring a method both "private" and "public").
  * @author Zachary Palmer
  */
-public class ConflictingAccessModifierError extends BsjParserError
+public class ConflictingAccessModifierException extends BsjParserException
 {
 	private static final long serialVersionUID = 1L;
 	
@@ -16,7 +16,7 @@ public class ConflictingAccessModifierError extends BsjParserError
 	/** The string indicating the second modifier which was used. */
 	private String secondModifierName;
 	
-	public ConflictingAccessModifierError(BsjSourceLocation location, String firstModifierName,
+	public ConflictingAccessModifierException(BsjSourceLocation location, String firstModifierName,
 			String secondModifierName)
 	{
 		super(location);
