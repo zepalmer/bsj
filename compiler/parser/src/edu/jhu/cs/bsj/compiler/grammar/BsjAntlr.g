@@ -273,13 +273,16 @@ options {
     {
         // TODO: more elaborate error handling: extract info from exception and create a non-ANTLR error object to be
         // provided to BSJ users through the API.
-        String hdr = getErrorHeader(e);
+        /*String hdr = getErrorHeader(e);
         String msg = getErrorMessage(e, tokenNames);
         ByteArrayOutputStream buffer = new ByteArrayOutputStream();
         PrintStream printStream = new PrintStream(buffer);
         e.printStackTrace(printStream);
         printStream.close();
-        logger.error(hdr+" "+msg+"\n"+buffer.toString());
+        logger.error(hdr+" "+msg+"\n"+buffer.toString());*/
+        BsjParserException bsjException =
+                BsjAntlrParserUtils.convertFromParser(e, tokenNames, getSourceLocation(-1), input.LT(-1));
+        exceptions.add(bsjException);
     }
 }
 

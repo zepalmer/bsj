@@ -250,7 +250,7 @@ public class AntlrAstViewer
 	{
 		properties.setProperty("size", ((int) (d.getWidth())) + "," + ((int) (d.getHeight())));
 	}
-	
+
 	private static void log4jConfigure(String level)
 	{
 		Properties loggingProperties = new Properties();
@@ -271,7 +271,7 @@ public class AntlrAstViewer
 		final JTextArea error = new JTextArea(6, 40);
 		error.setBorder(new TitledBorder(new LineBorder(Color.BLACK), "Error"));
 		error.setEditable(false);
-		final JComboBox logLevel = new JComboBox(new Object[]{"trace","debug"});
+		final JComboBox logLevel = new JComboBox(new Object[] { "trace", "debug" });
 		logLevel.setBorder(new TitledBorder(new LineBorder(Color.BLACK), "Log4J Level"));
 		logLevel.addItemListener(new ItemListener()
 		{
@@ -285,7 +285,7 @@ public class AntlrAstViewer
 			}
 		});
 		logLevel.setSelectedItem("debug");
-		
+
 		final JTextArea source = new JTextArea(8, 40);
 		source.setBorder(new TitledBorder(new LineBorder(Color.BLACK), "Source"));
 		JButton parse = new JButton("Parse");
@@ -296,7 +296,7 @@ public class AntlrAstViewer
 		JPanel treePanel = new JPanel(new BorderLayout());
 		treePanel.add(sp, BorderLayout.CENTER);
 		treePanel.setBorder(new TitledBorder(new LineBorder(Color.BLACK), "AST"));
-		
+
 		final JTextArea serializedSource = new JTextArea(13, 40);
 		serializedSource.setBorder(new TitledBorder(new LineBorder(Color.BLACK), "Serialized Source"));
 		serializedSource.setEditable(false);
@@ -306,11 +306,11 @@ public class AntlrAstViewer
 		leftMainPanel.setLayout(new BoxLayout(leftMainPanel, BoxLayout.Y_AXIS));
 		leftMainPanel.add(new JScrollPane(error));
 		leftMainPanel.add(new JScrollPane(source));
-		
+
 		JPanel leftPanel = new JPanel(new BorderLayout());
 		leftPanel.add(leftMainPanel, BorderLayout.CENTER);
 		leftPanel.add(logLevel, BorderLayout.SOUTH);
-		
+
 		JTabbedPane tabPanel = new JTabbedPane();
 		tabPanel.addTab("AST", treePanel);
 		tabPanel.addTab("Source", serializedSourceScrollPane);
@@ -338,15 +338,30 @@ public class AntlrAstViewer
 				PrependablePrintStream errorps = new PrependablePrintStream(errorBuffer, "    ", 0);
 				try
 				{
+					boolean errorShown = false;
 					setSource(source.getText());
 					saveProperties();
 
 					Node node = stringToAst(getSource());
-					String serializedSourceStr = node.executeOperation(new BsjSourceSerializerImpl(), null);
-					serializedSource.setText(serializedSourceStr);
-					
+					if (node != null)
+					{
+						try
+						{
+							String serializedSourceStr = node.executeOperation(new BsjSourceSerializerImpl(), null);
+							serializedSource.setText(serializedSourceStr);
+						} catch (Throwable t)
+						{
+							t.printStackTrace(errorps);
+							errorShown = true;
+						}
+					} else
+					{
+						serializedSource.setText("");
+					}
+
 					tree.setModel(new DefaultTreeModel(new SwingCommonTreeNode(null, node)));
-					errorps.println("(no error)");
+					if (!errorShown)
+						errorps.println("(no error)");
 					failure = false;
 				} catch (BsjCompositeCompilerException bcce)
 				{

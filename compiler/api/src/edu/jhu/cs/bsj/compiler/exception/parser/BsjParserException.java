@@ -19,6 +19,12 @@ public abstract class BsjParserException extends BsjCompilerException
 		super();
 		this.location = location;
 	}
+	
+	public BsjParserException(BsjSourceLocation location, Throwable cause)
+	{
+		super(cause);
+		this.location = location;
+	}
 
 	/**
 	 * Retrieves the location at which this error occurred.
