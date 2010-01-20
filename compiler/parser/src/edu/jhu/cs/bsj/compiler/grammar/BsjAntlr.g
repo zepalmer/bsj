@@ -3642,14 +3642,14 @@ lexicalLiteral returns [LiteralNode<?> ret]
         FLOATLITERAL
         {
             String s = $FLOATLITERAL.text;
-            s = s.substring(0,s.length()-1);
-            Float f = null;
+            Float f;
             try
             {
-                f = Float.parseFloat(s);
-            } catch (NumberFormatException nfe)
+                f = BsjAntlrParserUtils.parseFloat(s, getSourceLocation(-1));
+            } catch (BsjParserException e)
             {
-                // TODO: report and handle error
+                exceptions.add(e);
+                f = Float.NaN;
             }
             $ret = factory.makeFloatLiteralNode(f);
         }
@@ -3657,17 +3657,14 @@ lexicalLiteral returns [LiteralNode<?> ret]
         DOUBLELITERAL
         {
             String s = $DOUBLELITERAL.text;
-            if (s.endsWith("d") || s.endsWith("D"))
-            {
-                s = s.substring(0,s.length()-1);
-            }
-            Double d = null;
+            Double d;
             try
             {
-                d = Double.parseDouble(s);
-            } catch (NumberFormatException nfe)
+                d = BsjAntlrParserUtils.parseDouble(s, getSourceLocation(-1));
+            } catch (BsjParserException e)
             {
-                // TODO: report and handle error
+                exceptions.add(e);
+                d = Double.NaN;
             }
             $ret = factory.makeDoubleLiteralNode(d);
         }
