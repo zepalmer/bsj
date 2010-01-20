@@ -428,7 +428,7 @@ importDeclaration returns [ImportNode ret]
         }
     ;
 
-javadoc returns [JavadocNode ret]//TODO
+javadoc returns [JavadocNode ret] // TODO: parse out Javadoc contents
         @init{
             int index = input.index();
             while(--index >= 0)
