@@ -207,6 +207,11 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
     @Override
     public Void executeClassDeclarationNode(ClassDeclarationNode node, PrependablePrintStream p)
     {
+        if (node.getJavadoc() != null)
+        {
+            node.getJavadoc().executeOperation(this, p);
+            p.print("\n");
+        }
         node.getModifiers().executeOperation(this, p);
         p.print("class ");
         node.getIdentifier().executeOperation(this, p);
@@ -577,7 +582,11 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
     @Override
     public Void executeInterfaceDeclarationNode(InterfaceDeclarationNode node, PrependablePrintStream p)
     {
-        // TODO done?
+        if (node.getJavadoc() != null)
+        {
+            node.getJavadoc().executeOperation(this, p);
+            p.print("\n");
+        }
         node.getModifiers().executeOperation(this, p);
         p.print("interface ");
         node.getIdentifier().executeOperation(this, p);
