@@ -284,7 +284,15 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
     @Override
     public Void executeConstructorBodyNode(ConstructorBodyNode node, PrependablePrintStream p)
     {
-        // TODO Auto-generated method stub
+        p.print("{\n");
+        p.incPrependCount();
+        if (node.getConstructorInvocation() != null)
+        {
+            node.getConstructorInvocation().executeOperation(this, p);
+        }
+        handleListNode(node.getStatements(), "", ";\n", ";\n", p, true);
+        p.decPrependCount();
+        p.print("}\n");
         return null;
     }
 
@@ -298,10 +306,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
         }
         node.getModifiers().executeOperation(this, p);
         handleListNode(node.getTypeParameters(), "<", ", ", "> ", p, true);
-        
-        //TODO class name
-        p.print("ConstructorTODO");
-        
+        node.getIdentifier().executeOperation(this, p);        
         handleListNode(node.getParameters(), "(", ", ", "", p, false);
         if (node.getVarargParameter() != null)
         {
