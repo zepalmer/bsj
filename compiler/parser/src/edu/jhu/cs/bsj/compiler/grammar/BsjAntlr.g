@@ -543,7 +543,15 @@ modifiers[boolean accessAllowed, Modifier... mods]
                 {
                     if ($access != AccessModifier.PACKAGE)
                     {
-                        // TODO: error handling (duplicate or conflicting access modifier)
+                        if ($access == currentAccess)
+                        {
+                            errors.add(new DuplicateModifierError(getSourceLocation(-1), currentAccess.toString().toLowerCase()));
+                        } else
+                        {
+                            errors.add(new ConflictingAccessModifierError(getSourceLocation(-1),
+                                    $access.toString().toLowerCase(),
+                                    currentAccess.toString().toLowerCase()));
+                        }
                     } else
                     {
                         $access = currentAccess;
