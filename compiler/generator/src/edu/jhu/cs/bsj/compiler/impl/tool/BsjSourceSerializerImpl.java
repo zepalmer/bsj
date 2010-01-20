@@ -36,7 +36,7 @@ public class BsjSourceSerializerImpl extends BsjNodeOperationProxy<PrependablePr
 	protected PrependablePrintStream before(Void p)
 	{
 		this.buffer = new ByteArrayOutputStream();
-		this.ps = new PrependablePrintStream(buffer, "    ");
+		this.ps = new PrependablePrintStream(buffer, "    ", 0);
 		return this.ps;
 	}
 }
