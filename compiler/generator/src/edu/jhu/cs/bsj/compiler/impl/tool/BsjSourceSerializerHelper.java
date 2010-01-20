@@ -12,7 +12,9 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
     @Override
     public Void executeAlternateConstructorInvocationNode(AlternateConstructorInvocationNode node, PrependablePrintStream p)
     {
-        // TODO Auto-generated method stub
+        handleListNode(node.getTypeArguments(), "<", ", ", ">", p, true);
+        p.print("this");
+        handleListNode(node.getArguments(), "(", ", ", ")", p, false);
         return null;
     } 
 
@@ -289,6 +291,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
         if (node.getConstructorInvocation() != null)
         {
             node.getConstructorInvocation().executeOperation(this, p);
+            p.print(";\n");
         }
         handleListNode(node.getStatements(), "", ";\n", ";\n", p, true);
         p.decPrependCount();
@@ -329,7 +332,6 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
         {
             p.print(";");
         }
-        p.print("\n");
         return null;
     }
 
@@ -843,7 +845,16 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
     @Override
     public Void executeSuperclassConstructorInvocationNode(SuperclassConstructorInvocationNode node, PrependablePrintStream p)
     {
-        // TODO Auto-generated method stub
+        if (node.getQualifyingExpression() != null)
+        {
+            node.getQualifyingExpression().executeOperation(this, p);
+            p.print(".");
+        }
+        
+        handleListNode(node.getTypeArguments(), "<", ", ", ">", p, true);
+        p.print("super");
+        handleListNode(node.getArguments(), "(", ", ", ")", p, false);
+
         return null;
     }
 
