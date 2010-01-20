@@ -15,7 +15,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Iterator;
@@ -41,8 +40,11 @@ import javax.swing.tree.TreeNode;
 import org.apache.log4j.PropertyConfigurator;
 
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
+import edu.jhu.cs.bsj.compiler.exception.BsjCompilerException;
+import edu.jhu.cs.bsj.compiler.exception.BsjCompositeCompilerException;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeFactoryImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.BsjSourceSerializerImpl;
+import edu.jhu.cs.bsj.compiler.impl.utils.PrependablePrintStream;
 import edu.jhu.cs.bsj.compiler.tool.parser.BsjParserImpl;
 
 public class AntlrAstViewer
@@ -331,6 +333,9 @@ public class AntlrAstViewer
 		{
 			public void actionPerformed(ActionEvent event)
 			{
+				boolean failure;
+				ByteArrayOutputStream errorBuffer = new ByteArrayOutputStream();
+				PrependablePrintStream errorps = new PrependablePrintStream(errorBuffer, "    ", 0);
 				try
 				{
 					setSource(source.getText());
@@ -341,15 +346,31 @@ public class AntlrAstViewer
 					serializedSource.setText(serializedSourceStr);
 					
 					tree.setModel(new DefaultTreeModel(new SwingCommonTreeNode(null, node)));
-					error.setText("(no error)");
+					errorps.println("(no error)");
+					failure = false;
+				} catch (BsjCompositeCompilerException bcce)
+				{
+					bcce.printStackTrace(errorps);
+					errorps.println("containing " + bcce.getErrors().size() + " exceptions:");
+					errorps.incPrependCount();
+					for (BsjCompilerException e : bcce.getErrors())
+					{
+						errorps.println("including:");
+						errorps.incPrependCount();
+						e.printStackTrace(errorps);
+						errorps.decPrependCount();
+					}
+					errorps.decPrependCount();
+					failure = true;
 				} catch (Exception e)
 				{
-					ByteArrayOutputStream baos = new ByteArrayOutputStream();
-					PrintStream ps = new PrintStream(baos);
-					e.printStackTrace(ps);
-					ps.close();
-					String stackTrace = new String(baos.toByteArray());
-					error.setText(stackTrace);
+					e.printStackTrace(errorps);
+					failure = true;
+				}
+				errorps.close();
+				error.setText(errorBuffer.toString());
+				if (failure)
+				{
 					tree.setModel(new DefaultTreeModel(new DefaultMutableTreeNode()));
 				}
 			}
