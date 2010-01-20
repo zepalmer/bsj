@@ -886,9 +886,21 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
     @Override
     public Void executeVariableDeclarationNode(VariableDeclarationNode node, PrependablePrintStream p)
     {
-        node.getModifiers().executeOperation(this, p);
-        handleListNode(node.getDeclarators(), "", ", ", "", p, true);
-        //TODO done?
+        boolean first = true;
+        
+        for (Node item : node.getDeclarators().getChildren())
+        {
+            if (first)
+            {
+                first = false;
+            }
+            else
+            {
+                p.print(";\n");
+            }
+            node.getModifiers().executeOperation(this, p);            
+            item.executeOperation(this, p);
+        }
         return null;
     }
 
