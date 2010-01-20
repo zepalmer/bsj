@@ -60,6 +60,12 @@ options {
     memoize=true;
 }
 
+// this scope tracks information about the rule on top of the call stack
+scope Rule {
+    String name;
+    Token firstToken;
+}
+
 @lexer::header{
     package edu.jhu.cs.bsj.compiler.tool.parser.antlr;
 
@@ -275,6 +281,15 @@ options {
                 BsjAntlrParserUtils.convertFromParser(e, tokenNames, getSourceLocation(-1), input.LT(-1));
         exceptions.add(bsjException);
     }
+    
+    // *** RULE AOP METHODS ***************************************************
+    private void ruleStart(String ruleName)
+    {
+    }
+    
+    private void ruleStop()
+    {
+    }
 }
 
 
@@ -292,9 +307,14 @@ options {
 // indicators, an in/out type is also required.  This construct is necessary on its own to support the multiple
 // declaration sugar ("int x,y;").
 variableDeclarator[TypeNode inType] returns [VariableDeclaratorNode ret]
+        scope Rule;
         @init {
+            ruleStart("variableDeclarator");
             TypeNode type = inType;
             VariableInitializerNode initializer = null;
+        }
+        @after {
+            ruleStop();
         }
     :
         id=identifier
@@ -325,6 +345,13 @@ variableDeclarator[TypeNode inType] returns [VariableDeclaratorNode ret]
 // symbols and the modification of a type.  Note that this rule must parse at least one pair of brackets; thus, it
 // should be optional anywhere that a non-array type is permissible.
 arrayTypeIndicator[TypeNode inType] returns [ArrayTypeNode ret]
+        scope Rule;
+        @init {
+            ruleStart("arrayTypeIndicator");
+        }
+        @after {
+            ruleStop();
+        }
     :
         '[' ']'
         {
@@ -341,6 +368,13 @@ arrayTypeIndicator[TypeNode inType] returns [ArrayTypeNode ret]
 /** These are the actual grammar rules. */
 
 compilationUnit returns [CompilationUnitNode ret]
+        scope Rule;
+        @init {
+            ruleStart("compilationUnit");
+        }
+        @after {
+            ruleStop();
+        }
     :
         packageDeclaration?
         importDeclarations
@@ -355,10 +389,15 @@ compilationUnit returns [CompilationUnitNode ret]
     ;
 
 packageDeclaration returns [PackageDeclarationNode ret]
-    @init{
-        ListNode<AnnotationNode> annotationsNode = 
-            factory.makeListNode(Collections.<AnnotationNode>emptyList());
-    }
+        scope Rule;
+        @init{
+            ruleStart("packageDeclaration");
+            ListNode<AnnotationNode> annotationsNode = 
+                factory.makeListNode(Collections.<AnnotationNode>emptyList());
+        }
+        @after {
+            ruleStop();
+        }
     :
         (
             annotations
@@ -375,11 +414,14 @@ packageDeclaration returns [PackageDeclarationNode ret]
     ;
 
 importDeclarations returns [ListNode<ImportNode> ret]
+        scope Rule;
         @init {
+            ruleStart("importDeclarations");
             List<ImportNode> list = new ArrayList<ImportNode>();
         }
         @after {
             $ret = factory.<ImportNode>makeListNode(list);
+            ruleStop();
         }
     :
         (
@@ -391,9 +433,14 @@ importDeclarations returns [ListNode<ImportNode> ret]
     ;
 
 importDeclaration returns [ImportNode ret]
+        scope Rule;
         @init {
+            ruleStart("importDeclaration");
             boolean staticImport = false;
             boolean onDemand = false;
+        }
+        @after {
+            ruleStop();
         }
     :   
         'import'
@@ -423,7 +470,9 @@ importDeclaration returns [ImportNode ret]
     ;
 
 javadoc returns [JavadocNode ret] // TODO: parse out Javadoc contents
+        scope Rule;
         @init{
+            ruleStart("javadoc");
             int index = input.index();
             while(--index >= 0)
             {
@@ -438,15 +487,21 @@ javadoc returns [JavadocNode ret] // TODO: parse out Javadoc contents
 	            }       
             }
         }
+        @after {
+            ruleStop();
+        }
     :
     ;
 
 typeDeclarations returns [ListNode<TypeDeclarationNode> ret]
+        scope Rule;
         @init {
+            ruleStart("typeDeclarations");
             List<TypeDeclarationNode> list = new ArrayList<TypeDeclarationNode>();
         }
         @after {
             $ret = factory.<TypeDeclarationNode>makeListNode(list);
+            ruleStop();
         }
     :
         (
@@ -458,6 +513,13 @@ typeDeclarations returns [ListNode<TypeDeclarationNode> ret]
     ;
 
 typeDeclaration returns [TypeDeclarationNode ret]
+        scope Rule;
+        @init {
+            ruleStart("typeDeclaration");
+        }
+        @after {
+            ruleStop();
+        }
     :
         classOrInterfaceDeclaration
         {
@@ -471,6 +533,13 @@ typeDeclaration returns [TypeDeclarationNode ret]
     ;
 
 voidTypeDeclaration returns [VoidTypeDeclarationNode ret]
+        scope Rule;
+        @init {
+            ruleStart("voidTypeDeclaration");
+        }
+        @after {
+            ruleStop();
+        }
     :
         ';'
         {
@@ -479,6 +548,13 @@ voidTypeDeclaration returns [VoidTypeDeclarationNode ret]
     ;
 
 classOrInterfaceDeclaration returns [TypeDeclarationNode ret]
+        scope Rule;
+        @init {
+            ruleStart("classOrInterfaceDeclaration");
+        }
+        @after {
+            ruleStop();
+        }
     :
         (classHeader | enumHeader) => classDeclaration
         {
@@ -496,7 +572,9 @@ classOrInterfaceDeclaration returns [TypeDeclarationNode ret]
 // * a list of those modifiers which are allowed
 modifiers[boolean accessAllowed, Modifier... mods]
     returns [ModifierSet modifiers, AccessModifier access, ListNode<AnnotationNode> annotations]
+        scope Rule;
         @init {
+            ruleStart("classOrInterfaceDeclaration");
             List<AnnotationNode> annotationList = new ArrayList<AnnotationNode>();
             $access = AccessModifier.PACKAGE;
             $modifiers = new ModifierSet(mods);
@@ -505,6 +583,7 @@ modifiers[boolean accessAllowed, Modifier... mods]
         }
         @after {
             $annotations = factory.makeListNode(annotationList);
+            ruleStop();
         }
     :
         (
@@ -600,6 +679,13 @@ modifiers[boolean accessAllowed, Modifier... mods]
     ;
 
 annotationMethodModifiers returns [AnnotationMethodModifiersNode ret]
+        scope Rule;
+        @init {
+            ruleStart("annotationMethodModifiers");
+        }
+        @after {
+            ruleStop();
+        }
     :
         modifiers[false, Modifier.PUBLIC, Modifier.ABSTRACT]
         {
@@ -608,6 +694,13 @@ annotationMethodModifiers returns [AnnotationMethodModifiersNode ret]
     ;
 
 annotationModifiers returns [AnnotationModifiersNode ret]
+        scope Rule;
+        @init {
+            ruleStart("annotationModifiers");
+        }
+        @after {
+            ruleStop();
+        }
     :
         modifiers[true, Modifier.ABSTRACT, Modifier.STATIC, Modifier.STRICTFP]
         {
@@ -620,6 +713,13 @@ annotationModifiers returns [AnnotationModifiersNode ret]
     ;
     
 classModifiers returns [ClassModifiersNode ret]
+        scope Rule;
+        @init {
+            ruleStart("classModifiers");
+        }
+        @after {
+            ruleStop();
+        }
     :
         modifiers[true, Modifier.ABSTRACT, Modifier.STATIC, Modifier.FINAL, Modifier.STRICTFP]
         {
@@ -634,6 +734,13 @@ classModifiers returns [ClassModifiersNode ret]
     ;
     
 constructorModifiers returns [ConstructorModifiersNode ret]
+        scope Rule;
+        @init {
+            ruleStart("constructorModifiers");
+        }
+        @after {
+            ruleStop();
+        }
     :
         modifiers[true]
         {
@@ -642,6 +749,13 @@ constructorModifiers returns [ConstructorModifiersNode ret]
     ;
     
 enumModifiers returns [EnumModifiersNode ret]
+        scope Rule;
+        @init {
+            ruleStart("enumModifiers");
+        }
+        @after {
+            ruleStop();
+        }
     :
         modifiers[true, Modifier.STATIC, Modifier.STRICTFP]
         {
@@ -653,6 +767,13 @@ enumModifiers returns [EnumModifiersNode ret]
     ;
     
 fieldModifiers returns [FieldModifiersNode ret]
+        scope Rule;
+        @init {
+            ruleStart("fieldModifiers");
+        }
+        @after {
+            ruleStop();
+        }
     :
         modifiers[true, Modifier.STATIC, Modifier.FINAL, Modifier.TRANSIENT, Modifier.VOLATILE]
         {
@@ -667,6 +788,13 @@ fieldModifiers returns [FieldModifiersNode ret]
     ;
     
 interfaceModifiers returns [InterfaceModifiersNode ret]
+        scope Rule;
+        @init {
+            ruleStart("interfaceModifiers");
+        }
+        @after {
+            ruleStop();
+        }
     :
         modifiers[true, Modifier.ABSTRACT, Modifier.STATIC, Modifier.STRICTFP]
         {
@@ -679,6 +807,13 @@ interfaceModifiers returns [InterfaceModifiersNode ret]
     ;
     
 methodModifiers returns [MethodModifiersNode ret]
+        scope Rule;
+        @init {
+            ruleStart("methodModifiers");
+        }
+        @after {
+            ruleStop();
+        }
     :
         modifiers[true, Modifier.ABSTRACT, Modifier.STATIC, Modifier.FINAL, Modifier.SYNCHRONIZED, Modifier.NATIVE,
             Modifier.STRICTFP]
@@ -696,6 +831,13 @@ methodModifiers returns [MethodModifiersNode ret]
     ;
     
 variableModifiers returns [VariableModifiersNode ret]
+        scope Rule;
+        @init {
+            ruleStart("variableModifiers");
+        }
+        @after {
+            ruleStop();
+        }
     :
         modifiers[false, Modifier.FINAL]
         {
@@ -706,6 +848,13 @@ variableModifiers returns [VariableModifiersNode ret]
     ;
 
 classDeclaration returns [InlineTypeDeclarableNode ret] 
+        scope Rule;
+        @init {
+            ruleStart("classDeclaration");
+        }
+        @after {
+            ruleStop();
+        }
     :
         (classHeader)=>normalClassDeclaration
         {
@@ -719,10 +868,15 @@ classDeclaration returns [InlineTypeDeclarableNode ret]
     ;
 
 normalClassDeclaration returns [ClassDeclarationNode ret]
+        scope Rule;
         @init {
+            ruleStart("normalClassDeclaration");
             ListNode<TypeNode> typeListNode = factory.makeListNode(new ArrayList<TypeNode>());
             ListNode<TypeParameterNode> typeParamsNode = factory.makeListNode(new ArrayList<TypeParameterNode>());
         }         
+        @after {
+            ruleStop();
+        }
     :   
         javadoc classModifiers
         'class' id=identifier
@@ -754,11 +908,14 @@ normalClassDeclaration returns [ClassDeclarationNode ret]
 
 
 typeParameters returns [ListNode<TypeParameterNode> ret]
+        scope Rule;
         @init {
-                List<TypeParameterNode> list = new ArrayList<TypeParameterNode>();
+            ruleStart("typeParameters");
+            List<TypeParameterNode> list = new ArrayList<TypeParameterNode>();
         }
         @after {
-                $ret = factory.<TypeParameterNode>makeListNode(list);
+            $ret = factory.<TypeParameterNode>makeListNode(list);
+            ruleStop();
         }
     :   
         '<'
@@ -776,8 +933,13 @@ typeParameters returns [ListNode<TypeParameterNode> ret]
 
 
 typeParameter returns [TypeParameterNode ret]
+        scope Rule;
         @init {
+            ruleStart("typeParameter");
             ListNode<DeclaredTypeNode> typeBoundNode = factory.makeListNode(Collections.<DeclaredTypeNode>emptyList());
+        }
+        @after {
+            ruleStop();
         }
     :   
         id=identifier
@@ -796,11 +958,14 @@ typeParameter returns [TypeParameterNode ret]
 
 
 typeBound returns [ListNode<DeclaredTypeNode> ret]
+        scope Rule;
         @init {
+            ruleStart("typeBound");
             List<DeclaredTypeNode> list = new ArrayList<DeclaredTypeNode>();
         }
         @after {
             $ret = factory.makeListNode(list);
+            ruleStop();
         }
     :   
         a=classOrInterfaceType
@@ -817,9 +982,14 @@ typeBound returns [ListNode<DeclaredTypeNode> ret]
 
 
 enumDeclaration returns [EnumDeclarationNode ret]
+        scope Rule;
         @init {
+            ruleStart("enumDeclaration");
             ListNode<TypeNode> typeListNode = factory.makeListNode(new ArrayList<TypeNode>());
         } 
+        @after {
+            ruleStop();
+        }
     :   
         javadoc enumModifiers
         'enum' 
@@ -843,11 +1013,16 @@ enumDeclaration returns [EnumDeclarationNode ret]
 
 
 enumBody returns [EnumBodyNode ret]
+        scope Rule;
         @init {
+            ruleStart("enumBody");
             ListNode<EnumConstantDeclarationNode> enumConstantsNode = factory.makeListNode(
                     Collections.<EnumConstantDeclarationNode>emptyList());
             ListNode<ClassMemberNode> enumBodyDeclarationsNode =
                     factory.makeListNode(Collections.<ClassMemberNode>emptyList());
+        }
+        @after {
+            ruleStop();
         }
     :   
         '{'
@@ -873,11 +1048,14 @@ enumBody returns [EnumBodyNode ret]
     ;
 
 enumConstants returns [ListNode<EnumConstantDeclarationNode> ret]
+        scope Rule;
         @init {
+            ruleStart("enumConstants");
             List<EnumConstantDeclarationNode> list = new ArrayList<EnumConstantDeclarationNode>();
         }
         @after {
             $ret = factory.<EnumConstantDeclarationNode>makeListNode(list);
+            ruleStop();
         }
     :
         a=enumConstant
@@ -894,10 +1072,15 @@ enumConstants returns [ListNode<EnumConstantDeclarationNode> ret]
     ;
 
 enumConstant returns [EnumConstantDeclarationNode ret]
+        scope Rule;
         @init {
+            ruleStart("enumConstant");
             ListNode<AnnotationNode> annotationsNode = factory.makeListNode(Collections.<AnnotationNode>emptyList());
             ListNode<ExpressionNode> argumentsNode = factory.makeListNode(Collections.<ExpressionNode>emptyList());
             AnonymousClassBodyNode anonymousClassBodyNode = null;
+        }
+        @after {
+            ruleStop();
         }
     :   
         javadoc
@@ -931,11 +1114,14 @@ enumConstant returns [EnumConstantDeclarationNode ret]
     ;
 
 enumBodyDeclarations returns [ListNode<ClassMemberNode> ret]
+        scope Rule;
         @init {
+            ruleStart("enumBodyDeclarations");
             List<ClassMemberNode> list = new ArrayList<ClassMemberNode>();
         }
         @after {
             $ret = factory.makeListNode(list);
+            ruleStop();
         }
     :
         ';'
@@ -949,6 +1135,13 @@ enumBodyDeclarations returns [ListNode<ClassMemberNode> ret]
 
 
 interfaceDeclaration returns [TypeDeclarationNode ret] 
+        scope Rule;
+        @init {
+            ruleStart("interfaceDeclaration");
+        }
+        @after {
+            ruleStop();
+        }
     :   
         (interfaceHeader)=>a=normalInterfaceDeclaration
         {
@@ -962,10 +1155,15 @@ interfaceDeclaration returns [TypeDeclarationNode ret]
     ;
     
 normalInterfaceDeclaration returns [InterfaceDeclarationNode ret]
+        scope Rule;
         @init {
+            ruleStart("normalInterfaceDeclaration");
             ListNode<TypeNode> typeListNode = factory.makeListNode(new ArrayList<TypeNode>());
             ListNode<TypeParameterNode> typeParamsNode = factory.makeListNode(new ArrayList<TypeParameterNode>());
         } 
+        @after {
+            ruleStop();
+        }
     :   
         javadoc interfaceModifiers
         'interface' id=identifier
@@ -994,11 +1192,14 @@ normalInterfaceDeclaration returns [InterfaceDeclarationNode ret]
     ;
 
 typeList returns [ListNode<TypeNode> ret]
+        scope Rule;
         @init {
+            ruleStart("typeList");
             List<TypeNode> list = new ArrayList<TypeNode>();
         }
         @after {
             $ret = factory.<TypeNode>makeListNode(list);
+            ruleStop();
         }
     :   
         a=type
@@ -1014,11 +1215,14 @@ typeList returns [ListNode<TypeNode> ret]
     ;
 
 classBody returns [ClassBodyNode ret]
+        scope Rule;
         @init {
-                List<ClassMemberNode> list = new ArrayList<ClassMemberNode>();
+            ruleStart("classBody");
+            List<ClassMemberNode> list = new ArrayList<ClassMemberNode>();
         }
         @after {
-                $ret = factory.makeClassBodyNode(factory.makeListNode(list));
+            $ret = factory.makeClassBodyNode(factory.makeListNode(list));
+            ruleStop();
         }
     :   
         '{' 
@@ -1032,11 +1236,14 @@ classBody returns [ClassBodyNode ret]
     ;
 
 anonymousClassBody returns [AnonymousClassBodyNode ret]
+        scope Rule;
         @init {
-                List<AnonymousClassMemberNode> list = new ArrayList<AnonymousClassMemberNode>();
+            ruleStart("anonymousClassBody");
+            List<AnonymousClassMemberNode> list = new ArrayList<AnonymousClassMemberNode>();
         }
         @after {
-                $ret = factory.makeAnonymousClassBodyNode(factory.makeListNode(list));
+            $ret = factory.makeAnonymousClassBodyNode(factory.makeListNode(list));
+            ruleStop();
         }
     :   
         '{' 
@@ -1050,11 +1257,14 @@ anonymousClassBody returns [AnonymousClassBodyNode ret]
     ;
 
 interfaceBody returns [InterfaceBodyNode ret]
+        scope Rule;
         @init {
-                List<InterfaceMemberNode> list = new ArrayList<InterfaceMemberNode>();
+            ruleStart("interfaceBody");
+            List<InterfaceMemberNode> list = new ArrayList<InterfaceMemberNode>();
         }
         @after {
-                $ret = factory.makeInterfaceBodyNode(factory.makeListNode(list));
+            $ret = factory.makeInterfaceBodyNode(factory.makeListNode(list));
+            ruleStop();
         }
     :   
         '{' 
@@ -1068,6 +1278,13 @@ interfaceBody returns [InterfaceBodyNode ret]
     ;
 
 initializerBlock returns [InitializerDeclarationNode ret]
+        scope Rule;
+        @init {
+            ruleStart("initializerBlock");
+        }
+        @after {
+            ruleStop();
+        }
     :
         staticText='static'?
         block
@@ -1079,6 +1296,13 @@ initializerBlock returns [InitializerDeclarationNode ret]
     ;
     
 classBodyDeclaration returns [ClassMemberNode ret]
+        scope Rule;
+        @init {
+            ruleStart("classBodyDeclaration");
+        }
+        @after {
+            ruleStop();
+        }
     :
         voidTypeDeclaration
         {
@@ -1102,6 +1326,13 @@ classBodyDeclaration returns [ClassMemberNode ret]
     ;
 
 anonymousClassBodyDeclaration returns [AnonymousClassMemberNode ret]
+        scope Rule;
+        @init {
+            ruleStart("anonymousClassBodyDeclaration");
+        }
+        @after {
+            ruleStop();
+        }
     :
         voidTypeDeclaration
         {
@@ -1120,6 +1351,13 @@ anonymousClassBodyDeclaration returns [AnonymousClassMemberNode ret]
     ;
 
 memberDecl returns [AnonymousClassMemberNode ret]
+        scope Rule;
+        @init {
+            ruleStart("memberDecl");
+        }
+        @after {
+            ruleStop();
+        }
     :    
         (fieldHeader)=>fieldDeclaration
         {
@@ -1143,6 +1381,13 @@ memberDecl returns [AnonymousClassMemberNode ret]
     ;
 
 methodReturnType returns [TypeNode ret]
+        scope Rule;
+        @init {
+            ruleStart("methodReturnType");
+        }
+        @after {
+            ruleStop();
+        }
     :
         type
         {
@@ -1156,10 +1401,15 @@ methodReturnType returns [TypeNode ret]
     ;
 
 constructorDeclaration returns [ConstructorDeclarationNode ret]
+        scope Rule;
         @init {
+            ruleStart("constructorDeclaration");
             ListNode<TypeParameterNode> typeParametersNode =
                     factory.makeListNode(Collections.<TypeParameterNode>emptyList());
             ListNode<UnparameterizedTypeNode> throwsNode = factory.makeListNode(Collections.<UnparameterizedTypeNode>emptyList());
+        }
+        @after {
+            ruleStop();
         }
     :
         javadoc constructorModifiers
@@ -1192,7 +1442,9 @@ constructorDeclaration returns [ConstructorDeclarationNode ret]
     ;
 
 constructorBody returns [ConstructorBodyNode ret]
+        scope Rule;
         @init {
+            ruleStart("constructorBody");
             List<StatementNode> list = new ArrayList<StatementNode>();
             ConstructorInvocationNode constructorInvocationNode = null;
         }
@@ -1200,6 +1452,7 @@ constructorBody returns [ConstructorBodyNode ret]
             $ret = factory.makeConstructorBodyNode(
                     constructorInvocationNode,
                     factory.makeListNode(list));
+            ruleStop();
         }
     :
         '{' 
@@ -1219,12 +1472,17 @@ constructorBody returns [ConstructorBodyNode ret]
     ;
 
 methodDeclaration returns [MethodDeclarationNode ret]
+        scope Rule;
         @init {
+            ruleStart("methodDeclaration");
             BlockStatementNode blockStatementNode = null;
             ListNode<TypeParameterNode> typeParametersNode =
                     factory.makeListNode(Collections.<TypeParameterNode>emptyList());
             ListNode<UnparameterizedTypeNode> throwsNode = factory.makeListNode(Collections.<UnparameterizedTypeNode>emptyList());
             TypeNode returnTypeNode = null;
+        }
+        @after {
+            ruleStop();
         }
     :
         javadoc methodModifiers
@@ -1275,8 +1533,13 @@ methodDeclaration returns [MethodDeclarationNode ret]
     ;
 
 fieldDeclaration returns [FieldDeclarationNode ret]
+        scope Rule;
         @init {
+            ruleStart("fieldDeclaration");
             List<VariableDeclaratorNode> list = new ArrayList<VariableDeclaratorNode>();
+        }
+        @after {
+            ruleStop();
         }
     :   
         javadoc fieldModifiers
@@ -1301,6 +1564,13 @@ fieldDeclaration returns [FieldDeclarationNode ret]
     ;
 
 interfaceBodyDeclaration returns [InterfaceMemberNode ret]
+        scope Rule;
+        @init {
+            ruleStart("interfaceBodyDeclaration");
+        }
+        @after {
+            ruleStop();
+        }
     :
         interfaceFieldDeclaration
         {
@@ -1329,9 +1599,14 @@ interfaceBodyDeclaration returns [InterfaceMemberNode ret]
     ;
 
 interfaceMethodDeclaration returns [MethodDeclarationNode ret]
+        scope Rule;
         @init {
+            ruleStart("interfaceMethodDeclaration");
             TypeNode returnTypeNode = null;
             ListNode<UnparameterizedTypeNode> throwsNode = factory.makeListNode(Collections.<UnparameterizedTypeNode>emptyList());
+        }
+        @after {
+            ruleStop();
         }
     :   
         javadoc methodModifiers
@@ -1370,6 +1645,13 @@ interfaceMethodDeclaration returns [MethodDeclarationNode ret]
     ;
 
 interfaceFieldDeclaration returns [FieldDeclarationNode ret]
+        scope Rule;
+        @init {
+            ruleStart("interfaceFieldDeclaration");
+        }
+        @after {
+            ruleStop();
+        }
     :   
         fieldDeclaration
         {
@@ -1378,11 +1660,14 @@ interfaceFieldDeclaration returns [FieldDeclarationNode ret]
     ;
 
 throwsClause returns [ListNode<UnparameterizedTypeNode> ret]
+        scope Rule;
         @init {
+            ruleStart("throwsClause");
             List<UnparameterizedTypeNode> list = new ArrayList<UnparameterizedTypeNode>();
         }
         @after {
             $ret = factory.makeListNode(list);
+            ruleStop();
         }
     :
         THROWS
@@ -1399,6 +1684,13 @@ throwsClause returns [ListNode<UnparameterizedTypeNode> ret]
     ;
 
 nonprimitiveType returns [ReferenceTypeNode ret]
+        scope Rule;
+        @init {
+            ruleStart("nonprimitiveType");
+        }
+        @after {
+            ruleStop();
+        }
     :
         classOrInterfaceType
         {
@@ -1421,6 +1713,13 @@ nonprimitiveType returns [ReferenceTypeNode ret]
 //     Map.Entry<K,V>
 //     List<String>[] (even though this generates a warning later)
 type returns [TypeNode ret]
+        scope Rule;
+        @init {
+            ruleStart("type");
+        }
+        @after {
+            ruleStop();
+        }
     :   
         (
             classOrInterfaceType
@@ -1449,9 +1748,14 @@ type returns [TypeNode ret]
 // Note that the legal types can get pretty complex, as in
 //     A<X,Y>.B.C<Z>.D
 classOrInterfaceType returns [DeclaredTypeNode ret]
+        scope Rule;
         @init {
+            ruleStart("classOrInterfaceType");
             UnparameterizedTypeNode unparameterizedTypeNode = null;
             ParameterizedTypeNode parameterizedTypeNode = null;
+        }
+        @after {
+            ruleStop();
         }
     :
         typeName
@@ -1480,11 +1784,14 @@ classOrInterfaceType returns [DeclaredTypeNode ret]
 // this rule matches
 //     boolean
 primitiveType returns [PrimitiveTypeNode ret]
+        scope Rule;
         @init {
-                PrimitiveType temp = null;
+            ruleStart("primitiveType");
+            PrimitiveType temp = null;
         }
         @after {
-                $ret = factory.makePrimitiveTypeNode(temp);
+            $ret = factory.makePrimitiveTypeNode(temp);
+            ruleStop();
         }
     :   
         'boolean'
@@ -1534,11 +1841,14 @@ primitiveType returns [PrimitiveTypeNode ret]
 // this node would parse
 //     <K,V>
 typeArguments returns [ListNode<TypeArgumentNode> ret]
+        scope Rule;
         @init {
+            ruleStart("typeArguments");
             List<TypeArgumentNode> list = new ArrayList<TypeArgumentNode>();
         }
         @after {
             $ret = factory.<TypeArgumentNode>makeListNode(list);
+            ruleStop();
         }
     :   
         '<' a=typeArgument
@@ -1562,9 +1872,14 @@ typeArguments returns [ListNode<TypeArgumentNode> ret]
 // this node would parse
 //     ? extends Bar
 typeArgument returns [TypeArgumentNode ret]
+        scope Rule;
         @init {
+            ruleStart("typeArgument");
             boolean upper = false;
         } 
+        @after {
+            ruleStop();
+        }
     :
         unboundedType=classOrInterfaceType
         {
@@ -1594,9 +1909,14 @@ typeArgument returns [TypeArgumentNode ret]
 // this rule matches
 //     (int x, int y)
 formalParameters returns [ListNode<VariableNode> parameters, VariableNode varargParameter]
+        scope Rule;
         @init {
+            ruleStart("formalParameters");
             $parameters = factory.makeListNode(Collections.<VariableNode>emptyList());
             $varargParameter = null;
+        }
+        @after {
+            ruleStop();
         }
     :
         '('
@@ -1612,11 +1932,14 @@ formalParameters returns [ListNode<VariableNode> parameters, VariableNode vararg
 
 // This rule is expected to produce a list of parameter declarations (multiple results)
 formalParameterDecls returns [ListNode<VariableNode> parameters, VariableNode varargParameter]
+        scope Rule;
         @init {
+            ruleStart("formalParameterDecls");
             List<VariableNode> list = new ArrayList<VariableNode>();
         }
         @after {
             $parameters = factory.makeListNode(list);
+            ruleStop();
         }
     :
         ellipsisParameterDecl
@@ -1652,8 +1975,13 @@ formalParameterDecls returns [ListNode<VariableNode> parameters, VariableNode va
     ;
 
 normalParameterDecl returns [VariableNode ret]
+        scope Rule;
         @init {
+            ruleStart("normalParameterDecl");
             TypeNode typeNode = null;
+        }
+        @after {
+            ruleStop();
         }
     :
         mod=variableModifiers
@@ -1674,6 +2002,13 @@ normalParameterDecl returns [VariableNode ret]
     ;
 
 ellipsisParameterDecl returns [VariableNode ret]
+        scope Rule;
+        @init {
+            ruleStart("ellipsisParameterDecl");
+        }
+        @after {
+            ruleStop();
+        }
     :
         mod=variableModifiers t=type '...' id=identifier
         {
@@ -1682,6 +2017,13 @@ ellipsisParameterDecl returns [VariableNode ret]
     ;
 
 alternateConstructorInvocation returns [AlternateConstructorInvocationNode ret]
+        scope Rule;
+        @init {
+            ruleStart("alternateConstructorInvocation");
+        }
+        @after {
+            ruleStop();
+        }
     :
         nonWildcardTypeArguments? 'this' arguments ';'
         {
@@ -1692,9 +2034,14 @@ alternateConstructorInvocation returns [AlternateConstructorInvocationNode ret]
     ;
 
 superclassConstructorInvocation returns [SuperclassConstructorInvocationNode ret]
+        scope Rule;
         @init {
+            ruleStart("superclassConstructorInvocation");
             PrimaryExpressionNode qualifyingExpression = null;
             ListNode<TypeNode> typeArgumentsNode = factory.makeListNode(Collections.<TypeNode>emptyList());
+        }
+        @after {
+            ruleStop();
         }
     :
         (
@@ -1719,6 +2066,13 @@ superclassConstructorInvocation returns [SuperclassConstructorInvocationNode ret
     ;
 
 explicitConstructorInvocation returns [ConstructorInvocationNode ret]
+        scope Rule;
+        @init {
+            ruleStart("explicitConstructorInvocation");
+        }
+        @after {
+            ruleStop();
+        }
     :
         alternateConstructorInvocation
         {
@@ -1732,11 +2086,14 @@ explicitConstructorInvocation returns [ConstructorInvocationNode ret]
     ;
 
 annotations returns [ListNode<AnnotationNode> ret]
+        scope Rule;
         @init {
-                List<AnnotationNode> list = new ArrayList<AnnotationNode>();
+            ruleStart("annotations");
+            List<AnnotationNode> list = new ArrayList<AnnotationNode>();
         }
         @after {
-                $ret = factory.makeListNode(list);
+            $ret = factory.makeListNode(list);
+            ruleStop();
         }
     :   
         (
@@ -1754,6 +2111,13 @@ annotations returns [ListNode<AnnotationNode> ret]
 // This rule would parse
 //     @Test("foo")
 annotation returns [AnnotationNode ret]
+        scope Rule;
+        @init {
+            ruleStart("annotation");
+        }
+        @after {
+            ruleStop();
+        }
     :   
         '@' typeName
         {
@@ -1788,11 +2152,14 @@ annotation returns [AnnotationNode ret]
 // this rule would parse
 //     bar="baz",happy=5
 elementValuePairs returns [ListNode<AnnotationElementNode> ret]
+        scope Rule;
         @init {
+            ruleStart("elementValuePairs");
             List<AnnotationElementNode> list = new ArrayList<AnnotationElementNode>();
         }
         @after {
             $ret = factory.makeListNode(list);
+            ruleStop();
         }
     :
         a=elementValuePair
@@ -1816,6 +2183,13 @@ elementValuePairs returns [ListNode<AnnotationElementNode> ret]
 // or
 //     happy=5
 elementValuePair returns [AnnotationElementNode ret]
+        scope Rule;
+        @init {
+            ruleStart("elementValuePair");
+        }
+        @after {
+            ruleStop();
+        }
     :
         id=identifier '=' elementValue
         {
@@ -1833,6 +2207,13 @@ elementValuePair returns [AnnotationElementNode ret]
 // or
 //    @Test
 elementValue returns [AnnotationValueNode ret]
+        scope Rule;
+        @init {
+            ruleStart("elementValue");
+        }
+        @after {
+            ruleStop();
+        }
     :   
         conditionalExpression
         {
@@ -1860,11 +2241,14 @@ elementValue returns [AnnotationValueNode ret]
 // this rule would parse
 //     {1,2,3}
 elementValueArrayInitializer returns [AnnotationArrayValueNode ret]
+        scope Rule;
         @init {
+            ruleStart("elementValueArrayInitializer");
             List<AnnotationValueNode> list = new ArrayList<AnnotationValueNode>();
         }
         @after {
             $ret = factory.makeAnnotationArrayValueNode(factory.makeListNode(list));
+            ruleStop();
         }
     :   
         '{'
@@ -1888,6 +2272,13 @@ elementValueArrayInitializer returns [AnnotationArrayValueNode ret]
  * Annotation declaration.
  */
 annotationTypeDeclaration returns [AnnotationDeclarationNode ret]
+        scope Rule;
+        @init {
+            ruleStart("annotationTypeDeclaration");
+        }
+        @after {
+            ruleStop();
+        }
     :   
         javadoc annotationModifiers '@'
         'interface'
@@ -1904,11 +2295,14 @@ annotationTypeDeclaration returns [AnnotationDeclarationNode ret]
 
 
 annotationTypeBody returns [AnnotationBodyNode ret]
+        scope Rule;
         @init {
-                List<AnnotationMemberNode> list = new ArrayList<AnnotationMemberNode>();
+            ruleStart("annotationTypeBody");
+            List<AnnotationMemberNode> list = new ArrayList<AnnotationMemberNode>();
         }
         @after {
-                $ret = factory.makeAnnotationBodyNode(factory.makeListNode(list));
+            $ret = factory.makeAnnotationBodyNode(factory.makeListNode(list));
+            ruleStop();
         }
     :   
         '{' 
@@ -1922,6 +2316,13 @@ annotationTypeBody returns [AnnotationBodyNode ret]
     ;
 
 annotationTypeElementDeclaration returns [AnnotationMemberNode ret]
+        scope Rule;
+        @init {
+            ruleStart("annotationTypeElementDeclaration");
+        }
+        @after {
+            ruleStop();
+        }
     :   
         annotationMethodDeclaration
         {
@@ -1960,9 +2361,14 @@ annotationTypeElementDeclaration returns [AnnotationMemberNode ret]
     ;
 
 annotationMethodDeclaration returns [AnnotationMethodDeclarationNode ret]
-    @init{
-        AnnotationValueNode elementValueNode = null;
-    }
+        scope Rule;
+        @init{
+            ruleStart("annotationMethodDeclaration");
+            AnnotationValueNode elementValueNode = null;
+        }
+        @after {
+            ruleStop();
+        }
     :   
         javadoc annotationMethodModifiers
         type
@@ -1987,11 +2393,14 @@ annotationMethodDeclaration returns [AnnotationMethodDeclarationNode ret]
         ;
 
 block returns [BlockStatementNode ret]
+        scope Rule;
         @init {
-                List<StatementNode> list = new ArrayList<StatementNode>();
+            ruleStart("block");
+            List<StatementNode> list = new ArrayList<StatementNode>();
         }
         @after {
-                $ret = factory.makeBlockStatementNode(factory.makeListNode(list));
+            $ret = factory.makeBlockStatementNode(factory.makeListNode(list));
+            ruleStop();
         }
     :   
         '{'
@@ -2006,6 +2415,13 @@ block returns [BlockStatementNode ret]
 
 // Parses a statement from a block of statements.
 blockStatement returns [StatementNode ret]
+        scope Rule;
+        @init {
+            ruleStart("blockStatement");
+        }
+        @after {
+            ruleStop();
+        }
     :   
         (localVariableHeader)=>localVariableDeclarationStatement
         {
@@ -2027,6 +2443,13 @@ blockStatement returns [StatementNode ret]
 // For example, this rule would match
 //     int x = 5, y;
 localVariableDeclarationStatement returns [VariableDeclarationNode ret]
+        scope Rule;
+        @init {
+            ruleStart("localVariableDeclarationStatement");
+        }
+        @after {
+            ruleStop();
+        }
     :
         localVariableDeclaration ';'
         {
@@ -2039,8 +2462,13 @@ localVariableDeclarationStatement returns [VariableDeclarationNode ret]
 //     int x = 5, y
 // Note the absence of a semicolon.
 localVariableDeclaration returns [VariableDeclarationNode ret]
+        scope Rule;
         @init {
+            ruleStart("localVariableDeclaration");
             List<VariableDeclaratorNode> list = new ArrayList<VariableDeclaratorNode>();
+        }
+        @after {
+            ruleStop();
         }
     :   
         variableModifiers type
@@ -2062,11 +2490,16 @@ localVariableDeclaration returns [VariableDeclarationNode ret]
     ;
 
 statement returns [StatementNode ret]
-    @init{
-        IdentifierNode idNode = null;
-        ExpressionNode expNode = null;
-        StatementNode stmtNode = null;
-    }
+        scope Rule;
+        @init{
+            ruleStart("statement");
+            IdentifierNode idNode = null;
+            ExpressionNode expNode = null;
+            StatementNode stmtNode = null;
+        }
+        @after {
+            ruleStop();
+        }
     :   
         block
         {
@@ -2196,12 +2629,15 @@ statement returns [StatementNode ret]
     ;
 
 switchBlockStatementGroups returns [ListNode<CaseNode> ret]
-    @init {
+        scope Rule;
+        @init {
+            ruleStart("switchBlockStatementGroups");
             List<CaseNode> list = new ArrayList<CaseNode>();
-    }
-    @after {
+        }
+        @after {
             $ret = factory.makeListNode(list);
-    }
+            ruleStop();
+        }
     :   
         (
             switchBlockStatementGroup 
@@ -2212,13 +2648,16 @@ switchBlockStatementGroups returns [ListNode<CaseNode> ret]
     ;
 
 switchBlockStatementGroup returns [CaseNode ret]
-    @init {
+        scope Rule;
+        @init {
+            ruleStart("switchBlockStatementGroup");
             List<StatementNode> list = new ArrayList<StatementNode>();
             ExpressionNode label = null;
-    }
-    @after {
+        }
+        @after {
             $ret = factory.makeCaseNode(label, factory.makeListNode(list));
-    }
+            ruleStop();
+        }
     :
         switchLabel
         {
@@ -2233,6 +2672,13 @@ switchBlockStatementGroup returns [CaseNode ret]
     ;
 
 switchLabel returns [ExpressionNode ret]
+        scope Rule;
+        @init {
+            ruleStart("switchLabel");
+        }
+        @after {
+            ruleStop();
+        }
     :   
         'case' expression ':'
         {
@@ -2247,10 +2693,15 @@ switchLabel returns [ExpressionNode ret]
 
 
 trystatement returns [TryNode ret]
+        scope Rule;
         @init {
+            ruleStart("trystatement");
             ListNode<CatchNode> catchList = factory.makeListNode(new ArrayList<CatchNode>());
             BlockStatementNode finallyBlock = null;
         }    
+        @after {
+            ruleStop();
+        }
     :   
         'try' b=block
         (
@@ -2279,11 +2730,14 @@ trystatement returns [TryNode ret]
     ;
 
 catches returns [ListNode<CatchNode> ret]
+        scope Rule;
         @init {
+            ruleStart("catches");
             List<CatchNode> list = new ArrayList<CatchNode>();
         }
         @after {
             $ret = factory.<CatchNode>makeListNode(list);
+            ruleStop();
         }
     :   
         a=catchClause
@@ -2299,6 +2753,13 @@ catches returns [ListNode<CatchNode> ret]
     ;
 
 catchClause returns [CatchNode ret]
+        scope Rule;
+        @init {
+            ruleStart("catchClause");
+        }
+        @after {
+            ruleStop();
+        }
     :   
         'catch' '(' formalParameter ')'
         block
@@ -2315,8 +2776,13 @@ catchClause returns [CatchNode ret]
 // this rule would match
 //     IOException e
 formalParameter returns [VariableNode ret]
+        scope Rule;
         @init {
+            ruleStart("formalParameter");
             TypeNode typeNode = null;
+        }
+        @after {
+            ruleStop();
         }
     :   
         variableModifiers
@@ -2340,12 +2806,17 @@ formalParameter returns [VariableNode ret]
     ;
 
 forstatement returns [StatementNode ret]
-    @init{
-        ForInitializerNode forInitNode = null;
-        ExpressionNode expNode = null;
-        ListNode<StatementExpressionNode> expListNode =
-                factory.makeListNode(Collections.<StatementExpressionNode>emptyList());
-    }
+        scope Rule;
+        @init{
+            ruleStart("forstatement");
+            ForInitializerNode forInitNode = null;
+            ExpressionNode expNode = null;
+            ListNode<StatementExpressionNode> expListNode =
+                    factory.makeListNode(Collections.<StatementExpressionNode>emptyList());
+        }
+        @after {
+            ruleStop();
+        }
     :   
         // enhanced for loop
         'for' '(' variableModifiers type id=identifier ':' 
@@ -2394,6 +2865,13 @@ forstatement returns [StatementNode ret]
 // Parses the initializer for a standard for loop.  This may either be a list of variable declarations or a list of
 // initialization expressions.
 forInit returns [ForInitializerNode ret]
+        scope Rule;
+        @init {
+            ruleStart("forInit");
+        }
+        @after {
+            ruleStop();
+        }
     :   
         localVariableDeclaration
         {
@@ -2407,6 +2885,13 @@ forInit returns [ForInitializerNode ret]
     ;
 
 parExpression returns [ExpressionNode ret]
+        scope Rule;
+        @init {
+            ruleStart("parExpression");
+        }
+        @after {
+            ruleStop();
+        }
     :   
         '(' expression ')'
         {
@@ -2415,11 +2900,14 @@ parExpression returns [ExpressionNode ret]
     ;
 
 statementExpressionList returns [ListNode<StatementExpressionNode> ret]
+        scope Rule;
         @init {
+            ruleStart("statementExpressionList");
             List<StatementExpressionNode> list = new ArrayList<StatementExpressionNode>();
         }
         @after {
             $ret = factory.makeListNode(list);
+            ruleStop();
         }
     :   
         a=statementExpression
@@ -2435,11 +2923,14 @@ statementExpressionList returns [ListNode<StatementExpressionNode> ret]
     ;
 
 expressionList returns [ListNode<ExpressionNode> ret]
+        scope Rule;
         @init {
+            ruleStart("expressionList");
             List<ExpressionNode> list = new ArrayList<ExpressionNode>();
         }
         @after {
             $ret = factory.makeListNode(list);
+            ruleStop();
         }
     :   
         a=expression
@@ -2457,6 +2948,13 @@ expressionList returns [ListNode<ExpressionNode> ret]
 /* This rule parses a statement expression.  A statement expression is one of those types of expressions which may be
  * used as a statement (such as x++) but not any other kind of expression (such as ~x). */
 statementExpression returns [StatementExpressionNode ret]
+        scope Rule;
+        @init {
+            ruleStart("statementExpression");
+        }
+        @after {
+            ruleStop();
+        }
     :
         // Okay, this is a bit hacky but seriously reduces duplication as well as maintenance.
         // We'll just grab any expression we can.  If it's not a statement expression, we raise a RecognitionException.
@@ -2474,6 +2972,13 @@ statementExpression returns [StatementExpressionNode ret]
     ;
 
 expression returns [ExpressionNode ret]
+        scope Rule;
+        @init {
+            ruleStart("expression");
+        }
+        @after {
+            ruleStop();
+        }
     :   
         conditionalExpression
         {
@@ -2493,6 +2998,13 @@ expression returns [ExpressionNode ret]
 
 
 assignmentOperator returns [AssignmentOperator ret]
+        scope Rule;
+        @init {
+            ruleStart("assignmentOperator");
+        }
+        @after {
+            ruleStop();
+        }
     :   
         '='
         {
@@ -2557,6 +3069,13 @@ assignmentOperator returns [AssignmentOperator ret]
 
 
 conditionalExpression returns [NonAssignmentExpressionNode ret]
+        scope Rule;
+        @init {
+            ruleStart("conditionalExpression");
+        }
+        @after {
+            ruleStop();
+        }
     :   
         conditionalOrExpression
         {
@@ -2574,6 +3093,13 @@ conditionalExpression returns [NonAssignmentExpressionNode ret]
     ;
 
 conditionalOrExpression returns [NonAssignmentExpressionNode ret]
+        scope Rule;
+        @init {
+            ruleStart("conditionalOrExpression");
+        }
+        @after {
+            ruleStop();
+        }
     :   
         e1=conditionalAndExpression
         {
@@ -2591,6 +3117,13 @@ conditionalOrExpression returns [NonAssignmentExpressionNode ret]
     ;
 
 conditionalAndExpression returns [NonAssignmentExpressionNode ret]
+        scope Rule;
+        @init {
+            ruleStart("conditionalAndExpression");
+        }
+        @after {
+            ruleStop();
+        }
     :   
         e1=inclusiveOrExpression
         {
@@ -2608,6 +3141,13 @@ conditionalAndExpression returns [NonAssignmentExpressionNode ret]
     ;
 
 inclusiveOrExpression returns [NonAssignmentExpressionNode ret]
+        scope Rule;
+        @init {
+            ruleStart("inclusiveOrExpression");
+        }
+        @after {
+            ruleStop();
+        }
     :   
         e1=exclusiveOrExpression
         {
@@ -2625,6 +3165,13 @@ inclusiveOrExpression returns [NonAssignmentExpressionNode ret]
     ;
 
 exclusiveOrExpression returns [NonAssignmentExpressionNode ret]
+        scope Rule;
+        @init {
+            ruleStart("exclusiveOrExpression");
+        }
+        @after {
+            ruleStop();
+        }
     :   
         e1=andExpression
         {
@@ -2642,6 +3189,13 @@ exclusiveOrExpression returns [NonAssignmentExpressionNode ret]
     ;
 
 andExpression returns [NonAssignmentExpressionNode ret]
+        scope Rule;
+        @init {
+            ruleStart("andExpression");
+        }
+        @after {
+            ruleStop();
+        }
     :   
         e1=equalityExpression
         {
@@ -2659,8 +3213,13 @@ andExpression returns [NonAssignmentExpressionNode ret]
     ;
 
 equalityExpression returns [NonAssignmentExpressionNode ret]
+        scope Rule;
         @init{
+            ruleStart("equalityExpression");
             BinaryOperator op = null;
+        }
+        @after {
+            ruleStop();
         }
     :   
         e1=instanceOfExpression
@@ -2688,6 +3247,13 @@ equalityExpression returns [NonAssignmentExpressionNode ret]
     ;
 
 instanceOfExpression returns [NonAssignmentExpressionNode ret]
+        scope Rule;
+        @init {
+            ruleStart("instanceOfExpression");
+        }
+        @after {
+            ruleStop();
+        }
     :   
         e1=relationalExpression
         {
@@ -2704,6 +3270,13 @@ instanceOfExpression returns [NonAssignmentExpressionNode ret]
     ;
 
 relationalExpression returns [NonAssignmentExpressionNode ret]
+        scope Rule;
+        @init {
+            ruleStart("relationalExpression");
+        }
+        @after {
+            ruleStop();
+        }
     :   
         e1=shiftExpression
         {
@@ -2721,6 +3294,13 @@ relationalExpression returns [NonAssignmentExpressionNode ret]
     ;
 
 relationalOp returns [BinaryOperator ret]
+        scope Rule;
+        @init {
+            ruleStart("relationalOp");
+        }
+        @after {
+            ruleStop();
+        }
     :    
         '<' '='
         {
@@ -2744,6 +3324,13 @@ relationalOp returns [BinaryOperator ret]
     ;
 
 shiftExpression returns [NonAssignmentExpressionNode ret]
+        scope Rule;
+        @init {
+            ruleStart("shiftExpression");
+        }
+        @after {
+            ruleStop();
+        }
     :   
         e1=additiveExpression
         {
@@ -2762,6 +3349,13 @@ shiftExpression returns [NonAssignmentExpressionNode ret]
 
 
 shiftOp returns [BinaryOperator ret]
+        scope Rule;
+        @init {
+            ruleStart("shiftOp");
+        }
+        @after {
+            ruleStop();
+        }
     :    
         '<' '<'
         {
@@ -2781,8 +3375,13 @@ shiftOp returns [BinaryOperator ret]
 
 
 additiveExpression returns [NonAssignmentExpressionNode ret]
+        scope Rule;
         @init{
+            ruleStart("additiveExpression");
             BinaryOperator op = null;
+        }
+        @after {
+            ruleStop();
         }
     :   
         e1=multiplicativeExpression
@@ -2810,8 +3409,13 @@ additiveExpression returns [NonAssignmentExpressionNode ret]
     ;
 
 multiplicativeExpression returns [NonAssignmentExpressionNode ret]
+        scope Rule;
         @init{
+            ruleStart("multiplicativeExpression");
             BinaryOperator op = null;
+        }
+        @after {
+            ruleStop();
         }
     :
         e1=unaryExpression
@@ -2847,6 +3451,13 @@ multiplicativeExpression returns [NonAssignmentExpressionNode ret]
  *       it's a literal with signed value. INTLITERAL AND LONG LITERAL are added here for this.
  */
 unaryExpression returns [NonAssignmentExpressionNode ret]
+        scope Rule;
+        @init {
+            ruleStart("unaryExpression");
+        }
+        @after {
+            ruleStop();
+        }
     :   
         '+'  e=unaryExpression
         {
@@ -2893,6 +3504,13 @@ unaryExpression returns [NonAssignmentExpressionNode ret]
     ;
 
 unaryExpressionNotPlusMinus returns [NonAssignmentExpressionNode ret]
+        scope Rule;
+        @init {
+            ruleStart("unaryExpressionNotPlusMinus");
+        }
+        @after {
+            ruleStop();
+        }
     :   
         '~' unaryExpression
         {
@@ -2920,6 +3538,13 @@ unaryExpressionNotPlusMinus returns [NonAssignmentExpressionNode ret]
     ;
 
 castExpression returns [TypeCastNode ret]
+        scope Rule;
+        @init {
+            ruleStart("castExpression");
+        }
+        @after {
+            ruleStop();
+        }
     :   
         '(' type ')' unaryExpressionNotPlusMinus
         {
@@ -2930,6 +3555,13 @@ castExpression returns [TypeCastNode ret]
     ;
 
 postfixExpression returns [NonAssignmentExpressionNode ret]
+        scope Rule;
+        @init {
+            ruleStart("postfixExpression");
+        }
+        @after {
+            ruleStop();
+        }
     :
         // Note: primary must be before expressionName in the following.  Otherwise, this postfixExpression rule will
         // match "this" out of "this.x" and leave the ".x" lying around.  Because primary is first, backtracking will
@@ -2964,6 +3596,13 @@ primary returns [PrimaryExpressionNode ret]
         scope {
             PrimaryExpressionNode result;
         }
+        scope Rule;
+        @init {
+            ruleStart("primary");
+        }
+        @after {
+            ruleStop();
+        }
     :
         (
             arrayCreator
@@ -2988,6 +3627,13 @@ primary returns [PrimaryExpressionNode ret]
     ;
 
 restrictedPrimary returns [RestrictedPrimaryExpressionNode ret]
+        scope Rule;
+        @init {
+            ruleStart("restrictedPrimary");
+        }
+        @after {
+            ruleStop();
+        }
     :
         (
             // lexical literal
@@ -3072,8 +3718,13 @@ restrictedPrimary returns [RestrictedPrimaryExpressionNode ret]
 // ANTLR's parameter passing has broken down by this point due to the complexity of this rule.  Using scope instead;
 // thankfully, we know which rule is calling this one.
 primarySuffix returns [RestrictedPrimaryExpressionNode ret]
+        scope Rule;
         @init {
+            ruleStart("primarySuffix");
             PrimaryExpressionNode in = $primary::result;
+        }
+        @after {
+            ruleStop();
         }
     :
         (
@@ -3104,11 +3755,14 @@ primarySuffix returns [RestrictedPrimaryExpressionNode ret]
     ;
 
 thisClause returns [ThisNode ret]
+        scope Rule;
         @init {
+            ruleStart("thisClause");
             UnparameterizedTypeNode qualifyingType = null;
         }
         @after {
             $ret = factory.makeThisNode(qualifyingType);
+            ruleStop();
         }
     :
         (
@@ -3121,10 +3775,15 @@ thisClause returns [ThisNode ret]
     ;
 
 unqualifiedClassInstantiation returns [UnqualifiedClassInstantiationNode ret]
+        scope Rule;
         @init {
+            ruleStart("unqualifiedClassInstantiation");
             AnonymousClassBodyNode anonymousClassBodyNode = null;
             ListNode<TypeArgumentNode> typeArgumentsNode =
                     factory.makeListNode(Collections.<TypeArgumentNode>emptyList());
+        }
+        @after {
+            ruleStop();
         }
     :
         NEW
@@ -3157,8 +3816,13 @@ unqualifiedClassInstantiation returns [UnqualifiedClassInstantiationNode ret]
 // The latter case is used to specify which enclosing type's supertype should be accessed.  (See the documentation of
 // SuperFieldAccessNode for more information.)
 superFieldAccess returns [SuperFieldAccessNode ret]
+        scope Rule;
         @init {
+            ruleStart("superFieldAccess");
             UnparameterizedTypeNode qualifyingTypeNode = null;
+        }
+        @after {
+            ruleStop();
         }
     :
         (
@@ -3180,6 +3844,13 @@ superFieldAccess returns [SuperFieldAccessNode ret]
 // or
 //     Utils.stuff();
 methodInvocationByName returns [MethodInvocationByNameNode ret]
+        scope Rule;
+        @init {
+            ruleStart("methodInvocationByName");
+        }
+        @after {
+            ruleStop();
+        }
     :
         methodName arguments
         {
@@ -3197,9 +3868,14 @@ methodInvocationByName returns [MethodInvocationByNameNode ret]
 // The latter case is used to specify which enclosing type's supertype should be accessed.  (See the documentation of
 // SuperMethodInvocationNode for more information.)
 superMethodInvocation returns [SuperMethodInvocationNode ret]
+        scope Rule;
         @init {
+            ruleStart("superMethodInvocation");
             UnparameterizedTypeNode qualifyingTypeNode = null;
             ListNode<TypeNode> typeArgumentsNode = factory.makeListNode(Collections.<TypeNode>emptyList());
+        }
+        @after {
+            ruleStop();
         }
     :
         (
@@ -3228,6 +3904,13 @@ superMethodInvocation returns [SuperMethodInvocationNode ret]
 // This rule invokes a method against a type while providing type arguments, as in
 //     Collections.<Integer>emptySet();
 typeQualifiedTypeArgumentMethodInvocation returns [MethodInvocationByNameNode ret]
+        scope Rule;
+        @init {
+            ruleStart("typeQualifiedTypeArgumentMethodInvocation");
+        }
+        @after {
+            ruleStop();
+        }
     :
         typeName '.' nonWildcardTypeArguments identifier arguments
         {
@@ -3246,12 +3929,17 @@ typeQualifiedTypeArgumentMethodInvocation returns [MethodInvocationByNameNode re
 // For example:
 //     (foo.bar()).new MyClass()
 qualifiedClassInstantiationPrimarySuffix[PrimaryExpressionNode in] returns [QualifiedClassInstantiationNode ret]
+        scope Rule;
         @init {
+            ruleStart("qualifiedClassInstantiationPrimarySuffix");
             ListNode<TypeArgumentNode> constructorTypeArgumentsNode =
                     factory.makeListNode(Collections.<TypeArgumentNode>emptyList());
             ListNode<TypeArgumentNode> classTypeArgumentsNode =
                     factory.makeListNode(Collections.<TypeArgumentNode>emptyList());
             AnonymousClassBodyNode anonymousClassBodyNode = null;
+        }
+        @after {
+            ruleStop();
         }
     :
         '.' NEW
@@ -3291,8 +3979,13 @@ qualifiedClassInstantiationPrimarySuffix[PrimaryExpressionNode in] returns [Qual
 // or
 //     foo().bar()    
 typeArgumentMethodInvocationSuffix[PrimaryExpressionNode in] returns [RestrictedPrimaryExpressionNode ret]
+        scope Rule;
         @init {
+            ruleStart("typeArgumentMethodInvocationSuffix");
             ListNode<TypeNode> typeArgumentsNode = factory.makeListNode(Collections.<TypeNode>emptyList());
+        }
+        @after {
+            ruleStop();
         }
     :
         '.'
@@ -3313,6 +4006,13 @@ typeArgumentMethodInvocationSuffix[PrimaryExpressionNode in] returns [Restricted
     ;
     
 arrayAccess[RestrictedPrimaryExpressionNode in] returns [ArrayAccessNode ret]
+        scope Rule;
+        @init {
+            ruleStart("arrayAccess");
+        }
+        @after {
+            ruleStop();
+        }
     :
         '[' a=expression ']'
         {
@@ -3327,11 +4027,14 @@ arrayAccess[RestrictedPrimaryExpressionNode in] returns [ArrayAccessNode ret]
     ;
 
 primitiveClassLiteral returns [ClassLiteralNode ret]
+        scope Rule;
         @init {
+            ruleStart("primitiveClassLiteral");
             LiteralizableTypeNode typeNode = null;
         }
         @after {
             $ret = factory.makeClassLiteralNode(typeNode);
+            ruleStop();
         }
     :
         primitiveType
@@ -3348,6 +4051,13 @@ primitiveClassLiteral returns [ClassLiteralNode ret]
     ;
 
 voidClassLiteral returns [ClassLiteralNode ret]
+        scope Rule;
+        @init {
+            ruleStart("voidClassLiteral");
+        }
+        @after {
+            ruleStop();
+        }
     :
         'void' '.' 'class'
         {
@@ -3361,10 +4071,15 @@ voidClassLiteral returns [ClassLiteralNode ret]
 // Or:
 //     new int[2][][];
 arrayCreator returns [ArrayCreationNode ret]
+        scope Rule;
     @init{
+            ruleStart("arrayCreator");
         int levels = 0;
         List<ExpressionNode> list = new ArrayList<ExpressionNode>();
     }
+        @after {
+            ruleStop();
+        }
     :   
         NEW createdName
         '[' ']'
@@ -3411,6 +4126,13 @@ arrayCreator returns [ArrayCreationNode ret]
     ;
 
 variableInitializer returns [VariableInitializerNode ret]
+        scope Rule;
+        @init {
+            ruleStart("variableInitializer");
+        }
+        @after {
+            ruleStop();
+        }
     :   
         arrayInitializer
         {
@@ -3424,12 +4146,15 @@ variableInitializer returns [VariableInitializerNode ret]
     ;
 
 arrayInitializer returns [ArrayInitializerNode ret]
+        scope Rule;
     @init {
+            ruleStart("arrayInitializer");
             List<VariableInitializerNode> list = new ArrayList<VariableInitializerNode>();
     }
     @after {
             $ret = factory.makeArrayInitializerNode(
                 factory.makeListNode(list));
+            ruleStop();
     }
     :   
         '{' 
@@ -3451,6 +4176,13 @@ arrayInitializer returns [ArrayInitializerNode ret]
 
 
 createdName returns [BaseTypeNode ret]
+        scope Rule;
+        @init {
+            ruleStart("createdName");
+        }
+        @after {
+            ruleStop();
+        }
     :   
         classOrInterfaceType
         {
@@ -3463,6 +4195,13 @@ createdName returns [BaseTypeNode ret]
     ;
 
 nonWildcardTypeArguments returns [ListNode<TypeNode> ret]
+        scope Rule;
+        @init {
+            ruleStart("nonWildcardTypeArguments");
+        }
+        @after {
+            ruleStop();
+        }
     :   
         '<' typeList
         {
@@ -3472,6 +4211,13 @@ nonWildcardTypeArguments returns [ListNode<TypeNode> ret]
     ;
 
 arguments returns [ListNode<ExpressionNode> ret]
+        scope Rule;
+        @init {
+            ruleStart("arguments");
+        }
+        @after {
+            ruleStop();
+        }
     :
         {
             // initialize to empty list
@@ -3486,6 +4232,13 @@ arguments returns [ListNode<ExpressionNode> ret]
 
 // Parses a package name chain.
 packageName returns [NameNode ret]
+        scope Rule;
+        @init {
+            ruleStart("packageName");
+        }
+        @after {
+            ruleStop();
+        }
     :
         categorizedName[NameCategory.PACKAGE, NameCategory.PACKAGE]
         {
@@ -3495,6 +4248,13 @@ packageName returns [NameNode ret]
 
 // Parses a type name chain.  The last node is of the category TYPE; the rest are PACKAGE_OR_TYPE.
 typeName returns [NameNode ret]
+        scope Rule;
+        @init {
+            ruleStart("typeName");
+        }
+        @after {
+            ruleStop();
+        }
     :
         categorizedName[NameCategory.PACKAGE_OR_TYPE, NameCategory.TYPE]
         {
@@ -3504,6 +4264,13 @@ typeName returns [NameNode ret]
 
 // Parses an expression name chain.  The last node is of the category EXPRESSION; the rest are AMBIGUOUS.
 expressionName returns [NameNode ret]
+        scope Rule;
+        @init {
+            ruleStart("expressionName");
+        }
+        @after {
+            ruleStop();
+        }
     :
         categorizedName[NameCategory.AMBIGUOUS, NameCategory.EXPRESSION]
         {
@@ -3513,6 +4280,13 @@ expressionName returns [NameNode ret]
 
 // Parses a method name chain.  The last node is of the category METHOD; the rest are AMBIGUOUS.
 methodName returns [NameNode ret]
+        scope Rule;
+        @init {
+            ruleStart("methodName");
+        }
+        @after {
+            ruleStop();
+        }
     :
         categorizedName[NameCategory.AMBIGUOUS, NameCategory.METHOD]
         {
@@ -3522,6 +4296,13 @@ methodName returns [NameNode ret]
     
 // Parses a package-or-type name chain.
 packageOrTypeName returns [NameNode ret]
+        scope Rule;
+        @init {
+            ruleStart("packageOrTypeName");
+        }
+        @after {
+            ruleStop();
+        }
     :
         categorizedName[NameCategory.PACKAGE_OR_TYPE, NameCategory.PACKAGE_OR_TYPE]
         {
@@ -3531,6 +4312,13 @@ packageOrTypeName returns [NameNode ret]
 
 // Parses an ambiguous name.
 ambiguousName returns [NameNode ret]
+        scope Rule;
+        @init {
+            ruleStart("ambiguousName");
+        }
+        @after {
+            ruleStop();
+        }
     :
         categorizedName[NameCategory.AMBIGUOUS, NameCategory.AMBIGUOUS]
         {
@@ -3542,7 +4330,9 @@ ambiguousName returns [NameNode ret]
 // name node is assigned another category.  This rule does not correspond directly to anything in the JLS; it is used as
 // a parsing subroutine.
 categorizedName[NameCategory category, NameCategory lastCategory] returns [NameNode ret]
+        scope Rule;
         @init {
+            ruleStart("categorizedName");
             List<IdentifierNode> identifierNodes = new ArrayList<IdentifierNode>();
         }
         @after {
@@ -3559,6 +4349,7 @@ categorizedName[NameCategory category, NameCategory lastCategory] returns [NameN
 	                        $ret,
 	                        identifierNodes.get(i),
 	                        currentCategory);
+            ruleStop();
                 }
             }
             if (logger.isTraceEnabled())
@@ -3580,6 +4371,13 @@ categorizedName[NameCategory category, NameCategory lastCategory] returns [NameN
     ;
 
 intLiteral [boolean isNegative] returns [LiteralNode<?> ret]
+        scope Rule;
+        @init {
+            ruleStart("intLiteral");
+        }
+        @after {
+            ruleStop();
+        }
     :  
         INTLITERAL
         {
@@ -3600,6 +4398,13 @@ intLiteral [boolean isNegative] returns [LiteralNode<?> ret]
     ;   
     
 longLiteral [boolean isNegative] returns [LiteralNode<?> ret]    
+        scope Rule;
+        @init {
+            ruleStart("longLiteral");
+        }
+        @after {
+            ruleStop();
+        }
     :
         LONGLITERAL
         {
@@ -3622,6 +4427,13 @@ longLiteral [boolean isNegative] returns [LiteralNode<?> ret]
     ;
 
 lexicalLiteral returns [LiteralNode<?> ret]
+        scope Rule;
+        @init {
+            ruleStart("lexicalLiteral");
+        }
+        @after {
+            ruleStop();
+        }
     :
         intLiteral[false]
         {
@@ -3701,6 +4513,13 @@ lexicalLiteral returns [LiteralNode<?> ret]
     ;
 
 identifier returns [IdentifierNode ret]
+        scope Rule;
+        @init {
+            ruleStart("identifier");
+        }
+        @after {
+            ruleStop();
+        }
     :
         IDENTIFIER
         {
