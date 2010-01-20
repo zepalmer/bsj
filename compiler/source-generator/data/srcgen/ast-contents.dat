@@ -1038,6 +1038,7 @@ AnnotationMethodDeclarationNode :: Node + AnnotationMemberNode
 
 ConstructorDeclarationNode :: Node + ClassMemberNode
     @props
+    identifier              IdentifierNode                              | the identifier for the name of this constructor
     body                    ConstructorBodyNode                         | the body of this constructor
     modifiers               ConstructorModifiersNode                    | the modifiers for this constructor
     parameters              ListNode<VariableNode>                      | the parameters declared by this constructor

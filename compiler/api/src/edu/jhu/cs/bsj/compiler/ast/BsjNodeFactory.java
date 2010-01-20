@@ -443,6 +443,7 @@ public interface BsjNodeFactory
      * Creates a ConstructorDeclarationNode.
      */
     public ConstructorDeclarationNode makeConstructorDeclarationNode(
+            IdentifierNode identifier,
             ConstructorBodyNode body,
             ConstructorModifiersNode modifiers,
             ListNode<VariableNode> parameters,

@@ -752,6 +752,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     @Override
     public ConstructorDeclarationNode makeConstructorDeclarationNode(
+            IdentifierNode identifier,
             ConstructorBodyNode body,
             ConstructorModifiersNode modifiers,
             ListNode<VariableNode> parameters,
@@ -760,7 +761,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ListNode<TypeParameterNode> typeParameters,
             JavadocNode javadoc)
     {
-        ConstructorDeclarationNode ret = new ConstructorDeclarationNodeImpl(body, modifiers, parameters, varargParameter, throwTypes, typeParameters, javadoc);
+        ConstructorDeclarationNode ret = new ConstructorDeclarationNodeImpl(identifier, body, modifiers, parameters, varargParameter, throwTypes, typeParameters, javadoc);
         return ret;
     }
 

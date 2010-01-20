@@ -14,6 +14,18 @@ import javax.annotation.Generated;
 public interface ConstructorDeclarationNode extends Node, ClassMemberNode
 {
     /**
+     * Gets the identifier for the name of this constructor.
+     * @return The identifier for the name of this constructor.
+     */
+    public IdentifierNode getIdentifier();
+
+    /**
+     * Changes the identifier for the name of this constructor.
+     * @param identifier The identifier for the name of this constructor.
+     */
+    public void setIdentifier(IdentifierNode identifier);
+
+    /**
      * Gets the body of this constructor.
      * @return The body of this constructor.
      */

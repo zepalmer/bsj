@@ -60,10 +60,6 @@ options {
     memoize=true;
 }
 
-scope Global {   
-    String className;
-}
-
 @lexer::header{
     package edu.jhu.cs.bsj.compiler.tool.parser.antlr;
 
@@ -720,7 +716,6 @@ classDeclaration returns [InlineTypeDeclarableNode ret]
     ;
 
 normalClassDeclaration returns [ClassDeclarationNode ret]
-        scope Global;
         @init {
             ListNode<TypeNode> typeListNode = factory.makeListNode(new ArrayList<TypeNode>());
             ListNode<TypeParameterNode> typeParamsNode = factory.makeListNode(new ArrayList<TypeParameterNode>());
@@ -728,9 +723,6 @@ normalClassDeclaration returns [ClassDeclarationNode ret]
     :   
         javadoc classModifiers
         'class' id=identifier
-        {
-            $Global::className = $id.ret.getIdentifier();
-        }
         (
             typeParameters
             {
@@ -822,7 +814,6 @@ typeBound returns [ListNode<DeclaredTypeNode> ret]
 
 
 enumDeclaration returns [EnumDeclarationNode ret]
-        scope Global;
         @init {
             ListNode<TypeNode> typeListNode = factory.makeListNode(new ArrayList<TypeNode>());
         } 
@@ -830,9 +821,6 @@ enumDeclaration returns [EnumDeclarationNode ret]
         javadoc enumModifiers
         'enum' 
         id=identifier
-        {
-            $Global::className = $id.ret.getIdentifier();
-        }
         (
             'implements' typeList
             {
@@ -971,7 +959,6 @@ interfaceDeclaration returns [TypeDeclarationNode ret]
     ;
     
 normalInterfaceDeclaration returns [InterfaceDeclarationNode ret]
-        scope Global;
         @init {
             ListNode<TypeNode> typeListNode = factory.makeListNode(new ArrayList<TypeNode>());
             ListNode<TypeParameterNode> typeParamsNode = factory.makeListNode(new ArrayList<TypeParameterNode>());
@@ -979,9 +966,6 @@ normalInterfaceDeclaration returns [InterfaceDeclarationNode ret]
     :   
         javadoc interfaceModifiers
         'interface' id=identifier
-        {
-            $Global::className = $id.ret.getIdentifier();
-        }        
         (
             typeParameters
             {
@@ -1169,7 +1153,6 @@ methodReturnType returns [TypeNode ret]
     ;
 
 constructorDeclaration returns [ConstructorDeclarationNode ret]
-    scope Global;
         @init {
             ListNode<TypeParameterNode> typeParametersNode =
                     factory.makeListNode(Collections.<TypeParameterNode>emptyList());
@@ -1193,20 +1176,15 @@ constructorDeclaration returns [ConstructorDeclarationNode ret]
         )?
         constructorBody
         {
-            if (!$identifier.ret.getIdentifier().equals($Global::className))
-            {
-                //TODO error handling
-            } else
-            {
-                $ret = factory.makeConstructorDeclarationNode(
-                    $constructorBody.ret,
-                    $constructorModifiers.ret,
-                    $formalParameters.parameters,
-                    $formalParameters.varargParameter,
-                    throwsNode,
-                    typeParametersNode,
-                    $javadoc.ret);
-            }
+            $ret = factory.makeConstructorDeclarationNode(
+                $identifier.ret,
+                $constructorBody.ret,
+                $constructorModifiers.ret,
+                $formalParameters.parameters,
+                $formalParameters.varargParameter,
+                throwsNode,
+                typeParametersNode,
+                $javadoc.ret);
         }
     ;
 

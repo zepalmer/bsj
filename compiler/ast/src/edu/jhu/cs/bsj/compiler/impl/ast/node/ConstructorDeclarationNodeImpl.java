@@ -10,6 +10,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.ConstructorBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ConstructorDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ConstructorModifiersNode;
+import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.JavadocNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeParameterNode;
@@ -19,6 +20,9 @@ import edu.jhu.cs.bsj.compiler.ast.node.VariableNode;
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class ConstructorDeclarationNodeImpl extends NodeImpl implements ConstructorDeclarationNode
 {
+    /** The identifier for the name of this constructor. */
+    private IdentifierNode identifier;
+
     /** The body of this constructor. */
     private ConstructorBodyNode body;
 
@@ -42,6 +46,7 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
 
     /** General constructor. */
     public ConstructorDeclarationNodeImpl(
+            IdentifierNode identifier,
             ConstructorBodyNode body,
             ConstructorModifiersNode modifiers,
             ListNode<VariableNode> parameters,
@@ -51,6 +56,7 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
             JavadocNode javadoc)
     {
         super();
+        this.identifier = identifier;
         this.body = body;
         this.modifiers = modifiers;
         this.parameters = parameters;
@@ -58,6 +64,32 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
         this.throwTypes = throwTypes;
         this.typeParameters = typeParameters;
         this.javadoc = javadoc;
+    }
+
+    /**
+     * Gets the identifier for the name of this constructor.
+     * @return The identifier for the name of this constructor.
+     */
+    public IdentifierNode getIdentifier()
+    {
+        return this.identifier;
+    }
+
+    /**
+     * Changes the identifier for the name of this constructor.
+     * @param identifier The identifier for the name of this constructor.
+     */
+    public void setIdentifier(IdentifierNode identifier)
+    {
+        if (this.identifier instanceof NodeImpl)
+        {
+            ((NodeImpl)this.identifier).setParent(null);
+        }
+        this.identifier = identifier;
+        if (this.identifier instanceof NodeImpl)
+        {
+            ((NodeImpl)this.identifier).setParent(this);
+        }
     }
 
     /**
@@ -253,6 +285,7 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
+        this.identifier.receive(visitor);
         this.body.receive(visitor);
         this.modifiers.receive(visitor);
         this.parameters.receive(visitor);
@@ -273,6 +306,7 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
+        this.identifier.receiveTyped(visitor);
         this.body.receiveTyped(visitor);
         this.modifiers.receiveTyped(visitor);
         this.parameters.receiveTyped(visitor);
@@ -307,6 +341,7 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
+        list.add(getIdentifier());
         list.add(getBody());
         list.add(getModifiers());
         list.add(getParameters());
@@ -326,6 +361,9 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
+        sb.append("identifier=");
+        sb.append(this.identifier == null? "null" : this.identifier.getClass().getSimpleName());
+        sb.append(',');
         sb.append("body=");
         sb.append(this.body == null? "null" : this.body.getClass().getSimpleName());
         sb.append(',');

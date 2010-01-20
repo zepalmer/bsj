@@ -828,6 +828,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
      */
     @Override
     public ConstructorDeclarationNode makeConstructorDeclarationNode(
+            IdentifierNode identifier,
             ConstructorBodyNode body,
             ConstructorModifiersNode modifiers,
             ListNode<VariableNode> parameters,
@@ -836,7 +837,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
             ListNode<TypeParameterNode> typeParameters,
             JavadocNode javadoc)
     {
-        ConstructorDeclarationNode node = factory.makeConstructorDeclarationNode(body, modifiers, parameters, varargParameter, throwTypes, typeParameters, javadoc);
+        ConstructorDeclarationNode node = factory.makeConstructorDeclarationNode(identifier, body, modifiers, parameters, varargParameter, throwTypes, typeParameters, javadoc);
         this.decorate(node);
         return node;
     }
