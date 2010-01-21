@@ -48,8 +48,8 @@
 # Each file is read line by line and scanned for comments on their own line.  Each comment of the form
 # /* GEN:foo */ (where foo is any string containing no whitespace) is interpreted rather than processed.  Interpreted
 # comments change the behavior of the file inclusion.  Lines which appear after a "start" are copied into the body of
-# the file until a "stop" is encountered.  Lines which appear after an "importstart" are copied into the header of the
-# file until an "importstop" is encountered.  If an include is specified, it must be present in both the classes and
+# the file until a "stop" is encountered.  Lines which appear after an "headerstart" are copied into the header of the
+# file until an "headerstop" is encountered.  If an include is specified, it must be present in both the classes and
 # ifaces directories, even if one of them is empty.
 #
 # The fourth available mode is toString.  When in toString mode, each line is taken to be in the context of a custom
@@ -1428,6 +1428,9 @@ Node*
         Node.java
     @docs
         The parent class for all BSJ AST nodes.
+# TODO: add to properties of Node
+#    startLocation*          BsjSourceLocation                           | the location at which this node's text starts (inclusive)
+#    stopLocation*           BsjSourceLocation                           | the location at which this node's text stops (exclusive)
 
 PackageDeclarationNode :: Node
     @props

@@ -1,4 +1,4 @@
-/* GEN:importstart */
+/* GEN:headerstart */
 /**
  * This default implementation of {@link BsjTypedNodeVisitor} provides no-op versions of each
  * of the interface's methods.  This is meant for convenience; implementations (especially
@@ -6,7 +6,7 @@
  *
  * @author Zachary Palmer
  */
-/* GEN:importstop */
+/* GEN:headerstop */
 public class BsjTypedNodeNoOpVisitor
 {
 /* GEN:start */

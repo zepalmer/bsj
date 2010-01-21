@@ -1,4 +1,4 @@
-/* GEN:importstart */
+/* GEN:headerstart */
 /**
  * This implementation of the BSJ node operation decorates every method of a backing
  * operation with a uniform before and after call.  This permits allows proxying, adjusting
@@ -13,7 +13,7 @@
  *
  * @author Zachary Palmer
  */
-/* GEN:importstop */
+/* GEN:headerstop */
 public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements BsjNodeOperation<PNew,RNew>
 {
 /* GEN:start */

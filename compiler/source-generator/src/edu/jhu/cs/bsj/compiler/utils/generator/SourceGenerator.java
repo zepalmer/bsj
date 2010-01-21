@@ -563,8 +563,7 @@ public class SourceGenerator
 	 */
 	private static void includeImports(File f, PrintStream ps) throws IOException
 	{
-		// TODO: rename this "headerstart" and "headerstop"
-		includeFileParts(f, ps, "importstart", "importstop");
+		includeFileParts(f, ps, "headerstart", "headerstop");
 	}
 
 	/**

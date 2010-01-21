@@ -1,6 +1,6 @@
-/* GEN:importstart */
+/* GEN:headerstart */
 import java.util.concurrent.atomic.AtomicLong;
-/* GEN:importstop */
+/* GEN:headerstop */
 
 public abstract class NameNodeImpl
 {

@@ -1,4 +1,4 @@
-/* GEN:importstart */
+/* GEN:headerstart */
 /**
  * This interface is implemented by those classes which wish to perform visitation operations
  * over a BSJ AST.  Each node visits a method for its own class as well as all of its
@@ -59,7 +59,7 @@
  *
  * @author Zachary Palmer
  */
-/* GEN:importstop */
+/* GEN:headerstop */
 public interface BsjTypedNodeVisitor
 {
 /* GEN:start */

@@ -1,4 +1,4 @@
-/* GEN:importstart */
+/* GEN:headerstart */
 /**
  * This interface specifies an operation to be carried out on a node.  The purpose of this
  * mechanism is effectively to allow the addition of operations to the node hierarchy
@@ -14,7 +14,7 @@
  *
  * @author Zachary Palmer
  */
-/* GEN:importstop */
+/* GEN:headerstop */
 public interface BsjNodeOperation<P,R>
 {
 /* GEN:start */

@@ -1,4 +1,4 @@
-/* GEN:importstart */
+/* GEN:headerstart */
 /**
  * This interface is implemented by any object which can act as a factory for BSJ nodes.  It
  * is strongly advisable to ensure that all nodes in a given AST are produced from the same
@@ -6,4 +6,4 @@
  *
  * @author Zachary Palmer
  */
-/* GEN:importstop */
+/* GEN:headerstop */

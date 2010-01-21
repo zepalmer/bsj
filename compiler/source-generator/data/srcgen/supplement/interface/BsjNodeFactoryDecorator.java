@@ -1,10 +1,10 @@
-/* GEN:importstart */
+/* GEN:headerstart */
 /**
  * This class allows simple decoration of all node construction methods on a node factory.
  *
  * @author Zachary Palmer
  */
-/* GEN:importstop */
+/* GEN:headerstop */
 public class BsjNodeFactoryDecorator implements BsjNodeFactory
 {
 /* GEN:start */
