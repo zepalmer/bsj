@@ -815,7 +815,8 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
     @Override
     public Void executeParameterizedTypeNode(ParameterizedTypeNode node, PrependablePrintStream p)
     {
-        // TODO Auto-generated method stub
+    	node.getBaseType().executeOperation(this, p);
+    	handleListNode(node.getTypeArguments(), "<", " , ", "> ", p, true);
         return null;
     }
 
@@ -967,7 +968,12 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
     @Override
     public Void executeTypeParameterNode(TypeParameterNode node, PrependablePrintStream p)
     {
-        // TODO Auto-generated method stub
+    	node.getIdentifier().executeOperation(this, p);
+    	if (!node.getBounds().getChildren().isEmpty())
+    	{
+    		p.print(" extends ");
+    		handleListNode(node.getBounds(), "", " & ", "", p, true);
+    	}
         return null;
     }
 
@@ -988,7 +994,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
     @Override
     public Void executeUnparameterizedTypeNode(UnparameterizedTypeNode node, PrependablePrintStream p)
     {
-        // TODO Auto-generated method stub
+        node.getName().executeOperation(this, p);
         return null;
     }
 
@@ -1085,7 +1091,19 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
     @Override
     public Void executeWildcardTypeNode(WildcardTypeNode node, PrependablePrintStream p)
     {
-        // TODO Auto-generated method stub
+    	p.print("?");
+    	if (node.getBound() != null)
+    	{
+    		if (node.getUpperBound())
+    		{
+    			p.print(" extends ");
+    		}
+    		else
+    		{
+    			p.print(" super ");
+    		}
+    		node.getBound().executeOperation(this, p);
+    	}
         return null;
     }
     
