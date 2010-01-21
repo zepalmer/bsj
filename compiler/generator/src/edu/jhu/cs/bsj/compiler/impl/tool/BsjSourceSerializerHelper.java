@@ -273,8 +273,11 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
     @Override
     public Void executeCompilationUnitNode(CompilationUnitNode node, PrependablePrintStream p)
     {
-        node.getPackageDeclaration().executeOperation(this, p);
-        p.print("\n\n");
+    	if (node.getPackageDeclaration() != null)
+		{
+			node.getPackageDeclaration().executeOperation(this, p);
+			p.print("\n\n");
+		}
         handleListNode(node.getImports(), "", "\n", "\n", p, true);
         p.print("\n");
         handleListNode(node.getTypeDecls(), "", "\n\n", "\n", p, true);
