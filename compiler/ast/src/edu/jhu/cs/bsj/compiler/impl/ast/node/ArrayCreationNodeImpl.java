@@ -130,8 +130,6 @@ public abstract class ArrayCreationNodeImpl extends NodeImpl implements ArrayCre
         List<Object> list = super.getChildObjects();
         list.add(getBaseType());
         list.add(getArrayLevels());
-        list.add(getStartLocation());
-        list.add(getStopLocation());
         return list;
     }
 
@@ -145,10 +143,16 @@ public abstract class ArrayCreationNodeImpl extends NodeImpl implements ArrayCre
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("baseType=");
-        sb.append(this.baseType == null? "null" : this.baseType.getClass().getSimpleName());
+        sb.append(this.getBaseType() == null? "null" : this.getBaseType().getClass().getSimpleName());
         sb.append(',');
         sb.append("arrayLevels=");
-        sb.append(String.valueOf(this.arrayLevels) + ":" + "int");
+        sb.append(String.valueOf(this.getArrayLevels()) + ":" + "int");
+        sb.append(',');
+        sb.append("startLocation=");
+        sb.append(String.valueOf(this.getStartLocation()) + ":" + this.getStartLocation().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("stopLocation=");
+        sb.append(String.valueOf(this.getStopLocation()) + ":" + this.getStopLocation().getClass().getSimpleName());
         sb.append(']');
         return sb.toString();
     }

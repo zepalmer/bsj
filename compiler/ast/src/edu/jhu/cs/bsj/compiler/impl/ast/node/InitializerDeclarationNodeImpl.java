@@ -133,8 +133,6 @@ public class InitializerDeclarationNodeImpl extends NodeImpl implements Initiali
         List<Object> list = super.getChildObjects();
         list.add(getStaticInitializer());
         list.add(getBody());
-        list.add(getStartLocation());
-        list.add(getStopLocation());
         return list;
     }
 
@@ -148,10 +146,16 @@ public class InitializerDeclarationNodeImpl extends NodeImpl implements Initiali
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("staticInitializer=");
-        sb.append(String.valueOf(this.staticInitializer) + ":" + "boolean");
+        sb.append(String.valueOf(this.getStaticInitializer()) + ":" + "boolean");
         sb.append(',');
         sb.append("body=");
-        sb.append(this.body == null? "null" : this.body.getClass().getSimpleName());
+        sb.append(this.getBody() == null? "null" : this.getBody().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("startLocation=");
+        sb.append(String.valueOf(this.getStartLocation()) + ":" + this.getStartLocation().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("stopLocation=");
+        sb.append(String.valueOf(this.getStopLocation()) + ":" + this.getStopLocation().getClass().getSimpleName());
         sb.append(']');
         return sb.toString();
     }

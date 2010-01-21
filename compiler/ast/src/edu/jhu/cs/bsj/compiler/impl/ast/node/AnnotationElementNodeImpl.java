@@ -140,8 +140,6 @@ public class AnnotationElementNodeImpl extends NodeImpl implements AnnotationEle
         List<Object> list = super.getChildObjects();
         list.add(getIdentifier());
         list.add(getValue());
-        list.add(getStartLocation());
-        list.add(getStopLocation());
         return list;
     }
 
@@ -155,10 +153,16 @@ public class AnnotationElementNodeImpl extends NodeImpl implements AnnotationEle
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("identifier=");
-        sb.append(this.identifier == null? "null" : this.identifier.getClass().getSimpleName());
+        sb.append(this.getIdentifier() == null? "null" : this.getIdentifier().getClass().getSimpleName());
         sb.append(',');
         sb.append("value=");
-        sb.append(this.value == null? "null" : this.value.getClass().getSimpleName());
+        sb.append(this.getValue() == null? "null" : this.getValue().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("startLocation=");
+        sb.append(String.valueOf(this.getStartLocation()) + ":" + this.getStartLocation().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("stopLocation=");
+        sb.append(String.valueOf(this.getStopLocation()) + ":" + this.getStopLocation().getClass().getSimpleName());
         sb.append(']');
         return sb.toString();
     }

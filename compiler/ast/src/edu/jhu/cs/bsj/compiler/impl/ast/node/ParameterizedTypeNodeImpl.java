@@ -143,8 +143,6 @@ public class ParameterizedTypeNodeImpl extends NodeImpl implements Parameterized
         List<Object> list = super.getChildObjects();
         list.add(getBaseType());
         list.add(getTypeArguments());
-        list.add(getStartLocation());
-        list.add(getStopLocation());
         return list;
     }
 
@@ -158,10 +156,16 @@ public class ParameterizedTypeNodeImpl extends NodeImpl implements Parameterized
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("baseType=");
-        sb.append(this.baseType == null? "null" : this.baseType.getClass().getSimpleName());
+        sb.append(this.getBaseType() == null? "null" : this.getBaseType().getClass().getSimpleName());
         sb.append(',');
         sb.append("typeArguments=");
-        sb.append(this.typeArguments == null? "null" : this.typeArguments.getClass().getSimpleName());
+        sb.append(this.getTypeArguments() == null? "null" : this.getTypeArguments().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("startLocation=");
+        sb.append(String.valueOf(this.getStartLocation()) + ":" + this.getStartLocation().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("stopLocation=");
+        sb.append(String.valueOf(this.getStopLocation()) + ":" + this.getStopLocation().getClass().getSimpleName());
         sb.append(']');
         return sb.toString();
     }

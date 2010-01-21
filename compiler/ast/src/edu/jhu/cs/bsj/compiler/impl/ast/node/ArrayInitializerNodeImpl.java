@@ -108,8 +108,6 @@ public class ArrayInitializerNodeImpl extends NodeImpl implements ArrayInitializ
     {
         List<Object> list = super.getChildObjects();
         list.add(getInitializers());
-        list.add(getStartLocation());
-        list.add(getStopLocation());
         return list;
     }
 
@@ -123,7 +121,13 @@ public class ArrayInitializerNodeImpl extends NodeImpl implements ArrayInitializ
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("initializers=");
-        sb.append(this.initializers == null? "null" : this.initializers.getClass().getSimpleName());
+        sb.append(this.getInitializers() == null? "null" : this.getInitializers().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("startLocation=");
+        sb.append(String.valueOf(this.getStartLocation()) + ":" + this.getStartLocation().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("stopLocation=");
+        sb.append(String.valueOf(this.getStopLocation()) + ":" + this.getStopLocation().getClass().getSimpleName());
         sb.append(']');
         return sb.toString();
     }

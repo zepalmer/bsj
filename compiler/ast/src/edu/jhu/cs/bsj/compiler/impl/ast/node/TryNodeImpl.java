@@ -177,8 +177,6 @@ public class TryNodeImpl extends NodeImpl implements TryNode
         list.add(getBlock());
         list.add(getCatches());
         list.add(getFinallyBlock());
-        list.add(getStartLocation());
-        list.add(getStopLocation());
         return list;
     }
 
@@ -192,13 +190,19 @@ public class TryNodeImpl extends NodeImpl implements TryNode
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("block=");
-        sb.append(this.block == null? "null" : this.block.getClass().getSimpleName());
+        sb.append(this.getBlock() == null? "null" : this.getBlock().getClass().getSimpleName());
         sb.append(',');
         sb.append("catches=");
-        sb.append(this.catches == null? "null" : this.catches.getClass().getSimpleName());
+        sb.append(this.getCatches() == null? "null" : this.getCatches().getClass().getSimpleName());
         sb.append(',');
         sb.append("finallyBlock=");
-        sb.append(this.finallyBlock == null? "null" : this.finallyBlock.getClass().getSimpleName());
+        sb.append(this.getFinallyBlock() == null? "null" : this.getFinallyBlock().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("startLocation=");
+        sb.append(String.valueOf(this.getStartLocation()) + ":" + this.getStartLocation().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("stopLocation=");
+        sb.append(String.valueOf(this.getStopLocation()) + ":" + this.getStopLocation().getClass().getSimpleName());
         sb.append(']');
         return sb.toString();
     }

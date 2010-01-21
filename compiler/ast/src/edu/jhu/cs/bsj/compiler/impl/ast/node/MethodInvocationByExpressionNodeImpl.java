@@ -147,10 +147,6 @@ public class MethodInvocationByExpressionNodeImpl extends MethodInvocationNodeIm
         List<Object> list = super.getChildObjects();
         list.add(getExpression());
         list.add(getIdentifier());
-        list.add(getArguments());
-        list.add(getTypeArguments());
-        list.add(getStartLocation());
-        list.add(getStopLocation());
         return list;
     }
 
@@ -164,10 +160,22 @@ public class MethodInvocationByExpressionNodeImpl extends MethodInvocationNodeIm
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("expression=");
-        sb.append(this.expression == null? "null" : this.expression.getClass().getSimpleName());
+        sb.append(this.getExpression() == null? "null" : this.getExpression().getClass().getSimpleName());
         sb.append(',');
         sb.append("identifier=");
-        sb.append(this.identifier == null? "null" : this.identifier.getClass().getSimpleName());
+        sb.append(this.getIdentifier() == null? "null" : this.getIdentifier().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("arguments=");
+        sb.append(this.getArguments() == null? "null" : this.getArguments().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("typeArguments=");
+        sb.append(this.getTypeArguments() == null? "null" : this.getTypeArguments().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("startLocation=");
+        sb.append(String.valueOf(this.getStartLocation()) + ":" + this.getStartLocation().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("stopLocation=");
+        sb.append(String.valueOf(this.getStopLocation()) + ":" + this.getStopLocation().getClass().getSimpleName());
         sb.append(']');
         return sb.toString();
     }

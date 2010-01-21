@@ -142,8 +142,6 @@ public class ArrayAccessNodeImpl extends NodeImpl implements ArrayAccessNode
         List<Object> list = super.getChildObjects();
         list.add(getArrayExpression());
         list.add(getIndexExpression());
-        list.add(getStartLocation());
-        list.add(getStopLocation());
         return list;
     }
 
@@ -157,10 +155,16 @@ public class ArrayAccessNodeImpl extends NodeImpl implements ArrayAccessNode
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("arrayExpression=");
-        sb.append(this.arrayExpression == null? "null" : this.arrayExpression.getClass().getSimpleName());
+        sb.append(this.getArrayExpression() == null? "null" : this.getArrayExpression().getClass().getSimpleName());
         sb.append(',');
         sb.append("indexExpression=");
-        sb.append(this.indexExpression == null? "null" : this.indexExpression.getClass().getSimpleName());
+        sb.append(this.getIndexExpression() == null? "null" : this.getIndexExpression().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("startLocation=");
+        sb.append(String.valueOf(this.getStartLocation()) + ":" + this.getStartLocation().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("stopLocation=");
+        sb.append(String.valueOf(this.getStopLocation()) + ":" + this.getStopLocation().getClass().getSimpleName());
         sb.append(']');
         return sb.toString();
     }

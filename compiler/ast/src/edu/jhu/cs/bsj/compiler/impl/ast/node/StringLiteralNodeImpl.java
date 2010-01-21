@@ -73,9 +73,6 @@ public class StringLiteralNodeImpl extends LiteralNodeImpl<String> implements St
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(getValue());
-        list.add(getStartLocation());
-        list.add(getStopLocation());
         return list;
     }
 
@@ -88,6 +85,14 @@ public class StringLiteralNodeImpl extends LiteralNodeImpl<String> implements St
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
+        sb.append("value=");
+        sb.append(String.valueOf(this.getValue()) + ":" + this.getValue().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("startLocation=");
+        sb.append(String.valueOf(this.getStartLocation()) + ":" + this.getStartLocation().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("stopLocation=");
+        sb.append(String.valueOf(this.getStopLocation()) + ":" + this.getStopLocation().getClass().getSimpleName());
         sb.append(']');
         return sb.toString();
     }

@@ -244,9 +244,6 @@ public class MethodModifiersNodeImpl extends ModifiersNodeImpl implements Method
         list.add(getSynchronizedFlag());
         list.add(getNativeFlag());
         list.add(getStrictfpFlag());
-        list.add(getAnnotations());
-        list.add(getStartLocation());
-        list.add(getStopLocation());
         return list;
     }
 
@@ -260,25 +257,34 @@ public class MethodModifiersNodeImpl extends ModifiersNodeImpl implements Method
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("access=");
-        sb.append(String.valueOf(this.access) + ":" + this.access.getClass().getSimpleName());
+        sb.append(String.valueOf(this.getAccess()) + ":" + this.getAccess().getClass().getSimpleName());
         sb.append(',');
         sb.append("abstractFlag=");
-        sb.append(String.valueOf(this.abstractFlag) + ":" + "boolean");
+        sb.append(String.valueOf(this.getAbstractFlag()) + ":" + "boolean");
         sb.append(',');
         sb.append("staticFlag=");
-        sb.append(String.valueOf(this.staticFlag) + ":" + "boolean");
+        sb.append(String.valueOf(this.getStaticFlag()) + ":" + "boolean");
         sb.append(',');
         sb.append("finalFlag=");
-        sb.append(String.valueOf(this.finalFlag) + ":" + "boolean");
+        sb.append(String.valueOf(this.getFinalFlag()) + ":" + "boolean");
         sb.append(',');
         sb.append("synchronizedFlag=");
-        sb.append(String.valueOf(this.synchronizedFlag) + ":" + "boolean");
+        sb.append(String.valueOf(this.getSynchronizedFlag()) + ":" + "boolean");
         sb.append(',');
         sb.append("nativeFlag=");
-        sb.append(String.valueOf(this.nativeFlag) + ":" + "boolean");
+        sb.append(String.valueOf(this.getNativeFlag()) + ":" + "boolean");
         sb.append(',');
         sb.append("strictfpFlag=");
-        sb.append(String.valueOf(this.strictfpFlag) + ":" + "boolean");
+        sb.append(String.valueOf(this.getStrictfpFlag()) + ":" + "boolean");
+        sb.append(',');
+        sb.append("annotations=");
+        sb.append(this.getAnnotations() == null? "null" : this.getAnnotations().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("startLocation=");
+        sb.append(String.valueOf(this.getStartLocation()) + ":" + this.getStartLocation().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("stopLocation=");
+        sb.append(String.valueOf(this.getStopLocation()) + ":" + this.getStopLocation().getClass().getSimpleName());
         sb.append(']');
         return sb.toString();
     }

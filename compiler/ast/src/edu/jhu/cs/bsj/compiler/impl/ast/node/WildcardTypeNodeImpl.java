@@ -131,8 +131,6 @@ public class WildcardTypeNodeImpl extends NodeImpl implements WildcardTypeNode
         List<Object> list = super.getChildObjects();
         list.add(getBound());
         list.add(getUpperBound());
-        list.add(getStartLocation());
-        list.add(getStopLocation());
         return list;
     }
 
@@ -146,10 +144,16 @@ public class WildcardTypeNodeImpl extends NodeImpl implements WildcardTypeNode
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("bound=");
-        sb.append(this.bound == null? "null" : this.bound.getClass().getSimpleName());
+        sb.append(this.getBound() == null? "null" : this.getBound().getClass().getSimpleName());
         sb.append(',');
         sb.append("upperBound=");
-        sb.append(String.valueOf(this.upperBound) + ":" + "boolean");
+        sb.append(String.valueOf(this.getUpperBound()) + ":" + "boolean");
+        sb.append(',');
+        sb.append("startLocation=");
+        sb.append(String.valueOf(this.getStartLocation()) + ":" + this.getStartLocation().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("stopLocation=");
+        sb.append(String.valueOf(this.getStopLocation()) + ":" + this.getStopLocation().getClass().getSimpleName());
         sb.append(']');
         return sb.toString();
     }

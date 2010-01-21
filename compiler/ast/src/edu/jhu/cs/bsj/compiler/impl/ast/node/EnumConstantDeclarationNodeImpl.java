@@ -246,8 +246,6 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
         list.add(getArguments());
         list.add(getBody());
         list.add(getJavadoc());
-        list.add(getStartLocation());
-        list.add(getStopLocation());
         return list;
     }
 
@@ -261,19 +259,25 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("annotations=");
-        sb.append(this.annotations == null? "null" : this.annotations.getClass().getSimpleName());
+        sb.append(this.getAnnotations() == null? "null" : this.getAnnotations().getClass().getSimpleName());
         sb.append(',');
         sb.append("identifier=");
-        sb.append(this.identifier == null? "null" : this.identifier.getClass().getSimpleName());
+        sb.append(this.getIdentifier() == null? "null" : this.getIdentifier().getClass().getSimpleName());
         sb.append(',');
         sb.append("arguments=");
-        sb.append(this.arguments == null? "null" : this.arguments.getClass().getSimpleName());
+        sb.append(this.getArguments() == null? "null" : this.getArguments().getClass().getSimpleName());
         sb.append(',');
         sb.append("body=");
-        sb.append(this.body == null? "null" : this.body.getClass().getSimpleName());
+        sb.append(this.getBody() == null? "null" : this.getBody().getClass().getSimpleName());
         sb.append(',');
         sb.append("javadoc=");
-        sb.append(this.javadoc == null? "null" : this.javadoc.getClass().getSimpleName());
+        sb.append(this.getJavadoc() == null? "null" : this.getJavadoc().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("startLocation=");
+        sb.append(String.valueOf(this.getStartLocation()) + ":" + this.getStartLocation().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("stopLocation=");
+        sb.append(String.valueOf(this.getStopLocation()) + ":" + this.getStopLocation().getClass().getSimpleName());
         sb.append(']');
         return sb.toString();
     }

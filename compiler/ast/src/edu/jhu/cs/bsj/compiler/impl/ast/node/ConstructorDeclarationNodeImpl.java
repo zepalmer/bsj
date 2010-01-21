@@ -352,8 +352,6 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
         list.add(getThrowTypes());
         list.add(getTypeParameters());
         list.add(getJavadoc());
-        list.add(getStartLocation());
-        list.add(getStopLocation());
         return list;
     }
 
@@ -367,28 +365,34 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("identifier=");
-        sb.append(this.identifier == null? "null" : this.identifier.getClass().getSimpleName());
+        sb.append(this.getIdentifier() == null? "null" : this.getIdentifier().getClass().getSimpleName());
         sb.append(',');
         sb.append("body=");
-        sb.append(this.body == null? "null" : this.body.getClass().getSimpleName());
+        sb.append(this.getBody() == null? "null" : this.getBody().getClass().getSimpleName());
         sb.append(',');
         sb.append("modifiers=");
-        sb.append(this.modifiers == null? "null" : this.modifiers.getClass().getSimpleName());
+        sb.append(this.getModifiers() == null? "null" : this.getModifiers().getClass().getSimpleName());
         sb.append(',');
         sb.append("parameters=");
-        sb.append(this.parameters == null? "null" : this.parameters.getClass().getSimpleName());
+        sb.append(this.getParameters() == null? "null" : this.getParameters().getClass().getSimpleName());
         sb.append(',');
         sb.append("varargParameter=");
-        sb.append(this.varargParameter == null? "null" : this.varargParameter.getClass().getSimpleName());
+        sb.append(this.getVarargParameter() == null? "null" : this.getVarargParameter().getClass().getSimpleName());
         sb.append(',');
         sb.append("throwTypes=");
-        sb.append(this.throwTypes == null? "null" : this.throwTypes.getClass().getSimpleName());
+        sb.append(this.getThrowTypes() == null? "null" : this.getThrowTypes().getClass().getSimpleName());
         sb.append(',');
         sb.append("typeParameters=");
-        sb.append(this.typeParameters == null? "null" : this.typeParameters.getClass().getSimpleName());
+        sb.append(this.getTypeParameters() == null? "null" : this.getTypeParameters().getClass().getSimpleName());
         sb.append(',');
         sb.append("javadoc=");
-        sb.append(this.javadoc == null? "null" : this.javadoc.getClass().getSimpleName());
+        sb.append(this.getJavadoc() == null? "null" : this.getJavadoc().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("startLocation=");
+        sb.append(String.valueOf(this.getStartLocation()) + ":" + this.getStartLocation().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("stopLocation=");
+        sb.append(String.valueOf(this.getStopLocation()) + ":" + this.getStopLocation().getClass().getSimpleName());
         sb.append(']');
         return sb.toString();
     }

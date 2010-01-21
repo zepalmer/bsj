@@ -107,8 +107,6 @@ public class InlineTypeDeclarationNodeImpl extends NodeImpl implements InlineTyp
     {
         List<Object> list = super.getChildObjects();
         list.add(getDeclaration());
-        list.add(getStartLocation());
-        list.add(getStopLocation());
         return list;
     }
 
@@ -122,7 +120,13 @@ public class InlineTypeDeclarationNodeImpl extends NodeImpl implements InlineTyp
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("declaration=");
-        sb.append(this.declaration == null? "null" : this.declaration.getClass().getSimpleName());
+        sb.append(this.getDeclaration() == null? "null" : this.getDeclaration().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("startLocation=");
+        sb.append(String.valueOf(this.getStartLocation()) + ":" + this.getStartLocation().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("stopLocation=");
+        sb.append(String.valueOf(this.getStopLocation()) + ":" + this.getStopLocation().getClass().getSimpleName());
         sb.append(']');
         return sb.toString();
     }

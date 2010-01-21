@@ -1212,7 +1212,7 @@ public class SourceGenerator
 			ps.println("    {");
 			ps.println("        List<Object> list = "
 					+ (def.sname == null ? "new ArrayList<Object>();" : "super.getChildObjects();"));
-			for (Prop p : recProps)
+			for (Prop p : def.props)
 			{
 				ps.println("        list.add(get" + Character.toUpperCase(p.name.charAt(0)) + p.name.substring(1)
 						+ "());");
@@ -1237,7 +1237,7 @@ public class SourceGenerator
 				ps.println("        sb.append(this.getClass().getSimpleName());");
 				ps.println("        sb.append('[');");
 				boolean firstProp = true;
-				for (Prop p : def.props)
+				for (Prop p : recProps)
 				{
 					if (firstProp)
 					{
@@ -1246,18 +1246,19 @@ public class SourceGenerator
 					{
 						ps.println("        sb.append(',');");
 					}
+					String capName = Character.toUpperCase(p.name.charAt(0)) + p.name.substring(1);
 					ps.println("        sb.append(\"" + p.name + "=\");");
 					if (propInstanceOf(p.type, "Node"))
 					{
-						ps.println("        sb.append(this." + p.name + " == null? \"null\" : this." + p.name
-								+ ".getClass().getSimpleName());");
+						ps.println("        sb.append(this.get" + capName + "() == null? \"null\" : this.get" + capName
+								+ "().getClass().getSimpleName());");
 					} else
 					{
-						ps.println("        sb.append(String.valueOf(this."
-								+ p.name
-								+ ") + \":\" + "
-								+ ((PRIMITIVE_TYPES.contains(p.type)) ? "\"" + p.type + "\"" : "this." + p.name
-										+ ".getClass().getSimpleName()") + ");");
+						ps.println("        sb.append(String.valueOf(this.get"
+								+ capName
+								+ "()) + \":\" + "
+								+ ((PRIMITIVE_TYPES.contains(p.type)) ? "\"" + p.type + "\"" : "this.get" + capName
+										+ "().getClass().getSimpleName()") + ");");
 					}
 				}
 				ps.println("        sb.append(']');");
@@ -1515,10 +1516,11 @@ public class SourceGenerator
 				printParameterList(dps, recProps, true);
 				dps.println();
 				dps.println("    {");
+				dps.println("        this.before();");
 				dps.print("        " + typeName + " node = factory.make" + def.getRawName());
 				printArgumentList(dps, recProps, true);
 				dps.println(";");
-				dps.println("        this.decorate(node);");
+				dps.println("        this.after(node);");
 				dps.println("        return node;");
 				dps.println("    }");
 				dps.println();

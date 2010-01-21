@@ -112,10 +112,6 @@ public class MethodInvocationByNameNodeImpl extends MethodInvocationNodeImpl imp
     {
         List<Object> list = super.getChildObjects();
         list.add(getName());
-        list.add(getArguments());
-        list.add(getTypeArguments());
-        list.add(getStartLocation());
-        list.add(getStopLocation());
         return list;
     }
 
@@ -129,7 +125,19 @@ public class MethodInvocationByNameNodeImpl extends MethodInvocationNodeImpl imp
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("name=");
-        sb.append(this.name == null? "null" : this.name.getClass().getSimpleName());
+        sb.append(this.getName() == null? "null" : this.getName().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("arguments=");
+        sb.append(this.getArguments() == null? "null" : this.getArguments().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("typeArguments=");
+        sb.append(this.getTypeArguments() == null? "null" : this.getTypeArguments().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("startLocation=");
+        sb.append(String.valueOf(this.getStartLocation()) + ":" + this.getStartLocation().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("stopLocation=");
+        sb.append(String.valueOf(this.getStopLocation()) + ":" + this.getStopLocation().getClass().getSimpleName());
         sb.append(']');
         return sb.toString();
     }

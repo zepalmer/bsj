@@ -89,8 +89,6 @@ public class ListNodeImpl<T extends Node> extends NodeImpl implements ListNode<T
     {
         List<Object> list = super.getChildObjects();
         list.add(getChildren());
-        list.add(getStartLocation());
-        list.add(getStopLocation());
         return list;
     }
 */
@@ -104,7 +102,13 @@ public class ListNodeImpl<T extends Node> extends NodeImpl implements ListNode<T
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("children=");
-        sb.append(String.valueOf(this.children) + ":" + this.children.getClass().getSimpleName());
+        sb.append(String.valueOf(this.getChildren()) + ":" + this.getChildren().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("startLocation=");
+        sb.append(String.valueOf(this.getStartLocation()) + ":" + this.getStartLocation().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("stopLocation=");
+        sb.append(String.valueOf(this.getStopLocation()) + ":" + this.getStopLocation().getClass().getSimpleName());
         sb.append(']');
         return sb.toString();
     }
@@ -121,22 +125,23 @@ public class ListNodeImpl<T extends Node> extends NodeImpl implements ListNode<T
         return operation.executeListNode(this, p);
     }
 	/** General constructor */
-    public ListNodeImpl(List<? extends T> children, BsjSourceLocation startLocation, BsjSourceLocation stopLocation)
-    {
-        super(startLocation, stopLocation);
-        this.children = new ArrayList<T>(children);
-    }
-    
-    /**
-     * Creates a list of this node's child objects.  Modifying the list has no effect on this node.
-     * @return A mutable list of this node's child objects.
-     */
-    public List<Object> getChildObjects()
-    {
-    	List<Object> list = super.getChildObjects();
-    	list.addAll(this.children);
-    	return list;
-    }
+	public ListNodeImpl(List<? extends T> children, BsjSourceLocation startLocation, BsjSourceLocation stopLocation)
+	{
+		super(startLocation, stopLocation);
+		this.children = new ArrayList<T>(children);
+	}
 
+	/**
+	 * Creates a list of this node's child objects. Modifying the list has no effect on this node.
+	 * 
+	 * @return A mutable list of this node's child objects.
+	 */
+	public List<Object> getChildObjects()
+	{
+		List<Object> list = super.getChildObjects();
+		list.addAll(this.children);
+		return list;
+	}
+	
 	// TODO: implement the List<T> interface
 }

@@ -111,10 +111,6 @@ public class ArrayInstantiatorCreationNodeImpl extends ArrayCreationNodeImpl imp
     {
         List<Object> list = super.getChildObjects();
         list.add(getDimExpressions());
-        list.add(getBaseType());
-        list.add(getArrayLevels());
-        list.add(getStartLocation());
-        list.add(getStopLocation());
         return list;
     }
 
@@ -128,7 +124,19 @@ public class ArrayInstantiatorCreationNodeImpl extends ArrayCreationNodeImpl imp
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("dimExpressions=");
-        sb.append(this.dimExpressions == null? "null" : this.dimExpressions.getClass().getSimpleName());
+        sb.append(this.getDimExpressions() == null? "null" : this.getDimExpressions().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("baseType=");
+        sb.append(this.getBaseType() == null? "null" : this.getBaseType().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("arrayLevels=");
+        sb.append(String.valueOf(this.getArrayLevels()) + ":" + "int");
+        sb.append(',');
+        sb.append("startLocation=");
+        sb.append(String.valueOf(this.getStartLocation()) + ":" + this.getStartLocation().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("stopLocation=");
+        sb.append(String.valueOf(this.getStopLocation()) + ":" + this.getStopLocation().getClass().getSimpleName());
         sb.append(']');
         return sb.toString();
     }

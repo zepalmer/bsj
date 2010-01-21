@@ -176,8 +176,6 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
         list.add(getPackageDeclaration());
         list.add(getImports());
         list.add(getTypeDecls());
-        list.add(getStartLocation());
-        list.add(getStopLocation());
         return list;
     }
 
@@ -191,13 +189,19 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("packageDeclaration=");
-        sb.append(this.packageDeclaration == null? "null" : this.packageDeclaration.getClass().getSimpleName());
+        sb.append(this.getPackageDeclaration() == null? "null" : this.getPackageDeclaration().getClass().getSimpleName());
         sb.append(',');
         sb.append("imports=");
-        sb.append(this.imports == null? "null" : this.imports.getClass().getSimpleName());
+        sb.append(this.getImports() == null? "null" : this.getImports().getClass().getSimpleName());
         sb.append(',');
         sb.append("typeDecls=");
-        sb.append(this.typeDecls == null? "null" : this.typeDecls.getClass().getSimpleName());
+        sb.append(this.getTypeDecls() == null? "null" : this.getTypeDecls().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("startLocation=");
+        sb.append(String.valueOf(this.getStartLocation()) + ":" + this.getStartLocation().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("stopLocation=");
+        sb.append(String.valueOf(this.getStopLocation()) + ":" + this.getStopLocation().getClass().getSimpleName());
         sb.append(']');
         return sb.toString();
     }

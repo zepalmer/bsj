@@ -110,10 +110,6 @@ public class ArrayInitializerCreationNodeImpl extends ArrayCreationNodeImpl impl
     {
         List<Object> list = super.getChildObjects();
         list.add(getInitializer());
-        list.add(getBaseType());
-        list.add(getArrayLevels());
-        list.add(getStartLocation());
-        list.add(getStopLocation());
         return list;
     }
 
@@ -127,7 +123,19 @@ public class ArrayInitializerCreationNodeImpl extends ArrayCreationNodeImpl impl
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("initializer=");
-        sb.append(this.initializer == null? "null" : this.initializer.getClass().getSimpleName());
+        sb.append(this.getInitializer() == null? "null" : this.getInitializer().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("baseType=");
+        sb.append(this.getBaseType() == null? "null" : this.getBaseType().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("arrayLevels=");
+        sb.append(String.valueOf(this.getArrayLevels()) + ":" + "int");
+        sb.append(',');
+        sb.append("startLocation=");
+        sb.append(String.valueOf(this.getStartLocation()) + ":" + this.getStartLocation().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("stopLocation=");
+        sb.append(String.valueOf(this.getStopLocation()) + ":" + this.getStopLocation().getClass().getSimpleName());
         sb.append(']');
         return sb.toString();
     }

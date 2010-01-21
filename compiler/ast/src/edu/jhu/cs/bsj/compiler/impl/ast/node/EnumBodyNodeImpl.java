@@ -141,8 +141,6 @@ public class EnumBodyNodeImpl extends NodeImpl implements EnumBodyNode
         List<Object> list = super.getChildObjects();
         list.add(getConstants());
         list.add(getMembers());
-        list.add(getStartLocation());
-        list.add(getStopLocation());
         return list;
     }
 
@@ -156,10 +154,16 @@ public class EnumBodyNodeImpl extends NodeImpl implements EnumBodyNode
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("constants=");
-        sb.append(this.constants == null? "null" : this.constants.getClass().getSimpleName());
+        sb.append(this.getConstants() == null? "null" : this.getConstants().getClass().getSimpleName());
         sb.append(',');
         sb.append("members=");
-        sb.append(this.members == null? "null" : this.members.getClass().getSimpleName());
+        sb.append(this.getMembers() == null? "null" : this.getMembers().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("startLocation=");
+        sb.append(String.valueOf(this.getStartLocation()) + ":" + this.getStartLocation().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("stopLocation=");
+        sb.append(String.valueOf(this.getStopLocation()) + ":" + this.getStopLocation().getClass().getSimpleName());
         sb.append(']');
         return sb.toString();
     }

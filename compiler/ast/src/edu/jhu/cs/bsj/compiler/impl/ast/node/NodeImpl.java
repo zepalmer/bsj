@@ -104,10 +104,10 @@ public abstract class NodeImpl implements Node
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("startLocation=");
-        sb.append(String.valueOf(this.startLocation) + ":" + this.startLocation.getClass().getSimpleName());
+        sb.append(String.valueOf(this.getStartLocation()) + ":" + this.getStartLocation().getClass().getSimpleName());
         sb.append(',');
         sb.append("stopLocation=");
-        sb.append(String.valueOf(this.stopLocation) + ":" + this.stopLocation.getClass().getSimpleName());
+        sb.append(String.valueOf(this.getStopLocation()) + ":" + this.getStopLocation().getClass().getSimpleName());
         sb.append(']');
         return sb.toString();
     }

@@ -108,8 +108,6 @@ public class ForInitializerExpressionNodeImpl extends NodeImpl implements ForIni
     {
         List<Object> list = super.getChildObjects();
         list.add(getExpressions());
-        list.add(getStartLocation());
-        list.add(getStopLocation());
         return list;
     }
 
@@ -123,7 +121,13 @@ public class ForInitializerExpressionNodeImpl extends NodeImpl implements ForIni
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("expressions=");
-        sb.append(this.expressions == null? "null" : this.expressions.getClass().getSimpleName());
+        sb.append(this.getExpressions() == null? "null" : this.getExpressions().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("startLocation=");
+        sb.append(String.valueOf(this.getStartLocation()) + ":" + this.getStartLocation().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("stopLocation=");
+        sb.append(String.valueOf(this.getStopLocation()) + ":" + this.getStopLocation().getClass().getSimpleName());
         sb.append(']');
         return sb.toString();
     }

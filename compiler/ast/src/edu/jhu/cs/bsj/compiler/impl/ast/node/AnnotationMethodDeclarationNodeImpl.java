@@ -247,8 +247,6 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
         list.add(getIdentifier());
         list.add(getDefaultValue());
         list.add(getJavadoc());
-        list.add(getStartLocation());
-        list.add(getStopLocation());
         return list;
     }
 
@@ -262,19 +260,25 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("modifiers=");
-        sb.append(this.modifiers == null? "null" : this.modifiers.getClass().getSimpleName());
+        sb.append(this.getModifiers() == null? "null" : this.getModifiers().getClass().getSimpleName());
         sb.append(',');
         sb.append("type=");
-        sb.append(this.type == null? "null" : this.type.getClass().getSimpleName());
+        sb.append(this.getType() == null? "null" : this.getType().getClass().getSimpleName());
         sb.append(',');
         sb.append("identifier=");
-        sb.append(this.identifier == null? "null" : this.identifier.getClass().getSimpleName());
+        sb.append(this.getIdentifier() == null? "null" : this.getIdentifier().getClass().getSimpleName());
         sb.append(',');
         sb.append("defaultValue=");
-        sb.append(this.defaultValue == null? "null" : this.defaultValue.getClass().getSimpleName());
+        sb.append(this.getDefaultValue() == null? "null" : this.getDefaultValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("javadoc=");
-        sb.append(this.javadoc == null? "null" : this.javadoc.getClass().getSimpleName());
+        sb.append(this.getJavadoc() == null? "null" : this.getJavadoc().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("startLocation=");
+        sb.append(String.valueOf(this.getStartLocation()) + ":" + this.getStartLocation().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("stopLocation=");
+        sb.append(String.valueOf(this.getStopLocation()) + ":" + this.getStopLocation().getClass().getSimpleName());
         sb.append(']');
         return sb.toString();
     }

@@ -166,8 +166,6 @@ public class BinaryExpressionNodeImpl extends NodeImpl implements BinaryExpressi
         list.add(getLeftOperand());
         list.add(getRightOperand());
         list.add(getOperator());
-        list.add(getStartLocation());
-        list.add(getStopLocation());
         return list;
     }
 
@@ -181,13 +179,19 @@ public class BinaryExpressionNodeImpl extends NodeImpl implements BinaryExpressi
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("leftOperand=");
-        sb.append(this.leftOperand == null? "null" : this.leftOperand.getClass().getSimpleName());
+        sb.append(this.getLeftOperand() == null? "null" : this.getLeftOperand().getClass().getSimpleName());
         sb.append(',');
         sb.append("rightOperand=");
-        sb.append(this.rightOperand == null? "null" : this.rightOperand.getClass().getSimpleName());
+        sb.append(this.getRightOperand() == null? "null" : this.getRightOperand().getClass().getSimpleName());
         sb.append(',');
         sb.append("operator=");
-        sb.append(String.valueOf(this.operator) + ":" + this.operator.getClass().getSimpleName());
+        sb.append(String.valueOf(this.getOperator()) + ":" + this.getOperator().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("startLocation=");
+        sb.append(String.valueOf(this.getStartLocation()) + ":" + this.getStartLocation().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("stopLocation=");
+        sb.append(String.valueOf(this.getStopLocation()) + ":" + this.getStopLocation().getClass().getSimpleName());
         sb.append(']');
         return sb.toString();
     }

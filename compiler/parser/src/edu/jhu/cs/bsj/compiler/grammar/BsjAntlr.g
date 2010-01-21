@@ -192,7 +192,10 @@ scope Rule {
     protected BsjSourceLocation getSourceLocation(int rel)
     {
         Token token = input.LT(rel);
-        return new BsjSourceLocation(this.resourceName, token.getLine(), token.getCharPositionInLine());
+        return new BsjSourceLocation(
+                this.resourceName,
+                token==null ? 0 : token.getLine(),
+                token==null ? 0 : token.getCharPositionInLine());
     }
 
     // *** FACTORY NODE PROPERTY **********************************************
@@ -210,7 +213,48 @@ scope Rule {
     {
         this.factory = new BsjNodeFactoryDecorator(factory)
         {
-            protected void decorate(Node node)
+            protected void before()
+            {
+                BsjSourceLocation start = 
+                        new BsjSourceLocation(resourceName, $Rule::firstToken.getLine(),
+                                $Rule::firstToken.getCharPositionInLine());
+                setStartSourceLocation(start);
+                
+                BsjSourceLocation stop;
+                Token token = input.LT(-1);
+                if (token == null)
+                {
+                    stop = new BsjSourceLocation(resourceName, 0, 0);
+                } else
+                {
+                    stop = new BsjSourceLocation(resourceName, token.getLine(),
+                            token.getCharPositionInLine() + token.getText().length());
+                }
+                // If the start location is greater than the stop location, then the last token consumed appears before
+                // the next token when the rule started.  In other words, the rule consumed no tokens.  Therefore, we
+                // give the stop location as matching the start location.
+                // TODO: this probably won't work for Javadocs; how do we want to deal with those?  (javadoc @init?)
+                if (start.compareTo(stop) > 0)
+                {
+                    stop = start;
+                }
+                setStopSourceLocation(stop);
+                
+                if (logger.isTraceEnabled())
+                {
+	                logger.trace("Created node while parsing rule " + $Rule::name);
+	                logger.trace("First token = " +
+	                        (($Rule::firstToken==null)?
+	                        "null" : ($Rule::firstToken.getText())) +
+	                        " at " + start);
+	                logger.trace("Last token = " +
+	                        ((token==null)?
+	                        "null" : (token.getText())) +
+                        " at " + stop);
+                }
+            }
+            
+            protected void after(Node node)
             {
                 if (logger.isTraceEnabled())
                 {

@@ -143,8 +143,6 @@ public class SwitchNodeImpl extends NodeImpl implements SwitchNode
         List<Object> list = super.getChildObjects();
         list.add(getExpression());
         list.add(getCases());
-        list.add(getStartLocation());
-        list.add(getStopLocation());
         return list;
     }
 
@@ -158,10 +156,16 @@ public class SwitchNodeImpl extends NodeImpl implements SwitchNode
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("expression=");
-        sb.append(this.expression == null? "null" : this.expression.getClass().getSimpleName());
+        sb.append(this.getExpression() == null? "null" : this.getExpression().getClass().getSimpleName());
         sb.append(',');
         sb.append("cases=");
-        sb.append(this.cases == null? "null" : this.cases.getClass().getSimpleName());
+        sb.append(this.getCases() == null? "null" : this.getCases().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("startLocation=");
+        sb.append(String.valueOf(this.getStartLocation()) + ":" + this.getStartLocation().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("stopLocation=");
+        sb.append(String.valueOf(this.getStopLocation()) + ":" + this.getStopLocation().getClass().getSimpleName());
         sb.append(']');
         return sb.toString();
     }

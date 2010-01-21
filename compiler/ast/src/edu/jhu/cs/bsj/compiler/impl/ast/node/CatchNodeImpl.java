@@ -140,8 +140,6 @@ public class CatchNodeImpl extends NodeImpl implements CatchNode
         List<Object> list = super.getChildObjects();
         list.add(getBlock());
         list.add(getParameter());
-        list.add(getStartLocation());
-        list.add(getStopLocation());
         return list;
     }
 
@@ -155,10 +153,16 @@ public class CatchNodeImpl extends NodeImpl implements CatchNode
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("block=");
-        sb.append(this.block == null? "null" : this.block.getClass().getSimpleName());
+        sb.append(this.getBlock() == null? "null" : this.getBlock().getClass().getSimpleName());
         sb.append(',');
         sb.append("parameter=");
-        sb.append(this.parameter == null? "null" : this.parameter.getClass().getSimpleName());
+        sb.append(this.getParameter() == null? "null" : this.getParameter().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("startLocation=");
+        sb.append(String.valueOf(this.getStartLocation()) + ":" + this.getStartLocation().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("stopLocation=");
+        sb.append(String.valueOf(this.getStopLocation()) + ":" + this.getStopLocation().getClass().getSimpleName());
         sb.append(']');
         return sb.toString();
     }

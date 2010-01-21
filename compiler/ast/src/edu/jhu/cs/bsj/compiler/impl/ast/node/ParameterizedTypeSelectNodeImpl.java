@@ -142,8 +142,6 @@ public class ParameterizedTypeSelectNodeImpl extends NodeImpl implements Paramet
         List<Object> list = super.getChildObjects();
         list.add(getBase());
         list.add(getSelect());
-        list.add(getStartLocation());
-        list.add(getStopLocation());
         return list;
     }
 
@@ -157,10 +155,16 @@ public class ParameterizedTypeSelectNodeImpl extends NodeImpl implements Paramet
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("base=");
-        sb.append(this.base == null? "null" : this.base.getClass().getSimpleName());
+        sb.append(this.getBase() == null? "null" : this.getBase().getClass().getSimpleName());
         sb.append(',');
         sb.append("select=");
-        sb.append(this.select == null? "null" : this.select.getClass().getSimpleName());
+        sb.append(this.getSelect() == null? "null" : this.getSelect().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("startLocation=");
+        sb.append(String.valueOf(this.getStartLocation()) + ":" + this.getStartLocation().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("stopLocation=");
+        sb.append(String.valueOf(this.getStopLocation()) + ":" + this.getStopLocation().getClass().getSimpleName());
         sb.append(']');
         return sb.toString();
     }

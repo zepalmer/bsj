@@ -213,8 +213,6 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
         list.add(getCondition());
         list.add(getUpdate());
         list.add(getStatement());
-        list.add(getStartLocation());
-        list.add(getStopLocation());
         return list;
     }
 
@@ -228,16 +226,22 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("initializer=");
-        sb.append(this.initializer == null? "null" : this.initializer.getClass().getSimpleName());
+        sb.append(this.getInitializer() == null? "null" : this.getInitializer().getClass().getSimpleName());
         sb.append(',');
         sb.append("condition=");
-        sb.append(this.condition == null? "null" : this.condition.getClass().getSimpleName());
+        sb.append(this.getCondition() == null? "null" : this.getCondition().getClass().getSimpleName());
         sb.append(',');
         sb.append("update=");
-        sb.append(this.update == null? "null" : this.update.getClass().getSimpleName());
+        sb.append(this.getUpdate() == null? "null" : this.getUpdate().getClass().getSimpleName());
         sb.append(',');
         sb.append("statement=");
-        sb.append(this.statement == null? "null" : this.statement.getClass().getSimpleName());
+        sb.append(this.getStatement() == null? "null" : this.getStatement().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("startLocation=");
+        sb.append(String.valueOf(this.getStartLocation()) + ":" + this.getStartLocation().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("stopLocation=");
+        sb.append(String.valueOf(this.getStopLocation()) + ":" + this.getStopLocation().getClass().getSimpleName());
         sb.append(']');
         return sb.toString();
     }

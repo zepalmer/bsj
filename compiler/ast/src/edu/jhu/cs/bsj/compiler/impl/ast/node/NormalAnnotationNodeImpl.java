@@ -110,9 +110,6 @@ public class NormalAnnotationNodeImpl extends AnnotationNodeImpl implements Norm
     {
         List<Object> list = super.getChildObjects();
         list.add(getArguments());
-        list.add(getAnnotationType());
-        list.add(getStartLocation());
-        list.add(getStopLocation());
         return list;
     }
 
@@ -126,7 +123,16 @@ public class NormalAnnotationNodeImpl extends AnnotationNodeImpl implements Norm
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("arguments=");
-        sb.append(this.arguments == null? "null" : this.arguments.getClass().getSimpleName());
+        sb.append(this.getArguments() == null? "null" : this.getArguments().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("annotationType=");
+        sb.append(this.getAnnotationType() == null? "null" : this.getAnnotationType().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("startLocation=");
+        sb.append(String.valueOf(this.getStartLocation()) + ":" + this.getStartLocation().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("stopLocation=");
+        sb.append(String.valueOf(this.getStopLocation()) + ":" + this.getStopLocation().getClass().getSimpleName());
         sb.append(']');
         return sb.toString();
     }

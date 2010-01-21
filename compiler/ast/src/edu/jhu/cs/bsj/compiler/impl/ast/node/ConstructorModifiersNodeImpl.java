@@ -100,9 +100,6 @@ public class ConstructorModifiersNodeImpl extends ModifiersNodeImpl implements C
     {
         List<Object> list = super.getChildObjects();
         list.add(getAccess());
-        list.add(getAnnotations());
-        list.add(getStartLocation());
-        list.add(getStopLocation());
         return list;
     }
 
@@ -116,7 +113,16 @@ public class ConstructorModifiersNodeImpl extends ModifiersNodeImpl implements C
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("access=");
-        sb.append(String.valueOf(this.access) + ":" + this.access.getClass().getSimpleName());
+        sb.append(String.valueOf(this.getAccess()) + ":" + this.getAccess().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("annotations=");
+        sb.append(this.getAnnotations() == null? "null" : this.getAnnotations().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("startLocation=");
+        sb.append(String.valueOf(this.getStartLocation()) + ":" + this.getStartLocation().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("stopLocation=");
+        sb.append(String.valueOf(this.getStopLocation()) + ":" + this.getStopLocation().getClass().getSimpleName());
         sb.append(']');
         return sb.toString();
     }

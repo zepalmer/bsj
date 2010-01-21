@@ -106,8 +106,6 @@ public class AnnotationBodyNodeImpl extends NodeImpl implements AnnotationBodyNo
     {
         List<Object> list = super.getChildObjects();
         list.add(getMembers());
-        list.add(getStartLocation());
-        list.add(getStopLocation());
         return list;
     }
 
@@ -121,7 +119,13 @@ public class AnnotationBodyNodeImpl extends NodeImpl implements AnnotationBodyNo
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("members=");
-        sb.append(this.members == null? "null" : this.members.getClass().getSimpleName());
+        sb.append(this.getMembers() == null? "null" : this.getMembers().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("startLocation=");
+        sb.append(String.valueOf(this.getStartLocation()) + ":" + this.getStartLocation().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("stopLocation=");
+        sb.append(String.valueOf(this.getStopLocation()) + ":" + this.getStopLocation().getClass().getSimpleName());
         sb.append(']');
         return sb.toString();
     }

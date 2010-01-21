@@ -179,8 +179,6 @@ public abstract class ClassInstantiationNodeImpl extends NodeImpl implements Cla
         list.add(getConstructorTypeArguments());
         list.add(getArguments());
         list.add(getBody());
-        list.add(getStartLocation());
-        list.add(getStopLocation());
         return list;
     }
 
@@ -194,13 +192,19 @@ public abstract class ClassInstantiationNodeImpl extends NodeImpl implements Cla
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("constructorTypeArguments=");
-        sb.append(this.constructorTypeArguments == null? "null" : this.constructorTypeArguments.getClass().getSimpleName());
+        sb.append(this.getConstructorTypeArguments() == null? "null" : this.getConstructorTypeArguments().getClass().getSimpleName());
         sb.append(',');
         sb.append("arguments=");
-        sb.append(this.arguments == null? "null" : this.arguments.getClass().getSimpleName());
+        sb.append(this.getArguments() == null? "null" : this.getArguments().getClass().getSimpleName());
         sb.append(',');
         sb.append("body=");
-        sb.append(this.body == null? "null" : this.body.getClass().getSimpleName());
+        sb.append(this.getBody() == null? "null" : this.getBody().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("startLocation=");
+        sb.append(String.valueOf(this.getStartLocation()) + ":" + this.getStartLocation().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("stopLocation=");
+        sb.append(String.valueOf(this.getStopLocation()) + ":" + this.getStopLocation().getClass().getSimpleName());
         sb.append(']');
         return sb.toString();
     }

@@ -112,10 +112,6 @@ public class SuperclassConstructorInvocationNodeImpl extends ConstructorInvocati
     {
         List<Object> list = super.getChildObjects();
         list.add(getQualifyingExpression());
-        list.add(getArguments());
-        list.add(getTypeArguments());
-        list.add(getStartLocation());
-        list.add(getStopLocation());
         return list;
     }
 
@@ -129,7 +125,19 @@ public class SuperclassConstructorInvocationNodeImpl extends ConstructorInvocati
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("qualifyingExpression=");
-        sb.append(this.qualifyingExpression == null? "null" : this.qualifyingExpression.getClass().getSimpleName());
+        sb.append(this.getQualifyingExpression() == null? "null" : this.getQualifyingExpression().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("arguments=");
+        sb.append(this.getArguments() == null? "null" : this.getArguments().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("typeArguments=");
+        sb.append(this.getTypeArguments() == null? "null" : this.getTypeArguments().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("startLocation=");
+        sb.append(String.valueOf(this.getStartLocation()) + ":" + this.getStartLocation().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("stopLocation=");
+        sb.append(String.valueOf(this.getStopLocation()) + ":" + this.getStopLocation().getClass().getSimpleName());
         sb.append(']');
         return sb.toString();
     }

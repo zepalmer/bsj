@@ -141,8 +141,6 @@ public class ConstructorBodyNodeImpl extends NodeImpl implements ConstructorBody
         List<Object> list = super.getChildObjects();
         list.add(getConstructorInvocation());
         list.add(getStatements());
-        list.add(getStartLocation());
-        list.add(getStopLocation());
         return list;
     }
 
@@ -156,10 +154,16 @@ public class ConstructorBodyNodeImpl extends NodeImpl implements ConstructorBody
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("constructorInvocation=");
-        sb.append(this.constructorInvocation == null? "null" : this.constructorInvocation.getClass().getSimpleName());
+        sb.append(this.getConstructorInvocation() == null? "null" : this.getConstructorInvocation().getClass().getSimpleName());
         sb.append(',');
         sb.append("statements=");
-        sb.append(this.statements == null? "null" : this.statements.getClass().getSimpleName());
+        sb.append(this.getStatements() == null? "null" : this.getStatements().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("startLocation=");
+        sb.append(String.valueOf(this.getStartLocation()) + ":" + this.getStartLocation().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("stopLocation=");
+        sb.append(String.valueOf(this.getStopLocation()) + ":" + this.getStopLocation().getClass().getSimpleName());
         sb.append(']');
         return sb.toString();
     }

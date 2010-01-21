@@ -144,9 +144,6 @@ public class QualifiedNameNodeImpl extends NameNodeImpl implements QualifiedName
         List<Object> list = super.getChildObjects();
         list.add(getBase());
         list.add(getIdentifier());
-        list.add(getCategory());
-        list.add(getStartLocation());
-        list.add(getStopLocation());
         return list;
     }
 

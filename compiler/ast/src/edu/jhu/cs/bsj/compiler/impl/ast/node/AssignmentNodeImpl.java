@@ -166,8 +166,6 @@ public class AssignmentNodeImpl extends NodeImpl implements AssignmentNode
         list.add(getVariable());
         list.add(getOperator());
         list.add(getExpression());
-        list.add(getStartLocation());
-        list.add(getStopLocation());
         return list;
     }
 
@@ -181,13 +179,19 @@ public class AssignmentNodeImpl extends NodeImpl implements AssignmentNode
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("variable=");
-        sb.append(this.variable == null? "null" : this.variable.getClass().getSimpleName());
+        sb.append(this.getVariable() == null? "null" : this.getVariable().getClass().getSimpleName());
         sb.append(',');
         sb.append("operator=");
-        sb.append(String.valueOf(this.operator) + ":" + this.operator.getClass().getSimpleName());
+        sb.append(String.valueOf(this.getOperator()) + ":" + this.getOperator().getClass().getSimpleName());
         sb.append(',');
         sb.append("expression=");
-        sb.append(this.expression == null? "null" : this.expression.getClass().getSimpleName());
+        sb.append(this.getExpression() == null? "null" : this.getExpression().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("startLocation=");
+        sb.append(String.valueOf(this.getStartLocation()) + ":" + this.getStartLocation().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("stopLocation=");
+        sb.append(String.valueOf(this.getStopLocation()) + ":" + this.getStopLocation().getClass().getSimpleName());
         sb.append(']');
         return sb.toString();
     }

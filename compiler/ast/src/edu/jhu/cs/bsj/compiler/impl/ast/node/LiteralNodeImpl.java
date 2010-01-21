@@ -95,8 +95,6 @@ public abstract class LiteralNodeImpl<T> extends NodeImpl implements LiteralNode
     {
         List<Object> list = super.getChildObjects();
         list.add(getValue());
-        list.add(getStartLocation());
-        list.add(getStopLocation());
         return list;
     }
 
@@ -110,7 +108,13 @@ public abstract class LiteralNodeImpl<T> extends NodeImpl implements LiteralNode
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("value=");
-        sb.append(String.valueOf(this.value) + ":" + this.value.getClass().getSimpleName());
+        sb.append(String.valueOf(this.getValue()) + ":" + this.getValue().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("startLocation=");
+        sb.append(String.valueOf(this.getStartLocation()) + ":" + this.getStartLocation().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("stopLocation=");
+        sb.append(String.valueOf(this.getStopLocation()) + ":" + this.getStopLocation().getClass().getSimpleName());
         sb.append(']');
         return sb.toString();
     }

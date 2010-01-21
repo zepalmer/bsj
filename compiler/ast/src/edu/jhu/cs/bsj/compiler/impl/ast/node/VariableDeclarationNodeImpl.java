@@ -143,8 +143,6 @@ public class VariableDeclarationNodeImpl extends NodeImpl implements VariableDec
         List<Object> list = super.getChildObjects();
         list.add(getModifiers());
         list.add(getDeclarators());
-        list.add(getStartLocation());
-        list.add(getStopLocation());
         return list;
     }
 
@@ -158,10 +156,16 @@ public class VariableDeclarationNodeImpl extends NodeImpl implements VariableDec
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("modifiers=");
-        sb.append(this.modifiers == null? "null" : this.modifiers.getClass().getSimpleName());
+        sb.append(this.getModifiers() == null? "null" : this.getModifiers().getClass().getSimpleName());
         sb.append(',');
         sb.append("declarators=");
-        sb.append(this.declarators == null? "null" : this.declarators.getClass().getSimpleName());
+        sb.append(this.getDeclarators() == null? "null" : this.getDeclarators().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("startLocation=");
+        sb.append(String.valueOf(this.getStartLocation()) + ":" + this.getStartLocation().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("stopLocation=");
+        sb.append(String.valueOf(this.getStopLocation()) + ":" + this.getStopLocation().getClass().getSimpleName());
         sb.append(']');
         return sb.toString();
     }

@@ -141,8 +141,6 @@ public class AssertStatementNodeImpl extends NodeImpl implements AssertStatement
         List<Object> list = super.getChildObjects();
         list.add(getTestExpression());
         list.add(getMessageExpression());
-        list.add(getStartLocation());
-        list.add(getStopLocation());
         return list;
     }
 
@@ -156,10 +154,16 @@ public class AssertStatementNodeImpl extends NodeImpl implements AssertStatement
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("testExpression=");
-        sb.append(this.testExpression == null? "null" : this.testExpression.getClass().getSimpleName());
+        sb.append(this.getTestExpression() == null? "null" : this.getTestExpression().getClass().getSimpleName());
         sb.append(',');
         sb.append("messageExpression=");
-        sb.append(this.messageExpression == null? "null" : this.messageExpression.getClass().getSimpleName());
+        sb.append(this.getMessageExpression() == null? "null" : this.getMessageExpression().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("startLocation=");
+        sb.append(String.valueOf(this.getStartLocation()) + ":" + this.getStartLocation().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("stopLocation=");
+        sb.append(String.valueOf(this.getStopLocation()) + ":" + this.getStopLocation().getClass().getSimpleName());
         sb.append(']');
         return sb.toString();
     }

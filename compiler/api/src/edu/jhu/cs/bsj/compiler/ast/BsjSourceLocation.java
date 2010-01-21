@@ -4,7 +4,7 @@ package edu.jhu.cs.bsj.compiler.ast;
  * This class represents a location in a BSJ or Java source file.
  * @author Zachary Palmer
  */
-public class BsjSourceLocation
+public class BsjSourceLocation implements Comparable<BsjSourceLocation>
 {
 	/**
 	 * The name of the source specified by this location.  This should be, for example, the name of the source unit
@@ -47,5 +47,22 @@ public class BsjSourceLocation
 	public String toString()
 	{
 		return this.resourceName + ":" + this.line + ":" + this.column;
+	}
+
+	@Override
+	public int compareTo(BsjSourceLocation o)
+	{
+		int c = this.resourceName.compareTo(o.getResourceName());
+		if (c!=0)
+			return c;
+		if (getLine() < o.getLine())
+			return -1;
+		if (getLine() > o.getLine())
+			return 1;
+		if (getColumn() < o.getColumn())
+			return -1;
+		if (getColumn() > o.getColumn())
+			return 1;
+		return 0;
 	}
 }

@@ -215,8 +215,6 @@ public class SuperMethodInvocationNodeImpl extends NodeImpl implements SuperMeth
         list.add(getIdentifier());
         list.add(getArguments());
         list.add(getTypeArguments());
-        list.add(getStartLocation());
-        list.add(getStopLocation());
         return list;
     }
 
@@ -230,16 +228,22 @@ public class SuperMethodInvocationNodeImpl extends NodeImpl implements SuperMeth
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("type=");
-        sb.append(this.type == null? "null" : this.type.getClass().getSimpleName());
+        sb.append(this.getType() == null? "null" : this.getType().getClass().getSimpleName());
         sb.append(',');
         sb.append("identifier=");
-        sb.append(this.identifier == null? "null" : this.identifier.getClass().getSimpleName());
+        sb.append(this.getIdentifier() == null? "null" : this.getIdentifier().getClass().getSimpleName());
         sb.append(',');
         sb.append("arguments=");
-        sb.append(this.arguments == null? "null" : this.arguments.getClass().getSimpleName());
+        sb.append(this.getArguments() == null? "null" : this.getArguments().getClass().getSimpleName());
         sb.append(',');
         sb.append("typeArguments=");
-        sb.append(this.typeArguments == null? "null" : this.typeArguments.getClass().getSimpleName());
+        sb.append(this.getTypeArguments() == null? "null" : this.getTypeArguments().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("startLocation=");
+        sb.append(String.valueOf(this.getStartLocation()) + ":" + this.getStartLocation().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("stopLocation=");
+        sb.append(String.valueOf(this.getStopLocation()) + ":" + this.getStopLocation().getClass().getSimpleName());
         sb.append(']');
         return sb.toString();
     }

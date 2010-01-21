@@ -177,8 +177,6 @@ public class EnhancedForLoopNodeImpl extends NodeImpl implements EnhancedForLoop
         list.add(getVariable());
         list.add(getExpression());
         list.add(getStatement());
-        list.add(getStartLocation());
-        list.add(getStopLocation());
         return list;
     }
 
@@ -192,13 +190,19 @@ public class EnhancedForLoopNodeImpl extends NodeImpl implements EnhancedForLoop
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("variable=");
-        sb.append(this.variable == null? "null" : this.variable.getClass().getSimpleName());
+        sb.append(this.getVariable() == null? "null" : this.getVariable().getClass().getSimpleName());
         sb.append(',');
         sb.append("expression=");
-        sb.append(this.expression == null? "null" : this.expression.getClass().getSimpleName());
+        sb.append(this.getExpression() == null? "null" : this.getExpression().getClass().getSimpleName());
         sb.append(',');
         sb.append("statement=");
-        sb.append(this.statement == null? "null" : this.statement.getClass().getSimpleName());
+        sb.append(this.getStatement() == null? "null" : this.getStatement().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("startLocation=");
+        sb.append(String.valueOf(this.getStartLocation()) + ":" + this.getStartLocation().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("stopLocation=");
+        sb.append(String.valueOf(this.getStopLocation()) + ":" + this.getStopLocation().getClass().getSimpleName());
         sb.append(']');
         return sb.toString();
     }

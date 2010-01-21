@@ -105,8 +105,6 @@ public abstract class ModifiersNodeImpl extends NodeImpl implements ModifiersNod
     {
         List<Object> list = super.getChildObjects();
         list.add(getAnnotations());
-        list.add(getStartLocation());
-        list.add(getStopLocation());
         return list;
     }
 
@@ -120,7 +118,13 @@ public abstract class ModifiersNodeImpl extends NodeImpl implements ModifiersNod
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("annotations=");
-        sb.append(this.annotations == null? "null" : this.annotations.getClass().getSimpleName());
+        sb.append(this.getAnnotations() == null? "null" : this.getAnnotations().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("startLocation=");
+        sb.append(String.valueOf(this.getStartLocation()) + ":" + this.getStartLocation().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("stopLocation=");
+        sb.append(String.valueOf(this.getStopLocation()) + ":" + this.getStopLocation().getClass().getSimpleName());
         sb.append(']');
         return sb.toString();
     }

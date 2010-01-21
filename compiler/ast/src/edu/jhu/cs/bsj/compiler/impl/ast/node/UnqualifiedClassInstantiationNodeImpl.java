@@ -114,11 +114,6 @@ public class UnqualifiedClassInstantiationNodeImpl extends ClassInstantiationNod
     {
         List<Object> list = super.getChildObjects();
         list.add(getType());
-        list.add(getConstructorTypeArguments());
-        list.add(getArguments());
-        list.add(getBody());
-        list.add(getStartLocation());
-        list.add(getStopLocation());
         return list;
     }
 
@@ -132,7 +127,22 @@ public class UnqualifiedClassInstantiationNodeImpl extends ClassInstantiationNod
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("type=");
-        sb.append(this.type == null? "null" : this.type.getClass().getSimpleName());
+        sb.append(this.getType() == null? "null" : this.getType().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("constructorTypeArguments=");
+        sb.append(this.getConstructorTypeArguments() == null? "null" : this.getConstructorTypeArguments().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("arguments=");
+        sb.append(this.getArguments() == null? "null" : this.getArguments().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("body=");
+        sb.append(this.getBody() == null? "null" : this.getBody().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("startLocation=");
+        sb.append(String.valueOf(this.getStartLocation()) + ":" + this.getStartLocation().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("stopLocation=");
+        sb.append(String.valueOf(this.getStopLocation()) + ":" + this.getStopLocation().getClass().getSimpleName());
         sb.append(']');
         return sb.toString();
     }

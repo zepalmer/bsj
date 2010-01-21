@@ -104,8 +104,6 @@ public abstract class AnnotationNodeImpl extends NodeImpl implements AnnotationN
     {
         List<Object> list = super.getChildObjects();
         list.add(getAnnotationType());
-        list.add(getStartLocation());
-        list.add(getStopLocation());
         return list;
     }
 
@@ -119,7 +117,13 @@ public abstract class AnnotationNodeImpl extends NodeImpl implements AnnotationN
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("annotationType=");
-        sb.append(this.annotationType == null? "null" : this.annotationType.getClass().getSimpleName());
+        sb.append(this.getAnnotationType() == null? "null" : this.getAnnotationType().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("startLocation=");
+        sb.append(String.valueOf(this.getStartLocation()) + ":" + this.getStartLocation().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("stopLocation=");
+        sb.append(String.valueOf(this.getStopLocation()) + ":" + this.getStopLocation().getClass().getSimpleName());
         sb.append(']');
         return sb.toString();
     }

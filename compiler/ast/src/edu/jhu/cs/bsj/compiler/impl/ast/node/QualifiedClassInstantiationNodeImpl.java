@@ -182,11 +182,6 @@ public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeI
         list.add(getEnclosingExpression());
         list.add(getIdentifier());
         list.add(getTypeArguments());
-        list.add(getConstructorTypeArguments());
-        list.add(getArguments());
-        list.add(getBody());
-        list.add(getStartLocation());
-        list.add(getStopLocation());
         return list;
     }
 
@@ -200,13 +195,28 @@ public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeI
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("enclosingExpression=");
-        sb.append(this.enclosingExpression == null? "null" : this.enclosingExpression.getClass().getSimpleName());
+        sb.append(this.getEnclosingExpression() == null? "null" : this.getEnclosingExpression().getClass().getSimpleName());
         sb.append(',');
         sb.append("identifier=");
-        sb.append(this.identifier == null? "null" : this.identifier.getClass().getSimpleName());
+        sb.append(this.getIdentifier() == null? "null" : this.getIdentifier().getClass().getSimpleName());
         sb.append(',');
         sb.append("typeArguments=");
-        sb.append(this.typeArguments == null? "null" : this.typeArguments.getClass().getSimpleName());
+        sb.append(this.getTypeArguments() == null? "null" : this.getTypeArguments().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("constructorTypeArguments=");
+        sb.append(this.getConstructorTypeArguments() == null? "null" : this.getConstructorTypeArguments().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("arguments=");
+        sb.append(this.getArguments() == null? "null" : this.getArguments().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("body=");
+        sb.append(this.getBody() == null? "null" : this.getBody().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("startLocation=");
+        sb.append(String.valueOf(this.getStartLocation()) + ":" + this.getStartLocation().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("stopLocation=");
+        sb.append(String.valueOf(this.getStopLocation()) + ":" + this.getStopLocation().getClass().getSimpleName());
         sb.append(']');
         return sb.toString();
     }

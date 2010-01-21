@@ -75,9 +75,6 @@ public class AnnotationMethodModifiersNodeImpl extends ModifiersNodeImpl impleme
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(getAnnotations());
-        list.add(getStartLocation());
-        list.add(getStopLocation());
         return list;
     }
 
@@ -90,6 +87,14 @@ public class AnnotationMethodModifiersNodeImpl extends ModifiersNodeImpl impleme
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
+        sb.append("annotations=");
+        sb.append(this.getAnnotations() == null? "null" : this.getAnnotations().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("startLocation=");
+        sb.append(String.valueOf(this.getStartLocation()) + ":" + this.getStartLocation().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("stopLocation=");
+        sb.append(String.valueOf(this.getStopLocation()) + ":" + this.getStopLocation().getClass().getSimpleName());
         sb.append(']');
         return sb.toString();
     }

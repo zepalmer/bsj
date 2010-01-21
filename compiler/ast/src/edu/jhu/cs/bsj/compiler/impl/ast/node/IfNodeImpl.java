@@ -176,8 +176,6 @@ public class IfNodeImpl extends NodeImpl implements IfNode
         list.add(getCondition());
         list.add(getThenStatement());
         list.add(getElseStatement());
-        list.add(getStartLocation());
-        list.add(getStopLocation());
         return list;
     }
 
@@ -191,13 +189,19 @@ public class IfNodeImpl extends NodeImpl implements IfNode
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("condition=");
-        sb.append(this.condition == null? "null" : this.condition.getClass().getSimpleName());
+        sb.append(this.getCondition() == null? "null" : this.getCondition().getClass().getSimpleName());
         sb.append(',');
         sb.append("thenStatement=");
-        sb.append(this.thenStatement == null? "null" : this.thenStatement.getClass().getSimpleName());
+        sb.append(this.getThenStatement() == null? "null" : this.getThenStatement().getClass().getSimpleName());
         sb.append(',');
         sb.append("elseStatement=");
-        sb.append(this.elseStatement == null? "null" : this.elseStatement.getClass().getSimpleName());
+        sb.append(this.getElseStatement() == null? "null" : this.getElseStatement().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("startLocation=");
+        sb.append(String.valueOf(this.getStartLocation()) + ":" + this.getStartLocation().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("stopLocation=");
+        sb.append(String.valueOf(this.getStopLocation()) + ":" + this.getStopLocation().getClass().getSimpleName());
         sb.append(']');
         return sb.toString();
     }

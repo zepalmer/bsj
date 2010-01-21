@@ -94,8 +94,6 @@ public class IdentifierNodeImpl extends NodeImpl implements IdentifierNode
     {
         List<Object> list = super.getChildObjects();
         list.add(getIdentifier());
-        list.add(getStartLocation());
-        list.add(getStopLocation());
         return list;
     }
 

@@ -184,8 +184,6 @@ public class FieldDeclarationNodeImpl extends NodeImpl implements FieldDeclarati
         list.add(getModifiers());
         list.add(getDeclarators());
         list.add(getJavadoc());
-        list.add(getStartLocation());
-        list.add(getStopLocation());
         return list;
     }
 
@@ -199,13 +197,19 @@ public class FieldDeclarationNodeImpl extends NodeImpl implements FieldDeclarati
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("modifiers=");
-        sb.append(this.modifiers == null? "null" : this.modifiers.getClass().getSimpleName());
+        sb.append(this.getModifiers() == null? "null" : this.getModifiers().getClass().getSimpleName());
         sb.append(',');
         sb.append("declarators=");
-        sb.append(this.declarators == null? "null" : this.declarators.getClass().getSimpleName());
+        sb.append(this.getDeclarators() == null? "null" : this.getDeclarators().getClass().getSimpleName());
         sb.append(',');
         sb.append("javadoc=");
-        sb.append(this.javadoc == null? "null" : this.javadoc.getClass().getSimpleName());
+        sb.append(this.getJavadoc() == null? "null" : this.getJavadoc().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("startLocation=");
+        sb.append(String.valueOf(this.getStartLocation()) + ":" + this.getStartLocation().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("stopLocation=");
+        sb.append(String.valueOf(this.getStopLocation()) + ":" + this.getStopLocation().getClass().getSimpleName());
         sb.append(']');
         return sb.toString();
     }

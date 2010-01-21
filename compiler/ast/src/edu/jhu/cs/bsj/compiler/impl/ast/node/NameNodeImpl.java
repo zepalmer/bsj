@@ -84,8 +84,6 @@ public abstract class NameNodeImpl extends NodeImpl implements NameNode
     {
         List<Object> list = super.getChildObjects();
         list.add(getCategory());
-        list.add(getStartLocation());
-        list.add(getStopLocation());
         return list;
     }
 
@@ -99,7 +97,13 @@ public abstract class NameNodeImpl extends NodeImpl implements NameNode
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("category=");
-        sb.append(String.valueOf(this.category) + ":" + this.category.getClass().getSimpleName());
+        sb.append(String.valueOf(this.getCategory()) + ":" + this.getCategory().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("startLocation=");
+        sb.append(String.valueOf(this.getStartLocation()) + ":" + this.getStartLocation().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("stopLocation=");
+        sb.append(String.valueOf(this.getStopLocation()) + ":" + this.getStopLocation().getClass().getSimpleName());
         sb.append(']');
         return sb.toString();
     }

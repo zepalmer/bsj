@@ -177,8 +177,6 @@ public class VariableDeclaratorNodeImpl extends NodeImpl implements VariableDecl
         list.add(getType());
         list.add(getName());
         list.add(getInitializer());
-        list.add(getStartLocation());
-        list.add(getStopLocation());
         return list;
     }
 
@@ -192,13 +190,19 @@ public class VariableDeclaratorNodeImpl extends NodeImpl implements VariableDecl
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("type=");
-        sb.append(this.type == null? "null" : this.type.getClass().getSimpleName());
+        sb.append(this.getType() == null? "null" : this.getType().getClass().getSimpleName());
         sb.append(',');
         sb.append("name=");
-        sb.append(this.name == null? "null" : this.name.getClass().getSimpleName());
+        sb.append(this.getName() == null? "null" : this.getName().getClass().getSimpleName());
         sb.append(',');
         sb.append("initializer=");
-        sb.append(this.initializer == null? "null" : this.initializer.getClass().getSimpleName());
+        sb.append(this.getInitializer() == null? "null" : this.getInitializer().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("startLocation=");
+        sb.append(String.valueOf(this.getStartLocation()) + ":" + this.getStartLocation().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("stopLocation=");
+        sb.append(String.valueOf(this.getStopLocation()) + ":" + this.getStopLocation().getClass().getSimpleName());
         sb.append(']');
         return sb.toString();
     }

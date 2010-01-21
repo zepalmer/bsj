@@ -184,10 +184,6 @@ public class EnumDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl implem
         list.add(getModifiers());
         list.add(getImplementsClause());
         list.add(getBody());
-        list.add(getIdentifier());
-        list.add(getJavadoc());
-        list.add(getStartLocation());
-        list.add(getStopLocation());
         return list;
     }
 
@@ -201,13 +197,25 @@ public class EnumDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl implem
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("modifiers=");
-        sb.append(this.modifiers == null? "null" : this.modifiers.getClass().getSimpleName());
+        sb.append(this.getModifiers() == null? "null" : this.getModifiers().getClass().getSimpleName());
         sb.append(',');
         sb.append("implementsClause=");
-        sb.append(this.implementsClause == null? "null" : this.implementsClause.getClass().getSimpleName());
+        sb.append(this.getImplementsClause() == null? "null" : this.getImplementsClause().getClass().getSimpleName());
         sb.append(',');
         sb.append("body=");
-        sb.append(this.body == null? "null" : this.body.getClass().getSimpleName());
+        sb.append(this.getBody() == null? "null" : this.getBody().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("identifier=");
+        sb.append(this.getIdentifier() == null? "null" : this.getIdentifier().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("javadoc=");
+        sb.append(this.getJavadoc() == null? "null" : this.getJavadoc().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("startLocation=");
+        sb.append(String.valueOf(this.getStartLocation()) + ":" + this.getStartLocation().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("stopLocation=");
+        sb.append(String.valueOf(this.getStopLocation()) + ":" + this.getStopLocation().getClass().getSimpleName());
         sb.append(']');
         return sb.toString();
     }

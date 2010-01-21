@@ -109,9 +109,6 @@ public class SimpleNameNodeImpl extends NameNodeImpl implements SimpleNameNode
     {
         List<Object> list = super.getChildObjects();
         list.add(getIdentifier());
-        list.add(getCategory());
-        list.add(getStartLocation());
-        list.add(getStopLocation());
         return list;
     }
 

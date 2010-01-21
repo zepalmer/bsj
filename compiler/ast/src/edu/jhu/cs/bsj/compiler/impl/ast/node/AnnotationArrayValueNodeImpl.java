@@ -108,8 +108,6 @@ public class AnnotationArrayValueNodeImpl extends NodeImpl implements Annotation
     {
         List<Object> list = super.getChildObjects();
         list.add(getValues());
-        list.add(getStartLocation());
-        list.add(getStopLocation());
         return list;
     }
 
@@ -123,7 +121,13 @@ public class AnnotationArrayValueNodeImpl extends NodeImpl implements Annotation
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("values=");
-        sb.append(this.values == null? "null" : this.values.getClass().getSimpleName());
+        sb.append(this.getValues() == null? "null" : this.getValues().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("startLocation=");
+        sb.append(String.valueOf(this.getStartLocation()) + ":" + this.getStartLocation().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("stopLocation=");
+        sb.append(String.valueOf(this.getStopLocation()) + ":" + this.getStopLocation().getClass().getSimpleName());
         sb.append(']');
         return sb.toString();
     }

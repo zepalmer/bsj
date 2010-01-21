@@ -107,8 +107,6 @@ public class ContinueNodeImpl extends NodeImpl implements ContinueNode
     {
         List<Object> list = super.getChildObjects();
         list.add(getLabel());
-        list.add(getStartLocation());
-        list.add(getStopLocation());
         return list;
     }
 
@@ -122,7 +120,13 @@ public class ContinueNodeImpl extends NodeImpl implements ContinueNode
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("label=");
-        sb.append(this.label == null? "null" : this.label.getClass().getSimpleName());
+        sb.append(this.getLabel() == null? "null" : this.getLabel().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("startLocation=");
+        sb.append(String.valueOf(this.getStartLocation()) + ":" + this.getStartLocation().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("stopLocation=");
+        sb.append(String.valueOf(this.getStopLocation()) + ":" + this.getStopLocation().getClass().getSimpleName());
         sb.append(']');
         return sb.toString();
     }

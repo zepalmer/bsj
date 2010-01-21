@@ -72,8 +72,6 @@ public class VoidStatementNodeImpl extends NodeImpl implements VoidStatementNode
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(getStartLocation());
-        list.add(getStopLocation());
         return list;
     }
 
@@ -86,6 +84,11 @@ public class VoidStatementNodeImpl extends NodeImpl implements VoidStatementNode
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
+        sb.append("startLocation=");
+        sb.append(String.valueOf(this.getStartLocation()) + ":" + this.getStartLocation().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("stopLocation=");
+        sb.append(String.valueOf(this.getStopLocation()) + ":" + this.getStopLocation().getClass().getSimpleName());
         sb.append(']');
         return sb.toString();
     }

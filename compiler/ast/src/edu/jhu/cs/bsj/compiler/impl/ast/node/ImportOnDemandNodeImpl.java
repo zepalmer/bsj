@@ -131,8 +131,6 @@ public class ImportOnDemandNodeImpl extends NodeImpl implements ImportOnDemandNo
         List<Object> list = super.getChildObjects();
         list.add(getName());
         list.add(getStaticImport());
-        list.add(getStartLocation());
-        list.add(getStopLocation());
         return list;
     }
 
@@ -146,10 +144,16 @@ public class ImportOnDemandNodeImpl extends NodeImpl implements ImportOnDemandNo
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("name=");
-        sb.append(this.name == null? "null" : this.name.getClass().getSimpleName());
+        sb.append(this.getName() == null? "null" : this.getName().getClass().getSimpleName());
         sb.append(',');
         sb.append("staticImport=");
-        sb.append(String.valueOf(this.staticImport) + ":" + "boolean");
+        sb.append(String.valueOf(this.getStaticImport()) + ":" + "boolean");
+        sb.append(',');
+        sb.append("startLocation=");
+        sb.append(String.valueOf(this.getStartLocation()) + ":" + this.getStartLocation().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("stopLocation=");
+        sb.append(String.valueOf(this.getStopLocation()) + ":" + this.getStopLocation().getClass().getSimpleName());
         sb.append(']');
         return sb.toString();
     }

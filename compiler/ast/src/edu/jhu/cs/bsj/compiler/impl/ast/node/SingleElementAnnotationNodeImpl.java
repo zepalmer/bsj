@@ -109,9 +109,6 @@ public class SingleElementAnnotationNodeImpl extends AnnotationNodeImpl implemen
     {
         List<Object> list = super.getChildObjects();
         list.add(getValue());
-        list.add(getAnnotationType());
-        list.add(getStartLocation());
-        list.add(getStopLocation());
         return list;
     }
 
@@ -125,7 +122,16 @@ public class SingleElementAnnotationNodeImpl extends AnnotationNodeImpl implemen
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("value=");
-        sb.append(this.value == null? "null" : this.value.getClass().getSimpleName());
+        sb.append(this.getValue() == null? "null" : this.getValue().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("annotationType=");
+        sb.append(this.getAnnotationType() == null? "null" : this.getAnnotationType().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("startLocation=");
+        sb.append(String.valueOf(this.getStartLocation()) + ":" + this.getStartLocation().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("stopLocation=");
+        sb.append(String.valueOf(this.getStopLocation()) + ":" + this.getStopLocation().getClass().getSimpleName());
         sb.append(']');
         return sb.toString();
     }

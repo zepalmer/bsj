@@ -141,8 +141,6 @@ public class TypeParameterNodeImpl extends NodeImpl implements TypeParameterNode
         List<Object> list = super.getChildObjects();
         list.add(getIdentifier());
         list.add(getBounds());
-        list.add(getStartLocation());
-        list.add(getStopLocation());
         return list;
     }
 
@@ -156,10 +154,16 @@ public class TypeParameterNodeImpl extends NodeImpl implements TypeParameterNode
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("identifier=");
-        sb.append(this.identifier == null? "null" : this.identifier.getClass().getSimpleName());
+        sb.append(this.getIdentifier() == null? "null" : this.getIdentifier().getClass().getSimpleName());
         sb.append(',');
         sb.append("bounds=");
-        sb.append(this.bounds == null? "null" : this.bounds.getClass().getSimpleName());
+        sb.append(this.getBounds() == null? "null" : this.getBounds().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("startLocation=");
+        sb.append(String.valueOf(this.getStartLocation()) + ":" + this.getStartLocation().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("stopLocation=");
+        sb.append(String.valueOf(this.getStopLocation()) + ":" + this.getStopLocation().getClass().getSimpleName());
         sb.append(']');
         return sb.toString();
     }

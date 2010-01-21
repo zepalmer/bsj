@@ -109,8 +109,6 @@ public class ArrayTypeNodeImpl extends NodeImpl implements ArrayTypeNode
     {
         List<Object> list = super.getChildObjects();
         list.add(getType());
-        list.add(getStartLocation());
-        list.add(getStopLocation());
         return list;
     }
 
@@ -124,7 +122,13 @@ public class ArrayTypeNodeImpl extends NodeImpl implements ArrayTypeNode
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("type=");
-        sb.append(this.type == null? "null" : this.type.getClass().getSimpleName());
+        sb.append(this.getType() == null? "null" : this.getType().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("startLocation=");
+        sb.append(String.valueOf(this.getStartLocation()) + ":" + this.getStartLocation().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("stopLocation=");
+        sb.append(String.valueOf(this.getStopLocation()) + ":" + this.getStopLocation().getClass().getSimpleName());
         sb.append(']');
         return sb.toString();
     }
