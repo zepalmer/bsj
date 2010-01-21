@@ -626,7 +626,9 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
     @Override
     public Void executeInstanceOfNode(InstanceOfNode node, PrependablePrintStream p)
     {
-        // TODO Auto-generated method stub
+    	node.getExpression().executeOperation(this, p);
+    	p.print(" instanceof ");
+    	node.getType().executeOperation(this, p);
         return null;
     }
 
@@ -695,15 +697,15 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
     @Override
     public Void executeLabeledStatementNode(LabeledStatementNode node, PrependablePrintStream p)
     {
-        // TODO Auto-generated method stub
+    	node.getLabel().executeOperation(this, p);
+    	p.print(": ");
+    	node.getStatement().executeOperation(this, p);
         return null;
     }
 
     @Override
     public <T extends Node> Void executeListNode(ListNode<T> node, PrependablePrintStream p)
     {
-        // TODO done?
-        
         // just call the utility method with some defaults
         handleListNode(node, "", ",", "\n", p, false);
         return null;
