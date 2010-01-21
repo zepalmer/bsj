@@ -14,7 +14,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.CodeLiteralNode;
  * @author Zachary Palmer
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public class BsjTypedNodeNoOpVisitor
+public class BsjTypedNodeNoOpVisitor implements BsjTypedNodeVisitor
 {
     /**
      * Begins a sequence of visit start calls on a node.

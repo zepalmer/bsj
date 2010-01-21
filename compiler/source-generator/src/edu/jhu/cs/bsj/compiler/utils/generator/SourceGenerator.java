@@ -1254,7 +1254,7 @@ public class SourceGenerator
 	/**
 	 * Writes the BsjTypedNodeVisitor interface.
 	 */
-	static class BsjTypedNodeVisitorWriter implements ClassDefHandler
+	static class BsjTypedNodeVisitorWriter extends AbstractClassDefHandler
 	{
 		private Map<String, Set<String>> subtypeMap;
 		private Map<String, String> supertypeMap;
@@ -1314,97 +1314,15 @@ public class SourceGenerator
 			Collections.sort(sortedNames);
 
 			// Write interface
-			String pkg = "edu.jhu.cs.bsj.compiler.ast";
-			PrintStream ps;
-			ps = new PrintStream(new FileOutputStream(new File(TARGET_IFACE_DIR.getPath() + File.separator
-					+ pkg.replaceAll("\\.", File.separator) + File.separator + "BsjTypedNodeVisitor.java")));
-			ps.println("package " + pkg + ";");
-			ps.println();
-			printImports(ps, false);
-			ps.println("/**");
-			ps.println(" * This interface is implemented by those classes which wish to perform visitation operations");
-			ps.println(" * over a BSJ AST.  Each node visits a method for its own class as well as all of its");
-			ps.println(" * superclasses in order from most specific type to least specific type (when the visit");
-			ps.println(" * starts) or from least specific type to most specific type (when the visit ends).  Each");
-			ps.println(" * method representing a concrete type also accepts a boolean argument from the node");
-			ps.println(" * indicating whether or not that type is the most specific type for that node.  A method is");
-			ps.println(" * also called (after or before the previous calls for start and stop, respectively) for each");
-			ps.println(" * interface the node implements.  Finally, each node's sequence of starting calls begins");
-			ps.println(" * with a call to <tt>visitStartBegin</tt> and ends with a call to <tt>visitStartEnd</tt>;");
-			ps.println(" * likewise, each sequence of ending calls begins with a call to <tt>visitStopBegin</tt> and");
-			ps.println(" * ends with a call to <tt>visitStopEnd</tt>.");
-			ps.println(" * <p/>");
-			ps.println(" * For example, imagine a simple type hierarchy in which <tt>C</tt> extends from <tt>B</tt>");
-			ps.println(" * and <tt>B</tt> extends from <tt>A</tt>.  Assume that <tt>C</tt> and <tt>B</tt> are");
-			ps.println(" * concrete classes while <tt>A</tt> is not.  In that case, the following sequence of methods");
-			ps.println(" * would be called if an instance this visitor interface were to visit an instance of node");
-			ps.println(" * <tt>C</tt>:");
-			ps.println(" * <ul>");
-			ps.println(" * <li><tt>visitStartBegin(node)</tt></li>");
-			ps.println(" * <li><tt>visitCStart(node,true)</tt></li>");
-			ps.println(" * <li><tt>visitBStart(node,false)</tt></li>");
-			ps.println(" * <li><tt>visitAStart(node)</tt></li>");
-			ps.println(" * <li><tt>visitStartEnd(node)</tt></li>");
-			ps.println(" * <li><tt>visitStopBegin(node)</tt></li>");
-			ps.println(" * <li><tt>visitAStop(node)</tt></li>");
-			ps.println(" * <li><tt>visitBStop(node,false)</tt></li>");
-			ps.println(" * <li><tt>visitCStop(node,true)</tt></li>");
-			ps.println(" * <li><tt>visitStopEnd(node)</tt></li>");
-			ps.println(" * </ul>");
-			ps.println(" * As usual for a tree visitor pattern, each node is visited around their child visits.  If");
-			ps.println(" * <tt>node</tt> above had a <tt>child</tt> of type <tt>B</tt>, the executed sequence of");
-			ps.println(" * calls would be extended as shown below.");
-			ps.println(" * <ul>");
-			ps.println(" * <li><tt>visitStartBegin(node)</tt></li>");
-			ps.println(" * <li><tt>visitCStart(node,true)</tt></li>");
-			ps.println(" * <li><tt>visitBStart(node,false)</tt></li>");
-			ps.println(" * <li><tt>visitAStart(node)</tt></li>");
-			ps.println(" * <li><tt>visitStartEnd(node)</tt></li>");
-			ps.println(" * <li><tt>visitStartBegin(child)</tt></li>");
-			ps.println(" * <li><tt>visitBStart(child,true)</tt></li>");
-			ps.println(" * <li><tt>visitAStart(child)</tt></li>");
-			ps.println(" * <li><tt>visitStartEnd(child)</tt></li>");
-			ps.println(" * <li><tt>visitStopBegin(child)</tt></li>");
-			ps.println(" * <li><tt>visitAStop(child)</tt></li>");
-			ps.println(" * <li><tt>visitBStop(child,true)</tt></li>");
-			ps.println(" * <li><tt>visitStopEnd(child)</tt></li>");
-			ps.println(" * <li><tt>visitStopBegin(node)</tt></li>");
-			ps.println(" * <li><tt>visitAStop(node)</tt></li>");
-			ps.println(" * <li><tt>visitBStop(node,false)</tt></li>");
-			ps.println(" * <li><tt>visitCStop(node,true)</tt></li>");
-			ps.println(" * <li><tt>visitStopEnd(node)</tt></li>");
-			ps.println(" * </ul>");
-			ps.println(" * This interface is very efficient at providing for the needs of visitors which regularly");
-			ps.println(" * need to condition behavior based on node type and have a number of types to service.  If");
-			ps.println(" * a simpler traversal of the nodes in the tree is desired, {@link BsjNodeVisitor} may be");
-			ps.println(" * more suitable.");
-			ps.println(" *");
-			ps.println(" * @author Zachary Palmer");
-			ps.println(" */");
-			printGeneratedClause(ps);
-			ps.println("public interface BsjTypedNodeVisitor");
-			ps.println("{");
+			PrintStream ps = createOutputFile("edu.jhu.cs.bsj.compiler.ast", ClassMode.INTERFACE, false,
+					"BsjTypedNodeVisitor", true, null);
 			writeTypeBody(ps, false, sortedNames, concreteTypeNameSet);
 			ps.println("}");
 			ps.close();
 
 			// Write default implementation
-			pkg = "edu.jhu.cs.bsj.compiler.ast.util";
-			ps = new PrintStream(new FileOutputStream(new File(TARGET_IFACE_DIR.getPath() + File.separator
-					+ pkg.replaceAll("\\.", File.separator) + File.separator + "BsjTypedNodeNoOpVisitor.java")));
-			ps.println("package " + pkg + ";");
-			ps.println();
-			printImports(ps, false);
-			ps.println("/**");
-			ps.println(" * This default implementation of {@link BsjTypedNodeVisitor} provides no-op versions of each");
-			ps.println(" * of the interface's methods.  This is meant for convenience; implementations (especially");
-			ps.println(" * anonymous classes) can make use of this class to reduce lines of code.");
-			ps.println(" *");
-			ps.println(" * @author Zachary Palmer");
-			ps.println(" */");
-			printGeneratedClause(ps);
-			ps.println("public class BsjTypedNodeNoOpVisitor");
-			ps.println("{");
+			ps = createOutputFile("edu.jhu.cs.bsj.compiler.ast.util", ClassMode.CONCRETE, false,
+					"BsjTypedNodeNoOpVisitor", true, null, "BsjTypedNodeVisitor");
 			writeTypeBody(ps, true, sortedNames, concreteTypeNameSet);
 			ps.println("}");
 			ps.close();
@@ -1665,10 +1583,8 @@ public class SourceGenerator
 				pps.println("    /**");
 				pps.println("     * Decorates this operation, turning it over to the backing operation.");
 				pps.println("     * @param node The node to affect.");
-				pps
-						.println("     * @param p The value to pass through the proxy filter and into the backing operation.");
-				pps
-						.println("     * @return The result of this operation (after being passed through the proxy filter).");
+				pps.println("     * @param p The value to pass through the proxy filter and into the backing operation.");
+				pps.println("     * @return The result of this operation (after being passed through the proxy filter).");
 				pps.println("     */");
 				pps.println("    public " + typeParamS + "RNew execute" + def.getRawName() + "(" + typeName
 						+ " node, PNew p)");
