@@ -890,7 +890,13 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
     @Override
     public Void executeSuperFieldAccessNode(SuperFieldAccessNode node, PrependablePrintStream p)
     {
-        // TODO Auto-generated method stub
+    	if (node.getType() != null)
+    	{
+    		node.getType().executeOperation(this, p);
+    		p.print(".");
+    	}
+    	p.print("super.");
+    	node.getIdentifier().executeOperation(this, p);
         return null;
     }
 
@@ -908,12 +914,10 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
         {
             node.getQualifyingExpression().executeOperation(this, p);
             p.print(".");
-        }
-        
+        }        
         handleListNode(node.getTypeArguments(), "<", ", ", ">", p, true);
         p.print("super");
         handleListNode(node.getArguments(), "(", ", ", ")", p, false);
-
         return null;
     }
 
@@ -933,14 +937,22 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
     @Override
     public Void executeSynchronizedNode(SynchronizedNode node, PrependablePrintStream p)
     {
-        // TODO Auto-generated method stub
+    	p.print("synchronized (");
+    	node.getExpression().executeOperation(this, p);
+    	p.print(")\n");
+    	node.getBlock().executeOperation(this, p);
         return null;
     }
 
     @Override
     public Void executeThisNode(ThisNode node, PrependablePrintStream p)
     {
-        // TODO Auto-generated method stub
+    	if (node.getType() != null)
+    	{
+    		node.getType().executeOperation(this, p);
+    		p.print(".");
+    	}
+    	p.print("this");
         return null;
     }
 
