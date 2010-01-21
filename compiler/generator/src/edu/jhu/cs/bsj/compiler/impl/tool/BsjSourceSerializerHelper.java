@@ -1,6 +1,7 @@
 package edu.jhu.cs.bsj.compiler.impl.tool;
 
 import edu.jhu.cs.bsj.compiler.ast.AccessModifier;
+import edu.jhu.cs.bsj.compiler.ast.AssignmentOperator;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.PrimitiveType;
 import edu.jhu.cs.bsj.compiler.ast.node.*;
@@ -126,14 +127,24 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
     @Override
     public Void executeAssertStatementNode(AssertStatementNode node, PrependablePrintStream p)
     {
-        // TODO Auto-generated method stub
+    	p.print("assert ");
+    	node.getTestExpression().executeOperation(this, p);
+    	if (node.getMessageExpression() != null)
+    	{
+    		p.print(": ");
+    		node.getMessageExpression().executeOperation(this, p);
+    	}
         return null;
     }
 
     @Override
     public Void executeAssignmentNode(AssignmentNode node, PrependablePrintStream p)
     {
-        // TODO Auto-generated method stub
+    	node.getVariable().executeOperation(this, p);
+    	p.print(" ");
+    	p.print(assignmentOperatorToString(node.getOperator()));
+    	p.print(" ");
+    	node.getExpression().executeOperation(this, p);    	
         return null;
     }
 
@@ -455,7 +466,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
     @Override
     public Void executeExpressionStatementNode(ExpressionStatementNode node, PrependablePrintStream p)
     {
-        // TODO Auto-generated method stub
+    	node.getExpression().executeOperation(this, p);
         return null;
     }
 
@@ -1169,6 +1180,44 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
             default:
                 throw new IllegalStateException("Invalid AccessModifier");
         }
+    }
+    
+    protected String assignmentOperatorToString(AssignmentOperator modifier)
+    {
+        if (modifier == null)
+        {
+            throw new IllegalStateException("Null AssignmentOperator");
+        }
+        
+		switch (modifier)
+		{
+			case ASSIGNMENT:
+				return "=";
+			case PLUS_ASSIGNMENT:
+				return "+=";
+			case MINUS_ASSIGNMENT:
+				return "-=";
+			case MULTIPLY_ASSIGNMENT:
+				return "*=";
+			case DIVIDE_ASSIGNMENT:
+				return "/=";
+			case AND_ASSIGNMENT:
+				return "&=";
+			case OR_ASSIGNMENT:
+				return "|=";
+			case XOR_ASSIGNMENT:
+				return "^=";
+			case MODULUS_ASSIGNMENT:
+				return "%=";
+			case LEFT_SHIFT_ASSIGNMENT:
+				return "<<=";
+			case RIGHT_SHIFT_ASSIGNMENT:
+				return ">>=";
+			case UNSIGNED_RIGHT_SHIFT_ASSIGNMENT:
+				return ">>>=";
+			default:
+				throw new IllegalStateException("Invalid AssignmentOperator");
+		}
     }
     
     protected String primitiveTypeToString(PrimitiveType type)
