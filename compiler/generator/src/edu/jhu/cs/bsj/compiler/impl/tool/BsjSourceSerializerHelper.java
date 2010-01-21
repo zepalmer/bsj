@@ -159,7 +159,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
     public Void executeBlockStatementNode(BlockStatementNode node, PrependablePrintStream p)
     {
         p.print("{\n");
-        p.incPrependCount();
+        p.incPrependCount();    
         handleListNode(node.getStatements(), "", ";\n", ";\n", p, true);
         p.decPrependCount();
         p.print("}\n");
@@ -207,7 +207,10 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
     @Override
     public Void executeCatchNode(CatchNode node, PrependablePrintStream p)
     {
-        // TODO Auto-generated method stub
+    	p.print("catch (");
+    	node.getParameter().executeOperation(this, p);
+    	p.print(")\n");
+    	node.getBlock().executeOperation(this, p);
         return null;
     }
 
@@ -579,7 +582,15 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
     @Override
     public Void executeIfNode(IfNode node, PrependablePrintStream p)
     {
-        // TODO Auto-generated method stub
+    	p.print("if (");
+    	node.getCondition().executeOperation(this, p);
+    	p.print(")\n");
+    	node.getThenStatement().executeOperation(this, p);    	
+    	if (node.getElseStatement() != null)
+    	{
+    		p.print("else\n");
+    		node.getElseStatement().executeOperation(this, p);
+    	}
         return null;
     }
 
@@ -992,7 +1003,14 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
     @Override
     public Void executeTryNode(TryNode node, PrependablePrintStream p)
     {
-        // TODO Auto-generated method stub
+    	p.print("try\n");
+    	node.getBlock().executeOperation(this, p);
+    	handleListNode(node.getCatches(), "", "", "", p, true);
+    	if (node.getFinallyBlock() != null)
+    	{
+    		p.print("finally\n");
+    		node.getFinallyBlock().executeOperation(this, p);
+    	}
         return null;
     }
 
