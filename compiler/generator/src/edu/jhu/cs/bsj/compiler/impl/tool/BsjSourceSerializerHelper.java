@@ -904,7 +904,12 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
     @Override
     public Void executeReturnNode(ReturnNode node, PrependablePrintStream p)
     {
-        // TODO Auto-generated method stub
+    	p.print("return");
+    	if (node.getExpression() != null)
+    	{
+    		p.print(" ");
+    		node.getExpression().executeOperation(this, p);
+    	}
         return null;
     }
 
