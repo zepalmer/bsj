@@ -165,8 +165,12 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
     @Override
     public Void executeBreakNode(BreakNode node, PrependablePrintStream p)
     {
-        p.print("break ");
-        node.getLabel().executeOperation(this, p);
+        p.print("break");
+        if (node.getLabel() != null)
+        {
+        	p.print(" ");
+        	node.getLabel().executeOperation(this, p);
+        }
         return null;
     }
 
@@ -355,7 +359,12 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
     @Override
     public Void executeContinueNode(ContinueNode node, PrependablePrintStream p)
     {
-        // TODO Auto-generated method stub
+        p.print("continue");
+        if (node.getLabel() != null)
+        {
+        	p.print(" ");
+        	node.getLabel().executeOperation(this, p);
+        }
         return null;
     }
 
