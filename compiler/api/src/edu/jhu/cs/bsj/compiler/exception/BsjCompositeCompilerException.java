@@ -24,12 +24,18 @@ public class BsjCompositeCompilerException extends BsjCompilerException
 
 	public BsjCompositeCompilerException(List<BsjCompilerException> errors)
 	{
-		super();
+		super(null);
 		this.errors = errors;
 	}
 
 	public List<BsjCompilerException> getErrors()
 	{
 		return errors;
+	}
+
+	@Override
+	public String getMessage()
+	{
+		return errors.size() + " error" + (errors.size()!=1?"s":"");
 	}
 }

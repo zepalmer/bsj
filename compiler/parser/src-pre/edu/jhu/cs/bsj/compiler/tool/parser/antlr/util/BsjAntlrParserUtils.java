@@ -6,6 +6,7 @@ import org.antlr.runtime.Token;
 import org.antlr.runtime.UnwantedTokenException;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
+import edu.jhu.cs.bsj.compiler.exception.lexer.BsjLexerException;
 import edu.jhu.cs.bsj.compiler.exception.parser.BsjParserException;
 import edu.jhu.cs.bsj.compiler.exception.parser.ExtraneousTokenException;
 import edu.jhu.cs.bsj.compiler.exception.parser.InvalidFloatingPointLiteralException;
@@ -234,5 +235,21 @@ public class BsjAntlrParserUtils
         }
 	}
 	
-	// TODO: different convert function for lexer
+	/**
+	 * Produces a {@link BsjLexerException} which corresponds to the specified ANTLR exception when thrown from the
+	 * lexer. This method is used to prevent the BSJ API from thowing ANTLR errors and thus causing the users of BSJ to
+	 * have a build dependency on the ANTLR package.
+	 * 
+	 * @param e The ANTLR exception.
+	 * @param tokenNames The names of the tokens according to the lexer.
+	 * @param location The location at which the exception occurred.
+	 * @param last The most recently used character.
+	 * @return The corresponding {@link BsjLexerException}.
+	 */
+	public static BsjLexerException convertFromLexer(
+			RecognitionException re, String[] tokenNames, BsjSourceLocation location, int last)
+	{
+		// TODO: can we be more specific?
+        return new BsjLexerException(location, last);
+	}
 }

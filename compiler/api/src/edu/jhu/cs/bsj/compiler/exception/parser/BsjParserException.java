@@ -13,32 +13,19 @@ public class BsjParserException extends BsjCompilerException
 {
 	private static final long serialVersionUID = 1L;
 	
-	/** The location of this error. */
-	private BsjSourceLocation location;
 	/** The rule which was being parsed when the failure occurred. */
 	private String rule;
 
 	public BsjParserException(String rule, BsjSourceLocation location)
 	{
-		super();
-		this.location = location;
+		super(location);
 		this.rule = rule;
 	}
 	
 	public BsjParserException(String rule, BsjSourceLocation location, Throwable cause)
 	{
-		super(cause);
-		this.location = location;
+		super(location, cause);
 		this.rule = rule;
-	}
-
-	/**
-	 * Retrieves the location at which this error occurred.
-	 * @return The location at which the error occurred.
-	 */
-	public BsjSourceLocation getLocation()
-	{
-		return location;
 	}
 
 	/**
@@ -56,6 +43,6 @@ public class BsjParserException extends BsjCompilerException
 	@Override
 	public String getMessage()
 	{
-		return this.rule + " @ " + this.location;
+		return this.rule + " @ " + this.getLocation();
 	}
 }

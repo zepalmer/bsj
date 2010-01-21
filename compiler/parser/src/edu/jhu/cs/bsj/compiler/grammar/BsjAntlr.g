@@ -71,6 +71,10 @@ scope Rule {
 
     import org.apache.log4j.Logger;
     
+    import edu.jhu.cs.bsj.compiler.ast.*;
+    import edu.jhu.cs.bsj.compiler.exception.*;
+    import edu.jhu.cs.bsj.compiler.exception.lexer.*;
+    
     import edu.jhu.cs.bsj.compiler.tool.parser.antlr.util.BsjAntlrParserUtils;
 }
 
@@ -88,6 +92,55 @@ scope Rule {
                     " with text: " + token.getText());
         }
         return token;
+    }
+    
+    // *** SOURCE LOCATION TRACKING *******************************************
+    /** The current resource name to store in source locations. */
+    private String resourceName = "<unknown>";
+    /** Getter for the resource name indicating which resource is being parsed. */
+    public String getResourceName()
+    {
+        return resourceName;
+    }
+    public void setResourceName(String resourceName)
+    {
+        this.resourceName = resourceName;
+    }
+    /**
+     * Retrieves a source location object describing the start of the specified relative token index (as per input.LT).
+     */
+    protected BsjSourceLocation getSourceLocation(int rel)
+    {
+        return new BsjSourceLocation(this.resourceName, this.getLine(), this.getCharPositionInLine());
+    }
+
+    // *** ERROR REPORTING AND HANDLING ***************************************
+    /** A list of exceptions which have occurred since this lexer was created. */
+    private List<BsjLexerException> exceptions = new ArrayList<BsjLexerException>();
+    
+    /**
+     * Retrieves the list of exceptions that has been accumulated since the creation of this lexer.  If the list has
+     * a size of zero, it is safe to assume that everything went smoothly.
+     * @return The list of errors this lexer has accumulated.
+     */
+    public List<BsjLexerException> getExceptions()
+    {
+        return this.exceptions;
+    }
+    
+    /**
+     * Overrides the mechanism for displaying recognition errors.  While it is possible to do something very similar by
+     * overriding emitErrorMessage, this method is extracted instead in order to allow the exception itself to be
+     * trapped for more informative error handling.
+     */
+    @Override
+    public void displayRecognitionError(String[] tokenNames, RecognitionException e)
+    {
+        int character = input.LT(1);
+        BsjLexerException bsjException =
+                BsjAntlrParserUtils.convertFromLexer(
+                        e, tokenNames, getSourceLocation(1), character);
+        exceptions.add(bsjException);
     }
 }
 
@@ -281,7 +334,7 @@ scope Rule {
     {
         BsjParserException bsjException =
                 BsjAntlrParserUtils.convertFromParser(
-                        e, tokenNames, getSourceLocation(-1), input.LT(-1), $Rule::name);
+                        e, tokenNames, getSourceLocation(1), input.LT(1), $Rule::name);
         exceptions.add(bsjException);
     }
     

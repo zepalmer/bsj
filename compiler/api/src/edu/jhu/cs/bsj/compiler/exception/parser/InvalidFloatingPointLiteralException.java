@@ -1,5 +1,6 @@
 package edu.jhu.cs.bsj.compiler.exception.parser;
 
+import sun.awt.CausedFocusEvent.Cause;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 
 /**
