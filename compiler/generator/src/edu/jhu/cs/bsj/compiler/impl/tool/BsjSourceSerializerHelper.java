@@ -630,7 +630,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
     @Override
     public Void executeInlineTypeDeclarationNode(InlineTypeDeclarationNode node, PrependablePrintStream p)
     {
-        // TODO Auto-generated method stub
+    	node.getDeclaration().executeOperation(this, p);
         return null;
     }
 
@@ -771,14 +771,21 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
     @Override
     public Void executeMethodInvocationByExpressionNode(MethodInvocationByExpressionNode node, PrependablePrintStream p)
     {
-        // TODO Auto-generated method stub
+    	node.getExpression().executeOperation(this, p);
+    	p.print(".");
+    	handleListNode(node.getTypeArguments(), "<", ", ", ">", p, true);
+    	node.getIdentifier().executeOperation(this, p);
+    	handleListNode(node.getArguments(), "(", ", ", ")", p, false);
         return null;
     }
 
     @Override
     public Void executeMethodInvocationByNameNode(MethodInvocationByNameNode node, PrependablePrintStream p)
     {
-        // TODO Auto-generated method stub
+    	//TODO insert typeArgs inside of name (ie <code>x.<T>foo();</code>)
+    	handleListNode(node.getTypeArguments(), "<", ", ", ">", p, true);
+    	node.getName().executeOperation(this, p);
+    	handleListNode(node.getArguments(), "(", ", ", ")", p, false);
         return null;
     }
 
@@ -940,7 +947,15 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
     @Override
     public Void executeSuperMethodInvocationNode(SuperMethodInvocationNode node, PrependablePrintStream p)
     {
-        // TODO Auto-generated method stub
+    	if (node.getType() != null)
+    	{
+    		node.getType().executeOperation(this, p);
+    		p.print(".");
+    	}
+    	p.print("super.");
+    	handleListNode(node.getTypeArguments(), "<", ", ", ">", p, true);
+    	node.getIdentifier().executeOperation(this, p);
+    	handleListNode(node.getArguments(), "(", ", ", ")", p, false);
         return null;
     }
 
@@ -1017,7 +1032,10 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
     @Override
     public Void executeTypeCastNode(TypeCastNode node, PrependablePrintStream p)
     {
-        // TODO Auto-generated method stub
+    	p.print("(");
+    	node.getType().executeOperation(this, p);
+    	p.print(") ");
+    	node.getExpression().executeOperation(this, p);
         return null;
     }
 
