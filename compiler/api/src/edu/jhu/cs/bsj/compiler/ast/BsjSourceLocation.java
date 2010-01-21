@@ -42,4 +42,10 @@ public class BsjSourceLocation
 	{
 		return column;
 	}
+
+	@Override
+	public String toString()
+	{
+		return this.resourceName + ":" + this.line + ":" + this.column;
+	}
 }

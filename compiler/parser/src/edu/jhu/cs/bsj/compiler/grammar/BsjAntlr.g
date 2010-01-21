@@ -123,7 +123,7 @@ scope Rule {
     
     // *** SOURCE LOCATION TRACKING *******************************************
     /** The current resource name to store in source locations. */
-    private String resourceName = "?";
+    private String resourceName = "<unknown>";
     /** Getter for the resource name indicating which resource is being parsed. */
     public String getResourceName()
     {

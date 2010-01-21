@@ -49,4 +49,13 @@ public class BsjParserException extends BsjCompilerException
 	{
 		return rule;
 	}
+
+	/**
+	 * This overridden message generator produces a human-readable debug message describing this parse exception.
+	 */
+	@Override
+	public String getMessage()
+	{
+		return this.rule + " @ " + this.location;
+	}
 }
