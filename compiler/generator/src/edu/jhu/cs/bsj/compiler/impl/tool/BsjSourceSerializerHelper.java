@@ -314,7 +314,11 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
     @Override
     public Void executeConditionalExpressionNode(ConditionalExpressionNode node, PrependablePrintStream p)
     {
-        // TODO Auto-generated method stub
+    	node.getCondition().executeOperation(this, p);
+    	p.print(" ? ");
+    	node.getTrueExpression().executeOperation(this, p);
+    	p.print(" : ");
+    	node.getFalseExpression().executeOperation(this, p);
         return null;
     }
 
@@ -459,7 +463,12 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
     @Override
     public Void executeEnumModifiersNode(EnumModifiersNode node, PrependablePrintStream p)
     {
-        // TODO Auto-generated method stub
+        // TODO annotations
+        p.print(accessModifierToString(node.getAccess()));
+        if (node.getStrictfpFlag())
+        {
+            p.print("strictfp ");
+        }
         return null;
     }
 
@@ -827,21 +836,25 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
     public Void executeParameterizedTypeNode(ParameterizedTypeNode node, PrependablePrintStream p)
     {
     	node.getBaseType().executeOperation(this, p);
-    	handleListNode(node.getTypeArguments(), "<", " , ", "> ", p, true);
+    	handleListNode(node.getTypeArguments(), "<", " , ", ">", p, true);
         return null;
     }
 
     @Override
     public Void executeParameterizedTypeSelectNode(ParameterizedTypeSelectNode node, PrependablePrintStream p)
     {
-        // TODO Auto-generated method stub
+    	node.getBase().executeOperation(this, p);
+    	p.print(".");
+    	node.getSelect().executeOperation(this, p);
         return null;
     }
 
     @Override
     public Void executeParenthesizedExpressionNode(ParenthesizedExpressionNode node, PrependablePrintStream p)
     {
-        // TODO Auto-generated method stub
+    	p.print("(");
+    	node.getExpression().executeOperation(this, p);
+    	p.print(")");
         return null;
     }
 
