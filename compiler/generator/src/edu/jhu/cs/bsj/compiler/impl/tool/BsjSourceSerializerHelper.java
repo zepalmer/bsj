@@ -261,7 +261,8 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
     @Override
     public Void executeClassLiteralNode(ClassLiteralNode node, PrependablePrintStream p)
     {
-        // TODO Auto-generated method stub
+    	node.getValue().executeOperation(this, p);
+    	p.print(".class");
         return null;
     }
 
@@ -402,7 +403,11 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
     @Override
     public Void executeDoWhileLoopNode(DoWhileLoopNode node, PrependablePrintStream p)
     {
-        // TODO Auto-generated method stub
+    	p.print("do\n");
+    	node.getStatement().executeOperation(this, p);
+    	p.print("while (");
+    	node.getCondition().executeOperation(this, p);
+    	p.print(")");
         return null;
     }
 
