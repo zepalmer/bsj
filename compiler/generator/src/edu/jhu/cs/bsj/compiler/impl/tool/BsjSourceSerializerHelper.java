@@ -4,6 +4,7 @@ import edu.jhu.cs.bsj.compiler.ast.AccessModifier;
 import edu.jhu.cs.bsj.compiler.ast.AssignmentOperator;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.PrimitiveType;
+import edu.jhu.cs.bsj.compiler.ast.UnaryOperator;
 import edu.jhu.cs.bsj.compiler.ast.node.*;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.CodeLiteralNode;
 import edu.jhu.cs.bsj.compiler.impl.utils.PrependablePrintStream;
@@ -1016,7 +1017,8 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
     @Override
     public Void executeThrowNode(ThrowNode node, PrependablePrintStream p)
     {
-        // TODO Auto-generated method stub
+    	p.print("throw ");
+    	node.getExpression().executeOperation(this, p);
         return null;
     }
 
@@ -1059,7 +1061,8 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
     @Override
     public Void executeUnaryExpressionNode(UnaryExpressionNode node, PrependablePrintStream p)
     {
-        // TODO Auto-generated method stub
+    	p.print(unaryOperatorToString(node.getOperator()));
+    	node.getExpression().executeOperation(this, p);
         return null;
     }
 
@@ -1238,14 +1241,14 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
         }
     }
     
-    protected String assignmentOperatorToString(AssignmentOperator modifier)
+    protected String assignmentOperatorToString(AssignmentOperator operator)
     {
-        if (modifier == null)
+        if (operator == null)
         {
             throw new IllegalStateException("Null AssignmentOperator");
         }
         
-		switch (modifier)
+		switch (operator)
 		{
 			case ASSIGNMENT:
 				return "=";
@@ -1307,4 +1310,26 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
                 throw new IllegalStateException("Invalid PrimitiveType");
         }
     }
+    
+    protected String unaryOperatorToString(UnaryOperator operator)
+    {
+        if (operator == null)
+        {
+            throw new IllegalStateException("Null PrimitiveType");
+        }
+        
+        switch (operator)
+        {
+        	case BITWISE_COMPLEMENT:
+        		return "~";
+        	case LOGICAL_COMPLEMENT:
+        		return "!";
+        	case UNARY_MINUS:  
+        		return "-";
+        	case UNARY_PLUS: 
+        		return "+";
+            default:
+                throw new IllegalStateException("Invalid UnaryOperator");
+        }
+    }    
 }
