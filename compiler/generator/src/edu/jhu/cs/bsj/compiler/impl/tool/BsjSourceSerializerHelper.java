@@ -404,21 +404,44 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
     @Override
     public Void executeEnumBodyNode(EnumBodyNode node, PrependablePrintStream p)
     {
-        // TODO Auto-generated method stub
+        p.print("{\n");
+        p.incPrependCount();
+        handleListNode(node.getConstants(), "", ",\n", ";\n", p, true);
+        handleListNode(node.getMembers(), "", ";\n", ";\n", p, true); 
+        p.decPrependCount();
+        p.print("}\n");
         return null;
     }
 
     @Override
     public Void executeEnumConstantDeclarationNode(EnumConstantDeclarationNode node, PrependablePrintStream p)
     {
-        // TODO Auto-generated method stub
+        // TODO finish
+        if (node.getJavadoc() != null)
+        {
+            node.getJavadoc().executeOperation(this, p);
+            p.print("\n");
+        }
+        handleListNode(node.getAnnotations(), "", "\n", "\n", p, true);
+        node.getIdentifier().executeOperation(this, p);
         return null;
     }
 
     @Override
     public Void executeEnumDeclarationNode(EnumDeclarationNode node, PrependablePrintStream p)
     {
-        // TODO Auto-generated method stub
+        // TODO done?
+        if (node.getJavadoc() != null)
+        {
+            node.getJavadoc().executeOperation(this, p);
+            p.print("\n");
+        }
+        node.getModifiers().executeOperation(this, p);
+        p.print("enum ");
+        node.getIdentifier().executeOperation(this, p);
+        handleListNode(node.getImplementsClause(), " implements ", ", ", "", p, true);
+        p.print("\n");
+        node.getBody().executeOperation(this, p);
         return null;
     }
 
