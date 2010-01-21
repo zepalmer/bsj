@@ -177,7 +177,19 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
     @Override
     public Void executeCaseNode(CaseNode node, PrependablePrintStream p)
     {
-        // TODO Auto-generated method stub
+    	if (node.getExpression() == null)
+    	{
+    		p.print("default:\n");
+    	}
+    	else
+    	{
+    		p.print("case ");
+    		node.getExpression().executeOperation(this, p);
+    		p.print(":\n");
+    	}
+    	p.incPrependCount();
+    	handleListNode(node.getStatements(), "", ";\n", ";\n", p, true);    	
+    	p.decPrependCount();
         return null;
     }
 
@@ -427,14 +439,16 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
     @Override
     public Void executeFieldAccessByExpressionNode(FieldAccessByExpressionNode node, PrependablePrintStream p)
     {
-        // TODO Auto-generated method stub
+    	node.getExpression().executeOperation(this, p);
+    	p.print(".");
+    	node.getIdentifier().executeOperation(this, p);
         return null;
     }
 
     @Override
     public Void executeFieldAccessByNameNode(FieldAccessByNameNode node, PrependablePrintStream p)
     {
-        // TODO Auto-generated method stub
+    	node.getName().executeOperation(this, p);
         return null;
     }
 
@@ -882,7 +896,13 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
     @Override
     public Void executeSwitchNode(SwitchNode node, PrependablePrintStream p)
     {
-        // TODO Auto-generated method stub
+    	p.print("switch (");
+    	node.getExpression().executeOperation(this, p);
+    	p.print(")\n{\n");
+    	p.incPrependCount();
+    	handleListNode(node.getCases(), "", "", "", p, true);
+    	p.decPrependCount();
+    	p.print("}");    	
         return null;
     }
 
