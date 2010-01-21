@@ -7,16 +7,45 @@ import java.util.concurrent.atomic.AtomicLong;
 import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public abstract class NodeImpl implements Node
 {
+    /** The location at which this node's text starts (inclusive). */
+    private BsjSourceLocation startLocation;
+
+    /** The location at which this node's text stops (exclusive). */
+    private BsjSourceLocation stopLocation;
+
     /** General constructor. */
-    protected NodeImpl()
+    protected NodeImpl(
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
         super();
+        this.startLocation = startLocation;
+        this.stopLocation = stopLocation;
+    }
+
+    /**
+     * Gets the location at which this node's text starts (inclusive).
+     * @return The location at which this node's text starts (inclusive).
+     */
+    public BsjSourceLocation getStartLocation()
+    {
+        return this.startLocation;
+    }
+
+    /**
+     * Gets the location at which this node's text stops (exclusive).
+     * @return The location at which this node's text stops (exclusive).
+     */
+    public BsjSourceLocation getStopLocation()
+    {
+        return this.stopLocation;
     }
 
     /**
@@ -60,6 +89,8 @@ public abstract class NodeImpl implements Node
     public List<Object> getChildObjects()
     {
         List<Object> list = new ArrayList<Object>();
+        list.add(getStartLocation());
+        list.add(getStopLocation());
         return list;
     }
 
@@ -72,6 +103,11 @@ public abstract class NodeImpl implements Node
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
+        sb.append("startLocation=");
+        sb.append(String.valueOf(this.startLocation) + ":" + this.startLocation.getClass().getSimpleName());
+        sb.append(',');
+        sb.append("stopLocation=");
+        sb.append(String.valueOf(this.stopLocation) + ":" + this.stopLocation.getClass().getSimpleName());
         sb.append(']');
         return sb.toString();
     }

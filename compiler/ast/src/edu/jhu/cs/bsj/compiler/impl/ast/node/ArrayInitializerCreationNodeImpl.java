@@ -6,6 +6,7 @@ import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.ArrayInitializerCreationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ArrayInitializerNode;
@@ -21,9 +22,11 @@ public class ArrayInitializerCreationNodeImpl extends ArrayCreationNodeImpl impl
     public ArrayInitializerCreationNodeImpl(
             ArrayInitializerNode initializer,
             BaseTypeNode baseType,
-            int arrayLevels)
+            int arrayLevels,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
-        super(baseType, arrayLevels);
+        super(baseType, arrayLevels, startLocation, stopLocation);
         this.initializer = initializer;
     }
 
@@ -109,6 +112,8 @@ public class ArrayInitializerCreationNodeImpl extends ArrayCreationNodeImpl impl
         list.add(getInitializer());
         list.add(getBaseType());
         list.add(getArrayLevels());
+        list.add(getStartLocation());
+        list.add(getStopLocation());
         return list;
     }
 

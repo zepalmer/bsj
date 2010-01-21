@@ -6,6 +6,7 @@ import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.BlockStatementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
@@ -19,9 +20,11 @@ public class BlockStatementNodeImpl extends NodeImpl implements BlockStatementNo
 
     /** General constructor. */
     public BlockStatementNodeImpl(
-            ListNode<StatementNode> statements)
+            ListNode<StatementNode> statements,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
-        super();
+        super(startLocation, stopLocation);
         this.statements = statements;
     }
 
@@ -105,6 +108,8 @@ public class BlockStatementNodeImpl extends NodeImpl implements BlockStatementNo
     {
         List<Object> list = super.getChildObjects();
         list.add(getStatements());
+        list.add(getStartLocation());
+        list.add(getStopLocation());
         return list;
     }
 

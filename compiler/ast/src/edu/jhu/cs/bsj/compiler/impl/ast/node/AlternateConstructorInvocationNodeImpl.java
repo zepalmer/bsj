@@ -6,6 +6,7 @@ import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.AlternateConstructorInvocationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
@@ -18,9 +19,11 @@ public class AlternateConstructorInvocationNodeImpl extends ConstructorInvocatio
     /** General constructor. */
     public AlternateConstructorInvocationNodeImpl(
             ListNode<ExpressionNode> arguments,
-            ListNode<TypeNode> typeArguments)
+            ListNode<TypeNode> typeArguments,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
-        super(arguments, typeArguments);
+        super(arguments, typeArguments, startLocation, stopLocation);
     }
 
     /**
@@ -76,6 +79,8 @@ public class AlternateConstructorInvocationNodeImpl extends ConstructorInvocatio
         List<Object> list = super.getChildObjects();
         list.add(getArguments());
         list.add(getTypeArguments());
+        list.add(getStartLocation());
+        list.add(getStopLocation());
         return list;
     }
 

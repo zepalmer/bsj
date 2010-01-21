@@ -5,6 +5,7 @@ import java.util.List;
 import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.ArrayCreationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.BaseTypeNode;
@@ -21,9 +22,11 @@ public abstract class ArrayCreationNodeImpl extends NodeImpl implements ArrayCre
     /** General constructor. */
     protected ArrayCreationNodeImpl(
             BaseTypeNode baseType,
-            int arrayLevels)
+            int arrayLevels,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
-        super();
+        super(startLocation, stopLocation);
         this.baseType = baseType;
         this.arrayLevels = arrayLevels;
     }
@@ -127,6 +130,8 @@ public abstract class ArrayCreationNodeImpl extends NodeImpl implements ArrayCre
         List<Object> list = super.getChildObjects();
         list.add(getBaseType());
         list.add(getArrayLevels());
+        list.add(getStartLocation());
+        list.add(getStopLocation());
         return list;
     }
 

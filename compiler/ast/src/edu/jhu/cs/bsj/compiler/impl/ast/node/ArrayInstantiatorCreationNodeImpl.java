@@ -6,6 +6,7 @@ import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.ArrayInstantiatorCreationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.BaseTypeNode;
@@ -22,9 +23,11 @@ public class ArrayInstantiatorCreationNodeImpl extends ArrayCreationNodeImpl imp
     public ArrayInstantiatorCreationNodeImpl(
             ListNode<ExpressionNode> dimExpressions,
             BaseTypeNode baseType,
-            int arrayLevels)
+            int arrayLevels,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
-        super(baseType, arrayLevels);
+        super(baseType, arrayLevels, startLocation, stopLocation);
         this.dimExpressions = dimExpressions;
     }
 
@@ -110,6 +113,8 @@ public class ArrayInstantiatorCreationNodeImpl extends ArrayCreationNodeImpl imp
         list.add(getDimExpressions());
         list.add(getBaseType());
         list.add(getArrayLevels());
+        list.add(getStartLocation());
+        list.add(getStopLocation());
         return list;
     }
 

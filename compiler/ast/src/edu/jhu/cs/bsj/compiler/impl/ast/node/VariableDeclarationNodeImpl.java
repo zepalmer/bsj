@@ -6,6 +6,7 @@ import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclarationNode;
@@ -24,9 +25,11 @@ public class VariableDeclarationNodeImpl extends NodeImpl implements VariableDec
     /** General constructor. */
     public VariableDeclarationNodeImpl(
             VariableModifiersNode modifiers,
-            ListNode<VariableDeclaratorNode> declarators)
+            ListNode<VariableDeclaratorNode> declarators,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
-        super();
+        super(startLocation, stopLocation);
         this.modifiers = modifiers;
         this.declarators = declarators;
     }
@@ -140,6 +143,8 @@ public class VariableDeclarationNodeImpl extends NodeImpl implements VariableDec
         List<Object> list = super.getChildObjects();
         list.add(getModifiers());
         list.add(getDeclarators());
+        list.add(getStartLocation());
+        list.add(getStopLocation());
         return list;
     }
 

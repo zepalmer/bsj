@@ -6,6 +6,7 @@ import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
@@ -24,9 +25,11 @@ public class PackageDeclarationNodeImpl extends NodeImpl implements PackageDecla
     /** General constructor. */
     public PackageDeclarationNodeImpl(
             NameNode name,
-            ListNode<AnnotationNode> annotations)
+            ListNode<AnnotationNode> annotations,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
-        super();
+        super(startLocation, stopLocation);
         this.name = name;
         this.annotations = annotations;
     }
@@ -138,6 +141,8 @@ public class PackageDeclarationNodeImpl extends NodeImpl implements PackageDecla
         List<Object> list = super.getChildObjects();
         list.add(getName());
         list.add(getAnnotations());
+        list.add(getStartLocation());
+        list.add(getStopLocation());
         return list;
     }
 

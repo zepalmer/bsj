@@ -330,6 +330,7 @@ public class SourceGenerator
 	private Prop parseProp(String s)
 	{
 		boolean readOnly = false;
+		boolean skipMake = false;
 
 		s = s.trim();
 		String name, type, comment;
@@ -349,9 +350,14 @@ public class SourceGenerator
 		{
 			name = name.substring(0, name.length() - 1);
 			readOnly = true;
+		} else if (name.endsWith("+"))
+		{
+			name = name.substring(0, name.length() - 1);
+			readOnly = true;
+			skipMake = true;
 		}
 
-		return new Prop(name, type, comment, readOnly);
+		return new Prop(name, type, comment, readOnly, skipMake);
 	}
 
 	static enum Mode
@@ -364,15 +370,22 @@ public class SourceGenerator
 		String name;
 		String type;
 		String desc;
+		/** If true, no setter should be generated. */
 		boolean readOnly;
+		/**
+		 * If true, no parameter will be provided in the make call (meaning that the factory has to figure things out
+		 * for itself).
+		 */
+		boolean skipMake;
 
-		public Prop(String name, String type, String desc, boolean readOnly)
+		public Prop(String name, String type, String desc, boolean readOnly, boolean skipMake)
 		{
 			super();
 			this.name = name;
 			this.type = type;
 			this.desc = desc;
 			this.readOnly = readOnly;
+			this.skipMake = skipMake;
 		}
 	}
 
@@ -608,6 +621,19 @@ public class SourceGenerator
 	 */
 	private static void printParameterList(PrintStream ps, List<Prop> props)
 	{
+		printParameterList(ps, props, false);
+	}
+
+	/**
+	 * Writes a list of parameters suitable for the provided properties.
+	 * 
+	 * @param ps The stream to which to write the text.
+	 * @param props The properties to use as parameters.
+	 * @param skipMake <code>true</code> to skip properties which are excluded from the factory's make call;
+	 *            <code>false</code> otherwise.
+	 */
+	private static void printParameterList(PrintStream ps, List<Prop> props, boolean skipMake)
+	{
 		boolean first = true;
 		ps.print("(");
 		if (props.size() > 0)
@@ -615,13 +641,16 @@ public class SourceGenerator
 			ps.println();
 			for (Prop p : props)
 			{
-				if (!first)
+				if (!p.skipMake || !skipMake)
 				{
-					ps.println(",");
-				}
-				first = false;
+					if (!first)
+					{
+						ps.println(",");
+					}
+					first = false;
 
-				ps.print("            " + p.type + " " + p.name);
+					ps.print("            " + p.type + " " + p.name);
+				}
 			}
 		}
 		ps.print(")");
@@ -635,16 +664,32 @@ public class SourceGenerator
 	 */
 	private static void printArgumentList(PrintStream ps, List<Prop> props)
 	{
+		printArgumentList(ps, props, false);
+	}
+
+	/**
+	 * Writes a list of arguments suitable for the provided properties.
+	 * 
+	 * @param ps The stream to which to write the text.
+	 * @param props The properties to use as arguments.
+	 * @param skipMake <code>true</code> to skip properties which are excluded from the factory's make call;
+	 *            <code>false</code> otherwise.
+	 */
+	private static void printArgumentList(PrintStream ps, List<Prop> props, boolean skipMake)
+	{
 		boolean first = true;
 		ps.print("(");
 		for (Prop p : props)
 		{
-			if (!first)
+			if (!p.skipMake || !skipMake)
 			{
-				ps.print(", ");
+				if (!first)
+				{
+					ps.print(", ");
+				}
+				first = false;
+				ps.print(p.name);
 			}
-			first = false;
-			ps.print(p.name);
 		}
 		ps.print(")");
 	}
@@ -902,7 +947,7 @@ public class SourceGenerator
 				{
 					if (replacementMap.containsKey(p.type))
 					{
-						p = new Prop(p.name, replacementMap.get(p.type), p.desc, p.readOnly);
+						p = new Prop(p.name, replacementMap.get(p.type), p.desc, p.readOnly, p.skipMake);
 					}
 					list.add(p);
 				}
@@ -1441,7 +1486,7 @@ public class SourceGenerator
 				ips.println("     * Creates a " + def.getRawName() + ".");
 				ips.println("     */");
 				ips.print("    public " + typeParamS + typeName + " make" + def.getRawName());
-				printParameterList(ips, recProps);
+				printParameterList(ips, recProps, true);
 				ips.println(";");
 				ips.println();
 
@@ -1450,7 +1495,7 @@ public class SourceGenerator
 				cps.println("     */");
 				cps.println("    @Override");
 				cps.print("    public " + typeParamS + typeName + " make" + def.getRawName());
-				printParameterList(cps, recProps);
+				printParameterList(cps, recProps, true);
 				cps.println();
 				cps.println("    {");
 				String classname = def.getRawName() + "Impl" + typeArg;
@@ -1467,11 +1512,11 @@ public class SourceGenerator
 				dps.println("     */");
 				dps.println("    @Override");
 				dps.print("    public " + typeParamS + typeName + " make" + def.getRawName());
-				printParameterList(dps, recProps);
+				printParameterList(dps, recProps, true);
 				dps.println();
 				dps.println("    {");
 				dps.print("        " + typeName + " node = factory.make" + def.getRawName());
-				printArgumentList(dps, recProps);
+				printArgumentList(dps, recProps, true);
 				dps.println(";");
 				dps.println("        this.decorate(node);");
 				dps.println("        return node;");

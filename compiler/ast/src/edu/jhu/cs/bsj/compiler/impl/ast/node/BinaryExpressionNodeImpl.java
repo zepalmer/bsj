@@ -7,6 +7,7 @@ import javax.annotation.Generated;
 import edu.jhu.cs.bsj.compiler.ast.BinaryOperator;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.BinaryExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
@@ -27,9 +28,11 @@ public class BinaryExpressionNodeImpl extends NodeImpl implements BinaryExpressi
     public BinaryExpressionNodeImpl(
             ExpressionNode leftOperand,
             ExpressionNode rightOperand,
-            BinaryOperator operator)
+            BinaryOperator operator,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
-        super();
+        super(startLocation, stopLocation);
         this.leftOperand = leftOperand;
         this.rightOperand = rightOperand;
         this.operator = operator;
@@ -163,6 +166,8 @@ public class BinaryExpressionNodeImpl extends NodeImpl implements BinaryExpressi
         list.add(getLeftOperand());
         list.add(getRightOperand());
         list.add(getOperator());
+        list.add(getStartLocation());
+        list.add(getStopLocation());
         return list;
     }
 

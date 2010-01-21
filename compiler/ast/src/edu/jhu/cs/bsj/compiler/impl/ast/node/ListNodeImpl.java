@@ -7,6 +7,7 @@ import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
@@ -20,9 +21,11 @@ public class ListNodeImpl<T extends Node> extends NodeImpl implements ListNode<T
     /** General constructor. */
 /* // stopGen=cons,children
     public ListNodeImpl(
-            List<T> children)
+            List<T> children,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
-        super();
+        super(startLocation, stopLocation);
         this.children = children;
     }
 */
@@ -86,6 +89,8 @@ public class ListNodeImpl<T extends Node> extends NodeImpl implements ListNode<T
     {
         List<Object> list = super.getChildObjects();
         list.add(getChildren());
+        list.add(getStartLocation());
+        list.add(getStopLocation());
         return list;
     }
 */
@@ -116,9 +121,9 @@ public class ListNodeImpl<T extends Node> extends NodeImpl implements ListNode<T
         return operation.executeListNode(this, p);
     }
 	/** General constructor */
-    public ListNodeImpl(List<? extends T> children)
+    public ListNodeImpl(List<? extends T> children, BsjSourceLocation startLocation, BsjSourceLocation stopLocation)
     {
-        super();
+        super(startLocation, stopLocation);
         this.children = new ArrayList<T>(children);
     }
     

@@ -5,6 +5,7 @@ import java.util.List;
 import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
@@ -23,9 +24,11 @@ public abstract class MethodInvocationNodeImpl extends NodeImpl implements Metho
     /** General constructor. */
     protected MethodInvocationNodeImpl(
             ListNode<ExpressionNode> arguments,
-            ListNode<TypeNode> typeArguments)
+            ListNode<TypeNode> typeArguments,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
-        super();
+        super(startLocation, stopLocation);
         this.arguments = arguments;
         this.typeArguments = typeArguments;
     }
@@ -141,6 +144,8 @@ public abstract class MethodInvocationNodeImpl extends NodeImpl implements Metho
         List<Object> list = super.getChildObjects();
         list.add(getArguments());
         list.add(getTypeArguments());
+        list.add(getStartLocation());
+        list.add(getStopLocation());
         return list;
     }
 

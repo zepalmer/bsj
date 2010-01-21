@@ -6,6 +6,7 @@ import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.LabeledStatementNode;
@@ -23,9 +24,11 @@ public class LabeledStatementNodeImpl extends NodeImpl implements LabeledStateme
     /** General constructor. */
     public LabeledStatementNodeImpl(
             IdentifierNode label,
-            StatementNode statement)
+            StatementNode statement,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
-        super();
+        super(startLocation, stopLocation);
         this.label = label;
         this.statement = statement;
     }
@@ -139,6 +142,8 @@ public class LabeledStatementNodeImpl extends NodeImpl implements LabeledStateme
         List<Object> list = super.getChildObjects();
         list.add(getLabel());
         list.add(getStatement());
+        list.add(getStartLocation());
+        list.add(getStopLocation());
         return list;
     }
 

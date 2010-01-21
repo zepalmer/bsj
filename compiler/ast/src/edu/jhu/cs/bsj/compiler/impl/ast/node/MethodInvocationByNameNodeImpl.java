@@ -6,6 +6,7 @@ import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
@@ -23,9 +24,11 @@ public class MethodInvocationByNameNodeImpl extends MethodInvocationNodeImpl imp
     public MethodInvocationByNameNodeImpl(
             NameNode name,
             ListNode<ExpressionNode> arguments,
-            ListNode<TypeNode> typeArguments)
+            ListNode<TypeNode> typeArguments,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
-        super(arguments, typeArguments);
+        super(arguments, typeArguments, startLocation, stopLocation);
         this.name = name;
     }
 
@@ -111,6 +114,8 @@ public class MethodInvocationByNameNodeImpl extends MethodInvocationNodeImpl imp
         list.add(getName());
         list.add(getArguments());
         list.add(getTypeArguments());
+        list.add(getStartLocation());
+        list.add(getStopLocation());
         return list;
     }
 

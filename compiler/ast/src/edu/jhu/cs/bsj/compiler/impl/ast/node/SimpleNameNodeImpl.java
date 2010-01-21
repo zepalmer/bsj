@@ -6,6 +6,7 @@ import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.NameCategory;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
@@ -20,9 +21,11 @@ public class SimpleNameNodeImpl extends NameNodeImpl implements SimpleNameNode
     /** General constructor. */
     public SimpleNameNodeImpl(
             IdentifierNode identifier,
-            NameCategory category)
+            NameCategory category,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
-        super(category);
+        super(category, startLocation, stopLocation);
         this.identifier = identifier;
     }
 
@@ -107,6 +110,8 @@ public class SimpleNameNodeImpl extends NameNodeImpl implements SimpleNameNode
         List<Object> list = super.getChildObjects();
         list.add(getIdentifier());
         list.add(getCategory());
+        list.add(getStartLocation());
+        list.add(getStopLocation());
         return list;
     }
 

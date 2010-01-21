@@ -6,6 +6,7 @@ import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.ArrayAccessNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
@@ -23,9 +24,11 @@ public class ArrayAccessNodeImpl extends NodeImpl implements ArrayAccessNode
     /** General constructor. */
     public ArrayAccessNodeImpl(
             RestrictedPrimaryExpressionNode arrayExpression,
-            ExpressionNode indexExpression)
+            ExpressionNode indexExpression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
-        super();
+        super(startLocation, stopLocation);
         this.arrayExpression = arrayExpression;
         this.indexExpression = indexExpression;
     }
@@ -139,6 +142,8 @@ public class ArrayAccessNodeImpl extends NodeImpl implements ArrayAccessNode
         List<Object> list = super.getChildObjects();
         list.add(getArrayExpression());
         list.add(getIndexExpression());
+        list.add(getStartLocation());
+        list.add(getStopLocation());
         return list;
     }
 

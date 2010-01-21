@@ -6,6 +6,7 @@ import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.StatementNode;
@@ -23,9 +24,11 @@ public class WhileLoopNodeImpl extends NodeImpl implements WhileLoopNode
     /** General constructor. */
     public WhileLoopNodeImpl(
             ExpressionNode condition,
-            StatementNode statement)
+            StatementNode statement,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
-        super();
+        super(startLocation, stopLocation);
         this.condition = condition;
         this.statement = statement;
     }
@@ -139,6 +142,8 @@ public class WhileLoopNodeImpl extends NodeImpl implements WhileLoopNode
         List<Object> list = super.getChildObjects();
         list.add(getCondition());
         list.add(getStatement());
+        list.add(getStartLocation());
+        list.add(getStopLocation());
         return list;
     }
 

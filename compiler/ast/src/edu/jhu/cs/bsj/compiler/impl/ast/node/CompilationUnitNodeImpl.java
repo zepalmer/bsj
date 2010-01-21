@@ -6,6 +6,7 @@ import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ImportNode;
@@ -29,9 +30,11 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
     public CompilationUnitNodeImpl(
             PackageDeclarationNode packageDeclaration,
             ListNode<ImportNode> imports,
-            ListNode<TypeDeclarationNode> typeDecls)
+            ListNode<TypeDeclarationNode> typeDecls,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
-        super();
+        super(startLocation, stopLocation);
         this.packageDeclaration = packageDeclaration;
         this.imports = imports;
         this.typeDecls = typeDecls;
@@ -173,6 +176,8 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
         list.add(getPackageDeclaration());
         list.add(getImports());
         list.add(getTypeDecls());
+        list.add(getStartLocation());
+        list.add(getStopLocation());
         return list;
     }
 

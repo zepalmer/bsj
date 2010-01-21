@@ -4,9 +4,9 @@ public class ListNodeImpl<T extends Node> extends Node implements ListNode<T>
 {
 	/* GEN:start */
 	/** General constructor */
-    public ListNodeImpl(List<? extends T> children)
+    public ListNodeImpl(List<? extends T> children, BsjSourceLocation startLocation, BsjSourceLocation stopLocation)
     {
-        super();
+        super(startLocation, stopLocation);
         this.children = new ArrayList<T>(children);
     }
     

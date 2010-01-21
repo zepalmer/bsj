@@ -6,6 +6,7 @@ import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.JavadocNode;
 
@@ -17,9 +18,11 @@ public class JavadocNodeImpl extends NodeImpl implements JavadocNode
 
     /** General constructor. */
     public JavadocNodeImpl(
-            String text)
+            String text,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
-        super();
+        super(startLocation, stopLocation);
         this.text = text;
     }
 
@@ -91,6 +94,8 @@ public class JavadocNodeImpl extends NodeImpl implements JavadocNode
     {
         List<Object> list = super.getChildObjects();
         list.add(getText());
+        list.add(getStartLocation());
+        list.add(getStopLocation());
         return list;
     }
 

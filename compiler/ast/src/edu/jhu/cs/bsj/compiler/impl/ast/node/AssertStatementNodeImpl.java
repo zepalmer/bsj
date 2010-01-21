@@ -6,6 +6,7 @@ import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.AssertStatementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
@@ -22,9 +23,11 @@ public class AssertStatementNodeImpl extends NodeImpl implements AssertStatement
     /** General constructor. */
     public AssertStatementNodeImpl(
             ExpressionNode testExpression,
-            ExpressionNode messageExpression)
+            ExpressionNode messageExpression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
-        super();
+        super(startLocation, stopLocation);
         this.testExpression = testExpression;
         this.messageExpression = messageExpression;
     }
@@ -138,6 +141,8 @@ public class AssertStatementNodeImpl extends NodeImpl implements AssertStatement
         List<Object> list = super.getChildObjects();
         list.add(getTestExpression());
         list.add(getMessageExpression());
+        list.add(getStartLocation());
+        list.add(getStopLocation());
         return list;
     }
 

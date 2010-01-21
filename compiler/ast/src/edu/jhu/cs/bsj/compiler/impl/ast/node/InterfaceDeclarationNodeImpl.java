@@ -6,6 +6,7 @@ import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.InterfaceBodyNode;
@@ -38,9 +39,11 @@ public class InterfaceDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl i
             InterfaceBodyNode body,
             ListNode<TypeParameterNode> typeParameters,
             IdentifierNode identifier,
-            JavadocNode javadoc)
+            JavadocNode javadoc,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
-        super(identifier, javadoc);
+        super(identifier, javadoc, startLocation, stopLocation);
         this.modifiers = modifiers;
         this.extendsClause = extendsClause;
         this.body = body;
@@ -216,6 +219,8 @@ public class InterfaceDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl i
         list.add(getTypeParameters());
         list.add(getIdentifier());
         list.add(getJavadoc());
+        list.add(getStartLocation());
+        list.add(getStopLocation());
         return list;
     }
 

@@ -6,6 +6,7 @@ import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
@@ -34,9 +35,11 @@ public class SuperMethodInvocationNodeImpl extends NodeImpl implements SuperMeth
             UnparameterizedTypeNode type,
             IdentifierNode identifier,
             ListNode<ExpressionNode> arguments,
-            ListNode<TypeNode> typeArguments)
+            ListNode<TypeNode> typeArguments,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
-        super();
+        super(startLocation, stopLocation);
         this.type = type;
         this.identifier = identifier;
         this.arguments = arguments;
@@ -212,6 +215,8 @@ public class SuperMethodInvocationNodeImpl extends NodeImpl implements SuperMeth
         list.add(getIdentifier());
         list.add(getArguments());
         list.add(getTypeArguments());
+        list.add(getStartLocation());
+        list.add(getStopLocation());
         return list;
     }
 

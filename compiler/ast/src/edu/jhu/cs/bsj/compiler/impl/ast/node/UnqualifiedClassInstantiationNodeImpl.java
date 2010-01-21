@@ -6,6 +6,7 @@ import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.AnonymousClassBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.DeclaredTypeNode;
@@ -25,9 +26,11 @@ public class UnqualifiedClassInstantiationNodeImpl extends ClassInstantiationNod
             DeclaredTypeNode type,
             ListNode<TypeArgumentNode> constructorTypeArguments,
             ListNode<ExpressionNode> arguments,
-            AnonymousClassBodyNode body)
+            AnonymousClassBodyNode body,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
-        super(constructorTypeArguments, arguments, body);
+        super(constructorTypeArguments, arguments, body, startLocation, stopLocation);
         this.type = type;
     }
 
@@ -114,6 +117,8 @@ public class UnqualifiedClassInstantiationNodeImpl extends ClassInstantiationNod
         list.add(getConstructorTypeArguments());
         list.add(getArguments());
         list.add(getBody());
+        list.add(getStartLocation());
+        list.add(getStopLocation());
         return list;
     }
 

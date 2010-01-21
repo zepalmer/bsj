@@ -179,7 +179,8 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
      * Creates a VoidStatementNode.
      */
     @Override
-    public VoidStatementNode makeVoidStatementNode()
+    public VoidStatementNode makeVoidStatementNode(
+)
     {
         VoidStatementNode node = factory.makeVoidStatementNode();
         this.decorate(node);
@@ -337,7 +338,8 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
      * Creates a VoidTypeNode.
      */
     @Override
-    public VoidTypeNode makeVoidTypeNode()
+    public VoidTypeNode makeVoidTypeNode(
+)
     {
         VoidTypeNode node = factory.makeVoidTypeNode();
         this.decorate(node);
@@ -479,7 +481,8 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
      * Creates a VoidTypeDeclarationNode.
      */
     @Override
-    public VoidTypeDeclarationNode makeVoidTypeDeclarationNode()
+    public VoidTypeDeclarationNode makeVoidTypeDeclarationNode(
+)
     {
         VoidTypeDeclarationNode node = factory.makeVoidTypeDeclarationNode();
         this.decorate(node);

@@ -6,6 +6,7 @@ import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.BlockStatementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.CatchNode;
@@ -28,9 +29,11 @@ public class TryNodeImpl extends NodeImpl implements TryNode
     public TryNodeImpl(
             BlockStatementNode block,
             ListNode<CatchNode> catches,
-            BlockStatementNode finallyBlock)
+            BlockStatementNode finallyBlock,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
-        super();
+        super(startLocation, stopLocation);
         this.block = block;
         this.catches = catches;
         this.finallyBlock = finallyBlock;
@@ -174,6 +177,8 @@ public class TryNodeImpl extends NodeImpl implements TryNode
         list.add(getBlock());
         list.add(getCatches());
         list.add(getFinallyBlock());
+        list.add(getStartLocation());
+        list.add(getStopLocation());
         return list;
     }
 

@@ -6,6 +6,7 @@ import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.DeclaredTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ParameterizedTypeNode;
@@ -23,9 +24,11 @@ public class ParameterizedTypeSelectNodeImpl extends NodeImpl implements Paramet
     /** General constructor. */
     public ParameterizedTypeSelectNodeImpl(
             ParameterizedTypeNode base,
-            DeclaredTypeNode select)
+            DeclaredTypeNode select,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
-        super();
+        super(startLocation, stopLocation);
         this.base = base;
         this.select = select;
     }
@@ -139,6 +142,8 @@ public class ParameterizedTypeSelectNodeImpl extends NodeImpl implements Paramet
         List<Object> list = super.getChildObjects();
         list.add(getBase());
         list.add(getSelect());
+        list.add(getStartLocation());
+        list.add(getStopLocation());
         return list;
     }
 

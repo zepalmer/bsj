@@ -6,6 +6,7 @@ import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.DeclaredTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
@@ -24,9 +25,11 @@ public class TypeParameterNodeImpl extends NodeImpl implements TypeParameterNode
     /** General constructor. */
     public TypeParameterNodeImpl(
             IdentifierNode identifier,
-            ListNode<DeclaredTypeNode> bounds)
+            ListNode<DeclaredTypeNode> bounds,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
-        super();
+        super(startLocation, stopLocation);
         this.identifier = identifier;
         this.bounds = bounds;
     }
@@ -138,6 +141,8 @@ public class TypeParameterNodeImpl extends NodeImpl implements TypeParameterNode
         List<Object> list = super.getChildObjects();
         list.add(getIdentifier());
         list.add(getBounds());
+        list.add(getStartLocation());
+        list.add(getStopLocation());
         return list;
     }
 

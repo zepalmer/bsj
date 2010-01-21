@@ -5,6 +5,7 @@ import java.util.List;
 import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.NameCategory;
 import edu.jhu.cs.bsj.compiler.ast.node.NameNode;
@@ -16,9 +17,11 @@ public abstract class NameNodeImpl extends NodeImpl implements NameNode
 
     /** General constructor. */
     protected NameNodeImpl(
-            NameCategory category)
+            NameCategory category,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
-        super();
+        super(startLocation, stopLocation);
         this.category = category;
     }
 
@@ -81,6 +84,8 @@ public abstract class NameNodeImpl extends NodeImpl implements NameNode
     {
         List<Object> list = super.getChildObjects();
         list.add(getCategory());
+        list.add(getStartLocation());
+        list.add(getStopLocation());
         return list;
     }
 

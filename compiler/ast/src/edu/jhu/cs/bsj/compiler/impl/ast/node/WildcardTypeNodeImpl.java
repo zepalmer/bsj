@@ -6,6 +6,7 @@ import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.ReferenceTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.WildcardTypeNode;
@@ -22,9 +23,11 @@ public class WildcardTypeNodeImpl extends NodeImpl implements WildcardTypeNode
     /** General constructor. */
     public WildcardTypeNodeImpl(
             ReferenceTypeNode bound,
-            boolean upperBound)
+            boolean upperBound,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
-        super();
+        super(startLocation, stopLocation);
         this.bound = bound;
         this.upperBound = upperBound;
     }
@@ -128,6 +131,8 @@ public class WildcardTypeNodeImpl extends NodeImpl implements WildcardTypeNode
         List<Object> list = super.getChildObjects();
         list.add(getBound());
         list.add(getUpperBound());
+        list.add(getStartLocation());
+        list.add(getStopLocation());
         return list;
     }
 

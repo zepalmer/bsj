@@ -6,6 +6,7 @@ import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.PrimitiveType;
 import edu.jhu.cs.bsj.compiler.ast.node.PrimitiveTypeNode;
@@ -18,9 +19,11 @@ public class PrimitiveTypeNodeImpl extends NodeImpl implements PrimitiveTypeNode
 
     /** General constructor. */
     public PrimitiveTypeNodeImpl(
-            PrimitiveType primitiveType)
+            PrimitiveType primitiveType,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
-        super();
+        super(startLocation, stopLocation);
         this.primitiveType = primitiveType;
     }
 
@@ -98,6 +101,8 @@ public class PrimitiveTypeNodeImpl extends NodeImpl implements PrimitiveTypeNode
     {
         List<Object> list = super.getChildObjects();
         list.add(getPrimitiveType());
+        list.add(getStartLocation());
+        list.add(getStopLocation());
         return list;
     }
 

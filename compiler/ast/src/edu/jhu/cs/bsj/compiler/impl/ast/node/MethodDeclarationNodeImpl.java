@@ -6,6 +6,7 @@ import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.BlockStatementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
@@ -58,9 +59,11 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
             TypeNode returnType,
             ListNode<UnparameterizedTypeNode> throwTypes,
             ListNode<TypeParameterNode> typeParameters,
-            JavadocNode javadoc)
+            JavadocNode javadoc,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
-        super();
+        super(startLocation, stopLocation);
         this.body = body;
         this.modifiers = modifiers;
         this.identifier = identifier;
@@ -388,6 +391,8 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
         list.add(getThrowTypes());
         list.add(getTypeParameters());
         list.add(getJavadoc());
+        list.add(getStartLocation());
+        list.add(getStopLocation());
         return list;
     }
 

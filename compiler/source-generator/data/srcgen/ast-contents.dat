@@ -39,7 +39,9 @@
 #     * All content up to the first space (ignoring leading whitespace) is treated as the name of the property.
 #     * The rest of the line is treated as the property's type.
 #
-# If the property's name is suffixed by a '*' character, no setter will be generated for it.
+# If the property's name is suffixed by a '*' character, no setter will be generated for it.  If the property's name is
+# suffixed by a '+' character, no setter will be generated for it and it will not be included in the factory make method
+# (implying that the factory has been designed to fill that value in when calling the constructor).
 #
 # The second mode available is docs.  When in docs mode, each line is interpreted as Javadoc commentation for the class
 # itself.  Note that each line will be interpreted as HTML by the Javadoc reader.
@@ -1422,15 +1424,16 @@ ListNode<T extends Node> :: Node
 
 !set stopGen=
 
+# Note: the startLocation and stopLocation properties do not require special handling in the source generator because
+# the BSJ node factory already has member fields of the same name.
 Node*
     @props
+    startLocation+          BsjSourceLocation                           | the location at which this node's text starts (inclusive)
+    stopLocation+           BsjSourceLocation                           | the location at which this node's text stops (exclusive)
     @include
         Node.java
     @docs
         The parent class for all BSJ AST nodes.
-# TODO: add to properties of Node
-#    startLocation*          BsjSourceLocation                           | the location at which this node's text starts (inclusive)
-#    stopLocation*           BsjSourceLocation                           | the location at which this node's text stops (exclusive)
 
 PackageDeclarationNode :: Node
     @props

@@ -6,6 +6,7 @@ import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.SuperFieldAccessNode;
@@ -23,9 +24,11 @@ public class SuperFieldAccessNodeImpl extends NodeImpl implements SuperFieldAcce
     /** General constructor. */
     public SuperFieldAccessNodeImpl(
             UnparameterizedTypeNode type,
-            IdentifierNode identifier)
+            IdentifierNode identifier,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
-        super();
+        super(startLocation, stopLocation);
         this.type = type;
         this.identifier = identifier;
     }
@@ -139,6 +142,8 @@ public class SuperFieldAccessNodeImpl extends NodeImpl implements SuperFieldAcce
         List<Object> list = super.getChildObjects();
         list.add(getType());
         list.add(getIdentifier());
+        list.add(getStartLocation());
+        list.add(getStopLocation());
         return list;
     }
 

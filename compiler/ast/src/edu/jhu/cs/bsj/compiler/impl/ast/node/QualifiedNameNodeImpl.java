@@ -6,6 +6,7 @@ import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.NameCategory;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
@@ -25,9 +26,11 @@ public class QualifiedNameNodeImpl extends NameNodeImpl implements QualifiedName
     public QualifiedNameNodeImpl(
             NameNode base,
             IdentifierNode identifier,
-            NameCategory category)
+            NameCategory category,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
-        super(category);
+        super(category, startLocation, stopLocation);
         this.base = base;
         this.identifier = identifier;
     }
@@ -142,6 +145,8 @@ public class QualifiedNameNodeImpl extends NameNodeImpl implements QualifiedName
         list.add(getBase());
         list.add(getIdentifier());
         list.add(getCategory());
+        list.add(getStartLocation());
+        list.add(getStopLocation());
         return list;
     }
 

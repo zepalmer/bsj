@@ -6,6 +6,7 @@ import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.ArrayInitializerNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
@@ -19,9 +20,11 @@ public class ArrayInitializerNodeImpl extends NodeImpl implements ArrayInitializ
 
     /** General constructor. */
     public ArrayInitializerNodeImpl(
-            ListNode<VariableInitializerNode> initializers)
+            ListNode<VariableInitializerNode> initializers,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
-        super();
+        super(startLocation, stopLocation);
         this.initializers = initializers;
     }
 
@@ -105,6 +108,8 @@ public class ArrayInitializerNodeImpl extends NodeImpl implements ArrayInitializ
     {
         List<Object> list = super.getChildObjects();
         list.add(getInitializers());
+        list.add(getStartLocation());
+        list.add(getStopLocation());
         return list;
     }
 

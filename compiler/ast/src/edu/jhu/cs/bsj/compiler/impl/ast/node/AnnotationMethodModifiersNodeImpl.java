@@ -6,6 +6,7 @@ import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationMethodModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationNode;
@@ -16,9 +17,11 @@ public class AnnotationMethodModifiersNodeImpl extends ModifiersNodeImpl impleme
 {
     /** General constructor. */
     public AnnotationMethodModifiersNodeImpl(
-            ListNode<AnnotationNode> annotations)
+            ListNode<AnnotationNode> annotations,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
-        super(annotations);
+        super(annotations, startLocation, stopLocation);
     }
 
     /**
@@ -73,6 +76,8 @@ public class AnnotationMethodModifiersNodeImpl extends ModifiersNodeImpl impleme
     {
         List<Object> list = super.getChildObjects();
         list.add(getAnnotations());
+        list.add(getStartLocation());
+        list.add(getStopLocation());
         return list;
     }
 

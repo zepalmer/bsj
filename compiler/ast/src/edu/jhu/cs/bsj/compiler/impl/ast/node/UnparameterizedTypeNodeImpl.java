@@ -6,6 +6,7 @@ import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.NameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.UnparameterizedTypeNode;
@@ -18,9 +19,11 @@ public class UnparameterizedTypeNodeImpl extends NodeImpl implements Unparameter
 
     /** General constructor. */
     public UnparameterizedTypeNodeImpl(
-            NameNode name)
+            NameNode name,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
-        super();
+        super(startLocation, stopLocation);
         this.name = name;
     }
 
@@ -106,6 +109,8 @@ public class UnparameterizedTypeNodeImpl extends NodeImpl implements Unparameter
     {
         List<Object> list = super.getChildObjects();
         list.add(getName());
+        list.add(getStartLocation());
+        list.add(getStopLocation());
         return list;
     }
 

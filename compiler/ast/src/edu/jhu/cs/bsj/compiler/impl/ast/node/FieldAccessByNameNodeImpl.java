@@ -6,6 +6,7 @@ import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.FieldAccessByNameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.NameNode;
@@ -18,9 +19,11 @@ public class FieldAccessByNameNodeImpl extends NodeImpl implements FieldAccessBy
 
     /** General constructor. */
     public FieldAccessByNameNodeImpl(
-            NameNode name)
+            NameNode name,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
-        super();
+        super(startLocation, stopLocation);
         this.name = name;
     }
 
@@ -104,6 +107,8 @@ public class FieldAccessByNameNodeImpl extends NodeImpl implements FieldAccessBy
     {
         List<Object> list = super.getChildObjects();
         list.add(getName());
+        list.add(getStartLocation());
+        list.add(getStopLocation());
         return list;
     }
 

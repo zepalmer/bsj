@@ -6,6 +6,7 @@ import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.ConditionalExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
@@ -26,9 +27,11 @@ public class ConditionalExpressionNodeImpl extends NodeImpl implements Condition
     public ConditionalExpressionNodeImpl(
             ExpressionNode condition,
             ExpressionNode trueExpression,
-            ExpressionNode falseExpression)
+            ExpressionNode falseExpression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
-        super();
+        super(startLocation, stopLocation);
         this.condition = condition;
         this.trueExpression = trueExpression;
         this.falseExpression = falseExpression;
@@ -172,6 +175,8 @@ public class ConditionalExpressionNodeImpl extends NodeImpl implements Condition
         list.add(getCondition());
         list.add(getTrueExpression());
         list.add(getFalseExpression());
+        list.add(getStartLocation());
+        list.add(getStopLocation());
         return list;
     }
 

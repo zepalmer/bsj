@@ -6,6 +6,7 @@ import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationExpressionValueNode;
 import edu.jhu.cs.bsj.compiler.ast.node.NonAssignmentExpressionNode;
@@ -18,9 +19,11 @@ public class AnnotationExpressionValueNodeImpl extends NodeImpl implements Annot
 
     /** General constructor. */
     public AnnotationExpressionValueNodeImpl(
-            NonAssignmentExpressionNode expression)
+            NonAssignmentExpressionNode expression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
-        super();
+        super(startLocation, stopLocation);
         this.expression = expression;
     }
 
@@ -104,6 +107,8 @@ public class AnnotationExpressionValueNodeImpl extends NodeImpl implements Annot
     {
         List<Object> list = super.getChildObjects();
         list.add(getExpression());
+        list.add(getStartLocation());
+        list.add(getStopLocation());
         return list;
     }
 

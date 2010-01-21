@@ -6,6 +6,7 @@ import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.ThisNode;
 import edu.jhu.cs.bsj.compiler.ast.node.UnparameterizedTypeNode;
@@ -18,9 +19,11 @@ public class ThisNodeImpl extends NodeImpl implements ThisNode
 
     /** General constructor. */
     public ThisNodeImpl(
-            UnparameterizedTypeNode type)
+            UnparameterizedTypeNode type,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
-        super();
+        super(startLocation, stopLocation);
         this.type = type;
     }
 
@@ -104,6 +107,8 @@ public class ThisNodeImpl extends NodeImpl implements ThisNode
     {
         List<Object> list = super.getChildObjects();
         list.add(getType());
+        list.add(getStartLocation());
+        list.add(getStopLocation());
         return list;
     }
 

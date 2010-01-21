@@ -6,6 +6,7 @@ import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.EnumBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.EnumDeclarationNode;
@@ -33,9 +34,11 @@ public class EnumDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl implem
             ListNode<TypeNode> implementsClause,
             EnumBodyNode body,
             IdentifierNode identifier,
-            JavadocNode javadoc)
+            JavadocNode javadoc,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
-        super(identifier, javadoc);
+        super(identifier, javadoc, startLocation, stopLocation);
         this.modifiers = modifiers;
         this.implementsClause = implementsClause;
         this.body = body;
@@ -183,6 +186,8 @@ public class EnumDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl implem
         list.add(getBody());
         list.add(getIdentifier());
         list.add(getJavadoc());
+        list.add(getStartLocation());
+        list.add(getStopLocation());
         return list;
     }
 

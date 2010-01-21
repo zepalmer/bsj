@@ -6,6 +6,7 @@ import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 
 /**
@@ -14,6 +15,18 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public interface Node
 {
+    /**
+     * Gets the location at which this node's text starts (inclusive).
+     * @return The location at which this node's text starts (inclusive).
+     */
+    public BsjSourceLocation getStartLocation();
+
+    /**
+     * Gets the location at which this node's text stops (exclusive).
+     * @return The location at which this node's text stops (exclusive).
+     */
+    public BsjSourceLocation getStopLocation();
+
 	/**
 	 * Causes this node to receive a visitor.  Visitors are received by nodes in a depth-first fashion.  The order of
 	 * the children receiving the visitor is dependent upon the type of node; however, a superclass's child nodes are

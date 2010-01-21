@@ -5,6 +5,7 @@ import java.util.List;
 import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.LiteralNode;
 
@@ -16,9 +17,11 @@ public abstract class LiteralNodeImpl<T> extends NodeImpl implements LiteralNode
 
     /** General constructor. */
     protected LiteralNodeImpl(
-            T value)
+            T value,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
-        super();
+        super(startLocation, stopLocation);
         this.value = value;
     }
 
@@ -92,6 +95,8 @@ public abstract class LiteralNodeImpl<T> extends NodeImpl implements LiteralNode
     {
         List<Object> list = super.getChildObjects();
         list.add(getValue());
+        list.add(getStartLocation());
+        list.add(getStopLocation());
         return list;
     }
 

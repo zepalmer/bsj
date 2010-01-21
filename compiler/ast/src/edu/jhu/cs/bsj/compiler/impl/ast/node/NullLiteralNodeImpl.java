@@ -6,6 +6,7 @@ import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.NullLiteralNode;
 
@@ -14,9 +15,11 @@ public class NullLiteralNodeImpl extends LiteralNodeImpl<Void> implements NullLi
 {
     /** General constructor. */
     public NullLiteralNodeImpl(
-            Void value)
+            Void value,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
-        super(value);
+        super(value, startLocation, stopLocation);
     }
 
     /**
@@ -71,6 +74,8 @@ public class NullLiteralNodeImpl extends LiteralNodeImpl<Void> implements NullLi
     {
         List<Object> list = super.getChildObjects();
         list.add(getValue());
+        list.add(getStartLocation());
+        list.add(getStopLocation());
         return list;
     }
 

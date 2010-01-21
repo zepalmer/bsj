@@ -6,6 +6,7 @@ import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.FieldDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.FieldModifiersNode;
@@ -29,9 +30,11 @@ public class FieldDeclarationNodeImpl extends NodeImpl implements FieldDeclarati
     public FieldDeclarationNodeImpl(
             FieldModifiersNode modifiers,
             ListNode<VariableDeclaratorNode> declarators,
-            JavadocNode javadoc)
+            JavadocNode javadoc,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
-        super();
+        super(startLocation, stopLocation);
         this.modifiers = modifiers;
         this.declarators = declarators;
         this.javadoc = javadoc;
@@ -181,6 +184,8 @@ public class FieldDeclarationNodeImpl extends NodeImpl implements FieldDeclarati
         list.add(getModifiers());
         list.add(getDeclarators());
         list.add(getJavadoc());
+        list.add(getStartLocation());
+        list.add(getStopLocation());
         return list;
     }
 

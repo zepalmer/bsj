@@ -5,6 +5,7 @@ import java.util.List;
 import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.JavadocNode;
@@ -22,9 +23,11 @@ public abstract class NamedTypeDeclarationNodeImpl extends NodeImpl implements N
     /** General constructor. */
     protected NamedTypeDeclarationNodeImpl(
             IdentifierNode identifier,
-            JavadocNode javadoc)
+            JavadocNode javadoc,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
-        super();
+        super(startLocation, stopLocation);
         this.identifier = identifier;
         this.javadoc = javadoc;
     }
@@ -138,6 +141,8 @@ public abstract class NamedTypeDeclarationNodeImpl extends NodeImpl implements N
         List<Object> list = super.getChildObjects();
         list.add(getIdentifier());
         list.add(getJavadoc());
+        list.add(getStartLocation());
+        list.add(getStopLocation());
         return list;
     }
 

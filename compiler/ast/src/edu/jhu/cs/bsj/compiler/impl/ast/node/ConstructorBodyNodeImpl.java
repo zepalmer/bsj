@@ -6,6 +6,7 @@ import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.ConstructorBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ConstructorInvocationNode;
@@ -24,9 +25,11 @@ public class ConstructorBodyNodeImpl extends NodeImpl implements ConstructorBody
     /** General constructor. */
     public ConstructorBodyNodeImpl(
             ConstructorInvocationNode constructorInvocation,
-            ListNode<StatementNode> statements)
+            ListNode<StatementNode> statements,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
-        super();
+        super(startLocation, stopLocation);
         this.constructorInvocation = constructorInvocation;
         this.statements = statements;
     }
@@ -138,6 +141,8 @@ public class ConstructorBodyNodeImpl extends NodeImpl implements ConstructorBody
         List<Object> list = super.getChildObjects();
         list.add(getConstructorInvocation());
         list.add(getStatements());
+        list.add(getStartLocation());
+        list.add(getStopLocation());
         return list;
     }
 

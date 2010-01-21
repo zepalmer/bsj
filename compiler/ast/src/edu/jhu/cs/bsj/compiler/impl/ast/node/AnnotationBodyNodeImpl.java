@@ -6,6 +6,7 @@ import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationMemberNode;
@@ -19,9 +20,11 @@ public class AnnotationBodyNodeImpl extends NodeImpl implements AnnotationBodyNo
 
     /** General constructor. */
     public AnnotationBodyNodeImpl(
-            ListNode<AnnotationMemberNode> members)
+            ListNode<AnnotationMemberNode> members,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
-        super();
+        super(startLocation, stopLocation);
         this.members = members;
     }
 
@@ -103,6 +106,8 @@ public class AnnotationBodyNodeImpl extends NodeImpl implements AnnotationBodyNo
     {
         List<Object> list = super.getChildObjects();
         list.add(getMembers());
+        list.add(getStartLocation());
+        list.add(getStopLocation());
         return list;
     }
 

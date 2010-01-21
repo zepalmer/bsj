@@ -5,6 +5,7 @@ import java.util.List;
 import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
@@ -18,9 +19,11 @@ public abstract class ModifiersNodeImpl extends NodeImpl implements ModifiersNod
 
     /** General constructor. */
     protected ModifiersNodeImpl(
-            ListNode<AnnotationNode> annotations)
+            ListNode<AnnotationNode> annotations,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
-        super();
+        super(startLocation, stopLocation);
         this.annotations = annotations;
     }
 
@@ -102,6 +105,8 @@ public abstract class ModifiersNodeImpl extends NodeImpl implements ModifiersNod
     {
         List<Object> list = super.getChildObjects();
         list.add(getAnnotations());
+        list.add(getStartLocation());
+        list.add(getStopLocation());
         return list;
     }
 

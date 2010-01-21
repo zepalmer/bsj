@@ -6,6 +6,7 @@ import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.ImportSingleTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.NameNode;
@@ -22,9 +23,11 @@ public class ImportSingleTypeNodeImpl extends NodeImpl implements ImportSingleTy
     /** General constructor. */
     public ImportSingleTypeNodeImpl(
             NameNode name,
-            boolean staticImport)
+            boolean staticImport,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
-        super();
+        super(startLocation, stopLocation);
         this.name = name;
         this.staticImport = staticImport;
     }
@@ -128,6 +131,8 @@ public class ImportSingleTypeNodeImpl extends NodeImpl implements ImportSingleTy
         List<Object> list = super.getChildObjects();
         list.add(getName());
         list.add(getStaticImport());
+        list.add(getStartLocation());
+        list.add(getStopLocation());
         return list;
     }
 

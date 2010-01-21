@@ -6,6 +6,7 @@ import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.UnaryOperator;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
@@ -23,9 +24,11 @@ public class UnaryExpressionNodeImpl extends NodeImpl implements UnaryExpression
     /** General constructor. */
     public UnaryExpressionNodeImpl(
             ExpressionNode expression,
-            UnaryOperator operator)
+            UnaryOperator operator,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
-        super();
+        super(startLocation, stopLocation);
         this.expression = expression;
         this.operator = operator;
     }
@@ -129,6 +132,8 @@ public class UnaryExpressionNodeImpl extends NodeImpl implements UnaryExpression
         List<Object> list = super.getChildObjects();
         list.add(getExpression());
         list.add(getOperator());
+        list.add(getStartLocation());
+        list.add(getStopLocation());
         return list;
     }
 

@@ -5,6 +5,7 @@ import java.util.List;
 import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.AnonymousClassBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassInstantiationNode;
@@ -28,9 +29,11 @@ public abstract class ClassInstantiationNodeImpl extends NodeImpl implements Cla
     protected ClassInstantiationNodeImpl(
             ListNode<TypeArgumentNode> constructorTypeArguments,
             ListNode<ExpressionNode> arguments,
-            AnonymousClassBodyNode body)
+            AnonymousClassBodyNode body,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
-        super();
+        super(startLocation, stopLocation);
         this.constructorTypeArguments = constructorTypeArguments;
         this.arguments = arguments;
         this.body = body;
@@ -176,6 +179,8 @@ public abstract class ClassInstantiationNodeImpl extends NodeImpl implements Cla
         list.add(getConstructorTypeArguments());
         list.add(getArguments());
         list.add(getBody());
+        list.add(getStartLocation());
+        list.add(getStopLocation());
         return list;
     }
 

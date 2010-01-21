@@ -6,6 +6,7 @@ import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.BlockStatementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.CatchNode;
@@ -23,9 +24,11 @@ public class CatchNodeImpl extends NodeImpl implements CatchNode
     /** General constructor. */
     public CatchNodeImpl(
             BlockStatementNode block,
-            VariableNode parameter)
+            VariableNode parameter,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
-        super();
+        super(startLocation, stopLocation);
         this.block = block;
         this.parameter = parameter;
     }
@@ -137,6 +140,8 @@ public class CatchNodeImpl extends NodeImpl implements CatchNode
         List<Object> list = super.getChildObjects();
         list.add(getBlock());
         list.add(getParameter());
+        list.add(getStartLocation());
+        list.add(getStopLocation());
         return list;
     }
 

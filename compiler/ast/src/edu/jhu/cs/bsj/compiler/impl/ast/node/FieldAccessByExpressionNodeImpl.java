@@ -6,6 +6,7 @@ import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.FieldAccessByExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
@@ -23,9 +24,11 @@ public class FieldAccessByExpressionNodeImpl extends NodeImpl implements FieldAc
     /** General constructor. */
     public FieldAccessByExpressionNodeImpl(
             PrimaryExpressionNode expression,
-            IdentifierNode identifier)
+            IdentifierNode identifier,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
-        super();
+        super(startLocation, stopLocation);
         this.expression = expression;
         this.identifier = identifier;
     }
@@ -139,6 +142,8 @@ public class FieldAccessByExpressionNodeImpl extends NodeImpl implements FieldAc
         List<Object> list = super.getChildObjects();
         list.add(getExpression());
         list.add(getIdentifier());
+        list.add(getStartLocation());
+        list.add(getStopLocation());
         return list;
     }
 

@@ -6,6 +6,7 @@ import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassMemberNode;
 import edu.jhu.cs.bsj.compiler.ast.node.EnumBodyNode;
@@ -24,9 +25,11 @@ public class EnumBodyNodeImpl extends NodeImpl implements EnumBodyNode
     /** General constructor. */
     public EnumBodyNodeImpl(
             ListNode<EnumConstantDeclarationNode> constants,
-            ListNode<ClassMemberNode> members)
+            ListNode<ClassMemberNode> members,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
-        super();
+        super(startLocation, stopLocation);
         this.constants = constants;
         this.members = members;
     }
@@ -138,6 +141,8 @@ public class EnumBodyNodeImpl extends NodeImpl implements EnumBodyNode
         List<Object> list = super.getChildObjects();
         list.add(getConstants());
         list.add(getMembers());
+        list.add(getStartLocation());
+        list.add(getStopLocation());
         return list;
     }
 

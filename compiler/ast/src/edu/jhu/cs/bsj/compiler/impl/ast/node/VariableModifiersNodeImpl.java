@@ -6,6 +6,7 @@ import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
@@ -20,9 +21,11 @@ public class VariableModifiersNodeImpl extends ModifiersNodeImpl implements Vari
     /** General constructor. */
     public VariableModifiersNodeImpl(
             boolean finalFlag,
-            ListNode<AnnotationNode> annotations)
+            ListNode<AnnotationNode> annotations,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
-        super(annotations);
+        super(annotations, startLocation, stopLocation);
         this.finalFlag = finalFlag;
     }
 
@@ -97,6 +100,8 @@ public class VariableModifiersNodeImpl extends ModifiersNodeImpl implements Vari
         List<Object> list = super.getChildObjects();
         list.add(getFinalFlag());
         list.add(getAnnotations());
+        list.add(getStartLocation());
+        list.add(getStopLocation());
         return list;
     }
 

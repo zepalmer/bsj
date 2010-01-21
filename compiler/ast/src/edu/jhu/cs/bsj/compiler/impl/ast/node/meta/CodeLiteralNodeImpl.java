@@ -6,6 +6,7 @@ import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.CodeLiteralNode;
@@ -16,9 +17,11 @@ public class CodeLiteralNodeImpl extends LiteralNodeImpl<Node> implements CodeLi
 {
     /** General constructor. */
     public CodeLiteralNodeImpl(
-            Node value)
+            Node value,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
-        super(value);
+        super(value, startLocation, stopLocation);
     }
 
     /**
@@ -73,6 +76,8 @@ public class CodeLiteralNodeImpl extends LiteralNodeImpl<Node> implements CodeLi
     {
         List<Object> list = super.getChildObjects();
         list.add(getValue());
+        list.add(getStartLocation());
+        list.add(getStopLocation());
         return list;
     }
 

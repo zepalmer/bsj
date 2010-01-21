@@ -6,6 +6,7 @@ import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationDeclarationNode;
@@ -27,9 +28,11 @@ public class AnnotationDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl 
             AnnotationModifiersNode modifiers,
             AnnotationBodyNode body,
             IdentifierNode identifier,
-            JavadocNode javadoc)
+            JavadocNode javadoc,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
-        super(identifier, javadoc);
+        super(identifier, javadoc, startLocation, stopLocation);
         this.modifiers = modifiers;
         this.body = body;
     }
@@ -145,6 +148,8 @@ public class AnnotationDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl 
         list.add(getBody());
         list.add(getIdentifier());
         list.add(getJavadoc());
+        list.add(getStartLocation());
+        list.add(getStopLocation());
         return list;
     }
 

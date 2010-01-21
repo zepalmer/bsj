@@ -6,6 +6,7 @@ import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.AnonymousClassBodyNode;
@@ -39,9 +40,11 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
             IdentifierNode identifier,
             ListNode<ExpressionNode> arguments,
             AnonymousClassBodyNode body,
-            JavadocNode javadoc)
+            JavadocNode javadoc,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
-        super();
+        super(startLocation, stopLocation);
         this.annotations = annotations;
         this.identifier = identifier;
         this.arguments = arguments;
@@ -243,6 +246,8 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
         list.add(getArguments());
         list.add(getBody());
         list.add(getJavadoc());
+        list.add(getStartLocation());
+        list.add(getStopLocation());
         return list;
     }
 

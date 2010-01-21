@@ -6,6 +6,7 @@ import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.VoidStatementNode;
 
@@ -13,9 +14,11 @@ import edu.jhu.cs.bsj.compiler.ast.node.VoidStatementNode;
 public class VoidStatementNodeImpl extends NodeImpl implements VoidStatementNode
 {
     /** General constructor. */
-    public VoidStatementNodeImpl()
+    public VoidStatementNodeImpl(
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
-        super();
+        super(startLocation, stopLocation);
     }
 
     /**
@@ -69,6 +72,8 @@ public class VoidStatementNodeImpl extends NodeImpl implements VoidStatementNode
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
+        list.add(getStartLocation());
+        list.add(getStopLocation());
         return list;
     }
 

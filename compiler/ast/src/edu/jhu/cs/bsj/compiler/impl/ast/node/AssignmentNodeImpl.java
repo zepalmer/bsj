@@ -7,6 +7,7 @@ import javax.annotation.Generated;
 import edu.jhu.cs.bsj.compiler.ast.AssignmentOperator;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.AssignmentNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
@@ -27,9 +28,11 @@ public class AssignmentNodeImpl extends NodeImpl implements AssignmentNode
     public AssignmentNodeImpl(
             ExpressionNode variable,
             AssignmentOperator operator,
-            ExpressionNode expression)
+            ExpressionNode expression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
-        super();
+        super(startLocation, stopLocation);
         this.variable = variable;
         this.operator = operator;
         this.expression = expression;
@@ -163,6 +166,8 @@ public class AssignmentNodeImpl extends NodeImpl implements AssignmentNode
         list.add(getVariable());
         list.add(getOperator());
         list.add(getExpression());
+        list.add(getStartLocation());
+        list.add(getStopLocation());
         return list;
     }
 

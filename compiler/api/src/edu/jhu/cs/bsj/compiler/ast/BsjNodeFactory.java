@@ -18,6 +18,20 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.CodeLiteralNode;
 public interface BsjNodeFactory
 {
     /**
+     * Changes the starting source location used for new nodes.
+     * @param startLocation The new start location to use for new nodes.  <code>null</code> is a permissible value and
+     *                      indicates that no information is available.
+     */
+    public void setStartSourceLocation(BsjSourceLocation startLocation);
+
+    /**
+     * Changes the ending source location used for new nodes.
+     * @param stopLocation The new stop location to use for new nodes.  <code>null</code> is a permissible value and
+     *                      indicates that no information is available.
+     */
+    public void setStopSourceLocation(BsjSourceLocation stopLocation);
+
+    /**
      * Creates a AssertStatementNode.
      */
     public AssertStatementNode makeAssertStatementNode(
@@ -94,7 +108,8 @@ public interface BsjNodeFactory
     /**
      * Creates a VoidStatementNode.
      */
-    public VoidStatementNode makeVoidStatementNode();
+    public VoidStatementNode makeVoidStatementNode(
+);
 
     /**
      * Creates a CodeLiteralNode.
@@ -180,7 +195,8 @@ public interface BsjNodeFactory
     /**
      * Creates a VoidTypeNode.
      */
-    public VoidTypeNode makeVoidTypeNode();
+    public VoidTypeNode makeVoidTypeNode(
+);
 
     /**
      * Creates a VariableDeclarationNode.
@@ -256,7 +272,8 @@ public interface BsjNodeFactory
     /**
      * Creates a VoidTypeDeclarationNode.
      */
-    public VoidTypeDeclarationNode makeVoidTypeDeclarationNode();
+    public VoidTypeDeclarationNode makeVoidTypeDeclarationNode(
+);
 
     /**
      * Creates a NormalAnnotationNode.

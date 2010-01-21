@@ -6,6 +6,7 @@ import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.BlockStatementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
@@ -23,9 +24,11 @@ public class SynchronizedNodeImpl extends NodeImpl implements SynchronizedNode
     /** General constructor. */
     public SynchronizedNodeImpl(
             ExpressionNode expression,
-            BlockStatementNode block)
+            BlockStatementNode block,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
-        super();
+        super(startLocation, stopLocation);
         this.expression = expression;
         this.block = block;
     }
@@ -139,6 +142,8 @@ public class SynchronizedNodeImpl extends NodeImpl implements SynchronizedNode
         List<Object> list = super.getChildObjects();
         list.add(getExpression());
         list.add(getBlock());
+        list.add(getStartLocation());
+        list.add(getStopLocation());
         return list;
     }
 

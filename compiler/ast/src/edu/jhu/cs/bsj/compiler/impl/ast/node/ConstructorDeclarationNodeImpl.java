@@ -6,6 +6,7 @@ import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.ConstructorBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ConstructorDeclarationNode;
@@ -53,9 +54,11 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
             VariableNode varargParameter,
             ListNode<UnparameterizedTypeNode> throwTypes,
             ListNode<TypeParameterNode> typeParameters,
-            JavadocNode javadoc)
+            JavadocNode javadoc,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
-        super();
+        super(startLocation, stopLocation);
         this.identifier = identifier;
         this.body = body;
         this.modifiers = modifiers;
@@ -349,6 +352,8 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
         list.add(getThrowTypes());
         list.add(getTypeParameters());
         list.add(getJavadoc());
+        list.add(getStartLocation());
+        list.add(getStopLocation());
         return list;
     }
 

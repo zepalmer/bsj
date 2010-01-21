@@ -6,6 +6,7 @@ import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.ArrayTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
@@ -18,9 +19,11 @@ public class ArrayTypeNodeImpl extends NodeImpl implements ArrayTypeNode
 
     /** General constructor. */
     public ArrayTypeNodeImpl(
-            TypeNode type)
+            TypeNode type,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
-        super();
+        super(startLocation, stopLocation);
         this.type = type;
     }
 
@@ -106,6 +109,8 @@ public class ArrayTypeNodeImpl extends NodeImpl implements ArrayTypeNode
     {
         List<Object> list = super.getChildObjects();
         list.add(getType());
+        list.add(getStartLocation());
+        list.add(getStopLocation());
         return list;
     }
 

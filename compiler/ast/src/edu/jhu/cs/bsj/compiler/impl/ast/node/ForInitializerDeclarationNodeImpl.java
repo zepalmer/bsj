@@ -6,6 +6,7 @@ import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.ForInitializerDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclarationNode;
@@ -18,9 +19,11 @@ public class ForInitializerDeclarationNodeImpl extends NodeImpl implements ForIn
 
     /** General constructor. */
     public ForInitializerDeclarationNodeImpl(
-            VariableDeclarationNode declaration)
+            VariableDeclarationNode declaration,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
-        super();
+        super(startLocation, stopLocation);
         this.declaration = declaration;
     }
 
@@ -104,6 +107,8 @@ public class ForInitializerDeclarationNodeImpl extends NodeImpl implements ForIn
     {
         List<Object> list = super.getChildObjects();
         list.add(getDeclaration());
+        list.add(getStartLocation());
+        list.add(getStopLocation());
         return list;
     }
 

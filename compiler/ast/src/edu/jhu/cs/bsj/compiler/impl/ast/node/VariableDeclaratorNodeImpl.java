@@ -6,6 +6,7 @@ import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
@@ -28,9 +29,11 @@ public class VariableDeclaratorNodeImpl extends NodeImpl implements VariableDecl
     public VariableDeclaratorNodeImpl(
             TypeNode type,
             IdentifierNode name,
-            VariableInitializerNode initializer)
+            VariableInitializerNode initializer,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
-        super();
+        super(startLocation, stopLocation);
         this.type = type;
         this.name = name;
         this.initializer = initializer;
@@ -174,6 +177,8 @@ public class VariableDeclaratorNodeImpl extends NodeImpl implements VariableDecl
         list.add(getType());
         list.add(getName());
         list.add(getInitializer());
+        list.add(getStartLocation());
+        list.add(getStopLocation());
         return list;
     }
 

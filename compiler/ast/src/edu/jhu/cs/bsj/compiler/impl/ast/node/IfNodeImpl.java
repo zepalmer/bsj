@@ -6,6 +6,7 @@ import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.IfNode;
@@ -27,9 +28,11 @@ public class IfNodeImpl extends NodeImpl implements IfNode
     public IfNodeImpl(
             ExpressionNode condition,
             StatementNode thenStatement,
-            StatementNode elseStatement)
+            StatementNode elseStatement,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
-        super();
+        super(startLocation, stopLocation);
         this.condition = condition;
         this.thenStatement = thenStatement;
         this.elseStatement = elseStatement;
@@ -173,6 +176,8 @@ public class IfNodeImpl extends NodeImpl implements IfNode
         list.add(getCondition());
         list.add(getThenStatement());
         list.add(getElseStatement());
+        list.add(getStartLocation());
+        list.add(getStopLocation());
         return list;
     }
 

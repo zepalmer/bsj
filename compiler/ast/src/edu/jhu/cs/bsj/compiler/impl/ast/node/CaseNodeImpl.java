@@ -6,6 +6,7 @@ import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.CaseNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
@@ -24,9 +25,11 @@ public class CaseNodeImpl extends NodeImpl implements CaseNode
     /** General constructor. */
     public CaseNodeImpl(
             ExpressionNode expression,
-            ListNode<StatementNode> statements)
+            ListNode<StatementNode> statements,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
-        super();
+        super(startLocation, stopLocation);
         this.expression = expression;
         this.statements = statements;
     }
@@ -138,6 +141,8 @@ public class CaseNodeImpl extends NodeImpl implements CaseNode
         List<Object> list = super.getChildObjects();
         list.add(getExpression());
         list.add(getStatements());
+        list.add(getStartLocation());
+        list.add(getStopLocation());
         return list;
     }
 

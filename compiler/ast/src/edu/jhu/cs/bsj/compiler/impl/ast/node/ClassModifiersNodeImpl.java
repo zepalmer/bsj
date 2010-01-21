@@ -7,6 +7,7 @@ import javax.annotation.Generated;
 import edu.jhu.cs.bsj.compiler.ast.AccessModifier;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassModifiersNode;
@@ -37,9 +38,11 @@ public class ClassModifiersNodeImpl extends ModifiersNodeImpl implements ClassMo
             boolean staticFlag,
             boolean finalFlag,
             boolean strictfpFlag,
-            ListNode<AnnotationNode> annotations)
+            ListNode<AnnotationNode> annotations,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
-        super(annotations);
+        super(annotations, startLocation, stopLocation);
         this.access = access;
         this.abstractFlag = abstractFlag;
         this.staticFlag = staticFlag;
@@ -194,6 +197,8 @@ public class ClassModifiersNodeImpl extends ModifiersNodeImpl implements ClassMo
         list.add(getFinalFlag());
         list.add(getStrictfpFlag());
         list.add(getAnnotations());
+        list.add(getStartLocation());
+        list.add(getStopLocation());
         return list;
     }
 

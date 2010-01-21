@@ -6,6 +6,7 @@ import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ParameterizedTypeNode;
@@ -24,9 +25,11 @@ public class ParameterizedTypeNodeImpl extends NodeImpl implements Parameterized
     /** General constructor. */
     public ParameterizedTypeNodeImpl(
             UnparameterizedTypeNode baseType,
-            ListNode<TypeArgumentNode> typeArguments)
+            ListNode<TypeArgumentNode> typeArguments,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
-        super();
+        super(startLocation, stopLocation);
         this.baseType = baseType;
         this.typeArguments = typeArguments;
     }
@@ -140,6 +143,8 @@ public class ParameterizedTypeNodeImpl extends NodeImpl implements Parameterized
         List<Object> list = super.getChildObjects();
         list.add(getBaseType());
         list.add(getTypeArguments());
+        list.add(getStartLocation());
+        list.add(getStopLocation());
         return list;
     }
 

@@ -6,6 +6,7 @@ import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.InlineTypeDeclarableNode;
 import edu.jhu.cs.bsj.compiler.ast.node.InlineTypeDeclarationNode;
@@ -18,9 +19,11 @@ public class InlineTypeDeclarationNodeImpl extends NodeImpl implements InlineTyp
 
     /** General constructor. */
     public InlineTypeDeclarationNodeImpl(
-            InlineTypeDeclarableNode declaration)
+            InlineTypeDeclarableNode declaration,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
-        super();
+        super(startLocation, stopLocation);
         this.declaration = declaration;
     }
 
@@ -104,6 +107,8 @@ public class InlineTypeDeclarationNodeImpl extends NodeImpl implements InlineTyp
     {
         List<Object> list = super.getChildObjects();
         list.add(getDeclaration());
+        list.add(getStartLocation());
+        list.add(getStopLocation());
         return list;
     }
 

@@ -6,6 +6,7 @@ import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ForInitializerNode;
@@ -34,9 +35,11 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
             ForInitializerNode initializer,
             ExpressionNode condition,
             ListNode<StatementExpressionNode> update,
-            StatementNode statement)
+            StatementNode statement,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
-        super();
+        super(startLocation, stopLocation);
         this.initializer = initializer;
         this.condition = condition;
         this.update = update;
@@ -210,6 +213,8 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
         list.add(getCondition());
         list.add(getUpdate());
         list.add(getStatement());
+        list.add(getStartLocation());
+        list.add(getStopLocation());
         return list;
     }
 

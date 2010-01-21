@@ -6,6 +6,7 @@ import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.BlockStatementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.InitializerDeclarationNode;
@@ -22,9 +23,11 @@ public class InitializerDeclarationNodeImpl extends NodeImpl implements Initiali
     /** General constructor. */
     public InitializerDeclarationNodeImpl(
             boolean staticInitializer,
-            BlockStatementNode body)
+            BlockStatementNode body,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
-        super();
+        super(startLocation, stopLocation);
         this.staticInitializer = staticInitializer;
         this.body = body;
     }
@@ -130,6 +133,8 @@ public class InitializerDeclarationNodeImpl extends NodeImpl implements Initiali
         List<Object> list = super.getChildObjects();
         list.add(getStaticInitializer());
         list.add(getBody());
+        list.add(getStartLocation());
+        list.add(getStopLocation());
         return list;
     }
 

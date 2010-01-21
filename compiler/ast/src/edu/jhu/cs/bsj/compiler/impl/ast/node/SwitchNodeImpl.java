@@ -6,6 +6,7 @@ import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.CaseNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
@@ -24,9 +25,11 @@ public class SwitchNodeImpl extends NodeImpl implements SwitchNode
     /** General constructor. */
     public SwitchNodeImpl(
             ExpressionNode expression,
-            ListNode<CaseNode> cases)
+            ListNode<CaseNode> cases,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
-        super();
+        super(startLocation, stopLocation);
         this.expression = expression;
         this.cases = cases;
     }
@@ -140,6 +143,8 @@ public class SwitchNodeImpl extends NodeImpl implements SwitchNode
         List<Object> list = super.getChildObjects();
         list.add(getExpression());
         list.add(getCases());
+        list.add(getStartLocation());
+        list.add(getStopLocation());
         return list;
     }
 

@@ -6,6 +6,7 @@ import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationElementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
@@ -21,9 +22,11 @@ public class NormalAnnotationNodeImpl extends AnnotationNodeImpl implements Norm
     /** General constructor. */
     public NormalAnnotationNodeImpl(
             ListNode<AnnotationElementNode> arguments,
-            UnparameterizedTypeNode annotationType)
+            UnparameterizedTypeNode annotationType,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
-        super(annotationType);
+        super(annotationType, startLocation, stopLocation);
         this.arguments = arguments;
     }
 
@@ -108,6 +111,8 @@ public class NormalAnnotationNodeImpl extends AnnotationNodeImpl implements Norm
         List<Object> list = super.getChildObjects();
         list.add(getArguments());
         list.add(getAnnotationType());
+        list.add(getStartLocation());
+        list.add(getStopLocation());
         return list;
     }
 

@@ -6,6 +6,7 @@ import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.EnhancedForLoopNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
@@ -28,9 +29,11 @@ public class EnhancedForLoopNodeImpl extends NodeImpl implements EnhancedForLoop
     public EnhancedForLoopNodeImpl(
             VariableNode variable,
             ExpressionNode expression,
-            StatementNode statement)
+            StatementNode statement,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
-        super();
+        super(startLocation, stopLocation);
         this.variable = variable;
         this.expression = expression;
         this.statement = statement;
@@ -174,6 +177,8 @@ public class EnhancedForLoopNodeImpl extends NodeImpl implements EnhancedForLoop
         list.add(getVariable());
         list.add(getExpression());
         list.add(getStatement());
+        list.add(getStartLocation());
+        list.add(getStopLocation());
         return list;
     }
 

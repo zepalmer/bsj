@@ -6,6 +6,7 @@ import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationArrayValueNode;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationValueNode;
@@ -19,9 +20,11 @@ public class AnnotationArrayValueNodeImpl extends NodeImpl implements Annotation
 
     /** General constructor. */
     public AnnotationArrayValueNodeImpl(
-            ListNode<AnnotationValueNode> values)
+            ListNode<AnnotationValueNode> values,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
-        super();
+        super(startLocation, stopLocation);
         this.values = values;
     }
 
@@ -105,6 +108,8 @@ public class AnnotationArrayValueNodeImpl extends NodeImpl implements Annotation
     {
         List<Object> list = super.getChildObjects();
         list.add(getValues());
+        list.add(getStartLocation());
+        list.add(getStopLocation());
         return list;
     }
 

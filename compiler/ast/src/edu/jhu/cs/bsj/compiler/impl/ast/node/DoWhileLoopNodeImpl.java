@@ -6,6 +6,7 @@ import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.DoWhileLoopNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
@@ -23,9 +24,11 @@ public class DoWhileLoopNodeImpl extends NodeImpl implements DoWhileLoopNode
     /** General constructor. */
     public DoWhileLoopNodeImpl(
             ExpressionNode condition,
-            StatementNode statement)
+            StatementNode statement,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
-        super();
+        super(startLocation, stopLocation);
         this.condition = condition;
         this.statement = statement;
     }
@@ -139,6 +142,8 @@ public class DoWhileLoopNodeImpl extends NodeImpl implements DoWhileLoopNode
         List<Object> list = super.getChildObjects();
         list.add(getCondition());
         list.add(getStatement());
+        list.add(getStartLocation());
+        list.add(getStopLocation());
         return list;
     }
 

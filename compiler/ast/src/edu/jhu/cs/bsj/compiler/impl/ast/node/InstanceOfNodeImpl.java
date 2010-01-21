@@ -6,6 +6,7 @@ import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.InstanceOfNode;
@@ -23,9 +24,11 @@ public class InstanceOfNodeImpl extends NodeImpl implements InstanceOfNode
     /** General constructor. */
     public InstanceOfNodeImpl(
             ExpressionNode expression,
-            TypeNode type)
+            TypeNode type,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
-        super();
+        super(startLocation, stopLocation);
         this.expression = expression;
         this.type = type;
     }
@@ -139,6 +142,8 @@ public class InstanceOfNodeImpl extends NodeImpl implements InstanceOfNode
         List<Object> list = super.getChildObjects();
         list.add(getExpression());
         list.add(getType());
+        list.add(getStartLocation());
+        list.add(getStopLocation());
         return list;
     }
 

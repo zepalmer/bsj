@@ -6,6 +6,7 @@ import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.ForInitializerExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
@@ -19,9 +20,11 @@ public class ForInitializerExpressionNodeImpl extends NodeImpl implements ForIni
 
     /** General constructor. */
     public ForInitializerExpressionNodeImpl(
-            ListNode<StatementExpressionNode> expressions)
+            ListNode<StatementExpressionNode> expressions,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
-        super();
+        super(startLocation, stopLocation);
         this.expressions = expressions;
     }
 
@@ -105,6 +108,8 @@ public class ForInitializerExpressionNodeImpl extends NodeImpl implements ForIni
     {
         List<Object> list = super.getChildObjects();
         list.add(getExpressions());
+        list.add(getStartLocation());
+        list.add(getStopLocation());
         return list;
     }
 

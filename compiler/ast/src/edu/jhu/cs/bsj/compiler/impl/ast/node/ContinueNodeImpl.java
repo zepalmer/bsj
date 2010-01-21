@@ -6,6 +6,7 @@ import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.ContinueNode;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
@@ -18,9 +19,11 @@ public class ContinueNodeImpl extends NodeImpl implements ContinueNode
 
     /** General constructor. */
     public ContinueNodeImpl(
-            IdentifierNode label)
+            IdentifierNode label,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
-        super();
+        super(startLocation, stopLocation);
         this.label = label;
     }
 
@@ -104,6 +107,8 @@ public class ContinueNodeImpl extends NodeImpl implements ContinueNode
     {
         List<Object> list = super.getChildObjects();
         list.add(getLabel());
+        list.add(getStartLocation());
+        list.add(getStopLocation());
         return list;
     }
 

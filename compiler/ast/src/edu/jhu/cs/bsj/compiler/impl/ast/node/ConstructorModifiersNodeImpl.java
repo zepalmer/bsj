@@ -7,6 +7,7 @@ import javax.annotation.Generated;
 import edu.jhu.cs.bsj.compiler.ast.AccessModifier;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ConstructorModifiersNode;
@@ -21,9 +22,11 @@ public class ConstructorModifiersNodeImpl extends ModifiersNodeImpl implements C
     /** General constructor. */
     public ConstructorModifiersNodeImpl(
             AccessModifier access,
-            ListNode<AnnotationNode> annotations)
+            ListNode<AnnotationNode> annotations,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
-        super(annotations);
+        super(annotations, startLocation, stopLocation);
         this.access = access;
     }
 
@@ -98,6 +101,8 @@ public class ConstructorModifiersNodeImpl extends ModifiersNodeImpl implements C
         List<Object> list = super.getChildObjects();
         list.add(getAccess());
         list.add(getAnnotations());
+        list.add(getStartLocation());
+        list.add(getStopLocation());
         return list;
     }
 

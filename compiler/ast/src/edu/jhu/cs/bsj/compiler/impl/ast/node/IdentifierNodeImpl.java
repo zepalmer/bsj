@@ -6,6 +6,7 @@ import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 
@@ -17,9 +18,11 @@ public class IdentifierNodeImpl extends NodeImpl implements IdentifierNode
 
     /** General constructor. */
     public IdentifierNodeImpl(
-            String identifier)
+            String identifier,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
-        super();
+        super(startLocation, stopLocation);
         this.identifier = identifier;
     }
 
@@ -91,6 +94,8 @@ public class IdentifierNodeImpl extends NodeImpl implements IdentifierNode
     {
         List<Object> list = super.getChildObjects();
         list.add(getIdentifier());
+        list.add(getStartLocation());
+        list.add(getStopLocation());
         return list;
     }
 

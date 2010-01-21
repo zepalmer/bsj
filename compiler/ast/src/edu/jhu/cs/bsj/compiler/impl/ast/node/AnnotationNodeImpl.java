@@ -5,6 +5,7 @@ import java.util.List;
 import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.UnparameterizedTypeNode;
@@ -17,9 +18,11 @@ public abstract class AnnotationNodeImpl extends NodeImpl implements AnnotationN
 
     /** General constructor. */
     protected AnnotationNodeImpl(
-            UnparameterizedTypeNode annotationType)
+            UnparameterizedTypeNode annotationType,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
     {
-        super();
+        super(startLocation, stopLocation);
         this.annotationType = annotationType;
     }
 
@@ -101,6 +104,8 @@ public abstract class AnnotationNodeImpl extends NodeImpl implements AnnotationN
     {
         List<Object> list = super.getChildObjects();
         list.add(getAnnotationType());
+        list.add(getStartLocation());
+        list.add(getStopLocation());
         return list;
     }
 
