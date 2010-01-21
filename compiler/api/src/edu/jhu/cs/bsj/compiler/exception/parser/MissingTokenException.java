@@ -15,15 +15,15 @@ public class MissingTokenException extends BsjParserException
 	/** The name of the missing token's type. */
 	private String tokenType;
 	
-	public MissingTokenException(BsjSourceLocation location, String tokenType)
+	public MissingTokenException(String rule, BsjSourceLocation location, String tokenType)
 	{
-		super(location);
+		super(rule, location);
 		this.tokenType = tokenType;
 	}
 	
-	public MissingTokenException(BsjSourceLocation location, Throwable cause, String tokenType)
+	public MissingTokenException(String rule, BsjSourceLocation location, Throwable cause, String tokenType)
 	{
-		super(location, cause);
+		super(rule, location, cause);
 		this.tokenType = tokenType;
 	}
 

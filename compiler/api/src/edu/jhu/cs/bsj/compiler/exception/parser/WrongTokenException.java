@@ -20,18 +20,18 @@ public class WrongTokenException extends BsjParserException
 	/** The type of the token which was expected. */
 	private String expectedType;
 	
-	public WrongTokenException(BsjSourceLocation location, String foundType, String foundText, String expectedType)
+	public WrongTokenException(String rule, BsjSourceLocation location, String foundType, String foundText, String expectedType)
 	{
-		super(location);
+		super(rule, location);
 		this.foundType = foundType;
 		this.foundText = foundText;
 		this.expectedType = expectedType;
 	}
 
-	public WrongTokenException(BsjSourceLocation location, Throwable cause, String foundType, String foundText,
+	public WrongTokenException(String rule, BsjSourceLocation location, Throwable cause, String foundType, String foundText,
 			String expectedType)
 	{
-		super(location, cause);
+		super(rule, location, cause);
 		this.foundType = foundType;
 		this.foundText = foundText;
 		this.expectedType = expectedType;

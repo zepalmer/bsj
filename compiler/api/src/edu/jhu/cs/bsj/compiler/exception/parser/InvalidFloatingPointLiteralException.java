@@ -35,10 +35,10 @@ public class InvalidFloatingPointLiteralException extends BsjParserException
 	 * @param literalString The literal string which produced the parse failure.
 	 * @param cause The {@link Cause} of the exception.
 	 */
-	public InvalidFloatingPointLiteralException(BsjSourceLocation location, String literalString,
+	public InvalidFloatingPointLiteralException(String rule, BsjSourceLocation location, String literalString,
 			FailureType failureType)
 	{
-		super(location);
+		super(rule, location);
 		this.literalString = literalString;
 		this.failureType = failureType;
 	}

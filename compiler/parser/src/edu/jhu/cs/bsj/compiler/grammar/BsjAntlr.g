@@ -242,13 +242,15 @@ scope Rule {
             switch (state[mod.ordinal()])
             {
                 case DISALLOWED:
-                    exceptions.add(new InvalidModifierException(getSourceLocation(-1), mod.toString().toLowerCase()));
+                    exceptions.add(new InvalidModifierException(
+                            $Rule::name, getSourceLocation(-1), mod.toString().toLowerCase()));
                     break;
                 case NOT_SEEN:
                     state[mod.ordinal()] = ModifierState.SEEN;
                     break;
                 case SEEN:
-                    exceptions.add(new DuplicateModifierException(getSourceLocation(-1), mod.toString().toLowerCase()));
+                    exceptions.add(new DuplicateModifierException(
+                            $Rule::name, getSourceLocation(-1), mod.toString().toLowerCase()));
                     break;
             }
         }
@@ -278,13 +280,16 @@ scope Rule {
     public void displayRecognitionError(String[] tokenNames, RecognitionException e)
     {
         BsjParserException bsjException =
-                BsjAntlrParserUtils.convertFromParser(e, tokenNames, getSourceLocation(-1), input.LT(-1));
+                BsjAntlrParserUtils.convertFromParser(
+                        e, tokenNames, getSourceLocation(-1), input.LT(-1), $Rule::name);
         exceptions.add(bsjException);
     }
     
     // *** RULE AOP METHODS ***************************************************
     private void ruleStart(String ruleName)
     {
+        $Rule::name = ruleName;
+        $Rule::firstToken = input.LT(1);
     }
     
     private void ruleStop()
@@ -618,11 +623,15 @@ modifiers[boolean accessAllowed, Modifier... mods]
                     {
                         if ($access == currentAccess)
                         {
-                            exceptions.add(new DuplicateModifierException(getSourceLocation(-1),
+                            exceptions.add(new DuplicateModifierException(
+                                    $Rule::name,
+                                    getSourceLocation(-1),
                                     currentAccess.toString().toLowerCase()));
                         } else
                         {
-                            exceptions.add(new ConflictingAccessModifierException(getSourceLocation(-1),
+                            exceptions.add(new ConflictingAccessModifierException(
+                                    $Rule::name,
+                                    getSourceLocation(-1),
                                     $access.toString().toLowerCase(),
                                     currentAccess.toString().toLowerCase()));
                         }
@@ -2965,6 +2974,7 @@ statementExpression returns [StatementExpressionNode ret]
                 $ret = (StatementExpressionNode)($expression.ret);
             } else
             {
+                // TODO: replace with BSJ exception
                 throw new FailedPredicateException(input, "statementExpression",
                         "$expression.ret instanceof StatementExpressionNode ");
             }
@@ -4390,6 +4400,7 @@ intLiteral [boolean isNegative] returns [LiteralNode<?> ret]
             } catch (NumberFormatException nfe)
             {
                 exceptions.add(new InvalidIntegerLiteralException(
+                        $Rule::name,
                         getSourceLocation(-1),
                         (isNegative?"-":"")+$INTLITERAL.text));
             }
@@ -4419,6 +4430,7 @@ longLiteral [boolean isNegative] returns [LiteralNode<?> ret]
             } catch (NumberFormatException nfe)
             {
                 exceptions.add(new InvalidIntegerLiteralException(
+                        $Rule::name,
                         getSourceLocation(-1),
                         (isNegative?"-":"")+$LONGLITERAL.text));
             }
@@ -4451,7 +4463,7 @@ lexicalLiteral returns [LiteralNode<?> ret]
             Float f;
             try
             {
-                f = BsjAntlrParserUtils.parseFloat(s, getSourceLocation(-1));
+                f = BsjAntlrParserUtils.parseFloat(s, getSourceLocation(-1), $Rule::name);
             } catch (BsjParserException e)
             {
                 exceptions.add(e);
@@ -4466,7 +4478,7 @@ lexicalLiteral returns [LiteralNode<?> ret]
             Double d;
             try
             {
-                d = BsjAntlrParserUtils.parseDouble(s, getSourceLocation(-1));
+                d = BsjAntlrParserUtils.parseDouble(s, getSourceLocation(-1), $Rule::name);
             } catch (BsjParserException e)
             {
                 exceptions.add(e);

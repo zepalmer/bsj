@@ -14,9 +14,9 @@ public class InvalidModifierException extends BsjParserException
 	/** The string indicating the modifier which was used. */
 	private String modifierName;
 
-	public InvalidModifierException(BsjSourceLocation location, String modifierName)
+	public InvalidModifierException(String rule, BsjSourceLocation location, String modifierName)
 	{
-		super(location);
+		super(rule, location);
 		this.modifierName = modifierName;
 	}
 	

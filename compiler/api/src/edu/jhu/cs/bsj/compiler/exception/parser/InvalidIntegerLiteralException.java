@@ -13,9 +13,9 @@ public class InvalidIntegerLiteralException extends BsjParserException
 	/** The text of the invalid literal. */
 	private String literalText;
 
-	public InvalidIntegerLiteralException(BsjSourceLocation location, String literalText)
+	public InvalidIntegerLiteralException(String rule, BsjSourceLocation location, String literalText)
 	{
-		super(location);
+		super(rule, location);
 		this.literalText = literalText;
 	}
 

@@ -141,21 +141,22 @@ public class BsjAntlrParserUtils
 	 * 
 	 * @param s The input string.
 	 * @param source The BSJ source location at which this string appears.
+	 * @param ruleName The name of the current rule.
 	 * @return The parsed float.
 	 * @throws BsjParserException If parsing failed.
 	 */
-	public static float parseFloat(String s, BsjSourceLocation source) throws BsjParserException
+	public static float parseFloat(String s, BsjSourceLocation source, String ruleName) throws BsjParserException
 	{
 		String nums = s.substring(0, s.length() - 1);
 		float f = Float.parseFloat(nums);
 		if (!isFloatingPointZero(s) && f == 0.0f)
 		{
-			throw new InvalidFloatingPointLiteralException(source, s,
+			throw new InvalidFloatingPointLiteralException(ruleName, source, s,
 					InvalidFloatingPointLiteralException.FailureType.TOO_SMALL);
 		}
 		if (Float.isInfinite(f))
 		{
-			throw new InvalidFloatingPointLiteralException(source, s,
+			throw new InvalidFloatingPointLiteralException(ruleName, source, s,
 					InvalidFloatingPointLiteralException.FailureType.TOO_LARGE);
 		}
 		return f;
@@ -166,10 +167,11 @@ public class BsjAntlrParserUtils
 	 * 
 	 * @param s The input string.
 	 * @param source The BSJ source location at which this string appears.
+	 * @param ruleName The name of the current rule.
 	 * @return The parsed double.
 	 * @throws BsjParserException If parsing failed.
 	 */
-	public static double parseDouble(String s, BsjSourceLocation source) throws BsjParserException
+	public static double parseDouble(String s, BsjSourceLocation source, String ruleName) throws BsjParserException
 	{
 		String nums = s;
 		if (s.endsWith("d") || s.endsWith("D"))
@@ -179,12 +181,12 @@ public class BsjAntlrParserUtils
 		double d = Double.parseDouble(nums);
 		if (!isFloatingPointZero(s) && d == 0.0)
 		{
-			throw new InvalidFloatingPointLiteralException(source, s,
+			throw new InvalidFloatingPointLiteralException(ruleName, source, s,
 					InvalidFloatingPointLiteralException.FailureType.TOO_SMALL);
 		}
 		if (Double.isInfinite(d))
 		{
-			throw new InvalidFloatingPointLiteralException(source, s,
+			throw new InvalidFloatingPointLiteralException(ruleName, source, s,
 					InvalidFloatingPointLiteralException.FailureType.TOO_LARGE);
 		}
 		return d;
@@ -199,67 +201,37 @@ public class BsjAntlrParserUtils
 	 * @param tokenNames The names of the tokens according to the parser.
 	 * @param location The location at which the exception occurred.
 	 * @param last The most recently parsed token.
+	 * @param ruleName The name of the rule that threw the exception.
 	 * @return The corresponding {@link BsjParserException}.
 	 */
-	public static BsjParserException convertFromParser(RecognitionException re, String[] tokenNames, BsjSourceLocation location, Token last)
+	public static BsjParserException convertFromParser(
+			RecognitionException re, String[] tokenNames, BsjSourceLocation location, Token last, String ruleName)
 	{
         if (re instanceof UnwantedTokenException)
         {
         	UnwantedTokenException ute = (UnwantedTokenException)re;
         	return new ExtraneousTokenException(
-        			location, re,
+        			ruleName, location, re,
         			ute.expecting == Token.EOF ? "EOF" : tokenNames[ute.expecting],
         			last.getText());
         } else if (re instanceof org.antlr.runtime.MissingTokenException)
         {
         	org.antlr.runtime.MissingTokenException mte = (org.antlr.runtime.MissingTokenException)re;
         	return new MissingTokenException(
-        			location, re,
+        			ruleName, location, re,
         			mte.expecting == Token.EOF ? "EOF" : tokenNames[mte.expecting]);
         } else if (re instanceof MismatchedTokenException)
         {
         	MismatchedTokenException mte = (MismatchedTokenException)re;
         	return new WrongTokenException(
-        			location, re,
+        			ruleName, location, re,
         			tokenNames[last.getType()],
         			last.getText(),
         			tokenNames[mte.expecting]);
         } else
         {
-        	// TODO: finish
-        	throw new RuntimeException(re);
+        	return new BsjParserException(ruleName, location, re);
         }
-        /*
-        00268                 else if ( e instanceof NoViableAltException ) {
-        00269                         //NoViableAltException nvae = (NoViableAltException)e;
-        00270                         // for development, can add "decision=<<"+nvae.grammarDecisionDescription+">>"
-        00271                         // and "(decision="+nvae.decisionNumber+") and
-        00272                         // "state "+nvae.stateNumber
-        00273                         msg = "no viable alternative at input "+getTokenErrorDisplay(e.token);
-        00274                 }
-        00275                 else if ( e instanceof EarlyExitException ) {
-        00276                         //EarlyExitException eee = (EarlyExitException)e;
-        00277                         // for development, can add "(decision="+eee.decisionNumber+")"
-        00278                         msg = "required (...)+ loop did not match anything at input "+
-        00279                                 getTokenErrorDisplay(e.token);
-        00280                 }
-        00281                 else if ( e instanceof MismatchedSetException ) {
-        00282                         MismatchedSetException mse = (MismatchedSetException)e;
-        00283                         msg = "mismatched input "+getTokenErrorDisplay(e.token)+
-        00284                                 " expecting set "+mse.expecting;
-        00285                 }
-        00286                 else if ( e instanceof MismatchedNotSetException ) {
-        00287                         MismatchedNotSetException mse = (MismatchedNotSetException)e;
-        00288                         msg = "mismatched input "+getTokenErrorDisplay(e.token)+
-        00289                                 " expecting set "+mse.expecting;
-        00290                 }
-        00291                 else if ( e instanceof FailedPredicateException ) {
-        00292                         FailedPredicateException fpe = (FailedPredicateException)e;
-        00293                         msg = "rule "+fpe.ruleName+" failed predicate: {"+
-        00294                                 fpe.predicateText+"}?";
-        00295                 }
-        00296                 return msg;
-        */
 	}
 	
 	// TODO: different convert function for lexer

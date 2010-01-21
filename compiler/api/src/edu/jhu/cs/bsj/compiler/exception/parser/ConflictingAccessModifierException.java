@@ -16,10 +16,10 @@ public class ConflictingAccessModifierException extends BsjParserException
 	/** The string indicating the second modifier which was used. */
 	private String secondModifierName;
 	
-	public ConflictingAccessModifierException(BsjSourceLocation location, String firstModifierName,
+	public ConflictingAccessModifierException(String rule, BsjSourceLocation location, String firstModifierName,
 			String secondModifierName)
 	{
-		super(location);
+		super(rule, location);
 		this.firstModifierName = firstModifierName;
 		this.secondModifierName = secondModifierName;
 	}

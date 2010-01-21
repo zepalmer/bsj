@@ -14,9 +14,9 @@ public class DuplicateModifierException extends BsjParserException
 	/** The string indicating the modifier which was used. */
 	private String modifierName;
 
-	public DuplicateModifierException(BsjSourceLocation location, String modifierName)
+	public DuplicateModifierException(String rule, BsjSourceLocation location, String modifierName)
 	{
-		super(location);
+		super(rule, location);
 		this.modifierName = modifierName;
 	}
 	
