@@ -1166,7 +1166,10 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
     @Override
     public Void executeWhileLoopNode(WhileLoopNode node, PrependablePrintStream p)
     {
-        // TODO Auto-generated method stub
+    	p.print("while (");
+    	node.getCondition().executeOperation(this, p);
+    	p.print(")\n");
+    	node.getStatement().executeOperation(this, p);
         return null;
     }
 
