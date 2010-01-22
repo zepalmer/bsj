@@ -86,42 +86,72 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
     @Override
     public Void executeAnonymousClassBodyNode(AnonymousClassBodyNode node, PrependablePrintStream p)
     {
-        // TODO Auto-generated method stub
+        p.print("{\n");
+        p.incPrependCount();
+        handleListNode(node.getMembers(), "", "\n", "", p, true);  
+        p.decPrependCount();
+        p.print("}\n");
         return null;
     }
 
     @Override
     public Void executeArrayAccessNode(ArrayAccessNode node, PrependablePrintStream p)
     {
-        // TODO Auto-generated method stub
+    	node.getArrayExpression().executeOperation(this, p);
+    	p.print("[");
+    	node.getIndexExpression().executeOperation(this, p);
+    	p.print("]");
         return null;
     }
 
     @Override
     public Void executeArrayInitializerCreationNode(ArrayInitializerCreationNode node, PrependablePrintStream p)
     {
-        // TODO Auto-generated method stub
+    	p.print("new ");
+    	node.getBaseType().executeOperation(this, p);
+    	for (int i = 0; i < node.getArrayLevels(); i++)
+    	{
+    		p.print("[]");
+    	}
+		if (node.getInitializer() != null)
+		{
+			p.print("{");
+			node.getInitializer().executeOperation(this, p);
+			p.print("}");
+		}
         return null;
     }
 
     @Override
     public Void executeArrayInitializerNode(ArrayInitializerNode node, PrependablePrintStream p)
     {
-        // TODO Auto-generated method stub
+    	handleListNode(node.getInitializers(), "", ", ", "", p, true);
         return null;
     }
 
     @Override
     public Void executeArrayInstantiatorCreationNode(ArrayInstantiatorCreationNode node, PrependablePrintStream p)
     {
-        // TODO Auto-generated method stub
+    	p.print("new ");
+    	node.getBaseType().executeOperation(this, p);
+    	for (ExpressionNode exp : node.getDimExpressions().getChildren())
+    	{
+    		p.print("[");
+    		exp.executeOperation(this, p);
+    		p.print("]");
+    	}
+    	for (int i = 0; i < node.getArrayLevels(); i++)
+    	{
+    		p.print("[]");
+    	}
         return null;
     }
 
     @Override
     public Void executeArrayTypeNode(ArrayTypeNode node, PrependablePrintStream p)
     {
-        // TODO Auto-generated method stub
+    	node.getType().executeOperation(this, p);
+    	p.print("[]");
         return null;
     }
 
