@@ -24,7 +24,6 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
     @Override
     public Void executeAnnotationAnnotationValueNode(AnnotationAnnotationValueNode node, PrependablePrintStream p)
     {
-        // TODO Auto-generated method stub
     	node.getAnnotation().executeOperation(this, p);
         return null;
     }
@@ -32,21 +31,36 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
     @Override
     public Void executeAnnotationArrayValueNode(AnnotationArrayValueNode node, PrependablePrintStream p)
     {
-        // TODO Auto-generated method stub
+    	handleListNode(node.getValues(), "{", ", ", "}", p, true);
         return null;
     }
 
     @Override
     public Void executeAnnotationBodyNode(AnnotationBodyNode node, PrependablePrintStream p)
     {
-        // TODO Auto-generated method stub
+    	p.incPrependCount();
+    	handleListNode(node.getMembers(), "", ";\n", ";\n", p, true);
+    	p.decPrependCount();
         return null;
     }
 
     @Override
     public Void executeAnnotationDeclarationNode(AnnotationDeclarationNode node, PrependablePrintStream p)
     {
-        // TODO Auto-generated method stub
+        if (node.getJavadoc() != null)
+        {
+            node.getJavadoc().executeOperation(this, p);
+            p.print("\n");
+        }
+    	node.getModifiers().executeOperation(this, p);
+    	p.print("@interface ");
+    	node.getIdentifier().executeOperation(this, p);
+    	p.print("\n{\n");
+    	if (node.getBody() != null)
+    	{
+    		node.getBody().executeOperation(this, p);
+    	}
+    	p.print("}");
         return null;
     }
 
@@ -69,21 +83,47 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
     @Override
     public Void executeAnnotationMethodDeclarationNode(AnnotationMethodDeclarationNode node, PrependablePrintStream p)
     {
-        // TODO Auto-generated method stub
+        if (node.getJavadoc() != null)
+        {
+            node.getJavadoc().executeOperation(this, p);
+            p.print("\n");
+        }
+        node.getModifiers().executeOperation(this, p);
+        node.getType().executeOperation(this, p);
+        p.print(" ");
+        node.getIdentifier().executeOperation(this, p);
+        p.print("()");
+        if (node.getDefaultValue() != null)
+        {
+        	p.print(" default ");
+        	node.getDefaultValue().executeOperation(this, p);
+        }
         return null;
     }
 
     @Override
     public Void executeAnnotationMethodModifiersNode(AnnotationMethodModifiersNode node, PrependablePrintStream p)
     {
-        // TODO Auto-generated method stub
+    	handleListNode(node.getAnnotations(), "", "\n", "\n", p, true);
         return null;
     }
 
     @Override
     public Void executeAnnotationModifiersNode(AnnotationModifiersNode node, PrependablePrintStream p)
     {
-        // TODO Auto-generated method stub
+        handleListNode(node.getAnnotations(), "", "\n", "\n", p, true);
+        p.print(accessModifierToString(node.getAccess()));
+
+        if (node.getStaticFlag())
+        {
+            p.print("static ");
+        }
+        
+        if (node.getStrictfpFlag())
+        {
+            p.print("strictfp ");
+        }
+        
         return null;
     }
 
@@ -307,7 +347,6 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
     @Override
     public Void executeClassModifiersNode(ClassModifiersNode node, PrependablePrintStream p)
     {
-        //TODO annotations
         handleListNode(node.getAnnotations(), "", "\n", "\n", p, true);
         p.print(accessModifierToString(node.getAccess()));
 
@@ -421,7 +460,6 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
     @Override
     public Void executeConstructorModifiersNode(ConstructorModifiersNode node, PrependablePrintStream p)
     {
-        // TODO annotations done?
         handleListNode(node.getAnnotations(), "", "\n", "\n", p, true);
         p.print(accessModifierToString(node.getAccess()));
         return null;
@@ -520,7 +558,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
     @Override
     public Void executeEnumModifiersNode(EnumModifiersNode node, PrependablePrintStream p)
     {
-        // TODO annotations
+    	handleListNode(node.getAnnotations(), "", "\n", "\n", p, true);
         p.print(accessModifierToString(node.getAccess()));
         if (node.getStrictfpFlag())
         {
@@ -572,7 +610,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
     @Override
     public Void executeFieldModifiersNode(FieldModifiersNode node, PrependablePrintStream p)
     {
-        // TODO annotations
+    	handleListNode(node.getAnnotations(), "", "\n", "\n", p, true);
         p.print(accessModifierToString(node.getAccess()));
         
         if (node.getFinalFlag())
@@ -753,7 +791,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
     @Override
     public Void executeInterfaceModifiersNode(InterfaceModifiersNode node, PrependablePrintStream p)
     {
-        //TODO annotations
+    	handleListNode(node.getAnnotations(), "", "\n", "\n", p, true);
         p.print(accessModifierToString(node.getAccess()));
 
         if (node.getStaticFlag())
@@ -863,7 +901,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
     @Override
     public Void executeMethodModifiersNode(MethodModifiersNode node, PrependablePrintStream p)
     {
-        // TODO annotations
+    	handleListNode(node.getAnnotations(), "", "\n", "\n", p, true);
         p.print(accessModifierToString(node.getAccess()));
         
         if (node.getAbstractFlag())
@@ -937,7 +975,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
     @Override
     public Void executePackageDeclarationNode(PackageDeclarationNode node, PrependablePrintStream p)
     {
-        // TODO annotations
+    	handleListNode(node.getAnnotations(), "", "\n", "\n", p, true);
         p.print("package ");
         node.getName().executeOperation(this, p);
         p.print(";");
