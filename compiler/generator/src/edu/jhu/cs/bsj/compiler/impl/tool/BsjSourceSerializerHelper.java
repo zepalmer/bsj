@@ -1104,7 +1104,30 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
     @Override
     public Void executeUnaryStatementExpressionNode(UnaryStatementExpressionNode node, PrependablePrintStream p)
     {
-        // TODO Auto-generated method stub
+    	if (node.getOperator() == null)
+    	{
+    		throw new IllegalStateException("Invalid UnaryStatementOperator");
+    	}
+    	
+    	switch (node.getOperator())
+    	{
+			case POSTFIX_DECREMENT:        // x--
+				node.getExpression().executeOperation(this, p);
+				p.print("--");
+				break;
+			case POSTFIX_INCREMENT:        // x++
+				node.getExpression().executeOperation(this, p);
+				p.print("++");
+				break;
+			case PREFIX_DECREMENT:         // --x
+				p.print("--");
+				node.getExpression().executeOperation(this, p);    		
+				break;
+			case PREFIX_INCREMENT:         // ++x
+				p.print("++");
+				node.getExpression().executeOperation(this, p);    		
+				break;
+    	}
         return null;
     }
 
@@ -1375,5 +1398,5 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
             default:
                 throw new IllegalStateException("Invalid UnaryOperator");
         }
-    }    
+    } 
 }
