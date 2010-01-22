@@ -2,6 +2,7 @@ package edu.jhu.cs.bsj.compiler.impl.tool;
 
 import edu.jhu.cs.bsj.compiler.ast.AccessModifier;
 import edu.jhu.cs.bsj.compiler.ast.AssignmentOperator;
+import edu.jhu.cs.bsj.compiler.ast.BinaryOperator;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.PrimitiveType;
 import edu.jhu.cs.bsj.compiler.ast.UnaryOperator;
@@ -182,7 +183,11 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
     @Override
     public Void executeBinaryExpressionNode(BinaryExpressionNode node, PrependablePrintStream p)
     {
-        // TODO Auto-generated method stub
+    	node.getLeftOperand().executeOperation(this, p);
+    	p.print(" ");
+    	p.print(binaryOperatorToString(node.getOperator()));
+    	p.print(" ");
+    	node.getRightOperand().executeOperation(this, p);
         return null;
     }
 
@@ -485,6 +490,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
         handleListNode(node.getArguments(), "(", ", ", ")", p, true);
         if (node.getBody() != null)
         {
+        	p.print("\n");
         	node.getBody().executeOperation(this, p);
         }
         return null;
@@ -1432,4 +1438,57 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
                 throw new IllegalStateException("Invalid UnaryOperator");
         }
     } 
+    
+    protected String binaryOperatorToString(BinaryOperator operator)
+    {
+        if (operator == null)
+        {
+            throw new IllegalStateException("Null BinaryOperator");
+        }
+        
+        switch (operator)
+        {
+	        case LOGICAL_AND:            
+	        	return "&";
+	        case LOGICAL_OR:             
+	        	return "|";
+	        case XOR:            
+	        	return "^";	
+	        case CONDITIONAL_AND:  
+	        	return "&&";
+	        case CONDITIONAL_OR:   
+	        	return "||";	
+	        case DIVIDE:                
+	        	return "/";
+	        case MINUS:                 
+	        	return "-";
+	        case MODULUS:              
+	        	return "%";
+	        case MULTIPLY:             
+	        	return "*";
+	        case PLUS:                  
+	        	return "+";	
+	        case EQUAL:                
+	        	return "==";
+	        case NOT_EQUAL:            
+	        	return "!=";	    	
+	        case GREATER_THAN:         
+	        	return ">";
+	        case GREATER_THAN_EQUAL:   
+	        	return ">=";
+	        case LESS_THAN:            
+	        	return "<";
+	        case LESS_THAN_EQUAL:      
+	        	return "<=";
+	
+	        case LEFT_SHIFT:            
+	        	return "<<";
+	        case RIGHT_SHIFT:          
+	        	return ">>";
+	        case UNSIGNED_RIGHT_SHIFT:  
+	        	return ">>>";
+	        default:
+	            throw new IllegalStateException("Invalid BinaryOperator");
+        }
+    }
 }
