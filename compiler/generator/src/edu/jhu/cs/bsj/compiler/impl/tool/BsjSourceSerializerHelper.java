@@ -25,6 +25,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
     public Void executeAnnotationAnnotationValueNode(AnnotationAnnotationValueNode node, PrependablePrintStream p)
     {
         // TODO Auto-generated method stub
+    	node.getAnnotation().executeOperation(this, p);
         return null;
     }
 
@@ -52,14 +53,16 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
     @Override
     public Void executeAnnotationElementNode(AnnotationElementNode node, PrependablePrintStream p)
     {
-        // TODO Auto-generated method stub
+    	node.getIdentifier().executeOperation(this, p);
+    	p.print(" = ");
+    	node.getValue().executeOperation(this, p);
         return null;
     }
 
     @Override
     public Void executeAnnotationExpressionValueNode(AnnotationExpressionValueNode node, PrependablePrintStream p)
     {
-        // TODO Auto-generated method stub
+        node.getExpression().executeOperation(this, p);
         return null;
     }
 
@@ -305,6 +308,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
     public Void executeClassModifiersNode(ClassModifiersNode node, PrependablePrintStream p)
     {
         //TODO annotations
+        handleListNode(node.getAnnotations(), "", "\n", "\n", p, true);
         p.print(accessModifierToString(node.getAccess()));
 
         if (node.getAbstractFlag())
@@ -898,7 +902,28 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
     @Override
     public Void executeNormalAnnotationNode(NormalAnnotationNode node, PrependablePrintStream p)
     {
-        // TODO Auto-generated method stub
+    	p.print("@");
+    	node.getAnnotationType().executeOperation(this, p);
+		if (!(node.getArguments().getChildren().isEmpty()))
+		{
+			p.print("(\n");
+			boolean first = true;
+			p.incPrependCount();
+			for (Node item : node.getArguments().getChildren())
+			{
+				if (first)
+				{
+					first = false;
+				}
+				else
+				{
+					p.print(",\n");
+				}
+				item.executeOperation(this, p);
+			}
+			p.decPrependCount();
+			p.print("\n)");
+		}
         return null;
     }
 
@@ -998,7 +1023,11 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
     @Override
     public Void executeSingleElementAnnotationNode(SingleElementAnnotationNode node, PrependablePrintStream p)
     {
-        // TODO Auto-generated method stub
+    	p.print("@");
+    	node.getAnnotationType().executeOperation(this, p);
+    	p.print("(");
+    	node.getValue().executeOperation(this, p);
+    	p.print(")");
         return null;
     }
 
