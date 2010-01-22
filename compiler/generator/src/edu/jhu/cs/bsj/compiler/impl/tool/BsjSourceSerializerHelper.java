@@ -421,7 +421,12 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
     @Override
     public Void executeEnhancedForLoopNode(EnhancedForLoopNode node, PrependablePrintStream p)
     {
-        // TODO Auto-generated method stub
+    	p.print("for (");
+    	node.getVariable().executeOperation(this, p);
+    	p.print(" : ");
+    	node.getExpression().executeOperation(this, p);
+    	p.print(")\n");
+    	node.getStatement().executeOperation(this, p);
         return null;
     }
 
@@ -560,21 +565,34 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
     @Override
     public Void executeForInitializerDeclarationNode(ForInitializerDeclarationNode node, PrependablePrintStream p)
     {
-        // TODO Auto-generated method stub
+        node.getDeclaration().executeOperation(this, p);
         return null;
     }
 
     @Override
     public Void executeForInitializerExpressionNode(ForInitializerExpressionNode node, PrependablePrintStream p)
     {
-        // TODO Auto-generated method stub
+    	handleListNode(node.getExpressions(), "", ", ", "", p, true);
         return null;
     }
 
     @Override
     public Void executeForLoopNode(ForLoopNode node, PrependablePrintStream p)
     {
-        // TODO Auto-generated method stub
+    	p.print("for (");
+    	if (node.getInitializer() != null)
+    	{
+    		node.getInitializer().executeOperation(this, p);
+    	}
+    	p.print("; ");
+    	if (node.getCondition() != null)
+    	{
+    		node.getCondition().executeOperation(this, p);
+    	}
+    	p.print("; ");
+    	handleListNode(node.getUpdate(), "", ", ", "", p, true);
+    	p.print(")\n");
+    	node.getStatement().executeOperation(this, p);
         return null;
     }
 
