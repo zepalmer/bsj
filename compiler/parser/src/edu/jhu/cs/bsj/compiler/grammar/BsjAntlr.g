@@ -3686,20 +3686,10 @@ postfixExpression returns [NonAssignmentExpressionNode ret]
             ruleStop();
         }
     :
-        // Note: primary must be before expressionName in the following.  Otherwise, this postfixExpression rule will
-        // match "this" out of "this.x" and leave the ".x" lying around.  Because primary is first, backtracking will
-        // try to match it first and only try expressionName if primary fails.
-        (
-            primary
-            {
-                $ret = $primary.ret;
-            }
-        |
-            expressionName
-            {
-                $ret = factory.makeFieldAccessByNameNode($expressionName.ret);
-            }
-        )
+        primary
+        {
+            $ret = $primary.ret;
+        }
         (
             '++'
             {
@@ -3819,15 +3809,10 @@ restrictedPrimary returns [RestrictedPrimaryExpressionNode ret]
                 $ret = $typeQualifiedTypeArgumentMethodInvocation.ret;
             }
         |
-            // Array access against a simple field access by name.  This rule is located here to support chained
-            // array access expressions such as "x[5][6]".  The arrayAccess rule below would cover every array access
-            // after the first, whereas this part of the rule covers the first.  This is done to disambiguate this rule
-            // from the simple expressionName clause in the postfixExpression rule; otherwise "x" would be parseable
-            // by both that rule and this one.
-            expressionName '[' expression ']'
+            // field access by expression name (such as "x" or "x.y")
+            expressionName
             {
-                $ret = factory.makeArrayAccessNode(
-                        factory.makeFieldAccessByNameNode($expressionName.ret), $expression.ret);
+                $ret = factory.makeFieldAccessByNameNode($expressionName.ret);
             }
         )
         (
