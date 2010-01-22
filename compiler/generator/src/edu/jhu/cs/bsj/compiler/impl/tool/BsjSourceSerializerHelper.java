@@ -647,7 +647,11 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
     @Override
     public Void executeInitializerDeclarationNode(InitializerDeclarationNode node, PrependablePrintStream p)
     {
-        // TODO Auto-generated method stub
+    	if (node.getStaticInitializer())
+    	{
+    		p.print("static ");
+    	}
+    	node.getBody().executeOperation(this, p);
         return null;
     }
 
@@ -912,7 +916,15 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
     @Override
     public Void executeQualifiedClassInstantiationNode(QualifiedClassInstantiationNode node, PrependablePrintStream p)
     {
-        // TODO Auto-generated method stub
+    	node.getEnclosingExpression().executeOperation(this, p);
+    	p.print(".new ");
+    	node.getIdentifier().executeOperation(this, p);
+    	handleListNode(node.getTypeArguments(), "<", ", ", ">", p, true);
+    	handleListNode(node.getArguments(), "(", ", ", ")", p, false);
+    	if (node.getBody() != null)
+    	{
+    		node.getBody().executeOperation(this, p);
+    	}
         return null;
     }
 
@@ -1106,7 +1118,13 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
     @Override
     public Void executeUnqualifiedClassInstantiationNode(UnqualifiedClassInstantiationNode node, PrependablePrintStream p)
     {
-        // TODO Auto-generated method stub
+    	p.print("new ");
+    	node.getType().executeOperation(this, p);
+    	handleListNode(node.getArguments(), "(", ", ", ")", p, false);
+    	if (node.getBody() != null)
+    	{
+    		node.getBody().executeOperation(this, p);
+    	}
         return null;
     }
 
