@@ -466,7 +466,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
         p.print("{\n");
         p.incPrependCount();
         handleListNode(node.getConstants(), "", ",\n", ";\n", p, true);
-        handleListNode(node.getMembers(), "", ";\n", ";\n", p, true); 
+        handleListNode(node.getMembers(), "", "", "", p, true); 
         p.decPrependCount();
         p.print("}\n");
         return null;
@@ -475,7 +475,6 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
     @Override
     public Void executeEnumConstantDeclarationNode(EnumConstantDeclarationNode node, PrependablePrintStream p)
     {
-        // TODO finish
         if (node.getJavadoc() != null)
         {
             node.getJavadoc().executeOperation(this, p);
@@ -483,13 +482,17 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
         }
         handleListNode(node.getAnnotations(), "", "\n", "\n", p, true);
         node.getIdentifier().executeOperation(this, p);
+        handleListNode(node.getArguments(), "(", ", ", ")", p, true);
+        if (node.getBody() != null)
+        {
+        	node.getBody().executeOperation(this, p);
+        }
         return null;
     }
 
     @Override
     public Void executeEnumDeclarationNode(EnumDeclarationNode node, PrependablePrintStream p)
     {
-        // TODO done?
         if (node.getJavadoc() != null)
         {
             node.getJavadoc().executeOperation(this, p);
