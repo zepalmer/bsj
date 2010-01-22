@@ -209,48 +209,55 @@ scope Rule {
         return this.factory;
     }
     
+    /** Used to override the factory's concept of source locations for the current node.  If set, the factory will not
+     *  assign source locations (meaning that the caller of the make method must provide them). */
+    private boolean factorySourceLocationOverride = false;
+    
     public void setFactory(BsjNodeFactory factory)
     {
         this.factory = new BsjNodeFactoryDecorator(factory)
         {
             protected void before()
             {
-                BsjSourceLocation start = 
-                        new BsjSourceLocation(resourceName, $Rule::firstToken.getLine(),
-                                $Rule::firstToken.getCharPositionInLine());
-                setStartSourceLocation(start);
-                
-                BsjSourceLocation stop;
-                Token token = input.LT(-1);
-                if (token == null)
+                if (!factorySourceLocationOverride)
                 {
-                    stop = new BsjSourceLocation(resourceName, 0, 0);
-                } else
-                {
-                    stop = new BsjSourceLocation(resourceName, token.getLine(),
-                            token.getCharPositionInLine() + token.getText().length());
-                }
-                // If the start location is greater than the stop location, then the last token consumed appears before
-                // the next token when the rule started.  In other words, the rule consumed no tokens.  Therefore, we
-                // give the stop location as matching the start location.
-                // TODO: this probably won't work for Javadocs; how do we want to deal with those?  (javadoc @init?)
-                if (start.compareTo(stop) > 0)
-                {
-                    stop = start;
-                }
-                setStopSourceLocation(stop);
-                
-                if (logger.isTraceEnabled())
-                {
-	                logger.trace("Created node while parsing rule " + $Rule::name);
-	                logger.trace("First token = " +
-	                        (($Rule::firstToken==null)?
-	                        "null" : ($Rule::firstToken.getText())) +
-	                        " at " + start);
-	                logger.trace("Last token = " +
-	                        ((token==null)?
-	                        "null" : (token.getText())) +
-                        " at " + stop);
+	                BsjSourceLocation start = 
+	                        new BsjSourceLocation(resourceName, $Rule::firstToken.getLine(),
+	                                $Rule::firstToken.getCharPositionInLine());
+	                setStartSourceLocation(start);
+	                
+	                BsjSourceLocation stop;
+	                Token token = input.LT(-1);
+	                if (token == null)
+	                {
+	                    stop = new BsjSourceLocation(resourceName, 0, 0);
+	                } else
+	                {
+	                    stop = new BsjSourceLocation(resourceName, token.getLine(),
+	                            token.getCharPositionInLine() + token.getText().length());
+	                }
+	                
+	                // If the start location is greater than the stop location, then the last token consumed appears
+	                // before the next token when the rule started.  In other words, the rule consumed no tokens.
+	                // Therefore, we give the stop location as matching the start location.
+	                if (start.compareTo(stop) > 0)
+	                {
+	                    stop = start;
+	                }
+	                setStopSourceLocation(stop);
+	                
+	                if (logger.isTraceEnabled())
+	                {
+	                    logger.trace("Created node while parsing rule " + $Rule::name);
+	                    logger.trace("First token = " +
+	                            (($Rule::firstToken==null)?
+	                            "null" : ($Rule::firstToken.getText())) +
+	                            " at " + start);
+	                    logger.trace("Last token = " +
+	                            ((token==null)?
+	                            "null" : (token.getText())) +
+	                        " at " + stop);
+	                }
                 }
             }
             
@@ -580,7 +587,16 @@ javadoc returns [JavadocNode ret] // TODO: parse out Javadoc contents
             {
                 if (input.get(index).getType() == BsjAntlrLexer.COMMENT)
                 {
-                    $ret = factory.makeJavadocNode(input.get(index).getText());
+                    Token token = input.get(index);
+                    BsjSourceLocation startSourceLocation = new BsjSourceLocation(
+                            resourceName, token.getLine(), token.getCharPositionInLine());
+                    BsjSourceLocation stopSourceLocation = new BsjSourceLocation(
+                            resourceName, token.getLine(), token.getCharPositionInLine() + token.getText().length());
+                    factory.setStartSourceLocation(startSourceLocation);
+                    factory.setStopSourceLocation(stopSourceLocation);
+                    factorySourceLocationOverride = true;
+                    $ret = factory.makeJavadocNode(token.getText());
+                    factorySourceLocationOverride = false;
                     break;
                 }
 	            else if  (input.get(index).getChannel() == org.antlr.runtime.Token.DEFAULT_CHANNEL)
