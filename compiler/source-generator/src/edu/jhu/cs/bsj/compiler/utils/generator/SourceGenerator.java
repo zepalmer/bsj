@@ -23,7 +23,7 @@ import java.util.Set;
  */
 public class SourceGenerator
 {
-	private static final File CONTENTS_FILE = new File("data/srcgen/ast-contents.dat");
+	private static final File CONTENTS_FILE = new File("data/srcgen/main.srcgen");
 	private static final File SUPPLEMENTS_DIR = new File("data/srcgen/supplement/");
 	private static final File TARGET_DIR = new File("out/");
 	private static final File TARGET_IMPL_DIR = new File(TARGET_DIR.getAbsolutePath() + File.separator
@@ -97,22 +97,24 @@ public class SourceGenerator
 	static class Line
 	{
 		public String string;
+		public String filename;
 		public int number;
 
-		public Line(String string, int number)
+		public Line(String string, String filename, int number)
 		{
 			super();
 			this.string = string;
+			this.filename = filename;
 			this.number = number;
 		}
 
-		public static List<Line> number(List<String> list)
+		public static List<Line> tag(List<String> list, String filename)
 		{
 			List<Line> ret = new ArrayList<Line>();
 			int n = 0;
 			for (String s : list)
 			{
-				ret.add(new Line(s, ++n));
+				ret.add(new Line(s, filename, ++n));
 			}
 			return ret;
 		}
@@ -122,14 +124,28 @@ public class SourceGenerator
 	{
 		// Clear the target directory
 		rmrf(TARGET_DIR);
+		TARGET_DIR.mkdirs();
 
 		// Initialize each handler
 		for (ClassDefHandler handler : handlers)
 			handler.init();
 
-		// Obtain the contents file
-		TARGET_DIR.mkdirs();
-		String contents = getFileAsString(CONTENTS_FILE);
+		// Parse contents file
+		List<Line> lines = parse(CONTENTS_FILE);
+
+		// Process the contents file
+		lines = new LinkedList<Line>(lines);
+
+		process(lines, CONTENTS_FILE.getParentFile());
+
+		// Finish each handler
+		for (ClassDefHandler handler : handlers)
+			handler.finish();
+	}
+	
+	private List<Line> parse(File file) throws IOException
+	{
+		String contents = getFileAsString(file);
 		List<String> strings = new ArrayList<String>(Arrays.asList(contents.split("\n")));
 
 		// Strip comments
@@ -152,19 +168,10 @@ public class SourceGenerator
 			}
 		}
 
-		List<Line> lines = Line.number(strings);
-
-		// Process the contents file
-		lines = new LinkedList<Line>(lines);
-
-		process(lines);
-
-		// Finish each handler
-		for (ClassDefHandler handler : handlers)
-			handler.finish();
+		return Line.tag(strings, file.getName());
 	}
 
-	private void process(List<Line> lines) throws IOException
+	private void process(List<Line> lines, File relDir) throws IOException
 	{
 		while (lines.size() > 0 && lines.get(0).string.trim().length() == 0)
 		{
@@ -191,6 +198,12 @@ public class SourceGenerator
 						throw new IllegalArgumentException("Malformed set command " + command);
 					}
 					envMap.put(pieces[0], pieces[1]);
+				} else if (op.equals("!include"))
+				{
+					String path = arg;
+					File f = new File(relDir.getPath() + File.separator + path).getCanonicalFile();
+					List<Line> includeLines = parse(f);
+					process(includeLines, f.getParentFile());
 				} else
 				{
 					throw new IllegalArgumentException("Unknown command " + command);
