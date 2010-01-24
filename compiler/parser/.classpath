@@ -4,7 +4,6 @@
 	<classpathentry kind="src" path="src-pre"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/BSJ Compiler API"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/BSJ AST Implementation"/>
 	<classpathentry exported="true" kind="lib" path=".gen/bin" sourcepath=".gen/src"/>
 	<classpathentry kind="lib" path="lib/antlr.jar"/>
 	<classpathentry kind="lib" path="lib/log4j.jar"/>
