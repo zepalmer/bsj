@@ -3,7 +3,7 @@
 basedir=../out
 
 apisrc=../../api/src
-astsrc=../../ast/src
+astsrc=../../generator/src
 
 if [ ! -d "../out" ]; then
 	echo "Must be run from within the tools directory after sources are generated"

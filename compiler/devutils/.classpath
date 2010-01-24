@@ -3,7 +3,6 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="lib/tools.jar"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/BSJ AST Implementation"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/BSJ Compiler API"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/BSJ Generator"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/BSJ Parser"/>
