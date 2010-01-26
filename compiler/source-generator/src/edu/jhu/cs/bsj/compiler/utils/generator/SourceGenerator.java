@@ -143,7 +143,7 @@ public class SourceGenerator
 		for (ClassDefHandler handler : handlers)
 			handler.finish();
 	}
-	
+
 	private List<Line> parse(File file) throws IOException
 	{
 		String contents = getFileAsString(file);
@@ -426,10 +426,10 @@ public class SourceGenerator
 		ClassMode mode;
 		String classDoc;
 		List<String> toStringLines;
-		Map<String,String> argMap;
+		Map<String, String> argMap;
 
 		public ClassDef(String name, String sname, List<String> tags, List<Prop> props, List<String> includeFilenames,
-				ClassMode mode, String classDoc, List<String> toStringLines, Map<String,String> argMap)
+				ClassMode mode, String classDoc, List<String> toStringLines, Map<String, String> argMap)
 		{
 			super();
 			this.name = name;
@@ -440,7 +440,7 @@ public class SourceGenerator
 			this.mode = mode;
 			this.classDoc = classDoc;
 			this.toStringLines = toStringLines;
-			this.argMap = new HashMap<String,String>(argMap);
+			this.argMap = new HashMap<String, String>(argMap);
 		}
 
 		public String getRawName()
@@ -1278,11 +1278,19 @@ public class SourceGenerator
 								+ "().getClass().getSimpleName());");
 					} else
 					{
+						String typeString;
+						if (PRIMITIVE_TYPES.contains(p.type))
+						{
+							typeString = "\"" + p.type + "\"";
+						} else
+						{
+							typeString = "this.get" + capName + "() == null ? this.get" + capName
+									+ "().getClass().getSimpleName() : \"null\"";
+						}
 						ps.println("        sb.append(String.valueOf(this.get"
 								+ capName
 								+ "()) + \":\" + "
-								+ ((PRIMITIVE_TYPES.contains(p.type)) ? "\"" + p.type + "\"" : "this.get" + capName
-										+ "().getClass().getSimpleName()") + ");");
+								+ typeString + ");");
 					}
 				}
 				ps.println("        sb.append(']');");
@@ -1527,7 +1535,7 @@ public class SourceGenerator
 				cps.println("    {");
 				String classname = def.getRawName() + "Impl" + typeArg;
 				cps.print("        " + typeName + " ret = new " + classname);
-				
+
 				// print constructor arguments - this is special because of the argMap
 				cps.print('(');
 				boolean first = true;
@@ -1545,7 +1553,7 @@ public class SourceGenerator
 					{
 						override = def.argMap.get(p.name).trim();
 					}
-					if (override.length()>0)
+					if (override.length() > 0)
 					{
 						cps.print(override);
 					} else
@@ -1554,7 +1562,7 @@ public class SourceGenerator
 					}
 				}
 				cps.print(')');
-				
+
 				cps.println(";");
 				// TODO: later, this is where we register created nodes with the central dependency validation authority
 				cps.println("        return ret;");

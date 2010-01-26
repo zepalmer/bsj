@@ -137,7 +137,7 @@ public class EnumModifiersNodeImpl extends ModifiersNodeImpl implements EnumModi
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("access=");
-        sb.append(String.valueOf(this.getAccess()) + ":" + this.getAccess().getClass().getSimpleName());
+        sb.append(String.valueOf(this.getAccess()) + ":" + this.getAccess() == null ? this.getAccess().getClass().getSimpleName() : "null");
         sb.append(',');
         sb.append("strictfpFlag=");
         sb.append(String.valueOf(this.getStrictfpFlag()) + ":" + "boolean");
@@ -146,10 +146,10 @@ public class EnumModifiersNodeImpl extends ModifiersNodeImpl implements EnumModi
         sb.append(this.getAnnotations() == null? "null" : this.getAnnotations().getClass().getSimpleName());
         sb.append(',');
         sb.append("startLocation=");
-        sb.append(String.valueOf(this.getStartLocation()) + ":" + this.getStartLocation().getClass().getSimpleName());
+        sb.append(String.valueOf(this.getStartLocation()) + ":" + this.getStartLocation() == null ? this.getStartLocation().getClass().getSimpleName() : "null");
         sb.append(',');
         sb.append("stopLocation=");
-        sb.append(String.valueOf(this.getStopLocation()) + ":" + this.getStopLocation().getClass().getSimpleName());
+        sb.append(String.valueOf(this.getStopLocation()) + ":" + this.getStopLocation() == null ? this.getStopLocation().getClass().getSimpleName() : "null");
         sb.append(']');
         return sb.toString();
     }

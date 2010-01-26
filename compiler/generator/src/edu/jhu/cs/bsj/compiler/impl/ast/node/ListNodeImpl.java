@@ -102,13 +102,13 @@ public class ListNodeImpl<T extends Node> extends NodeImpl implements ListNode<T
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("children=");
-        sb.append(String.valueOf(this.getChildren()) + ":" + this.getChildren().getClass().getSimpleName());
+        sb.append(String.valueOf(this.getChildren()) + ":" + this.getChildren() == null ? this.getChildren().getClass().getSimpleName() : "null");
         sb.append(',');
         sb.append("startLocation=");
-        sb.append(String.valueOf(this.getStartLocation()) + ":" + this.getStartLocation().getClass().getSimpleName());
+        sb.append(String.valueOf(this.getStartLocation()) + ":" + this.getStartLocation() == null ? this.getStartLocation().getClass().getSimpleName() : "null");
         sb.append(',');
         sb.append("stopLocation=");
-        sb.append(String.valueOf(this.getStopLocation()) + ":" + this.getStopLocation().getClass().getSimpleName());
+        sb.append(String.valueOf(this.getStopLocation()) + ":" + this.getStopLocation() == null ? this.getStopLocation().getClass().getSimpleName() : "null");
         sb.append(']');
         return sb.toString();
     }

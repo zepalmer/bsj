@@ -97,13 +97,13 @@ public abstract class NameNodeImpl extends NodeImpl implements NameNode
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("category=");
-        sb.append(String.valueOf(this.getCategory()) + ":" + this.getCategory().getClass().getSimpleName());
+        sb.append(String.valueOf(this.getCategory()) + ":" + this.getCategory() == null ? this.getCategory().getClass().getSimpleName() : "null");
         sb.append(',');
         sb.append("startLocation=");
-        sb.append(String.valueOf(this.getStartLocation()) + ":" + this.getStartLocation().getClass().getSimpleName());
+        sb.append(String.valueOf(this.getStartLocation()) + ":" + this.getStartLocation() == null ? this.getStartLocation().getClass().getSimpleName() : "null");
         sb.append(',');
         sb.append("stopLocation=");
-        sb.append(String.valueOf(this.getStopLocation()) + ":" + this.getStopLocation().getClass().getSimpleName());
+        sb.append(String.valueOf(this.getStopLocation()) + ":" + this.getStopLocation() == null ? this.getStopLocation().getClass().getSimpleName() : "null");
         sb.append(']');
         return sb.toString();
     }
