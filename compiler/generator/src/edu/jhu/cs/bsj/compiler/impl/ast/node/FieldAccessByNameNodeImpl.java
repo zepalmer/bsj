@@ -123,10 +123,10 @@ public class FieldAccessByNameNodeImpl extends NodeImpl implements FieldAccessBy
         sb.append(this.getName() == null? "null" : this.getName().getClass().getSimpleName());
         sb.append(',');
         sb.append("startLocation=");
-        sb.append(String.valueOf(this.getStartLocation()) + ":" + this.getStartLocation() == null ? this.getStartLocation().getClass().getSimpleName() : "null");
+        sb.append(String.valueOf(this.getStartLocation()) + ":" + (this.getStartLocation() != null ? this.getStartLocation().getClass().getSimpleName() : "null"));
         sb.append(',');
         sb.append("stopLocation=");
-        sb.append(String.valueOf(this.getStopLocation()) + ":" + this.getStopLocation() == null ? this.getStopLocation().getClass().getSimpleName() : "null");
+        sb.append(String.valueOf(this.getStopLocation()) + ":" + (this.getStopLocation() != null ? this.getStopLocation().getClass().getSimpleName() : "null"));
         sb.append(']');
         return sb.toString();
     }

@@ -146,13 +146,13 @@ public abstract class ArrayCreationNodeImpl extends NodeImpl implements ArrayCre
         sb.append(this.getBaseType() == null? "null" : this.getBaseType().getClass().getSimpleName());
         sb.append(',');
         sb.append("arrayLevels=");
-        sb.append(String.valueOf(this.getArrayLevels()) + ":" + "int");
+        sb.append(String.valueOf(this.getArrayLevels()) + ":" + ("int"));
         sb.append(',');
         sb.append("startLocation=");
-        sb.append(String.valueOf(this.getStartLocation()) + ":" + this.getStartLocation() == null ? this.getStartLocation().getClass().getSimpleName() : "null");
+        sb.append(String.valueOf(this.getStartLocation()) + ":" + (this.getStartLocation() != null ? this.getStartLocation().getClass().getSimpleName() : "null"));
         sb.append(',');
         sb.append("stopLocation=");
-        sb.append(String.valueOf(this.getStopLocation()) + ":" + this.getStopLocation() == null ? this.getStopLocation().getClass().getSimpleName() : "null");
+        sb.append(String.valueOf(this.getStopLocation()) + ":" + (this.getStopLocation() != null ? this.getStopLocation().getClass().getSimpleName() : "null"));
         sb.append(']');
         return sb.toString();
     }

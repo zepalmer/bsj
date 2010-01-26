@@ -1284,13 +1284,13 @@ public class SourceGenerator
 							typeString = "\"" + p.type + "\"";
 						} else
 						{
-							typeString = "this.get" + capName + "() == null ? this.get" + capName
+							typeString = "this.get" + capName + "() != null ? this.get" + capName
 									+ "().getClass().getSimpleName() : \"null\"";
 						}
 						ps.println("        sb.append(String.valueOf(this.get"
 								+ capName
-								+ "()) + \":\" + "
-								+ typeString + ");");
+								+ "()) + \":\" + ("
+								+ typeString + "));");
 					}
 				}
 				ps.println("        sb.append(']');");

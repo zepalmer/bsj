@@ -114,13 +114,13 @@ public class PrimitiveTypeNodeImpl extends NodeImpl implements PrimitiveTypeNode
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("primitiveType=");
-        sb.append(String.valueOf(this.getPrimitiveType()) + ":" + this.getPrimitiveType() == null ? this.getPrimitiveType().getClass().getSimpleName() : "null");
+        sb.append(String.valueOf(this.getPrimitiveType()) + ":" + (this.getPrimitiveType() != null ? this.getPrimitiveType().getClass().getSimpleName() : "null"));
         sb.append(',');
         sb.append("startLocation=");
-        sb.append(String.valueOf(this.getStartLocation()) + ":" + this.getStartLocation() == null ? this.getStartLocation().getClass().getSimpleName() : "null");
+        sb.append(String.valueOf(this.getStartLocation()) + ":" + (this.getStartLocation() != null ? this.getStartLocation().getClass().getSimpleName() : "null"));
         sb.append(',');
         sb.append("stopLocation=");
-        sb.append(String.valueOf(this.getStopLocation()) + ":" + this.getStopLocation() == null ? this.getStopLocation().getClass().getSimpleName() : "null");
+        sb.append(String.valueOf(this.getStopLocation()) + ":" + (this.getStopLocation() != null ? this.getStopLocation().getClass().getSimpleName() : "null"));
         sb.append(']');
         return sb.toString();
     }

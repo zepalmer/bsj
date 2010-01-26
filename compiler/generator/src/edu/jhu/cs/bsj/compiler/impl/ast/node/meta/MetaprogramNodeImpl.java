@@ -135,16 +135,16 @@ public abstract class MetaprogramNodeImpl<T extends Node> extends NodeImpl imple
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("replacement=");
-        sb.append(String.valueOf(this.getReplacement()) + ":" + this.getReplacement() == null ? this.getReplacement().getClass().getSimpleName() : "null");
+        sb.append(String.valueOf(this.getReplacement()) + ":" + (this.getReplacement() != null ? this.getReplacement().getClass().getSimpleName() : "null"));
         sb.append(',');
         sb.append("body=");
         sb.append(this.getBody() == null? "null" : this.getBody().getClass().getSimpleName());
         sb.append(',');
         sb.append("startLocation=");
-        sb.append(String.valueOf(this.getStartLocation()) + ":" + this.getStartLocation() == null ? this.getStartLocation().getClass().getSimpleName() : "null");
+        sb.append(String.valueOf(this.getStartLocation()) + ":" + (this.getStartLocation() != null ? this.getStartLocation().getClass().getSimpleName() : "null"));
         sb.append(',');
         sb.append("stopLocation=");
-        sb.append(String.valueOf(this.getStopLocation()) + ":" + this.getStopLocation() == null ? this.getStopLocation().getClass().getSimpleName() : "null");
+        sb.append(String.valueOf(this.getStopLocation()) + ":" + (this.getStopLocation() != null ? this.getStopLocation().getClass().getSimpleName() : "null"));
         sb.append(']');
         return sb.toString();
     }

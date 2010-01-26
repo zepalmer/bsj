@@ -147,13 +147,13 @@ public class WildcardTypeNodeImpl extends NodeImpl implements WildcardTypeNode
         sb.append(this.getBound() == null? "null" : this.getBound().getClass().getSimpleName());
         sb.append(',');
         sb.append("upperBound=");
-        sb.append(String.valueOf(this.getUpperBound()) + ":" + "boolean");
+        sb.append(String.valueOf(this.getUpperBound()) + ":" + ("boolean"));
         sb.append(',');
         sb.append("startLocation=");
-        sb.append(String.valueOf(this.getStartLocation()) + ":" + this.getStartLocation() == null ? this.getStartLocation().getClass().getSimpleName() : "null");
+        sb.append(String.valueOf(this.getStartLocation()) + ":" + (this.getStartLocation() != null ? this.getStartLocation().getClass().getSimpleName() : "null"));
         sb.append(',');
         sb.append("stopLocation=");
-        sb.append(String.valueOf(this.getStopLocation()) + ":" + this.getStopLocation() == null ? this.getStopLocation().getClass().getSimpleName() : "null");
+        sb.append(String.valueOf(this.getStopLocation()) + ":" + (this.getStopLocation() != null ? this.getStopLocation().getClass().getSimpleName() : "null"));
         sb.append(']');
         return sb.toString();
     }
