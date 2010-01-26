@@ -122,11 +122,11 @@ public class VariableDeclarationNodeImpl extends NodeImpl implements VariableDec
         visitor.visitStartBegin(this);
         visitor.visitVariableDeclarationNodeStart(this, true);
         visitor.visitNodeStart(this);
-        visitor.visitStatementNodeStart(this);
+        visitor.visitBlockStatementNodeStart(this);
         visitor.visitStartEnd(this);
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
-        visitor.visitStatementNodeStop(this);
+        visitor.visitBlockStatementNodeStop(this);
         visitor.visitNodeStart(this);
         visitor.visitVariableDeclarationNodeStart(this, true);
         visitor.visitStopEnd(this);

@@ -8,10 +8,10 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.node.BlockStatementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.CaseNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.StatementNode;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class CaseNodeImpl extends NodeImpl implements CaseNode
@@ -20,12 +20,12 @@ public class CaseNodeImpl extends NodeImpl implements CaseNode
     private ExpressionNode expression;
 
     /** The statements to execute in this case node. */
-    private ListNode<StatementNode> statements;
+    private ListNode<BlockStatementNode> statements;
 
     /** General constructor. */
     public CaseNodeImpl(
             ExpressionNode expression,
-            ListNode<StatementNode> statements,
+            ListNode<BlockStatementNode> statements,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
@@ -64,7 +64,7 @@ public class CaseNodeImpl extends NodeImpl implements CaseNode
      * Gets the statements to execute in this case node.
      * @return The statements to execute in this case node.
      */
-    public ListNode<StatementNode> getStatements()
+    public ListNode<BlockStatementNode> getStatements()
     {
         return this.statements;
     }
@@ -73,7 +73,7 @@ public class CaseNodeImpl extends NodeImpl implements CaseNode
      * Changes the statements to execute in this case node.
      * @param statements The statements to execute in this case node.
      */
-    public void setStatements(ListNode<StatementNode> statements)
+    public void setStatements(ListNode<BlockStatementNode> statements)
     {
         if (this.statements instanceof NodeImpl)
         {

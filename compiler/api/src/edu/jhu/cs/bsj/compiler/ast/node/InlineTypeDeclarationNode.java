@@ -7,7 +7,7 @@ import javax.annotation.Generated;
  * within a method body or similar environment.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public interface InlineTypeDeclarationNode extends Node, StatementNode
+public interface InlineTypeDeclarationNode extends Node, BlockStatementNode
 {
     /**
      * Gets the type declaration.

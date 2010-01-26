@@ -103,7 +103,7 @@ public interface BsjNodeFactory
      */
     public CaseNode makeCaseNode(
             ExpressionNode expression,
-            ListNode<StatementNode> statements);
+            ListNode<BlockStatementNode> statements);
 
     /**
      * Creates a VoidStatementNode.
@@ -387,7 +387,7 @@ public interface BsjNodeFactory
      * Creates a BlockNode.
      */
     public BlockNode makeBlockNode(
-            ListNode<StatementNode> statements);
+            ListNode<BlockStatementNode> statements);
 
     /**
      * Creates a SynchronizedNode.
@@ -728,7 +728,7 @@ public interface BsjNodeFactory
      */
     public ConstructorBodyNode makeConstructorBodyNode(
             ConstructorInvocationNode constructorInvocation,
-            ListNode<StatementNode> statements);
+            ListNode<BlockStatementNode> statements);
 
     /**
      * Creates a FieldAccessByNameNode.

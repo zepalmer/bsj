@@ -25,6 +25,10 @@ AnonymousClassMemberNode+ :: Node + ClassMemberNode
 BaseTypeNode+ :: Node
 	@docs
 		This tagging interface is used to denote AST nodes which can be used as array base types.
+
+BlockStatementNode+ :: Node
+    @docs
+        This tagging interface is used to denote AST nodes which can appear in blocks.
 		
 ClassMemberNode+ :: Node
 	@docs
@@ -91,7 +95,7 @@ StatementExpressionNode+ :: Node + ExpressionNode
     @docs
         A tagging interface which marks all expressions which may be used as statements.
 
-StatementNode+ :: Node
+StatementNode+ :: BlockStatementNode
     @docs
         This tagging interface is used to denote AST nodes which represent statements.
 		
@@ -651,7 +655,7 @@ AssertStatementNode :: Node + StatementNode
 
 BlockNode :: Node + StatementNode
     @props
-    statements              ListNode<StatementNode>                     | the statements contained in this block statement
+    statements              ListNode<BlockStatementNode>                | the statements contained in this block statement
     @docs
         Represents a block of statements, as in
         <pre>
@@ -743,7 +747,7 @@ IfNode :: Node + StatementNode
         if (<i>condition</i>) then <i>statement</i> else <i>statement</i>
         </pre>
 
-InlineTypeDeclarationNode :: Node + StatementNode
+InlineTypeDeclarationNode :: Node + BlockStatementNode
     @props
     declaration             InlineTypeDeclarableNode                    | the type declaration
     @docs
@@ -825,7 +829,7 @@ TryNode :: Node + StatementNode
         If no catch block exists, the <tt>catches</tt> list node will contain no children.  If no finally block exists,
         <tt>finallyBlock</tt> will be <tt>null</tt>.  <tt>catches</tt> is not permitted to be <tt>null</tt>.
 
-VariableDeclarationNode :: Node + StatementNode
+VariableDeclarationNode :: Node + BlockStatementNode
     @props
     modifiers               VariableModifiersNode                       | the modifiers for this variable
     declarators             ListNode<VariableDeclaratorNode>            | the variable declarators for this node
@@ -1251,10 +1255,11 @@ ArrayInitializerNode :: Node + VariableInitializerNode
         </pre>
         The resulting array contains one element for each initializer expression.
 
+# TODO: case nodes probably shouldn't have expressions for their labels...
 CaseNode :: Node
     @props
     expression              ExpressionNode                              | the expression used in this case label
-    statements              ListNode<StatementNode>                     | the statements to execute in this case node
+    statements              ListNode<BlockStatementNode>                | the statements to execute in this case node
     @docs
         A node representing a switch's case block, as in:
         <pre>
@@ -1293,7 +1298,7 @@ CompilationUnitNode :: Node
 ConstructorBodyNode :: Node
     @props
     constructorInvocation   ConstructorInvocationNode                   | the (nullable) constructor invocation
-    statements              ListNode<StatementNode>                     | the statements contained in this constructor
+    statements              ListNode<BlockStatementNode>                | the statements contained in this constructor
     @docs
         Represents a constructor body.  For example, in
         <pre>

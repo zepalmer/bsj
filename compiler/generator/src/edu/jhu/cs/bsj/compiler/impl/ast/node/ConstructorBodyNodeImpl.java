@@ -8,10 +8,10 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.node.BlockStatementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ConstructorBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ConstructorInvocationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.StatementNode;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class ConstructorBodyNodeImpl extends NodeImpl implements ConstructorBodyNode
@@ -20,12 +20,12 @@ public class ConstructorBodyNodeImpl extends NodeImpl implements ConstructorBody
     private ConstructorInvocationNode constructorInvocation;
 
     /** The statements contained in this constructor. */
-    private ListNode<StatementNode> statements;
+    private ListNode<BlockStatementNode> statements;
 
     /** General constructor. */
     public ConstructorBodyNodeImpl(
             ConstructorInvocationNode constructorInvocation,
-            ListNode<StatementNode> statements,
+            ListNode<BlockStatementNode> statements,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
@@ -64,7 +64,7 @@ public class ConstructorBodyNodeImpl extends NodeImpl implements ConstructorBody
      * Gets the statements contained in this constructor.
      * @return The statements contained in this constructor.
      */
-    public ListNode<StatementNode> getStatements()
+    public ListNode<BlockStatementNode> getStatements()
     {
         return this.statements;
     }
@@ -73,7 +73,7 @@ public class ConstructorBodyNodeImpl extends NodeImpl implements ConstructorBody
      * Changes the statements contained in this constructor.
      * @param statements The statements contained in this constructor.
      */
-    public void setStatements(ListNode<StatementNode> statements)
+    public void setStatements(ListNode<BlockStatementNode> statements)
     {
         if (this.statements instanceof NodeImpl)
         {

@@ -1567,7 +1567,7 @@ constructorBody returns [ConstructorBodyNode ret]
         scope Rule;
         @init {
             ruleStart("constructorBody");
-            List<StatementNode> list = new ArrayList<StatementNode>();
+            List<BlockStatementNode> list = new ArrayList<BlockStatementNode>();
             ConstructorInvocationNode constructorInvocationNode = null;
         }
         @after {
@@ -2518,7 +2518,7 @@ block returns [BlockNode ret]
         scope Rule;
         @init {
             ruleStart("block");
-            List<StatementNode> list = new ArrayList<StatementNode>();
+            List<BlockStatementNode> list = new ArrayList<BlockStatementNode>();
         }
         @after {
             $ret = factory.makeBlockNode(factory.makeListNode(list));
@@ -2536,7 +2536,7 @@ block returns [BlockNode ret]
     ;
 
 // Parses a statement from a block of statements.
-blockStatement returns [StatementNode ret]
+blockStatement returns [BlockStatementNode ret]
         scope Rule;
         @init {
             ruleStart("blockStatement");
@@ -2773,7 +2773,7 @@ switchBlockStatementGroup returns [CaseNode ret]
         scope Rule;
         @init {
             ruleStart("switchBlockStatementGroup");
-            List<StatementNode> list = new ArrayList<StatementNode>();
+            List<BlockStatementNode> list = new ArrayList<BlockStatementNode>();
             ExpressionNode label = null;
         }
         @after {

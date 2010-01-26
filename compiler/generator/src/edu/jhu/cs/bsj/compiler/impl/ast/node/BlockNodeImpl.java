@@ -9,18 +9,18 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.BlockNode;
+import edu.jhu.cs.bsj.compiler.ast.node.BlockStatementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.StatementNode;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class BlockNodeImpl extends NodeImpl implements BlockNode
 {
     /** The statements contained in this block statement. */
-    private ListNode<StatementNode> statements;
+    private ListNode<BlockStatementNode> statements;
 
     /** General constructor. */
     public BlockNodeImpl(
-            ListNode<StatementNode> statements,
+            ListNode<BlockStatementNode> statements,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
@@ -32,7 +32,7 @@ public class BlockNodeImpl extends NodeImpl implements BlockNode
      * Gets the statements contained in this block statement.
      * @return The statements contained in this block statement.
      */
-    public ListNode<StatementNode> getStatements()
+    public ListNode<BlockStatementNode> getStatements()
     {
         return this.statements;
     }
@@ -41,7 +41,7 @@ public class BlockNodeImpl extends NodeImpl implements BlockNode
      * Changes the statements contained in this block statement.
      * @param statements The statements contained in this block statement.
      */
-    public void setStatements(ListNode<StatementNode> statements)
+    public void setStatements(ListNode<BlockStatementNode> statements)
     {
         if (this.statements instanceof NodeImpl)
         {

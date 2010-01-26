@@ -172,7 +172,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     @Override
     public CaseNode makeCaseNode(
             ExpressionNode expression,
-            ListNode<StatementNode> statements)
+            ListNode<BlockStatementNode> statements)
     {
         CaseNode ret = new CaseNodeImpl(expression, statements, startLocation, stopLocation);
         return ret;
@@ -656,7 +656,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     @Override
     public BlockNode makeBlockNode(
-            ListNode<StatementNode> statements)
+            ListNode<BlockStatementNode> statements)
     {
         BlockNode ret = new BlockNodeImpl(statements, startLocation, stopLocation);
         return ret;
@@ -1227,7 +1227,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     @Override
     public ConstructorBodyNode makeConstructorBodyNode(
             ConstructorInvocationNode constructorInvocation,
-            ListNode<StatementNode> statements)
+            ListNode<BlockStatementNode> statements)
     {
         ConstructorBodyNode ret = new ConstructorBodyNodeImpl(constructorInvocation, statements, startLocation, stopLocation);
         return ret;

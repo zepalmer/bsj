@@ -205,7 +205,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     @Override
     public CaseNode makeCaseNode(
             ExpressionNode expression,
-            ListNode<StatementNode> statements)
+            ListNode<BlockStatementNode> statements)
     {
         this.before();
         CaseNode node = factory.makeCaseNode(expression, statements);
@@ -769,7 +769,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
      */
     @Override
     public BlockNode makeBlockNode(
-            ListNode<StatementNode> statements)
+            ListNode<BlockStatementNode> statements)
     {
         this.before();
         BlockNode node = factory.makeBlockNode(statements);
@@ -1432,7 +1432,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     @Override
     public ConstructorBodyNode makeConstructorBodyNode(
             ConstructorInvocationNode constructorInvocation,
-            ListNode<StatementNode> statements)
+            ListNode<BlockStatementNode> statements)
     {
         this.before();
         ConstructorBodyNode node = factory.makeConstructorBodyNode(constructorInvocation, statements);

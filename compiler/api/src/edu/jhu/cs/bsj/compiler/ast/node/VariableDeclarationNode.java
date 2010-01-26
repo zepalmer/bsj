@@ -16,7 +16,7 @@ import javax.annotation.Generated;
  *     <i>type identifier</i> = <i>expression</i>, <i>identifier</i> = <i>expression</i>, ...;
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public interface VariableDeclarationNode extends Node, StatementNode
+public interface VariableDeclarationNode extends Node, BlockStatementNode
 {
     /**
      * Gets the modifiers for this variable.
