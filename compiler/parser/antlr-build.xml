@@ -34,7 +34,7 @@
 	</path>
 	
     <!-- - - - - - - - - - - - - - - - - - 
-          target: antlr                      
+          target: prebuild                      
          - - - - - - - - - - - - - - - - - -->
 	<target name="prebuild" description="Builds the sources on which the ANTLR parser depends">
 		<javac
@@ -53,7 +53,9 @@
     	<antlr:antlr3 xmlns:antlr="antlib:org/apache/tools/ant/antlr"
     	    target="${grammar}"
     		outputdirectory="${parserPackage}"
-    		conversiontimeout="100000"/>
+    		conversiontimeout="100000">
+    		<jvmarg value="-Xmx1024m"/>
+    	</antlr:antlr3>
     	<mkdir dir="${genbin}"/>
     	<javac
     		    destdir="${genbin}"
