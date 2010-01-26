@@ -232,7 +232,6 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
     @Override
     public Void executeBinaryExpressionNode(BinaryExpressionNode node, PrependablePrintStream p)
     {
-        //TODO fix order of operations for created nodes - TEST
         boolean parenLeft = checkForLowerPrecedence(node.getLeftOperand(), node.getOperator());
         boolean parenRight = checkForLowerPrecedence(node.getRightOperand(), node.getOperator());;
         
