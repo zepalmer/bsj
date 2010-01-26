@@ -40,6 +40,7 @@ public class SourceGenerator
 
 	private Set<ClassDefHandler> handlers = new HashSet<ClassDefHandler>();
 	private Map<String, String> envMap = new HashMap<String, String>();
+	private Map<String, String> argMap = new HashMap<String, String>();
 
 	public static void main(String[] arg) throws Exception
 	{
@@ -188,16 +189,10 @@ public class SourceGenerator
 
 				if (op.equals("!set"))
 				{
-					String[] pieces = arg.split("=");
-					if ((pieces.length == 1) && (arg.endsWith("=")))
-					{
-						pieces = new String[] { pieces[0], "" };
-					}
-					if (pieces.length != 2)
-					{
-						throw new IllegalArgumentException("Malformed set command " + command);
-					}
-					envMap.put(pieces[0], pieces[1]);
+					parseMapLine("set", this.envMap, arg, command);
+				} else if (op.equals("!arg"))
+				{
+					parseMapLine("arg", this.argMap, arg, command);
 				} else if (op.equals("!include"))
 				{
 					String path = arg;
@@ -217,6 +212,20 @@ public class SourceGenerator
 				lines.remove(0);
 			}
 		}
+	}
+
+	private void parseMapLine(String name, Map<String, String> map, String arg, String command)
+	{
+		String[] pieces = arg.split("=");
+		if ((pieces.length == 1) && (arg.endsWith("=")))
+		{
+			pieces = new String[] { pieces[0], "" };
+		}
+		if (pieces.length != 2)
+		{
+			throw new IllegalArgumentException("Malformed " + name + " command " + command);
+		}
+		map.put(pieces[0], pieces[1]);
 	}
 
 	private void processEntry(List<Line> lines) throws IOException
@@ -332,7 +341,7 @@ public class SourceGenerator
 		}
 
 		ClassDef def = new ClassDef(classname, supername, taggingInterfaces, props, includeFilenames, classMode,
-				classDocBuilder.toString(), toStringLines);
+				classDocBuilder.toString(), toStringLines, this.argMap);
 
 		for (ClassDefHandler handler : handlers)
 		{
@@ -417,9 +426,10 @@ public class SourceGenerator
 		ClassMode mode;
 		String classDoc;
 		List<String> toStringLines;
+		Map<String,String> argMap;
 
 		public ClassDef(String name, String sname, List<String> tags, List<Prop> props, List<String> includeFilenames,
-				ClassMode mode, String classDoc, List<String> toStringLines)
+				ClassMode mode, String classDoc, List<String> toStringLines, Map<String,String> argMap)
 		{
 			super();
 			this.name = name;
@@ -430,6 +440,7 @@ public class SourceGenerator
 			this.mode = mode;
 			this.classDoc = classDoc;
 			this.toStringLines = toStringLines;
+			this.argMap = new HashMap<String,String>(argMap);
 		}
 
 		public String getRawName()
@@ -1496,6 +1507,7 @@ public class SourceGenerator
 				typeName = def.getRawName() + typeArg;
 				String typeParamS = typeParam == null ? "" : (typeParam + " ");
 
+				// Write interface method description
 				ips.println("    /**");
 				ips.println("     * Creates a " + def.getRawName() + ".");
 				ips.println("     */");
@@ -1504,6 +1516,7 @@ public class SourceGenerator
 				ips.println(";");
 				ips.println();
 
+				// Write backing class implementation
 				cps.println("    /**");
 				cps.println("     * Creates a " + def.getRawName() + ".");
 				cps.println("     */");
@@ -1514,13 +1527,41 @@ public class SourceGenerator
 				cps.println("    {");
 				String classname = def.getRawName() + "Impl" + typeArg;
 				cps.print("        " + typeName + " ret = new " + classname);
-				printArgumentList(cps, recProps);
+				
+				// print constructor arguments - this is special because of the argMap
+				cps.print('(');
+				boolean first = true;
+				for (Prop p : recProps)
+				{
+					if (first)
+					{
+						first = false;
+					} else
+					{
+						cps.print(", ");
+					}
+					String override = "";
+					if (def.argMap.containsKey(p.name))
+					{
+						override = def.argMap.get(p.name).trim();
+					}
+					if (override.length()>0)
+					{
+						cps.print(override);
+					} else
+					{
+						cps.print(p.name);
+					}
+				}
+				cps.print(')');
+				
 				cps.println(";");
 				// TODO: later, this is where we register created nodes with the central dependency validation authority
 				cps.println("        return ret;");
 				cps.println("    }");
 				cps.println();
 
+				// Write decorator implementation
 				dps.println("    /**");
 				dps.println("     * Creates a " + def.getRawName() + ".");
 				dps.println("     */");

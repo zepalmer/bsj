@@ -21,6 +21,11 @@
 #     * !include: Includes the specified file (relative to the current file) at this location.  The file is parsed and
 #                 processed as if its contents were located at this command.  The rest of the line (after whitespace)
 #                 is interpreted as the file's relative path.
+#     * !arg:     Sets a default value for the factory to use.  All class descriptions which appear after this operation
+#                 will be affected accordingly.  The syntax is identical to the syntax for set.  For instance, the
+#                 operation "!arg foo=new Bar()" would use the expression "new Bar()" in the factory whenever an
+#                 argument named "foo" was requested.  This is particularly handy when a property is suffixed by "+";
+#                 see below.
 #
 # The class's name and immediate superclass are separated by "::".  Additionally, the class's name may be suffixed in a
 # '*' character.  If this is the case, no concrete implementation is expected.  This is used in cases in which parts of

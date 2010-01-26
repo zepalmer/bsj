@@ -5,7 +5,13 @@ import java.util.List;
 import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.node.*;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.AnnotationMemberMetaprogramNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.AnonymousClassMemberMetaprogramNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.BlockStatementMetaprogramNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.ClassMemberMetaprogramNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.CodeLiteralNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.InterfaceMemberMetaprogramNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.TopLevelMetaprogramNode;
 
 /**
  * This interface is implemented by any object which can act as a factory for BSJ nodes.  It
@@ -123,6 +129,12 @@ public interface BsjNodeFactory
     public ImportOnDemandNode makeImportOnDemandNode(
             NameNode name,
             boolean staticImport);
+
+    /**
+     * Creates a InterfaceMemberMetaprogramNode.
+     */
+    public InterfaceMemberMetaprogramNode makeInterfaceMemberMetaprogramNode(
+            ListNode<BlockStatementNode> body);
 
     /**
      * Creates a VariableModifiersNode.
@@ -315,6 +327,12 @@ public interface BsjNodeFactory
             StatementNode statement);
 
     /**
+     * Creates a TopLevelMetaprogramNode.
+     */
+    public TopLevelMetaprogramNode makeTopLevelMetaprogramNode(
+            ListNode<BlockStatementNode> body);
+
+    /**
      * Creates a BinaryExpressionNode.
      */
     public BinaryExpressionNode makeBinaryExpressionNode(
@@ -492,6 +510,12 @@ public interface BsjNodeFactory
             StatementNode statement);
 
     /**
+     * Creates a ClassMemberMetaprogramNode.
+     */
+    public ClassMemberMetaprogramNode makeClassMemberMetaprogramNode(
+            ListNode<BlockStatementNode> body);
+
+    /**
      * Creates a ListNode.
      */
     public <T extends Node> ListNode<T> makeListNode(
@@ -519,6 +543,12 @@ public interface BsjNodeFactory
     public ConstructorModifiersNode makeConstructorModifiersNode(
             AccessModifier access,
             ListNode<AnnotationNode> annotations);
+
+    /**
+     * Creates a AnnotationMemberMetaprogramNode.
+     */
+    public AnnotationMemberMetaprogramNode makeAnnotationMemberMetaprogramNode(
+            ListNode<BlockStatementNode> body);
 
     /**
      * Creates a ParameterizedTypeSelectNode.
@@ -648,6 +678,12 @@ public interface BsjNodeFactory
             ExpressionNode expression);
 
     /**
+     * Creates a AnonymousClassMemberMetaprogramNode.
+     */
+    public AnonymousClassMemberMetaprogramNode makeAnonymousClassMemberMetaprogramNode(
+            ListNode<BlockStatementNode> body);
+
+    /**
      * Creates a AssignmentNode.
      */
     public AssignmentNode makeAssignmentNode(
@@ -705,6 +741,12 @@ public interface BsjNodeFactory
     public ParameterizedTypeNode makeParameterizedTypeNode(
             UnparameterizedTypeNode baseType,
             ListNode<TypeArgumentNode> typeArguments);
+
+    /**
+     * Creates a BlockStatementMetaprogramNode.
+     */
+    public BlockStatementMetaprogramNode makeBlockStatementMetaprogramNode(
+            ListNode<BlockStatementNode> body);
 
     /**
      * Creates a InterfaceDeclarationNode.

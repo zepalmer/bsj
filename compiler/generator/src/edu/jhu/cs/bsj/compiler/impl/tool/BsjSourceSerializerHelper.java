@@ -7,7 +7,13 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.PrimitiveType;
 import edu.jhu.cs.bsj.compiler.ast.UnaryOperator;
 import edu.jhu.cs.bsj.compiler.ast.node.*;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.AnnotationMemberMetaprogramNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.AnonymousClassMemberMetaprogramNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.BlockStatementMetaprogramNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.ClassMemberMetaprogramNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.CodeLiteralNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.InterfaceMemberMetaprogramNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.TopLevelMetaprogramNode;
 import edu.jhu.cs.bsj.compiler.impl.utils.PrependablePrintStream;
 
 public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePrintStream, Void>
@@ -1422,10 +1428,58 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
     }
     
     // ========================================================================
+    // =========================== Metaprogram Nodes ==========================
+    // ========================================================================
+    // TODO: what do we do about this?
+        
+    @Override
+	public Void executeAnnotationMemberMetaprogramNode(AnnotationMemberMetaprogramNode node, PrependablePrintStream p)
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Void executeAnonymousClassMemberMetaprogramNode(AnonymousClassMemberMetaprogramNode node,
+			PrependablePrintStream p)
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Void executeBlockStatementMetaprogramNode(BlockStatementMetaprogramNode node, PrependablePrintStream p)
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Void executeClassMemberMetaprogramNode(ClassMemberMetaprogramNode node, PrependablePrintStream p)
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Void executeInterfaceMemberMetaprogramNode(InterfaceMemberMetaprogramNode node, PrependablePrintStream p)
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Void executeTopLevelMetaprogramNode(TopLevelMetaprogramNode node, PrependablePrintStream p)
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+    // ========================================================================
     // ============================ Utility Methods ===========================
     // ========================================================================
         
-    protected void handleListNode(ListNode<? extends Node> node, 
+	protected void handleListNode(ListNode<? extends Node> node, 
             String begin, String separator, String end, PrependablePrintStream p, boolean doNothingIfEmpty)
     {
         if (node == null || (doNothingIfEmpty && node.getChildren().isEmpty()))

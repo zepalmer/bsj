@@ -3,7 +3,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
 import javax.annotation.Generated;
 
 /**
- * A nore for wildcard type parameters, as in:
+ * A node for wildcard type parameters, as in:
  * <pre>
  * ? extends <i>type</i>
  * </pre>
