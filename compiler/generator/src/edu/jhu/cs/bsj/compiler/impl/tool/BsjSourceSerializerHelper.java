@@ -1113,6 +1113,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
     		p.print(" ");
     		node.getExpression().executeOperation(this, p);
     	}
+    	p.print(";");
         return null;
     }
 
@@ -1340,6 +1341,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
             node.getModifiers().executeOperation(this, p);            
             item.executeOperation(this, p);
         }
+        p.print(";");
         return null;
     }
 
