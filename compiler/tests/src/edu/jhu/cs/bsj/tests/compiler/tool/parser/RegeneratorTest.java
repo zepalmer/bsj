@@ -6,6 +6,7 @@ import static org.junit.Assert.fail;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileReader;
 
 import org.junit.Test;
@@ -46,6 +47,7 @@ public class RegeneratorTest
                 } 
                 catch (Exception e)
                 {
+                    e.printStackTrace();
                     fail();
                 }
             }            
@@ -62,20 +64,11 @@ public class RegeneratorTest
     private boolean regenerateJavaFile(File file) throws Exception
     {
         // read the java file in
-        BufferedReader inputStream = null;
-        inputStream = new BufferedReader(new FileReader(file));
-        String temp = null;
-        StringBuilder fileContents = new StringBuilder();
-
-        while ((temp = inputStream.readLine()) != null)
-        {
-            fileContents.append(temp);
-        }
+        FileInputStream input = new FileInputStream(file);        
 
         // parse it to an AST
         BsjParserImpl parser = new BsjParserImpl(new BsjNodeFactoryImpl());
-        ByteArrayInputStream blah = new ByteArrayInputStream(fileContents.toString().getBytes());
-        Node ast = parser.parse(blah);
+        Node ast = parser.parse(input);
 
         // regenerate it once
         String regen1 = ast.executeOperation(new BsjSourceSerializerImpl(), null);
