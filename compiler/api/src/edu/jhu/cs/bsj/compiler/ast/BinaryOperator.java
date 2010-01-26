@@ -52,7 +52,7 @@ public enum BinaryOperator
 	/**
 	 * Compares two binary operators in terms of their precedence.
 	 */
-	public class PrecedenceComparator implements Comparator<BinaryOperator>
+	public static class PrecedenceComparator implements Comparator<BinaryOperator>
 	{
 	    /**
 	     * Compares two binary operators in terms of their precedence.

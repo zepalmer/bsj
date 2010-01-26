@@ -226,12 +226,36 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
     @Override
     public Void executeBinaryExpressionNode(BinaryExpressionNode node, PrependablePrintStream p)
     {
-        //TODO fix order of operations for created nodes 
+        //TODO fix order of operations for created nodes - TEST
+        boolean parenLeft = checkForLowerPrecedence(node.getLeftOperand(), node.getOperator());
+        boolean parenRight = checkForLowerPrecedence(node.getRightOperand(), node.getOperator());;
+        
+        // parenthesize left expression if needed
+        if (parenLeft)
+        {
+            p.print("(");
+        }
     	node.getLeftOperand().executeOperation(this, p);
+        if (parenLeft)
+        {
+            p.print(")");
+        }
+        
+        // display operator
     	p.print(" ");
     	p.print(binaryOperatorToString(node.getOperator()));
     	p.print(" ");
+    	
+    	// parenthesize right expression if needed
+        if (parenRight)
+        {
+            p.print("(");
+        }
     	node.getRightOperand().executeOperation(this, p);
+        if (parenRight)
+        {
+            p.print(")");
+        }
         return null;
     }
 
@@ -398,11 +422,45 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
     @Override
     public Void executeConditionalExpressionNode(ConditionalExpressionNode node, PrependablePrintStream p)
     {
+        // only assignment operations have a lower precedence than conditionals
+        boolean parenCondition = (node.getCondition() instanceof AssignmentNode);
+        boolean parenTrue = (node.getTrueExpression() instanceof AssignmentNode);
+        boolean parenFalse = (node.getFalseExpression() instanceof AssignmentNode);
+        
+        if (parenCondition)
+        {
+            p.print("(");
+        }
     	node.getCondition().executeOperation(this, p);
+        if (parenCondition)
+        {
+            p.print(")");
+        }
+        
     	p.print(" ? ");
+    	
+    	if (parenTrue)
+    	{
+    	    p.print("(");
+    	}
     	node.getTrueExpression().executeOperation(this, p);
+        if (parenTrue)
+        {
+            p.print(")");
+        }
+        
     	p.print(" : ");
+    	
+    	if (parenFalse)
+    	{
+    	    p.print("(");
+    	}
     	node.getFalseExpression().executeOperation(this, p);
+        if (parenFalse)
+        {
+            p.print(")");
+        }
+        
         return null;
     }
 
@@ -1558,5 +1616,30 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	        default:
 	            throw new IllegalStateException("Invalid BinaryOperator");
         }
+    }
+    
+    public boolean checkForLowerPrecedence(ExpressionNode childNode, BinaryOperator operator)
+    {
+        // assignment and conditionals have a lower precedence than binary operations
+        if (childNode instanceof AssignmentNode || childNode instanceof ConditionalExpressionNode)
+        {
+            return true;
+        }
+        
+        if (!(childNode instanceof BinaryExpressionNode))
+        {
+            return false;
+        }
+        
+        BinaryOperator.PrecedenceComparator comparator = new BinaryOperator.PrecedenceComparator();
+        BinaryExpressionNode child = (BinaryExpressionNode) childNode;
+        
+        // if the child has a lower precedence than the parent, it must be parenthesized        
+        if (comparator.compare(child.getOperator(), operator) < 0)
+        {
+            return true;
+        }
+        
+        return false;
     }
 }
