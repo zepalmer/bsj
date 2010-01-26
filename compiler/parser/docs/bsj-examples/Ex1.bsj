@@ -1,0 +1,31 @@
+public class Ex1
+{
+	public int foo()
+	{
+		int x = 0;
+		[:
+			// Assumption: metaprogram context has a node factory in scope accessible by getFactory()
+			IntLiteralNode n = getFactory().makeIntLiteralNode(5);
+			AssignmentNode an = getFactory().makeAssignmentNode(factory.makeSimpleNameNode(factory.makeIdentifierNode("x")), n);
+			StatementNode asn = getFactory().makeExpressionStatementNode(an);
+			/*
+			 * Assumption:
+			 * A method named getContext() exists which returns a object describing the metaprogram's context.
+			 * Context has a generic type parameter indicating which type of anchor node it contains.  The API provides
+			 * an anchor node for every node that has a metaprogram-assignable property (such as block statements (which
+			 * have a list of statements), if-then-else (which might have up to two statements), etc.) - this may
+			 * instead be based on a tagging interface (InsertableMetaprogramContainerNode, etc.) to reduce repetition.
+			 */
+			Context<BlockStatementAnchorNode> c = getContext();
+			// Assumption: Context class contains a method getAnchor() which returns an anchor node that represents
+			// the location of the metaprogram in the static source
+			BlockStatementAnchorNode anchor = c.getAnchor();
+			
+			// Assumption: AnchorNodes have a field which indicates the node with which they will be replaced.  This
+			// starts as a no-op but can be changed using the "replace" method.  (This is likely the sort of method
+			// which generates a runtime error if called more than once.)
+			anchor.replaceWith(asn);
+		:]
+		return x;
+	}
+}
