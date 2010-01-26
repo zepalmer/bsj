@@ -269,9 +269,9 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
     {
         p.print("{\n");
         p.incPrependCount();    
-        handleListNode(node.getStatements(), "", ";\n", ";\n", p, true);
+        handleListNode(node.getStatements(), "", "\n", "\n", p, true);
         p.decPrependCount();
-        p.print("}\n");
+        p.print("}");
         return null;
     }
 
@@ -635,6 +635,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
     public Void executeExpressionStatementNode(ExpressionStatementNode node, PrependablePrintStream p)
     {
     	node.getExpression().executeOperation(this, p);
+    	p.print(";");
         return null;
     }
 
@@ -757,7 +758,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
     	node.getThenStatement().executeOperation(this, p);    	
     	if (node.getElseStatement() != null)
     	{
-    		p.print("else\n");
+    		p.print(" else\n");
     		node.getElseStatement().executeOperation(this, p);
     	}
         return null;
