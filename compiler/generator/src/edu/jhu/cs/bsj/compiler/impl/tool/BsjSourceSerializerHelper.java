@@ -226,6 +226,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
     @Override
     public Void executeBinaryExpressionNode(BinaryExpressionNode node, PrependablePrintStream p)
     {
+        //TODO fix order of operations for created nodes 
     	node.getLeftOperand().executeOperation(this, p);
     	p.print(" ");
     	p.print(binaryOperatorToString(node.getOperator()));
