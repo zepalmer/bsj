@@ -874,7 +874,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
     @Override
     public Void executeJavadocNode(JavadocNode node, PrependablePrintStream p)
     {
-        // TODO parse text? or do that when building AST instead?
+        // TODO parse text into Javadoc format
         p.print(node.getText());
         return null;
     }
