@@ -306,13 +306,13 @@ public class BsjTypedNodeNoOpVisitor implements BsjTypedNodeVisitor
     }
 
     /**
-     * Starts a visit for nodes of type BlockStatementNode.
+     * Starts a visit for nodes of type BlockNode.
      * @param node The node being visited.
      * @param mostSpecific <code>true</code> if this is the most specific call
      *                     which can be made for this node; <code>false</code>
      *                     otherwise.
      */
-    public void visitBlockStatementNodeStart(BlockStatementNode node, boolean mostSpecific)
+    public void visitBlockNodeStart(BlockNode node, boolean mostSpecific)
     {
     }
 
@@ -1747,13 +1747,13 @@ public class BsjTypedNodeNoOpVisitor implements BsjTypedNodeVisitor
     }
 
     /**
-     * Stops a visit for nodes of type BlockStatementNode.
+     * Stops a visit for nodes of type BlockNode.
      * @param node The node being visited.
      * @param mostSpecific <code>true</code> if this is the most specific call
      *                     which can be made for this node; <code>false</code>
      *                     otherwise.
      */
-    public void visitBlockStatementNodeStop(BlockStatementNode node, boolean mostSpecific)
+    public void visitBlockNodeStop(BlockNode node, boolean mostSpecific)
     {
     }
 

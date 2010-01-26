@@ -159,7 +159,7 @@ public interface BsjNodeFactory
      */
     public InitializerDeclarationNode makeInitializerDeclarationNode(
             boolean staticInitializer,
-            BlockStatementNode body);
+            BlockNode body);
 
     /**
      * Creates a EnumBodyNode.
@@ -172,9 +172,9 @@ public interface BsjNodeFactory
      * Creates a TryNode.
      */
     public TryNode makeTryNode(
-            BlockStatementNode block,
+            BlockNode block,
             ListNode<CatchNode> catches,
-            BlockStatementNode finallyBlock);
+            BlockNode finallyBlock);
 
     /**
      * Creates a ThisNode.
@@ -266,7 +266,7 @@ public interface BsjNodeFactory
      * Creates a CatchNode.
      */
     public CatchNode makeCatchNode(
-            BlockStatementNode block,
+            BlockNode block,
             VariableNode parameter);
 
     /**
@@ -313,12 +313,6 @@ public interface BsjNodeFactory
     public LabeledStatementNode makeLabeledStatementNode(
             IdentifierNode label,
             StatementNode statement);
-
-    /**
-     * Creates a BlockStatementNode.
-     */
-    public BlockStatementNode makeBlockStatementNode(
-            ListNode<StatementNode> statements);
 
     /**
      * Creates a BinaryExpressionNode.
@@ -390,11 +384,17 @@ public interface BsjNodeFactory
             ListNode<AnonymousClassMemberNode> members);
 
     /**
+     * Creates a BlockNode.
+     */
+    public BlockNode makeBlockNode(
+            ListNode<StatementNode> statements);
+
+    /**
      * Creates a SynchronizedNode.
      */
     public SynchronizedNode makeSynchronizedNode(
             ExpressionNode expression,
-            BlockStatementNode block);
+            BlockNode block);
 
     /**
      * Creates a VariableNode.
@@ -809,7 +809,7 @@ public interface BsjNodeFactory
      * Creates a MethodDeclarationNode.
      */
     public MethodDeclarationNode makeMethodDeclarationNode(
-            BlockStatementNode body,
+            BlockNode body,
             MethodModifiersNode modifiers,
             IdentifierNode identifier,
             ListNode<VariableNode> parameters,

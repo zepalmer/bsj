@@ -649,7 +649,7 @@ AssertStatementNode :: Node + StatementNode
             assert <i>expr</i> : <i>expr</i>;
         </pre>
 
-BlockStatementNode :: Node + StatementNode
+BlockNode :: Node + StatementNode
     @props
     statements              ListNode<StatementNode>                     | the statements contained in this block statement
     @docs
@@ -786,7 +786,7 @@ SwitchNode :: Node + StatementNode
 SynchronizedNode :: Node + StatementNode
     @props
     expression              ExpressionNode                              | the synchronization expression
-    block                   BlockStatementNode                          | the block of statements to synchronize
+    block                   BlockNode                                   | the block of statements to synchronize
     @docs
         A node to represent synchronization statements, as in:
         <pre>
@@ -806,9 +806,9 @@ ThrowNode :: Node + StatementNode
 
 TryNode :: Node + StatementNode
     @props
-    block                   BlockStatementNode                          | the block in which to try
+    block                   BlockNode                                   | the block in which to try
     catches                 ListNode<CatchNode>                         | the catch conditions
-    finallyBlock            BlockStatementNode                          | the finally block
+    finallyBlock            BlockNode                                   | the finally block
     @docs
         A node to represent a try-catch block, as in:
         <pre>
@@ -1019,11 +1019,11 @@ FieldDeclarationNode :: Node + ClassMemberNode, InterfaceMemberNode, AnnotationM
 InitializerDeclarationNode :: Node + ClassMemberNode, AnonymousClassMemberNode
     @props
     staticInitializer       boolean                                     | whether or not the initializer is static
-    body                    BlockStatementNode                          | the body of the initializer
+    body                    BlockNode                                   | the body of the initializer
 
 MethodDeclarationNode :: Node + ClassMemberNode, InterfaceMemberNode, AnonymousClassMemberNode
     @props
-    body                    BlockStatementNode                          | the body of this method
+    body                    BlockNode                                   | the body of this method
     modifiers               MethodModifiersNode                         | the modifiers for this method
     identifier              IdentifierNode                              | this method's name
     parameters              ListNode<VariableNode>                      | the parameters declared by this method
@@ -1272,7 +1272,7 @@ CaseNode :: Node
 
 CatchNode :: Node
     @props
-    block                   BlockStatementNode                          | the block to execute when this catch occurs
+    block                   BlockNode                                   | the block to execute when this catch occurs
     parameter               VariableNode                                | this catch block's exception variable
     @docs
         A node representing a catch block, as in

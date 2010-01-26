@@ -260,7 +260,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
     }
 
     @Override
-    public Void executeBlockStatementNode(BlockStatementNode node, PrependablePrintStream p)
+    public Void executeBlockNode(BlockNode node, PrependablePrintStream p)
     {
         p.print("{\n");
         p.incPrependCount();    

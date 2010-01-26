@@ -12,7 +12,7 @@ import javax.annotation.Generated;
  * </pre>
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public interface BlockStatementNode extends Node, StatementNode
+public interface BlockNode extends Node, StatementNode
 {
     /**
      * Gets the statements contained in this block statement.

@@ -8,18 +8,18 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
-import edu.jhu.cs.bsj.compiler.ast.node.BlockStatementNode;
+import edu.jhu.cs.bsj.compiler.ast.node.BlockNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.StatementNode;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public class BlockStatementNodeImpl extends NodeImpl implements BlockStatementNode
+public class BlockNodeImpl extends NodeImpl implements BlockNode
 {
     /** The statements contained in this block statement. */
     private ListNode<StatementNode> statements;
 
     /** General constructor. */
-    public BlockStatementNodeImpl(
+    public BlockNodeImpl(
             ListNode<StatementNode> statements,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
@@ -86,7 +86,7 @@ public class BlockStatementNodeImpl extends NodeImpl implements BlockStatementNo
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
         visitor.visitStartBegin(this);
-        visitor.visitBlockStatementNodeStart(this, true);
+        visitor.visitBlockNodeStart(this, true);
         visitor.visitNodeStart(this);
         visitor.visitStatementNodeStart(this);
         visitor.visitStartEnd(this);
@@ -94,7 +94,7 @@ public class BlockStatementNodeImpl extends NodeImpl implements BlockStatementNo
         visitor.visitStopBegin(this);
         visitor.visitStatementNodeStop(this);
         visitor.visitNodeStart(this);
-        visitor.visitBlockStatementNodeStart(this, true);
+        visitor.visitBlockNodeStart(this, true);
         visitor.visitStopEnd(this);
     }
 
@@ -141,6 +141,6 @@ public class BlockStatementNodeImpl extends NodeImpl implements BlockStatementNo
     @Override
     public <P,R> R executeOperation(BsjNodeOperation<P,R> operation, P p)
     {
-        return operation.executeBlockStatementNode(this, p);
+        return operation.executeBlockNode(this, p);
     }
 }

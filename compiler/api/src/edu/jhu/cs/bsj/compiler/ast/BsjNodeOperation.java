@@ -336,14 +336,6 @@ public interface BsjNodeOperation<P,R>
     public R executeLabeledStatementNode(LabeledStatementNode node, P p);
 
     /**
-     * Executes this operation against a BlockStatementNode.
-     * @param node The BlockStatementNode in question.
-     * @param p The parameter to use.
-     * @return The result of the operation.
-     */
-    public R executeBlockStatementNode(BlockStatementNode node, P p);
-
-    /**
      * Executes this operation against a BinaryExpressionNode.
      * @param node The BinaryExpressionNode in question.
      * @param p The parameter to use.
@@ -422,6 +414,14 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeAnonymousClassBodyNode(AnonymousClassBodyNode node, P p);
+
+    /**
+     * Executes this operation against a BlockNode.
+     * @param node The BlockNode in question.
+     * @param p The parameter to use.
+     * @return The result of the operation.
+     */
+    public R executeBlockNode(BlockNode node, P p);
 
     /**
      * Executes this operation against a SynchronizedNode.

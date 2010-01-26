@@ -24,12 +24,12 @@ public interface InitializerDeclarationNode extends Node, ClassMemberNode,  Anon
      * Gets the body of the initializer.
      * @return The body of the initializer.
      */
-    public BlockStatementNode getBody();
+    public BlockNode getBody();
 
     /**
      * Changes the body of the initializer.
      * @param body The body of the initializer.
      */
-    public void setBody(BlockStatementNode body);
+    public void setBody(BlockNode body);
 
 }

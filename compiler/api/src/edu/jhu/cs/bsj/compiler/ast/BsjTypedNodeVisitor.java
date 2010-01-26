@@ -300,13 +300,13 @@ public interface BsjTypedNodeVisitor
     public void visitBinaryExpressionNodeStart(BinaryExpressionNode node, boolean mostSpecific);
 
     /**
-     * Starts a visit for nodes of type BlockStatementNode.
+     * Starts a visit for nodes of type BlockNode.
      * @param node The node being visited.
      * @param mostSpecific <code>true</code> if this is the most specific call
      *                     which can be made for this node; <code>false</code>
      *                     otherwise.
      */
-    public void visitBlockStatementNodeStart(BlockStatementNode node, boolean mostSpecific);
+    public void visitBlockNodeStart(BlockNode node, boolean mostSpecific);
 
     /**
      * Starts a visit for nodes of type BooleanLiteralNode.
@@ -1461,13 +1461,13 @@ public interface BsjTypedNodeVisitor
     public void visitBinaryExpressionNodeStop(BinaryExpressionNode node, boolean mostSpecific);
 
     /**
-     * Stops a visit for nodes of type BlockStatementNode.
+     * Stops a visit for nodes of type BlockNode.
      * @param node The node being visited.
      * @param mostSpecific <code>true</code> if this is the most specific call
      *                     which can be made for this node; <code>false</code>
      *                     otherwise.
      */
-    public void visitBlockStatementNodeStop(BlockStatementNode node, boolean mostSpecific);
+    public void visitBlockNodeStop(BlockNode node, boolean mostSpecific);
 
     /**
      * Stops a visit for nodes of type BooleanLiteralNode.

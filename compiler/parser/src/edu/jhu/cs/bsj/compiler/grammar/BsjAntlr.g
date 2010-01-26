@@ -1597,7 +1597,7 @@ methodDeclaration returns [MethodDeclarationNode ret]
         scope Rule;
         @init {
             ruleStart("methodDeclaration");
-            BlockStatementNode blockStatementNode = null;
+            BlockNode blockNode = null;
             ListNode<TypeParameterNode> typeParametersNode =
                     factory.makeListNode(Collections.<TypeParameterNode>emptyList());
             ListNode<UnparameterizedTypeNode> throwsNode = factory.makeListNode(Collections.<UnparameterizedTypeNode>emptyList());
@@ -1635,14 +1635,14 @@ methodDeclaration returns [MethodDeclarationNode ret]
         (        
             block   
             {
-                blockStatementNode = $block.ret;
+                blockNode = $block.ret;
             }
         |
             ';' 
         )
         {
             $ret = factory.makeMethodDeclarationNode(
-                    blockStatementNode,
+                    blockNode,
                     $methodModifiers.ret,
                     $id.ret,
                     $formalParameters.parameters,
@@ -2514,14 +2514,14 @@ annotationMethodDeclaration returns [AnnotationMethodDeclarationNode ret]
         }
         ;
 
-block returns [BlockStatementNode ret]
+block returns [BlockNode ret]
         scope Rule;
         @init {
             ruleStart("block");
             List<StatementNode> list = new ArrayList<StatementNode>();
         }
         @after {
-            $ret = factory.makeBlockStatementNode(factory.makeListNode(list));
+            $ret = factory.makeBlockNode(factory.makeListNode(list));
             ruleStop();
         }
     :   
@@ -2819,7 +2819,7 @@ trystatement returns [TryNode ret]
         @init {
             ruleStart("trystatement");
             ListNode<CatchNode> catchList = factory.makeListNode(new ArrayList<CatchNode>());
-            BlockStatementNode finallyBlock = null;
+            BlockNode finallyBlock = null;
         }    
         @after {
             ruleStop();

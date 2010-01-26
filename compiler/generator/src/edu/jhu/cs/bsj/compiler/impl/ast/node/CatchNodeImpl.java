@@ -8,7 +8,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
-import edu.jhu.cs.bsj.compiler.ast.node.BlockStatementNode;
+import edu.jhu.cs.bsj.compiler.ast.node.BlockNode;
 import edu.jhu.cs.bsj.compiler.ast.node.CatchNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableNode;
 
@@ -16,14 +16,14 @@ import edu.jhu.cs.bsj.compiler.ast.node.VariableNode;
 public class CatchNodeImpl extends NodeImpl implements CatchNode
 {
     /** The block to execute when this catch occurs. */
-    private BlockStatementNode block;
+    private BlockNode block;
 
     /** This catch block's exception variable. */
     private VariableNode parameter;
 
     /** General constructor. */
     public CatchNodeImpl(
-            BlockStatementNode block,
+            BlockNode block,
             VariableNode parameter,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
@@ -37,7 +37,7 @@ public class CatchNodeImpl extends NodeImpl implements CatchNode
      * Gets the block to execute when this catch occurs.
      * @return The block to execute when this catch occurs.
      */
-    public BlockStatementNode getBlock()
+    public BlockNode getBlock()
     {
         return this.block;
     }
@@ -46,7 +46,7 @@ public class CatchNodeImpl extends NodeImpl implements CatchNode
      * Changes the block to execute when this catch occurs.
      * @param block The block to execute when this catch occurs.
      */
-    public void setBlock(BlockStatementNode block)
+    public void setBlock(BlockNode block)
     {
         if (this.block instanceof NodeImpl)
         {

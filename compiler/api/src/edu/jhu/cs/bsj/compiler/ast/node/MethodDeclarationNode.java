@@ -24,13 +24,13 @@ public interface MethodDeclarationNode extends Node, ClassMemberNode,  Interface
      * Gets the body of this method.
      * @return The body of this method.
      */
-    public BlockStatementNode getBody();
+    public BlockNode getBody();
 
     /**
      * Changes the body of this method.
      * @param body The body of this method.
      */
-    public void setBody(BlockStatementNode body);
+    public void setBody(BlockNode body);
 
     /**
      * Gets the modifiers for this method.

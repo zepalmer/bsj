@@ -317,7 +317,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     @Override
     public InitializerDeclarationNode makeInitializerDeclarationNode(
             boolean staticInitializer,
-            BlockStatementNode body)
+            BlockNode body)
     {
         this.before();
         InitializerDeclarationNode node = factory.makeInitializerDeclarationNode(staticInitializer, body);
@@ -344,9 +344,9 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
      */
     @Override
     public TryNode makeTryNode(
-            BlockStatementNode block,
+            BlockNode block,
             ListNode<CatchNode> catches,
-            BlockStatementNode finallyBlock)
+            BlockNode finallyBlock)
     {
         this.before();
         TryNode node = factory.makeTryNode(block, catches, finallyBlock);
@@ -529,7 +529,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
      */
     @Override
     public CatchNode makeCatchNode(
-            BlockStatementNode block,
+            BlockNode block,
             VariableNode parameter)
     {
         this.before();
@@ -621,19 +621,6 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     {
         this.before();
         LabeledStatementNode node = factory.makeLabeledStatementNode(label, statement);
-        this.after(node);
-        return node;
-    }
-
-    /**
-     * Creates a BlockStatementNode.
-     */
-    @Override
-    public BlockStatementNode makeBlockStatementNode(
-            ListNode<StatementNode> statements)
-    {
-        this.before();
-        BlockStatementNode node = factory.makeBlockStatementNode(statements);
         this.after(node);
         return node;
     }
@@ -778,12 +765,25 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     }
 
     /**
+     * Creates a BlockNode.
+     */
+    @Override
+    public BlockNode makeBlockNode(
+            ListNode<StatementNode> statements)
+    {
+        this.before();
+        BlockNode node = factory.makeBlockNode(statements);
+        this.after(node);
+        return node;
+    }
+
+    /**
      * Creates a SynchronizedNode.
      */
     @Override
     public SynchronizedNode makeSynchronizedNode(
             ExpressionNode expression,
-            BlockStatementNode block)
+            BlockNode block)
     {
         this.before();
         SynchronizedNode node = factory.makeSynchronizedNode(expression, block);
@@ -1590,7 +1590,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
      */
     @Override
     public MethodDeclarationNode makeMethodDeclarationNode(
-            BlockStatementNode body,
+            BlockNode body,
             MethodModifiersNode modifiers,
             IdentifierNode identifier,
             ListNode<VariableNode> parameters,

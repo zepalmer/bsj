@@ -8,7 +8,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
-import edu.jhu.cs.bsj.compiler.ast.node.BlockStatementNode;
+import edu.jhu.cs.bsj.compiler.ast.node.BlockNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.SynchronizedNode;
 
@@ -19,12 +19,12 @@ public class SynchronizedNodeImpl extends NodeImpl implements SynchronizedNode
     private ExpressionNode expression;
 
     /** The block of statements to synchronize. */
-    private BlockStatementNode block;
+    private BlockNode block;
 
     /** General constructor. */
     public SynchronizedNodeImpl(
             ExpressionNode expression,
-            BlockStatementNode block,
+            BlockNode block,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
@@ -63,7 +63,7 @@ public class SynchronizedNodeImpl extends NodeImpl implements SynchronizedNode
      * Gets the block of statements to synchronize.
      * @return The block of statements to synchronize.
      */
-    public BlockStatementNode getBlock()
+    public BlockNode getBlock()
     {
         return this.block;
     }
@@ -72,7 +72,7 @@ public class SynchronizedNodeImpl extends NodeImpl implements SynchronizedNode
      * Changes the block of statements to synchronize.
      * @param block The block of statements to synchronize.
      */
-    public void setBlock(BlockStatementNode block)
+    public void setBlock(BlockNode block)
     {
         if (this.block instanceof NodeImpl)
         {

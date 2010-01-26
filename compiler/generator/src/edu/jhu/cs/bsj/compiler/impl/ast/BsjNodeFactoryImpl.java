@@ -268,7 +268,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     @Override
     public InitializerDeclarationNode makeInitializerDeclarationNode(
             boolean staticInitializer,
-            BlockStatementNode body)
+            BlockNode body)
     {
         InitializerDeclarationNode ret = new InitializerDeclarationNodeImpl(staticInitializer, body, startLocation, stopLocation);
         return ret;
@@ -291,9 +291,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     @Override
     public TryNode makeTryNode(
-            BlockStatementNode block,
+            BlockNode block,
             ListNode<CatchNode> catches,
-            BlockStatementNode finallyBlock)
+            BlockNode finallyBlock)
     {
         TryNode ret = new TryNodeImpl(block, catches, finallyBlock, startLocation, stopLocation);
         return ret;
@@ -450,7 +450,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     @Override
     public CatchNode makeCatchNode(
-            BlockStatementNode block,
+            BlockNode block,
             VariableNode parameter)
     {
         CatchNode ret = new CatchNodeImpl(block, parameter, startLocation, stopLocation);
@@ -529,17 +529,6 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             StatementNode statement)
     {
         LabeledStatementNode ret = new LabeledStatementNodeImpl(label, statement, startLocation, stopLocation);
-        return ret;
-    }
-
-    /**
-     * Creates a BlockStatementNode.
-     */
-    @Override
-    public BlockStatementNode makeBlockStatementNode(
-            ListNode<StatementNode> statements)
-    {
-        BlockStatementNode ret = new BlockStatementNodeImpl(statements, startLocation, stopLocation);
         return ret;
     }
 
@@ -663,12 +652,23 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
 
     /**
+     * Creates a BlockNode.
+     */
+    @Override
+    public BlockNode makeBlockNode(
+            ListNode<StatementNode> statements)
+    {
+        BlockNode ret = new BlockNodeImpl(statements, startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
      * Creates a SynchronizedNode.
      */
     @Override
     public SynchronizedNode makeSynchronizedNode(
             ExpressionNode expression,
-            BlockStatementNode block)
+            BlockNode block)
     {
         SynchronizedNode ret = new SynchronizedNodeImpl(expression, block, startLocation, stopLocation);
         return ret;
@@ -1363,7 +1363,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     @Override
     public MethodDeclarationNode makeMethodDeclarationNode(
-            BlockStatementNode body,
+            BlockNode body,
             MethodModifiersNode modifiers,
             IdentifierNode identifier,
             ListNode<VariableNode> parameters,

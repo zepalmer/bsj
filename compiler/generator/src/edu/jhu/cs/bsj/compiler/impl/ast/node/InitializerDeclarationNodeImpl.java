@@ -8,7 +8,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
-import edu.jhu.cs.bsj.compiler.ast.node.BlockStatementNode;
+import edu.jhu.cs.bsj.compiler.ast.node.BlockNode;
 import edu.jhu.cs.bsj.compiler.ast.node.InitializerDeclarationNode;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
@@ -18,12 +18,12 @@ public class InitializerDeclarationNodeImpl extends NodeImpl implements Initiali
     private boolean staticInitializer;
 
     /** The body of the initializer. */
-    private BlockStatementNode body;
+    private BlockNode body;
 
     /** General constructor. */
     public InitializerDeclarationNodeImpl(
             boolean staticInitializer,
-            BlockStatementNode body,
+            BlockNode body,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
@@ -54,7 +54,7 @@ public class InitializerDeclarationNodeImpl extends NodeImpl implements Initiali
      * Gets the body of the initializer.
      * @return The body of the initializer.
      */
-    public BlockStatementNode getBody()
+    public BlockNode getBody()
     {
         return this.body;
     }
@@ -63,7 +63,7 @@ public class InitializerDeclarationNodeImpl extends NodeImpl implements Initiali
      * Changes the body of the initializer.
      * @param body The body of the initializer.
      */
-    public void setBody(BlockStatementNode body)
+    public void setBody(BlockNode body)
     {
         if (this.body instanceof NodeImpl)
         {

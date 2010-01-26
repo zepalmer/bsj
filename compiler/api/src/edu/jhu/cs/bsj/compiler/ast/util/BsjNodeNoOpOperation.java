@@ -449,17 +449,6 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
      * @param p Ignored.
      * @return <code>null</code>, always.
      */
-    public R executeBlockStatementNode(BlockStatementNode node, P p)
-    {
-        return null;
-    }
-
-    /**
-     * Performs no operation.
-     * @param node Ignored.
-     * @param p Ignored.
-     * @return <code>null</code>, always.
-     */
     public R executeBinaryExpressionNode(BinaryExpressionNode node, P p)
     {
         return null;
@@ -560,6 +549,17 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
      * @return <code>null</code>, always.
      */
     public R executeAnonymousClassBodyNode(AnonymousClassBodyNode node, P p)
+    {
+        return null;
+    }
+
+    /**
+     * Performs no operation.
+     * @param node Ignored.
+     * @param p Ignored.
+     * @return <code>null</code>, always.
+     */
+    public R executeBlockNode(BlockNode node, P p)
     {
         return null;
     }

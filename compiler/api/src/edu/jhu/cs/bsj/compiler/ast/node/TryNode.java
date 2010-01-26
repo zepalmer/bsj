@@ -25,13 +25,13 @@ public interface TryNode extends Node, StatementNode
      * Gets the block in which to try.
      * @return The block in which to try.
      */
-    public BlockStatementNode getBlock();
+    public BlockNode getBlock();
 
     /**
      * Changes the block in which to try.
      * @param block The block in which to try.
      */
-    public void setBlock(BlockStatementNode block);
+    public void setBlock(BlockNode block);
 
     /**
      * Gets the catch conditions.
@@ -49,12 +49,12 @@ public interface TryNode extends Node, StatementNode
      * Gets the finally block.
      * @return The finally block.
      */
-    public BlockStatementNode getFinallyBlock();
+    public BlockNode getFinallyBlock();
 
     /**
      * Changes the finally block.
      * @param finallyBlock The finally block.
      */
-    public void setFinallyBlock(BlockStatementNode finallyBlock);
+    public void setFinallyBlock(BlockNode finallyBlock);
 
 }

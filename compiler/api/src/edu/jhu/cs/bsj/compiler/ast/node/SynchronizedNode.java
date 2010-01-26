@@ -29,12 +29,12 @@ public interface SynchronizedNode extends Node, StatementNode
      * Gets the block of statements to synchronize.
      * @return The block of statements to synchronize.
      */
-    public BlockStatementNode getBlock();
+    public BlockNode getBlock();
 
     /**
      * Changes the block of statements to synchronize.
      * @param block The block of statements to synchronize.
      */
-    public void setBlock(BlockStatementNode block);
+    public void setBlock(BlockNode block);
 
 }

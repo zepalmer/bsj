@@ -16,13 +16,13 @@ public interface CatchNode extends Node
      * Gets the block to execute when this catch occurs.
      * @return The block to execute when this catch occurs.
      */
-    public BlockStatementNode getBlock();
+    public BlockNode getBlock();
 
     /**
      * Changes the block to execute when this catch occurs.
      * @param block The block to execute when this catch occurs.
      */
-    public void setBlock(BlockStatementNode block);
+    public void setBlock(BlockNode block);
 
     /**
      * Gets this catch block's exception variable.

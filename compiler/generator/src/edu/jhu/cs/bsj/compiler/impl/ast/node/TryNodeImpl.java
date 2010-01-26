@@ -8,7 +8,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
-import edu.jhu.cs.bsj.compiler.ast.node.BlockStatementNode;
+import edu.jhu.cs.bsj.compiler.ast.node.BlockNode;
 import edu.jhu.cs.bsj.compiler.ast.node.CatchNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TryNode;
@@ -17,19 +17,19 @@ import edu.jhu.cs.bsj.compiler.ast.node.TryNode;
 public class TryNodeImpl extends NodeImpl implements TryNode
 {
     /** The block in which to try. */
-    private BlockStatementNode block;
+    private BlockNode block;
 
     /** The catch conditions. */
     private ListNode<CatchNode> catches;
 
     /** The finally block. */
-    private BlockStatementNode finallyBlock;
+    private BlockNode finallyBlock;
 
     /** General constructor. */
     public TryNodeImpl(
-            BlockStatementNode block,
+            BlockNode block,
             ListNode<CatchNode> catches,
-            BlockStatementNode finallyBlock,
+            BlockNode finallyBlock,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
@@ -43,7 +43,7 @@ public class TryNodeImpl extends NodeImpl implements TryNode
      * Gets the block in which to try.
      * @return The block in which to try.
      */
-    public BlockStatementNode getBlock()
+    public BlockNode getBlock()
     {
         return this.block;
     }
@@ -52,7 +52,7 @@ public class TryNodeImpl extends NodeImpl implements TryNode
      * Changes the block in which to try.
      * @param block The block in which to try.
      */
-    public void setBlock(BlockStatementNode block)
+    public void setBlock(BlockNode block)
     {
         if (this.block instanceof NodeImpl)
         {
@@ -95,7 +95,7 @@ public class TryNodeImpl extends NodeImpl implements TryNode
      * Gets the finally block.
      * @return The finally block.
      */
-    public BlockStatementNode getFinallyBlock()
+    public BlockNode getFinallyBlock()
     {
         return this.finallyBlock;
     }
@@ -104,7 +104,7 @@ public class TryNodeImpl extends NodeImpl implements TryNode
      * Changes the finally block.
      * @param finallyBlock The finally block.
      */
-    public void setFinallyBlock(BlockStatementNode finallyBlock)
+    public void setFinallyBlock(BlockNode finallyBlock)
     {
         if (this.finallyBlock instanceof NodeImpl)
         {
