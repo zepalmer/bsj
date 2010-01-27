@@ -3,11 +3,9 @@ package edu.jhu.cs.bsj.tests.compiler.tool.parser;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileReader;
 
 import org.junit.Test;
 
