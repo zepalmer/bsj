@@ -955,7 +955,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
     @Override
     public Void executeMethodInvocationByNameNode(MethodInvocationByNameNode node, PrependablePrintStream p)
     {
-    	//TODO insert typeArgs inside of name (ie <code>x.<T>foo();</code>)
+    	// check for need to insert typeArgs inside of name (ie <code>x.<T>foo();</code>)
     	if (node.getName() instanceof QualifiedNameNode)
     	{
             ((QualifiedNameNode)node.getName()).getBase().executeOperation(this, p);
