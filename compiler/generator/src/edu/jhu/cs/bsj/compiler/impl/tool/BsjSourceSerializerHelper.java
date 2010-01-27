@@ -874,8 +874,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
     @Override
     public Void executeJavadocNode(JavadocNode node, PrependablePrintStream p)
     {
-        // TODO parse text into Javadoc format
-        p.print(node.getText());
+        p.print(buildJavadoc(node.getText()));
         return null;
     }
 
@@ -1698,4 +1697,23 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
         
         return false;
     }
+    
+	/**
+	 * Builds a formatted javadoc comment from a stored javadoc.
+	 * @param input the stored javadoc, lines separated by returns.
+	 * @return the formatted javadoc.
+	 */
+	public static String buildJavadoc(String input)
+	{
+		// rebuild formatting from individual lines
+		String tokens[] = input.split("\n");
+		StringBuilder ret = new StringBuilder("/**\n");
+		for (String temp : tokens)
+		{
+			ret.append(" * ");
+			ret.append(temp).append("\n");
+		}
+		ret.append(" */");
+		return ret.toString();
+	}
 }

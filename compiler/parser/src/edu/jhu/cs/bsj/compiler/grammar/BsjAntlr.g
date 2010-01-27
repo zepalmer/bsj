@@ -389,6 +389,35 @@ scope Rule {
         exceptions.add(bsjException);
     }
     
+    // Extracts the content of a javadoc comment into a string.
+    public static String parseJavadoc(String input)
+    {
+		   // verify that this is a stored javadoc
+		   input = input.trim();
+		   if (!(input.startsWith("/**") && input.endsWith("*/")))
+		   {
+		     throw new IllegalStateException("Invalid javadoc comment");
+		   }
+		   
+		   // remove /** and */
+		   input = input.substring(3, input.length()-2);
+		   
+		   // parse out individual lines
+		   String tokens[] = input.split("\n");
+		   StringBuilder ret = new StringBuilder();
+		   for (String temp : tokens)
+		   {
+		     temp = temp.trim();
+		     if (!temp.isEmpty() && temp.charAt(0) == '*')
+		     {
+		       temp = temp.replaceFirst("\\*", "");
+		     }
+		     ret.append(temp.trim()).append("\n");
+		   }
+		   
+		   return ret.toString().trim();
+		}
+    
     // *** RULE AOP METHODS ***************************************************
     private void ruleStart(String ruleName)
     {
@@ -595,7 +624,7 @@ javadoc returns [JavadocNode ret] // TODO: parse out Javadoc contents
                     factory.setStartSourceLocation(startSourceLocation);
                     factory.setStopSourceLocation(stopSourceLocation);
                     factorySourceLocationOverride = true;
-                    $ret = factory.makeJavadocNode(token.getText());
+                    $ret = factory.makeJavadocNode(parseJavadoc(token.getText()));
                     factorySourceLocationOverride = false;
                     break;
                 }
