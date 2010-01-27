@@ -9,50 +9,20 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.BlockStatementNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.BlockStatementMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramNode;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.NodeImpl;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public class MetaprogramNodeImpl extends NodeImpl implements MetaprogramNode
+public class BlockStatementMetaprogramAnchorNodeImpl extends MetaprogramAnchorNodeImpl<BlockStatementNode> implements BlockStatementMetaprogramAnchorNode
 {
-    /** The list of statements in the metaprogram's body. */
-    private ListNode<BlockStatementNode> body;
-
     /** General constructor. */
-    public MetaprogramNodeImpl(
-            ListNode<BlockStatementNode> body,
+    public BlockStatementMetaprogramAnchorNodeImpl(
+            BlockStatementNode replacement,
+            MetaprogramNode metaprogram,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        super(startLocation, stopLocation);
-        this.body = body;
-    }
-
-    /**
-     * Gets the list of statements in the metaprogram's body.
-     * @return The list of statements in the metaprogram's body.
-     */
-    public ListNode<BlockStatementNode> getBody()
-    {
-        return this.body;
-    }
-
-    /**
-     * Changes the list of statements in the metaprogram's body.
-     * @param body The list of statements in the metaprogram's body.
-     */
-    public void setBody(ListNode<BlockStatementNode> body)
-    {
-        if (this.body instanceof NodeImpl)
-        {
-            ((NodeImpl)this.body).setParent(null);
-        }
-        this.body = body;
-        if (this.body instanceof NodeImpl)
-        {
-            ((NodeImpl)this.body).setParent(this);
-        }
+        super(replacement, metaprogram, startLocation, stopLocation);
     }
 
     /**
@@ -66,7 +36,6 @@ public class MetaprogramNodeImpl extends NodeImpl implements MetaprogramNode
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        this.body.receive(visitor);
     }
 
     /**
@@ -80,20 +49,23 @@ public class MetaprogramNodeImpl extends NodeImpl implements MetaprogramNode
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        this.body.receiveTyped(visitor);
     }
 
     @Override
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
         visitor.visitStartBegin(this);
-        visitor.visitMetaprogramNodeStart(this, true);
+        visitor.visitBlockStatementMetaprogramAnchorNodeStart(this, true);
+        visitor.visitMetaprogramAnchorNodeStart(this);
         visitor.visitNodeStart(this);
+        visitor.visitBlockStatementNodeStart(this);
         visitor.visitStartEnd(this);
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
+        visitor.visitBlockStatementNodeStop(this);
         visitor.visitNodeStart(this);
-        visitor.visitMetaprogramNodeStart(this, true);
+        visitor.visitMetaprogramAnchorNodeStart(this);
+        visitor.visitBlockStatementMetaprogramAnchorNodeStart(this, true);
         visitor.visitStopEnd(this);
     }
 
@@ -106,7 +78,6 @@ public class MetaprogramNodeImpl extends NodeImpl implements MetaprogramNode
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(getBody());
         return list;
     }
 
@@ -119,8 +90,11 @@ public class MetaprogramNodeImpl extends NodeImpl implements MetaprogramNode
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
-        sb.append("body=");
-        sb.append(this.getBody() == null? "null" : this.getBody().getClass().getSimpleName());
+        sb.append("replacement=");
+        sb.append(this.getReplacement() == null? "null" : this.getReplacement().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("metaprogram=");
+        sb.append(this.getMetaprogram() == null? "null" : this.getMetaprogram().getClass().getSimpleName());
         sb.append(',');
         sb.append("startLocation=");
         sb.append(String.valueOf(this.getStartLocation()) + ":" + (this.getStartLocation() != null ? this.getStartLocation().getClass().getSimpleName() : "null"));
@@ -140,6 +114,6 @@ public class MetaprogramNodeImpl extends NodeImpl implements MetaprogramNode
     @Override
     public <P,R> R executeOperation(BsjNodeOperation<P,R> operation, P p)
     {
-        return operation.executeMetaprogramNode(this, p);
+        return operation.executeBlockStatementMetaprogramAnchorNode(this, p);
     }
 }

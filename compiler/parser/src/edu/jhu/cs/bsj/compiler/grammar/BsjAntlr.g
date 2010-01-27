@@ -436,9 +436,10 @@ scope Rule {
                           Parser section
 *********************************************************************************************/
 
-/* 
+/* ===========================================================================
  * These rules only exist in the parser.  They may map to the language standard but are primarily used to abstract
  * away parser patterns and may not manifest in the AST. 
+ * ===========================================================================
  */
  
 // Represents the combination of an identifier and an initializer.  As the identifier can be followed with array type
@@ -503,7 +504,125 @@ arrayTypeIndicator[TypeNode inType] returns [ArrayTypeNode ret]
         )*
     ;
 
-/** These are the actual grammar rules. */
+/* ===========================================================================
+ * These are the BSJ grammar rules.
+ * ===========================================================================
+ */
+
+// TODO: use the anchor rules in their appropriate places
+
+/* This rule parses a BSJ metaprogram. */
+bsjMetaprogram returns [MetaprogramNode ret]
+        scope Rule;
+        @init {
+            ruleStart("bsjMetaprogram");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        '[' ':'
+        blockStatementList
+        ':' ']'
+        {
+            $ret = factory.makeMetaprogramNode($blockStatementList.ret);
+        }
+    ;
+
+topLevelBsjMetaprogramAnchor returns [TopLevelMetaprogramAnchorNode ret]
+        scope Rule;
+        @init {
+            ruleStart("topLevelBsjMetaprogramAnchor");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        bsjMetaprogram
+        {
+            $ret = factory.makeTopLevelMetaprogramAnchorNode($bsjMetaprogram.ret);
+        }
+    ;    
+
+classMemberBsjMetaprogramAnchor returns [ClassMemberMetaprogramAnchorNode ret]
+        scope Rule;
+        @init {
+            ruleStart("classMemberBsjMetaprogramAnchor");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        bsjMetaprogram
+        {
+            $ret = factory.makeClassMemberMetaprogramAnchorNode($bsjMetaprogram.ret);
+        }
+    ;    
+
+annotationMemberBsjMetaprogramAnchor returns [AnnotationMemberMetaprogramAnchorNode ret]
+        scope Rule;
+        @init {
+            ruleStart("annotationMemberBsjMetaprogramAnchor");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        bsjMetaprogram
+        {
+            $ret = factory.makeAnnotationMemberMetaprogramAnchorNode($bsjMetaprogram.ret);
+        }
+    ;
+
+anonymousClassMemberBsjMetaprogramAnchor returns [AnonymousClassMemberMetaprogramAnchorNode ret]
+        scope Rule;
+        @init {
+            ruleStart("anonymousClassMemberBsjMetaprogramAnchor");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        bsjMetaprogram
+        {
+            $ret = factory.makeAnonymousClassMemberMetaprogramAnchorNode($bsjMetaprogram.ret);
+        }
+    ;
+
+interfaceMemberBsjMetaprogramAnchor returns [InterfaceMemberMetaprogramAnchorNode ret]
+        scope Rule;
+        @init {
+            ruleStart("interfaceMemberBsjMetaprogramAnchor");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        bsjMetaprogram
+        {
+            $ret = factory.makeInterfaceMemberMetaprogramAnchorNode($bsjMetaprogram.ret);
+        }
+    ;
+
+blockStatementBsjMetaprogramAnchor returns [BlockStatementMetaprogramAnchorNode ret]
+        scope Rule;
+        @init {
+            ruleStart("blockStatementBsjMetaprogramAnchor");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        bsjMetaprogram
+        {
+            $ret = factory.makeBlockStatementMetaprogramAnchorNode($bsjMetaprogram.ret);
+        }
+    ;
+
+/* ===========================================================================
+ * These are the Java grammar rules.
+ * ===========================================================================
+ */
 
 compilationUnit returns [CompilationUnitNode ret]
         scope Rule;
@@ -1596,13 +1715,13 @@ constructorBody returns [ConstructorBodyNode ret]
         scope Rule;
         @init {
             ruleStart("constructorBody");
-            List<BlockStatementNode> list = new ArrayList<BlockStatementNode>();
+            ListNode<BlockStatementNode> listNode = null;
             ConstructorInvocationNode constructorInvocationNode = null;
         }
         @after {
             $ret = factory.makeConstructorBodyNode(
                     constructorInvocationNode,
-                    factory.makeListNode(list));
+                    listNode);
             ruleStop();
         }
     :
@@ -1613,12 +1732,10 @@ constructorBody returns [ConstructorBodyNode ret]
                 constructorInvocationNode = $explicitConstructorInvocation.ret;
             }
         )?
-        (
-            blockStatement
-            {
-                list.add($blockStatement.ret);
-            }
-        )*
+        blockStatementList
+        {
+            listNode = $blockStatementList.ret;
+        }
         '}'
     ;
 
@@ -2547,21 +2664,36 @@ block returns [BlockNode ret]
         scope Rule;
         @init {
             ruleStart("block");
-            List<BlockStatementNode> list = new ArrayList<BlockStatementNode>();
         }
         @after {
-            $ret = factory.makeBlockNode(factory.makeListNode(list));
             ruleStop();
         }
     :   
         '{'
+        blockStatementList
+        '}'
+        {
+            $ret = factory.makeBlockNode($blockStatementList.ret);
+        }
+    ;
+
+blockStatementList returns [ListNode<BlockStatementNode> ret]
+        scope Rule;
+        @init {
+            ruleStart("blockStatementList");
+            List<BlockStatementNode> list = new ArrayList<BlockStatementNode>();
+        }
+        @after {
+            $ret = factory.makeListNode(list);
+            ruleStop();
+        }
+    :
         (
             blockStatement
             {
                 list.add($blockStatement.ret);
             }
         )*
-        '}'
     ;
 
 // Parses a statement from a block of statements.
@@ -2802,11 +2934,11 @@ switchBlockStatementGroup returns [CaseNode ret]
         scope Rule;
         @init {
             ruleStart("switchBlockStatementGroup");
-            List<BlockStatementNode> list = new ArrayList<BlockStatementNode>();
+            ListNode<BlockStatementNode> listNode = null;
             ExpressionNode label = null;
         }
         @after {
-            $ret = factory.makeCaseNode(label, factory.makeListNode(list));
+            $ret = factory.makeCaseNode(label, listNode);
             ruleStop();
         }
     :
@@ -2814,12 +2946,10 @@ switchBlockStatementGroup returns [CaseNode ret]
         {
             label = $switchLabel.ret;
         }
-        (
-            blockStatement
-            {
-                list.add($blockStatement.ret);
-            }
-        )*
+        blockStatementList
+        {
+            listNode = $blockStatementList.ret;
+        }
     ;
 
 switchLabel returns [ExpressionNode ret]

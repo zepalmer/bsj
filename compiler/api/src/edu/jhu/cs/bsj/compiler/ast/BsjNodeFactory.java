@@ -5,13 +5,14 @@ import java.util.List;
 import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.node.*;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.AnnotationMemberMetaprogramNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.AnonymousClassMemberMetaprogramNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.BlockStatementMetaprogramNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.ClassMemberMetaprogramNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.AnnotationMemberMetaprogramAnchorNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.AnonymousClassMemberMetaprogramAnchorNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.BlockStatementMetaprogramAnchorNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.ClassMemberMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.CodeLiteralNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.InterfaceMemberMetaprogramNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.TopLevelMetaprogramNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.InterfaceMemberMetaprogramAnchorNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.TopLevelMetaprogramAnchorNode;
 
 /**
  * This interface is implemented by any object which can act as a factory for BSJ nodes.  It
@@ -131,17 +132,17 @@ public interface BsjNodeFactory
             boolean staticImport);
 
     /**
-     * Creates a InterfaceMemberMetaprogramNode.
-     */
-    public InterfaceMemberMetaprogramNode makeInterfaceMemberMetaprogramNode(
-            ListNode<BlockStatementNode> body);
-
-    /**
      * Creates a VariableModifiersNode.
      */
     public VariableModifiersNode makeVariableModifiersNode(
             boolean finalFlag,
             ListNode<AnnotationNode> annotations);
+
+    /**
+     * Creates a BlockStatementMetaprogramAnchorNode.
+     */
+    public BlockStatementMetaprogramAnchorNode makeBlockStatementMetaprogramAnchorNode(
+            MetaprogramNode metaprogram);
 
     /**
      * Creates a InterfaceModifiersNode.
@@ -165,6 +166,12 @@ public interface BsjNodeFactory
      */
     public PrimitiveTypeNode makePrimitiveTypeNode(
             PrimitiveType primitiveType);
+
+    /**
+     * Creates a MetaprogramNode.
+     */
+    public MetaprogramNode makeMetaprogramNode(
+            ListNode<BlockStatementNode> body);
 
     /**
      * Creates a InitializerDeclarationNode.
@@ -205,10 +212,22 @@ public interface BsjNodeFactory
             JavadocNode javadoc);
 
     /**
+     * Creates a TopLevelMetaprogramAnchorNode.
+     */
+    public TopLevelMetaprogramAnchorNode makeTopLevelMetaprogramAnchorNode(
+            MetaprogramNode metaprogram);
+
+    /**
      * Creates a VoidTypeNode.
      */
     public VoidTypeNode makeVoidTypeNode(
 );
+
+    /**
+     * Creates a ClassMemberMetaprogramAnchorNode.
+     */
+    public ClassMemberMetaprogramAnchorNode makeClassMemberMetaprogramAnchorNode(
+            MetaprogramNode metaprogram);
 
     /**
      * Creates a VariableDeclarationNode.
@@ -261,6 +280,12 @@ public interface BsjNodeFactory
             IdentifierNode identifier);
 
     /**
+     * Creates a AnonymousClassMemberMetaprogramAnchorNode.
+     */
+    public AnonymousClassMemberMetaprogramAnchorNode makeAnonymousClassMemberMetaprogramAnchorNode(
+            MetaprogramNode metaprogram);
+
+    /**
      * Creates a ThrowNode.
      */
     public ThrowNode makeThrowNode(
@@ -273,6 +298,12 @@ public interface BsjNodeFactory
             AccessModifier access,
             boolean strictfpFlag,
             ListNode<AnnotationNode> annotations);
+
+    /**
+     * Creates a AnnotationMemberMetaprogramAnchorNode.
+     */
+    public AnnotationMemberMetaprogramAnchorNode makeAnnotationMemberMetaprogramAnchorNode(
+            MetaprogramNode metaprogram);
 
     /**
      * Creates a CatchNode.
@@ -313,6 +344,12 @@ public interface BsjNodeFactory
             AnonymousClassBodyNode body);
 
     /**
+     * Creates a InterfaceMemberMetaprogramAnchorNode.
+     */
+    public InterfaceMemberMetaprogramAnchorNode makeInterfaceMemberMetaprogramAnchorNode(
+            MetaprogramNode metaprogram);
+
+    /**
      * Creates a TypeCastNode.
      */
     public TypeCastNode makeTypeCastNode(
@@ -325,12 +362,6 @@ public interface BsjNodeFactory
     public LabeledStatementNode makeLabeledStatementNode(
             IdentifierNode label,
             StatementNode statement);
-
-    /**
-     * Creates a TopLevelMetaprogramNode.
-     */
-    public TopLevelMetaprogramNode makeTopLevelMetaprogramNode(
-            ListNode<BlockStatementNode> body);
 
     /**
      * Creates a BinaryExpressionNode.
@@ -510,12 +541,6 @@ public interface BsjNodeFactory
             StatementNode statement);
 
     /**
-     * Creates a ClassMemberMetaprogramNode.
-     */
-    public ClassMemberMetaprogramNode makeClassMemberMetaprogramNode(
-            ListNode<BlockStatementNode> body);
-
-    /**
      * Creates a ListNode.
      */
     public <T extends Node> ListNode<T> makeListNode(
@@ -543,12 +568,6 @@ public interface BsjNodeFactory
     public ConstructorModifiersNode makeConstructorModifiersNode(
             AccessModifier access,
             ListNode<AnnotationNode> annotations);
-
-    /**
-     * Creates a AnnotationMemberMetaprogramNode.
-     */
-    public AnnotationMemberMetaprogramNode makeAnnotationMemberMetaprogramNode(
-            ListNode<BlockStatementNode> body);
 
     /**
      * Creates a ParameterizedTypeSelectNode.
@@ -678,12 +697,6 @@ public interface BsjNodeFactory
             ExpressionNode expression);
 
     /**
-     * Creates a AnonymousClassMemberMetaprogramNode.
-     */
-    public AnonymousClassMemberMetaprogramNode makeAnonymousClassMemberMetaprogramNode(
-            ListNode<BlockStatementNode> body);
-
-    /**
      * Creates a AssignmentNode.
      */
     public AssignmentNode makeAssignmentNode(
@@ -741,12 +754,6 @@ public interface BsjNodeFactory
     public ParameterizedTypeNode makeParameterizedTypeNode(
             UnparameterizedTypeNode baseType,
             ListNode<TypeArgumentNode> typeArguments);
-
-    /**
-     * Creates a BlockStatementMetaprogramNode.
-     */
-    public BlockStatementMetaprogramNode makeBlockStatementMetaprogramNode(
-            ListNode<BlockStatementNode> body);
 
     /**
      * Creates a InterfaceDeclarationNode.

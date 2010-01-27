@@ -4,26 +4,68 @@ import java.util.List;
 
 import javax.annotation.Generated;
 
-import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
-import edu.jhu.cs.bsj.compiler.ast.node.BlockStatementNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.TypeDeclarationNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.TopLevelMetaprogramNode;
+import edu.jhu.cs.bsj.compiler.ast.node.Node;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramAnchorNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramNode;
+import edu.jhu.cs.bsj.compiler.impl.ast.node.NodeImpl;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public class TopLevelMetaprogramNodeImpl extends MetaprogramNodeImpl<TypeDeclarationNode> implements TopLevelMetaprogramNode
+public abstract class MetaprogramAnchorNodeImpl<T extends Node> extends NodeImpl implements MetaprogramAnchorNode<T>
 {
+    /** The replacement node for this metaprogram. */
+    private T replacement;
+
+    /** The metaprogram on this node. */
+    private MetaprogramNode metaprogram;
+
     /** General constructor. */
-    public TopLevelMetaprogramNodeImpl(
-            TypeDeclarationNode replacement,
-            ListNode<BlockStatementNode> body,
+    protected MetaprogramAnchorNodeImpl(
+            T replacement,
+            MetaprogramNode metaprogram,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        super(replacement, body, startLocation, stopLocation);
+        super(startLocation, stopLocation);
+        this.replacement = replacement;
+        this.metaprogram = metaprogram;
+    }
+
+    /**
+     * Gets the replacement node for this metaprogram.
+     * @return The replacement node for this metaprogram.
+     */
+    public T getReplacement()
+    {
+        return this.replacement;
+    }
+
+    /**
+     * Gets the metaprogram on this node.
+     * @return The metaprogram on this node.
+     */
+    public MetaprogramNode getMetaprogram()
+    {
+        return this.metaprogram;
+    }
+
+    /**
+     * Changes the metaprogram on this node.
+     * @param metaprogram The metaprogram on this node.
+     */
+    public void setMetaprogram(MetaprogramNode metaprogram)
+    {
+        if (this.metaprogram instanceof NodeImpl)
+        {
+            ((NodeImpl)this.metaprogram).setParent(null);
+        }
+        this.metaprogram = metaprogram;
+        if (this.metaprogram instanceof NodeImpl)
+        {
+            ((NodeImpl)this.metaprogram).setParent(this);
+        }
     }
 
     /**
@@ -37,6 +79,7 @@ public class TopLevelMetaprogramNodeImpl extends MetaprogramNodeImpl<TypeDeclara
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
+        this.metaprogram.receive(visitor);
     }
 
     /**
@@ -50,21 +93,20 @@ public class TopLevelMetaprogramNodeImpl extends MetaprogramNodeImpl<TypeDeclara
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
+        this.metaprogram.receiveTyped(visitor);
     }
 
     @Override
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
         visitor.visitStartBegin(this);
-        visitor.visitTopLevelMetaprogramNodeStart(this, true);
-        visitor.visitMetaprogramNodeStart(this);
+        visitor.visitMetaprogramAnchorNodeStart(this);
         visitor.visitNodeStart(this);
         visitor.visitStartEnd(this);
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
         visitor.visitNodeStart(this);
-        visitor.visitMetaprogramNodeStart(this);
-        visitor.visitTopLevelMetaprogramNodeStart(this, true);
+        visitor.visitMetaprogramAnchorNodeStart(this);
         visitor.visitStopEnd(this);
     }
 
@@ -77,6 +119,8 @@ public class TopLevelMetaprogramNodeImpl extends MetaprogramNodeImpl<TypeDeclara
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
+        list.add(getReplacement());
+        list.add(getMetaprogram());
         return list;
     }
 
@@ -90,10 +134,10 @@ public class TopLevelMetaprogramNodeImpl extends MetaprogramNodeImpl<TypeDeclara
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
         sb.append("replacement=");
-        sb.append(this.getReplacement() == null? "null" : this.getReplacement().getClass().getSimpleName());
+        sb.append(String.valueOf(this.getReplacement()) + ":" + (this.getReplacement() != null ? this.getReplacement().getClass().getSimpleName() : "null"));
         sb.append(',');
-        sb.append("body=");
-        sb.append(this.getBody() == null? "null" : this.getBody().getClass().getSimpleName());
+        sb.append("metaprogram=");
+        sb.append(this.getMetaprogram() == null? "null" : this.getMetaprogram().getClass().getSimpleName());
         sb.append(',');
         sb.append("startLocation=");
         sb.append(String.valueOf(this.getStartLocation()) + ":" + (this.getStartLocation() != null ? this.getStartLocation().getClass().getSimpleName() : "null"));
@@ -104,15 +148,4 @@ public class TopLevelMetaprogramNodeImpl extends MetaprogramNodeImpl<TypeDeclara
         return sb.toString();
     }
 
-    /**
-     * Executes an operation on this node.
-     * @param operation The operation to perform.
-     * @param p The parameter to pass to the operation.
-     * @return The result of the operation.
-     */
-    @Override
-    public <P,R> R executeOperation(BsjNodeOperation<P,R> operation, P p)
-    {
-        return operation.executeTopLevelMetaprogramNode(this, p);
-    }
 }

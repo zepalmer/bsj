@@ -8,22 +8,21 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
-import edu.jhu.cs.bsj.compiler.ast.node.AnnotationMemberNode;
-import edu.jhu.cs.bsj.compiler.ast.node.BlockStatementNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.AnnotationMemberMetaprogramNode;
+import edu.jhu.cs.bsj.compiler.ast.node.TypeDeclarationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.TopLevelMetaprogramAnchorNode;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public class AnnotationMemberMetaprogramNodeImpl extends MetaprogramNodeImpl<AnnotationMemberNode> implements AnnotationMemberMetaprogramNode
+public class TopLevelMetaprogramAnchorNodeImpl extends MetaprogramAnchorNodeImpl<TypeDeclarationNode> implements TopLevelMetaprogramAnchorNode
 {
     /** General constructor. */
-    public AnnotationMemberMetaprogramNodeImpl(
-            AnnotationMemberNode replacement,
-            ListNode<BlockStatementNode> body,
+    public TopLevelMetaprogramAnchorNodeImpl(
+            TypeDeclarationNode replacement,
+            MetaprogramNode metaprogram,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        super(replacement, body, startLocation, stopLocation);
+        super(replacement, metaprogram, startLocation, stopLocation);
     }
 
     /**
@@ -56,17 +55,15 @@ public class AnnotationMemberMetaprogramNodeImpl extends MetaprogramNodeImpl<Ann
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
         visitor.visitStartBegin(this);
-        visitor.visitAnnotationMemberMetaprogramNodeStart(this, true);
-        visitor.visitMetaprogramNodeStart(this);
+        visitor.visitTopLevelMetaprogramAnchorNodeStart(this, true);
+        visitor.visitMetaprogramAnchorNodeStart(this);
         visitor.visitNodeStart(this);
-        visitor.visitAnnotationMemberNodeStart(this);
         visitor.visitStartEnd(this);
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
-        visitor.visitAnnotationMemberNodeStop(this);
         visitor.visitNodeStart(this);
-        visitor.visitMetaprogramNodeStart(this);
-        visitor.visitAnnotationMemberMetaprogramNodeStart(this, true);
+        visitor.visitMetaprogramAnchorNodeStart(this);
+        visitor.visitTopLevelMetaprogramAnchorNodeStart(this, true);
         visitor.visitStopEnd(this);
     }
 
@@ -94,8 +91,8 @@ public class AnnotationMemberMetaprogramNodeImpl extends MetaprogramNodeImpl<Ann
         sb.append("replacement=");
         sb.append(this.getReplacement() == null? "null" : this.getReplacement().getClass().getSimpleName());
         sb.append(',');
-        sb.append("body=");
-        sb.append(this.getBody() == null? "null" : this.getBody().getClass().getSimpleName());
+        sb.append("metaprogram=");
+        sb.append(this.getMetaprogram() == null? "null" : this.getMetaprogram().getClass().getSimpleName());
         sb.append(',');
         sb.append("startLocation=");
         sb.append(String.valueOf(this.getStartLocation()) + ":" + (this.getStartLocation() != null ? this.getStartLocation().getClass().getSimpleName() : "null"));
@@ -115,6 +112,6 @@ public class AnnotationMemberMetaprogramNodeImpl extends MetaprogramNodeImpl<Ann
     @Override
     public <P,R> R executeOperation(BsjNodeOperation<P,R> operation, P p)
     {
-        return operation.executeAnnotationMemberMetaprogramNode(this, p);
+        return operation.executeTopLevelMetaprogramAnchorNode(this, p);
     }
 }

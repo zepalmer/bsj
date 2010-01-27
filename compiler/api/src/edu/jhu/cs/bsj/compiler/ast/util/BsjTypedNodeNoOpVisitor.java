@@ -4,14 +4,15 @@ import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.*;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.AnnotationMemberMetaprogramNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.AnonymousClassMemberMetaprogramNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.BlockStatementMetaprogramNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.ClassMemberMetaprogramNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.AnnotationMemberMetaprogramAnchorNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.AnonymousClassMemberMetaprogramAnchorNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.BlockStatementMetaprogramAnchorNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.ClassMemberMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.CodeLiteralNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.InterfaceMemberMetaprogramNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.InterfaceMemberMetaprogramAnchorNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.TopLevelMetaprogramNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.TopLevelMetaprogramAnchorNode;
 
 /**
  * This default implementation of {@link BsjTypedNodeVisitor} provides no-op versions of each
@@ -133,13 +134,13 @@ public class BsjTypedNodeNoOpVisitor implements BsjTypedNodeVisitor
     }
 
     /**
-     * Starts a visit for nodes of type AnnotationMemberMetaprogramNode.
+     * Starts a visit for nodes of type AnnotationMemberMetaprogramAnchorNode.
      * @param node The node being visited.
      * @param mostSpecific <code>true</code> if this is the most specific call
      *                     which can be made for this node; <code>false</code>
      *                     otherwise.
      */
-    public void visitAnnotationMemberMetaprogramNodeStart(AnnotationMemberMetaprogramNode node, boolean mostSpecific)
+    public void visitAnnotationMemberMetaprogramAnchorNodeStart(AnnotationMemberMetaprogramAnchorNode node, boolean mostSpecific)
     {
     }
 
@@ -212,13 +213,13 @@ public class BsjTypedNodeNoOpVisitor implements BsjTypedNodeVisitor
     }
 
     /**
-     * Starts a visit for nodes of type AnonymousClassMemberMetaprogramNode.
+     * Starts a visit for nodes of type AnonymousClassMemberMetaprogramAnchorNode.
      * @param node The node being visited.
      * @param mostSpecific <code>true</code> if this is the most specific call
      *                     which can be made for this node; <code>false</code>
      *                     otherwise.
      */
-    public void visitAnonymousClassMemberMetaprogramNodeStart(AnonymousClassMemberMetaprogramNode node, boolean mostSpecific)
+    public void visitAnonymousClassMemberMetaprogramAnchorNodeStart(AnonymousClassMemberMetaprogramAnchorNode node, boolean mostSpecific)
     {
     }
 
@@ -346,13 +347,13 @@ public class BsjTypedNodeNoOpVisitor implements BsjTypedNodeVisitor
     }
 
     /**
-     * Starts a visit for nodes of type BlockStatementMetaprogramNode.
+     * Starts a visit for nodes of type BlockStatementMetaprogramAnchorNode.
      * @param node The node being visited.
      * @param mostSpecific <code>true</code> if this is the most specific call
      *                     which can be made for this node; <code>false</code>
      *                     otherwise.
      */
-    public void visitBlockStatementMetaprogramNodeStart(BlockStatementMetaprogramNode node, boolean mostSpecific)
+    public void visitBlockStatementMetaprogramAnchorNodeStart(BlockStatementMetaprogramAnchorNode node, boolean mostSpecific)
     {
     }
 
@@ -461,13 +462,13 @@ public class BsjTypedNodeNoOpVisitor implements BsjTypedNodeVisitor
     }
 
     /**
-     * Starts a visit for nodes of type ClassMemberMetaprogramNode.
+     * Starts a visit for nodes of type ClassMemberMetaprogramAnchorNode.
      * @param node The node being visited.
      * @param mostSpecific <code>true</code> if this is the most specific call
      *                     which can be made for this node; <code>false</code>
      *                     otherwise.
      */
-    public void visitClassMemberMetaprogramNodeStart(ClassMemberMetaprogramNode node, boolean mostSpecific)
+    public void visitClassMemberMetaprogramAnchorNodeStart(ClassMemberMetaprogramAnchorNode node, boolean mostSpecific)
     {
     }
 
@@ -910,13 +911,13 @@ public class BsjTypedNodeNoOpVisitor implements BsjTypedNodeVisitor
     }
 
     /**
-     * Starts a visit for nodes of type InterfaceMemberMetaprogramNode.
+     * Starts a visit for nodes of type InterfaceMemberMetaprogramAnchorNode.
      * @param node The node being visited.
      * @param mostSpecific <code>true</code> if this is the most specific call
      *                     which can be made for this node; <code>false</code>
      *                     otherwise.
      */
-    public void visitInterfaceMemberMetaprogramNodeStart(InterfaceMemberMetaprogramNode node, boolean mostSpecific)
+    public void visitInterfaceMemberMetaprogramAnchorNodeStart(InterfaceMemberMetaprogramAnchorNode node, boolean mostSpecific)
     {
     }
 
@@ -1000,10 +1001,21 @@ public class BsjTypedNodeNoOpVisitor implements BsjTypedNodeVisitor
     }
 
     /**
-     * Starts a visit for nodes of type MetaprogramNode.
+     * Starts a visit for nodes of type MetaprogramAnchorNode.
      * @param node The node being visited.
      */
-    public void visitMetaprogramNodeStart(MetaprogramNode<?> node)
+    public void visitMetaprogramAnchorNodeStart(MetaprogramAnchorNode<?> node)
+    {
+    }
+
+    /**
+     * Starts a visit for nodes of type MetaprogramNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitMetaprogramNodeStart(MetaprogramNode node, boolean mostSpecific)
     {
     }
 
@@ -1360,13 +1372,13 @@ public class BsjTypedNodeNoOpVisitor implements BsjTypedNodeVisitor
     }
 
     /**
-     * Starts a visit for nodes of type TopLevelMetaprogramNode.
+     * Starts a visit for nodes of type TopLevelMetaprogramAnchorNode.
      * @param node The node being visited.
      * @param mostSpecific <code>true</code> if this is the most specific call
      *                     which can be made for this node; <code>false</code>
      *                     otherwise.
      */
-    public void visitTopLevelMetaprogramNodeStart(TopLevelMetaprogramNode node, boolean mostSpecific)
+    public void visitTopLevelMetaprogramAnchorNodeStart(TopLevelMetaprogramAnchorNode node, boolean mostSpecific)
     {
     }
 
@@ -1656,13 +1668,13 @@ public class BsjTypedNodeNoOpVisitor implements BsjTypedNodeVisitor
     }
 
     /**
-     * Stops a visit for nodes of type AnnotationMemberMetaprogramNode.
+     * Stops a visit for nodes of type AnnotationMemberMetaprogramAnchorNode.
      * @param node The node being visited.
      * @param mostSpecific <code>true</code> if this is the most specific call
      *                     which can be made for this node; <code>false</code>
      *                     otherwise.
      */
-    public void visitAnnotationMemberMetaprogramNodeStop(AnnotationMemberMetaprogramNode node, boolean mostSpecific)
+    public void visitAnnotationMemberMetaprogramAnchorNodeStop(AnnotationMemberMetaprogramAnchorNode node, boolean mostSpecific)
     {
     }
 
@@ -1735,13 +1747,13 @@ public class BsjTypedNodeNoOpVisitor implements BsjTypedNodeVisitor
     }
 
     /**
-     * Stops a visit for nodes of type AnonymousClassMemberMetaprogramNode.
+     * Stops a visit for nodes of type AnonymousClassMemberMetaprogramAnchorNode.
      * @param node The node being visited.
      * @param mostSpecific <code>true</code> if this is the most specific call
      *                     which can be made for this node; <code>false</code>
      *                     otherwise.
      */
-    public void visitAnonymousClassMemberMetaprogramNodeStop(AnonymousClassMemberMetaprogramNode node, boolean mostSpecific)
+    public void visitAnonymousClassMemberMetaprogramAnchorNodeStop(AnonymousClassMemberMetaprogramAnchorNode node, boolean mostSpecific)
     {
     }
 
@@ -1869,13 +1881,13 @@ public class BsjTypedNodeNoOpVisitor implements BsjTypedNodeVisitor
     }
 
     /**
-     * Stops a visit for nodes of type BlockStatementMetaprogramNode.
+     * Stops a visit for nodes of type BlockStatementMetaprogramAnchorNode.
      * @param node The node being visited.
      * @param mostSpecific <code>true</code> if this is the most specific call
      *                     which can be made for this node; <code>false</code>
      *                     otherwise.
      */
-    public void visitBlockStatementMetaprogramNodeStop(BlockStatementMetaprogramNode node, boolean mostSpecific)
+    public void visitBlockStatementMetaprogramAnchorNodeStop(BlockStatementMetaprogramAnchorNode node, boolean mostSpecific)
     {
     }
 
@@ -1984,13 +1996,13 @@ public class BsjTypedNodeNoOpVisitor implements BsjTypedNodeVisitor
     }
 
     /**
-     * Stops a visit for nodes of type ClassMemberMetaprogramNode.
+     * Stops a visit for nodes of type ClassMemberMetaprogramAnchorNode.
      * @param node The node being visited.
      * @param mostSpecific <code>true</code> if this is the most specific call
      *                     which can be made for this node; <code>false</code>
      *                     otherwise.
      */
-    public void visitClassMemberMetaprogramNodeStop(ClassMemberMetaprogramNode node, boolean mostSpecific)
+    public void visitClassMemberMetaprogramAnchorNodeStop(ClassMemberMetaprogramAnchorNode node, boolean mostSpecific)
     {
     }
 
@@ -2433,13 +2445,13 @@ public class BsjTypedNodeNoOpVisitor implements BsjTypedNodeVisitor
     }
 
     /**
-     * Stops a visit for nodes of type InterfaceMemberMetaprogramNode.
+     * Stops a visit for nodes of type InterfaceMemberMetaprogramAnchorNode.
      * @param node The node being visited.
      * @param mostSpecific <code>true</code> if this is the most specific call
      *                     which can be made for this node; <code>false</code>
      *                     otherwise.
      */
-    public void visitInterfaceMemberMetaprogramNodeStop(InterfaceMemberMetaprogramNode node, boolean mostSpecific)
+    public void visitInterfaceMemberMetaprogramAnchorNodeStop(InterfaceMemberMetaprogramAnchorNode node, boolean mostSpecific)
     {
     }
 
@@ -2523,10 +2535,21 @@ public class BsjTypedNodeNoOpVisitor implements BsjTypedNodeVisitor
     }
 
     /**
-     * Stops a visit for nodes of type MetaprogramNode.
+     * Stops a visit for nodes of type MetaprogramAnchorNode.
      * @param node The node being visited.
      */
-    public void visitMetaprogramNodeStop(MetaprogramNode<?> node)
+    public void visitMetaprogramAnchorNodeStop(MetaprogramAnchorNode<?> node)
+    {
+    }
+
+    /**
+     * Stops a visit for nodes of type MetaprogramNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitMetaprogramNodeStop(MetaprogramNode node, boolean mostSpecific)
     {
     }
 
@@ -2883,13 +2906,13 @@ public class BsjTypedNodeNoOpVisitor implements BsjTypedNodeVisitor
     }
 
     /**
-     * Stops a visit for nodes of type TopLevelMetaprogramNode.
+     * Stops a visit for nodes of type TopLevelMetaprogramAnchorNode.
      * @param node The node being visited.
      * @param mostSpecific <code>true</code> if this is the most specific call
      *                     which can be made for this node; <code>false</code>
      *                     otherwise.
      */
-    public void visitTopLevelMetaprogramNodeStop(TopLevelMetaprogramNode node, boolean mostSpecific)
+    public void visitTopLevelMetaprogramAnchorNodeStop(TopLevelMetaprogramAnchorNode node, boolean mostSpecific)
     {
     }
 

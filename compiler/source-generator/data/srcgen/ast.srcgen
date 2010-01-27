@@ -1467,45 +1467,50 @@ WildcardTypeNode :: Node + TypeArgumentNode
 
 ### Metaprogram Nodes #################################################################################################
 
-# TODO: more info, such as explicit dependencies, imports, etc. (once syntax is available)
-MetaprogramNode<T extends Node>* :: Node
+MetaprogramAnchorNode<T extends Node>* :: Node
     @props
     replacement+            T                                           | the replacement node for this metaprogram
+    metaprogram             MetaprogramNode                             | the metaprogram on this node
+    @docs
+        The replacement field on this node is used to indicate the node with which this node will be replaced once the
+        execution of this metaprogram terminates.  This is initially defaulted to a no-op.
+
+# TODO: more info, such as explicit dependencies, imports, etc. (once syntax is available)
+MetaprogramNode :: Node
+    @props
     body                    ListNode<BlockStatementNode>                | the list of statements in the metaprogram's body
     @docs
         A node for metaprograms, as in
         <pre>
         [: <i>statement...</i> :]
         </pre>
-        The replacement field on this node is used to indicate the node with which this node will be replaced once the
-        execution of this metaprogram terminates.  This is initially defaulted to a no-op.
 
 # All metaprograms which replace with void type declarations are here for sake of convenience
 !arg replacement=makeVoidTypeDeclarationNode()
 
-AnnotationMemberMetaprogramNode :: MetaprogramNode<AnnotationMemberNode> + AnnotationMemberNode
+AnnotationMemberMetaprogramAnchorNode :: MetaprogramAnchorNode<AnnotationMemberNode> + AnnotationMemberNode
     @docs
         A node representing a metaprogram as an annotation member.
 
-AnonymousClassMemberMetaprogramNode :: MetaprogramNode<AnonymousClassMemberNode> + AnonymousClassMemberNode
+AnonymousClassMemberMetaprogramAnchorNode :: MetaprogramAnchorNode<AnonymousClassMemberNode> + AnonymousClassMemberNode
     @docs
         A node representing a metaprogram as a class member.
 
-ClassMemberMetaprogramNode :: MetaprogramNode<ClassMemberNode> + ClassMemberNode
+ClassMemberMetaprogramAnchorNode :: MetaprogramAnchorNode<ClassMemberNode> + ClassMemberNode
     @docs
         A node representing a metaprogram as a class member.
 
-InterfaceMemberMetaprogramNode :: MetaprogramNode<InterfaceMemberNode> + InterfaceMemberNode
+InterfaceMemberMetaprogramAnchorNode :: MetaprogramAnchorNode<InterfaceMemberNode> + InterfaceMemberNode
     @docs
         A node representing a metaprogram as an interface member.
 
-TopLevelMetaprogramNode :: MetaprogramNode<TypeDeclarationNode>
+TopLevelMetaprogramAnchorNode :: MetaprogramAnchorNode<TypeDeclarationNode>
     @docs
         A node representing a metaprogram found at the top level of a source file.
 
 !arg replacement=makeVoidStatementNode()
         
-BlockStatementMetaprogramNode :: MetaprogramNode<BlockStatementNode> + BlockStatementNode
+BlockStatementMetaprogramAnchorNode :: MetaprogramAnchorNode<BlockStatementNode> + BlockStatementNode
     @docs
         A node representing a metaprogram as a block statement.
 

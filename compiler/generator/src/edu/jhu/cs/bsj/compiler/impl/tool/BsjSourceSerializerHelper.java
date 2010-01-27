@@ -7,13 +7,14 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.PrimitiveType;
 import edu.jhu.cs.bsj.compiler.ast.UnaryOperator;
 import edu.jhu.cs.bsj.compiler.ast.node.*;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.AnnotationMemberMetaprogramNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.AnonymousClassMemberMetaprogramNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.BlockStatementMetaprogramNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.ClassMemberMetaprogramNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.AnnotationMemberMetaprogramAnchorNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.AnonymousClassMemberMetaprogramAnchorNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.BlockStatementMetaprogramAnchorNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.ClassMemberMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.CodeLiteralNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.InterfaceMemberMetaprogramNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.TopLevelMetaprogramNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.InterfaceMemberMetaprogramAnchorNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.TopLevelMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.impl.utils.PrependablePrintStream;
 
 public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePrintStream, Void>
@@ -1442,16 +1443,9 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
     // =========================== Metaprogram Nodes ==========================
     // ========================================================================
     // TODO: what do we do about this?
-        
+    
     @Override
-	public Void executeAnnotationMemberMetaprogramNode(AnnotationMemberMetaprogramNode node, PrependablePrintStream p)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Void executeAnonymousClassMemberMetaprogramNode(AnonymousClassMemberMetaprogramNode node,
+	public Void executeAnnotationMemberMetaprogramAnchorNode(AnnotationMemberMetaprogramAnchorNode node,
 			PrependablePrintStream p)
 	{
 		// TODO Auto-generated method stub
@@ -1459,28 +1453,45 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	}
 
 	@Override
-	public Void executeBlockStatementMetaprogramNode(BlockStatementMetaprogramNode node, PrependablePrintStream p)
+	public Void executeAnonymousClassMemberMetaprogramAnchorNode(AnonymousClassMemberMetaprogramAnchorNode node,
+			PrependablePrintStream p)
 	{
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Void executeClassMemberMetaprogramNode(ClassMemberMetaprogramNode node, PrependablePrintStream p)
+	public Void executeBlockStatementMetaprogramAnchorNode(BlockStatementMetaprogramAnchorNode node,
+			PrependablePrintStream p)
 	{
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Void executeInterfaceMemberMetaprogramNode(InterfaceMemberMetaprogramNode node, PrependablePrintStream p)
+	public Void executeClassMemberMetaprogramAnchorNode(ClassMemberMetaprogramAnchorNode node, PrependablePrintStream p)
 	{
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Void executeTopLevelMetaprogramNode(TopLevelMetaprogramNode node, PrependablePrintStream p)
+	public Void executeInterfaceMemberMetaprogramAnchorNode(InterfaceMemberMetaprogramAnchorNode node,
+			PrependablePrintStream p)
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Void executeMetaprogramNode(MetaprogramNode node, PrependablePrintStream p)
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Void executeTopLevelMetaprogramAnchorNode(TopLevelMetaprogramAnchorNode node, PrependablePrintStream p)
 	{
 		// TODO Auto-generated method stub
 		return null;
@@ -1516,7 +1527,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
         p.print(end);
     }
     
-    protected String accessModifierToString(AccessModifier modifier)
+	protected String accessModifierToString(AccessModifier modifier)
     {
         if (modifier == null)
         {

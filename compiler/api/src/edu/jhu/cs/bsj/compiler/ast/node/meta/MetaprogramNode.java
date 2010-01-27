@@ -11,18 +11,10 @@ import edu.jhu.cs.bsj.compiler.ast.node.Node;
  * <pre>
  * [: <i>statement...</i> :]
  * </pre>
- * The replacement field on this node is used to indicate the node with which this node will be replaced once the
- * execution of this metaprogram terminates.  This is initially defaulted to a no-op.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public interface MetaprogramNode<T extends Node> extends Node
+public interface MetaprogramNode extends Node
 {
-    /**
-     * Gets the replacement node for this metaprogram.
-     * @return The replacement node for this metaprogram.
-     */
-    public T getReplacement();
-
     /**
      * Gets the list of statements in the metaprogram's body.
      * @return The list of statements in the metaprogram's body.
