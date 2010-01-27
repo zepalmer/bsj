@@ -479,9 +479,9 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
             node.getConstructorInvocation().executeOperation(this, p);
             p.print(";\n");
         }
-        handleListNode(node.getStatements(), "", ";\n", ";\n", p, true);
+        handleListNode(node.getStatements(), "", "\n", "\n", p, true);
         p.decPrependCount();
-        p.print("}\n");
+        p.print("}");
         return null;
     }
 
@@ -956,8 +956,18 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
     public Void executeMethodInvocationByNameNode(MethodInvocationByNameNode node, PrependablePrintStream p)
     {
     	//TODO insert typeArgs inside of name (ie <code>x.<T>foo();</code>)
-    	handleListNode(node.getTypeArguments(), "<", ", ", ">", p, true);
-    	node.getName().executeOperation(this, p);
+    	if (node.getName() instanceof QualifiedNameNode)
+    	{
+            ((QualifiedNameNode)node.getName()).getBase().executeOperation(this, p);
+            p.print('.');      
+            handleListNode(node.getTypeArguments(), "<", ", ", ">", p, true);
+            ((QualifiedNameNode)node.getName()).getIdentifier().executeOperation(this, p);
+    	}
+    	else
+    	{
+        	handleListNode(node.getTypeArguments(), "<", ", ", ">", p, true);    	
+        	node.getName().executeOperation(this, p);
+    	}
     	handleListNode(node.getArguments(), "(", ", ", ")", p, false);
         return null;
     }
