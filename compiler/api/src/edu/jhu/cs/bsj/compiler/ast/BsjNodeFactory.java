@@ -5,14 +5,10 @@ import java.util.List;
 import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.node.*;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.AnnotationMemberMetaprogramAnchorNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.AnonymousClassMemberMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.BlockStatementMetaprogramAnchorNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.ClassMemberMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.CodeLiteralNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.InterfaceMemberMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.TopLevelMetaprogramAnchorNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.TypeDeclarationMetaprogramAnchorNode;
 
 /**
  * This interface is implemented by any object which can act as a factory for BSJ nodes.  It
@@ -202,6 +198,12 @@ public interface BsjNodeFactory
             UnparameterizedTypeNode type);
 
     /**
+     * Creates a TypeDeclarationMetaprogramAnchorNode.
+     */
+    public TypeDeclarationMetaprogramAnchorNode makeTypeDeclarationMetaprogramAnchorNode(
+            MetaprogramNode metaprogram);
+
+    /**
      * Creates a EnumDeclarationNode.
      */
     public EnumDeclarationNode makeEnumDeclarationNode(
@@ -212,22 +214,10 @@ public interface BsjNodeFactory
             JavadocNode javadoc);
 
     /**
-     * Creates a TopLevelMetaprogramAnchorNode.
-     */
-    public TopLevelMetaprogramAnchorNode makeTopLevelMetaprogramAnchorNode(
-            MetaprogramNode metaprogram);
-
-    /**
      * Creates a VoidTypeNode.
      */
     public VoidTypeNode makeVoidTypeNode(
 );
-
-    /**
-     * Creates a ClassMemberMetaprogramAnchorNode.
-     */
-    public ClassMemberMetaprogramAnchorNode makeClassMemberMetaprogramAnchorNode(
-            MetaprogramNode metaprogram);
 
     /**
      * Creates a VariableDeclarationNode.
@@ -280,12 +270,6 @@ public interface BsjNodeFactory
             IdentifierNode identifier);
 
     /**
-     * Creates a AnonymousClassMemberMetaprogramAnchorNode.
-     */
-    public AnonymousClassMemberMetaprogramAnchorNode makeAnonymousClassMemberMetaprogramAnchorNode(
-            MetaprogramNode metaprogram);
-
-    /**
      * Creates a ThrowNode.
      */
     public ThrowNode makeThrowNode(
@@ -298,12 +282,6 @@ public interface BsjNodeFactory
             AccessModifier access,
             boolean strictfpFlag,
             ListNode<AnnotationNode> annotations);
-
-    /**
-     * Creates a AnnotationMemberMetaprogramAnchorNode.
-     */
-    public AnnotationMemberMetaprogramAnchorNode makeAnnotationMemberMetaprogramAnchorNode(
-            MetaprogramNode metaprogram);
 
     /**
      * Creates a CatchNode.
@@ -342,12 +320,6 @@ public interface BsjNodeFactory
             ListNode<TypeArgumentNode> constructorTypeArguments,
             ListNode<ExpressionNode> arguments,
             AnonymousClassBodyNode body);
-
-    /**
-     * Creates a InterfaceMemberMetaprogramAnchorNode.
-     */
-    public InterfaceMemberMetaprogramAnchorNode makeInterfaceMemberMetaprogramAnchorNode(
-            MetaprogramNode metaprogram);
 
     /**
      * Creates a TypeCastNode.

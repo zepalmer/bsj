@@ -3,14 +3,10 @@ package edu.jhu.cs.bsj.compiler.ast;
 import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.node.*;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.AnnotationMemberMetaprogramAnchorNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.AnonymousClassMemberMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.BlockStatementMetaprogramAnchorNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.ClassMemberMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.CodeLiteralNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.InterfaceMemberMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.TopLevelMetaprogramAnchorNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.TypeDeclarationMetaprogramAnchorNode;
 
 /**
  * This interface specifies an operation to be carried out on a node.  The purpose of this
@@ -215,6 +211,14 @@ public interface BsjNodeOperation<P,R>
     public R executeThisNode(ThisNode node, P p);
 
     /**
+     * Executes this operation against a TypeDeclarationMetaprogramAnchorNode.
+     * @param node The TypeDeclarationMetaprogramAnchorNode in question.
+     * @param p The parameter to use.
+     * @return The result of the operation.
+     */
+    public R executeTypeDeclarationMetaprogramAnchorNode(TypeDeclarationMetaprogramAnchorNode node, P p);
+
+    /**
      * Executes this operation against a EnumDeclarationNode.
      * @param node The EnumDeclarationNode in question.
      * @param p The parameter to use.
@@ -223,28 +227,12 @@ public interface BsjNodeOperation<P,R>
     public R executeEnumDeclarationNode(EnumDeclarationNode node, P p);
 
     /**
-     * Executes this operation against a TopLevelMetaprogramAnchorNode.
-     * @param node The TopLevelMetaprogramAnchorNode in question.
-     * @param p The parameter to use.
-     * @return The result of the operation.
-     */
-    public R executeTopLevelMetaprogramAnchorNode(TopLevelMetaprogramAnchorNode node, P p);
-
-    /**
      * Executes this operation against a VoidTypeNode.
      * @param node The VoidTypeNode in question.
      * @param p The parameter to use.
      * @return The result of the operation.
      */
     public R executeVoidTypeNode(VoidTypeNode node, P p);
-
-    /**
-     * Executes this operation against a ClassMemberMetaprogramAnchorNode.
-     * @param node The ClassMemberMetaprogramAnchorNode in question.
-     * @param p The parameter to use.
-     * @return The result of the operation.
-     */
-    public R executeClassMemberMetaprogramAnchorNode(ClassMemberMetaprogramAnchorNode node, P p);
 
     /**
      * Executes this operation against a VariableDeclarationNode.
@@ -303,14 +291,6 @@ public interface BsjNodeOperation<P,R>
     public R executeSuperFieldAccessNode(SuperFieldAccessNode node, P p);
 
     /**
-     * Executes this operation against a AnonymousClassMemberMetaprogramAnchorNode.
-     * @param node The AnonymousClassMemberMetaprogramAnchorNode in question.
-     * @param p The parameter to use.
-     * @return The result of the operation.
-     */
-    public R executeAnonymousClassMemberMetaprogramAnchorNode(AnonymousClassMemberMetaprogramAnchorNode node, P p);
-
-    /**
      * Executes this operation against a ThrowNode.
      * @param node The ThrowNode in question.
      * @param p The parameter to use.
@@ -325,14 +305,6 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeEnumModifiersNode(EnumModifiersNode node, P p);
-
-    /**
-     * Executes this operation against a AnnotationMemberMetaprogramAnchorNode.
-     * @param node The AnnotationMemberMetaprogramAnchorNode in question.
-     * @param p The parameter to use.
-     * @return The result of the operation.
-     */
-    public R executeAnnotationMemberMetaprogramAnchorNode(AnnotationMemberMetaprogramAnchorNode node, P p);
 
     /**
      * Executes this operation against a CatchNode.
@@ -373,14 +345,6 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeQualifiedClassInstantiationNode(QualifiedClassInstantiationNode node, P p);
-
-    /**
-     * Executes this operation against a InterfaceMemberMetaprogramAnchorNode.
-     * @param node The InterfaceMemberMetaprogramAnchorNode in question.
-     * @param p The parameter to use.
-     * @return The result of the operation.
-     */
-    public R executeInterfaceMemberMetaprogramAnchorNode(InterfaceMemberMetaprogramAnchorNode node, P p);
 
     /**
      * Executes this operation against a TypeCastNode.

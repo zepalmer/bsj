@@ -4,14 +4,10 @@ import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.node.*;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.AnnotationMemberMetaprogramAnchorNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.AnonymousClassMemberMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.BlockStatementMetaprogramAnchorNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.ClassMemberMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.CodeLiteralNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.InterfaceMemberMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.TopLevelMetaprogramAnchorNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.TypeDeclarationMetaprogramAnchorNode;
 
 /**
  * This implementation of the BSJ node operation implements every method with a no-op.
@@ -280,6 +276,17 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
      * @param p Ignored.
      * @return <code>null</code>, always.
      */
+    public R executeTypeDeclarationMetaprogramAnchorNode(TypeDeclarationMetaprogramAnchorNode node, P p)
+    {
+        return null;
+    }
+
+    /**
+     * Performs no operation.
+     * @param node Ignored.
+     * @param p Ignored.
+     * @return <code>null</code>, always.
+     */
     public R executeEnumDeclarationNode(EnumDeclarationNode node, P p)
     {
         return null;
@@ -291,29 +298,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
      * @param p Ignored.
      * @return <code>null</code>, always.
      */
-    public R executeTopLevelMetaprogramAnchorNode(TopLevelMetaprogramAnchorNode node, P p)
-    {
-        return null;
-    }
-
-    /**
-     * Performs no operation.
-     * @param node Ignored.
-     * @param p Ignored.
-     * @return <code>null</code>, always.
-     */
     public R executeVoidTypeNode(VoidTypeNode node, P p)
-    {
-        return null;
-    }
-
-    /**
-     * Performs no operation.
-     * @param node Ignored.
-     * @param p Ignored.
-     * @return <code>null</code>, always.
-     */
-    public R executeClassMemberMetaprogramAnchorNode(ClassMemberMetaprogramAnchorNode node, P p)
     {
         return null;
     }
@@ -401,17 +386,6 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
      * @param p Ignored.
      * @return <code>null</code>, always.
      */
-    public R executeAnonymousClassMemberMetaprogramAnchorNode(AnonymousClassMemberMetaprogramAnchorNode node, P p)
-    {
-        return null;
-    }
-
-    /**
-     * Performs no operation.
-     * @param node Ignored.
-     * @param p Ignored.
-     * @return <code>null</code>, always.
-     */
     public R executeThrowNode(ThrowNode node, P p)
     {
         return null;
@@ -424,17 +398,6 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
      * @return <code>null</code>, always.
      */
     public R executeEnumModifiersNode(EnumModifiersNode node, P p)
-    {
-        return null;
-    }
-
-    /**
-     * Performs no operation.
-     * @param node Ignored.
-     * @param p Ignored.
-     * @return <code>null</code>, always.
-     */
-    public R executeAnnotationMemberMetaprogramAnchorNode(AnnotationMemberMetaprogramAnchorNode node, P p)
     {
         return null;
     }
@@ -490,17 +453,6 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
      * @return <code>null</code>, always.
      */
     public R executeQualifiedClassInstantiationNode(QualifiedClassInstantiationNode node, P p)
-    {
-        return null;
-    }
-
-    /**
-     * Performs no operation.
-     * @param node Ignored.
-     * @param p Ignored.
-     * @return <code>null</code>, always.
-     */
-    public R executeInterfaceMemberMetaprogramAnchorNode(InterfaceMemberMetaprogramAnchorNode node, P p)
     {
         return null;
     }

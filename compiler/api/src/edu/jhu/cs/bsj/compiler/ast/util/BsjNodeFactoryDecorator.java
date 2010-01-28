@@ -14,14 +14,10 @@ import edu.jhu.cs.bsj.compiler.ast.PrimitiveType;
 import edu.jhu.cs.bsj.compiler.ast.UnaryOperator;
 import edu.jhu.cs.bsj.compiler.ast.UnaryStatementOperator;
 import edu.jhu.cs.bsj.compiler.ast.node.*;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.AnnotationMemberMetaprogramAnchorNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.AnonymousClassMemberMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.BlockStatementMetaprogramAnchorNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.ClassMemberMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.CodeLiteralNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.InterfaceMemberMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.TopLevelMetaprogramAnchorNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.TypeDeclarationMetaprogramAnchorNode;
 
 /**
  * This class allows simple decoration of all node construction methods on a node factory.
@@ -401,6 +397,19 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     }
 
     /**
+     * Creates a TypeDeclarationMetaprogramAnchorNode.
+     */
+    @Override
+    public TypeDeclarationMetaprogramAnchorNode makeTypeDeclarationMetaprogramAnchorNode(
+            MetaprogramNode metaprogram)
+    {
+        this.before();
+        TypeDeclarationMetaprogramAnchorNode node = factory.makeTypeDeclarationMetaprogramAnchorNode(metaprogram);
+        this.after(node);
+        return node;
+    }
+
+    /**
      * Creates a EnumDeclarationNode.
      */
     @Override
@@ -418,19 +427,6 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     }
 
     /**
-     * Creates a TopLevelMetaprogramAnchorNode.
-     */
-    @Override
-    public TopLevelMetaprogramAnchorNode makeTopLevelMetaprogramAnchorNode(
-            MetaprogramNode metaprogram)
-    {
-        this.before();
-        TopLevelMetaprogramAnchorNode node = factory.makeTopLevelMetaprogramAnchorNode(metaprogram);
-        this.after(node);
-        return node;
-    }
-
-    /**
      * Creates a VoidTypeNode.
      */
     @Override
@@ -439,19 +435,6 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     {
         this.before();
         VoidTypeNode node = factory.makeVoidTypeNode();
-        this.after(node);
-        return node;
-    }
-
-    /**
-     * Creates a ClassMemberMetaprogramAnchorNode.
-     */
-    @Override
-    public ClassMemberMetaprogramAnchorNode makeClassMemberMetaprogramAnchorNode(
-            MetaprogramNode metaprogram)
-    {
-        this.before();
-        ClassMemberMetaprogramAnchorNode node = factory.makeClassMemberMetaprogramAnchorNode(metaprogram);
         this.after(node);
         return node;
     }
@@ -556,19 +539,6 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     }
 
     /**
-     * Creates a AnonymousClassMemberMetaprogramAnchorNode.
-     */
-    @Override
-    public AnonymousClassMemberMetaprogramAnchorNode makeAnonymousClassMemberMetaprogramAnchorNode(
-            MetaprogramNode metaprogram)
-    {
-        this.before();
-        AnonymousClassMemberMetaprogramAnchorNode node = factory.makeAnonymousClassMemberMetaprogramAnchorNode(metaprogram);
-        this.after(node);
-        return node;
-    }
-
-    /**
      * Creates a ThrowNode.
      */
     @Override
@@ -592,19 +562,6 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     {
         this.before();
         EnumModifiersNode node = factory.makeEnumModifiersNode(access, strictfpFlag, annotations);
-        this.after(node);
-        return node;
-    }
-
-    /**
-     * Creates a AnnotationMemberMetaprogramAnchorNode.
-     */
-    @Override
-    public AnnotationMemberMetaprogramAnchorNode makeAnnotationMemberMetaprogramAnchorNode(
-            MetaprogramNode metaprogram)
-    {
-        this.before();
-        AnnotationMemberMetaprogramAnchorNode node = factory.makeAnnotationMemberMetaprogramAnchorNode(metaprogram);
         this.after(node);
         return node;
     }
@@ -678,19 +635,6 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     {
         this.before();
         QualifiedClassInstantiationNode node = factory.makeQualifiedClassInstantiationNode(enclosingExpression, identifier, typeArguments, constructorTypeArguments, arguments, body);
-        this.after(node);
-        return node;
-    }
-
-    /**
-     * Creates a InterfaceMemberMetaprogramAnchorNode.
-     */
-    @Override
-    public InterfaceMemberMetaprogramAnchorNode makeInterfaceMemberMetaprogramAnchorNode(
-            MetaprogramNode metaprogram)
-    {
-        this.before();
-        InterfaceMemberMetaprogramAnchorNode node = factory.makeInterfaceMemberMetaprogramAnchorNode(metaprogram);
         this.after(node);
         return node;
     }

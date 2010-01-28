@@ -529,10 +529,10 @@ bsjMetaprogram returns [MetaprogramNode ret]
         }
     ;
 
-topLevelBsjMetaprogramAnchor returns [TopLevelMetaprogramAnchorNode ret]
+typeDeclarationBsjMetaprogramAnchor returns [TypeDeclarationMetaprogramAnchorNode ret]
         scope Rule;
         @init {
-            ruleStart("topLevelBsjMetaprogramAnchor");
+            ruleStart("typeDeclarationBsjMetaprogramAnchor");
         }
         @after {
             ruleStop();
@@ -540,69 +540,9 @@ topLevelBsjMetaprogramAnchor returns [TopLevelMetaprogramAnchorNode ret]
     :
         bsjMetaprogram
         {
-            $ret = factory.makeTopLevelMetaprogramAnchorNode($bsjMetaprogram.ret);
+            $ret = factory.makeTypeDeclarationMetaprogramAnchorNode($bsjMetaprogram.ret);
         }
     ;    
-
-classMemberBsjMetaprogramAnchor returns [ClassMemberMetaprogramAnchorNode ret]
-        scope Rule;
-        @init {
-            ruleStart("classMemberBsjMetaprogramAnchor");
-        }
-        @after {
-            ruleStop();
-        }
-    :
-        bsjMetaprogram
-        {
-            $ret = factory.makeClassMemberMetaprogramAnchorNode($bsjMetaprogram.ret);
-        }
-    ;    
-
-annotationMemberBsjMetaprogramAnchor returns [AnnotationMemberMetaprogramAnchorNode ret]
-        scope Rule;
-        @init {
-            ruleStart("annotationMemberBsjMetaprogramAnchor");
-        }
-        @after {
-            ruleStop();
-        }
-    :
-        bsjMetaprogram
-        {
-            $ret = factory.makeAnnotationMemberMetaprogramAnchorNode($bsjMetaprogram.ret);
-        }
-    ;
-
-anonymousClassMemberBsjMetaprogramAnchor returns [AnonymousClassMemberMetaprogramAnchorNode ret]
-        scope Rule;
-        @init {
-            ruleStart("anonymousClassMemberBsjMetaprogramAnchor");
-        }
-        @after {
-            ruleStop();
-        }
-    :
-        bsjMetaprogram
-        {
-            $ret = factory.makeAnonymousClassMemberMetaprogramAnchorNode($bsjMetaprogram.ret);
-        }
-    ;
-
-interfaceMemberBsjMetaprogramAnchor returns [InterfaceMemberMetaprogramAnchorNode ret]
-        scope Rule;
-        @init {
-            ruleStart("interfaceMemberBsjMetaprogramAnchor");
-        }
-        @after {
-            ruleStop();
-        }
-    :
-        bsjMetaprogram
-        {
-            $ret = factory.makeInterfaceMemberMetaprogramAnchorNode($bsjMetaprogram.ret);
-        }
-    ;
 
 blockStatementBsjMetaprogramAnchor returns [BlockStatementMetaprogramAnchorNode ret]
         scope Rule;
@@ -795,6 +735,11 @@ typeDeclaration returns [TypeDeclarationNode ret]
         voidTypeDeclaration
         {
             $ret = $voidTypeDeclaration.ret;
+        }
+    |
+        typeDeclarationBsjMetaprogramAnchor
+        {
+            $ret = $typeDeclarationBsjMetaprogramAnchor.ret;
         }
     ;
 
@@ -1593,6 +1538,11 @@ classBodyDeclaration returns [ClassMemberNode ret]
         {
             $ret = $memberDecl.ret;
         }
+    |
+        typeDeclarationBsjMetaprogramAnchor
+        {
+            $ret = $typeDeclarationBsjMetaprogramAnchor.ret;
+        }
     ;
 
 anonymousClassBodyDeclaration returns [AnonymousClassMemberNode ret]
@@ -1617,6 +1567,11 @@ anonymousClassBodyDeclaration returns [AnonymousClassMemberNode ret]
         memberDecl
         {
             $ret = $memberDecl.ret;
+        }
+    |
+        typeDeclarationBsjMetaprogramAnchor
+        {
+            $ret = $typeDeclarationBsjMetaprogramAnchor.ret;
         }
     ;
 
@@ -1863,6 +1818,11 @@ interfaceBodyDeclaration returns [InterfaceMemberNode ret]
         voidTypeDeclaration
         {
             $ret = $voidTypeDeclaration.ret;
+        }
+    |
+        typeDeclarationBsjMetaprogramAnchor
+        {
+            $ret = $typeDeclarationBsjMetaprogramAnchor.ret;
         }
     ;
 
@@ -2626,6 +2586,11 @@ annotationTypeElementDeclaration returns [AnnotationMemberNode ret]
         {
             $ret = $voidTypeDeclaration.ret;
         }
+    |
+        typeDeclarationBsjMetaprogramAnchor
+        {
+            $ret = $typeDeclarationBsjMetaprogramAnchor.ret;
+        }
     ;
 
 annotationMethodDeclaration returns [AnnotationMethodDeclarationNode ret]
@@ -2719,6 +2684,11 @@ blockStatement returns [BlockStatementNode ret]
         statement
         {
             $ret = $statement.ret;
+        }
+    |
+        blockStatementBsjMetaprogramAnchor
+        {
+            $ret = $blockStatementBsjMetaprogramAnchor.ret;
         }        
     ;
 

@@ -1485,34 +1485,17 @@ MetaprogramNode :: Node
         [: <i>statement...</i> :]
         </pre>
 
-# All metaprograms which replace with void type declarations are here for sake of convenience
-!arg replacement=makeVoidTypeDeclarationNode()
-
-AnnotationMemberMetaprogramAnchorNode :: MetaprogramAnchorNode<AnnotationMemberNode> + AnnotationMemberNode
-    @docs
-        A node representing a metaprogram as an annotation member.
-
-AnonymousClassMemberMetaprogramAnchorNode :: MetaprogramAnchorNode<AnonymousClassMemberNode> + AnonymousClassMemberNode
-    @docs
-        A node representing a metaprogram as a class member.
-
-ClassMemberMetaprogramAnchorNode :: MetaprogramAnchorNode<ClassMemberNode> + ClassMemberNode
-    @docs
-        A node representing a metaprogram as a class member.
-
-InterfaceMemberMetaprogramAnchorNode :: MetaprogramAnchorNode<InterfaceMemberNode> + InterfaceMemberNode
-    @docs
-        A node representing a metaprogram as an interface member.
-
-TopLevelMetaprogramAnchorNode :: MetaprogramAnchorNode<TypeDeclarationNode>
-    @docs
-        A node representing a metaprogram found at the top level of a source file.
-
 !arg replacement=makeVoidStatementNode()
         
 BlockStatementMetaprogramAnchorNode :: MetaprogramAnchorNode<BlockStatementNode> + BlockStatementNode
     @docs
         A node representing a metaprogram as a block statement.
+
+!arg replacement=makeVoidTypeDeclarationNode()
+
+TypeDeclarationMetaprogramAnchorNode :: MetaprogramAnchorNode<TypeDeclarationNode> + TypeDeclarationNode
+    @docs
+        A node representing a metaprogram found at the top level of a source file.
 
 !arg replacement=
 

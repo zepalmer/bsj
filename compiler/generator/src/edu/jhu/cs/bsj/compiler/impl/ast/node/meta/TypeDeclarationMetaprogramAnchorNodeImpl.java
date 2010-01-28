@@ -10,13 +10,13 @@ import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.TopLevelMetaprogramAnchorNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.TypeDeclarationMetaprogramAnchorNode;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public class TopLevelMetaprogramAnchorNodeImpl extends MetaprogramAnchorNodeImpl<TypeDeclarationNode> implements TopLevelMetaprogramAnchorNode
+public class TypeDeclarationMetaprogramAnchorNodeImpl extends MetaprogramAnchorNodeImpl<TypeDeclarationNode> implements TypeDeclarationMetaprogramAnchorNode
 {
     /** General constructor. */
-    public TopLevelMetaprogramAnchorNodeImpl(
+    public TypeDeclarationMetaprogramAnchorNodeImpl(
             TypeDeclarationNode replacement,
             MetaprogramNode metaprogram,
             BsjSourceLocation startLocation,
@@ -55,15 +55,17 @@ public class TopLevelMetaprogramAnchorNodeImpl extends MetaprogramAnchorNodeImpl
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
         visitor.visitStartBegin(this);
-        visitor.visitTopLevelMetaprogramAnchorNodeStart(this, true);
+        visitor.visitTypeDeclarationMetaprogramAnchorNodeStart(this, true);
         visitor.visitMetaprogramAnchorNodeStart(this);
         visitor.visitNodeStart(this);
+        visitor.visitTypeDeclarationNodeStart(this);
         visitor.visitStartEnd(this);
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
+        visitor.visitTypeDeclarationNodeStop(this);
         visitor.visitNodeStart(this);
         visitor.visitMetaprogramAnchorNodeStart(this);
-        visitor.visitTopLevelMetaprogramAnchorNodeStart(this, true);
+        visitor.visitTypeDeclarationMetaprogramAnchorNodeStart(this, true);
         visitor.visitStopEnd(this);
     }
 
@@ -112,6 +114,6 @@ public class TopLevelMetaprogramAnchorNodeImpl extends MetaprogramAnchorNodeImpl
     @Override
     public <P,R> R executeOperation(BsjNodeOperation<P,R> operation, P p)
     {
-        return operation.executeTopLevelMetaprogramAnchorNode(this, p);
+        return operation.executeTypeDeclarationMetaprogramAnchorNode(this, p);
     }
 }

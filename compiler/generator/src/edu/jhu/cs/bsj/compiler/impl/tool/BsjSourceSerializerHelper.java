@@ -7,14 +7,10 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.PrimitiveType;
 import edu.jhu.cs.bsj.compiler.ast.UnaryOperator;
 import edu.jhu.cs.bsj.compiler.ast.node.*;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.AnnotationMemberMetaprogramAnchorNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.AnonymousClassMemberMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.BlockStatementMetaprogramAnchorNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.ClassMemberMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.CodeLiteralNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.InterfaceMemberMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.TopLevelMetaprogramAnchorNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.TypeDeclarationMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.impl.utils.PrependablePrintStream;
 
 public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePrintStream, Void>
@@ -1444,39 +1440,8 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
     // ========================================================================
     // TODO: what do we do about this?
     
-    @Override
-	public Void executeAnnotationMemberMetaprogramAnchorNode(AnnotationMemberMetaprogramAnchorNode node,
-			PrependablePrintStream p)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Void executeAnonymousClassMemberMetaprogramAnchorNode(AnonymousClassMemberMetaprogramAnchorNode node,
-			PrependablePrintStream p)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 	@Override
 	public Void executeBlockStatementMetaprogramAnchorNode(BlockStatementMetaprogramAnchorNode node,
-			PrependablePrintStream p)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Void executeClassMemberMetaprogramAnchorNode(ClassMemberMetaprogramAnchorNode node, PrependablePrintStream p)
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Void executeInterfaceMemberMetaprogramAnchorNode(InterfaceMemberMetaprogramAnchorNode node,
 			PrependablePrintStream p)
 	{
 		// TODO Auto-generated method stub
@@ -1491,7 +1456,8 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	}
 
 	@Override
-	public Void executeTopLevelMetaprogramAnchorNode(TopLevelMetaprogramAnchorNode node, PrependablePrintStream p)
+	public Void executeTypeDeclarationMetaprogramAnchorNode(TypeDeclarationMetaprogramAnchorNode node,
+			PrependablePrintStream p)
 	{
 		// TODO Auto-generated method stub
 		return null;

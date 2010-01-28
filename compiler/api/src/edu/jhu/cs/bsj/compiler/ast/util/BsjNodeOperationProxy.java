@@ -4,14 +4,10 @@ import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.node.*;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.AnnotationMemberMetaprogramAnchorNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.AnonymousClassMemberMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.BlockStatementMetaprogramAnchorNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.ClassMemberMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.CodeLiteralNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.InterfaceMemberMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.TopLevelMetaprogramAnchorNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.TypeDeclarationMetaprogramAnchorNode;
 
 /**
  * This implementation of the BSJ node operation decorates every method of a backing
@@ -361,6 +357,19 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
      * @param p The value to pass through the proxy filter and into the backing operation.
      * @return The result of this operation (after being passed through the proxy filter).
      */
+    public RNew executeTypeDeclarationMetaprogramAnchorNode(TypeDeclarationMetaprogramAnchorNode node, PNew p)
+    {
+        POrig porig = before(p);
+        ROrig rorig = this.backingOp.executeTypeDeclarationMetaprogramAnchorNode(node, porig);
+        return after(rorig);
+    }
+
+    /**
+     * Decorates this operation, turning it over to the backing operation.
+     * @param node The node to affect.
+     * @param p The value to pass through the proxy filter and into the backing operation.
+     * @return The result of this operation (after being passed through the proxy filter).
+     */
     public RNew executeEnumDeclarationNode(EnumDeclarationNode node, PNew p)
     {
         POrig porig = before(p);
@@ -374,36 +383,10 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
      * @param p The value to pass through the proxy filter and into the backing operation.
      * @return The result of this operation (after being passed through the proxy filter).
      */
-    public RNew executeTopLevelMetaprogramAnchorNode(TopLevelMetaprogramAnchorNode node, PNew p)
-    {
-        POrig porig = before(p);
-        ROrig rorig = this.backingOp.executeTopLevelMetaprogramAnchorNode(node, porig);
-        return after(rorig);
-    }
-
-    /**
-     * Decorates this operation, turning it over to the backing operation.
-     * @param node The node to affect.
-     * @param p The value to pass through the proxy filter and into the backing operation.
-     * @return The result of this operation (after being passed through the proxy filter).
-     */
     public RNew executeVoidTypeNode(VoidTypeNode node, PNew p)
     {
         POrig porig = before(p);
         ROrig rorig = this.backingOp.executeVoidTypeNode(node, porig);
-        return after(rorig);
-    }
-
-    /**
-     * Decorates this operation, turning it over to the backing operation.
-     * @param node The node to affect.
-     * @param p The value to pass through the proxy filter and into the backing operation.
-     * @return The result of this operation (after being passed through the proxy filter).
-     */
-    public RNew executeClassMemberMetaprogramAnchorNode(ClassMemberMetaprogramAnchorNode node, PNew p)
-    {
-        POrig porig = before(p);
-        ROrig rorig = this.backingOp.executeClassMemberMetaprogramAnchorNode(node, porig);
         return after(rorig);
     }
 
@@ -504,19 +487,6 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
      * @param p The value to pass through the proxy filter and into the backing operation.
      * @return The result of this operation (after being passed through the proxy filter).
      */
-    public RNew executeAnonymousClassMemberMetaprogramAnchorNode(AnonymousClassMemberMetaprogramAnchorNode node, PNew p)
-    {
-        POrig porig = before(p);
-        ROrig rorig = this.backingOp.executeAnonymousClassMemberMetaprogramAnchorNode(node, porig);
-        return after(rorig);
-    }
-
-    /**
-     * Decorates this operation, turning it over to the backing operation.
-     * @param node The node to affect.
-     * @param p The value to pass through the proxy filter and into the backing operation.
-     * @return The result of this operation (after being passed through the proxy filter).
-     */
     public RNew executeThrowNode(ThrowNode node, PNew p)
     {
         POrig porig = before(p);
@@ -534,19 +504,6 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
     {
         POrig porig = before(p);
         ROrig rorig = this.backingOp.executeEnumModifiersNode(node, porig);
-        return after(rorig);
-    }
-
-    /**
-     * Decorates this operation, turning it over to the backing operation.
-     * @param node The node to affect.
-     * @param p The value to pass through the proxy filter and into the backing operation.
-     * @return The result of this operation (after being passed through the proxy filter).
-     */
-    public RNew executeAnnotationMemberMetaprogramAnchorNode(AnnotationMemberMetaprogramAnchorNode node, PNew p)
-    {
-        POrig porig = before(p);
-        ROrig rorig = this.backingOp.executeAnnotationMemberMetaprogramAnchorNode(node, porig);
         return after(rorig);
     }
 
@@ -612,19 +569,6 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
     {
         POrig porig = before(p);
         ROrig rorig = this.backingOp.executeQualifiedClassInstantiationNode(node, porig);
-        return after(rorig);
-    }
-
-    /**
-     * Decorates this operation, turning it over to the backing operation.
-     * @param node The node to affect.
-     * @param p The value to pass through the proxy filter and into the backing operation.
-     * @return The result of this operation (after being passed through the proxy filter).
-     */
-    public RNew executeInterfaceMemberMetaprogramAnchorNode(InterfaceMemberMetaprogramAnchorNode node, PNew p)
-    {
-        POrig porig = before(p);
-        ROrig rorig = this.backingOp.executeInterfaceMemberMetaprogramAnchorNode(node, porig);
         return after(rorig);
     }
 

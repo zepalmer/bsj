@@ -14,23 +14,15 @@ import edu.jhu.cs.bsj.compiler.ast.PrimitiveType;
 import edu.jhu.cs.bsj.compiler.ast.UnaryOperator;
 import edu.jhu.cs.bsj.compiler.ast.UnaryStatementOperator;
 import edu.jhu.cs.bsj.compiler.ast.node.*;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.AnnotationMemberMetaprogramAnchorNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.AnonymousClassMemberMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.BlockStatementMetaprogramAnchorNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.ClassMemberMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.CodeLiteralNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.InterfaceMemberMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.TopLevelMetaprogramAnchorNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.TypeDeclarationMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.*;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.meta.AnnotationMemberMetaprogramAnchorNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.meta.AnonymousClassMemberMetaprogramAnchorNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.meta.BlockStatementMetaprogramAnchorNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.meta.ClassMemberMetaprogramAnchorNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.meta.CodeLiteralNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.meta.InterfaceMemberMetaprogramAnchorNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.meta.MetaprogramNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.meta.TopLevelMetaprogramAnchorNodeImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.node.meta.TypeDeclarationMetaprogramAnchorNodeImpl;
 
 /**
  * This class acts as a BSJ node factory for the standard BSJ compiler.
@@ -347,6 +339,17 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
 
     /**
+     * Creates a TypeDeclarationMetaprogramAnchorNode.
+     */
+    @Override
+    public TypeDeclarationMetaprogramAnchorNode makeTypeDeclarationMetaprogramAnchorNode(
+            MetaprogramNode metaprogram)
+    {
+        TypeDeclarationMetaprogramAnchorNode ret = new TypeDeclarationMetaprogramAnchorNodeImpl(makeVoidTypeDeclarationNode(), metaprogram, startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
      * Creates a EnumDeclarationNode.
      */
     @Override
@@ -362,17 +365,6 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
 
     /**
-     * Creates a TopLevelMetaprogramAnchorNode.
-     */
-    @Override
-    public TopLevelMetaprogramAnchorNode makeTopLevelMetaprogramAnchorNode(
-            MetaprogramNode metaprogram)
-    {
-        TopLevelMetaprogramAnchorNode ret = new TopLevelMetaprogramAnchorNodeImpl(makeVoidTypeDeclarationNode(), metaprogram, startLocation, stopLocation);
-        return ret;
-    }
-
-    /**
      * Creates a VoidTypeNode.
      */
     @Override
@@ -380,17 +372,6 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
 )
     {
         VoidTypeNode ret = new VoidTypeNodeImpl(startLocation, stopLocation);
-        return ret;
-    }
-
-    /**
-     * Creates a ClassMemberMetaprogramAnchorNode.
-     */
-    @Override
-    public ClassMemberMetaprogramAnchorNode makeClassMemberMetaprogramAnchorNode(
-            MetaprogramNode metaprogram)
-    {
-        ClassMemberMetaprogramAnchorNode ret = new ClassMemberMetaprogramAnchorNodeImpl(makeVoidTypeDeclarationNode(), metaprogram, startLocation, stopLocation);
         return ret;
     }
 
@@ -480,17 +461,6 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
 
     /**
-     * Creates a AnonymousClassMemberMetaprogramAnchorNode.
-     */
-    @Override
-    public AnonymousClassMemberMetaprogramAnchorNode makeAnonymousClassMemberMetaprogramAnchorNode(
-            MetaprogramNode metaprogram)
-    {
-        AnonymousClassMemberMetaprogramAnchorNode ret = new AnonymousClassMemberMetaprogramAnchorNodeImpl(makeVoidTypeDeclarationNode(), metaprogram, startLocation, stopLocation);
-        return ret;
-    }
-
-    /**
      * Creates a ThrowNode.
      */
     @Override
@@ -511,17 +481,6 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ListNode<AnnotationNode> annotations)
     {
         EnumModifiersNode ret = new EnumModifiersNodeImpl(access, strictfpFlag, annotations, startLocation, stopLocation);
-        return ret;
-    }
-
-    /**
-     * Creates a AnnotationMemberMetaprogramAnchorNode.
-     */
-    @Override
-    public AnnotationMemberMetaprogramAnchorNode makeAnnotationMemberMetaprogramAnchorNode(
-            MetaprogramNode metaprogram)
-    {
-        AnnotationMemberMetaprogramAnchorNode ret = new AnnotationMemberMetaprogramAnchorNodeImpl(makeVoidTypeDeclarationNode(), metaprogram, startLocation, stopLocation);
         return ret;
     }
 
@@ -585,17 +544,6 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             AnonymousClassBodyNode body)
     {
         QualifiedClassInstantiationNode ret = new QualifiedClassInstantiationNodeImpl(enclosingExpression, identifier, typeArguments, constructorTypeArguments, arguments, body, startLocation, stopLocation);
-        return ret;
-    }
-
-    /**
-     * Creates a InterfaceMemberMetaprogramAnchorNode.
-     */
-    @Override
-    public InterfaceMemberMetaprogramAnchorNode makeInterfaceMemberMetaprogramAnchorNode(
-            MetaprogramNode metaprogram)
-    {
-        InterfaceMemberMetaprogramAnchorNode ret = new InterfaceMemberMetaprogramAnchorNodeImpl(makeVoidTypeDeclarationNode(), metaprogram, startLocation, stopLocation);
         return ret;
     }
 
