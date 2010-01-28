@@ -1444,14 +1444,21 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	public Void executeBlockStatementMetaprogramAnchorNode(BlockStatementMetaprogramAnchorNode node,
 			PrependablePrintStream p)
 	{
-		// TODO Auto-generated method stub
+		executeMetaprogramNode(node.getMetaprogram(), p);
 		return null;
 	}
 
 	@Override
 	public Void executeMetaprogramNode(MetaprogramNode node, PrependablePrintStream p)
 	{
-		// TODO Auto-generated method stub
+		p.println("[:");
+		p.incPrependCount();
+		for (BlockStatementNode blockStatementNode : node.getBody().getChildren())
+		{
+			blockStatementNode.executeOperation(this, p);
+		}
+		p.decPrependCount();
+		p.println(":]");
 		return null;
 	}
 
@@ -1459,7 +1466,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	public Void executeTypeDeclarationMetaprogramAnchorNode(TypeDeclarationMetaprogramAnchorNode node,
 			PrependablePrintStream p)
 	{
-		// TODO Auto-generated method stub
+		executeMetaprogramNode(node.getMetaprogram(), p);
 		return null;
 	}
 
