@@ -24,7 +24,7 @@ public class BsjJavaCompiler
     /**
      * @param args
      */
-    public static void main(String[] args)
+    public static void main(String[] args) throws Exception
     {
         JavaCompiler jc = ToolProvider.getSystemJavaCompiler();
         JavaFileManager sjfm = jc.getStandardFileManager(null, null, null);
@@ -32,8 +32,8 @@ public class BsjJavaCompiler
         
         String codeStr =
             "public class JoeClass {" +
-                "public void foo(){" +
-                    "System.out.println(\"Hello Joe!\");" +
+                "public String toString(){" +
+                    "return(\"Hello Joe!\");" +
                 "}" +
             "}";
         List<Location> locations = new ArrayList<Location>();
@@ -76,6 +76,9 @@ public class BsjJavaCompiler
             System.exit(1);            
         }
         System.out.println("Class has been successfully compiled");
+        
+        Object o = jfm.getClassLoader(StandardLocation.CLASS_OUTPUT).loadClass("JoeClass").newInstance();
+        System.out.println(o);
 
 //        URL[] urls = null;
 //        try

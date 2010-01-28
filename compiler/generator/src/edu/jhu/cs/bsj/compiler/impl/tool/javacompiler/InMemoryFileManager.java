@@ -22,15 +22,15 @@ import edu.jhu.cs.bsj.compiler.impl.tool.compiler.JavaFileManagerUtilities;
  */
 public class InMemoryFileManager implements JavaFileManager
 {
-    private Map<FileObjectTuple, FileObject> fileObjectMap;
-    private Map<JavaFileObjectTuple, JavaFileObject> javaFileObjectMap;
+    private Map<FileObjectTuple, ByteArrayJavaFileObject> fileObjectMap;
+    private Map<JavaFileObjectTuple, ByteArrayJavaFileObject> javaFileObjectMap;
     private List<Location> locations;
     private JavaFileManager fileManager;
 
     public InMemoryFileManager(JavaFileManager fileManager, List<Location> locations)
     {
-        fileObjectMap = new HashMap<FileObjectTuple, FileObject>();
-        javaFileObjectMap = new HashMap<JavaFileObjectTuple, JavaFileObject>();
+        fileObjectMap = new HashMap<FileObjectTuple, ByteArrayJavaFileObject>();
+        javaFileObjectMap = new HashMap<JavaFileObjectTuple, ByteArrayJavaFileObject>();
         this.locations = locations;
         this.fileManager = fileManager;
     }
@@ -48,7 +48,7 @@ public class InMemoryFileManager implements JavaFileManager
     }
 
     @Override
-    public ClassLoader getClassLoader(Location location)
+    public ClassLoader getClassLoader(final Location location)
     {
         // TODO Auto-generated method stub
         if (!locations.contains(location))
@@ -56,7 +56,19 @@ public class InMemoryFileManager implements JavaFileManager
             return fileManager.getClassLoader(location);       
         }
         
-        return null;
+        ClassLoader classLoader = new ClassLoader(getClass().getClassLoader())
+        {
+            @Override
+            protected Class<?> findClass(String name) throws ClassNotFoundException
+            {
+                JavaFileObjectTuple key = new JavaFileObjectTuple(
+                        location, name, Kind.CLASS);
+                ByteArrayJavaFileObject file = javaFileObjectMap.get(key);
+                return super.defineClass(name, file.getBytes(), 0, file.getBytes().length);
+            }
+        };
+        
+        return classLoader;
     }
 
     @Override
@@ -79,7 +91,7 @@ public class InMemoryFileManager implements JavaFileManager
             return fileManager.getFileForOutput(location, packageName, relativeName, sibling);         
         }
         
-        FileObject fileObject = null;
+        ByteArrayJavaFileObject fileObject = null;
         try
         {
             fileObject = new ByteArrayJavaFileObject(
@@ -90,7 +102,7 @@ public class InMemoryFileManager implements JavaFileManager
         } 
         catch (URISyntaxException e)
         {
-            throw new IOException(e.getMessage());
+            throw new IOException(e.getMessage(), e);
         }
 
         return fileObject;
@@ -120,7 +132,7 @@ public class InMemoryFileManager implements JavaFileManager
             return fileManager.getJavaFileForOutput(location, className, kind, sibling);            
         }
         
-        JavaFileObject javaFileObject = null;
+        ByteArrayJavaFileObject javaFileObject = null;
         try
         {
             javaFileObject = new ByteArrayJavaFileObject(className + kind.extension, kind);
@@ -128,7 +140,7 @@ public class InMemoryFileManager implements JavaFileManager
         } 
         catch (URISyntaxException e)
         {
-            throw new IOException(e.getMessage());
+            throw new IOException(e.getMessage(), e);
         }
 
         return javaFileObject;
@@ -161,7 +173,18 @@ public class InMemoryFileManager implements JavaFileManager
     @Override
     public boolean isSameFile(FileObject a, FileObject b)
     {
-        // TODO Auto-generated method stub
+        if (a instanceof ByteArrayJavaFileObject)
+        {
+            if (b instanceof ByteArrayJavaFileObject)
+            {
+                return a.toUri().equals(b.toUri());
+            }
+            else
+            {
+                return false;
+            }
+        }
+        
         return fileManager.isSameFile(a, b);
     }
 
