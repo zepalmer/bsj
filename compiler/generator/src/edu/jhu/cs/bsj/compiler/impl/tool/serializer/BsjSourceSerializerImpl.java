@@ -1,4 +1,4 @@
-package edu.jhu.cs.bsj.compiler.impl.tool;
+package edu.jhu.cs.bsj.compiler.impl.tool.serializer;
 
 import java.io.ByteArrayOutputStream;
 

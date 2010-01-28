@@ -1,4 +1,4 @@
-package edu.jhu.cs.bsj.compiler.impl.tool;
+package edu.jhu.cs.bsj.compiler.impl.tool.serializer;
 
 import edu.jhu.cs.bsj.compiler.ast.AccessModifier;
 import edu.jhu.cs.bsj.compiler.ast.AssignmentOperator;

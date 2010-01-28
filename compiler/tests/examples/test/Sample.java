@@ -11,7 +11,7 @@ import org.junit.Test;
 
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeFactoryImpl;
-import edu.jhu.cs.bsj.compiler.impl.tool.BsjSourceSerializerImpl;
+import edu.jhu.cs.bsj.compiler.impl.tool.serializer.BsjSourceSerializerImpl;
 import edu.jhu.cs.bsj.compiler.tool.parser.BsjParserImpl;
 
 

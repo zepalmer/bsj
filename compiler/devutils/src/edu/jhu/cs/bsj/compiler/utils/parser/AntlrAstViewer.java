@@ -43,7 +43,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.exception.BsjCompilerException;
 import edu.jhu.cs.bsj.compiler.exception.BsjCompositeCompilerException;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeFactoryImpl;
-import edu.jhu.cs.bsj.compiler.impl.tool.BsjSourceSerializerImpl;
+import edu.jhu.cs.bsj.compiler.impl.tool.serializer.BsjSourceSerializerImpl;
 import edu.jhu.cs.bsj.compiler.impl.utils.PrependablePrintStream;
 import edu.jhu.cs.bsj.compiler.tool.parser.BsjParserImpl;
 
