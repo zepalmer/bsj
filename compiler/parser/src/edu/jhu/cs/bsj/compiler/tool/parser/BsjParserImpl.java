@@ -52,7 +52,7 @@ public class BsjParserImpl
 		BsjAntlrLexer lexer = new BsjAntlrLexer(new ANTLRInputStream(is));
 		BsjAntlrParser parser = new BsjAntlrParser(new TokenRewriteStream(lexer));
 		parser.setFactory(factory);
-
+		
 		CompilationUnitNode compilationUnitNode;
 		try
 		{

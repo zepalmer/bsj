@@ -168,11 +168,23 @@ scope Rule {
     import edu.jhu.cs.bsj.compiler.exception.parser.*;
     
     import edu.jhu.cs.bsj.compiler.tool.parser.antlr.util.BsjAntlrParserUtils;
+    import edu.jhu.cs.bsj.compiler.tool.parser.antlr.util.BsjParserConfiguration;
 }
 
 @parser::members {
     // *** LOG4J **************************************************************
     private Logger logger = Logger.getLogger(this.getClass());
+    
+    // *** BSJ PARSING CONTROL ************************************************
+    /** The configuration of this parser. */
+    private BsjParserConfiguration configuration = BsjParserConfiguration.BSJ_1_0;
+    /**
+     * Changes the configuration of this parser.
+     */
+    public void setConfiguration(BsjParserConfiguration configuration)
+    {
+        this.configuration = configuration;
+    }
     
     // *** SOURCE LOCATION TRACKING *******************************************
     /** The current resource name to store in source locations. */
@@ -509,8 +521,6 @@ arrayTypeIndicator[TypeNode inType] returns [ArrayTypeNode ret]
  * ===========================================================================
  */
 
-// TODO: use the anchor rules in their appropriate places
-
 /* This rule parses a BSJ metaprogram. */
 bsjMetaprogram returns [MetaprogramNode ret]
         scope Rule;
@@ -737,7 +747,7 @@ typeDeclaration returns [TypeDeclarationNode ret]
             $ret = $voidTypeDeclaration.ret;
         }
     |
-        typeDeclarationBsjMetaprogramAnchor
+        {configuration.getMetaprogramsSupported()}?=> typeDeclarationBsjMetaprogramAnchor
         {
             $ret = $typeDeclarationBsjMetaprogramAnchor.ret;
         }
@@ -1539,7 +1549,7 @@ classBodyDeclaration returns [ClassMemberNode ret]
             $ret = $memberDecl.ret;
         }
     |
-        typeDeclarationBsjMetaprogramAnchor
+        {configuration.getMetaprogramsSupported()}?=> typeDeclarationBsjMetaprogramAnchor
         {
             $ret = $typeDeclarationBsjMetaprogramAnchor.ret;
         }
@@ -1569,7 +1579,7 @@ anonymousClassBodyDeclaration returns [AnonymousClassMemberNode ret]
             $ret = $memberDecl.ret;
         }
     |
-        typeDeclarationBsjMetaprogramAnchor
+        {configuration.getMetaprogramsSupported()}?=> typeDeclarationBsjMetaprogramAnchor
         {
             $ret = $typeDeclarationBsjMetaprogramAnchor.ret;
         }
@@ -1820,7 +1830,7 @@ interfaceBodyDeclaration returns [InterfaceMemberNode ret]
             $ret = $voidTypeDeclaration.ret;
         }
     |
-        typeDeclarationBsjMetaprogramAnchor
+        {configuration.getMetaprogramsSupported()}?=> typeDeclarationBsjMetaprogramAnchor
         {
             $ret = $typeDeclarationBsjMetaprogramAnchor.ret;
         }
@@ -2587,7 +2597,7 @@ annotationTypeElementDeclaration returns [AnnotationMemberNode ret]
             $ret = $voidTypeDeclaration.ret;
         }
     |
-        typeDeclarationBsjMetaprogramAnchor
+        {configuration.getMetaprogramsSupported()}?=> typeDeclarationBsjMetaprogramAnchor
         {
             $ret = $typeDeclarationBsjMetaprogramAnchor.ret;
         }
@@ -2686,7 +2696,7 @@ blockStatement returns [BlockStatementNode ret]
             $ret = $statement.ret;
         }
     |
-        blockStatementBsjMetaprogramAnchor
+        {configuration.getMetaprogramsSupported()}?=> blockStatementBsjMetaprogramAnchor
         {
             $ret = $blockStatementBsjMetaprogramAnchor.ret;
         }        
