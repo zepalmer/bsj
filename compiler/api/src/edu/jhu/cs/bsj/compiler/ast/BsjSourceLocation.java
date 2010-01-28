@@ -2,12 +2,13 @@ package edu.jhu.cs.bsj.compiler.ast;
 
 /**
  * This class represents a location in a BSJ or Java source file.
+ * 
  * @author Zachary Palmer
  */
 public class BsjSourceLocation implements Comparable<BsjSourceLocation>
 {
 	/**
-	 * The name of the source specified by this location.  This should be, for example, the name of the source unit
+	 * The name of the source specified by this location. This should be, for example, the name of the source unit
 	 * containing this location.
 	 */
 	private String resourceName;
@@ -19,13 +20,23 @@ public class BsjSourceLocation implements Comparable<BsjSourceLocation>
 	 * The column of this location in its line.
 	 */
 	private int column;
-	
+
 	public BsjSourceLocation(String resourceName, int line, int column)
 	{
 		super();
 		this.resourceName = resourceName;
 		this.line = line;
 		this.column = column;
+	}
+
+	/**
+	 * Copying constructor. Creates a deep copy of the provided object.
+	 * 
+	 * @param other The other source location.
+	 */
+	public BsjSourceLocation(BsjSourceLocation other)
+	{
+		this(other.getResourceName(), other.getLine(), other.getColumn());
 	}
 
 	public String getResourceName()
@@ -53,7 +64,7 @@ public class BsjSourceLocation implements Comparable<BsjSourceLocation>
 	public int compareTo(BsjSourceLocation o)
 	{
 		int c = this.resourceName.compareTo(o.getResourceName());
-		if (c!=0)
+		if (c != 0)
 			return c;
 		if (getLine() < o.getLine())
 			return -1;

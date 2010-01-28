@@ -2,6 +2,8 @@ package edu.jhu.cs.bsj.compiler.ast.node;
 
 import javax.annotation.Generated;
 
+import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
+
 /**
  * Represents the declaration of an annotation, as in:
  * <pre>
@@ -39,4 +41,11 @@ public interface AnnotationDeclarationNode extends NamedTypeDeclarationNode
      */
     public void setBody(AnnotationBodyNode body);
 
+    /**
+     * Generates a deep copy of this node.
+     * @param factory The node factory to use to create the deep copy.
+     * @return The resulting deep copy node.
+     */
+    @Override
+    public AnnotationDeclarationNode deepCopy(BsjNodeFactory factory);
 }

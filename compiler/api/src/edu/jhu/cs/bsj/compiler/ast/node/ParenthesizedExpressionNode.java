@@ -2,6 +2,8 @@ package edu.jhu.cs.bsj.compiler.ast.node;
 
 import javax.annotation.Generated;
 
+import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
+
 /**
  * A node representing a parenthesized expression, as in:
  * <pre>
@@ -28,4 +30,11 @@ public interface ParenthesizedExpressionNode extends Node, RestrictedPrimaryExpr
      */
     public void setExpression(ExpressionNode expression);
 
+    /**
+     * Generates a deep copy of this node.
+     * @param factory The node factory to use to create the deep copy.
+     * @return The resulting deep copy node.
+     */
+    @Override
+    public ParenthesizedExpressionNode deepCopy(BsjNodeFactory factory);
 }

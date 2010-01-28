@@ -2,6 +2,8 @@ package edu.jhu.cs.bsj.compiler.ast.node;
 
 import javax.annotation.Generated;
 
+import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
+
 /**
  * Represents a for loop initializer which declares variables.  For example, in
  * <pre>for (int i=0;i<n;i++)</pre>
@@ -24,4 +26,11 @@ public interface ForInitializerDeclarationNode extends Node, ForInitializerNode
      */
     public void setDeclaration(VariableDeclarationNode declaration);
 
+    /**
+     * Generates a deep copy of this node.
+     * @param factory The node factory to use to create the deep copy.
+     * @return The resulting deep copy node.
+     */
+    @Override
+    public ForInitializerDeclarationNode deepCopy(BsjNodeFactory factory);
 }

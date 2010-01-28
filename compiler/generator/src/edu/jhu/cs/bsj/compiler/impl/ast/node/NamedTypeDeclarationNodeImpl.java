@@ -168,4 +168,5 @@ public abstract class NamedTypeDeclarationNodeImpl extends NodeImpl implements N
         return sb.toString();
     }
 
+
 }

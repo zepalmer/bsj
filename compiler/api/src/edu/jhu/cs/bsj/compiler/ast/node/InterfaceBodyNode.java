@@ -2,6 +2,8 @@ package edu.jhu.cs.bsj.compiler.ast.node;
 
 import javax.annotation.Generated;
 
+import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
+
 /**
  * Represents the body of an interface declaration.
  */
@@ -20,4 +22,11 @@ public interface InterfaceBodyNode extends Node
      */
     public void setMembers(ListNode<InterfaceMemberNode> members);
 
+    /**
+     * Generates a deep copy of this node.
+     * @param factory The node factory to use to create the deep copy.
+     * @return The resulting deep copy node.
+     */
+    @Override
+    public InterfaceBodyNode deepCopy(BsjNodeFactory factory);
 }

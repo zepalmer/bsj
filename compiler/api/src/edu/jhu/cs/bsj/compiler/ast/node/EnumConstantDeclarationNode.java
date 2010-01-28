@@ -2,6 +2,8 @@ package edu.jhu.cs.bsj.compiler.ast.node;
 
 import javax.annotation.Generated;
 
+import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
+
 /**
  * A node representing an enum constant.  While enum constants typically consist of a single name, many optional
  * extensions exist.  In the likely case that this constant is not an anonymous subclass, <tt>body</tt> is
@@ -70,4 +72,11 @@ public interface EnumConstantDeclarationNode extends Node
      */
     public void setJavadoc(JavadocNode javadoc);
 
+    /**
+     * Generates a deep copy of this node.
+     * @param factory The node factory to use to create the deep copy.
+     * @return The resulting deep copy node.
+     */
+    @Override
+    public EnumConstantDeclarationNode deepCopy(BsjNodeFactory factory);
 }

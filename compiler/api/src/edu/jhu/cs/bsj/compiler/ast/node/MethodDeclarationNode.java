@@ -2,6 +2,8 @@ package edu.jhu.cs.bsj.compiler.ast.node;
 
 import javax.annotation.Generated;
 
+import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
+
 /**
  * A node representing a method declaration, as in:
  * <pre>
@@ -128,4 +130,11 @@ public interface MethodDeclarationNode extends Node, ClassMemberNode,  Interface
      */
     public void setJavadoc(JavadocNode javadoc);
 
+    /**
+     * Generates a deep copy of this node.
+     * @param factory The node factory to use to create the deep copy.
+     * @return The resulting deep copy node.
+     */
+    @Override
+    public MethodDeclarationNode deepCopy(BsjNodeFactory factory);
 }

@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.annotation.Generated;
 
+import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
@@ -179,5 +180,18 @@ public class TypeCastNodeImpl extends NodeImpl implements TypeCastNode
     public <P,R> R executeOperation(BsjNodeOperation<P,R> operation, P p)
     {
         return operation.executeTypeCastNode(this, p);
+    }
+
+    /**
+     * Generates a deep copy of this node.
+     * @param factory The node factory to use to create the deep copy.
+     * @return The resulting deep copy node.
+     */
+    @Override
+    public TypeCastNode deepCopy(BsjNodeFactory factory)
+    {
+        return factory.makeTypeCastNode(
+                getExpression().deepCopy(factory),
+                getType().deepCopy(factory));
     }
 }

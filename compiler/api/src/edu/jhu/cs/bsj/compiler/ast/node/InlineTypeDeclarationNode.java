@@ -2,6 +2,8 @@ package edu.jhu.cs.bsj.compiler.ast.node;
 
 import javax.annotation.Generated;
 
+import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
+
 /**
  * A node representing an inline type declaration.  This is used to allow classes and enums to be declared
  * within a method body or similar environment.
@@ -21,4 +23,11 @@ public interface InlineTypeDeclarationNode extends Node, BlockStatementNode
      */
     public void setDeclaration(InlineTypeDeclarableNode declaration);
 
+    /**
+     * Generates a deep copy of this node.
+     * @param factory The node factory to use to create the deep copy.
+     * @return The resulting deep copy node.
+     */
+    @Override
+    public InlineTypeDeclarationNode deepCopy(BsjNodeFactory factory);
 }

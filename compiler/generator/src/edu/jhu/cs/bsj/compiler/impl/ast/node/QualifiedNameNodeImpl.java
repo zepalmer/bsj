@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.annotation.Generated;
 
+import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
@@ -185,5 +186,19 @@ public class QualifiedNameNodeImpl extends NameNodeImpl implements QualifiedName
     public <P,R> R executeOperation(BsjNodeOperation<P,R> operation, P p)
     {
         return operation.executeQualifiedNameNode(this, p);
+    }
+
+    /**
+     * Generates a deep copy of this node.
+     * @param factory The node factory to use to create the deep copy.
+     * @return The resulting deep copy node.
+     */
+    @Override
+    public QualifiedNameNode deepCopy(BsjNodeFactory factory)
+    {
+        return factory.makeQualifiedNameNode(
+                getBase().deepCopy(factory),
+                getIdentifier().deepCopy(factory),
+                getCategory());
     }
 }

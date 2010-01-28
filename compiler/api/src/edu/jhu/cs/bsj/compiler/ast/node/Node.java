@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.annotation.Generated;
 
+import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
@@ -27,6 +28,12 @@ public interface Node
      */
     public BsjSourceLocation getStopLocation();
 
+    /**
+     * Generates a deep copy of this node.
+     * @param factory The node factory to use to create the deep copy.
+     * @return The resulting deep copy node.
+     */
+    public Node deepCopy(BsjNodeFactory factory);
 	/**
 	 * Causes this node to receive a visitor.  Visitors are received by nodes in a depth-first fashion.  The order of
 	 * the children receiving the visitor is dependent upon the type of node; however, a superclass's child nodes are

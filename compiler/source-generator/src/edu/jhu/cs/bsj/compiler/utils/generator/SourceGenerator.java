@@ -765,15 +765,12 @@ public class SourceGenerator
 	/**
 	 * A module which allows the creation of AST interfaces.
 	 */
-	static class InterfaceWriter implements ClassDefHandler
+	static class InterfaceWriter extends ClassHierarchyBuildingHandler
 	{
-		public void init()
+		@Override
+		public void useDefinition(ClassDef def) throws IOException
 		{
-		}
-
-		public void handleDefinition(ClassDef def, Map<String, String> env) throws IOException
-		{
-			String pkg = env.get("iPackage");
+			String pkg = envs.get(def).get("iPackage");
 			if (pkg == null)
 				pkg = "";
 			File classFile = new File(TARGET_IFACE_DIR.getAbsolutePath() + File.separator
@@ -828,12 +825,19 @@ public class SourceGenerator
 				}
 			}
 
+			// write deep copy interface
+			ps.println("    /**");
+			ps.println("     * Generates a deep copy of this node.");
+			ps.println("     * @param factory The node factory to use to create the deep copy.");
+			ps.println("     * @return The resulting deep copy node.");
+			ps.println("     */");
+			if (def.sname != null)
+				ps.println("    @Override");
+			ps.println("    public " + def.getRawName() + def.getNameArg() + " deepCopy(BsjNodeFactory factory);");
+
+			// write bodies
 			includeAllBodies(ps, def.includeFilenames, "nodes" + File.separator + "interface");
 			ps.println("}");
-		}
-
-		public void finish()
-		{
 		}
 	}
 
@@ -1248,7 +1252,6 @@ public class SourceGenerator
 			ps.println();
 
 			// add logic for toString
-			// TODO: this only uses immediate properties - we need to include properties for superclasses as well
 			ps.println("    /**");
 			ps.println("     * Obtains a human-readable description of this node.");
 			ps.println("     * @return A human-readable description of this node.");
@@ -1287,9 +1290,7 @@ public class SourceGenerator
 							typeString = "this.get" + capName + "() != null ? this.get" + capName
 									+ "().getClass().getSimpleName() : \"null\"";
 						}
-						ps.println("        sb.append(String.valueOf(this.get"
-								+ capName
-								+ "()) + \":\" + ("
+						ps.println("        sb.append(String.valueOf(this.get" + capName + "()) + \":\" + ("
 								+ typeString + "));");
 					}
 				}
@@ -1320,12 +1321,78 @@ public class SourceGenerator
 				ps.println("        return operation.execute" + def.getRawName() + "(this, p);");
 				ps.println("    }");
 			}
+			ps.println();
+
+			// add deep copy implementation
+			if (def.mode == ClassMode.CONCRETE)
+			{
+				ps.println("    /**");
+				ps.println("     * Generates a deep copy of this node.");
+				ps.println("     * @param factory The node factory to use to create the deep copy.");
+				ps.println("     * @return The resulting deep copy node.");
+				ps.println("     */");
+				if (def.sname != null)
+					ps.println("    @Override");
+				ps.println("    public " + def.getRawName() + def.getNameArg() + " deepCopy(BsjNodeFactory factory)");
+				ps.println("    {");
+				ps.println("        return factory.make" + def.getRawName() + "(");
+				boolean first = true;
+				for (Prop p : recProps)
+				{
+					if (p.skipMake)
+						continue;
+					if (first)
+					{
+						first = false;
+					} else
+					{
+						ps.println(",");
+					}
+					ps.print("                ");
+					if (PRIMITIVE_TYPES.contains(p.type))
+					{
+						ps.print("get" + capFirst(p.name) + "()");
+					} else if (propInstanceOf(p.type, "Node"))
+					{
+						ps.print("get" + capFirst(p.name) + "().deepCopy(factory)");
+					} else if (constructorCopyNames.contains(p.type))
+					{
+						ps.print("new " + p.type + "(get" + capFirst(p.name) + "())");
+					} else if (directCopyNames.contains(p.type))
+					{
+						ps.print("get" + capFirst(p.name) + "()");
+					} else if (p.type.startsWith("List<"))
+					{
+						ps.print("new Array" + p.type + "(get" + capFirst(p.name) + "())");
+					} else if (p.type.equals("Void"))
+					{
+						ps.print("null");
+					} else
+					{
+						throw new IllegalStateException("Don't know how to deep copy value of type " + p.type
+								+ " for definition " + def.name);
+					}
+				}
+				ps.println(");");
+				ps.println("    }");
+			}
 
 			// add supplements
 			includeAllBodies(ps, def.includeFilenames, "nodes" + File.separator + "implementation");
 
 			ps.println("}");
 		}
+
+		/** Names the types of objects which are "deep copied" by simply copying the reference. */
+		private static Set<String> directCopyNames = Collections.unmodifiableSet(new HashSet<String>(
+				Arrays.asList(new String[] { "Long", "Integer", "Short", "Byte", "Double", "Float", "Boolean",
+						"String", "Character", "AccessModifier", "AssignmentOperator", "BinaryOperator",
+						"NameCategory", "PrimitiveType", "UnaryOperator", "UnaryStatementOperator", })));
+		/**
+		 * Names the types of objects which are deep copied by passing them as a single argument to their constructor.
+		 */
+		private static Set<String> constructorCopyNames = Collections.unmodifiableSet(new HashSet<String>(
+				Arrays.asList(new String[] { "BsjSourceLocation", })));
 	}
 
 	/**

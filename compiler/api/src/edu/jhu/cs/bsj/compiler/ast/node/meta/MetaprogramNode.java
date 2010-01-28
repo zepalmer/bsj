@@ -2,6 +2,7 @@ package edu.jhu.cs.bsj.compiler.ast.node.meta;
 
 import javax.annotation.Generated;
 
+import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 import edu.jhu.cs.bsj.compiler.ast.node.BlockStatementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
@@ -27,4 +28,11 @@ public interface MetaprogramNode extends Node
      */
     public void setBody(ListNode<BlockStatementNode> body);
 
+    /**
+     * Generates a deep copy of this node.
+     * @param factory The node factory to use to create the deep copy.
+     * @return The resulting deep copy node.
+     */
+    @Override
+    public MetaprogramNode deepCopy(BsjNodeFactory factory);
 }

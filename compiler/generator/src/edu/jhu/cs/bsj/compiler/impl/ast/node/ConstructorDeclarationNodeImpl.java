@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.annotation.Generated;
 
+import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
@@ -407,5 +408,24 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
     public <P,R> R executeOperation(BsjNodeOperation<P,R> operation, P p)
     {
         return operation.executeConstructorDeclarationNode(this, p);
+    }
+
+    /**
+     * Generates a deep copy of this node.
+     * @param factory The node factory to use to create the deep copy.
+     * @return The resulting deep copy node.
+     */
+    @Override
+    public ConstructorDeclarationNode deepCopy(BsjNodeFactory factory)
+    {
+        return factory.makeConstructorDeclarationNode(
+                getIdentifier().deepCopy(factory),
+                getBody().deepCopy(factory),
+                getModifiers().deepCopy(factory),
+                getParameters().deepCopy(factory),
+                getVarargParameter().deepCopy(factory),
+                getThrowTypes().deepCopy(factory),
+                getTypeParameters().deepCopy(factory),
+                getJavadoc().deepCopy(factory));
     }
 }

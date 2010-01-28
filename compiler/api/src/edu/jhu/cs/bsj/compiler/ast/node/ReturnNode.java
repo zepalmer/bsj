@@ -2,6 +2,8 @@ package edu.jhu.cs.bsj.compiler.ast.node;
 
 import javax.annotation.Generated;
 
+import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
+
 /**
  * A node representing a return statement, as in;
  * <pre>return <i>expr</i>;</pre>
@@ -24,4 +26,11 @@ public interface ReturnNode extends Node, StatementNode
      */
     public void setExpression(ExpressionNode expression);
 
+    /**
+     * Generates a deep copy of this node.
+     * @param factory The node factory to use to create the deep copy.
+     * @return The resulting deep copy node.
+     */
+    @Override
+    public ReturnNode deepCopy(BsjNodeFactory factory);
 }

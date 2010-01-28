@@ -2,6 +2,8 @@ package edu.jhu.cs.bsj.compiler.ast.node;
 
 import javax.annotation.Generated;
 
+import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
+
 /**
  * A node representing an if-then-else statement, as in:
  * <pre>
@@ -47,4 +49,11 @@ public interface IfNode extends Node, StatementNode
      */
     public void setElseStatement(StatementNode elseStatement);
 
+    /**
+     * Generates a deep copy of this node.
+     * @param factory The node factory to use to create the deep copy.
+     * @return The resulting deep copy node.
+     */
+    @Override
+    public IfNode deepCopy(BsjNodeFactory factory);
 }

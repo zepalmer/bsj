@@ -112,6 +112,7 @@ public abstract class NodeImpl implements Node
         return sb.toString();
     }
 
+
 	/**
 	 * The next globally unique UID to assign.
 	 */

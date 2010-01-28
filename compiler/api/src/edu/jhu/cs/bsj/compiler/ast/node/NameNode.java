@@ -2,6 +2,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
 
 import javax.annotation.Generated;
 
+import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 import edu.jhu.cs.bsj.compiler.ast.NameCategory;
 
 /**
@@ -24,6 +25,13 @@ public interface NameNode extends Node
      */
     public NameCategory getCategory();
 
+    /**
+     * Generates a deep copy of this node.
+     * @param factory The node factory to use to create the deep copy.
+     * @return The resulting deep copy node.
+     */
+    @Override
+    public NameNode deepCopy(BsjNodeFactory factory);
 	// TODO: Protect this method call to prevent it from being abused by misbehaving metaprograms.
 	// TODO: Improve error handling; we should be able to log errors on a node based on some vaguely global context
 	//       (possibly provided by the node factory?).

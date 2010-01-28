@@ -2,6 +2,8 @@ package edu.jhu.cs.bsj.compiler.ast.node;
 
 import javax.annotation.Generated;
 
+import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
+
 /**
  * A node representing continue statements, as in:
  * <pre>
@@ -23,4 +25,11 @@ public interface ContinueNode extends Node, StatementNode
      */
     public void setLabel(IdentifierNode label);
 
+    /**
+     * Generates a deep copy of this node.
+     * @param factory The node factory to use to create the deep copy.
+     * @return The resulting deep copy node.
+     */
+    @Override
+    public ContinueNode deepCopy(BsjNodeFactory factory);
 }

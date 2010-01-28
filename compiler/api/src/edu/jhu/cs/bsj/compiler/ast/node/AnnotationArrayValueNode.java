@@ -2,6 +2,8 @@ package edu.jhu.cs.bsj.compiler.ast.node;
 
 import javax.annotation.Generated;
 
+import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
+
 /**
  * A value in an annotation representing an array.  This node is distinct from the {@link ArrayInitializerNode}
  * because it allows annotations (by way of {@link AnnotationAnnotationValueNode}) as well as expressions.
@@ -21,4 +23,11 @@ public interface AnnotationArrayValueNode extends Node, AnnotationValueNode
      */
     public void setValues(ListNode<AnnotationValueNode> values);
 
+    /**
+     * Generates a deep copy of this node.
+     * @param factory The node factory to use to create the deep copy.
+     * @return The resulting deep copy node.
+     */
+    @Override
+    public AnnotationArrayValueNode deepCopy(BsjNodeFactory factory);
 }

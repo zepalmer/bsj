@@ -2,6 +2,8 @@ package edu.jhu.cs.bsj.compiler.ast.node;
 
 import javax.annotation.Generated;
 
+import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
+
 /**
  * A node representing an on-demand import statement, such as "<tt>import java.util.*</tt>".
  */
@@ -32,4 +34,11 @@ public interface ImportOnDemandNode extends Node, ImportNode
      */
     public void setStaticImport(boolean staticImport);
 
+    /**
+     * Generates a deep copy of this node.
+     * @param factory The node factory to use to create the deep copy.
+     * @return The resulting deep copy node.
+     */
+    @Override
+    public ImportOnDemandNode deepCopy(BsjNodeFactory factory);
 }

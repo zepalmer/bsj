@@ -108,6 +108,7 @@ public abstract class NameNodeImpl extends NodeImpl implements NameNode
         return sb.toString();
     }
 
+
 	/**
 	 * Asserts that this node should fall into the specified category.
 	 * @param category The category into which this node should fall.

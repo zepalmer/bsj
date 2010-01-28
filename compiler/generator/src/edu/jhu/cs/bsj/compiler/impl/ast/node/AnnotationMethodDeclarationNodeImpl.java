@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.annotation.Generated;
 
+import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
@@ -293,5 +294,21 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
     public <P,R> R executeOperation(BsjNodeOperation<P,R> operation, P p)
     {
         return operation.executeAnnotationMethodDeclarationNode(this, p);
+    }
+
+    /**
+     * Generates a deep copy of this node.
+     * @param factory The node factory to use to create the deep copy.
+     * @return The resulting deep copy node.
+     */
+    @Override
+    public AnnotationMethodDeclarationNode deepCopy(BsjNodeFactory factory)
+    {
+        return factory.makeAnnotationMethodDeclarationNode(
+                getModifiers().deepCopy(factory),
+                getType().deepCopy(factory),
+                getIdentifier().deepCopy(factory),
+                getDefaultValue().deepCopy(factory),
+                getJavadoc().deepCopy(factory));
     }
 }

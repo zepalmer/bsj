@@ -2,6 +2,8 @@ package edu.jhu.cs.bsj.compiler.ast.node;
 
 import javax.annotation.Generated;
 
+import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
+
 /**
  * Represents the declaration of an interface, as in:
  * <pre>
@@ -63,4 +65,11 @@ public interface InterfaceDeclarationNode extends NamedTypeDeclarationNode
      */
     public void setTypeParameters(ListNode<TypeParameterNode> typeParameters);
 
+    /**
+     * Generates a deep copy of this node.
+     * @param factory The node factory to use to create the deep copy.
+     * @return The resulting deep copy node.
+     */
+    @Override
+    public InterfaceDeclarationNode deepCopy(BsjNodeFactory factory);
 }

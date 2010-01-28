@@ -2,6 +2,8 @@ package edu.jhu.cs.bsj.compiler.ast.node;
 
 import javax.annotation.Generated;
 
+import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
+
 /**
  * A node for a while loop, as in:
  * <pre>
@@ -36,4 +38,11 @@ public interface WhileLoopNode extends Node, StatementNode
      */
     public void setStatement(StatementNode statement);
 
+    /**
+     * Generates a deep copy of this node.
+     * @param factory The node factory to use to create the deep copy.
+     * @return The resulting deep copy node.
+     */
+    @Override
+    public WhileLoopNode deepCopy(BsjNodeFactory factory);
 }

@@ -2,6 +2,8 @@ package edu.jhu.cs.bsj.compiler.ast.node;
 
 import javax.annotation.Generated;
 
+import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
+
 /**
  * A node representing a type selection from a parameterized type.  This node is used when a type is selected from
  * another type which is parameterized, such as in <tt>A&lt;X&gt;.B</tt>.  In that case, the root node is a
@@ -37,4 +39,11 @@ public interface ParameterizedTypeSelectNode extends Node, DeclaredTypeNode
      */
     public void setSelect(DeclaredTypeNode select);
 
+    /**
+     * Generates a deep copy of this node.
+     * @param factory The node factory to use to create the deep copy.
+     * @return The resulting deep copy node.
+     */
+    @Override
+    public ParameterizedTypeSelectNode deepCopy(BsjNodeFactory factory);
 }

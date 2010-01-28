@@ -2,6 +2,8 @@ package edu.jhu.cs.bsj.compiler.ast.node;
 
 import javax.annotation.Generated;
 
+import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
+
 /**
  * Represents the creation of an array with initializer, as in
  * <pre>
@@ -25,4 +27,11 @@ public interface ArrayInitializerCreationNode extends ArrayCreationNode
      */
     public void setInitializer(ArrayInitializerNode initializer);
 
+    /**
+     * Generates a deep copy of this node.
+     * @param factory The node factory to use to create the deep copy.
+     * @return The resulting deep copy node.
+     */
+    @Override
+    public ArrayInitializerCreationNode deepCopy(BsjNodeFactory factory);
 }

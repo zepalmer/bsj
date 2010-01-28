@@ -3,6 +3,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
 import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.AccessModifier;
+import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 
 /**
  * Represents the modifiers which can be associated with an enum.  The <tt>static</tt> modifier is syntactically
@@ -35,4 +36,11 @@ public interface EnumModifiersNode extends ModifiersNode
      */
     public void setStrictfpFlag(boolean strictfpFlag);
 
+    /**
+     * Generates a deep copy of this node.
+     * @param factory The node factory to use to create the deep copy.
+     * @return The resulting deep copy node.
+     */
+    @Override
+    public EnumModifiersNode deepCopy(BsjNodeFactory factory);
 }

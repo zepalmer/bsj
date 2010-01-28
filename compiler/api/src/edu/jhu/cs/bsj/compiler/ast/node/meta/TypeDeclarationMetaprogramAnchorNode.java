@@ -2,6 +2,7 @@ package edu.jhu.cs.bsj.compiler.ast.node.meta;
 
 import javax.annotation.Generated;
 
+import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeDeclarationNode;
 
 /**
@@ -10,4 +11,11 @@ import edu.jhu.cs.bsj.compiler.ast.node.TypeDeclarationNode;
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public interface TypeDeclarationMetaprogramAnchorNode extends MetaprogramAnchorNode<TypeDeclarationNode>, TypeDeclarationNode
 {
+    /**
+     * Generates a deep copy of this node.
+     * @param factory The node factory to use to create the deep copy.
+     * @return The resulting deep copy node.
+     */
+    @Override
+    public TypeDeclarationMetaprogramAnchorNode deepCopy(BsjNodeFactory factory);
 }

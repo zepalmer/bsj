@@ -2,6 +2,8 @@ package edu.jhu.cs.bsj.compiler.ast.node;
 
 import javax.annotation.Generated;
 
+import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
+
 /**
  * A node representing the modifiers applied to another node.  Modifiers may include flags (such as <tt>final</tt>
  * or <tt>strictfp</tt>) and annotations (such as <tt>@Override</tt>).  Subclasses of this node dictate precisely
@@ -22,4 +24,11 @@ public interface ModifiersNode extends Node
      */
     public void setAnnotations(ListNode<AnnotationNode> annotations);
 
+    /**
+     * Generates a deep copy of this node.
+     * @param factory The node factory to use to create the deep copy.
+     * @return The resulting deep copy node.
+     */
+    @Override
+    public ModifiersNode deepCopy(BsjNodeFactory factory);
 }

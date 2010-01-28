@@ -2,6 +2,8 @@ package edu.jhu.cs.bsj.compiler.ast.node;
 
 import javax.annotation.Generated;
 
+import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
+
 /**
  * Represents a for loop initializer which contains expressions.  For example, in
  * <pre>for (i=0,j=0;i<n || j<m;i++,j++)</pre>
@@ -23,4 +25,11 @@ public interface ForInitializerExpressionNode extends Node, ForInitializerNode
      */
     public void setExpressions(ListNode<StatementExpressionNode> expressions);
 
+    /**
+     * Generates a deep copy of this node.
+     * @param factory The node factory to use to create the deep copy.
+     * @return The resulting deep copy node.
+     */
+    @Override
+    public ForInitializerExpressionNode deepCopy(BsjNodeFactory factory);
 }

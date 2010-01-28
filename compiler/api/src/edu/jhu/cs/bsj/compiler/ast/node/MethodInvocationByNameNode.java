@@ -2,6 +2,8 @@ package edu.jhu.cs.bsj.compiler.ast.node;
 
 import javax.annotation.Generated;
 
+import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
+
 /**
  * A node representing method invocation by name, as in:
  * <pre>
@@ -29,4 +31,11 @@ public interface MethodInvocationByNameNode extends MethodInvocationNode
      */
     public void setName(NameNode name);
 
+    /**
+     * Generates a deep copy of this node.
+     * @param factory The node factory to use to create the deep copy.
+     * @return The resulting deep copy node.
+     */
+    @Override
+    public MethodInvocationByNameNode deepCopy(BsjNodeFactory factory);
 }

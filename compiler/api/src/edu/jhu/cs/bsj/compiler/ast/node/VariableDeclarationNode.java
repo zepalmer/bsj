@@ -2,6 +2,8 @@ package edu.jhu.cs.bsj.compiler.ast.node;
 
 import javax.annotation.Generated;
 
+import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
+
 /**
  * A node for the declaration of a variable, as in:
  *     <pre>
@@ -42,4 +44,11 @@ public interface VariableDeclarationNode extends Node, BlockStatementNode
      */
     public void setDeclarators(ListNode<VariableDeclaratorNode> declarators);
 
+    /**
+     * Generates a deep copy of this node.
+     * @param factory The node factory to use to create the deep copy.
+     * @return The resulting deep copy node.
+     */
+    @Override
+    public VariableDeclarationNode deepCopy(BsjNodeFactory factory);
 }

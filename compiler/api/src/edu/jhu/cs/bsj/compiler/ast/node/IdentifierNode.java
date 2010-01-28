@@ -2,6 +2,8 @@ package edu.jhu.cs.bsj.compiler.ast.node;
 
 import javax.annotation.Generated;
 
+import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
+
 /**
  * A tree node representing a simple identifier, as in:
  * <pre>
@@ -23,4 +25,11 @@ public interface IdentifierNode extends Node
      */
     public void setIdentifier(String identifier);
 
+    /**
+     * Generates a deep copy of this node.
+     * @param factory The node factory to use to create the deep copy.
+     * @return The resulting deep copy node.
+     */
+    @Override
+    public IdentifierNode deepCopy(BsjNodeFactory factory);
 }

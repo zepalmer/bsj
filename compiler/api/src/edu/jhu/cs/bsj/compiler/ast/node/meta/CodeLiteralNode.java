@@ -2,6 +2,7 @@ package edu.jhu.cs.bsj.compiler.ast.node.meta;
 
 import javax.annotation.Generated;
 
+import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 import edu.jhu.cs.bsj.compiler.ast.node.LiteralNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 
@@ -11,4 +12,11 @@ import edu.jhu.cs.bsj.compiler.ast.node.Node;
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public interface CodeLiteralNode extends LiteralNode<Node>
 {
+    /**
+     * Generates a deep copy of this node.
+     * @param factory The node factory to use to create the deep copy.
+     * @return The resulting deep copy node.
+     */
+    @Override
+    public CodeLiteralNode deepCopy(BsjNodeFactory factory);
 }

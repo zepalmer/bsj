@@ -2,6 +2,8 @@ package edu.jhu.cs.bsj.compiler.ast.node;
 
 import javax.annotation.Generated;
 
+import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
+
 /**
  * Represents the body of an enum declaration.
  */
@@ -32,4 +34,11 @@ public interface EnumBodyNode extends Node
      */
     public void setMembers(ListNode<ClassMemberNode> members);
 
+    /**
+     * Generates a deep copy of this node.
+     * @param factory The node factory to use to create the deep copy.
+     * @return The resulting deep copy node.
+     */
+    @Override
+    public EnumBodyNode deepCopy(BsjNodeFactory factory);
 }

@@ -2,6 +2,8 @@ package edu.jhu.cs.bsj.compiler.ast.node;
 
 import javax.annotation.Generated;
 
+import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
+
 /**
  * A superclass for all types of literal nodes.
  */
@@ -20,4 +22,11 @@ public interface LiteralNode<T> extends Node, RestrictedPrimaryExpressionNode
      */
     public void setValue(T value);
 
+    /**
+     * Generates a deep copy of this node.
+     * @param factory The node factory to use to create the deep copy.
+     * @return The resulting deep copy node.
+     */
+    @Override
+    public LiteralNode<T> deepCopy(BsjNodeFactory factory);
 }

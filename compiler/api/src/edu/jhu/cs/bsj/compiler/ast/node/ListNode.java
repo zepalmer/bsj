@@ -4,6 +4,8 @@ import java.util.List;
 
 import javax.annotation.Generated;
 
+import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
+
 /**
  * Represents a list of nodes.  Nodes do not simply have lists as properties as the ListNode allows additional
  * information to be tracked as necessary.
@@ -17,4 +19,11 @@ public interface ListNode<T extends Node> extends Node
      */
     public List<T> getChildren();
 
+    /**
+     * Generates a deep copy of this node.
+     * @param factory The node factory to use to create the deep copy.
+     * @return The resulting deep copy node.
+     */
+    @Override
+    public ListNode<T> deepCopy(BsjNodeFactory factory);
 }

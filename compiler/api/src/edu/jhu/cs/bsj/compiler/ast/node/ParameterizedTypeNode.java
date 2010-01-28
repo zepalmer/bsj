@@ -2,6 +2,8 @@ package edu.jhu.cs.bsj.compiler.ast.node;
 
 import javax.annotation.Generated;
 
+import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
+
 /**
  * A node representing parameterized types.  This node represents the use of a type which has type arguments, such
  * as Set<String> (which would be represented by the unparameterized type Set and the single-element argument list
@@ -34,4 +36,11 @@ public interface ParameterizedTypeNode extends Node, DeclaredTypeNode
      */
     public void setTypeArguments(ListNode<TypeArgumentNode> typeArguments);
 
+    /**
+     * Generates a deep copy of this node.
+     * @param factory The node factory to use to create the deep copy.
+     * @return The resulting deep copy node.
+     */
+    @Override
+    public ParameterizedTypeNode deepCopy(BsjNodeFactory factory);
 }

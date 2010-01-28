@@ -2,6 +2,7 @@ package edu.jhu.cs.bsj.compiler.ast.node.meta;
 
 import javax.annotation.Generated;
 
+import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 
 /**
@@ -29,4 +30,11 @@ public interface MetaprogramAnchorNode<T extends Node> extends Node
      */
     public void setMetaprogram(MetaprogramNode metaprogram);
 
+    /**
+     * Generates a deep copy of this node.
+     * @param factory The node factory to use to create the deep copy.
+     * @return The resulting deep copy node.
+     */
+    @Override
+    public MetaprogramAnchorNode<T> deepCopy(BsjNodeFactory factory);
 }
