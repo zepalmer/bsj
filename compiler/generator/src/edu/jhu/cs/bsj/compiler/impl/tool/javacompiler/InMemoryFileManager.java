@@ -50,7 +50,6 @@ public class InMemoryFileManager implements JavaFileManager
     @Override
     public ClassLoader getClassLoader(final Location location)
     {
-        // TODO Auto-generated method stub
         if (!locations.contains(location))
         {
             return fileManager.getClassLoader(location);       
