@@ -31,4 +31,23 @@ public class StringUtilities
 			return string.substring(0, index);
 		}
 	}
+	
+	/**
+	 * Retrieves the suffix for the provided string after the last instance of the specified character (but not
+	 * including it).  If that character does not exist in the provided string, it is returned as it is.
+	 * @param string The string.
+	 * @param ch The character to use to find the suffix.
+	 * @return The suffix.
+	 */
+	public static String getSuffix(String string, char ch)
+	{
+		int index = string.lastIndexOf(ch);
+		if (index==-1)
+		{
+			return string;
+		} else
+		{
+			return string.substring(index + 1);
+		}
+	}
 }
