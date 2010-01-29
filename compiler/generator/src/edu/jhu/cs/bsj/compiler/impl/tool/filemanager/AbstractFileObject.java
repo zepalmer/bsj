@@ -26,7 +26,7 @@ import edu.jhu.cs.bsj.compiler.impl.utils.IOUtilities;
  * 
  * @author Zachary Palmer
  */
-public abstract class AbstractFileObject implements JavaFileObject
+public abstract class AbstractFileObject extends IORegistry implements JavaFileObject
 {
 	/** The character set that this file object uses. */
 	private Charset characterSet;

@@ -47,18 +47,20 @@ public interface LocationManager extends Closeable, Flushable
 	 * 
 	 * @param packageName The package in which the file object should exist.
 	 * @param relativeName The relative name of the file object. This must be a path-rootless relative name.
-	 * @return The resulting file object.
+	 * @return The resulting file object. If this file does not exist, this method may return <code>null</code>.
+	 * @throws IOException If an I/O error occurs.
 	 */
-	public FileObject getFile(String packageName, String relativeName);
+	public FileObject getFile(String packageName, String relativeName) throws IOException;
 
 	/**
 	 * Retrieves a file object for this location.
 	 * 
 	 * @param className The name of the class for which a file should be obtained.
 	 * @param kind The kind of the file.
-	 * @return The resulting file object.
+	 * @return The resulting file object. If this file does not exist, this method may return <code>null</code>.
+	 * @throws IOException If an I/O error occurs.
 	 */
-	public JavaFileObject getJavaFile(String className, Kind kind);
+	public JavaFileObject getJavaFile(String className, Kind kind) throws IOException;
 
 	/**
 	 * Infers the binary name of the specified file.
@@ -76,6 +78,8 @@ public interface LocationManager extends Closeable, Flushable
 	 * @param kinds The kinds of files which should be included.
 	 * @param recurse <code>true</code> to recurse into subdirectories; <code>false</code> otherwise.
 	 * @return The list of files in the specified position.
+	 * @throws IOException If an I/O error occurs.
 	 */
-	public Iterable<JavaFileObject> list(String packageName, Set<JavaFileObject.Kind> kinds, boolean recurse);
+	public Iterable<JavaFileObject> list(String packageName, Set<JavaFileObject.Kind> kinds, boolean recurse)
+			throws IOException;
 }

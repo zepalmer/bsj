@@ -12,15 +12,17 @@ import javax.tools.JavaFileObject.Kind;
 
 /**
  * Allows a set of {@link LocationManager} objects to be provided which dictate the behavior of this file manager.
+ * 
  * @author Zachary Palmer
  */
 public class LocationMappedFileManager implements JavaFileManager
 {
 	/** A mapping between locations and their managers. */
-	private Map<Location,LocationManager> locationManagerMap;
+	private Map<Location, LocationManager> locationManagerMap;
 
 	/**
 	 * Creates a new location-mapped file manager.
+	 * 
 	 * @param locationManagerMap The location manager map to use.
 	 */
 	public LocationMappedFileManager(Map<Location, LocationManager> locationManagerMap)
@@ -50,17 +52,20 @@ public class LocationMappedFileManager implements JavaFileManager
 	@Override
 	public ClassLoader getClassLoader(Location location)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		LocationManager manager = this.locationManagerMap.get(location);
+		if (manager == null)
+			return null;
+
+		return manager.getClassLoader();
 	}
 
 	@Override
 	public FileObject getFileForInput(Location location, String packageName, String relativeName) throws IOException
 	{
 		LocationManager manager = this.locationManagerMap.get(location);
-		if (manager==null)
+		if (manager == null)
 			return null;
-		
+
 		return manager.getFile(packageName, relativeName);
 	}
 
@@ -69,9 +74,9 @@ public class LocationMappedFileManager implements JavaFileManager
 			throws IOException
 	{
 		LocationManager manager = this.locationManagerMap.get(location);
-		if (manager==null)
+		if (manager == null)
 			return null;
-		
+
 		return manager.getFile(packageName, relativeName);
 	}
 
@@ -79,9 +84,9 @@ public class LocationMappedFileManager implements JavaFileManager
 	public JavaFileObject getJavaFileForInput(Location location, String className, Kind kind) throws IOException
 	{
 		LocationManager manager = this.locationManagerMap.get(location);
-		if (manager==null)
+		if (manager == null)
 			return null;
-		
+
 		return manager.getJavaFile(className, kind);
 	}
 
@@ -90,15 +95,16 @@ public class LocationMappedFileManager implements JavaFileManager
 			throws IOException
 	{
 		LocationManager manager = this.locationManagerMap.get(location);
-		if (manager==null)
+		if (manager == null)
 			return null;
-		
+
 		return manager.getJavaFile(className, kind);
 	}
 
 	/**
-	 * Location-mapped file managers do not accept options in this fashion.  Thus, this method always returns
+	 * Location-mapped file managers do not accept options in this fashion. Thus, this method always returns
 	 * <code>false</code>.
+	 * 
 	 * @param current Ignored.
 	 * @param remaining Ignored.
 	 * @return <code>false</code>, always.
@@ -133,13 +139,17 @@ public class LocationMappedFileManager implements JavaFileManager
 	public Iterable<JavaFileObject> list(Location location, String packageName, Set<Kind> kinds, boolean recurse)
 			throws IOException
 	{
-		// TODO Auto-generated method stub
-		return null;
+		LocationManager manager = this.locationManagerMap.get(location);
+		if (manager == null)
+			return null;
+		
+		return manager.list(packageName, kinds, recurse);
 	}
 
 	/**
 	 * This file manager does not couple configuration routines with it; thus, this method always returns
 	 * <code>-1</code>.
+	 * 
 	 * @param option Ignored.
 	 * @return <code>-1</code>, always.
 	 */
