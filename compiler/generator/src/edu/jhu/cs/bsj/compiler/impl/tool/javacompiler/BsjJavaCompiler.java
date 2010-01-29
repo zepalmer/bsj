@@ -33,16 +33,26 @@ public class BsjJavaCompiler
         String codeStr =
             "public class JoeClass {" +
                 "public String toString(){" +
-                    "return(\"Hello Joe!\");" +
+                    "SmallClass sc = new SmallClass(); return(\"Hello Joe!\");" +
                 "}" +
             "}";
+        String codeStr2 =
+            "public class SmallClass {" +
+                "public String toString(){" +
+                    "return(\"SmallClass!\");" +
+                "}" +
+            "}";
+        
         List<Location> locations = new ArrayList<Location>();
         locations.add(StandardLocation.CLASS_OUTPUT);
+        locations.add(StandardLocation.SOURCE_PATH);
         
         
         InMemoryFileManager jfm = new InMemoryFileManager(sjfm, locations);
-
-
+        ByteArrayJavaFileObject altFile = (ByteArrayJavaFileObject)
+        	jfm.getJavaFileForOutput(StandardLocation.SOURCE_PATH, "SmallClass", Kind.SOURCE, null);
+        altFile.setBytes(codeStr2.getBytes());
+        
         ByteArrayJavaFileObject sourceFile = null;
         try
         {
@@ -55,17 +65,16 @@ public class BsjJavaCompiler
             System.exit(1);
         }
         
-        //File javaFile = new File("/home/jriley/test/com/ToBeCompiled.java");
-        //Iterable<? extends JavaFileObject> fileObjects = sjfm.getJavaFileObjects(javaFile);
         List<JavaFileObject> fileObjects = new ArrayList<JavaFileObject>();
         fileObjects.add(sourceFile);
-
-
-        String[] options = new String[]{"-d", "/home/jriley/test"};
+        //fileObjects.add(altFile);
 
         //The next step is to compile Iterable collection of java files and close file manager:
 
-        jc.getTask(null, jfm, null, Arrays.asList(options), null, fileObjects).call();
+        if (!(jc.getTask(null, jfm, null, null, null, fileObjects).call()))
+        {
+        	 //System.exit(1); 
+        }
         try
         {
             sjfm.close();
