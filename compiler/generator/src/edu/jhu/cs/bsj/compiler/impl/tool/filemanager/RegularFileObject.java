@@ -76,8 +76,13 @@ public class RegularFileObject extends AbstractFileObject implements BinaryInfer
 	@Override
 	public String inferBinaryName()
 	{
-		// TODO: if this file doesn't exist, this method is supposed to return null?  is that a requirement?
-		return this.binaryName;
+		if (file.exists())
+		{
+			return this.binaryName;
+		} else
+		{
+			return null;
+		}
 	}
 
 	@Override
