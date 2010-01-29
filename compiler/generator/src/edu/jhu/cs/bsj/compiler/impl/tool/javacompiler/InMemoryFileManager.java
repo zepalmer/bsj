@@ -2,6 +2,7 @@ package edu.jhu.cs.bsj.compiler.impl.tool.javacompiler;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -193,13 +194,34 @@ public class InMemoryFileManager implements JavaFileManager
             Set<Kind> kinds, boolean recurse)
             throws IOException
     {
-        // TODO Auto-generated method stub
         if (!locations.contains(location))
         {
             return fileManager.list(location, packageName, kinds, recurse);
         }
+        
+        List<JavaFileObject> list = new ArrayList<JavaFileObject>();        
+        
+        for (JavaFileObjectTuple key : javaFileObjectMap.keySet())
+        {
+        	// examine file objects of the proper location and kind
+			if (key.getLocation().equals(location)
+					&& kinds.contains(key.getKind()))
+			{
+				JavaFileObject jfo = javaFileObjectMap.get(key);
+				if (jfo.getName().startsWith(packageName))
+				{
+					// if recurse is on we select this file even if it is in a subpackage,
+					// otherwise we only want files in the given package
+					if (recurse || 
+							(!(jfo.getName().replaceFirst(packageName, "").contains("."))))
+					{
+						list.add(jfo);
+					}
+				}
+			}
+        }
                 
-        return fileManager.list(location, packageName, kinds, recurse);
+        return list;
     }
 
     @Override
