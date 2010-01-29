@@ -86,7 +86,7 @@ public abstract class AbstractLocationManager extends IORegistry implements Loca
 
 	/**
 	 * Provides a default implementation to infer binary names.  This implementation assumes that incoming file objects
-	 * are {@link BinaryInferrableFileObject}s; if they are not, the file object's raw name is used with the suffix
+	 * are {@link BsjFileObject}s; if they are not, the file object's raw name is used with the suffix
 	 * stripped and path separators replaced by dots ('<code>.</code>').
 	 * @param file The file object whose binary name should be inferred.
 	 * @return The inferred binary name.
@@ -94,9 +94,9 @@ public abstract class AbstractLocationManager extends IORegistry implements Loca
 	@Override
 	public String inferBinaryName(JavaFileObject file)
 	{
-		if (file instanceof BinaryInferrableFileObject)
+		if (file instanceof BsjFileObject)
 		{
-			BinaryInferrableFileObject bifo = (BinaryInferrableFileObject)file;
+			BsjFileObject bifo = (BsjFileObject)file;
 			return bifo.inferBinaryName();
 		}
 		

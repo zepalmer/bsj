@@ -4,13 +4,11 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
-import java.util.Set;
 
-import javax.tools.FileObject;
-import javax.tools.JavaFileObject;
 import javax.tools.JavaFileObject.Kind;
 
 /**
@@ -36,7 +34,7 @@ public class RegularFileLocationManager extends AbstractLocationManager
 	}
 
 	@Override
-	public FileObject getFile(String packageName, String relativeName) throws IOException
+	public BsjFileObject getFile(String packageName, String relativeName) throws IOException
 	{
 		return new RegularFileObject(getEncodingName(), new File(this.root.getPath() + File.separator
 				+ packageName.replace('.', File.separatorChar) + File.separator
@@ -44,19 +42,18 @@ public class RegularFileLocationManager extends AbstractLocationManager
 	}
 
 	@Override
-	public JavaFileObject getJavaFile(String className, Kind kind) throws IOException
+	public BsjFileObject getJavaFile(String className, Kind kind) throws IOException
 	{
 		return new RegularFileObject(getEncodingName(), new File(this.root.getPath() + File.separator
 				+ className.replace('.', File.separatorChar) + kind.extension), this.root);
 	}
-
+	
 	@Override
-	public Iterable<JavaFileObject> list(String packageName, Set<Kind> kinds, boolean recurse)
-		throws IOException
+	public Iterable<? extends BsjFileObject> listFiles(String packageName, Collection<Kind> kinds, boolean recurse) throws IOException
 	{
 		File listroot = new File(this.root.getPath() + File.separator + packageName.replace('.', File.separatorChar));
 
-		List<JavaFileObject> ret = new ArrayList<JavaFileObject>();
+		List<BsjFileObject> ret = new ArrayList<BsjFileObject>();
 		
 		Queue<File> queue = new LinkedList<File>();
 		queue.addAll(Arrays.asList(listroot.listFiles()));

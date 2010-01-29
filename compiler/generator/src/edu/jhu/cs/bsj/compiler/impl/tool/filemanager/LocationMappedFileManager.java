@@ -1,21 +1,24 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.filemanager;
 
 import java.io.IOException;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
 import javax.tools.FileObject;
-import javax.tools.JavaFileManager;
 import javax.tools.JavaFileObject;
 import javax.tools.JavaFileObject.Kind;
+
+import edu.jhu.cs.bsj.compiler.impl.utils.TypeTranslatingIterable;
 
 /**
  * Allows a set of {@link LocationManager} objects to be provided which dictate the behavior of this file manager.
  * 
  * @author Zachary Palmer
  */
-public class LocationMappedFileManager implements JavaFileManager
+public class LocationMappedFileManager implements BsjFileManager
 {
 	/** A mapping between locations and their managers. */
 	private Map<Location, LocationManager> locationManagerMap;
@@ -60,7 +63,7 @@ public class LocationMappedFileManager implements JavaFileManager
 	}
 
 	@Override
-	public FileObject getFileForInput(Location location, String packageName, String relativeName) throws IOException
+	public BsjFileObject getFileForInput(Location location, String packageName, String relativeName) throws IOException
 	{
 		LocationManager manager = this.locationManagerMap.get(location);
 		if (manager == null)
@@ -70,7 +73,7 @@ public class LocationMappedFileManager implements JavaFileManager
 	}
 
 	@Override
-	public FileObject getFileForOutput(Location location, String packageName, String relativeName, FileObject sibling)
+	public BsjFileObject getFileForOutput(Location location, String packageName, String relativeName, FileObject sibling)
 			throws IOException
 	{
 		LocationManager manager = this.locationManagerMap.get(location);
@@ -81,7 +84,7 @@ public class LocationMappedFileManager implements JavaFileManager
 	}
 
 	@Override
-	public JavaFileObject getJavaFileForInput(Location location, String className, Kind kind) throws IOException
+	public BsjFileObject getJavaFileForInput(Location location, String className, Kind kind) throws IOException
 	{
 		LocationManager manager = this.locationManagerMap.get(location);
 		if (manager == null)
@@ -91,7 +94,7 @@ public class LocationMappedFileManager implements JavaFileManager
 	}
 
 	@Override
-	public JavaFileObject getJavaFileForOutput(Location location, String className, Kind kind, FileObject sibling)
+	public BsjFileObject getJavaFileForOutput(Location location, String className, Kind kind, FileObject sibling)
 			throws IOException
 	{
 		LocationManager manager = this.locationManagerMap.get(location);
@@ -139,11 +142,18 @@ public class LocationMappedFileManager implements JavaFileManager
 	public Iterable<JavaFileObject> list(Location location, String packageName, Set<Kind> kinds, boolean recurse)
 			throws IOException
 	{
+		return new TypeTranslatingIterable<JavaFileObject>(listFiles(location,packageName,kinds,recurse));
+	}
+	
+	@Override
+	public Iterable<? extends BsjFileObject> listFiles(Location location, String packageName, Collection<Kind> kinds,
+			boolean recurse) throws IOException
+	{
 		LocationManager manager = this.locationManagerMap.get(location);
 		if (manager == null)
-			return null;
+			return Collections.emptyList();
 		
-		return manager.list(packageName, kinds, recurse);
+		return manager.listFiles(packageName, kinds, recurse);
 	}
 
 	/**

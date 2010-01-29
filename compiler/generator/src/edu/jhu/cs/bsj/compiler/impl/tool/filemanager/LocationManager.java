@@ -3,9 +3,8 @@ package edu.jhu.cs.bsj.compiler.impl.tool.filemanager;
 import java.io.Closeable;
 import java.io.Flushable;
 import java.io.IOException;
-import java.util.Set;
+import java.util.Collection;
 
-import javax.tools.FileObject;
 import javax.tools.JavaFileManager;
 import javax.tools.JavaFileObject;
 import javax.tools.JavaFileObject.Kind;
@@ -47,20 +46,22 @@ public interface LocationManager extends Closeable, Flushable
 	 * 
 	 * @param packageName The package in which the file object should exist.
 	 * @param relativeName The relative name of the file object. This must be a path-rootless relative name.
-	 * @return The resulting file object. If this file does not exist, this method may return <code>null</code>.
+	 * @return The resulting file object. Note that, unlike {@link JavaFileManager}, this method will always return a
+	 *         non-<code>null</code> object regardless of whether or not the specified file exists.
 	 * @throws IOException If an I/O error occurs.
 	 */
-	public FileObject getFile(String packageName, String relativeName) throws IOException;
+	public BsjFileObject getFile(String packageName, String relativeName) throws IOException;
 
 	/**
 	 * Retrieves a file object for this location.
 	 * 
 	 * @param className The name of the class for which a file should be obtained.
 	 * @param kind The kind of the file.
-	 * @return The resulting file object. If this file does not exist, this method may return <code>null</code>.
+	 * @return The resulting file object. Note that, unlike {@link JavaFileManager}, this method will always return a
+	 *         non-<code>null</code> object regardless of whether or not the specified file exists.
 	 * @throws IOException If an I/O error occurs.
 	 */
-	public JavaFileObject getJavaFile(String className, Kind kind) throws IOException;
+	public BsjFileObject getJavaFile(String className, Kind kind) throws IOException;
 
 	/**
 	 * Infers the binary name of the specified file.
@@ -73,13 +74,12 @@ public interface LocationManager extends Closeable, Flushable
 
 	/**
 	 * Lists the contents of this location in a specific package.
-	 * 
 	 * @param packageName The package for which a listing is required.
 	 * @param kinds The kinds of files which should be included.
 	 * @param recurse <code>true</code> to recurse into subdirectories; <code>false</code> otherwise.
+	 * 
 	 * @return The list of files in the specified position.
 	 * @throws IOException If an I/O error occurs.
 	 */
-	public Iterable<JavaFileObject> list(String packageName, Set<JavaFileObject.Kind> kinds, boolean recurse)
-			throws IOException;
+	public Iterable<? extends BsjFileObject> listFiles(String packageName, Collection<Kind> kinds, boolean recurse) throws IOException;
 }

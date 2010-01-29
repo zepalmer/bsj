@@ -14,7 +14,7 @@ import java.net.URI;
  * 
  * @author Zachary Palmer
  */
-public class RegularFileObject extends AbstractFileObject implements BinaryInferrableFileObject
+public class RegularFileObject extends AbstractFileObject implements BsjFileObject
 {
 	/** This file object's file. */
 	private File file;
@@ -130,5 +130,11 @@ public class RegularFileObject extends AbstractFileObject implements BinaryInfer
 	public URI toUri()
 	{
 		return this.file.toURI();
+	}
+
+	@Override
+	public boolean exists()
+	{
+		return this.file.exists();
 	}
 }

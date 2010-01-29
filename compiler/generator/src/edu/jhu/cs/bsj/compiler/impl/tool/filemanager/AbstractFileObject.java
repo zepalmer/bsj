@@ -16,7 +16,6 @@ import java.nio.charset.CodingErrorAction;
 
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.NestingKind;
-import javax.tools.JavaFileObject;
 
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.JavaFileManagerUtilities;
 import edu.jhu.cs.bsj.compiler.impl.utils.IOUtilities;
@@ -26,7 +25,7 @@ import edu.jhu.cs.bsj.compiler.impl.utils.IOUtilities;
  * 
  * @author Zachary Palmer
  */
-public abstract class AbstractFileObject extends IORegistry implements JavaFileObject
+public abstract class AbstractFileObject extends IORegistry implements BsjFileObject
 {
 	/** The character set that this file object uses. */
 	private Charset characterSet;

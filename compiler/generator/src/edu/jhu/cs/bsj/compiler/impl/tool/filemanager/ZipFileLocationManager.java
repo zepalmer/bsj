@@ -3,16 +3,14 @@ package edu.jhu.cs.bsj.compiler.impl.tool.filemanager;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-import javax.tools.FileObject;
-import javax.tools.JavaFileObject;
 import javax.tools.JavaFileObject.Kind;
 
 import edu.jhu.cs.bsj.compiler.impl.utils.EnumerationIterator;
@@ -68,34 +66,34 @@ public class ZipFileLocationManager extends AbstractLocationManager
 	}
 
 	@Override
-	public FileObject getFile(String packageName, String relativeName) throws IOException
+	public BsjFileObject getFile(String packageName, String relativeName) throws IOException
 	{
 		String name = packageName.replace('.', '/') + '/' + relativeName;
 		return getFileFromEntryName(name);
 	}
 
 	@Override
-	public JavaFileObject getJavaFile(String className, Kind kind) throws IOException
+	public BsjFileObject getJavaFile(String className, Kind kind) throws IOException
 	{
 		String name = className.replace('.', '/') + '/' + kind.extension;
 		return getFileFromEntryName(name);
 	}
 
-	private JavaFileObject getFileFromEntryName(String name)
+	private BsjFileObject getFileFromEntryName(String name)
 	{
 		ZipEntry entry = this.zip.getEntryMap().get(name);
 		if (entry == null)
 		{
-			return null;
+			return new NonExistentZipFileObject(name, this.zip.getZipFile());
 		}
 		return new ZipFileObject(getEncodingName(), entry, this.zip.getZipFile());
 	}
-
+	
 	@Override
-	public Iterable<JavaFileObject> list(String packageName, Set<Kind> kinds, boolean recurse) throws IOException
+	public Iterable<? extends BsjFileObject> listFiles(String packageName, Collection<Kind> kinds, boolean recurse) throws IOException
 	{
 		String prefix = packageName.replace('.', '/');
-		List<JavaFileObject> ret = new ArrayList<JavaFileObject>();
+		List<BsjFileObject> ret = new ArrayList<BsjFileObject>();
 		for (ZipEntry entry : this.zip.getEntryMap().values())
 		{
 			if (entry.isDirectory())
