@@ -69,7 +69,7 @@ public class LocationMappedFileManager implements BsjFileManager
 		if (manager == null)
 			return null;
 
-		return manager.getFile(packageName, relativeName);
+		return manager.getFile(packageName, relativeName, false);
 	}
 
 	@Override
@@ -80,7 +80,7 @@ public class LocationMappedFileManager implements BsjFileManager
 		if (manager == null)
 			return null;
 
-		return manager.getFile(packageName, relativeName);
+		return manager.getFile(packageName, relativeName, true);
 	}
 
 	@Override
@@ -90,7 +90,7 @@ public class LocationMappedFileManager implements BsjFileManager
 		if (manager == null)
 			return null;
 
-		return manager.getJavaFile(className, kind);
+		return manager.getJavaFile(className, kind, false);
 	}
 
 	@Override
@@ -101,7 +101,7 @@ public class LocationMappedFileManager implements BsjFileManager
 		if (manager == null)
 			return null;
 
-		return manager.getJavaFile(className, kind);
+		return manager.getJavaFile(className, kind, true);
 	}
 
 	/**
@@ -127,8 +127,11 @@ public class LocationMappedFileManager implements BsjFileManager
 	@Override
 	public String inferBinaryName(Location location, JavaFileObject file)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		LocationManager manager = this.locationManagerMap.get(location);
+		if (manager == null)
+			return file.getName();
+		
+		return manager.inferBinaryName(file);
 	}
 
 	@Override
@@ -142,9 +145,9 @@ public class LocationMappedFileManager implements BsjFileManager
 	public Iterable<JavaFileObject> list(Location location, String packageName, Set<Kind> kinds, boolean recurse)
 			throws IOException
 	{
-		return new TypeTranslatingIterable<JavaFileObject>(listFiles(location,packageName,kinds,recurse));
+		return new TypeTranslatingIterable<JavaFileObject>(listFiles(location, packageName, kinds, recurse));
 	}
-	
+
 	@Override
 	public Iterable<? extends BsjFileObject> listFiles(Location location, String packageName, Collection<Kind> kinds,
 			boolean recurse) throws IOException
@@ -152,7 +155,7 @@ public class LocationMappedFileManager implements BsjFileManager
 		LocationManager manager = this.locationManagerMap.get(location);
 		if (manager == null)
 			return Collections.emptyList();
-		
+
 		return manager.listFiles(packageName, kinds, recurse);
 	}
 

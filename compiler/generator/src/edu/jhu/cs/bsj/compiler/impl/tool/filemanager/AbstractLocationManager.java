@@ -58,7 +58,7 @@ public abstract class AbstractLocationManager extends IORegistry implements Loca
 					JavaFileObject fileObject;
 					try
 					{
-						fileObject = getJavaFile(name, Kind.CLASS);
+						fileObject = getJavaFile(name, Kind.CLASS, false);
 					} catch (IOException ioe)
 					{
 						throw new ClassNotFoundException("Could not access class file", ioe);

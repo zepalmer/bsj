@@ -66,14 +66,14 @@ public class ZipFileLocationManager extends AbstractLocationManager
 	}
 
 	@Override
-	public BsjFileObject getFile(String packageName, String relativeName) throws IOException
+	public BsjFileObject getFile(String packageName, String relativeName, boolean writable) throws IOException
 	{
 		String name = packageName.replace('.', '/') + '/' + relativeName;
 		return getFileFromEntryName(name);
 	}
 
 	@Override
-	public BsjFileObject getJavaFile(String className, Kind kind) throws IOException
+	public BsjFileObject getJavaFile(String className, Kind kind, boolean writable) throws IOException
 	{
 		String name = className.replace('.', '/') + '/' + kind.extension;
 		return getFileFromEntryName(name);

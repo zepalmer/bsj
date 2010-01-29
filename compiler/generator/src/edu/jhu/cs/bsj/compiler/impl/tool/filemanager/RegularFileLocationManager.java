@@ -34,7 +34,7 @@ public class RegularFileLocationManager extends AbstractLocationManager
 	}
 
 	@Override
-	public BsjFileObject getFile(String packageName, String relativeName) throws IOException
+	public BsjFileObject getFile(String packageName, String relativeName, boolean writable) throws IOException
 	{
 		return new RegularFileObject(getEncodingName(), new File(this.root.getPath() + File.separator
 				+ packageName.replace('.', File.separatorChar) + File.separator
@@ -42,7 +42,7 @@ public class RegularFileLocationManager extends AbstractLocationManager
 	}
 
 	@Override
-	public BsjFileObject getJavaFile(String className, Kind kind) throws IOException
+	public BsjFileObject getJavaFile(String className, Kind kind, boolean writable) throws IOException
 	{
 		return new RegularFileObject(getEncodingName(), new File(this.root.getPath() + File.separator
 				+ className.replace('.', File.separatorChar) + kind.extension), this.root);

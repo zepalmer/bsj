@@ -46,22 +46,28 @@ public interface LocationManager extends Closeable, Flushable
 	 * 
 	 * @param packageName The package in which the file object should exist.
 	 * @param relativeName The relative name of the file object. This must be a path-rootless relative name.
+	 * @param writable A hint indicating whether or not the caller expects to be able to write to the resulting file
+	 *            object. This can usually be ignored but may be significant in some cases (such as in
+	 *            {@link UnionLocationManager}).
 	 * @return The resulting file object. Note that, unlike {@link JavaFileManager}, this method will always return a
 	 *         non-<code>null</code> object regardless of whether or not the specified file exists.
 	 * @throws IOException If an I/O error occurs.
 	 */
-	public BsjFileObject getFile(String packageName, String relativeName) throws IOException;
+	public BsjFileObject getFile(String packageName, String relativeName, boolean writable) throws IOException;
 
 	/**
 	 * Retrieves a file object for this location.
 	 * 
 	 * @param className The name of the class for which a file should be obtained.
 	 * @param kind The kind of the file.
+	 * @param writable A hint indicating whether or not the caller expects to be able to write to the resulting file
+	 *            object. This can usually be ignored but may be significant in some cases (such as in
+	 *            {@link UnionLocationManager}).
 	 * @return The resulting file object. Note that, unlike {@link JavaFileManager}, this method will always return a
 	 *         non-<code>null</code> object regardless of whether or not the specified file exists.
 	 * @throws IOException If an I/O error occurs.
 	 */
-	public BsjFileObject getJavaFile(String className, Kind kind) throws IOException;
+	public BsjFileObject getJavaFile(String className, Kind kind, boolean writable) throws IOException;
 
 	/**
 	 * Infers the binary name of the specified file.
@@ -74,6 +80,7 @@ public interface LocationManager extends Closeable, Flushable
 
 	/**
 	 * Lists the contents of this location in a specific package.
+	 * 
 	 * @param packageName The package for which a listing is required.
 	 * @param kinds The kinds of files which should be included.
 	 * @param recurse <code>true</code> to recurse into subdirectories; <code>false</code> otherwise.
@@ -81,5 +88,6 @@ public interface LocationManager extends Closeable, Flushable
 	 * @return The list of files in the specified position.
 	 * @throws IOException If an I/O error occurs.
 	 */
-	public Iterable<? extends BsjFileObject> listFiles(String packageName, Collection<Kind> kinds, boolean recurse) throws IOException;
+	public Iterable<? extends BsjFileObject> listFiles(String packageName, Collection<Kind> kinds, boolean recurse)
+			throws IOException;
 }
