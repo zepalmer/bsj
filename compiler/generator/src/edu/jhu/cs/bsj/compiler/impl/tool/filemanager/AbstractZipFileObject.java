@@ -55,4 +55,9 @@ public abstract class AbstractZipFileObject extends AbstractFileObject
 		}
 	}
 
+	@Override
+	public boolean isWritable()
+	{
+		return false;
+	}
 }

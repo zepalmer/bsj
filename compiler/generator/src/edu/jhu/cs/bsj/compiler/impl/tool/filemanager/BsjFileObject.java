@@ -22,4 +22,11 @@ public interface BsjFileObject extends JavaFileObject
 	 * @return <code>true</code> if the file object exists; <code>false</code> if it does not.
 	 */
 	public boolean exists();
+	
+	/**
+	 * Determines whether or not this file object is writable.
+	 * @return <code>true</code> if it is possible that writing to this file could succeed; <code>false</code> if an
+	 * attempt to write to this file would always fail.
+	 */
+	public boolean isWritable();
 }

@@ -137,4 +137,10 @@ public class RegularFileObject extends AbstractFileObject implements BsjFileObje
 	{
 		return this.file.exists();
 	}
+
+	@Override
+	public boolean isWritable()
+	{
+		return true;
+	}
 }

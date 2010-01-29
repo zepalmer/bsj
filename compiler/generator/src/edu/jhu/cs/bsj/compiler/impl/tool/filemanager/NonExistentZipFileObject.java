@@ -39,5 +39,4 @@ public class NonExistentZipFileObject extends AbstractZipFileObject
 	{
 		return false;
 	}
-
 }
