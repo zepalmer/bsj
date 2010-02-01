@@ -20,13 +20,6 @@ public abstract class AbstractZipFileObject extends AbstractFileObject
 	}
 
 	@Override
-	public boolean isNameCompatible(String simpleName, Kind kind)
-	{
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
 	public boolean delete()
 	{
 		return false;

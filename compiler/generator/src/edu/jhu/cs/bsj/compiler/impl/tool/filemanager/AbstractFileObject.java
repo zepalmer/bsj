@@ -145,4 +145,10 @@ public abstract class AbstractFileObject extends IORegistry implements BsjFileOb
 		writer.append(charSequence);
 		writer.close();
 	}
+
+	@Override
+	public boolean isNameCompatible(String simpleName, Kind kind)
+	{
+		return getName().endsWith(simpleName + kind.extension);
+	}
 }

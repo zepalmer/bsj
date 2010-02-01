@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
@@ -52,6 +53,10 @@ public class RegularFileLocationManager extends AbstractLocationManager
 	public Iterable<? extends BsjFileObject> listFiles(String packageName, Collection<Kind> kinds, boolean recurse) throws IOException
 	{
 		File listroot = new File(this.root.getPath() + File.separator + packageName.replace('.', File.separatorChar));
+		if (!listroot.isDirectory())
+		{
+			return Collections.emptyList();
+		}
 
 		List<BsjFileObject> ret = new ArrayList<BsjFileObject>();
 		

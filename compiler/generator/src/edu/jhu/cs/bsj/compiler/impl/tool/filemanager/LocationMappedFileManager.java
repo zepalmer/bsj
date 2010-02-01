@@ -11,6 +11,8 @@ import javax.tools.FileObject;
 import javax.tools.JavaFileObject;
 import javax.tools.JavaFileObject.Kind;
 
+import org.apache.log4j.Logger;
+
 import edu.jhu.cs.bsj.compiler.impl.utils.TypeTranslatingIterable;
 
 /**
@@ -20,6 +22,9 @@ import edu.jhu.cs.bsj.compiler.impl.utils.TypeTranslatingIterable;
  */
 public class LocationMappedFileManager implements BsjFileManager
 {
+	/** A logger for this class. */
+	private Logger LOGGER = Logger.getLogger(this.getClass());
+
 	/** A mapping between locations and their managers. */
 	private Map<? extends Location, ? extends LocationManager> locationManagerMap;
 
@@ -28,7 +33,7 @@ public class LocationMappedFileManager implements BsjFileManager
 	 * 
 	 * @param locationManagerMap The location manager map to use.
 	 */
-	public <T extends Location, U extends LocationManager> LocationMappedFileManager(Map<T,U> locationManagerMap)
+	public <T extends Location, U extends LocationManager> LocationMappedFileManager(Map<T, U> locationManagerMap)
 	{
 		super();
 		this.locationManagerMap = locationManagerMap;
@@ -65,6 +70,11 @@ public class LocationMappedFileManager implements BsjFileManager
 	@Override
 	public BsjFileObject getFileForInput(Location location, String packageName, String relativeName) throws IOException
 	{
+		if (LOGGER.isTraceEnabled())
+		{
+			LOGGER.trace("getFileForInput(" + location + ", " + packageName + ", " + relativeName + ")");
+		}
+
 		LocationManager manager = this.locationManagerMap.get(location);
 		if (manager == null)
 			return null;
@@ -76,6 +86,12 @@ public class LocationMappedFileManager implements BsjFileManager
 	public BsjFileObject getFileForOutput(Location location, String packageName, String relativeName, FileObject sibling)
 			throws IOException
 	{
+		if (LOGGER.isTraceEnabled())
+		{
+			LOGGER.trace("getFileForOutput(" + location + ", " + packageName + ", " + relativeName + "," + sibling
+					+ ")");
+		}
+
 		LocationManager manager = this.locationManagerMap.get(location);
 		if (manager == null)
 			return null;
@@ -86,6 +102,11 @@ public class LocationMappedFileManager implements BsjFileManager
 	@Override
 	public BsjFileObject getJavaFileForInput(Location location, String className, Kind kind) throws IOException
 	{
+		if (LOGGER.isTraceEnabled())
+		{
+			LOGGER.trace("getJavaFileForInput(" + location + ", " + className + ", " + kind + ")");
+		}
+		
 		LocationManager manager = this.locationManagerMap.get(location);
 		if (manager == null)
 			return null;
@@ -97,6 +118,11 @@ public class LocationMappedFileManager implements BsjFileManager
 	public BsjFileObject getJavaFileForOutput(Location location, String className, Kind kind, FileObject sibling)
 			throws IOException
 	{
+		if (LOGGER.isTraceEnabled())
+		{
+			LOGGER.trace("getJavaFileForInput(" + location + ", " + className + ", " + kind + "," + sibling + ")");
+		}
+		
 		LocationManager manager = this.locationManagerMap.get(location);
 		if (manager == null)
 			return null;
@@ -130,7 +156,7 @@ public class LocationMappedFileManager implements BsjFileManager
 		LocationManager manager = this.locationManagerMap.get(location);
 		if (manager == null)
 			return file.getName();
-		
+
 		return manager.inferBinaryName(file);
 	}
 

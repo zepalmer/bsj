@@ -8,5 +8,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/BSJ Generator"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/BSJ Parser"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/BSJ Utilities"/>
+	<classpathentry kind="lib" path="lib/log4j.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -92,13 +92,6 @@ public class RegularFileObject extends AbstractFileObject implements BsjFileObje
 	}
 
 	@Override
-	public boolean isNameCompatible(String simpleName, Kind kind)
-	{
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
 	public boolean delete()
 	{
 		return this.file.delete();
