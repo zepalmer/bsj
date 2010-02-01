@@ -167,7 +167,6 @@ public class InMemoryFileManager implements JavaFileManager
     @Override
     public String inferBinaryName(Location location, JavaFileObject file)
     {
-        // TODO Auto-generated method stub
         return fileManager.inferBinaryName(location, file);
     }
 

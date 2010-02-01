@@ -15,7 +15,7 @@ import edu.jhu.cs.bsj.compiler.impl.tool.compiler.JavaFileManagerUtilities;
 import edu.jhu.cs.bsj.compiler.impl.tool.javacompiler.ByteArrayJavaFileObject;
 
 /**
- * Provides a memory-based file system wrapper a specific location.
+ * Provides a memory-based file system wrapper for a specific location.
  * @author Joseph Riley
  */
 public class InMemoryLocationManager extends AbstractLocationManager
@@ -145,15 +145,15 @@ public class InMemoryLocationManager extends AbstractLocationManager
         	// examine file objects of the proper kind
 			if (kinds.contains(key.getKind()))
 			{
-				BsjFileObject jfo = javaFileObjectMap.get(key);
-				if (jfo.getName().startsWith(packageName))
+				BsjFileObject bfo = javaFileObjectMap.get(key);
+				if (bfo.getName().startsWith(packageName))
 				{
 					// if recurse is on we select this file even if it is in a subpackage,
 					// otherwise we only want files in the given package
 					if (recurse || 
-							(!(jfo.getName().replaceFirst(packageName, "").contains("."))))
+							(!(bfo.getName().replaceFirst(packageName, "").contains("."))))
 					{
-						list.add(jfo);
+						list.add(bfo);
 					}
 				}
 			}
