@@ -12,12 +12,10 @@ public class CompoundIterator<T> implements Iterator<T>
 {
 	/** The list of backing iterators. */
 	private Iterator<Iterator<? extends T>> backingIterators;
-	/** The current iterator. */
+	/** The iterator from which the next element will be drawn. */
 	private Iterator<? extends T> current;
-	/** The last iterator. */
+	/** The iterator from which the last element was drawn. */
 	private Iterator<? extends T> last;
-	/** Indicates whether or not a remove is valid. */
-	private boolean canRemove;
 
 	/**
 	 * Creates a compound iterator.
@@ -30,7 +28,6 @@ public class CompoundIterator<T> implements Iterator<T>
 		this.backingIterators = backingIterators;
 		this.current = null;
 		this.last = null;
-		this.canRemove = false;
 	}
 
 	/**
@@ -38,14 +35,16 @@ public class CompoundIterator<T> implements Iterator<T>
 	 */
 	private void ensureCurrent()
 	{
-		if (this.current != null && !this.current.hasNext())
+		while (this.current == null || !this.current.hasNext())
 		{
-			this.last = current;
-			this.current = null;
-		}
-		if (this.current == null && this.backingIterators.hasNext())
-		{
-			this.current = this.backingIterators.next();
+			if (this.backingIterators.hasNext())
+			{
+				this.current = this.backingIterators.next();
+			} else
+			{
+				this.current = null;
+				break;
+			}
 		}
 	}
 
@@ -59,14 +58,13 @@ public class CompoundIterator<T> implements Iterator<T>
 	@Override
 	public T next()
 	{
-		this.canRemove = true;
-		this.last = null;
 		ensureCurrent();
 		if (this.current == null)
 		{
 			throw new NoSuchElementException();
 		} else
 		{
+			this.last = this.current;
 			return this.current.next();
 		}
 	}
@@ -74,18 +72,13 @@ public class CompoundIterator<T> implements Iterator<T>
 	@Override
 	public void remove()
 	{
-		if (!this.canRemove)
+		if (this.last == null)
 		{
 			throw new IllegalStateException();
-		}
-		this.canRemove = false;
-		if (this.last!=null)
+		} else
 		{
 			this.last.remove();
 			this.last = null;
-		} else
-		{
-			this.current.remove();
 		}
 	}
 }
