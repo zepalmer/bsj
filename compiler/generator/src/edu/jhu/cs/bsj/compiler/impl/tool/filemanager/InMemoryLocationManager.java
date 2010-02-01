@@ -20,9 +20,20 @@ import edu.jhu.cs.bsj.compiler.impl.tool.javacompiler.ByteArrayJavaFileObject;
  */
 public class InMemoryLocationManager extends AbstractLocationManager
 {
+	/**
+	 * Contains the in-memory regular files.
+	 */
     private Map<FileObjectPair, BsjFileObject> fileObjectMap;
+
+	/**
+	 * Contains the in-memory Java files.
+	 */
     private Map<JavaFileObjectPair, BsjFileObject> javaFileObjectMap;		
 
+    /**
+     * Constructor.
+     * @param encodingName name of encoding for this location, null if default.
+     */
 	public InMemoryLocationManager(String encodingName)
 	{
 		super(encodingName);
@@ -115,6 +126,14 @@ public class InMemoryLocationManager extends AbstractLocationManager
 
 	}
 
+	/**
+	 * Returns a list of BsjFileObjects with the given criteria.
+	 * @param packageName the package name to search for.
+	 * @param kinds the kinds of files to look for.
+	 * @param recurse if true, search subpackages.
+	 * @return list of files in this location that meet the given criteria.
+	 * @throws IOException on error.
+	 */
 	@Override
 	public Iterable<? extends BsjFileObject> listFiles(String packageName,
 			Collection<Kind> kinds, boolean recurse) throws IOException
@@ -142,5 +161,4 @@ public class InMemoryLocationManager extends AbstractLocationManager
                 
         return list;
 	}
-
 }

@@ -183,7 +183,15 @@ public class UnionLocationManager extends AbstractLocationManager
 			throws IOException, FileNotFoundException
 	{
 		List<LocationManager> managers = new ArrayList<LocationManager>();
-		for (String component : path.split(":"))
+		
+		// use a different classpath separator for windows or unix
+		String classpathSeparator = ":";
+		if (System.getProperty("os.name").toLowerCase().contains("windows"))
+		{
+			classpathSeparator = ";";
+		}
+		
+		for (String component : path.split(classpathSeparator))
 		{
 			File file = new File(component);
 			file = file.getCanonicalFile();

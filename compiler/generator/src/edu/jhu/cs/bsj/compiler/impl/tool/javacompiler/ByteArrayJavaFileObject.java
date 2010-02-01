@@ -79,41 +79,23 @@ public class ByteArrayJavaFileObject extends AbstractFileObject implements BsjFi
         return ret;
     }
 
-    /**
-     * @return the bytes
-     */
-    public byte[] getBytes()
-    {
-        return bytes;
-    }
-
-    /**
-     * @param bytes the bytes to set
-     */
-    public void setBytes(byte[] bytes)
-    {
-        this.bytes = bytes;
-    }
-
 	@Override
 	public boolean exists()
 	{
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override
 	public String inferBinaryName()
 	{
-		// TODO Auto-generated method stub
-		return null;
+		return fileName;
 	}
 
 	@Override
 	public boolean isWritable()
 	{
 		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
 	@Override
@@ -146,5 +128,53 @@ public class ByteArrayJavaFileObject extends AbstractFileObject implements BsjFi
 		{
 			return null;
 		}
+	}
+	
+    /**
+     * @return the bytes
+     */
+    public byte[] getBytes()
+    {
+        return bytes;
+    }
+
+    /**
+     * @param bytes the bytes to set
+     */
+    public void setBytes(byte[] bytes)
+    {
+        this.bytes = bytes;
+    }
+
+	/**
+	 * @return the fileName
+	 */
+	public String getFileName()
+	{
+		return fileName;
+	}
+
+	/**
+	 * @param fileName the fileName to set
+	 */
+	public void setFileName(String fileName)
+	{
+		this.fileName = fileName;
+	}
+
+	/**
+	 * @return the kind
+	 */
+	public Kind getKind()
+	{
+		return kind;
+	}
+
+	/**
+	 * @param kind the kind to set
+	 */
+	public void setKind(Kind kind)
+	{
+		this.kind = kind;
 	}
 }
