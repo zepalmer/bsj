@@ -1,163 +1,94 @@
 package edu.jhu.cs.bsj.tests.compiler.tool.javacompiler;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
+import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 
 import javax.tools.JavaCompiler;
-import javax.tools.JavaFileManager;
 import javax.tools.JavaFileObject;
 import javax.tools.StandardLocation;
 import javax.tools.ToolProvider;
 import javax.tools.JavaFileManager.Location;
 import javax.tools.JavaFileObject.Kind;
 
-import edu.jhu.cs.bsj.compiler.impl.tool.javacompiler.ByteArrayJavaFileObject;
-import edu.jhu.cs.bsj.compiler.impl.tool.javacompiler.InMemoryFileManager;
+import junit.framework.Assert;
 
+import org.apache.log4j.PropertyConfigurator;
+import org.junit.Test;
+
+import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.BsjFileManager;
+import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.BsjFileObject;
+import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.LocationManager;
+import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.LocationMappedFileManager;
+import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.RegularFileLocationManager;
+import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.UnionLocationManager;
 
 public class BsjJavaCompilerTest
 {
+	public void log4jConfigure(String level)
+	{
+		// TODO: move to utilities method?
+		Properties loggingProperties = new Properties();
+		loggingProperties.setProperty("log4j.rootLogger", level + ", stdout");
+		loggingProperties.setProperty("log4j.appender.stdout", "org.apache.log4j.ConsoleAppender");
+		loggingProperties.setProperty("log4j.appender.stdout.layout", "org.apache.log4j.PatternLayout");
+		loggingProperties.setProperty("log4j.appender.stdout.layout.ConversionPattern", "%5p [%t] (%F:%L) - %m%n");
+		PropertyConfigurator.configure(loggingProperties);
+	}
 
-    /**
-     * @param args
-     */
-    public static void main(String[] args) throws Exception
-    {
-        JavaCompiler jc = ToolProvider.getSystemJavaCompiler();
-        JavaFileManager sjfm = jc.getStandardFileManager(null, null, null);
-        
-        
-        String codeStr =
-            "public class JoeClass {" +
-                "public String toString(){" +
-                    "SmallClass sc = new SmallClass(); return(\"Hello Joe!\");" +
-                "}" +
-            "}";
-        String codeStr2 =
-            "public class SmallClass {" +
-                "public String toString(){" +
-                    "return(\"SmallClass!\");" +
-                "}" +
-            "}";
-        
-        List<Location> locations = new ArrayList<Location>();
-        locations.add(StandardLocation.CLASS_OUTPUT);
-        locations.add(StandardLocation.SOURCE_PATH);
-        
-        
-        InMemoryFileManager jfm = new InMemoryFileManager(sjfm, locations);
-        ByteArrayJavaFileObject altFile = (ByteArrayJavaFileObject)
-        	jfm.getJavaFileForOutput(StandardLocation.SOURCE_PATH, "SmallClass", Kind.SOURCE, null);
-        altFile.setBytes(codeStr2.getBytes());
-        
-        ByteArrayJavaFileObject sourceFile = null;
-        try
-        {
-            sourceFile = new ByteArrayJavaFileObject("JoeClass.java", Kind.SOURCE);
-            sourceFile.setBytes(codeStr.getBytes());
-        } catch (URISyntaxException e2)
-        {
-            // TODO Auto-generated catch block
-            e2.printStackTrace();
-            System.exit(1);
-        }
-        
-        List<JavaFileObject> fileObjects = new ArrayList<JavaFileObject>();
-        fileObjects.add(sourceFile);
-        fileObjects.add(altFile);
+	@Test
+	public void testJavaCompilerWithBsjFileManager() throws Exception
+	{
+		log4jConfigure("trace");
 
-        //The next step is to compile Iterable collection of java files and close file manager:
+		JavaCompiler jc = ToolProvider.getSystemJavaCompiler();
 
-        if (!(jc.getTask(null, jfm, null, null, null, fileObjects).call()))
-        {
-        	 System.exit(1); 
-        }
-        try
-        {
-            sjfm.close();
-        } catch (IOException e)
-        {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-            System.exit(1);            
-        }
-        System.out.println("Class has been successfully compiled");
-        
-        Object o = jfm.getClassLoader(StandardLocation.CLASS_OUTPUT).loadClass("JoeClass").newInstance();
-        System.out.println(o);
+		Map<StandardLocation, LocationManager> map = new HashMap<StandardLocation, LocationManager>();
+		File test = new File("." + File.separator + "local");
+		test.mkdir();
+		map.put(StandardLocation.SOURCE_PATH, new RegularFileLocationManager(null, test));
+		map.put(StandardLocation.SOURCE_OUTPUT, new RegularFileLocationManager(null, test));
+		map.put(StandardLocation.PLATFORM_CLASS_PATH, new UnionLocationManager(null,
+				System.getProperty("sun.boot.class.path")));
+		map.put(StandardLocation.CLASS_PATH, new UnionLocationManager(null, System.getProperty("java.class.path")));
+		map.put(StandardLocation.CLASS_OUTPUT, new RegularFileLocationManager(null, test));
+		map.put(StandardLocation.ANNOTATION_PROCESSOR_PATH, new RegularFileLocationManager(null, test));
+		BsjFileManager bfm = new LocationMappedFileManager(map);
 
-//        URL[] urls = null;
-//        try
-//        {
-//            urls = new URL[]{ new URL("file:///home/jriley/test/") };
-//        } catch (MalformedURLException e)
-//        {
-//            // TODO Auto-generated catch block
-//            e.printStackTrace();
-//            System.exit(1);
-//        }
-//        URLClassLoader ucl = new URLClassLoader(urls);
-//
-//        Class clazz = null;
-//        try
-//        {
-//            clazz = ucl.loadClass("JoeClass");
-//        } catch (ClassNotFoundException e)
-//        {
-//            // TODO Auto-generated catch block
-//            e.printStackTrace();
-//            System.exit(1);
-//        }
-//        System.out.println("Class has been successfully loaded");
-//
-//        //And get the method callMe using reflections:
-//
-//        Method method = null;
-//        try
-//        {
-//            method = clazz.getDeclaredMethod("callMe", null);
-//        } catch (SecurityException e)
-//        {
-//            // TODO Auto-generated catch block
-//            e.printStackTrace();
-//        } catch (NoSuchMethodException e)
-//        {
-//            // TODO Auto-generated catch block
-//            e.printStackTrace();
-//        }
-//
-//        //Finally we need to create new instance of the just loaded class and call method callMe on it:
-//
-//        Object object = null;
-//        try
-//        {
-//            object = clazz.newInstance();
-//        } catch (InstantiationException e)
-//        {
-//            // TODO Auto-generated catch block
-//            e.printStackTrace();
-//        } catch (IllegalAccessException e)
-//        {
-//            // TODO Auto-generated catch block
-//            e.printStackTrace();
-//        }
-//        try
-//        {
-//            method.invoke(object, null);
-//        } catch (IllegalArgumentException e)
-//        {
-//            // TODO Auto-generated catch block
-//            e.printStackTrace();
-//        } catch (IllegalAccessException e)
-//        {
-//            // TODO Auto-generated catch block
-//            e.printStackTrace();
-//        } catch (InvocationTargetException e)
-//        {
-//            // TODO Auto-generated catch block
-//            e.printStackTrace();
-//        }
-    }
+		String codeStr = "public class JoeClass {" + "public String toString(){"
+				+ "SmallClass sc = new SmallClass(); return(\"Hello Joe!\");" + "}" + "}";
+		String codeStr2 = "public class SmallClass {" + "public String toString(){" + "return(\"SmallClass!\");" + "}"
+				+ "}";
+
+		List<Location> locations = new ArrayList<Location>();
+		locations.add(StandardLocation.CLASS_OUTPUT);
+		locations.add(StandardLocation.SOURCE_PATH);
+
+		BsjFileObject bfo = bfm.getJavaFileForOutput(StandardLocation.SOURCE_PATH, "SmallClass", Kind.SOURCE, null);
+		bfo.setCharContent(codeStr2);
+
+		BsjFileObject bfo2 = bfm.getJavaFileForOutput(StandardLocation.SOURCE_PATH, "JoeClass", Kind.SOURCE, null);
+		bfo2.setCharContent(codeStr);
+
+		System.out.println(bfo.getName());
+		System.out.println(bfo2.getName());
+		System.out.println(bfo.inferBinaryName());
+
+		List<JavaFileObject> fileObjects = Arrays.<JavaFileObject> asList(bfo, bfo2);
+
+		// The next step is to compile Iterable collection of java files and close file manager:
+
+		if (!(jc.getTask(null, bfm, null, null, null, fileObjects).call()))
+		{
+			Assert.fail("Compilation failure.");
+		}
+		bfm.close();
+
+		Object o = bfm.getClassLoader(StandardLocation.CLASS_OUTPUT).loadClass("JoeClass").newInstance();
+		Assert.assertEquals("Hello Joe!", o.toString());
+	}
 }
