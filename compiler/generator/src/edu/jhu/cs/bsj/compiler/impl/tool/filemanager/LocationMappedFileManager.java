@@ -38,6 +38,17 @@ public class LocationMappedFileManager implements BsjFileManager
 		super();
 		this.locationManagerMap = locationManagerMap;
 	}
+	
+	/**
+	 * Determines which location manager is serving the specified location.
+	 * @param location The location in question.
+	 * @return The location manager handling that location or <code>null</code> if this file manager does not recognize
+	 * the specified location.
+	 */
+	public LocationManager getLocationManager(Location location)
+	{
+		return this.locationManagerMap.get(location);
+	}
 
 	@Override
 	public void close() throws IOException
