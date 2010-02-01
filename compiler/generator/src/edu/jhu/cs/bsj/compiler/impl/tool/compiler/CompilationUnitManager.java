@@ -61,7 +61,7 @@ public class CompilationUnitManager
 	 */
 	public void addTask(BsjCompilerTask task)
 	{
-		this.priorityQueue.add(task);
+		this.priorityQueue.offer(task);
 	}
 
 	/**

@@ -24,7 +24,7 @@ public class SourceSerializationTask extends AbstractBsjCompilerTask implements 
 {
 	public SourceSerializationTask(CompilationUnitTracker tracker)
 	{
-		super(tracker);
+		super(tracker, TaskPriority.SERIALIZE);
 	}
 
 	@Override

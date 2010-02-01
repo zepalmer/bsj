@@ -17,7 +17,7 @@ public class CheatStubTask extends AbstractBsjCompilerTask
 {
 	public CheatStubTask(CompilationUnitTracker tracker)
 	{
-		super(tracker);
+		super(tracker, TaskPriority.CHEAT);
 	}
 
 	@Override

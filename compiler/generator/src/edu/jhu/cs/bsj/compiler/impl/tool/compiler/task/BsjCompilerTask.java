@@ -10,7 +10,7 @@ import edu.jhu.cs.bsj.compiler.impl.tool.compiler.CompilationUnitManager;
  * 
  * @author Zachary Palmer
  */
-public interface BsjCompilerTask
+public interface BsjCompilerTask extends Comparable<BsjCompilerTask>
 {
 	/**
 	 * Executes this task.
@@ -21,4 +21,15 @@ public interface BsjCompilerTask
 	 */
 	public void execute(CompilationUnitManager manager) throws IOException,
 			BsjCompilerException;
+	
+	/**
+	 * Retrieves the {@link TaskPriority} of this compiler task.
+	 */
+	public TaskPriority getPriority();
+	
+	/**
+	 * Retrieves a value uniquely identifying this {@link BsjCompilerTask}.  This UID applies only to the specific class
+	 * of compiler task the instance represents; two different class instances may have different UID namespaces.
+	 */
+	public int getUid();
 }

@@ -18,7 +18,7 @@ public class ParseCompilationUnitTask extends AbstractBsjCompilerTask
 {
 	public ParseCompilationUnitTask(CompilationUnitTracker tracker)
 	{
-		super(tracker);
+		super(tracker, TaskPriority.PARSE);
 	}
 
 	@Override
