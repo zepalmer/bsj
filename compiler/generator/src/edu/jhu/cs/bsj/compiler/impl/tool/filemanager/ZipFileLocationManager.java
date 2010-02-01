@@ -102,6 +102,11 @@ public class ZipFileLocationManager extends AbstractLocationManager
 			}
 			if (entry.getName().startsWith(prefix))
 			{
+				// If we're not recursing, make sure we skip subdirectory entries
+				if (!recurse && entry.getName().substring(prefix.length() + 1).indexOf('/') != -1)
+				{
+					continue;
+				}
 				for (Kind k : kinds)
 				{
 					if (entry.getName().endsWith(k.extension))

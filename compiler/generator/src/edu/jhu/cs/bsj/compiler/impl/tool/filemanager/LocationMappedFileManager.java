@@ -178,11 +178,27 @@ public class LocationMappedFileManager implements BsjFileManager
 	public Iterable<? extends BsjFileObject> listFiles(Location location, String packageName, Collection<Kind> kinds,
 			boolean recurse) throws IOException
 	{
+		if (LOGGER.isTraceEnabled())
+		{
+			LOGGER.trace("listFiles(" + location + ", \"" + packageName + "\", " + kinds + "," + recurse + ")");
+		}
+		
 		LocationManager manager = this.locationManagerMap.get(location);
 		if (manager == null)
 			return Collections.emptyList();
 
-		return manager.listFiles(packageName, kinds, recurse);
+		Iterable<? extends BsjFileObject> ret = manager.listFiles(packageName, kinds, recurse);
+		
+		if (LOGGER.isTraceEnabled())
+		{
+			LOGGER.trace("Found files: ");
+			for (BsjFileObject bfo : ret)
+			{
+				LOGGER.trace("    " + bfo.getName());
+			}
+		}
+		
+		return ret;
 	}
 
 	/**
