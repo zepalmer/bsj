@@ -185,12 +185,6 @@ public class UnionLocationManager extends AbstractLocationManager
 		List<LocationManager> managers = new ArrayList<LocationManager>();
 		
 		// use a different classpath separator for windows or unix
-//		String classpathSeparator = ":";
-//		if (System.getProperty("os.name").toLowerCase().contains("windows"))
-//		{
-//			classpathSeparator = ";";
-//		}
-		
 		for (String component : path.split(File.pathSeparator))
 		{
 			File file = new File(component);
