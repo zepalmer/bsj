@@ -6,6 +6,7 @@ import static org.junit.Assert.fail;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.InputStreamReader;
 
 import org.junit.Test;
 
@@ -66,13 +67,13 @@ public class RegeneratorTest
 
         // parse it to an AST
         BsjParserImpl parser = new BsjParserImpl(new BsjNodeFactoryImpl());
-        Node ast = parser.parse(input);
+        Node ast = parser.parse(new InputStreamReader(input));
 
         // regenerate it once
         String regen1 = ast.executeOperation(new BsjSourceSerializerImpl(), null);
         
         // use the regenerated version to create another AST
-        Node newAst = parser.parse(new ByteArrayInputStream(regen1.getBytes()));
+        Node newAst = parser.parse(new InputStreamReader(new ByteArrayInputStream(regen1.getBytes())));
                 
         // regenerate it again from the new AST
         String regen2 = newAst.executeOperation(new BsjSourceSerializerImpl(), null);

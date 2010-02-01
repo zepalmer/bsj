@@ -1,11 +1,11 @@
 package edu.jhu.cs.bsj.compiler.tool.parser;
 
 import java.io.IOException;
-import java.io.InputStream;
+import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.antlr.runtime.ANTLRInputStream;
+import org.antlr.runtime.ANTLRReaderStream;
 import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.TokenRewriteStream;
 
@@ -44,15 +44,17 @@ public class BsjParserImpl
 	/**
 	 * This method generates a BSJ heterogeneous AST from the provided source stream.
 	 * 
+	 * @param reader The {@link Reader} to use to read the input file.
 	 * @throws IOException If an I/O error occurs.
 	 * @throws BsjCompositeCompilerError If one or more parse errors occur.
 	 */
-	public CompilationUnitNode parse(InputStream is) throws IOException, BsjCompilerException, BsjCompositeCompilerException
+	public CompilationUnitNode parse(Reader reader) throws IOException, BsjCompilerException,
+			BsjCompositeCompilerException
 	{
-		BsjAntlrLexer lexer = new BsjAntlrLexer(new ANTLRInputStream(is));
+		BsjAntlrLexer lexer = new BsjAntlrLexer(new ANTLRReaderStream(reader));
 		BsjAntlrParser parser = new BsjAntlrParser(new TokenRewriteStream(lexer));
 		parser.setFactory(factory);
-		
+
 		CompilationUnitNode compilationUnitNode;
 		try
 		{
@@ -61,21 +63,21 @@ public class BsjParserImpl
 		{
 			throw new RuntimeException(re); // throw an exception of our own instead (to avoid passing ANTLR deps)
 		}
-		
+
 		List<BsjCompilerException> exceptions = new ArrayList<BsjCompilerException>();
-		if (lexer.getExceptions().size()>0)
+		if (lexer.getExceptions().size() > 0)
 		{
 			exceptions.addAll(lexer.getExceptions());
 		}
-		if (parser.getExceptions().size()>0)
+		if (parser.getExceptions().size() > 0)
 		{
 			exceptions.addAll(parser.getExceptions());
 		}
-		if (exceptions.size()>0)
+		if (exceptions.size() > 0)
 		{
 			throw new BsjCompositeCompilerException(exceptions);
 		}
-		
+
 		return compilationUnitNode;
 	}
 }

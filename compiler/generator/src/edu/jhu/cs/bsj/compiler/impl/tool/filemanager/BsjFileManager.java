@@ -59,4 +59,13 @@ public interface BsjFileManager extends JavaFileManager
 	 */
 	public Iterable<? extends BsjFileObject> listFiles(Location location, String packageName, Collection<Kind> kinds,
 			boolean recurse) throws IOException;
+
+	/**
+	 * Determines which location manager is serving the specified location.
+	 * 
+	 * @param location The location in question.
+	 * @return The location manager handling that location or <code>null</code> if this file manager does not recognize
+	 *         the specified location.
+	 */
+	public LocationManager getLocationManager(Location location);
 }
