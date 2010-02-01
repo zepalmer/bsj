@@ -1,12 +1,17 @@
 package edu.jhu.cs.bsj.compiler.ast;
 
 /**
- * This class represents a location in a BSJ or Java source file.
+ * This class represents a location in a BSJ or Java source file.  Line and column numbers are one-based.
  * 
  * @author Zachary Palmer
  */
 public class BsjSourceLocation implements Comparable<BsjSourceLocation>
 {
+	/**
+	 * The value which will be used for line or column when no information is available.
+	 */
+	public static final int NOPOS = 0;
+	
 	/**
 	 * The name of the source specified by this location. This should be, for example, the name of the source unit
 	 * containing this location.

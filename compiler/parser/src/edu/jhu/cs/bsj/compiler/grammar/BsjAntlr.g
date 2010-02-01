@@ -111,7 +111,7 @@ scope Rule {
      */
     protected BsjSourceLocation getSourceLocation(int rel)
     {
-        return new BsjSourceLocation(this.resourceName, this.getLine(), this.getCharPositionInLine());
+        return new BsjSourceLocation(this.resourceName, this.getLine(), this.getCharPositionInLine() + 1);
     }
 
     // *** ERROR REPORTING AND HANDLING ***************************************
@@ -206,8 +206,8 @@ scope Rule {
         Token token = input.LT(rel);
         return new BsjSourceLocation(
                 this.resourceName,
-                token==null ? 0 : token.getLine(),
-                token==null ? 0 : token.getCharPositionInLine());
+                token==null ? BsjSourceLocation.NOPOS : token.getLine(),
+                token==null ? BsjSourceLocation.NOPOS : token.getCharPositionInLine() + 1);
     }
 
     // *** FACTORY NODE PROPERTY **********************************************
@@ -235,18 +235,18 @@ scope Rule {
                 {
 	                BsjSourceLocation start = 
 	                        new BsjSourceLocation(resourceName, $Rule::firstToken.getLine(),
-	                                $Rule::firstToken.getCharPositionInLine());
+	                                $Rule::firstToken.getCharPositionInLine() + 1);
 	                setStartSourceLocation(start);
 	                
 	                BsjSourceLocation stop;
 	                Token token = input.LT(-1);
 	                if (token == null)
 	                {
-	                    stop = new BsjSourceLocation(resourceName, 0, 0);
+	                    stop = new BsjSourceLocation(resourceName, BsjSourceLocation.NOPOS, BsjSourceLocation.NOPOS);
 	                } else
 	                {
 	                    stop = new BsjSourceLocation(resourceName, token.getLine(),
-	                            token.getCharPositionInLine() + token.getText().length());
+	                            token.getCharPositionInLine() + token.getText().length() + 1);
 	                }
 	                
 	                // If the start location is greater than the stop location, then the last token consumed appears
@@ -687,9 +687,9 @@ javadoc returns [JavadocNode ret] // TODO: parse out Javadoc contents
                 {
                     Token token = input.get(index);
                     BsjSourceLocation startSourceLocation = new BsjSourceLocation(
-                            resourceName, token.getLine(), token.getCharPositionInLine());
+                            resourceName, token.getLine(), token.getCharPositionInLine() + 1);
                     BsjSourceLocation stopSourceLocation = new BsjSourceLocation(
-                            resourceName, token.getLine(), token.getCharPositionInLine() + token.getText().length());
+                            resourceName, token.getLine(), token.getCharPositionInLine() + token.getText().length() + 1);
                     factory.setStartSourceLocation(startSourceLocation);
                     factory.setStopSourceLocation(stopSourceLocation);
                     factorySourceLocationOverride = true;
