@@ -38,11 +38,11 @@ public class RegularFileObject extends AbstractFileObject implements BsjFileObje
 		throws IOException
 	{
 		super(encodingName);
-		this.file = file;
+		this.file = file.getCanonicalFile();
 		this.root = root.getCanonicalFile();
 		// validate root
 		StringBuilder binaryNameBuilder = new StringBuilder();
-		File f = file.getCanonicalFile();
+		File f = this.file;
 		boolean ok = false;
 		while (f != null)
 		{
