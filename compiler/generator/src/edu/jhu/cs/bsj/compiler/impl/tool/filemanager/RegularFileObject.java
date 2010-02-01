@@ -143,4 +143,10 @@ public class RegularFileObject extends AbstractFileObject implements BsjFileObje
 	{
 		return true;
 	}
+
+	@Override
+	public String toString()
+	{
+		return "RegularFileObject (" + binaryName + " -> " + file + ")";
+	}
 }
