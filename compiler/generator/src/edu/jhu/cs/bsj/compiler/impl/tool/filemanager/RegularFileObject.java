@@ -8,6 +8,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URI;
 
+import edu.jhu.cs.bsj.compiler.impl.utils.StringUtilities;
+
 /**
  * This implementation of {@link AbstractFileObject} represents a file which is stored in a physical location on the
  * disk.
@@ -52,8 +54,12 @@ public class RegularFileObject extends AbstractFileObject implements BsjFileObje
 			if (binaryNameBuilder.length()>0)
 			{
 				binaryNameBuilder.insert(0, '.');
+				binaryNameBuilder.insert(0, f.getName());
+			} else
+			{
+				// remove extension
+				binaryNameBuilder.insert(0, StringUtilities.removeSuffix(f.getName(), '.'));
 			}
-			binaryNameBuilder.insert(0, f.getName());
 			f = f.getParentFile();
 		}
 		if (!ok)
