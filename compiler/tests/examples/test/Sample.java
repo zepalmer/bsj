@@ -3,9 +3,11 @@ package test;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.Reader;
 
 import org.junit.Test;
 
@@ -66,18 +68,18 @@ public class Sample
 
         // parse it to an AST
         BsjParserImpl parser = new BsjParserImpl(new BsjNodeFactoryImpl());
-        Node ast = parser.parse(input);
+        //Node ast = parser.parse(new BufferedReader(input));
 
         // regenerate it once
-        String regen1 = ast.executeOperation(new BsjSourceSerializerImpl(), null);
+        //String regen1 = ast.executeOperation(new BsjSourceSerializerImpl(), null);
         
         // use the regenerated version to create another AST
-        Node newAst = parser.parse(new ByteArrayInputStream(regen1.getBytes()));
+        //Node newAst = parser.parse(new ByteArrayInputStream(regen1.getBytes()));
                 
         // regenerate it again from the new AST
-        String regen2 = newAst.executeOperation(new BsjSourceSerializerImpl(), null);
+        //String regen2 = newAst.executeOperation(new BsjSourceSerializerImpl(), null);
         
         // the twice regenerated source should equal the once regenerated source
-        return regen1.equals(regen2);
+        return false;
     }
 }
