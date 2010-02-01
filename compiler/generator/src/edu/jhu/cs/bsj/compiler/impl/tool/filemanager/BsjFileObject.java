@@ -1,5 +1,7 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.filemanager;
 
+import java.io.IOException;
+
 import javax.tools.JavaFileObject;
 
 /**
@@ -29,4 +31,11 @@ public interface BsjFileObject extends JavaFileObject
 	 * attempt to write to this file would always fail.
 	 */
 	public boolean isWritable();
+	
+	/**
+	 * Sets the contents of this file.
+	 * @param charSequence The character sequence to store in this file.
+	 * @throws IOException If an I/O error occurs.
+	 */
+	public void setCharContent(CharSequence charSequence) throws IOException;
 }

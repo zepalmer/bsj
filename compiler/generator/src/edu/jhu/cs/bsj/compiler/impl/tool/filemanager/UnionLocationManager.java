@@ -196,7 +196,9 @@ public class UnionLocationManager extends AbstractLocationManager
 				manager = new RegularFileLocationManager(encodingName, file);
 			} else
 			{
-				throw new FileNotFoundException(component + " does not exist or cannot be used");
+				// TODO: can we do anything here?  FNFE causes problems because default boot classpath has nonexistents
+				continue;
+				//throw new FileNotFoundException(component + " does not exist or cannot be used");
 			}
 			managers.add(manager);
 		}

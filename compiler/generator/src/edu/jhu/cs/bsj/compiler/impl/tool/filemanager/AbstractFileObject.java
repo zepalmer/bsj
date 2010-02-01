@@ -137,4 +137,12 @@ public abstract class AbstractFileObject extends IORegistry implements BsjFileOb
 		OutputStreamWriter writer = new OutputStreamWriter(os, getEncoder());
 		return writer;
 	}
+
+	@Override
+	public void setCharContent(CharSequence charSequence) throws IOException
+	{
+		Writer writer = openWriter();
+		writer.append(charSequence);
+		writer.close();
+	}
 }

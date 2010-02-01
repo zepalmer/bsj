@@ -21,14 +21,14 @@ import edu.jhu.cs.bsj.compiler.impl.utils.TypeTranslatingIterable;
 public class LocationMappedFileManager implements BsjFileManager
 {
 	/** A mapping between locations and their managers. */
-	private Map<Location, LocationManager> locationManagerMap;
+	private Map<? extends Location, ? extends LocationManager> locationManagerMap;
 
 	/**
 	 * Creates a new location-mapped file manager.
 	 * 
 	 * @param locationManagerMap The location manager map to use.
 	 */
-	public LocationMappedFileManager(Map<Location, LocationManager> locationManagerMap)
+	public <T extends Location, U extends LocationManager> LocationMappedFileManager(Map<T,U> locationManagerMap)
 	{
 		super();
 		this.locationManagerMap = locationManagerMap;

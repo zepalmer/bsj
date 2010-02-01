@@ -44,7 +44,7 @@ public class RegularFileObject extends AbstractFileObject implements BsjFileObje
 		boolean ok = false;
 		while (f != null)
 		{
-			if (f.equals(root))
+			if (f.equals(this.root))
 			{
 				ok = true;
 				break;
