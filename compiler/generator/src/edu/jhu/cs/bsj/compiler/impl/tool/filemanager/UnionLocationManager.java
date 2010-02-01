@@ -1,5 +1,7 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.filemanager;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -44,6 +46,22 @@ public class UnionLocationManager extends AbstractLocationManager
 			throw new IllegalArgumentException(
 					"UnionLocationManager can't handle an empty backing location manager list.");
 		}
+	}
+
+	/**
+	 * Creates a new location manager. This constructor is provided for convenience and parses the specified path string
+	 * into a number of components. Each path component which is a file is treated as a ZIP archive; each path component
+	 * which is a directory is treated as a location root.
+	 * 
+	 * @param encodingName The character encoding to use on files produced by this location manager.
+	 * @param path The path to use for this location manager.
+	 * @throws IllegalArgumentException If the path string is empty.
+	 * @throws IOException If canonicalization of a pathname fails.
+	 * @throws FileNotFoundException If one of the specified pathnames does not exist.
+	 */
+	public UnionLocationManager(String encodingName, String path) throws IOException, FileNotFoundException
+	{
+		this(encodingName, instantiatePath(encodingName, path));
 	}
 
 	/**
@@ -131,11 +149,11 @@ public class UnionLocationManager extends AbstractLocationManager
 	}
 
 	/**
-	 * Generates a list of the files in a specific package name.  This method will simply perform the listing operation
-	 * on all of its backing locations and assemble the results into a single iterable object.  This means that if the
+	 * Generates a list of the files in a specific package name. This method will simply perform the listing operation
+	 * on all of its backing locations and assemble the results into a single iterable object. This means that if the
 	 * backing locations overlap, it is possible to get "duplicates": two file objects may represent the same backing
-	 * resource.  These duplicates are not filtered out by this method, as it would be computationally expensive to do
-	 * so and not terribly common for duplicates to occur.  Callers may wish to filter out duplicates on their own.
+	 * resource. These duplicates are not filtered out by this method, as it would be computationally expensive to do so
+	 * and not terribly common for duplicates to occur. Callers may wish to filter out duplicates on their own.
 	 */
 	@Override
 	public Iterable<? extends BsjFileObject> listFiles(String packageName, Collection<Kind> kinds, boolean recurse)
@@ -148,5 +166,40 @@ public class UnionLocationManager extends AbstractLocationManager
 			iterables.add(manager.listFiles(packageName, kinds, recurse));
 		}
 		return new CompoundIterable<BsjFileObject>(iterables);
+	}
+
+	/**
+	 * This utility method is used by the path constructor of this class to instantiate backing location managers from
+	 * the specified path string.
+	 * 
+	 * @param encodingName The name of the encoding to use for the backing managers or <code>null</code> to use the
+	 *            default platform encoding.
+	 * @param path The path string to use.
+	 * @return The location managers to use when instantiating the {@link UnionLocationManager}.
+	 * @throws IOException If canonicalization of a pathname fails.
+	 * @throws FileNotFoundException If one of the specified pathnames does not exist.
+	 */
+	private static List<? extends LocationManager> instantiatePath(String encodingName, String path)
+			throws IOException, FileNotFoundException
+	{
+		List<LocationManager> managers = new ArrayList<LocationManager>();
+		for (String component : path.split(":"))
+		{
+			File file = new File(component);
+			file = file.getCanonicalFile();
+			LocationManager manager;
+			if (file.isFile())
+			{
+				manager = new ZipFileLocationManager(encodingName, file);
+			} else if (file.isDirectory())
+			{
+				manager = new RegularFileLocationManager(encodingName, file);
+			} else
+			{
+				throw new FileNotFoundException(component + " does not exist or cannot be used");
+			}
+			managers.add(manager);
+		}
+		return managers;
 	}
 }
