@@ -8,24 +8,34 @@ import java.io.OutputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import javax.tools.SimpleJavaFileObject;
+import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.AbstractFileObject;
+import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.BsjFileObject;
 
-public class ByteArrayJavaFileObject extends SimpleJavaFileObject
+public class ByteArrayJavaFileObject extends AbstractFileObject implements BsjFileObject
 {
     /**
      * Stores the content of this file object.
      */
     private byte[] bytes = new byte[0];
+    
+    private String fileName;
+    
+    private Kind kind;
 
     /**
      * Constructor.
+     * @param encodingName the name of the encoding to use.
      * @param fileName the name of the class.
      * @param bytes the content of the class.
      * @throws URISyntaxException on error.
      */
-    public ByteArrayJavaFileObject(String fileName, Kind kind) throws URISyntaxException
+    public ByteArrayJavaFileObject(String encodingName, 
+    		String fileName, Kind kind) throws URISyntaxException
     {
-        super(new URI("bsjmemfile://bsj/"+fileName), kind);
+    	super(encodingName);
+    	this.fileName = fileName;
+    	this.kind = kind;
+        //super(new URI("bsjmemfile://bsj/"+fileName), kind);
     }
 
     /**
@@ -43,6 +53,7 @@ public class ByteArrayJavaFileObject extends SimpleJavaFileObject
      * Opens an input stream for reading from this file object.
      * @return the input stream.
      */
+    @Override
     public InputStream openInputStream() throws IOException
     {
         return new ByteArrayInputStream(bytes);
@@ -53,6 +64,7 @@ public class ByteArrayJavaFileObject extends SimpleJavaFileObject
      * @return the output stream.
      * @throws IOException on error.
      */
+    @Override
     public OutputStream openOutputStream() throws IOException
     {
         // store the output stream in our buffer
@@ -82,4 +94,57 @@ public class ByteArrayJavaFileObject extends SimpleJavaFileObject
     {
         this.bytes = bytes;
     }
+
+	@Override
+	public boolean exists()
+	{
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public String inferBinaryName()
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean isWritable()
+	{
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean delete()
+	{
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public long getLastModified()
+	{
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public String getName()
+	{
+		return fileName;
+	}
+
+	@Override
+	public URI toUri()
+	{
+		try
+		{
+			return new URI("bsjmemfile://bsj/"+fileName);
+		} catch (URISyntaxException e)
+		{
+			return null;
+		}
+	}
 }

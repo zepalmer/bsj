@@ -95,6 +95,7 @@ public class InMemoryFileManager implements JavaFileManager
         try
         {
             fileObject = new ByteArrayJavaFileObject(
+            		null,
                     relativeName, 
                     JavaFileManagerUtilities.getKindFor(relativeName));
             fileObjectMap.put(
@@ -135,7 +136,7 @@ public class InMemoryFileManager implements JavaFileManager
         ByteArrayJavaFileObject javaFileObject = null;
         try
         {
-            javaFileObject = new ByteArrayJavaFileObject(className + kind.extension, kind);
+            javaFileObject = new ByteArrayJavaFileObject(null, className + kind.extension, kind);
             javaFileObjectMap.put(new JavaFileObjectTuple(location, className, kind), javaFileObject);
         } 
         catch (URISyntaxException e)
