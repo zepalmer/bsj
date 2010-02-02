@@ -30,6 +30,21 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
 	{
 		return "v" + (nextVariableId++);
 	}
+	
+	protected ExpressionNode expressionizeString(String s)
+	{
+		return factory.makeStringLiteralNode(s);
+	}
+	
+	protected ExpressionNode expressionizeCharacter(Character c)
+	{
+		return expressionizeChar(c);
+	}
+	
+	protected ExpressionNode expressionizeInteger(Integer i)
+	{
+		return expressionizeInt(i);
+	}
     private BsjNodeFactory factory;
 
     public BsjTreeLifter(BsjNodeFactory factory)
@@ -37,34 +52,111 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
         this.factory = factory;
     }
 
-    public ExpressionNode executeChar(char x)
+    protected ExpressionNode expressionizeChar(char x)
     {
         return factory.makeCharLiteralNode(x);
     }
 
-    public ExpressionNode executeInt(int x)
+    protected ExpressionNode expressionizeInt(int x)
     {
         return factory.makeIntLiteralNode(x);
     }
 
-    public ExpressionNode executeBoolean(boolean x)
+    protected ExpressionNode expressionizeBoolean(boolean x)
     {
         return factory.makeBooleanLiteralNode(x);
     }
 
-    public ExpressionNode executeDouble(double x)
+    protected ExpressionNode expressionizeDouble(double x)
     {
         return factory.makeDoubleLiteralNode(x);
     }
 
-    public ExpressionNode executeLong(long x)
+    protected ExpressionNode expressionizeLong(long x)
     {
         return factory.makeLongLiteralNode(x);
     }
 
-    public ExpressionNode executeFloat(float x)
+    protected ExpressionNode expressionizeFloat(float x)
     {
         return factory.makeFloatLiteralNode(x);
+    }
+
+    protected ExpressionNode expressionizePrimitiveType(PrimitiveType x)
+    {
+        return factory.makeFieldAccessByNameNode(factory.makeQualifiedNameNode(
+                factory.makeSimpleNameNode(
+                        factory.makeIdentifierNode("PrimitiveType"),
+                        NameCategory.EXPRESSION
+                        ),
+                factory.makeIdentifierNode(x.name()),
+                NameCategory.EXPRESSION));
+    }
+
+    protected ExpressionNode expressionizeUnaryStatementOperator(UnaryStatementOperator x)
+    {
+        return factory.makeFieldAccessByNameNode(factory.makeQualifiedNameNode(
+                factory.makeSimpleNameNode(
+                        factory.makeIdentifierNode("UnaryStatementOperator"),
+                        NameCategory.EXPRESSION
+                        ),
+                factory.makeIdentifierNode(x.name()),
+                NameCategory.EXPRESSION));
+    }
+
+    protected ExpressionNode expressionizeAssignmentOperator(AssignmentOperator x)
+    {
+        return factory.makeFieldAccessByNameNode(factory.makeQualifiedNameNode(
+                factory.makeSimpleNameNode(
+                        factory.makeIdentifierNode("AssignmentOperator"),
+                        NameCategory.EXPRESSION
+                        ),
+                factory.makeIdentifierNode(x.name()),
+                NameCategory.EXPRESSION));
+    }
+
+    protected ExpressionNode expressionizeBinaryOperator(BinaryOperator x)
+    {
+        return factory.makeFieldAccessByNameNode(factory.makeQualifiedNameNode(
+                factory.makeSimpleNameNode(
+                        factory.makeIdentifierNode("BinaryOperator"),
+                        NameCategory.EXPRESSION
+                        ),
+                factory.makeIdentifierNode(x.name()),
+                NameCategory.EXPRESSION));
+    }
+
+    protected ExpressionNode expressionizeNameCategory(NameCategory x)
+    {
+        return factory.makeFieldAccessByNameNode(factory.makeQualifiedNameNode(
+                factory.makeSimpleNameNode(
+                        factory.makeIdentifierNode("NameCategory"),
+                        NameCategory.EXPRESSION
+                        ),
+                factory.makeIdentifierNode(x.name()),
+                NameCategory.EXPRESSION));
+    }
+
+    protected ExpressionNode expressionizeUnaryOperator(UnaryOperator x)
+    {
+        return factory.makeFieldAccessByNameNode(factory.makeQualifiedNameNode(
+                factory.makeSimpleNameNode(
+                        factory.makeIdentifierNode("UnaryOperator"),
+                        NameCategory.EXPRESSION
+                        ),
+                factory.makeIdentifierNode(x.name()),
+                NameCategory.EXPRESSION));
+    }
+
+    protected ExpressionNode expressionizeAccessModifier(AccessModifier x)
+    {
+        return factory.makeFieldAccessByNameNode(factory.makeQualifiedNameNode(
+                factory.makeSimpleNameNode(
+                        factory.makeIdentifierNode("AccessModifier"),
+                        NameCategory.EXPRESSION
+                        ),
+                factory.makeIdentifierNode(x.name()),
+                NameCategory.EXPRESSION));
     }
 
     @Override
@@ -97,10 +189,10 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                                 factory.makeIdentifierNode("makeAssertStatementNode"),
                                                 factory.makeListNode(
                                                         Arrays.<ExpressionNode>asList(
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftTestExpressionVarName),NameCategory.EXPRESSION)),
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftMessageExpressionVarName),NameCategory.EXPRESSION))
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftTestExpressionVarName),NameCategory.EXPRESSION)),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftMessageExpressionVarName),NameCategory.EXPRESSION))
                                                                 )),
                                                 factory.makeListNode(Collections.<TypeNode>emptyList()))
             )))));
@@ -138,9 +230,9 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                                 factory.makeIdentifierNode("makeUnaryStatementExpressionNode"),
                                                 factory.makeListNode(
                                                         Arrays.<ExpressionNode>asList(
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftExpressionVarName),NameCategory.EXPRESSION)),
-/* TODO */ null
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftExpressionVarName),NameCategory.EXPRESSION)),
+                                                                expressionizeUnaryStatementOperator(liftOperatorValue)
                                                                 )),
                                                 factory.makeListNode(Collections.<TypeNode>emptyList()))
             )))));
@@ -176,8 +268,8 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                                 factory.makeIdentifierNode("makeInterfaceBodyNode"),
                                                 factory.makeListNode(
                                                         Arrays.<ExpressionNode>asList(
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftMembersVarName),NameCategory.EXPRESSION))
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftMembersVarName),NameCategory.EXPRESSION))
                                                                 )),
                                                 factory.makeListNode(Collections.<TypeNode>emptyList()))
             )))));
@@ -213,8 +305,8 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                                 factory.makeIdentifierNode("makeExpressionStatementNode"),
                                                 factory.makeListNode(
                                                         Arrays.<ExpressionNode>asList(
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftExpressionVarName),NameCategory.EXPRESSION))
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftExpressionVarName),NameCategory.EXPRESSION))
                                                                 )),
                                                 factory.makeListNode(Collections.<TypeNode>emptyList()))
             )))));
@@ -262,20 +354,20 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                                 factory.makeIdentifierNode("makeClassDeclarationNode"),
                                                 factory.makeListNode(
                                                         Arrays.<ExpressionNode>asList(
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftModifiersVarName),NameCategory.EXPRESSION)),
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftExtendsClauseVarName),NameCategory.EXPRESSION)),
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftImplementsClauseVarName),NameCategory.EXPRESSION)),
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftBodyVarName),NameCategory.EXPRESSION)),
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftTypeParametersVarName),NameCategory.EXPRESSION)),
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftIdentifierVarName),NameCategory.EXPRESSION)),
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftJavadocVarName),NameCategory.EXPRESSION))
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftModifiersVarName),NameCategory.EXPRESSION)),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftExtendsClauseVarName),NameCategory.EXPRESSION)),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftImplementsClauseVarName),NameCategory.EXPRESSION)),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftBodyVarName),NameCategory.EXPRESSION)),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftTypeParametersVarName),NameCategory.EXPRESSION)),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftIdentifierVarName),NameCategory.EXPRESSION)),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftJavadocVarName),NameCategory.EXPRESSION))
                                                                 )),
                                                 factory.makeListNode(Collections.<TypeNode>emptyList()))
             )))));
@@ -315,12 +407,12 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                                 factory.makeIdentifierNode("makeEnhancedForLoopNode"),
                                                 factory.makeListNode(
                                                         Arrays.<ExpressionNode>asList(
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftVariableVarName),NameCategory.EXPRESSION)),
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftExpressionVarName),NameCategory.EXPRESSION)),
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftStatementVarName),NameCategory.EXPRESSION))
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftVariableVarName),NameCategory.EXPRESSION)),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftExpressionVarName),NameCategory.EXPRESSION)),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftStatementVarName),NameCategory.EXPRESSION))
                                                                 )),
                                                 factory.makeListNode(Collections.<TypeNode>emptyList()))
             )))));
@@ -358,10 +450,10 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                                 factory.makeIdentifierNode("makeArrayAccessNode"),
                                                 factory.makeListNode(
                                                         Arrays.<ExpressionNode>asList(
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftArrayExpressionVarName),NameCategory.EXPRESSION)),
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftIndexExpressionVarName),NameCategory.EXPRESSION))
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftArrayExpressionVarName),NameCategory.EXPRESSION)),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftIndexExpressionVarName),NameCategory.EXPRESSION))
                                                                 )),
                                                 factory.makeListNode(Collections.<TypeNode>emptyList()))
             )))));
@@ -397,7 +489,7 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                                 factory.makeIdentifierNode("makeLongLiteralNode"),
                                                 factory.makeListNode(
                                                         Arrays.<ExpressionNode>asList(
-/* TODO */ null
+                                                                expressionizeLong(liftValueValue)
                                                                 )),
                                                 factory.makeListNode(Collections.<TypeNode>emptyList()))
             )))));
@@ -437,11 +529,11 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                                 factory.makeIdentifierNode("makeQualifiedNameNode"),
                                                 factory.makeListNode(
                                                         Arrays.<ExpressionNode>asList(
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftBaseVarName),NameCategory.EXPRESSION)),
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftIdentifierVarName),NameCategory.EXPRESSION)),
-/* TODO */ null
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftBaseVarName),NameCategory.EXPRESSION)),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftIdentifierVarName),NameCategory.EXPRESSION)),
+                                                                expressionizeNameCategory(liftCategoryValue)
                                                                 )),
                                                 factory.makeListNode(Collections.<TypeNode>emptyList()))
             )))));
@@ -479,10 +571,10 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                                 factory.makeIdentifierNode("makeCaseNode"),
                                                 factory.makeListNode(
                                                         Arrays.<ExpressionNode>asList(
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftExpressionVarName),NameCategory.EXPRESSION)),
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftStatementsVarName),NameCategory.EXPRESSION))
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftExpressionVarName),NameCategory.EXPRESSION)),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftStatementsVarName),NameCategory.EXPRESSION))
                                                                 )),
                                                 factory.makeListNode(Collections.<TypeNode>emptyList()))
             )))));
@@ -551,8 +643,8 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                                 factory.makeIdentifierNode("makeCodeLiteralNode"),
                                                 factory.makeListNode(
                                                         Arrays.<ExpressionNode>asList(
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftValueVarName),NameCategory.EXPRESSION))
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftValueVarName),NameCategory.EXPRESSION))
                                                                 )),
                                                 factory.makeListNode(Collections.<TypeNode>emptyList()))
             )))));
@@ -590,9 +682,9 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                                 factory.makeIdentifierNode("makeImportOnDemandNode"),
                                                 factory.makeListNode(
                                                         Arrays.<ExpressionNode>asList(
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftNameVarName),NameCategory.EXPRESSION)),
-/* TODO */ null
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftNameVarName),NameCategory.EXPRESSION)),
+                                                                expressionizeBoolean(liftStaticImportValue)
                                                                 )),
                                                 factory.makeListNode(Collections.<TypeNode>emptyList()))
             )))));
@@ -630,9 +722,9 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                                 factory.makeIdentifierNode("makeVariableModifiersNode"),
                                                 factory.makeListNode(
                                                         Arrays.<ExpressionNode>asList(
-/* TODO */ null,
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftAnnotationsVarName),NameCategory.EXPRESSION))
+                                                                expressionizeBoolean(liftFinalFlagValue),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftAnnotationsVarName),NameCategory.EXPRESSION))
                                                                 )),
                                                 factory.makeListNode(Collections.<TypeNode>emptyList()))
             )))));
@@ -668,8 +760,8 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                                 factory.makeIdentifierNode("makeBlockStatementMetaprogramAnchorNode"),
                                                 factory.makeListNode(
                                                         Arrays.<ExpressionNode>asList(
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftMetaprogramVarName),NameCategory.EXPRESSION))
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftMetaprogramVarName),NameCategory.EXPRESSION))
                                                                 )),
                                                 factory.makeListNode(Collections.<TypeNode>emptyList()))
             )))));
@@ -711,11 +803,11 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                                 factory.makeIdentifierNode("makeInterfaceModifiersNode"),
                                                 factory.makeListNode(
                                                         Arrays.<ExpressionNode>asList(
-/* TODO */ null,
-/* TODO */ null,
-/* TODO */ null,
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftAnnotationsVarName),NameCategory.EXPRESSION))
+                                                                expressionizeAccessModifier(liftAccessValue),
+                                                                expressionizeBoolean(liftStaticFlagValue),
+                                                                expressionizeBoolean(liftStrictfpFlagValue),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftAnnotationsVarName),NameCategory.EXPRESSION))
                                                                 )),
                                                 factory.makeListNode(Collections.<TypeNode>emptyList()))
             )))));
@@ -755,12 +847,12 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                                 factory.makeIdentifierNode("makeSuperclassConstructorInvocationNode"),
                                                 factory.makeListNode(
                                                         Arrays.<ExpressionNode>asList(
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftQualifyingExpressionVarName),NameCategory.EXPRESSION)),
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftArgumentsVarName),NameCategory.EXPRESSION)),
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftTypeArgumentsVarName),NameCategory.EXPRESSION))
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftQualifyingExpressionVarName),NameCategory.EXPRESSION)),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftArgumentsVarName),NameCategory.EXPRESSION)),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftTypeArgumentsVarName),NameCategory.EXPRESSION))
                                                                 )),
                                                 factory.makeListNode(Collections.<TypeNode>emptyList()))
             )))));
@@ -796,7 +888,7 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                                 factory.makeIdentifierNode("makePrimitiveTypeNode"),
                                                 factory.makeListNode(
                                                         Arrays.<ExpressionNode>asList(
-/* TODO */ null
+                                                                expressionizePrimitiveType(liftPrimitiveTypeValue)
                                                                 )),
                                                 factory.makeListNode(Collections.<TypeNode>emptyList()))
             )))));
@@ -832,8 +924,8 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                                 factory.makeIdentifierNode("makeMetaprogramNode"),
                                                 factory.makeListNode(
                                                         Arrays.<ExpressionNode>asList(
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftBodyVarName),NameCategory.EXPRESSION))
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftBodyVarName),NameCategory.EXPRESSION))
                                                                 )),
                                                 factory.makeListNode(Collections.<TypeNode>emptyList()))
             )))));
@@ -871,9 +963,9 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                                 factory.makeIdentifierNode("makeInitializerDeclarationNode"),
                                                 factory.makeListNode(
                                                         Arrays.<ExpressionNode>asList(
-/* TODO */ null,
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftBodyVarName),NameCategory.EXPRESSION))
+                                                                expressionizeBoolean(liftStaticInitializerValue),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftBodyVarName),NameCategory.EXPRESSION))
                                                                 )),
                                                 factory.makeListNode(Collections.<TypeNode>emptyList()))
             )))));
@@ -911,10 +1003,10 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                                 factory.makeIdentifierNode("makeEnumBodyNode"),
                                                 factory.makeListNode(
                                                         Arrays.<ExpressionNode>asList(
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftConstantsVarName),NameCategory.EXPRESSION)),
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftMembersVarName),NameCategory.EXPRESSION))
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftConstantsVarName),NameCategory.EXPRESSION)),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftMembersVarName),NameCategory.EXPRESSION))
                                                                 )),
                                                 factory.makeListNode(Collections.<TypeNode>emptyList()))
             )))));
@@ -954,12 +1046,12 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                                 factory.makeIdentifierNode("makeTryNode"),
                                                 factory.makeListNode(
                                                         Arrays.<ExpressionNode>asList(
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftBlockVarName),NameCategory.EXPRESSION)),
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftCatchesVarName),NameCategory.EXPRESSION)),
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftFinallyBlockVarName),NameCategory.EXPRESSION))
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftBlockVarName),NameCategory.EXPRESSION)),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftCatchesVarName),NameCategory.EXPRESSION)),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftFinallyBlockVarName),NameCategory.EXPRESSION))
                                                                 )),
                                                 factory.makeListNode(Collections.<TypeNode>emptyList()))
             )))));
@@ -995,8 +1087,8 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                                 factory.makeIdentifierNode("makeThisNode"),
                                                 factory.makeListNode(
                                                         Arrays.<ExpressionNode>asList(
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftTypeVarName),NameCategory.EXPRESSION))
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftTypeVarName),NameCategory.EXPRESSION))
                                                                 )),
                                                 factory.makeListNode(Collections.<TypeNode>emptyList()))
             )))));
@@ -1032,8 +1124,8 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                                 factory.makeIdentifierNode("makeTypeDeclarationMetaprogramAnchorNode"),
                                                 factory.makeListNode(
                                                         Arrays.<ExpressionNode>asList(
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftMetaprogramVarName),NameCategory.EXPRESSION))
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftMetaprogramVarName),NameCategory.EXPRESSION))
                                                                 )),
                                                 factory.makeListNode(Collections.<TypeNode>emptyList()))
             )))));
@@ -1077,16 +1169,16 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                                 factory.makeIdentifierNode("makeEnumDeclarationNode"),
                                                 factory.makeListNode(
                                                         Arrays.<ExpressionNode>asList(
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftModifiersVarName),NameCategory.EXPRESSION)),
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftImplementsClauseVarName),NameCategory.EXPRESSION)),
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftBodyVarName),NameCategory.EXPRESSION)),
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftIdentifierVarName),NameCategory.EXPRESSION)),
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftJavadocVarName),NameCategory.EXPRESSION))
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftModifiersVarName),NameCategory.EXPRESSION)),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftImplementsClauseVarName),NameCategory.EXPRESSION)),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftBodyVarName),NameCategory.EXPRESSION)),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftIdentifierVarName),NameCategory.EXPRESSION)),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftJavadocVarName),NameCategory.EXPRESSION))
                                                                 )),
                                                 factory.makeListNode(Collections.<TypeNode>emptyList()))
             )))));
@@ -1157,10 +1249,10 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                                 factory.makeIdentifierNode("makeVariableDeclarationNode"),
                                                 factory.makeListNode(
                                                         Arrays.<ExpressionNode>asList(
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftModifiersVarName),NameCategory.EXPRESSION)),
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftDeclaratorsVarName),NameCategory.EXPRESSION))
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftModifiersVarName),NameCategory.EXPRESSION)),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftDeclaratorsVarName),NameCategory.EXPRESSION))
                                                                 )),
                                                 factory.makeListNode(Collections.<TypeNode>emptyList()))
             )))));
@@ -1196,8 +1288,8 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                                 factory.makeIdentifierNode("makeAnnotationBodyNode"),
                                                 factory.makeListNode(
                                                         Arrays.<ExpressionNode>asList(
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftMembersVarName),NameCategory.EXPRESSION))
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftMembersVarName),NameCategory.EXPRESSION))
                                                                 )),
                                                 factory.makeListNode(Collections.<TypeNode>emptyList()))
             )))));
@@ -1233,8 +1325,8 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                                 factory.makeIdentifierNode("makeUnparameterizedTypeNode"),
                                                 factory.makeListNode(
                                                         Arrays.<ExpressionNode>asList(
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftNameVarName),NameCategory.EXPRESSION))
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftNameVarName),NameCategory.EXPRESSION))
                                                                 )),
                                                 factory.makeListNode(Collections.<TypeNode>emptyList()))
             )))));
@@ -1274,12 +1366,12 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                                 factory.makeIdentifierNode("makeVariableDeclaratorNode"),
                                                 factory.makeListNode(
                                                         Arrays.<ExpressionNode>asList(
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftTypeVarName),NameCategory.EXPRESSION)),
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftNameVarName),NameCategory.EXPRESSION)),
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftInitializerVarName),NameCategory.EXPRESSION))
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftTypeVarName),NameCategory.EXPRESSION)),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftNameVarName),NameCategory.EXPRESSION)),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftInitializerVarName),NameCategory.EXPRESSION))
                                                                 )),
                                                 factory.makeListNode(Collections.<TypeNode>emptyList()))
             )))));
@@ -1321,11 +1413,11 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                                 factory.makeIdentifierNode("makeAnnotationModifiersNode"),
                                                 factory.makeListNode(
                                                         Arrays.<ExpressionNode>asList(
-/* TODO */ null,
-/* TODO */ null,
-/* TODO */ null,
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftAnnotationsVarName),NameCategory.EXPRESSION))
+                                                                expressionizeAccessModifier(liftAccessValue),
+                                                                expressionizeBoolean(liftStaticFlagValue),
+                                                                expressionizeBoolean(liftStrictfpFlagValue),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftAnnotationsVarName),NameCategory.EXPRESSION))
                                                                 )),
                                                 factory.makeListNode(Collections.<TypeNode>emptyList()))
             )))));
@@ -1363,10 +1455,10 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                                 factory.makeIdentifierNode("makeFieldAccessByExpressionNode"),
                                                 factory.makeListNode(
                                                         Arrays.<ExpressionNode>asList(
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftExpressionVarName),NameCategory.EXPRESSION)),
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftIdentifierVarName),NameCategory.EXPRESSION))
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftExpressionVarName),NameCategory.EXPRESSION)),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftIdentifierVarName),NameCategory.EXPRESSION))
                                                                 )),
                                                 factory.makeListNode(Collections.<TypeNode>emptyList()))
             )))));
@@ -1404,10 +1496,10 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                                 factory.makeIdentifierNode("makeSuperFieldAccessNode"),
                                                 factory.makeListNode(
                                                         Arrays.<ExpressionNode>asList(
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftTypeVarName),NameCategory.EXPRESSION)),
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftIdentifierVarName),NameCategory.EXPRESSION))
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftTypeVarName),NameCategory.EXPRESSION)),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftIdentifierVarName),NameCategory.EXPRESSION))
                                                                 )),
                                                 factory.makeListNode(Collections.<TypeNode>emptyList()))
             )))));
@@ -1443,8 +1535,8 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                                 factory.makeIdentifierNode("makeThrowNode"),
                                                 factory.makeListNode(
                                                         Arrays.<ExpressionNode>asList(
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftExpressionVarName),NameCategory.EXPRESSION))
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftExpressionVarName),NameCategory.EXPRESSION))
                                                                 )),
                                                 factory.makeListNode(Collections.<TypeNode>emptyList()))
             )))));
@@ -1484,10 +1576,10 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                                 factory.makeIdentifierNode("makeEnumModifiersNode"),
                                                 factory.makeListNode(
                                                         Arrays.<ExpressionNode>asList(
-/* TODO */ null,
-/* TODO */ null,
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftAnnotationsVarName),NameCategory.EXPRESSION))
+                                                                expressionizeAccessModifier(liftAccessValue),
+                                                                expressionizeBoolean(liftStrictfpFlagValue),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftAnnotationsVarName),NameCategory.EXPRESSION))
                                                                 )),
                                                 factory.makeListNode(Collections.<TypeNode>emptyList()))
             )))));
@@ -1525,10 +1617,10 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                                 factory.makeIdentifierNode("makeCatchNode"),
                                                 factory.makeListNode(
                                                         Arrays.<ExpressionNode>asList(
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftBlockVarName),NameCategory.EXPRESSION)),
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftParameterVarName),NameCategory.EXPRESSION))
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftBlockVarName),NameCategory.EXPRESSION)),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftParameterVarName),NameCategory.EXPRESSION))
                                                                 )),
                                                 factory.makeListNode(Collections.<TypeNode>emptyList()))
             )))));
@@ -1599,10 +1691,10 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                                 factory.makeIdentifierNode("makeNormalAnnotationNode"),
                                                 factory.makeListNode(
                                                         Arrays.<ExpressionNode>asList(
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftArgumentsVarName),NameCategory.EXPRESSION)),
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftAnnotationTypeVarName),NameCategory.EXPRESSION))
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftArgumentsVarName),NameCategory.EXPRESSION)),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftAnnotationTypeVarName),NameCategory.EXPRESSION))
                                                                 )),
                                                 factory.makeListNode(Collections.<TypeNode>emptyList()))
             )))));
@@ -1640,10 +1732,10 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                                 factory.makeIdentifierNode("makeDoWhileLoopNode"),
                                                 factory.makeListNode(
                                                         Arrays.<ExpressionNode>asList(
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftConditionVarName),NameCategory.EXPRESSION)),
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftStatementVarName),NameCategory.EXPRESSION))
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftConditionVarName),NameCategory.EXPRESSION)),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftStatementVarName),NameCategory.EXPRESSION))
                                                                 )),
                                                 factory.makeListNode(Collections.<TypeNode>emptyList()))
             )))));
@@ -1689,18 +1781,18 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                                 factory.makeIdentifierNode("makeQualifiedClassInstantiationNode"),
                                                 factory.makeListNode(
                                                         Arrays.<ExpressionNode>asList(
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftEnclosingExpressionVarName),NameCategory.EXPRESSION)),
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftIdentifierVarName),NameCategory.EXPRESSION)),
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftTypeArgumentsVarName),NameCategory.EXPRESSION)),
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftConstructorTypeArgumentsVarName),NameCategory.EXPRESSION)),
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftArgumentsVarName),NameCategory.EXPRESSION)),
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftBodyVarName),NameCategory.EXPRESSION))
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftEnclosingExpressionVarName),NameCategory.EXPRESSION)),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftIdentifierVarName),NameCategory.EXPRESSION)),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftTypeArgumentsVarName),NameCategory.EXPRESSION)),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftConstructorTypeArgumentsVarName),NameCategory.EXPRESSION)),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftArgumentsVarName),NameCategory.EXPRESSION)),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftBodyVarName),NameCategory.EXPRESSION))
                                                                 )),
                                                 factory.makeListNode(Collections.<TypeNode>emptyList()))
             )))));
@@ -1738,10 +1830,10 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                                 factory.makeIdentifierNode("makeTypeCastNode"),
                                                 factory.makeListNode(
                                                         Arrays.<ExpressionNode>asList(
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftExpressionVarName),NameCategory.EXPRESSION)),
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftTypeVarName),NameCategory.EXPRESSION))
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftExpressionVarName),NameCategory.EXPRESSION)),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftTypeVarName),NameCategory.EXPRESSION))
                                                                 )),
                                                 factory.makeListNode(Collections.<TypeNode>emptyList()))
             )))));
@@ -1779,10 +1871,10 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                                 factory.makeIdentifierNode("makeLabeledStatementNode"),
                                                 factory.makeListNode(
                                                         Arrays.<ExpressionNode>asList(
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftLabelVarName),NameCategory.EXPRESSION)),
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftStatementVarName),NameCategory.EXPRESSION))
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftLabelVarName),NameCategory.EXPRESSION)),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftStatementVarName),NameCategory.EXPRESSION))
                                                                 )),
                                                 factory.makeListNode(Collections.<TypeNode>emptyList()))
             )))));
@@ -1822,11 +1914,11 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                                 factory.makeIdentifierNode("makeBinaryExpressionNode"),
                                                 factory.makeListNode(
                                                         Arrays.<ExpressionNode>asList(
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftLeftOperandVarName),NameCategory.EXPRESSION)),
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftRightOperandVarName),NameCategory.EXPRESSION)),
-/* TODO */ null
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftLeftOperandVarName),NameCategory.EXPRESSION)),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftRightOperandVarName),NameCategory.EXPRESSION)),
+                                                                expressionizeBinaryOperator(liftOperatorValue)
                                                                 )),
                                                 factory.makeListNode(Collections.<TypeNode>emptyList()))
             )))));
@@ -1862,8 +1954,8 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                                 factory.makeIdentifierNode("makeForInitializerExpressionNode"),
                                                 factory.makeListNode(
                                                         Arrays.<ExpressionNode>asList(
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftExpressionsVarName),NameCategory.EXPRESSION))
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftExpressionsVarName),NameCategory.EXPRESSION))
                                                                 )),
                                                 factory.makeListNode(Collections.<TypeNode>emptyList()))
             )))));
@@ -1901,10 +1993,10 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                                 factory.makeIdentifierNode("makePackageDeclarationNode"),
                                                 factory.makeListNode(
                                                         Arrays.<ExpressionNode>asList(
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftNameVarName),NameCategory.EXPRESSION)),
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftAnnotationsVarName),NameCategory.EXPRESSION))
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftNameVarName),NameCategory.EXPRESSION)),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftAnnotationsVarName),NameCategory.EXPRESSION))
                                                                 )),
                                                 factory.makeListNode(Collections.<TypeNode>emptyList()))
             )))));
@@ -1946,14 +2038,14 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                                 factory.makeIdentifierNode("makeAnnotationDeclarationNode"),
                                                 factory.makeListNode(
                                                         Arrays.<ExpressionNode>asList(
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftModifiersVarName),NameCategory.EXPRESSION)),
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftBodyVarName),NameCategory.EXPRESSION)),
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftIdentifierVarName),NameCategory.EXPRESSION)),
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftJavadocVarName),NameCategory.EXPRESSION))
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftModifiersVarName),NameCategory.EXPRESSION)),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftBodyVarName),NameCategory.EXPRESSION)),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftIdentifierVarName),NameCategory.EXPRESSION)),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftJavadocVarName),NameCategory.EXPRESSION))
                                                                 )),
                                                 factory.makeListNode(Collections.<TypeNode>emptyList()))
             )))));
@@ -1993,12 +2085,12 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                                 factory.makeIdentifierNode("makeCompilationUnitNode"),
                                                 factory.makeListNode(
                                                         Arrays.<ExpressionNode>asList(
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftPackageDeclarationVarName),NameCategory.EXPRESSION)),
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftImportsVarName),NameCategory.EXPRESSION)),
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftTypeDeclsVarName),NameCategory.EXPRESSION))
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftPackageDeclarationVarName),NameCategory.EXPRESSION)),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftImportsVarName),NameCategory.EXPRESSION)),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftTypeDeclsVarName),NameCategory.EXPRESSION))
                                                                 )),
                                                 factory.makeListNode(Collections.<TypeNode>emptyList()))
             )))));
@@ -2034,8 +2126,8 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                                 factory.makeIdentifierNode("makeContinueNode"),
                                                 factory.makeListNode(
                                                         Arrays.<ExpressionNode>asList(
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftLabelVarName),NameCategory.EXPRESSION))
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftLabelVarName),NameCategory.EXPRESSION))
                                                                 )),
                                                 factory.makeListNode(Collections.<TypeNode>emptyList()))
             )))));
@@ -2071,7 +2163,7 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                                 factory.makeIdentifierNode("makeStringLiteralNode"),
                                                 factory.makeListNode(
                                                         Arrays.<ExpressionNode>asList(
-/* TODO */ null
+                                                                expressionizeString(liftValueValue)
                                                                 )),
                                                 factory.makeListNode(Collections.<TypeNode>emptyList()))
             )))));
@@ -2109,10 +2201,10 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                                 factory.makeIdentifierNode("makeAnnotationElementNode"),
                                                 factory.makeListNode(
                                                         Arrays.<ExpressionNode>asList(
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftIdentifierVarName),NameCategory.EXPRESSION)),
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftValueVarName),NameCategory.EXPRESSION))
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftIdentifierVarName),NameCategory.EXPRESSION)),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftValueVarName),NameCategory.EXPRESSION))
                                                                 )),
                                                 factory.makeListNode(Collections.<TypeNode>emptyList()))
             )))));
@@ -2148,7 +2240,7 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                                 factory.makeIdentifierNode("makeDoubleLiteralNode"),
                                                 factory.makeListNode(
                                                         Arrays.<ExpressionNode>asList(
-/* TODO */ null
+                                                                expressionizeDouble(liftValueValue)
                                                                 )),
                                                 factory.makeListNode(Collections.<TypeNode>emptyList()))
             )))));
@@ -2184,8 +2276,8 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                                 factory.makeIdentifierNode("makeAnonymousClassBodyNode"),
                                                 factory.makeListNode(
                                                         Arrays.<ExpressionNode>asList(
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftMembersVarName),NameCategory.EXPRESSION))
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftMembersVarName),NameCategory.EXPRESSION))
                                                                 )),
                                                 factory.makeListNode(Collections.<TypeNode>emptyList()))
             )))));
@@ -2221,8 +2313,8 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                                 factory.makeIdentifierNode("makeBlockNode"),
                                                 factory.makeListNode(
                                                         Arrays.<ExpressionNode>asList(
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftStatementsVarName),NameCategory.EXPRESSION))
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftStatementsVarName),NameCategory.EXPRESSION))
                                                                 )),
                                                 factory.makeListNode(Collections.<TypeNode>emptyList()))
             )))));
@@ -2260,10 +2352,10 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                                 factory.makeIdentifierNode("makeSynchronizedNode"),
                                                 factory.makeListNode(
                                                         Arrays.<ExpressionNode>asList(
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftExpressionVarName),NameCategory.EXPRESSION)),
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftBlockVarName),NameCategory.EXPRESSION))
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftExpressionVarName),NameCategory.EXPRESSION)),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftBlockVarName),NameCategory.EXPRESSION))
                                                                 )),
                                                 factory.makeListNode(Collections.<TypeNode>emptyList()))
             )))));
@@ -2303,12 +2395,12 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                                 factory.makeIdentifierNode("makeVariableNode"),
                                                 factory.makeListNode(
                                                         Arrays.<ExpressionNode>asList(
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftModifiersVarName),NameCategory.EXPRESSION)),
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftTypeVarName),NameCategory.EXPRESSION)),
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftIdentifierVarName),NameCategory.EXPRESSION))
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftModifiersVarName),NameCategory.EXPRESSION)),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftTypeVarName),NameCategory.EXPRESSION)),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftIdentifierVarName),NameCategory.EXPRESSION))
                                                                 )),
                                                 factory.makeListNode(Collections.<TypeNode>emptyList()))
             )))));
@@ -2344,7 +2436,7 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                                 factory.makeIdentifierNode("makeCharLiteralNode"),
                                                 factory.makeListNode(
                                                         Arrays.<ExpressionNode>asList(
-/* TODO */ null
+                                                                expressionizeCharacter(liftValueValue)
                                                                 )),
                                                 factory.makeListNode(Collections.<TypeNode>emptyList()))
             )))));
@@ -2382,9 +2474,9 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                                 factory.makeIdentifierNode("makeWildcardTypeNode"),
                                                 factory.makeListNode(
                                                         Arrays.<ExpressionNode>asList(
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftBoundVarName),NameCategory.EXPRESSION)),
-/* TODO */ null
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftBoundVarName),NameCategory.EXPRESSION)),
+                                                                expressionizeBoolean(liftUpperBoundValue)
                                                                 )),
                                                 factory.makeListNode(Collections.<TypeNode>emptyList()))
             )))));
@@ -2420,8 +2512,8 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                                 factory.makeIdentifierNode("makeInlineTypeDeclarationNode"),
                                                 factory.makeListNode(
                                                         Arrays.<ExpressionNode>asList(
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftDeclarationVarName),NameCategory.EXPRESSION))
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftDeclarationVarName),NameCategory.EXPRESSION))
                                                                 )),
                                                 factory.makeListNode(Collections.<TypeNode>emptyList()))
             )))));
@@ -2459,9 +2551,9 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                                 factory.makeIdentifierNode("makeUnaryExpressionNode"),
                                                 factory.makeListNode(
                                                         Arrays.<ExpressionNode>asList(
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftExpressionVarName),NameCategory.EXPRESSION)),
-/* TODO */ null
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftExpressionVarName),NameCategory.EXPRESSION)),
+                                                                expressionizeUnaryOperator(liftOperatorValue)
                                                                 )),
                                                 factory.makeListNode(Collections.<TypeNode>emptyList()))
             )))));
@@ -2497,7 +2589,7 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                                 factory.makeIdentifierNode("makeBooleanLiteralNode"),
                                                 factory.makeListNode(
                                                         Arrays.<ExpressionNode>asList(
-/* TODO */ null
+                                                                expressionizeBoolean(liftValueValue)
                                                                 )),
                                                 factory.makeListNode(Collections.<TypeNode>emptyList()))
             )))));
@@ -2535,10 +2627,10 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                                 factory.makeIdentifierNode("makeSwitchNode"),
                                                 factory.makeListNode(
                                                         Arrays.<ExpressionNode>asList(
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftExpressionVarName),NameCategory.EXPRESSION)),
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftCasesVarName),NameCategory.EXPRESSION))
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftExpressionVarName),NameCategory.EXPRESSION)),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftCasesVarName),NameCategory.EXPRESSION))
                                                                 )),
                                                 factory.makeListNode(Collections.<TypeNode>emptyList()))
             )))));
@@ -2576,10 +2668,10 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                                 factory.makeIdentifierNode("makeAlternateConstructorInvocationNode"),
                                                 factory.makeListNode(
                                                         Arrays.<ExpressionNode>asList(
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftArgumentsVarName),NameCategory.EXPRESSION)),
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftTypeArgumentsVarName),NameCategory.EXPRESSION))
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftArgumentsVarName),NameCategory.EXPRESSION)),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftTypeArgumentsVarName),NameCategory.EXPRESSION))
                                                                 )),
                                                 factory.makeListNode(Collections.<TypeNode>emptyList()))
             )))));
@@ -2615,8 +2707,8 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                                 factory.makeIdentifierNode("makeAnnotationMethodModifiersNode"),
                                                 factory.makeListNode(
                                                         Arrays.<ExpressionNode>asList(
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftAnnotationsVarName),NameCategory.EXPRESSION))
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftAnnotationsVarName),NameCategory.EXPRESSION))
                                                                 )),
                                                 factory.makeListNode(Collections.<TypeNode>emptyList()))
             )))));
@@ -2666,22 +2758,22 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                                 factory.makeIdentifierNode("makeConstructorDeclarationNode"),
                                                 factory.makeListNode(
                                                         Arrays.<ExpressionNode>asList(
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftIdentifierVarName),NameCategory.EXPRESSION)),
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftBodyVarName),NameCategory.EXPRESSION)),
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftModifiersVarName),NameCategory.EXPRESSION)),
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftParametersVarName),NameCategory.EXPRESSION)),
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftVarargParameterVarName),NameCategory.EXPRESSION)),
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftThrowTypesVarName),NameCategory.EXPRESSION)),
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftTypeParametersVarName),NameCategory.EXPRESSION)),
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftJavadocVarName),NameCategory.EXPRESSION))
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftIdentifierVarName),NameCategory.EXPRESSION)),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftBodyVarName),NameCategory.EXPRESSION)),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftModifiersVarName),NameCategory.EXPRESSION)),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftParametersVarName),NameCategory.EXPRESSION)),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftVarargParameterVarName),NameCategory.EXPRESSION)),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftThrowTypesVarName),NameCategory.EXPRESSION)),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftTypeParametersVarName),NameCategory.EXPRESSION)),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftJavadocVarName),NameCategory.EXPRESSION))
                                                                 )),
                                                 factory.makeListNode(Collections.<TypeNode>emptyList()))
             )))));
@@ -2717,8 +2809,8 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                                 factory.makeIdentifierNode("makeAnnotationAnnotationValueNode"),
                                                 factory.makeListNode(
                                                         Arrays.<ExpressionNode>asList(
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftAnnotationVarName),NameCategory.EXPRESSION))
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftAnnotationVarName),NameCategory.EXPRESSION))
                                                                 )),
                                                 factory.makeListNode(Collections.<TypeNode>emptyList()))
             )))));
@@ -2760,14 +2852,14 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                                 factory.makeIdentifierNode("makeForLoopNode"),
                                                 factory.makeListNode(
                                                         Arrays.<ExpressionNode>asList(
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftInitializerVarName),NameCategory.EXPRESSION)),
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftConditionVarName),NameCategory.EXPRESSION)),
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftUpdateVarName),NameCategory.EXPRESSION)),
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftStatementVarName),NameCategory.EXPRESSION))
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftInitializerVarName),NameCategory.EXPRESSION)),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftConditionVarName),NameCategory.EXPRESSION)),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftUpdateVarName),NameCategory.EXPRESSION)),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftStatementVarName),NameCategory.EXPRESSION))
                                                                 )),
                                                 factory.makeListNode(Collections.<TypeNode>emptyList()))
             )))));
@@ -2805,10 +2897,10 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                                 factory.makeIdentifierNode("makeWhileLoopNode"),
                                                 factory.makeListNode(
                                                         Arrays.<ExpressionNode>asList(
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftConditionVarName),NameCategory.EXPRESSION)),
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftStatementVarName),NameCategory.EXPRESSION))
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftConditionVarName),NameCategory.EXPRESSION)),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftStatementVarName),NameCategory.EXPRESSION))
                                                                 )),
                                                 factory.makeListNode(Collections.<TypeNode>emptyList()))
             )))));
@@ -2843,7 +2935,7 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                                 factory.makeIdentifierNode("makeListNode<T extends Node>"),
                                                 factory.makeListNode(
                                                         Arrays.<ExpressionNode>asList(
-/* TODO */ null
+                                                                /* TODO */ null
                                                                 )),
                                                 factory.makeListNode(Collections.<TypeNode>emptyList()))
             )))));
@@ -2887,16 +2979,16 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                                 factory.makeIdentifierNode("makeEnumConstantDeclarationNode"),
                                                 factory.makeListNode(
                                                         Arrays.<ExpressionNode>asList(
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftAnnotationsVarName),NameCategory.EXPRESSION)),
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftIdentifierVarName),NameCategory.EXPRESSION)),
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftArgumentsVarName),NameCategory.EXPRESSION)),
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftBodyVarName),NameCategory.EXPRESSION)),
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftJavadocVarName),NameCategory.EXPRESSION))
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftAnnotationsVarName),NameCategory.EXPRESSION)),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftIdentifierVarName),NameCategory.EXPRESSION)),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftArgumentsVarName),NameCategory.EXPRESSION)),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftBodyVarName),NameCategory.EXPRESSION)),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftJavadocVarName),NameCategory.EXPRESSION))
                                                                 )),
                                                 factory.makeListNode(Collections.<TypeNode>emptyList()))
             )))));
@@ -2932,8 +3024,8 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                                 factory.makeIdentifierNode("makeBreakNode"),
                                                 factory.makeListNode(
                                                         Arrays.<ExpressionNode>asList(
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftLabelVarName),NameCategory.EXPRESSION))
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftLabelVarName),NameCategory.EXPRESSION))
                                                                 )),
                                                 factory.makeListNode(Collections.<TypeNode>emptyList()))
             )))));
@@ -2971,9 +3063,9 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                                 factory.makeIdentifierNode("makeConstructorModifiersNode"),
                                                 factory.makeListNode(
                                                         Arrays.<ExpressionNode>asList(
-/* TODO */ null,
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftAnnotationsVarName),NameCategory.EXPRESSION))
+                                                                expressionizeAccessModifier(liftAccessValue),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftAnnotationsVarName),NameCategory.EXPRESSION))
                                                                 )),
                                                 factory.makeListNode(Collections.<TypeNode>emptyList()))
             )))));
@@ -3011,10 +3103,10 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                                 factory.makeIdentifierNode("makeParameterizedTypeSelectNode"),
                                                 factory.makeListNode(
                                                         Arrays.<ExpressionNode>asList(
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftBaseVarName),NameCategory.EXPRESSION)),
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftSelectVarName),NameCategory.EXPRESSION))
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftBaseVarName),NameCategory.EXPRESSION)),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftSelectVarName),NameCategory.EXPRESSION))
                                                                 )),
                                                 factory.makeListNode(Collections.<TypeNode>emptyList()))
             )))));
@@ -3050,7 +3142,7 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                                 factory.makeIdentifierNode("makeIdentifierNode"),
                                                 factory.makeListNode(
                                                         Arrays.<ExpressionNode>asList(
-/* TODO */ null
+                                                                expressionizeString(liftIdentifierValue)
                                                                 )),
                                                 factory.makeListNode(Collections.<TypeNode>emptyList()))
             )))));
@@ -3086,8 +3178,8 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                                 factory.makeIdentifierNode("makeArrayTypeNode"),
                                                 factory.makeListNode(
                                                         Arrays.<ExpressionNode>asList(
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftTypeVarName),NameCategory.EXPRESSION))
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftTypeVarName),NameCategory.EXPRESSION))
                                                                 )),
                                                 factory.makeListNode(Collections.<TypeNode>emptyList()))
             )))));
@@ -3127,11 +3219,11 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                                 factory.makeIdentifierNode("makeArrayInitializerCreationNode"),
                                                 factory.makeListNode(
                                                         Arrays.<ExpressionNode>asList(
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftInitializerVarName),NameCategory.EXPRESSION)),
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftBaseTypeVarName),NameCategory.EXPRESSION)),
-/* TODO */ null
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftInitializerVarName),NameCategory.EXPRESSION)),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftBaseTypeVarName),NameCategory.EXPRESSION)),
+                                                                expressionizeInt(liftArrayLevelsValue)
                                                                 )),
                                                 factory.makeListNode(Collections.<TypeNode>emptyList()))
             )))));
@@ -3177,13 +3269,13 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                                 factory.makeIdentifierNode("makeFieldModifiersNode"),
                                                 factory.makeListNode(
                                                         Arrays.<ExpressionNode>asList(
-/* TODO */ null,
-/* TODO */ null,
-/* TODO */ null,
-/* TODO */ null,
-/* TODO */ null,
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftAnnotationsVarName),NameCategory.EXPRESSION))
+                                                                expressionizeAccessModifier(liftAccessValue),
+                                                                expressionizeBoolean(liftStaticFlagValue),
+                                                                expressionizeBoolean(liftFinalFlagValue),
+                                                                expressionizeBoolean(liftTransientFlagValue),
+                                                                expressionizeBoolean(liftVolatileFlagValue),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftAnnotationsVarName),NameCategory.EXPRESSION))
                                                                 )),
                                                 factory.makeListNode(Collections.<TypeNode>emptyList()))
             )))));
@@ -3221,10 +3313,10 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                                 factory.makeIdentifierNode("makeTypeParameterNode"),
                                                 factory.makeListNode(
                                                         Arrays.<ExpressionNode>asList(
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftIdentifierVarName),NameCategory.EXPRESSION)),
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftBoundsVarName),NameCategory.EXPRESSION))
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftIdentifierVarName),NameCategory.EXPRESSION)),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftBoundsVarName),NameCategory.EXPRESSION))
                                                                 )),
                                                 factory.makeListNode(Collections.<TypeNode>emptyList()))
             )))));
@@ -3268,16 +3360,16 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                                 factory.makeIdentifierNode("makeAnnotationMethodDeclarationNode"),
                                                 factory.makeListNode(
                                                         Arrays.<ExpressionNode>asList(
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftModifiersVarName),NameCategory.EXPRESSION)),
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftTypeVarName),NameCategory.EXPRESSION)),
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftIdentifierVarName),NameCategory.EXPRESSION)),
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftDefaultValueVarName),NameCategory.EXPRESSION)),
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftJavadocVarName),NameCategory.EXPRESSION))
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftModifiersVarName),NameCategory.EXPRESSION)),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftTypeVarName),NameCategory.EXPRESSION)),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftIdentifierVarName),NameCategory.EXPRESSION)),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftDefaultValueVarName),NameCategory.EXPRESSION)),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftJavadocVarName),NameCategory.EXPRESSION))
                                                                 )),
                                                 factory.makeListNode(Collections.<TypeNode>emptyList()))
             )))));
@@ -3315,9 +3407,9 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                                 factory.makeIdentifierNode("makeImportSingleTypeNode"),
                                                 factory.makeListNode(
                                                         Arrays.<ExpressionNode>asList(
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftNameVarName),NameCategory.EXPRESSION)),
-/* TODO */ null
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftNameVarName),NameCategory.EXPRESSION)),
+                                                                expressionizeBoolean(liftStaticImportValue)
                                                                 )),
                                                 factory.makeListNode(Collections.<TypeNode>emptyList()))
             )))));
@@ -3357,12 +3449,12 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                                 factory.makeIdentifierNode("makeFieldDeclarationNode"),
                                                 factory.makeListNode(
                                                         Arrays.<ExpressionNode>asList(
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftModifiersVarName),NameCategory.EXPRESSION)),
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftDeclaratorsVarName),NameCategory.EXPRESSION)),
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftJavadocVarName),NameCategory.EXPRESSION))
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftModifiersVarName),NameCategory.EXPRESSION)),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftDeclaratorsVarName),NameCategory.EXPRESSION)),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftJavadocVarName),NameCategory.EXPRESSION))
                                                                 )),
                                                 factory.makeListNode(Collections.<TypeNode>emptyList()))
             )))));
@@ -3398,8 +3490,8 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                                 factory.makeIdentifierNode("makeAnnotationArrayValueNode"),
                                                 factory.makeListNode(
                                                         Arrays.<ExpressionNode>asList(
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftValuesVarName),NameCategory.EXPRESSION))
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftValuesVarName),NameCategory.EXPRESSION))
                                                                 )),
                                                 factory.makeListNode(Collections.<TypeNode>emptyList()))
             )))));
@@ -3437,10 +3529,10 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                                 factory.makeIdentifierNode("makeSingleElementAnnotationNode"),
                                                 factory.makeListNode(
                                                         Arrays.<ExpressionNode>asList(
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftValueVarName),NameCategory.EXPRESSION)),
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftAnnotationTypeVarName),NameCategory.EXPRESSION))
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftValueVarName),NameCategory.EXPRESSION)),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftAnnotationTypeVarName),NameCategory.EXPRESSION))
                                                                 )),
                                                 factory.makeListNode(Collections.<TypeNode>emptyList()))
             )))));
@@ -3476,8 +3568,8 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                                 factory.makeIdentifierNode("makeClassLiteralNode"),
                                                 factory.makeListNode(
                                                         Arrays.<ExpressionNode>asList(
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftValueVarName),NameCategory.EXPRESSION))
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftValueVarName),NameCategory.EXPRESSION))
                                                                 )),
                                                 factory.makeListNode(Collections.<TypeNode>emptyList()))
             )))));
@@ -3519,14 +3611,14 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                                 factory.makeIdentifierNode("makeSuperMethodInvocationNode"),
                                                 factory.makeListNode(
                                                         Arrays.<ExpressionNode>asList(
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftTypeVarName),NameCategory.EXPRESSION)),
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftIdentifierVarName),NameCategory.EXPRESSION)),
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftArgumentsVarName),NameCategory.EXPRESSION)),
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftTypeArgumentsVarName),NameCategory.EXPRESSION))
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftTypeVarName),NameCategory.EXPRESSION)),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftIdentifierVarName),NameCategory.EXPRESSION)),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftArgumentsVarName),NameCategory.EXPRESSION)),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftTypeArgumentsVarName),NameCategory.EXPRESSION))
                                                                 )),
                                                 factory.makeListNode(Collections.<TypeNode>emptyList()))
             )))));
@@ -3572,13 +3664,13 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                                 factory.makeIdentifierNode("makeClassModifiersNode"),
                                                 factory.makeListNode(
                                                         Arrays.<ExpressionNode>asList(
-/* TODO */ null,
-/* TODO */ null,
-/* TODO */ null,
-/* TODO */ null,
-/* TODO */ null,
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftAnnotationsVarName),NameCategory.EXPRESSION))
+                                                                expressionizeAccessModifier(liftAccessValue),
+                                                                expressionizeBoolean(liftAbstractFlagValue),
+                                                                expressionizeBoolean(liftStaticFlagValue),
+                                                                expressionizeBoolean(liftFinalFlagValue),
+                                                                expressionizeBoolean(liftStrictfpFlagValue),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftAnnotationsVarName),NameCategory.EXPRESSION))
                                                                 )),
                                                 factory.makeListNode(Collections.<TypeNode>emptyList()))
             )))));
@@ -3614,8 +3706,8 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                                 factory.makeIdentifierNode("makeArrayInitializerNode"),
                                                 factory.makeListNode(
                                                         Arrays.<ExpressionNode>asList(
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftInitializersVarName),NameCategory.EXPRESSION))
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftInitializersVarName),NameCategory.EXPRESSION))
                                                                 )),
                                                 factory.makeListNode(Collections.<TypeNode>emptyList()))
             )))));
@@ -3651,8 +3743,8 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                                 factory.makeIdentifierNode("makeAnnotationExpressionValueNode"),
                                                 factory.makeListNode(
                                                         Arrays.<ExpressionNode>asList(
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftExpressionVarName),NameCategory.EXPRESSION))
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftExpressionVarName),NameCategory.EXPRESSION))
                                                                 )),
                                                 factory.makeListNode(Collections.<TypeNode>emptyList()))
             )))));
@@ -3688,8 +3780,8 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                                 factory.makeIdentifierNode("makeReturnNode"),
                                                 factory.makeListNode(
                                                         Arrays.<ExpressionNode>asList(
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftExpressionVarName),NameCategory.EXPRESSION))
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftExpressionVarName),NameCategory.EXPRESSION))
                                                                 )),
                                                 factory.makeListNode(Collections.<TypeNode>emptyList()))
             )))));
@@ -3729,11 +3821,11 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                                 factory.makeIdentifierNode("makeAssignmentNode"),
                                                 factory.makeListNode(
                                                         Arrays.<ExpressionNode>asList(
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftVariableVarName),NameCategory.EXPRESSION)),
-/* TODO */ null,
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftExpressionVarName),NameCategory.EXPRESSION))
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftVariableVarName),NameCategory.EXPRESSION)),
+                                                                expressionizeAssignmentOperator(liftOperatorValue),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftExpressionVarName),NameCategory.EXPRESSION))
                                                                 )),
                                                 factory.makeListNode(Collections.<TypeNode>emptyList()))
             )))));
@@ -3775,14 +3867,14 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                                 factory.makeIdentifierNode("makeMethodInvocationByExpressionNode"),
                                                 factory.makeListNode(
                                                         Arrays.<ExpressionNode>asList(
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftExpressionVarName),NameCategory.EXPRESSION)),
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftIdentifierVarName),NameCategory.EXPRESSION)),
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftArgumentsVarName),NameCategory.EXPRESSION)),
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftTypeArgumentsVarName),NameCategory.EXPRESSION))
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftExpressionVarName),NameCategory.EXPRESSION)),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftIdentifierVarName),NameCategory.EXPRESSION)),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftArgumentsVarName),NameCategory.EXPRESSION)),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftTypeArgumentsVarName),NameCategory.EXPRESSION))
                                                                 )),
                                                 factory.makeListNode(Collections.<TypeNode>emptyList()))
             )))));
@@ -3820,10 +3912,10 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                                 factory.makeIdentifierNode("makeInstanceOfNode"),
                                                 factory.makeListNode(
                                                         Arrays.<ExpressionNode>asList(
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftExpressionVarName),NameCategory.EXPRESSION)),
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftTypeVarName),NameCategory.EXPRESSION))
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftExpressionVarName),NameCategory.EXPRESSION)),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftTypeVarName),NameCategory.EXPRESSION))
                                                                 )),
                                                 factory.makeListNode(Collections.<TypeNode>emptyList()))
             )))));
@@ -3863,12 +3955,12 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                                 factory.makeIdentifierNode("makeConditionalExpressionNode"),
                                                 factory.makeListNode(
                                                         Arrays.<ExpressionNode>asList(
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftConditionVarName),NameCategory.EXPRESSION)),
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftTrueExpressionVarName),NameCategory.EXPRESSION)),
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftFalseExpressionVarName),NameCategory.EXPRESSION))
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftConditionVarName),NameCategory.EXPRESSION)),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftTrueExpressionVarName),NameCategory.EXPRESSION)),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftFalseExpressionVarName),NameCategory.EXPRESSION))
                                                                 )),
                                                 factory.makeListNode(Collections.<TypeNode>emptyList()))
             )))));
@@ -3904,8 +3996,8 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                                 factory.makeIdentifierNode("makeParenthesizedExpressionNode"),
                                                 factory.makeListNode(
                                                         Arrays.<ExpressionNode>asList(
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftExpressionVarName),NameCategory.EXPRESSION))
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftExpressionVarName),NameCategory.EXPRESSION))
                                                                 )),
                                                 factory.makeListNode(Collections.<TypeNode>emptyList()))
             )))));
@@ -3941,7 +4033,7 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                                 factory.makeIdentifierNode("makeFloatLiteralNode"),
                                                 factory.makeListNode(
                                                         Arrays.<ExpressionNode>asList(
-/* TODO */ null
+                                                                expressionizeFloat(liftValueValue)
                                                                 )),
                                                 factory.makeListNode(Collections.<TypeNode>emptyList()))
             )))));
@@ -3981,12 +4073,12 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                                 factory.makeIdentifierNode("makeMethodInvocationByNameNode"),
                                                 factory.makeListNode(
                                                         Arrays.<ExpressionNode>asList(
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftNameVarName),NameCategory.EXPRESSION)),
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftArgumentsVarName),NameCategory.EXPRESSION)),
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftTypeArgumentsVarName),NameCategory.EXPRESSION))
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftNameVarName),NameCategory.EXPRESSION)),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftArgumentsVarName),NameCategory.EXPRESSION)),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftTypeArgumentsVarName),NameCategory.EXPRESSION))
                                                                 )),
                                                 factory.makeListNode(Collections.<TypeNode>emptyList()))
             )))));
@@ -4024,10 +4116,10 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                                 factory.makeIdentifierNode("makeParameterizedTypeNode"),
                                                 factory.makeListNode(
                                                         Arrays.<ExpressionNode>asList(
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftBaseTypeVarName),NameCategory.EXPRESSION)),
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftTypeArgumentsVarName),NameCategory.EXPRESSION))
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftBaseTypeVarName),NameCategory.EXPRESSION)),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftTypeArgumentsVarName),NameCategory.EXPRESSION))
                                                                 )),
                                                 factory.makeListNode(Collections.<TypeNode>emptyList()))
             )))));
@@ -4073,18 +4165,18 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                                 factory.makeIdentifierNode("makeInterfaceDeclarationNode"),
                                                 factory.makeListNode(
                                                         Arrays.<ExpressionNode>asList(
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftModifiersVarName),NameCategory.EXPRESSION)),
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftExtendsClauseVarName),NameCategory.EXPRESSION)),
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftBodyVarName),NameCategory.EXPRESSION)),
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftTypeParametersVarName),NameCategory.EXPRESSION)),
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftIdentifierVarName),NameCategory.EXPRESSION)),
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftJavadocVarName),NameCategory.EXPRESSION))
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftModifiersVarName),NameCategory.EXPRESSION)),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftExtendsClauseVarName),NameCategory.EXPRESSION)),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftBodyVarName),NameCategory.EXPRESSION)),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftTypeParametersVarName),NameCategory.EXPRESSION)),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftIdentifierVarName),NameCategory.EXPRESSION)),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftJavadocVarName),NameCategory.EXPRESSION))
                                                                 )),
                                                 factory.makeListNode(Collections.<TypeNode>emptyList()))
             )))));
@@ -4120,8 +4212,8 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                                 factory.makeIdentifierNode("makeForInitializerDeclarationNode"),
                                                 factory.makeListNode(
                                                         Arrays.<ExpressionNode>asList(
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftDeclarationVarName),NameCategory.EXPRESSION))
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftDeclarationVarName),NameCategory.EXPRESSION))
                                                                 )),
                                                 factory.makeListNode(Collections.<TypeNode>emptyList()))
             )))));
@@ -4159,10 +4251,10 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                                 factory.makeIdentifierNode("makeConstructorBodyNode"),
                                                 factory.makeListNode(
                                                         Arrays.<ExpressionNode>asList(
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftConstructorInvocationVarName),NameCategory.EXPRESSION)),
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftStatementsVarName),NameCategory.EXPRESSION))
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftConstructorInvocationVarName),NameCategory.EXPRESSION)),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftStatementsVarName),NameCategory.EXPRESSION))
                                                                 )),
                                                 factory.makeListNode(Collections.<TypeNode>emptyList()))
             )))));
@@ -4198,8 +4290,8 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                                 factory.makeIdentifierNode("makeFieldAccessByNameNode"),
                                                 factory.makeListNode(
                                                         Arrays.<ExpressionNode>asList(
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftNameVarName),NameCategory.EXPRESSION))
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftNameVarName),NameCategory.EXPRESSION))
                                                                 )),
                                                 factory.makeListNode(Collections.<TypeNode>emptyList()))
             )))));
@@ -4241,14 +4333,14 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                                 factory.makeIdentifierNode("makeUnqualifiedClassInstantiationNode"),
                                                 factory.makeListNode(
                                                         Arrays.<ExpressionNode>asList(
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftTypeVarName),NameCategory.EXPRESSION)),
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftConstructorTypeArgumentsVarName),NameCategory.EXPRESSION)),
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftArgumentsVarName),NameCategory.EXPRESSION)),
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftBodyVarName),NameCategory.EXPRESSION))
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftTypeVarName),NameCategory.EXPRESSION)),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftConstructorTypeArgumentsVarName),NameCategory.EXPRESSION)),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftArgumentsVarName),NameCategory.EXPRESSION)),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftBodyVarName),NameCategory.EXPRESSION))
                                                                 )),
                                                 factory.makeListNode(Collections.<TypeNode>emptyList()))
             )))));
@@ -4286,9 +4378,9 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                                 factory.makeIdentifierNode("makeSimpleNameNode"),
                                                 factory.makeListNode(
                                                         Arrays.<ExpressionNode>asList(
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftIdentifierVarName),NameCategory.EXPRESSION)),
-/* TODO */ null
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftIdentifierVarName),NameCategory.EXPRESSION)),
+                                                                expressionizeNameCategory(liftCategoryValue)
                                                                 )),
                                                 factory.makeListNode(Collections.<TypeNode>emptyList()))
             )))));
@@ -4328,11 +4420,11 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                                 factory.makeIdentifierNode("makeArrayInstantiatorCreationNode"),
                                                 factory.makeListNode(
                                                         Arrays.<ExpressionNode>asList(
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftDimExpressionsVarName),NameCategory.EXPRESSION)),
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftBaseTypeVarName),NameCategory.EXPRESSION)),
-/* TODO */ null
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftDimExpressionsVarName),NameCategory.EXPRESSION)),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftBaseTypeVarName),NameCategory.EXPRESSION)),
+                                                                expressionizeInt(liftArrayLevelsValue)
                                                                 )),
                                                 factory.makeListNode(Collections.<TypeNode>emptyList()))
             )))));
@@ -4382,15 +4474,15 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                                 factory.makeIdentifierNode("makeMethodModifiersNode"),
                                                 factory.makeListNode(
                                                         Arrays.<ExpressionNode>asList(
-/* TODO */ null,
-/* TODO */ null,
-/* TODO */ null,
-/* TODO */ null,
-/* TODO */ null,
-/* TODO */ null,
-/* TODO */ null,
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftAnnotationsVarName),NameCategory.EXPRESSION))
+                                                                expressionizeAccessModifier(liftAccessValue),
+                                                                expressionizeBoolean(liftAbstractFlagValue),
+                                                                expressionizeBoolean(liftStaticFlagValue),
+                                                                expressionizeBoolean(liftFinalFlagValue),
+                                                                expressionizeBoolean(liftSynchronizedFlagValue),
+                                                                expressionizeBoolean(liftNativeFlagValue),
+                                                                expressionizeBoolean(liftStrictfpFlagValue),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftAnnotationsVarName),NameCategory.EXPRESSION))
                                                                 )),
                                                 factory.makeListNode(Collections.<TypeNode>emptyList()))
             )))));
@@ -4426,8 +4518,8 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                                 factory.makeIdentifierNode("makeClassBodyNode"),
                                                 factory.makeListNode(
                                                         Arrays.<ExpressionNode>asList(
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftMembersVarName),NameCategory.EXPRESSION))
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftMembersVarName),NameCategory.EXPRESSION))
                                                                 )),
                                                 factory.makeListNode(Collections.<TypeNode>emptyList()))
             )))));
@@ -4467,12 +4559,12 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                                 factory.makeIdentifierNode("makeIfNode"),
                                                 factory.makeListNode(
                                                         Arrays.<ExpressionNode>asList(
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftConditionVarName),NameCategory.EXPRESSION)),
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftThenStatementVarName),NameCategory.EXPRESSION)),
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftElseStatementVarName),NameCategory.EXPRESSION))
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftConditionVarName),NameCategory.EXPRESSION)),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftThenStatementVarName),NameCategory.EXPRESSION)),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftElseStatementVarName),NameCategory.EXPRESSION))
                                                                 )),
                                                 factory.makeListNode(Collections.<TypeNode>emptyList()))
             )))));
@@ -4508,7 +4600,7 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                                 factory.makeIdentifierNode("makeIntLiteralNode"),
                                                 factory.makeListNode(
                                                         Arrays.<ExpressionNode>asList(
-/* TODO */ null
+                                                                expressionizeInteger(liftValueValue)
                                                                 )),
                                                 factory.makeListNode(Collections.<TypeNode>emptyList()))
             )))));
@@ -4522,7 +4614,6 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
         ExpressionNode factoryNode = p.getFirst();
         List<BlockStatementNode> statements = p.getSecond();
 
-        // TODO: value
 
         String myVarName = getUniqueName();
         statements.add(
@@ -4543,7 +4634,7 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                                 factory.makeIdentifierNode("makeNullLiteralNode"),
                                                 factory.makeListNode(
                                                         Arrays.<ExpressionNode>asList(
-/* TODO */ null
+                                                                factory.makeNullLiteralNode(null)
                                                                 )),
                                                 factory.makeListNode(Collections.<TypeNode>emptyList()))
             )))));
@@ -4579,7 +4670,7 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                                 factory.makeIdentifierNode("makeJavadocNode"),
                                                 factory.makeListNode(
                                                         Arrays.<ExpressionNode>asList(
-/* TODO */ null
+                                                                expressionizeString(liftTextValue)
                                                                 )),
                                                 factory.makeListNode(Collections.<TypeNode>emptyList()))
             )))));
@@ -4631,24 +4722,24 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                                 factory.makeIdentifierNode("makeMethodDeclarationNode"),
                                                 factory.makeListNode(
                                                         Arrays.<ExpressionNode>asList(
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftBodyVarName),NameCategory.EXPRESSION)),
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftModifiersVarName),NameCategory.EXPRESSION)),
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftIdentifierVarName),NameCategory.EXPRESSION)),
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftParametersVarName),NameCategory.EXPRESSION)),
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftVarargParameterVarName),NameCategory.EXPRESSION)),
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftReturnTypeVarName),NameCategory.EXPRESSION)),
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftThrowTypesVarName),NameCategory.EXPRESSION)),
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftTypeParametersVarName),NameCategory.EXPRESSION)),
-                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode(liftJavadocVarName),NameCategory.EXPRESSION))
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftBodyVarName),NameCategory.EXPRESSION)),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftModifiersVarName),NameCategory.EXPRESSION)),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftIdentifierVarName),NameCategory.EXPRESSION)),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftParametersVarName),NameCategory.EXPRESSION)),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftVarargParameterVarName),NameCategory.EXPRESSION)),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftReturnTypeVarName),NameCategory.EXPRESSION)),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftThrowTypesVarName),NameCategory.EXPRESSION)),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftTypeParametersVarName),NameCategory.EXPRESSION)),
+                                                                factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
+                                                                        liftJavadocVarName),NameCategory.EXPRESSION))
                                                                 )),
                                                 factory.makeListNode(Collections.<TypeNode>emptyList()))
             )))));

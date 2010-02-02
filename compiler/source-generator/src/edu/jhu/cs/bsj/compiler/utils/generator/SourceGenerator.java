@@ -35,18 +35,27 @@ public class SourceGenerator
 	private static final String[] CLASS_IMPORTS = { "edu.jhu.cs.bsj.compiler.impl.ast.*",
 			"edu.jhu.cs.bsj.compiler.impl.ast.node.*", "edu.jhu.cs.bsj.compiler.impl.ast.node.meta.*",
 			"edu.jhu.cs.bsj.compiler.impl.utils.Pair", "javax.annotation.Generated" };
+	
 	private static final Set<String> PRIMITIVE_TYPES = new HashSet<String>(Arrays.asList(new String[] { "int", "long",
 			"boolean", "float", "double", "short", "byte", "char" }));
+	private static final Set<String> PRIMITIVE_CONTAINER_TYPES = new HashSet<String>(Arrays.asList(new String[]{
+			"Long", "Integer", "Short", "Byte",
+			"Double", "Float", "Boolean", "String", "Character"
+	}));
+	private static final Set<String> ENUM_TYPES = new HashSet<String>(Arrays.asList(new String[]{
+			"AccessModifier", "AssignmentOperator",
+			"BinaryOperator", "NameCategory", "PrimitiveType", "UnaryOperator", "UnaryStatementOperator"
+	}));
 
 	/** Names the types of objects which are "deep copied" by simply copying the reference. */
 	private static final Set<String> DIRECT_COPY_NAMES;
 
 	static
 	{
-		Set<String> directCopy = new HashSet<String>(Arrays.asList(new String[] { "Long", "Integer", "Short", "Byte",
-				"Double", "Float", "Boolean", "String", "Character", "AccessModifier", "AssignmentOperator",
-				"BinaryOperator", "NameCategory", "PrimitiveType", "UnaryOperator", "UnaryStatementOperator", }));
+		Set<String> directCopy = new HashSet<String>();
 		directCopy.addAll(PRIMITIVE_TYPES);
+		directCopy.addAll(PRIMITIVE_CONTAINER_TYPES);
+		directCopy.addAll(ENUM_TYPES);
 		DIRECT_COPY_NAMES = Collections.unmodifiableSet(directCopy);
 	}
 
@@ -1862,9 +1871,23 @@ public class SourceGenerator
 			{
 				if (ptype.equals("short") || ptype.equals("byte"))
 					continue;
-				ps.println("    public ExpressionNode execute" + capFirst(ptype) + "(" + ptype + " x)");
+				ps.println("    protected ExpressionNode expressionize" + capFirst(ptype) + "(" + ptype + " x)");
 				ps.println("    {");
 				ps.println("        return factory.make" + capFirst(ptype) + "LiteralNode(x);");
+				ps.println("    }");
+				ps.println();
+			}
+			for (String etype : ENUM_TYPES)
+			{
+				ps.println("    protected ExpressionNode expressionize" + etype + "(" + etype + " x)");
+				ps.println("    {");
+				ps.println("        return factory.makeFieldAccessByNameNode(factory.makeQualifiedNameNode(");
+				ps.println("                factory.makeSimpleNameNode(");
+				ps.println("                        factory.makeIdentifierNode(\"" + etype + "\"),");
+				ps.println("                        NameCategory.EXPRESSION");
+				ps.println("                        ),");
+				ps.println("                factory.makeIdentifierNode(x.name()),");
+				ps.println("                NameCategory.EXPRESSION));");
 				ps.println("    }");
 				ps.println();
 			}
@@ -1897,7 +1920,7 @@ public class SourceGenerator
 				{
 					public void voidType(PrintStream ps, Prop p)
 					{
-						ps.println("        // TODO: " + p.name);
+						// Intentionally doing nothing.  We'll just use "null" below.
 					}
 
 					public void node(PrintStream ps, Prop p)
@@ -1958,20 +1981,19 @@ public class SourceGenerator
 					ps.print(",");
 				}
 				ps.println();
+				ps.print("                                                                ");
 				propAbstract(new PropertyTypeAbstractor()
 				{
 					public void voidType(PrintStream ps, Prop p)
 					{
-						ps.print("/* TODO */ null");
+						ps.print("factory.makeNullLiteralNode(null)");
 					}
 
 					public void node(PrintStream ps, Prop p)
 					{
-						ps.print("                                                                ");
-						ps.println("factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(");
-						ps.print("                                                                        ");
-						ps.print("factory.makeIdentifierNode(lift" + capFirst(p.name)
-								+ "VarName),NameCategory.EXPRESSION))");
+						fieldAccessPrefix();
+						ps.print("lift" + capFirst(p.name) + "VarName),NameCategory.EXPRESSION");
+						fieldAccessPostfix();
 					}
 
 					public void list(PrintStream ps, Prop p)
@@ -1981,12 +2003,22 @@ public class SourceGenerator
 
 					public void directCopy(PrintStream ps, Prop p)
 					{
-						ps.print("/* TODO */ null");
+						ps.print("expressionize" + capFirst(p.type) + "(lift" + capFirst(p.name) + "Value)");
 					}
 
 					public void constructorCopy(PrintStream ps, Prop p)
 					{
-						ps.print("/* TODO */ null");
+						ps.println("        // TODO: " + p.name);
+					}
+					
+					private void fieldAccessPrefix()
+					{
+						ps.println("factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(");
+						ps.print("                                                                        ");
+					}
+					private void fieldAccessPostfix()
+					{
+						ps.print("))");
 					}
 				}, p, ps, def);
 			}

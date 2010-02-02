@@ -13,5 +13,20 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode, List
 	{
 		return "v" + (nextVariableId++);
 	}
+	
+	protected ExpressionNode expressionizeString(String s)
+	{
+		return factory.makeStringLiteralNode(s);
+	}
+	
+	protected ExpressionNode expressionizeCharacter(Character c)
+	{
+		return expressionizeChar(c);
+	}
+	
+	protected ExpressionNode expressionizeInteger(Integer i)
+	{
+		return expressionizeInt(i);
+	}
 	/* GEN:stop */
 }
