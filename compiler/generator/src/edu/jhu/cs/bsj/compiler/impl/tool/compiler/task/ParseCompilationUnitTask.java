@@ -5,9 +5,9 @@ import java.io.Reader;
 
 import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
 import edu.jhu.cs.bsj.compiler.exception.BsjCompilerException;
-import edu.jhu.cs.bsj.compiler.impl.tool.compiler.MetacompilationManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.CompilationUnitStatus;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.CompilationUnitTracker;
+import edu.jhu.cs.bsj.compiler.impl.tool.compiler.MetacompilationManager;
 import edu.jhu.cs.bsj.compiler.tool.parser.BsjParserImpl;
 
 /**

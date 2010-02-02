@@ -10,6 +10,22 @@
 public interface BsjNodeFactory
 {
 /* GEN:start */
+	/**
+	 * Retrieves the starting source location used for new nodes.
+	 * 
+	 * @return The start location used for new nodes. <code>null</code> is a permissible value and indicates that no
+	 *         information is available.
+	 */
+	public BsjSourceLocation getStartSourceLocation();
+
+	/**
+	 * Retrieves the ending source location used for new nodes.
+	 * 
+	 * @return The stop location used for new nodes. <code>null</code> is a permissible value and indicates that no
+	 *         information is available.
+	 */
+	public BsjSourceLocation getStopSourceLocation();
+
     /**
      * Changes the starting source location used for new nodes.
      * @param startLocation The new start location to use for new nodes.  <code>null</code> is a permissible value and

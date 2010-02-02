@@ -3,9 +3,9 @@ package edu.jhu.cs.bsj.compiler.impl.tool.compiler.task;
 import java.io.IOException;
 
 import edu.jhu.cs.bsj.compiler.exception.BsjCompilerException;
-import edu.jhu.cs.bsj.compiler.impl.tool.compiler.MetacompilationManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.CompilationUnitStatus;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.CompilationUnitTracker;
+import edu.jhu.cs.bsj.compiler.impl.tool.compiler.MetacompilationManager;
 
 /**
  * This stub task is used to pretend that the a compilation unit tracker has finished all of its work.  It is used for
