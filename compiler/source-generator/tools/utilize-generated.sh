@@ -13,12 +13,15 @@ fi
 for d in "$apisrc/" "$astsrc/"; do
     find "$d" -name '*.java' | while read line; do
         if [ -n "$(cat "$line" | grep '@Generated' | grep 'edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator')" ]; then
-            echo "deleted $line"
+            #echo "deleted $line"
             rm "$line"
         fi
     done
 	mkdir -p "$d"
 done
 
-cp -av $basedir/interface/* $apisrc/
-cp -av $basedir/implementation/* $astsrc/
+n="$(cp -av $basedir/interface/* $apisrc/)"
+m="$(cp -av $basedir/implementation/* $astsrc/)"
+filecount="$( (echo "$n"; echo "$m") | wc -l )"
+
+echo "Finished utilizing generated sources.  Found $filecount files."

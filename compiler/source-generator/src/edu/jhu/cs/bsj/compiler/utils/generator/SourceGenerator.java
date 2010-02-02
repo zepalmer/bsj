@@ -34,9 +34,27 @@ public class SourceGenerator
 			"javax.annotation.Generated" };
 	private static final String[] CLASS_IMPORTS = { "edu.jhu.cs.bsj.compiler.impl.ast.*",
 			"edu.jhu.cs.bsj.compiler.impl.ast.node.*", "edu.jhu.cs.bsj.compiler.impl.ast.node.meta.*",
-			"javax.annotation.Generated" };
+			"edu.jhu.cs.bsj.compiler.impl.utils.Pair", "javax.annotation.Generated" };
 	private static final Set<String> PRIMITIVE_TYPES = new HashSet<String>(Arrays.asList(new String[] { "int", "long",
 			"boolean", "float", "double", "short", "byte", "char" }));
+
+	/** Names the types of objects which are "deep copied" by simply copying the reference. */
+	private static final Set<String> DIRECT_COPY_NAMES;
+
+	static
+	{
+		Set<String> directCopy = new HashSet<String>(Arrays.asList(new String[] { "Long", "Integer", "Short", "Byte",
+				"Double", "Float", "Boolean", "String", "Character", "AccessModifier", "AssignmentOperator",
+				"BinaryOperator", "NameCategory", "PrimitiveType", "UnaryOperator", "UnaryStatementOperator", }));
+		directCopy.addAll(PRIMITIVE_TYPES);
+		DIRECT_COPY_NAMES = Collections.unmodifiableSet(directCopy);
+	}
+
+	/**
+	 * Names the types of objects which are deep copied by passing them as a single argument to their constructor.
+	 */
+	private static final Set<String> CONSTRUCTOR_COPY_NAMES = Collections.unmodifiableSet(new HashSet<String>(
+			Arrays.asList(new String[] { "BsjSourceLocation", })));
 
 	private Set<ClassDefHandler> handlers = new HashSet<ClassDefHandler>();
 	private Map<String, String> envMap = new HashMap<String, String>();
@@ -1007,6 +1025,42 @@ public class SourceGenerator
 
 		public abstract void useDefinition(ClassDef def) throws IOException;
 
+		protected void propAbstract(PropertyTypeAbstractor abstractor, Prop p, PrintStream ps, ClassDef def)
+		{
+			if (DIRECT_COPY_NAMES.contains(p.type))
+			{
+				abstractor.directCopy(ps, p);
+			} else if (propInstanceOf(p.type, "Node"))
+			{
+				abstractor.node(ps, p);
+			} else if (CONSTRUCTOR_COPY_NAMES.contains(p.type))
+			{
+				abstractor.constructorCopy(ps, p);
+			} else if (p.type.startsWith("List<"))
+			{
+				abstractor.list(ps, p);
+			} else if (p.type.equals("Void"))
+			{
+				abstractor.voidType(ps, p);
+			} else
+			{
+				throw new IllegalStateException("Don't know how to handle a value of type " + p.type
+						+ " for definition " + def.name);
+			}
+		}
+
+		static interface PropertyTypeAbstractor
+		{
+			void directCopy(PrintStream ps, Prop p);
+
+			void node(PrintStream ps, Prop p);
+
+			void constructorCopy(PrintStream ps, Prop p);
+
+			void list(PrintStream ps, Prop p);
+
+			void voidType(PrintStream ps, Prop p);
+		}
 	}
 
 	/**
@@ -1349,29 +1403,34 @@ public class SourceGenerator
 						ps.println(",");
 					}
 					ps.print("                ");
-					if (PRIMITIVE_TYPES.contains(p.type))
+
+					propAbstract(new PropertyTypeAbstractor()
 					{
-						ps.print("get" + capFirst(p.name) + "()");
-					} else if (propInstanceOf(p.type, "Node"))
-					{
-						ps.print("get" + capFirst(p.name) + "().deepCopy(factory)");
-					} else if (constructorCopyNames.contains(p.type))
-					{
-						ps.print("new " + p.type + "(get" + capFirst(p.name) + "())");
-					} else if (directCopyNames.contains(p.type))
-					{
-						ps.print("get" + capFirst(p.name) + "()");
-					} else if (p.type.startsWith("List<"))
-					{
-						ps.print("new Array" + p.type + "(get" + capFirst(p.name) + "())");
-					} else if (p.type.equals("Void"))
-					{
-						ps.print("null");
-					} else
-					{
-						throw new IllegalStateException("Don't know how to deep copy value of type " + p.type
-								+ " for definition " + def.name);
-					}
+						public void directCopy(PrintStream ps, Prop p)
+						{
+							ps.print("get" + capFirst(p.name) + "()");
+						}
+
+						public void node(PrintStream ps, Prop p)
+						{
+							ps.print("get" + capFirst(p.name) + "().deepCopy(factory)");
+						}
+
+						public void constructorCopy(PrintStream ps, Prop p)
+						{
+							ps.print("new " + p.type + "(get" + capFirst(p.name) + "())");
+						}
+
+						public void list(PrintStream ps, Prop p)
+						{
+							ps.print("new Array" + p.type + "(get" + capFirst(p.name) + "())");
+						}
+
+						public void voidType(PrintStream ps, Prop p)
+						{
+							ps.print("null");
+						}
+					}, p, ps, def);
 				}
 				ps.println(");");
 				ps.println("    }");
@@ -1382,17 +1441,6 @@ public class SourceGenerator
 
 			ps.println("}");
 		}
-
-		/** Names the types of objects which are "deep copied" by simply copying the reference. */
-		private static Set<String> directCopyNames = Collections.unmodifiableSet(new HashSet<String>(
-				Arrays.asList(new String[] { "Long", "Integer", "Short", "Byte", "Double", "Float", "Boolean",
-						"String", "Character", "AccessModifier", "AssignmentOperator", "BinaryOperator",
-						"NameCategory", "PrimitiveType", "UnaryOperator", "UnaryStatementOperator", })));
-		/**
-		 * Names the types of objects which are deep copied by passing them as a single argument to their constructor.
-		 */
-		private static Set<String> constructorCopyNames = Collections.unmodifiableSet(new HashSet<String>(
-				Arrays.asList(new String[] { "BsjSourceLocation", })));
 	}
 
 	/**
@@ -1786,5 +1834,180 @@ public class SourceGenerator
 			pps.println("}");
 			pps.close();
 		}
+	}
+
+	/**
+	 * Writes the BSJ tree lifter class.
+	 */
+	static class TreeLifterWriter extends ClassHierarchyBuildingHandler
+	{
+		/** The stream to which the file's content is written. */
+		private PrintStream ps;
+
+		@Override
+		public void init() throws IOException
+		{
+			super.init();
+			ps = createOutputFile("edu.jhu.cs.bsj.compiler.impl.tool.compiler", ClassMode.CONCRETE, true,
+					"BsjTreeLifter", true, null,
+					"BsjNodeOperation<Pair<ExpressionNode,List<BlockStatementNode>>,String>");
+			ps.println("    private BsjNodeFactory factory;");
+			ps.println();
+			ps.println("    public BsjTreeLifter(BsjNodeFactory factory)");
+			ps.println("    {");
+			ps.println("        this.factory = factory;");
+			ps.println("    }");
+			ps.println();
+			for (String ptype : PRIMITIVE_TYPES)
+			{
+				if (ptype.equals("short") || ptype.equals("byte"))
+					continue;
+				ps.println("    public ExpressionNode execute" + capFirst(ptype) + "(" + ptype + " x)");
+				ps.println("    {");
+				ps.println("        return factory.make" + capFirst(ptype) + "LiteralNode(x);");
+				ps.println("    }");
+				ps.println();
+			}
+		}
+
+		@Override
+		public void useDefinition(ClassDef def) throws IOException
+		{
+			List<Prop> recProp = this.getRecursiveProps(def);
+			if (def.mode != ClassMode.CONCRETE)
+				return;
+			// TODO: preserve start/stop location in the META world!
+
+			ps.println("    @Override");
+			String typeargString = "";
+			if (def.getNameParam().length() > 0)
+				typeargString = def.getNameParam() + " ";
+			ps.println("    public " + typeargString + "String execute" + def.getRawName() + "(" + def.getRawName()
+					+ def.getNameArg() + " node, Pair<ExpressionNode,List<BlockStatementNode>> p)");
+			ps.println("    {");
+			ps.println("        ExpressionNode factoryNode = p.getFirst();");
+			ps.println("        List<BlockStatementNode> statements = p.getSecond();");
+			ps.println();
+			for (Prop p : recProp)
+			{
+				if (p.skipMake)
+					continue;
+
+				propAbstract(new PropertyTypeAbstractor()
+				{
+					public void voidType(PrintStream ps, Prop p)
+					{
+						ps.println("        // TODO: " + p.name);
+					}
+
+					public void node(PrintStream ps, Prop p)
+					{
+						ps.println("        String lift" + capFirst(p.name) + "VarName = ");
+						ps.println("                node.get" + capFirst(p.name) + "().executeOperation(this,p);");
+					}
+
+					public void list(PrintStream ps, Prop p)
+					{
+						ps.println("        // TODO: " + p.name);
+					}
+
+					public void directCopy(PrintStream ps, Prop p)
+					{
+						ps.println("        " + p.type + " lift" + capFirst(p.name) + "Value = ");
+						ps.println("                node.get" + capFirst(p.name) + "();");
+					}
+
+					public void constructorCopy(PrintStream ps, Prop p)
+					{
+						ps.println("        // TODO: " + p.name);
+					}
+				}, p, ps, def);
+			}
+			ps.println();
+			ps.println("        String myVarName = getUniqueName();");
+			ps.println("        statements.add(");
+			ps.println("                factory.makeVariableDeclarationNode(");
+			ps.println("                        factory.makeVariableModifiersNode(");
+			ps.println("                                false,");
+			ps.println("                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),");
+			ps.println("                factory.makeListNode(");
+			ps.println("                        Collections.singletonList(");
+			ps.println("                                factory.makeVariableDeclaratorNode(");
+			ps.println("                                        factory.makeUnparameterizedTypeNode(");
+			ps.println("                                                factory.makeSimpleNameNode(");
+			ps.println("                                                        factory.makeIdentifierNode(\""
+					+ def.name + "\"),");
+			ps.println("                                                        NameCategory.TYPE)),");
+			ps.println("                                        factory.makeIdentifierNode(myVarName),");
+			ps.println("                                        factory.makeMethodInvocationByExpressionNode(");
+			ps.println("                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),");
+			ps.println("                                                factory.makeIdentifierNode(\"make" + def.name
+					+ "\"),");
+			ps.println("                                                factory.makeListNode(");
+			ps.print("                                                        Arrays.<ExpressionNode>asList(");
+			boolean first = true;
+			for (Prop p : recProp)
+			{
+				if (p.skipMake)
+					continue;
+				if (first)
+				{
+					first = false;
+				} else
+				{
+					ps.print(",");
+				}
+				ps.println();
+				propAbstract(new PropertyTypeAbstractor()
+				{
+					public void voidType(PrintStream ps, Prop p)
+					{
+						ps.print("/* TODO */ null");
+					}
+
+					public void node(PrintStream ps, Prop p)
+					{
+						ps.print("                                                                ");
+						ps.println("factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(");
+						ps.print("                                                                        ");
+						ps.print("factory.makeIdentifierNode(lift" + capFirst(p.name)
+								+ "VarName),NameCategory.EXPRESSION))");
+					}
+
+					public void list(PrintStream ps, Prop p)
+					{
+						ps.print("/* TODO */ null");
+					}
+
+					public void directCopy(PrintStream ps, Prop p)
+					{
+						ps.print("/* TODO */ null");
+					}
+
+					public void constructorCopy(PrintStream ps, Prop p)
+					{
+						ps.print("/* TODO */ null");
+					}
+				}, p, ps, def);
+			}
+			ps.println();
+			ps.println("                                                                )),");
+			ps.println("                                                factory.makeListNode(Collections.<TypeNode>emptyList()))");
+			ps.println("            )))));");
+			ps.println();
+			ps.println("        return myVarName;");
+			ps.println("    }");
+			ps.println();
+
+		}
+
+		@Override
+		public void finish() throws IOException
+		{
+			super.finish();
+			ps.println("}");
+			ps.close();
+		}
+
 	}
 }
