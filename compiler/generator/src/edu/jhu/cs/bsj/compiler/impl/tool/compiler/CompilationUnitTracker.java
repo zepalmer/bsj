@@ -91,9 +91,9 @@ public class CompilationUnitTracker implements Comparable<CompilationUnitTracker
 	public int compareTo(CompilationUnitTracker o)
 	{
 		if (this.status != o.status)
-			return this.status.ordinal() - o.status.ordinal();
+			return this.status.getPriority() - o.status.getPriority();
 		
-		// arbitrary but consistent ordering (as long we don't get a UID rollover)
-		return this.getUid() - o.getUid();
+		// If they have the same status, defer to the status itself.
+		return this.status.compare(this, o);
 	}
 }
