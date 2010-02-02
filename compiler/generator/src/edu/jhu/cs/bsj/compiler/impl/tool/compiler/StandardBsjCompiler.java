@@ -50,7 +50,7 @@ public class StandardBsjCompiler implements BsjCompiler
 	 * Tracks the progress of compilation units through the compilation process. This data structure performs the
 	 * accounting of source files and source file-specific data structures.
 	 */
-	private MetacompilationManager compilationUnitManager;
+	private MetacompilationManager metacompilationManager;
 
 	// TODO: allow factory to be specified by user?
 	/**
@@ -112,13 +112,13 @@ public class StandardBsjCompiler implements BsjCompiler
 		// Initialize the compilation unit manager with the names of the files it must compile
 		for (BsjFileObject file : units)
 		{
-			this.compilationUnitManager.addTarget(file);
+			this.metacompilationManager.addTarget(file);
 		}
 
 		// Allow the compilation unit manager to handle the work in the sense of a work queue
-		while (!this.compilationUnitManager.isFinished())
+		while (!this.metacompilationManager.isFinished())
 		{
-			this.compilationUnitManager.doWork();
+			this.metacompilationManager.doWork();
 		}
 
 		// Now compile everything in the generated source directory
@@ -175,7 +175,7 @@ public class StandardBsjCompiler implements BsjCompiler
 		{
 			LOGGER.trace("Initializing compiler data structures.");
 		}
-		this.compilationUnitManager = new MetacompilationManager(this.factory, this.bsjFileManager);
+		this.metacompilationManager = new MetacompilationManager(this.factory, this.bsjFileManager);
 	}
 
 	/**
@@ -183,6 +183,6 @@ public class StandardBsjCompiler implements BsjCompiler
 	 */
 	private void terminate()
 	{
-		this.compilationUnitManager = null;
+		this.metacompilationManager = null;
 	}
 }
