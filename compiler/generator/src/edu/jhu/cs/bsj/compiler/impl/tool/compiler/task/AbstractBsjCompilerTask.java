@@ -2,36 +2,21 @@ package edu.jhu.cs.bsj.compiler.impl.tool.compiler.task;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-import edu.jhu.cs.bsj.compiler.impl.tool.compiler.CompilationUnitTracker;
-
-/**
- * This base class provides functionality for compiler tasks.
- * @author Zachary Palmer
- */
 public abstract class AbstractBsjCompilerTask implements BsjCompilerTask
 {
 	/** The next UID to assign to a task. */
 	private static final AtomicInteger nextUID = new AtomicInteger(0);
-	
-	/** The tracker against which this task will executed. */
-	private CompilationUnitTracker tracker;
 	/** The priority of this task. */
 	private TaskPriority priority;
 	/** The UID for this task. */
 	private int uid = nextUID.getAndIncrement();
 
-	protected AbstractBsjCompilerTask(CompilationUnitTracker tracker, TaskPriority priority)
+	protected AbstractBsjCompilerTask(TaskPriority priority)
 	{
 		super();
-		this.tracker = tracker;
 		this.priority = priority;
 	}
 
-	public CompilationUnitTracker getTracker()
-	{
-		return tracker;
-	}
-	
 	public TaskPriority getPriority()
 	{
 		return priority;
@@ -45,21 +30,23 @@ public abstract class AbstractBsjCompilerTask implements BsjCompilerTask
 	@Override
 	public int compareTo(BsjCompilerTask o)
 	{
-		if (this.getPriority().ordinal() < o.getPriority().ordinal())
-			return -1;
-		if (this.getPriority().ordinal() > o.getPriority().ordinal())
-			return 1;
-		
+		int a = this.getPriority().getPriority();
+		int b = o.getPriority().getPriority();
+		if (a != b)
+			return a - b;
+	
 		// Arbitrary but consistent ordering
-		if (this.getClass().hashCode() < o.getClass().hashCode())
-			return -1;
-		if (this.getClass().hashCode() > o.getClass().hashCode())
-			return 1;
-		if (this.getUid() < o.getUid())
-			return -1;
-		if (this.getUid() > o.getUid())
-			return 1;
-		
+		a = this.getClass().hashCode();
+		b = this.getClass().hashCode();
+		if (a != b)
+			return a - b;
+	
+		a = this.getUid();
+		b = o.getUid();
+		if (a != b)
+			return a - b;
+	
 		return 0;
 	}
+
 }
