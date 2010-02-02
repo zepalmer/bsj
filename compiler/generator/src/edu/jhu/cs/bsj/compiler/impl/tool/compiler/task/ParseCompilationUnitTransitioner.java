@@ -14,26 +14,17 @@ import edu.jhu.cs.bsj.compiler.tool.parser.BsjParserImpl;
  * Parses the compilation unit associated with the base tracker.
  * @author Zachary Palmer
  */
-public class ParseCompilationUnitTask extends AbstractBsjCompilerTask
+public class ParseCompilationUnitTransitioner extends AbstractCompilationUnitTransitioner
 {
-	public ParseCompilationUnitTask(CompilationUnitTracker tracker)
-	{
-		super(tracker, TaskPriority.PARSE);
-	}
-
 	@Override
-	public void execute(CompilationUnitManager manager) throws IOException, BsjCompilerException
+	public void execute(CompilationUnitManager manager, CompilationUnitTracker tracker) throws IOException, BsjCompilerException
 	{
-		Reader reader = getTracker().getFile().openReader(true); // TODO: parameterize ignoring of encoding errors?
+		Reader reader = tracker.getFile().openReader(true); // TODO: parameterize ignoring of encoding errors?
 		// TODO: get a standard BsjParser once that interface exists
 		BsjParserImpl parser = new BsjParserImpl(manager.getFactory());
 		CompilationUnitNode node = parser.parse(reader);
 		
-		getTracker().setAst(node);
-		getTracker().setStatus(CompilationUnitStatus.PARSED);
-		
-		// TODO: enqueue next task for the compilation unit
-		
-		manager.addTask(new CheatStubTask(getTracker()));
+		tracker.setAst(node);
+		tracker.setStatus(CompilationUnitStatus.PARSED);
 	}
 }

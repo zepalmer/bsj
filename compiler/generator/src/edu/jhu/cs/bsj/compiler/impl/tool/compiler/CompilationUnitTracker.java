@@ -9,7 +9,7 @@ import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.BsjFileObject;
  * This class tracks the compilation progress of a single compilation unit.
  * @author Zachary Palmer
  */
-public class CompilationUnitTracker
+public class CompilationUnitTracker implements Comparable<CompilationUnitTracker>
 {
 	/** The next UID to assign to a tracker. */
 	private static final AtomicInteger nextUID = new AtomicInteger(0);
@@ -85,5 +85,15 @@ public class CompilationUnitTracker
 	public void setAst(CompilationUnitNode ast)
 	{
 		this.ast = ast;
+	}
+
+	@Override
+	public int compareTo(CompilationUnitTracker o)
+	{
+		if (this.status != o.status)
+			return this.status.ordinal() - o.status.ordinal();
+		
+		// arbitrary but consistent ordering (as long we don't get a UID rollover)
+		return this.getUid() - o.getUid();
 	}
 }
