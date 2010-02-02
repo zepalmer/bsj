@@ -3,7 +3,7 @@ package edu.jhu.cs.bsj.compiler.impl.tool.compiler.task;
 import java.io.IOException;
 
 import edu.jhu.cs.bsj.compiler.exception.BsjCompilerException;
-import edu.jhu.cs.bsj.compiler.impl.tool.compiler.CompilationUnitManager;
+import edu.jhu.cs.bsj.compiler.impl.tool.compiler.MetacompilationManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.CompilationUnitTracker;
 
 /**
@@ -21,6 +21,6 @@ public interface CompilationUnitTransitioner
 	 * @throws IOException If an I/O error occurs.
 	 * @throws BsjCompilerException If a compilation error occurs.
 	 */
-	public void execute(CompilationUnitManager manager, CompilationUnitTracker tracker) throws IOException,
+	public void execute(MetacompilationManager manager, CompilationUnitTracker tracker) throws IOException,
 			BsjCompilerException;
 }

@@ -24,7 +24,7 @@ import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.BsjFileObject;
  * 
  * @author Zachary Palmer
  */
-public class CompilationUnitManager
+public class MetacompilationManager
 {
 	/**
 	 * Contains the registry of stateless compilation unit transitioners keyed by the state they transition.
@@ -69,7 +69,7 @@ public class CompilationUnitManager
 	 * @param factory The node factory to use.
 	 * @param fileManager The file management abstraction to use.
 	 */
-	public CompilationUnitManager(BsjNodeFactory factory, BsjFileManager fileManager)
+	public MetacompilationManager(BsjNodeFactory factory, BsjFileManager fileManager)
 	{
 		this.trackerMap = new HashMap<String, CompilationUnitTracker>();
 		this.priorityQueue = new PriorityQueue<CompilationUnitTracker>();

@@ -35,7 +35,9 @@ public class CompilationUnitTracker implements Comparable<CompilationUnitTracker
 	private BsjFileObject file;
 	
 	/**
-	 * The AST for this compilation unit.
+	 * The AST for this compilation unit.  If this tracker is in the {@link CompilationUnitStatus#PARSED} state, this
+	 * AST represents the results of parsing.  Once metaprogram execution begins, it represents the source which is
+	 * being generated.
 	 */
 	private CompilationUnitNode ast;
 	

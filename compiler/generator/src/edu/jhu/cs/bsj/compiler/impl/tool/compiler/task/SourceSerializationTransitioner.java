@@ -6,7 +6,7 @@ import javax.tools.JavaFileObject.Kind;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceSerializer;
 import edu.jhu.cs.bsj.compiler.exception.BsjCompilerException;
-import edu.jhu.cs.bsj.compiler.impl.tool.compiler.CompilationUnitManager;
+import edu.jhu.cs.bsj.compiler.impl.tool.compiler.MetacompilationManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.CompilationUnitStatus;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.CompilationUnitTracker;
 import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.BsjCompilerLocation;
@@ -23,7 +23,7 @@ import edu.jhu.cs.bsj.compiler.impl.tool.serializer.BsjSourceSerializerImpl;
 public class SourceSerializationTransitioner extends AbstractCompilationUnitTransitioner implements CompilationUnitTransitioner
 {
 	@Override
-	public void execute(CompilationUnitManager manager, CompilationUnitTracker tracker) throws IOException, BsjCompilerException
+	public void execute(MetacompilationManager manager, CompilationUnitTracker tracker) throws IOException, BsjCompilerException
 	{
 		// TODO: is there a better way to fetch a source serializer? SPI? Toolkit?
 		BsjSourceSerializer serializer = new BsjSourceSerializerImpl();
