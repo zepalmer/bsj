@@ -8,10 +8,10 @@ import java.util.PriorityQueue;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 import edu.jhu.cs.bsj.compiler.exception.BsjCompilerException;
-import edu.jhu.cs.bsj.compiler.impl.tool.compiler.task.CheatStubTransitioner;
-import edu.jhu.cs.bsj.compiler.impl.tool.compiler.task.CompilationUnitTransitioner;
-import edu.jhu.cs.bsj.compiler.impl.tool.compiler.task.ParseCompilationUnitTransitioner;
-import edu.jhu.cs.bsj.compiler.impl.tool.compiler.task.SourceSerializationTransitioner;
+import edu.jhu.cs.bsj.compiler.impl.tool.compiler.transitioner.CheatStubTransitioner;
+import edu.jhu.cs.bsj.compiler.impl.tool.compiler.transitioner.CompilationUnitTransitioner;
+import edu.jhu.cs.bsj.compiler.impl.tool.compiler.transitioner.ParseCompilationUnitTransitioner;
+import edu.jhu.cs.bsj.compiler.impl.tool.compiler.transitioner.SourceSerializationTransitioner;
 import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.BsjFileManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.BsjFileObject;
 

@@ -1,4 +1,4 @@
-package edu.jhu.cs.bsj.compiler.impl.tool.compiler.task;
+package edu.jhu.cs.bsj.compiler.impl.tool.compiler.transitioner;
 
 import java.io.IOException;
 import java.io.Reader;
