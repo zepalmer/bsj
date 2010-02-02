@@ -31,6 +31,28 @@ public class BsjNodeFactoryDecorator implements BsjNodeFactory
      */
     protected abstract void after(Node node);
     
+	/**
+	 * Retrieves the starting source location used for new nodes.
+	 * 
+	 * @return The start location used for new nodes. <code>null</code> is a permissible value and indicates that no
+	 *         information is available.
+	 */
+	public BsjSourceLocation getStartSourceLocation()
+	{
+		return this.factory.getStartSourceLocation();
+	}
+
+	/**
+	 * Retrieves the ending source location used for new nodes.
+	 * 
+	 * @return The stop location used for new nodes. <code>null</code> is a permissible value and indicates that no
+	 *         information is available.
+	 */
+	public BsjSourceLocation getStopSourceLocation()
+	{
+		return this.factory.getStopSourceLocation();
+	}
+
     /**
      * Changes the starting source location used for new nodes.
      * @param startLocation The new start location to use for new nodes.  <code>null</code> is a permissible value and
