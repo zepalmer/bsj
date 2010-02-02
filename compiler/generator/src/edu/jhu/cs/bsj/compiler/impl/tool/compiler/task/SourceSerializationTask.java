@@ -1,4 +1,4 @@
-package edu.jhu.cs.bsj.compiler.impl.tool.compiler.transitioner;
+package edu.jhu.cs.bsj.compiler.impl.tool.compiler.task;
 
 import java.io.IOException;
 
@@ -20,19 +20,24 @@ import edu.jhu.cs.bsj.compiler.impl.tool.serializer.BsjSourceSerializerImpl;
  * @author Zachary Palmer
  * 
  */
-public class SourceSerializationTransitioner extends AbstractCompilationUnitTransitioner implements CompilationUnitTransitioner
+public class SourceSerializationTask extends CompilationUnitTask implements BsjCompilerTask
 {
+	public SourceSerializationTask(CompilationUnitTracker tracker)
+	{
+		super(tracker, TaskPriority.SERIALIZE);
+	}
+
 	@Override
-	public void execute(MetacompilationManager manager, CompilationUnitTracker tracker) throws IOException, BsjCompilerException
+	public void execute(MetacompilationManager manager) throws IOException, BsjCompilerException
 	{
 		// TODO: is there a better way to fetch a source serializer? SPI? Toolkit?
 		BsjSourceSerializer serializer = new BsjSourceSerializerImpl();
-		String source = serializer.executeCompilationUnitNode(tracker.getAst(), null);
+		String source = serializer.executeCompilationUnitNode(getTracker().getAst(), null);
 		BsjFileObject bsjFileObject = manager.getFileManager().getJavaFileForOutput(
-				BsjCompilerLocation.GENERATED_SOURCE_PATH, tracker.getName(), Kind.SOURCE, null);
+				BsjCompilerLocation.GENERATED_SOURCE_PATH, getTracker().getName(), Kind.SOURCE, null);
 		bsjFileObject.setCharContent(source);
 		
-		tracker.setStatus(CompilationUnitStatus.COMPLETE);
+		getTracker().setStatus(CompilationUnitStatus.COMPLETE);
 	}
 
 }

@@ -1,22 +1,19 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.compiler;
 
 import java.io.IOException;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.PriorityQueue;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 import edu.jhu.cs.bsj.compiler.exception.BsjCompilerException;
-import edu.jhu.cs.bsj.compiler.impl.tool.compiler.transitioner.CheatStubTransitioner;
-import edu.jhu.cs.bsj.compiler.impl.tool.compiler.transitioner.CompilationUnitTransitioner;
-import edu.jhu.cs.bsj.compiler.impl.tool.compiler.transitioner.ParseCompilationUnitTransitioner;
-import edu.jhu.cs.bsj.compiler.impl.tool.compiler.transitioner.SourceSerializationTransitioner;
+import edu.jhu.cs.bsj.compiler.impl.tool.compiler.task.BsjCompilerTask;
+import edu.jhu.cs.bsj.compiler.impl.tool.compiler.task.ParseCompilationUnitTask;
 import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.BsjFileManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.BsjFileObject;
 
 /**
- * This class represents the data structure which manages compilation units. It tracks the progress which has been made
+ * This class represents the data structure which manages metacompilation. It tracks the progress which has been made
  * on a given compilation unit and, indirectly, any data specifically associated with it (such as its AST). The manager
  * maintains work in the form of a priority queue and is not finished until all of the work units in the priority queue
  * have been exhausted. Once a compilation unit manager reports that its work is complete, all sources have been
@@ -27,33 +24,15 @@ import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.BsjFileObject;
 public class MetacompilationManager
 {
 	/**
-	 * Contains the registry of stateless compilation unit transitioners keyed by the state they transition.
-	 */
-	private static final Map<CompilationUnitStatus, CompilationUnitTransitioner> transitionerMap;
-
-	static
-	{
-		Map<CompilationUnitStatus, CompilationUnitTransitioner> map =
-			new HashMap<CompilationUnitStatus, CompilationUnitTransitioner>();
-		
-		map.put(CompilationUnitStatus.JUST_STARTED, new ParseCompilationUnitTransitioner());
-		map.put(CompilationUnitStatus.PARSED, new CheatStubTransitioner());
-		map.put(CompilationUnitStatus.READY_TO_SERIALIZE, new SourceSerializationTransitioner());
-		
-		transitionerMap = Collections.unmodifiableMap(map);
-	}
-
-	/**
 	 * Maps the names of compilation units to their respective trackers. The trackers contain the compilation unit-
 	 * specific data and the individual compilation unit statuses.
 	 */
 	private Map<String, CompilationUnitTracker> trackerMap;
 	/**
-	 * Represents the work queue. Trackers are enqueued here as long as they are incomplete. Because of trackers'
-	 * natural ordering and the fact that this is a priority queue, trackers with more immediate  concerns (such as
-	 * parsing) can complete before trackers with later concerns (like source serialization).
+	 * Represents the work queue. Work to be performed is enqueued here. The queue is prioritized to allow preemption of
+	 * more basic tasks (such as when the type checker or metacompiler brings in another source unit for parsing).
 	 */
-	private PriorityQueue<CompilationUnitTracker> priorityQueue;
+	private PriorityQueue<BsjCompilerTask> priorityQueue;
 	/**
 	 * The node factory which tasks should use.
 	 */
@@ -65,26 +44,24 @@ public class MetacompilationManager
 
 	/**
 	 * Creates a new compilation unit manager.
-	 * 
 	 * @param factory The node factory to use.
 	 * @param fileManager The file management abstraction to use.
 	 */
 	public MetacompilationManager(BsjNodeFactory factory, BsjFileManager fileManager)
 	{
 		this.trackerMap = new HashMap<String, CompilationUnitTracker>();
-		this.priorityQueue = new PriorityQueue<CompilationUnitTracker>();
+		this.priorityQueue = new PriorityQueue<BsjCompilerTask>();
 		this.factory = factory;
 		this.fileManager = fileManager;
 	}
-
+	
 	/**
-	 * Adds a tracker to this manager.
-	 * 
-	 * @param tracker The tracker to add.
+	 * Adds a task to this manager.
+	 * @param task The task to add.
 	 */
-	public void addTracker(CompilationUnitTracker tracker)
+	public void addTask(BsjCompilerTask task)
 	{
-		this.priorityQueue.offer(tracker);
+		this.priorityQueue.offer(task);
 	}
 
 	/**
@@ -117,7 +94,7 @@ public class MetacompilationManager
 		}
 		CompilationUnitTracker tracker = new CompilationUnitTracker(file);
 		this.trackerMap.put(binaryName, tracker);
-		this.addTracker(tracker);
+		this.addTask(new ParseCompilationUnitTask(tracker));
 	}
 
 	/**
@@ -144,10 +121,9 @@ public class MetacompilationManager
 			return false;
 		}
 	}
-
+	
 	/**
 	 * Instructs this compilation unit manager to do more work.
-	 * 
 	 * @throws IOException If an I/O error occurs.
 	 * @throws BsjCompilerException If a compilation error occurs.
 	 * @throws IllegalStateException If no more work exists to be done.
@@ -158,14 +134,9 @@ public class MetacompilationManager
 		{
 			throw new IllegalStateException("No more work to do!");
 		}
-
-		CompilationUnitTracker tracker = this.priorityQueue.poll();
-		CompilationUnitTransitioner transitioner = transitionerMap.get(tracker.getStatus());
-		transitioner.execute(this, tracker);
-		if (tracker.getStatus() != CompilationUnitStatus.COMPLETE)
-		{
-			this.priorityQueue.offer(tracker);
-		}
+		
+		BsjCompilerTask task = this.priorityQueue.poll();
+		task.execute(this);
 	}
 
 	public BsjNodeFactory getFactory()
