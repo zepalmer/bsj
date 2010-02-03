@@ -61,7 +61,7 @@ public class SourceGenerator
 	/**
 	 * Names the types of objects which are deep copied by passing them as a single argument to their constructor.
 	 */
-	private static final Set<String> CONSTRUCTOR_COPY_NAMES = Collections.unmodifiableSet(new HashSet<String>(
+	private static final Set<String> CLONEABLE_NAMES = Collections.unmodifiableSet(new HashSet<String>(
 			Arrays.asList(new String[] { "BsjSourceLocation", })));
 
 	private Set<ClassDefHandler> handlers = new HashSet<ClassDefHandler>();
@@ -1041,9 +1041,9 @@ public class SourceGenerator
 			} else if (propInstanceOf(p.type, "Node"))
 			{
 				abstractor.node(ps, p);
-			} else if (CONSTRUCTOR_COPY_NAMES.contains(p.type))
+			} else if (CLONEABLE_NAMES.contains(p.type))
 			{
-				abstractor.constructorCopy(ps, p);
+				abstractor.cloneable(ps, p);
 			} else if (p.type.startsWith("List<"))
 			{
 				abstractor.list(ps, p);
@@ -1063,7 +1063,7 @@ public class SourceGenerator
 
 			void node(PrependablePrintStream ps, Prop p);
 
-			void constructorCopy(PrependablePrintStream ps, Prop p);
+			void cloneable(PrependablePrintStream ps, Prop p);
 
 			void list(PrependablePrintStream ps, Prop p);
 
@@ -1424,9 +1424,9 @@ public class SourceGenerator
 							ps.print("get" + capFirst(p.name) + "().deepCopy(factory)");
 						}
 
-						public void constructorCopy(PrependablePrintStream ps, Prop p)
+						public void cloneable(PrependablePrintStream ps, Prop p)
 						{
-							ps.print("new " + p.type + "(get" + capFirst(p.name) + "())");
+							ps.print("(" + p.type + ")(get" + capFirst(p.name) + "().clone())");
 						}
 
 						public void list(PrependablePrintStream ps, Prop p)
@@ -1909,7 +1909,6 @@ public class SourceGenerator
 			List<Prop> recProp = this.getRecursiveProps(def);
 			if (def.mode != ClassMode.CONCRETE)
 				return;
-			// TODO: preserve start/stop location in the META world!
 
 			ps.println("@Override");
 			String typeargString = "";
@@ -1940,7 +1939,7 @@ public class SourceGenerator
 			ps.incPrependCount();
 			for (Prop p : recProp)
 			{
-				if (p.skipMake)
+				if (p.skipMake && !p.name.matches("st(art|op)Location"))
 					continue;
 
 				propAbstract(new PropertyTypeAbstractor()
@@ -1975,8 +1974,9 @@ public class SourceGenerator
 
 					public void list(PrependablePrintStream ps, Prop p)
 					{
-						String typeArg = p.type.substring(5, p.type.length()-1);
-						ps.println("List<ExpressionNode> lift" + capFirst(p.name) + "List = new ArrayList<ExpressionNode>();");
+						String typeArg = p.type.substring(5, p.type.length() - 1);
+						ps.println("List<ExpressionNode> lift" + capFirst(p.name)
+								+ "List = new ArrayList<ExpressionNode>();");
 						ps.println("for (" + typeArg + " listval : node.get" + capFirst(p.name) + "())");
 						ps.println("{");
 						ps.println("    lift" + capFirst(p.name) + "List.add(");
@@ -1992,9 +1992,10 @@ public class SourceGenerator
 						ps.println("        node.get" + capFirst(p.name) + "();");
 					}
 
-					public void constructorCopy(PrependablePrintStream ps, Prop p)
+					public void cloneable(PrependablePrintStream ps, Prop p)
 					{
-						throw new IllegalStateException("Don't know how to handle constructor copy for " + p.name + "!");
+						ps.println("ExpressionNode lift" + capFirst(p.name) + "MetaClone = ");
+						ps.println("        expressionize" + p.type + "(node.get" + capFirst(p.name) + "());");
 					}
 				}, p, ps, def);
 			}
@@ -2014,7 +2015,7 @@ public class SourceGenerator
 			boolean first = true;
 			for (Prop p : recProp)
 			{
-				if (p.skipMake)
+				if (p.skipMake && !p.name.matches("st(art|op)Location"))
 					continue;
 				if (first)
 				{
@@ -2067,9 +2068,9 @@ public class SourceGenerator
 						ps.print("expressionize" + capFirst(p.type) + "(lift" + capFirst(p.name) + "Value)");
 					}
 
-					public void constructorCopy(PrependablePrintStream ps, Prop p)
+					public void cloneable(PrependablePrintStream ps, Prop p)
 					{
-						throw new IllegalStateException("Don't know how to handle constructor copy for " + p.name + "!");
+						ps.print("lift" + capFirst(p.name) + "MetaClone");
 					}
 				}, p, ps, def);
 			}

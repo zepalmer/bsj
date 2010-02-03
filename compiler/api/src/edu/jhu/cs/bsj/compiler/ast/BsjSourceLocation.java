@@ -5,7 +5,7 @@ package edu.jhu.cs.bsj.compiler.ast;
  * 
  * @author Zachary Palmer
  */
-public class BsjSourceLocation implements Comparable<BsjSourceLocation>
+public class BsjSourceLocation implements Comparable<BsjSourceLocation>, Cloneable
 {
 	/**
 	 * The value which will be used for line or column when no information is available.
@@ -80,5 +80,11 @@ public class BsjSourceLocation implements Comparable<BsjSourceLocation>
 		if (getColumn() > o.getColumn())
 			return 1;
 		return 0;
+	}
+
+	@Override
+	public BsjSourceLocation clone() throws CloneNotSupportedException
+	{
+		return (BsjSourceLocation)(super.clone());
 	}
 }
