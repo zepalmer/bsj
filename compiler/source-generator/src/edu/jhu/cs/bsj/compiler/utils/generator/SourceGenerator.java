@@ -35,17 +35,14 @@ public class SourceGenerator
 	private static final String[] CLASS_IMPORTS = { "edu.jhu.cs.bsj.compiler.impl.ast.*",
 			"edu.jhu.cs.bsj.compiler.impl.ast.node.*", "edu.jhu.cs.bsj.compiler.impl.ast.node.meta.*",
 			"edu.jhu.cs.bsj.compiler.impl.utils.Pair", "javax.annotation.Generated" };
-	
+
 	private static final Set<String> PRIMITIVE_TYPES = new HashSet<String>(Arrays.asList(new String[] { "int", "long",
 			"boolean", "float", "double", "short", "byte", "char" }));
-	private static final Set<String> PRIMITIVE_CONTAINER_TYPES = new HashSet<String>(Arrays.asList(new String[]{
-			"Long", "Integer", "Short", "Byte",
-			"Double", "Float", "Boolean", "String", "Character"
-	}));
-	private static final Set<String> ENUM_TYPES = new HashSet<String>(Arrays.asList(new String[]{
-			"AccessModifier", "AssignmentOperator",
-			"BinaryOperator", "NameCategory", "PrimitiveType", "UnaryOperator", "UnaryStatementOperator"
-	}));
+	private static final Set<String> PRIMITIVE_CONTAINER_TYPES = new HashSet<String>(Arrays.asList(new String[] {
+			"Long", "Integer", "Short", "Byte", "Double", "Float", "Boolean", "String", "Character" }));
+	private static final Set<String> ENUM_TYPES = new HashSet<String>(Arrays.asList(new String[] { "AccessModifier",
+			"AssignmentOperator", "BinaryOperator", "NameCategory", "PrimitiveType", "UnaryOperator",
+			"UnaryStatementOperator" }));
 
 	/** Names the types of objects which are "deep copied" by simply copying the reference. */
 	private static final Set<String> DIRECT_COPY_NAMES;
@@ -1920,13 +1917,15 @@ public class SourceGenerator
 				{
 					public void voidType(PrintStream ps, Prop p)
 					{
-						// Intentionally doing nothing.  We'll just use "null" below.
+						// Intentionally doing nothing. We'll just use "null" below.
 					}
 
 					public void node(PrintStream ps, Prop p)
 					{
 						ps.println("        String lift" + capFirst(p.name) + "VarName = ");
-						ps.println("                node.get" + capFirst(p.name) + "().executeOperation(this,p);");
+						ps.println("                node.get" + capFirst(p.name) + "() != null ?");
+						ps.println("                node.get" + capFirst(p.name) + "().executeOperation(this,p) :");
+						ps.println("                null;");
 					}
 
 					public void list(PrintStream ps, Prop p)
@@ -1956,16 +1955,37 @@ public class SourceGenerator
 			ps.println("                factory.makeListNode(");
 			ps.println("                        Collections.singletonList(");
 			ps.println("                                factory.makeVariableDeclaratorNode(");
+			if (def.getNameArg().length() > 0)
+			{
+				ps.println("                                    factory.makeParameterizedTypeNode(");
+			}
 			ps.println("                                        factory.makeUnparameterizedTypeNode(");
 			ps.println("                                                factory.makeSimpleNameNode(");
 			ps.println("                                                        factory.makeIdentifierNode(\""
-					+ def.name + "\"),");
+					+ def.getRawName() + "\"),");
 			ps.println("                                                        NameCategory.TYPE)),");
+			if (def.getNameArg().length() > 0)
+			{
+				// TODO: fix this assumption: nodes only have one type parameter on them
+				ps.println("                                        factory.makeListNode(");
+				ps.println("                                            Arrays.<TypeArgumentNode>asList(");
+				ps.println("                                                factory.makeUnparameterizedTypeNode(");
+				ps.println("                                                        factory.makeSimpleNameNode(");
+				ps.println("                                                                factory.makeIdentifierNode(");
+				ps.println("                                                                        \"" + def.getNameArg().substring(1,def.getNameArg().length()-1) + "\"");
+				ps.println("                                                                ),");
+				ps.println("                                                                NameCategory.TYPE");
+				ps.println("                                                        )");
+				ps.println("                                                )");
+				ps.println("                                            )");
+				ps.println("                                        )");
+				ps.println("                                    ),");
+			}
 			ps.println("                                        factory.makeIdentifierNode(myVarName),");
 			ps.println("                                        factory.makeMethodInvocationByExpressionNode(");
 			ps.println("                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),");
-			ps.println("                                                factory.makeIdentifierNode(\"make" + def.name
-					+ "\"),");
+			ps.println("                                                factory.makeIdentifierNode(\"make"
+					+ def.getRawName() + "\"),");
 			ps.println("                                                factory.makeListNode(");
 			ps.print("                                                        Arrays.<ExpressionNode>asList(");
 			boolean first = true;
@@ -1991,14 +2011,18 @@ public class SourceGenerator
 
 					public void node(PrintStream ps, Prop p)
 					{
-						fieldAccessPrefix();
+						String varNameName = "lift" + capFirst(p.name) + "VarName";
+						ps.println(varNameName + " != null ? ");
+						ps.print("                                                                        ");
+						ps.println("factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(");
+						ps.print("                                                                                ");
 						ps.print("lift" + capFirst(p.name) + "VarName),NameCategory.EXPRESSION");
-						fieldAccessPostfix();
+						ps.print(")) : factory.makeNullLiteralNode(null)");
 					}
 
 					public void list(PrintStream ps, Prop p)
 					{
-						ps.print("/* TODO */ null");
+						ps.print("/* TODO */ factory.makeBooleanLiteralNode(true)");
 					}
 
 					public void directCopy(PrintStream ps, Prop p)
@@ -2009,16 +2033,6 @@ public class SourceGenerator
 					public void constructorCopy(PrintStream ps, Prop p)
 					{
 						ps.println("        // TODO: " + p.name);
-					}
-					
-					private void fieldAccessPrefix()
-					{
-						ps.println("factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(");
-						ps.print("                                                                        ");
-					}
-					private void fieldAccessPostfix()
-					{
-						ps.print("))");
 					}
 				}, p, ps, def);
 			}
