@@ -222,6 +222,24 @@ public class PrependablePrintStream extends PrintStream
 		setPrependCount(getPrependCount() - 1);
 	}
 
+	/**
+	 * Increments the prepend count. This is provided as a convenience function.
+	 * @param n The amount by which to increment the prepend count.
+	 */
+	public synchronized void incPrependCount(int n)
+	{
+		setPrependCount(getPrependCount() + n);
+	}
+
+	/**
+	 * Increments the prepend count. This is provided as a convenience function.
+	 * @param n The amount by which to decrement the prepend count.
+	 */
+	public synchronized void decPrependCount(int n)
+	{
+		setPrependCount(getPrependCount() - n);
+	}
+
 	// OVERRIDDEN PRINTSTREAM METHODS ////////////////////////////////////////////////
 
 	@Override

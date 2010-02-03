@@ -1,5 +1,6 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.compiler;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -21,7 +22,6 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.BlockStatementMetaprogramAnchorNode
 import edu.jhu.cs.bsj.compiler.ast.node.meta.CodeLiteralNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.TypeDeclarationMetaprogramAnchorNode;
-import edu.jhu.cs.bsj.compiler.impl.utils.Pair;
 
 /**
  * This class is designed to "lift" a BSJ AST, transitioning it into a higher, more abstract stage of programming.  The
@@ -51,14 +51,8 @@ import edu.jhu.cs.bsj.compiler.impl.utils.Pair;
  * file is treated as something similar to a giant code literal).
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<BlockStatementNode>>,String>
+public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,ExpressionNode>
 {
-	private int nextVariableId = 0;
-	private String getUniqueName()
-	{
-		return "v" + (nextVariableId++);
-	}
-	
 	protected ExpressionNode expressionizeString(String s)
 	{
 		return factory.makeStringLiteralNode(s);
@@ -80,42 +74,42 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
 	 */
 	private Stack<String> argsForListNodeStack = new Stack<String>();
     private BsjNodeFactory factory;
-
+    
     public BsjTreeLifter(BsjNodeFactory factory)
     {
         this.factory = factory;
     }
-
+    
     protected ExpressionNode expressionizeChar(char x)
     {
         return factory.makeCharLiteralNode(x);
     }
-
+    
     protected ExpressionNode expressionizeInt(int x)
     {
         return factory.makeIntLiteralNode(x);
     }
-
+    
     protected ExpressionNode expressionizeBoolean(boolean x)
     {
         return factory.makeBooleanLiteralNode(x);
     }
-
+    
     protected ExpressionNode expressionizeDouble(double x)
     {
         return factory.makeDoubleLiteralNode(x);
     }
-
+    
     protected ExpressionNode expressionizeLong(long x)
     {
         return factory.makeLongLiteralNode(x);
     }
-
+    
     protected ExpressionNode expressionizeFloat(float x)
     {
         return factory.makeFloatLiteralNode(x);
     }
-
+    
     protected ExpressionNode expressionizePrimitiveType(PrimitiveType x)
     {
         return factory.makeFieldAccessByNameNode(factory.makeQualifiedNameNode(
@@ -126,7 +120,7 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                 factory.makeIdentifierNode(x.name()),
                 NameCategory.EXPRESSION));
     }
-
+    
     protected ExpressionNode expressionizeUnaryStatementOperator(UnaryStatementOperator x)
     {
         return factory.makeFieldAccessByNameNode(factory.makeQualifiedNameNode(
@@ -137,7 +131,7 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                 factory.makeIdentifierNode(x.name()),
                 NameCategory.EXPRESSION));
     }
-
+    
     protected ExpressionNode expressionizeAssignmentOperator(AssignmentOperator x)
     {
         return factory.makeFieldAccessByNameNode(factory.makeQualifiedNameNode(
@@ -148,7 +142,7 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                 factory.makeIdentifierNode(x.name()),
                 NameCategory.EXPRESSION));
     }
-
+    
     protected ExpressionNode expressionizeBinaryOperator(BinaryOperator x)
     {
         return factory.makeFieldAccessByNameNode(factory.makeQualifiedNameNode(
@@ -159,7 +153,7 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                 factory.makeIdentifierNode(x.name()),
                 NameCategory.EXPRESSION));
     }
-
+    
     protected ExpressionNode expressionizeNameCategory(NameCategory x)
     {
         return factory.makeFieldAccessByNameNode(factory.makeQualifiedNameNode(
@@ -170,7 +164,7 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                 factory.makeIdentifierNode(x.name()),
                 NameCategory.EXPRESSION));
     }
-
+    
     protected ExpressionNode expressionizeUnaryOperator(UnaryOperator x)
     {
         return factory.makeFieldAccessByNameNode(factory.makeQualifiedNameNode(
@@ -181,7 +175,7 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                 factory.makeIdentifierNode(x.name()),
                 NameCategory.EXPRESSION));
     }
-
+    
     protected ExpressionNode expressionizeAccessModifier(AccessModifier x)
     {
         return factory.makeFieldAccessByNameNode(factory.makeQualifiedNameNode(
@@ -192,708 +186,385 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                 factory.makeIdentifierNode(x.name()),
                 NameCategory.EXPRESSION));
     }
-
+    
     @Override
-    public String executeAssertStatementNode(AssertStatementNode node, Pair<ExpressionNode,List<BlockStatementNode>> p)
+    public ExpressionNode executeAssertStatementNode(AssertStatementNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode factoryNode = p.getFirst();
-        List<BlockStatementNode> statements = p.getSecond();
-
-        String liftTestExpressionVarName = 
+        ExpressionNode liftTestExpression = 
                 node.getTestExpression() != null ?
-                node.getTestExpression().executeOperation(this,p) :
-                null;
-        String liftMessageExpressionVarName = 
+                        node.getTestExpression().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        ExpressionNode liftMessageExpression = 
                 node.getMessageExpression() != null ?
-                node.getMessageExpression().executeOperation(this,p) :
-                null;
-
-        String myVarName = getUniqueName();
-        statements.add(
-                factory.makeVariableDeclarationNode(
-                        factory.makeVariableModifiersNode(
-                                false,
-                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
-                factory.makeListNode(
-                        Collections.singletonList(
-                                factory.makeVariableDeclaratorNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.makeSimpleNameNode(
-                                                        factory.makeIdentifierNode("AssertStatementNode"),
-                                                        NameCategory.TYPE)),
-                                        factory.makeIdentifierNode(myVarName),
-                                        factory.makeMethodInvocationByExpressionNode(
-                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                                                factory.makeIdentifierNode("makeAssertStatementNode"),
-                                                factory.makeListNode(
-                                                        Arrays.<ExpressionNode>asList(
-                                                                liftTestExpressionVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftTestExpressionVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                liftMessageExpressionVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftMessageExpressionVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null)
-                                                                )),
-                                                factory.makeListNode(Collections.<TypeNode>emptyList()))
-            )))));
-
-        return myVarName;
+                        node.getMessageExpression().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeAssertStatementNode"),
+                        factory.makeListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        liftTestExpression,
+                                        liftMessageExpression)),
+                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
     }
-
+    
     @Override
-    public String executeUnaryStatementExpressionNode(UnaryStatementExpressionNode node, Pair<ExpressionNode,List<BlockStatementNode>> p)
+    public ExpressionNode executeUnaryStatementExpressionNode(UnaryStatementExpressionNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode factoryNode = p.getFirst();
-        List<BlockStatementNode> statements = p.getSecond();
-
-        String liftExpressionVarName = 
+        ExpressionNode liftExpression = 
                 node.getExpression() != null ?
-                node.getExpression().executeOperation(this,p) :
-                null;
+                        node.getExpression().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         UnaryStatementOperator liftOperatorValue = 
                 node.getOperator();
-
-        String myVarName = getUniqueName();
-        statements.add(
-                factory.makeVariableDeclarationNode(
-                        factory.makeVariableModifiersNode(
-                                false,
-                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
-                factory.makeListNode(
-                        Collections.singletonList(
-                                factory.makeVariableDeclaratorNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.makeSimpleNameNode(
-                                                        factory.makeIdentifierNode("UnaryStatementExpressionNode"),
-                                                        NameCategory.TYPE)),
-                                        factory.makeIdentifierNode(myVarName),
-                                        factory.makeMethodInvocationByExpressionNode(
-                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                                                factory.makeIdentifierNode("makeUnaryStatementExpressionNode"),
-                                                factory.makeListNode(
-                                                        Arrays.<ExpressionNode>asList(
-                                                                liftExpressionVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftExpressionVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                expressionizeUnaryStatementOperator(liftOperatorValue)
-                                                                )),
-                                                factory.makeListNode(Collections.<TypeNode>emptyList()))
-            )))));
-
-        return myVarName;
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeUnaryStatementExpressionNode"),
+                        factory.makeListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        liftExpression,
+                                        expressionizeUnaryStatementOperator(liftOperatorValue))),
+                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
     }
-
+    
     @Override
-    public String executeInterfaceBodyNode(InterfaceBodyNode node, Pair<ExpressionNode,List<BlockStatementNode>> p)
+    public ExpressionNode executeInterfaceBodyNode(InterfaceBodyNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode factoryNode = p.getFirst();
-        List<BlockStatementNode> statements = p.getSecond();
-
         argsForListNodeStack.push("InterfaceMemberNode");
-        String liftMembersVarName = 
+        ExpressionNode liftMembers = 
                 node.getMembers() != null ?
-                node.getMembers().executeOperation(this,p) :
-                null;
+                        node.getMembers().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         argsForListNodeStack.pop();
-
-        String myVarName = getUniqueName();
-        statements.add(
-                factory.makeVariableDeclarationNode(
-                        factory.makeVariableModifiersNode(
-                                false,
-                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
-                factory.makeListNode(
-                        Collections.singletonList(
-                                factory.makeVariableDeclaratorNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.makeSimpleNameNode(
-                                                        factory.makeIdentifierNode("InterfaceBodyNode"),
-                                                        NameCategory.TYPE)),
-                                        factory.makeIdentifierNode(myVarName),
-                                        factory.makeMethodInvocationByExpressionNode(
-                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                                                factory.makeIdentifierNode("makeInterfaceBodyNode"),
-                                                factory.makeListNode(
-                                                        Arrays.<ExpressionNode>asList(
-                                                                liftMembersVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftMembersVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null)
-                                                                )),
-                                                factory.makeListNode(Collections.<TypeNode>emptyList()))
-            )))));
-
-        return myVarName;
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeInterfaceBodyNode"),
+                        factory.makeListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        liftMembers)),
+                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
     }
-
+    
     @Override
-    public String executeExpressionStatementNode(ExpressionStatementNode node, Pair<ExpressionNode,List<BlockStatementNode>> p)
+    public ExpressionNode executeExpressionStatementNode(ExpressionStatementNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode factoryNode = p.getFirst();
-        List<BlockStatementNode> statements = p.getSecond();
-
-        String liftExpressionVarName = 
+        ExpressionNode liftExpression = 
                 node.getExpression() != null ?
-                node.getExpression().executeOperation(this,p) :
-                null;
-
-        String myVarName = getUniqueName();
-        statements.add(
-                factory.makeVariableDeclarationNode(
-                        factory.makeVariableModifiersNode(
-                                false,
-                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
-                factory.makeListNode(
-                        Collections.singletonList(
-                                factory.makeVariableDeclaratorNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.makeSimpleNameNode(
-                                                        factory.makeIdentifierNode("ExpressionStatementNode"),
-                                                        NameCategory.TYPE)),
-                                        factory.makeIdentifierNode(myVarName),
-                                        factory.makeMethodInvocationByExpressionNode(
-                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                                                factory.makeIdentifierNode("makeExpressionStatementNode"),
-                                                factory.makeListNode(
-                                                        Arrays.<ExpressionNode>asList(
-                                                                liftExpressionVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftExpressionVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null)
-                                                                )),
-                                                factory.makeListNode(Collections.<TypeNode>emptyList()))
-            )))));
-
-        return myVarName;
+                        node.getExpression().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeExpressionStatementNode"),
+                        factory.makeListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        liftExpression)),
+                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
     }
-
+    
     @Override
-    public String executeClassDeclarationNode(ClassDeclarationNode node, Pair<ExpressionNode,List<BlockStatementNode>> p)
+    public ExpressionNode executeClassDeclarationNode(ClassDeclarationNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode factoryNode = p.getFirst();
-        List<BlockStatementNode> statements = p.getSecond();
-
-        String liftModifiersVarName = 
+        ExpressionNode liftModifiers = 
                 node.getModifiers() != null ?
-                node.getModifiers().executeOperation(this,p) :
-                null;
-        String liftExtendsClauseVarName = 
+                        node.getModifiers().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        ExpressionNode liftExtendsClause = 
                 node.getExtendsClause() != null ?
-                node.getExtendsClause().executeOperation(this,p) :
-                null;
+                        node.getExtendsClause().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         argsForListNodeStack.push("TypeNode");
-        String liftImplementsClauseVarName = 
+        ExpressionNode liftImplementsClause = 
                 node.getImplementsClause() != null ?
-                node.getImplementsClause().executeOperation(this,p) :
-                null;
+                        node.getImplementsClause().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         argsForListNodeStack.pop();
-        String liftBodyVarName = 
+        ExpressionNode liftBody = 
                 node.getBody() != null ?
-                node.getBody().executeOperation(this,p) :
-                null;
+                        node.getBody().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         argsForListNodeStack.push("TypeParameterNode");
-        String liftTypeParametersVarName = 
+        ExpressionNode liftTypeParameters = 
                 node.getTypeParameters() != null ?
-                node.getTypeParameters().executeOperation(this,p) :
-                null;
+                        node.getTypeParameters().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         argsForListNodeStack.pop();
-        String liftIdentifierVarName = 
+        ExpressionNode liftIdentifier = 
                 node.getIdentifier() != null ?
-                node.getIdentifier().executeOperation(this,p) :
-                null;
-        String liftJavadocVarName = 
+                        node.getIdentifier().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        ExpressionNode liftJavadoc = 
                 node.getJavadoc() != null ?
-                node.getJavadoc().executeOperation(this,p) :
-                null;
-
-        String myVarName = getUniqueName();
-        statements.add(
-                factory.makeVariableDeclarationNode(
-                        factory.makeVariableModifiersNode(
-                                false,
-                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
-                factory.makeListNode(
-                        Collections.singletonList(
-                                factory.makeVariableDeclaratorNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.makeSimpleNameNode(
-                                                        factory.makeIdentifierNode("ClassDeclarationNode"),
-                                                        NameCategory.TYPE)),
-                                        factory.makeIdentifierNode(myVarName),
-                                        factory.makeMethodInvocationByExpressionNode(
-                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                                                factory.makeIdentifierNode("makeClassDeclarationNode"),
-                                                factory.makeListNode(
-                                                        Arrays.<ExpressionNode>asList(
-                                                                liftModifiersVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftModifiersVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                liftExtendsClauseVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftExtendsClauseVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                liftImplementsClauseVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftImplementsClauseVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                liftBodyVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftBodyVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                liftTypeParametersVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftTypeParametersVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                liftIdentifierVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftIdentifierVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                liftJavadocVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftJavadocVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null)
-                                                                )),
-                                                factory.makeListNode(Collections.<TypeNode>emptyList()))
-            )))));
-
-        return myVarName;
+                        node.getJavadoc().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeClassDeclarationNode"),
+                        factory.makeListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        liftModifiers,
+                                        liftExtendsClause,
+                                        liftImplementsClause,
+                                        liftBody,
+                                        liftTypeParameters,
+                                        liftIdentifier,
+                                        liftJavadoc)),
+                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
     }
-
+    
     @Override
-    public String executeEnhancedForLoopNode(EnhancedForLoopNode node, Pair<ExpressionNode,List<BlockStatementNode>> p)
+    public ExpressionNode executeEnhancedForLoopNode(EnhancedForLoopNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode factoryNode = p.getFirst();
-        List<BlockStatementNode> statements = p.getSecond();
-
-        String liftVariableVarName = 
+        ExpressionNode liftVariable = 
                 node.getVariable() != null ?
-                node.getVariable().executeOperation(this,p) :
-                null;
-        String liftExpressionVarName = 
+                        node.getVariable().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        ExpressionNode liftExpression = 
                 node.getExpression() != null ?
-                node.getExpression().executeOperation(this,p) :
-                null;
-        String liftStatementVarName = 
+                        node.getExpression().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        ExpressionNode liftStatement = 
                 node.getStatement() != null ?
-                node.getStatement().executeOperation(this,p) :
-                null;
-
-        String myVarName = getUniqueName();
-        statements.add(
-                factory.makeVariableDeclarationNode(
-                        factory.makeVariableModifiersNode(
-                                false,
-                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
-                factory.makeListNode(
-                        Collections.singletonList(
-                                factory.makeVariableDeclaratorNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.makeSimpleNameNode(
-                                                        factory.makeIdentifierNode("EnhancedForLoopNode"),
-                                                        NameCategory.TYPE)),
-                                        factory.makeIdentifierNode(myVarName),
-                                        factory.makeMethodInvocationByExpressionNode(
-                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                                                factory.makeIdentifierNode("makeEnhancedForLoopNode"),
-                                                factory.makeListNode(
-                                                        Arrays.<ExpressionNode>asList(
-                                                                liftVariableVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftVariableVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                liftExpressionVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftExpressionVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                liftStatementVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftStatementVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null)
-                                                                )),
-                                                factory.makeListNode(Collections.<TypeNode>emptyList()))
-            )))));
-
-        return myVarName;
+                        node.getStatement().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeEnhancedForLoopNode"),
+                        factory.makeListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        liftVariable,
+                                        liftExpression,
+                                        liftStatement)),
+                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
     }
-
+    
     @Override
-    public String executeArrayAccessNode(ArrayAccessNode node, Pair<ExpressionNode,List<BlockStatementNode>> p)
+    public ExpressionNode executeArrayAccessNode(ArrayAccessNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode factoryNode = p.getFirst();
-        List<BlockStatementNode> statements = p.getSecond();
-
-        String liftArrayExpressionVarName = 
+        ExpressionNode liftArrayExpression = 
                 node.getArrayExpression() != null ?
-                node.getArrayExpression().executeOperation(this,p) :
-                null;
-        String liftIndexExpressionVarName = 
+                        node.getArrayExpression().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        ExpressionNode liftIndexExpression = 
                 node.getIndexExpression() != null ?
-                node.getIndexExpression().executeOperation(this,p) :
-                null;
-
-        String myVarName = getUniqueName();
-        statements.add(
-                factory.makeVariableDeclarationNode(
-                        factory.makeVariableModifiersNode(
-                                false,
-                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
-                factory.makeListNode(
-                        Collections.singletonList(
-                                factory.makeVariableDeclaratorNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.makeSimpleNameNode(
-                                                        factory.makeIdentifierNode("ArrayAccessNode"),
-                                                        NameCategory.TYPE)),
-                                        factory.makeIdentifierNode(myVarName),
-                                        factory.makeMethodInvocationByExpressionNode(
-                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                                                factory.makeIdentifierNode("makeArrayAccessNode"),
-                                                factory.makeListNode(
-                                                        Arrays.<ExpressionNode>asList(
-                                                                liftArrayExpressionVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftArrayExpressionVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                liftIndexExpressionVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftIndexExpressionVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null)
-                                                                )),
-                                                factory.makeListNode(Collections.<TypeNode>emptyList()))
-            )))));
-
-        return myVarName;
+                        node.getIndexExpression().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeArrayAccessNode"),
+                        factory.makeListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        liftArrayExpression,
+                                        liftIndexExpression)),
+                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
     }
-
+    
     @Override
-    public String executeLongLiteralNode(LongLiteralNode node, Pair<ExpressionNode,List<BlockStatementNode>> p)
+    public ExpressionNode executeLongLiteralNode(LongLiteralNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode factoryNode = p.getFirst();
-        List<BlockStatementNode> statements = p.getSecond();
-
         Long liftValueValue = 
                 node.getValue();
-
-        String myVarName = getUniqueName();
-        statements.add(
-                factory.makeVariableDeclarationNode(
-                        factory.makeVariableModifiersNode(
-                                false,
-                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
-                factory.makeListNode(
-                        Collections.singletonList(
-                                factory.makeVariableDeclaratorNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.makeSimpleNameNode(
-                                                        factory.makeIdentifierNode("LongLiteralNode"),
-                                                        NameCategory.TYPE)),
-                                        factory.makeIdentifierNode(myVarName),
-                                        factory.makeMethodInvocationByExpressionNode(
-                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                                                factory.makeIdentifierNode("makeLongLiteralNode"),
-                                                factory.makeListNode(
-                                                        Arrays.<ExpressionNode>asList(
-                                                                expressionizeLong(liftValueValue)
-                                                                )),
-                                                factory.makeListNode(Collections.<TypeNode>emptyList()))
-            )))));
-
-        return myVarName;
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeLongLiteralNode"),
+                        factory.makeListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        expressionizeLong(liftValueValue))),
+                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
     }
-
+    
     @Override
-    public String executeQualifiedNameNode(QualifiedNameNode node, Pair<ExpressionNode,List<BlockStatementNode>> p)
+    public ExpressionNode executeQualifiedNameNode(QualifiedNameNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode factoryNode = p.getFirst();
-        List<BlockStatementNode> statements = p.getSecond();
-
-        String liftBaseVarName = 
+        ExpressionNode liftBase = 
                 node.getBase() != null ?
-                node.getBase().executeOperation(this,p) :
-                null;
-        String liftIdentifierVarName = 
+                        node.getBase().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        ExpressionNode liftIdentifier = 
                 node.getIdentifier() != null ?
-                node.getIdentifier().executeOperation(this,p) :
-                null;
+                        node.getIdentifier().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         NameCategory liftCategoryValue = 
                 node.getCategory();
-
-        String myVarName = getUniqueName();
-        statements.add(
-                factory.makeVariableDeclarationNode(
-                        factory.makeVariableModifiersNode(
-                                false,
-                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
-                factory.makeListNode(
-                        Collections.singletonList(
-                                factory.makeVariableDeclaratorNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.makeSimpleNameNode(
-                                                        factory.makeIdentifierNode("QualifiedNameNode"),
-                                                        NameCategory.TYPE)),
-                                        factory.makeIdentifierNode(myVarName),
-                                        factory.makeMethodInvocationByExpressionNode(
-                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                                                factory.makeIdentifierNode("makeQualifiedNameNode"),
-                                                factory.makeListNode(
-                                                        Arrays.<ExpressionNode>asList(
-                                                                liftBaseVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftBaseVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                liftIdentifierVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftIdentifierVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                expressionizeNameCategory(liftCategoryValue)
-                                                                )),
-                                                factory.makeListNode(Collections.<TypeNode>emptyList()))
-            )))));
-
-        return myVarName;
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeQualifiedNameNode"),
+                        factory.makeListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        liftBase,
+                                        liftIdentifier,
+                                        expressionizeNameCategory(liftCategoryValue))),
+                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
     }
-
+    
     @Override
-    public String executeCaseNode(CaseNode node, Pair<ExpressionNode,List<BlockStatementNode>> p)
+    public ExpressionNode executeCaseNode(CaseNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode factoryNode = p.getFirst();
-        List<BlockStatementNode> statements = p.getSecond();
-
-        String liftExpressionVarName = 
+        ExpressionNode liftExpression = 
                 node.getExpression() != null ?
-                node.getExpression().executeOperation(this,p) :
-                null;
+                        node.getExpression().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         argsForListNodeStack.push("BlockStatementNode");
-        String liftStatementsVarName = 
+        ExpressionNode liftStatements = 
                 node.getStatements() != null ?
-                node.getStatements().executeOperation(this,p) :
-                null;
+                        node.getStatements().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         argsForListNodeStack.pop();
-
-        String myVarName = getUniqueName();
-        statements.add(
-                factory.makeVariableDeclarationNode(
-                        factory.makeVariableModifiersNode(
-                                false,
-                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
-                factory.makeListNode(
-                        Collections.singletonList(
-                                factory.makeVariableDeclaratorNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.makeSimpleNameNode(
-                                                        factory.makeIdentifierNode("CaseNode"),
-                                                        NameCategory.TYPE)),
-                                        factory.makeIdentifierNode(myVarName),
-                                        factory.makeMethodInvocationByExpressionNode(
-                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                                                factory.makeIdentifierNode("makeCaseNode"),
-                                                factory.makeListNode(
-                                                        Arrays.<ExpressionNode>asList(
-                                                                liftExpressionVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftExpressionVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                liftStatementsVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftStatementsVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null)
-                                                                )),
-                                                factory.makeListNode(Collections.<TypeNode>emptyList()))
-            )))));
-
-        return myVarName;
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeCaseNode"),
+                        factory.makeListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        liftExpression,
+                                        liftStatements)),
+                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
     }
-
+    
     @Override
-    public String executeVoidStatementNode(VoidStatementNode node, Pair<ExpressionNode,List<BlockStatementNode>> p)
+    public ExpressionNode executeVoidStatementNode(VoidStatementNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode factoryNode = p.getFirst();
-        List<BlockStatementNode> statements = p.getSecond();
-
-
-        String myVarName = getUniqueName();
-        statements.add(
-                factory.makeVariableDeclarationNode(
-                        factory.makeVariableModifiersNode(
-                                false,
-                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
-                factory.makeListNode(
-                        Collections.singletonList(
-                                factory.makeVariableDeclaratorNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.makeSimpleNameNode(
-                                                        factory.makeIdentifierNode("VoidStatementNode"),
-                                                        NameCategory.TYPE)),
-                                        factory.makeIdentifierNode(myVarName),
-                                        factory.makeMethodInvocationByExpressionNode(
-                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                                                factory.makeIdentifierNode("makeVoidStatementNode"),
-                                                factory.makeListNode(
-                                                        Arrays.<ExpressionNode>asList(
-                                                                )),
-                                                factory.makeListNode(Collections.<TypeNode>emptyList()))
-            )))));
-
-        return myVarName;
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeVoidStatementNode"),
+                        factory.makeListNode(
+                                Arrays.<ExpressionNode>asList()),
+                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
     }
-
+    
     @Override
-    public String executeCodeLiteralNode(CodeLiteralNode node, Pair<ExpressionNode,List<BlockStatementNode>> p)
+    public ExpressionNode executeCodeLiteralNode(CodeLiteralNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode factoryNode = p.getFirst();
-        List<BlockStatementNode> statements = p.getSecond();
-
-        String liftValueVarName = 
+        ExpressionNode liftValue = 
                 node.getValue() != null ?
-                node.getValue().executeOperation(this,p) :
-                null;
-
-        String myVarName = getUniqueName();
-        statements.add(
-                factory.makeVariableDeclarationNode(
-                        factory.makeVariableModifiersNode(
-                                false,
-                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
-                factory.makeListNode(
-                        Collections.singletonList(
-                                factory.makeVariableDeclaratorNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.makeSimpleNameNode(
-                                                        factory.makeIdentifierNode("CodeLiteralNode"),
-                                                        NameCategory.TYPE)),
-                                        factory.makeIdentifierNode(myVarName),
-                                        factory.makeMethodInvocationByExpressionNode(
-                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                                                factory.makeIdentifierNode("makeCodeLiteralNode"),
-                                                factory.makeListNode(
-                                                        Arrays.<ExpressionNode>asList(
-                                                                liftValueVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftValueVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null)
-                                                                )),
-                                                factory.makeListNode(Collections.<TypeNode>emptyList()))
-            )))));
-
-        return myVarName;
+                        node.getValue().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeCodeLiteralNode"),
+                        factory.makeListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        liftValue)),
+                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
     }
-
+    
     @Override
-    public String executeImportOnDemandNode(ImportOnDemandNode node, Pair<ExpressionNode,List<BlockStatementNode>> p)
+    public ExpressionNode executeImportOnDemandNode(ImportOnDemandNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode factoryNode = p.getFirst();
-        List<BlockStatementNode> statements = p.getSecond();
-
-        String liftNameVarName = 
+        ExpressionNode liftName = 
                 node.getName() != null ?
-                node.getName().executeOperation(this,p) :
-                null;
+                        node.getName().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         boolean liftStaticImportValue = 
                 node.getStaticImport();
-
-        String myVarName = getUniqueName();
-        statements.add(
-                factory.makeVariableDeclarationNode(
-                        factory.makeVariableModifiersNode(
-                                false,
-                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
-                factory.makeListNode(
-                        Collections.singletonList(
-                                factory.makeVariableDeclaratorNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.makeSimpleNameNode(
-                                                        factory.makeIdentifierNode("ImportOnDemandNode"),
-                                                        NameCategory.TYPE)),
-                                        factory.makeIdentifierNode(myVarName),
-                                        factory.makeMethodInvocationByExpressionNode(
-                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                                                factory.makeIdentifierNode("makeImportOnDemandNode"),
-                                                factory.makeListNode(
-                                                        Arrays.<ExpressionNode>asList(
-                                                                liftNameVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftNameVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                expressionizeBoolean(liftStaticImportValue)
-                                                                )),
-                                                factory.makeListNode(Collections.<TypeNode>emptyList()))
-            )))));
-
-        return myVarName;
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeImportOnDemandNode"),
+                        factory.makeListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        liftName,
+                                        expressionizeBoolean(liftStaticImportValue))),
+                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
     }
-
+    
     @Override
-    public String executeVariableModifiersNode(VariableModifiersNode node, Pair<ExpressionNode,List<BlockStatementNode>> p)
+    public ExpressionNode executeVariableModifiersNode(VariableModifiersNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode factoryNode = p.getFirst();
-        List<BlockStatementNode> statements = p.getSecond();
-
         boolean liftFinalFlagValue = 
                 node.getFinalFlag();
         argsForListNodeStack.push("AnnotationNode");
-        String liftAnnotationsVarName = 
+        ExpressionNode liftAnnotations = 
                 node.getAnnotations() != null ?
-                node.getAnnotations().executeOperation(this,p) :
-                null;
+                        node.getAnnotations().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         argsForListNodeStack.pop();
-
-        String myVarName = getUniqueName();
-        statements.add(
-                factory.makeVariableDeclarationNode(
-                        factory.makeVariableModifiersNode(
-                                false,
-                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
-                factory.makeListNode(
-                        Collections.singletonList(
-                                factory.makeVariableDeclaratorNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.makeSimpleNameNode(
-                                                        factory.makeIdentifierNode("VariableModifiersNode"),
-                                                        NameCategory.TYPE)),
-                                        factory.makeIdentifierNode(myVarName),
-                                        factory.makeMethodInvocationByExpressionNode(
-                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                                                factory.makeIdentifierNode("makeVariableModifiersNode"),
-                                                factory.makeListNode(
-                                                        Arrays.<ExpressionNode>asList(
-                                                                expressionizeBoolean(liftFinalFlagValue),
-                                                                liftAnnotationsVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftAnnotationsVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null)
-                                                                )),
-                                                factory.makeListNode(Collections.<TypeNode>emptyList()))
-            )))));
-
-        return myVarName;
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeVariableModifiersNode"),
+                        factory.makeListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        expressionizeBoolean(liftFinalFlagValue),
+                                        liftAnnotations)),
+                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
     }
-
+    
     @Override
-    public String executeBlockStatementMetaprogramAnchorNode(BlockStatementMetaprogramAnchorNode node, Pair<ExpressionNode,List<BlockStatementNode>> p)
+    public ExpressionNode executeBlockStatementMetaprogramAnchorNode(BlockStatementMetaprogramAnchorNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode factoryNode = p.getFirst();
-        List<BlockStatementNode> statements = p.getSecond();
-
-        String liftMetaprogramVarName = 
+        ExpressionNode liftMetaprogram = 
                 node.getMetaprogram() != null ?
-                node.getMetaprogram().executeOperation(this,p) :
-                null;
-
-        String myVarName = getUniqueName();
-        statements.add(
-                factory.makeVariableDeclarationNode(
-                        factory.makeVariableModifiersNode(
-                                false,
-                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
-                factory.makeListNode(
-                        Collections.singletonList(
-                                factory.makeVariableDeclaratorNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.makeSimpleNameNode(
-                                                        factory.makeIdentifierNode("BlockStatementMetaprogramAnchorNode"),
-                                                        NameCategory.TYPE)),
-                                        factory.makeIdentifierNode(myVarName),
-                                        factory.makeMethodInvocationByExpressionNode(
-                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                                                factory.makeIdentifierNode("makeBlockStatementMetaprogramAnchorNode"),
-                                                factory.makeListNode(
-                                                        Arrays.<ExpressionNode>asList(
-                                                                liftMetaprogramVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftMetaprogramVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null)
-                                                                )),
-                                                factory.makeListNode(Collections.<TypeNode>emptyList()))
-            )))));
-
-        return myVarName;
+                        node.getMetaprogram().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeBlockStatementMetaprogramAnchorNode"),
+                        factory.makeListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        liftMetaprogram)),
+                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
     }
-
+    
     @Override
-    public String executeInterfaceModifiersNode(InterfaceModifiersNode node, Pair<ExpressionNode,List<BlockStatementNode>> p)
+    public ExpressionNode executeInterfaceModifiersNode(InterfaceModifiersNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode factoryNode = p.getFirst();
-        List<BlockStatementNode> statements = p.getSecond();
-
         AccessModifier liftAccessValue = 
                 node.getAccess();
         boolean liftStaticFlagValue = 
@@ -901,704 +572,384 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
         boolean liftStrictfpFlagValue = 
                 node.getStrictfpFlag();
         argsForListNodeStack.push("AnnotationNode");
-        String liftAnnotationsVarName = 
+        ExpressionNode liftAnnotations = 
                 node.getAnnotations() != null ?
-                node.getAnnotations().executeOperation(this,p) :
-                null;
+                        node.getAnnotations().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         argsForListNodeStack.pop();
-
-        String myVarName = getUniqueName();
-        statements.add(
-                factory.makeVariableDeclarationNode(
-                        factory.makeVariableModifiersNode(
-                                false,
-                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
-                factory.makeListNode(
-                        Collections.singletonList(
-                                factory.makeVariableDeclaratorNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.makeSimpleNameNode(
-                                                        factory.makeIdentifierNode("InterfaceModifiersNode"),
-                                                        NameCategory.TYPE)),
-                                        factory.makeIdentifierNode(myVarName),
-                                        factory.makeMethodInvocationByExpressionNode(
-                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                                                factory.makeIdentifierNode("makeInterfaceModifiersNode"),
-                                                factory.makeListNode(
-                                                        Arrays.<ExpressionNode>asList(
-                                                                expressionizeAccessModifier(liftAccessValue),
-                                                                expressionizeBoolean(liftStaticFlagValue),
-                                                                expressionizeBoolean(liftStrictfpFlagValue),
-                                                                liftAnnotationsVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftAnnotationsVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null)
-                                                                )),
-                                                factory.makeListNode(Collections.<TypeNode>emptyList()))
-            )))));
-
-        return myVarName;
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeInterfaceModifiersNode"),
+                        factory.makeListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        expressionizeAccessModifier(liftAccessValue),
+                                        expressionizeBoolean(liftStaticFlagValue),
+                                        expressionizeBoolean(liftStrictfpFlagValue),
+                                        liftAnnotations)),
+                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
     }
-
+    
     @Override
-    public String executeSuperclassConstructorInvocationNode(SuperclassConstructorInvocationNode node, Pair<ExpressionNode,List<BlockStatementNode>> p)
+    public ExpressionNode executeSuperclassConstructorInvocationNode(SuperclassConstructorInvocationNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode factoryNode = p.getFirst();
-        List<BlockStatementNode> statements = p.getSecond();
-
-        String liftQualifyingExpressionVarName = 
+        ExpressionNode liftQualifyingExpression = 
                 node.getQualifyingExpression() != null ?
-                node.getQualifyingExpression().executeOperation(this,p) :
-                null;
+                        node.getQualifyingExpression().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         argsForListNodeStack.push("ExpressionNode");
-        String liftArgumentsVarName = 
+        ExpressionNode liftArguments = 
                 node.getArguments() != null ?
-                node.getArguments().executeOperation(this,p) :
-                null;
+                        node.getArguments().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         argsForListNodeStack.pop();
         argsForListNodeStack.push("TypeNode");
-        String liftTypeArgumentsVarName = 
+        ExpressionNode liftTypeArguments = 
                 node.getTypeArguments() != null ?
-                node.getTypeArguments().executeOperation(this,p) :
-                null;
+                        node.getTypeArguments().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         argsForListNodeStack.pop();
-
-        String myVarName = getUniqueName();
-        statements.add(
-                factory.makeVariableDeclarationNode(
-                        factory.makeVariableModifiersNode(
-                                false,
-                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
-                factory.makeListNode(
-                        Collections.singletonList(
-                                factory.makeVariableDeclaratorNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.makeSimpleNameNode(
-                                                        factory.makeIdentifierNode("SuperclassConstructorInvocationNode"),
-                                                        NameCategory.TYPE)),
-                                        factory.makeIdentifierNode(myVarName),
-                                        factory.makeMethodInvocationByExpressionNode(
-                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                                                factory.makeIdentifierNode("makeSuperclassConstructorInvocationNode"),
-                                                factory.makeListNode(
-                                                        Arrays.<ExpressionNode>asList(
-                                                                liftQualifyingExpressionVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftQualifyingExpressionVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                liftArgumentsVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftArgumentsVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                liftTypeArgumentsVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftTypeArgumentsVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null)
-                                                                )),
-                                                factory.makeListNode(Collections.<TypeNode>emptyList()))
-            )))));
-
-        return myVarName;
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeSuperclassConstructorInvocationNode"),
+                        factory.makeListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        liftQualifyingExpression,
+                                        liftArguments,
+                                        liftTypeArguments)),
+                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
     }
-
+    
     @Override
-    public String executePrimitiveTypeNode(PrimitiveTypeNode node, Pair<ExpressionNode,List<BlockStatementNode>> p)
+    public ExpressionNode executePrimitiveTypeNode(PrimitiveTypeNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode factoryNode = p.getFirst();
-        List<BlockStatementNode> statements = p.getSecond();
-
         PrimitiveType liftPrimitiveTypeValue = 
                 node.getPrimitiveType();
-
-        String myVarName = getUniqueName();
-        statements.add(
-                factory.makeVariableDeclarationNode(
-                        factory.makeVariableModifiersNode(
-                                false,
-                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
-                factory.makeListNode(
-                        Collections.singletonList(
-                                factory.makeVariableDeclaratorNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.makeSimpleNameNode(
-                                                        factory.makeIdentifierNode("PrimitiveTypeNode"),
-                                                        NameCategory.TYPE)),
-                                        factory.makeIdentifierNode(myVarName),
-                                        factory.makeMethodInvocationByExpressionNode(
-                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                                                factory.makeIdentifierNode("makePrimitiveTypeNode"),
-                                                factory.makeListNode(
-                                                        Arrays.<ExpressionNode>asList(
-                                                                expressionizePrimitiveType(liftPrimitiveTypeValue)
-                                                                )),
-                                                factory.makeListNode(Collections.<TypeNode>emptyList()))
-            )))));
-
-        return myVarName;
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makePrimitiveTypeNode"),
+                        factory.makeListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        expressionizePrimitiveType(liftPrimitiveTypeValue))),
+                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
     }
-
+    
     @Override
-    public String executeMetaprogramNode(MetaprogramNode node, Pair<ExpressionNode,List<BlockStatementNode>> p)
+    public ExpressionNode executeMetaprogramNode(MetaprogramNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode factoryNode = p.getFirst();
-        List<BlockStatementNode> statements = p.getSecond();
-
         argsForListNodeStack.push("BlockStatementNode");
-        String liftBodyVarName = 
+        ExpressionNode liftBody = 
                 node.getBody() != null ?
-                node.getBody().executeOperation(this,p) :
-                null;
+                        node.getBody().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         argsForListNodeStack.pop();
-
-        String myVarName = getUniqueName();
-        statements.add(
-                factory.makeVariableDeclarationNode(
-                        factory.makeVariableModifiersNode(
-                                false,
-                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
-                factory.makeListNode(
-                        Collections.singletonList(
-                                factory.makeVariableDeclaratorNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.makeSimpleNameNode(
-                                                        factory.makeIdentifierNode("MetaprogramNode"),
-                                                        NameCategory.TYPE)),
-                                        factory.makeIdentifierNode(myVarName),
-                                        factory.makeMethodInvocationByExpressionNode(
-                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                                                factory.makeIdentifierNode("makeMetaprogramNode"),
-                                                factory.makeListNode(
-                                                        Arrays.<ExpressionNode>asList(
-                                                                liftBodyVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftBodyVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null)
-                                                                )),
-                                                factory.makeListNode(Collections.<TypeNode>emptyList()))
-            )))));
-
-        return myVarName;
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeMetaprogramNode"),
+                        factory.makeListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        liftBody)),
+                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
     }
-
+    
     @Override
-    public String executeInitializerDeclarationNode(InitializerDeclarationNode node, Pair<ExpressionNode,List<BlockStatementNode>> p)
+    public ExpressionNode executeInitializerDeclarationNode(InitializerDeclarationNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode factoryNode = p.getFirst();
-        List<BlockStatementNode> statements = p.getSecond();
-
         boolean liftStaticInitializerValue = 
                 node.getStaticInitializer();
-        String liftBodyVarName = 
+        ExpressionNode liftBody = 
                 node.getBody() != null ?
-                node.getBody().executeOperation(this,p) :
-                null;
-
-        String myVarName = getUniqueName();
-        statements.add(
-                factory.makeVariableDeclarationNode(
-                        factory.makeVariableModifiersNode(
-                                false,
-                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
-                factory.makeListNode(
-                        Collections.singletonList(
-                                factory.makeVariableDeclaratorNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.makeSimpleNameNode(
-                                                        factory.makeIdentifierNode("InitializerDeclarationNode"),
-                                                        NameCategory.TYPE)),
-                                        factory.makeIdentifierNode(myVarName),
-                                        factory.makeMethodInvocationByExpressionNode(
-                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                                                factory.makeIdentifierNode("makeInitializerDeclarationNode"),
-                                                factory.makeListNode(
-                                                        Arrays.<ExpressionNode>asList(
-                                                                expressionizeBoolean(liftStaticInitializerValue),
-                                                                liftBodyVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftBodyVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null)
-                                                                )),
-                                                factory.makeListNode(Collections.<TypeNode>emptyList()))
-            )))));
-
-        return myVarName;
+                        node.getBody().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeInitializerDeclarationNode"),
+                        factory.makeListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        expressionizeBoolean(liftStaticInitializerValue),
+                                        liftBody)),
+                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
     }
-
+    
     @Override
-    public String executeEnumBodyNode(EnumBodyNode node, Pair<ExpressionNode,List<BlockStatementNode>> p)
+    public ExpressionNode executeEnumBodyNode(EnumBodyNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode factoryNode = p.getFirst();
-        List<BlockStatementNode> statements = p.getSecond();
-
         argsForListNodeStack.push("EnumConstantDeclarationNode");
-        String liftConstantsVarName = 
+        ExpressionNode liftConstants = 
                 node.getConstants() != null ?
-                node.getConstants().executeOperation(this,p) :
-                null;
+                        node.getConstants().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         argsForListNodeStack.pop();
         argsForListNodeStack.push("ClassMemberNode");
-        String liftMembersVarName = 
+        ExpressionNode liftMembers = 
                 node.getMembers() != null ?
-                node.getMembers().executeOperation(this,p) :
-                null;
+                        node.getMembers().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         argsForListNodeStack.pop();
-
-        String myVarName = getUniqueName();
-        statements.add(
-                factory.makeVariableDeclarationNode(
-                        factory.makeVariableModifiersNode(
-                                false,
-                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
-                factory.makeListNode(
-                        Collections.singletonList(
-                                factory.makeVariableDeclaratorNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.makeSimpleNameNode(
-                                                        factory.makeIdentifierNode("EnumBodyNode"),
-                                                        NameCategory.TYPE)),
-                                        factory.makeIdentifierNode(myVarName),
-                                        factory.makeMethodInvocationByExpressionNode(
-                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                                                factory.makeIdentifierNode("makeEnumBodyNode"),
-                                                factory.makeListNode(
-                                                        Arrays.<ExpressionNode>asList(
-                                                                liftConstantsVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftConstantsVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                liftMembersVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftMembersVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null)
-                                                                )),
-                                                factory.makeListNode(Collections.<TypeNode>emptyList()))
-            )))));
-
-        return myVarName;
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeEnumBodyNode"),
+                        factory.makeListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        liftConstants,
+                                        liftMembers)),
+                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
     }
-
+    
     @Override
-    public String executeTryNode(TryNode node, Pair<ExpressionNode,List<BlockStatementNode>> p)
+    public ExpressionNode executeTryNode(TryNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode factoryNode = p.getFirst();
-        List<BlockStatementNode> statements = p.getSecond();
-
-        String liftBlockVarName = 
+        ExpressionNode liftBlock = 
                 node.getBlock() != null ?
-                node.getBlock().executeOperation(this,p) :
-                null;
+                        node.getBlock().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         argsForListNodeStack.push("CatchNode");
-        String liftCatchesVarName = 
+        ExpressionNode liftCatches = 
                 node.getCatches() != null ?
-                node.getCatches().executeOperation(this,p) :
-                null;
+                        node.getCatches().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         argsForListNodeStack.pop();
-        String liftFinallyBlockVarName = 
+        ExpressionNode liftFinallyBlock = 
                 node.getFinallyBlock() != null ?
-                node.getFinallyBlock().executeOperation(this,p) :
-                null;
-
-        String myVarName = getUniqueName();
-        statements.add(
-                factory.makeVariableDeclarationNode(
-                        factory.makeVariableModifiersNode(
-                                false,
-                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
-                factory.makeListNode(
-                        Collections.singletonList(
-                                factory.makeVariableDeclaratorNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.makeSimpleNameNode(
-                                                        factory.makeIdentifierNode("TryNode"),
-                                                        NameCategory.TYPE)),
-                                        factory.makeIdentifierNode(myVarName),
-                                        factory.makeMethodInvocationByExpressionNode(
-                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                                                factory.makeIdentifierNode("makeTryNode"),
-                                                factory.makeListNode(
-                                                        Arrays.<ExpressionNode>asList(
-                                                                liftBlockVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftBlockVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                liftCatchesVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftCatchesVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                liftFinallyBlockVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftFinallyBlockVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null)
-                                                                )),
-                                                factory.makeListNode(Collections.<TypeNode>emptyList()))
-            )))));
-
-        return myVarName;
+                        node.getFinallyBlock().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeTryNode"),
+                        factory.makeListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        liftBlock,
+                                        liftCatches,
+                                        liftFinallyBlock)),
+                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
     }
-
+    
     @Override
-    public String executeThisNode(ThisNode node, Pair<ExpressionNode,List<BlockStatementNode>> p)
+    public ExpressionNode executeThisNode(ThisNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode factoryNode = p.getFirst();
-        List<BlockStatementNode> statements = p.getSecond();
-
-        String liftTypeVarName = 
+        ExpressionNode liftType = 
                 node.getType() != null ?
-                node.getType().executeOperation(this,p) :
-                null;
-
-        String myVarName = getUniqueName();
-        statements.add(
-                factory.makeVariableDeclarationNode(
-                        factory.makeVariableModifiersNode(
-                                false,
-                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
-                factory.makeListNode(
-                        Collections.singletonList(
-                                factory.makeVariableDeclaratorNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.makeSimpleNameNode(
-                                                        factory.makeIdentifierNode("ThisNode"),
-                                                        NameCategory.TYPE)),
-                                        factory.makeIdentifierNode(myVarName),
-                                        factory.makeMethodInvocationByExpressionNode(
-                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                                                factory.makeIdentifierNode("makeThisNode"),
-                                                factory.makeListNode(
-                                                        Arrays.<ExpressionNode>asList(
-                                                                liftTypeVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftTypeVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null)
-                                                                )),
-                                                factory.makeListNode(Collections.<TypeNode>emptyList()))
-            )))));
-
-        return myVarName;
+                        node.getType().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeThisNode"),
+                        factory.makeListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        liftType)),
+                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
     }
-
+    
     @Override
-    public String executeTypeDeclarationMetaprogramAnchorNode(TypeDeclarationMetaprogramAnchorNode node, Pair<ExpressionNode,List<BlockStatementNode>> p)
+    public ExpressionNode executeTypeDeclarationMetaprogramAnchorNode(TypeDeclarationMetaprogramAnchorNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode factoryNode = p.getFirst();
-        List<BlockStatementNode> statements = p.getSecond();
-
-        String liftMetaprogramVarName = 
+        ExpressionNode liftMetaprogram = 
                 node.getMetaprogram() != null ?
-                node.getMetaprogram().executeOperation(this,p) :
-                null;
-
-        String myVarName = getUniqueName();
-        statements.add(
-                factory.makeVariableDeclarationNode(
-                        factory.makeVariableModifiersNode(
-                                false,
-                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
-                factory.makeListNode(
-                        Collections.singletonList(
-                                factory.makeVariableDeclaratorNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.makeSimpleNameNode(
-                                                        factory.makeIdentifierNode("TypeDeclarationMetaprogramAnchorNode"),
-                                                        NameCategory.TYPE)),
-                                        factory.makeIdentifierNode(myVarName),
-                                        factory.makeMethodInvocationByExpressionNode(
-                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                                                factory.makeIdentifierNode("makeTypeDeclarationMetaprogramAnchorNode"),
-                                                factory.makeListNode(
-                                                        Arrays.<ExpressionNode>asList(
-                                                                liftMetaprogramVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftMetaprogramVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null)
-                                                                )),
-                                                factory.makeListNode(Collections.<TypeNode>emptyList()))
-            )))));
-
-        return myVarName;
+                        node.getMetaprogram().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeTypeDeclarationMetaprogramAnchorNode"),
+                        factory.makeListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        liftMetaprogram)),
+                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
     }
-
+    
     @Override
-    public String executeEnumDeclarationNode(EnumDeclarationNode node, Pair<ExpressionNode,List<BlockStatementNode>> p)
+    public ExpressionNode executeEnumDeclarationNode(EnumDeclarationNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode factoryNode = p.getFirst();
-        List<BlockStatementNode> statements = p.getSecond();
-
-        String liftModifiersVarName = 
+        ExpressionNode liftModifiers = 
                 node.getModifiers() != null ?
-                node.getModifiers().executeOperation(this,p) :
-                null;
+                        node.getModifiers().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         argsForListNodeStack.push("TypeNode");
-        String liftImplementsClauseVarName = 
+        ExpressionNode liftImplementsClause = 
                 node.getImplementsClause() != null ?
-                node.getImplementsClause().executeOperation(this,p) :
-                null;
+                        node.getImplementsClause().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         argsForListNodeStack.pop();
-        String liftBodyVarName = 
+        ExpressionNode liftBody = 
                 node.getBody() != null ?
-                node.getBody().executeOperation(this,p) :
-                null;
-        String liftIdentifierVarName = 
+                        node.getBody().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        ExpressionNode liftIdentifier = 
                 node.getIdentifier() != null ?
-                node.getIdentifier().executeOperation(this,p) :
-                null;
-        String liftJavadocVarName = 
+                        node.getIdentifier().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        ExpressionNode liftJavadoc = 
                 node.getJavadoc() != null ?
-                node.getJavadoc().executeOperation(this,p) :
-                null;
-
-        String myVarName = getUniqueName();
-        statements.add(
-                factory.makeVariableDeclarationNode(
-                        factory.makeVariableModifiersNode(
-                                false,
-                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
-                factory.makeListNode(
-                        Collections.singletonList(
-                                factory.makeVariableDeclaratorNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.makeSimpleNameNode(
-                                                        factory.makeIdentifierNode("EnumDeclarationNode"),
-                                                        NameCategory.TYPE)),
-                                        factory.makeIdentifierNode(myVarName),
-                                        factory.makeMethodInvocationByExpressionNode(
-                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                                                factory.makeIdentifierNode("makeEnumDeclarationNode"),
-                                                factory.makeListNode(
-                                                        Arrays.<ExpressionNode>asList(
-                                                                liftModifiersVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftModifiersVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                liftImplementsClauseVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftImplementsClauseVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                liftBodyVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftBodyVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                liftIdentifierVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftIdentifierVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                liftJavadocVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftJavadocVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null)
-                                                                )),
-                                                factory.makeListNode(Collections.<TypeNode>emptyList()))
-            )))));
-
-        return myVarName;
+                        node.getJavadoc().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeEnumDeclarationNode"),
+                        factory.makeListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        liftModifiers,
+                                        liftImplementsClause,
+                                        liftBody,
+                                        liftIdentifier,
+                                        liftJavadoc)),
+                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
     }
-
+    
     @Override
-    public String executeVoidTypeNode(VoidTypeNode node, Pair<ExpressionNode,List<BlockStatementNode>> p)
+    public ExpressionNode executeVoidTypeNode(VoidTypeNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode factoryNode = p.getFirst();
-        List<BlockStatementNode> statements = p.getSecond();
-
-
-        String myVarName = getUniqueName();
-        statements.add(
-                factory.makeVariableDeclarationNode(
-                        factory.makeVariableModifiersNode(
-                                false,
-                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
-                factory.makeListNode(
-                        Collections.singletonList(
-                                factory.makeVariableDeclaratorNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.makeSimpleNameNode(
-                                                        factory.makeIdentifierNode("VoidTypeNode"),
-                                                        NameCategory.TYPE)),
-                                        factory.makeIdentifierNode(myVarName),
-                                        factory.makeMethodInvocationByExpressionNode(
-                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                                                factory.makeIdentifierNode("makeVoidTypeNode"),
-                                                factory.makeListNode(
-                                                        Arrays.<ExpressionNode>asList(
-                                                                )),
-                                                factory.makeListNode(Collections.<TypeNode>emptyList()))
-            )))));
-
-        return myVarName;
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeVoidTypeNode"),
+                        factory.makeListNode(
+                                Arrays.<ExpressionNode>asList()),
+                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
     }
-
+    
     @Override
-    public String executeVariableDeclarationNode(VariableDeclarationNode node, Pair<ExpressionNode,List<BlockStatementNode>> p)
+    public ExpressionNode executeVariableDeclarationNode(VariableDeclarationNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode factoryNode = p.getFirst();
-        List<BlockStatementNode> statements = p.getSecond();
-
-        String liftModifiersVarName = 
+        ExpressionNode liftModifiers = 
                 node.getModifiers() != null ?
-                node.getModifiers().executeOperation(this,p) :
-                null;
+                        node.getModifiers().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         argsForListNodeStack.push("VariableDeclaratorNode");
-        String liftDeclaratorsVarName = 
+        ExpressionNode liftDeclarators = 
                 node.getDeclarators() != null ?
-                node.getDeclarators().executeOperation(this,p) :
-                null;
+                        node.getDeclarators().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         argsForListNodeStack.pop();
-
-        String myVarName = getUniqueName();
-        statements.add(
-                factory.makeVariableDeclarationNode(
-                        factory.makeVariableModifiersNode(
-                                false,
-                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
-                factory.makeListNode(
-                        Collections.singletonList(
-                                factory.makeVariableDeclaratorNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.makeSimpleNameNode(
-                                                        factory.makeIdentifierNode("VariableDeclarationNode"),
-                                                        NameCategory.TYPE)),
-                                        factory.makeIdentifierNode(myVarName),
-                                        factory.makeMethodInvocationByExpressionNode(
-                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                                                factory.makeIdentifierNode("makeVariableDeclarationNode"),
-                                                factory.makeListNode(
-                                                        Arrays.<ExpressionNode>asList(
-                                                                liftModifiersVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftModifiersVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                liftDeclaratorsVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftDeclaratorsVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null)
-                                                                )),
-                                                factory.makeListNode(Collections.<TypeNode>emptyList()))
-            )))));
-
-        return myVarName;
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeVariableDeclarationNode"),
+                        factory.makeListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        liftModifiers,
+                                        liftDeclarators)),
+                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
     }
-
+    
     @Override
-    public String executeAnnotationBodyNode(AnnotationBodyNode node, Pair<ExpressionNode,List<BlockStatementNode>> p)
+    public ExpressionNode executeAnnotationBodyNode(AnnotationBodyNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode factoryNode = p.getFirst();
-        List<BlockStatementNode> statements = p.getSecond();
-
         argsForListNodeStack.push("AnnotationMemberNode");
-        String liftMembersVarName = 
+        ExpressionNode liftMembers = 
                 node.getMembers() != null ?
-                node.getMembers().executeOperation(this,p) :
-                null;
+                        node.getMembers().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         argsForListNodeStack.pop();
-
-        String myVarName = getUniqueName();
-        statements.add(
-                factory.makeVariableDeclarationNode(
-                        factory.makeVariableModifiersNode(
-                                false,
-                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
-                factory.makeListNode(
-                        Collections.singletonList(
-                                factory.makeVariableDeclaratorNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.makeSimpleNameNode(
-                                                        factory.makeIdentifierNode("AnnotationBodyNode"),
-                                                        NameCategory.TYPE)),
-                                        factory.makeIdentifierNode(myVarName),
-                                        factory.makeMethodInvocationByExpressionNode(
-                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                                                factory.makeIdentifierNode("makeAnnotationBodyNode"),
-                                                factory.makeListNode(
-                                                        Arrays.<ExpressionNode>asList(
-                                                                liftMembersVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftMembersVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null)
-                                                                )),
-                                                factory.makeListNode(Collections.<TypeNode>emptyList()))
-            )))));
-
-        return myVarName;
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeAnnotationBodyNode"),
+                        factory.makeListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        liftMembers)),
+                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
     }
-
+    
     @Override
-    public String executeUnparameterizedTypeNode(UnparameterizedTypeNode node, Pair<ExpressionNode,List<BlockStatementNode>> p)
+    public ExpressionNode executeUnparameterizedTypeNode(UnparameterizedTypeNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode factoryNode = p.getFirst();
-        List<BlockStatementNode> statements = p.getSecond();
-
-        String liftNameVarName = 
+        ExpressionNode liftName = 
                 node.getName() != null ?
-                node.getName().executeOperation(this,p) :
-                null;
-
-        String myVarName = getUniqueName();
-        statements.add(
-                factory.makeVariableDeclarationNode(
-                        factory.makeVariableModifiersNode(
-                                false,
-                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
-                factory.makeListNode(
-                        Collections.singletonList(
-                                factory.makeVariableDeclaratorNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.makeSimpleNameNode(
-                                                        factory.makeIdentifierNode("UnparameterizedTypeNode"),
-                                                        NameCategory.TYPE)),
-                                        factory.makeIdentifierNode(myVarName),
-                                        factory.makeMethodInvocationByExpressionNode(
-                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                                                factory.makeIdentifierNode("makeUnparameterizedTypeNode"),
-                                                factory.makeListNode(
-                                                        Arrays.<ExpressionNode>asList(
-                                                                liftNameVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftNameVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null)
-                                                                )),
-                                                factory.makeListNode(Collections.<TypeNode>emptyList()))
-            )))));
-
-        return myVarName;
+                        node.getName().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeUnparameterizedTypeNode"),
+                        factory.makeListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        liftName)),
+                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
     }
-
+    
     @Override
-    public String executeVariableDeclaratorNode(VariableDeclaratorNode node, Pair<ExpressionNode,List<BlockStatementNode>> p)
+    public ExpressionNode executeVariableDeclaratorNode(VariableDeclaratorNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode factoryNode = p.getFirst();
-        List<BlockStatementNode> statements = p.getSecond();
-
-        String liftTypeVarName = 
+        ExpressionNode liftType = 
                 node.getType() != null ?
-                node.getType().executeOperation(this,p) :
-                null;
-        String liftNameVarName = 
+                        node.getType().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        ExpressionNode liftName = 
                 node.getName() != null ?
-                node.getName().executeOperation(this,p) :
-                null;
-        String liftInitializerVarName = 
+                        node.getName().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        ExpressionNode liftInitializer = 
                 node.getInitializer() != null ?
-                node.getInitializer().executeOperation(this,p) :
-                null;
-
-        String myVarName = getUniqueName();
-        statements.add(
-                factory.makeVariableDeclarationNode(
-                        factory.makeVariableModifiersNode(
-                                false,
-                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
-                factory.makeListNode(
-                        Collections.singletonList(
-                                factory.makeVariableDeclaratorNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.makeSimpleNameNode(
-                                                        factory.makeIdentifierNode("VariableDeclaratorNode"),
-                                                        NameCategory.TYPE)),
-                                        factory.makeIdentifierNode(myVarName),
-                                        factory.makeMethodInvocationByExpressionNode(
-                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                                                factory.makeIdentifierNode("makeVariableDeclaratorNode"),
-                                                factory.makeListNode(
-                                                        Arrays.<ExpressionNode>asList(
-                                                                liftTypeVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftTypeVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                liftNameVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftNameVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                liftInitializerVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftInitializerVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null)
-                                                                )),
-                                                factory.makeListNode(Collections.<TypeNode>emptyList()))
-            )))));
-
-        return myVarName;
+                        node.getInitializer().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeVariableDeclaratorNode"),
+                        factory.makeListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        liftType,
+                                        liftName,
+                                        liftInitializer)),
+                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
     }
-
+    
     @Override
-    public String executeAnnotationModifiersNode(AnnotationModifiersNode node, Pair<ExpressionNode,List<BlockStatementNode>> p)
+    public ExpressionNode executeAnnotationModifiersNode(AnnotationModifiersNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode factoryNode = p.getFirst();
-        List<BlockStatementNode> statements = p.getSecond();
-
         AccessModifier liftAccessValue = 
                 node.getAccess();
         boolean liftStaticFlagValue = 
@@ -1606,1768 +957,969 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
         boolean liftStrictfpFlagValue = 
                 node.getStrictfpFlag();
         argsForListNodeStack.push("AnnotationNode");
-        String liftAnnotationsVarName = 
+        ExpressionNode liftAnnotations = 
                 node.getAnnotations() != null ?
-                node.getAnnotations().executeOperation(this,p) :
-                null;
+                        node.getAnnotations().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         argsForListNodeStack.pop();
-
-        String myVarName = getUniqueName();
-        statements.add(
-                factory.makeVariableDeclarationNode(
-                        factory.makeVariableModifiersNode(
-                                false,
-                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
-                factory.makeListNode(
-                        Collections.singletonList(
-                                factory.makeVariableDeclaratorNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.makeSimpleNameNode(
-                                                        factory.makeIdentifierNode("AnnotationModifiersNode"),
-                                                        NameCategory.TYPE)),
-                                        factory.makeIdentifierNode(myVarName),
-                                        factory.makeMethodInvocationByExpressionNode(
-                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                                                factory.makeIdentifierNode("makeAnnotationModifiersNode"),
-                                                factory.makeListNode(
-                                                        Arrays.<ExpressionNode>asList(
-                                                                expressionizeAccessModifier(liftAccessValue),
-                                                                expressionizeBoolean(liftStaticFlagValue),
-                                                                expressionizeBoolean(liftStrictfpFlagValue),
-                                                                liftAnnotationsVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftAnnotationsVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null)
-                                                                )),
-                                                factory.makeListNode(Collections.<TypeNode>emptyList()))
-            )))));
-
-        return myVarName;
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeAnnotationModifiersNode"),
+                        factory.makeListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        expressionizeAccessModifier(liftAccessValue),
+                                        expressionizeBoolean(liftStaticFlagValue),
+                                        expressionizeBoolean(liftStrictfpFlagValue),
+                                        liftAnnotations)),
+                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
     }
-
+    
     @Override
-    public String executeFieldAccessByExpressionNode(FieldAccessByExpressionNode node, Pair<ExpressionNode,List<BlockStatementNode>> p)
+    public ExpressionNode executeFieldAccessByExpressionNode(FieldAccessByExpressionNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode factoryNode = p.getFirst();
-        List<BlockStatementNode> statements = p.getSecond();
-
-        String liftExpressionVarName = 
+        ExpressionNode liftExpression = 
                 node.getExpression() != null ?
-                node.getExpression().executeOperation(this,p) :
-                null;
-        String liftIdentifierVarName = 
+                        node.getExpression().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        ExpressionNode liftIdentifier = 
                 node.getIdentifier() != null ?
-                node.getIdentifier().executeOperation(this,p) :
-                null;
-
-        String myVarName = getUniqueName();
-        statements.add(
-                factory.makeVariableDeclarationNode(
-                        factory.makeVariableModifiersNode(
-                                false,
-                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
-                factory.makeListNode(
-                        Collections.singletonList(
-                                factory.makeVariableDeclaratorNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.makeSimpleNameNode(
-                                                        factory.makeIdentifierNode("FieldAccessByExpressionNode"),
-                                                        NameCategory.TYPE)),
-                                        factory.makeIdentifierNode(myVarName),
-                                        factory.makeMethodInvocationByExpressionNode(
-                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                                                factory.makeIdentifierNode("makeFieldAccessByExpressionNode"),
-                                                factory.makeListNode(
-                                                        Arrays.<ExpressionNode>asList(
-                                                                liftExpressionVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftExpressionVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                liftIdentifierVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftIdentifierVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null)
-                                                                )),
-                                                factory.makeListNode(Collections.<TypeNode>emptyList()))
-            )))));
-
-        return myVarName;
+                        node.getIdentifier().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeFieldAccessByExpressionNode"),
+                        factory.makeListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        liftExpression,
+                                        liftIdentifier)),
+                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
     }
-
+    
     @Override
-    public String executeSuperFieldAccessNode(SuperFieldAccessNode node, Pair<ExpressionNode,List<BlockStatementNode>> p)
+    public ExpressionNode executeSuperFieldAccessNode(SuperFieldAccessNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode factoryNode = p.getFirst();
-        List<BlockStatementNode> statements = p.getSecond();
-
-        String liftTypeVarName = 
+        ExpressionNode liftType = 
                 node.getType() != null ?
-                node.getType().executeOperation(this,p) :
-                null;
-        String liftIdentifierVarName = 
+                        node.getType().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        ExpressionNode liftIdentifier = 
                 node.getIdentifier() != null ?
-                node.getIdentifier().executeOperation(this,p) :
-                null;
-
-        String myVarName = getUniqueName();
-        statements.add(
-                factory.makeVariableDeclarationNode(
-                        factory.makeVariableModifiersNode(
-                                false,
-                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
-                factory.makeListNode(
-                        Collections.singletonList(
-                                factory.makeVariableDeclaratorNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.makeSimpleNameNode(
-                                                        factory.makeIdentifierNode("SuperFieldAccessNode"),
-                                                        NameCategory.TYPE)),
-                                        factory.makeIdentifierNode(myVarName),
-                                        factory.makeMethodInvocationByExpressionNode(
-                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                                                factory.makeIdentifierNode("makeSuperFieldAccessNode"),
-                                                factory.makeListNode(
-                                                        Arrays.<ExpressionNode>asList(
-                                                                liftTypeVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftTypeVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                liftIdentifierVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftIdentifierVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null)
-                                                                )),
-                                                factory.makeListNode(Collections.<TypeNode>emptyList()))
-            )))));
-
-        return myVarName;
+                        node.getIdentifier().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeSuperFieldAccessNode"),
+                        factory.makeListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        liftType,
+                                        liftIdentifier)),
+                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
     }
-
+    
     @Override
-    public String executeThrowNode(ThrowNode node, Pair<ExpressionNode,List<BlockStatementNode>> p)
+    public ExpressionNode executeThrowNode(ThrowNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode factoryNode = p.getFirst();
-        List<BlockStatementNode> statements = p.getSecond();
-
-        String liftExpressionVarName = 
+        ExpressionNode liftExpression = 
                 node.getExpression() != null ?
-                node.getExpression().executeOperation(this,p) :
-                null;
-
-        String myVarName = getUniqueName();
-        statements.add(
-                factory.makeVariableDeclarationNode(
-                        factory.makeVariableModifiersNode(
-                                false,
-                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
-                factory.makeListNode(
-                        Collections.singletonList(
-                                factory.makeVariableDeclaratorNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.makeSimpleNameNode(
-                                                        factory.makeIdentifierNode("ThrowNode"),
-                                                        NameCategory.TYPE)),
-                                        factory.makeIdentifierNode(myVarName),
-                                        factory.makeMethodInvocationByExpressionNode(
-                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                                                factory.makeIdentifierNode("makeThrowNode"),
-                                                factory.makeListNode(
-                                                        Arrays.<ExpressionNode>asList(
-                                                                liftExpressionVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftExpressionVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null)
-                                                                )),
-                                                factory.makeListNode(Collections.<TypeNode>emptyList()))
-            )))));
-
-        return myVarName;
+                        node.getExpression().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeThrowNode"),
+                        factory.makeListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        liftExpression)),
+                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
     }
-
+    
     @Override
-    public String executeEnumModifiersNode(EnumModifiersNode node, Pair<ExpressionNode,List<BlockStatementNode>> p)
+    public ExpressionNode executeEnumModifiersNode(EnumModifiersNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode factoryNode = p.getFirst();
-        List<BlockStatementNode> statements = p.getSecond();
-
         AccessModifier liftAccessValue = 
                 node.getAccess();
         boolean liftStrictfpFlagValue = 
                 node.getStrictfpFlag();
         argsForListNodeStack.push("AnnotationNode");
-        String liftAnnotationsVarName = 
+        ExpressionNode liftAnnotations = 
                 node.getAnnotations() != null ?
-                node.getAnnotations().executeOperation(this,p) :
-                null;
+                        node.getAnnotations().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         argsForListNodeStack.pop();
-
-        String myVarName = getUniqueName();
-        statements.add(
-                factory.makeVariableDeclarationNode(
-                        factory.makeVariableModifiersNode(
-                                false,
-                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
-                factory.makeListNode(
-                        Collections.singletonList(
-                                factory.makeVariableDeclaratorNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.makeSimpleNameNode(
-                                                        factory.makeIdentifierNode("EnumModifiersNode"),
-                                                        NameCategory.TYPE)),
-                                        factory.makeIdentifierNode(myVarName),
-                                        factory.makeMethodInvocationByExpressionNode(
-                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                                                factory.makeIdentifierNode("makeEnumModifiersNode"),
-                                                factory.makeListNode(
-                                                        Arrays.<ExpressionNode>asList(
-                                                                expressionizeAccessModifier(liftAccessValue),
-                                                                expressionizeBoolean(liftStrictfpFlagValue),
-                                                                liftAnnotationsVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftAnnotationsVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null)
-                                                                )),
-                                                factory.makeListNode(Collections.<TypeNode>emptyList()))
-            )))));
-
-        return myVarName;
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeEnumModifiersNode"),
+                        factory.makeListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        expressionizeAccessModifier(liftAccessValue),
+                                        expressionizeBoolean(liftStrictfpFlagValue),
+                                        liftAnnotations)),
+                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
     }
-
+    
     @Override
-    public String executeCatchNode(CatchNode node, Pair<ExpressionNode,List<BlockStatementNode>> p)
+    public ExpressionNode executeCatchNode(CatchNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode factoryNode = p.getFirst();
-        List<BlockStatementNode> statements = p.getSecond();
-
-        String liftBlockVarName = 
+        ExpressionNode liftBlock = 
                 node.getBlock() != null ?
-                node.getBlock().executeOperation(this,p) :
-                null;
-        String liftParameterVarName = 
+                        node.getBlock().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        ExpressionNode liftParameter = 
                 node.getParameter() != null ?
-                node.getParameter().executeOperation(this,p) :
-                null;
-
-        String myVarName = getUniqueName();
-        statements.add(
-                factory.makeVariableDeclarationNode(
-                        factory.makeVariableModifiersNode(
-                                false,
-                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
-                factory.makeListNode(
-                        Collections.singletonList(
-                                factory.makeVariableDeclaratorNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.makeSimpleNameNode(
-                                                        factory.makeIdentifierNode("CatchNode"),
-                                                        NameCategory.TYPE)),
-                                        factory.makeIdentifierNode(myVarName),
-                                        factory.makeMethodInvocationByExpressionNode(
-                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                                                factory.makeIdentifierNode("makeCatchNode"),
-                                                factory.makeListNode(
-                                                        Arrays.<ExpressionNode>asList(
-                                                                liftBlockVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftBlockVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                liftParameterVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftParameterVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null)
-                                                                )),
-                                                factory.makeListNode(Collections.<TypeNode>emptyList()))
-            )))));
-
-        return myVarName;
+                        node.getParameter().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeCatchNode"),
+                        factory.makeListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        liftBlock,
+                                        liftParameter)),
+                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
     }
-
+    
     @Override
-    public String executeVoidTypeDeclarationNode(VoidTypeDeclarationNode node, Pair<ExpressionNode,List<BlockStatementNode>> p)
+    public ExpressionNode executeVoidTypeDeclarationNode(VoidTypeDeclarationNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode factoryNode = p.getFirst();
-        List<BlockStatementNode> statements = p.getSecond();
-
-
-        String myVarName = getUniqueName();
-        statements.add(
-                factory.makeVariableDeclarationNode(
-                        factory.makeVariableModifiersNode(
-                                false,
-                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
-                factory.makeListNode(
-                        Collections.singletonList(
-                                factory.makeVariableDeclaratorNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.makeSimpleNameNode(
-                                                        factory.makeIdentifierNode("VoidTypeDeclarationNode"),
-                                                        NameCategory.TYPE)),
-                                        factory.makeIdentifierNode(myVarName),
-                                        factory.makeMethodInvocationByExpressionNode(
-                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                                                factory.makeIdentifierNode("makeVoidTypeDeclarationNode"),
-                                                factory.makeListNode(
-                                                        Arrays.<ExpressionNode>asList(
-                                                                )),
-                                                factory.makeListNode(Collections.<TypeNode>emptyList()))
-            )))));
-
-        return myVarName;
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeVoidTypeDeclarationNode"),
+                        factory.makeListNode(
+                                Arrays.<ExpressionNode>asList()),
+                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
     }
-
+    
     @Override
-    public String executeNormalAnnotationNode(NormalAnnotationNode node, Pair<ExpressionNode,List<BlockStatementNode>> p)
+    public ExpressionNode executeNormalAnnotationNode(NormalAnnotationNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode factoryNode = p.getFirst();
-        List<BlockStatementNode> statements = p.getSecond();
-
         argsForListNodeStack.push("AnnotationElementNode");
-        String liftArgumentsVarName = 
+        ExpressionNode liftArguments = 
                 node.getArguments() != null ?
-                node.getArguments().executeOperation(this,p) :
-                null;
+                        node.getArguments().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         argsForListNodeStack.pop();
-        String liftAnnotationTypeVarName = 
+        ExpressionNode liftAnnotationType = 
                 node.getAnnotationType() != null ?
-                node.getAnnotationType().executeOperation(this,p) :
-                null;
-
-        String myVarName = getUniqueName();
-        statements.add(
-                factory.makeVariableDeclarationNode(
-                        factory.makeVariableModifiersNode(
-                                false,
-                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
-                factory.makeListNode(
-                        Collections.singletonList(
-                                factory.makeVariableDeclaratorNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.makeSimpleNameNode(
-                                                        factory.makeIdentifierNode("NormalAnnotationNode"),
-                                                        NameCategory.TYPE)),
-                                        factory.makeIdentifierNode(myVarName),
-                                        factory.makeMethodInvocationByExpressionNode(
-                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                                                factory.makeIdentifierNode("makeNormalAnnotationNode"),
-                                                factory.makeListNode(
-                                                        Arrays.<ExpressionNode>asList(
-                                                                liftArgumentsVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftArgumentsVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                liftAnnotationTypeVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftAnnotationTypeVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null)
-                                                                )),
-                                                factory.makeListNode(Collections.<TypeNode>emptyList()))
-            )))));
-
-        return myVarName;
+                        node.getAnnotationType().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeNormalAnnotationNode"),
+                        factory.makeListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        liftArguments,
+                                        liftAnnotationType)),
+                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
     }
-
+    
     @Override
-    public String executeDoWhileLoopNode(DoWhileLoopNode node, Pair<ExpressionNode,List<BlockStatementNode>> p)
+    public ExpressionNode executeDoWhileLoopNode(DoWhileLoopNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode factoryNode = p.getFirst();
-        List<BlockStatementNode> statements = p.getSecond();
-
-        String liftConditionVarName = 
+        ExpressionNode liftCondition = 
                 node.getCondition() != null ?
-                node.getCondition().executeOperation(this,p) :
-                null;
-        String liftStatementVarName = 
+                        node.getCondition().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        ExpressionNode liftStatement = 
                 node.getStatement() != null ?
-                node.getStatement().executeOperation(this,p) :
-                null;
-
-        String myVarName = getUniqueName();
-        statements.add(
-                factory.makeVariableDeclarationNode(
-                        factory.makeVariableModifiersNode(
-                                false,
-                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
-                factory.makeListNode(
-                        Collections.singletonList(
-                                factory.makeVariableDeclaratorNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.makeSimpleNameNode(
-                                                        factory.makeIdentifierNode("DoWhileLoopNode"),
-                                                        NameCategory.TYPE)),
-                                        factory.makeIdentifierNode(myVarName),
-                                        factory.makeMethodInvocationByExpressionNode(
-                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                                                factory.makeIdentifierNode("makeDoWhileLoopNode"),
-                                                factory.makeListNode(
-                                                        Arrays.<ExpressionNode>asList(
-                                                                liftConditionVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftConditionVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                liftStatementVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftStatementVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null)
-                                                                )),
-                                                factory.makeListNode(Collections.<TypeNode>emptyList()))
-            )))));
-
-        return myVarName;
+                        node.getStatement().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeDoWhileLoopNode"),
+                        factory.makeListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        liftCondition,
+                                        liftStatement)),
+                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
     }
-
+    
     @Override
-    public String executeQualifiedClassInstantiationNode(QualifiedClassInstantiationNode node, Pair<ExpressionNode,List<BlockStatementNode>> p)
+    public ExpressionNode executeQualifiedClassInstantiationNode(QualifiedClassInstantiationNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode factoryNode = p.getFirst();
-        List<BlockStatementNode> statements = p.getSecond();
-
-        String liftEnclosingExpressionVarName = 
+        ExpressionNode liftEnclosingExpression = 
                 node.getEnclosingExpression() != null ?
-                node.getEnclosingExpression().executeOperation(this,p) :
-                null;
-        String liftIdentifierVarName = 
+                        node.getEnclosingExpression().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        ExpressionNode liftIdentifier = 
                 node.getIdentifier() != null ?
-                node.getIdentifier().executeOperation(this,p) :
-                null;
+                        node.getIdentifier().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         argsForListNodeStack.push("TypeArgumentNode");
-        String liftTypeArgumentsVarName = 
+        ExpressionNode liftTypeArguments = 
                 node.getTypeArguments() != null ?
-                node.getTypeArguments().executeOperation(this,p) :
-                null;
+                        node.getTypeArguments().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         argsForListNodeStack.pop();
         argsForListNodeStack.push("TypeArgumentNode");
-        String liftConstructorTypeArgumentsVarName = 
+        ExpressionNode liftConstructorTypeArguments = 
                 node.getConstructorTypeArguments() != null ?
-                node.getConstructorTypeArguments().executeOperation(this,p) :
-                null;
+                        node.getConstructorTypeArguments().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         argsForListNodeStack.pop();
         argsForListNodeStack.push("ExpressionNode");
-        String liftArgumentsVarName = 
+        ExpressionNode liftArguments = 
                 node.getArguments() != null ?
-                node.getArguments().executeOperation(this,p) :
-                null;
+                        node.getArguments().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         argsForListNodeStack.pop();
-        String liftBodyVarName = 
+        ExpressionNode liftBody = 
                 node.getBody() != null ?
-                node.getBody().executeOperation(this,p) :
-                null;
-
-        String myVarName = getUniqueName();
-        statements.add(
-                factory.makeVariableDeclarationNode(
-                        factory.makeVariableModifiersNode(
-                                false,
-                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
-                factory.makeListNode(
-                        Collections.singletonList(
-                                factory.makeVariableDeclaratorNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.makeSimpleNameNode(
-                                                        factory.makeIdentifierNode("QualifiedClassInstantiationNode"),
-                                                        NameCategory.TYPE)),
-                                        factory.makeIdentifierNode(myVarName),
-                                        factory.makeMethodInvocationByExpressionNode(
-                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                                                factory.makeIdentifierNode("makeQualifiedClassInstantiationNode"),
-                                                factory.makeListNode(
-                                                        Arrays.<ExpressionNode>asList(
-                                                                liftEnclosingExpressionVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftEnclosingExpressionVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                liftIdentifierVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftIdentifierVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                liftTypeArgumentsVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftTypeArgumentsVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                liftConstructorTypeArgumentsVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftConstructorTypeArgumentsVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                liftArgumentsVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftArgumentsVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                liftBodyVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftBodyVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null)
-                                                                )),
-                                                factory.makeListNode(Collections.<TypeNode>emptyList()))
-            )))));
-
-        return myVarName;
+                        node.getBody().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeQualifiedClassInstantiationNode"),
+                        factory.makeListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        liftEnclosingExpression,
+                                        liftIdentifier,
+                                        liftTypeArguments,
+                                        liftConstructorTypeArguments,
+                                        liftArguments,
+                                        liftBody)),
+                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
     }
-
+    
     @Override
-    public String executeTypeCastNode(TypeCastNode node, Pair<ExpressionNode,List<BlockStatementNode>> p)
+    public ExpressionNode executeTypeCastNode(TypeCastNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode factoryNode = p.getFirst();
-        List<BlockStatementNode> statements = p.getSecond();
-
-        String liftExpressionVarName = 
+        ExpressionNode liftExpression = 
                 node.getExpression() != null ?
-                node.getExpression().executeOperation(this,p) :
-                null;
-        String liftTypeVarName = 
+                        node.getExpression().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        ExpressionNode liftType = 
                 node.getType() != null ?
-                node.getType().executeOperation(this,p) :
-                null;
-
-        String myVarName = getUniqueName();
-        statements.add(
-                factory.makeVariableDeclarationNode(
-                        factory.makeVariableModifiersNode(
-                                false,
-                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
-                factory.makeListNode(
-                        Collections.singletonList(
-                                factory.makeVariableDeclaratorNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.makeSimpleNameNode(
-                                                        factory.makeIdentifierNode("TypeCastNode"),
-                                                        NameCategory.TYPE)),
-                                        factory.makeIdentifierNode(myVarName),
-                                        factory.makeMethodInvocationByExpressionNode(
-                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                                                factory.makeIdentifierNode("makeTypeCastNode"),
-                                                factory.makeListNode(
-                                                        Arrays.<ExpressionNode>asList(
-                                                                liftExpressionVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftExpressionVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                liftTypeVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftTypeVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null)
-                                                                )),
-                                                factory.makeListNode(Collections.<TypeNode>emptyList()))
-            )))));
-
-        return myVarName;
+                        node.getType().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeTypeCastNode"),
+                        factory.makeListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        liftExpression,
+                                        liftType)),
+                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
     }
-
+    
     @Override
-    public String executeLabeledStatementNode(LabeledStatementNode node, Pair<ExpressionNode,List<BlockStatementNode>> p)
+    public ExpressionNode executeLabeledStatementNode(LabeledStatementNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode factoryNode = p.getFirst();
-        List<BlockStatementNode> statements = p.getSecond();
-
-        String liftLabelVarName = 
+        ExpressionNode liftLabel = 
                 node.getLabel() != null ?
-                node.getLabel().executeOperation(this,p) :
-                null;
-        String liftStatementVarName = 
+                        node.getLabel().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        ExpressionNode liftStatement = 
                 node.getStatement() != null ?
-                node.getStatement().executeOperation(this,p) :
-                null;
-
-        String myVarName = getUniqueName();
-        statements.add(
-                factory.makeVariableDeclarationNode(
-                        factory.makeVariableModifiersNode(
-                                false,
-                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
-                factory.makeListNode(
-                        Collections.singletonList(
-                                factory.makeVariableDeclaratorNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.makeSimpleNameNode(
-                                                        factory.makeIdentifierNode("LabeledStatementNode"),
-                                                        NameCategory.TYPE)),
-                                        factory.makeIdentifierNode(myVarName),
-                                        factory.makeMethodInvocationByExpressionNode(
-                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                                                factory.makeIdentifierNode("makeLabeledStatementNode"),
-                                                factory.makeListNode(
-                                                        Arrays.<ExpressionNode>asList(
-                                                                liftLabelVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftLabelVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                liftStatementVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftStatementVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null)
-                                                                )),
-                                                factory.makeListNode(Collections.<TypeNode>emptyList()))
-            )))));
-
-        return myVarName;
+                        node.getStatement().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeLabeledStatementNode"),
+                        factory.makeListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        liftLabel,
+                                        liftStatement)),
+                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
     }
-
+    
     @Override
-    public String executeBinaryExpressionNode(BinaryExpressionNode node, Pair<ExpressionNode,List<BlockStatementNode>> p)
+    public ExpressionNode executeBinaryExpressionNode(BinaryExpressionNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode factoryNode = p.getFirst();
-        List<BlockStatementNode> statements = p.getSecond();
-
-        String liftLeftOperandVarName = 
+        ExpressionNode liftLeftOperand = 
                 node.getLeftOperand() != null ?
-                node.getLeftOperand().executeOperation(this,p) :
-                null;
-        String liftRightOperandVarName = 
+                        node.getLeftOperand().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        ExpressionNode liftRightOperand = 
                 node.getRightOperand() != null ?
-                node.getRightOperand().executeOperation(this,p) :
-                null;
+                        node.getRightOperand().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         BinaryOperator liftOperatorValue = 
                 node.getOperator();
-
-        String myVarName = getUniqueName();
-        statements.add(
-                factory.makeVariableDeclarationNode(
-                        factory.makeVariableModifiersNode(
-                                false,
-                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
-                factory.makeListNode(
-                        Collections.singletonList(
-                                factory.makeVariableDeclaratorNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.makeSimpleNameNode(
-                                                        factory.makeIdentifierNode("BinaryExpressionNode"),
-                                                        NameCategory.TYPE)),
-                                        factory.makeIdentifierNode(myVarName),
-                                        factory.makeMethodInvocationByExpressionNode(
-                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                                                factory.makeIdentifierNode("makeBinaryExpressionNode"),
-                                                factory.makeListNode(
-                                                        Arrays.<ExpressionNode>asList(
-                                                                liftLeftOperandVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftLeftOperandVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                liftRightOperandVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftRightOperandVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                expressionizeBinaryOperator(liftOperatorValue)
-                                                                )),
-                                                factory.makeListNode(Collections.<TypeNode>emptyList()))
-            )))));
-
-        return myVarName;
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeBinaryExpressionNode"),
+                        factory.makeListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        liftLeftOperand,
+                                        liftRightOperand,
+                                        expressionizeBinaryOperator(liftOperatorValue))),
+                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
     }
-
+    
     @Override
-    public String executeForInitializerExpressionNode(ForInitializerExpressionNode node, Pair<ExpressionNode,List<BlockStatementNode>> p)
+    public ExpressionNode executeForInitializerExpressionNode(ForInitializerExpressionNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode factoryNode = p.getFirst();
-        List<BlockStatementNode> statements = p.getSecond();
-
         argsForListNodeStack.push("StatementExpressionNode");
-        String liftExpressionsVarName = 
+        ExpressionNode liftExpressions = 
                 node.getExpressions() != null ?
-                node.getExpressions().executeOperation(this,p) :
-                null;
+                        node.getExpressions().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         argsForListNodeStack.pop();
-
-        String myVarName = getUniqueName();
-        statements.add(
-                factory.makeVariableDeclarationNode(
-                        factory.makeVariableModifiersNode(
-                                false,
-                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
-                factory.makeListNode(
-                        Collections.singletonList(
-                                factory.makeVariableDeclaratorNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.makeSimpleNameNode(
-                                                        factory.makeIdentifierNode("ForInitializerExpressionNode"),
-                                                        NameCategory.TYPE)),
-                                        factory.makeIdentifierNode(myVarName),
-                                        factory.makeMethodInvocationByExpressionNode(
-                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                                                factory.makeIdentifierNode("makeForInitializerExpressionNode"),
-                                                factory.makeListNode(
-                                                        Arrays.<ExpressionNode>asList(
-                                                                liftExpressionsVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftExpressionsVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null)
-                                                                )),
-                                                factory.makeListNode(Collections.<TypeNode>emptyList()))
-            )))));
-
-        return myVarName;
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeForInitializerExpressionNode"),
+                        factory.makeListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        liftExpressions)),
+                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
     }
-
+    
     @Override
-    public String executePackageDeclarationNode(PackageDeclarationNode node, Pair<ExpressionNode,List<BlockStatementNode>> p)
+    public ExpressionNode executePackageDeclarationNode(PackageDeclarationNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode factoryNode = p.getFirst();
-        List<BlockStatementNode> statements = p.getSecond();
-
-        String liftNameVarName = 
+        ExpressionNode liftName = 
                 node.getName() != null ?
-                node.getName().executeOperation(this,p) :
-                null;
+                        node.getName().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         argsForListNodeStack.push("AnnotationNode");
-        String liftAnnotationsVarName = 
+        ExpressionNode liftAnnotations = 
                 node.getAnnotations() != null ?
-                node.getAnnotations().executeOperation(this,p) :
-                null;
+                        node.getAnnotations().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         argsForListNodeStack.pop();
-
-        String myVarName = getUniqueName();
-        statements.add(
-                factory.makeVariableDeclarationNode(
-                        factory.makeVariableModifiersNode(
-                                false,
-                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
-                factory.makeListNode(
-                        Collections.singletonList(
-                                factory.makeVariableDeclaratorNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.makeSimpleNameNode(
-                                                        factory.makeIdentifierNode("PackageDeclarationNode"),
-                                                        NameCategory.TYPE)),
-                                        factory.makeIdentifierNode(myVarName),
-                                        factory.makeMethodInvocationByExpressionNode(
-                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                                                factory.makeIdentifierNode("makePackageDeclarationNode"),
-                                                factory.makeListNode(
-                                                        Arrays.<ExpressionNode>asList(
-                                                                liftNameVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftNameVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                liftAnnotationsVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftAnnotationsVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null)
-                                                                )),
-                                                factory.makeListNode(Collections.<TypeNode>emptyList()))
-            )))));
-
-        return myVarName;
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makePackageDeclarationNode"),
+                        factory.makeListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        liftName,
+                                        liftAnnotations)),
+                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
     }
-
+    
     @Override
-    public String executeAnnotationDeclarationNode(AnnotationDeclarationNode node, Pair<ExpressionNode,List<BlockStatementNode>> p)
+    public ExpressionNode executeAnnotationDeclarationNode(AnnotationDeclarationNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode factoryNode = p.getFirst();
-        List<BlockStatementNode> statements = p.getSecond();
-
-        String liftModifiersVarName = 
+        ExpressionNode liftModifiers = 
                 node.getModifiers() != null ?
-                node.getModifiers().executeOperation(this,p) :
-                null;
-        String liftBodyVarName = 
+                        node.getModifiers().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        ExpressionNode liftBody = 
                 node.getBody() != null ?
-                node.getBody().executeOperation(this,p) :
-                null;
-        String liftIdentifierVarName = 
+                        node.getBody().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        ExpressionNode liftIdentifier = 
                 node.getIdentifier() != null ?
-                node.getIdentifier().executeOperation(this,p) :
-                null;
-        String liftJavadocVarName = 
+                        node.getIdentifier().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        ExpressionNode liftJavadoc = 
                 node.getJavadoc() != null ?
-                node.getJavadoc().executeOperation(this,p) :
-                null;
-
-        String myVarName = getUniqueName();
-        statements.add(
-                factory.makeVariableDeclarationNode(
-                        factory.makeVariableModifiersNode(
-                                false,
-                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
-                factory.makeListNode(
-                        Collections.singletonList(
-                                factory.makeVariableDeclaratorNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.makeSimpleNameNode(
-                                                        factory.makeIdentifierNode("AnnotationDeclarationNode"),
-                                                        NameCategory.TYPE)),
-                                        factory.makeIdentifierNode(myVarName),
-                                        factory.makeMethodInvocationByExpressionNode(
-                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                                                factory.makeIdentifierNode("makeAnnotationDeclarationNode"),
-                                                factory.makeListNode(
-                                                        Arrays.<ExpressionNode>asList(
-                                                                liftModifiersVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftModifiersVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                liftBodyVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftBodyVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                liftIdentifierVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftIdentifierVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                liftJavadocVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftJavadocVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null)
-                                                                )),
-                                                factory.makeListNode(Collections.<TypeNode>emptyList()))
-            )))));
-
-        return myVarName;
+                        node.getJavadoc().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeAnnotationDeclarationNode"),
+                        factory.makeListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        liftModifiers,
+                                        liftBody,
+                                        liftIdentifier,
+                                        liftJavadoc)),
+                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
     }
-
+    
     @Override
-    public String executeCompilationUnitNode(CompilationUnitNode node, Pair<ExpressionNode,List<BlockStatementNode>> p)
+    public ExpressionNode executeCompilationUnitNode(CompilationUnitNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode factoryNode = p.getFirst();
-        List<BlockStatementNode> statements = p.getSecond();
-
-        String liftPackageDeclarationVarName = 
+        ExpressionNode liftPackageDeclaration = 
                 node.getPackageDeclaration() != null ?
-                node.getPackageDeclaration().executeOperation(this,p) :
-                null;
+                        node.getPackageDeclaration().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         argsForListNodeStack.push("ImportNode");
-        String liftImportsVarName = 
+        ExpressionNode liftImports = 
                 node.getImports() != null ?
-                node.getImports().executeOperation(this,p) :
-                null;
+                        node.getImports().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         argsForListNodeStack.pop();
         argsForListNodeStack.push("TypeDeclarationNode");
-        String liftTypeDeclsVarName = 
+        ExpressionNode liftTypeDecls = 
                 node.getTypeDecls() != null ?
-                node.getTypeDecls().executeOperation(this,p) :
-                null;
+                        node.getTypeDecls().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         argsForListNodeStack.pop();
-
-        String myVarName = getUniqueName();
-        statements.add(
-                factory.makeVariableDeclarationNode(
-                        factory.makeVariableModifiersNode(
-                                false,
-                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
-                factory.makeListNode(
-                        Collections.singletonList(
-                                factory.makeVariableDeclaratorNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.makeSimpleNameNode(
-                                                        factory.makeIdentifierNode("CompilationUnitNode"),
-                                                        NameCategory.TYPE)),
-                                        factory.makeIdentifierNode(myVarName),
-                                        factory.makeMethodInvocationByExpressionNode(
-                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                                                factory.makeIdentifierNode("makeCompilationUnitNode"),
-                                                factory.makeListNode(
-                                                        Arrays.<ExpressionNode>asList(
-                                                                liftPackageDeclarationVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftPackageDeclarationVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                liftImportsVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftImportsVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                liftTypeDeclsVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftTypeDeclsVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null)
-                                                                )),
-                                                factory.makeListNode(Collections.<TypeNode>emptyList()))
-            )))));
-
-        return myVarName;
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeCompilationUnitNode"),
+                        factory.makeListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        liftPackageDeclaration,
+                                        liftImports,
+                                        liftTypeDecls)),
+                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
     }
-
+    
     @Override
-    public String executeContinueNode(ContinueNode node, Pair<ExpressionNode,List<BlockStatementNode>> p)
+    public ExpressionNode executeContinueNode(ContinueNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode factoryNode = p.getFirst();
-        List<BlockStatementNode> statements = p.getSecond();
-
-        String liftLabelVarName = 
+        ExpressionNode liftLabel = 
                 node.getLabel() != null ?
-                node.getLabel().executeOperation(this,p) :
-                null;
-
-        String myVarName = getUniqueName();
-        statements.add(
-                factory.makeVariableDeclarationNode(
-                        factory.makeVariableModifiersNode(
-                                false,
-                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
-                factory.makeListNode(
-                        Collections.singletonList(
-                                factory.makeVariableDeclaratorNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.makeSimpleNameNode(
-                                                        factory.makeIdentifierNode("ContinueNode"),
-                                                        NameCategory.TYPE)),
-                                        factory.makeIdentifierNode(myVarName),
-                                        factory.makeMethodInvocationByExpressionNode(
-                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                                                factory.makeIdentifierNode("makeContinueNode"),
-                                                factory.makeListNode(
-                                                        Arrays.<ExpressionNode>asList(
-                                                                liftLabelVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftLabelVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null)
-                                                                )),
-                                                factory.makeListNode(Collections.<TypeNode>emptyList()))
-            )))));
-
-        return myVarName;
+                        node.getLabel().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeContinueNode"),
+                        factory.makeListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        liftLabel)),
+                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
     }
-
+    
     @Override
-    public String executeStringLiteralNode(StringLiteralNode node, Pair<ExpressionNode,List<BlockStatementNode>> p)
+    public ExpressionNode executeStringLiteralNode(StringLiteralNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode factoryNode = p.getFirst();
-        List<BlockStatementNode> statements = p.getSecond();
-
         String liftValueValue = 
                 node.getValue();
-
-        String myVarName = getUniqueName();
-        statements.add(
-                factory.makeVariableDeclarationNode(
-                        factory.makeVariableModifiersNode(
-                                false,
-                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
-                factory.makeListNode(
-                        Collections.singletonList(
-                                factory.makeVariableDeclaratorNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.makeSimpleNameNode(
-                                                        factory.makeIdentifierNode("StringLiteralNode"),
-                                                        NameCategory.TYPE)),
-                                        factory.makeIdentifierNode(myVarName),
-                                        factory.makeMethodInvocationByExpressionNode(
-                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                                                factory.makeIdentifierNode("makeStringLiteralNode"),
-                                                factory.makeListNode(
-                                                        Arrays.<ExpressionNode>asList(
-                                                                expressionizeString(liftValueValue)
-                                                                )),
-                                                factory.makeListNode(Collections.<TypeNode>emptyList()))
-            )))));
-
-        return myVarName;
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeStringLiteralNode"),
+                        factory.makeListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        expressionizeString(liftValueValue))),
+                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
     }
-
+    
     @Override
-    public String executeAnnotationElementNode(AnnotationElementNode node, Pair<ExpressionNode,List<BlockStatementNode>> p)
+    public ExpressionNode executeAnnotationElementNode(AnnotationElementNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode factoryNode = p.getFirst();
-        List<BlockStatementNode> statements = p.getSecond();
-
-        String liftIdentifierVarName = 
+        ExpressionNode liftIdentifier = 
                 node.getIdentifier() != null ?
-                node.getIdentifier().executeOperation(this,p) :
-                null;
-        String liftValueVarName = 
+                        node.getIdentifier().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        ExpressionNode liftValue = 
                 node.getValue() != null ?
-                node.getValue().executeOperation(this,p) :
-                null;
-
-        String myVarName = getUniqueName();
-        statements.add(
-                factory.makeVariableDeclarationNode(
-                        factory.makeVariableModifiersNode(
-                                false,
-                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
-                factory.makeListNode(
-                        Collections.singletonList(
-                                factory.makeVariableDeclaratorNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.makeSimpleNameNode(
-                                                        factory.makeIdentifierNode("AnnotationElementNode"),
-                                                        NameCategory.TYPE)),
-                                        factory.makeIdentifierNode(myVarName),
-                                        factory.makeMethodInvocationByExpressionNode(
-                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                                                factory.makeIdentifierNode("makeAnnotationElementNode"),
-                                                factory.makeListNode(
-                                                        Arrays.<ExpressionNode>asList(
-                                                                liftIdentifierVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftIdentifierVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                liftValueVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftValueVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null)
-                                                                )),
-                                                factory.makeListNode(Collections.<TypeNode>emptyList()))
-            )))));
-
-        return myVarName;
+                        node.getValue().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeAnnotationElementNode"),
+                        factory.makeListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        liftIdentifier,
+                                        liftValue)),
+                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
     }
-
+    
     @Override
-    public String executeDoubleLiteralNode(DoubleLiteralNode node, Pair<ExpressionNode,List<BlockStatementNode>> p)
+    public ExpressionNode executeDoubleLiteralNode(DoubleLiteralNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode factoryNode = p.getFirst();
-        List<BlockStatementNode> statements = p.getSecond();
-
         Double liftValueValue = 
                 node.getValue();
-
-        String myVarName = getUniqueName();
-        statements.add(
-                factory.makeVariableDeclarationNode(
-                        factory.makeVariableModifiersNode(
-                                false,
-                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
-                factory.makeListNode(
-                        Collections.singletonList(
-                                factory.makeVariableDeclaratorNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.makeSimpleNameNode(
-                                                        factory.makeIdentifierNode("DoubleLiteralNode"),
-                                                        NameCategory.TYPE)),
-                                        factory.makeIdentifierNode(myVarName),
-                                        factory.makeMethodInvocationByExpressionNode(
-                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                                                factory.makeIdentifierNode("makeDoubleLiteralNode"),
-                                                factory.makeListNode(
-                                                        Arrays.<ExpressionNode>asList(
-                                                                expressionizeDouble(liftValueValue)
-                                                                )),
-                                                factory.makeListNode(Collections.<TypeNode>emptyList()))
-            )))));
-
-        return myVarName;
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeDoubleLiteralNode"),
+                        factory.makeListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        expressionizeDouble(liftValueValue))),
+                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
     }
-
+    
     @Override
-    public String executeAnonymousClassBodyNode(AnonymousClassBodyNode node, Pair<ExpressionNode,List<BlockStatementNode>> p)
+    public ExpressionNode executeAnonymousClassBodyNode(AnonymousClassBodyNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode factoryNode = p.getFirst();
-        List<BlockStatementNode> statements = p.getSecond();
-
         argsForListNodeStack.push("AnonymousClassMemberNode");
-        String liftMembersVarName = 
+        ExpressionNode liftMembers = 
                 node.getMembers() != null ?
-                node.getMembers().executeOperation(this,p) :
-                null;
+                        node.getMembers().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         argsForListNodeStack.pop();
-
-        String myVarName = getUniqueName();
-        statements.add(
-                factory.makeVariableDeclarationNode(
-                        factory.makeVariableModifiersNode(
-                                false,
-                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
-                factory.makeListNode(
-                        Collections.singletonList(
-                                factory.makeVariableDeclaratorNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.makeSimpleNameNode(
-                                                        factory.makeIdentifierNode("AnonymousClassBodyNode"),
-                                                        NameCategory.TYPE)),
-                                        factory.makeIdentifierNode(myVarName),
-                                        factory.makeMethodInvocationByExpressionNode(
-                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                                                factory.makeIdentifierNode("makeAnonymousClassBodyNode"),
-                                                factory.makeListNode(
-                                                        Arrays.<ExpressionNode>asList(
-                                                                liftMembersVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftMembersVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null)
-                                                                )),
-                                                factory.makeListNode(Collections.<TypeNode>emptyList()))
-            )))));
-
-        return myVarName;
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeAnonymousClassBodyNode"),
+                        factory.makeListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        liftMembers)),
+                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
     }
-
+    
     @Override
-    public String executeBlockNode(BlockNode node, Pair<ExpressionNode,List<BlockStatementNode>> p)
+    public ExpressionNode executeBlockNode(BlockNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode factoryNode = p.getFirst();
-        List<BlockStatementNode> statements = p.getSecond();
-
         argsForListNodeStack.push("BlockStatementNode");
-        String liftStatementsVarName = 
+        ExpressionNode liftStatements = 
                 node.getStatements() != null ?
-                node.getStatements().executeOperation(this,p) :
-                null;
+                        node.getStatements().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         argsForListNodeStack.pop();
-
-        String myVarName = getUniqueName();
-        statements.add(
-                factory.makeVariableDeclarationNode(
-                        factory.makeVariableModifiersNode(
-                                false,
-                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
-                factory.makeListNode(
-                        Collections.singletonList(
-                                factory.makeVariableDeclaratorNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.makeSimpleNameNode(
-                                                        factory.makeIdentifierNode("BlockNode"),
-                                                        NameCategory.TYPE)),
-                                        factory.makeIdentifierNode(myVarName),
-                                        factory.makeMethodInvocationByExpressionNode(
-                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                                                factory.makeIdentifierNode("makeBlockNode"),
-                                                factory.makeListNode(
-                                                        Arrays.<ExpressionNode>asList(
-                                                                liftStatementsVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftStatementsVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null)
-                                                                )),
-                                                factory.makeListNode(Collections.<TypeNode>emptyList()))
-            )))));
-
-        return myVarName;
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeBlockNode"),
+                        factory.makeListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        liftStatements)),
+                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
     }
-
+    
     @Override
-    public String executeSynchronizedNode(SynchronizedNode node, Pair<ExpressionNode,List<BlockStatementNode>> p)
+    public ExpressionNode executeSynchronizedNode(SynchronizedNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode factoryNode = p.getFirst();
-        List<BlockStatementNode> statements = p.getSecond();
-
-        String liftExpressionVarName = 
+        ExpressionNode liftExpression = 
                 node.getExpression() != null ?
-                node.getExpression().executeOperation(this,p) :
-                null;
-        String liftBlockVarName = 
+                        node.getExpression().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        ExpressionNode liftBlock = 
                 node.getBlock() != null ?
-                node.getBlock().executeOperation(this,p) :
-                null;
-
-        String myVarName = getUniqueName();
-        statements.add(
-                factory.makeVariableDeclarationNode(
-                        factory.makeVariableModifiersNode(
-                                false,
-                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
-                factory.makeListNode(
-                        Collections.singletonList(
-                                factory.makeVariableDeclaratorNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.makeSimpleNameNode(
-                                                        factory.makeIdentifierNode("SynchronizedNode"),
-                                                        NameCategory.TYPE)),
-                                        factory.makeIdentifierNode(myVarName),
-                                        factory.makeMethodInvocationByExpressionNode(
-                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                                                factory.makeIdentifierNode("makeSynchronizedNode"),
-                                                factory.makeListNode(
-                                                        Arrays.<ExpressionNode>asList(
-                                                                liftExpressionVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftExpressionVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                liftBlockVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftBlockVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null)
-                                                                )),
-                                                factory.makeListNode(Collections.<TypeNode>emptyList()))
-            )))));
-
-        return myVarName;
+                        node.getBlock().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeSynchronizedNode"),
+                        factory.makeListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        liftExpression,
+                                        liftBlock)),
+                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
     }
-
+    
     @Override
-    public String executeVariableNode(VariableNode node, Pair<ExpressionNode,List<BlockStatementNode>> p)
+    public ExpressionNode executeVariableNode(VariableNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode factoryNode = p.getFirst();
-        List<BlockStatementNode> statements = p.getSecond();
-
-        String liftModifiersVarName = 
+        ExpressionNode liftModifiers = 
                 node.getModifiers() != null ?
-                node.getModifiers().executeOperation(this,p) :
-                null;
-        String liftTypeVarName = 
+                        node.getModifiers().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        ExpressionNode liftType = 
                 node.getType() != null ?
-                node.getType().executeOperation(this,p) :
-                null;
-        String liftIdentifierVarName = 
+                        node.getType().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        ExpressionNode liftIdentifier = 
                 node.getIdentifier() != null ?
-                node.getIdentifier().executeOperation(this,p) :
-                null;
-
-        String myVarName = getUniqueName();
-        statements.add(
-                factory.makeVariableDeclarationNode(
-                        factory.makeVariableModifiersNode(
-                                false,
-                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
-                factory.makeListNode(
-                        Collections.singletonList(
-                                factory.makeVariableDeclaratorNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.makeSimpleNameNode(
-                                                        factory.makeIdentifierNode("VariableNode"),
-                                                        NameCategory.TYPE)),
-                                        factory.makeIdentifierNode(myVarName),
-                                        factory.makeMethodInvocationByExpressionNode(
-                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                                                factory.makeIdentifierNode("makeVariableNode"),
-                                                factory.makeListNode(
-                                                        Arrays.<ExpressionNode>asList(
-                                                                liftModifiersVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftModifiersVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                liftTypeVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftTypeVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                liftIdentifierVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftIdentifierVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null)
-                                                                )),
-                                                factory.makeListNode(Collections.<TypeNode>emptyList()))
-            )))));
-
-        return myVarName;
+                        node.getIdentifier().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeVariableNode"),
+                        factory.makeListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        liftModifiers,
+                                        liftType,
+                                        liftIdentifier)),
+                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
     }
-
+    
     @Override
-    public String executeCharLiteralNode(CharLiteralNode node, Pair<ExpressionNode,List<BlockStatementNode>> p)
+    public ExpressionNode executeCharLiteralNode(CharLiteralNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode factoryNode = p.getFirst();
-        List<BlockStatementNode> statements = p.getSecond();
-
         Character liftValueValue = 
                 node.getValue();
-
-        String myVarName = getUniqueName();
-        statements.add(
-                factory.makeVariableDeclarationNode(
-                        factory.makeVariableModifiersNode(
-                                false,
-                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
-                factory.makeListNode(
-                        Collections.singletonList(
-                                factory.makeVariableDeclaratorNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.makeSimpleNameNode(
-                                                        factory.makeIdentifierNode("CharLiteralNode"),
-                                                        NameCategory.TYPE)),
-                                        factory.makeIdentifierNode(myVarName),
-                                        factory.makeMethodInvocationByExpressionNode(
-                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                                                factory.makeIdentifierNode("makeCharLiteralNode"),
-                                                factory.makeListNode(
-                                                        Arrays.<ExpressionNode>asList(
-                                                                expressionizeCharacter(liftValueValue)
-                                                                )),
-                                                factory.makeListNode(Collections.<TypeNode>emptyList()))
-            )))));
-
-        return myVarName;
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeCharLiteralNode"),
+                        factory.makeListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        expressionizeCharacter(liftValueValue))),
+                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
     }
-
+    
     @Override
-    public String executeWildcardTypeNode(WildcardTypeNode node, Pair<ExpressionNode,List<BlockStatementNode>> p)
+    public ExpressionNode executeWildcardTypeNode(WildcardTypeNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode factoryNode = p.getFirst();
-        List<BlockStatementNode> statements = p.getSecond();
-
-        String liftBoundVarName = 
+        ExpressionNode liftBound = 
                 node.getBound() != null ?
-                node.getBound().executeOperation(this,p) :
-                null;
+                        node.getBound().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         boolean liftUpperBoundValue = 
                 node.getUpperBound();
-
-        String myVarName = getUniqueName();
-        statements.add(
-                factory.makeVariableDeclarationNode(
-                        factory.makeVariableModifiersNode(
-                                false,
-                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
-                factory.makeListNode(
-                        Collections.singletonList(
-                                factory.makeVariableDeclaratorNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.makeSimpleNameNode(
-                                                        factory.makeIdentifierNode("WildcardTypeNode"),
-                                                        NameCategory.TYPE)),
-                                        factory.makeIdentifierNode(myVarName),
-                                        factory.makeMethodInvocationByExpressionNode(
-                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                                                factory.makeIdentifierNode("makeWildcardTypeNode"),
-                                                factory.makeListNode(
-                                                        Arrays.<ExpressionNode>asList(
-                                                                liftBoundVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftBoundVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                expressionizeBoolean(liftUpperBoundValue)
-                                                                )),
-                                                factory.makeListNode(Collections.<TypeNode>emptyList()))
-            )))));
-
-        return myVarName;
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeWildcardTypeNode"),
+                        factory.makeListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        liftBound,
+                                        expressionizeBoolean(liftUpperBoundValue))),
+                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
     }
-
+    
     @Override
-    public String executeInlineTypeDeclarationNode(InlineTypeDeclarationNode node, Pair<ExpressionNode,List<BlockStatementNode>> p)
+    public ExpressionNode executeInlineTypeDeclarationNode(InlineTypeDeclarationNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode factoryNode = p.getFirst();
-        List<BlockStatementNode> statements = p.getSecond();
-
-        String liftDeclarationVarName = 
+        ExpressionNode liftDeclaration = 
                 node.getDeclaration() != null ?
-                node.getDeclaration().executeOperation(this,p) :
-                null;
-
-        String myVarName = getUniqueName();
-        statements.add(
-                factory.makeVariableDeclarationNode(
-                        factory.makeVariableModifiersNode(
-                                false,
-                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
-                factory.makeListNode(
-                        Collections.singletonList(
-                                factory.makeVariableDeclaratorNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.makeSimpleNameNode(
-                                                        factory.makeIdentifierNode("InlineTypeDeclarationNode"),
-                                                        NameCategory.TYPE)),
-                                        factory.makeIdentifierNode(myVarName),
-                                        factory.makeMethodInvocationByExpressionNode(
-                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                                                factory.makeIdentifierNode("makeInlineTypeDeclarationNode"),
-                                                factory.makeListNode(
-                                                        Arrays.<ExpressionNode>asList(
-                                                                liftDeclarationVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftDeclarationVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null)
-                                                                )),
-                                                factory.makeListNode(Collections.<TypeNode>emptyList()))
-            )))));
-
-        return myVarName;
+                        node.getDeclaration().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeInlineTypeDeclarationNode"),
+                        factory.makeListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        liftDeclaration)),
+                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
     }
-
+    
     @Override
-    public String executeUnaryExpressionNode(UnaryExpressionNode node, Pair<ExpressionNode,List<BlockStatementNode>> p)
+    public ExpressionNode executeUnaryExpressionNode(UnaryExpressionNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode factoryNode = p.getFirst();
-        List<BlockStatementNode> statements = p.getSecond();
-
-        String liftExpressionVarName = 
+        ExpressionNode liftExpression = 
                 node.getExpression() != null ?
-                node.getExpression().executeOperation(this,p) :
-                null;
+                        node.getExpression().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         UnaryOperator liftOperatorValue = 
                 node.getOperator();
-
-        String myVarName = getUniqueName();
-        statements.add(
-                factory.makeVariableDeclarationNode(
-                        factory.makeVariableModifiersNode(
-                                false,
-                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
-                factory.makeListNode(
-                        Collections.singletonList(
-                                factory.makeVariableDeclaratorNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.makeSimpleNameNode(
-                                                        factory.makeIdentifierNode("UnaryExpressionNode"),
-                                                        NameCategory.TYPE)),
-                                        factory.makeIdentifierNode(myVarName),
-                                        factory.makeMethodInvocationByExpressionNode(
-                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                                                factory.makeIdentifierNode("makeUnaryExpressionNode"),
-                                                factory.makeListNode(
-                                                        Arrays.<ExpressionNode>asList(
-                                                                liftExpressionVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftExpressionVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                expressionizeUnaryOperator(liftOperatorValue)
-                                                                )),
-                                                factory.makeListNode(Collections.<TypeNode>emptyList()))
-            )))));
-
-        return myVarName;
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeUnaryExpressionNode"),
+                        factory.makeListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        liftExpression,
+                                        expressionizeUnaryOperator(liftOperatorValue))),
+                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
     }
-
+    
     @Override
-    public String executeBooleanLiteralNode(BooleanLiteralNode node, Pair<ExpressionNode,List<BlockStatementNode>> p)
+    public ExpressionNode executeBooleanLiteralNode(BooleanLiteralNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode factoryNode = p.getFirst();
-        List<BlockStatementNode> statements = p.getSecond();
-
         Boolean liftValueValue = 
                 node.getValue();
-
-        String myVarName = getUniqueName();
-        statements.add(
-                factory.makeVariableDeclarationNode(
-                        factory.makeVariableModifiersNode(
-                                false,
-                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
-                factory.makeListNode(
-                        Collections.singletonList(
-                                factory.makeVariableDeclaratorNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.makeSimpleNameNode(
-                                                        factory.makeIdentifierNode("BooleanLiteralNode"),
-                                                        NameCategory.TYPE)),
-                                        factory.makeIdentifierNode(myVarName),
-                                        factory.makeMethodInvocationByExpressionNode(
-                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                                                factory.makeIdentifierNode("makeBooleanLiteralNode"),
-                                                factory.makeListNode(
-                                                        Arrays.<ExpressionNode>asList(
-                                                                expressionizeBoolean(liftValueValue)
-                                                                )),
-                                                factory.makeListNode(Collections.<TypeNode>emptyList()))
-            )))));
-
-        return myVarName;
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeBooleanLiteralNode"),
+                        factory.makeListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        expressionizeBoolean(liftValueValue))),
+                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
     }
-
+    
     @Override
-    public String executeSwitchNode(SwitchNode node, Pair<ExpressionNode,List<BlockStatementNode>> p)
+    public ExpressionNode executeSwitchNode(SwitchNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode factoryNode = p.getFirst();
-        List<BlockStatementNode> statements = p.getSecond();
-
-        String liftExpressionVarName = 
+        ExpressionNode liftExpression = 
                 node.getExpression() != null ?
-                node.getExpression().executeOperation(this,p) :
-                null;
+                        node.getExpression().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         argsForListNodeStack.push("CaseNode");
-        String liftCasesVarName = 
+        ExpressionNode liftCases = 
                 node.getCases() != null ?
-                node.getCases().executeOperation(this,p) :
-                null;
+                        node.getCases().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         argsForListNodeStack.pop();
-
-        String myVarName = getUniqueName();
-        statements.add(
-                factory.makeVariableDeclarationNode(
-                        factory.makeVariableModifiersNode(
-                                false,
-                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
-                factory.makeListNode(
-                        Collections.singletonList(
-                                factory.makeVariableDeclaratorNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.makeSimpleNameNode(
-                                                        factory.makeIdentifierNode("SwitchNode"),
-                                                        NameCategory.TYPE)),
-                                        factory.makeIdentifierNode(myVarName),
-                                        factory.makeMethodInvocationByExpressionNode(
-                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                                                factory.makeIdentifierNode("makeSwitchNode"),
-                                                factory.makeListNode(
-                                                        Arrays.<ExpressionNode>asList(
-                                                                liftExpressionVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftExpressionVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                liftCasesVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftCasesVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null)
-                                                                )),
-                                                factory.makeListNode(Collections.<TypeNode>emptyList()))
-            )))));
-
-        return myVarName;
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeSwitchNode"),
+                        factory.makeListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        liftExpression,
+                                        liftCases)),
+                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
     }
-
+    
     @Override
-    public String executeAlternateConstructorInvocationNode(AlternateConstructorInvocationNode node, Pair<ExpressionNode,List<BlockStatementNode>> p)
+    public ExpressionNode executeAlternateConstructorInvocationNode(AlternateConstructorInvocationNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode factoryNode = p.getFirst();
-        List<BlockStatementNode> statements = p.getSecond();
-
         argsForListNodeStack.push("ExpressionNode");
-        String liftArgumentsVarName = 
+        ExpressionNode liftArguments = 
                 node.getArguments() != null ?
-                node.getArguments().executeOperation(this,p) :
-                null;
+                        node.getArguments().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         argsForListNodeStack.pop();
         argsForListNodeStack.push("TypeNode");
-        String liftTypeArgumentsVarName = 
+        ExpressionNode liftTypeArguments = 
                 node.getTypeArguments() != null ?
-                node.getTypeArguments().executeOperation(this,p) :
-                null;
+                        node.getTypeArguments().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         argsForListNodeStack.pop();
-
-        String myVarName = getUniqueName();
-        statements.add(
-                factory.makeVariableDeclarationNode(
-                        factory.makeVariableModifiersNode(
-                                false,
-                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
-                factory.makeListNode(
-                        Collections.singletonList(
-                                factory.makeVariableDeclaratorNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.makeSimpleNameNode(
-                                                        factory.makeIdentifierNode("AlternateConstructorInvocationNode"),
-                                                        NameCategory.TYPE)),
-                                        factory.makeIdentifierNode(myVarName),
-                                        factory.makeMethodInvocationByExpressionNode(
-                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                                                factory.makeIdentifierNode("makeAlternateConstructorInvocationNode"),
-                                                factory.makeListNode(
-                                                        Arrays.<ExpressionNode>asList(
-                                                                liftArgumentsVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftArgumentsVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                liftTypeArgumentsVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftTypeArgumentsVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null)
-                                                                )),
-                                                factory.makeListNode(Collections.<TypeNode>emptyList()))
-            )))));
-
-        return myVarName;
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeAlternateConstructorInvocationNode"),
+                        factory.makeListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        liftArguments,
+                                        liftTypeArguments)),
+                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
     }
-
+    
     @Override
-    public String executeAnnotationMethodModifiersNode(AnnotationMethodModifiersNode node, Pair<ExpressionNode,List<BlockStatementNode>> p)
+    public ExpressionNode executeAnnotationMethodModifiersNode(AnnotationMethodModifiersNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode factoryNode = p.getFirst();
-        List<BlockStatementNode> statements = p.getSecond();
-
         argsForListNodeStack.push("AnnotationNode");
-        String liftAnnotationsVarName = 
+        ExpressionNode liftAnnotations = 
                 node.getAnnotations() != null ?
-                node.getAnnotations().executeOperation(this,p) :
-                null;
+                        node.getAnnotations().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         argsForListNodeStack.pop();
-
-        String myVarName = getUniqueName();
-        statements.add(
-                factory.makeVariableDeclarationNode(
-                        factory.makeVariableModifiersNode(
-                                false,
-                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
-                factory.makeListNode(
-                        Collections.singletonList(
-                                factory.makeVariableDeclaratorNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.makeSimpleNameNode(
-                                                        factory.makeIdentifierNode("AnnotationMethodModifiersNode"),
-                                                        NameCategory.TYPE)),
-                                        factory.makeIdentifierNode(myVarName),
-                                        factory.makeMethodInvocationByExpressionNode(
-                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                                                factory.makeIdentifierNode("makeAnnotationMethodModifiersNode"),
-                                                factory.makeListNode(
-                                                        Arrays.<ExpressionNode>asList(
-                                                                liftAnnotationsVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftAnnotationsVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null)
-                                                                )),
-                                                factory.makeListNode(Collections.<TypeNode>emptyList()))
-            )))));
-
-        return myVarName;
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeAnnotationMethodModifiersNode"),
+                        factory.makeListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        liftAnnotations)),
+                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
     }
-
+    
     @Override
-    public String executeConstructorDeclarationNode(ConstructorDeclarationNode node, Pair<ExpressionNode,List<BlockStatementNode>> p)
+    public ExpressionNode executeConstructorDeclarationNode(ConstructorDeclarationNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode factoryNode = p.getFirst();
-        List<BlockStatementNode> statements = p.getSecond();
-
-        String liftIdentifierVarName = 
+        ExpressionNode liftIdentifier = 
                 node.getIdentifier() != null ?
-                node.getIdentifier().executeOperation(this,p) :
-                null;
-        String liftBodyVarName = 
+                        node.getIdentifier().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        ExpressionNode liftBody = 
                 node.getBody() != null ?
-                node.getBody().executeOperation(this,p) :
-                null;
-        String liftModifiersVarName = 
+                        node.getBody().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        ExpressionNode liftModifiers = 
                 node.getModifiers() != null ?
-                node.getModifiers().executeOperation(this,p) :
-                null;
+                        node.getModifiers().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         argsForListNodeStack.push("VariableNode");
-        String liftParametersVarName = 
+        ExpressionNode liftParameters = 
                 node.getParameters() != null ?
-                node.getParameters().executeOperation(this,p) :
-                null;
+                        node.getParameters().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         argsForListNodeStack.pop();
-        String liftVarargParameterVarName = 
+        ExpressionNode liftVarargParameter = 
                 node.getVarargParameter() != null ?
-                node.getVarargParameter().executeOperation(this,p) :
-                null;
+                        node.getVarargParameter().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         argsForListNodeStack.push("UnparameterizedTypeNode");
-        String liftThrowTypesVarName = 
+        ExpressionNode liftThrowTypes = 
                 node.getThrowTypes() != null ?
-                node.getThrowTypes().executeOperation(this,p) :
-                null;
+                        node.getThrowTypes().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         argsForListNodeStack.pop();
         argsForListNodeStack.push("TypeParameterNode");
-        String liftTypeParametersVarName = 
+        ExpressionNode liftTypeParameters = 
                 node.getTypeParameters() != null ?
-                node.getTypeParameters().executeOperation(this,p) :
-                null;
+                        node.getTypeParameters().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         argsForListNodeStack.pop();
-        String liftJavadocVarName = 
+        ExpressionNode liftJavadoc = 
                 node.getJavadoc() != null ?
-                node.getJavadoc().executeOperation(this,p) :
-                null;
-
-        String myVarName = getUniqueName();
-        statements.add(
-                factory.makeVariableDeclarationNode(
-                        factory.makeVariableModifiersNode(
-                                false,
-                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
-                factory.makeListNode(
-                        Collections.singletonList(
-                                factory.makeVariableDeclaratorNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.makeSimpleNameNode(
-                                                        factory.makeIdentifierNode("ConstructorDeclarationNode"),
-                                                        NameCategory.TYPE)),
-                                        factory.makeIdentifierNode(myVarName),
-                                        factory.makeMethodInvocationByExpressionNode(
-                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                                                factory.makeIdentifierNode("makeConstructorDeclarationNode"),
-                                                factory.makeListNode(
-                                                        Arrays.<ExpressionNode>asList(
-                                                                liftIdentifierVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftIdentifierVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                liftBodyVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftBodyVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                liftModifiersVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftModifiersVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                liftParametersVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftParametersVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                liftVarargParameterVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftVarargParameterVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                liftThrowTypesVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftThrowTypesVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                liftTypeParametersVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftTypeParametersVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                liftJavadocVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftJavadocVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null)
-                                                                )),
-                                                factory.makeListNode(Collections.<TypeNode>emptyList()))
-            )))));
-
-        return myVarName;
+                        node.getJavadoc().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeConstructorDeclarationNode"),
+                        factory.makeListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        liftIdentifier,
+                                        liftBody,
+                                        liftModifiers,
+                                        liftParameters,
+                                        liftVarargParameter,
+                                        liftThrowTypes,
+                                        liftTypeParameters,
+                                        liftJavadoc)),
+                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
     }
-
+    
     @Override
-    public String executeAnnotationAnnotationValueNode(AnnotationAnnotationValueNode node, Pair<ExpressionNode,List<BlockStatementNode>> p)
+    public ExpressionNode executeAnnotationAnnotationValueNode(AnnotationAnnotationValueNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode factoryNode = p.getFirst();
-        List<BlockStatementNode> statements = p.getSecond();
-
-        String liftAnnotationVarName = 
+        ExpressionNode liftAnnotation = 
                 node.getAnnotation() != null ?
-                node.getAnnotation().executeOperation(this,p) :
-                null;
-
-        String myVarName = getUniqueName();
-        statements.add(
-                factory.makeVariableDeclarationNode(
-                        factory.makeVariableModifiersNode(
-                                false,
-                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
-                factory.makeListNode(
-                        Collections.singletonList(
-                                factory.makeVariableDeclaratorNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.makeSimpleNameNode(
-                                                        factory.makeIdentifierNode("AnnotationAnnotationValueNode"),
-                                                        NameCategory.TYPE)),
-                                        factory.makeIdentifierNode(myVarName),
-                                        factory.makeMethodInvocationByExpressionNode(
-                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                                                factory.makeIdentifierNode("makeAnnotationAnnotationValueNode"),
-                                                factory.makeListNode(
-                                                        Arrays.<ExpressionNode>asList(
-                                                                liftAnnotationVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftAnnotationVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null)
-                                                                )),
-                                                factory.makeListNode(Collections.<TypeNode>emptyList()))
-            )))));
-
-        return myVarName;
+                        node.getAnnotation().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeAnnotationAnnotationValueNode"),
+                        factory.makeListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        liftAnnotation)),
+                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
     }
-
+    
     @Override
-    public String executeForLoopNode(ForLoopNode node, Pair<ExpressionNode,List<BlockStatementNode>> p)
+    public ExpressionNode executeForLoopNode(ForLoopNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode factoryNode = p.getFirst();
-        List<BlockStatementNode> statements = p.getSecond();
-
-        String liftInitializerVarName = 
+        ExpressionNode liftInitializer = 
                 node.getInitializer() != null ?
-                node.getInitializer().executeOperation(this,p) :
-                null;
-        String liftConditionVarName = 
+                        node.getInitializer().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        ExpressionNode liftCondition = 
                 node.getCondition() != null ?
-                node.getCondition().executeOperation(this,p) :
-                null;
+                        node.getCondition().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         argsForListNodeStack.push("StatementExpressionNode");
-        String liftUpdateVarName = 
+        ExpressionNode liftUpdate = 
                 node.getUpdate() != null ?
-                node.getUpdate().executeOperation(this,p) :
-                null;
+                        node.getUpdate().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         argsForListNodeStack.pop();
-        String liftStatementVarName = 
+        ExpressionNode liftStatement = 
                 node.getStatement() != null ?
-                node.getStatement().executeOperation(this,p) :
-                null;
-
-        String myVarName = getUniqueName();
-        statements.add(
-                factory.makeVariableDeclarationNode(
-                        factory.makeVariableModifiersNode(
-                                false,
-                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
-                factory.makeListNode(
-                        Collections.singletonList(
-                                factory.makeVariableDeclaratorNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.makeSimpleNameNode(
-                                                        factory.makeIdentifierNode("ForLoopNode"),
-                                                        NameCategory.TYPE)),
-                                        factory.makeIdentifierNode(myVarName),
-                                        factory.makeMethodInvocationByExpressionNode(
-                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                                                factory.makeIdentifierNode("makeForLoopNode"),
-                                                factory.makeListNode(
-                                                        Arrays.<ExpressionNode>asList(
-                                                                liftInitializerVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftInitializerVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                liftConditionVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftConditionVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                liftUpdateVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftUpdateVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                liftStatementVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftStatementVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null)
-                                                                )),
-                                                factory.makeListNode(Collections.<TypeNode>emptyList()))
-            )))));
-
-        return myVarName;
+                        node.getStatement().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeForLoopNode"),
+                        factory.makeListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        liftInitializer,
+                                        liftCondition,
+                                        liftUpdate,
+                                        liftStatement)),
+                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
     }
-
+    
     @Override
-    public String executeWhileLoopNode(WhileLoopNode node, Pair<ExpressionNode,List<BlockStatementNode>> p)
+    public ExpressionNode executeWhileLoopNode(WhileLoopNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode factoryNode = p.getFirst();
-        List<BlockStatementNode> statements = p.getSecond();
-
-        String liftConditionVarName = 
+        ExpressionNode liftCondition = 
                 node.getCondition() != null ?
-                node.getCondition().executeOperation(this,p) :
-                null;
-        String liftStatementVarName = 
+                        node.getCondition().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        ExpressionNode liftStatement = 
                 node.getStatement() != null ?
-                node.getStatement().executeOperation(this,p) :
-                null;
-
-        String myVarName = getUniqueName();
-        statements.add(
-                factory.makeVariableDeclarationNode(
-                        factory.makeVariableModifiersNode(
-                                false,
-                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
-                factory.makeListNode(
-                        Collections.singletonList(
-                                factory.makeVariableDeclaratorNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.makeSimpleNameNode(
-                                                        factory.makeIdentifierNode("WhileLoopNode"),
-                                                        NameCategory.TYPE)),
-                                        factory.makeIdentifierNode(myVarName),
-                                        factory.makeMethodInvocationByExpressionNode(
-                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                                                factory.makeIdentifierNode("makeWhileLoopNode"),
-                                                factory.makeListNode(
-                                                        Arrays.<ExpressionNode>asList(
-                                                                liftConditionVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftConditionVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                liftStatementVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftStatementVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null)
-                                                                )),
-                                                factory.makeListNode(Collections.<TypeNode>emptyList()))
-            )))));
-
-        return myVarName;
+                        node.getStatement().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeWhileLoopNode"),
+                        factory.makeListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        liftCondition,
+                                        liftStatement)),
+                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
     }
-
+    
     @Override
-    public <T extends Node> String executeListNode(ListNode<T> node, Pair<ExpressionNode,List<BlockStatementNode>> p)
+    public <T extends Node> ExpressionNode executeListNode(ListNode<T> node, ExpressionNode factoryNode)
     {
         String typeName;
         if (argsForListNodeStack.size() == 0)
@@ -3377,453 +1929,227 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
         {
             typeName = argsForListNodeStack.peek();
         }
-        return executeListNode(node, p, typeName);
+        return executeListNode(node, factoryNode, typeName);
     }
-
-    public <T extends Node> String executeListNode(ListNode<T> node, Pair<ExpressionNode,List<BlockStatementNode>> p, String argName)
+    
+    protected <T extends Node> ExpressionNode executeListNode(ListNode<T> node, ExpressionNode factoryNode, String argName)
     {
-        ExpressionNode factoryNode = p.getFirst();
-        List<BlockStatementNode> statements = p.getSecond();
-
-        String liftChildrenListName = getUniqueName();
-        statements.add(
-                factory.makeVariableDeclarationNode(
-                        factory.makeVariableModifiersNode(
-                                false,
-                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
-                factory.makeListNode(Collections.singletonList(
-                        factory.makeVariableDeclaratorNode(
-                                factory.makeParameterizedTypeNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.makeSimpleNameNode(
-                                                        factory.makeIdentifierNode("List"),
-                                                        NameCategory.TYPE)),
-                                        factory.makeListNode(
-                                                Arrays.<TypeArgumentNode>asList(
+        List<ExpressionNode> liftChildrenList = new ArrayList<ExpressionNode>();
+        for (T listval : node.getChildren())
+        {
+            liftChildrenList.add(
+                    listval != null ? 
+        			        listval.executeOperation(this,factoryNode) :
+                            null);
+        }
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeListNode"),
+                        factory.makeListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        factory.makeMethodInvocationByNameNode(
+                                                factory.makeQualifiedNameNode(
+                                                        factory.makeSimpleNameNode(
+                                                                factory.makeIdentifierNode("Arrays"),
+                                                                NameCategory.TYPE),
+                                                        factory.makeIdentifierNode("asList"),
+                                                        NameCategory.METHOD),
+                                                factory.makeListNode(liftChildrenList),
+                                                factory.makeListNode(Collections.<TypeNode>singletonList(
                                                         factory.makeUnparameterizedTypeNode(
                                                                 factory.makeSimpleNameNode(
                                                                         factory.makeIdentifierNode(argName),
-                                                                        NameCategory.TYPE))
-                                                        ))),
-                                factory.makeIdentifierNode(liftChildrenListName),
-                                factory.makeUnqualifiedClassInstantiationNode(
-                                        factory.makeParameterizedTypeNode(
-                                                factory.makeUnparameterizedTypeNode(
-                                                        factory.makeSimpleNameNode(
-                                                                factory.makeIdentifierNode("ArrayList"),
-                                                                NameCategory.TYPE)),
-                                                factory.makeListNode(
-                                                        Arrays.<TypeArgumentNode>asList(
-                                                                factory.makeUnparameterizedTypeNode(
-                                                                        factory.makeSimpleNameNode(
-                                                                                factory.makeIdentifierNode(argName),
-                                                                                NameCategory.TYPE))
-                                                                ))),
-                                        factory.makeListNode(Collections.<TypeArgumentNode>emptyList()),
-                                        factory.makeListNode(Collections.<ExpressionNode>emptyList()),
-                                        null))))));
-
-        for (T listval : node.getChildren())
-        {
-            String varname = listval.executeOperation(this,p);
-            statements.add(
-                factory.makeExpressionStatementNode(
-                    factory.makeMethodInvocationByExpressionNode(
-                            factory.makeFieldAccessByNameNode(
-                                    factory.makeSimpleNameNode(
-                                            factory.makeIdentifierNode(liftChildrenListName),
-                                            NameCategory.EXPRESSION)),
-                            factory.makeIdentifierNode("add"),
-                            factory.makeListNode(
-                                    Collections.<ExpressionNode>singletonList(
-                                            factory.makeFieldAccessByNameNode(
-                                                    factory.makeSimpleNameNode(
-                                                            factory.makeIdentifierNode(varname),
-                                                            NameCategory.EXPRESSION)))),
-                            factory.makeListNode(Collections.<TypeNode>emptyList()))));
-        }
-
-        String myVarName = getUniqueName();
-        String nodeTypeArg = argsForListNodeStack.size() == 0 ?
-                "T" :
-                argsForListNodeStack.peek();
-        statements.add(
-                factory.makeVariableDeclarationNode(
-                        factory.makeVariableModifiersNode(
-                                false,
-                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
-                factory.makeListNode(
-                        Collections.singletonList(
-                                factory.makeVariableDeclaratorNode(
-                                    factory.makeParameterizedTypeNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.makeSimpleNameNode(
-                                                        factory.makeIdentifierNode("ListNode"),
-                                                        NameCategory.TYPE)),
-                                        factory.makeListNode(
-                                            Arrays.<TypeArgumentNode>asList(
-                                                factory.makeUnparameterizedTypeNode(
-                                                        factory.makeSimpleNameNode(
-                                                                factory.makeIdentifierNode(nodeTypeArg),
-                                                                NameCategory.TYPE
-                                                        )
-                                                )
-                                            )
-                                        )
-                                    ),
-                                        factory.makeIdentifierNode(myVarName),
-                                        factory.makeMethodInvocationByExpressionNode(
-                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                                                factory.makeIdentifierNode("makeListNode"),
-                                                factory.makeListNode(
-                                                        Arrays.<ExpressionNode>asList(
-                                                                factory.makeFieldAccessByNameNode(
-                                                                        factory.makeSimpleNameNode(
-                                                                                factory.makeIdentifierNode(liftChildrenListName), NameCategory.EXPRESSION))
-
-                                                                )),
-                                                factory.makeListNode(Collections.<TypeNode>emptyList()))
-            )))));
-
-        return myVarName;
+                                                                        NameCategory.TYPE))))))),
+                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
     }
-
+    
     @Override
-    public String executeEnumConstantDeclarationNode(EnumConstantDeclarationNode node, Pair<ExpressionNode,List<BlockStatementNode>> p)
+    public ExpressionNode executeEnumConstantDeclarationNode(EnumConstantDeclarationNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode factoryNode = p.getFirst();
-        List<BlockStatementNode> statements = p.getSecond();
-
         argsForListNodeStack.push("AnnotationNode");
-        String liftAnnotationsVarName = 
+        ExpressionNode liftAnnotations = 
                 node.getAnnotations() != null ?
-                node.getAnnotations().executeOperation(this,p) :
-                null;
+                        node.getAnnotations().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         argsForListNodeStack.pop();
-        String liftIdentifierVarName = 
+        ExpressionNode liftIdentifier = 
                 node.getIdentifier() != null ?
-                node.getIdentifier().executeOperation(this,p) :
-                null;
+                        node.getIdentifier().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         argsForListNodeStack.push("ExpressionNode");
-        String liftArgumentsVarName = 
+        ExpressionNode liftArguments = 
                 node.getArguments() != null ?
-                node.getArguments().executeOperation(this,p) :
-                null;
+                        node.getArguments().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         argsForListNodeStack.pop();
-        String liftBodyVarName = 
+        ExpressionNode liftBody = 
                 node.getBody() != null ?
-                node.getBody().executeOperation(this,p) :
-                null;
-        String liftJavadocVarName = 
+                        node.getBody().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        ExpressionNode liftJavadoc = 
                 node.getJavadoc() != null ?
-                node.getJavadoc().executeOperation(this,p) :
-                null;
-
-        String myVarName = getUniqueName();
-        statements.add(
-                factory.makeVariableDeclarationNode(
-                        factory.makeVariableModifiersNode(
-                                false,
-                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
-                factory.makeListNode(
-                        Collections.singletonList(
-                                factory.makeVariableDeclaratorNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.makeSimpleNameNode(
-                                                        factory.makeIdentifierNode("EnumConstantDeclarationNode"),
-                                                        NameCategory.TYPE)),
-                                        factory.makeIdentifierNode(myVarName),
-                                        factory.makeMethodInvocationByExpressionNode(
-                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                                                factory.makeIdentifierNode("makeEnumConstantDeclarationNode"),
-                                                factory.makeListNode(
-                                                        Arrays.<ExpressionNode>asList(
-                                                                liftAnnotationsVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftAnnotationsVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                liftIdentifierVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftIdentifierVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                liftArgumentsVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftArgumentsVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                liftBodyVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftBodyVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                liftJavadocVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftJavadocVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null)
-                                                                )),
-                                                factory.makeListNode(Collections.<TypeNode>emptyList()))
-            )))));
-
-        return myVarName;
+                        node.getJavadoc().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeEnumConstantDeclarationNode"),
+                        factory.makeListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        liftAnnotations,
+                                        liftIdentifier,
+                                        liftArguments,
+                                        liftBody,
+                                        liftJavadoc)),
+                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
     }
-
+    
     @Override
-    public String executeBreakNode(BreakNode node, Pair<ExpressionNode,List<BlockStatementNode>> p)
+    public ExpressionNode executeBreakNode(BreakNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode factoryNode = p.getFirst();
-        List<BlockStatementNode> statements = p.getSecond();
-
-        String liftLabelVarName = 
+        ExpressionNode liftLabel = 
                 node.getLabel() != null ?
-                node.getLabel().executeOperation(this,p) :
-                null;
-
-        String myVarName = getUniqueName();
-        statements.add(
-                factory.makeVariableDeclarationNode(
-                        factory.makeVariableModifiersNode(
-                                false,
-                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
-                factory.makeListNode(
-                        Collections.singletonList(
-                                factory.makeVariableDeclaratorNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.makeSimpleNameNode(
-                                                        factory.makeIdentifierNode("BreakNode"),
-                                                        NameCategory.TYPE)),
-                                        factory.makeIdentifierNode(myVarName),
-                                        factory.makeMethodInvocationByExpressionNode(
-                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                                                factory.makeIdentifierNode("makeBreakNode"),
-                                                factory.makeListNode(
-                                                        Arrays.<ExpressionNode>asList(
-                                                                liftLabelVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftLabelVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null)
-                                                                )),
-                                                factory.makeListNode(Collections.<TypeNode>emptyList()))
-            )))));
-
-        return myVarName;
+                        node.getLabel().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeBreakNode"),
+                        factory.makeListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        liftLabel)),
+                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
     }
-
+    
     @Override
-    public String executeConstructorModifiersNode(ConstructorModifiersNode node, Pair<ExpressionNode,List<BlockStatementNode>> p)
+    public ExpressionNode executeConstructorModifiersNode(ConstructorModifiersNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode factoryNode = p.getFirst();
-        List<BlockStatementNode> statements = p.getSecond();
-
         AccessModifier liftAccessValue = 
                 node.getAccess();
         argsForListNodeStack.push("AnnotationNode");
-        String liftAnnotationsVarName = 
+        ExpressionNode liftAnnotations = 
                 node.getAnnotations() != null ?
-                node.getAnnotations().executeOperation(this,p) :
-                null;
+                        node.getAnnotations().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         argsForListNodeStack.pop();
-
-        String myVarName = getUniqueName();
-        statements.add(
-                factory.makeVariableDeclarationNode(
-                        factory.makeVariableModifiersNode(
-                                false,
-                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
-                factory.makeListNode(
-                        Collections.singletonList(
-                                factory.makeVariableDeclaratorNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.makeSimpleNameNode(
-                                                        factory.makeIdentifierNode("ConstructorModifiersNode"),
-                                                        NameCategory.TYPE)),
-                                        factory.makeIdentifierNode(myVarName),
-                                        factory.makeMethodInvocationByExpressionNode(
-                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                                                factory.makeIdentifierNode("makeConstructorModifiersNode"),
-                                                factory.makeListNode(
-                                                        Arrays.<ExpressionNode>asList(
-                                                                expressionizeAccessModifier(liftAccessValue),
-                                                                liftAnnotationsVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftAnnotationsVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null)
-                                                                )),
-                                                factory.makeListNode(Collections.<TypeNode>emptyList()))
-            )))));
-
-        return myVarName;
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeConstructorModifiersNode"),
+                        factory.makeListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        expressionizeAccessModifier(liftAccessValue),
+                                        liftAnnotations)),
+                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
     }
-
+    
     @Override
-    public String executeParameterizedTypeSelectNode(ParameterizedTypeSelectNode node, Pair<ExpressionNode,List<BlockStatementNode>> p)
+    public ExpressionNode executeParameterizedTypeSelectNode(ParameterizedTypeSelectNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode factoryNode = p.getFirst();
-        List<BlockStatementNode> statements = p.getSecond();
-
-        String liftBaseVarName = 
+        ExpressionNode liftBase = 
                 node.getBase() != null ?
-                node.getBase().executeOperation(this,p) :
-                null;
-        String liftSelectVarName = 
+                        node.getBase().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        ExpressionNode liftSelect = 
                 node.getSelect() != null ?
-                node.getSelect().executeOperation(this,p) :
-                null;
-
-        String myVarName = getUniqueName();
-        statements.add(
-                factory.makeVariableDeclarationNode(
-                        factory.makeVariableModifiersNode(
-                                false,
-                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
-                factory.makeListNode(
-                        Collections.singletonList(
-                                factory.makeVariableDeclaratorNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.makeSimpleNameNode(
-                                                        factory.makeIdentifierNode("ParameterizedTypeSelectNode"),
-                                                        NameCategory.TYPE)),
-                                        factory.makeIdentifierNode(myVarName),
-                                        factory.makeMethodInvocationByExpressionNode(
-                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                                                factory.makeIdentifierNode("makeParameterizedTypeSelectNode"),
-                                                factory.makeListNode(
-                                                        Arrays.<ExpressionNode>asList(
-                                                                liftBaseVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftBaseVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                liftSelectVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftSelectVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null)
-                                                                )),
-                                                factory.makeListNode(Collections.<TypeNode>emptyList()))
-            )))));
-
-        return myVarName;
+                        node.getSelect().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeParameterizedTypeSelectNode"),
+                        factory.makeListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        liftBase,
+                                        liftSelect)),
+                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
     }
-
+    
     @Override
-    public String executeIdentifierNode(IdentifierNode node, Pair<ExpressionNode,List<BlockStatementNode>> p)
+    public ExpressionNode executeIdentifierNode(IdentifierNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode factoryNode = p.getFirst();
-        List<BlockStatementNode> statements = p.getSecond();
-
         String liftIdentifierValue = 
                 node.getIdentifier();
-
-        String myVarName = getUniqueName();
-        statements.add(
-                factory.makeVariableDeclarationNode(
-                        factory.makeVariableModifiersNode(
-                                false,
-                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
-                factory.makeListNode(
-                        Collections.singletonList(
-                                factory.makeVariableDeclaratorNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.makeSimpleNameNode(
-                                                        factory.makeIdentifierNode("IdentifierNode"),
-                                                        NameCategory.TYPE)),
-                                        factory.makeIdentifierNode(myVarName),
-                                        factory.makeMethodInvocationByExpressionNode(
-                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                                                factory.makeIdentifierNode("makeIdentifierNode"),
-                                                factory.makeListNode(
-                                                        Arrays.<ExpressionNode>asList(
-                                                                expressionizeString(liftIdentifierValue)
-                                                                )),
-                                                factory.makeListNode(Collections.<TypeNode>emptyList()))
-            )))));
-
-        return myVarName;
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeIdentifierNode"),
+                        factory.makeListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        expressionizeString(liftIdentifierValue))),
+                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
     }
-
+    
     @Override
-    public String executeArrayTypeNode(ArrayTypeNode node, Pair<ExpressionNode,List<BlockStatementNode>> p)
+    public ExpressionNode executeArrayTypeNode(ArrayTypeNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode factoryNode = p.getFirst();
-        List<BlockStatementNode> statements = p.getSecond();
-
-        String liftTypeVarName = 
+        ExpressionNode liftType = 
                 node.getType() != null ?
-                node.getType().executeOperation(this,p) :
-                null;
-
-        String myVarName = getUniqueName();
-        statements.add(
-                factory.makeVariableDeclarationNode(
-                        factory.makeVariableModifiersNode(
-                                false,
-                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
-                factory.makeListNode(
-                        Collections.singletonList(
-                                factory.makeVariableDeclaratorNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.makeSimpleNameNode(
-                                                        factory.makeIdentifierNode("ArrayTypeNode"),
-                                                        NameCategory.TYPE)),
-                                        factory.makeIdentifierNode(myVarName),
-                                        factory.makeMethodInvocationByExpressionNode(
-                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                                                factory.makeIdentifierNode("makeArrayTypeNode"),
-                                                factory.makeListNode(
-                                                        Arrays.<ExpressionNode>asList(
-                                                                liftTypeVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftTypeVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null)
-                                                                )),
-                                                factory.makeListNode(Collections.<TypeNode>emptyList()))
-            )))));
-
-        return myVarName;
+                        node.getType().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeArrayTypeNode"),
+                        factory.makeListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        liftType)),
+                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
     }
-
+    
     @Override
-    public String executeArrayInitializerCreationNode(ArrayInitializerCreationNode node, Pair<ExpressionNode,List<BlockStatementNode>> p)
+    public ExpressionNode executeArrayInitializerCreationNode(ArrayInitializerCreationNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode factoryNode = p.getFirst();
-        List<BlockStatementNode> statements = p.getSecond();
-
-        String liftInitializerVarName = 
+        ExpressionNode liftInitializer = 
                 node.getInitializer() != null ?
-                node.getInitializer().executeOperation(this,p) :
-                null;
-        String liftBaseTypeVarName = 
+                        node.getInitializer().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        ExpressionNode liftBaseType = 
                 node.getBaseType() != null ?
-                node.getBaseType().executeOperation(this,p) :
-                null;
+                        node.getBaseType().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         int liftArrayLevelsValue = 
                 node.getArrayLevels();
-
-        String myVarName = getUniqueName();
-        statements.add(
-                factory.makeVariableDeclarationNode(
-                        factory.makeVariableModifiersNode(
-                                false,
-                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
-                factory.makeListNode(
-                        Collections.singletonList(
-                                factory.makeVariableDeclaratorNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.makeSimpleNameNode(
-                                                        factory.makeIdentifierNode("ArrayInitializerCreationNode"),
-                                                        NameCategory.TYPE)),
-                                        factory.makeIdentifierNode(myVarName),
-                                        factory.makeMethodInvocationByExpressionNode(
-                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                                                factory.makeIdentifierNode("makeArrayInitializerCreationNode"),
-                                                factory.makeListNode(
-                                                        Arrays.<ExpressionNode>asList(
-                                                                liftInitializerVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftInitializerVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                liftBaseTypeVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftBaseTypeVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                expressionizeInt(liftArrayLevelsValue)
-                                                                )),
-                                                factory.makeListNode(Collections.<TypeNode>emptyList()))
-            )))));
-
-        return myVarName;
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeArrayInitializerCreationNode"),
+                        factory.makeListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        liftInitializer,
+                                        liftBaseType,
+                                        expressionizeInt(liftArrayLevelsValue))),
+                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
     }
-
+    
     @Override
-    public String executeFieldModifiersNode(FieldModifiersNode node, Pair<ExpressionNode,List<BlockStatementNode>> p)
+    public ExpressionNode executeFieldModifiersNode(FieldModifiersNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode factoryNode = p.getFirst();
-        List<BlockStatementNode> statements = p.getSecond();
-
         AccessModifier liftAccessValue = 
                 node.getAccess();
         boolean liftStaticFlagValue = 
@@ -3835,462 +2161,260 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
         boolean liftVolatileFlagValue = 
                 node.getVolatileFlag();
         argsForListNodeStack.push("AnnotationNode");
-        String liftAnnotationsVarName = 
+        ExpressionNode liftAnnotations = 
                 node.getAnnotations() != null ?
-                node.getAnnotations().executeOperation(this,p) :
-                null;
+                        node.getAnnotations().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         argsForListNodeStack.pop();
-
-        String myVarName = getUniqueName();
-        statements.add(
-                factory.makeVariableDeclarationNode(
-                        factory.makeVariableModifiersNode(
-                                false,
-                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
-                factory.makeListNode(
-                        Collections.singletonList(
-                                factory.makeVariableDeclaratorNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.makeSimpleNameNode(
-                                                        factory.makeIdentifierNode("FieldModifiersNode"),
-                                                        NameCategory.TYPE)),
-                                        factory.makeIdentifierNode(myVarName),
-                                        factory.makeMethodInvocationByExpressionNode(
-                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                                                factory.makeIdentifierNode("makeFieldModifiersNode"),
-                                                factory.makeListNode(
-                                                        Arrays.<ExpressionNode>asList(
-                                                                expressionizeAccessModifier(liftAccessValue),
-                                                                expressionizeBoolean(liftStaticFlagValue),
-                                                                expressionizeBoolean(liftFinalFlagValue),
-                                                                expressionizeBoolean(liftTransientFlagValue),
-                                                                expressionizeBoolean(liftVolatileFlagValue),
-                                                                liftAnnotationsVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftAnnotationsVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null)
-                                                                )),
-                                                factory.makeListNode(Collections.<TypeNode>emptyList()))
-            )))));
-
-        return myVarName;
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeFieldModifiersNode"),
+                        factory.makeListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        expressionizeAccessModifier(liftAccessValue),
+                                        expressionizeBoolean(liftStaticFlagValue),
+                                        expressionizeBoolean(liftFinalFlagValue),
+                                        expressionizeBoolean(liftTransientFlagValue),
+                                        expressionizeBoolean(liftVolatileFlagValue),
+                                        liftAnnotations)),
+                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
     }
-
+    
     @Override
-    public String executeTypeParameterNode(TypeParameterNode node, Pair<ExpressionNode,List<BlockStatementNode>> p)
+    public ExpressionNode executeTypeParameterNode(TypeParameterNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode factoryNode = p.getFirst();
-        List<BlockStatementNode> statements = p.getSecond();
-
-        String liftIdentifierVarName = 
+        ExpressionNode liftIdentifier = 
                 node.getIdentifier() != null ?
-                node.getIdentifier().executeOperation(this,p) :
-                null;
+                        node.getIdentifier().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         argsForListNodeStack.push("DeclaredTypeNode");
-        String liftBoundsVarName = 
+        ExpressionNode liftBounds = 
                 node.getBounds() != null ?
-                node.getBounds().executeOperation(this,p) :
-                null;
+                        node.getBounds().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         argsForListNodeStack.pop();
-
-        String myVarName = getUniqueName();
-        statements.add(
-                factory.makeVariableDeclarationNode(
-                        factory.makeVariableModifiersNode(
-                                false,
-                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
-                factory.makeListNode(
-                        Collections.singletonList(
-                                factory.makeVariableDeclaratorNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.makeSimpleNameNode(
-                                                        factory.makeIdentifierNode("TypeParameterNode"),
-                                                        NameCategory.TYPE)),
-                                        factory.makeIdentifierNode(myVarName),
-                                        factory.makeMethodInvocationByExpressionNode(
-                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                                                factory.makeIdentifierNode("makeTypeParameterNode"),
-                                                factory.makeListNode(
-                                                        Arrays.<ExpressionNode>asList(
-                                                                liftIdentifierVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftIdentifierVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                liftBoundsVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftBoundsVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null)
-                                                                )),
-                                                factory.makeListNode(Collections.<TypeNode>emptyList()))
-            )))));
-
-        return myVarName;
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeTypeParameterNode"),
+                        factory.makeListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        liftIdentifier,
+                                        liftBounds)),
+                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
     }
-
+    
     @Override
-    public String executeAnnotationMethodDeclarationNode(AnnotationMethodDeclarationNode node, Pair<ExpressionNode,List<BlockStatementNode>> p)
+    public ExpressionNode executeAnnotationMethodDeclarationNode(AnnotationMethodDeclarationNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode factoryNode = p.getFirst();
-        List<BlockStatementNode> statements = p.getSecond();
-
-        String liftModifiersVarName = 
+        ExpressionNode liftModifiers = 
                 node.getModifiers() != null ?
-                node.getModifiers().executeOperation(this,p) :
-                null;
-        String liftTypeVarName = 
+                        node.getModifiers().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        ExpressionNode liftType = 
                 node.getType() != null ?
-                node.getType().executeOperation(this,p) :
-                null;
-        String liftIdentifierVarName = 
+                        node.getType().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        ExpressionNode liftIdentifier = 
                 node.getIdentifier() != null ?
-                node.getIdentifier().executeOperation(this,p) :
-                null;
-        String liftDefaultValueVarName = 
+                        node.getIdentifier().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        ExpressionNode liftDefaultValue = 
                 node.getDefaultValue() != null ?
-                node.getDefaultValue().executeOperation(this,p) :
-                null;
-        String liftJavadocVarName = 
+                        node.getDefaultValue().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        ExpressionNode liftJavadoc = 
                 node.getJavadoc() != null ?
-                node.getJavadoc().executeOperation(this,p) :
-                null;
-
-        String myVarName = getUniqueName();
-        statements.add(
-                factory.makeVariableDeclarationNode(
-                        factory.makeVariableModifiersNode(
-                                false,
-                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
-                factory.makeListNode(
-                        Collections.singletonList(
-                                factory.makeVariableDeclaratorNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.makeSimpleNameNode(
-                                                        factory.makeIdentifierNode("AnnotationMethodDeclarationNode"),
-                                                        NameCategory.TYPE)),
-                                        factory.makeIdentifierNode(myVarName),
-                                        factory.makeMethodInvocationByExpressionNode(
-                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                                                factory.makeIdentifierNode("makeAnnotationMethodDeclarationNode"),
-                                                factory.makeListNode(
-                                                        Arrays.<ExpressionNode>asList(
-                                                                liftModifiersVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftModifiersVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                liftTypeVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftTypeVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                liftIdentifierVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftIdentifierVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                liftDefaultValueVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftDefaultValueVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                liftJavadocVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftJavadocVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null)
-                                                                )),
-                                                factory.makeListNode(Collections.<TypeNode>emptyList()))
-            )))));
-
-        return myVarName;
+                        node.getJavadoc().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeAnnotationMethodDeclarationNode"),
+                        factory.makeListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        liftModifiers,
+                                        liftType,
+                                        liftIdentifier,
+                                        liftDefaultValue,
+                                        liftJavadoc)),
+                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
     }
-
+    
     @Override
-    public String executeImportSingleTypeNode(ImportSingleTypeNode node, Pair<ExpressionNode,List<BlockStatementNode>> p)
+    public ExpressionNode executeImportSingleTypeNode(ImportSingleTypeNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode factoryNode = p.getFirst();
-        List<BlockStatementNode> statements = p.getSecond();
-
-        String liftNameVarName = 
+        ExpressionNode liftName = 
                 node.getName() != null ?
-                node.getName().executeOperation(this,p) :
-                null;
+                        node.getName().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         boolean liftStaticImportValue = 
                 node.getStaticImport();
-
-        String myVarName = getUniqueName();
-        statements.add(
-                factory.makeVariableDeclarationNode(
-                        factory.makeVariableModifiersNode(
-                                false,
-                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
-                factory.makeListNode(
-                        Collections.singletonList(
-                                factory.makeVariableDeclaratorNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.makeSimpleNameNode(
-                                                        factory.makeIdentifierNode("ImportSingleTypeNode"),
-                                                        NameCategory.TYPE)),
-                                        factory.makeIdentifierNode(myVarName),
-                                        factory.makeMethodInvocationByExpressionNode(
-                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                                                factory.makeIdentifierNode("makeImportSingleTypeNode"),
-                                                factory.makeListNode(
-                                                        Arrays.<ExpressionNode>asList(
-                                                                liftNameVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftNameVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                expressionizeBoolean(liftStaticImportValue)
-                                                                )),
-                                                factory.makeListNode(Collections.<TypeNode>emptyList()))
-            )))));
-
-        return myVarName;
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeImportSingleTypeNode"),
+                        factory.makeListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        liftName,
+                                        expressionizeBoolean(liftStaticImportValue))),
+                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
     }
-
+    
     @Override
-    public String executeFieldDeclarationNode(FieldDeclarationNode node, Pair<ExpressionNode,List<BlockStatementNode>> p)
+    public ExpressionNode executeFieldDeclarationNode(FieldDeclarationNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode factoryNode = p.getFirst();
-        List<BlockStatementNode> statements = p.getSecond();
-
-        String liftModifiersVarName = 
+        ExpressionNode liftModifiers = 
                 node.getModifiers() != null ?
-                node.getModifiers().executeOperation(this,p) :
-                null;
+                        node.getModifiers().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         argsForListNodeStack.push("VariableDeclaratorNode");
-        String liftDeclaratorsVarName = 
+        ExpressionNode liftDeclarators = 
                 node.getDeclarators() != null ?
-                node.getDeclarators().executeOperation(this,p) :
-                null;
+                        node.getDeclarators().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         argsForListNodeStack.pop();
-        String liftJavadocVarName = 
+        ExpressionNode liftJavadoc = 
                 node.getJavadoc() != null ?
-                node.getJavadoc().executeOperation(this,p) :
-                null;
-
-        String myVarName = getUniqueName();
-        statements.add(
-                factory.makeVariableDeclarationNode(
-                        factory.makeVariableModifiersNode(
-                                false,
-                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
-                factory.makeListNode(
-                        Collections.singletonList(
-                                factory.makeVariableDeclaratorNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.makeSimpleNameNode(
-                                                        factory.makeIdentifierNode("FieldDeclarationNode"),
-                                                        NameCategory.TYPE)),
-                                        factory.makeIdentifierNode(myVarName),
-                                        factory.makeMethodInvocationByExpressionNode(
-                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                                                factory.makeIdentifierNode("makeFieldDeclarationNode"),
-                                                factory.makeListNode(
-                                                        Arrays.<ExpressionNode>asList(
-                                                                liftModifiersVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftModifiersVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                liftDeclaratorsVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftDeclaratorsVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                liftJavadocVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftJavadocVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null)
-                                                                )),
-                                                factory.makeListNode(Collections.<TypeNode>emptyList()))
-            )))));
-
-        return myVarName;
+                        node.getJavadoc().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeFieldDeclarationNode"),
+                        factory.makeListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        liftModifiers,
+                                        liftDeclarators,
+                                        liftJavadoc)),
+                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
     }
-
+    
     @Override
-    public String executeAnnotationArrayValueNode(AnnotationArrayValueNode node, Pair<ExpressionNode,List<BlockStatementNode>> p)
+    public ExpressionNode executeAnnotationArrayValueNode(AnnotationArrayValueNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode factoryNode = p.getFirst();
-        List<BlockStatementNode> statements = p.getSecond();
-
         argsForListNodeStack.push("AnnotationValueNode");
-        String liftValuesVarName = 
+        ExpressionNode liftValues = 
                 node.getValues() != null ?
-                node.getValues().executeOperation(this,p) :
-                null;
+                        node.getValues().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         argsForListNodeStack.pop();
-
-        String myVarName = getUniqueName();
-        statements.add(
-                factory.makeVariableDeclarationNode(
-                        factory.makeVariableModifiersNode(
-                                false,
-                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
-                factory.makeListNode(
-                        Collections.singletonList(
-                                factory.makeVariableDeclaratorNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.makeSimpleNameNode(
-                                                        factory.makeIdentifierNode("AnnotationArrayValueNode"),
-                                                        NameCategory.TYPE)),
-                                        factory.makeIdentifierNode(myVarName),
-                                        factory.makeMethodInvocationByExpressionNode(
-                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                                                factory.makeIdentifierNode("makeAnnotationArrayValueNode"),
-                                                factory.makeListNode(
-                                                        Arrays.<ExpressionNode>asList(
-                                                                liftValuesVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftValuesVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null)
-                                                                )),
-                                                factory.makeListNode(Collections.<TypeNode>emptyList()))
-            )))));
-
-        return myVarName;
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeAnnotationArrayValueNode"),
+                        factory.makeListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        liftValues)),
+                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
     }
-
+    
     @Override
-    public String executeSingleElementAnnotationNode(SingleElementAnnotationNode node, Pair<ExpressionNode,List<BlockStatementNode>> p)
+    public ExpressionNode executeSingleElementAnnotationNode(SingleElementAnnotationNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode factoryNode = p.getFirst();
-        List<BlockStatementNode> statements = p.getSecond();
-
-        String liftValueVarName = 
+        ExpressionNode liftValue = 
                 node.getValue() != null ?
-                node.getValue().executeOperation(this,p) :
-                null;
-        String liftAnnotationTypeVarName = 
+                        node.getValue().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        ExpressionNode liftAnnotationType = 
                 node.getAnnotationType() != null ?
-                node.getAnnotationType().executeOperation(this,p) :
-                null;
-
-        String myVarName = getUniqueName();
-        statements.add(
-                factory.makeVariableDeclarationNode(
-                        factory.makeVariableModifiersNode(
-                                false,
-                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
-                factory.makeListNode(
-                        Collections.singletonList(
-                                factory.makeVariableDeclaratorNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.makeSimpleNameNode(
-                                                        factory.makeIdentifierNode("SingleElementAnnotationNode"),
-                                                        NameCategory.TYPE)),
-                                        factory.makeIdentifierNode(myVarName),
-                                        factory.makeMethodInvocationByExpressionNode(
-                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                                                factory.makeIdentifierNode("makeSingleElementAnnotationNode"),
-                                                factory.makeListNode(
-                                                        Arrays.<ExpressionNode>asList(
-                                                                liftValueVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftValueVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                liftAnnotationTypeVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftAnnotationTypeVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null)
-                                                                )),
-                                                factory.makeListNode(Collections.<TypeNode>emptyList()))
-            )))));
-
-        return myVarName;
+                        node.getAnnotationType().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeSingleElementAnnotationNode"),
+                        factory.makeListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        liftValue,
+                                        liftAnnotationType)),
+                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
     }
-
+    
     @Override
-    public String executeClassLiteralNode(ClassLiteralNode node, Pair<ExpressionNode,List<BlockStatementNode>> p)
+    public ExpressionNode executeClassLiteralNode(ClassLiteralNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode factoryNode = p.getFirst();
-        List<BlockStatementNode> statements = p.getSecond();
-
-        String liftValueVarName = 
+        ExpressionNode liftValue = 
                 node.getValue() != null ?
-                node.getValue().executeOperation(this,p) :
-                null;
-
-        String myVarName = getUniqueName();
-        statements.add(
-                factory.makeVariableDeclarationNode(
-                        factory.makeVariableModifiersNode(
-                                false,
-                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
-                factory.makeListNode(
-                        Collections.singletonList(
-                                factory.makeVariableDeclaratorNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.makeSimpleNameNode(
-                                                        factory.makeIdentifierNode("ClassLiteralNode"),
-                                                        NameCategory.TYPE)),
-                                        factory.makeIdentifierNode(myVarName),
-                                        factory.makeMethodInvocationByExpressionNode(
-                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                                                factory.makeIdentifierNode("makeClassLiteralNode"),
-                                                factory.makeListNode(
-                                                        Arrays.<ExpressionNode>asList(
-                                                                liftValueVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftValueVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null)
-                                                                )),
-                                                factory.makeListNode(Collections.<TypeNode>emptyList()))
-            )))));
-
-        return myVarName;
+                        node.getValue().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeClassLiteralNode"),
+                        factory.makeListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        liftValue)),
+                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
     }
-
+    
     @Override
-    public String executeSuperMethodInvocationNode(SuperMethodInvocationNode node, Pair<ExpressionNode,List<BlockStatementNode>> p)
+    public ExpressionNode executeSuperMethodInvocationNode(SuperMethodInvocationNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode factoryNode = p.getFirst();
-        List<BlockStatementNode> statements = p.getSecond();
-
-        String liftTypeVarName = 
+        ExpressionNode liftType = 
                 node.getType() != null ?
-                node.getType().executeOperation(this,p) :
-                null;
-        String liftIdentifierVarName = 
+                        node.getType().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        ExpressionNode liftIdentifier = 
                 node.getIdentifier() != null ?
-                node.getIdentifier().executeOperation(this,p) :
-                null;
+                        node.getIdentifier().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         argsForListNodeStack.push("ExpressionNode");
-        String liftArgumentsVarName = 
+        ExpressionNode liftArguments = 
                 node.getArguments() != null ?
-                node.getArguments().executeOperation(this,p) :
-                null;
+                        node.getArguments().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         argsForListNodeStack.pop();
         argsForListNodeStack.push("TypeNode");
-        String liftTypeArgumentsVarName = 
+        ExpressionNode liftTypeArguments = 
                 node.getTypeArguments() != null ?
-                node.getTypeArguments().executeOperation(this,p) :
-                null;
+                        node.getTypeArguments().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         argsForListNodeStack.pop();
-
-        String myVarName = getUniqueName();
-        statements.add(
-                factory.makeVariableDeclarationNode(
-                        factory.makeVariableModifiersNode(
-                                false,
-                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
-                factory.makeListNode(
-                        Collections.singletonList(
-                                factory.makeVariableDeclaratorNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.makeSimpleNameNode(
-                                                        factory.makeIdentifierNode("SuperMethodInvocationNode"),
-                                                        NameCategory.TYPE)),
-                                        factory.makeIdentifierNode(myVarName),
-                                        factory.makeMethodInvocationByExpressionNode(
-                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                                                factory.makeIdentifierNode("makeSuperMethodInvocationNode"),
-                                                factory.makeListNode(
-                                                        Arrays.<ExpressionNode>asList(
-                                                                liftTypeVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftTypeVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                liftIdentifierVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftIdentifierVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                liftArgumentsVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftArgumentsVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                liftTypeArgumentsVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftTypeArgumentsVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null)
-                                                                )),
-                                                factory.makeListNode(Collections.<TypeNode>emptyList()))
-            )))));
-
-        return myVarName;
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeSuperMethodInvocationNode"),
+                        factory.makeListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        liftType,
+                                        liftIdentifier,
+                                        liftArguments,
+                                        liftTypeArguments)),
+                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
     }
-
+    
     @Override
-    public String executeClassModifiersNode(ClassModifiersNode node, Pair<ExpressionNode,List<BlockStatementNode>> p)
+    public ExpressionNode executeClassModifiersNode(ClassModifiersNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode factoryNode = p.getFirst();
-        List<BlockStatementNode> statements = p.getSecond();
-
         AccessModifier liftAccessValue = 
                 node.getAccess();
         boolean liftAbstractFlagValue = 
@@ -4302,941 +2426,523 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
         boolean liftStrictfpFlagValue = 
                 node.getStrictfpFlag();
         argsForListNodeStack.push("AnnotationNode");
-        String liftAnnotationsVarName = 
+        ExpressionNode liftAnnotations = 
                 node.getAnnotations() != null ?
-                node.getAnnotations().executeOperation(this,p) :
-                null;
+                        node.getAnnotations().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         argsForListNodeStack.pop();
-
-        String myVarName = getUniqueName();
-        statements.add(
-                factory.makeVariableDeclarationNode(
-                        factory.makeVariableModifiersNode(
-                                false,
-                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
-                factory.makeListNode(
-                        Collections.singletonList(
-                                factory.makeVariableDeclaratorNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.makeSimpleNameNode(
-                                                        factory.makeIdentifierNode("ClassModifiersNode"),
-                                                        NameCategory.TYPE)),
-                                        factory.makeIdentifierNode(myVarName),
-                                        factory.makeMethodInvocationByExpressionNode(
-                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                                                factory.makeIdentifierNode("makeClassModifiersNode"),
-                                                factory.makeListNode(
-                                                        Arrays.<ExpressionNode>asList(
-                                                                expressionizeAccessModifier(liftAccessValue),
-                                                                expressionizeBoolean(liftAbstractFlagValue),
-                                                                expressionizeBoolean(liftStaticFlagValue),
-                                                                expressionizeBoolean(liftFinalFlagValue),
-                                                                expressionizeBoolean(liftStrictfpFlagValue),
-                                                                liftAnnotationsVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftAnnotationsVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null)
-                                                                )),
-                                                factory.makeListNode(Collections.<TypeNode>emptyList()))
-            )))));
-
-        return myVarName;
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeClassModifiersNode"),
+                        factory.makeListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        expressionizeAccessModifier(liftAccessValue),
+                                        expressionizeBoolean(liftAbstractFlagValue),
+                                        expressionizeBoolean(liftStaticFlagValue),
+                                        expressionizeBoolean(liftFinalFlagValue),
+                                        expressionizeBoolean(liftStrictfpFlagValue),
+                                        liftAnnotations)),
+                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
     }
-
+    
     @Override
-    public String executeArrayInitializerNode(ArrayInitializerNode node, Pair<ExpressionNode,List<BlockStatementNode>> p)
+    public ExpressionNode executeArrayInitializerNode(ArrayInitializerNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode factoryNode = p.getFirst();
-        List<BlockStatementNode> statements = p.getSecond();
-
         argsForListNodeStack.push("VariableInitializerNode");
-        String liftInitializersVarName = 
+        ExpressionNode liftInitializers = 
                 node.getInitializers() != null ?
-                node.getInitializers().executeOperation(this,p) :
-                null;
+                        node.getInitializers().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         argsForListNodeStack.pop();
-
-        String myVarName = getUniqueName();
-        statements.add(
-                factory.makeVariableDeclarationNode(
-                        factory.makeVariableModifiersNode(
-                                false,
-                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
-                factory.makeListNode(
-                        Collections.singletonList(
-                                factory.makeVariableDeclaratorNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.makeSimpleNameNode(
-                                                        factory.makeIdentifierNode("ArrayInitializerNode"),
-                                                        NameCategory.TYPE)),
-                                        factory.makeIdentifierNode(myVarName),
-                                        factory.makeMethodInvocationByExpressionNode(
-                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                                                factory.makeIdentifierNode("makeArrayInitializerNode"),
-                                                factory.makeListNode(
-                                                        Arrays.<ExpressionNode>asList(
-                                                                liftInitializersVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftInitializersVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null)
-                                                                )),
-                                                factory.makeListNode(Collections.<TypeNode>emptyList()))
-            )))));
-
-        return myVarName;
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeArrayInitializerNode"),
+                        factory.makeListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        liftInitializers)),
+                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
     }
-
+    
     @Override
-    public String executeAnnotationExpressionValueNode(AnnotationExpressionValueNode node, Pair<ExpressionNode,List<BlockStatementNode>> p)
+    public ExpressionNode executeAnnotationExpressionValueNode(AnnotationExpressionValueNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode factoryNode = p.getFirst();
-        List<BlockStatementNode> statements = p.getSecond();
-
-        String liftExpressionVarName = 
+        ExpressionNode liftExpression = 
                 node.getExpression() != null ?
-                node.getExpression().executeOperation(this,p) :
-                null;
-
-        String myVarName = getUniqueName();
-        statements.add(
-                factory.makeVariableDeclarationNode(
-                        factory.makeVariableModifiersNode(
-                                false,
-                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
-                factory.makeListNode(
-                        Collections.singletonList(
-                                factory.makeVariableDeclaratorNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.makeSimpleNameNode(
-                                                        factory.makeIdentifierNode("AnnotationExpressionValueNode"),
-                                                        NameCategory.TYPE)),
-                                        factory.makeIdentifierNode(myVarName),
-                                        factory.makeMethodInvocationByExpressionNode(
-                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                                                factory.makeIdentifierNode("makeAnnotationExpressionValueNode"),
-                                                factory.makeListNode(
-                                                        Arrays.<ExpressionNode>asList(
-                                                                liftExpressionVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftExpressionVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null)
-                                                                )),
-                                                factory.makeListNode(Collections.<TypeNode>emptyList()))
-            )))));
-
-        return myVarName;
+                        node.getExpression().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeAnnotationExpressionValueNode"),
+                        factory.makeListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        liftExpression)),
+                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
     }
-
+    
     @Override
-    public String executeReturnNode(ReturnNode node, Pair<ExpressionNode,List<BlockStatementNode>> p)
+    public ExpressionNode executeReturnNode(ReturnNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode factoryNode = p.getFirst();
-        List<BlockStatementNode> statements = p.getSecond();
-
-        String liftExpressionVarName = 
+        ExpressionNode liftExpression = 
                 node.getExpression() != null ?
-                node.getExpression().executeOperation(this,p) :
-                null;
-
-        String myVarName = getUniqueName();
-        statements.add(
-                factory.makeVariableDeclarationNode(
-                        factory.makeVariableModifiersNode(
-                                false,
-                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
-                factory.makeListNode(
-                        Collections.singletonList(
-                                factory.makeVariableDeclaratorNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.makeSimpleNameNode(
-                                                        factory.makeIdentifierNode("ReturnNode"),
-                                                        NameCategory.TYPE)),
-                                        factory.makeIdentifierNode(myVarName),
-                                        factory.makeMethodInvocationByExpressionNode(
-                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                                                factory.makeIdentifierNode("makeReturnNode"),
-                                                factory.makeListNode(
-                                                        Arrays.<ExpressionNode>asList(
-                                                                liftExpressionVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftExpressionVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null)
-                                                                )),
-                                                factory.makeListNode(Collections.<TypeNode>emptyList()))
-            )))));
-
-        return myVarName;
+                        node.getExpression().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeReturnNode"),
+                        factory.makeListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        liftExpression)),
+                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
     }
-
+    
     @Override
-    public String executeAssignmentNode(AssignmentNode node, Pair<ExpressionNode,List<BlockStatementNode>> p)
+    public ExpressionNode executeAssignmentNode(AssignmentNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode factoryNode = p.getFirst();
-        List<BlockStatementNode> statements = p.getSecond();
-
-        String liftVariableVarName = 
+        ExpressionNode liftVariable = 
                 node.getVariable() != null ?
-                node.getVariable().executeOperation(this,p) :
-                null;
+                        node.getVariable().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         AssignmentOperator liftOperatorValue = 
                 node.getOperator();
-        String liftExpressionVarName = 
+        ExpressionNode liftExpression = 
                 node.getExpression() != null ?
-                node.getExpression().executeOperation(this,p) :
-                null;
-
-        String myVarName = getUniqueName();
-        statements.add(
-                factory.makeVariableDeclarationNode(
-                        factory.makeVariableModifiersNode(
-                                false,
-                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
-                factory.makeListNode(
-                        Collections.singletonList(
-                                factory.makeVariableDeclaratorNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.makeSimpleNameNode(
-                                                        factory.makeIdentifierNode("AssignmentNode"),
-                                                        NameCategory.TYPE)),
-                                        factory.makeIdentifierNode(myVarName),
-                                        factory.makeMethodInvocationByExpressionNode(
-                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                                                factory.makeIdentifierNode("makeAssignmentNode"),
-                                                factory.makeListNode(
-                                                        Arrays.<ExpressionNode>asList(
-                                                                liftVariableVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftVariableVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                expressionizeAssignmentOperator(liftOperatorValue),
-                                                                liftExpressionVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftExpressionVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null)
-                                                                )),
-                                                factory.makeListNode(Collections.<TypeNode>emptyList()))
-            )))));
-
-        return myVarName;
+                        node.getExpression().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeAssignmentNode"),
+                        factory.makeListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        liftVariable,
+                                        expressionizeAssignmentOperator(liftOperatorValue),
+                                        liftExpression)),
+                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
     }
-
+    
     @Override
-    public String executeMethodInvocationByExpressionNode(MethodInvocationByExpressionNode node, Pair<ExpressionNode,List<BlockStatementNode>> p)
+    public ExpressionNode executeMethodInvocationByExpressionNode(MethodInvocationByExpressionNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode factoryNode = p.getFirst();
-        List<BlockStatementNode> statements = p.getSecond();
-
-        String liftExpressionVarName = 
+        ExpressionNode liftExpression = 
                 node.getExpression() != null ?
-                node.getExpression().executeOperation(this,p) :
-                null;
-        String liftIdentifierVarName = 
+                        node.getExpression().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        ExpressionNode liftIdentifier = 
                 node.getIdentifier() != null ?
-                node.getIdentifier().executeOperation(this,p) :
-                null;
+                        node.getIdentifier().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         argsForListNodeStack.push("ExpressionNode");
-        String liftArgumentsVarName = 
+        ExpressionNode liftArguments = 
                 node.getArguments() != null ?
-                node.getArguments().executeOperation(this,p) :
-                null;
+                        node.getArguments().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         argsForListNodeStack.pop();
         argsForListNodeStack.push("TypeNode");
-        String liftTypeArgumentsVarName = 
+        ExpressionNode liftTypeArguments = 
                 node.getTypeArguments() != null ?
-                node.getTypeArguments().executeOperation(this,p) :
-                null;
+                        node.getTypeArguments().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         argsForListNodeStack.pop();
-
-        String myVarName = getUniqueName();
-        statements.add(
-                factory.makeVariableDeclarationNode(
-                        factory.makeVariableModifiersNode(
-                                false,
-                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
-                factory.makeListNode(
-                        Collections.singletonList(
-                                factory.makeVariableDeclaratorNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.makeSimpleNameNode(
-                                                        factory.makeIdentifierNode("MethodInvocationByExpressionNode"),
-                                                        NameCategory.TYPE)),
-                                        factory.makeIdentifierNode(myVarName),
-                                        factory.makeMethodInvocationByExpressionNode(
-                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                                                factory.makeIdentifierNode("makeMethodInvocationByExpressionNode"),
-                                                factory.makeListNode(
-                                                        Arrays.<ExpressionNode>asList(
-                                                                liftExpressionVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftExpressionVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                liftIdentifierVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftIdentifierVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                liftArgumentsVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftArgumentsVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                liftTypeArgumentsVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftTypeArgumentsVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null)
-                                                                )),
-                                                factory.makeListNode(Collections.<TypeNode>emptyList()))
-            )))));
-
-        return myVarName;
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeMethodInvocationByExpressionNode"),
+                        factory.makeListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        liftExpression,
+                                        liftIdentifier,
+                                        liftArguments,
+                                        liftTypeArguments)),
+                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
     }
-
+    
     @Override
-    public String executeInstanceOfNode(InstanceOfNode node, Pair<ExpressionNode,List<BlockStatementNode>> p)
+    public ExpressionNode executeInstanceOfNode(InstanceOfNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode factoryNode = p.getFirst();
-        List<BlockStatementNode> statements = p.getSecond();
-
-        String liftExpressionVarName = 
+        ExpressionNode liftExpression = 
                 node.getExpression() != null ?
-                node.getExpression().executeOperation(this,p) :
-                null;
-        String liftTypeVarName = 
+                        node.getExpression().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        ExpressionNode liftType = 
                 node.getType() != null ?
-                node.getType().executeOperation(this,p) :
-                null;
-
-        String myVarName = getUniqueName();
-        statements.add(
-                factory.makeVariableDeclarationNode(
-                        factory.makeVariableModifiersNode(
-                                false,
-                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
-                factory.makeListNode(
-                        Collections.singletonList(
-                                factory.makeVariableDeclaratorNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.makeSimpleNameNode(
-                                                        factory.makeIdentifierNode("InstanceOfNode"),
-                                                        NameCategory.TYPE)),
-                                        factory.makeIdentifierNode(myVarName),
-                                        factory.makeMethodInvocationByExpressionNode(
-                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                                                factory.makeIdentifierNode("makeInstanceOfNode"),
-                                                factory.makeListNode(
-                                                        Arrays.<ExpressionNode>asList(
-                                                                liftExpressionVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftExpressionVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                liftTypeVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftTypeVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null)
-                                                                )),
-                                                factory.makeListNode(Collections.<TypeNode>emptyList()))
-            )))));
-
-        return myVarName;
+                        node.getType().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeInstanceOfNode"),
+                        factory.makeListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        liftExpression,
+                                        liftType)),
+                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
     }
-
+    
     @Override
-    public String executeConditionalExpressionNode(ConditionalExpressionNode node, Pair<ExpressionNode,List<BlockStatementNode>> p)
+    public ExpressionNode executeConditionalExpressionNode(ConditionalExpressionNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode factoryNode = p.getFirst();
-        List<BlockStatementNode> statements = p.getSecond();
-
-        String liftConditionVarName = 
+        ExpressionNode liftCondition = 
                 node.getCondition() != null ?
-                node.getCondition().executeOperation(this,p) :
-                null;
-        String liftTrueExpressionVarName = 
+                        node.getCondition().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        ExpressionNode liftTrueExpression = 
                 node.getTrueExpression() != null ?
-                node.getTrueExpression().executeOperation(this,p) :
-                null;
-        String liftFalseExpressionVarName = 
+                        node.getTrueExpression().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        ExpressionNode liftFalseExpression = 
                 node.getFalseExpression() != null ?
-                node.getFalseExpression().executeOperation(this,p) :
-                null;
-
-        String myVarName = getUniqueName();
-        statements.add(
-                factory.makeVariableDeclarationNode(
-                        factory.makeVariableModifiersNode(
-                                false,
-                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
-                factory.makeListNode(
-                        Collections.singletonList(
-                                factory.makeVariableDeclaratorNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.makeSimpleNameNode(
-                                                        factory.makeIdentifierNode("ConditionalExpressionNode"),
-                                                        NameCategory.TYPE)),
-                                        factory.makeIdentifierNode(myVarName),
-                                        factory.makeMethodInvocationByExpressionNode(
-                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                                                factory.makeIdentifierNode("makeConditionalExpressionNode"),
-                                                factory.makeListNode(
-                                                        Arrays.<ExpressionNode>asList(
-                                                                liftConditionVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftConditionVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                liftTrueExpressionVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftTrueExpressionVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                liftFalseExpressionVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftFalseExpressionVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null)
-                                                                )),
-                                                factory.makeListNode(Collections.<TypeNode>emptyList()))
-            )))));
-
-        return myVarName;
+                        node.getFalseExpression().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeConditionalExpressionNode"),
+                        factory.makeListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        liftCondition,
+                                        liftTrueExpression,
+                                        liftFalseExpression)),
+                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
     }
-
+    
     @Override
-    public String executeParenthesizedExpressionNode(ParenthesizedExpressionNode node, Pair<ExpressionNode,List<BlockStatementNode>> p)
+    public ExpressionNode executeParenthesizedExpressionNode(ParenthesizedExpressionNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode factoryNode = p.getFirst();
-        List<BlockStatementNode> statements = p.getSecond();
-
-        String liftExpressionVarName = 
+        ExpressionNode liftExpression = 
                 node.getExpression() != null ?
-                node.getExpression().executeOperation(this,p) :
-                null;
-
-        String myVarName = getUniqueName();
-        statements.add(
-                factory.makeVariableDeclarationNode(
-                        factory.makeVariableModifiersNode(
-                                false,
-                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
-                factory.makeListNode(
-                        Collections.singletonList(
-                                factory.makeVariableDeclaratorNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.makeSimpleNameNode(
-                                                        factory.makeIdentifierNode("ParenthesizedExpressionNode"),
-                                                        NameCategory.TYPE)),
-                                        factory.makeIdentifierNode(myVarName),
-                                        factory.makeMethodInvocationByExpressionNode(
-                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                                                factory.makeIdentifierNode("makeParenthesizedExpressionNode"),
-                                                factory.makeListNode(
-                                                        Arrays.<ExpressionNode>asList(
-                                                                liftExpressionVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftExpressionVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null)
-                                                                )),
-                                                factory.makeListNode(Collections.<TypeNode>emptyList()))
-            )))));
-
-        return myVarName;
+                        node.getExpression().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeParenthesizedExpressionNode"),
+                        factory.makeListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        liftExpression)),
+                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
     }
-
+    
     @Override
-    public String executeFloatLiteralNode(FloatLiteralNode node, Pair<ExpressionNode,List<BlockStatementNode>> p)
+    public ExpressionNode executeFloatLiteralNode(FloatLiteralNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode factoryNode = p.getFirst();
-        List<BlockStatementNode> statements = p.getSecond();
-
         Float liftValueValue = 
                 node.getValue();
-
-        String myVarName = getUniqueName();
-        statements.add(
-                factory.makeVariableDeclarationNode(
-                        factory.makeVariableModifiersNode(
-                                false,
-                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
-                factory.makeListNode(
-                        Collections.singletonList(
-                                factory.makeVariableDeclaratorNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.makeSimpleNameNode(
-                                                        factory.makeIdentifierNode("FloatLiteralNode"),
-                                                        NameCategory.TYPE)),
-                                        factory.makeIdentifierNode(myVarName),
-                                        factory.makeMethodInvocationByExpressionNode(
-                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                                                factory.makeIdentifierNode("makeFloatLiteralNode"),
-                                                factory.makeListNode(
-                                                        Arrays.<ExpressionNode>asList(
-                                                                expressionizeFloat(liftValueValue)
-                                                                )),
-                                                factory.makeListNode(Collections.<TypeNode>emptyList()))
-            )))));
-
-        return myVarName;
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeFloatLiteralNode"),
+                        factory.makeListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        expressionizeFloat(liftValueValue))),
+                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
     }
-
+    
     @Override
-    public String executeMethodInvocationByNameNode(MethodInvocationByNameNode node, Pair<ExpressionNode,List<BlockStatementNode>> p)
+    public ExpressionNode executeMethodInvocationByNameNode(MethodInvocationByNameNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode factoryNode = p.getFirst();
-        List<BlockStatementNode> statements = p.getSecond();
-
-        String liftNameVarName = 
+        ExpressionNode liftName = 
                 node.getName() != null ?
-                node.getName().executeOperation(this,p) :
-                null;
+                        node.getName().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         argsForListNodeStack.push("ExpressionNode");
-        String liftArgumentsVarName = 
+        ExpressionNode liftArguments = 
                 node.getArguments() != null ?
-                node.getArguments().executeOperation(this,p) :
-                null;
+                        node.getArguments().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         argsForListNodeStack.pop();
         argsForListNodeStack.push("TypeNode");
-        String liftTypeArgumentsVarName = 
+        ExpressionNode liftTypeArguments = 
                 node.getTypeArguments() != null ?
-                node.getTypeArguments().executeOperation(this,p) :
-                null;
+                        node.getTypeArguments().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         argsForListNodeStack.pop();
-
-        String myVarName = getUniqueName();
-        statements.add(
-                factory.makeVariableDeclarationNode(
-                        factory.makeVariableModifiersNode(
-                                false,
-                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
-                factory.makeListNode(
-                        Collections.singletonList(
-                                factory.makeVariableDeclaratorNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.makeSimpleNameNode(
-                                                        factory.makeIdentifierNode("MethodInvocationByNameNode"),
-                                                        NameCategory.TYPE)),
-                                        factory.makeIdentifierNode(myVarName),
-                                        factory.makeMethodInvocationByExpressionNode(
-                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                                                factory.makeIdentifierNode("makeMethodInvocationByNameNode"),
-                                                factory.makeListNode(
-                                                        Arrays.<ExpressionNode>asList(
-                                                                liftNameVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftNameVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                liftArgumentsVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftArgumentsVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                liftTypeArgumentsVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftTypeArgumentsVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null)
-                                                                )),
-                                                factory.makeListNode(Collections.<TypeNode>emptyList()))
-            )))));
-
-        return myVarName;
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeMethodInvocationByNameNode"),
+                        factory.makeListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        liftName,
+                                        liftArguments,
+                                        liftTypeArguments)),
+                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
     }
-
+    
     @Override
-    public String executeParameterizedTypeNode(ParameterizedTypeNode node, Pair<ExpressionNode,List<BlockStatementNode>> p)
+    public ExpressionNode executeParameterizedTypeNode(ParameterizedTypeNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode factoryNode = p.getFirst();
-        List<BlockStatementNode> statements = p.getSecond();
-
-        String liftBaseTypeVarName = 
+        ExpressionNode liftBaseType = 
                 node.getBaseType() != null ?
-                node.getBaseType().executeOperation(this,p) :
-                null;
+                        node.getBaseType().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         argsForListNodeStack.push("TypeArgumentNode");
-        String liftTypeArgumentsVarName = 
+        ExpressionNode liftTypeArguments = 
                 node.getTypeArguments() != null ?
-                node.getTypeArguments().executeOperation(this,p) :
-                null;
+                        node.getTypeArguments().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         argsForListNodeStack.pop();
-
-        String myVarName = getUniqueName();
-        statements.add(
-                factory.makeVariableDeclarationNode(
-                        factory.makeVariableModifiersNode(
-                                false,
-                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
-                factory.makeListNode(
-                        Collections.singletonList(
-                                factory.makeVariableDeclaratorNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.makeSimpleNameNode(
-                                                        factory.makeIdentifierNode("ParameterizedTypeNode"),
-                                                        NameCategory.TYPE)),
-                                        factory.makeIdentifierNode(myVarName),
-                                        factory.makeMethodInvocationByExpressionNode(
-                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                                                factory.makeIdentifierNode("makeParameterizedTypeNode"),
-                                                factory.makeListNode(
-                                                        Arrays.<ExpressionNode>asList(
-                                                                liftBaseTypeVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftBaseTypeVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                liftTypeArgumentsVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftTypeArgumentsVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null)
-                                                                )),
-                                                factory.makeListNode(Collections.<TypeNode>emptyList()))
-            )))));
-
-        return myVarName;
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeParameterizedTypeNode"),
+                        factory.makeListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        liftBaseType,
+                                        liftTypeArguments)),
+                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
     }
-
+    
     @Override
-    public String executeInterfaceDeclarationNode(InterfaceDeclarationNode node, Pair<ExpressionNode,List<BlockStatementNode>> p)
+    public ExpressionNode executeInterfaceDeclarationNode(InterfaceDeclarationNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode factoryNode = p.getFirst();
-        List<BlockStatementNode> statements = p.getSecond();
-
-        String liftModifiersVarName = 
+        ExpressionNode liftModifiers = 
                 node.getModifiers() != null ?
-                node.getModifiers().executeOperation(this,p) :
-                null;
+                        node.getModifiers().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         argsForListNodeStack.push("TypeNode");
-        String liftExtendsClauseVarName = 
+        ExpressionNode liftExtendsClause = 
                 node.getExtendsClause() != null ?
-                node.getExtendsClause().executeOperation(this,p) :
-                null;
+                        node.getExtendsClause().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         argsForListNodeStack.pop();
-        String liftBodyVarName = 
+        ExpressionNode liftBody = 
                 node.getBody() != null ?
-                node.getBody().executeOperation(this,p) :
-                null;
+                        node.getBody().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         argsForListNodeStack.push("TypeParameterNode");
-        String liftTypeParametersVarName = 
+        ExpressionNode liftTypeParameters = 
                 node.getTypeParameters() != null ?
-                node.getTypeParameters().executeOperation(this,p) :
-                null;
+                        node.getTypeParameters().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         argsForListNodeStack.pop();
-        String liftIdentifierVarName = 
+        ExpressionNode liftIdentifier = 
                 node.getIdentifier() != null ?
-                node.getIdentifier().executeOperation(this,p) :
-                null;
-        String liftJavadocVarName = 
+                        node.getIdentifier().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        ExpressionNode liftJavadoc = 
                 node.getJavadoc() != null ?
-                node.getJavadoc().executeOperation(this,p) :
-                null;
-
-        String myVarName = getUniqueName();
-        statements.add(
-                factory.makeVariableDeclarationNode(
-                        factory.makeVariableModifiersNode(
-                                false,
-                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
-                factory.makeListNode(
-                        Collections.singletonList(
-                                factory.makeVariableDeclaratorNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.makeSimpleNameNode(
-                                                        factory.makeIdentifierNode("InterfaceDeclarationNode"),
-                                                        NameCategory.TYPE)),
-                                        factory.makeIdentifierNode(myVarName),
-                                        factory.makeMethodInvocationByExpressionNode(
-                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                                                factory.makeIdentifierNode("makeInterfaceDeclarationNode"),
-                                                factory.makeListNode(
-                                                        Arrays.<ExpressionNode>asList(
-                                                                liftModifiersVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftModifiersVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                liftExtendsClauseVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftExtendsClauseVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                liftBodyVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftBodyVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                liftTypeParametersVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftTypeParametersVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                liftIdentifierVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftIdentifierVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                liftJavadocVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftJavadocVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null)
-                                                                )),
-                                                factory.makeListNode(Collections.<TypeNode>emptyList()))
-            )))));
-
-        return myVarName;
+                        node.getJavadoc().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeInterfaceDeclarationNode"),
+                        factory.makeListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        liftModifiers,
+                                        liftExtendsClause,
+                                        liftBody,
+                                        liftTypeParameters,
+                                        liftIdentifier,
+                                        liftJavadoc)),
+                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
     }
-
+    
     @Override
-    public String executeForInitializerDeclarationNode(ForInitializerDeclarationNode node, Pair<ExpressionNode,List<BlockStatementNode>> p)
+    public ExpressionNode executeForInitializerDeclarationNode(ForInitializerDeclarationNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode factoryNode = p.getFirst();
-        List<BlockStatementNode> statements = p.getSecond();
-
-        String liftDeclarationVarName = 
+        ExpressionNode liftDeclaration = 
                 node.getDeclaration() != null ?
-                node.getDeclaration().executeOperation(this,p) :
-                null;
-
-        String myVarName = getUniqueName();
-        statements.add(
-                factory.makeVariableDeclarationNode(
-                        factory.makeVariableModifiersNode(
-                                false,
-                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
-                factory.makeListNode(
-                        Collections.singletonList(
-                                factory.makeVariableDeclaratorNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.makeSimpleNameNode(
-                                                        factory.makeIdentifierNode("ForInitializerDeclarationNode"),
-                                                        NameCategory.TYPE)),
-                                        factory.makeIdentifierNode(myVarName),
-                                        factory.makeMethodInvocationByExpressionNode(
-                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                                                factory.makeIdentifierNode("makeForInitializerDeclarationNode"),
-                                                factory.makeListNode(
-                                                        Arrays.<ExpressionNode>asList(
-                                                                liftDeclarationVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftDeclarationVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null)
-                                                                )),
-                                                factory.makeListNode(Collections.<TypeNode>emptyList()))
-            )))));
-
-        return myVarName;
+                        node.getDeclaration().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeForInitializerDeclarationNode"),
+                        factory.makeListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        liftDeclaration)),
+                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
     }
-
+    
     @Override
-    public String executeConstructorBodyNode(ConstructorBodyNode node, Pair<ExpressionNode,List<BlockStatementNode>> p)
+    public ExpressionNode executeConstructorBodyNode(ConstructorBodyNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode factoryNode = p.getFirst();
-        List<BlockStatementNode> statements = p.getSecond();
-
-        String liftConstructorInvocationVarName = 
+        ExpressionNode liftConstructorInvocation = 
                 node.getConstructorInvocation() != null ?
-                node.getConstructorInvocation().executeOperation(this,p) :
-                null;
+                        node.getConstructorInvocation().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         argsForListNodeStack.push("BlockStatementNode");
-        String liftStatementsVarName = 
+        ExpressionNode liftStatements = 
                 node.getStatements() != null ?
-                node.getStatements().executeOperation(this,p) :
-                null;
+                        node.getStatements().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         argsForListNodeStack.pop();
-
-        String myVarName = getUniqueName();
-        statements.add(
-                factory.makeVariableDeclarationNode(
-                        factory.makeVariableModifiersNode(
-                                false,
-                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
-                factory.makeListNode(
-                        Collections.singletonList(
-                                factory.makeVariableDeclaratorNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.makeSimpleNameNode(
-                                                        factory.makeIdentifierNode("ConstructorBodyNode"),
-                                                        NameCategory.TYPE)),
-                                        factory.makeIdentifierNode(myVarName),
-                                        factory.makeMethodInvocationByExpressionNode(
-                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                                                factory.makeIdentifierNode("makeConstructorBodyNode"),
-                                                factory.makeListNode(
-                                                        Arrays.<ExpressionNode>asList(
-                                                                liftConstructorInvocationVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftConstructorInvocationVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                liftStatementsVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftStatementsVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null)
-                                                                )),
-                                                factory.makeListNode(Collections.<TypeNode>emptyList()))
-            )))));
-
-        return myVarName;
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeConstructorBodyNode"),
+                        factory.makeListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        liftConstructorInvocation,
+                                        liftStatements)),
+                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
     }
-
+    
     @Override
-    public String executeFieldAccessByNameNode(FieldAccessByNameNode node, Pair<ExpressionNode,List<BlockStatementNode>> p)
+    public ExpressionNode executeFieldAccessByNameNode(FieldAccessByNameNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode factoryNode = p.getFirst();
-        List<BlockStatementNode> statements = p.getSecond();
-
-        String liftNameVarName = 
+        ExpressionNode liftName = 
                 node.getName() != null ?
-                node.getName().executeOperation(this,p) :
-                null;
-
-        String myVarName = getUniqueName();
-        statements.add(
-                factory.makeVariableDeclarationNode(
-                        factory.makeVariableModifiersNode(
-                                false,
-                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
-                factory.makeListNode(
-                        Collections.singletonList(
-                                factory.makeVariableDeclaratorNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.makeSimpleNameNode(
-                                                        factory.makeIdentifierNode("FieldAccessByNameNode"),
-                                                        NameCategory.TYPE)),
-                                        factory.makeIdentifierNode(myVarName),
-                                        factory.makeMethodInvocationByExpressionNode(
-                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                                                factory.makeIdentifierNode("makeFieldAccessByNameNode"),
-                                                factory.makeListNode(
-                                                        Arrays.<ExpressionNode>asList(
-                                                                liftNameVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftNameVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null)
-                                                                )),
-                                                factory.makeListNode(Collections.<TypeNode>emptyList()))
-            )))));
-
-        return myVarName;
+                        node.getName().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeFieldAccessByNameNode"),
+                        factory.makeListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        liftName)),
+                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
     }
-
+    
     @Override
-    public String executeUnqualifiedClassInstantiationNode(UnqualifiedClassInstantiationNode node, Pair<ExpressionNode,List<BlockStatementNode>> p)
+    public ExpressionNode executeUnqualifiedClassInstantiationNode(UnqualifiedClassInstantiationNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode factoryNode = p.getFirst();
-        List<BlockStatementNode> statements = p.getSecond();
-
-        String liftTypeVarName = 
+        ExpressionNode liftType = 
                 node.getType() != null ?
-                node.getType().executeOperation(this,p) :
-                null;
+                        node.getType().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         argsForListNodeStack.push("TypeArgumentNode");
-        String liftConstructorTypeArgumentsVarName = 
+        ExpressionNode liftConstructorTypeArguments = 
                 node.getConstructorTypeArguments() != null ?
-                node.getConstructorTypeArguments().executeOperation(this,p) :
-                null;
+                        node.getConstructorTypeArguments().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         argsForListNodeStack.pop();
         argsForListNodeStack.push("ExpressionNode");
-        String liftArgumentsVarName = 
+        ExpressionNode liftArguments = 
                 node.getArguments() != null ?
-                node.getArguments().executeOperation(this,p) :
-                null;
+                        node.getArguments().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         argsForListNodeStack.pop();
-        String liftBodyVarName = 
+        ExpressionNode liftBody = 
                 node.getBody() != null ?
-                node.getBody().executeOperation(this,p) :
-                null;
-
-        String myVarName = getUniqueName();
-        statements.add(
-                factory.makeVariableDeclarationNode(
-                        factory.makeVariableModifiersNode(
-                                false,
-                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
-                factory.makeListNode(
-                        Collections.singletonList(
-                                factory.makeVariableDeclaratorNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.makeSimpleNameNode(
-                                                        factory.makeIdentifierNode("UnqualifiedClassInstantiationNode"),
-                                                        NameCategory.TYPE)),
-                                        factory.makeIdentifierNode(myVarName),
-                                        factory.makeMethodInvocationByExpressionNode(
-                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                                                factory.makeIdentifierNode("makeUnqualifiedClassInstantiationNode"),
-                                                factory.makeListNode(
-                                                        Arrays.<ExpressionNode>asList(
-                                                                liftTypeVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftTypeVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                liftConstructorTypeArgumentsVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftConstructorTypeArgumentsVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                liftArgumentsVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftArgumentsVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                liftBodyVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftBodyVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null)
-                                                                )),
-                                                factory.makeListNode(Collections.<TypeNode>emptyList()))
-            )))));
-
-        return myVarName;
+                        node.getBody().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeUnqualifiedClassInstantiationNode"),
+                        factory.makeListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        liftType,
+                                        liftConstructorTypeArguments,
+                                        liftArguments,
+                                        liftBody)),
+                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
     }
-
+    
     @Override
-    public String executeSimpleNameNode(SimpleNameNode node, Pair<ExpressionNode,List<BlockStatementNode>> p)
+    public ExpressionNode executeSimpleNameNode(SimpleNameNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode factoryNode = p.getFirst();
-        List<BlockStatementNode> statements = p.getSecond();
-
-        String liftIdentifierVarName = 
+        ExpressionNode liftIdentifier = 
                 node.getIdentifier() != null ?
-                node.getIdentifier().executeOperation(this,p) :
-                null;
+                        node.getIdentifier().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         NameCategory liftCategoryValue = 
                 node.getCategory();
-
-        String myVarName = getUniqueName();
-        statements.add(
-                factory.makeVariableDeclarationNode(
-                        factory.makeVariableModifiersNode(
-                                false,
-                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
-                factory.makeListNode(
-                        Collections.singletonList(
-                                factory.makeVariableDeclaratorNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.makeSimpleNameNode(
-                                                        factory.makeIdentifierNode("SimpleNameNode"),
-                                                        NameCategory.TYPE)),
-                                        factory.makeIdentifierNode(myVarName),
-                                        factory.makeMethodInvocationByExpressionNode(
-                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                                                factory.makeIdentifierNode("makeSimpleNameNode"),
-                                                factory.makeListNode(
-                                                        Arrays.<ExpressionNode>asList(
-                                                                liftIdentifierVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftIdentifierVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                expressionizeNameCategory(liftCategoryValue)
-                                                                )),
-                                                factory.makeListNode(Collections.<TypeNode>emptyList()))
-            )))));
-
-        return myVarName;
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeSimpleNameNode"),
+                        factory.makeListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        liftIdentifier,
+                                        expressionizeNameCategory(liftCategoryValue))),
+                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
     }
-
+    
     @Override
-    public String executeArrayInstantiatorCreationNode(ArrayInstantiatorCreationNode node, Pair<ExpressionNode,List<BlockStatementNode>> p)
+    public ExpressionNode executeArrayInstantiatorCreationNode(ArrayInstantiatorCreationNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode factoryNode = p.getFirst();
-        List<BlockStatementNode> statements = p.getSecond();
-
         argsForListNodeStack.push("ExpressionNode");
-        String liftDimExpressionsVarName = 
+        ExpressionNode liftDimExpressions = 
                 node.getDimExpressions() != null ?
-                node.getDimExpressions().executeOperation(this,p) :
-                null;
+                        node.getDimExpressions().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         argsForListNodeStack.pop();
-        String liftBaseTypeVarName = 
+        ExpressionNode liftBaseType = 
                 node.getBaseType() != null ?
-                node.getBaseType().executeOperation(this,p) :
-                null;
+                        node.getBaseType().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         int liftArrayLevelsValue = 
                 node.getArrayLevels();
-
-        String myVarName = getUniqueName();
-        statements.add(
-                factory.makeVariableDeclarationNode(
-                        factory.makeVariableModifiersNode(
-                                false,
-                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
-                factory.makeListNode(
-                        Collections.singletonList(
-                                factory.makeVariableDeclaratorNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.makeSimpleNameNode(
-                                                        factory.makeIdentifierNode("ArrayInstantiatorCreationNode"),
-                                                        NameCategory.TYPE)),
-                                        factory.makeIdentifierNode(myVarName),
-                                        factory.makeMethodInvocationByExpressionNode(
-                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                                                factory.makeIdentifierNode("makeArrayInstantiatorCreationNode"),
-                                                factory.makeListNode(
-                                                        Arrays.<ExpressionNode>asList(
-                                                                liftDimExpressionsVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftDimExpressionsVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                liftBaseTypeVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftBaseTypeVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                expressionizeInt(liftArrayLevelsValue)
-                                                                )),
-                                                factory.makeListNode(Collections.<TypeNode>emptyList()))
-            )))));
-
-        return myVarName;
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeArrayInstantiatorCreationNode"),
+                        factory.makeListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        liftDimExpressions,
+                                        liftBaseType,
+                                        expressionizeInt(liftArrayLevelsValue))),
+                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
     }
-
+    
     @Override
-    public String executeMethodModifiersNode(MethodModifiersNode node, Pair<ExpressionNode,List<BlockStatementNode>> p)
+    public ExpressionNode executeMethodModifiersNode(MethodModifiersNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode factoryNode = p.getFirst();
-        List<BlockStatementNode> statements = p.getSecond();
-
         AccessModifier liftAccessValue = 
                 node.getAccess();
         boolean liftAbstractFlagValue = 
@@ -5252,350 +2958,199 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
         boolean liftStrictfpFlagValue = 
                 node.getStrictfpFlag();
         argsForListNodeStack.push("AnnotationNode");
-        String liftAnnotationsVarName = 
+        ExpressionNode liftAnnotations = 
                 node.getAnnotations() != null ?
-                node.getAnnotations().executeOperation(this,p) :
-                null;
+                        node.getAnnotations().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         argsForListNodeStack.pop();
-
-        String myVarName = getUniqueName();
-        statements.add(
-                factory.makeVariableDeclarationNode(
-                        factory.makeVariableModifiersNode(
-                                false,
-                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
-                factory.makeListNode(
-                        Collections.singletonList(
-                                factory.makeVariableDeclaratorNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.makeSimpleNameNode(
-                                                        factory.makeIdentifierNode("MethodModifiersNode"),
-                                                        NameCategory.TYPE)),
-                                        factory.makeIdentifierNode(myVarName),
-                                        factory.makeMethodInvocationByExpressionNode(
-                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                                                factory.makeIdentifierNode("makeMethodModifiersNode"),
-                                                factory.makeListNode(
-                                                        Arrays.<ExpressionNode>asList(
-                                                                expressionizeAccessModifier(liftAccessValue),
-                                                                expressionizeBoolean(liftAbstractFlagValue),
-                                                                expressionizeBoolean(liftStaticFlagValue),
-                                                                expressionizeBoolean(liftFinalFlagValue),
-                                                                expressionizeBoolean(liftSynchronizedFlagValue),
-                                                                expressionizeBoolean(liftNativeFlagValue),
-                                                                expressionizeBoolean(liftStrictfpFlagValue),
-                                                                liftAnnotationsVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftAnnotationsVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null)
-                                                                )),
-                                                factory.makeListNode(Collections.<TypeNode>emptyList()))
-            )))));
-
-        return myVarName;
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeMethodModifiersNode"),
+                        factory.makeListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        expressionizeAccessModifier(liftAccessValue),
+                                        expressionizeBoolean(liftAbstractFlagValue),
+                                        expressionizeBoolean(liftStaticFlagValue),
+                                        expressionizeBoolean(liftFinalFlagValue),
+                                        expressionizeBoolean(liftSynchronizedFlagValue),
+                                        expressionizeBoolean(liftNativeFlagValue),
+                                        expressionizeBoolean(liftStrictfpFlagValue),
+                                        liftAnnotations)),
+                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
     }
-
+    
     @Override
-    public String executeClassBodyNode(ClassBodyNode node, Pair<ExpressionNode,List<BlockStatementNode>> p)
+    public ExpressionNode executeClassBodyNode(ClassBodyNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode factoryNode = p.getFirst();
-        List<BlockStatementNode> statements = p.getSecond();
-
         argsForListNodeStack.push("ClassMemberNode");
-        String liftMembersVarName = 
+        ExpressionNode liftMembers = 
                 node.getMembers() != null ?
-                node.getMembers().executeOperation(this,p) :
-                null;
+                        node.getMembers().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         argsForListNodeStack.pop();
-
-        String myVarName = getUniqueName();
-        statements.add(
-                factory.makeVariableDeclarationNode(
-                        factory.makeVariableModifiersNode(
-                                false,
-                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
-                factory.makeListNode(
-                        Collections.singletonList(
-                                factory.makeVariableDeclaratorNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.makeSimpleNameNode(
-                                                        factory.makeIdentifierNode("ClassBodyNode"),
-                                                        NameCategory.TYPE)),
-                                        factory.makeIdentifierNode(myVarName),
-                                        factory.makeMethodInvocationByExpressionNode(
-                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                                                factory.makeIdentifierNode("makeClassBodyNode"),
-                                                factory.makeListNode(
-                                                        Arrays.<ExpressionNode>asList(
-                                                                liftMembersVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftMembersVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null)
-                                                                )),
-                                                factory.makeListNode(Collections.<TypeNode>emptyList()))
-            )))));
-
-        return myVarName;
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeClassBodyNode"),
+                        factory.makeListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        liftMembers)),
+                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
     }
-
+    
     @Override
-    public String executeIfNode(IfNode node, Pair<ExpressionNode,List<BlockStatementNode>> p)
+    public ExpressionNode executeIfNode(IfNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode factoryNode = p.getFirst();
-        List<BlockStatementNode> statements = p.getSecond();
-
-        String liftConditionVarName = 
+        ExpressionNode liftCondition = 
                 node.getCondition() != null ?
-                node.getCondition().executeOperation(this,p) :
-                null;
-        String liftThenStatementVarName = 
+                        node.getCondition().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        ExpressionNode liftThenStatement = 
                 node.getThenStatement() != null ?
-                node.getThenStatement().executeOperation(this,p) :
-                null;
-        String liftElseStatementVarName = 
+                        node.getThenStatement().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        ExpressionNode liftElseStatement = 
                 node.getElseStatement() != null ?
-                node.getElseStatement().executeOperation(this,p) :
-                null;
-
-        String myVarName = getUniqueName();
-        statements.add(
-                factory.makeVariableDeclarationNode(
-                        factory.makeVariableModifiersNode(
-                                false,
-                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
-                factory.makeListNode(
-                        Collections.singletonList(
-                                factory.makeVariableDeclaratorNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.makeSimpleNameNode(
-                                                        factory.makeIdentifierNode("IfNode"),
-                                                        NameCategory.TYPE)),
-                                        factory.makeIdentifierNode(myVarName),
-                                        factory.makeMethodInvocationByExpressionNode(
-                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                                                factory.makeIdentifierNode("makeIfNode"),
-                                                factory.makeListNode(
-                                                        Arrays.<ExpressionNode>asList(
-                                                                liftConditionVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftConditionVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                liftThenStatementVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftThenStatementVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                liftElseStatementVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftElseStatementVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null)
-                                                                )),
-                                                factory.makeListNode(Collections.<TypeNode>emptyList()))
-            )))));
-
-        return myVarName;
+                        node.getElseStatement().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeIfNode"),
+                        factory.makeListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        liftCondition,
+                                        liftThenStatement,
+                                        liftElseStatement)),
+                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
     }
-
+    
     @Override
-    public String executeIntLiteralNode(IntLiteralNode node, Pair<ExpressionNode,List<BlockStatementNode>> p)
+    public ExpressionNode executeIntLiteralNode(IntLiteralNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode factoryNode = p.getFirst();
-        List<BlockStatementNode> statements = p.getSecond();
-
         Integer liftValueValue = 
                 node.getValue();
-
-        String myVarName = getUniqueName();
-        statements.add(
-                factory.makeVariableDeclarationNode(
-                        factory.makeVariableModifiersNode(
-                                false,
-                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
-                factory.makeListNode(
-                        Collections.singletonList(
-                                factory.makeVariableDeclaratorNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.makeSimpleNameNode(
-                                                        factory.makeIdentifierNode("IntLiteralNode"),
-                                                        NameCategory.TYPE)),
-                                        factory.makeIdentifierNode(myVarName),
-                                        factory.makeMethodInvocationByExpressionNode(
-                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                                                factory.makeIdentifierNode("makeIntLiteralNode"),
-                                                factory.makeListNode(
-                                                        Arrays.<ExpressionNode>asList(
-                                                                expressionizeInteger(liftValueValue)
-                                                                )),
-                                                factory.makeListNode(Collections.<TypeNode>emptyList()))
-            )))));
-
-        return myVarName;
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeIntLiteralNode"),
+                        factory.makeListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        expressionizeInteger(liftValueValue))),
+                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
     }
-
+    
     @Override
-    public String executeNullLiteralNode(NullLiteralNode node, Pair<ExpressionNode,List<BlockStatementNode>> p)
+    public ExpressionNode executeNullLiteralNode(NullLiteralNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode factoryNode = p.getFirst();
-        List<BlockStatementNode> statements = p.getSecond();
-
-
-        String myVarName = getUniqueName();
-        statements.add(
-                factory.makeVariableDeclarationNode(
-                        factory.makeVariableModifiersNode(
-                                false,
-                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
-                factory.makeListNode(
-                        Collections.singletonList(
-                                factory.makeVariableDeclaratorNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.makeSimpleNameNode(
-                                                        factory.makeIdentifierNode("NullLiteralNode"),
-                                                        NameCategory.TYPE)),
-                                        factory.makeIdentifierNode(myVarName),
-                                        factory.makeMethodInvocationByExpressionNode(
-                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                                                factory.makeIdentifierNode("makeNullLiteralNode"),
-                                                factory.makeListNode(
-                                                        Arrays.<ExpressionNode>asList(
-                                                                factory.makeNullLiteralNode(null)
-                                                                )),
-                                                factory.makeListNode(Collections.<TypeNode>emptyList()))
-            )))));
-
-        return myVarName;
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeNullLiteralNode"),
+                        factory.makeListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        factory.makeNullLiteralNode(null))),
+                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
     }
-
+    
     @Override
-    public String executeJavadocNode(JavadocNode node, Pair<ExpressionNode,List<BlockStatementNode>> p)
+    public ExpressionNode executeJavadocNode(JavadocNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode factoryNode = p.getFirst();
-        List<BlockStatementNode> statements = p.getSecond();
-
         String liftTextValue = 
                 node.getText();
-
-        String myVarName = getUniqueName();
-        statements.add(
-                factory.makeVariableDeclarationNode(
-                        factory.makeVariableModifiersNode(
-                                false,
-                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
-                factory.makeListNode(
-                        Collections.singletonList(
-                                factory.makeVariableDeclaratorNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.makeSimpleNameNode(
-                                                        factory.makeIdentifierNode("JavadocNode"),
-                                                        NameCategory.TYPE)),
-                                        factory.makeIdentifierNode(myVarName),
-                                        factory.makeMethodInvocationByExpressionNode(
-                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                                                factory.makeIdentifierNode("makeJavadocNode"),
-                                                factory.makeListNode(
-                                                        Arrays.<ExpressionNode>asList(
-                                                                expressionizeString(liftTextValue)
-                                                                )),
-                                                factory.makeListNode(Collections.<TypeNode>emptyList()))
-            )))));
-
-        return myVarName;
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeJavadocNode"),
+                        factory.makeListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        expressionizeString(liftTextValue))),
+                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
     }
-
+    
     @Override
-    public String executeMethodDeclarationNode(MethodDeclarationNode node, Pair<ExpressionNode,List<BlockStatementNode>> p)
+    public ExpressionNode executeMethodDeclarationNode(MethodDeclarationNode node, ExpressionNode factoryNode)
     {
-        ExpressionNode factoryNode = p.getFirst();
-        List<BlockStatementNode> statements = p.getSecond();
-
-        String liftBodyVarName = 
+        ExpressionNode liftBody = 
                 node.getBody() != null ?
-                node.getBody().executeOperation(this,p) :
-                null;
-        String liftModifiersVarName = 
+                        node.getBody().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        ExpressionNode liftModifiers = 
                 node.getModifiers() != null ?
-                node.getModifiers().executeOperation(this,p) :
-                null;
-        String liftIdentifierVarName = 
+                        node.getModifiers().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        ExpressionNode liftIdentifier = 
                 node.getIdentifier() != null ?
-                node.getIdentifier().executeOperation(this,p) :
-                null;
+                        node.getIdentifier().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         argsForListNodeStack.push("VariableNode");
-        String liftParametersVarName = 
+        ExpressionNode liftParameters = 
                 node.getParameters() != null ?
-                node.getParameters().executeOperation(this,p) :
-                null;
+                        node.getParameters().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         argsForListNodeStack.pop();
-        String liftVarargParameterVarName = 
+        ExpressionNode liftVarargParameter = 
                 node.getVarargParameter() != null ?
-                node.getVarargParameter().executeOperation(this,p) :
-                null;
-        String liftReturnTypeVarName = 
+                        node.getVarargParameter().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        ExpressionNode liftReturnType = 
                 node.getReturnType() != null ?
-                node.getReturnType().executeOperation(this,p) :
-                null;
+                        node.getReturnType().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         argsForListNodeStack.push("UnparameterizedTypeNode");
-        String liftThrowTypesVarName = 
+        ExpressionNode liftThrowTypes = 
                 node.getThrowTypes() != null ?
-                node.getThrowTypes().executeOperation(this,p) :
-                null;
+                        node.getThrowTypes().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         argsForListNodeStack.pop();
         argsForListNodeStack.push("TypeParameterNode");
-        String liftTypeParametersVarName = 
+        ExpressionNode liftTypeParameters = 
                 node.getTypeParameters() != null ?
-                node.getTypeParameters().executeOperation(this,p) :
-                null;
+                        node.getTypeParameters().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         argsForListNodeStack.pop();
-        String liftJavadocVarName = 
+        ExpressionNode liftJavadoc = 
                 node.getJavadoc() != null ?
-                node.getJavadoc().executeOperation(this,p) :
-                null;
-
-        String myVarName = getUniqueName();
-        statements.add(
-                factory.makeVariableDeclarationNode(
-                        factory.makeVariableModifiersNode(
-                                false,
-                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
-                factory.makeListNode(
-                        Collections.singletonList(
-                                factory.makeVariableDeclaratorNode(
-                                        factory.makeUnparameterizedTypeNode(
-                                                factory.makeSimpleNameNode(
-                                                        factory.makeIdentifierNode("MethodDeclarationNode"),
-                                                        NameCategory.TYPE)),
-                                        factory.makeIdentifierNode(myVarName),
-                                        factory.makeMethodInvocationByExpressionNode(
-                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                                                factory.makeIdentifierNode("makeMethodDeclarationNode"),
-                                                factory.makeListNode(
-                                                        Arrays.<ExpressionNode>asList(
-                                                                liftBodyVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftBodyVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                liftModifiersVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftModifiersVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                liftIdentifierVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftIdentifierVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                liftParametersVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftParametersVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                liftVarargParameterVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftVarargParameterVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                liftReturnTypeVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftReturnTypeVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                liftThrowTypesVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftThrowTypesVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                liftTypeParametersVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftTypeParametersVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null),
-                                                                liftJavadocVarName != null ? 
-                                                                        factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(
-                                                                                liftJavadocVarName),NameCategory.EXPRESSION)) : factory.makeNullLiteralNode(null)
-                                                                )),
-                                                factory.makeListNode(Collections.<TypeNode>emptyList()))
-            )))));
-
-        return myVarName;
+                        node.getJavadoc().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeMethodDeclarationNode"),
+                        factory.makeListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        liftBody,
+                                        liftModifiers,
+                                        liftIdentifier,
+                                        liftParameters,
+                                        liftVarargParameter,
+                                        liftReturnType,
+                                        liftThrowTypes,
+                                        liftTypeParameters,
+                                        liftJavadoc)),
+                        factory.makeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
     }
-
+    
 }

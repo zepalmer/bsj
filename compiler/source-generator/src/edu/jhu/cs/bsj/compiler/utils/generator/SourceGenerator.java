@@ -15,6 +15,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import edu.jhu.cs.bsj.compiler.impl.utils.PrependablePrintStream;
+
 /**
  * This class generates some patternistic sources for the BSJ parser. The code is awful; it's not intended for long-term
  * maintenance, as it will become obsolete once the BSJ compiler has been reimplemented in BSJ.
@@ -887,8 +889,8 @@ public class SourceGenerator
 		 *         <code>}</code>.
 		 * @throws IOException If an I/O error occurs.
 		 */
-		protected PrintStream createOutputFile(String pkg, ClassMode mode, boolean implementation, String type,
-				boolean includes, String extendsName, String... implementsNames) throws IOException
+		protected PrependablePrintStream createOutputFile(String pkg, ClassMode mode, boolean implementation,
+				String type, boolean includes, String extendsName, String... implementsNames) throws IOException
 		{
 			String name;
 			if (type.indexOf('<') != -1)
@@ -903,7 +905,7 @@ public class SourceGenerator
 			File f = new File((implementation ? TARGET_IMPL_DIR : TARGET_IFACE_DIR).getPath() + File.separator
 					+ pkg.replaceAll("\\.", File.separator) + File.separator + name);
 			f.getParentFile().mkdirs();
-			PrintStream ret = new PrintStream(new FileOutputStream(f));
+			PrependablePrintStream ret = new PrependablePrintStream(new FileOutputStream(f), "    ", 0);
 			ret.println("package " + pkg + ";");
 			ret.println();
 			printImports(ret, implementation);
@@ -1031,7 +1033,7 @@ public class SourceGenerator
 
 		public abstract void useDefinition(ClassDef def) throws IOException;
 
-		protected void propAbstract(PropertyTypeAbstractor abstractor, Prop p, PrintStream ps, ClassDef def)
+		protected void propAbstract(PropertyTypeAbstractor abstractor, Prop p, PrependablePrintStream ps, ClassDef def)
 		{
 			if (DIRECT_COPY_NAMES.contains(p.type))
 			{
@@ -1057,15 +1059,15 @@ public class SourceGenerator
 
 		static interface PropertyTypeAbstractor
 		{
-			void directCopy(PrintStream ps, Prop p);
+			void directCopy(PrependablePrintStream ps, Prop p);
 
-			void node(PrintStream ps, Prop p);
+			void node(PrependablePrintStream ps, Prop p);
 
-			void constructorCopy(PrintStream ps, Prop p);
+			void constructorCopy(PrependablePrintStream ps, Prop p);
 
-			void list(PrintStream ps, Prop p);
+			void list(PrependablePrintStream ps, Prop p);
 
-			void voidType(PrintStream ps, Prop p);
+			void voidType(PrependablePrintStream ps, Prop p);
 		}
 	}
 
@@ -1097,7 +1099,7 @@ public class SourceGenerator
 					+ pkg.replaceAll("\\.", File.separator) + File.separator + rawclassname + ".java");
 			classFile.getParentFile().mkdirs();
 			FileOutputStream fos = new FileOutputStream(classFile);
-			PrintStream ps = new PrintStream(fos);
+			PrependablePrintStream ps = new PrependablePrintStream(fos, "    ", 0);
 
 			if (pkg.length() > 0)
 				ps.println("package " + pkg + ";");
@@ -1412,27 +1414,27 @@ public class SourceGenerator
 
 					propAbstract(new PropertyTypeAbstractor()
 					{
-						public void directCopy(PrintStream ps, Prop p)
+						public void directCopy(PrependablePrintStream ps, Prop p)
 						{
 							ps.print("get" + capFirst(p.name) + "()");
 						}
 
-						public void node(PrintStream ps, Prop p)
+						public void node(PrependablePrintStream ps, Prop p)
 						{
 							ps.print("get" + capFirst(p.name) + "().deepCopy(factory)");
 						}
 
-						public void constructorCopy(PrintStream ps, Prop p)
+						public void constructorCopy(PrependablePrintStream ps, Prop p)
 						{
 							ps.print("new " + p.type + "(get" + capFirst(p.name) + "())");
 						}
 
-						public void list(PrintStream ps, Prop p)
+						public void list(PrependablePrintStream ps, Prop p)
 						{
 							ps.print("new Array" + p.type + "(get" + capFirst(p.name) + "())");
 						}
 
-						public void voidType(PrintStream ps, Prop p)
+						public void voidType(PrependablePrintStream ps, Prop p)
 						{
 							ps.print("null");
 						}
@@ -1636,77 +1638,88 @@ public class SourceGenerator
 				typeName = def.getRawName() + typeArg;
 				String typeParamS = typeParam == null ? "" : (typeParam + " ");
 
-				// Write interface method description
-				ips.println("    /**");
-				ips.println("     * Creates a " + def.getRawName() + ".");
-				ips.println("     */");
-				ips.print("    public " + typeParamS + typeName + " make" + def.getRawName());
-				printParameterList(ips, recProps, true);
-				ips.println(";");
-				ips.println();
-
-				// Write backing class implementation
-				cps.println("    /**");
-				cps.println("     * Creates a " + def.getRawName() + ".");
-				cps.println("     */");
-				cps.println("    @Override");
-				cps.print("    public " + typeParamS + typeName + " make" + def.getRawName());
-				printParameterList(cps, recProps, true);
-				cps.println();
-				cps.println("    {");
-				String classname = def.getRawName() + "Impl" + typeArg;
-				cps.print("        " + typeName + " ret = new " + classname);
-
-				// print constructor arguments - this is special because of the argMap
-				cps.print('(');
-				boolean first = true;
-				for (Prop p : recProps)
+				for (boolean skipMake : new boolean[] { true, false })
 				{
-					if (first)
+					// Write documentation
+					for (PrintStream ps : new PrintStream[] { ips, cps, dps })
 					{
-						first = false;
-					} else
-					{
-						cps.print(", ");
+						ps.println("    /**");
+						ps.println("     * Creates a " + def.getRawName() + ".");
+						if (!skipMake)
+						{
+							ps.println("     * The specified start and stop locations are used.");
+						} else
+						{
+							ps.println("     * The start and stop locations which have been set as properties of this factory are used.");
+						}
+						ps.println("     */");
 					}
-					String override = "";
-					if (def.argMap.containsKey(p.name))
+
+					// Write interface method description
+					ips.print("    public " + typeParamS + typeName + " make" + def.getRawName());
+					printParameterList(ips, recProps, skipMake);
+					ips.println(";");
+					ips.println();
+
+					// Write backing class implementation
+					cps.println("    @Override");
+					cps.print("    public " + typeParamS + typeName + " make" + def.getRawName());
+					printParameterList(cps, recProps, skipMake);
+					cps.println();
+					cps.println("    {");
+					String classname = def.getRawName() + "Impl" + typeArg;
+					cps.print("        " + typeName + " ret = new " + classname);
+
+					// print constructor arguments - this is special because of the argMap
+					cps.print('(');
+					boolean first = true;
+					for (Prop p : recProps)
 					{
-						override = def.argMap.get(p.name).trim();
+						if (first)
+						{
+							first = false;
+						} else
+						{
+							cps.print(", ");
+						}
+						String override = "";
+						if (def.argMap.containsKey(p.name))
+						{
+							override = def.argMap.get(p.name).trim();
+						}
+						if (override.length() > 0)
+						{
+							cps.print(override);
+						} else
+						{
+							cps.print(p.name);
+						}
 					}
-					if (override.length() > 0)
-					{
-						cps.print(override);
-					} else
-					{
-						cps.print(p.name);
-					}
+					cps.print(')');
+
+					cps.println(";");
+					// TODO: later, this is where we register created nodes with the central dependency validation
+					// authority
+					cps.println("        return ret;");
+					cps.println("    }");
+					cps.println();
+
+					// Write decorator implementation
+					dps.println("    @Override");
+					dps.print("    public " + typeParamS + typeName + " make" + def.getRawName());
+					printParameterList(dps, recProps, skipMake);
+					dps.println();
+					dps.println("    {");
+					dps.println("        this.before();");
+					dps.print("        " + typeName + " node = factory.make" + def.getRawName());
+					printArgumentList(dps, recProps, skipMake);
+					dps.println(";");
+					dps.println("        this.after(node);");
+					dps.println("        return node;");
+					dps.println("    }");
+					dps.println();
+
 				}
-				cps.print(')');
-
-				cps.println(";");
-				// TODO: later, this is where we register created nodes with the central dependency validation authority
-				cps.println("        return ret;");
-				cps.println("    }");
-				cps.println();
-
-				// Write decorator implementation
-				dps.println("    /**");
-				dps.println("     * Creates a " + def.getRawName() + ".");
-				dps.println("     */");
-				dps.println("    @Override");
-				dps.print("    public " + typeParamS + typeName + " make" + def.getRawName());
-				printParameterList(dps, recProps, true);
-				dps.println();
-				dps.println("    {");
-				dps.println("        this.before();");
-				dps.print("        " + typeName + " node = factory.make" + def.getRawName());
-				printArgumentList(dps, recProps, true);
-				dps.println(";");
-				dps.println("        this.after(node);");
-				dps.println("        return node;");
-				dps.println("    }");
-				dps.println();
 			}
 		}
 
@@ -1848,44 +1861,44 @@ public class SourceGenerator
 	static class TreeLifterWriter extends ClassHierarchyBuildingHandler
 	{
 		/** The stream to which the file's content is written. */
-		private PrintStream ps;
+		private PrependablePrintStream ps;
 
 		@Override
 		public void init() throws IOException
 		{
 			super.init();
 			ps = createOutputFile("edu.jhu.cs.bsj.compiler.impl.tool.compiler", ClassMode.CONCRETE, true,
-					"BsjTreeLifter", true, null,
-					"BsjNodeOperation<Pair<ExpressionNode,List<BlockStatementNode>>,String>");
-			ps.println("    private BsjNodeFactory factory;");
+					"BsjTreeLifter", true, null, "BsjNodeOperation<ExpressionNode,ExpressionNode>");
+			ps.incPrependCount();
+			ps.println("private BsjNodeFactory factory;");
 			ps.println();
-			ps.println("    public BsjTreeLifter(BsjNodeFactory factory)");
-			ps.println("    {");
-			ps.println("        this.factory = factory;");
-			ps.println("    }");
+			ps.println("public BsjTreeLifter(BsjNodeFactory factory)");
+			ps.println("{");
+			ps.println("    this.factory = factory;");
+			ps.println("}");
 			ps.println();
 			for (String ptype : PRIMITIVE_TYPES)
 			{
 				if (ptype.equals("short") || ptype.equals("byte"))
 					continue;
-				ps.println("    protected ExpressionNode expressionize" + capFirst(ptype) + "(" + ptype + " x)");
-				ps.println("    {");
-				ps.println("        return factory.make" + capFirst(ptype) + "LiteralNode(x);");
-				ps.println("    }");
+				ps.println("protected ExpressionNode expressionize" + capFirst(ptype) + "(" + ptype + " x)");
+				ps.println("{");
+				ps.println("    return factory.make" + capFirst(ptype) + "LiteralNode(x);");
+				ps.println("}");
 				ps.println();
 			}
 			for (String etype : ENUM_TYPES)
 			{
-				ps.println("    protected ExpressionNode expressionize" + etype + "(" + etype + " x)");
-				ps.println("    {");
-				ps.println("        return factory.makeFieldAccessByNameNode(factory.makeQualifiedNameNode(");
-				ps.println("                factory.makeSimpleNameNode(");
-				ps.println("                        factory.makeIdentifierNode(\"" + etype + "\"),");
-				ps.println("                        NameCategory.EXPRESSION");
-				ps.println("                        ),");
-				ps.println("                factory.makeIdentifierNode(x.name()),");
-				ps.println("                NameCategory.EXPRESSION));");
-				ps.println("    }");
+				ps.println("protected ExpressionNode expressionize" + etype + "(" + etype + " x)");
+				ps.println("{");
+				ps.println("    return factory.makeFieldAccessByNameNode(factory.makeQualifiedNameNode(");
+				ps.println("            factory.makeSimpleNameNode(");
+				ps.println("                    factory.makeIdentifierNode(\"" + etype + "\"),");
+				ps.println("                    NameCategory.EXPRESSION");
+				ps.println("                    ),");
+				ps.println("            factory.makeIdentifierNode(x.name()),");
+				ps.println("            NameCategory.EXPRESSION));");
+				ps.println("}");
 				ps.println();
 			}
 		}
@@ -1898,35 +1911,33 @@ public class SourceGenerator
 				return;
 			// TODO: preserve start/stop location in the META world!
 
-			ps.println("    @Override");
+			ps.println("@Override");
 			String typeargString = "";
 			if (def.getNameParam().length() > 0)
 				typeargString = def.getNameParam() + " ";
-			ps.println("    public " + typeargString + "String execute" + def.getRawName() + "(" + def.getRawName()
-					+ def.getNameArg() + " node, Pair<ExpressionNode,List<BlockStatementNode>> p)");
+			ps.println("public " + typeargString + "ExpressionNode execute" + def.getRawName() + "(" + def.getRawName()
+					+ def.getNameArg() + " node, ExpressionNode factoryNode)");
 			if (def.getNameParam().length() > 0)
 			{
 				// defer this to a method which accepts the type argument as a parameter - default to our type arg
+				ps.println("{");
+				ps.println("    String typeName;");
+				ps.println("    if (argsFor" + def.getRawName() + "Stack.size() == 0)");
 				ps.println("    {");
-				ps.println("        String typeName;");
-				ps.println("        if (argsFor" + def.getRawName() + "Stack.size() == 0)");
-				ps.println("        {");
 				String typeName = def.getNameArg().substring(1, def.getNameArg().length() - 1);
-				ps.println("            typeName = \"" + typeName + "\";");
-				ps.println("        } else");
-				ps.println("        {");
-				ps.println("            typeName = argsFor" + def.getRawName() + "Stack.peek();");
-				ps.println("        }");
-				ps.println("        return execute" + def.getRawName() + "(node, p, typeName);");
+				ps.println("        typeName = \"" + typeName + "\";");
+				ps.println("    } else");
+				ps.println("    {");
+				ps.println("        typeName = argsFor" + def.getRawName() + "Stack.peek();");
 				ps.println("    }");
+				ps.println("    return execute" + def.getRawName() + "(node, factoryNode, typeName);");
+				ps.println("}");
 				ps.println();
-				ps.println("    public " + typeargString + "String execute" + def.getRawName() + "(" + def.getRawName()
-					+ def.getNameArg() + " node, Pair<ExpressionNode,List<BlockStatementNode>> p, String argName)");
+				ps.println("protected " + typeargString + "ExpressionNode execute" + def.getRawName() + "("
+						+ def.getRawName() + def.getNameArg() + " node, ExpressionNode factoryNode, String argName)");
 			}
-			ps.println("    {");
-			ps.println("        ExpressionNode factoryNode = p.getFirst();");
-			ps.println("        List<BlockStatementNode> statements = p.getSecond();");
-			ps.println();
+			ps.println("{");
+			ps.incPrependCount();
 			for (Prop p : recProp)
 			{
 				if (p.skipMake)
@@ -1934,12 +1945,12 @@ public class SourceGenerator
 
 				propAbstract(new PropertyTypeAbstractor()
 				{
-					public void voidType(PrintStream ps, Prop p)
+					public void voidType(PrependablePrintStream ps, Prop p)
 					{
 						// Intentionally doing nothing. We'll just use "null" below.
 					}
 
-					public void node(PrintStream ps, Prop p)
+					public void node(PrependablePrintStream ps, Prop p)
 					{
 						boolean generic = (p.type.contains("<"));
 						String rawName = null;
@@ -1947,141 +1958,59 @@ public class SourceGenerator
 						{
 							rawName = p.type.substring(0, p.type.indexOf('<'));
 							String typeArg = p.type.substring(p.type.indexOf('<') + 1, p.type.indexOf('>'));
-							ps.println("        argsFor" + rawName + "Stack.push(\"" + typeArg + "\");");
+							ps.println("argsFor" + rawName + "Stack.push(\"" + typeArg + "\");");
 						}
-						ps.println("        String lift" + capFirst(p.name) + "VarName = ");
-						ps.println("                node.get" + capFirst(p.name) + "() != null ?");
-						ps.println("                node.get" + capFirst(p.name) + "().executeOperation(this,p) :");
-						ps.println("                null;");
+						ps.println("ExpressionNode lift" + capFirst(p.name) + " = ");
+						ps.incPrependCount(2);
+						ps.println("node.get" + capFirst(p.name) + "() != null ?");
+						ps.incPrependCount(2);
+						ps.println("node.get" + capFirst(p.name) + "().executeOperation(this,factoryNode) :");
+						ps.println("factory.makeNullLiteralNode(null);");
+						ps.decPrependCount(4);
 						if (generic)
 						{
-							ps.println("        argsFor" + rawName + "Stack.pop();");
+							ps.println("argsFor" + rawName + "Stack.pop();");
 						}
 					}
 
-					public void list(PrintStream ps, Prop p)
+					public void list(PrependablePrintStream ps, Prop p)
 					{
-						// Assumption: lists are not supposed to be null
-						// Create a List of T in metaland
-						ps.println("        String lift" + capFirst(p.name) + "ListName = getUniqueName();");
-						ps.println("        statements.add(");
-						ps.println("                factory.makeVariableDeclarationNode(");
-						ps.println("                        factory.makeVariableModifiersNode(");
-						ps.println("                                false,");
-						ps.println("                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),");
-						ps.println("                factory.makeListNode(Collections.singletonList(");
-						ps.println("                        factory.makeVariableDeclaratorNode(");
-						ps.println("                                factory.makeParameterizedTypeNode(");
-						ps.println("                                        factory.makeUnparameterizedTypeNode(");
-						ps.println("                                                factory.makeSimpleNameNode(");
-						ps.println("                                                        factory.makeIdentifierNode(\"List\"),");
-						ps.println("                                                        NameCategory.TYPE)),");
-						ps.println("                                        factory.makeListNode(");
-						ps.println("                                                Arrays.<TypeArgumentNode>asList(");
-						ps.println("                                                        factory.makeUnparameterizedTypeNode(");
-						ps.println("                                                                factory.makeSimpleNameNode(");
-						ps.println("                                                                        factory.makeIdentifierNode(argName),");
-						ps.println("                                                                        NameCategory.TYPE))");
-						ps.println("                                                        ))),");
-						ps.println("                                factory.makeIdentifierNode(lift" + capFirst(p.name) + "ListName),");
-						ps.println("                                factory.makeUnqualifiedClassInstantiationNode(");
-						ps.println("                                        factory.makeParameterizedTypeNode(");
-						ps.println("                                                factory.makeUnparameterizedTypeNode(");
-						ps.println("                                                        factory.makeSimpleNameNode(");
-						ps.println("                                                                factory.makeIdentifierNode(\"ArrayList\"),");
-						ps.println("                                                                NameCategory.TYPE)),");
-						ps.println("                                                factory.makeListNode(");
-						ps.println("                                                        Arrays.<TypeArgumentNode>asList(");
-						ps.println("                                                                factory.makeUnparameterizedTypeNode(");
-						ps.println("                                                                        factory.makeSimpleNameNode(");
-						ps.println("                                                                                factory.makeIdentifierNode(argName),");
-						ps.println("                                                                                NameCategory.TYPE))");
-						ps.println("                                                                ))),");
-						ps.println("                                        factory.makeListNode(Collections.<TypeArgumentNode>emptyList()),");
-						ps.println("                                        factory.makeListNode(Collections.<ExpressionNode>emptyList()),");
-						ps.println("                                        null))))));");
-						ps.println();
-						// For each T in the list, process it as a node and then add that local variable to the metaland list
-						ps.println("        for (" + p.type.substring(5,p.type.length()-1) + " listval : node.get" + capFirst(p.name) + "())");
-						ps.println("        {");
-						ps.println("            String varname = listval.executeOperation(this,p);");
-						ps.println("            statements.add(");
-						ps.println("                factory.makeExpressionStatementNode(");
-						ps.println("                    factory.makeMethodInvocationByExpressionNode(");
-						ps.println("                            factory.makeFieldAccessByNameNode(");
-						ps.println("                                    factory.makeSimpleNameNode(");
-						ps.println("                                            factory.makeIdentifierNode(lift" + capFirst(p.name) + "ListName),");
-						ps.println("                                            NameCategory.EXPRESSION)),");
-						ps.println("                            factory.makeIdentifierNode(\"add\"),");
-						ps.println("                            factory.makeListNode(");
-						ps.println("                                    Collections.<ExpressionNode>singletonList(");
-						ps.println("                                            factory.makeFieldAccessByNameNode(");
-						ps.println("                                                    factory.makeSimpleNameNode(");
-						ps.println("                                                            factory.makeIdentifierNode(varname),");
-						ps.println("                                                            NameCategory.EXPRESSION)))),");
-						ps.println("                            factory.makeListNode(Collections.<TypeNode>emptyList()))));");
-						ps.println("        }");
+						String typeArg = p.type.substring(5, p.type.length()-1);
+						ps.println("List<ExpressionNode> lift" + capFirst(p.name) + "List = new ArrayList<ExpressionNode>();");
+						ps.println("for (" + typeArg + " listval : node.get" + capFirst(p.name) + "())");
+						ps.println("{");
+						ps.println("    lift" + capFirst(p.name) + "List.add(");
+						ps.println("            listval != null ? ");
+						ps.println("			        listval.executeOperation(this,factoryNode) :");
+						ps.println("                    null);");
+						ps.println("}");
 					}
 
-					public void directCopy(PrintStream ps, Prop p)
+					public void directCopy(PrependablePrintStream ps, Prop p)
 					{
-						ps.println("        " + p.type + " lift" + capFirst(p.name) + "Value = ");
-						ps.println("                node.get" + capFirst(p.name) + "();");
+						ps.println(p.type + " lift" + capFirst(p.name) + "Value = ");
+						ps.println("        node.get" + capFirst(p.name) + "();");
 					}
 
-					public void constructorCopy(PrintStream ps, Prop p)
+					public void constructorCopy(PrependablePrintStream ps, Prop p)
 					{
 						throw new IllegalStateException("Don't know how to handle constructor copy for " + p.name + "!");
 					}
 				}, p, ps, def);
 			}
 			ps.println();
-			ps.println("        String myVarName = getUniqueName();");
-			if (def.getNameArg().length()>0)
-			{
-				ps.println("        String nodeTypeArg = argsFor" + def.getRawName() + "Stack.size() == 0 ?");
-				ps.println("                \"" + def.getNameArg().substring(1,def.getNameArg().length()-1) + "\" :");
-				ps.println("                argsFor" + def.getRawName() + "Stack.peek();");
-			}
-			ps.println("        statements.add(");
-			ps.println("                factory.makeVariableDeclarationNode(");
-			ps.println("                        factory.makeVariableModifiersNode(");
-			ps.println("                                false,");
-			ps.println("                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),");
-			ps.println("                factory.makeListNode(");
-			ps.println("                        Collections.singletonList(");
-			ps.println("                                factory.makeVariableDeclaratorNode(");
-			if (def.getNameArg().length() > 0)
-			{
-				ps.println("                                    factory.makeParameterizedTypeNode(");
-			}
-			ps.println("                                        factory.makeUnparameterizedTypeNode(");
-			ps.println("                                                factory.makeSimpleNameNode(");
-			ps.println("                                                        factory.makeIdentifierNode(\""
-					+ def.getRawName() + "\"),");
-			ps.println("                                                        NameCategory.TYPE)),");
-			if (def.getNameArg().length() > 0)
-			{
-				// TODO: fix this assumption: nodes only have one type parameter on them
-				ps.println("                                        factory.makeListNode(");
-				ps.println("                                            Arrays.<TypeArgumentNode>asList(");
-				ps.println("                                                factory.makeUnparameterizedTypeNode(");
-				ps.println("                                                        factory.makeSimpleNameNode(");
-				ps.println("                                                                factory.makeIdentifierNode(nodeTypeArg),");
-				ps.println("                                                                NameCategory.TYPE");
-				ps.println("                                                        )");
-				ps.println("                                                )");
-				ps.println("                                            )");
-				ps.println("                                        )");
-				ps.println("                                    ),");
-			}
-			ps.println("                                        factory.makeIdentifierNode(myVarName),");
-			ps.println("                                        factory.makeMethodInvocationByExpressionNode(");
-			ps.println("                                                factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),");
-			ps.println("                                                factory.makeIdentifierNode(\"make"
-					+ def.getRawName() + "\"),");
-			ps.println("                                                factory.makeListNode(");
-			ps.print("                                                        Arrays.<ExpressionNode>asList(");
+
+			// Generate resulting expression
+			ps.println("ExpressionNode ret =");
+			ps.incPrependCount(2);
+			ps.println("factory.makeMethodInvocationByExpressionNode(");
+			ps.incPrependCount(2);
+			ps.println("factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),");
+			ps.println("factory.makeIdentifierNode(\"make" + def.getRawName() + "\"),");
+			ps.println("factory.makeListNode(");
+			ps.incPrependCount(2);
+			ps.print("Arrays.<ExpressionNode>asList(");
+			ps.incPrependCount(2);
 			boolean first = true;
 			for (Prop p : recProp)
 			{
@@ -2095,60 +2024,72 @@ public class SourceGenerator
 					ps.print(",");
 				}
 				ps.println();
-				ps.print("                                                                ");
 				propAbstract(new PropertyTypeAbstractor()
 				{
-					public void voidType(PrintStream ps, Prop p)
+					public void voidType(PrependablePrintStream ps, Prop p)
 					{
 						ps.print("factory.makeNullLiteralNode(null)");
 					}
 
-					public void node(PrintStream ps, Prop p)
+					public void node(PrependablePrintStream ps, Prop p)
 					{
-						String varNameName = "lift" + capFirst(p.name) + "VarName";
-						ps.println(varNameName + " != null ? ");
-						ps.print("                                                                        ");
-						ps.println("factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(factory.makeIdentifierNode(");
-						ps.print("                                                                                ");
-						ps.print("lift" + capFirst(p.name) + "VarName),NameCategory.EXPRESSION");
-						ps.print(")) : factory.makeNullLiteralNode(null)");
+						ps.print("lift" + capFirst(p.name));
 					}
 
-					public void list(PrintStream ps, Prop p)
+					public void list(PrependablePrintStream ps, Prop p)
 					{
-						ps.println("factory.makeFieldAccessByNameNode(");
-						ps.print("                                                                        ");
+						ps.println("factory.makeMethodInvocationByNameNode(");
+						ps.incPrependCount(2);
+						ps.println("factory.makeQualifiedNameNode(");
+						ps.incPrependCount(2);
 						ps.println("factory.makeSimpleNameNode(");
-						ps.print("                                                                                ");
-						ps.println("factory.makeIdentifierNode(lift" + capFirst(p.name) + "ListName), NameCategory.EXPRESSION))");
+						ps.incPrependCount(2);
+						ps.println("factory.makeIdentifierNode(\"Arrays\"),");
+						ps.println("NameCategory.TYPE),");
+						ps.decPrependCount(2);
+						ps.println("factory.makeIdentifierNode(\"asList\"),");
+						ps.println("NameCategory.METHOD),");
+						ps.decPrependCount(2);
+						ps.println("factory.makeListNode(lift" + capFirst(p.name) + "List),");
+						ps.println("factory.makeListNode(Collections.<TypeNode>singletonList(");
+						ps.incPrependCount(2);
+						ps.println("factory.makeUnparameterizedTypeNode(");
+						ps.incPrependCount(2);
+						ps.println("factory.makeSimpleNameNode(");
+						ps.incPrependCount(2);
+						ps.println("factory.makeIdentifierNode(argName),");
+						ps.print("NameCategory.TYPE)))))");
+						ps.decPrependCount(8);
 					}
 
-					public void directCopy(PrintStream ps, Prop p)
+					public void directCopy(PrependablePrintStream ps, Prop p)
 					{
 						ps.print("expressionize" + capFirst(p.type) + "(lift" + capFirst(p.name) + "Value)");
 					}
 
-					public void constructorCopy(PrintStream ps, Prop p)
+					public void constructorCopy(PrependablePrintStream ps, Prop p)
 					{
 						throw new IllegalStateException("Don't know how to handle constructor copy for " + p.name + "!");
 					}
 				}, p, ps, def);
 			}
+			ps.decPrependCount(2);
+			ps.println(")),");
+			ps.decPrependCount(2);
+			ps.println("factory.makeListNode(Collections.<TypeNode>emptyList()));");
+			ps.decPrependCount(4);
 			ps.println();
-			ps.println("                                                                )),");
-			ps.println("                                                factory.makeListNode(Collections.<TypeNode>emptyList()))");
-			ps.println("            )))));");
+			ps.println("return ret;");
+			ps.decPrependCount();
+			ps.println("}");
 			ps.println();
-			ps.println("        return myVarName;");
-			ps.println("    }");
-			ps.println();
-
 		}
 
 		@Override
 		public void finish() throws IOException
 		{
 			super.finish();
+			ps.decPrependCount();
 			ps.println("}");
 			ps.close();
 		}

@@ -37,12 +37,6 @@ import edu.jhu.cs.bsj.compiler.impl.utils.Pair;
 public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode, List<BlockStatementNode>>, Void>
 {
 	/* GEN:start */
-	private int nextVariableId = 0;
-	private String getUniqueName()
-	{
-		return "v" + (nextVariableId++);
-	}
-	
 	protected ExpressionNode expressionizeString(String s)
 	{
 		return factory.makeStringLiteralNode(s);
