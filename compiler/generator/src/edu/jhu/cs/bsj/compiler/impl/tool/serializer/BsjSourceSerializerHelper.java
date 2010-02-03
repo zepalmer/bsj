@@ -1145,7 +1145,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
     public Void executeStringLiteralNode(StringLiteralNode node, PrependablePrintStream p)
     {
         p.print("\"");
-        p.print(node.getValue());
+        p.print(node.getValue().replaceAll("\n", "\\\\n"));//TODO any other whitespace to translate?
         p.print("\"");
         return null;
     }

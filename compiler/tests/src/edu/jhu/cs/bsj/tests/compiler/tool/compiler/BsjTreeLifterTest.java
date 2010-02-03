@@ -1,9 +1,10 @@
 package edu.jhu.cs.bsj.tests.compiler.tool.compiler;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -58,27 +59,54 @@ public class BsjTreeLifterTest
 		"edu.jhu.cs.bsj.compiler.ast.node.meta.*", 
 		"java.util.*"
 		};
-    
+	
+	/**
+	 * Test the BsjTreeLifter on files in the examples directory.
+	 */
     @Test
-    public void testMetaGeneration()
+    public void testLifterOnExamples()
+    {
+        File exampleDir = new File("examples");        
+        findAndTestJavaFiles(exampleDir);
+    }
+    
+    /**
+     * Recursively find and test all java files in a directory.
+     * @param dir the directory to search.
+     */
+    public void findAndTestJavaFiles(File dir)
+    {
+        for (File file : dir.listFiles())
+        {
+            if (file.isDirectory())
+            {
+                findAndTestJavaFiles(file);
+            }
+            else if (file.getName().endsWith(".java"))
+			{
+				System.out.println("Testing " + file.getAbsolutePath());
+				assertTrue(liftJavaFile(file));
+			}         
+        }
+    }
+	
+    /**
+     * Attempt to lift, recompile, and regenerate a Java file, then compare to the original source.
+     * @param file the file to manipulate.
+     * @return true if the lifted, recompiled, and regenerated file is equal to the origina (regenerated).
+     */
+    public boolean liftJavaFile(File file)
     {
         BsjNodeFactory factory = new BsjNodeFactoryImpl();
         BsjTreeLifter treeLifter = new BsjTreeLifter(factory);       
         BsjParserImpl parser = new BsjParserImpl(new BsjNodeFactoryImpl());
         String factoryName = "factory";
         
-        String baseCode = 
-                "public class BaseClass " + 
-                "{" + 
-                    "public int foo()" + 
-                    "{return 666;}" + 
-                "}";
-        
         // parse the original source
         Node ast = null;
         try
         {
-            ast = parser.parse(new InputStreamReader(new ByteArrayInputStream(baseCode.getBytes())));
+            ast = parser.parse(new InputStreamReader(new FileInputStream(file)));
         } catch (Exception e)
         {
             e.printStackTrace();
@@ -109,11 +137,13 @@ public class BsjTreeLifterTest
                 
         // compare the original (regenerated) to the lifted, recompiled and regenerated
         assertTrue(originalProgram.equals(liftedProgram));
+        return originalProgram.equals(liftedProgram);
 	}
     
     /**
      * Compiles and runs a block of code which generates a lifted AST.
-     * @param code
+     * @param code the AST for generating the lifted AST.
+     * @param factoryName the name of the meta factory referenced in the lifted AST.
      * @return the lifted AST.
      */
     public CompilationUnitNode compileMeta(ExpressionNode code, String factoryName) throws Exception
@@ -128,7 +158,7 @@ public class BsjTreeLifterTest
         sb.append("BsjNodeFactory " + factoryName + " = new BsjNodeFactoryImpl();\nreturn ");
         sb.append(code.executeOperation(new BsjSourceSerializerImpl(), null));
         String wrapperCode = sb.append(";\n}\n}").toString();
-        
+
         // setup the compilation environment
         JavaCompiler jc = ToolProvider.getSystemJavaCompiler();
 		Map<StandardLocation, LocationManager> map = new HashMap<StandardLocation, LocationManager>();
@@ -159,8 +189,5 @@ public class BsjTreeLifterTest
       	Method method = wrapper.getDeclaredMethod("runLiftedCode", (Class<?>[])null);
       	Object object = wrapper.newInstance();
         return (CompilationUnitNode) method.invoke(object, (Object[])null);
-    }
-   
-    
-    
+    }    
 }
