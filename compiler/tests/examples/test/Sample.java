@@ -3,27 +3,48 @@ package test;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.Reader;
 
 import org.junit.Test;
 
-import edu.jhu.cs.bsj.compiler.ast.node.Node;
-import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeFactoryImpl;
-import edu.jhu.cs.bsj.compiler.impl.tool.serializer.BsjSourceSerializerImpl;
-import edu.jhu.cs.bsj.compiler.tool.parser.BsjParserImpl;
-
-
+/**
+ * Testing.
+ * @author Testing.
+ *
+ */
 public class Sample
 {
+	/** JAVADOC */
     @Test
     public void testRegeneratorOnExamples()
     {
         File exampleDir = new File("examples");        
         findAndTestJavaFiles(exampleDir);
+        
+        class Blah<T> extends Object
+        {
+        	@SuppressWarnings("hiding")
+			public <T>Blah()
+        	{
+        		this.<Integer>foo();
+        	}
+        	@SuppressWarnings("hiding")
+			public <T> void foo()
+        	{
+        		
+        	}
+        }
+        
+        Blah<Integer> blah = new Blah<Integer>();
+        blah.foo();        
+        
+        int[][] x = new int[2][];
+        int y[][] = new int[][] {{2},{2}};
+        
+		int z = 1 + 2 - 3 * 4 / 5 % 6 - (x[1][0] == y[0][0] ? x[1][0] : 7);
+		int a = (z == y[0][0] ? x[1][0] : 7);
+        
+        System.out.println(a);
     }
 
     /**
@@ -63,23 +84,7 @@ public class Sample
      */
     private boolean regenerateJavaFile(File file) throws Exception
     {
-        // read the java file in
-        FileInputStream input = new FileInputStream(file);        
 
-        // parse it to an AST
-        BsjParserImpl parser = new BsjParserImpl(new BsjNodeFactoryImpl());
-        //Node ast = parser.parse(new BufferedReader(input));
-
-        // regenerate it once
-        //String regen1 = ast.executeOperation(new BsjSourceSerializerImpl(), null);
-        
-        // use the regenerated version to create another AST
-        //Node newAst = parser.parse(new ByteArrayInputStream(regen1.getBytes()));
-                
-        // regenerate it again from the new AST
-        //String regen2 = newAst.executeOperation(new BsjSourceSerializerImpl(), null);
-        
-        // the twice regenerated source should equal the once regenerated source
         return false;
     }
 }
