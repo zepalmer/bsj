@@ -112,6 +112,8 @@ public class BsjTreeLifterTest
             e.printStackTrace();
             fail(e.getMessage());
         }
+        
+        // regenerate and save the original source
         String originalProgram = ast.executeOperation(new BsjSourceSerializerImpl(), null);
         
         // create a metaFactory for use in the lifted code
@@ -136,7 +138,6 @@ public class BsjTreeLifterTest
 		}
                 
         // compare the original (regenerated) to the lifted, recompiled and regenerated
-        assertTrue(originalProgram.equals(liftedProgram));
         return originalProgram.equals(liftedProgram);
 	}
     
