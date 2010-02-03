@@ -3,6 +3,7 @@ package edu.jhu.cs.bsj.compiler.impl.tool.compiler;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Stack;
 
 import javax.annotation.Generated;
 
@@ -72,6 +73,12 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
 	{
 		return expressionizeInt(i);
 	}
+	
+	/**
+	 * The stack of type parameterizations for the ListNode handler.  If this stack is empty, the invoker of
+	 * executeListNode is calling it directly (that is, it is not being called from this lifter directly).
+	 */
+	private Stack<String> argsForListNodeStack = new Stack<String>();
     private BsjNodeFactory factory;
 
     public BsjTreeLifter(BsjNodeFactory factory)
@@ -282,10 +289,12 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
         ExpressionNode factoryNode = p.getFirst();
         List<BlockStatementNode> statements = p.getSecond();
 
+        argsForListNodeStack.push("InterfaceMemberNode");
         String liftMembersVarName = 
                 node.getMembers() != null ?
                 node.getMembers().executeOperation(this,p) :
                 null;
+        argsForListNodeStack.pop();
 
         String myVarName = getUniqueName();
         statements.add(
@@ -370,18 +379,22 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                 node.getExtendsClause() != null ?
                 node.getExtendsClause().executeOperation(this,p) :
                 null;
+        argsForListNodeStack.push("TypeNode");
         String liftImplementsClauseVarName = 
                 node.getImplementsClause() != null ?
                 node.getImplementsClause().executeOperation(this,p) :
                 null;
+        argsForListNodeStack.pop();
         String liftBodyVarName = 
                 node.getBody() != null ?
                 node.getBody().executeOperation(this,p) :
                 null;
+        argsForListNodeStack.push("TypeParameterNode");
         String liftTypeParametersVarName = 
                 node.getTypeParameters() != null ?
                 node.getTypeParameters().executeOperation(this,p) :
                 null;
+        argsForListNodeStack.pop();
         String liftIdentifierVarName = 
                 node.getIdentifier() != null ?
                 node.getIdentifier().executeOperation(this,p) :
@@ -635,10 +648,12 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                 node.getExpression() != null ?
                 node.getExpression().executeOperation(this,p) :
                 null;
+        argsForListNodeStack.push("BlockStatementNode");
         String liftStatementsVarName = 
                 node.getStatements() != null ?
                 node.getStatements().executeOperation(this,p) :
                 null;
+        argsForListNodeStack.pop();
 
         String myVarName = getUniqueName();
         statements.add(
@@ -796,10 +811,12 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
 
         boolean liftFinalFlagValue = 
                 node.getFinalFlag();
+        argsForListNodeStack.push("AnnotationNode");
         String liftAnnotationsVarName = 
                 node.getAnnotations() != null ?
                 node.getAnnotations().executeOperation(this,p) :
                 null;
+        argsForListNodeStack.pop();
 
         String myVarName = getUniqueName();
         statements.add(
@@ -883,10 +900,12 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                 node.getStaticFlag();
         boolean liftStrictfpFlagValue = 
                 node.getStrictfpFlag();
+        argsForListNodeStack.push("AnnotationNode");
         String liftAnnotationsVarName = 
                 node.getAnnotations() != null ?
                 node.getAnnotations().executeOperation(this,p) :
                 null;
+        argsForListNodeStack.pop();
 
         String myVarName = getUniqueName();
         statements.add(
@@ -930,14 +949,18 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                 node.getQualifyingExpression() != null ?
                 node.getQualifyingExpression().executeOperation(this,p) :
                 null;
+        argsForListNodeStack.push("ExpressionNode");
         String liftArgumentsVarName = 
                 node.getArguments() != null ?
                 node.getArguments().executeOperation(this,p) :
                 null;
+        argsForListNodeStack.pop();
+        argsForListNodeStack.push("TypeNode");
         String liftTypeArgumentsVarName = 
                 node.getTypeArguments() != null ?
                 node.getTypeArguments().executeOperation(this,p) :
                 null;
+        argsForListNodeStack.pop();
 
         String myVarName = getUniqueName();
         statements.add(
@@ -1016,10 +1039,12 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
         ExpressionNode factoryNode = p.getFirst();
         List<BlockStatementNode> statements = p.getSecond();
 
+        argsForListNodeStack.push("BlockStatementNode");
         String liftBodyVarName = 
                 node.getBody() != null ?
                 node.getBody().executeOperation(this,p) :
                 null;
+        argsForListNodeStack.pop();
 
         String myVarName = getUniqueName();
         statements.add(
@@ -1099,14 +1124,18 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
         ExpressionNode factoryNode = p.getFirst();
         List<BlockStatementNode> statements = p.getSecond();
 
+        argsForListNodeStack.push("EnumConstantDeclarationNode");
         String liftConstantsVarName = 
                 node.getConstants() != null ?
                 node.getConstants().executeOperation(this,p) :
                 null;
+        argsForListNodeStack.pop();
+        argsForListNodeStack.push("ClassMemberNode");
         String liftMembersVarName = 
                 node.getMembers() != null ?
                 node.getMembers().executeOperation(this,p) :
                 null;
+        argsForListNodeStack.pop();
 
         String myVarName = getUniqueName();
         statements.add(
@@ -1150,10 +1179,12 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                 node.getBlock() != null ?
                 node.getBlock().executeOperation(this,p) :
                 null;
+        argsForListNodeStack.push("CatchNode");
         String liftCatchesVarName = 
                 node.getCatches() != null ?
                 node.getCatches().executeOperation(this,p) :
                 null;
+        argsForListNodeStack.pop();
         String liftFinallyBlockVarName = 
                 node.getFinallyBlock() != null ?
                 node.getFinallyBlock().executeOperation(this,p) :
@@ -1284,10 +1315,12 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                 node.getModifiers() != null ?
                 node.getModifiers().executeOperation(this,p) :
                 null;
+        argsForListNodeStack.push("TypeNode");
         String liftImplementsClauseVarName = 
                 node.getImplementsClause() != null ?
                 node.getImplementsClause().executeOperation(this,p) :
                 null;
+        argsForListNodeStack.pop();
         String liftBodyVarName = 
                 node.getBody() != null ?
                 node.getBody().executeOperation(this,p) :
@@ -1385,10 +1418,12 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                 node.getModifiers() != null ?
                 node.getModifiers().executeOperation(this,p) :
                 null;
+        argsForListNodeStack.push("VariableDeclaratorNode");
         String liftDeclaratorsVarName = 
                 node.getDeclarators() != null ?
                 node.getDeclarators().executeOperation(this,p) :
                 null;
+        argsForListNodeStack.pop();
 
         String myVarName = getUniqueName();
         statements.add(
@@ -1428,10 +1463,12 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
         ExpressionNode factoryNode = p.getFirst();
         List<BlockStatementNode> statements = p.getSecond();
 
+        argsForListNodeStack.push("AnnotationMemberNode");
         String liftMembersVarName = 
                 node.getMembers() != null ?
                 node.getMembers().executeOperation(this,p) :
                 null;
+        argsForListNodeStack.pop();
 
         String myVarName = getUniqueName();
         statements.add(
@@ -1568,10 +1605,12 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                 node.getStaticFlag();
         boolean liftStrictfpFlagValue = 
                 node.getStrictfpFlag();
+        argsForListNodeStack.push("AnnotationNode");
         String liftAnnotationsVarName = 
                 node.getAnnotations() != null ?
                 node.getAnnotations().executeOperation(this,p) :
                 null;
+        argsForListNodeStack.pop();
 
         String myVarName = getUniqueName();
         statements.add(
@@ -1749,10 +1788,12 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                 node.getAccess();
         boolean liftStrictfpFlagValue = 
                 node.getStrictfpFlag();
+        argsForListNodeStack.push("AnnotationNode");
         String liftAnnotationsVarName = 
                 node.getAnnotations() != null ?
                 node.getAnnotations().executeOperation(this,p) :
                 null;
+        argsForListNodeStack.pop();
 
         String myVarName = getUniqueName();
         statements.add(
@@ -1871,10 +1912,12 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
         ExpressionNode factoryNode = p.getFirst();
         List<BlockStatementNode> statements = p.getSecond();
 
+        argsForListNodeStack.push("AnnotationElementNode");
         String liftArgumentsVarName = 
                 node.getArguments() != null ?
                 node.getArguments().executeOperation(this,p) :
                 null;
+        argsForListNodeStack.pop();
         String liftAnnotationTypeVarName = 
                 node.getAnnotationType() != null ?
                 node.getAnnotationType().executeOperation(this,p) :
@@ -1973,18 +2016,24 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                 node.getIdentifier() != null ?
                 node.getIdentifier().executeOperation(this,p) :
                 null;
+        argsForListNodeStack.push("TypeArgumentNode");
         String liftTypeArgumentsVarName = 
                 node.getTypeArguments() != null ?
                 node.getTypeArguments().executeOperation(this,p) :
                 null;
+        argsForListNodeStack.pop();
+        argsForListNodeStack.push("TypeArgumentNode");
         String liftConstructorTypeArgumentsVarName = 
                 node.getConstructorTypeArguments() != null ?
                 node.getConstructorTypeArguments().executeOperation(this,p) :
                 null;
+        argsForListNodeStack.pop();
+        argsForListNodeStack.push("ExpressionNode");
         String liftArgumentsVarName = 
                 node.getArguments() != null ?
                 node.getArguments().executeOperation(this,p) :
                 null;
+        argsForListNodeStack.pop();
         String liftBodyVarName = 
                 node.getBody() != null ?
                 node.getBody().executeOperation(this,p) :
@@ -2184,10 +2233,12 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
         ExpressionNode factoryNode = p.getFirst();
         List<BlockStatementNode> statements = p.getSecond();
 
+        argsForListNodeStack.push("StatementExpressionNode");
         String liftExpressionsVarName = 
                 node.getExpressions() != null ?
                 node.getExpressions().executeOperation(this,p) :
                 null;
+        argsForListNodeStack.pop();
 
         String myVarName = getUniqueName();
         statements.add(
@@ -2228,10 +2279,12 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                 node.getName() != null ?
                 node.getName().executeOperation(this,p) :
                 null;
+        argsForListNodeStack.push("AnnotationNode");
         String liftAnnotationsVarName = 
                 node.getAnnotations() != null ?
                 node.getAnnotations().executeOperation(this,p) :
                 null;
+        argsForListNodeStack.pop();
 
         String myVarName = getUniqueName();
         statements.add(
@@ -2336,14 +2389,18 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                 node.getPackageDeclaration() != null ?
                 node.getPackageDeclaration().executeOperation(this,p) :
                 null;
+        argsForListNodeStack.push("ImportNode");
         String liftImportsVarName = 
                 node.getImports() != null ?
                 node.getImports().executeOperation(this,p) :
                 null;
+        argsForListNodeStack.pop();
+        argsForListNodeStack.push("TypeDeclarationNode");
         String liftTypeDeclsVarName = 
                 node.getTypeDecls() != null ?
                 node.getTypeDecls().executeOperation(this,p) :
                 null;
+        argsForListNodeStack.pop();
 
         String myVarName = getUniqueName();
         statements.add(
@@ -2545,10 +2602,12 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
         ExpressionNode factoryNode = p.getFirst();
         List<BlockStatementNode> statements = p.getSecond();
 
+        argsForListNodeStack.push("AnonymousClassMemberNode");
         String liftMembersVarName = 
                 node.getMembers() != null ?
                 node.getMembers().executeOperation(this,p) :
                 null;
+        argsForListNodeStack.pop();
 
         String myVarName = getUniqueName();
         statements.add(
@@ -2585,10 +2644,12 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
         ExpressionNode factoryNode = p.getFirst();
         List<BlockStatementNode> statements = p.getSecond();
 
+        argsForListNodeStack.push("BlockStatementNode");
         String liftStatementsVarName = 
                 node.getStatements() != null ?
                 node.getStatements().executeOperation(this,p) :
                 null;
+        argsForListNodeStack.pop();
 
         String myVarName = getUniqueName();
         statements.add(
@@ -2928,10 +2989,12 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                 node.getExpression() != null ?
                 node.getExpression().executeOperation(this,p) :
                 null;
+        argsForListNodeStack.push("CaseNode");
         String liftCasesVarName = 
                 node.getCases() != null ?
                 node.getCases().executeOperation(this,p) :
                 null;
+        argsForListNodeStack.pop();
 
         String myVarName = getUniqueName();
         statements.add(
@@ -2971,14 +3034,18 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
         ExpressionNode factoryNode = p.getFirst();
         List<BlockStatementNode> statements = p.getSecond();
 
+        argsForListNodeStack.push("ExpressionNode");
         String liftArgumentsVarName = 
                 node.getArguments() != null ?
                 node.getArguments().executeOperation(this,p) :
                 null;
+        argsForListNodeStack.pop();
+        argsForListNodeStack.push("TypeNode");
         String liftTypeArgumentsVarName = 
                 node.getTypeArguments() != null ?
                 node.getTypeArguments().executeOperation(this,p) :
                 null;
+        argsForListNodeStack.pop();
 
         String myVarName = getUniqueName();
         statements.add(
@@ -3018,10 +3085,12 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
         ExpressionNode factoryNode = p.getFirst();
         List<BlockStatementNode> statements = p.getSecond();
 
+        argsForListNodeStack.push("AnnotationNode");
         String liftAnnotationsVarName = 
                 node.getAnnotations() != null ?
                 node.getAnnotations().executeOperation(this,p) :
                 null;
+        argsForListNodeStack.pop();
 
         String myVarName = getUniqueName();
         statements.add(
@@ -3070,22 +3139,28 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                 node.getModifiers() != null ?
                 node.getModifiers().executeOperation(this,p) :
                 null;
+        argsForListNodeStack.push("VariableNode");
         String liftParametersVarName = 
                 node.getParameters() != null ?
                 node.getParameters().executeOperation(this,p) :
                 null;
+        argsForListNodeStack.pop();
         String liftVarargParameterVarName = 
                 node.getVarargParameter() != null ?
                 node.getVarargParameter().executeOperation(this,p) :
                 null;
+        argsForListNodeStack.push("UnparameterizedTypeNode");
         String liftThrowTypesVarName = 
                 node.getThrowTypes() != null ?
                 node.getThrowTypes().executeOperation(this,p) :
                 null;
+        argsForListNodeStack.pop();
+        argsForListNodeStack.push("TypeParameterNode");
         String liftTypeParametersVarName = 
                 node.getTypeParameters() != null ?
                 node.getTypeParameters().executeOperation(this,p) :
                 null;
+        argsForListNodeStack.pop();
         String liftJavadocVarName = 
                 node.getJavadoc() != null ?
                 node.getJavadoc().executeOperation(this,p) :
@@ -3195,10 +3270,12 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                 node.getCondition() != null ?
                 node.getCondition().executeOperation(this,p) :
                 null;
+        argsForListNodeStack.push("StatementExpressionNode");
         String liftUpdateVarName = 
                 node.getUpdate() != null ?
                 node.getUpdate().executeOperation(this,p) :
                 null;
+        argsForListNodeStack.pop();
         String liftStatementVarName = 
                 node.getStatement() != null ?
                 node.getStatement().executeOperation(this,p) :
@@ -3292,6 +3369,19 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
     @Override
     public <T extends Node> String executeListNode(ListNode<T> node, Pair<ExpressionNode,List<BlockStatementNode>> p)
     {
+        String typeName;
+        if (argsForListNodeStack.size() == 0)
+        {
+            typeName = "T";
+        } else
+        {
+            typeName = argsForListNodeStack.peek();
+        }
+        return executeListNode(node, p, typeName);
+    }
+
+    public <T extends Node> String executeListNode(ListNode<T> node, Pair<ExpressionNode,List<BlockStatementNode>> p, String argName)
+    {
         ExpressionNode factoryNode = p.getFirst();
         List<BlockStatementNode> statements = p.getSecond();
 
@@ -3312,7 +3402,7 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                                 Arrays.<TypeArgumentNode>asList(
                                                         factory.makeUnparameterizedTypeNode(
                                                                 factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode("T"),
+                                                                        factory.makeIdentifierNode(argName),
                                                                         NameCategory.TYPE))
                                                         ))),
                                 factory.makeIdentifierNode(liftChildrenListName),
@@ -3326,7 +3416,7 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                                         Arrays.<TypeArgumentNode>asList(
                                                                 factory.makeUnparameterizedTypeNode(
                                                                         factory.makeSimpleNameNode(
-                                                                                factory.makeIdentifierNode("T"),
+                                                                                factory.makeIdentifierNode(argName),
                                                                                 NameCategory.TYPE))
                                                                 ))),
                                         factory.makeListNode(Collections.<TypeArgumentNode>emptyList()),
@@ -3354,6 +3444,9 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
         }
 
         String myVarName = getUniqueName();
+        String nodeTypeArg = argsForListNodeStack.size() == 0 ?
+                "T" :
+                argsForListNodeStack.peek();
         statements.add(
                 factory.makeVariableDeclarationNode(
                         factory.makeVariableModifiersNode(
@@ -3371,9 +3464,7 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                             Arrays.<TypeArgumentNode>asList(
                                                 factory.makeUnparameterizedTypeNode(
                                                         factory.makeSimpleNameNode(
-                                                                factory.makeIdentifierNode(
-                                                                        "T"
-                                                                ),
+                                                                factory.makeIdentifierNode(nodeTypeArg),
                                                                 NameCategory.TYPE
                                                         )
                                                 )
@@ -3386,15 +3477,10 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                                 factory.makeIdentifierNode("makeListNode"),
                                                 factory.makeListNode(
                                                         Arrays.<ExpressionNode>asList(
-                                                                factory.makeMethodInvocationByExpressionNode(
-                                                                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                                                                        factory.makeIdentifierNode("makeListNode"),
-                                                                        factory.makeListNode(
-                                                                                Arrays.<ExpressionNode>asList(
-                                                                                        factory.makeFieldAccessByNameNode(
-                                                                                                factory.makeSimpleNameNode(
-                                                                                                        factory.makeIdentifierNode(liftChildrenListName), NameCategory.EXPRESSION)))),
-                                                                        factory.makeListNode(Collections.<TypeNode>emptyList()))
+                                                                factory.makeFieldAccessByNameNode(
+                                                                        factory.makeSimpleNameNode(
+                                                                                factory.makeIdentifierNode(liftChildrenListName), NameCategory.EXPRESSION))
+
                                                                 )),
                                                 factory.makeListNode(Collections.<TypeNode>emptyList()))
             )))));
@@ -3408,18 +3494,22 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
         ExpressionNode factoryNode = p.getFirst();
         List<BlockStatementNode> statements = p.getSecond();
 
+        argsForListNodeStack.push("AnnotationNode");
         String liftAnnotationsVarName = 
                 node.getAnnotations() != null ?
                 node.getAnnotations().executeOperation(this,p) :
                 null;
+        argsForListNodeStack.pop();
         String liftIdentifierVarName = 
                 node.getIdentifier() != null ?
                 node.getIdentifier().executeOperation(this,p) :
                 null;
+        argsForListNodeStack.push("ExpressionNode");
         String liftArgumentsVarName = 
                 node.getArguments() != null ?
                 node.getArguments().executeOperation(this,p) :
                 null;
+        argsForListNodeStack.pop();
         String liftBodyVarName = 
                 node.getBody() != null ?
                 node.getBody().executeOperation(this,p) :
@@ -3518,10 +3608,12 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
 
         AccessModifier liftAccessValue = 
                 node.getAccess();
+        argsForListNodeStack.push("AnnotationNode");
         String liftAnnotationsVarName = 
                 node.getAnnotations() != null ?
                 node.getAnnotations().executeOperation(this,p) :
                 null;
+        argsForListNodeStack.pop();
 
         String myVarName = getUniqueName();
         statements.add(
@@ -3742,10 +3834,12 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                 node.getTransientFlag();
         boolean liftVolatileFlagValue = 
                 node.getVolatileFlag();
+        argsForListNodeStack.push("AnnotationNode");
         String liftAnnotationsVarName = 
                 node.getAnnotations() != null ?
                 node.getAnnotations().executeOperation(this,p) :
                 null;
+        argsForListNodeStack.pop();
 
         String myVarName = getUniqueName();
         statements.add(
@@ -3791,10 +3885,12 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                 node.getIdentifier() != null ?
                 node.getIdentifier().executeOperation(this,p) :
                 null;
+        argsForListNodeStack.push("DeclaredTypeNode");
         String liftBoundsVarName = 
                 node.getBounds() != null ?
                 node.getBounds().executeOperation(this,p) :
                 null;
+        argsForListNodeStack.pop();
 
         String myVarName = getUniqueName();
         statements.add(
@@ -3949,10 +4045,12 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                 node.getModifiers() != null ?
                 node.getModifiers().executeOperation(this,p) :
                 null;
+        argsForListNodeStack.push("VariableDeclaratorNode");
         String liftDeclaratorsVarName = 
                 node.getDeclarators() != null ?
                 node.getDeclarators().executeOperation(this,p) :
                 null;
+        argsForListNodeStack.pop();
         String liftJavadocVarName = 
                 node.getJavadoc() != null ?
                 node.getJavadoc().executeOperation(this,p) :
@@ -3999,10 +4097,12 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
         ExpressionNode factoryNode = p.getFirst();
         List<BlockStatementNode> statements = p.getSecond();
 
+        argsForListNodeStack.push("AnnotationValueNode");
         String liftValuesVarName = 
                 node.getValues() != null ?
                 node.getValues().executeOperation(this,p) :
                 null;
+        argsForListNodeStack.pop();
 
         String myVarName = getUniqueName();
         statements.add(
@@ -4134,14 +4234,18 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                 node.getIdentifier() != null ?
                 node.getIdentifier().executeOperation(this,p) :
                 null;
+        argsForListNodeStack.push("ExpressionNode");
         String liftArgumentsVarName = 
                 node.getArguments() != null ?
                 node.getArguments().executeOperation(this,p) :
                 null;
+        argsForListNodeStack.pop();
+        argsForListNodeStack.push("TypeNode");
         String liftTypeArgumentsVarName = 
                 node.getTypeArguments() != null ?
                 node.getTypeArguments().executeOperation(this,p) :
                 null;
+        argsForListNodeStack.pop();
 
         String myVarName = getUniqueName();
         statements.add(
@@ -4197,10 +4301,12 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                 node.getFinalFlag();
         boolean liftStrictfpFlagValue = 
                 node.getStrictfpFlag();
+        argsForListNodeStack.push("AnnotationNode");
         String liftAnnotationsVarName = 
                 node.getAnnotations() != null ?
                 node.getAnnotations().executeOperation(this,p) :
                 null;
+        argsForListNodeStack.pop();
 
         String myVarName = getUniqueName();
         statements.add(
@@ -4242,10 +4348,12 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
         ExpressionNode factoryNode = p.getFirst();
         List<BlockStatementNode> statements = p.getSecond();
 
+        argsForListNodeStack.push("VariableInitializerNode");
         String liftInitializersVarName = 
                 node.getInitializers() != null ?
                 node.getInitializers().executeOperation(this,p) :
                 null;
+        argsForListNodeStack.pop();
 
         String myVarName = getUniqueName();
         statements.add(
@@ -4420,14 +4528,18 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                 node.getIdentifier() != null ?
                 node.getIdentifier().executeOperation(this,p) :
                 null;
+        argsForListNodeStack.push("ExpressionNode");
         String liftArgumentsVarName = 
                 node.getArguments() != null ?
                 node.getArguments().executeOperation(this,p) :
                 null;
+        argsForListNodeStack.pop();
+        argsForListNodeStack.push("TypeNode");
         String liftTypeArgumentsVarName = 
                 node.getTypeArguments() != null ?
                 node.getTypeArguments().executeOperation(this,p) :
                 null;
+        argsForListNodeStack.pop();
 
         String myVarName = getUniqueName();
         statements.add(
@@ -4654,14 +4766,18 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                 node.getName() != null ?
                 node.getName().executeOperation(this,p) :
                 null;
+        argsForListNodeStack.push("ExpressionNode");
         String liftArgumentsVarName = 
                 node.getArguments() != null ?
                 node.getArguments().executeOperation(this,p) :
                 null;
+        argsForListNodeStack.pop();
+        argsForListNodeStack.push("TypeNode");
         String liftTypeArgumentsVarName = 
                 node.getTypeArguments() != null ?
                 node.getTypeArguments().executeOperation(this,p) :
                 null;
+        argsForListNodeStack.pop();
 
         String myVarName = getUniqueName();
         statements.add(
@@ -4708,10 +4824,12 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                 node.getBaseType() != null ?
                 node.getBaseType().executeOperation(this,p) :
                 null;
+        argsForListNodeStack.push("TypeArgumentNode");
         String liftTypeArgumentsVarName = 
                 node.getTypeArguments() != null ?
                 node.getTypeArguments().executeOperation(this,p) :
                 null;
+        argsForListNodeStack.pop();
 
         String myVarName = getUniqueName();
         statements.add(
@@ -4755,18 +4873,22 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                 node.getModifiers() != null ?
                 node.getModifiers().executeOperation(this,p) :
                 null;
+        argsForListNodeStack.push("TypeNode");
         String liftExtendsClauseVarName = 
                 node.getExtendsClause() != null ?
                 node.getExtendsClause().executeOperation(this,p) :
                 null;
+        argsForListNodeStack.pop();
         String liftBodyVarName = 
                 node.getBody() != null ?
                 node.getBody().executeOperation(this,p) :
                 null;
+        argsForListNodeStack.push("TypeParameterNode");
         String liftTypeParametersVarName = 
                 node.getTypeParameters() != null ?
                 node.getTypeParameters().executeOperation(this,p) :
                 null;
+        argsForListNodeStack.pop();
         String liftIdentifierVarName = 
                 node.getIdentifier() != null ?
                 node.getIdentifier().executeOperation(this,p) :
@@ -4870,10 +4992,12 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                 node.getConstructorInvocation() != null ?
                 node.getConstructorInvocation().executeOperation(this,p) :
                 null;
+        argsForListNodeStack.push("BlockStatementNode");
         String liftStatementsVarName = 
                 node.getStatements() != null ?
                 node.getStatements().executeOperation(this,p) :
                 null;
+        argsForListNodeStack.pop();
 
         String myVarName = getUniqueName();
         statements.add(
@@ -4957,14 +5081,18 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                 node.getType() != null ?
                 node.getType().executeOperation(this,p) :
                 null;
+        argsForListNodeStack.push("TypeArgumentNode");
         String liftConstructorTypeArgumentsVarName = 
                 node.getConstructorTypeArguments() != null ?
                 node.getConstructorTypeArguments().executeOperation(this,p) :
                 null;
+        argsForListNodeStack.pop();
+        argsForListNodeStack.push("ExpressionNode");
         String liftArgumentsVarName = 
                 node.getArguments() != null ?
                 node.getArguments().executeOperation(this,p) :
                 null;
+        argsForListNodeStack.pop();
         String liftBodyVarName = 
                 node.getBody() != null ?
                 node.getBody().executeOperation(this,p) :
@@ -5057,10 +5185,12 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
         ExpressionNode factoryNode = p.getFirst();
         List<BlockStatementNode> statements = p.getSecond();
 
+        argsForListNodeStack.push("ExpressionNode");
         String liftDimExpressionsVarName = 
                 node.getDimExpressions() != null ?
                 node.getDimExpressions().executeOperation(this,p) :
                 null;
+        argsForListNodeStack.pop();
         String liftBaseTypeVarName = 
                 node.getBaseType() != null ?
                 node.getBaseType().executeOperation(this,p) :
@@ -5121,10 +5251,12 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                 node.getNativeFlag();
         boolean liftStrictfpFlagValue = 
                 node.getStrictfpFlag();
+        argsForListNodeStack.push("AnnotationNode");
         String liftAnnotationsVarName = 
                 node.getAnnotations() != null ?
                 node.getAnnotations().executeOperation(this,p) :
                 null;
+        argsForListNodeStack.pop();
 
         String myVarName = getUniqueName();
         statements.add(
@@ -5168,10 +5300,12 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
         ExpressionNode factoryNode = p.getFirst();
         List<BlockStatementNode> statements = p.getSecond();
 
+        argsForListNodeStack.push("ClassMemberNode");
         String liftMembersVarName = 
                 node.getMembers() != null ?
                 node.getMembers().executeOperation(this,p) :
                 null;
+        argsForListNodeStack.pop();
 
         String myVarName = getUniqueName();
         statements.add(
@@ -5380,10 +5514,12 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                 node.getIdentifier() != null ?
                 node.getIdentifier().executeOperation(this,p) :
                 null;
+        argsForListNodeStack.push("VariableNode");
         String liftParametersVarName = 
                 node.getParameters() != null ?
                 node.getParameters().executeOperation(this,p) :
                 null;
+        argsForListNodeStack.pop();
         String liftVarargParameterVarName = 
                 node.getVarargParameter() != null ?
                 node.getVarargParameter().executeOperation(this,p) :
@@ -5392,14 +5528,18 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                 node.getReturnType() != null ?
                 node.getReturnType().executeOperation(this,p) :
                 null;
+        argsForListNodeStack.push("UnparameterizedTypeNode");
         String liftThrowTypesVarName = 
                 node.getThrowTypes() != null ?
                 node.getThrowTypes().executeOperation(this,p) :
                 null;
+        argsForListNodeStack.pop();
+        argsForListNodeStack.push("TypeParameterNode");
         String liftTypeParametersVarName = 
                 node.getTypeParameters() != null ?
                 node.getTypeParameters().executeOperation(this,p) :
                 null;
+        argsForListNodeStack.pop();
         String liftJavadocVarName = 
                 node.getJavadoc() != null ?
                 node.getJavadoc().executeOperation(this,p) :
