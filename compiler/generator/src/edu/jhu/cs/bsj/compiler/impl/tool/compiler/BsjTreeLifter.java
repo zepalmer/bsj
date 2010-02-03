@@ -3295,7 +3295,63 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
         ExpressionNode factoryNode = p.getFirst();
         List<BlockStatementNode> statements = p.getSecond();
 
-        // TODO: children
+        String liftChildrenListName = getUniqueName();
+        statements.add(
+                factory.makeVariableDeclarationNode(
+                        factory.makeVariableModifiersNode(
+                                false,
+                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),
+                factory.makeListNode(Collections.singletonList(
+                        factory.makeVariableDeclaratorNode(
+                                factory.makeParameterizedTypeNode(
+                                        factory.makeUnparameterizedTypeNode(
+                                                factory.makeSimpleNameNode(
+                                                        factory.makeIdentifierNode("List"),
+                                                        NameCategory.TYPE)),
+                                        factory.makeListNode(
+                                                Arrays.<TypeArgumentNode>asList(
+                                                        factory.makeUnparameterizedTypeNode(
+                                                                factory.makeSimpleNameNode(
+                                                                        factory.makeIdentifierNode("T"),
+                                                                        NameCategory.TYPE))
+                                                        ))),
+                                factory.makeIdentifierNode(liftChildrenListName),
+                                factory.makeUnqualifiedClassInstantiationNode(
+                                        factory.makeParameterizedTypeNode(
+                                                factory.makeUnparameterizedTypeNode(
+                                                        factory.makeSimpleNameNode(
+                                                                factory.makeIdentifierNode("ArrayList"),
+                                                                NameCategory.TYPE)),
+                                                factory.makeListNode(
+                                                        Arrays.<TypeArgumentNode>asList(
+                                                                factory.makeUnparameterizedTypeNode(
+                                                                        factory.makeSimpleNameNode(
+                                                                                factory.makeIdentifierNode("T"),
+                                                                                NameCategory.TYPE))
+                                                                ))),
+                                        factory.makeListNode(Collections.<TypeArgumentNode>emptyList()),
+                                        factory.makeListNode(Collections.<ExpressionNode>emptyList()),
+                                        null))))));
+
+        for (T listval : node.getChildren())
+        {
+            String varname = listval.executeOperation(this,p);
+            statements.add(
+                factory.makeExpressionStatementNode(
+                    factory.makeMethodInvocationByExpressionNode(
+                            factory.makeFieldAccessByNameNode(
+                                    factory.makeSimpleNameNode(
+                                            factory.makeIdentifierNode(liftChildrenListName),
+                                            NameCategory.EXPRESSION)),
+                            factory.makeIdentifierNode("add"),
+                            factory.makeListNode(
+                                    Collections.<ExpressionNode>singletonList(
+                                            factory.makeFieldAccessByNameNode(
+                                                    factory.makeSimpleNameNode(
+                                                            factory.makeIdentifierNode(varname),
+                                                            NameCategory.EXPRESSION)))),
+                            factory.makeListNode(Collections.<TypeNode>emptyList()))));
+        }
 
         String myVarName = getUniqueName();
         statements.add(
@@ -3330,7 +3386,15 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode,List<
                                                 factory.makeIdentifierNode("makeListNode"),
                                                 factory.makeListNode(
                                                         Arrays.<ExpressionNode>asList(
-                                                                /* TODO */ factory.makeBooleanLiteralNode(true)
+                                                                factory.makeMethodInvocationByExpressionNode(
+                                                                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                                                                        factory.makeIdentifierNode("makeListNode"),
+                                                                        factory.makeListNode(
+                                                                                Arrays.<ExpressionNode>asList(
+                                                                                        factory.makeFieldAccessByNameNode(
+                                                                                                factory.makeSimpleNameNode(
+                                                                                                        factory.makeIdentifierNode(liftChildrenListName), NameCategory.EXPRESSION)))),
+                                                                        factory.makeListNode(Collections.<TypeNode>emptyList()))
                                                                 )),
                                                 factory.makeListNode(Collections.<TypeNode>emptyList()))
             )))));

@@ -1930,7 +1930,67 @@ public class SourceGenerator
 
 					public void list(PrintStream ps, Prop p)
 					{
-						ps.println("        // TODO: " + p.name);
+						String typeArg = p.type.substring(5,p.type.length()-1);
+						// Assumption: lists are not supposed to be null
+						// Create a List of T in metaland
+						ps.println("        String lift" + capFirst(p.name) + "ListName = getUniqueName();");
+						ps.println("        statements.add(");
+						ps.println("                factory.makeVariableDeclarationNode(");
+						ps.println("                        factory.makeVariableModifiersNode(");
+						ps.println("                                false,");
+						ps.println("                                factory.makeListNode(Collections.<AnnotationNode>emptyList())),");
+						ps.println("                factory.makeListNode(Collections.singletonList(");
+						ps.println("                        factory.makeVariableDeclaratorNode(");
+						ps.println("                                factory.makeParameterizedTypeNode(");
+						ps.println("                                        factory.makeUnparameterizedTypeNode(");
+						ps.println("                                                factory.makeSimpleNameNode(");
+						ps.println("                                                        factory.makeIdentifierNode(\"List\"),");
+						ps.println("                                                        NameCategory.TYPE)),");
+						ps.println("                                        factory.makeListNode(");
+						ps.println("                                                Arrays.<TypeArgumentNode>asList(");
+						ps.println("                                                        factory.makeUnparameterizedTypeNode(");
+						ps.println("                                                                factory.makeSimpleNameNode(");
+						ps.println("                                                                        factory.makeIdentifierNode(\"" + typeArg + "\"),");
+						ps.println("                                                                        NameCategory.TYPE))");
+						ps.println("                                                        ))),");
+						ps.println("                                factory.makeIdentifierNode(lift" + capFirst(p.name) + "ListName),");
+						ps.println("                                factory.makeUnqualifiedClassInstantiationNode(");
+						ps.println("                                        factory.makeParameterizedTypeNode(");
+						ps.println("                                                factory.makeUnparameterizedTypeNode(");
+						ps.println("                                                        factory.makeSimpleNameNode(");
+						ps.println("                                                                factory.makeIdentifierNode(\"ArrayList\"),");
+						ps.println("                                                                NameCategory.TYPE)),");
+						ps.println("                                                factory.makeListNode(");
+						ps.println("                                                        Arrays.<TypeArgumentNode>asList(");
+						ps.println("                                                                factory.makeUnparameterizedTypeNode(");
+						ps.println("                                                                        factory.makeSimpleNameNode(");
+						ps.println("                                                                                factory.makeIdentifierNode(\"" + typeArg + "\"),");
+						ps.println("                                                                                NameCategory.TYPE))");
+						ps.println("                                                                ))),");
+						ps.println("                                        factory.makeListNode(Collections.<TypeArgumentNode>emptyList()),");
+						ps.println("                                        factory.makeListNode(Collections.<ExpressionNode>emptyList()),");
+						ps.println("                                        null))))));");
+						ps.println();
+						// For each T in the list, process it as a node and then add that local variable to the metaland list
+						ps.println("        for (" + typeArg + " listval : node.get" + capFirst(p.name) + "())");
+						ps.println("        {");
+						ps.println("            String varname = listval.executeOperation(this,p);");
+						ps.println("            statements.add(");
+						ps.println("                factory.makeExpressionStatementNode(");
+						ps.println("                    factory.makeMethodInvocationByExpressionNode(");
+						ps.println("                            factory.makeFieldAccessByNameNode(");
+						ps.println("                                    factory.makeSimpleNameNode(");
+						ps.println("                                            factory.makeIdentifierNode(lift" + capFirst(p.name) + "ListName),");
+						ps.println("                                            NameCategory.EXPRESSION)),");
+						ps.println("                            factory.makeIdentifierNode(\"add\"),");
+						ps.println("                            factory.makeListNode(");
+						ps.println("                                    Collections.<ExpressionNode>singletonList(");
+						ps.println("                                            factory.makeFieldAccessByNameNode(");
+						ps.println("                                                    factory.makeSimpleNameNode(");
+						ps.println("                                                            factory.makeIdentifierNode(varname),");
+						ps.println("                                                            NameCategory.EXPRESSION)))),");
+						ps.println("                            factory.makeListNode(Collections.<TypeNode>emptyList()))));");
+						ps.println("        }");
 					}
 
 					public void directCopy(PrintStream ps, Prop p)
@@ -1941,7 +2001,7 @@ public class SourceGenerator
 
 					public void constructorCopy(PrintStream ps, Prop p)
 					{
-						ps.println("        // TODO: " + p.name);
+						ps.println("        // TODO: " + p.name + " : " + p.type);
 					}
 				}, p, ps, def);
 			}
@@ -2022,7 +2082,23 @@ public class SourceGenerator
 
 					public void list(PrintStream ps, Prop p)
 					{
-						ps.print("/* TODO */ factory.makeBooleanLiteralNode(true)");
+						ps.println("factory.makeMethodInvocationByExpressionNode(");
+						ps.print("                                                                        ");
+						ps.println("factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),");
+						ps.print("                                                                        ");
+						ps.println("factory.makeIdentifierNode(\"makeListNode\"),");
+						ps.print("                                                                        ");
+						ps.println("factory.makeListNode(");
+						ps.print("                                                                                ");
+						ps.println("Arrays.<ExpressionNode>asList(");
+						ps.print("                                                                                        ");
+						ps.println("factory.makeFieldAccessByNameNode(");
+						ps.print("                                                                                                ");
+						ps.println("factory.makeSimpleNameNode(");
+						ps.print("                                                                                                        ");
+						ps.println("factory.makeIdentifierNode(lift" + capFirst(p.name) + "ListName), NameCategory.EXPRESSION)))),");
+						ps.print("                                                                        ");
+						ps.print("factory.makeListNode(Collections.<TypeNode>emptyList()))");
 					}
 
 					public void directCopy(PrintStream ps, Prop p)
