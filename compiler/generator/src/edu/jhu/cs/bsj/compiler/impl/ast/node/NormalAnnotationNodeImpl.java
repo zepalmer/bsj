@@ -68,7 +68,10 @@ public class NormalAnnotationNodeImpl extends AnnotationNodeImpl implements Norm
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        this.arguments.receive(visitor);
+        if (this.arguments != null)
+        {
+            this.arguments.receive(visitor);
+        }
     }
 
     /**
@@ -82,7 +85,10 @@ public class NormalAnnotationNodeImpl extends AnnotationNodeImpl implements Norm
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        this.arguments.receiveTyped(visitor);
+        if (this.arguments != null)
+        {
+            this.arguments.receiveTyped(visitor);
+        }
     }
 
     @Override

@@ -65,7 +65,10 @@ public class ForInitializerDeclarationNodeImpl extends NodeImpl implements ForIn
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        this.declaration.receive(visitor);
+        if (this.declaration != null)
+        {
+            this.declaration.receive(visitor);
+        }
     }
 
     /**
@@ -79,7 +82,10 @@ public class ForInitializerDeclarationNodeImpl extends NodeImpl implements ForIn
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        this.declaration.receiveTyped(visitor);
+        if (this.declaration != null)
+        {
+            this.declaration.receiveTyped(visitor);
+        }
     }
 
     @Override

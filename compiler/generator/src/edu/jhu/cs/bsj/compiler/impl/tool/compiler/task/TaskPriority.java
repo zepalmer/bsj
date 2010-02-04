@@ -8,8 +8,8 @@ package edu.jhu.cs.bsj.compiler.impl.tool.compiler.task;
 public enum TaskPriority
 {
 	PARSE(100),
-	// TODO
-	CHEAT(900), // TODO: REMOVE
+	EXTRACT(300),
+	EXECUTE(500),
 	SERIALIZE(1000),
 	
 	;

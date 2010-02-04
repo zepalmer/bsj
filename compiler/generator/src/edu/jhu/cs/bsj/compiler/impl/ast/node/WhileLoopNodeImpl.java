@@ -97,8 +97,14 @@ public class WhileLoopNodeImpl extends NodeImpl implements WhileLoopNode
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        this.condition.receive(visitor);
-        this.statement.receive(visitor);
+        if (this.condition != null)
+        {
+            this.condition.receive(visitor);
+        }
+        if (this.statement != null)
+        {
+            this.statement.receive(visitor);
+        }
     }
 
     /**
@@ -112,8 +118,14 @@ public class WhileLoopNodeImpl extends NodeImpl implements WhileLoopNode
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        this.condition.receiveTyped(visitor);
-        this.statement.receiveTyped(visitor);
+        if (this.condition != null)
+        {
+            this.condition.receiveTyped(visitor);
+        }
+        if (this.statement != null)
+        {
+            this.statement.receiveTyped(visitor);
+        }
     }
 
     @Override

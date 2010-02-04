@@ -134,9 +134,18 @@ public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeI
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        this.enclosingExpression.receive(visitor);
-        this.identifier.receive(visitor);
-        this.typeArguments.receive(visitor);
+        if (this.enclosingExpression != null)
+        {
+            this.enclosingExpression.receive(visitor);
+        }
+        if (this.identifier != null)
+        {
+            this.identifier.receive(visitor);
+        }
+        if (this.typeArguments != null)
+        {
+            this.typeArguments.receive(visitor);
+        }
     }
 
     /**
@@ -150,9 +159,18 @@ public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeI
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        this.enclosingExpression.receiveTyped(visitor);
-        this.identifier.receiveTyped(visitor);
-        this.typeArguments.receiveTyped(visitor);
+        if (this.enclosingExpression != null)
+        {
+            this.enclosingExpression.receiveTyped(visitor);
+        }
+        if (this.identifier != null)
+        {
+            this.identifier.receiveTyped(visitor);
+        }
+        if (this.typeArguments != null)
+        {
+            this.typeArguments.receiveTyped(visitor);
+        }
     }
 
     @Override

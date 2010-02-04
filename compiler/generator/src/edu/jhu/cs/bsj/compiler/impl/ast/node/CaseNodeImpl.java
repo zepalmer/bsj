@@ -98,8 +98,14 @@ public class CaseNodeImpl extends NodeImpl implements CaseNode
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        this.expression.receive(visitor);
-        this.statements.receive(visitor);
+        if (this.expression != null)
+        {
+            this.expression.receive(visitor);
+        }
+        if (this.statements != null)
+        {
+            this.statements.receive(visitor);
+        }
     }
 
     /**
@@ -113,8 +119,14 @@ public class CaseNodeImpl extends NodeImpl implements CaseNode
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        this.expression.receiveTyped(visitor);
-        this.statements.receiveTyped(visitor);
+        if (this.expression != null)
+        {
+            this.expression.receiveTyped(visitor);
+        }
+        if (this.statements != null)
+        {
+            this.statements.receiveTyped(visitor);
+        }
     }
 
     @Override

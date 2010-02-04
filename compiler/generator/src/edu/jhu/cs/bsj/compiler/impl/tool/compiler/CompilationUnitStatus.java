@@ -6,20 +6,15 @@ package edu.jhu.cs.bsj.compiler.impl.tool.compiler;
  */
 public enum CompilationUnitStatus
 {
+	// TODO: states for name analysis, type building, type checking, etc.
 	/** Indicates that no work has been performed. */
 	JUST_STARTED,
 	/** Indicates that the file has been buffered and parsed. */
 	PARSED,
-	
-	/**
-	 * Indicates that the compilation is ready for metaprogram execution.  A compilation unit tracker enters this state
-	 * after parsing once the AST content of the file has been interpreted as static content of a metaprogram.  It also
-	 * enters this state whenever additional metaprograms have been discovered and correctly handled.
-	 */
-	// TODO: more
-
-	/** Indicates that the compilation unit is ready for source serialization. */
-	READY_TO_SERIALIZE,
+	/** Indicates that the file is ready for metaprogram extraction. */
+	METAPROGRAMS_EXTRACTED,
+	/** Indicates that the file is waiting for all metaprograms to terminate. */
+	METAPROGRAMS_EXECUTED,
 	/** Indicates that the compilation unit has been completely processed. */
 	COMPLETE,
 }

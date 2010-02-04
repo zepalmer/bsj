@@ -1207,7 +1207,10 @@ public class SourceGenerator
 			{
 				if (propInstanceOf(p.type, "Node"))
 				{
-					ps.println("        this." + p.name + ".receive(visitor);");
+					ps.println("        if (this." + p.name + " != null)");
+					ps.println("        {");
+					ps.println("            this." + p.name + ".receive(visitor);");
+					ps.println("        }");
 				}
 			}
 			ps.println("    }");
@@ -1235,7 +1238,10 @@ public class SourceGenerator
 			{
 				if (propInstanceOf(p.type, "Node"))
 				{
-					ps.println("        this." + p.name + ".receiveTyped(visitor);");
+					ps.println("        if (this." + p.name + " != null)");
+					ps.println("        {");
+					ps.println("            this." + p.name + ".receiveTyped(visitor);");
+					ps.println("        }");
 				}
 			}
 			ps.println("    }");
@@ -1750,6 +1756,8 @@ public class SourceGenerator
 		PrintStream nps;
 		/** Print stream for all-methods proxy. */
 		PrintStream pps;
+		/** Print stream for default operation implementation. */
+		PrintStream dps;
 
 		@Override
 		public void init() throws IOException
@@ -1762,6 +1770,8 @@ public class SourceGenerator
 					"BsjNodeNoOpOperation<P,R>", true, null, "BsjNodeOperation<P,R>");
 			pps = createOutputFile("edu.jhu.cs.bsj.compiler.ast.util", ClassMode.ABSTRACT, false,
 					"BsjNodeOperationProxy<POrig,ROrig,PNew,RNew>", true, null, "BsjNodeOperation<PNew,RNew>");
+			dps = createOutputFile("edu.jhu.cs.bsj.compiler.ast.util", ClassMode.ABSTRACT, false,
+					"BsjDefaultNodeOperation<P,R>", true, null, "BsjNodeOperation<P,R>");
 		}
 
 		@Override
@@ -1836,6 +1846,18 @@ public class SourceGenerator
 				pps.println("        return after(rorig);");
 				pps.println("    }");
 				pps.println();
+
+				dps.println("    /**");
+				dps.println("     * Executes the default operation for this node.");
+				dps.println("     * @param node The node in question.");
+				dps.println("     * @param p The parameter to this node operation.");
+				dps.println("     */");
+				dps.println("    public " + typeParamS + "R execute" + def.getRawName() + "(" + typeName
+						+ " node, P p)");
+				dps.println("    {");
+				dps.println("        return executeDefault(node, p);");
+				dps.println("    }");
+				dps.println();
 			}
 		}
 
@@ -1852,6 +1874,9 @@ public class SourceGenerator
 
 			pps.println("}");
 			pps.close();
+
+			dps.println("}");
+			dps.close();
 		}
 	}
 

@@ -134,9 +134,18 @@ public class EnumDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl implem
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        this.modifiers.receive(visitor);
-        this.implementsClause.receive(visitor);
-        this.body.receive(visitor);
+        if (this.modifiers != null)
+        {
+            this.modifiers.receive(visitor);
+        }
+        if (this.implementsClause != null)
+        {
+            this.implementsClause.receive(visitor);
+        }
+        if (this.body != null)
+        {
+            this.body.receive(visitor);
+        }
     }
 
     /**
@@ -150,9 +159,18 @@ public class EnumDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl implem
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        this.modifiers.receiveTyped(visitor);
-        this.implementsClause.receiveTyped(visitor);
-        this.body.receiveTyped(visitor);
+        if (this.modifiers != null)
+        {
+            this.modifiers.receiveTyped(visitor);
+        }
+        if (this.implementsClause != null)
+        {
+            this.implementsClause.receiveTyped(visitor);
+        }
+        if (this.body != null)
+        {
+            this.body.receiveTyped(visitor);
+        }
     }
 
     @Override

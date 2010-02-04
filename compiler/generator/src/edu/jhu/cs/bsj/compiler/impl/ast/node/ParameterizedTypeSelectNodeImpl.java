@@ -97,8 +97,14 @@ public class ParameterizedTypeSelectNodeImpl extends NodeImpl implements Paramet
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        this.base.receive(visitor);
-        this.select.receive(visitor);
+        if (this.base != null)
+        {
+            this.base.receive(visitor);
+        }
+        if (this.select != null)
+        {
+            this.select.receive(visitor);
+        }
     }
 
     /**
@@ -112,8 +118,14 @@ public class ParameterizedTypeSelectNodeImpl extends NodeImpl implements Paramet
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        this.base.receiveTyped(visitor);
-        this.select.receiveTyped(visitor);
+        if (this.base != null)
+        {
+            this.base.receiveTyped(visitor);
+        }
+        if (this.select != null)
+        {
+            this.select.receiveTyped(visitor);
+        }
     }
 
     @Override

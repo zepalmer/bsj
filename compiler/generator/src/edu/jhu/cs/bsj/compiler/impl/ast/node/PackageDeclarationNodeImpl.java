@@ -98,8 +98,14 @@ public class PackageDeclarationNodeImpl extends NodeImpl implements PackageDecla
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        this.name.receive(visitor);
-        this.annotations.receive(visitor);
+        if (this.name != null)
+        {
+            this.name.receive(visitor);
+        }
+        if (this.annotations != null)
+        {
+            this.annotations.receive(visitor);
+        }
     }
 
     /**
@@ -113,8 +119,14 @@ public class PackageDeclarationNodeImpl extends NodeImpl implements PackageDecla
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        this.name.receiveTyped(visitor);
-        this.annotations.receiveTyped(visitor);
+        if (this.name != null)
+        {
+            this.name.receiveTyped(visitor);
+        }
+        if (this.annotations != null)
+        {
+            this.annotations.receiveTyped(visitor);
+        }
     }
 
     @Override

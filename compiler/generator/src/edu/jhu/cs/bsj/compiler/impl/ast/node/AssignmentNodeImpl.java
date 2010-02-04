@@ -120,8 +120,14 @@ public class AssignmentNodeImpl extends NodeImpl implements AssignmentNode
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        this.variable.receive(visitor);
-        this.expression.receive(visitor);
+        if (this.variable != null)
+        {
+            this.variable.receive(visitor);
+        }
+        if (this.expression != null)
+        {
+            this.expression.receive(visitor);
+        }
     }
 
     /**
@@ -135,8 +141,14 @@ public class AssignmentNodeImpl extends NodeImpl implements AssignmentNode
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        this.variable.receiveTyped(visitor);
-        this.expression.receiveTyped(visitor);
+        if (this.variable != null)
+        {
+            this.variable.receiveTyped(visitor);
+        }
+        if (this.expression != null)
+        {
+            this.expression.receiveTyped(visitor);
+        }
     }
 
     @Override

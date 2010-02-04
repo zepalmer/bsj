@@ -86,7 +86,10 @@ public abstract class ArrayCreationNodeImpl extends NodeImpl implements ArrayCre
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        this.baseType.receive(visitor);
+        if (this.baseType != null)
+        {
+            this.baseType.receive(visitor);
+        }
     }
 
     /**
@@ -100,7 +103,10 @@ public abstract class ArrayCreationNodeImpl extends NodeImpl implements ArrayCre
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        this.baseType.receiveTyped(visitor);
+        if (this.baseType != null)
+        {
+            this.baseType.receiveTyped(visitor);
+        }
     }
 
     @Override

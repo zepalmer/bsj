@@ -130,9 +130,18 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        this.packageDeclaration.receive(visitor);
-        this.imports.receive(visitor);
-        this.typeDecls.receive(visitor);
+        if (this.packageDeclaration != null)
+        {
+            this.packageDeclaration.receive(visitor);
+        }
+        if (this.imports != null)
+        {
+            this.imports.receive(visitor);
+        }
+        if (this.typeDecls != null)
+        {
+            this.typeDecls.receive(visitor);
+        }
     }
 
     /**
@@ -146,9 +155,18 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        this.packageDeclaration.receiveTyped(visitor);
-        this.imports.receiveTyped(visitor);
-        this.typeDecls.receiveTyped(visitor);
+        if (this.packageDeclaration != null)
+        {
+            this.packageDeclaration.receiveTyped(visitor);
+        }
+        if (this.imports != null)
+        {
+            this.imports.receiveTyped(visitor);
+        }
+        if (this.typeDecls != null)
+        {
+            this.typeDecls.receiveTyped(visitor);
+        }
     }
 
     @Override

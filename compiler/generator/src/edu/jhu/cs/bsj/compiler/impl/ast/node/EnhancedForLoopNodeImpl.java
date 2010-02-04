@@ -129,9 +129,18 @@ public class EnhancedForLoopNodeImpl extends NodeImpl implements EnhancedForLoop
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        this.variable.receive(visitor);
-        this.expression.receive(visitor);
-        this.statement.receive(visitor);
+        if (this.variable != null)
+        {
+            this.variable.receive(visitor);
+        }
+        if (this.expression != null)
+        {
+            this.expression.receive(visitor);
+        }
+        if (this.statement != null)
+        {
+            this.statement.receive(visitor);
+        }
     }
 
     /**
@@ -145,9 +154,18 @@ public class EnhancedForLoopNodeImpl extends NodeImpl implements EnhancedForLoop
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        this.variable.receiveTyped(visitor);
-        this.expression.receiveTyped(visitor);
-        this.statement.receiveTyped(visitor);
+        if (this.variable != null)
+        {
+            this.variable.receiveTyped(visitor);
+        }
+        if (this.expression != null)
+        {
+            this.expression.receiveTyped(visitor);
+        }
+        if (this.statement != null)
+        {
+            this.statement.receiveTyped(visitor);
+        }
     }
 
     @Override

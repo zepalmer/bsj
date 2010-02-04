@@ -69,7 +69,10 @@ public class ArrayInstantiatorCreationNodeImpl extends ArrayCreationNodeImpl imp
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        this.dimExpressions.receive(visitor);
+        if (this.dimExpressions != null)
+        {
+            this.dimExpressions.receive(visitor);
+        }
     }
 
     /**
@@ -83,7 +86,10 @@ public class ArrayInstantiatorCreationNodeImpl extends ArrayCreationNodeImpl imp
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        this.dimExpressions.receiveTyped(visitor);
+        if (this.dimExpressions != null)
+        {
+            this.dimExpressions.receiveTyped(visitor);
+        }
     }
 
     @Override

@@ -96,8 +96,14 @@ public abstract class ConstructorInvocationNodeImpl extends NodeImpl implements 
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        this.arguments.receive(visitor);
-        this.typeArguments.receive(visitor);
+        if (this.arguments != null)
+        {
+            this.arguments.receive(visitor);
+        }
+        if (this.typeArguments != null)
+        {
+            this.typeArguments.receive(visitor);
+        }
     }
 
     /**
@@ -111,8 +117,14 @@ public abstract class ConstructorInvocationNodeImpl extends NodeImpl implements 
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        this.arguments.receiveTyped(visitor);
-        this.typeArguments.receiveTyped(visitor);
+        if (this.arguments != null)
+        {
+            this.arguments.receiveTyped(visitor);
+        }
+        if (this.typeArguments != null)
+        {
+            this.typeArguments.receiveTyped(visitor);
+        }
     }
 
     @Override

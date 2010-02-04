@@ -99,8 +99,14 @@ public class QualifiedNameNodeImpl extends NameNodeImpl implements QualifiedName
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        this.base.receive(visitor);
-        this.identifier.receive(visitor);
+        if (this.base != null)
+        {
+            this.base.receive(visitor);
+        }
+        if (this.identifier != null)
+        {
+            this.identifier.receive(visitor);
+        }
     }
 
     /**
@@ -114,8 +120,14 @@ public class QualifiedNameNodeImpl extends NameNodeImpl implements QualifiedName
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        this.base.receiveTyped(visitor);
-        this.identifier.receiveTyped(visitor);
+        if (this.base != null)
+        {
+            this.base.receiveTyped(visitor);
+        }
+        if (this.identifier != null)
+        {
+            this.identifier.receiveTyped(visitor);
+        }
     }
 
     @Override

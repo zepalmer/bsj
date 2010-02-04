@@ -162,10 +162,22 @@ public class SuperMethodInvocationNodeImpl extends NodeImpl implements SuperMeth
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        this.type.receive(visitor);
-        this.identifier.receive(visitor);
-        this.arguments.receive(visitor);
-        this.typeArguments.receive(visitor);
+        if (this.type != null)
+        {
+            this.type.receive(visitor);
+        }
+        if (this.identifier != null)
+        {
+            this.identifier.receive(visitor);
+        }
+        if (this.arguments != null)
+        {
+            this.arguments.receive(visitor);
+        }
+        if (this.typeArguments != null)
+        {
+            this.typeArguments.receive(visitor);
+        }
     }
 
     /**
@@ -179,10 +191,22 @@ public class SuperMethodInvocationNodeImpl extends NodeImpl implements SuperMeth
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        this.type.receiveTyped(visitor);
-        this.identifier.receiveTyped(visitor);
-        this.arguments.receiveTyped(visitor);
-        this.typeArguments.receiveTyped(visitor);
+        if (this.type != null)
+        {
+            this.type.receiveTyped(visitor);
+        }
+        if (this.identifier != null)
+        {
+            this.identifier.receiveTyped(visitor);
+        }
+        if (this.arguments != null)
+        {
+            this.arguments.receiveTyped(visitor);
+        }
+        if (this.typeArguments != null)
+        {
+            this.typeArguments.receiveTyped(visitor);
+        }
     }
 
     @Override

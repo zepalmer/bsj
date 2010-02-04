@@ -66,7 +66,10 @@ public class ForInitializerExpressionNodeImpl extends NodeImpl implements ForIni
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        this.expressions.receive(visitor);
+        if (this.expressions != null)
+        {
+            this.expressions.receive(visitor);
+        }
     }
 
     /**
@@ -80,7 +83,10 @@ public class ForInitializerExpressionNodeImpl extends NodeImpl implements ForIni
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        this.expressions.receiveTyped(visitor);
+        if (this.expressions != null)
+        {
+            this.expressions.receiveTyped(visitor);
+        }
     }
 
     @Override

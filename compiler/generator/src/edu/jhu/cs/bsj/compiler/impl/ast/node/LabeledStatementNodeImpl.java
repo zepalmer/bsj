@@ -97,8 +97,14 @@ public class LabeledStatementNodeImpl extends NodeImpl implements LabeledStateme
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        this.label.receive(visitor);
-        this.statement.receive(visitor);
+        if (this.label != null)
+        {
+            this.label.receive(visitor);
+        }
+        if (this.statement != null)
+        {
+            this.statement.receive(visitor);
+        }
     }
 
     /**
@@ -112,8 +118,14 @@ public class LabeledStatementNodeImpl extends NodeImpl implements LabeledStateme
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        this.label.receiveTyped(visitor);
-        this.statement.receiveTyped(visitor);
+        if (this.label != null)
+        {
+            this.label.receiveTyped(visitor);
+        }
+        if (this.statement != null)
+        {
+            this.statement.receiveTyped(visitor);
+        }
     }
 
     @Override

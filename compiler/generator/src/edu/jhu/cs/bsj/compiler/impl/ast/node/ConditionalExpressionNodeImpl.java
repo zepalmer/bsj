@@ -127,9 +127,18 @@ public class ConditionalExpressionNodeImpl extends NodeImpl implements Condition
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        this.condition.receive(visitor);
-        this.trueExpression.receive(visitor);
-        this.falseExpression.receive(visitor);
+        if (this.condition != null)
+        {
+            this.condition.receive(visitor);
+        }
+        if (this.trueExpression != null)
+        {
+            this.trueExpression.receive(visitor);
+        }
+        if (this.falseExpression != null)
+        {
+            this.falseExpression.receive(visitor);
+        }
     }
 
     /**
@@ -143,9 +152,18 @@ public class ConditionalExpressionNodeImpl extends NodeImpl implements Condition
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        this.condition.receiveTyped(visitor);
-        this.trueExpression.receiveTyped(visitor);
-        this.falseExpression.receiveTyped(visitor);
+        if (this.condition != null)
+        {
+            this.condition.receiveTyped(visitor);
+        }
+        if (this.trueExpression != null)
+        {
+            this.trueExpression.receiveTyped(visitor);
+        }
+        if (this.falseExpression != null)
+        {
+            this.falseExpression.receiveTyped(visitor);
+        }
     }
 
     @Override

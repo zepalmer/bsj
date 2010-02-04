@@ -23,4 +23,10 @@ public abstract class CompilationUnitTask extends AbstractBsjCompilerTask
 	{
 		return tracker;
 	}
+	
+	@Override
+	public String toString()
+	{
+		return this.getClass().getSimpleName() + " for " + tracker.getName();
+	}
 }

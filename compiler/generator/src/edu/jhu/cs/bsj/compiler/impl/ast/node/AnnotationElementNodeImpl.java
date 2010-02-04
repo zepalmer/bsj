@@ -97,8 +97,14 @@ public class AnnotationElementNodeImpl extends NodeImpl implements AnnotationEle
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        this.identifier.receive(visitor);
-        this.value.receive(visitor);
+        if (this.identifier != null)
+        {
+            this.identifier.receive(visitor);
+        }
+        if (this.value != null)
+        {
+            this.value.receive(visitor);
+        }
     }
 
     /**
@@ -112,8 +118,14 @@ public class AnnotationElementNodeImpl extends NodeImpl implements AnnotationEle
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        this.identifier.receiveTyped(visitor);
-        this.value.receiveTyped(visitor);
+        if (this.identifier != null)
+        {
+            this.identifier.receiveTyped(visitor);
+        }
+        if (this.value != null)
+        {
+            this.value.receiveTyped(visitor);
+        }
     }
 
     @Override

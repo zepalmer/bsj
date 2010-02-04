@@ -97,8 +97,14 @@ public class SynchronizedNodeImpl extends NodeImpl implements SynchronizedNode
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        this.expression.receive(visitor);
-        this.block.receive(visitor);
+        if (this.expression != null)
+        {
+            this.expression.receive(visitor);
+        }
+        if (this.block != null)
+        {
+            this.block.receive(visitor);
+        }
     }
 
     /**
@@ -112,8 +118,14 @@ public class SynchronizedNodeImpl extends NodeImpl implements SynchronizedNode
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        this.expression.receiveTyped(visitor);
-        this.block.receiveTyped(visitor);
+        if (this.expression != null)
+        {
+            this.expression.receiveTyped(visitor);
+        }
+        if (this.block != null)
+        {
+            this.block.receiveTyped(visitor);
+        }
     }
 
     @Override

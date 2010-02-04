@@ -88,7 +88,10 @@ public class InitializerDeclarationNodeImpl extends NodeImpl implements Initiali
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        this.body.receive(visitor);
+        if (this.body != null)
+        {
+            this.body.receive(visitor);
+        }
     }
 
     /**
@@ -102,7 +105,10 @@ public class InitializerDeclarationNodeImpl extends NodeImpl implements Initiali
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        this.body.receiveTyped(visitor);
+        if (this.body != null)
+        {
+            this.body.receiveTyped(visitor);
+        }
     }
 
     @Override

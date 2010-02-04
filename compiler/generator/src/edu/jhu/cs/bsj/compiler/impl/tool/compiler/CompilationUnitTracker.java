@@ -40,6 +40,11 @@ public class CompilationUnitTracker
 	private CompilationUnitNode ast;
 	
 	/**
+	 * The number of outstanding metaprograms associated with this tracker.
+	 */
+	private int metaprogramsOutstanding;
+	
+	/**
 	 * Creates a new compilation unit tracker in the {@link CompilationUnitStatus#JUST_STARTED} state.
 	 * @param file The file containing the compilation unit to build.
 	 */
@@ -50,6 +55,7 @@ public class CompilationUnitTracker
 		this.name = this.file.inferBinaryName();
 		this.status = CompilationUnitStatus.JUST_STARTED;
 		this.ast = null;
+		this.metaprogramsOutstanding = 0;
 	}
 
 	public CompilationUnitStatus getStatus()
@@ -85,5 +91,15 @@ public class CompilationUnitTracker
 	public void setAst(CompilationUnitNode ast)
 	{
 		this.ast = ast;
+	}
+
+	public int getMetaprogramsOutstanding()
+	{
+		return metaprogramsOutstanding;
+	}
+
+	public void setMetaprogramsOutstanding(int metaprogramsOutstanding)
+	{
+		this.metaprogramsOutstanding = metaprogramsOutstanding;
 	}
 }

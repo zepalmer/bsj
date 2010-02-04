@@ -98,8 +98,14 @@ public class VariableDeclarationNodeImpl extends NodeImpl implements VariableDec
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        this.modifiers.receive(visitor);
-        this.declarators.receive(visitor);
+        if (this.modifiers != null)
+        {
+            this.modifiers.receive(visitor);
+        }
+        if (this.declarators != null)
+        {
+            this.declarators.receive(visitor);
+        }
     }
 
     /**
@@ -113,8 +119,14 @@ public class VariableDeclarationNodeImpl extends NodeImpl implements VariableDec
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        this.modifiers.receiveTyped(visitor);
-        this.declarators.receiveTyped(visitor);
+        if (this.modifiers != null)
+        {
+            this.modifiers.receiveTyped(visitor);
+        }
+        if (this.declarators != null)
+        {
+            this.declarators.receiveTyped(visitor);
+        }
     }
 
     @Override

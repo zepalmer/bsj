@@ -97,8 +97,14 @@ public class ArrayAccessNodeImpl extends NodeImpl implements ArrayAccessNode
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        this.arrayExpression.receive(visitor);
-        this.indexExpression.receive(visitor);
+        if (this.arrayExpression != null)
+        {
+            this.arrayExpression.receive(visitor);
+        }
+        if (this.indexExpression != null)
+        {
+            this.indexExpression.receive(visitor);
+        }
     }
 
     /**
@@ -112,8 +118,14 @@ public class ArrayAccessNodeImpl extends NodeImpl implements ArrayAccessNode
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        this.arrayExpression.receiveTyped(visitor);
-        this.indexExpression.receiveTyped(visitor);
+        if (this.arrayExpression != null)
+        {
+            this.arrayExpression.receiveTyped(visitor);
+        }
+        if (this.indexExpression != null)
+        {
+            this.indexExpression.receiveTyped(visitor);
+        }
     }
 
     @Override

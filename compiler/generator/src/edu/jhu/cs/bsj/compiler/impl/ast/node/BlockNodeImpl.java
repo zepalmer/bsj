@@ -66,7 +66,10 @@ public class BlockNodeImpl extends NodeImpl implements BlockNode
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        this.statements.receive(visitor);
+        if (this.statements != null)
+        {
+            this.statements.receive(visitor);
+        }
     }
 
     /**
@@ -80,7 +83,10 @@ public class BlockNodeImpl extends NodeImpl implements BlockNode
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        this.statements.receiveTyped(visitor);
+        if (this.statements != null)
+        {
+            this.statements.receiveTyped(visitor);
+        }
     }
 
     @Override

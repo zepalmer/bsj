@@ -66,7 +66,10 @@ public class ArrayInitializerNodeImpl extends NodeImpl implements ArrayInitializ
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        this.initializers.receive(visitor);
+        if (this.initializers != null)
+        {
+            this.initializers.receive(visitor);
+        }
     }
 
     /**
@@ -80,7 +83,10 @@ public class ArrayInitializerNodeImpl extends NodeImpl implements ArrayInitializ
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        this.initializers.receiveTyped(visitor);
+        if (this.initializers != null)
+        {
+            this.initializers.receiveTyped(visitor);
+        }
     }
 
     @Override

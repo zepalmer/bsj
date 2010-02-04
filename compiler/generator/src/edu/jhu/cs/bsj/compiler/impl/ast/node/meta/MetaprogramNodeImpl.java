@@ -67,7 +67,10 @@ public class MetaprogramNodeImpl extends NodeImpl implements MetaprogramNode
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        this.body.receive(visitor);
+        if (this.body != null)
+        {
+            this.body.receive(visitor);
+        }
     }
 
     /**
@@ -81,7 +84,10 @@ public class MetaprogramNodeImpl extends NodeImpl implements MetaprogramNode
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        this.body.receiveTyped(visitor);
+        if (this.body != null)
+        {
+            this.body.receiveTyped(visitor);
+        }
     }
 
     @Override

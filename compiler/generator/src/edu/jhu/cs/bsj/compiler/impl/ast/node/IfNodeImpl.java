@@ -128,9 +128,18 @@ public class IfNodeImpl extends NodeImpl implements IfNode
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        this.condition.receive(visitor);
-        this.thenStatement.receive(visitor);
-        this.elseStatement.receive(visitor);
+        if (this.condition != null)
+        {
+            this.condition.receive(visitor);
+        }
+        if (this.thenStatement != null)
+        {
+            this.thenStatement.receive(visitor);
+        }
+        if (this.elseStatement != null)
+        {
+            this.elseStatement.receive(visitor);
+        }
     }
 
     /**
@@ -144,9 +153,18 @@ public class IfNodeImpl extends NodeImpl implements IfNode
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        this.condition.receiveTyped(visitor);
-        this.thenStatement.receiveTyped(visitor);
-        this.elseStatement.receiveTyped(visitor);
+        if (this.condition != null)
+        {
+            this.condition.receiveTyped(visitor);
+        }
+        if (this.thenStatement != null)
+        {
+            this.thenStatement.receiveTyped(visitor);
+        }
+        if (this.elseStatement != null)
+        {
+            this.elseStatement.receiveTyped(visitor);
+        }
     }
 
     @Override

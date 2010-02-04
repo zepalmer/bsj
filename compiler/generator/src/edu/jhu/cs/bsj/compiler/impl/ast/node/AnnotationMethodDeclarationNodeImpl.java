@@ -193,11 +193,26 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        this.modifiers.receive(visitor);
-        this.type.receive(visitor);
-        this.identifier.receive(visitor);
-        this.defaultValue.receive(visitor);
-        this.javadoc.receive(visitor);
+        if (this.modifiers != null)
+        {
+            this.modifiers.receive(visitor);
+        }
+        if (this.type != null)
+        {
+            this.type.receive(visitor);
+        }
+        if (this.identifier != null)
+        {
+            this.identifier.receive(visitor);
+        }
+        if (this.defaultValue != null)
+        {
+            this.defaultValue.receive(visitor);
+        }
+        if (this.javadoc != null)
+        {
+            this.javadoc.receive(visitor);
+        }
     }
 
     /**
@@ -211,11 +226,26 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        this.modifiers.receiveTyped(visitor);
-        this.type.receiveTyped(visitor);
-        this.identifier.receiveTyped(visitor);
-        this.defaultValue.receiveTyped(visitor);
-        this.javadoc.receiveTyped(visitor);
+        if (this.modifiers != null)
+        {
+            this.modifiers.receiveTyped(visitor);
+        }
+        if (this.type != null)
+        {
+            this.type.receiveTyped(visitor);
+        }
+        if (this.identifier != null)
+        {
+            this.identifier.receiveTyped(visitor);
+        }
+        if (this.defaultValue != null)
+        {
+            this.defaultValue.receiveTyped(visitor);
+        }
+        if (this.javadoc != null)
+        {
+            this.javadoc.receiveTyped(visitor);
+        }
     }
 
     @Override

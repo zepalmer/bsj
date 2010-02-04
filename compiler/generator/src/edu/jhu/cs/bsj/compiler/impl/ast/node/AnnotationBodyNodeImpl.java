@@ -66,7 +66,10 @@ public class AnnotationBodyNodeImpl extends NodeImpl implements AnnotationBodyNo
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        this.members.receive(visitor);
+        if (this.members != null)
+        {
+            this.members.receive(visitor);
+        }
     }
 
     /**
@@ -80,7 +83,10 @@ public class AnnotationBodyNodeImpl extends NodeImpl implements AnnotationBodyNo
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        this.members.receiveTyped(visitor);
+        if (this.members != null)
+        {
+            this.members.receiveTyped(visitor);
+        }
     }
 
     @Override

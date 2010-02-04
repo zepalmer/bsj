@@ -65,7 +65,10 @@ public class ContinueNodeImpl extends NodeImpl implements ContinueNode
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        this.label.receive(visitor);
+        if (this.label != null)
+        {
+            this.label.receive(visitor);
+        }
     }
 
     /**
@@ -79,7 +82,10 @@ public class ContinueNodeImpl extends NodeImpl implements ContinueNode
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        this.label.receiveTyped(visitor);
+        if (this.label != null)
+        {
+            this.label.receiveTyped(visitor);
+        }
     }
 
     @Override

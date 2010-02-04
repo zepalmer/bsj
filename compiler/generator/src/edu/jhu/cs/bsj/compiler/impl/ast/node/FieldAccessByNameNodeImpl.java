@@ -65,7 +65,10 @@ public class FieldAccessByNameNodeImpl extends NodeImpl implements FieldAccessBy
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        this.name.receive(visitor);
+        if (this.name != null)
+        {
+            this.name.receive(visitor);
+        }
     }
 
     /**
@@ -79,7 +82,10 @@ public class FieldAccessByNameNodeImpl extends NodeImpl implements FieldAccessBy
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        this.name.receiveTyped(visitor);
+        if (this.name != null)
+        {
+            this.name.receiveTyped(visitor);
+        }
     }
 
     @Override

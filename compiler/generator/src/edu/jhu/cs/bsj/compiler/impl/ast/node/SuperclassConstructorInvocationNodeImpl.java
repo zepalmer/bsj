@@ -70,7 +70,10 @@ public class SuperclassConstructorInvocationNodeImpl extends ConstructorInvocati
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        this.qualifyingExpression.receive(visitor);
+        if (this.qualifyingExpression != null)
+        {
+            this.qualifyingExpression.receive(visitor);
+        }
     }
 
     /**
@@ -84,7 +87,10 @@ public class SuperclassConstructorInvocationNodeImpl extends ConstructorInvocati
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        this.qualifyingExpression.receiveTyped(visitor);
+        if (this.qualifyingExpression != null)
+        {
+            this.qualifyingExpression.receiveTyped(visitor);
+        }
     }
 
     @Override

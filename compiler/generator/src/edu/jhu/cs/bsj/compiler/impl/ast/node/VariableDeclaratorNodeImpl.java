@@ -129,9 +129,18 @@ public class VariableDeclaratorNodeImpl extends NodeImpl implements VariableDecl
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        this.type.receive(visitor);
-        this.name.receive(visitor);
-        this.initializer.receive(visitor);
+        if (this.type != null)
+        {
+            this.type.receive(visitor);
+        }
+        if (this.name != null)
+        {
+            this.name.receive(visitor);
+        }
+        if (this.initializer != null)
+        {
+            this.initializer.receive(visitor);
+        }
     }
 
     /**
@@ -145,9 +154,18 @@ public class VariableDeclaratorNodeImpl extends NodeImpl implements VariableDecl
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        this.type.receiveTyped(visitor);
-        this.name.receiveTyped(visitor);
-        this.initializer.receiveTyped(visitor);
+        if (this.type != null)
+        {
+            this.type.receiveTyped(visitor);
+        }
+        if (this.name != null)
+        {
+            this.name.receiveTyped(visitor);
+        }
+        if (this.initializer != null)
+        {
+            this.initializer.receiveTyped(visitor);
+        }
     }
 
     @Override

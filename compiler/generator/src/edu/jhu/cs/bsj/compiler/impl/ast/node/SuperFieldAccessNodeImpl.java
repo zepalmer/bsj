@@ -97,8 +97,14 @@ public class SuperFieldAccessNodeImpl extends NodeImpl implements SuperFieldAcce
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        this.type.receive(visitor);
-        this.identifier.receive(visitor);
+        if (this.type != null)
+        {
+            this.type.receive(visitor);
+        }
+        if (this.identifier != null)
+        {
+            this.identifier.receive(visitor);
+        }
     }
 
     /**
@@ -112,8 +118,14 @@ public class SuperFieldAccessNodeImpl extends NodeImpl implements SuperFieldAcce
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        this.type.receiveTyped(visitor);
-        this.identifier.receiveTyped(visitor);
+        if (this.type != null)
+        {
+            this.type.receiveTyped(visitor);
+        }
+        if (this.identifier != null)
+        {
+            this.identifier.receiveTyped(visitor);
+        }
     }
 
     @Override

@@ -97,8 +97,14 @@ public class FieldAccessByExpressionNodeImpl extends NodeImpl implements FieldAc
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        this.expression.receive(visitor);
-        this.identifier.receive(visitor);
+        if (this.expression != null)
+        {
+            this.expression.receive(visitor);
+        }
+        if (this.identifier != null)
+        {
+            this.identifier.receive(visitor);
+        }
     }
 
     /**
@@ -112,8 +118,14 @@ public class FieldAccessByExpressionNodeImpl extends NodeImpl implements FieldAc
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        this.expression.receiveTyped(visitor);
-        this.identifier.receiveTyped(visitor);
+        if (this.expression != null)
+        {
+            this.expression.receiveTyped(visitor);
+        }
+        if (this.identifier != null)
+        {
+            this.identifier.receiveTyped(visitor);
+        }
     }
 
     @Override

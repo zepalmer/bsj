@@ -67,7 +67,10 @@ public class SingleElementAnnotationNodeImpl extends AnnotationNodeImpl implemen
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        this.value.receive(visitor);
+        if (this.value != null)
+        {
+            this.value.receive(visitor);
+        }
     }
 
     /**
@@ -81,7 +84,10 @@ public class SingleElementAnnotationNodeImpl extends AnnotationNodeImpl implemen
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        this.value.receiveTyped(visitor);
+        if (this.value != null)
+        {
+            this.value.receiveTyped(visitor);
+        }
     }
 
     @Override

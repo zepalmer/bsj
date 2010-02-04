@@ -1,13 +1,17 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.compiler;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.PriorityQueue;
 
+import org.apache.log4j.Logger;
+
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 import edu.jhu.cs.bsj.compiler.exception.BsjCompilerException;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.task.BsjCompilerTask;
+import edu.jhu.cs.bsj.compiler.impl.tool.compiler.task.MetaprogramExecutionTask;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.task.ParseCompilationUnitTask;
 import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.BsjFileManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.BsjFileObject;
@@ -23,6 +27,9 @@ import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.BsjFileObject;
  */
 public class MetacompilationManager
 {
+	/** A logger for this metacompilation manager. */
+	private Logger LOGGER = Logger.getLogger(this.getClass());
+	
 	/**
 	 * Maps the names of compilation units to their respective trackers. The trackers contain the compilation unit-
 	 * specific data and the individual compilation unit statuses.
@@ -53,6 +60,8 @@ public class MetacompilationManager
 		this.priorityQueue = new PriorityQueue<BsjCompilerTask>();
 		this.factory = factory;
 		this.fileManager = fileManager;
+		
+		this.priorityQueue.offer(new MetaprogramExecutionTask());
 	}
 	
 	/**
@@ -123,6 +132,15 @@ public class MetacompilationManager
 	}
 	
 	/**
+	 * Retrieves a collection of all of the trackers that this compilation manager knows about.
+	 * @return A collection of all of the trackers that this compilation manager knows about.
+	 */
+	public Collection<CompilationUnitTracker> getAllTrackers()
+	{
+		return this.trackerMap.values();
+	}
+	
+	/**
 	 * Instructs this compilation unit manager to do more work.
 	 * @throws IOException If an I/O error occurs.
 	 * @throws BsjCompilerException If a compilation error occurs.
@@ -136,6 +154,10 @@ public class MetacompilationManager
 		}
 		
 		BsjCompilerTask task = this.priorityQueue.poll();
+		if (LOGGER.isTraceEnabled())
+		{
+			LOGGER.trace("Executing next compilation task: " + task.toString());
+		}
 		task.execute(this);
 	}
 

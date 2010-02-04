@@ -98,8 +98,14 @@ public class TypeParameterNodeImpl extends NodeImpl implements TypeParameterNode
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        this.identifier.receive(visitor);
-        this.bounds.receive(visitor);
+        if (this.identifier != null)
+        {
+            this.identifier.receive(visitor);
+        }
+        if (this.bounds != null)
+        {
+            this.bounds.receive(visitor);
+        }
     }
 
     /**
@@ -113,8 +119,14 @@ public class TypeParameterNodeImpl extends NodeImpl implements TypeParameterNode
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        this.identifier.receiveTyped(visitor);
-        this.bounds.receiveTyped(visitor);
+        if (this.identifier != null)
+        {
+            this.identifier.receiveTyped(visitor);
+        }
+        if (this.bounds != null)
+        {
+            this.bounds.receiveTyped(visitor);
+        }
     }
 
     @Override

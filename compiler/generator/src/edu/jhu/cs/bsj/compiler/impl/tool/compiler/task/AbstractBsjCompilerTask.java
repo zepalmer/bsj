@@ -49,4 +49,9 @@ public abstract class AbstractBsjCompilerTask implements BsjCompilerTask
 		return 0;
 	}
 
+	@Override
+	public String toString()
+	{
+		return this.getClass().getSimpleName();
+	}
 }

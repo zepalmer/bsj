@@ -67,7 +67,10 @@ public class SimpleNameNodeImpl extends NameNodeImpl implements SimpleNameNode
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        this.identifier.receive(visitor);
+        if (this.identifier != null)
+        {
+            this.identifier.receive(visitor);
+        }
     }
 
     /**
@@ -81,7 +84,10 @@ public class SimpleNameNodeImpl extends NameNodeImpl implements SimpleNameNode
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        this.identifier.receiveTyped(visitor);
+        if (this.identifier != null)
+        {
+            this.identifier.receiveTyped(visitor);
+        }
     }
 
     @Override

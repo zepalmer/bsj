@@ -56,6 +56,9 @@
  * need to condition behavior based on node type and have a number of types to service.  If
  * a simpler traversal of the nodes in the tree is desired, {@link BsjNodeVisitor} may be
  * more suitable.
+ * <p/>
+ * It should be noted that some nodes may have <code>null</code> children; these children are not visited by this
+ * visitor in any way.
  *
  * @author Zachary Palmer
  */

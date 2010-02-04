@@ -166,10 +166,22 @@ public class InterfaceDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl i
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        this.modifiers.receive(visitor);
-        this.extendsClause.receive(visitor);
-        this.body.receive(visitor);
-        this.typeParameters.receive(visitor);
+        if (this.modifiers != null)
+        {
+            this.modifiers.receive(visitor);
+        }
+        if (this.extendsClause != null)
+        {
+            this.extendsClause.receive(visitor);
+        }
+        if (this.body != null)
+        {
+            this.body.receive(visitor);
+        }
+        if (this.typeParameters != null)
+        {
+            this.typeParameters.receive(visitor);
+        }
     }
 
     /**
@@ -183,10 +195,22 @@ public class InterfaceDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl i
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        this.modifiers.receiveTyped(visitor);
-        this.extendsClause.receiveTyped(visitor);
-        this.body.receiveTyped(visitor);
-        this.typeParameters.receiveTyped(visitor);
+        if (this.modifiers != null)
+        {
+            this.modifiers.receiveTyped(visitor);
+        }
+        if (this.extendsClause != null)
+        {
+            this.extendsClause.receiveTyped(visitor);
+        }
+        if (this.body != null)
+        {
+            this.body.receiveTyped(visitor);
+        }
+        if (this.typeParameters != null)
+        {
+            this.typeParameters.receiveTyped(visitor);
+        }
     }
 
     @Override

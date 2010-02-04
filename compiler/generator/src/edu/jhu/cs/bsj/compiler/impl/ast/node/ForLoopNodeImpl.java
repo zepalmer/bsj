@@ -162,10 +162,22 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        this.initializer.receive(visitor);
-        this.condition.receive(visitor);
-        this.update.receive(visitor);
-        this.statement.receive(visitor);
+        if (this.initializer != null)
+        {
+            this.initializer.receive(visitor);
+        }
+        if (this.condition != null)
+        {
+            this.condition.receive(visitor);
+        }
+        if (this.update != null)
+        {
+            this.update.receive(visitor);
+        }
+        if (this.statement != null)
+        {
+            this.statement.receive(visitor);
+        }
     }
 
     /**
@@ -179,10 +191,22 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        this.initializer.receiveTyped(visitor);
-        this.condition.receiveTyped(visitor);
-        this.update.receiveTyped(visitor);
-        this.statement.receiveTyped(visitor);
+        if (this.initializer != null)
+        {
+            this.initializer.receiveTyped(visitor);
+        }
+        if (this.condition != null)
+        {
+            this.condition.receiveTyped(visitor);
+        }
+        if (this.update != null)
+        {
+            this.update.receiveTyped(visitor);
+        }
+        if (this.statement != null)
+        {
+            this.statement.receiveTyped(visitor);
+        }
     }
 
     @Override

@@ -79,7 +79,10 @@ public abstract class MetaprogramAnchorNodeImpl<T extends Node> extends NodeImpl
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        this.metaprogram.receive(visitor);
+        if (this.metaprogram != null)
+        {
+            this.metaprogram.receive(visitor);
+        }
     }
 
     /**
@@ -93,7 +96,10 @@ public abstract class MetaprogramAnchorNodeImpl<T extends Node> extends NodeImpl
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        this.metaprogram.receiveTyped(visitor);
+        if (this.metaprogram != null)
+        {
+            this.metaprogram.receiveTyped(visitor);
+        }
     }
 
     @Override

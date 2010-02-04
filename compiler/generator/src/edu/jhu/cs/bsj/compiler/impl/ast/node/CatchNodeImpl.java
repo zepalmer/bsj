@@ -97,8 +97,14 @@ public class CatchNodeImpl extends NodeImpl implements CatchNode
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        this.block.receive(visitor);
-        this.parameter.receive(visitor);
+        if (this.block != null)
+        {
+            this.block.receive(visitor);
+        }
+        if (this.parameter != null)
+        {
+            this.parameter.receive(visitor);
+        }
     }
 
     /**
@@ -112,8 +118,14 @@ public class CatchNodeImpl extends NodeImpl implements CatchNode
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        this.block.receiveTyped(visitor);
-        this.parameter.receiveTyped(visitor);
+        if (this.block != null)
+        {
+            this.block.receiveTyped(visitor);
+        }
+        if (this.parameter != null)
+        {
+            this.parameter.receiveTyped(visitor);
+        }
     }
 
     @Override

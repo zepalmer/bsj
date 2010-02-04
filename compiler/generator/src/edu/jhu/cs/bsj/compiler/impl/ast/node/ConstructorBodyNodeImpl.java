@@ -98,8 +98,14 @@ public class ConstructorBodyNodeImpl extends NodeImpl implements ConstructorBody
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        this.constructorInvocation.receive(visitor);
-        this.statements.receive(visitor);
+        if (this.constructorInvocation != null)
+        {
+            this.constructorInvocation.receive(visitor);
+        }
+        if (this.statements != null)
+        {
+            this.statements.receive(visitor);
+        }
     }
 
     /**
@@ -113,8 +119,14 @@ public class ConstructorBodyNodeImpl extends NodeImpl implements ConstructorBody
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        this.constructorInvocation.receiveTyped(visitor);
-        this.statements.receiveTyped(visitor);
+        if (this.constructorInvocation != null)
+        {
+            this.constructorInvocation.receiveTyped(visitor);
+        }
+        if (this.statements != null)
+        {
+            this.statements.receiveTyped(visitor);
+        }
     }
 
     @Override

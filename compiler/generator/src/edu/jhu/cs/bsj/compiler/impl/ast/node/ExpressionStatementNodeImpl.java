@@ -65,7 +65,10 @@ public class ExpressionStatementNodeImpl extends NodeImpl implements ExpressionS
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        this.expression.receive(visitor);
+        if (this.expression != null)
+        {
+            this.expression.receive(visitor);
+        }
     }
 
     /**
@@ -79,7 +82,10 @@ public class ExpressionStatementNodeImpl extends NodeImpl implements ExpressionS
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        this.expression.receiveTyped(visitor);
+        if (this.expression != null)
+        {
+            this.expression.receiveTyped(visitor);
+        }
     }
 
     @Override

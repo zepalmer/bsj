@@ -120,8 +120,14 @@ public class BinaryExpressionNodeImpl extends NodeImpl implements BinaryExpressi
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        this.leftOperand.receive(visitor);
-        this.rightOperand.receive(visitor);
+        if (this.leftOperand != null)
+        {
+            this.leftOperand.receive(visitor);
+        }
+        if (this.rightOperand != null)
+        {
+            this.rightOperand.receive(visitor);
+        }
     }
 
     /**
@@ -135,8 +141,14 @@ public class BinaryExpressionNodeImpl extends NodeImpl implements BinaryExpressi
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        this.leftOperand.receiveTyped(visitor);
-        this.rightOperand.receiveTyped(visitor);
+        if (this.leftOperand != null)
+        {
+            this.leftOperand.receiveTyped(visitor);
+        }
+        if (this.rightOperand != null)
+        {
+            this.rightOperand.receiveTyped(visitor);
+        }
     }
 
     @Override

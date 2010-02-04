@@ -194,11 +194,26 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        this.annotations.receive(visitor);
-        this.identifier.receive(visitor);
-        this.arguments.receive(visitor);
-        this.body.receive(visitor);
-        this.javadoc.receive(visitor);
+        if (this.annotations != null)
+        {
+            this.annotations.receive(visitor);
+        }
+        if (this.identifier != null)
+        {
+            this.identifier.receive(visitor);
+        }
+        if (this.arguments != null)
+        {
+            this.arguments.receive(visitor);
+        }
+        if (this.body != null)
+        {
+            this.body.receive(visitor);
+        }
+        if (this.javadoc != null)
+        {
+            this.javadoc.receive(visitor);
+        }
     }
 
     /**
@@ -212,11 +227,26 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        this.annotations.receiveTyped(visitor);
-        this.identifier.receiveTyped(visitor);
-        this.arguments.receiveTyped(visitor);
-        this.body.receiveTyped(visitor);
-        this.javadoc.receiveTyped(visitor);
+        if (this.annotations != null)
+        {
+            this.annotations.receiveTyped(visitor);
+        }
+        if (this.identifier != null)
+        {
+            this.identifier.receiveTyped(visitor);
+        }
+        if (this.arguments != null)
+        {
+            this.arguments.receiveTyped(visitor);
+        }
+        if (this.body != null)
+        {
+            this.body.receiveTyped(visitor);
+        }
+        if (this.javadoc != null)
+        {
+            this.javadoc.receiveTyped(visitor);
+        }
     }
 
     @Override

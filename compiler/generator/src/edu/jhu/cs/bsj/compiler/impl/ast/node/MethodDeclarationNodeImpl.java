@@ -321,15 +321,42 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        this.body.receive(visitor);
-        this.modifiers.receive(visitor);
-        this.identifier.receive(visitor);
-        this.parameters.receive(visitor);
-        this.varargParameter.receive(visitor);
-        this.returnType.receive(visitor);
-        this.throwTypes.receive(visitor);
-        this.typeParameters.receive(visitor);
-        this.javadoc.receive(visitor);
+        if (this.body != null)
+        {
+            this.body.receive(visitor);
+        }
+        if (this.modifiers != null)
+        {
+            this.modifiers.receive(visitor);
+        }
+        if (this.identifier != null)
+        {
+            this.identifier.receive(visitor);
+        }
+        if (this.parameters != null)
+        {
+            this.parameters.receive(visitor);
+        }
+        if (this.varargParameter != null)
+        {
+            this.varargParameter.receive(visitor);
+        }
+        if (this.returnType != null)
+        {
+            this.returnType.receive(visitor);
+        }
+        if (this.throwTypes != null)
+        {
+            this.throwTypes.receive(visitor);
+        }
+        if (this.typeParameters != null)
+        {
+            this.typeParameters.receive(visitor);
+        }
+        if (this.javadoc != null)
+        {
+            this.javadoc.receive(visitor);
+        }
     }
 
     /**
@@ -343,15 +370,42 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        this.body.receiveTyped(visitor);
-        this.modifiers.receiveTyped(visitor);
-        this.identifier.receiveTyped(visitor);
-        this.parameters.receiveTyped(visitor);
-        this.varargParameter.receiveTyped(visitor);
-        this.returnType.receiveTyped(visitor);
-        this.throwTypes.receiveTyped(visitor);
-        this.typeParameters.receiveTyped(visitor);
-        this.javadoc.receiveTyped(visitor);
+        if (this.body != null)
+        {
+            this.body.receiveTyped(visitor);
+        }
+        if (this.modifiers != null)
+        {
+            this.modifiers.receiveTyped(visitor);
+        }
+        if (this.identifier != null)
+        {
+            this.identifier.receiveTyped(visitor);
+        }
+        if (this.parameters != null)
+        {
+            this.parameters.receiveTyped(visitor);
+        }
+        if (this.varargParameter != null)
+        {
+            this.varargParameter.receiveTyped(visitor);
+        }
+        if (this.returnType != null)
+        {
+            this.returnType.receiveTyped(visitor);
+        }
+        if (this.throwTypes != null)
+        {
+            this.throwTypes.receiveTyped(visitor);
+        }
+        if (this.typeParameters != null)
+        {
+            this.typeParameters.receiveTyped(visitor);
+        }
+        if (this.javadoc != null)
+        {
+            this.javadoc.receiveTyped(visitor);
+        }
     }
 
     @Override

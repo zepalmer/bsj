@@ -34,6 +34,6 @@ public class ParseCompilationUnitTask extends CompilationUnitTask
 		
 		// TODO: enqueue next task for the compilation unit
 		
-		manager.addTask(new CheatStubTask(getTracker()));
+		manager.addTask(new ExtractMetaprogramsTask(getTracker()));
 	}
 }

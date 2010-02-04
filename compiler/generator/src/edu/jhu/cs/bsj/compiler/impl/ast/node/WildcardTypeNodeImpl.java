@@ -88,7 +88,10 @@ public class WildcardTypeNodeImpl extends NodeImpl implements WildcardTypeNode
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        this.bound.receive(visitor);
+        if (this.bound != null)
+        {
+            this.bound.receive(visitor);
+        }
     }
 
     /**
@@ -102,7 +105,10 @@ public class WildcardTypeNodeImpl extends NodeImpl implements WildcardTypeNode
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        this.bound.receiveTyped(visitor);
+        if (this.bound != null)
+        {
+            this.bound.receiveTyped(visitor);
+        }
     }
 
     @Override

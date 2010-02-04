@@ -130,9 +130,18 @@ public class FieldDeclarationNodeImpl extends NodeImpl implements FieldDeclarati
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        this.modifiers.receive(visitor);
-        this.declarators.receive(visitor);
-        this.javadoc.receive(visitor);
+        if (this.modifiers != null)
+        {
+            this.modifiers.receive(visitor);
+        }
+        if (this.declarators != null)
+        {
+            this.declarators.receive(visitor);
+        }
+        if (this.javadoc != null)
+        {
+            this.javadoc.receive(visitor);
+        }
     }
 
     /**
@@ -146,9 +155,18 @@ public class FieldDeclarationNodeImpl extends NodeImpl implements FieldDeclarati
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        this.modifiers.receiveTyped(visitor);
-        this.declarators.receiveTyped(visitor);
-        this.javadoc.receiveTyped(visitor);
+        if (this.modifiers != null)
+        {
+            this.modifiers.receiveTyped(visitor);
+        }
+        if (this.declarators != null)
+        {
+            this.declarators.receiveTyped(visitor);
+        }
+        if (this.javadoc != null)
+        {
+            this.javadoc.receiveTyped(visitor);
+        }
     }
 
     @Override

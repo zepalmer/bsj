@@ -128,9 +128,18 @@ public abstract class ClassInstantiationNodeImpl extends NodeImpl implements Cla
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        this.constructorTypeArguments.receive(visitor);
-        this.arguments.receive(visitor);
-        this.body.receive(visitor);
+        if (this.constructorTypeArguments != null)
+        {
+            this.constructorTypeArguments.receive(visitor);
+        }
+        if (this.arguments != null)
+        {
+            this.arguments.receive(visitor);
+        }
+        if (this.body != null)
+        {
+            this.body.receive(visitor);
+        }
     }
 
     /**
@@ -144,9 +153,18 @@ public abstract class ClassInstantiationNodeImpl extends NodeImpl implements Cla
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        this.constructorTypeArguments.receiveTyped(visitor);
-        this.arguments.receiveTyped(visitor);
-        this.body.receiveTyped(visitor);
+        if (this.constructorTypeArguments != null)
+        {
+            this.constructorTypeArguments.receiveTyped(visitor);
+        }
+        if (this.arguments != null)
+        {
+            this.arguments.receiveTyped(visitor);
+        }
+        if (this.body != null)
+        {
+            this.body.receiveTyped(visitor);
+        }
     }
 
     @Override

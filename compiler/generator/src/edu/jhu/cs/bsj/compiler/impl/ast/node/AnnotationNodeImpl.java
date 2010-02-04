@@ -63,7 +63,10 @@ public abstract class AnnotationNodeImpl extends NodeImpl implements AnnotationN
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        this.annotationType.receive(visitor);
+        if (this.annotationType != null)
+        {
+            this.annotationType.receive(visitor);
+        }
     }
 
     /**
@@ -77,7 +80,10 @@ public abstract class AnnotationNodeImpl extends NodeImpl implements AnnotationN
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        this.annotationType.receiveTyped(visitor);
+        if (this.annotationType != null)
+        {
+            this.annotationType.receiveTyped(visitor);
+        }
     }
 
     @Override

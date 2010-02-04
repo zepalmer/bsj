@@ -65,7 +65,10 @@ public class ArrayTypeNodeImpl extends NodeImpl implements ArrayTypeNode
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        this.type.receive(visitor);
+        if (this.type != null)
+        {
+            this.type.receive(visitor);
+        }
     }
 
     /**
@@ -79,7 +82,10 @@ public class ArrayTypeNodeImpl extends NodeImpl implements ArrayTypeNode
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        this.type.receiveTyped(visitor);
+        if (this.type != null)
+        {
+            this.type.receiveTyped(visitor);
+        }
     }
 
     @Override

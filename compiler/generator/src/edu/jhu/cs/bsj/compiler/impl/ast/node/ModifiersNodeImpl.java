@@ -64,7 +64,10 @@ public abstract class ModifiersNodeImpl extends NodeImpl implements ModifiersNod
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        this.annotations.receive(visitor);
+        if (this.annotations != null)
+        {
+            this.annotations.receive(visitor);
+        }
     }
 
     /**
@@ -78,7 +81,10 @@ public abstract class ModifiersNodeImpl extends NodeImpl implements ModifiersNod
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        this.annotations.receiveTyped(visitor);
+        if (this.annotations != null)
+        {
+            this.annotations.receiveTyped(visitor);
+        }
     }
 
     @Override

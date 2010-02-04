@@ -96,8 +96,14 @@ public class AssertStatementNodeImpl extends NodeImpl implements AssertStatement
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        this.testExpression.receive(visitor);
-        this.messageExpression.receive(visitor);
+        if (this.testExpression != null)
+        {
+            this.testExpression.receive(visitor);
+        }
+        if (this.messageExpression != null)
+        {
+            this.messageExpression.receive(visitor);
+        }
     }
 
     /**
@@ -111,8 +117,14 @@ public class AssertStatementNodeImpl extends NodeImpl implements AssertStatement
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        this.testExpression.receiveTyped(visitor);
-        this.messageExpression.receiveTyped(visitor);
+        if (this.testExpression != null)
+        {
+            this.testExpression.receiveTyped(visitor);
+        }
+        if (this.messageExpression != null)
+        {
+            this.messageExpression.receiveTyped(visitor);
+        }
     }
 
     @Override

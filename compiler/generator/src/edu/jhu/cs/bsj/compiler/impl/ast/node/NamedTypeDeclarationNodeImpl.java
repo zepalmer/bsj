@@ -95,8 +95,14 @@ public abstract class NamedTypeDeclarationNodeImpl extends NodeImpl implements N
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        this.identifier.receive(visitor);
-        this.javadoc.receive(visitor);
+        if (this.identifier != null)
+        {
+            this.identifier.receive(visitor);
+        }
+        if (this.javadoc != null)
+        {
+            this.javadoc.receive(visitor);
+        }
     }
 
     /**
@@ -110,8 +116,14 @@ public abstract class NamedTypeDeclarationNodeImpl extends NodeImpl implements N
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        this.identifier.receiveTyped(visitor);
-        this.javadoc.receiveTyped(visitor);
+        if (this.identifier != null)
+        {
+            this.identifier.receiveTyped(visitor);
+        }
+        if (this.javadoc != null)
+        {
+            this.javadoc.receiveTyped(visitor);
+        }
     }
 
     @Override

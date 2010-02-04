@@ -98,8 +98,14 @@ public class EnumBodyNodeImpl extends NodeImpl implements EnumBodyNode
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        this.constants.receive(visitor);
-        this.members.receive(visitor);
+        if (this.constants != null)
+        {
+            this.constants.receive(visitor);
+        }
+        if (this.members != null)
+        {
+            this.members.receive(visitor);
+        }
     }
 
     /**
@@ -113,8 +119,14 @@ public class EnumBodyNodeImpl extends NodeImpl implements EnumBodyNode
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        this.constants.receiveTyped(visitor);
-        this.members.receiveTyped(visitor);
+        if (this.constants != null)
+        {
+            this.constants.receiveTyped(visitor);
+        }
+        if (this.members != null)
+        {
+            this.members.receiveTyped(visitor);
+        }
     }
 
     @Override

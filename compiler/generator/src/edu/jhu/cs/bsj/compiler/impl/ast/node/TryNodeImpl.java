@@ -129,9 +129,18 @@ public class TryNodeImpl extends NodeImpl implements TryNode
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        this.block.receive(visitor);
-        this.catches.receive(visitor);
-        this.finallyBlock.receive(visitor);
+        if (this.block != null)
+        {
+            this.block.receive(visitor);
+        }
+        if (this.catches != null)
+        {
+            this.catches.receive(visitor);
+        }
+        if (this.finallyBlock != null)
+        {
+            this.finallyBlock.receive(visitor);
+        }
     }
 
     /**
@@ -145,9 +154,18 @@ public class TryNodeImpl extends NodeImpl implements TryNode
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        this.block.receiveTyped(visitor);
-        this.catches.receiveTyped(visitor);
-        this.finallyBlock.receiveTyped(visitor);
+        if (this.block != null)
+        {
+            this.block.receiveTyped(visitor);
+        }
+        if (this.catches != null)
+        {
+            this.catches.receiveTyped(visitor);
+        }
+        if (this.finallyBlock != null)
+        {
+            this.finallyBlock.receiveTyped(visitor);
+        }
     }
 
     @Override

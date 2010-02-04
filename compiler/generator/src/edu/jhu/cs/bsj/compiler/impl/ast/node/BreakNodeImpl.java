@@ -65,7 +65,10 @@ public class BreakNodeImpl extends NodeImpl implements BreakNode
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        this.label.receive(visitor);
+        if (this.label != null)
+        {
+            this.label.receive(visitor);
+        }
     }
 
     /**
@@ -79,7 +82,10 @@ public class BreakNodeImpl extends NodeImpl implements BreakNode
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        this.label.receiveTyped(visitor);
+        if (this.label != null)
+        {
+            this.label.receiveTyped(visitor);
+        }
     }
 
     @Override
