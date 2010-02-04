@@ -10,6 +10,7 @@ import java.net.URISyntaxException;
 
 import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.AbstractFileObject;
 import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.BsjFileObject;
+import edu.jhu.cs.bsj.compiler.impl.utils.StringUtilities;
 
 public class ByteArrayJavaFileObject extends AbstractFileObject implements BsjFileObject
 {
@@ -88,7 +89,7 @@ public class ByteArrayJavaFileObject extends AbstractFileObject implements BsjFi
 	@Override
 	public String inferBinaryName()
 	{
-		return fileName;
+		return StringUtilities.removeSuffix(this.fileName, '.').replace('/', '.');
 	}
 
 	@Override
