@@ -139,8 +139,8 @@ public class LabeledStatementNodeImpl extends NodeImpl implements LabeledStateme
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
         visitor.visitStatementNodeStop(this);
-        visitor.visitNodeStart(this);
-        visitor.visitLabeledStatementNodeStart(this, true);
+        visitor.visitNodeStop(this);
+        visitor.visitLabeledStatementNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
 

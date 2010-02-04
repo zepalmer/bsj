@@ -229,8 +229,12 @@ public class ExtractMetaprogramsTask extends CompilationUnitTask
 		private BsjMetaprogram<A> compileMetaprogram(MetaprogramNode metaprogramNode, Context<A> context)
 				throws IOException, BsjCompilerException
 		{
-			// *** Start by building the metaprogram compilation unit
+			if (LOGGER.isTraceEnabled())
+			{
+				LOGGER.trace("Generating metaprogram class for " + getTracker().getName());
+			}
 
+			// *** Start by building the metaprogram compilation unit
 			// TODO: what kind of package declaration should a metaprogram have?
 			String metaprogramPackageName = "foo";
 
@@ -297,6 +301,12 @@ public class ExtractMetaprogramsTask extends CompilationUnitTask
 					factory.makeListNode(Collections.singletonList(metaprogramClassNode)));
 
 			// *** Compile the metaprogram in memory
+			if (LOGGER.isTraceEnabled())
+			{
+				LOGGER.trace("Compiling metaprogram class " + fullyQualifiedMetaprogramClassName + " for "
+						+ getTracker().getName());
+			}
+
 			Map<BsjCompilerLocation, LocationManager> locationMap = new HashMap<BsjCompilerLocation, LocationManager>();
 			locationMap.put(BsjCompilerLocation.SOURCE_PATH, new InMemoryLocationManager(null));
 			locationMap.put(BsjCompilerLocation.GENERATED_SOURCE_PATH, new InMemoryLocationManager(null));

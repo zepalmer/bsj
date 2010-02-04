@@ -100,8 +100,8 @@ public class ArrayInitializerNodeImpl extends NodeImpl implements ArrayInitializ
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
         visitor.visitVariableInitializerNodeStop(this);
-        visitor.visitNodeStart(this);
-        visitor.visitArrayInitializerNodeStart(this, true);
+        visitor.visitNodeStop(this);
+        visitor.visitArrayInitializerNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
 

@@ -99,8 +99,8 @@ public class MetaprogramNodeImpl extends NodeImpl implements MetaprogramNode
         visitor.visitStartEnd(this);
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
-        visitor.visitNodeStart(this);
-        visitor.visitMetaprogramNodeStart(this, true);
+        visitor.visitNodeStop(this);
+        visitor.visitMetaprogramNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
 

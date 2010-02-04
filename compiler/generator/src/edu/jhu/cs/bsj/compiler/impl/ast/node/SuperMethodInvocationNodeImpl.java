@@ -222,8 +222,8 @@ public class SuperMethodInvocationNodeImpl extends NodeImpl implements SuperMeth
         visitor.visitStopBegin(this);
         visitor.visitRestrictedPrimaryExpressionNodeStop(this);
         visitor.visitStatementExpressionNodeStop(this);
-        visitor.visitNodeStart(this);
-        visitor.visitSuperMethodInvocationNodeStart(this, true);
+        visitor.visitNodeStop(this);
+        visitor.visitSuperMethodInvocationNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
 

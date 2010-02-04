@@ -123,8 +123,8 @@ public class UnaryExpressionNodeImpl extends NodeImpl implements UnaryExpression
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
         visitor.visitNonAssignmentExpressionNodeStop(this);
-        visitor.visitNodeStart(this);
-        visitor.visitUnaryExpressionNodeStart(this, true);
+        visitor.visitNodeStop(this);
+        visitor.visitUnaryExpressionNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
 

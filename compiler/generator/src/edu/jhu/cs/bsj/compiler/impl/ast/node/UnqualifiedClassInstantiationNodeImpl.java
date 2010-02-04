@@ -105,9 +105,9 @@ public class UnqualifiedClassInstantiationNodeImpl extends ClassInstantiationNod
         visitor.visitStartEnd(this);
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
-        visitor.visitNodeStart(this);
-        visitor.visitClassInstantiationNodeStart(this);
-        visitor.visitUnqualifiedClassInstantiationNodeStart(this, true);
+        visitor.visitNodeStop(this);
+        visitor.visitClassInstantiationNodeStop(this);
+        visitor.visitUnqualifiedClassInstantiationNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
 

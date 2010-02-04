@@ -2,8 +2,13 @@ package edu.jhu.cs.bsj.compiler.impl.tool.compiler.task;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.apache.log4j.Logger;
+
 public abstract class AbstractBsjCompilerTask implements BsjCompilerTask
 {
+	/** A logger for this task. */
+	protected final Logger LOGGER = Logger.getLogger(this.getClass());
+
 	/** The next UID to assign to a task. */
 	private static final AtomicInteger nextUID = new AtomicInteger(0);
 	/** The priority of this task. */

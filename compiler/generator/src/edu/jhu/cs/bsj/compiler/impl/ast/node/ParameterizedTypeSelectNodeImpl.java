@@ -139,8 +139,8 @@ public class ParameterizedTypeSelectNodeImpl extends NodeImpl implements Paramet
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
         visitor.visitDeclaredTypeNodeStop(this);
-        visitor.visitNodeStart(this);
-        visitor.visitParameterizedTypeSelectNodeStart(this, true);
+        visitor.visitNodeStop(this);
+        visitor.visitParameterizedTypeSelectNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
 

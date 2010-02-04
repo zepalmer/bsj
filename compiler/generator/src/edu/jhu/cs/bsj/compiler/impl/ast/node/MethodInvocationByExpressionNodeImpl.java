@@ -143,9 +143,9 @@ public class MethodInvocationByExpressionNodeImpl extends MethodInvocationNodeIm
         visitor.visitStartEnd(this);
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
-        visitor.visitNodeStart(this);
-        visitor.visitMethodInvocationNodeStart(this);
-        visitor.visitMethodInvocationByExpressionNodeStart(this, true);
+        visitor.visitNodeStop(this);
+        visitor.visitMethodInvocationNodeStop(this);
+        visitor.visitMethodInvocationByExpressionNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
 

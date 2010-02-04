@@ -59,8 +59,8 @@ public class VoidTypeDeclarationNodeImpl extends NodeImpl implements VoidTypeDec
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
         visitor.visitTypeDeclarationNodeStop(this);
-        visitor.visitNodeStart(this);
-        visitor.visitVoidTypeDeclarationNodeStart(this, true);
+        visitor.visitNodeStop(this);
+        visitor.visitVoidTypeDeclarationNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
 

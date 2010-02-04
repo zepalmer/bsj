@@ -137,8 +137,8 @@ public class CatchNodeImpl extends NodeImpl implements CatchNode
         visitor.visitStartEnd(this);
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
-        visitor.visitNodeStart(this);
-        visitor.visitCatchNodeStart(this, true);
+        visitor.visitNodeStop(this);
+        visitor.visitCatchNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
 

@@ -423,8 +423,8 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
         visitor.visitClassMemberNodeStop(this);
         visitor.visitInterfaceMemberNodeStop(this);
         visitor.visitAnonymousClassMemberNodeStop(this);
-        visitor.visitNodeStart(this);
-        visitor.visitMethodDeclarationNodeStart(this, true);
+        visitor.visitNodeStop(this);
+        visitor.visitMethodDeclarationNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
 

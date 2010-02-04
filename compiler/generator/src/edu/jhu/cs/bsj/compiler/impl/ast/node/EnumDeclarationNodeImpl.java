@@ -185,9 +185,9 @@ public class EnumDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl implem
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
         visitor.visitInlineTypeDeclarableNodeStop(this);
-        visitor.visitNodeStart(this);
-        visitor.visitNamedTypeDeclarationNodeStart(this);
-        visitor.visitEnumDeclarationNodeStart(this, true);
+        visitor.visitNodeStop(this);
+        visitor.visitNamedTypeDeclarationNodeStop(this);
+        visitor.visitEnumDeclarationNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
 

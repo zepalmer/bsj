@@ -177,8 +177,8 @@ public class ConditionalExpressionNodeImpl extends NodeImpl implements Condition
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
         visitor.visitNonAssignmentExpressionNodeStop(this);
-        visitor.visitNodeStart(this);
-        visitor.visitConditionalExpressionNodeStart(this, true);
+        visitor.visitNodeStop(this);
+        visitor.visitConditionalExpressionNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
 

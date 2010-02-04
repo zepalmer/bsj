@@ -101,8 +101,8 @@ public class ArrayTypeNodeImpl extends NodeImpl implements ArrayTypeNode
         visitor.visitStopBegin(this);
         visitor.visitReferenceTypeNodeStop(this);
         visitor.visitLiteralizableTypeNodeStop(this);
-        visitor.visitNodeStart(this);
-        visitor.visitArrayTypeNodeStart(this, true);
+        visitor.visitNodeStop(this);
+        visitor.visitArrayTypeNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
 

@@ -61,9 +61,9 @@ public class AnnotationMethodModifiersNodeImpl extends ModifiersNodeImpl impleme
         visitor.visitStartEnd(this);
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
-        visitor.visitNodeStart(this);
-        visitor.visitModifiersNodeStart(this);
-        visitor.visitAnnotationMethodModifiersNodeStart(this, true);
+        visitor.visitNodeStop(this);
+        visitor.visitModifiersNodeStop(this);
+        visitor.visitAnnotationMethodModifiersNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
 

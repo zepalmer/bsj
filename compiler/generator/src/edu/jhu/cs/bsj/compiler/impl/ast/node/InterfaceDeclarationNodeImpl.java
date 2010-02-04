@@ -223,9 +223,9 @@ public class InterfaceDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl i
         visitor.visitStartEnd(this);
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
-        visitor.visitNodeStart(this);
-        visitor.visitNamedTypeDeclarationNodeStart(this);
-        visitor.visitInterfaceDeclarationNodeStart(this, true);
+        visitor.visitNodeStop(this);
+        visitor.visitNamedTypeDeclarationNodeStop(this);
+        visitor.visitInterfaceDeclarationNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
 

@@ -142,9 +142,9 @@ public class AnnotationDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl 
         visitor.visitStartEnd(this);
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
-        visitor.visitNodeStart(this);
-        visitor.visitNamedTypeDeclarationNodeStart(this);
-        visitor.visitAnnotationDeclarationNodeStart(this, true);
+        visitor.visitNodeStop(this);
+        visitor.visitNamedTypeDeclarationNodeStop(this);
+        visitor.visitAnnotationDeclarationNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
 

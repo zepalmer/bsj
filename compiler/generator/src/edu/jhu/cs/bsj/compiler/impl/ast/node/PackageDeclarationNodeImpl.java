@@ -138,8 +138,8 @@ public class PackageDeclarationNodeImpl extends NodeImpl implements PackageDecla
         visitor.visitStartEnd(this);
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
-        visitor.visitNodeStart(this);
-        visitor.visitPackageDeclarationNodeStart(this, true);
+        visitor.visitNodeStop(this);
+        visitor.visitPackageDeclarationNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
 

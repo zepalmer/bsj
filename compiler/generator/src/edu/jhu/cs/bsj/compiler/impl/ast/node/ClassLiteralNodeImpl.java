@@ -60,9 +60,9 @@ public class ClassLiteralNodeImpl extends LiteralNodeImpl<LiteralizableTypeNode>
         visitor.visitStartEnd(this);
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
-        visitor.visitNodeStart(this);
-        visitor.visitLiteralNodeStart(this);
-        visitor.visitClassLiteralNodeStart(this, true);
+        visitor.visitNodeStop(this);
+        visitor.visitLiteralNodeStop(this);
+        visitor.visitClassLiteralNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
 

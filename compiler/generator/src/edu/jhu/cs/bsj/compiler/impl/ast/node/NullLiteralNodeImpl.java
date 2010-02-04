@@ -59,9 +59,9 @@ public class NullLiteralNodeImpl extends LiteralNodeImpl<Void> implements NullLi
         visitor.visitStartEnd(this);
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
-        visitor.visitNodeStart(this);
-        visitor.visitLiteralNodeStart(this);
-        visitor.visitNullLiteralNodeStart(this, true);
+        visitor.visitNodeStop(this);
+        visitor.visitLiteralNodeStop(this);
+        visitor.visitNullLiteralNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
 

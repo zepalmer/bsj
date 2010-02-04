@@ -139,8 +139,8 @@ public class FieldAccessByExpressionNodeImpl extends NodeImpl implements FieldAc
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
         visitor.visitFieldAccessNodeStop(this);
-        visitor.visitNodeStart(this);
-        visitor.visitFieldAccessByExpressionNodeStart(this, true);
+        visitor.visitNodeStop(this);
+        visitor.visitFieldAccessByExpressionNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
 

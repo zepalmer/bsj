@@ -99,8 +99,8 @@ public class ThisNodeImpl extends NodeImpl implements ThisNode
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
         visitor.visitRestrictedPrimaryExpressionNodeStop(this);
-        visitor.visitNodeStart(this);
-        visitor.visitThisNodeStart(this, true);
+        visitor.visitNodeStop(this);
+        visitor.visitThisNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
 

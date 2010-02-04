@@ -101,9 +101,9 @@ public class NormalAnnotationNodeImpl extends AnnotationNodeImpl implements Norm
         visitor.visitStartEnd(this);
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
-        visitor.visitNodeStart(this);
-        visitor.visitAnnotationNodeStart(this);
-        visitor.visitNormalAnnotationNodeStart(this, true);
+        visitor.visitNodeStop(this);
+        visitor.visitAnnotationNodeStop(this);
+        visitor.visitNormalAnnotationNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
 

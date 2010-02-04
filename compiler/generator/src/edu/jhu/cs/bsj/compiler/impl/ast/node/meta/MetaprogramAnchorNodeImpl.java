@@ -111,8 +111,8 @@ public abstract class MetaprogramAnchorNodeImpl<T extends Node> extends NodeImpl
         visitor.visitStartEnd(this);
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
-        visitor.visitNodeStart(this);
-        visitor.visitMetaprogramAnchorNodeStart(this);
+        visitor.visitNodeStop(this);
+        visitor.visitMetaprogramAnchorNodeStop(this);
         visitor.visitStopEnd(this);
     }
 

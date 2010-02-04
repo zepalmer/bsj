@@ -64,9 +64,9 @@ public class TypeDeclarationMetaprogramAnchorNodeImpl extends MetaprogramAnchorN
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
         visitor.visitTypeDeclarationNodeStop(this);
-        visitor.visitNodeStart(this);
-        visitor.visitMetaprogramAnchorNodeStart(this);
-        visitor.visitTypeDeclarationMetaprogramAnchorNodeStart(this, true);
+        visitor.visitNodeStop(this);
+        visitor.visitMetaprogramAnchorNodeStop(this);
+        visitor.visitTypeDeclarationMetaprogramAnchorNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
 

@@ -80,8 +80,8 @@ public class IdentifierNodeImpl extends NodeImpl implements IdentifierNode
         visitor.visitStartEnd(this);
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
-        visitor.visitNodeStart(this);
-        visitor.visitIdentifierNodeStart(this, true);
+        visitor.visitNodeStop(this);
+        visitor.visitIdentifierNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
 

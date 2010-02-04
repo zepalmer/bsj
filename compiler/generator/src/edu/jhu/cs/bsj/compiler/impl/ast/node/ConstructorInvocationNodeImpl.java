@@ -136,8 +136,8 @@ public abstract class ConstructorInvocationNodeImpl extends NodeImpl implements 
         visitor.visitStartEnd(this);
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
-        visitor.visitNodeStart(this);
-        visitor.visitConstructorInvocationNodeStart(this);
+        visitor.visitNodeStop(this);
+        visitor.visitConstructorInvocationNodeStop(this);
         visitor.visitStopEnd(this);
     }
 

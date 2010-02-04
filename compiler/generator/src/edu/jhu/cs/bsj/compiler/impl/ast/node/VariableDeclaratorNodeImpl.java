@@ -179,8 +179,8 @@ public class VariableDeclaratorNodeImpl extends NodeImpl implements VariableDecl
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
         visitor.visitStatementNodeStop(this);
-        visitor.visitNodeStart(this);
-        visitor.visitVariableDeclaratorNodeStart(this, true);
+        visitor.visitNodeStop(this);
+        visitor.visitVariableDeclaratorNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
 

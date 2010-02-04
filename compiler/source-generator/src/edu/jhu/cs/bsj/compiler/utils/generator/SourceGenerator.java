@@ -1211,6 +1211,17 @@ public class SourceGenerator
 					ps.println("        {");
 					ps.println("            this." + p.name + ".receive(visitor);");
 					ps.println("        }");
+				} else if (p.type.startsWith("List<"))
+				{
+					// Let's assume that the list contains node objects!
+					// TODO: this is pretty shoddy - can we improve on this?
+					ps.println("        if (this." + p.name + " != null)");
+					ps.println("        {");
+					ps.println("            for (Node node : this." + p.name + ")");
+					ps.println("            {");
+					ps.println("                node.receive(visitor);");
+					ps.println("            }");
+					ps.println("        }");
 				}
 			}
 			ps.println("    }");
@@ -1241,6 +1252,17 @@ public class SourceGenerator
 					ps.println("        if (this." + p.name + " != null)");
 					ps.println("        {");
 					ps.println("            this." + p.name + ".receiveTyped(visitor);");
+					ps.println("        }");
+				} else if (p.type.startsWith("List<"))
+				{
+					// Let's assume that the list contains node objects!
+					// TODO: this is pretty shoddy - can we improve on this?
+					ps.println("        if (this." + p.name + " != null)");
+					ps.println("        {");
+					ps.println("            for (Node node : this." + p.name + ")");
+					ps.println("            {");
+					ps.println("                node.receiveTyped(visitor);");
+					ps.println("            }");
 					ps.println("        }");
 				}
 			}
@@ -1280,7 +1302,7 @@ public class SourceGenerator
 			}
 			for (ClassDef edef : backtrack)
 			{
-				ps.print("        visitor.visit" + edef.getRawName() + "Start(this");
+				ps.print("        visitor.visit" + edef.getRawName() + "Stop(this");
 				if (edef.mode == ClassMode.CONCRETE)
 				{
 					ps.print(", ");

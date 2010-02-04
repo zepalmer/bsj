@@ -139,8 +139,8 @@ public class SuperFieldAccessNodeImpl extends NodeImpl implements SuperFieldAcce
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
         visitor.visitRestrictedPrimaryExpressionNodeStop(this);
-        visitor.visitNodeStart(this);
-        visitor.visitSuperFieldAccessNodeStart(this, true);
+        visitor.visitNodeStop(this);
+        visitor.visitSuperFieldAccessNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
 

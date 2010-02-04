@@ -139,8 +139,8 @@ public class TypeCastNodeImpl extends NodeImpl implements TypeCastNode
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
         visitor.visitNonAssignmentExpressionNodeStop(this);
-        visitor.visitNodeStart(this);
-        visitor.visitTypeCastNodeStart(this, true);
+        visitor.visitNodeStop(this);
+        visitor.visitTypeCastNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
 

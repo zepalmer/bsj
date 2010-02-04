@@ -122,8 +122,8 @@ public class WildcardTypeNodeImpl extends NodeImpl implements WildcardTypeNode
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
         visitor.visitTypeArgumentNodeStop(this);
-        visitor.visitNodeStart(this);
-        visitor.visitWildcardTypeNodeStart(this, true);
+        visitor.visitNodeStop(this);
+        visitor.visitWildcardTypeNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
 

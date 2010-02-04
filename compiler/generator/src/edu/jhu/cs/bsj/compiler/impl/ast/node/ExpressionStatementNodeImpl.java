@@ -99,8 +99,8 @@ public class ExpressionStatementNodeImpl extends NodeImpl implements ExpressionS
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
         visitor.visitStatementNodeStop(this);
-        visitor.visitNodeStart(this);
-        visitor.visitExpressionStatementNodeStart(this, true);
+        visitor.visitNodeStop(this);
+        visitor.visitExpressionStatementNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
 

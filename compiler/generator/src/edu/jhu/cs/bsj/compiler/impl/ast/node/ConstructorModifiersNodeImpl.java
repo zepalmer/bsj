@@ -85,9 +85,9 @@ public class ConstructorModifiersNodeImpl extends ModifiersNodeImpl implements C
         visitor.visitStartEnd(this);
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
-        visitor.visitNodeStart(this);
-        visitor.visitModifiersNodeStart(this);
-        visitor.visitConstructorModifiersNodeStart(this, true);
+        visitor.visitNodeStop(this);
+        visitor.visitModifiersNodeStop(this);
+        visitor.visitConstructorModifiersNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
 

@@ -99,8 +99,8 @@ public class BreakNodeImpl extends NodeImpl implements BreakNode
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
         visitor.visitStatementNodeStop(this);
-        visitor.visitNodeStart(this);
-        visitor.visitBreakNodeStart(this, true);
+        visitor.visitNodeStop(this);
+        visitor.visitBreakNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
 

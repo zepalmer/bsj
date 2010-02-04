@@ -95,8 +95,8 @@ public abstract class AnnotationNodeImpl extends NodeImpl implements AnnotationN
         visitor.visitStartEnd(this);
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
-        visitor.visitNodeStart(this);
-        visitor.visitAnnotationNodeStart(this);
+        visitor.visitNodeStop(this);
+        visitor.visitAnnotationNodeStop(this);
         visitor.visitStopEnd(this);
     }
 

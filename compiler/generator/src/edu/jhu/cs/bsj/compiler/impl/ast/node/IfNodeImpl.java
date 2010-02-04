@@ -178,8 +178,8 @@ public class IfNodeImpl extends NodeImpl implements IfNode
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
         visitor.visitStatementNodeStop(this);
-        visitor.visitNodeStart(this);
-        visitor.visitIfNodeStart(this, true);
+        visitor.visitNodeStop(this);
+        visitor.visitIfNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
 

@@ -101,8 +101,8 @@ public class UnparameterizedTypeNodeImpl extends NodeImpl implements Unparameter
         visitor.visitStopBegin(this);
         visitor.visitDeclaredTypeNodeStop(this);
         visitor.visitLiteralizableTypeNodeStop(this);
-        visitor.visitNodeStart(this);
-        visitor.visitUnparameterizedTypeNodeStart(this, true);
+        visitor.visitNodeStop(this);
+        visitor.visitUnparameterizedTypeNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
 

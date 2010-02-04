@@ -103,9 +103,9 @@ public class MethodInvocationByNameNodeImpl extends MethodInvocationNodeImpl imp
         visitor.visitStartEnd(this);
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
-        visitor.visitNodeStart(this);
-        visitor.visitMethodInvocationNodeStart(this);
-        visitor.visitMethodInvocationByNameNodeStart(this, true);
+        visitor.visitNodeStop(this);
+        visitor.visitMethodInvocationNodeStop(this);
+        visitor.visitMethodInvocationByNameNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
 

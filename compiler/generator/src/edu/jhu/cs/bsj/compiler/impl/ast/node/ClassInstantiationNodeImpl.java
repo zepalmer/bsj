@@ -180,8 +180,8 @@ public abstract class ClassInstantiationNodeImpl extends NodeImpl implements Cla
         visitor.visitStopBegin(this);
         visitor.visitRestrictedPrimaryExpressionNodeStop(this);
         visitor.visitStatementExpressionNodeStop(this);
-        visitor.visitNodeStart(this);
-        visitor.visitClassInstantiationNodeStart(this);
+        visitor.visitNodeStop(this);
+        visitor.visitClassInstantiationNodeStop(this);
         visitor.visitStopEnd(this);
     }
 

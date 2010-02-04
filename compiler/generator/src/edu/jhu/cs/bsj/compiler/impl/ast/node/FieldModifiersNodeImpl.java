@@ -177,9 +177,9 @@ public class FieldModifiersNodeImpl extends ModifiersNodeImpl implements FieldMo
         visitor.visitStartEnd(this);
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
-        visitor.visitNodeStart(this);
-        visitor.visitModifiersNodeStart(this);
-        visitor.visitFieldModifiersNodeStart(this, true);
+        visitor.visitNodeStop(this);
+        visitor.visitModifiersNodeStop(this);
+        visitor.visitFieldModifiersNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
 

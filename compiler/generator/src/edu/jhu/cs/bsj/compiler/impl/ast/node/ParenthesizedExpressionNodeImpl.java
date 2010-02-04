@@ -99,8 +99,8 @@ public class ParenthesizedExpressionNodeImpl extends NodeImpl implements Parenth
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
         visitor.visitRestrictedPrimaryExpressionNodeStop(this);
-        visitor.visitNodeStart(this);
-        visitor.visitParenthesizedExpressionNodeStart(this, true);
+        visitor.visitNodeStop(this);
+        visitor.visitParenthesizedExpressionNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
 

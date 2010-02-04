@@ -124,8 +124,8 @@ public class InitializerDeclarationNodeImpl extends NodeImpl implements Initiali
         visitor.visitStopBegin(this);
         visitor.visitClassMemberNodeStop(this);
         visitor.visitAnonymousClassMemberNodeStop(this);
-        visitor.visitNodeStart(this);
-        visitor.visitInitializerDeclarationNodeStart(this, true);
+        visitor.visitNodeStop(this);
+        visitor.visitInitializerDeclarationNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
 

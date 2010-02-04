@@ -99,8 +99,8 @@ public class ThrowNodeImpl extends NodeImpl implements ThrowNode
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
         visitor.visitStatementNodeStop(this);
-        visitor.visitNodeStart(this);
-        visitor.visitThrowNodeStart(this, true);
+        visitor.visitNodeStop(this);
+        visitor.visitThrowNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
 

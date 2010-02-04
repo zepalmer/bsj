@@ -140,8 +140,8 @@ public abstract class MethodInvocationNodeImpl extends NodeImpl implements Metho
         visitor.visitStopBegin(this);
         visitor.visitRestrictedPrimaryExpressionNodeStop(this);
         visitor.visitStatementExpressionNodeStop(this);
-        visitor.visitNodeStart(this);
-        visitor.visitMethodInvocationNodeStart(this);
+        visitor.visitNodeStop(this);
+        visitor.visitMethodInvocationNodeStop(this);
         visitor.visitStopEnd(this);
     }
 

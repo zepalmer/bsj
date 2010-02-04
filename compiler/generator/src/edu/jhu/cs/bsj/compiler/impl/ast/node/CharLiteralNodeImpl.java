@@ -59,9 +59,9 @@ public class CharLiteralNodeImpl extends LiteralNodeImpl<Character> implements C
         visitor.visitStartEnd(this);
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
-        visitor.visitNodeStart(this);
-        visitor.visitLiteralNodeStart(this);
-        visitor.visitCharLiteralNodeStart(this, true);
+        visitor.visitNodeStop(this);
+        visitor.visitLiteralNodeStop(this);
+        visitor.visitCharLiteralNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
 

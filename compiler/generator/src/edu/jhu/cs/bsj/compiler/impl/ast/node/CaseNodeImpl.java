@@ -138,8 +138,8 @@ public class CaseNodeImpl extends NodeImpl implements CaseNode
         visitor.visitStartEnd(this);
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
-        visitor.visitNodeStart(this);
-        visitor.visitCaseNodeStart(this, true);
+        visitor.visitNodeStop(this);
+        visitor.visitCaseNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
 

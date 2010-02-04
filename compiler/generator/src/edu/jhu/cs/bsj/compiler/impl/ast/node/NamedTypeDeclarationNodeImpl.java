@@ -137,8 +137,8 @@ public abstract class NamedTypeDeclarationNodeImpl extends NodeImpl implements N
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
         visitor.visitTypeDeclarationNodeStop(this);
-        visitor.visitNodeStart(this);
-        visitor.visitNamedTypeDeclarationNodeStart(this);
+        visitor.visitNodeStop(this);
+        visitor.visitNamedTypeDeclarationNodeStop(this);
         visitor.visitStopEnd(this);
     }
 

@@ -59,9 +59,9 @@ public class BooleanLiteralNodeImpl extends LiteralNodeImpl<Boolean> implements 
         visitor.visitStartEnd(this);
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
-        visitor.visitNodeStart(this);
-        visitor.visitLiteralNodeStart(this);
-        visitor.visitBooleanLiteralNodeStart(this, true);
+        visitor.visitNodeStop(this);
+        visitor.visitLiteralNodeStop(this);
+        visitor.visitBooleanLiteralNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
 

@@ -379,8 +379,8 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
         visitor.visitClassMemberNodeStop(this);
-        visitor.visitNodeStart(this);
-        visitor.visitConstructorDeclarationNodeStart(this, true);
+        visitor.visitNodeStop(this);
+        visitor.visitConstructorDeclarationNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
 

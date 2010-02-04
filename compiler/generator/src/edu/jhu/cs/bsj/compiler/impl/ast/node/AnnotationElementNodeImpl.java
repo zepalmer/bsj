@@ -137,8 +137,8 @@ public class AnnotationElementNodeImpl extends NodeImpl implements AnnotationEle
         visitor.visitStartEnd(this);
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
-        visitor.visitNodeStart(this);
-        visitor.visitAnnotationElementNodeStart(this, true);
+        visitor.visitNodeStop(this);
+        visitor.visitAnnotationElementNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
 

@@ -186,8 +186,8 @@ public class FieldDeclarationNodeImpl extends NodeImpl implements FieldDeclarati
         visitor.visitInterfaceMemberNodeStop(this);
         visitor.visitAnnotationMemberNodeStop(this);
         visitor.visitAnonymousClassMemberNodeStop(this);
-        visitor.visitNodeStart(this);
-        visitor.visitFieldDeclarationNodeStart(this, true);
+        visitor.visitNodeStop(this);
+        visitor.visitFieldDeclarationNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
 

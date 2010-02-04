@@ -50,6 +50,13 @@ public class ListNodeImpl<T extends Node> extends NodeImpl implements ListNode<T
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
+        if (this.children != null)
+        {
+            for (Node node : this.children)
+            {
+                node.receive(visitor);
+            }
+        }
     }
 
     /**
@@ -63,6 +70,13 @@ public class ListNodeImpl<T extends Node> extends NodeImpl implements ListNode<T
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
+        if (this.children != null)
+        {
+            for (Node node : this.children)
+            {
+                node.receiveTyped(visitor);
+            }
+        }
     }
 
     @Override
@@ -74,8 +88,8 @@ public class ListNodeImpl<T extends Node> extends NodeImpl implements ListNode<T
         visitor.visitStartEnd(this);
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
-        visitor.visitNodeStart(this);
-        visitor.visitListNodeStart(this, true);
+        visitor.visitNodeStop(this);
+        visitor.visitListNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
 

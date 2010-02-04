@@ -162,8 +162,8 @@ public class AssignmentNodeImpl extends NodeImpl implements AssignmentNode
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
         visitor.visitStatementExpressionNodeStop(this);
-        visitor.visitNodeStart(this);
-        visitor.visitAssignmentNodeStart(this, true);
+        visitor.visitNodeStop(this);
+        visitor.visitAssignmentNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
 

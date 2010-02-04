@@ -99,8 +99,8 @@ public class ForInitializerDeclarationNodeImpl extends NodeImpl implements ForIn
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
         visitor.visitForInitializerNodeStop(this);
-        visitor.visitNodeStart(this);
-        visitor.visitForInitializerDeclarationNodeStart(this, true);
+        visitor.visitNodeStop(this);
+        visitor.visitForInitializerDeclarationNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
 

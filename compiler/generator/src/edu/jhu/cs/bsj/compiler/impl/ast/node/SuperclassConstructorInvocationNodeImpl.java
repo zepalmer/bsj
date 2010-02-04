@@ -103,9 +103,9 @@ public class SuperclassConstructorInvocationNodeImpl extends ConstructorInvocati
         visitor.visitStartEnd(this);
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
-        visitor.visitNodeStart(this);
-        visitor.visitConstructorInvocationNodeStart(this);
-        visitor.visitSuperclassConstructorInvocationNodeStart(this, true);
+        visitor.visitNodeStop(this);
+        visitor.visitConstructorInvocationNodeStop(this);
+        visitor.visitSuperclassConstructorInvocationNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
 

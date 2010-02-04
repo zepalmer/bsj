@@ -59,9 +59,9 @@ public class LongLiteralNodeImpl extends LiteralNodeImpl<Long> implements LongLi
         visitor.visitStartEnd(this);
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
-        visitor.visitNodeStart(this);
-        visitor.visitLiteralNodeStart(this);
-        visitor.visitLongLiteralNodeStart(this, true);
+        visitor.visitNodeStop(this);
+        visitor.visitLiteralNodeStop(this);
+        visitor.visitLongLiteralNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
 

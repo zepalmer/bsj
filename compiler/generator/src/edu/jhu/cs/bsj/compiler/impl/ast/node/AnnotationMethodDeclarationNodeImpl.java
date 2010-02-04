@@ -259,8 +259,8 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
         visitor.visitAnnotationMemberNodeStop(this);
-        visitor.visitNodeStart(this);
-        visitor.visitAnnotationMethodDeclarationNodeStart(this, true);
+        visitor.visitNodeStop(this);
+        visitor.visitAnnotationMethodDeclarationNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
 

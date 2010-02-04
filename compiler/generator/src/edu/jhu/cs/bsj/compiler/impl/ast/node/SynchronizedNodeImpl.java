@@ -139,8 +139,8 @@ public class SynchronizedNodeImpl extends NodeImpl implements SynchronizedNode
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
         visitor.visitStatementNodeStop(this);
-        visitor.visitNodeStart(this);
-        visitor.visitSynchronizedNodeStart(this, true);
+        visitor.visitNodeStop(this);
+        visitor.visitSynchronizedNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
 

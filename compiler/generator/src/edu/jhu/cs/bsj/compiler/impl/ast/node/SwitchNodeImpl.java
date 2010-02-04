@@ -140,8 +140,8 @@ public class SwitchNodeImpl extends NodeImpl implements SwitchNode
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
         visitor.visitStatementNodeStop(this);
-        visitor.visitNodeStart(this);
-        visitor.visitSwitchNodeStart(this, true);
+        visitor.visitNodeStop(this);
+        visitor.visitSwitchNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
 

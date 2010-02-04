@@ -59,8 +59,8 @@ public class VoidStatementNodeImpl extends NodeImpl implements VoidStatementNode
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
         visitor.visitStatementNodeStop(this);
-        visitor.visitNodeStart(this);
-        visitor.visitVoidStatementNodeStart(this, true);
+        visitor.visitNodeStop(this);
+        visitor.visitVoidStatementNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
 

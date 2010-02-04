@@ -122,8 +122,8 @@ public class ImportSingleTypeNodeImpl extends NodeImpl implements ImportSingleTy
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
         visitor.visitImportNodeStop(this);
-        visitor.visitNodeStart(this);
-        visitor.visitImportSingleTypeNodeStart(this, true);
+        visitor.visitNodeStop(this);
+        visitor.visitImportSingleTypeNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
 

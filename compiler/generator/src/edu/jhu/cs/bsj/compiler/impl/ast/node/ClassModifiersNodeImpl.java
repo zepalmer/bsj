@@ -177,9 +177,9 @@ public class ClassModifiersNodeImpl extends ModifiersNodeImpl implements ClassMo
         visitor.visitStartEnd(this);
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
-        visitor.visitNodeStart(this);
-        visitor.visitModifiersNodeStart(this);
-        visitor.visitClassModifiersNodeStart(this, true);
+        visitor.visitNodeStop(this);
+        visitor.visitModifiersNodeStop(this);
+        visitor.visitClassModifiersNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
 

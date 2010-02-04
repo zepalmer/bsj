@@ -178,8 +178,8 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
         visitor.visitStartEnd(this);
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
-        visitor.visitNodeStart(this);
-        visitor.visitCompilationUnitNodeStart(this, true);
+        visitor.visitNodeStop(this);
+        visitor.visitCompilationUnitNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
 

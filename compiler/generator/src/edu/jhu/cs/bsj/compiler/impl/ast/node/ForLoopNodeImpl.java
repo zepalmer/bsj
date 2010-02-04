@@ -220,8 +220,8 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
         visitor.visitStatementNodeStop(this);
-        visitor.visitNodeStart(this);
-        visitor.visitForLoopNodeStart(this, true);
+        visitor.visitNodeStop(this);
+        visitor.visitForLoopNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
 

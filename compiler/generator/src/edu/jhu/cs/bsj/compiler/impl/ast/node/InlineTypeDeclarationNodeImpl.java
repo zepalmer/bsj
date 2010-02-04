@@ -99,8 +99,8 @@ public class InlineTypeDeclarationNodeImpl extends NodeImpl implements InlineTyp
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
         visitor.visitBlockStatementNodeStop(this);
-        visitor.visitNodeStart(this);
-        visitor.visitInlineTypeDeclarationNodeStart(this, true);
+        visitor.visitNodeStop(this);
+        visitor.visitInlineTypeDeclarationNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
 

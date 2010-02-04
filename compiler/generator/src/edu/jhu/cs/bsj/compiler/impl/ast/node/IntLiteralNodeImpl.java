@@ -59,9 +59,9 @@ public class IntLiteralNodeImpl extends LiteralNodeImpl<Integer> implements IntL
         visitor.visitStartEnd(this);
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
-        visitor.visitNodeStart(this);
-        visitor.visitLiteralNodeStart(this);
-        visitor.visitIntLiteralNodeStart(this, true);
+        visitor.visitNodeStop(this);
+        visitor.visitLiteralNodeStop(this);
+        visitor.visitIntLiteralNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
 

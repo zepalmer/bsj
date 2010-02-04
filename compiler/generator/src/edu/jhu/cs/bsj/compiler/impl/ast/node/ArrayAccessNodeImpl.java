@@ -139,8 +139,8 @@ public class ArrayAccessNodeImpl extends NodeImpl implements ArrayAccessNode
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
         visitor.visitRestrictedPrimaryExpressionNodeStop(this);
-        visitor.visitNodeStart(this);
-        visitor.visitArrayAccessNodeStart(this, true);
+        visitor.visitNodeStop(this);
+        visitor.visitArrayAccessNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
 

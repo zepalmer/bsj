@@ -59,9 +59,9 @@ public class FloatLiteralNodeImpl extends LiteralNodeImpl<Float> implements Floa
         visitor.visitStartEnd(this);
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
-        visitor.visitNodeStart(this);
-        visitor.visitLiteralNodeStart(this);
-        visitor.visitFloatLiteralNodeStart(this, true);
+        visitor.visitNodeStop(this);
+        visitor.visitLiteralNodeStop(this);
+        visitor.visitFloatLiteralNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
 

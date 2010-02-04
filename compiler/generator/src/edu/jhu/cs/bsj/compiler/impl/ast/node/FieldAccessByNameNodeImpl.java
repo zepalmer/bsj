@@ -99,8 +99,8 @@ public class FieldAccessByNameNodeImpl extends NodeImpl implements FieldAccessBy
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
         visitor.visitFieldAccessNodeStop(this);
-        visitor.visitNodeStart(this);
-        visitor.visitFieldAccessByNameNodeStart(this, true);
+        visitor.visitNodeStop(this);
+        visitor.visitFieldAccessByNameNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
 

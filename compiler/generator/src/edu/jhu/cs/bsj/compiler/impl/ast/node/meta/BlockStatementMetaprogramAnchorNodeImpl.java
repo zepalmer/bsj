@@ -64,9 +64,9 @@ public class BlockStatementMetaprogramAnchorNodeImpl extends MetaprogramAnchorNo
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
         visitor.visitBlockStatementNodeStop(this);
-        visitor.visitNodeStart(this);
-        visitor.visitMetaprogramAnchorNodeStart(this);
-        visitor.visitBlockStatementMetaprogramAnchorNodeStart(this, true);
+        visitor.visitNodeStop(this);
+        visitor.visitMetaprogramAnchorNodeStop(this);
+        visitor.visitBlockStatementMetaprogramAnchorNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
 

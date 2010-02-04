@@ -28,7 +28,7 @@ import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.BsjFileObject;
 public class MetacompilationManager
 {
 	/** A logger for this metacompilation manager. */
-	private Logger LOGGER = Logger.getLogger(this.getClass());
+	private final Logger LOGGER = Logger.getLogger(this.getClass());
 	
 	/**
 	 * Maps the names of compilation units to their respective trackers. The trackers contain the compilation unit-

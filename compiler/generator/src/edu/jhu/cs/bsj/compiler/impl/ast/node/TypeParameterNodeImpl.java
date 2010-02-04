@@ -138,8 +138,8 @@ public class TypeParameterNodeImpl extends NodeImpl implements TypeParameterNode
         visitor.visitStartEnd(this);
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
-        visitor.visitNodeStart(this);
-        visitor.visitTypeParameterNodeStart(this, true);
+        visitor.visitNodeStop(this);
+        visitor.visitTypeParameterNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
 

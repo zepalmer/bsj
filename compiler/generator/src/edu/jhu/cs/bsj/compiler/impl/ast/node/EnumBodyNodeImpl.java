@@ -138,8 +138,8 @@ public class EnumBodyNodeImpl extends NodeImpl implements EnumBodyNode
         visitor.visitStartEnd(this);
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
-        visitor.visitNodeStart(this);
-        visitor.visitEnumBodyNodeStart(this, true);
+        visitor.visitNodeStop(this);
+        visitor.visitEnumBodyNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
 

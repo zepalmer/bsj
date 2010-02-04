@@ -69,8 +69,8 @@ public abstract class NameNodeImpl extends NodeImpl implements NameNode
         visitor.visitStartEnd(this);
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
-        visitor.visitNodeStart(this);
-        visitor.visitNameNodeStart(this);
+        visitor.visitNodeStop(this);
+        visitor.visitNameNodeStop(this);
         visitor.visitStopEnd(this);
     }
 

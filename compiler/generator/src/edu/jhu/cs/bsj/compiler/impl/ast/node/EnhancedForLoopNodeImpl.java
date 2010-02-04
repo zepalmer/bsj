@@ -179,8 +179,8 @@ public class EnhancedForLoopNodeImpl extends NodeImpl implements EnhancedForLoop
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
         visitor.visitStatementNodeStop(this);
-        visitor.visitNodeStart(this);
-        visitor.visitEnhancedForLoopNodeStart(this, true);
+        visitor.visitNodeStop(this);
+        visitor.visitEnhancedForLoopNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
 

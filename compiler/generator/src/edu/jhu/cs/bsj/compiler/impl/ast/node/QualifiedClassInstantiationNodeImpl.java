@@ -183,9 +183,9 @@ public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeI
         visitor.visitStartEnd(this);
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
-        visitor.visitNodeStart(this);
-        visitor.visitClassInstantiationNodeStart(this);
-        visitor.visitQualifiedClassInstantiationNodeStart(this, true);
+        visitor.visitNodeStop(this);
+        visitor.visitClassInstantiationNodeStop(this);
+        visitor.visitQualifiedClassInstantiationNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
 

@@ -98,8 +98,8 @@ public class AnonymousClassBodyNodeImpl extends NodeImpl implements AnonymousCla
         visitor.visitStartEnd(this);
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
-        visitor.visitNodeStart(this);
-        visitor.visitAnonymousClassBodyNodeStart(this, true);
+        visitor.visitNodeStop(this);
+        visitor.visitAnonymousClassBodyNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
 

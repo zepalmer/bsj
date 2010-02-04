@@ -122,8 +122,8 @@ public class ImportOnDemandNodeImpl extends NodeImpl implements ImportOnDemandNo
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
         visitor.visitImportNodeStop(this);
-        visitor.visitNodeStart(this);
-        visitor.visitImportOnDemandNodeStart(this, true);
+        visitor.visitNodeStop(this);
+        visitor.visitImportOnDemandNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
 

@@ -99,8 +99,8 @@ public class ContinueNodeImpl extends NodeImpl implements ContinueNode
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
         visitor.visitStatementNodeStop(this);
-        visitor.visitNodeStart(this);
-        visitor.visitContinueNodeStart(this, true);
+        visitor.visitNodeStop(this);
+        visitor.visitContinueNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
 

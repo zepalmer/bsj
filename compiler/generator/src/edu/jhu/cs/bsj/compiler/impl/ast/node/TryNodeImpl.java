@@ -179,8 +179,8 @@ public class TryNodeImpl extends NodeImpl implements TryNode
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
         visitor.visitStatementNodeStop(this);
-        visitor.visitNodeStart(this);
-        visitor.visitTryNodeStart(this, true);
+        visitor.visitNodeStop(this);
+        visitor.visitTryNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
 

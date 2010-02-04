@@ -138,8 +138,8 @@ public class AssertStatementNodeImpl extends NodeImpl implements AssertStatement
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
         visitor.visitStatementNodeStop(this);
-        visitor.visitNodeStart(this);
-        visitor.visitAssertStatementNodeStart(this, true);
+        visitor.visitNodeStop(this);
+        visitor.visitAssertStatementNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
 

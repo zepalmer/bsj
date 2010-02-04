@@ -140,8 +140,8 @@ public class ParameterizedTypeNodeImpl extends NodeImpl implements Parameterized
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
         visitor.visitDeclaredTypeNodeStop(this);
-        visitor.visitNodeStart(this);
-        visitor.visitParameterizedTypeNodeStart(this, true);
+        visitor.visitNodeStop(this);
+        visitor.visitParameterizedTypeNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
 

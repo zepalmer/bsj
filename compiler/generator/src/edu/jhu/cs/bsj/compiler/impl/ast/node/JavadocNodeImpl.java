@@ -80,8 +80,8 @@ public class JavadocNodeImpl extends NodeImpl implements JavadocNode
         visitor.visitStartEnd(this);
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
-        visitor.visitNodeStart(this);
-        visitor.visitJavadocNodeStart(this, true);
+        visitor.visitNodeStop(this);
+        visitor.visitJavadocNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
 

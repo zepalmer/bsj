@@ -99,8 +99,8 @@ public class ReturnNodeImpl extends NodeImpl implements ReturnNode
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
         visitor.visitStatementNodeStop(this);
-        visitor.visitNodeStart(this);
-        visitor.visitReturnNodeStart(this, true);
+        visitor.visitNodeStop(this);
+        visitor.visitReturnNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
 

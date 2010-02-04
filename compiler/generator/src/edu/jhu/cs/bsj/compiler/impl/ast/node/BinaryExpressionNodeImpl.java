@@ -162,8 +162,8 @@ public class BinaryExpressionNodeImpl extends NodeImpl implements BinaryExpressi
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
         visitor.visitNonAssignmentExpressionNodeStop(this);
-        visitor.visitNodeStart(this);
-        visitor.visitBinaryExpressionNodeStart(this, true);
+        visitor.visitNodeStop(this);
+        visitor.visitBinaryExpressionNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
 

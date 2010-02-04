@@ -98,8 +98,8 @@ public class InterfaceBodyNodeImpl extends NodeImpl implements InterfaceBodyNode
         visitor.visitStartEnd(this);
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
-        visitor.visitNodeStart(this);
-        visitor.visitInterfaceBodyNodeStart(this, true);
+        visitor.visitNodeStop(this);
+        visitor.visitInterfaceBodyNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
 

@@ -100,8 +100,8 @@ public class ForInitializerExpressionNodeImpl extends NodeImpl implements ForIni
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
         visitor.visitForInitializerNodeStop(this);
-        visitor.visitNodeStart(this);
-        visitor.visitForInitializerExpressionNodeStart(this, true);
+        visitor.visitNodeStop(this);
+        visitor.visitForInitializerExpressionNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
 

@@ -139,8 +139,8 @@ public class DoWhileLoopNodeImpl extends NodeImpl implements DoWhileLoopNode
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
         visitor.visitStatementNodeStop(this);
-        visitor.visitNodeStart(this);
-        visitor.visitDoWhileLoopNodeStart(this, true);
+        visitor.visitNodeStop(this);
+        visitor.visitDoWhileLoopNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
 

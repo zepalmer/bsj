@@ -100,8 +100,8 @@ public class AnnotationArrayValueNodeImpl extends NodeImpl implements Annotation
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
         visitor.visitAnnotationValueNodeStop(this);
-        visitor.visitNodeStart(this);
-        visitor.visitAnnotationArrayValueNodeStart(this, true);
+        visitor.visitNodeStop(this);
+        visitor.visitAnnotationArrayValueNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
 

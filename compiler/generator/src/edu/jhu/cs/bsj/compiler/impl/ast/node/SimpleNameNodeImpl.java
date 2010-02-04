@@ -100,9 +100,9 @@ public class SimpleNameNodeImpl extends NameNodeImpl implements SimpleNameNode
         visitor.visitStartEnd(this);
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
-        visitor.visitNodeStart(this);
-        visitor.visitNameNodeStart(this);
-        visitor.visitSimpleNameNodeStart(this, true);
+        visitor.visitNodeStop(this);
+        visitor.visitNameNodeStop(this);
+        visitor.visitSimpleNameNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
 

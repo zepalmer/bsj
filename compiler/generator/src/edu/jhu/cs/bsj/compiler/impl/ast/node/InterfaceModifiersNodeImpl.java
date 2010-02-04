@@ -131,9 +131,9 @@ public class InterfaceModifiersNodeImpl extends ModifiersNodeImpl implements Int
         visitor.visitStartEnd(this);
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
-        visitor.visitNodeStart(this);
-        visitor.visitModifiersNodeStart(this);
-        visitor.visitInterfaceModifiersNodeStart(this, true);
+        visitor.visitNodeStop(this);
+        visitor.visitModifiersNodeStop(this);
+        visitor.visitInterfaceModifiersNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
 

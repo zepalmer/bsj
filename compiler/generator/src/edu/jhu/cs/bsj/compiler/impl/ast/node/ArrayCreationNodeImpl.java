@@ -120,8 +120,8 @@ public abstract class ArrayCreationNodeImpl extends NodeImpl implements ArrayCre
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
         visitor.visitPrimaryExpressionNodeStop(this);
-        visitor.visitNodeStart(this);
-        visitor.visitArrayCreationNodeStart(this);
+        visitor.visitNodeStop(this);
+        visitor.visitArrayCreationNodeStop(this);
         visitor.visitStopEnd(this);
     }
 

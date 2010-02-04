@@ -63,9 +63,9 @@ public class AlternateConstructorInvocationNodeImpl extends ConstructorInvocatio
         visitor.visitStartEnd(this);
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
-        visitor.visitNodeStart(this);
-        visitor.visitConstructorInvocationNodeStart(this);
-        visitor.visitAlternateConstructorInvocationNodeStart(this, true);
+        visitor.visitNodeStop(this);
+        visitor.visitConstructorInvocationNodeStop(this);
+        visitor.visitAlternateConstructorInvocationNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
 

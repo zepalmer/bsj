@@ -100,9 +100,9 @@ public class SingleElementAnnotationNodeImpl extends AnnotationNodeImpl implemen
         visitor.visitStartEnd(this);
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
-        visitor.visitNodeStart(this);
-        visitor.visitAnnotationNodeStart(this);
-        visitor.visitSingleElementAnnotationNodeStart(this, true);
+        visitor.visitNodeStop(this);
+        visitor.visitAnnotationNodeStop(this);
+        visitor.visitSingleElementAnnotationNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
 

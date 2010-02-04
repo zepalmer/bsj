@@ -139,8 +139,8 @@ public class WhileLoopNodeImpl extends NodeImpl implements WhileLoopNode
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
         visitor.visitStatementNodeStop(this);
-        visitor.visitNodeStart(this);
-        visitor.visitWhileLoopNodeStart(this, true);
+        visitor.visitNodeStop(this);
+        visitor.visitWhileLoopNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
 

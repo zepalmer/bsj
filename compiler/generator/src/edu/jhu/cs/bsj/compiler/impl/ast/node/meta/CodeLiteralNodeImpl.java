@@ -61,9 +61,9 @@ public class CodeLiteralNodeImpl extends LiteralNodeImpl<Node> implements CodeLi
         visitor.visitStartEnd(this);
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
-        visitor.visitNodeStart(this);
-        visitor.visitLiteralNodeStart(this);
-        visitor.visitCodeLiteralNodeStart(this, true);
+        visitor.visitNodeStop(this);
+        visitor.visitLiteralNodeStop(this);
+        visitor.visitCodeLiteralNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
 

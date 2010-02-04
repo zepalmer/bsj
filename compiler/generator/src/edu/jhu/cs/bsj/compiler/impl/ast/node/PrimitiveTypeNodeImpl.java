@@ -87,8 +87,8 @@ public class PrimitiveTypeNodeImpl extends NodeImpl implements PrimitiveTypeNode
         visitor.visitTypeNodeStop(this);
         visitor.visitBaseTypeNodeStop(this);
         visitor.visitLiteralizableTypeNodeStop(this);
-        visitor.visitNodeStart(this);
-        visitor.visitPrimitiveTypeNodeStart(this, true);
+        visitor.visitNodeStop(this);
+        visitor.visitPrimitiveTypeNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
 

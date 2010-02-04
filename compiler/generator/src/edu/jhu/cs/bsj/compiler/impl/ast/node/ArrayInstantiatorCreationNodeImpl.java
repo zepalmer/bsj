@@ -102,9 +102,9 @@ public class ArrayInstantiatorCreationNodeImpl extends ArrayCreationNodeImpl imp
         visitor.visitStartEnd(this);
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
-        visitor.visitNodeStart(this);
-        visitor.visitArrayCreationNodeStart(this);
-        visitor.visitArrayInstantiatorCreationNodeStart(this, true);
+        visitor.visitNodeStop(this);
+        visitor.visitArrayCreationNodeStop(this);
+        visitor.visitArrayInstantiatorCreationNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
 

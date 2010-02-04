@@ -59,9 +59,9 @@ public class DoubleLiteralNodeImpl extends LiteralNodeImpl<Double> implements Do
         visitor.visitStartEnd(this);
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
-        visitor.visitNodeStart(this);
-        visitor.visitLiteralNodeStart(this);
-        visitor.visitDoubleLiteralNodeStart(this, true);
+        visitor.visitNodeStop(this);
+        visitor.visitLiteralNodeStop(this);
+        visitor.visitDoubleLiteralNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
 

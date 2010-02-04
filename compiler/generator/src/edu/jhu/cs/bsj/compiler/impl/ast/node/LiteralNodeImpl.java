@@ -80,8 +80,8 @@ public abstract class LiteralNodeImpl<T> extends NodeImpl implements LiteralNode
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
         visitor.visitRestrictedPrimaryExpressionNodeStop(this);
-        visitor.visitNodeStart(this);
-        visitor.visitLiteralNodeStart(this);
+        visitor.visitNodeStop(this);
+        visitor.visitLiteralNodeStop(this);
         visitor.visitStopEnd(this);
     }
 

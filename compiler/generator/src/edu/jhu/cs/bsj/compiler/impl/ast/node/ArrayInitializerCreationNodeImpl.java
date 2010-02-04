@@ -101,9 +101,9 @@ public class ArrayInitializerCreationNodeImpl extends ArrayCreationNodeImpl impl
         visitor.visitStartEnd(this);
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
-        visitor.visitNodeStart(this);
-        visitor.visitArrayCreationNodeStart(this);
-        visitor.visitArrayInitializerCreationNodeStart(this, true);
+        visitor.visitNodeStop(this);
+        visitor.visitArrayCreationNodeStop(this);
+        visitor.visitArrayInitializerCreationNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
 

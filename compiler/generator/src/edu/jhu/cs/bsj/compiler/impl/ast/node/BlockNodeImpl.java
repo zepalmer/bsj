@@ -100,8 +100,8 @@ public class BlockNodeImpl extends NodeImpl implements BlockNode
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
         visitor.visitStatementNodeStop(this);
-        visitor.visitNodeStart(this);
-        visitor.visitBlockNodeStart(this, true);
+        visitor.visitNodeStop(this);
+        visitor.visitBlockNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
 

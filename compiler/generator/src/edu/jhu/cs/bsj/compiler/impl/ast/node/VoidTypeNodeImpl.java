@@ -61,8 +61,8 @@ public class VoidTypeNodeImpl extends NodeImpl implements VoidTypeNode
         visitor.visitStopBegin(this);
         visitor.visitTypeNodeStop(this);
         visitor.visitLiteralizableTypeNodeStop(this);
-        visitor.visitNodeStart(this);
-        visitor.visitVoidTypeNodeStart(this, true);
+        visitor.visitNodeStop(this);
+        visitor.visitVoidTypeNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
 

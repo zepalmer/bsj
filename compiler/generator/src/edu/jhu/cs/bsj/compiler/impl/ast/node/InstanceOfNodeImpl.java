@@ -139,8 +139,8 @@ public class InstanceOfNodeImpl extends NodeImpl implements InstanceOfNode
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
         visitor.visitNonAssignmentExpressionNodeStop(this);
-        visitor.visitNodeStart(this);
-        visitor.visitInstanceOfNodeStart(this, true);
+        visitor.visitNodeStop(this);
+        visitor.visitInstanceOfNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
 

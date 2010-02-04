@@ -77,7 +77,7 @@ public abstract class NodeImpl implements Node
         visitor.visitStartEnd(this);
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
-        visitor.visitNodeStart(this);
+        visitor.visitNodeStop(this);
         visitor.visitStopEnd(this);
     }
 

@@ -84,9 +84,9 @@ public class VariableModifiersNodeImpl extends ModifiersNodeImpl implements Vari
         visitor.visitStartEnd(this);
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
-        visitor.visitNodeStart(this);
-        visitor.visitModifiersNodeStart(this);
-        visitor.visitVariableModifiersNodeStart(this, true);
+        visitor.visitNodeStop(this);
+        visitor.visitModifiersNodeStop(this);
+        visitor.visitVariableModifiersNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
 

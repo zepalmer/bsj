@@ -96,8 +96,8 @@ public abstract class ModifiersNodeImpl extends NodeImpl implements ModifiersNod
         visitor.visitStartEnd(this);
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
-        visitor.visitNodeStart(this);
-        visitor.visitModifiersNodeStart(this);
+        visitor.visitNodeStop(this);
+        visitor.visitModifiersNodeStop(this);
         visitor.visitStopEnd(this);
     }
 

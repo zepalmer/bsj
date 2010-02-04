@@ -264,9 +264,9 @@ public class ClassDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl imple
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
         visitor.visitInlineTypeDeclarableNodeStop(this);
-        visitor.visitNodeStart(this);
-        visitor.visitNamedTypeDeclarationNodeStart(this);
-        visitor.visitClassDeclarationNodeStart(this, true);
+        visitor.visitNodeStop(this);
+        visitor.visitNamedTypeDeclarationNodeStop(this);
+        visitor.visitClassDeclarationNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
 

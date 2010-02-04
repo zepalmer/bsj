@@ -108,9 +108,9 @@ public class EnumModifiersNodeImpl extends ModifiersNodeImpl implements EnumModi
         visitor.visitStartEnd(this);
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
-        visitor.visitNodeStart(this);
-        visitor.visitModifiersNodeStart(this);
-        visitor.visitEnumModifiersNodeStart(this, true);
+        visitor.visitNodeStop(this);
+        visitor.visitModifiersNodeStop(this);
+        visitor.visitEnumModifiersNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
 

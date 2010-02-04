@@ -140,9 +140,9 @@ public class QualifiedNameNodeImpl extends NameNodeImpl implements QualifiedName
         visitor.visitStartEnd(this);
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
-        visitor.visitNodeStart(this);
-        visitor.visitNameNodeStart(this);
-        visitor.visitQualifiedNameNodeStart(this, true);
+        visitor.visitNodeStop(this);
+        visitor.visitNameNodeStop(this);
+        visitor.visitQualifiedNameNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
 

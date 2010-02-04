@@ -98,8 +98,8 @@ public class ClassBodyNodeImpl extends NodeImpl implements ClassBodyNode
         visitor.visitStartEnd(this);
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
-        visitor.visitNodeStart(this);
-        visitor.visitClassBodyNodeStart(this, true);
+        visitor.visitNodeStop(this);
+        visitor.visitClassBodyNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
 
