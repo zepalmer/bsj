@@ -31,8 +31,8 @@ public class ParameterizedTypeNodeImpl extends NodeImpl implements Parameterized
             BsjSourceLocation stopLocation)
     {
         super(startLocation, stopLocation);
-        this.baseType = baseType;
-        this.typeArguments = typeArguments;
+        setBaseType(baseType);
+        setTypeArguments(typeArguments);
     }
 
     /**

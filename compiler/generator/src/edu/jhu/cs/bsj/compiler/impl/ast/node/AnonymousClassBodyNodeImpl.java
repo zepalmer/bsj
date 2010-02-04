@@ -26,7 +26,7 @@ public class AnonymousClassBodyNodeImpl extends NodeImpl implements AnonymousCla
             BsjSourceLocation stopLocation)
     {
         super(startLocation, stopLocation);
-        this.members = members;
+        setMembers(members);
     }
 
     /**

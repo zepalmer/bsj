@@ -26,7 +26,7 @@ public class ArrayInitializerNodeImpl extends NodeImpl implements ArrayInitializ
             BsjSourceLocation stopLocation)
     {
         super(startLocation, stopLocation);
-        this.initializers = initializers;
+        setInitializers(initializers);
     }
 
     /**

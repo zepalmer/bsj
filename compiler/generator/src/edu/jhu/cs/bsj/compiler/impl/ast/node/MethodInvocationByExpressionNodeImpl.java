@@ -35,8 +35,8 @@ public class MethodInvocationByExpressionNodeImpl extends MethodInvocationNodeIm
             BsjSourceLocation stopLocation)
     {
         super(arguments, typeArguments, startLocation, stopLocation);
-        this.expression = expression;
-        this.identifier = identifier;
+        setExpression(expression);
+        setIdentifier(identifier);
     }
 
     /**

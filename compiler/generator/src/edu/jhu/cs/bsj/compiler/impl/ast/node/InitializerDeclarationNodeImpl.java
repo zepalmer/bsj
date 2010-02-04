@@ -30,7 +30,7 @@ public class InitializerDeclarationNodeImpl extends NodeImpl implements Initiali
     {
         super(startLocation, stopLocation);
         this.staticInitializer = staticInitializer;
-        this.body = body;
+        setBody(body);
     }
 
     /**

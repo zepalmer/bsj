@@ -34,8 +34,8 @@ public class AnnotationDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl 
             BsjSourceLocation stopLocation)
     {
         super(identifier, javadoc, startLocation, stopLocation);
-        this.modifiers = modifiers;
-        this.body = body;
+        setModifiers(modifiers);
+        setBody(body);
     }
 
     /**

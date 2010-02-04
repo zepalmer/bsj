@@ -34,9 +34,9 @@ public abstract class ClassInstantiationNodeImpl extends NodeImpl implements Cla
             BsjSourceLocation stopLocation)
     {
         super(startLocation, stopLocation);
-        this.constructorTypeArguments = constructorTypeArguments;
-        this.arguments = arguments;
-        this.body = body;
+        setConstructorTypeArguments(constructorTypeArguments);
+        setArguments(arguments);
+        setBody(body);
     }
 
     /**

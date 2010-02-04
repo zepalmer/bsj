@@ -26,7 +26,7 @@ public class AnnotationArrayValueNodeImpl extends NodeImpl implements Annotation
             BsjSourceLocation stopLocation)
     {
         super(startLocation, stopLocation);
-        this.values = values;
+        setValues(values);
     }
 
     /**

@@ -41,10 +41,10 @@ public class SuperMethodInvocationNodeImpl extends NodeImpl implements SuperMeth
             BsjSourceLocation stopLocation)
     {
         super(startLocation, stopLocation);
-        this.type = type;
-        this.identifier = identifier;
-        this.arguments = arguments;
-        this.typeArguments = typeArguments;
+        setType(type);
+        setIdentifier(identifier);
+        setArguments(arguments);
+        setTypeArguments(typeArguments);
     }
 
     /**

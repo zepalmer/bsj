@@ -30,7 +30,7 @@ public class UnaryStatementExpressionNodeImpl extends NodeImpl implements UnaryS
             BsjSourceLocation stopLocation)
     {
         super(startLocation, stopLocation);
-        this.expression = expression;
+        setExpression(expression);
         this.operator = operator;
     }
 

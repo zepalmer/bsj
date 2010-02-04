@@ -31,8 +31,8 @@ public class TypeParameterNodeImpl extends NodeImpl implements TypeParameterNode
             BsjSourceLocation stopLocation)
     {
         super(startLocation, stopLocation);
-        this.identifier = identifier;
-        this.bounds = bounds;
+        setIdentifier(identifier);
+        setBounds(bounds);
     }
 
     /**

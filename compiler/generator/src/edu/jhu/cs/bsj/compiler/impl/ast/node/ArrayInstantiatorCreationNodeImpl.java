@@ -29,7 +29,7 @@ public class ArrayInstantiatorCreationNodeImpl extends ArrayCreationNodeImpl imp
             BsjSourceLocation stopLocation)
     {
         super(baseType, arrayLevels, startLocation, stopLocation);
-        this.dimExpressions = dimExpressions;
+        setDimExpressions(dimExpressions);
     }
 
     /**

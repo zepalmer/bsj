@@ -25,7 +25,7 @@ public class BreakNodeImpl extends NodeImpl implements BreakNode
             BsjSourceLocation stopLocation)
     {
         super(startLocation, stopLocation);
-        this.label = label;
+        setLabel(label);
     }
 
     /**

@@ -34,9 +34,9 @@ public class IfNodeImpl extends NodeImpl implements IfNode
             BsjSourceLocation stopLocation)
     {
         super(startLocation, stopLocation);
-        this.condition = condition;
-        this.thenStatement = thenStatement;
-        this.elseStatement = elseStatement;
+        setCondition(condition);
+        setThenStatement(thenStatement);
+        setElseStatement(elseStatement);
     }
 
     /**

@@ -1138,7 +1138,13 @@ public class SourceGenerator
 			ps.println(";");
 			for (Prop p : def.props)
 			{
-				ps.println("        this." + p.name + " = " + p.name + ";");
+				if (propInstanceOf(p.type, "Node"))
+				{
+					ps.println("        set" + capFirst(p.name) + "(" + p.name + ");");
+				} else
+				{
+					ps.println("        this." + p.name + " = " + p.name + ";");
+				}
 			}
 			ps.println("    }");
 			if (stopGen.contains("cons"))

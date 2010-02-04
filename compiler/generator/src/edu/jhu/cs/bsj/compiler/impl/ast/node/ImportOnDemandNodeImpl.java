@@ -29,7 +29,7 @@ public class ImportOnDemandNodeImpl extends NodeImpl implements ImportOnDemandNo
             BsjSourceLocation stopLocation)
     {
         super(startLocation, stopLocation);
-        this.name = name;
+        setName(name);
         this.staticImport = staticImport;
     }
 

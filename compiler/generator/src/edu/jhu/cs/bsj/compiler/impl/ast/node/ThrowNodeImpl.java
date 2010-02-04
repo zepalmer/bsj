@@ -25,7 +25,7 @@ public class ThrowNodeImpl extends NodeImpl implements ThrowNode
             BsjSourceLocation stopLocation)
     {
         super(startLocation, stopLocation);
-        this.expression = expression;
+        setExpression(expression);
     }
 
     /**

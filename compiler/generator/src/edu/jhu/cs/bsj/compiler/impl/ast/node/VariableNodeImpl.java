@@ -35,9 +35,9 @@ public class VariableNodeImpl extends NodeImpl implements VariableNode
             BsjSourceLocation stopLocation)
     {
         super(startLocation, stopLocation);
-        this.modifiers = modifiers;
-        this.type = type;
-        this.identifier = identifier;
+        setModifiers(modifiers);
+        setType(type);
+        setIdentifier(identifier);
     }
 
     /**

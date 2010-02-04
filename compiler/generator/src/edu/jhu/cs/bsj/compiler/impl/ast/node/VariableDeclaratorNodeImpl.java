@@ -35,9 +35,9 @@ public class VariableDeclaratorNodeImpl extends NodeImpl implements VariableDecl
             BsjSourceLocation stopLocation)
     {
         super(startLocation, stopLocation);
-        this.type = type;
-        this.name = name;
-        this.initializer = initializer;
+        setType(type);
+        setName(name);
+        setInitializer(initializer);
     }
 
     /**

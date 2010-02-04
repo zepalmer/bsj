@@ -30,8 +30,8 @@ public class AnnotationElementNodeImpl extends NodeImpl implements AnnotationEle
             BsjSourceLocation stopLocation)
     {
         super(startLocation, stopLocation);
-        this.identifier = identifier;
-        this.value = value;
+        setIdentifier(identifier);
+        setValue(value);
     }
 
     /**

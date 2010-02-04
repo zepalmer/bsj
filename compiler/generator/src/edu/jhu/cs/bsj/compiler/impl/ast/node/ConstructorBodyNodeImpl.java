@@ -31,8 +31,8 @@ public class ConstructorBodyNodeImpl extends NodeImpl implements ConstructorBody
             BsjSourceLocation stopLocation)
     {
         super(startLocation, stopLocation);
-        this.constructorInvocation = constructorInvocation;
-        this.statements = statements;
+        setConstructorInvocation(constructorInvocation);
+        setStatements(statements);
     }
 
     /**

@@ -60,14 +60,14 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
             BsjSourceLocation stopLocation)
     {
         super(startLocation, stopLocation);
-        this.identifier = identifier;
-        this.body = body;
-        this.modifiers = modifiers;
-        this.parameters = parameters;
-        this.varargParameter = varargParameter;
-        this.throwTypes = throwTypes;
-        this.typeParameters = typeParameters;
-        this.javadoc = javadoc;
+        setIdentifier(identifier);
+        setBody(body);
+        setModifiers(modifiers);
+        setParameters(parameters);
+        setVarargParameter(varargParameter);
+        setThrowTypes(throwTypes);
+        setTypeParameters(typeParameters);
+        setJavadoc(javadoc);
     }
 
     /**

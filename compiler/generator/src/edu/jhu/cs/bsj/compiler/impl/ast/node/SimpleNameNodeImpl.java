@@ -27,7 +27,7 @@ public class SimpleNameNodeImpl extends NameNodeImpl implements SimpleNameNode
             BsjSourceLocation stopLocation)
     {
         super(category, startLocation, stopLocation);
-        this.identifier = identifier;
+        setIdentifier(identifier);
     }
 
     /**

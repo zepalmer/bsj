@@ -27,7 +27,7 @@ public class MetaprogramNodeImpl extends NodeImpl implements MetaprogramNode
             BsjSourceLocation stopLocation)
     {
         super(startLocation, stopLocation);
-        this.body = body;
+        setBody(body);
     }
 
     /**

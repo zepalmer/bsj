@@ -46,11 +46,11 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
             BsjSourceLocation stopLocation)
     {
         super(startLocation, stopLocation);
-        this.annotations = annotations;
-        this.identifier = identifier;
-        this.arguments = arguments;
-        this.body = body;
-        this.javadoc = javadoc;
+        setAnnotations(annotations);
+        setIdentifier(identifier);
+        setArguments(arguments);
+        setBody(body);
+        setJavadoc(javadoc);
     }
 
     /**

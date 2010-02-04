@@ -31,8 +31,8 @@ public class SwitchNodeImpl extends NodeImpl implements SwitchNode
             BsjSourceLocation stopLocation)
     {
         super(startLocation, stopLocation);
-        this.expression = expression;
-        this.cases = cases;
+        setExpression(expression);
+        setCases(cases);
     }
 
     /**

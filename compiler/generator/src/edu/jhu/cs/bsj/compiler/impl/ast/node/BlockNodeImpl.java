@@ -26,7 +26,7 @@ public class BlockNodeImpl extends NodeImpl implements BlockNode
             BsjSourceLocation stopLocation)
     {
         super(startLocation, stopLocation);
-        this.statements = statements;
+        setStatements(statements);
     }
 
     /**

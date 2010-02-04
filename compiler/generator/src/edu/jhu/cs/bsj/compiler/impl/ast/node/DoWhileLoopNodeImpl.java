@@ -30,8 +30,8 @@ public class DoWhileLoopNodeImpl extends NodeImpl implements DoWhileLoopNode
             BsjSourceLocation stopLocation)
     {
         super(startLocation, stopLocation);
-        this.condition = condition;
-        this.statement = statement;
+        setCondition(condition);
+        setStatement(statement);
     }
 
     /**

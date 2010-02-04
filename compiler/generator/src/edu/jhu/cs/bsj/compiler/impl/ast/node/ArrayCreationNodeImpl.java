@@ -27,7 +27,7 @@ public abstract class ArrayCreationNodeImpl extends NodeImpl implements ArrayCre
             BsjSourceLocation stopLocation)
     {
         super(startLocation, stopLocation);
-        this.baseType = baseType;
+        setBaseType(baseType);
         this.arrayLevels = arrayLevels;
     }
 

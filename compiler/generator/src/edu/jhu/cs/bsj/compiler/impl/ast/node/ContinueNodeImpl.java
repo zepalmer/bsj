@@ -25,7 +25,7 @@ public class ContinueNodeImpl extends NodeImpl implements ContinueNode
             BsjSourceLocation stopLocation)
     {
         super(startLocation, stopLocation);
-        this.label = label;
+        setLabel(label);
     }
 
     /**

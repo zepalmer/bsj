@@ -30,8 +30,8 @@ public class SuperFieldAccessNodeImpl extends NodeImpl implements SuperFieldAcce
             BsjSourceLocation stopLocation)
     {
         super(startLocation, stopLocation);
-        this.type = type;
-        this.identifier = identifier;
+        setType(type);
+        setIdentifier(identifier);
     }
 
     /**

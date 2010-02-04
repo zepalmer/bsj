@@ -25,7 +25,7 @@ public class ThisNodeImpl extends NodeImpl implements ThisNode
             BsjSourceLocation stopLocation)
     {
         super(startLocation, stopLocation);
-        this.type = type;
+        setType(type);
     }
 
     /**

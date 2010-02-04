@@ -30,8 +30,8 @@ public class ParameterizedTypeSelectNodeImpl extends NodeImpl implements Paramet
             BsjSourceLocation stopLocation)
     {
         super(startLocation, stopLocation);
-        this.base = base;
-        this.select = select;
+        setBase(base);
+        setSelect(select);
     }
 
     /**

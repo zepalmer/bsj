@@ -29,8 +29,8 @@ public abstract class ConstructorInvocationNodeImpl extends NodeImpl implements 
             BsjSourceLocation stopLocation)
     {
         super(startLocation, stopLocation);
-        this.arguments = arguments;
-        this.typeArguments = typeArguments;
+        setArguments(arguments);
+        setTypeArguments(typeArguments);
     }
 
     /**

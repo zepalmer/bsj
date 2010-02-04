@@ -36,9 +36,9 @@ public class FieldDeclarationNodeImpl extends NodeImpl implements FieldDeclarati
             BsjSourceLocation stopLocation)
     {
         super(startLocation, stopLocation);
-        this.modifiers = modifiers;
-        this.declarators = declarators;
-        this.javadoc = javadoc;
+        setModifiers(modifiers);
+        setDeclarators(declarators);
+        setJavadoc(javadoc);
     }
 
     /**

@@ -28,8 +28,8 @@ public abstract class NamedTypeDeclarationNodeImpl extends NodeImpl implements N
             BsjSourceLocation stopLocation)
     {
         super(startLocation, stopLocation);
-        this.identifier = identifier;
-        this.javadoc = javadoc;
+        setIdentifier(identifier);
+        setJavadoc(javadoc);
     }
 
     /**

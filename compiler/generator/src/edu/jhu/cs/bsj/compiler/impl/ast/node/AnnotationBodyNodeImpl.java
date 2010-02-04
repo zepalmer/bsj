@@ -26,7 +26,7 @@ public class AnnotationBodyNodeImpl extends NodeImpl implements AnnotationBodyNo
             BsjSourceLocation stopLocation)
     {
         super(startLocation, stopLocation);
-        this.members = members;
+        setMembers(members);
     }
 
     /**

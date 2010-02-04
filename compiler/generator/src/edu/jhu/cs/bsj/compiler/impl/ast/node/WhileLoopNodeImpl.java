@@ -30,8 +30,8 @@ public class WhileLoopNodeImpl extends NodeImpl implements WhileLoopNode
             BsjSourceLocation stopLocation)
     {
         super(startLocation, stopLocation);
-        this.condition = condition;
-        this.statement = statement;
+        setCondition(condition);
+        setStatement(statement);
     }
 
     /**

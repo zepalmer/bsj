@@ -30,7 +30,7 @@ public class MethodInvocationByNameNodeImpl extends MethodInvocationNodeImpl imp
             BsjSourceLocation stopLocation)
     {
         super(arguments, typeArguments, startLocation, stopLocation);
-        this.name = name;
+        setName(name);
     }
 
     /**

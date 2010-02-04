@@ -25,7 +25,7 @@ public class FieldAccessByNameNodeImpl extends NodeImpl implements FieldAccessBy
             BsjSourceLocation stopLocation)
     {
         super(startLocation, stopLocation);
-        this.name = name;
+        setName(name);
     }
 
     /**

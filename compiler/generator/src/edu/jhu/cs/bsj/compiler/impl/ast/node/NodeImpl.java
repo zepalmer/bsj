@@ -175,6 +175,7 @@ public abstract class NodeImpl implements Node
 	 */
 	public void setParent(Node node)
 	{
+		// TODO: some way of validating the argument (so a rogue metaprogrammer doesn't make the tree inconsistent)
 		this.parent = node;
 	}
 }

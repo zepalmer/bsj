@@ -35,9 +35,9 @@ public class EnhancedForLoopNodeImpl extends NodeImpl implements EnhancedForLoop
             BsjSourceLocation stopLocation)
     {
         super(startLocation, stopLocation);
-        this.variable = variable;
-        this.expression = expression;
-        this.statement = statement;
+        setVariable(variable);
+        setExpression(expression);
+        setStatement(statement);
     }
 
     /**

@@ -25,7 +25,7 @@ public class AnnotationAnnotationValueNodeImpl extends NodeImpl implements Annot
             BsjSourceLocation stopLocation)
     {
         super(startLocation, stopLocation);
-        this.annotation = annotation;
+        setAnnotation(annotation);
     }
 
     /**

@@ -45,10 +45,10 @@ public class InterfaceDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl i
             BsjSourceLocation stopLocation)
     {
         super(identifier, javadoc, startLocation, stopLocation);
-        this.modifiers = modifiers;
-        this.extendsClause = extendsClause;
-        this.body = body;
-        this.typeParameters = typeParameters;
+        setModifiers(modifiers);
+        setExtendsClause(extendsClause);
+        setBody(body);
+        setTypeParameters(typeParameters);
     }
 
     /**

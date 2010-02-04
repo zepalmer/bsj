@@ -65,15 +65,15 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
             BsjSourceLocation stopLocation)
     {
         super(startLocation, stopLocation);
-        this.body = body;
-        this.modifiers = modifiers;
-        this.identifier = identifier;
-        this.parameters = parameters;
-        this.varargParameter = varargParameter;
-        this.returnType = returnType;
-        this.throwTypes = throwTypes;
-        this.typeParameters = typeParameters;
-        this.javadoc = javadoc;
+        setBody(body);
+        setModifiers(modifiers);
+        setIdentifier(identifier);
+        setParameters(parameters);
+        setVarargParameter(varargParameter);
+        setReturnType(returnType);
+        setThrowTypes(throwTypes);
+        setTypeParameters(typeParameters);
+        setJavadoc(javadoc);
     }
 
     /**

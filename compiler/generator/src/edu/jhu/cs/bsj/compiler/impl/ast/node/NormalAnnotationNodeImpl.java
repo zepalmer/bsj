@@ -28,7 +28,7 @@ public class NormalAnnotationNodeImpl extends AnnotationNodeImpl implements Norm
             BsjSourceLocation stopLocation)
     {
         super(annotationType, startLocation, stopLocation);
-        this.arguments = arguments;
+        setArguments(arguments);
     }
 
     /**

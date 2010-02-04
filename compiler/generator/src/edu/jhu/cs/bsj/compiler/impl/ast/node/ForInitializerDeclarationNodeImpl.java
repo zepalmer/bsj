@@ -25,7 +25,7 @@ public class ForInitializerDeclarationNodeImpl extends NodeImpl implements ForIn
             BsjSourceLocation stopLocation)
     {
         super(startLocation, stopLocation);
-        this.declaration = declaration;
+        setDeclaration(declaration);
     }
 
     /**

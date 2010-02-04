@@ -45,11 +45,11 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
             BsjSourceLocation stopLocation)
     {
         super(startLocation, stopLocation);
-        this.modifiers = modifiers;
-        this.type = type;
-        this.identifier = identifier;
-        this.defaultValue = defaultValue;
-        this.javadoc = javadoc;
+        setModifiers(modifiers);
+        setType(type);
+        setIdentifier(identifier);
+        setDefaultValue(defaultValue);
+        setJavadoc(javadoc);
     }
 
     /**

@@ -40,9 +40,9 @@ public class EnumDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl implem
             BsjSourceLocation stopLocation)
     {
         super(identifier, javadoc, startLocation, stopLocation);
-        this.modifiers = modifiers;
-        this.implementsClause = implementsClause;
-        this.body = body;
+        setModifiers(modifiers);
+        setImplementsClause(implementsClause);
+        setBody(body);
     }
 
     /**

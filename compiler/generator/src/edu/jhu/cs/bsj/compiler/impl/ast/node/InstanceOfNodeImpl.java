@@ -30,8 +30,8 @@ public class InstanceOfNodeImpl extends NodeImpl implements InstanceOfNode
             BsjSourceLocation stopLocation)
     {
         super(startLocation, stopLocation);
-        this.expression = expression;
-        this.type = type;
+        setExpression(expression);
+        setType(type);
     }
 
     /**

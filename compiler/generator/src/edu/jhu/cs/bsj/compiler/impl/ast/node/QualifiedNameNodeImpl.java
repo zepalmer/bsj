@@ -32,8 +32,8 @@ public class QualifiedNameNodeImpl extends NameNodeImpl implements QualifiedName
             BsjSourceLocation stopLocation)
     {
         super(category, startLocation, stopLocation);
-        this.base = base;
-        this.identifier = identifier;
+        setBase(base);
+        setIdentifier(identifier);
     }
 
     /**

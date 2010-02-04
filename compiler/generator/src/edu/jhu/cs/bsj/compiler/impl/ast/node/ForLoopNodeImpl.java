@@ -41,10 +41,10 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
             BsjSourceLocation stopLocation)
     {
         super(startLocation, stopLocation);
-        this.initializer = initializer;
-        this.condition = condition;
-        this.update = update;
-        this.statement = statement;
+        setInitializer(initializer);
+        setCondition(condition);
+        setUpdate(update);
+        setStatement(statement);
     }
 
     /**

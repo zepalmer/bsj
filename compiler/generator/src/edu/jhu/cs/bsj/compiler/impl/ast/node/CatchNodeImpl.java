@@ -30,8 +30,8 @@ public class CatchNodeImpl extends NodeImpl implements CatchNode
             BsjSourceLocation stopLocation)
     {
         super(startLocation, stopLocation);
-        this.block = block;
-        this.parameter = parameter;
+        setBlock(block);
+        setParameter(parameter);
     }
 
     /**

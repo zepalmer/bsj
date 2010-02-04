@@ -35,9 +35,9 @@ public class TryNodeImpl extends NodeImpl implements TryNode
             BsjSourceLocation stopLocation)
     {
         super(startLocation, stopLocation);
-        this.block = block;
-        this.catches = catches;
-        this.finallyBlock = finallyBlock;
+        setBlock(block);
+        setCatches(catches);
+        setFinallyBlock(finallyBlock);
     }
 
     /**

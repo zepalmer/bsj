@@ -31,8 +31,8 @@ public class PackageDeclarationNodeImpl extends NodeImpl implements PackageDecla
             BsjSourceLocation stopLocation)
     {
         super(startLocation, stopLocation);
-        this.name = name;
-        this.annotations = annotations;
+        setName(name);
+        setAnnotations(annotations);
     }
 
     /**

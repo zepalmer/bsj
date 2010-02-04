@@ -23,7 +23,7 @@ public abstract class AnnotationNodeImpl extends NodeImpl implements AnnotationN
             BsjSourceLocation stopLocation)
     {
         super(startLocation, stopLocation);
-        this.annotationType = annotationType;
+        setAnnotationType(annotationType);
     }
 
     /**

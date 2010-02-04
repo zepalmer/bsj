@@ -25,7 +25,7 @@ public class ArrayTypeNodeImpl extends NodeImpl implements ArrayTypeNode
             BsjSourceLocation stopLocation)
     {
         super(startLocation, stopLocation);
-        this.type = type;
+        setType(type);
     }
 
     /**

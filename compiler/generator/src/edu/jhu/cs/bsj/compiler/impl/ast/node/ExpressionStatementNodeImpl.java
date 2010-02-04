@@ -25,7 +25,7 @@ public class ExpressionStatementNodeImpl extends NodeImpl implements ExpressionS
             BsjSourceLocation stopLocation)
     {
         super(startLocation, stopLocation);
-        this.expression = expression;
+        setExpression(expression);
     }
 
     /**

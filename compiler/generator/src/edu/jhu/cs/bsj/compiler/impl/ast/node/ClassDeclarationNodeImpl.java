@@ -49,11 +49,11 @@ public class ClassDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl imple
             BsjSourceLocation stopLocation)
     {
         super(identifier, javadoc, startLocation, stopLocation);
-        this.modifiers = modifiers;
-        this.extendsClause = extendsClause;
-        this.implementsClause = implementsClause;
-        this.body = body;
-        this.typeParameters = typeParameters;
+        setModifiers(modifiers);
+        setExtendsClause(extendsClause);
+        setImplementsClause(implementsClause);
+        setBody(body);
+        setTypeParameters(typeParameters);
     }
 
     /**

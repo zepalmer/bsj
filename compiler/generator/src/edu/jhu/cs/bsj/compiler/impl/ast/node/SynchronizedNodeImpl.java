@@ -30,8 +30,8 @@ public class SynchronizedNodeImpl extends NodeImpl implements SynchronizedNode
             BsjSourceLocation stopLocation)
     {
         super(startLocation, stopLocation);
-        this.expression = expression;
-        this.block = block;
+        setExpression(expression);
+        setBlock(block);
     }
 
     /**

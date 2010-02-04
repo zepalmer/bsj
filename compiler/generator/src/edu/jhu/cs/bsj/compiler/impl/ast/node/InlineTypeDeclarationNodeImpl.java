@@ -25,7 +25,7 @@ public class InlineTypeDeclarationNodeImpl extends NodeImpl implements InlineTyp
             BsjSourceLocation stopLocation)
     {
         super(startLocation, stopLocation);
-        this.declaration = declaration;
+        setDeclaration(declaration);
     }
 
     /**

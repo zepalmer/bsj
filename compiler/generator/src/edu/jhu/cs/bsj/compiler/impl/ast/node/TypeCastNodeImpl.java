@@ -30,8 +30,8 @@ public class TypeCastNodeImpl extends NodeImpl implements TypeCastNode
             BsjSourceLocation stopLocation)
     {
         super(startLocation, stopLocation);
-        this.expression = expression;
-        this.type = type;
+        setExpression(expression);
+        setType(type);
     }
 
     /**

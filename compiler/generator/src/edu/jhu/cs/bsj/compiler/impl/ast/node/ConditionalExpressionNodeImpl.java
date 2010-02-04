@@ -33,9 +33,9 @@ public class ConditionalExpressionNodeImpl extends NodeImpl implements Condition
             BsjSourceLocation stopLocation)
     {
         super(startLocation, stopLocation);
-        this.condition = condition;
-        this.trueExpression = trueExpression;
-        this.falseExpression = falseExpression;
+        setCondition(condition);
+        setTrueExpression(trueExpression);
+        setFalseExpression(falseExpression);
     }
 
     /**

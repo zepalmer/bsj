@@ -29,7 +29,7 @@ public class ImportSingleTypeNodeImpl extends NodeImpl implements ImportSingleTy
             BsjSourceLocation stopLocation)
     {
         super(startLocation, stopLocation);
-        this.name = name;
+        setName(name);
         this.staticImport = staticImport;
     }
 

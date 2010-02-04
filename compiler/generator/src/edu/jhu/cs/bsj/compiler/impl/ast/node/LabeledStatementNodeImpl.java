@@ -30,8 +30,8 @@ public class LabeledStatementNodeImpl extends NodeImpl implements LabeledStateme
             BsjSourceLocation stopLocation)
     {
         super(startLocation, stopLocation);
-        this.label = label;
-        this.statement = statement;
+        setLabel(label);
+        setStatement(statement);
     }
 
     /**

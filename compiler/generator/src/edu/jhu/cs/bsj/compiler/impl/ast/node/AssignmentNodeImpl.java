@@ -34,9 +34,9 @@ public class AssignmentNodeImpl extends NodeImpl implements AssignmentNode
             BsjSourceLocation stopLocation)
     {
         super(startLocation, stopLocation);
-        this.variable = variable;
+        setVariable(variable);
         this.operator = operator;
-        this.expression = expression;
+        setExpression(expression);
     }
 
     /**

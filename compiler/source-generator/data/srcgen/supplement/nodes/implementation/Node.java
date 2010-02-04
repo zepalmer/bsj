@@ -67,6 +67,8 @@ public abstract class NodeImpl
 	 */
 	public void setParent(Node node)
 	{
+		// TODO: some way of validating the argument (so a rogue metaprogrammer doesn't make the tree inconsistent)
+		// currently, we're using instanceof in every Node subclass setter - this is not cool
 		this.parent = node;
 	}
 	/* GEN:stop */

@@ -30,8 +30,8 @@ public class ArrayAccessNodeImpl extends NodeImpl implements ArrayAccessNode
             BsjSourceLocation stopLocation)
     {
         super(startLocation, stopLocation);
-        this.arrayExpression = arrayExpression;
-        this.indexExpression = indexExpression;
+        setArrayExpression(arrayExpression);
+        setIndexExpression(indexExpression);
     }
 
     /**

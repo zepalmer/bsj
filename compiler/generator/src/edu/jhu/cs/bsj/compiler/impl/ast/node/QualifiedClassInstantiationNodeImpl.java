@@ -40,9 +40,9 @@ public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeI
             BsjSourceLocation stopLocation)
     {
         super(constructorTypeArguments, arguments, body, startLocation, stopLocation);
-        this.enclosingExpression = enclosingExpression;
-        this.identifier = identifier;
-        this.typeArguments = typeArguments;
+        setEnclosingExpression(enclosingExpression);
+        setIdentifier(identifier);
+        setTypeArguments(typeArguments);
     }
 
     /**

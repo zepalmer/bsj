@@ -26,7 +26,7 @@ public class InterfaceBodyNodeImpl extends NodeImpl implements InterfaceBodyNode
             BsjSourceLocation stopLocation)
     {
         super(startLocation, stopLocation);
-        this.members = members;
+        setMembers(members);
     }
 
     /**

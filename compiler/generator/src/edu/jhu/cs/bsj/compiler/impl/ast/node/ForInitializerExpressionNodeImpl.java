@@ -26,7 +26,7 @@ public class ForInitializerExpressionNodeImpl extends NodeImpl implements ForIni
             BsjSourceLocation stopLocation)
     {
         super(startLocation, stopLocation);
-        this.expressions = expressions;
+        setExpressions(expressions);
     }
 
     /**

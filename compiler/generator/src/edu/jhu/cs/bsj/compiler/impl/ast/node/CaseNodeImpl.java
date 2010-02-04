@@ -31,8 +31,8 @@ public class CaseNodeImpl extends NodeImpl implements CaseNode
             BsjSourceLocation stopLocation)
     {
         super(startLocation, stopLocation);
-        this.expression = expression;
-        this.statements = statements;
+        setExpression(expression);
+        setStatements(statements);
     }
 
     /**

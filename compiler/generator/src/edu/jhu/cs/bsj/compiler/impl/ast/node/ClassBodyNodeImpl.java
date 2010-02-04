@@ -26,7 +26,7 @@ public class ClassBodyNodeImpl extends NodeImpl implements ClassBodyNode
             BsjSourceLocation stopLocation)
     {
         super(startLocation, stopLocation);
-        this.members = members;
+        setMembers(members);
     }
 
     /**

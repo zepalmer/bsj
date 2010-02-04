@@ -24,7 +24,7 @@ public abstract class ModifiersNodeImpl extends NodeImpl implements ModifiersNod
             BsjSourceLocation stopLocation)
     {
         super(startLocation, stopLocation);
-        this.annotations = annotations;
+        setAnnotations(annotations);
     }
 
     /**

@@ -28,7 +28,7 @@ public class ArrayInitializerCreationNodeImpl extends ArrayCreationNodeImpl impl
             BsjSourceLocation stopLocation)
     {
         super(baseType, arrayLevels, startLocation, stopLocation);
-        this.initializer = initializer;
+        setInitializer(initializer);
     }
 
     /**

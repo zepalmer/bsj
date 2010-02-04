@@ -25,7 +25,7 @@ public class ReturnNodeImpl extends NodeImpl implements ReturnNode
             BsjSourceLocation stopLocation)
     {
         super(startLocation, stopLocation);
-        this.expression = expression;
+        setExpression(expression);
     }
 
     /**

@@ -34,8 +34,8 @@ public class BinaryExpressionNodeImpl extends NodeImpl implements BinaryExpressi
             BsjSourceLocation stopLocation)
     {
         super(startLocation, stopLocation);
-        this.leftOperand = leftOperand;
-        this.rightOperand = rightOperand;
+        setLeftOperand(leftOperand);
+        setRightOperand(rightOperand);
         this.operator = operator;
     }
 

@@ -30,8 +30,8 @@ public class FieldAccessByExpressionNodeImpl extends NodeImpl implements FieldAc
             BsjSourceLocation stopLocation)
     {
         super(startLocation, stopLocation);
-        this.expression = expression;
-        this.identifier = identifier;
+        setExpression(expression);
+        setIdentifier(identifier);
     }
 
     /**

@@ -29,8 +29,8 @@ public class AssertStatementNodeImpl extends NodeImpl implements AssertStatement
             BsjSourceLocation stopLocation)
     {
         super(startLocation, stopLocation);
-        this.testExpression = testExpression;
-        this.messageExpression = messageExpression;
+        setTestExpression(testExpression);
+        setMessageExpression(messageExpression);
     }
 
     /**

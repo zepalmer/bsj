@@ -29,7 +29,7 @@ public class WildcardTypeNodeImpl extends NodeImpl implements WildcardTypeNode
             BsjSourceLocation stopLocation)
     {
         super(startLocation, stopLocation);
-        this.bound = bound;
+        setBound(bound);
         this.upperBound = upperBound;
     }
 

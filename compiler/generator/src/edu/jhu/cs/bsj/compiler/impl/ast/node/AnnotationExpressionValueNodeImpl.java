@@ -25,7 +25,7 @@ public class AnnotationExpressionValueNodeImpl extends NodeImpl implements Annot
             BsjSourceLocation stopLocation)
     {
         super(startLocation, stopLocation);
-        this.expression = expression;
+        setExpression(expression);
     }
 
     /**

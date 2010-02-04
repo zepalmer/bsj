@@ -32,7 +32,7 @@ public class UnqualifiedClassInstantiationNodeImpl extends ClassInstantiationNod
             BsjSourceLocation stopLocation)
     {
         super(constructorTypeArguments, arguments, body, startLocation, stopLocation);
-        this.type = type;
+        setType(type);
     }
 
     /**

@@ -27,7 +27,7 @@ public class SingleElementAnnotationNodeImpl extends AnnotationNodeImpl implemen
             BsjSourceLocation stopLocation)
     {
         super(annotationType, startLocation, stopLocation);
-        this.value = value;
+        setValue(value);
     }
 
     /**

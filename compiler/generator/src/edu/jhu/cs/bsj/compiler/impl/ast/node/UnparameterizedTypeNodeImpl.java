@@ -25,7 +25,7 @@ public class UnparameterizedTypeNodeImpl extends NodeImpl implements Unparameter
             BsjSourceLocation stopLocation)
     {
         super(startLocation, stopLocation);
-        this.name = name;
+        setName(name);
     }
 
     /**

@@ -31,8 +31,8 @@ public class VariableDeclarationNodeImpl extends NodeImpl implements VariableDec
             BsjSourceLocation stopLocation)
     {
         super(startLocation, stopLocation);
-        this.modifiers = modifiers;
-        this.declarators = declarators;
+        setModifiers(modifiers);
+        setDeclarators(declarators);
     }
 
     /**

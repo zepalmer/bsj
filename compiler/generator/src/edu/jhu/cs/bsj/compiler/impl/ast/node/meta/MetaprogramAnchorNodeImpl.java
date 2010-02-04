@@ -30,7 +30,7 @@ public abstract class MetaprogramAnchorNodeImpl<T extends Node> extends NodeImpl
     {
         super(startLocation, stopLocation);
         this.replacement = replacement;
-        this.metaprogram = metaprogram;
+        setMetaprogram(metaprogram);
     }
 
     /**

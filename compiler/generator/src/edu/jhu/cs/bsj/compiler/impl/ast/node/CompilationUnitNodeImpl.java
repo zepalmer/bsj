@@ -36,9 +36,9 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
             BsjSourceLocation stopLocation)
     {
         super(startLocation, stopLocation);
-        this.packageDeclaration = packageDeclaration;
-        this.imports = imports;
-        this.typeDecls = typeDecls;
+        setPackageDeclaration(packageDeclaration);
+        setImports(imports);
+        setTypeDecls(typeDecls);
     }
 
     /**

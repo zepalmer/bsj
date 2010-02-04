@@ -30,7 +30,7 @@ public class SuperclassConstructorInvocationNodeImpl extends ConstructorInvocati
             BsjSourceLocation stopLocation)
     {
         super(arguments, typeArguments, startLocation, stopLocation);
-        this.qualifyingExpression = qualifyingExpression;
+        setQualifyingExpression(qualifyingExpression);
     }
 
     /**

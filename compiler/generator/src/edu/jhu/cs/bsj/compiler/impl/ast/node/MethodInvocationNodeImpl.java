@@ -29,8 +29,8 @@ public abstract class MethodInvocationNodeImpl extends NodeImpl implements Metho
             BsjSourceLocation stopLocation)
     {
         super(startLocation, stopLocation);
-        this.arguments = arguments;
-        this.typeArguments = typeArguments;
+        setArguments(arguments);
+        setTypeArguments(typeArguments);
     }
 
     /**

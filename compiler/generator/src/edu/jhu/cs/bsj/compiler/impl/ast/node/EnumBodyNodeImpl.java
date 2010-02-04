@@ -31,8 +31,8 @@ public class EnumBodyNodeImpl extends NodeImpl implements EnumBodyNode
             BsjSourceLocation stopLocation)
     {
         super(startLocation, stopLocation);
-        this.constants = constants;
-        this.members = members;
+        setConstants(constants);
+        setMembers(members);
     }
 
     /**
