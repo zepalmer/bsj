@@ -27,6 +27,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.ImportNode;
 import edu.jhu.cs.bsj.compiler.ast.node.MethodDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.NameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
+import edu.jhu.cs.bsj.compiler.ast.node.PackageDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeArgumentNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
@@ -66,7 +67,8 @@ public class ExtractMetaprogramsTask extends CompilationUnitTask
 {
 	/** The packages which should be imported by metaprograms. */
 	private static String[] IMPORT_PACKAGES = { "edu.jhu.cs.bsj.compiler.impl.metaprogram",
-			"edu.jhu.cs.bsj.compiler.ast", "edu.jhu.cs.bsj.compiler.ast.node", "edu.jhu.cs.bsj.compiler.ast.node.meta" };
+			"edu.jhu.cs.bsj.compiler.ast", "edu.jhu.cs.bsj.compiler.ast.node", "edu.jhu.cs.bsj.compiler.ast.node.meta",
+			"edu.jhu.cs.bsj.compiler.metaprogram"};
 
 	/** A field containing the factory which should be used as this task is executing. */
 	private BsjNodeFactory factory;
@@ -248,6 +250,11 @@ public class ExtractMetaprogramsTask extends CompilationUnitTask
 			// TODO: get a unique identifier
 			String metaprogramClassName = "BsjMetaprogram$$$";
 			String fullyQualifiedMetaprogramClassName = metaprogramPackageName + "." + metaprogramClassName;
+			
+			// Create metaprogram nodes
+			PackageDeclarationNode packageDeclarationNode = factory.makePackageDeclarationNode(
+					parseNameNode(metaprogramPackageName, NameCategory.PACKAGE),
+					factory.makeListNode(Collections.<AnnotationNode>emptyList()));
 
 			// TODO: don't deep copy here (for efficiency)? this means we have to null out the list's parent first?
 			BlockNode methodBlock = factory.makeBlockNode(metaprogramNode.getBody().deepCopy(factory));
@@ -296,9 +303,19 @@ public class ExtractMetaprogramsTask extends CompilationUnitTask
 					factory.makeListNode(Collections.<TypeParameterNode> emptyList()),
 					factory.makeIdentifierNode(metaprogramClassName), null);
 
-			CompilationUnitNode metaprogramCompilationUnitNode = factory.makeCompilationUnitNode(null,
+			CompilationUnitNode metaprogramCompilationUnitNode = factory.makeCompilationUnitNode(
+					packageDeclarationNode,
 					factory.makeListNode(imports),
 					factory.makeListNode(Collections.singletonList(metaprogramClassNode)));
+			
+			if (LOGGER.isTraceEnabled())
+			{
+				// TODO: get from SPI or toolkit
+				BsjSourceSerializer serializer = new BsjSourceSerializerImpl();
+				String source = serializer.executeCompilationUnitNode(metaprogramCompilationUnitNode, null);
+				LOGGER.trace("Generated metaprogram class " + fullyQualifiedMetaprogramClassName + " for " +
+						getTracker().getName() + "; source looks like this: \n" + source);
+			}
 
 			// *** Compile the metaprogram in memory
 			if (LOGGER.isTraceEnabled())
@@ -308,6 +325,14 @@ public class ExtractMetaprogramsTask extends CompilationUnitTask
 			}
 
 			Map<BsjCompilerLocation, LocationManager> locationMap = new HashMap<BsjCompilerLocation, LocationManager>();
+			// TODO: remove local file management in favor of InMemoryLocationManager (and regression test!)
+//			File tmpdir = new File("./local/compile-temp");
+//			tmpdir.mkdirs();
+//			LocationManager tmplm = new RegularFileLocationManager(null, tmpdir);
+			
+//			locationMap.put(BsjCompilerLocation.SOURCE_PATH, tmplm);
+//			locationMap.put(BsjCompilerLocation.GENERATED_SOURCE_PATH, tmplm);
+//			locationMap.put(BsjCompilerLocation.CLASS_OUTPUT, tmplm);
 			locationMap.put(BsjCompilerLocation.SOURCE_PATH, new InMemoryLocationManager(null));
 			locationMap.put(BsjCompilerLocation.GENERATED_SOURCE_PATH, new InMemoryLocationManager(null));
 			locationMap.put(BsjCompilerLocation.CLASS_OUTPUT, new InMemoryLocationManager(null));
@@ -330,6 +355,7 @@ public class ExtractMetaprogramsTask extends CompilationUnitTask
 			BsjFileObject metaprogramSourceFile = fileManager.getFileForOutput(BsjCompilerLocation.SOURCE_PATH,
 					metaprogramPackageName, metaprogramClassName + ".bsj", null);
 			// TODO: get from SPI or toolkit or similar
+			// TODO: we shouldn't need to reserialize just to parse again - add compile to API that takes trees
 			BsjSourceSerializer serializer = new BsjSourceSerializerImpl();
 			String source = serializer.executeCompilationUnitNode(metaprogramCompilationUnitNode, null);
 			metaprogramSourceFile.setCharContent(source);
@@ -405,6 +431,7 @@ public class ExtractMetaprogramsTask extends CompilationUnitTask
 	 */
 	private static class RuntimeIOException extends RuntimeException
 	{
+		private static final long serialVersionUID = 1L;
 		private IOException e;
 
 		public RuntimeIOException(IOException e)
@@ -427,6 +454,7 @@ public class ExtractMetaprogramsTask extends CompilationUnitTask
 	 */
 	private static class RuntimeBsjCompilerException extends RuntimeException
 	{
+		private static final long serialVersionUID = 1L;
 		private BsjCompilerException e;
 
 		public RuntimeBsjCompilerException(BsjCompilerException e)
