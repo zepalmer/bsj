@@ -120,6 +120,7 @@ public class RegularFileObject extends AbstractFileObject implements BsjFileObje
 	@Override
 	public OutputStream openOutputStream() throws IOException
 	{
+		this.file.getParentFile().mkdirs();
 		OutputStream os = new FileOutputStream(this.file);
 		registerIOResource(os);
 		return os;
