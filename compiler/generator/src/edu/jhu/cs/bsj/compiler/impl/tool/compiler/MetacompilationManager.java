@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.PriorityQueue;
+import java.util.Queue;
 
 import org.apache.log4j.Logger;
 
@@ -39,7 +40,7 @@ public class MetacompilationManager
 	 * Represents the work queue. Work to be performed is enqueued here. The queue is prioritized to allow preemption of
 	 * more basic tasks (such as when the type checker or metacompiler brings in another source unit for parsing).
 	 */
-	private PriorityQueue<BsjCompilerTask> priorityQueue;
+	private Queue<BsjCompilerTask> priorityQueue;
 	/**
 	 * The node factory which tasks should use.
 	 */
@@ -48,6 +49,11 @@ public class MetacompilationManager
 	 * The file management abstraction to use.
 	 */
 	private BsjFileManager fileManager;
+	
+	/**
+	 * Represents the queue of metaprograms which remain to be executed.
+	 */
+	private Queue<MetaprogramProfile> metaprogramQueue;
 
 	/**
 	 * Creates a new compilation unit manager.
@@ -60,6 +66,7 @@ public class MetacompilationManager
 		this.priorityQueue = new PriorityQueue<BsjCompilerTask>();
 		this.factory = factory;
 		this.fileManager = fileManager;
+		this.metaprogramQueue = new PriorityQueue<MetaprogramProfile>();
 		
 		this.priorityQueue.offer(new MetaprogramExecutionTask());
 	}
@@ -104,6 +111,31 @@ public class MetacompilationManager
 		CompilationUnitTracker tracker = new CompilationUnitTracker(file);
 		this.trackerMap.put(binaryName, tracker);
 		this.addTask(new ParseCompilationUnitTask(tracker));
+	}
+	
+	/**
+	 * Registers a metaprogram for execution.
+	 * @param profile The profile of the metaprogram which will be executed.
+	 */
+	public void registerMetaprogramProfile(MetaprogramProfile profile)
+	{
+		this.metaprogramQueue.offer(profile);
+	}
+	
+	/**
+	 * Retrieves the next metaprogram to execute.  The caller of this method must execute the metaprogram in the
+	 * provided profile or else re-register it with this metacompilation manager.
+	 * @return The next metaprogram to execute or <code>null</code> if no metaprograms remain.
+	 */
+	public MetaprogramProfile getNextMetaprogramProfile()
+	{
+		if (this.metaprogramQueue.size()>0)
+		{
+			return this.metaprogramQueue.poll();
+		} else
+		{
+			return null;
+		}
 	}
 
 	/**

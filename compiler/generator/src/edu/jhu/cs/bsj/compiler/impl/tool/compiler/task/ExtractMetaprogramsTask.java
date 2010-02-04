@@ -109,8 +109,8 @@ public class ExtractMetaprogramsTask extends CompilationUnitTask
 				{
 					try
 					{
-						new MetaprogramAnchorHandler<BlockStatementMetaprogramAnchorNode, BlockStatementNode>(
-								BlockStatementMetaprogramAnchorNode.class, BlockStatementNode.class).handleAnchor(node);
+						new MetaprogramAnchorHandler<BlockStatementMetaprogramAnchorNode>(
+								BlockStatementMetaprogramAnchorNode.class).handleAnchor(node);
 						return null;
 					} catch (IOException ioe)
 					{
@@ -127,8 +127,8 @@ public class ExtractMetaprogramsTask extends CompilationUnitTask
 				{
 					try
 					{
-						new MetaprogramAnchorHandler<TypeDeclarationMetaprogramAnchorNode, TypeDeclarationNode>(
-								TypeDeclarationMetaprogramAnchorNode.class, TypeDeclarationNode.class).handleAnchor(node);
+						new MetaprogramAnchorHandler<TypeDeclarationMetaprogramAnchorNode>(
+								TypeDeclarationMetaprogramAnchorNode.class).handleAnchor(node);
 						return null;
 					} catch (IOException ioe)
 					{
@@ -191,41 +191,38 @@ public class ExtractMetaprogramsTask extends CompilationUnitTask
 	 * @param <A> The type of the anchor to handle.
 	 * @param <R> The type of the node which is used to replace the anchor.
 	 */
-	private class MetaprogramAnchorHandler<A extends MetaprogramAnchorNode<R>, R extends Node>
+	private class MetaprogramAnchorHandler<A extends MetaprogramAnchorNode<? extends Node>>
 	{
 		/** The type of the anchor node. */
 		private Class<A> anchorClass;
-		/** The type of the replacement node. */
-		private Class<R> replacementClass;
 
-		public MetaprogramAnchorHandler(Class<A> anchorClass, Class<R> replacementClass)
+		public MetaprogramAnchorHandler(Class<A> anchorClass)
 		{
 			super();
 			this.anchorClass = anchorClass;
-			this.replacementClass = replacementClass;
 		}
 
 		public void handleAnchor(A anchor) throws IOException, BsjCompilerException
 		{
 			// Build a metaprogram profile for this anchor
-			MetaprogramProfile<A> profile = buildProfile(anchor);
+			MetaprogramProfile profile = buildProfile(anchor);
 
 			// Clear the metaprogram from the anchor (so it can't reflect on itself or anything messy like that)
-			// TODO: is this necessary?
+			// TODO: is this necessary? has this already been done?
 			anchor.setMetaprogram(null);
 
 			// Register the metaprogram profile with the metacompilation manager
-			// TODO
+			metacompilationManager.registerMetaprogramProfile(profile);
 
 			getTracker().setMetaprogramsOutstanding(getTracker().getMetaprogramsOutstanding() + 1);
 		}
 
-		private MetaprogramProfile<A> buildProfile(A anchor) throws IOException, BsjCompilerException
+		private MetaprogramProfile buildProfile(A anchor) throws IOException, BsjCompilerException
 		{
 			Context<A> context = new ContextImpl<A>(anchor);
 			BsjMetaprogram<A> metaprogram = compileMetaprogram(anchor.getMetaprogram(), context);
 
-			return new MetaprogramProfile<A>(metaprogram, context);
+			return new MetaprogramProfile(metaprogram, getTracker());
 		}
 
 		private BsjMetaprogram<A> compileMetaprogram(MetaprogramNode metaprogramNode, Context<A> context)

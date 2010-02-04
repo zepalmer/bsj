@@ -1,8 +1,6 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.compiler;
 
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.impl.metaprogram.BsjMetaprogram;
-import edu.jhu.cs.bsj.compiler.metaprogram.Context;
 
 /**
  * Represents a metaprogram which has been extracted and is prepared to execute.
@@ -11,29 +9,28 @@ import edu.jhu.cs.bsj.compiler.metaprogram.Context;
  * 
  * @param <T> The type of the metaprogram's anchor node.
  */
-public class MetaprogramProfile<T extends MetaprogramAnchorNode<?>>
+public class MetaprogramProfile
 {
 	/** The metaprogram object which will be executed. */
-	private BsjMetaprogram<T> metaprogram;
-	/** The context to use when executing the metaprogram. */
-	private Context<T> context;
+	private BsjMetaprogram<?> metaprogram;
+	/** The tracker which is affected by this metaprogram. */
+	private CompilationUnitTracker tracker;
 
 	// TODO: dependency analysis metadata?
-	public MetaprogramProfile(BsjMetaprogram<T> metaprogram, Context<T> context)
+	public MetaprogramProfile(BsjMetaprogram<?> metaprogram, CompilationUnitTracker tracker)
 	{
 		super();
 		this.metaprogram = metaprogram;
-		this.context = context;
+		this.tracker = tracker;
 	}
 
-	public BsjMetaprogram<T> getMetaprogram()
+	public BsjMetaprogram<?> getMetaprogram()
 	{
 		return metaprogram;
 	}
 
-	public Context<T> getContext()
+	public CompilationUnitTracker getTracker()
 	{
-		return context;
+		return tracker;
 	}
-
 }

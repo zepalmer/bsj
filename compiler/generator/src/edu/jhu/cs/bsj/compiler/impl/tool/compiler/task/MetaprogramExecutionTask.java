@@ -6,6 +6,7 @@ import edu.jhu.cs.bsj.compiler.exception.BsjCompilerException;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.CompilationUnitStatus;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.CompilationUnitTracker;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.MetacompilationManager;
+import edu.jhu.cs.bsj.compiler.impl.tool.compiler.MetaprogramProfile;
 
 /**
  * This metacompilation task attempts to execute a single metaprogram. If a metaprogram is available for execution, it
@@ -25,8 +26,14 @@ public class MetaprogramExecutionTask extends AbstractBsjCompilerTask
 	@Override
 	public void execute(MetacompilationManager manager) throws IOException, BsjCompilerException
 	{
-		// TODO: check to see if a metaprogram exists to execute; if so, execute it
-		finishMetaprogramExecutionPhase(manager);
+		MetaprogramProfile profile = manager.getNextMetaprogramProfile();
+		if (profile==null)
+		{
+			finishMetaprogramExecutionPhase(manager);
+		} else
+		{
+			execute(profile, manager);
+		}
 	}
 
 	private void finishMetaprogramExecutionPhase(MetacompilationManager manager)
@@ -40,5 +47,26 @@ public class MetaprogramExecutionTask extends AbstractBsjCompilerTask
 			}
 			manager.addTask(new SourceSerializationTask(tracker));
 		}
+	}
+	
+	private void execute(MetaprogramProfile profile, MetacompilationManager manager)
+	{
+		// Run the metaprogram
+		profile.getMetaprogram().execute();
+		
+		// Have the metaprogram replace itself with its replacement node
+		// TODO
+		
+		// Transition the affected tracker
+		// TODO: If the metaprogram introduces sub-metaprograms, what do we do?  Move back to extraction?
+		// There's a good reason we'd want to do this: generating code that uses @Property, for example.
+		profile.getTracker().setMetaprogramsOutstanding(profile.getTracker().getMetaprogramsOutstanding()-1);
+		if (profile.getTracker().getMetaprogramsOutstanding()==0)
+		{
+			profile.getTracker().setStatus(CompilationUnitStatus.METAPROGRAMS_EXECUTED);
+		}
+		
+		// Re-enqueue this task so we can execute the next metaprogram when the time comes (which is probably right now)
+		manager.addTask(this);
 	}
 }
