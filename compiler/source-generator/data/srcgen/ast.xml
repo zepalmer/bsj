@@ -1,1612 +1,1803 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <srcgen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="./srcgen.xsd">
-    <type name="AnnotationMemberNode" super="Node" mode="tag">
-        <doc><![CDATA[
-            This tagging interface is used to denote AST nodes which can be used as members of an annotation declaration's
-            body.
-        ]]></doc>
-    </type>
-    <type name="AnnotationValueNode" super="Node" mode="tag">
-        <doc><![CDATA[
-            This tagging interface is used to denote AST nodes which represent annotation values.
-        ]]></doc>
-    </type>
-    <type name="AnonymousClassMemberNode" super="Node" mode="tag">
-        <tag name="ClassMemberNode" />
-        <doc><![CDATA[
-            This tagging interface is used to denote AST nodes which can be used as members of an anonymous class's body.
-            Since the set of declarations which may appear in an anonymous class is a subset of that which may appear in a
-            named class, this type is a subtype of {@link ClassMember}.
-        ]]></doc>
-    </type>
-    <type name="BaseTypeNode" super="Node" mode="tag">
-        <doc><![CDATA[
-            This tagging interface is used to denote AST nodes which can be used as array base types.
-        ]]></doc>
-    </type>
-    <type name="BlockStatementNode" super="Node" mode="tag">
-        <doc><![CDATA[
-            This tagging interface is used to denote AST nodes which can appear in blocks.
-        ]]></doc>
-    </type>
-    <type name="ClassMemberNode" super="Node" mode="tag">
-        <doc><![CDATA[
-            This tagging interface is used to denote AST nodes which can be used as members of a class declaration's body.
-        ]]></doc>
-    </type>
-    <type name="DeclaredTypeNode" super="Node" mode="tag">
-        <tag name="ReferenceTypeNode" />
-        <tag name="BaseTypeNode" />
-        <doc><![CDATA[
-            A node representing any declared type.  In the BSJ API, a "declared type" refers to any type which has been
-            created by a declaration statement.  Arrays and primitives are not declared types because they are not declared.
-        ]]></doc>
-    </type>
-    <type name="ExpressionNode" super="Node" mode="tag">
-        <tag name="VariableInitializerNode" />
-        <doc><![CDATA[
-            This tagging interface is used to denote BSJ AST nodes which represent expressions.
-        ]]></doc>
-    </type>
-    <type name="FieldAccessNode" super="Node" mode="tag">
-        <tag name="RestrictedPrimaryExpressionNode" />
-        <doc><![CDATA[
-            This tagging interface is used to denote BSJ AST nodes which represent field access.
-        ]]></doc>
-    </type>
-    <type name="ForInitializerNode" super="Node" mode="tag">
-        <doc><![CDATA[
-            This tagging interface is used to denote AST nodes which are used as standard for-loop initializers.  It exists
-            to allow the two different types of for loop initializers to be used coherently.
-        ]]></doc>
-    </type>
-    <type name="ImportNode" super="Node" mode="tag">
-        <doc><![CDATA[
-            This tagging interface is used to denote AST nodes which represent import statements.
-        ]]></doc>
-    </type>
-    <type name="InlineTypeDeclarableNode" super="Node" mode="tag">
-        <tag name="TypeDeclarationNode" />
-        <doc><![CDATA[
-            This tagging interface is used to denote AST nodes which represent type declarations and can be declared inline
-            as a statement.
-        ]]></doc>
-    </type>
-    <type name="InterfaceMemberNode" super="Node" mode="tag">
-        <doc><![CDATA[
-            This tagging interface is used to denote AST nodes which can be used as members of an interface declaration's
-            body.
-        ]]></doc>
-    </type>
-    <type name="LiteralizableTypeNode" super="Node" mode="tag">
-        <tag name="TypeNode" />
-        <doc><![CDATA[
-            This tagging interface is used to denote AST nodes which refer to a type which can be used to define a class
-            literal (such as <tt>String.class</tt>, <tt>int.class</tt>, or <tt>String[].class</tt>).  Note that
-            parameterized types may not be used to create literals; that is, <tt>Set&lt;String&gt;.class</tt> is illegal.
-        ]]></doc>
-    </type>
-    <type name="NonAssignmentExpressionNode" super="Node" mode="tag">
-        <tag name="ExpressionNode" />
-        <doc><![CDATA[
-            This tagging interface describes expressions which are not assignment expressions.  In some contexts, assignment
-            expressions are not permitted (such as in the initializers of annotation values).
-        ]]></doc>
-    </type>
-    <type name="PrimaryExpressionNode" super="Node" mode="tag">
-        <tag name="NonAssignmentExpressionNode" />
-        <doc><![CDATA[
-            A tagging interface for all nodes considered "primary expressions" by the Java Language Specification.  Primary
-            expressions include the basic building blocks of more complex expressions.
-        ]]></doc>
-    </type>
-    <type name="ReferenceTypeNode" super="Node" mode="tag">
-        <tag name="TypeNode" />
-        <tag name="TypeArgumentNode" />
-        <doc><![CDATA[
-            A node representing a reference type.  A reference type in Java is any non-primitive type.
-        ]]></doc>
-    </type>
-    <type name="RestrictedPrimaryExpressionNode" super="Node" mode="tag">
-        <tag name="PrimaryExpressionNode" />
-        <doc><![CDATA[
-            A tagging interface for restricted primary expressions.  This maps to the <i>PrimaryNoNewArray</i> parse target
-            in the JLS.
-        ]]></doc>
-    </type>
-    <type name="StatementExpressionNode" super="Node" mode="tag">
-        <tag name="ExpressionNode" />
-        <doc><![CDATA[
-            A tagging interface which marks all expressions which may be used as statements.
-        ]]></doc>
-    </type>
-    <type name="StatementNode" super="BlockStatementNode" mode="tag">
-        <doc><![CDATA[
-            This tagging interface is used to denote AST nodes which represent statements.
-        ]]></doc>
-    </type>
-    <type name="TypeArgumentNode" super="Node" mode="tag">
-        <doc><![CDATA[
-            This tagging interface is used to denote AST nodes which can be used as type arguments.
-        ]]></doc>
-    </type>
-    <type name="TypeDeclarationNode" super="Node" mode="tag">
-        <tag name="ClassMemberNode" />
-        <tag name="InterfaceMemberNode" />
-        <tag name="AnnotationMemberNode" />
-        <tag name="AnonymousClassMemberNode" />
-        <doc><![CDATA[
-            This tagging interface is used to denoate AST nodes which declare types.
-        ]]></doc>
-    </type>
-    <type name="TypeNode" super="Node" mode="tag">
-        <doc><![CDATA[
-            This tagging interface is used to denote AST nodes which refer to types.
-        ]]></doc>
-    </type>
-    <type name="VariableInitializerNode" super="Node" mode="tag">
-        <doc><![CDATA[
-            This tagging interface is used to denote AST nodes which represent a variable initialization using either an
-            expression or an array initializer.          
-        ]]></doc>
-    </type>
-    <type name="IdentifierNode" super="Node">
-        <prop name="identifier" type="String" desc="the identifier contained in this node" />
-        <doc><![CDATA[
-            A tree node representing a simple identifier, as in:
-            <pre>
-            <i>ident</i>
-            </pre>
-        ]]></doc>
-        <toString><![CDATA[
-            sb.append("Identifier[" + this.identifier + "]");
-        ]]></toString>
-    </type>
-    <type name="NameNode" super="Node" mode="abstract">
-        <prop name="category" type="NameCategory" mode="readOnly" desc="the category for this name" />
-        <include file="NameNode.java" />
-        <doc><![CDATA[
-            A common supertype for all nodes representing a name.  In Java, a name is either a simple name (a single
-            identifier) or a qualified name (a name, a dot, and an identifier).  The meaning of a name is context-sensitive
-            and is partially dependent upon type information; therefore, this node maintains information about the facts
-            currently known about this name.
-            <p/>
-            Note that some identifiers are not used as names; as a result, not all identifiers are children of this class
-            or one of its subclasses.  Examples of such cases include variable and type declarations, where the identifier
-            is not technically a name because it is being used to create a name which does not exist.  For more information,
-            please see the Java Language Specification v3.0 &#167;6.
-        ]]></doc>
-    </type>
-    <type name="QualifiedNameNode" super="NameNode">
-        <prop name="base" type="NameNode" desc="the name being qualified" />
-        <prop name="identifier" type="IdentifierNode" desc="the identifier used to qualify the base name" />
-        <doc><![CDATA[
-            Represents a qualified name, as in
-            <pre>
-            <i>name.ident</i>
-            </pre>
-        ]]></doc>
-        <toString><![CDATA[
-            if (base == null)
-            {
+
+    <!-- Java AST Nodes -->
+    <srcgen ipkg="edu.jhu.cs.bsj.compiler.ast.node" cpkg="edu.jhu.cs.bsj.compiler.impl.ast.node">
+    
+        <!-- ==================== TAGGING INTERFACES ==================== -->
+    
+        <type name="AnnotationMemberNode" super="Node" mode="tag">
+            <doc><![CDATA[
+                This tagging interface is used to denote AST nodes which can be used as members of an annotation declaration's
+                body.
+            ]]></doc>
+        </type>
+
+        <type name="AnnotationValueNode" super="Node" mode="tag">
+            <doc><![CDATA[
+                This tagging interface is used to denote AST nodes which represent annotation values.
+            ]]></doc>
+        </type>
+
+        <type name="AnonymousClassMemberNode" super="Node" mode="tag">
+            <tag name="ClassMemberNode" />
+            <doc><![CDATA[
+                This tagging interface is used to denote AST nodes which can be used as members of an anonymous class's body.
+                Since the set of declarations which may appear in an anonymous class is a subset of that which may appear in a
+                named class, this type is a subtype of {@link ClassMember}.
+            ]]></doc>
+        </type>
+
+        <type name="BaseTypeNode" super="Node" mode="tag">
+            <doc><![CDATA[
+                This tagging interface is used to denote AST nodes which can be used as array base types.
+            ]]></doc>
+        </type>
+
+        <type name="BlockStatementNode" super="Node" mode="tag">
+            <doc><![CDATA[
+                This tagging interface is used to denote AST nodes which can appear in blocks.
+            ]]></doc>
+        </type>
+
+        <type name="ClassMemberNode" super="Node" mode="tag">
+            <doc><![CDATA[
+                This tagging interface is used to denote AST nodes which can be used as members of a class declaration's body.
+            ]]></doc>
+        </type>
+
+        <type name="DeclaredTypeNode" super="Node" mode="tag">
+            <tag name="ReferenceTypeNode" />
+            <tag name="BaseTypeNode" />
+            <doc><![CDATA[
+                A node representing any declared type.  In the BSJ API, a "declared type" refers to any type which has been
+                created by a declaration statement.  Arrays and primitives are not declared types because they are not declared.
+            ]]></doc>
+        </type>
+
+        <type name="ExpressionNode" super="Node" mode="tag">
+            <tag name="VariableInitializerNode" />
+            <doc><![CDATA[
+                This tagging interface is used to denote BSJ AST nodes which represent expressions.
+            ]]></doc>
+        </type>
+
+        <type name="FieldAccessNode" super="Node" mode="tag">
+            <tag name="RestrictedPrimaryExpressionNode" />
+            <doc><![CDATA[
+                This tagging interface is used to denote BSJ AST nodes which represent field access.
+            ]]></doc>
+        </type>
+
+        <type name="ForInitializerNode" super="Node" mode="tag">
+            <doc><![CDATA[
+                This tagging interface is used to denote AST nodes which are used as standard for-loop initializers.  It exists
+                to allow the two different types of for loop initializers to be used coherently.
+            ]]></doc>
+        </type>
+
+        <type name="ImportNode" super="Node" mode="tag">
+            <doc><![CDATA[
+                This tagging interface is used to denote AST nodes which represent import statements.
+            ]]></doc>
+        </type>
+
+        <type name="InlineTypeDeclarableNode" super="Node" mode="tag">
+            <tag name="TypeDeclarationNode" />
+            <doc><![CDATA[
+                This tagging interface is used to denote AST nodes which represent type declarations and can be declared inline
+                as a statement.
+            ]]></doc>
+        </type>
+
+        <type name="InterfaceMemberNode" super="Node" mode="tag">
+            <doc><![CDATA[
+                This tagging interface is used to denote AST nodes which can be used as members of an interface declaration's
+                body.
+            ]]></doc>
+        </type>
+
+        <type name="LiteralizableTypeNode" super="Node" mode="tag">
+            <tag name="TypeNode" />
+            <doc><![CDATA[
+                This tagging interface is used to denote AST nodes which refer to a type which can be used to define a class
+                literal (such as <tt>String.class</tt>, <tt>int.class</tt>, or <tt>String[].class</tt>).  Note that
+                parameterized types may not be used to create literals; that is, <tt>Set&lt;String&gt;.class</tt> is illegal.
+            ]]></doc>
+        </type>
+
+        <type name="NonAssignmentExpressionNode" super="Node" mode="tag">
+            <tag name="ExpressionNode" />
+            <doc><![CDATA[
+                This tagging interface describes expressions which are not assignment expressions.  In some contexts, assignment
+                expressions are not permitted (such as in the initializers of annotation values).
+            ]]></doc>
+        </type>
+
+        <type name="PrimaryExpressionNode" super="Node" mode="tag">
+            <tag name="NonAssignmentExpressionNode" />
+            <doc><![CDATA[
+                A tagging interface for all nodes considered "primary expressions" by the Java Language Specification.  Primary
+                expressions include the basic building blocks of more complex expressions.
+            ]]></doc>
+        </type>
+
+        <type name="ReferenceTypeNode" super="Node" mode="tag">
+            <tag name="TypeNode" />
+            <tag name="TypeArgumentNode" />
+            <doc><![CDATA[
+                A node representing a reference type.  A reference type in Java is any non-primitive type.
+            ]]></doc>
+        </type>
+
+        <type name="RestrictedPrimaryExpressionNode" super="Node" mode="tag">
+            <tag name="PrimaryExpressionNode" />
+            <doc><![CDATA[
+                A tagging interface for restricted primary expressions.  This maps to the <i>PrimaryNoNewArray</i> parse target
+                in the JLS.
+            ]]></doc>
+        </type>
+
+        <type name="StatementExpressionNode" super="Node" mode="tag">
+            <tag name="ExpressionNode" />
+            <doc><![CDATA[
+                A tagging interface which marks all expressions which may be used as statements.
+            ]]></doc>
+        </type>
+
+        <type name="StatementNode" super="BlockStatementNode" mode="tag">
+            <doc><![CDATA[
+                This tagging interface is used to denote AST nodes which represent statements.
+            ]]></doc>
+        </type>
+
+        <type name="TypeArgumentNode" super="Node" mode="tag">
+            <doc><![CDATA[
+                This tagging interface is used to denote AST nodes which can be used as type arguments.
+            ]]></doc>
+        </type>
+
+        <type name="TypeDeclarationNode" super="Node" mode="tag">
+            <tag name="ClassMemberNode" />
+            <tag name="InterfaceMemberNode" />
+            <tag name="AnnotationMemberNode" />
+            <tag name="AnonymousClassMemberNode" />
+            <doc><![CDATA[
+                This tagging interface is used to denoate AST nodes which declare types.
+            ]]></doc>
+        </type>
+
+        <type name="TypeNode" super="Node" mode="tag">
+            <doc><![CDATA[
+                This tagging interface is used to denote AST nodes which refer to types.
+            ]]></doc>
+        </type>
+
+        <type name="VariableInitializerNode" super="Node" mode="tag">
+            <doc><![CDATA[
+                This tagging interface is used to denote AST nodes which represent a variable initialization using either an
+                expression or an array initializer.          
+            ]]></doc>
+        </type>
+        
+        <!-- ======================= NAMING NODES ======================= -->
+
+        <type name="IdentifierNode" super="Node">
+            <prop name="identifier" type="String" desc="the identifier contained in this node" />
+            <doc><![CDATA[
+                A tree node representing a simple identifier, as in:
+                <pre>
+                <i>ident</i>
+                </pre>
+            ]]></doc>
+            <toString><![CDATA[
+                sb.append("Identifier[" + this.identifier + "]");
+            ]]></toString>
+        </type>
+
+        <type name="NameNode" super="Node" mode="abstract">
+            <prop name="category" type="NameCategory" mode="readOnly" desc="the category for this name" />
+            <include file="NameNode.java" />
+            <doc><![CDATA[
+                A common supertype for all nodes representing a name.  In Java, a name is either a simple name (a single
+                identifier) or a qualified name (a name, a dot, and an identifier).  The meaning of a name is context-sensitive
+                and is partially dependent upon type information; therefore, this node maintains information about the facts
+                currently known about this name.
+                <p/>
+                Note that some identifiers are not used as names; as a result, not all identifiers are children of this class
+                or one of its subclasses.  Examples of such cases include variable and type declarations, where the identifier
+                is not technically a name because it is being used to create a name which does not exist.  For more information,
+                please see the Java Language Specification v3.0 &#167;6.
+            ]]></doc>
+        </type>
+
+        <type name="QualifiedNameNode" super="NameNode">
+            <prop name="base" type="NameNode" desc="the name being qualified" />
+            <prop name="identifier" type="IdentifierNode" desc="the identifier used to qualify the base name" />
+            <doc><![CDATA[
+                Represents a qualified name, as in
+                <pre>
+                <i>name.ident</i>
+                </pre>
+            ]]></doc>
+            <toString><![CDATA[
+                if (base == null)
+                {
                 sb.append("[null]");
-            } else
-            {
+                } else
+                {
                 sb.append(this.base.toString());
-            }
-            sb.append('.');
-            if (identifier == null)
-            {
-                sb.append("[null]");
-            } else
-            {
-                sb.append(identifier.getIdentifier());
-                sb.append('[');
-                sb.append(this.getCategory());
-                sb.append(']');
-            }
-        ]]></toString>
-    </type>
-    <type name="SimpleNameNode" super="NameNode">
-        <prop name="identifier" type="IdentifierNode" desc="the identifier used as a simple name" />
-        <doc><![CDATA[
-            Represents a simple name, as in
-            <pre>
-            <i>name</i>
-            </pre>
-        ]]></doc>
-        <toString><![CDATA[
-            if (identifier == null)
-            {
-                sb.append("[null]");
-            } else
-            {
-                sb.append(identifier.getIdentifier());
-                sb.append('[');
-                sb.append(this.getCategory());
-                sb.append(']');
-            }
-        ]]></toString>
-    </type>
-    <type name="AnnotationMethodModifiersNode" super="ModifiersNode">
-        <doc><![CDATA[
-            Represents the modifiers which can be associated with an annotation method.  As all annotation methods are
-            implicitly <tt>public</tt> and <tt>abstract</tt> and these are the only legal modifiers, no flags exist for
-            annotation methods.
-        ]]></doc>
-    </type>
-    <type name="AnnotationModifiersNode" super="ModifiersNode">
-        <prop name="access" type="AccessModifier" desc="the access for the associated annotation" />
-        <prop name="staticFlag" type="boolean" desc="whether or not the associated annotation is static" />
-        <prop name="strictfpFlag" type="boolean"
-            desc="whether or not the associated annotation uses strict floating-point" />
-        <doc><![CDATA[
-            Represents the modifiers which can be associated with an annotation.  While <tt>public</tt> and
-            <tt>abstract</tt> are syntactically legal modifiers, they are not included here because they are implicit to all
-            annotations.
-        ]]></doc>
-    </type>
-    <type name="ClassModifiersNode" super="ModifiersNode">
-        <prop name="access" type="AccessModifier" desc="the access for the associated class" />
-        <prop name="abstractFlag" type="boolean" desc="whether or not the associated class is abstract" />
-        <prop name="staticFlag" type="boolean" desc="whether or not the associated class is static" />
-        <prop name="finalFlag" type="boolean" desc="whether or not the associated class is final" />
-        <prop name="strictfpFlag" type="boolean" desc="whether or not the associated class uses strict floating-point" />
-        <doc><![CDATA[
-            Represents the modifiers which can be associated with a class.
-        ]]></doc>
-    </type>
-    <type name="ConstructorModifiersNode" super="ModifiersNode">
-        <prop name="access" type="AccessModifier" desc="the access for the associated constructor" />
-        <doc><![CDATA[
-            Represents the modifiers which can be associated with a constructor.
-        ]]></doc>
-    </type>
-    <type name="EnumModifiersNode" super="ModifiersNode">
-        <prop name="access" type="AccessModifier" desc="the access for the associated enum" />
-        <prop name="strictfpFlag" type="boolean" desc="whether or not the associated enum uses strict floating-point" />
-        <doc><![CDATA[
-            Represents the modifiers which can be associated with an enum.  The <tt>static</tt> modifier is syntactically
-            legal but also implicit, so it does not appear here.
-        ]]></doc>
-    </type>
-    <type name="FieldModifiersNode" super="ModifiersNode">
-        <prop name="access" type="AccessModifier" desc="the access for the associated fields" />
-        <prop name="staticFlag" type="boolean" desc="whether or not the associated class is static" />
-        <prop name="finalFlag" type="boolean" desc="whether or not the associated class is final" />
-        <prop name="transientFlag" type="boolean" desc="whether or not the associated class is transient" />
-        <prop name="volatileFlag" type="boolean" desc="whether or not the associated class is volatile" />
-        <doc><![CDATA[
-            Represents the modifiers which can be associated with a field.
-        ]]></doc>
-    </type>
-    <type name="InterfaceModifiersNode" super="ModifiersNode">
-        <prop name="access" type="AccessModifier" desc="the access for the associated interface" />
-        <prop name="staticFlag" type="boolean" desc="whether or not the associated interface is static" />
-        <prop name="strictfpFlag" type="boolean"
-            desc="whether or not the associated interface uses strict floating-point" />
-        <doc><![CDATA[
-            Represents the modifiers which can be associated with an interface.  While <tt>public</tt> and <tt>abstract</tt>
-            are syntactically legal modifiers, they are not included here because they are implicit to all interfaces.
-        ]]></doc>
-    </type>
-    <type name="MethodModifiersNode" super="ModifiersNode">
-        <prop name="access" type="AccessModifier" desc="the access for the associated method" />
-        <prop name="abstractFlag" type="boolean" desc="whether or not the associated method is abstract" />
-        <prop name="staticFlag" type="boolean" desc="whether or not the associated method is static" />
-        <prop name="finalFlag" type="boolean" desc="whether or not the associated method is final" />
-        <prop name="synchronizedFlag" type="boolean" desc="whether or not the associated method is synchronized" />
-        <prop name="nativeFlag" type="boolean" desc="whether or not the associated method is native" />
-        <prop name="strictfpFlag" type="boolean" desc="whether or not the associated method uses strict floating-point" />
-        <doc><![CDATA[
-            Represents the modifiers which can be associated with a method.
-        ]]></doc>
-    </type>
-    <type name="ModifiersNode" super="Node" mode="abstract">
-        <prop name="annotations" type="ListNode" typeArg="AnnotationNode" desc="the annotations modifying the subject" />
-        <doc><![CDATA[
-            A node representing the modifiers applied to another node.  Modifiers may include flags (such as <tt>final</tt>
-            or <tt>strictfp</tt>) and annotations (such as <tt>@Override</tt>).  Subclasses of this node dictate precisely
-            which flags are permitted for their parent nodes.
-        ]]></doc>
-    </type>
-    <type name="VariableModifiersNode" super="ModifiersNode">
-        <prop name="finalFlag" type="boolean" desc="whether or not the associated variable is final" />
-        <doc><![CDATA[
-            Represents the modifiers which can be associated with a variable.
-        ]]></doc>
-    </type>
-    <type name="ArrayAccessNode" super="Node">
-        <tag name="RestrictedPrimaryExpressionNode" />
-        <prop name="arrayExpression" type="RestrictedPrimaryExpressionNode" desc="the expression identifying the array" />
-        <prop name="indexExpression" type="ExpressionNode" desc="the index into the array" />
-        <doc><![CDATA[
-            Represents an array access, as in:
-            <pre>
-            <i>expression</i>[<i>index</i>]
-            </pre>
-        ]]></doc>
-    </type>
-    <type name="ArrayCreationNode" super="Node" mode="abstract">
-        <tag name="PrimaryExpressionNode" />
-        <prop name="baseType" type="BaseTypeNode" desc="the base type for this array" />
-        <prop name="arrayLevels" type="int" desc="the number of uninitialized levels for this array" />
-        <doc><![CDATA[
-            Represents the creation of an array, including both instantiation and initialization.
-        ]]></doc>
-    </type>
-    <type name="ArrayInitializerCreationNode" super="ArrayCreationNode">
-        <prop name="initializer" type="ArrayInitializerNode" desc="the initializer for this array" />
-        <doc><![CDATA[
-            Represents the creation of an array with initializer, as in
-            <pre>
-            new <i>type</i> []... {<i>initializer</i>,...}
-            </pre>
-            Levels for this array creator refer to square brace pairs,
-            for example <code>new int[][][]</code> would have three levels.
-        ]]></doc>
-    </type>
-    <type name="ArrayInstantiatorCreationNode" super="ArrayCreationNode">
-        <prop name="dimExpressions" type="ListNode" typeArg="ExpressionNode" desc="the dimension expressions for this array" />
-        <doc><![CDATA[
-            Represents the creation of an array with instantiator, as in
-            <pre>
-            new <i>type</i> [<i>expression</i>]... []...
-            </pre>
-            Levels for this array creator refer to square braces without initializers,
-            for example <code>new int[2][][]</code> would have two levels.
-        ]]></doc>
-    </type>
-    <type name="AssignmentNode" super="Node">
-        <tag name="StatementExpressionNode" />
-        <prop name="variable" type="ExpressionNode" desc="the variable to which to assign a value" />
-        <prop name="operator" type="AssignmentOperator" desc="the assignment operator indicating the operation to perform" />
-        <prop name="expression" type="ExpressionNode" desc="the expression to use" />
-        <doc><![CDATA[
-            Represents the assignment of an expression to a variable, as in
-            <pre>
-            <i>expr op expr</i>
-            </pre>
-            where <i>op</i> is one of <tt>=</tt>, <tt>+=</tt>, <tt>%=</tt>, etc.
-        ]]></doc>
-    </type>
-    <type name="BinaryExpressionNode" super="Node">
-        <tag name="NonAssignmentExpressionNode" />
-        <prop name="leftOperand" type="ExpressionNode" desc="the left operand of the expression" />
-        <prop name="rightOperand" type="ExpressionNode" desc="the right operand of the expression" />
-        <prop name="operator" type="BinaryOperator" desc="the binary operator to apply" />
-        <doc><![CDATA[
-            Represents the application of a binary operator.
-        ]]></doc>
-    </type>
-    <type name="ClassInstantiationNode" super="Node" mode="abstract">
-        <tag name="RestrictedPrimaryExpressionNode" />
-        <tag name="StatementExpressionNode" />
-        <prop name="constructorTypeArguments" type="ListNode" typeArg="TypeArgumentNode"
-            desc="the type arguments for the constructor" />
-        <prop name="arguments" type="ListNode" typeArg="ExpressionNode" desc="the arguments to the constructor" />
-        <prop name="body" type="AnonymousClassBodyNode" desc="the body of the anonymous class" />
-        <doc><![CDATA[
-            Acts as a parent to class instantiation nodes. 
-        ]]></doc>
-    </type>
-    <type name="ConditionalExpressionNode" super="Node">
-        <tag name="NonAssignmentExpressionNode" />
-        <prop name="condition" type="ExpressionNode" desc="the condition of the expression" />
-        <prop name="trueExpression" type="ExpressionNode" desc="the value of this expression when the condition is true" />
-        <prop name="falseExpression" type="ExpressionNode" desc="the value of this expression when the condition is false" />
-        <doc><![CDATA[
-            Represents a conditional <i>expression</i>, as in:
-            <pre>
-            <i>condition</i> ? <i>expression</i> : <i>expression</i>
-            </pre>
-        ]]></doc>
-    </type>
-    <type name="FieldAccessByExpressionNode" super="Node">
-        <tag name="FieldAccessNode" />
-        <prop name="expression" type="PrimaryExpressionNode" desc="the expression from which the field is being selected" />
-        <prop name="identifier" type="IdentifierNode" desc="the name of the field" />
-        <doc><![CDATA[
-            Represents a field access, as in
-            <pre>
-            <i>expr</i>.<i>ident</i>
-            </pre>
-            For example, this node would allow the access of a fieldon the result of a method call using the code
-            <pre>
-            foo().bar
-            </pre>
-            This node is not used for simple expressions such as <tt>x</tt> or <tt>y.z</tt>.  For those forms of field
-            access, see {@link FieldAccessByNameNode}.
-        ]]></doc>
-    </type>
-    <type name="FieldAccessByNameNode" super="Node">
-        <tag name="FieldAccessNode" />
-        <prop name="name" type="NameNode" desc="the name of the field to access" />
-        <doc><![CDATA[
-            Represents a field access, as in
-            <pre>
-            <i>name</i>
-            </pre>
-            For example, this node would allow the access of a local variable <tt>x</tt> using the code
-            <pre>
-            x
-            </pre>
-            and allow the access of a <tt>bar</tt> field on a class <tt>Foo</tt> using the code
-            <pre>
-            Foo.bar
-            </pre>
-            This node is not used to represent field access from the evaluation result of a subexpression (such as in the
-            code <tt>foo().bar</tt>).  For that form of access, see {@link FieldAccessByExpressionNode}.
-        ]]></doc>
-    </type>
-    <type name="InstanceOfNode" super="Node">
-        <tag name="NonAssignmentExpressionNode" />
-        <prop name="expression" type="ExpressionNode" desc="the expression being evaluated" />
-        <prop name="type" type="TypeNode" desc="the type being checked" />
-        <doc><![CDATA[
-            Represents the invocation of the <tt>instanceof</tt> operator, as in:
-            <pre>
-            <i>expression</i> instanceof <i>type</i>
-            </pre>
-        ]]></doc>
-    </type>
-    <type name="LiteralNode" typeParam="T" super="Node" mode="abstract">
-        <tag name="RestrictedPrimaryExpressionNode" />
-        <prop name="value" type="T" desc="the literal value for this node" />
-        <doc><![CDATA[
-            A superclass for all types of literal nodes.
-        ]]></doc>
-    </type>
-    <type name="MethodInvocationByExpressionNode" super="MethodInvocationNode">
-        <prop name="expression" type="PrimaryExpressionNode" desc="the expression against which to invoke the method" />
-        <prop name="identifier" type="IdentifierNode" desc="the name of the method to invoke" />
-        <doc><![CDATA[
-            A node representing method invocation by expression, as in:
-            <pre>
-            <i>expr</i>.&lt;<i>typeArgs</i>&gt;<i>identifier</i>(<i>arg...</i>)
-            </pre>
-            For example, this node might be used when an expression produces an object against which we want to call a
-            method as in
-            <pre>
-            new Object().toString()
-            </pre>
-            or
-            <pre>
-            foo().bar()
-            </pre>
-            For simple method invocations (such as <tt>myObjectReference.myMethod()</tt>), see
-            {@link MethodInvocationByNameNode}.
-        ]]></doc>
-    </type>
-    <type name="MethodInvocationByNameNode" super="MethodInvocationNode">
-        <prop name="name" type="NameNode" desc="the name of the method to invoke" />
-        <doc><![CDATA[
-            A node representing method invocation by name, as in:
-            <pre>
-            <i>ambiguousName</i>.&lt;<i>typeArgs</i>&gt;<i>identifier</i>(<i>arg...</i>)
-            </pre>
-            or
-            <pre>
-            <i>methodName</i>(<i>arg...</i>)
-            </pre>
-            This node is used for simple method calls (such as <tt>x.y()</tt>) and not for expression-based method calls
-            (such as <tt>x().y()</tt>).  For expression-based method calls, see {@link MethodInvocationByExpressionNode}.
-        ]]></doc>
-    </type>
-    <type name="MethodInvocationNode" super="Node" mode="abstract">
-        <tag name="RestrictedPrimaryExpressionNode" />
-        <tag name="StatementExpressionNode" />
-        <prop name="arguments" type="ListNode" typeArg="ExpressionNode" desc="the arguments to pass to the method" />
-        <prop name="typeArguments" type="ListNode" typeArg="TypeNode" desc="the type arguments for the method" />
-        <doc><![CDATA[
-            A superclass for method invocation nodes.
-        ]]></doc>
-    </type>
-    <type name="ParenthesizedExpressionNode" super="Node">
-        <tag name="RestrictedPrimaryExpressionNode" />
-        <prop name="expression" type="ExpressionNode" desc="the expression contained in this node" />
-        <doc><![CDATA[
-            A node representing a parenthesized expression, as in:
-            <pre>
-            (<i>expr</i>)
-            </pre>
-            This node is made explicit in this AST because Java distinguishes between primary expressions and other types
-            of expressions.  For example, the ternary conditional operator (<tt>?:</tt>) is not a primary expression, but
-            there is a big difference between <tt>b?x:y.z</tt> and <tt>(b?x:y).z</tt>.  However, the field selection node
-            (which represents <tt>a.z</tt>) expects a primary expression; thus, without this node, there would be no way
-            to express <tt>(b?x:y).z</tt>.
-        ]]></doc>
-    </type>
-    <type name="QualifiedClassInstantiationNode" super="ClassInstantiationNode">
-        <prop name="enclosingExpression" type="ExpressionNode" desc="the expression enclosing the non-static inner class" />
-        <prop name="identifier" type="IdentifierNode" desc="the name of the class being instantiated" />
-        <prop name="typeArguments" type="ListNode" typeArg="TypeArgumentNode"
-            desc="the type arguments to apply to the class being instantiated" />
-        <doc><![CDATA[
-            A node representing the qualified instantiation of a class, as in:
-            <pre>
-            <i>expr</i>.new <i>type</i>(<i>arg...</i>)
-            </pre>
-            For example, consider the following code:
-            <pre>
-            public class Example
-            {
-                class A
+                }
+                sb.append('.');
+                if (identifier == null)
                 {
-                    class B
+                sb.append("[null]");
+                } else
+                {
+                sb.append(identifier.getIdentifier());
+                sb.append('[');
+                sb.append(this.getCategory());
+                sb.append(']');
+                }
+            ]]></toString>
+        </type>
+
+        <type name="SimpleNameNode" super="NameNode">
+            <prop name="identifier" type="IdentifierNode" desc="the identifier used as a simple name" />
+            <doc><![CDATA[
+                Represents a simple name, as in
+                <pre>
+                <i>name</i>
+                </pre>
+            ]]></doc>
+            <toString><![CDATA[
+                if (identifier == null)
+                {
+                sb.append("[null]");
+                } else
+                {
+                sb.append(identifier.getIdentifier());
+                sb.append('[');
+                sb.append(this.getCategory());
+                sb.append(']');
+                }
+            ]]></toString>
+        </type>
+        
+        <!-- ====================== MODIFIER NODES ====================== -->
+
+        <type name="AnnotationMethodModifiersNode" super="ModifiersNode">
+            <doc><![CDATA[
+                Represents the modifiers which can be associated with an annotation method.  As all annotation methods are
+                implicitly <tt>public</tt> and <tt>abstract</tt> and these are the only legal modifiers, no flags exist for
+                annotation methods.
+            ]]></doc>
+        </type>
+
+        <type name="AnnotationModifiersNode" super="ModifiersNode">
+            <prop name="access" type="AccessModifier" desc="the access for the associated annotation" />
+            <prop name="staticFlag" type="boolean" desc="whether or not the associated annotation is static" />
+            <prop name="strictfpFlag" type="boolean"
+                desc="whether or not the associated annotation uses strict floating-point" />
+            <doc><![CDATA[
+                Represents the modifiers which can be associated with an annotation.  While <tt>public</tt> and
+                <tt>abstract</tt> are syntactically legal modifiers, they are not included here because they are implicit to all
+                annotations.
+            ]]></doc>
+        </type>
+
+        <type name="ClassModifiersNode" super="ModifiersNode">
+            <prop name="access" type="AccessModifier" desc="the access for the associated class" />
+            <prop name="abstractFlag" type="boolean" desc="whether or not the associated class is abstract" />
+            <prop name="staticFlag" type="boolean" desc="whether or not the associated class is static" />
+            <prop name="finalFlag" type="boolean" desc="whether or not the associated class is final" />
+            <prop name="strictfpFlag" type="boolean"
+                desc="whether or not the associated class uses strict floating-point" />
+            <doc><![CDATA[
+                Represents the modifiers which can be associated with a class.
+            ]]></doc>
+        </type>
+
+        <type name="ConstructorModifiersNode" super="ModifiersNode">
+            <prop name="access" type="AccessModifier" desc="the access for the associated constructor" />
+            <doc><![CDATA[
+                Represents the modifiers which can be associated with a constructor.
+            ]]></doc>
+        </type>
+
+        <type name="EnumModifiersNode" super="ModifiersNode">
+            <prop name="access" type="AccessModifier" desc="the access for the associated enum" />
+            <prop name="strictfpFlag" type="boolean"
+                desc="whether or not the associated enum uses strict floating-point" />
+            <doc><![CDATA[
+                Represents the modifiers which can be associated with an enum.  The <tt>static</tt> modifier is syntactically
+                legal but also implicit, so it does not appear here.
+            ]]></doc>
+        </type>
+
+        <type name="FieldModifiersNode" super="ModifiersNode">
+            <prop name="access" type="AccessModifier" desc="the access for the associated fields" />
+            <prop name="staticFlag" type="boolean" desc="whether or not the associated class is static" />
+            <prop name="finalFlag" type="boolean" desc="whether or not the associated class is final" />
+            <prop name="transientFlag" type="boolean" desc="whether or not the associated class is transient" />
+            <prop name="volatileFlag" type="boolean" desc="whether or not the associated class is volatile" />
+            <doc><![CDATA[
+                Represents the modifiers which can be associated with a field.
+            ]]></doc>
+        </type>
+
+        <type name="InterfaceModifiersNode" super="ModifiersNode">
+            <prop name="access" type="AccessModifier" desc="the access for the associated interface" />
+            <prop name="staticFlag" type="boolean" desc="whether or not the associated interface is static" />
+            <prop name="strictfpFlag" type="boolean"
+                desc="whether or not the associated interface uses strict floating-point" />
+            <doc><![CDATA[
+                Represents the modifiers which can be associated with an interface.  While <tt>public</tt> and <tt>abstract</tt>
+                are syntactically legal modifiers, they are not included here because they are implicit to all interfaces.
+            ]]></doc>
+        </type>
+
+        <type name="MethodModifiersNode" super="ModifiersNode">
+            <prop name="access" type="AccessModifier" desc="the access for the associated method" />
+            <prop name="abstractFlag" type="boolean" desc="whether or not the associated method is abstract" />
+            <prop name="staticFlag" type="boolean" desc="whether or not the associated method is static" />
+            <prop name="finalFlag" type="boolean" desc="whether or not the associated method is final" />
+            <prop name="synchronizedFlag" type="boolean" desc="whether or not the associated method is synchronized" />
+            <prop name="nativeFlag" type="boolean" desc="whether or not the associated method is native" />
+            <prop name="strictfpFlag" type="boolean"
+                desc="whether or not the associated method uses strict floating-point" />
+            <doc><![CDATA[
+                Represents the modifiers which can be associated with a method.
+            ]]></doc>
+        </type>
+
+        <type name="ModifiersNode" super="Node" mode="abstract">
+            <prop name="annotations" type="ListNode" typeArg="AnnotationNode" desc="the annotations modifying the subject" />
+            <doc><![CDATA[
+                A node representing the modifiers applied to another node.  Modifiers may include flags (such as <tt>final</tt>
+                or <tt>strictfp</tt>) and annotations (such as <tt>@Override</tt>).  Subclasses of this node dictate precisely
+                which flags are permitted for their parent nodes.
+            ]]></doc>
+        </type>
+
+        <type name="VariableModifiersNode" super="ModifiersNode">
+            <prop name="finalFlag" type="boolean" desc="whether or not the associated variable is final" />
+            <doc><![CDATA[
+                Represents the modifiers which can be associated with a variable.
+            ]]></doc>
+        </type>
+        
+        <!-- ===================== EXPRESSION NODES ====================== -->
+
+        <type name="ArrayAccessNode" super="Node">
+            <tag name="RestrictedPrimaryExpressionNode" />
+            <prop name="arrayExpression" type="RestrictedPrimaryExpressionNode" desc="the expression identifying the array" />
+            <prop name="indexExpression" type="ExpressionNode" desc="the index into the array" />
+            <doc><![CDATA[
+                Represents an array access, as in:
+                <pre>
+                <i>expression</i>[<i>index</i>]
+                </pre>
+            ]]></doc>
+        </type>
+
+        <type name="ArrayCreationNode" super="Node" mode="abstract">
+            <tag name="PrimaryExpressionNode" />
+            <prop name="baseType" type="BaseTypeNode" desc="the base type for this array" />
+            <prop name="arrayLevels" type="int" desc="the number of uninitialized levels for this array" />
+            <doc><![CDATA[
+                Represents the creation of an array, including both instantiation and initialization.
+            ]]></doc>
+        </type>
+
+        <type name="ArrayInitializerCreationNode" super="ArrayCreationNode">
+            <prop name="initializer" type="ArrayInitializerNode" desc="the initializer for this array" />
+            <doc><![CDATA[
+                Represents the creation of an array with initializer, as in
+                <pre>
+                new <i>type</i> []... {<i>initializer</i>,...}
+                </pre>
+                Levels for this array creator refer to square brace pairs,
+                for example <code>new int[][][]</code> would have three levels.
+            ]]></doc>
+        </type>
+
+        <type name="ArrayInstantiatorCreationNode" super="ArrayCreationNode">
+            <prop name="dimExpressions" type="ListNode" typeArg="ExpressionNode"
+                desc="the dimension expressions for this array" />
+            <doc><![CDATA[
+                Represents the creation of an array with instantiator, as in
+                <pre>
+                new <i>type</i> [<i>expression</i>]... []...
+                </pre>
+                Levels for this array creator refer to square braces without initializers,
+                for example <code>new int[2][][]</code> would have two levels.
+            ]]></doc>
+        </type>
+
+        <type name="AssignmentNode" super="Node">
+            <tag name="StatementExpressionNode" />
+            <prop name="variable" type="ExpressionNode" desc="the variable to which to assign a value" />
+            <prop name="operator" type="AssignmentOperator" desc="the assignment operator indicating the operation to perform" />
+            <prop name="expression" type="ExpressionNode" desc="the expression to use" />
+            <doc><![CDATA[
+                Represents the assignment of an expression to a variable, as in
+                <pre>
+                <i>expr op expr</i>
+                </pre>
+                where <i>op</i> is one of <tt>=</tt>, <tt>+=</tt>, <tt>%=</tt>, etc.
+            ]]></doc>
+        </type>
+
+        <type name="BinaryExpressionNode" super="Node">
+            <tag name="NonAssignmentExpressionNode" />
+            <prop name="leftOperand" type="ExpressionNode" desc="the left operand of the expression" />
+            <prop name="rightOperand" type="ExpressionNode" desc="the right operand of the expression" />
+            <prop name="operator" type="BinaryOperator" desc="the binary operator to apply" />
+            <doc><![CDATA[
+                Represents the application of a binary operator.
+            ]]></doc>
+        </type>
+
+        <type name="ClassInstantiationNode" super="Node" mode="abstract">
+            <tag name="RestrictedPrimaryExpressionNode" />
+            <tag name="StatementExpressionNode" />
+            <prop name="constructorTypeArguments" type="ListNode" typeArg="TypeArgumentNode"
+                desc="the type arguments for the constructor" />
+            <prop name="arguments" type="ListNode" typeArg="ExpressionNode" desc="the arguments to the constructor" />
+            <prop name="body" type="AnonymousClassBodyNode" desc="the body of the anonymous class" />
+            <doc><![CDATA[
+                Acts as a parent to class instantiation nodes. 
+            ]]></doc>
+        </type>
+
+        <type name="ConditionalExpressionNode" super="Node">
+            <tag name="NonAssignmentExpressionNode" />
+            <prop name="condition" type="ExpressionNode" desc="the condition of the expression" />
+            <prop name="trueExpression" type="ExpressionNode" desc="the value of this expression when the condition is true" />
+            <prop name="falseExpression" type="ExpressionNode" desc="the value of this expression when the condition is false" />
+            <doc><![CDATA[
+                Represents a conditional <i>expression</i>, as in:
+                <pre>
+                <i>condition</i> ? <i>expression</i> : <i>expression</i>
+                </pre>
+            ]]></doc>
+        </type>
+
+        <type name="FieldAccessByExpressionNode" super="Node">
+            <tag name="FieldAccessNode" />
+            <prop name="expression" type="PrimaryExpressionNode" desc="the expression from which the field is being selected" />
+            <prop name="identifier" type="IdentifierNode" desc="the name of the field" />
+            <doc><![CDATA[
+                Represents a field access, as in
+                <pre>
+                <i>expr</i>.<i>ident</i>
+                </pre>
+                For example, this node would allow the access of a fieldon the result of a method call using the code
+                <pre>
+                foo().bar
+                </pre>
+                This node is not used for simple expressions such as <tt>x</tt> or <tt>y.z</tt>.  For those forms of field
+                access, see {@link FieldAccessByNameNode}.
+            ]]></doc>
+        </type>
+
+        <type name="FieldAccessByNameNode" super="Node">
+            <tag name="FieldAccessNode" />
+            <prop name="name" type="NameNode" desc="the name of the field to access" />
+            <doc><![CDATA[
+                Represents a field access, as in
+                <pre>
+                <i>name</i>
+                </pre>
+                For example, this node would allow the access of a local variable <tt>x</tt> using the code
+                <pre>
+                x
+                </pre>
+                and allow the access of a <tt>bar</tt> field on a class <tt>Foo</tt> using the code
+                <pre>
+                Foo.bar
+                </pre>
+                This node is not used to represent field access from the evaluation result of a subexpression (such as in the
+                code <tt>foo().bar</tt>).  For that form of access, see {@link FieldAccessByExpressionNode}.
+            ]]></doc>
+        </type>
+
+        <type name="InstanceOfNode" super="Node">
+            <tag name="NonAssignmentExpressionNode" />
+            <prop name="expression" type="ExpressionNode" desc="the expression being evaluated" />
+            <prop name="type" type="TypeNode" desc="the type being checked" />
+            <doc><![CDATA[
+                Represents the invocation of the <tt>instanceof</tt> operator, as in:
+                <pre>
+                <i>expression</i> instanceof <i>type</i>
+                </pre>
+            ]]></doc>
+        </type>
+
+        <type name="LiteralNode" typeParam="T" super="Node" mode="abstract">
+            <tag name="RestrictedPrimaryExpressionNode" />
+            <prop name="value" type="T" desc="the literal value for this node" />
+            <doc><![CDATA[
+                A superclass for all types of literal nodes.
+            ]]></doc>
+        </type>
+
+        <type name="MethodInvocationByExpressionNode" super="MethodInvocationNode">
+            <prop name="expression" type="PrimaryExpressionNode" desc="the expression against which to invoke the method" />
+            <prop name="identifier" type="IdentifierNode" desc="the name of the method to invoke" />
+            <doc><![CDATA[
+                A node representing method invocation by expression, as in:
+                <pre>
+                <i>expr</i>.&lt;<i>typeArgs</i>&gt;<i>identifier</i>(<i>arg...</i>)
+                </pre>
+                For example, this node might be used when an expression produces an object against which we want to call a
+                method as in
+                <pre>
+                new Object().toString()
+                </pre>
+                or
+                <pre>
+                foo().bar()
+                </pre>
+                For simple method invocations (such as <tt>myObjectReference.myMethod()</tt>), see
+                {@link MethodInvocationByNameNode}.
+            ]]></doc>
+        </type>
+
+        <type name="MethodInvocationByNameNode" super="MethodInvocationNode">
+            <prop name="name" type="NameNode" desc="the name of the method to invoke" />
+            <doc><![CDATA[
+                A node representing method invocation by name, as in:
+                <pre>
+                <i>ambiguousName</i>.&lt;<i>typeArgs</i>&gt;<i>identifier</i>(<i>arg...</i>)
+                </pre>
+                or
+                <pre>
+                <i>methodName</i>(<i>arg...</i>)
+                </pre>
+                This node is used for simple method calls (such as <tt>x.y()</tt>) and not for expression-based method calls
+                (such as <tt>x().y()</tt>).  For expression-based method calls, see {@link MethodInvocationByExpressionNode}.
+            ]]></doc>
+        </type>
+
+        <type name="MethodInvocationNode" super="Node" mode="abstract">
+            <tag name="RestrictedPrimaryExpressionNode" />
+            <tag name="StatementExpressionNode" />
+            <prop name="arguments" type="ListNode" typeArg="ExpressionNode" desc="the arguments to pass to the method" />
+            <prop name="typeArguments" type="ListNode" typeArg="TypeNode" desc="the type arguments for the method" />
+            <doc><![CDATA[
+                A superclass for method invocation nodes.
+            ]]></doc>
+        </type>
+
+        <type name="ParenthesizedExpressionNode" super="Node">
+            <tag name="RestrictedPrimaryExpressionNode" />
+            <prop name="expression" type="ExpressionNode" desc="the expression contained in this node" />
+            <doc><![CDATA[
+                A node representing a parenthesized expression, as in:
+                <pre>
+                (<i>expr</i>)
+                </pre>
+                This node is made explicit in this AST because Java distinguishes between primary expressions and other types
+                of expressions.  For example, the ternary conditional operator (<tt>?:</tt>) is not a primary expression, but
+                there is a big difference between <tt>b?x:y.z</tt> and <tt>(b?x:y).z</tt>.  However, the field selection node
+                (which represents <tt>a.z</tt>) expects a primary expression; thus, without this node, there would be no way
+                to express <tt>(b?x:y).z</tt>.
+            ]]></doc>
+        </type>
+
+        <type name="QualifiedClassInstantiationNode" super="ClassInstantiationNode">
+            <prop name="enclosingExpression" type="ExpressionNode" desc="the expression enclosing the non-static inner class" />
+            <prop name="identifier" type="IdentifierNode" desc="the name of the class being instantiated" />
+            <prop name="typeArguments" type="ListNode" typeArg="TypeArgumentNode"
+                desc="the type arguments to apply to the class being instantiated" />
+            <doc><![CDATA[
+                A node representing the qualified instantiation of a class, as in:
+                <pre>
+                <i>expr</i>.new <i>type</i>(<i>arg...</i>)
+                </pre>
+                For example, consider the following code:
+                <pre>
+                public class Example
+                {
+                    class A
                     {
+                        class B
+                        {
+                        }
+                    }
+                    &nbsp;
+                    public void foo()
+                    {
+                        A a = new A();
+                        A.B b = a.new B(); // qualified instantiation
                     }
                 }
-                &nbsp;
-                public void foo()
-                {
-                    A a = new A();
-                    A.B b = a.new B(); // qualified instantiation
+                </pre>
+            ]]></doc>
+        </type>
+
+        <type name="SuperFieldAccessNode" super="Node">
+            <tag name="RestrictedPrimaryExpressionNode" />
+            <prop name="type" type="UnparameterizedTypeNode" desc="the qualifying type" />
+            <prop name="identifier" type="IdentifierNode" desc="the identifier of the field being accessed" />
+            <doc><![CDATA[
+                A node representing a field selection from <tt>super</tt>, such as in the expression
+                <pre>
+                <tt>super.myvar</tt>
+                </pre>
+                In some cases, it is possible for <tt>super</tt> to be qualified with a type, such as in the following
+                convoluted example:
+                <pre>
+                public class A {
+                    protected int x = 0;
                 }
-            }
-            </pre>
-        ]]></doc>
-    </type>
-    <type name="SuperFieldAccessNode" super="Node">
-        <tag name="RestrictedPrimaryExpressionNode" />
-        <prop name="type" type="UnparameterizedTypeNode" desc="the qualifying type" />
-        <prop name="identifier" type="IdentifierNode" desc="the identifier of the field being accessed" />
-        <doc><![CDATA[
-            A node representing a field selection from <tt>super</tt>, such as in the expression
-            <pre>
-            <tt>super.myvar</tt>
-            </pre>
-            In some cases, it is possible for <tt>super</tt> to be qualified with a type, such as in the following
-            convoluted example:
-            <pre>
-            public class A {
-                protected int x = 0;
-            }
-            public class B extends A {
-                protected int x = 1;
-                public class C {
+                public class B extends A {
+                    protected int x = 1;
+                    public class C {
+                        public void foo() {
+                            System.out.println(B.super.x);
+                        }
+                    }
+                }
+                </pre>
+                Calling the <tt>foo</tt> method on the <tt>B.C</tt> class would print <tt>0</tt> rather than <tt>1</tt> because
+                <tt>super</tt> is qualified with the enclosing class <tt>B</tt>.  Therefore, the field is selected from the
+                enclosing instance's superclass (<tt>A</tt>) rather than the inner class's superclass (<tt>Object</tt>).  If a
+                type qualification is not necessary (and it usually won't be), <tt>type</tt> should be <tt>null</tt>.
+            ]]></doc>
+        </type>
+
+        <type name="SuperMethodInvocationNode" super="Node">
+            <tag name="RestrictedPrimaryExpressionNode" />
+            <tag name="StatementExpressionNode" />
+            <prop name="type" type="UnparameterizedTypeNode" desc="the qualifying type" />
+            <prop name="identifier" type="IdentifierNode" desc="the identifier of the method being invoked" />
+            <prop name="arguments" type="ListNode" typeArg="ExpressionNode" desc="the arguments to pass to the method" />
+            <prop name="typeArguments" type="ListNode" typeArg="TypeNode" desc="the type arguments for the method" />
+            <doc><![CDATA[
+                A node representing a method invocation from <tt>super</tt>, such as in the expression
+                <pre>
+                <tt>super.toString()</tt>
+                </pre>
+                In some cases, it is possible for <tt>super</tt> to be qualified with a type, such as in the following
+                convoluted example:
+                <pre>
+                public class A {
                     public void foo() {
-                        System.out.println(B.super.x);
+                        System.out.println(0);
                     }
                 }
-            }
-            </pre>
-            Calling the <tt>foo</tt> method on the <tt>B.C</tt> class would print <tt>0</tt> rather than <tt>1</tt> because
-            <tt>super</tt> is qualified with the enclosing class <tt>B</tt>.  Therefore, the field is selected from the
-            enclosing instance's superclass (<tt>A</tt>) rather than the inner class's superclass (<tt>Object</tt>).  If a
-            type qualification is not necessary (and it usually won't be), <tt>type</tt> should be <tt>null</tt>.
-        ]]></doc>
-    </type>
-    <type name="SuperMethodInvocationNode" super="Node">
-        <tag name="RestrictedPrimaryExpressionNode" />
-        <tag name="StatementExpressionNode" />
-        <prop name="type" type="UnparameterizedTypeNode" desc="the qualifying type" />
-        <prop name="identifier" type="IdentifierNode" desc="the identifier of the method being invoked" />
-        <prop name="arguments" type="ListNode" typeArg="ExpressionNode" desc="the arguments to pass to the method" />
-        <prop name="typeArguments" type="ListNode" typeArg="TypeNode" desc="the type arguments for the method" />
-        <doc><![CDATA[
-            A node representing a method invocation from <tt>super</tt>, such as in the expression
-            <pre>
-            <tt>super.toString()</tt>
-            </pre>
-            In some cases, it is possible for <tt>super</tt> to be qualified with a type, such as in the following
-            convoluted example:
-            <pre>
-            public class A {
-                public void foo() {
-                    System.out.println(0);
-                }
-            }
-            public class B extends A {
-                public void foo() {
-                    System.out.println(1);
-                }
-                public class C {
+                public class B extends A {
                     public void foo() {
-                        B.super.foo();
+                        System.out.println(1);
+                    }
+                    public class C {
+                        public void foo() {
+                            B.super.foo();
+                        }
                     }
                 }
-            }
-            </pre>
-            Calling the <tt>foo</tt> method on the <tt>B.C</tt> class would print <tt>0</tt> rather than <tt>1</tt> because
-            <tt>super</tt> is qualified with the enclosing class <tt>B</tt>.  Therefore, the method is invoked from the
-            enclosing instance's superclass (<tt>A</tt>) rather than the inner class's superclass (<tt>Object</tt>).  If a
-            type qualification is not necessary (and it usually won't be), <tt>type</tt> should be <tt>null</tt>.
-        ]]></doc>
-    </type>
-    <type name="ThisNode" super="Node">
-        <tag name="RestrictedPrimaryExpressionNode" />
-        <prop name="type" type="UnparameterizedTypeNode" desc="the qualifying type" />
-        <doc><![CDATA[
-            A node representing the code snippet <tt>this</tt> in terms of a value, such as in the expression
-            <pre>
-            Object o = this;
-            </pre>
-            In some cases (especially in inner classes), <tt>this</tt> may be qualified with a type, such as in
-            <pre>
-            public class A {
-                int x = 0;
-                class B {
+                </pre>
+                Calling the <tt>foo</tt> method on the <tt>B.C</tt> class would print <tt>0</tt> rather than <tt>1</tt> because
+                <tt>super</tt> is qualified with the enclosing class <tt>B</tt>.  Therefore, the method is invoked from the
+                enclosing instance's superclass (<tt>A</tt>) rather than the inner class's superclass (<tt>Object</tt>).  If a
+                type qualification is not necessary (and it usually won't be), <tt>type</tt> should be <tt>null</tt>.
+            ]]></doc>
+        </type>
+
+        <type name="ThisNode" super="Node">
+            <tag name="RestrictedPrimaryExpressionNode" />
+            <prop name="type" type="UnparameterizedTypeNode" desc="the qualifying type" />
+            <doc><![CDATA[
+                A node representing the code snippet <tt>this</tt> in terms of a value, such as in the expression
+                <pre>
+                Object o = this;
+                </pre>
+                In some cases (especially in inner classes), <tt>this</tt> may be qualified with a type, such as in
+                <pre>
+                public class A {
                     int x = 0;
-                    public void foo() {
-                        A.this.x++;
+                    class B {
+                        int x = 0;
+                        public void foo() {
+                            A.this.x++;
+                        }
                     }
                 }
-            }
-            </pre>
-            In that case, the <tt>type</tt> field contains the name of the qualified <tt>this</tt>.  Usually, <tt>this</tt>
-            is unqualified and the <tt>type</tt> field is <tt>null</tt>.
-        ]]></doc>
-    </type>
-    <type name="TypeCastNode" super="Node">
-        <tag name="NonAssignmentExpressionNode" />
-        <prop name="expression" type="ExpressionNode" desc="the expression to cast" />
-        <prop name="type" type="TypeNode" desc="the type to which to cast" />
-        <doc><![CDATA[
-            A node for typecast expressions, as in:
-            <pre>
-            (<i>type</i>) <i>expr</i>
-            </pre>
-        ]]></doc>
-    </type>
-    <type name="UnaryExpressionNode" super="Node">
-        <tag name="NonAssignmentExpressionNode" />
-        <prop name="expression" type="ExpressionNode" desc="the expression on which to operate" />
-        <prop name="operator" type="UnaryOperator" desc="the operator to apply" />
-        <doc><![CDATA[
-            A node for non-statement unary expressions, such as
-            <pre>
-            ~0
-            </pre>
-            or
-            <pre>
-            -x
-            </pre>
-            Note that this node does not cover those unary expressions which are also statement expressions (increment and
-            decrement); for those expressions, nodes of type {@link UnaryStatementExpressionNode} should be used.
-        ]]></doc>
-    </type>
-    <type name="UnaryStatementExpressionNode" super="Node">
-        <tag name="NonAssignmentExpressionNode" />
-        <tag name="StatementExpressionNode" />
-        <prop name="expression" type="ExpressionNode" desc="the expression on which to operate" />
-        <prop name="operator" type="UnaryStatementOperator" desc="the operator to apply" />
-        <doc><![CDATA[
-            A node for unary statement expression, such as
-            <pre>
-            ++x
-            </pre>
-            or
-            <pre>
-            y--
-            </pre>
-            Note that this node does not cover those unary expressions which cannot be used as statement expressions.  For
-            those expressions, nodes of type {@link UnaryExpressionNode} should be used.
-        ]]></doc>
-    </type>
-    <type name="UnqualifiedClassInstantiationNode" super="ClassInstantiationNode">
-        <prop name="type" type="DeclaredTypeNode" desc="the type being instantiated" />
-        <doc><![CDATA[
-            A node representing the instantiation of a class, as in:
-            <pre>
-            new <i>type</i>(<i>arg...</i>)
-            </pre>
-            If this class is not anonymous, the <tt>body</tt> field is <tt>null</tt>.
-        ]]></doc>
-    </type>
-    <type name="AssertStatementNode" super="Node">
-        <tag name="StatementNode" />
-        <prop name="testExpression" type="ExpressionNode" desc="the assertion's test expression" />
-        <prop name="messageExpression" type="ExpressionNode" desc="the assertion's message expression" />
-        <doc><![CDATA[
-            Represents an assert statement, as in
-            <pre>
-                assert <i>expr</i>;
-            </pre>
-            or
-            <pre>
-                assert <i>expr</i> : <i>expr</i>;
-            </pre>
-        ]]></doc>
-    </type>
-    <type name="BlockNode" super="Node">
-        <tag name="StatementNode" />
-        <prop name="statements" type="ListNode" typeArg="BlockStatementNode"
-            desc="the statements contained in this block statement" />
-        <doc><![CDATA[
-            Represents a block of statements, as in
-            <pre>
-            {
-                <i>statement</i>
-                <i>...</i>
-            }
-            </pre>
-        ]]></doc>
-    </type>
-    <type name="BreakNode" super="Node">
-        <tag name="StatementNode" />
-        <prop name="label" type="IdentifierNode" desc="the break label" />
-        <doc><![CDATA[
-            A node representing break statements, as in:
-            <pre>
-                break <i>label</i>;
-            </pre>
-        ]]></doc>
-    </type>
-    <type name="ContinueNode" super="Node">
-        <tag name="StatementNode" />
-        <prop name="label" type="IdentifierNode" desc="the continue label" />
-        <doc><![CDATA[
-            A node representing continue statements, as in:
-            <pre>
-                continue <i>label</i>;
-            </pre>
-        ]]></doc>
-    </type>
-    <type name="DoWhileLoopNode" super="Node">
-        <tag name="StatementNode" />
-        <prop name="condition" type="ExpressionNode" desc="the loop's condition" />
-        <prop name="statement" type="StatementNode" desc="the loop's statement" />
-        <doc><![CDATA[
-            A node representing a do-while loop, as in:
-            <pre>
-            do <i>body</i> while (<i>condition</i>);
-            </pre>
-        ]]></doc>
-    </type>
-    <type name="EnhancedForLoopNode" super="Node">
-        <tag name="StatementNode" />
-        <prop name="variable" type="VariableNode" desc="the iterator variable" />
-        <prop name="expression" type="ExpressionNode" desc="the loop's iterable expression" />
-        <prop name="statement" type="StatementNode" desc="the loop's statement" />
-        <doc><![CDATA[
-            A node representing a for-each loop, as in:
-            <pre>
-            for (<i>variable</i> : <i>expression</i>)
-                <i>body</i>
-            </pre>
-        ]]></doc>
-    </type>
-    <type name="ExpressionStatementNode" super="Node">
-        <tag name="StatementNode" />
-        <prop name="expression" type="StatementExpressionNode" desc="this statement's expression" />
-        <doc><![CDATA[
-            A node representing an expression statement.  This allows expressions to be used as statements, as in
-            <pre>
-            foo();
-            </pre>
-            or
-            <pre>
-            x++;
-            </pre>
-            Note that not every expression can be used in Java as a statement.  For instance, <tt>~0</tt> and <tt>5+3</tt>
-            are not valid statements.
-        ]]></doc>
-    </type>
-    <type name="ForLoopNode" super="Node">
-        <tag name="StatementNode" />
-        <prop name="initializer" type="ForInitializerNode" desc="the initializer used for this for loop" />
-        <prop name="condition" type="ExpressionNode" desc="the loop's termination condition" />
-        <prop name="update" type="ListNode" typeArg="StatementExpressionNode" desc="the loop's update operation" />
-        <prop name="statement" type="StatementNode" desc="the loop's statement" />
-        <doc><![CDATA[
-            A node representing a for-loop, as in:
-            <pre>
-            for (<i>initializers</i>; <i>condition</i>; <i>updaters</i>)
-                <i>body</i>
-            </pre>
-            If the loop has no initializers, the <tt>initializer</tt> field is <tt>null</tt>.  If the loop has no updates,
-            the <tt>update</tt> field is a {@link ListNode} with no children.  If the loop has no termination condition, the
-            <tt>condition</tt> field is <tt>null</tt>.  The <tt>update</tt> field should never be <tt>null</tt>.
-        ]]></doc>
-    </type>
-    <type name="IfNode" super="Node">
-        <tag name="StatementNode" />
-        <prop name="condition" type="ExpressionNode" desc="the condition" />
-        <prop name="thenStatement" type="StatementNode" desc="the then branch's statement" />
-        <prop name="elseStatement" type="StatementNode" desc="the else branch's statement" />
-        <doc><![CDATA[
-            A node representing an if-then-else statement, as in:
-            <pre>
-            if (<i>condition</i>) then <i>statement</i> else <i>statement</i>
-            </pre>
-        ]]></doc>
-    </type>
-    <type name="InlineTypeDeclarationNode" super="Node">
-        <tag name="BlockStatementNode" />
-        <prop name="declaration" type="InlineTypeDeclarableNode" desc="the type declaration" />
-        <doc><![CDATA[
-            A node representing an inline type declaration.  This is used to allow classes and enums to be declared
-            within a method body or similar environment.
-        ]]></doc>
-    </type>
-    <type name="LabeledStatementNode" super="Node">
-        <tag name="StatementNode" />
-        <prop name="label" type="IdentifierNode" desc="the statement's label" />
-        <prop name="statement" type="StatementNode" desc="the statement being labeled" />
-        <doc><![CDATA[
-            A node representing labeled statements, as in:
-            <pre>
-            <i>identifier</i>: <i>statement</i>
-            </pre>
-        ]]></doc>
-    </type>
-    <type name="ReturnNode" super="Node">
-        <tag name="StatementNode" />
-        <prop name="expression" type="ExpressionNode" desc="the expression to return" />
-        <doc><![CDATA[
-            A node representing a return statement, as in;
-            <pre>return <i>expr</i>;</pre>
-            or
-            <pre>return;</pre>
-            For void return statements, the <tt>expression</tt> is <tt>null</tt>.
-        ]]></doc>
-    </type>
-    <type name="SwitchNode" super="Node">
-        <tag name="StatementNode" />
-        <prop name="expression" type="ExpressionNode" desc="the expression over which to switch" />
-        <prop name="cases" type="ListNode" typeArg="CaseNode" desc="the cases in this switch" />
-        <doc><![CDATA[
-            A node to represent switch statements, as in:
-            <pre>
-            switch (<i>expr</i>) {
-                case <i>value</i>:
-                ...
-            }
-            </pre>
-        ]]></doc>
-    </type>
-    <type name="SynchronizedNode" super="Node">
-        <tag name="StatementNode" />
-        <prop name="expression" type="ExpressionNode" desc="the synchronization expression" />
-        <prop name="block" type="BlockNode" desc="the block of statements to synchronize" />
-        <doc><![CDATA[
-            A node to represent synchronization statements, as in:
-            <pre>
-            synchronized (<i>expr</i>) {
-                ...
-            }
-            </pre>
-        ]]></doc>
-    </type>
-    <type name="ThrowNode" super="Node">
-        <tag name="StatementNode" />
-        <prop name="expression" type="ExpressionNode" desc="the Throwable to throw" />
-        <doc><![CDATA[
-            A node to represent throw statements, as in:
-            <pre>
-            throw <i>expr</i>;
-            </pre>
-        ]]></doc>
-    </type>
-    <type name="TryNode" super="Node">
-        <tag name="StatementNode" />
-        <prop name="block" type="BlockNode" desc="the block in which to try" />
-        <prop name="catches" type="ListNode" typeArg="CatchNode" desc="the catch conditions" />
-        <prop name="finallyBlock" type="BlockNode" desc="the finally block" />
-        <doc><![CDATA[
-            A node to represent a try-catch block, as in:
-            <pre>
-            try <i>block</i>
-            catch (<i>type name</i>) <i>block</i>
-            </pre>
-            or
-            <pre>
-            try <i>block</i>
-            catch (<i>type name</i>) <i>block</i>
-            catch (<i>type name</i>) <i>block</i>
-            finally <i>block</i>
-            </pre>
-            If no catch block exists, the <tt>catches</tt> list node will contain no children.  If no finally block exists,
-            <tt>finallyBlock</tt> will be <tt>null</tt>.  <tt>catches</tt> is not permitted to be <tt>null</tt>.
-        ]]></doc>
-    </type>
-    <type name="VariableDeclarationNode" super="Node">
-        <tag name="BlockStatementNode" />
-        <prop name="modifiers" type="VariableModifiersNode" desc="the modifiers for this variable" />
-        <prop name="declarators" type="ListNode" typeArg="VariableDeclaratorNode" desc="the variable declarators for this node" />
-        <doc><![CDATA[
-            A node for the declaration of a variable, as in:
-                <pre>
-                <i>type identifier</i>;
                 </pre>
-            or
+                In that case, the <tt>type</tt> field contains the name of the qualified <tt>this</tt>.  Usually, <tt>this</tt>
+                is unqualified and the <tt>type</tt> field is <tt>null</tt>.
+            ]]></doc>
+        </type>
+
+        <type name="TypeCastNode" super="Node">
+            <tag name="NonAssignmentExpressionNode" />
+            <prop name="expression" type="ExpressionNode" desc="the expression to cast" />
+            <prop name="type" type="TypeNode" desc="the type to which to cast" />
+            <doc><![CDATA[
+                A node for typecast expressions, as in:
                 <pre>
-                <i>type identifier</i> = <i>expression</i>;
+                (<i>type</i>) <i>expr</i>
                 </pre>
-            or
+            ]]></doc>
+        </type>
+
+        <type name="UnaryExpressionNode" super="Node">
+            <tag name="NonAssignmentExpressionNode" />
+            <prop name="expression" type="ExpressionNode" desc="the expression on which to operate" />
+            <prop name="operator" type="UnaryOperator" desc="the operator to apply" />
+            <doc><![CDATA[
+                A node for non-statement unary expressions, such as
                 <pre>
-                <i>type identifier</i> = <i>expression</i>, <i>identifier</i> = <i>expression</i>, ...;
-        ]]></doc>
-    </type>
-    <type name="VariableDeclaratorNode" super="Node">
-        <tag name="StatementNode" />
-        <prop name="type" type="TypeNode" desc="the type of this variable" />
-        <prop name="name" type="IdentifierNode" desc="the name of this variable" />
-        <prop name="initializer" type="VariableInitializerNode" desc="the initializer to use" />
-        <doc><![CDATA[
-            Represents a declarator for a variable declaration.  For example, in
-            <pre>int x = 5, y;</pre>
-            this node either represents
-            <pre>x = 5</pre>
-            or
-            <pre>y</pre>
-            .  Note that variable multi-declaration syntax allows different types, as in
-            <pre>int x = 5, y[] = new int[2];</pre>
-            Hence, type exists on this node instead of its parent.  If the variable is not initialized, the
-            <tt>initializer</tt> field is <tt>null</tt>.
-        ]]></doc>
-    </type>
-    <type name="VoidStatementNode" super="Node">
-        <tag name="StatementNode" />
-        <doc><![CDATA[
-            A node representing a void statement, as in
-            <pre>;</pre>        
-        ]]></doc>
-    </type>
-    <type name="WhileLoopNode" super="Node">
-        <tag name="StatementNode" />
-        <prop name="condition" type="ExpressionNode" desc="the loop's condition" />
-        <prop name="statement" type="StatementNode" desc="the loop's statement" />
-        <doc><![CDATA[
-            A node for a while loop, as in:
-            <pre>
-            while (<i>condition</i>)
-                statement
-            </pre>
-        ]]></doc>
-    </type>
-    <type name="ArrayTypeNode" super="Node">
-        <tag name="ReferenceTypeNode" />
-        <tag name="LiteralizableTypeNode" />
-        <prop name="type" type="TypeNode" desc="the element type of the array" />
-        <doc><![CDATA[
-            Represents an array type.
-        ]]></doc>
-    </type>
-    <type name="ParameterizedTypeNode" super="Node">
-        <tag name="DeclaredTypeNode" />
-        <prop name="baseType" type="UnparameterizedTypeNode" desc="the base type being parameterized" />
-        <prop name="typeArguments" type="ListNode" typeArg="TypeArgumentNode" desc="the type arguments for this node" />
-        <doc><![CDATA[
-            A node representing parameterized types.  This node represents the use of a type which has type arguments, such
-            as Set<String> (which would be represented by the unparameterized type Set and the single-element argument list
-            containing the unparameterized type for String).
-        ]]></doc>
-    </type>
-    <type name="ParameterizedTypeSelectNode" super="Node">
-        <tag name="DeclaredTypeNode" />
-        <prop name="base" type="ParameterizedTypeNode" desc="the parameterized type from which a type is selected" />
-        <prop name="select" type="DeclaredTypeNode" desc="the type which is selected from the base" />
-        <doc><![CDATA[
-            A node representing a type selection from a parameterized type.  This node is used when a type is selected from
-            another type which is parameterized, such as in <tt>A&lt;X&gt;.B</tt>.  In that case, the root node is a
-            <tt>ParameterizedTypeSelectNode</tt>.  The <tt>select</tt> child is an <tt>UnparameterizedTypeNode</tt>
-            containing the name "B"; the <tt>base</tt> child is a {@link ParameterizedTypeNode}.  The <tt>base</tt> has
-            children of an {@link UnparameterizedTypeNode} containing the name "A" and a {@link ListNode} containing the
-            type argument with the name "X".
-        ]]></doc>
-    </type>
-    <type name="PrimitiveTypeNode" super="Node">
-        <tag name="TypeNode" />
-        <tag name="BaseTypeNode" />
-        <tag name="LiteralizableTypeNode" />
-        <prop name="primitiveType" type="PrimitiveType" desc="the primitive type being represented" />
-        <doc><![CDATA[
-            A node representing a primitive type.
-        ]]></doc>
-    </type>
-    <type name="UnparameterizedTypeNode" super="Node">
-        <tag name="DeclaredTypeNode" />
-        <tag name="LiteralizableTypeNode" />
-        <prop name="name" type="NameNode" desc="the name of the type" />
-        <doc><![CDATA[
-            Represents an unparameterized type.  Examples of unparameterized types in Java include most of the API: String,
-            InputStream, and so on.  Parameterized types, such as Set<String>, are not represented in this way.
-            Unparameterized types also represent type parameters, such as the <tt>T</tt> in <tt>Set<T></tt>.
-        ]]></doc>
-    </type>
-    <type name="VoidTypeNode" super="Node">
-        <tag name="TypeNode" />
-        <tag name="LiteralizableTypeNode" />
-        <doc><![CDATA[
-            A node representing the void type.  This is used, for example, in method return values.
-        ]]></doc>
-    </type>
-    <type name="BooleanLiteralNode" super="LiteralNode" superTypeArg="Boolean">
-        <doc><![CDATA[
-            A node representing a boolean literal.
-        ]]></doc>
-    </type>
-    <type name="CharLiteralNode" super="LiteralNode" superTypeArg="Character">
-        <doc><![CDATA[
-            A node representing a character literal.
-        ]]></doc>
-    </type>
-    <type name="ClassLiteralNode" super="LiteralNode" superTypeArg="LiteralizableTypeNode">
-        <doc><![CDATA[
-            A note representing a class literal, such as <tt>String.class</tt>.  Note that the BSJ compiler API includes a
-            {@link VoidTypeNode}.  This is technically a violation (as Java does not treat <tt>void</tt> as a type) but
-            allows this node to represent <tt>void.class</tt>.
-        ]]></doc>
-    </type>
-    <type name="DoubleLiteralNode" super="LiteralNode" superTypeArg="Double">
-        <doc><![CDATA[
-            A node representing a double literal.
-        ]]></doc>
-    </type>
-    <type name="FloatLiteralNode" super="LiteralNode" superTypeArg="Float">
-        <doc><![CDATA[
-            A node representing a float literal.
-        ]]></doc>
-    </type>
-    <type name="IntLiteralNode" super="LiteralNode" superTypeArg="Integer">
-        <doc><![CDATA[
-            A node representing an int literal.
-        ]]></doc>
-    </type>
-    <type name="LongLiteralNode" super="LiteralNode" superTypeArg="Long">
-        <doc><![CDATA[
-            A node representing a long literal.
-        ]]></doc>
-    </type>
-    <type name="NullLiteralNode" super="LiteralNode" superTypeArg="Void">
-        <doc><![CDATA[
-            A node representing a null literal.
-        ]]></doc>
-    </type>
-    <type name="StringLiteralNode" super="LiteralNode" superTypeArg="String">
-        <doc><![CDATA[
-            A node representing a String literal.
-        ]]></doc>
-    </type>
-    <type name="AnnotationMethodDeclarationNode" super="Node">
-        <tag name="AnnotationMemberNode" />
-        <prop name="modifiers" type="AnnotationMethodModifiersNode" desc="the modifiers for this annotation method" />
-        <prop name="type" type="TypeNode" desc="the return type of this annotation method" />
-        <prop name="identifier" type="IdentifierNode" desc="this annotation method's name" />
-        <prop name="defaultValue" type="AnnotationValueNode" desc="the default value for this method" />
-        <prop name="javadoc" type="JavadocNode" desc="the associated javadoc comment for this node" />
-        <doc><![CDATA[
-            A node representing an annotation method declaration, as in:
-            <pre>
-                <i>modifiers type identifier</i> () default <i>defaultValue</i>;
-            </pre>
-        ]]></doc>
-    </type>
-    <type name="ConstructorDeclarationNode" super="Node">
-        <tag name="ClassMemberNode" />
-        <prop name="identifier" type="IdentifierNode" desc="the identifier for the name of this constructor" />
-        <prop name="body" type="ConstructorBodyNode" desc="the body of this constructor" />
-        <prop name="modifiers" type="ConstructorModifiersNode" desc="the modifiers for this constructor" />
-        <prop name="parameters" type="ListNode" typeArg="VariableNode" desc="the parameters declared by this constructor" />
-        <prop name="varargParameter" type="VariableNode" desc="the vararg parameter declared by this method" />
-        <prop name="throwTypes" type="ListNode" typeArg="UnparameterizedTypeNode"
-            desc="the types of exceptions thrown by this constructor" />
-        <prop name="typeParameters" type="ListNode" typeArg="TypeParameterNode"
-            desc="this constructor's applicable type parameters" />
-        <prop name="javadoc" type="JavadocNode" desc="the associated javadoc comment for this node" />
-        <doc><![CDATA[
-            A node representing a constructor declaration, as in:
-            <pre>
-                <i>modifiers typeParams typeName</i>(<i>parameter...</i>) throws <i>expr...</i>
-                    <i>body</i>
-            </pre>
-            See {@link MethodDeclarationNode} for more information.
-        ]]></doc>
-    </type>
-    <type name="EnumConstantDeclarationNode" super="Node">
-        <prop name="annotations" type="ListNode" typeArg="AnnotationNode" desc="the annotations on this constant" />
-        <prop name="identifier" type="IdentifierNode" desc="the name of this constant" />
-        <prop name="arguments" type="ListNode" typeArg="ExpressionNode" desc="the arguments to the enum constructor" />
-        <prop name="body" type="AnonymousClassBodyNode" desc="the body used to anonymously subclass the constant" />
-        <prop name="javadoc" type="JavadocNode" desc="the associated javadoc comment for this node" />
-        <doc><![CDATA[
-            A node representing an enum constant.  While enum constants typically consist of a single name, many optional
-            extensions exist.  In the likely case that this constant is not an anonymous subclass, <tt>body</tt> is
-            <tt>null</tt>.
-        ]]></doc>
-    </type>
-    <type name="FieldDeclarationNode" super="Node">
-        <tag name="ClassMemberNode" />
-        <tag name="InterfaceMemberNode" />
-        <tag name="AnnotationMemberNode" />
-        <tag name="AnonymousClassMemberNode" />
-        <prop name="modifiers" type="FieldModifiersNode" desc="the modifiers for this field" />
-        <prop name="declarators" type="ListNode" typeArg="VariableDeclaratorNode" desc="the variable declarators for this node" />
-        <prop name="javadoc" type="JavadocNode" desc="the associated javadoc comment for this node" />
-        <doc><![CDATA[
-            A node representing a field declaration.  Constants are represented by this node as well.
-        ]]></doc>
-    </type>
-    <type name="InitializerDeclarationNode" super="Node">
-        <tag name="ClassMemberNode" />
-        <tag name="AnonymousClassMemberNode" />
-        <prop name="staticInitializer" type="boolean" desc="whether or not the initializer is static" />
-        <prop name="body" type="BlockNode" desc="the body of the initializer" />
-        <doc><![CDATA[
-            Declares an initializer, whether static or otherwise, as in
-            <pre>
-            static {
-                <i>statement...</i>
-            }
-            </pre>
-        ]]></doc>
-    </type>
-    <type name="MethodDeclarationNode" super="Node">
-        <tag name="ClassMemberNode" />
-        <tag name="InterfaceMemberNode" />
-        <tag name="AnonymousClassMemberNode" />
-        <prop name="body" type="BlockNode" desc="the body of this method" />
-        <prop name="modifiers" type="MethodModifiersNode" desc="the modifiers for this method" />
-        <prop name="identifier" type="IdentifierNode" desc="this method's name" />
-        <prop name="parameters" type="ListNode" typeArg="VariableNode" desc="the parameters declared by this method" />
-        <prop name="varargParameter" type="VariableNode" desc="the vararg parameter declared by this method" />
-        <prop name="returnType" type="TypeNode" desc="the type of value returned" />
-        <prop name="throwTypes" type="ListNode" typeArg="UnparameterizedTypeNode" desc="the types of exceptions thrown by this method" />
-        <prop name="typeParameters" type="ListNode" typeArg="TypeParameterNode" desc="this method's applicable type parameters" />
-        <prop name="javadoc" type="JavadocNode" desc="the associated javadoc comment for this node" />
-        <doc><![CDATA[
-            A node representing a method declaration, as in:
-            <pre>
-                <i>modifiers typeParams type name</i>(<i>parameter...</i>) throws <i>expr...</i>
-                    <i>body</i>
-            </pre>
-            Note that the vararg parameter is used in cases where a variable argument is used, such as in
-            <pre>
-                public void foo(String... vararg)
-            </pre>
-            The type on the <tt>varargParameter</tt> node should be <tt>String</tt> in the above case (and <i>not</i>
-            <tt>String[]</tt>).  Also observe that methods with no body, such as the abstract method
-            <pre>public abstract void foo();</pre>
-            will have a <tt>null</tt> body.
-        ]]></doc>
-    </type>
-    <type name="AnnotationBodyNode" super="Node">
-        <prop name="members" type="ListNode" typeArg="AnnotationMemberNode" desc="the members of this annotation body" />
-        <doc><![CDATA[
-            Represents the body of an annotation declaration.
-        ]]></doc>
-    </type>
-    <type name="AnonymousClassBodyNode" super="Node">
-        <prop name="members" type="ListNode" typeArg="AnonymousClassMemberNode" desc="the members of this anonymous class body" />
-        <doc><![CDATA[
-            Represents the body of an anonymous class declaration.  This body is distinct from {@link ClassBodyNode} in that
-            it does not permit constructors.  There is no corresponding <tt>AnonymousClassDeclarationNode</tt> because the
-            expression which contains this body implicitly stands as the declaration of that type.
-        ]]></doc>
-    </type>
-    <type name="ClassBodyNode" super="Node">
-        <prop name="members" type="ListNode" typeArg="ClassMemberNode" desc="the members of this class body" />
-        <doc><![CDATA[
-            Represents the body of a class declaration.
-        ]]></doc>
-    </type>
-    <type name="EnumBodyNode" super="Node">
-        <prop name="constants" type="ListNode" typeArg="EnumConstantDeclarationNode" desc="the enumeration constants" />
-        <prop name="members" type="ListNode" typeArg="ClassMemberNode" desc="the members of the class body part" />
-        <doc><![CDATA[
-            Represents the body of an enum declaration.
-        ]]></doc>
-    </type>
-    <type name="InterfaceBodyNode" super="Node">
-        <prop name="members" type="ListNode" typeArg="InterfaceMemberNode" desc="the members of this interface body" />
-        <doc><![CDATA[
-            Represents the body of an interface declaration.
-        ]]></doc>
-    </type>
-    <type name="AnnotationDeclarationNode" super="NamedTypeDeclarationNode">
-        <prop name="modifiers" type="AnnotationModifiersNode" desc="the modifiers for this type" />
-        <prop name="body" type="AnnotationBodyNode" desc="this annotation's body" />
-        <doc><![CDATA[
-            Represents the declaration of an annotation, as in:
-            <pre>
-            <i>modifiers</i> @interface <i>name</i>
-            {
-                <i>member</i>
-                ...
-            }
-            </pre>
-        ]]></doc>
-    </type>
-    <type name="ClassDeclarationNode" super="NamedTypeDeclarationNode">
-        <tag name="InlineTypeDeclarableNode" />
-        <prop name="modifiers" type="ClassModifiersNode" desc="the modifiers for this type" />
-        <prop name="extendsClause" type="TypeNode" desc="the extends clause" />
-        <prop name="implementsClause" type="ListNode" typeArg="TypeNode" desc="the implements clause" />
-        <prop name="body" type="ClassBodyNode" desc="the body of this class" />
-        <prop name="typeParameters" type="ListNode" typeArg="TypeParameterNode" desc="this class's type parameters" />
-        <doc><![CDATA[
-            Represents the declaration of a class, as in:
-            <pre>
-            <i>modifiers<i> class <i>name</i>&lt;<i>typeParam...</i>&gt; extends <i>type</i> implements <i>type...</i>
-            {
-                <i>member</i>
-                <i>...</i>
-            }
-            </pre>
-        ]]></doc>
-    </type>
-    <type name="EnumDeclarationNode" super="NamedTypeDeclarationNode">
-        <tag name="InlineTypeDeclarableNode" />
-        <prop name="modifiers" type="EnumModifiersNode" desc="the modifiers for this type" />
-        <prop name="implementsClause" type="ListNode" typeArg="TypeNode" desc="the implements clause" />
-        <prop name="body" type="EnumBodyNode" desc="this enum's body" />
-        <doc><![CDATA[
-            Represents the declaration of a class, as in:
-            <pre>
-            <i>modifiers<i> enum <i>name</i> implements <i>type...</i>
-            {
-                <i>member</i>
-                <i>...</i>
-            }
-            </pre>
-        ]]></doc>
-    </type>
-    <type name="InterfaceDeclarationNode" super="NamedTypeDeclarationNode">
-        <prop name="modifiers" type="InterfaceModifiersNode" desc="the modifiers for this type" />
-        <prop name="extendsClause" type="ListNode" typeArg="TypeNode" desc="the extends clause" />
-        <prop name="body" type="InterfaceBodyNode" desc="this interface's body" />
-        <prop name="typeParameters" type="ListNode" typeArg="TypeParameterNode" desc="this class's type parameters" />
-        <doc><![CDATA[
-            Represents the declaration of an interface, as in:
-            <pre>
-            <i>modifiers<i> interface <i>name</i>&lt;<i>typeParam...</i>&gt; extends <i>type...</i>
-            {
-                <i>member</i>
-                <i>...</i>
-            }
-            </pre>
-        ]]></doc>
-    </type>
-    <type name="JavadocNode" super="Node">
-        <prop name="text" type="String" desc="the parsed text of this Javadoc comment" />
-        <doc><![CDATA[
-            Represents a complete javadoc comment, as in:
-            <pre>
-            /** 
-             * Methodname.
-             * @param x parameter x.
-             * @returns a value.
-             *&#47;
-            </pre>
-        ]]></doc>
-    </type>
-    <type name="NamedTypeDeclarationNode" super="Node" mode="abstract">
-        <tag name="TypeDeclarationNode" />
-        <prop name="identifier" type="IdentifierNode" desc="the name of this declared type" />
-        <prop name="javadoc" type="JavadocNode" desc="the associated javadoc comment for this node" />
-        <doc><![CDATA[
-            Acts as a superclass for all named type declarations.
-        ]]></doc>
-    </type>
-    <type name="VoidTypeDeclarationNode" super="Node">
-        <tag name="TypeDeclarationNode" />
-        <doc><![CDATA[
-            Represents the void declaration (a single semi-colon).
-        ]]></doc>
-    </type>
-    <type name="AnnotationAnnotationValueNode" super="Node">
-        <tag name="AnnotationValueNode" />
-        <prop name="annotation" type="AnnotationNode" desc="the annotation" />
-        <doc><![CDATA[
-            A value in an annotation which is another annotation.  This node is used for complex annotations, such as
-            <pre>@Foo(a=@Bar)</pre>
-            In the above snippet, this node would represent the
-            <pre>@Bar</pre>
-            portion.
-        ]]></doc>
-    </type>
-    <type name="AnnotationArrayValueNode" super="Node">
-        <tag name="AnnotationValueNode" />
-        <prop name="values" type="ListNode" typeArg="AnnotationValueNode" desc="the array values" />
-        <doc><![CDATA[
-            A value in an annotation representing an array.  This node is distinct from the {@link ArrayInitializerNode}
-            because it allows annotations (by way of {@link AnnotationAnnotationValueNode}) as well as expressions.
-        ]]></doc>
-    </type>
-    <type name="AnnotationExpressionValueNode" super="Node">
-        <tag name="AnnotationValueNode" />
-        <prop name="expression" type="NonAssignmentExpressionNode" desc="the expression" />
-        <doc><![CDATA[
-            A value in an annotation which is an expression.  This value may not be an assignment expression.
-        ]]></doc>
-    </type>
-    <type name="AnnotationNode" super="Node" mode="abstract">
-        <prop name="annotationType" type="UnparameterizedTypeNode" desc="the annotation type" />
-        <doc><![CDATA[
-            Acts as a base class for annotation nodes.  Subclasses distinguish between the different types of annotation
-            sugar.
-        ]]></doc>
-    </type>
-    <type name="AnnotationElementNode" super="Node">
-        <prop name="identifier" type="IdentifierNode" desc="the identifier" />
-        <prop name="value" type="AnnotationValueNode" desc="the element's value" />
-        <doc><![CDATA[
-            Represents an annotation element, as in
-            <pre>
-            <i>ident</i>=<i>value</i>
-            </pre>
-        ]]></doc>
-    </type>
-    <type name="NormalAnnotationNode" super="AnnotationNode">
-        <prop name="arguments" type="ListNode" typeArg="AnnotationElementNode" desc="the arguments" />
-        <doc><![CDATA[
-            Represents the usage of an annotation, as in:
-            <pre>@<i>type</i></pre>
-            or
-            <pre>@<i>type</i>(<i>key</i>=<i>value</i>,...)</pre>
-            Note that this node does not handle the single element annotation format (<pre>@Foo("bar")</pre>).  That is
-            handled by the {@link SingleElementAnnotationNode} class.
-        ]]></doc>
-    </type>
-    <type name="SingleElementAnnotationNode" super="AnnotationNode">
-        <prop name="value" type="AnnotationValueNode" desc="the value of the &quot;value&quot; element" />
-        <doc><![CDATA[
-            Represents a single element annotation, as in:
-            <pre>@<i>type</i>(<i>value</i>)</pre>
-        ]]></doc>
-    </type>
-    <type name="AlternateConstructorInvocationNode" super="ConstructorInvocationNode">
-        <doc><![CDATA[
-            Represents an alternate constructor invocation, as in
-            <pre>
-            this("foo")
-            </pre>
-            Note that this only applies to <i>alternate</i> constructor invocations (those using the <tt>this</tt> keyword).
-            For superclass constructor invocations, see {@link SuperclassConstructorInvocationNode}.
-        ]]></doc>
-    </type>
-    <type name="ArrayInitializerNode" super="Node">
-        <tag name="VariableInitializerNode" />
-        <prop name="initializers" type="ListNode" typeArg="VariableInitializerNode" desc="the initializers for the array" />
-        <doc><![CDATA[
-            A node representing the initialization of an array, as in:
-            <pre>
-            {<i>initializer</i>,...}
-            </pre>
-            The resulting array contains one element for each initializer expression.
-        ]]></doc>
-    </type>
-    <type name="CaseNode" super="Node">
-        <prop name="expression" type="ExpressionNode" desc="the expression used in this case label" />
-        <prop name="statements" type="ListNode" typeArg="BlockStatementNode" desc="the statements to execute in this case node" />
-        <doc><![CDATA[
-            A node representing a switch's case block, as in:
-            <pre>
-            case <i>expression</i>:
-                <i>statement</i>
-                <i>...</i>
-            </pre>
-            or
-            <pre>
-            default:
-                <i>statement</i>
-                <i>...</i>
-            </pre>
-            If the switch label is <tt>default</tt>, <tt>expression</tt> is <tt>null</tt>. 
-        ]]></doc>
-    </type>
-    <type name="CatchNode" super="Node">
-        <prop name="block" type="BlockNode" desc="the block to execute when this catch occurs" />
-        <prop name="parameter" type="VariableNode" desc="this catch block's exception variable" />
-        <doc><![CDATA[
-            A node representing a catch block, as in
-            <pre>
-            catch (<i>type identifier</i>)
-                <i>block</i>
-            </pre>
-        ]]></doc>
-    </type>
-    <type name="CompilationUnitNode" super="Node">
-        <prop name="packageDeclaration" type="PackageDeclarationNode" desc="the package declaration for this unit" />
-        <prop name="imports" type="ListNode" typeArg="ImportNode" desc="the imports used in this unit" />
-        <prop name="typeDecls" type="ListNode" typeArg="TypeDeclarationNode" desc="the type declarations of this unit" />
-        <doc><![CDATA[
-            Represents a BSJ compilation unit.
-        ]]></doc>
-    </type>
-    <type name="ConstructorBodyNode" super="Node">
-        <prop name="constructorInvocation" type="ConstructorInvocationNode" desc="the (nullable) constructor invocation" />
-        <prop name="statements" type="ListNode" typeArg="BlockStatementNode" desc="the statements contained in this constructor" />
-        <doc><![CDATA[
-            Represents a constructor body.  For example, in
-            <pre>
-            public MyClass()
-            {
-                super();
-                this.foo = 0;
-            }
-            </pre>
-            this node would represent all but the first line.  Observe that this structure enforces the Java language rule
-            that there be exactly one explicit constructor invocation and that it appears at the top of the constructor
-            body.
-        ]]></doc>
-    </type>
-    <type name="ConstructorInvocationNode" super="Node" mode="abstract">
-        <prop name="arguments" type="ListNode" typeArg="ExpressionNode" desc="the arguments to pass to the method" />
-        <prop name="typeArguments" type="ListNode" typeArg="TypeNode" desc="the type arguments for the method" />
-        <doc><![CDATA[
-            This class is a common superclass to both types of explicit constructor invocations: alternate constructor
-            invocations (those using the <tt>this</tt> keyword) and superclass constructor invocations (those using the
-            <tt>super</tt> keyword).  This distinction is made because, despite their similarities in use and syntax, the
-            language specification treats these two entities as distinct (and there are some corner cases for the superclass
-            constructor syntax which are best contained
-        ]]></doc>
-    </type>
-    <type name="ForInitializerDeclarationNode" super="Node">
-        <tag name="ForInitializerNode" />
-        <prop name="declaration" type="VariableDeclarationNode" desc="the variables declared in this initializer" />
-        <doc><![CDATA[
-            Represents a for loop initializer which declares variables.  For example, in
-            <pre>for (int i=0;i<n;i++)</pre>
-            this node represents
-            <pre>int i=0</pre>
-            Note that, due to the nature of {@link VariableDeclarationNode}, this can be a variable muilti-declaration.
-        ]]></doc>
-    </type>
-    <type name="ForInitializerExpressionNode" super="Node">
-        <tag name="ForInitializerNode" />
-        <prop name="expressions" type="ListNode" typeArg="StatementExpressionNode" desc="the expressions used in this initializer" />
-        <doc><![CDATA[
-            Represents a for loop initializer which contains expressions.  For example, in
-            <pre>for (i=0,j=0;i<n || j<m;i++,j++)</pre>
-            this node represents
-            <pre>i=0,j=0</pre>
-        ]]></doc>
-    </type>
-    <type name="ImportOnDemandNode" super="Node">
-        <tag name="ImportNode" />
-        <prop name="name" type="NameNode" desc="the name of the package to import" />
-        <prop name="staticImport" type="boolean" desc="the static-ness of the import" />
-        <doc><![CDATA[
-            A node representing an on-demand import statement, such as "<tt>import java.util.*</tt>".
-        ]]></doc>
-    </type>
-    <type name="ImportSingleTypeNode" super="Node">
-        <tag name="ImportNode" />
-        <prop name="name" type="NameNode" desc="the name of the type to import" />
-        <prop name="staticImport" type="boolean" desc="the static-ness of the import" />
-        <doc><![CDATA[
-            A node representing a single type import statement, such as "<tt>import java.util.Set</tt>".
-        ]]></doc>
-    </type>
-    <type name="ListNode" typeParam="T extends Node" super="Node">
-        <prop name="children" type="List" typeArg="T" mode="readOnly" desc="the list of children" />
-        <include file="ListNode.java" />
-        <doc><![CDATA[
-            Represents a list of nodes.  Nodes do not simply have lists as properties as the ListNode allows additional
-            information to be tracked as necessary.
-        ]]></doc>
-        <nogen id="cons" />
-        <nogen id="children" />
-    </type>
-    <type name="Node" mode="abstract">
-        <prop name="startLocation" type="BsjSourceLocation" mode="skip"
-            desc="the location at which this node's text starts (inclusive)" />
-        <prop name="stopLocation" type="BsjSourceLocation" mode="skip"
-            desc="the location at which this node's text stops (exclusive)" />
-        <include file="Node.java" />
-        <doc><![CDATA[
-            The parent class for all BSJ AST nodes.
-        ]]></doc>
-    </type>
-    <type name="PackageDeclarationNode" super="Node">
-        <prop name="name" type="NameNode" desc="the name of the package" />
-        <prop name="annotations" type="ListNode" typeArg="AnnotationNode" desc="the annotations on the package declaration" />
-        <doc><![CDATA[
-            A node representing a package declaration, as in
-            <pre>
-                package <i>packageName</i>;
-            </pre>
-            or
-            <pre>
-                <i>annotations</i>
-                package <i>packageName</i>;
-            </pre>
-        ]]></doc>
-    </type>
-    <type name="SuperclassConstructorInvocationNode" super="ConstructorInvocationNode">
-        <prop name="qualifyingExpression" type="PrimaryExpressionNode" desc="the qualifying expression for the enclosing object" />
-        <doc><![CDATA[
-            Represents an alternate constructor invocation, as in
-            <pre>
-            super("foo")
-            </pre>
-            or in the rarer syntax
-            <pre>
-            (new Foo()).super(0)
-            </pre>
-            .  Note that this only applies to <i>superclass</i> constructor invocations (those using the <tt>super</tt>
-            keyword).  For alternate constructor invocations, see {@link AlternateConstructorInvocationNode}.
-        ]]></doc>
-    </type>
-    <type name="TypeParameterNode" super="Node">
-        <prop name="identifier" type="IdentifierNode" desc="the base type name for the parameter" />
-        <prop name="bounds" type="ListNode" typeArg="DeclaredTypeNode" desc="the bounds over the base type" />
-        <doc><![CDATA[
-            A node for type parameters, as in:
-            <pre>
-            <i>ident</i>
-            </pre>
-            or
-            <pre>
-            <i>ident</i> extends <i>type</i>
-            </pre>
-            or
-            <pre>
-            <i>ident</i> extends <i>type</i> &amp; <i>type...</i>
-            </pre>
-        ]]></doc>
-    </type>
-    <type name="VariableNode" super="Node">
-        <prop name="modifiers" type="VariableModifiersNode" desc="the modifiers of this parameter" />
-        <prop name="type" type="TypeNode" desc="the type of the variable" />
-        <prop name="identifier" type="IdentifierNode" desc="the name of the variable" />
-        <doc><![CDATA[
-            A node describing a variable, as in:
+                ~0
+                </pre>
+                or
                 <pre>
-                <i>type identifier</i>
-                </pre>        
-        ]]></doc>
-    </type>
-    <type name="WildcardTypeNode" super="Node">
-        <tag name="TypeArgumentNode" />
-        <prop name="bound" type="ReferenceTypeNode" desc="the wildcard's bound" />
-        <prop name="upperBound" type="boolean"
-            desc="whether or not the wildcard's bound is an upper (&lt;tt&gt;extends&lt;/tt&gt;) bound" />
-        <doc><![CDATA[
-            A node for wildcard type parameters, as in:
-            <pre>
-            ? extends <i>type</i>
-            </pre>
-            (in which case <tt>bound</tt> is non-<tt>null</tt> and <tt>upperBound</tt> is <tt>true</tt>) or
-            <pre>
-            ? super <i>type</i>
-            </pre>
-            (in which case <tt>bound</tt> is non-<tt>null</tt> and <tt>upperBound</tt> is <tt>false</tt>) or
-            <pre>
-            ?
-            </pre>
-            (in which case <tt>bound</tt> is <tt>null</tt>).
-        ]]></doc>
-    </type>
-    <type name="MetaprogramAnchorNode" typeParam="T extends Node" super="Node" mode="abstract">
-        <prop name="replacement" type="T" mode="skip" desc="the replacement node for this metaprogram" />
-        <prop name="metaprogram" type="MetaprogramNode" desc="the metaprogram on this node" />
-        <include file="MetaprogramAnchorNode.java" />
-        <doc><![CDATA[
-            The replacement field on this node is used to indicate the node with which this node will be replaced once the
-            execution of this metaprogram terminates.  This is initially defaulted to a no-op.
-        ]]></doc>
-    </type>
-    <type name="MetaprogramNode" super="Node">
-        <prop name="body" type="ListNode" typeArg="BlockStatementNode" desc="the list of statements in the metaprogram's body" />
-        <doc><![CDATA[
-            A node for metaprograms, as in
-            <pre>
-            [: <i>statement...</i> :]
-            </pre>
-        ]]></doc>
-    </type>
-    <type name="BlockStatementMetaprogramAnchorNode" super="MetaprogramAnchorNode" superTypeArg="BlockStatementNode">
-        <tag name="BlockStatementNode" />
-        <doc><![CDATA[
-            A node representing a metaprogram as a block statement.
-        ]]></doc>
-        <override prop="replacement" expr="makeVoidStatementNode()" />
-    </type>
-    <type name="TypeDeclarationMetaprogramAnchorNode" super="MetaprogramAnchorNode" superTypeArg="TypeDeclarationNode">
-        <tag name="TypeDeclarationNode" />
-        <doc><![CDATA[
-            A node representing a metaprogram found at the top level of a source file.
-        ]]></doc>
-        <override prop="replacement" expr="makeVoidTypeDeclarationNode()" />
-    </type>
-    <type name="CodeLiteralNode" super="LiteralNode" superTypeArg="Node">
-        <doc><![CDATA[
-            A node representing a code literal.
-        ]]></doc>
-    </type>
+                -x
+                </pre>
+                Note that this node does not cover those unary expressions which are also statement expressions (increment and
+                decrement); for those expressions, nodes of type {@link UnaryStatementExpressionNode} should be used.
+            ]]></doc>
+        </type>
+
+        <type name="UnaryStatementExpressionNode" super="Node">
+            <tag name="NonAssignmentExpressionNode" />
+            <tag name="StatementExpressionNode" />
+            <prop name="expression" type="ExpressionNode" desc="the expression on which to operate" />
+            <prop name="operator" type="UnaryStatementOperator" desc="the operator to apply" />
+            <doc><![CDATA[
+                A node for unary statement expression, such as
+                <pre>
+                ++x
+                </pre>
+                or
+                <pre>
+                y--
+                </pre>
+                Note that this node does not cover those unary expressions which cannot be used as statement expressions.  For
+                those expressions, nodes of type {@link UnaryExpressionNode} should be used.
+            ]]></doc>
+        </type>
+
+        <type name="UnqualifiedClassInstantiationNode" super="ClassInstantiationNode">
+            <prop name="type" type="DeclaredTypeNode" desc="the type being instantiated" />
+            <doc><![CDATA[
+                A node representing the instantiation of a class, as in:
+                <pre>
+                new <i>type</i>(<i>arg...</i>)
+                </pre>
+                If this class is not anonymous, the <tt>body</tt> field is <tt>null</tt>.
+            ]]></doc>
+        </type>
+
+        <!-- ===================== STATEMENT NODES ====================== -->
+        
+        <type name="AssertStatementNode" super="Node">
+            <tag name="StatementNode" />
+            <prop name="testExpression" type="ExpressionNode" desc="the assertion's test expression" />
+            <prop name="messageExpression" type="ExpressionNode" desc="the assertion's message expression" />
+            <doc><![CDATA[
+                Represents an assert statement, as in
+                <pre>
+                    assert <i>expr</i>;
+                </pre>
+                or
+                <pre>
+                    assert <i>expr</i> : <i>expr</i>;
+                </pre>
+            ]]></doc>
+        </type>
+
+        <type name="BlockNode" super="Node">
+            <tag name="StatementNode" />
+            <prop name="statements" type="ListNode" typeArg="BlockStatementNode"
+                desc="the statements contained in this block statement" />
+            <doc><![CDATA[
+                Represents a block of statements, as in
+                <pre>
+                {
+                    <i>statement</i>
+                    <i>...</i>
+                }
+                </pre>
+            ]]></doc>
+        </type>
+
+        <type name="BreakNode" super="Node">
+            <tag name="StatementNode" />
+            <prop name="label" type="IdentifierNode" desc="the break label" />
+            <doc><![CDATA[
+                A node representing break statements, as in:
+                <pre>
+                    break <i>label</i>;
+                </pre>
+            ]]></doc>
+        </type>
+
+        <type name="ContinueNode" super="Node">
+            <tag name="StatementNode" />
+            <prop name="label" type="IdentifierNode" desc="the continue label" />
+            <doc><![CDATA[
+                A node representing continue statements, as in:
+                <pre>
+                    continue <i>label</i>;
+                </pre>
+            ]]></doc>
+        </type>
+
+        <type name="DoWhileLoopNode" super="Node">
+            <tag name="StatementNode" />
+            <prop name="condition" type="ExpressionNode" desc="the loop's condition" />
+            <prop name="statement" type="StatementNode" desc="the loop's statement" />
+            <doc><![CDATA[
+                A node representing a do-while loop, as in:
+                <pre>
+                do <i>body</i> while (<i>condition</i>);
+                </pre>
+            ]]></doc>
+        </type>
+
+        <type name="EnhancedForLoopNode" super="Node">
+            <tag name="StatementNode" />
+            <prop name="variable" type="VariableNode" desc="the iterator variable" />
+            <prop name="expression" type="ExpressionNode" desc="the loop's iterable expression" />
+            <prop name="statement" type="StatementNode" desc="the loop's statement" />
+            <doc><![CDATA[
+                A node representing a for-each loop, as in:
+                <pre>
+                for (<i>variable</i> : <i>expression</i>)
+                    <i>body</i>
+                </pre>
+            ]]></doc>
+        </type>
+
+        <type name="ExpressionStatementNode" super="Node">
+            <tag name="StatementNode" />
+            <prop name="expression" type="StatementExpressionNode" desc="this statement's expression" />
+            <doc><![CDATA[
+                A node representing an expression statement.  This allows expressions to be used as statements, as in
+                <pre>
+                foo();
+                </pre>
+                or
+                <pre>
+                x++;
+                </pre>
+                Note that not every expression can be used in Java as a statement.  For instance, <tt>~0</tt> and <tt>5+3</tt>
+                are not valid statements.
+            ]]></doc>
+        </type>
+
+        <type name="ForLoopNode" super="Node">
+            <tag name="StatementNode" />
+            <prop name="initializer" type="ForInitializerNode" desc="the initializer used for this for loop" />
+            <prop name="condition" type="ExpressionNode" desc="the loop's termination condition" />
+            <prop name="update" type="ListNode" typeArg="StatementExpressionNode" desc="the loop's update operation" />
+            <prop name="statement" type="StatementNode" desc="the loop's statement" />
+            <doc><![CDATA[
+                A node representing a for-loop, as in:
+                <pre>
+                for (<i>initializers</i>; <i>condition</i>; <i>updaters</i>)
+                    <i>body</i>
+                </pre>
+                If the loop has no initializers, the <tt>initializer</tt> field is <tt>null</tt>.  If the loop has no updates,
+                the <tt>update</tt> field is a {@link ListNode} with no children.  If the loop has no termination condition, the
+                <tt>condition</tt> field is <tt>null</tt>.  The <tt>update</tt> field should never be <tt>null</tt>.
+            ]]></doc>
+        </type>
+
+        <type name="IfNode" super="Node">
+            <tag name="StatementNode" />
+            <prop name="condition" type="ExpressionNode" desc="the condition" />
+            <prop name="thenStatement" type="StatementNode" desc="the then branch's statement" />
+            <prop name="elseStatement" type="StatementNode" desc="the else branch's statement" />
+            <doc><![CDATA[
+                A node representing an if-then-else statement, as in:
+                <pre>
+                if (<i>condition</i>) then <i>statement</i> else <i>statement</i>
+                </pre>
+            ]]></doc>
+        </type>
+
+        <type name="InlineTypeDeclarationNode" super="Node">
+            <tag name="BlockStatementNode" />
+            <prop name="declaration" type="InlineTypeDeclarableNode" desc="the type declaration" />
+            <doc><![CDATA[
+                A node representing an inline type declaration.  This is used to allow classes and enums to be declared
+                within a method body or similar environment.
+            ]]></doc>
+        </type>
+
+        <type name="LabeledStatementNode" super="Node">
+            <tag name="StatementNode" />
+            <prop name="label" type="IdentifierNode" desc="the statement's label" />
+            <prop name="statement" type="StatementNode" desc="the statement being labeled" />
+            <doc><![CDATA[
+                A node representing labeled statements, as in:
+                <pre>
+                <i>identifier</i>: <i>statement</i>
+                </pre>
+            ]]></doc>
+        </type>
+
+        <type name="ReturnNode" super="Node">
+            <tag name="StatementNode" />
+            <prop name="expression" type="ExpressionNode" desc="the expression to return" />
+            <doc><![CDATA[
+                A node representing a return statement, as in;
+                <pre>return <i>expr</i>;</pre>
+                or
+                <pre>return;</pre>
+                For void return statements, the <tt>expression</tt> is <tt>null</tt>.
+            ]]></doc>
+        </type>
+
+        <type name="SwitchNode" super="Node">
+            <tag name="StatementNode" />
+            <prop name="expression" type="ExpressionNode" desc="the expression over which to switch" />
+            <prop name="cases" type="ListNode" typeArg="CaseNode" desc="the cases in this switch" />
+            <doc><![CDATA[
+                A node to represent switch statements, as in:
+                <pre>
+                switch (<i>expr</i>) {
+                    case <i>value</i>:
+                    ...
+                }
+                </pre>
+            ]]></doc>
+        </type>
+
+        <type name="SynchronizedNode" super="Node">
+            <tag name="StatementNode" />
+            <prop name="expression" type="ExpressionNode" desc="the synchronization expression" />
+            <prop name="block" type="BlockNode" desc="the block of statements to synchronize" />
+            <doc><![CDATA[
+                A node to represent synchronization statements, as in:
+                <pre>
+                synchronized (<i>expr</i>) {
+                    ...
+                }
+                </pre>
+            ]]></doc>
+        </type>
+
+        <type name="ThrowNode" super="Node">
+            <tag name="StatementNode" />
+            <prop name="expression" type="ExpressionNode" desc="the Throwable to throw" />
+            <doc><![CDATA[
+                A node to represent throw statements, as in:
+                <pre>
+                throw <i>expr</i>;
+                </pre>
+            ]]></doc>
+        </type>
+
+        <type name="TryNode" super="Node">
+            <tag name="StatementNode" />
+            <prop name="block" type="BlockNode" desc="the block in which to try" />
+            <prop name="catches" type="ListNode" typeArg="CatchNode" desc="the catch conditions" />
+            <prop name="finallyBlock" type="BlockNode" desc="the finally block" />
+            <doc><![CDATA[
+                A node to represent a try-catch block, as in:
+                <pre>
+                try <i>block</i>
+                catch (<i>type name</i>) <i>block</i>
+                </pre>
+                or
+                <pre>
+                try <i>block</i>
+                catch (<i>type name</i>) <i>block</i>
+                catch (<i>type name</i>) <i>block</i>
+                finally <i>block</i>
+                </pre>
+                If no catch block exists, the <tt>catches</tt> list node will contain no children.  If no finally block exists,
+                <tt>finallyBlock</tt> will be <tt>null</tt>.  <tt>catches</tt> is not permitted to be <tt>null</tt>.
+            ]]></doc>
+        </type>
+
+        <type name="VariableDeclarationNode" super="Node">
+            <tag name="BlockStatementNode" />
+            <prop name="modifiers" type="VariableModifiersNode" desc="the modifiers for this variable" />
+            <prop name="declarators" type="ListNode" typeArg="VariableDeclaratorNode" desc="the variable declarators for this node" />
+            <doc><![CDATA[
+                A node for the declaration of a variable, as in:
+                    <pre>
+                    <i>type identifier</i>;
+                    </pre>
+                or
+                    <pre>
+                    <i>type identifier</i> = <i>expression</i>;
+                    </pre>
+                or
+                    <pre>
+                    <i>type identifier</i> = <i>expression</i>, <i>identifier</i> = <i>expression</i>, ...;
+            ]]></doc>
+        </type>
+
+        <type name="VariableDeclaratorNode" super="Node">
+            <tag name="StatementNode" />
+            <prop name="type" type="TypeNode" desc="the type of this variable" />
+            <prop name="name" type="IdentifierNode" desc="the name of this variable" />
+            <prop name="initializer" type="VariableInitializerNode" desc="the initializer to use" />
+            <doc><![CDATA[
+                Represents a declarator for a variable declaration.  For example, in
+                <pre>int x = 5, y;</pre>
+                this node either represents
+                <pre>x = 5</pre>
+                or
+                <pre>y</pre>
+                .  Note that variable multi-declaration syntax allows different types, as in
+                <pre>int x = 5, y[] = new int[2];</pre>
+                Hence, type exists on this node instead of its parent.  If the variable is not initialized, the
+                <tt>initializer</tt> field is <tt>null</tt>.
+            ]]></doc>
+        </type>
+
+        <type name="VoidStatementNode" super="Node">
+            <tag name="StatementNode" />
+            <doc><![CDATA[
+                A node representing a void statement, as in
+                <pre>;</pre>        
+            ]]></doc>
+        </type>
+
+        <type name="WhileLoopNode" super="Node">
+            <tag name="StatementNode" />
+            <prop name="condition" type="ExpressionNode" desc="the loop's condition" />
+            <prop name="statement" type="StatementNode" desc="the loop's statement" />
+            <doc><![CDATA[
+                A node for a while loop, as in:
+                <pre>
+                while (<i>condition</i>)
+                    statement
+                </pre>
+            ]]></doc>
+        </type>
+
+        <!-- ======================== TYPE NODES ======================== -->
+
+        <type name="ArrayTypeNode" super="Node">
+            <tag name="ReferenceTypeNode" />
+            <tag name="LiteralizableTypeNode" />
+            <prop name="type" type="TypeNode" desc="the element type of the array" />
+            <doc><![CDATA[
+                Represents an array type.
+            ]]></doc>
+        </type>
+
+        <type name="ParameterizedTypeNode" super="Node">
+            <tag name="DeclaredTypeNode" />
+            <prop name="baseType" type="UnparameterizedTypeNode" desc="the base type being parameterized" />
+            <prop name="typeArguments" type="ListNode" typeArg="TypeArgumentNode" desc="the type arguments for this node" />
+            <doc><![CDATA[
+                A node representing parameterized types.  This node represents the use of a type which has type arguments, such
+                as Set<String> (which would be represented by the unparameterized type Set and the single-element argument list
+                containing the unparameterized type for String).
+            ]]></doc>
+        </type>
+
+        <type name="ParameterizedTypeSelectNode" super="Node">
+            <tag name="DeclaredTypeNode" />
+            <prop name="base" type="ParameterizedTypeNode" desc="the parameterized type from which a type is selected" />
+            <prop name="select" type="DeclaredTypeNode" desc="the type which is selected from the base" />
+            <doc><![CDATA[
+                A node representing a type selection from a parameterized type.  This node is used when a type is selected from
+                another type which is parameterized, such as in <tt>A&lt;X&gt;.B</tt>.  In that case, the root node is a
+                <tt>ParameterizedTypeSelectNode</tt>.  The <tt>select</tt> child is an <tt>UnparameterizedTypeNode</tt>
+                containing the name "B"; the <tt>base</tt> child is a {@link ParameterizedTypeNode}.  The <tt>base</tt> has
+                children of an {@link UnparameterizedTypeNode} containing the name "A" and a {@link ListNode} containing the
+                type argument with the name "X".
+            ]]></doc>
+        </type>
+
+        <type name="PrimitiveTypeNode" super="Node">
+            <tag name="TypeNode" />
+            <tag name="BaseTypeNode" />
+            <tag name="LiteralizableTypeNode" />
+            <prop name="primitiveType" type="PrimitiveType" desc="the primitive type being represented" />
+            <doc><![CDATA[
+                A node representing a primitive type.
+            ]]></doc>
+        </type>
+
+        <type name="UnparameterizedTypeNode" super="Node">
+            <tag name="DeclaredTypeNode" />
+            <tag name="LiteralizableTypeNode" />
+            <prop name="name" type="NameNode" desc="the name of the type" />
+            <doc><![CDATA[
+                Represents an unparameterized type.  Examples of unparameterized types in Java include most of the API: String,
+                InputStream, and so on.  Parameterized types, such as Set<String>, are not represented in this way.
+                Unparameterized types also represent type parameters, such as the <tt>T</tt> in <tt>Set<T></tt>.
+            ]]></doc>
+        </type>
+
+        <type name="VoidTypeNode" super="Node">
+            <tag name="TypeNode" />
+            <tag name="LiteralizableTypeNode" />
+            <doc><![CDATA[
+                A node representing the void type.  This is used, for example, in method return values.
+            ]]></doc>
+        </type>
+
+        <!-- ======================= LITERAL NODES ====================== -->
+        
+        <type name="BooleanLiteralNode" super="LiteralNode" superTypeArg="Boolean">
+            <doc><![CDATA[
+                A node representing a boolean literal.
+            ]]></doc>
+        </type>
+
+        <type name="CharLiteralNode" super="LiteralNode" superTypeArg="Character">
+            <doc><![CDATA[
+                A node representing a character literal.
+            ]]></doc>
+        </type>
+
+        <type name="ClassLiteralNode" super="LiteralNode" superTypeArg="LiteralizableTypeNode">
+            <doc><![CDATA[
+                A note representing a class literal, such as <tt>String.class</tt>.  Note that the BSJ compiler API includes a
+                {@link VoidTypeNode}.  This is technically a violation (as Java does not treat <tt>void</tt> as a type) but
+                allows this node to represent <tt>void.class</tt>.
+            ]]></doc>
+        </type>
+
+        <type name="DoubleLiteralNode" super="LiteralNode" superTypeArg="Double">
+            <doc><![CDATA[
+                A node representing a double literal.
+            ]]></doc>
+        </type>
+
+        <type name="FloatLiteralNode" super="LiteralNode" superTypeArg="Float">
+            <doc><![CDATA[
+                A node representing a float literal.
+            ]]></doc>
+        </type>
+
+        <type name="IntLiteralNode" super="LiteralNode" superTypeArg="Integer">
+            <doc><![CDATA[
+                A node representing an int literal.
+            ]]></doc>
+        </type>
+
+        <type name="LongLiteralNode" super="LiteralNode" superTypeArg="Long">
+            <doc><![CDATA[
+                A node representing a long literal.
+            ]]></doc>
+        </type>
+
+        <type name="NullLiteralNode" super="LiteralNode" superTypeArg="Void">
+            <doc><![CDATA[
+                A node representing a null literal.
+            ]]></doc>
+        </type>
+
+        <type name="StringLiteralNode" super="LiteralNode" superTypeArg="String">
+            <doc><![CDATA[
+                A node representing a String literal.
+            ]]></doc>
+        </type>
+
+        <!-- ======================= MEMBER NODES ======================= -->
+        
+        <type name="AnnotationMethodDeclarationNode" super="Node">
+            <tag name="AnnotationMemberNode" />
+            <prop name="modifiers" type="AnnotationMethodModifiersNode" desc="the modifiers for this annotation method" />
+            <prop name="type" type="TypeNode" desc="the return type of this annotation method" />
+            <prop name="identifier" type="IdentifierNode" desc="this annotation method's name" />
+            <prop name="defaultValue" type="AnnotationValueNode" desc="the default value for this method" />
+            <prop name="javadoc" type="JavadocNode" desc="the associated javadoc comment for this node" />
+            <doc><![CDATA[
+                A node representing an annotation method declaration, as in:
+                <pre>
+                    <i>modifiers type identifier</i> () default <i>defaultValue</i>;
+                </pre>
+            ]]></doc>
+        </type>
+
+        <type name="ConstructorDeclarationNode" super="Node">
+            <tag name="ClassMemberNode" />
+            <prop name="identifier" type="IdentifierNode" desc="the identifier for the name of this constructor" />
+            <prop name="body" type="ConstructorBodyNode" desc="the body of this constructor" />
+            <prop name="modifiers" type="ConstructorModifiersNode" desc="the modifiers for this constructor" />
+            <prop name="parameters" type="ListNode" typeArg="VariableNode" desc="the parameters declared by this constructor" />
+            <prop name="varargParameter" type="VariableNode" desc="the vararg parameter declared by this method" />
+            <prop name="throwTypes" type="ListNode" typeArg="UnparameterizedTypeNode"
+                desc="the types of exceptions thrown by this constructor" />
+            <prop name="typeParameters" type="ListNode" typeArg="TypeParameterNode"
+                desc="this constructor's applicable type parameters" />
+            <prop name="javadoc" type="JavadocNode" desc="the associated javadoc comment for this node" />
+            <doc><![CDATA[
+                A node representing a constructor declaration, as in:
+                <pre>
+                    <i>modifiers typeParams typeName</i>(<i>parameter...</i>) throws <i>expr...</i>
+                        <i>body</i>
+                </pre>
+                See {@link MethodDeclarationNode} for more information.
+            ]]></doc>
+        </type>
+
+        <type name="EnumConstantDeclarationNode" super="Node">
+            <prop name="annotations" type="ListNode" typeArg="AnnotationNode" desc="the annotations on this constant" />
+            <prop name="identifier" type="IdentifierNode" desc="the name of this constant" />
+            <prop name="arguments" type="ListNode" typeArg="ExpressionNode" desc="the arguments to the enum constructor" />
+            <prop name="body" type="AnonymousClassBodyNode" desc="the body used to anonymously subclass the constant" />
+            <prop name="javadoc" type="JavadocNode" desc="the associated javadoc comment for this node" />
+            <doc><![CDATA[
+                A node representing an enum constant.  While enum constants typically consist of a single name, many optional
+                extensions exist.  In the likely case that this constant is not an anonymous subclass, <tt>body</tt> is
+                <tt>null</tt>.
+            ]]></doc>
+        </type>
+
+        <type name="FieldDeclarationNode" super="Node">
+            <tag name="ClassMemberNode" />
+            <tag name="InterfaceMemberNode" />
+            <tag name="AnnotationMemberNode" />
+            <tag name="AnonymousClassMemberNode" />
+            <prop name="modifiers" type="FieldModifiersNode" desc="the modifiers for this field" />
+            <prop name="declarators" type="ListNode" typeArg="VariableDeclaratorNode" desc="the variable declarators for this node" />
+            <prop name="javadoc" type="JavadocNode" desc="the associated javadoc comment for this node" />
+            <doc><![CDATA[
+                A node representing a field declaration.  Constants are represented by this node as well.
+            ]]></doc>
+        </type>
+
+        <type name="InitializerDeclarationNode" super="Node">
+            <tag name="ClassMemberNode" />
+            <tag name="AnonymousClassMemberNode" />
+            <prop name="staticInitializer" type="boolean" desc="whether or not the initializer is static" />
+            <prop name="body" type="BlockNode" desc="the body of the initializer" />
+            <doc><![CDATA[
+                Declares an initializer, whether static or otherwise, as in
+                <pre>
+                static {
+                    <i>statement...</i>
+                }
+                </pre>
+            ]]></doc>
+        </type>
+
+        <type name="MethodDeclarationNode" super="Node">
+            <tag name="ClassMemberNode" />
+            <tag name="InterfaceMemberNode" />
+            <tag name="AnonymousClassMemberNode" />
+            <prop name="body" type="BlockNode" desc="the body of this method" />
+            <prop name="modifiers" type="MethodModifiersNode" desc="the modifiers for this method" />
+            <prop name="identifier" type="IdentifierNode" desc="this method's name" />
+            <prop name="parameters" type="ListNode" typeArg="VariableNode" desc="the parameters declared by this method" />
+            <prop name="varargParameter" type="VariableNode" desc="the vararg parameter declared by this method" />
+            <prop name="returnType" type="TypeNode" desc="the type of value returned" />
+            <prop name="throwTypes" type="ListNode" typeArg="UnparameterizedTypeNode"
+                desc="the types of exceptions thrown by this method" />
+            <prop name="typeParameters" type="ListNode" typeArg="TypeParameterNode"
+                desc="this method's applicable type parameters" />
+            <prop name="javadoc" type="JavadocNode" desc="the associated javadoc comment for this node" />
+            <doc><![CDATA[
+                A node representing a method declaration, as in:
+                <pre>
+                    <i>modifiers typeParams type name</i>(<i>parameter...</i>) throws <i>expr...</i>
+                        <i>body</i>
+                </pre>
+                Note that the vararg parameter is used in cases where a variable argument is used, such as in
+                <pre>
+                    public void foo(String... vararg)
+                </pre>
+                The type on the <tt>varargParameter</tt> node should be <tt>String</tt> in the above case (and <i>not</i>
+                <tt>String[]</tt>).  Also observe that methods with no body, such as the abstract method
+                <pre>public abstract void foo();</pre>
+                will have a <tt>null</tt> body.
+            ]]></doc>
+        </type>
+        
+        <!-- ===================== TYPE BODY NODES ====================== -->
+
+        <type name="AnnotationBodyNode" super="Node">
+            <prop name="members" type="ListNode" typeArg="AnnotationMemberNode" desc="the members of this annotation body" />
+            <doc><![CDATA[
+                Represents the body of an annotation declaration.
+            ]]></doc>
+        </type>
+
+        <type name="AnonymousClassBodyNode" super="Node">
+            <prop name="members" type="ListNode" typeArg="AnonymousClassMemberNode" desc="the members of this anonymous class body" />
+            <doc><![CDATA[
+                Represents the body of an anonymous class declaration.  This body is distinct from {@link ClassBodyNode} in that
+                it does not permit constructors.  There is no corresponding <tt>AnonymousClassDeclarationNode</tt> because the
+                expression which contains this body implicitly stands as the declaration of that type.
+            ]]></doc>
+        </type>
+
+        <type name="ClassBodyNode" super="Node">
+            <prop name="members" type="ListNode" typeArg="ClassMemberNode" desc="the members of this class body" />
+            <doc><![CDATA[
+                Represents the body of a class declaration.
+            ]]></doc>
+        </type>
+
+        <type name="EnumBodyNode" super="Node">
+            <prop name="constants" type="ListNode" typeArg="EnumConstantDeclarationNode" desc="the enumeration constants" />
+            <prop name="members" type="ListNode" typeArg="ClassMemberNode" desc="the members of the class body part" />
+            <doc><![CDATA[
+                Represents the body of an enum declaration.
+            ]]></doc>
+        </type>
+
+        <type name="InterfaceBodyNode" super="Node">
+            <prop name="members" type="ListNode" typeArg="InterfaceMemberNode" desc="the members of this interface body" />
+            <doc><![CDATA[
+                Represents the body of an interface declaration.
+            ]]></doc>
+        </type>
+        
+        <!-- ================== TYPE DECLARATION NODES ================== -->
+
+        <type name="AnnotationDeclarationNode" super="NamedTypeDeclarationNode">
+            <prop name="modifiers" type="AnnotationModifiersNode" desc="the modifiers for this type" />
+            <prop name="body" type="AnnotationBodyNode" desc="this annotation's body" />
+            <doc><![CDATA[
+                Represents the declaration of an annotation, as in:
+                <pre>
+                <i>modifiers</i> @interface <i>name</i>
+                {
+                    <i>member</i>
+                    ...
+                }
+                </pre>
+            ]]></doc>
+        </type>
+
+        <type name="ClassDeclarationNode" super="NamedTypeDeclarationNode">
+            <tag name="InlineTypeDeclarableNode" />
+            <prop name="modifiers" type="ClassModifiersNode" desc="the modifiers for this type" />
+            <prop name="extendsClause" type="TypeNode" desc="the extends clause" />
+            <prop name="implementsClause" type="ListNode" typeArg="TypeNode" desc="the implements clause" />
+            <prop name="body" type="ClassBodyNode" desc="the body of this class" />
+            <prop name="typeParameters" type="ListNode" typeArg="TypeParameterNode" desc="this class's type parameters" />
+            <doc><![CDATA[
+                Represents the declaration of a class, as in:
+                <pre>
+                <i>modifiers<i> class <i>name</i>&lt;<i>typeParam...</i>&gt; extends <i>type</i> implements <i>type...</i>
+                {
+                    <i>member</i>
+                    <i>...</i>
+                }
+                </pre>
+            ]]></doc>
+        </type>
+
+        <type name="EnumDeclarationNode" super="NamedTypeDeclarationNode">
+            <tag name="InlineTypeDeclarableNode" />
+            <prop name="modifiers" type="EnumModifiersNode" desc="the modifiers for this type" />
+            <prop name="implementsClause" type="ListNode" typeArg="TypeNode" desc="the implements clause" />
+            <prop name="body" type="EnumBodyNode" desc="this enum's body" />
+            <doc><![CDATA[
+                Represents the declaration of a class, as in:
+                <pre>
+                <i>modifiers<i> enum <i>name</i> implements <i>type...</i>
+                {
+                    <i>member</i>
+                    <i>...</i>
+                }
+                </pre>
+            ]]></doc>
+        </type>
+
+        <type name="InterfaceDeclarationNode" super="NamedTypeDeclarationNode">
+            <prop name="modifiers" type="InterfaceModifiersNode" desc="the modifiers for this type" />
+            <prop name="extendsClause" type="ListNode" typeArg="TypeNode" desc="the extends clause" />
+            <prop name="body" type="InterfaceBodyNode" desc="this interface's body" />
+            <prop name="typeParameters" type="ListNode" typeArg="TypeParameterNode" desc="this class's type parameters" />
+            <doc><![CDATA[
+                Represents the declaration of an interface, as in:
+                <pre>
+                <i>modifiers<i> interface <i>name</i>&lt;<i>typeParam...</i>&gt; extends <i>type...</i>
+                {
+                    <i>member</i>
+                    <i>...</i>
+                }
+                </pre>
+            ]]></doc>
+        </type>
+
+        <type name="JavadocNode" super="Node">
+            <prop name="text" type="String" desc="the parsed text of this Javadoc comment" />
+            <doc><![CDATA[
+                Represents a complete javadoc comment, as in:
+                <pre>
+                /** 
+                 * Methodname.
+                 * @param x parameter x.
+                 * @returns a value.
+                 *&#47;
+                </pre>
+            ]]></doc>
+        </type>
+
+        <type name="NamedTypeDeclarationNode" super="Node" mode="abstract">
+            <tag name="TypeDeclarationNode" />
+            <prop name="identifier" type="IdentifierNode" desc="the name of this declared type" />
+            <prop name="javadoc" type="JavadocNode" desc="the associated javadoc comment for this node" />
+            <doc><![CDATA[
+                Acts as a superclass for all named type declarations.
+            ]]></doc>
+        </type>
+
+        <type name="VoidTypeDeclarationNode" super="Node">
+            <tag name="TypeDeclarationNode" />
+            <doc><![CDATA[
+                Represents the void declaration (a single semi-colon).
+            ]]></doc>
+        </type>
+        
+        <!-- ===================== ANNOTATION NODES ===================== -->
+
+        <type name="AnnotationAnnotationValueNode" super="Node">
+            <tag name="AnnotationValueNode" />
+            <prop name="annotation" type="AnnotationNode" desc="the annotation" />
+            <doc><![CDATA[
+                A value in an annotation which is another annotation.  This node is used for complex annotations, such as
+                <pre>@Foo(a=@Bar)</pre>
+                In the above snippet, this node would represent the
+                <pre>@Bar</pre>
+                portion.
+            ]]></doc>
+        </type>
+
+        <type name="AnnotationArrayValueNode" super="Node">
+            <tag name="AnnotationValueNode" />
+            <prop name="values" type="ListNode" typeArg="AnnotationValueNode" desc="the array values" />
+            <doc><![CDATA[
+                A value in an annotation representing an array.  This node is distinct from the {@link ArrayInitializerNode}
+                because it allows annotations (by way of {@link AnnotationAnnotationValueNode}) as well as expressions.
+            ]]></doc>
+        </type>
+
+        <type name="AnnotationExpressionValueNode" super="Node">
+            <tag name="AnnotationValueNode" />
+            <prop name="expression" type="NonAssignmentExpressionNode" desc="the expression" />
+            <doc><![CDATA[
+                A value in an annotation which is an expression.  This value may not be an assignment expression.
+            ]]></doc>
+        </type>
+
+        <type name="AnnotationNode" super="Node" mode="abstract">
+            <prop name="annotationType" type="UnparameterizedTypeNode" desc="the annotation type" />
+            <doc><![CDATA[
+                Acts as a base class for annotation nodes.  Subclasses distinguish between the different types of annotation
+                sugar.
+            ]]></doc>
+        </type>
+
+        <type name="AnnotationElementNode" super="Node">
+            <prop name="identifier" type="IdentifierNode" desc="the identifier" />
+            <prop name="value" type="AnnotationValueNode" desc="the element's value" />
+            <doc><![CDATA[
+                Represents an annotation element, as in
+                <pre>
+                <i>ident</i>=<i>value</i>
+                </pre>
+            ]]></doc>
+        </type>
+
+        <type name="NormalAnnotationNode" super="AnnotationNode">
+            <prop name="arguments" type="ListNode" typeArg="AnnotationElementNode" desc="the arguments" />
+            <doc><![CDATA[
+                Represents the usage of an annotation, as in:
+                <pre>@<i>type</i></pre>
+                or
+                <pre>@<i>type</i>(<i>key</i>=<i>value</i>,...)</pre>
+                Note that this node does not handle the single element annotation format (<pre>@Foo("bar")</pre>).  That is
+                handled by the {@link SingleElementAnnotationNode} class.
+            ]]></doc>
+        </type>
+
+        <type name="SingleElementAnnotationNode" super="AnnotationNode">
+            <prop name="value" type="AnnotationValueNode" desc="the value of the &quot;value&quot; element" />
+            <doc><![CDATA[
+                Represents a single element annotation, as in:
+                <pre>@<i>type</i>(<i>value</i>)</pre>
+            ]]></doc>
+        </type>
+        
+        <!-- ======================== BASE NODES ======================== -->
+
+        <type name="AlternateConstructorInvocationNode" super="ConstructorInvocationNode">
+            <doc><![CDATA[
+                Represents an alternate constructor invocation, as in
+                <pre>
+                this("foo")
+                </pre>
+                Note that this only applies to <i>alternate</i> constructor invocations (those using the <tt>this</tt> keyword).
+                For superclass constructor invocations, see {@link SuperclassConstructorInvocationNode}.
+            ]]></doc>
+        </type>
+
+        <type name="ArrayInitializerNode" super="Node">
+            <tag name="VariableInitializerNode" />
+            <prop name="initializers" type="ListNode" typeArg="VariableInitializerNode" desc="the initializers for the array" />
+            <doc><![CDATA[
+                A node representing the initialization of an array, as in:
+                <pre>
+                {<i>initializer</i>,...}
+                </pre>
+                The resulting array contains one element for each initializer expression.
+            ]]></doc>
+        </type>
+
+        <type name="CaseNode" super="Node">
+            <prop name="expression" type="ExpressionNode" desc="the expression used in this case label" />
+            <prop name="statements" type="ListNode" typeArg="BlockStatementNode" desc="the statements to execute in this case node" />
+            <doc><![CDATA[
+                A node representing a switch's case block, as in:
+                <pre>
+                case <i>expression</i>:
+                    <i>statement</i>
+                    <i>...</i>
+                </pre>
+                or
+                <pre>
+                default:
+                    <i>statement</i>
+                    <i>...</i>
+                </pre>
+                If the switch label is <tt>default</tt>, <tt>expression</tt> is <tt>null</tt>. 
+            ]]></doc>
+        </type>
+
+        <type name="CatchNode" super="Node">
+            <prop name="block" type="BlockNode" desc="the block to execute when this catch occurs" />
+            <prop name="parameter" type="VariableNode" desc="this catch block's exception variable" />
+            <doc><![CDATA[
+                A node representing a catch block, as in
+                <pre>
+                catch (<i>type identifier</i>)
+                    <i>block</i>
+                </pre>
+            ]]></doc>
+        </type>
+
+        <type name="CompilationUnitNode" super="Node">
+            <prop name="packageDeclaration" type="PackageDeclarationNode" desc="the package declaration for this unit" />
+            <prop name="imports" type="ListNode" typeArg="ImportNode" desc="the imports used in this unit" />
+            <prop name="typeDecls" type="ListNode" typeArg="TypeDeclarationNode" desc="the type declarations of this unit" />
+            <doc><![CDATA[
+                Represents a BSJ compilation unit.
+            ]]></doc>
+        </type>
+
+        <type name="ConstructorBodyNode" super="Node">
+            <prop name="constructorInvocation" type="ConstructorInvocationNode" desc="the (nullable) constructor invocation" />
+            <prop name="statements" type="ListNode" typeArg="BlockStatementNode"
+                desc="the statements contained in this constructor" />
+            <doc><![CDATA[
+                Represents a constructor body.  For example, in
+                <pre>
+                public MyClass()
+                {
+                    super();
+                    this.foo = 0;
+                }
+                </pre>
+                this node would represent all but the first line.  Observe that this structure enforces the Java language rule
+                that there be exactly one explicit constructor invocation and that it appears at the top of the constructor
+                body.
+            ]]></doc>
+        </type>
+
+        <type name="ConstructorInvocationNode" super="Node" mode="abstract">
+            <prop name="arguments" type="ListNode" typeArg="ExpressionNode" desc="the arguments to pass to the method" />
+            <prop name="typeArguments" type="ListNode" typeArg="TypeNode" desc="the type arguments for the method" />
+            <doc><![CDATA[
+                This class is a common superclass to both types of explicit constructor invocations: alternate constructor
+                invocations (those using the <tt>this</tt> keyword) and superclass constructor invocations (those using the
+                <tt>super</tt> keyword).  This distinction is made because, despite their similarities in use and syntax, the
+                language specification treats these two entities as distinct (and there are some corner cases for the superclass
+                constructor syntax which are best contained
+            ]]></doc>
+        </type>
+
+        <type name="ForInitializerDeclarationNode" super="Node">
+            <tag name="ForInitializerNode" />
+            <prop name="declaration" type="VariableDeclarationNode" desc="the variables declared in this initializer" />
+            <doc><![CDATA[
+                Represents a for loop initializer which declares variables.  For example, in
+                <pre>for (int i=0;i<n;i++)</pre>
+                this node represents
+                <pre>int i=0</pre>
+                Note that, due to the nature of {@link VariableDeclarationNode}, this can be a variable muilti-declaration.
+            ]]></doc>
+        </type>
+
+        <type name="ForInitializerExpressionNode" super="Node">
+            <tag name="ForInitializerNode" />
+            <prop name="expressions" type="ListNode" typeArg="StatementExpressionNode" desc="the expressions used in this initializer" />
+            <doc><![CDATA[
+                Represents a for loop initializer which contains expressions.  For example, in
+                <pre>for (i=0,j=0;i<n || j<m;i++,j++)</pre>
+                this node represents
+                <pre>i=0,j=0</pre>
+            ]]></doc>
+        </type>
+
+        <type name="ImportOnDemandNode" super="Node">
+            <tag name="ImportNode" />
+            <prop name="name" type="NameNode" desc="the name of the package to import" />
+            <prop name="staticImport" type="boolean" desc="the static-ness of the import" />
+            <doc><![CDATA[
+                A node representing an on-demand import statement, such as "<tt>import java.util.*</tt>".
+            ]]></doc>
+        </type>
+
+        <type name="ImportSingleTypeNode" super="Node">
+            <tag name="ImportNode" />
+            <prop name="name" type="NameNode" desc="the name of the type to import" />
+            <prop name="staticImport" type="boolean" desc="the static-ness of the import" />
+            <doc><![CDATA[
+                A node representing a single type import statement, such as "<tt>import java.util.Set</tt>".
+            ]]></doc>
+        </type>
+
+        <type name="ListNode" typeParam="T extends Node" super="Node">
+            <prop name="children" type="List" typeArg="T" mode="readOnly" desc="the list of children" />
+            <include file="ListNode.java" />
+            <doc><![CDATA[
+                Represents a list of nodes.  Nodes do not simply have lists as properties as the ListNode allows additional
+                information to be tracked as necessary.
+            ]]></doc>
+            <nogen id="cons" />
+            <nogen id="children" />
+        </type>
+
+        <type name="Node" mode="abstract">
+            <prop name="startLocation" type="BsjSourceLocation" mode="skip"
+                desc="the location at which this node's text starts (inclusive)" />
+            <prop name="stopLocation" type="BsjSourceLocation" mode="skip"
+                desc="the location at which this node's text stops (exclusive)" />
+            <include file="Node.java" />
+            <doc><![CDATA[
+                The parent class for all BSJ AST nodes.
+            ]]></doc>
+        </type>
+
+        <type name="PackageDeclarationNode" super="Node">
+            <prop name="name" type="NameNode" desc="the name of the package" />
+            <prop name="annotations" type="ListNode" typeArg="AnnotationNode" desc="the annotations on the package declaration" />
+            <doc><![CDATA[
+                A node representing a package declaration, as in
+                <pre>
+                    package <i>packageName</i>;
+                </pre>
+                or
+                <pre>
+                    <i>annotations</i>
+                    package <i>packageName</i>;
+                </pre>
+            ]]></doc>
+        </type>
+
+        <type name="SuperclassConstructorInvocationNode" super="ConstructorInvocationNode">
+            <prop name="qualifyingExpression" type="PrimaryExpressionNode" desc="the qualifying expression for the enclosing object" />
+            <doc><![CDATA[
+                Represents an alternate constructor invocation, as in
+                <pre>
+                super("foo")
+                </pre>
+                or in the rarer syntax
+                <pre>
+                (new Foo()).super(0)
+                </pre>
+                .  Note that this only applies to <i>superclass</i> constructor invocations (those using the <tt>super</tt>
+                keyword).  For alternate constructor invocations, see {@link AlternateConstructorInvocationNode}.
+            ]]></doc>
+        </type>
+
+        <type name="TypeParameterNode" super="Node">
+            <prop name="identifier" type="IdentifierNode" desc="the base type name for the parameter" />
+            <prop name="bounds" type="ListNode" typeArg="DeclaredTypeNode" desc="the bounds over the base type" />
+            <doc><![CDATA[
+                A node for type parameters, as in:
+                <pre>
+                <i>ident</i>
+                </pre>
+                or
+                <pre>
+                <i>ident</i> extends <i>type</i>
+                </pre>
+                or
+                <pre>
+                <i>ident</i> extends <i>type</i> &amp; <i>type...</i>
+                </pre>
+            ]]></doc>
+        </type>
+
+        <type name="VariableNode" super="Node">
+            <prop name="modifiers" type="VariableModifiersNode" desc="the modifiers of this parameter" />
+            <prop name="type" type="TypeNode" desc="the type of the variable" />
+            <prop name="identifier" type="IdentifierNode" desc="the name of the variable" />
+            <doc><![CDATA[
+                A node describing a variable, as in:
+                    <pre>
+                    <i>type identifier</i>
+                    </pre>        
+            ]]></doc>
+        </type>
+
+        <type name="WildcardTypeNode" super="Node">
+            <tag name="TypeArgumentNode" />
+            <prop name="bound" type="ReferenceTypeNode" desc="the wildcard's bound" />
+            <prop name="upperBound" type="boolean"
+                desc="whether or not the wildcard's bound is an upper (&lt;tt&gt;extends&lt;/tt&gt;) bound" />
+            <doc><![CDATA[
+                A node for wildcard type parameters, as in:
+                <pre>
+                ? extends <i>type</i>
+                </pre>
+                (in which case <tt>bound</tt> is non-<tt>null</tt> and <tt>upperBound</tt> is <tt>true</tt>) or
+                <pre>
+                ? super <i>type</i>
+                </pre>
+                (in which case <tt>bound</tt> is non-<tt>null</tt> and <tt>upperBound</tt> is <tt>false</tt>) or
+                <pre>
+                ?
+                </pre>
+                (in which case <tt>bound</tt> is <tt>null</tt>).
+            ]]></doc>
+        </type>
+
+    </srcgen>
+    
+    <!-- BSJ AST Nodes -->
+    <srcgen ipkg="edu.jhu.cs.bsj.compiler.ast.node.meta" cpkg="edu.jhu.cs.bsj.compiler.impl.ast.node.meta">
+    
+        <!-- ==================== METAPROGRAM NODES ===================== -->
+        
+        <type name="MetaprogramAnchorNode" typeParam="T extends Node" super="Node" mode="abstract">
+            <prop name="replacement" type="T" mode="skip" desc="the replacement node for this metaprogram" />
+            <prop name="metaprogram" type="MetaprogramNode" desc="the metaprogram on this node" />
+            <include file="MetaprogramAnchorNode.java" />
+            <doc><![CDATA[
+                The replacement field on this node is used to indicate the node with which this node will be replaced once the
+                execution of this metaprogram terminates.  This is initially defaulted to a no-op.
+            ]]></doc>
+        </type>
+
+        <type name="MetaprogramNode" super="Node">
+            <prop name="body" type="ListNode" typeArg="BlockStatementNode" desc="the list of statements in the metaprogram's body" />
+            <doc><![CDATA[
+                A node for metaprograms, as in
+                <pre>
+                [: <i>statement...</i> :]
+                </pre>
+            ]]></doc>
+        </type>
+
+        <type name="BlockStatementMetaprogramAnchorNode" super="MetaprogramAnchorNode" superTypeArg="BlockStatementNode">
+            <tag name="BlockStatementNode" />
+            <doc><![CDATA[
+                A node representing a metaprogram as a block statement.
+            ]]></doc>
+            <override prop="replacement" expr="makeVoidStatementNode()" />
+        </type>
+
+        <type name="TypeDeclarationMetaprogramAnchorNode" super="MetaprogramAnchorNode" superTypeArg="TypeDeclarationNode">
+            <tag name="TypeDeclarationNode" />
+            <doc><![CDATA[
+                A node representing a metaprogram found at the top level of a source file.
+            ]]></doc>
+            <override prop="replacement" expr="makeVoidTypeDeclarationNode()" />
+        </type>
+        
+        <!-- ======================== OTHER NODES ======================= -->
+
+        <type name="CodeLiteralNode" super="LiteralNode" superTypeArg="Node">
+            <doc><![CDATA[
+                A node representing a code literal.
+            ]]></doc>
+            <override prop="replacement" expr="" />
+        </type>
+
+    </srcgen>
 </srcgen>

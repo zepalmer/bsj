@@ -2439,8 +2439,8 @@ public class SourceGenerator
 		private String indentationTreat(String s)
 		{
 			s = "\n" + s;
-			s = s.replaceAll("\n", "\n            ");
-			s = s + "\n        ";
+			s = s.replaceAll("\n", "\n                ");
+			s = s + "\n            ";
 			return s;
 		}
 
