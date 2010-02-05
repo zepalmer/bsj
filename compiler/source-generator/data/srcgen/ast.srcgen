@@ -243,6 +243,8 @@ FieldModifiersNode :: ModifiersNode
     finalFlag               boolean                                     | whether or not the associated class is final
     transientFlag           boolean                                     | whether or not the associated class is transient
     volatileFlag            boolean                                     | whether or not the associated class is volatile
+    @docs
+        Represents the modifiers which can be associated with a field.
 
 InterfaceModifiersNode :: ModifiersNode
     @props
@@ -1024,6 +1026,13 @@ InitializerDeclarationNode :: Node + ClassMemberNode, AnonymousClassMemberNode
     @props
     staticInitializer       boolean                                     | whether or not the initializer is static
     body                    BlockNode                                   | the body of the initializer
+    @docs
+        Declares an initializer, whether static or otherwise, as in
+        <pre>
+        static {
+            <i>statement...</i>
+        }
+        </pre>
 
 MethodDeclarationNode :: Node + ClassMemberNode, InterfaceMemberNode, AnonymousClassMemberNode
     @props
