@@ -95,7 +95,6 @@ public class ByteArrayJavaFileObject extends AbstractFileObject implements BsjFi
 	@Override
 	public boolean isWritable()
 	{
-		// TODO Auto-generated method stub
 		return true;
 	}
 

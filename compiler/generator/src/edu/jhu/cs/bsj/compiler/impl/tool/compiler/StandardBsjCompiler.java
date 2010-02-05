@@ -124,8 +124,6 @@ public class StandardBsjCompiler implements BsjCompiler
 		// Now compile everything in the generated source directory
 		compileGeneratedSources();
 
-		// TODO: rest of compilation (or is this it?)
-
 		// Clean up
 		// TODO: should we ensure that terminate is called even when an exception is thrown?
 		terminate();
