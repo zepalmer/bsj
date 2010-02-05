@@ -8,6 +8,7 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -15,6 +16,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.xml.stream.FactoryConfigurationError;
+import javax.xml.stream.XMLOutputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamWriter;
+
+import edu.jhu.cs.bsj.compiler.impl.utils.Pair;
 import edu.jhu.cs.bsj.compiler.impl.utils.PrependablePrintStream;
 
 /**
@@ -965,7 +972,16 @@ public class SourceGenerator
 
 		public void finish() throws IOException
 		{
-			for (ClassDef def : map.values())
+			List<ClassDef> defList = new ArrayList<ClassDef>(map.values());
+			Collections.sort(defList, new Comparator<ClassDef>()
+			{
+				@Override
+				public int compare(ClassDef o1, ClassDef o2)
+				{
+					return o1.name.compareTo(o2.name);
+				}
+			});
+			for (ClassDef def : defList)
 			{
 				useDefinition(def);
 			}
@@ -1554,7 +1570,7 @@ public class SourceGenerator
 					ps.println("            int index = " + p.name + ".indexOf(before);");
 					ps.println("            if (index != -1)");
 					// TODO: YUCK YUCK YUCK - this compels me further to make different types for each list node!
-					ps.println("                " + p.name + ".set(index, (" + typeArg+ ")after);");
+					ps.println("                " + p.name + ".set(index, (" + typeArg + ")after);");
 					ps.println("        }");
 				}
 			}
@@ -2230,6 +2246,166 @@ public class SourceGenerator
 			ps.decPrependCount();
 			ps.println("}");
 			ps.close();
+		}
+
+	}
+
+	static class XmlDefinitionWriter extends ClassHierarchyBuildingHandler
+	{
+		private XMLStreamWriter writer;
+		
+		@Override
+		public void init() throws IOException
+		{
+			super.init();
+			try
+			{
+				writer = XMLOutputFactory.newInstance().createXMLStreamWriter(
+						new FileOutputStream(TARGET_DIR.getPath() + File.separator + "test.xml"));
+				writer.writeStartDocument();
+				writer.writeStartElement("srcgen");
+			} catch (XMLStreamException e)
+			{
+				throw new IllegalStateException(e);
+			} catch (FactoryConfigurationError e)
+			{
+				throw new IllegalStateException(e);
+			}
+		}
+
+		private Pair<String, String> splitType(String type)
+		{
+			if (type == null)
+			{
+				return new Pair<String, String>(null, null);
+			} else if (type.indexOf('<') != -1)
+			{
+				return new Pair<String, String>(type.substring(0, type.indexOf('<')), type.substring(
+						type.indexOf('<') + 1, type.length() - 1));
+			} else
+			{
+				return new Pair<String, String>(type, null);
+			}
+		}
+
+		@Override
+		public void useDefinition(ClassDef def) throws IOException
+		{
+			try
+			{
+				writer.writeStartElement("type");
+
+				Pair<String, String> baseType = splitType(def.name);
+				Pair<String, String> superType = splitType(def.sname);
+
+				writer.writeAttribute("name", baseType.getFirst());
+				if (baseType.getSecond() != null)
+					writer.writeAttribute("typeParam", baseType.getSecond());
+				if (superType.getFirst() != null)
+					writer.writeAttribute("super", superType.getFirst());
+				if (superType.getSecond() != null)
+					writer.writeAttribute("superTypeArg", superType.getSecond());
+
+				switch (def.mode)
+				{
+					case ABSTRACT:
+						writer.writeAttribute("mode", "abstract");
+						break;
+					case INTERFACE:
+						writer.writeAttribute("mode", "tag");
+						break;
+				}
+
+				for (String tag : def.tags)
+				{
+					writer.writeEmptyElement("tag");
+					writer.writeAttribute("name", tag.trim());
+				}
+
+				for (Prop p : def.props)
+				{
+					writer.writeEmptyElement("prop");
+
+					writer.writeAttribute("name", p.name);
+					Pair<String, String> ptype = splitType(p.type);
+					writer.writeAttribute("type", ptype.getFirst());
+					if (ptype.getSecond() != null)
+					{
+						writer.writeAttribute("typeArg", ptype.getSecond());
+					}
+					if (p.skipMake)
+					{
+						writer.writeAttribute("mode", "skip");
+					} else if (p.readOnly)
+					{
+						writer.writeAttribute("mode", "readOnly");
+					}
+					writer.writeAttribute("desc", p.desc);
+				}
+
+				for (String include : def.includeFilenames)
+				{
+					writer.writeEmptyElement("include");
+					writer.writeAttribute("file", include.trim());
+				}
+
+				if (def.classDoc != null && def.classDoc.length() > 0)
+				{
+					writer.writeStartElement("doc");
+					writer.writeCData(def.classDoc);
+					writer.writeEndElement();
+				}
+
+				if (def.toStringLines != null && def.toStringLines.size() > 0)
+				{
+					writer.writeStartElement("toString");
+					StringBuilder sb = new StringBuilder();
+					for (String toStringLine : def.toStringLines)
+					{
+						if (sb.length() > 0)
+							sb.append("\n");
+						sb.append(toStringLine);
+					}
+					writer.writeCData(sb.toString());
+					writer.writeEndElement();
+				}
+
+				String stopGen = envs.get(def).get("stopGen");
+				if (stopGen != null && stopGen.length() > 0)
+				{
+					for (String nogen : stopGen.split(","))
+					{
+						writer.writeEmptyElement("nogen");
+						writer.writeAttribute("id", nogen.trim());
+					}
+				}
+
+				for (Map.Entry<String, String> entry : def.argMap.entrySet())
+				{
+					writer.writeEmptyElement("override");
+					writer.writeAttribute("prop", entry.getKey());
+					writer.writeAttribute("expr", entry.getValue());
+				}
+
+				writer.writeEndElement();
+			} catch (XMLStreamException e)
+			{
+				throw new IllegalStateException(e);
+			}
+		}
+
+		@Override
+		public void finish() throws IOException
+		{
+			super.finish();
+			try
+			{
+				writer.writeEndDocument();
+				writer.close();
+			} catch (XMLStreamException e)
+			{
+				throw new IllegalStateException(e);
+			}
 		}
 
 	}

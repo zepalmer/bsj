@@ -1,0 +1,89 @@
+<?xml version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:simpleType name="typeMode_T">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="tag"/>
+            <xs:enumeration value="abstract"/>
+            <xs:enumeration value="concrete"/>
+        </xs:restriction>
+    </xs:simpleType>
+    
+    <xs:simpleType name="propMode_T">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="normal"/>
+            <xs:enumeration value="readOnly"/>
+            <xs:enumeration value="skip"/>
+        </xs:restriction>
+    </xs:simpleType>
+    
+    <xs:simpleType name="nogenArg_T">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="cons"/>
+            <xs:enumeration value="children"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="tag_T">
+        <xs:attribute name="name" type="xs:string" use="required"/>
+    </xs:complexType>
+    
+    <xs:complexType name="prop_T">
+        <xs:attribute name="name" type="xs:string" use="required"/>
+        <xs:attribute name="type" type="xs:string" use="required"/>
+        <xs:attribute name="typeArg" type="xs:string" use="optional"/>
+        <xs:attribute name="mode" type="propMode_T" use="optional" default="normal"/>
+        <xs:attribute name="desc" type="xs:string" use="required"/>
+    </xs:complexType>
+    
+    <xs:complexType name="include_T">
+        <xs:attribute name="file" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="doc_T">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+    
+    <xs:complexType name="toString_T">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+    
+    <xs:complexType name="override_T">
+        <xs:attribute name="prop" type="xs:string" use="required"/>
+        <xs:attribute name="expr" type="xs:string" use="required"/>
+    </xs:complexType>
+    
+    <xs:complexType name="nogen_T">
+        <xs:attribute name="id" type="nogenArg_T" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="type_T">
+        <xs:sequence>
+            <xs:element name="tag" type="tag_T" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="prop" type="prop_T" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="include" type="include_T" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="doc" type="doc_T"/>
+            <xs:element name="toString" type="toString_T" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="override" type="override_T" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="nogen" type="nogen_T" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="name" type="xs:string" use="required"/>
+        <xs:attribute name="typeParam" type="xs:string" use="optional"/>
+        <xs:attribute name="super" type="xs:string" use="optional"/>
+        <xs:attribute name="superTypeArg" type="xs:string" use="optional"/>
+        <xs:attribute name="mode" type="typeMode_T" use="optional" default="concrete"/>
+    </xs:complexType>
+
+    <xs:element name="srcgen">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="type" type="type_T" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>
