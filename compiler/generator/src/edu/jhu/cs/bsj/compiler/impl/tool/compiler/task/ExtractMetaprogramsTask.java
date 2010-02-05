@@ -320,11 +320,12 @@ public class ExtractMetaprogramsTask extends CompilationUnitTask
 	}
 
 	/**
-	 * A convenience casting method.  This method performs a casting operation from the specified class to that of a
-	 * metaprogram using the parameterized anchor type.  This method is <i>type unsafe</i>; it does not actually ensure
-	 * that the class in question has this property.  However, forcing the class cast operation into a seperate method
+	 * A convenience casting method. This method performs a casting operation from the specified class to that of a
+	 * metaprogram using the parameterized anchor type. This method is <i>type unsafe</i>; it does not actually ensure
+	 * that the class in question has this property. However, forcing the class cast operation into a seperate method
 	 * allows the {@link SuppressWarnings} annotation to target only this cast and none of the rest of the method from
 	 * which it is called.
+	 * 
 	 * @param <A> The type of anchor node used by the metaprogram class.
 	 * @param loadClass The class to cast.
 	 * @return The casted result.
@@ -345,11 +346,22 @@ public class ExtractMetaprogramsTask extends CompilationUnitTask
 	{
 		private List<MetaprogramAnchorNode<?>> metaprogramAnchors = new ArrayList<MetaprogramAnchorNode<?>>();
 
+		private int metaprogramLevels = 0;
+
+		@Override
+		public void visitMetaprogramAnchorNodeStart(MetaprogramAnchorNode<?> node)
+		{
+			this.metaprogramLevels++;
+		}
+
 		@Override
 		public void visitMetaprogramAnchorNodeStop(MetaprogramAnchorNode<?> node)
 		{
-			// TODO: make sure this is actually a top-level metaprogram!
-			this.metaprogramAnchors.add(node);
+			this.metaprogramLevels--;
+			if (this.metaprogramLevels == 0)
+			{
+				this.metaprogramAnchors.add(node);
+			}
 		}
 
 		public List<MetaprogramAnchorNode<?>> getMetaprogramAnchors()
