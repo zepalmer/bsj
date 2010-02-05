@@ -152,6 +152,27 @@ public class ListNodeImpl<T extends Node> extends NodeImpl implements ListNode<T
         return factory.makeListNode(
                 new ArrayList<T>(getChildren()));
     }
+    /**
+     * Performs replacement for this node.
+     * @param before The node to replace.
+     * @param after The node to replace the <tt>before</tt> node.
+     * @return <code>true</code> if the replacement was successful; <code>false</code> if the
+     *         specified <tt>before</tt> node is not a child of this node.
+     */
+    @SuppressWarnings("unchecked")
+    public <N extends Node> boolean replace(N before, N after)
+    {
+        if (super.replace(before,after))
+            return true;
+
+        {
+            int index = children.indexOf(before);
+            if (index != -1)
+                children.set(index, (T)after);
+        }
+        return false;
+    }
+
 	/** General constructor */
 	public ListNodeImpl(List<? extends T> children, BsjSourceLocation startLocation, BsjSourceLocation stopLocation)
 	{

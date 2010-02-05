@@ -10,6 +10,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.BlockStatementNode;
+import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.BlockStatementMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramNode;
 
@@ -129,4 +130,19 @@ public class BlockStatementMetaprogramAnchorNodeImpl extends MetaprogramAnchorNo
         return factory.makeBlockStatementMetaprogramAnchorNode(
                 getMetaprogram().deepCopy(factory));
     }
+    /**
+     * Performs replacement for this node.
+     * @param before The node to replace.
+     * @param after The node to replace the <tt>before</tt> node.
+     * @return <code>true</code> if the replacement was successful; <code>false</code> if the
+     *         specified <tt>before</tt> node is not a child of this node.
+     */
+    public <N extends Node> boolean replace(N before, N after)
+    {
+        if (super.replace(before,after))
+            return true;
+
+        return false;
+    }
+
 }

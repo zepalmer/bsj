@@ -12,6 +12,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.BinaryExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
+import edu.jhu.cs.bsj.compiler.ast.node.Node;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class BinaryExpressionNodeImpl extends NodeImpl implements BinaryExpressionNode
@@ -234,4 +235,29 @@ public class BinaryExpressionNodeImpl extends NodeImpl implements BinaryExpressi
                 getRightOperand().deepCopy(factory),
                 getOperator());
     }
+    /**
+     * Performs replacement for this node.
+     * @param before The node to replace.
+     * @param after The node to replace the <tt>before</tt> node.
+     * @return <code>true</code> if the replacement was successful; <code>false</code> if the
+     *         specified <tt>before</tt> node is not a child of this node.
+     */
+    public <N extends Node> boolean replace(N before, N after)
+    {
+        if (super.replace(before,after))
+            return true;
+
+        if (before.equals(this.leftOperand) && (after instanceof ExpressionNode))
+        {
+            setLeftOperand((ExpressionNode)after);
+            return true;
+        }
+        if (before.equals(this.rightOperand) && (after instanceof ExpressionNode))
+        {
+            setRightOperand((ExpressionNode)after);
+            return true;
+        }
+        return false;
+    }
+
 }

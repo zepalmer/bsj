@@ -10,6 +10,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.PrimitiveType;
+import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.PrimitiveTypeNode;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
@@ -149,4 +150,19 @@ public class PrimitiveTypeNodeImpl extends NodeImpl implements PrimitiveTypeNode
         return factory.makePrimitiveTypeNode(
                 getPrimitiveType());
     }
+    /**
+     * Performs replacement for this node.
+     * @param before The node to replace.
+     * @param after The node to replace the <tt>before</tt> node.
+     * @return <code>true</code> if the replacement was successful; <code>false</code> if the
+     *         specified <tt>before</tt> node is not a child of this node.
+     */
+    public <N extends Node> boolean replace(N before, N after)
+    {
+        if (super.replace(before,after))
+            return true;
+
+        return false;
+    }
+
 }

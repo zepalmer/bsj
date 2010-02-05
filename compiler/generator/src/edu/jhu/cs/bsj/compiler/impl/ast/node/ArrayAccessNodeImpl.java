@@ -11,6 +11,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.ArrayAccessNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
+import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.RestrictedPrimaryExpressionNode;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
@@ -206,4 +207,29 @@ public class ArrayAccessNodeImpl extends NodeImpl implements ArrayAccessNode
                 getArrayExpression().deepCopy(factory),
                 getIndexExpression().deepCopy(factory));
     }
+    /**
+     * Performs replacement for this node.
+     * @param before The node to replace.
+     * @param after The node to replace the <tt>before</tt> node.
+     * @return <code>true</code> if the replacement was successful; <code>false</code> if the
+     *         specified <tt>before</tt> node is not a child of this node.
+     */
+    public <N extends Node> boolean replace(N before, N after)
+    {
+        if (super.replace(before,after))
+            return true;
+
+        if (before.equals(this.arrayExpression) && (after instanceof RestrictedPrimaryExpressionNode))
+        {
+            setArrayExpression((RestrictedPrimaryExpressionNode)after);
+            return true;
+        }
+        if (before.equals(this.indexExpression) && (after instanceof ExpressionNode))
+        {
+            setIndexExpression((ExpressionNode)after);
+            return true;
+        }
+        return false;
+    }
+
 }

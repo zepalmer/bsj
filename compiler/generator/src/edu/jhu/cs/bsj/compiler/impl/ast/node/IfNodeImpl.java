@@ -11,6 +11,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.IfNode;
+import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.StatementNode;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
@@ -250,4 +251,34 @@ public class IfNodeImpl extends NodeImpl implements IfNode
                 getThenStatement().deepCopy(factory),
                 getElseStatement().deepCopy(factory));
     }
+    /**
+     * Performs replacement for this node.
+     * @param before The node to replace.
+     * @param after The node to replace the <tt>before</tt> node.
+     * @return <code>true</code> if the replacement was successful; <code>false</code> if the
+     *         specified <tt>before</tt> node is not a child of this node.
+     */
+    public <N extends Node> boolean replace(N before, N after)
+    {
+        if (super.replace(before,after))
+            return true;
+
+        if (before.equals(this.condition) && (after instanceof ExpressionNode))
+        {
+            setCondition((ExpressionNode)after);
+            return true;
+        }
+        if (before.equals(this.thenStatement) && (after instanceof StatementNode))
+        {
+            setThenStatement((StatementNode)after);
+            return true;
+        }
+        if (before.equals(this.elseStatement) && (after instanceof StatementNode))
+        {
+            setElseStatement((StatementNode)after);
+            return true;
+        }
+        return false;
+    }
+
 }

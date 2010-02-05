@@ -11,6 +11,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.BlockNode;
 import edu.jhu.cs.bsj.compiler.ast.node.InitializerDeclarationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.Node;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class InitializerDeclarationNodeImpl extends NodeImpl implements InitializerDeclarationNode
@@ -191,4 +192,24 @@ public class InitializerDeclarationNodeImpl extends NodeImpl implements Initiali
                 getStaticInitializer(),
                 getBody().deepCopy(factory));
     }
+    /**
+     * Performs replacement for this node.
+     * @param before The node to replace.
+     * @param after The node to replace the <tt>before</tt> node.
+     * @return <code>true</code> if the replacement was successful; <code>false</code> if the
+     *         specified <tt>before</tt> node is not a child of this node.
+     */
+    public <N extends Node> boolean replace(N before, N after)
+    {
+        if (super.replace(before,after))
+            return true;
+
+        if (before.equals(this.body) && (after instanceof BlockNode))
+        {
+            setBody((BlockNode)after);
+            return true;
+        }
+        return false;
+    }
+
 }

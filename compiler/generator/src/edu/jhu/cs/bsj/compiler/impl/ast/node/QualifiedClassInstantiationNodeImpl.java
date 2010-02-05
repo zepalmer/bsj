@@ -13,6 +13,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.AnonymousClassBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.QualifiedClassInstantiationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeArgumentNode;
 
@@ -268,4 +269,39 @@ public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeI
                 getArguments().deepCopy(factory),
                 getBody().deepCopy(factory));
     }
+    /**
+     * Performs replacement for this node.
+     * @param before The node to replace.
+     * @param after The node to replace the <tt>before</tt> node.
+     * @return <code>true</code> if the replacement was successful; <code>false</code> if the
+     *         specified <tt>before</tt> node is not a child of this node.
+     */
+    @SuppressWarnings("unchecked")
+    public <N extends Node> boolean replace(N before, N after)
+    {
+        if (super.replace(before,after))
+            return true;
+
+        if (before.equals(this.enclosingExpression) && (after instanceof ExpressionNode))
+        {
+            setEnclosingExpression((ExpressionNode)after);
+            return true;
+        }
+        if (before.equals(this.identifier) && (after instanceof IdentifierNode))
+        {
+            setIdentifier((IdentifierNode)after);
+            return true;
+        }
+        if (before.equals(this.typeArguments) && (after instanceof ListNode<?>))
+        {
+            for (Object listval : ((ListNode<?>)after).getChildren())
+            {
+                TypeArgumentNode.class.cast(listval);
+            }
+            setTypeArguments((ListNode<TypeArgumentNode>)after);
+            return true;
+        }
+        return false;
+    }
+
 }

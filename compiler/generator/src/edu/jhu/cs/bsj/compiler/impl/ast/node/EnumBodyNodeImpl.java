@@ -13,6 +13,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.ClassMemberNode;
 import edu.jhu.cs.bsj.compiler.ast.node.EnumBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.EnumConstantDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.Node;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class EnumBodyNodeImpl extends NodeImpl implements EnumBodyNode
@@ -205,4 +206,38 @@ public class EnumBodyNodeImpl extends NodeImpl implements EnumBodyNode
                 getConstants().deepCopy(factory),
                 getMembers().deepCopy(factory));
     }
+    /**
+     * Performs replacement for this node.
+     * @param before The node to replace.
+     * @param after The node to replace the <tt>before</tt> node.
+     * @return <code>true</code> if the replacement was successful; <code>false</code> if the
+     *         specified <tt>before</tt> node is not a child of this node.
+     */
+    @SuppressWarnings("unchecked")
+    public <N extends Node> boolean replace(N before, N after)
+    {
+        if (super.replace(before,after))
+            return true;
+
+        if (before.equals(this.constants) && (after instanceof ListNode<?>))
+        {
+            for (Object listval : ((ListNode<?>)after).getChildren())
+            {
+                EnumConstantDeclarationNode.class.cast(listval);
+            }
+            setConstants((ListNode<EnumConstantDeclarationNode>)after);
+            return true;
+        }
+        if (before.equals(this.members) && (after instanceof ListNode<?>))
+        {
+            for (Object listval : ((ListNode<?>)after).getChildren())
+            {
+                ClassMemberNode.class.cast(listval);
+            }
+            setMembers((ListNode<ClassMemberNode>)after);
+            return true;
+        }
+        return false;
+    }
+
 }

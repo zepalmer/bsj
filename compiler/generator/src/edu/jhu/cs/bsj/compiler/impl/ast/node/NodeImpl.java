@@ -113,6 +113,21 @@ public abstract class NodeImpl implements Node
     }
 
 
+    /**
+     * Performs replacement for this node.
+     * @param before The node to replace.
+     * @param after The node to replace the <tt>before</tt> node.
+     * @return <code>true</code> if the replacement was successful; <code>false</code> if the
+     *         specified <tt>before</tt> node is not a child of this node.
+     */
+    public <N extends Node> boolean replace(N before, N after)
+    {
+        if (before==null)
+            throw new IllegalArgumentException("Cannot replace node with before value of null.");
+
+        return false;
+    }
+
 	/**
 	 * The next globally unique UID to assign.
 	 */

@@ -15,6 +15,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.ConstructorModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.JavadocNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeParameterNode;
 import edu.jhu.cs.bsj.compiler.ast.node.UnparameterizedTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableNode;
@@ -476,4 +477,72 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
                 getTypeParameters().deepCopy(factory),
                 getJavadoc().deepCopy(factory));
     }
+    /**
+     * Performs replacement for this node.
+     * @param before The node to replace.
+     * @param after The node to replace the <tt>before</tt> node.
+     * @return <code>true</code> if the replacement was successful; <code>false</code> if the
+     *         specified <tt>before</tt> node is not a child of this node.
+     */
+    @SuppressWarnings("unchecked")
+    public <N extends Node> boolean replace(N before, N after)
+    {
+        if (super.replace(before,after))
+            return true;
+
+        if (before.equals(this.identifier) && (after instanceof IdentifierNode))
+        {
+            setIdentifier((IdentifierNode)after);
+            return true;
+        }
+        if (before.equals(this.body) && (after instanceof ConstructorBodyNode))
+        {
+            setBody((ConstructorBodyNode)after);
+            return true;
+        }
+        if (before.equals(this.modifiers) && (after instanceof ConstructorModifiersNode))
+        {
+            setModifiers((ConstructorModifiersNode)after);
+            return true;
+        }
+        if (before.equals(this.parameters) && (after instanceof ListNode<?>))
+        {
+            for (Object listval : ((ListNode<?>)after).getChildren())
+            {
+                VariableNode.class.cast(listval);
+            }
+            setParameters((ListNode<VariableNode>)after);
+            return true;
+        }
+        if (before.equals(this.varargParameter) && (after instanceof VariableNode))
+        {
+            setVarargParameter((VariableNode)after);
+            return true;
+        }
+        if (before.equals(this.throwTypes) && (after instanceof ListNode<?>))
+        {
+            for (Object listval : ((ListNode<?>)after).getChildren())
+            {
+                UnparameterizedTypeNode.class.cast(listval);
+            }
+            setThrowTypes((ListNode<UnparameterizedTypeNode>)after);
+            return true;
+        }
+        if (before.equals(this.typeParameters) && (after instanceof ListNode<?>))
+        {
+            for (Object listval : ((ListNode<?>)after).getChildren())
+            {
+                TypeParameterNode.class.cast(listval);
+            }
+            setTypeParameters((ListNode<TypeParameterNode>)after);
+            return true;
+        }
+        if (before.equals(this.javadoc) && (after instanceof JavadocNode))
+        {
+            setJavadoc((JavadocNode)after);
+            return true;
+        }
+        return false;
+    }
+
 }

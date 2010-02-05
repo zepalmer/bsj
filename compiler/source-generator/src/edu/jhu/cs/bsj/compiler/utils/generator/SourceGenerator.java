@@ -36,8 +36,7 @@ public class SourceGenerator
 			"javax.annotation.Generated" };
 	private static final String[] CLASS_IMPORTS = { "edu.jhu.cs.bsj.compiler.impl.ast.*",
 			"edu.jhu.cs.bsj.compiler.impl.ast.node.*", "edu.jhu.cs.bsj.compiler.impl.ast.node.meta.*",
-			"edu.jhu.cs.bsj.compiler.impl.utils.Pair", "javax.annotation.Generated" };
-
+			"edu.jhu.cs.bsj.compiler.impl.utils.*", "javax.annotation.Generated" };
 	private static final Set<String> PRIMITIVE_TYPES = new HashSet<String>(Arrays.asList(new String[] { "int", "long",
 			"boolean", "float", "double", "short", "byte", "char" }));
 	private static final Set<String> PRIMITIVE_CONTAINER_TYPES = new HashSet<String>(Arrays.asList(new String[] {
@@ -1477,6 +1476,91 @@ public class SourceGenerator
 				ps.println(");");
 				ps.println("    }");
 			}
+
+			// add logic for node replacement
+			ps.println("    /**");
+			ps.println("     * Performs replacement for this node.");
+			ps.println("     * @param before The node to replace.");
+			ps.println("     * @param after The node to replace the <tt>before</tt> node.");
+			ps.println("     * @return <code>true</code> if the replacement was successful; <code>false</code> if the");
+			ps.println("     *         specified <tt>before</tt> node is not a child of this node.");
+			ps.println("     */");
+			boolean suppress = false;
+			for (Prop p : def.props)
+			{
+				if (p.type.contains("<"))
+				{
+					suppress = true;
+					break;
+				}
+			}
+			if (suppress)
+			{
+				ps.println("    @SuppressWarnings(\"unchecked\")");
+			}
+			ps.println("    public <N extends Node> boolean replace(N before, N after)");
+			ps.println("    {");
+			if (def.sname != null)
+			{
+				ps.println("        if (super.replace(before,after))");
+				ps.println("            return true;");
+			} else
+			{
+				ps.println("        if (before==null)");
+				ps.println("            throw new IllegalArgumentException(\"Cannot replace node with before value of null.\");");
+			}
+			ps.println();
+			for (Prop p : def.props)
+			{
+				if (propInstanceOf(p.type, "Node"))
+				{
+					String propClass = p.type;
+					boolean generic = false;
+					String typeArg = "";
+					if (propClass.contains("<"))
+					{
+						propClass = propClass.substring(0, propClass.indexOf('<')) + "<?>";
+						generic = true;
+						typeArg = p.type.substring(p.type.indexOf('<') + 1, p.type.length() - 1);
+						if (typeArg.contains(" "))
+						{
+							typeArg = typeArg.substring(0, typeArg.indexOf(" "));
+						}
+					}
+					ps.println("        if (before.equals(this." + p.name + ") && (after instanceof " + propClass
+							+ "))");
+					ps.println("        {");
+					if (generic)
+					{
+						if (p.type.startsWith("ListNode"))
+						{
+							ps.println("            for (Object listval : ((ListNode<?>)after).getChildren())");
+							ps.println("            {");
+							ps.println("                " + typeArg + ".class.cast(listval);");
+							ps.println("            }");
+						} else
+						{
+							throw new IllegalStateException("Don't know how to assert type safety for type " + p.type);
+						}
+					}
+					ps.println("            set" + capFirst(p.name) + "((" + p.type + ")after);");
+					ps.println("            return true;");
+					ps.println("        }");
+				} else if (p.type.startsWith("List<"))
+				{
+					String typeArg = p.type.substring(5, p.type.length() - 1);
+					// block to scope out index
+					ps.println("        {");
+					ps.println("            int index = " + p.name + ".indexOf(before);");
+					ps.println("            if (index != -1)");
+					// TODO: YUCK YUCK YUCK - this compels me further to make different types for each list node!
+					ps.println("                " + p.name + ".set(index, (" + typeArg+ ")after);");
+					ps.println("        }");
+				}
+			}
+			ps.println("        return false;");
+			ps.println("    }");
+			ps.println();
 
 			// add supplements
 			includeAllBodies(ps, def.includeFilenames, "nodes" + File.separator + "implementation");

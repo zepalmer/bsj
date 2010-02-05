@@ -15,6 +15,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.InterfaceDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.InterfaceModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.JavadocNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeParameterNode;
 
@@ -309,4 +310,48 @@ public class InterfaceDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl i
                 getIdentifier().deepCopy(factory),
                 getJavadoc().deepCopy(factory));
     }
+    /**
+     * Performs replacement for this node.
+     * @param before The node to replace.
+     * @param after The node to replace the <tt>before</tt> node.
+     * @return <code>true</code> if the replacement was successful; <code>false</code> if the
+     *         specified <tt>before</tt> node is not a child of this node.
+     */
+    @SuppressWarnings("unchecked")
+    public <N extends Node> boolean replace(N before, N after)
+    {
+        if (super.replace(before,after))
+            return true;
+
+        if (before.equals(this.modifiers) && (after instanceof InterfaceModifiersNode))
+        {
+            setModifiers((InterfaceModifiersNode)after);
+            return true;
+        }
+        if (before.equals(this.extendsClause) && (after instanceof ListNode<?>))
+        {
+            for (Object listval : ((ListNode<?>)after).getChildren())
+            {
+                TypeNode.class.cast(listval);
+            }
+            setExtendsClause((ListNode<TypeNode>)after);
+            return true;
+        }
+        if (before.equals(this.body) && (after instanceof InterfaceBodyNode))
+        {
+            setBody((InterfaceBodyNode)after);
+            return true;
+        }
+        if (before.equals(this.typeParameters) && (after instanceof ListNode<?>))
+        {
+            for (Object listval : ((ListNode<?>)after).getChildren())
+            {
+                TypeParameterNode.class.cast(listval);
+            }
+            setTypeParameters((ListNode<TypeParameterNode>)after);
+            return true;
+        }
+        return false;
+    }
+
 }

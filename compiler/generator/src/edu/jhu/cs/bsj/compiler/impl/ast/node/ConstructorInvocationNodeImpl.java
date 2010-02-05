@@ -10,6 +10,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.ConstructorInvocationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
@@ -179,5 +180,39 @@ public abstract class ConstructorInvocationNodeImpl extends NodeImpl implements 
         return sb.toString();
     }
 
+
+    /**
+     * Performs replacement for this node.
+     * @param before The node to replace.
+     * @param after The node to replace the <tt>before</tt> node.
+     * @return <code>true</code> if the replacement was successful; <code>false</code> if the
+     *         specified <tt>before</tt> node is not a child of this node.
+     */
+    @SuppressWarnings("unchecked")
+    public <N extends Node> boolean replace(N before, N after)
+    {
+        if (super.replace(before,after))
+            return true;
+
+        if (before.equals(this.arguments) && (after instanceof ListNode<?>))
+        {
+            for (Object listval : ((ListNode<?>)after).getChildren())
+            {
+                ExpressionNode.class.cast(listval);
+            }
+            setArguments((ListNode<ExpressionNode>)after);
+            return true;
+        }
+        if (before.equals(this.typeArguments) && (after instanceof ListNode<?>))
+        {
+            for (Object listval : ((ListNode<?>)after).getChildren())
+            {
+                TypeNode.class.cast(listval);
+            }
+            setTypeArguments((ListNode<TypeNode>)after);
+            return true;
+        }
+        return false;
+    }
 
 }

@@ -13,6 +13,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.AnonymousClassBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.DeclaredTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeArgumentNode;
 import edu.jhu.cs.bsj.compiler.ast.node.UnqualifiedClassInstantiationNode;
 
@@ -180,4 +181,24 @@ public class UnqualifiedClassInstantiationNodeImpl extends ClassInstantiationNod
                 getArguments().deepCopy(factory),
                 getBody().deepCopy(factory));
     }
+    /**
+     * Performs replacement for this node.
+     * @param before The node to replace.
+     * @param after The node to replace the <tt>before</tt> node.
+     * @return <code>true</code> if the replacement was successful; <code>false</code> if the
+     *         specified <tt>before</tt> node is not a child of this node.
+     */
+    public <N extends Node> boolean replace(N before, N after)
+    {
+        if (super.replace(before,after))
+            return true;
+
+        if (before.equals(this.type) && (after instanceof DeclaredTypeNode))
+        {
+            setType((DeclaredTypeNode)after);
+            return true;
+        }
+        return false;
+    }
+
 }

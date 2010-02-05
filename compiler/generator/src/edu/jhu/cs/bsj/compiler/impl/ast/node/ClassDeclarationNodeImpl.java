@@ -15,6 +15,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.ClassModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.JavadocNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeParameterNode;
 
@@ -355,4 +356,53 @@ public class ClassDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl imple
                 getIdentifier().deepCopy(factory),
                 getJavadoc().deepCopy(factory));
     }
+    /**
+     * Performs replacement for this node.
+     * @param before The node to replace.
+     * @param after The node to replace the <tt>before</tt> node.
+     * @return <code>true</code> if the replacement was successful; <code>false</code> if the
+     *         specified <tt>before</tt> node is not a child of this node.
+     */
+    @SuppressWarnings("unchecked")
+    public <N extends Node> boolean replace(N before, N after)
+    {
+        if (super.replace(before,after))
+            return true;
+
+        if (before.equals(this.modifiers) && (after instanceof ClassModifiersNode))
+        {
+            setModifiers((ClassModifiersNode)after);
+            return true;
+        }
+        if (before.equals(this.extendsClause) && (after instanceof TypeNode))
+        {
+            setExtendsClause((TypeNode)after);
+            return true;
+        }
+        if (before.equals(this.implementsClause) && (after instanceof ListNode<?>))
+        {
+            for (Object listval : ((ListNode<?>)after).getChildren())
+            {
+                TypeNode.class.cast(listval);
+            }
+            setImplementsClause((ListNode<TypeNode>)after);
+            return true;
+        }
+        if (before.equals(this.body) && (after instanceof ClassBodyNode))
+        {
+            setBody((ClassBodyNode)after);
+            return true;
+        }
+        if (before.equals(this.typeParameters) && (after instanceof ListNode<?>))
+        {
+            for (Object listval : ((ListNode<?>)after).getChildren())
+            {
+                TypeParameterNode.class.cast(listval);
+            }
+            setTypeParameters((ListNode<TypeParameterNode>)after);
+            return true;
+        }
+        return false;
+    }
+
 }

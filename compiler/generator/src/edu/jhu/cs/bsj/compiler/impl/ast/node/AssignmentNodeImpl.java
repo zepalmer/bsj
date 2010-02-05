@@ -12,6 +12,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.AssignmentNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
+import edu.jhu.cs.bsj.compiler.ast.node.Node;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class AssignmentNodeImpl extends NodeImpl implements AssignmentNode
@@ -234,4 +235,29 @@ public class AssignmentNodeImpl extends NodeImpl implements AssignmentNode
                 getOperator(),
                 getExpression().deepCopy(factory));
     }
+    /**
+     * Performs replacement for this node.
+     * @param before The node to replace.
+     * @param after The node to replace the <tt>before</tt> node.
+     * @return <code>true</code> if the replacement was successful; <code>false</code> if the
+     *         specified <tt>before</tt> node is not a child of this node.
+     */
+    public <N extends Node> boolean replace(N before, N after)
+    {
+        if (super.replace(before,after))
+            return true;
+
+        if (before.equals(this.variable) && (after instanceof ExpressionNode))
+        {
+            setVariable((ExpressionNode)after);
+            return true;
+        }
+        if (before.equals(this.expression) && (after instanceof ExpressionNode))
+        {
+            setExpression((ExpressionNode)after);
+            return true;
+        }
+        return false;
+    }
+
 }

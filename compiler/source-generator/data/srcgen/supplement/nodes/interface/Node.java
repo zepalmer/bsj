@@ -53,5 +53,19 @@ public interface Node
 	 * @return The result of the operation.
 	 */
 	public <P,R> R executeOperation(BsjNodeOperation<P,R> operation, P p);
+	
+	/**
+	 * Replaces one child node value with another.  This convenience method is provided to allow children to remove
+	 * themselves from their parents when necessary, replacing themselves with another node.  It is more efficient to
+	 * call the appropriate setter directly (such as <tt>getParent().setPackageDeclaration(...)</tt>), but this method
+	 * is convenient in cases in which the caller does not know where in its parent it resides (which is especially
+	 * the case with lists).
+	 * @param before The node which is to be replaced.  <code>null</code> is not a legal value.
+	 * @param after The node with which it is to be replaced.
+	 * @return <code>true</code> if the replacement was successful; <code>false</code> if the specified <tt>before</tt>
+	 * node was not found.
+	 * @throws IllegalArgumentException If <tt>before</tt> is <code>null</code>.
+	 */
+	public <N extends Node> boolean replace(N before, N after);
 	/* GEN:stop */
 }

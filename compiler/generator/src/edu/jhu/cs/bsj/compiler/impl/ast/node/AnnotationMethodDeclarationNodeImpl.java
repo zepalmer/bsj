@@ -14,6 +14,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.AnnotationMethodModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationValueNode;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.JavadocNode;
+import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
@@ -341,4 +342,44 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
                 getDefaultValue().deepCopy(factory),
                 getJavadoc().deepCopy(factory));
     }
+    /**
+     * Performs replacement for this node.
+     * @param before The node to replace.
+     * @param after The node to replace the <tt>before</tt> node.
+     * @return <code>true</code> if the replacement was successful; <code>false</code> if the
+     *         specified <tt>before</tt> node is not a child of this node.
+     */
+    public <N extends Node> boolean replace(N before, N after)
+    {
+        if (super.replace(before,after))
+            return true;
+
+        if (before.equals(this.modifiers) && (after instanceof AnnotationMethodModifiersNode))
+        {
+            setModifiers((AnnotationMethodModifiersNode)after);
+            return true;
+        }
+        if (before.equals(this.type) && (after instanceof TypeNode))
+        {
+            setType((TypeNode)after);
+            return true;
+        }
+        if (before.equals(this.identifier) && (after instanceof IdentifierNode))
+        {
+            setIdentifier((IdentifierNode)after);
+            return true;
+        }
+        if (before.equals(this.defaultValue) && (after instanceof AnnotationValueNode))
+        {
+            setDefaultValue((AnnotationValueNode)after);
+            return true;
+        }
+        if (before.equals(this.javadoc) && (after instanceof JavadocNode))
+        {
+            setJavadoc((JavadocNode)after);
+            return true;
+        }
+        return false;
+    }
+
 }

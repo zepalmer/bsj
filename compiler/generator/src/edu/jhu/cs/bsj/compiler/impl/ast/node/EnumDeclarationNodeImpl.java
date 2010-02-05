@@ -15,6 +15,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.EnumModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.JavadocNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
@@ -266,4 +267,39 @@ public class EnumDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl implem
                 getIdentifier().deepCopy(factory),
                 getJavadoc().deepCopy(factory));
     }
+    /**
+     * Performs replacement for this node.
+     * @param before The node to replace.
+     * @param after The node to replace the <tt>before</tt> node.
+     * @return <code>true</code> if the replacement was successful; <code>false</code> if the
+     *         specified <tt>before</tt> node is not a child of this node.
+     */
+    @SuppressWarnings("unchecked")
+    public <N extends Node> boolean replace(N before, N after)
+    {
+        if (super.replace(before,after))
+            return true;
+
+        if (before.equals(this.modifiers) && (after instanceof EnumModifiersNode))
+        {
+            setModifiers((EnumModifiersNode)after);
+            return true;
+        }
+        if (before.equals(this.implementsClause) && (after instanceof ListNode<?>))
+        {
+            for (Object listval : ((ListNode<?>)after).getChildren())
+            {
+                TypeNode.class.cast(listval);
+            }
+            setImplementsClause((ListNode<TypeNode>)after);
+            return true;
+        }
+        if (before.equals(this.body) && (after instanceof EnumBodyNode))
+        {
+            setBody((EnumBodyNode)after);
+            return true;
+        }
+        return false;
+    }
+
 }

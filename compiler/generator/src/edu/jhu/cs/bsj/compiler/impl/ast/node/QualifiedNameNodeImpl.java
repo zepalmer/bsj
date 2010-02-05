@@ -12,6 +12,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.NameCategory;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.NameNode;
+import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.QualifiedNameNode;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
@@ -213,4 +214,29 @@ public class QualifiedNameNodeImpl extends NameNodeImpl implements QualifiedName
                 getIdentifier().deepCopy(factory),
                 getCategory());
     }
+    /**
+     * Performs replacement for this node.
+     * @param before The node to replace.
+     * @param after The node to replace the <tt>before</tt> node.
+     * @return <code>true</code> if the replacement was successful; <code>false</code> if the
+     *         specified <tt>before</tt> node is not a child of this node.
+     */
+    public <N extends Node> boolean replace(N before, N after)
+    {
+        if (super.replace(before,after))
+            return true;
+
+        if (before.equals(this.base) && (after instanceof NameNode))
+        {
+            setBase((NameNode)after);
+            return true;
+        }
+        if (before.equals(this.identifier) && (after instanceof IdentifierNode))
+        {
+            setIdentifier((IdentifierNode)after);
+            return true;
+        }
+        return false;
+    }
+
 }

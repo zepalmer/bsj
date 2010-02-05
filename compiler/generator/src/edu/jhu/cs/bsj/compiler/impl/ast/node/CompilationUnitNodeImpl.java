@@ -12,6 +12,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ImportNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.PackageDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeDeclarationNode;
 
@@ -250,4 +251,43 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
                 getImports().deepCopy(factory),
                 getTypeDecls().deepCopy(factory));
     }
+    /**
+     * Performs replacement for this node.
+     * @param before The node to replace.
+     * @param after The node to replace the <tt>before</tt> node.
+     * @return <code>true</code> if the replacement was successful; <code>false</code> if the
+     *         specified <tt>before</tt> node is not a child of this node.
+     */
+    @SuppressWarnings("unchecked")
+    public <N extends Node> boolean replace(N before, N after)
+    {
+        if (super.replace(before,after))
+            return true;
+
+        if (before.equals(this.packageDeclaration) && (after instanceof PackageDeclarationNode))
+        {
+            setPackageDeclaration((PackageDeclarationNode)after);
+            return true;
+        }
+        if (before.equals(this.imports) && (after instanceof ListNode<?>))
+        {
+            for (Object listval : ((ListNode<?>)after).getChildren())
+            {
+                ImportNode.class.cast(listval);
+            }
+            setImports((ListNode<ImportNode>)after);
+            return true;
+        }
+        if (before.equals(this.typeDecls) && (after instanceof ListNode<?>))
+        {
+            for (Object listval : ((ListNode<?>)after).getChildren())
+            {
+                TypeDeclarationNode.class.cast(listval);
+            }
+            setTypeDecls((ListNode<TypeDeclarationNode>)after);
+            return true;
+        }
+        return false;
+    }
+
 }

@@ -13,6 +13,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.FieldDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.FieldModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.JavadocNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclaratorNode;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
@@ -258,4 +259,39 @@ public class FieldDeclarationNodeImpl extends NodeImpl implements FieldDeclarati
                 getDeclarators().deepCopy(factory),
                 getJavadoc().deepCopy(factory));
     }
+    /**
+     * Performs replacement for this node.
+     * @param before The node to replace.
+     * @param after The node to replace the <tt>before</tt> node.
+     * @return <code>true</code> if the replacement was successful; <code>false</code> if the
+     *         specified <tt>before</tt> node is not a child of this node.
+     */
+    @SuppressWarnings("unchecked")
+    public <N extends Node> boolean replace(N before, N after)
+    {
+        if (super.replace(before,after))
+            return true;
+
+        if (before.equals(this.modifiers) && (after instanceof FieldModifiersNode))
+        {
+            setModifiers((FieldModifiersNode)after);
+            return true;
+        }
+        if (before.equals(this.declarators) && (after instanceof ListNode<?>))
+        {
+            for (Object listval : ((ListNode<?>)after).getChildren())
+            {
+                VariableDeclaratorNode.class.cast(listval);
+            }
+            setDeclarators((ListNode<VariableDeclaratorNode>)after);
+            return true;
+        }
+        if (before.equals(this.javadoc) && (after instanceof JavadocNode))
+        {
+            setJavadoc((JavadocNode)after);
+            return true;
+        }
+        return false;
+    }
+
 }

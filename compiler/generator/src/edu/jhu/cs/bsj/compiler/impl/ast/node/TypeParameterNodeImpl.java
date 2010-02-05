@@ -12,6 +12,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.DeclaredTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeParameterNode;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
@@ -205,4 +206,34 @@ public class TypeParameterNodeImpl extends NodeImpl implements TypeParameterNode
                 getIdentifier().deepCopy(factory),
                 getBounds().deepCopy(factory));
     }
+    /**
+     * Performs replacement for this node.
+     * @param before The node to replace.
+     * @param after The node to replace the <tt>before</tt> node.
+     * @return <code>true</code> if the replacement was successful; <code>false</code> if the
+     *         specified <tt>before</tt> node is not a child of this node.
+     */
+    @SuppressWarnings("unchecked")
+    public <N extends Node> boolean replace(N before, N after)
+    {
+        if (super.replace(before,after))
+            return true;
+
+        if (before.equals(this.identifier) && (after instanceof IdentifierNode))
+        {
+            setIdentifier((IdentifierNode)after);
+            return true;
+        }
+        if (before.equals(this.bounds) && (after instanceof ListNode<?>))
+        {
+            for (Object listval : ((ListNode<?>)after).getChildren())
+            {
+                DeclaredTypeNode.class.cast(listval);
+            }
+            setBounds((ListNode<DeclaredTypeNode>)after);
+            return true;
+        }
+        return false;
+    }
+
 }

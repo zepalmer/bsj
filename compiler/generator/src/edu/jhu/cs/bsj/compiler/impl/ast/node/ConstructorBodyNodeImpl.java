@@ -13,6 +13,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.BlockStatementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ConstructorBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ConstructorInvocationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.Node;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class ConstructorBodyNodeImpl extends NodeImpl implements ConstructorBodyNode
@@ -205,4 +206,34 @@ public class ConstructorBodyNodeImpl extends NodeImpl implements ConstructorBody
                 getConstructorInvocation().deepCopy(factory),
                 getStatements().deepCopy(factory));
     }
+    /**
+     * Performs replacement for this node.
+     * @param before The node to replace.
+     * @param after The node to replace the <tt>before</tt> node.
+     * @return <code>true</code> if the replacement was successful; <code>false</code> if the
+     *         specified <tt>before</tt> node is not a child of this node.
+     */
+    @SuppressWarnings("unchecked")
+    public <N extends Node> boolean replace(N before, N after)
+    {
+        if (super.replace(before,after))
+            return true;
+
+        if (before.equals(this.constructorInvocation) && (after instanceof ConstructorInvocationNode))
+        {
+            setConstructorInvocation((ConstructorInvocationNode)after);
+            return true;
+        }
+        if (before.equals(this.statements) && (after instanceof ListNode<?>))
+        {
+            for (Object listval : ((ListNode<?>)after).getChildren())
+            {
+                BlockStatementNode.class.cast(listval);
+            }
+            setStatements((ListNode<BlockStatementNode>)after);
+            return true;
+        }
+        return false;
+    }
+
 }

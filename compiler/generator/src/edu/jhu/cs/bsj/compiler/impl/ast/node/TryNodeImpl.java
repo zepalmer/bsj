@@ -12,6 +12,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.BlockNode;
 import edu.jhu.cs.bsj.compiler.ast.node.CatchNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.TryNode;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
@@ -251,4 +252,39 @@ public class TryNodeImpl extends NodeImpl implements TryNode
                 getCatches().deepCopy(factory),
                 getFinallyBlock().deepCopy(factory));
     }
+    /**
+     * Performs replacement for this node.
+     * @param before The node to replace.
+     * @param after The node to replace the <tt>before</tt> node.
+     * @return <code>true</code> if the replacement was successful; <code>false</code> if the
+     *         specified <tt>before</tt> node is not a child of this node.
+     */
+    @SuppressWarnings("unchecked")
+    public <N extends Node> boolean replace(N before, N after)
+    {
+        if (super.replace(before,after))
+            return true;
+
+        if (before.equals(this.block) && (after instanceof BlockNode))
+        {
+            setBlock((BlockNode)after);
+            return true;
+        }
+        if (before.equals(this.catches) && (after instanceof ListNode<?>))
+        {
+            for (Object listval : ((ListNode<?>)after).getChildren())
+            {
+                CatchNode.class.cast(listval);
+            }
+            setCatches((ListNode<CatchNode>)after);
+            return true;
+        }
+        if (before.equals(this.finallyBlock) && (after instanceof BlockNode))
+        {
+            setFinallyBlock((BlockNode)after);
+            return true;
+        }
+        return false;
+    }
+
 }
