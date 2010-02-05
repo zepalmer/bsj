@@ -55,7 +55,7 @@ public class MetaprogramExecutionTask extends AbstractBsjCompilerTask
 		profile.getMetaprogram().execute();
 		
 		// Have the metaprogram replace itself with its replacement node
-		// TODO
+		profile.getAnchor().getParent().replace(profile.getAnchor(), profile.getAnchor().getReplacement());
 		
 		// Transition the affected tracker
 		// TODO: If the metaprogram introduces sub-metaprograms, what do we do?  Move back to extraction?

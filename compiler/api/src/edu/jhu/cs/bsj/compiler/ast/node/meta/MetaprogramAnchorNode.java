@@ -37,4 +37,9 @@ public interface MetaprogramAnchorNode<T extends Node> extends Node
      */
     @Override
     public MetaprogramAnchorNode<T> deepCopy(BsjNodeFactory factory);
+	/**
+	 * Changes the node with which this anchor will be replaced once its metaprogram executes.
+	 * @param replacement The replacement node to use.
+	 */
+	public void setReplacement(T replacement);
 }

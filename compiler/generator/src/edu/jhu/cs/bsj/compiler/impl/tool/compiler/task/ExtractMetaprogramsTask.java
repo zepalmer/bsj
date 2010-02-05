@@ -157,7 +157,7 @@ public class ExtractMetaprogramsTask extends CompilationUnitTask
 		Context<A> context = new ContextImpl<A>(anchor);
 		BsjMetaprogram<A> metaprogram = compileMetaprogram(anchor.getMetaprogram(), context, anchorClass);
 
-		return new MetaprogramProfile(metaprogram, getTracker());
+		return new MetaprogramProfile(metaprogram, anchor, getTracker());
 	}
 
 	private <A extends MetaprogramAnchorNode<? extends Node>> BsjMetaprogram<A> compileMetaprogram(
@@ -201,12 +201,13 @@ public class ExtractMetaprogramsTask extends CompilationUnitTask
 				factory.makeListNode(Collections.<TypeParameterNode> emptyList()), null);
 
 		ConstructorDeclarationNode constructorImplementation = factory.makeConstructorDeclarationNode(
-				factory.makeIdentifierNode(metaprogramClassName),
-				factory.makeConstructorBodyNode(
-						factory.makeSuperclassConstructorInvocationNode(
-								null,
-								factory.makeListNode(Arrays.<ExpressionNode> asList(factory.makeFieldAccessByNameNode(parseNameNode(
-										"context", NameCategory.EXPRESSION)))),
+				factory.makeIdentifierNode(metaprogramClassName), factory.makeConstructorBodyNode(
+						factory.makeSuperclassConstructorInvocationNode(null,
+								factory.makeListNode(Arrays.<ExpressionNode> asList(
+										factory.makeFieldAccessByNameNode(parseNameNode("context",
+												NameCategory.EXPRESSION)),
+										factory.makeFieldAccessByNameNode(parseNameNode("factory",
+												NameCategory.EXPRESSION)))),
 								factory.makeListNode(Collections.<TypeNode> emptyList())),
 						factory.makeListNode(Collections.<BlockStatementNode> emptyList())),
 				factory.makeConstructorModifiersNode(AccessModifier.PUBLIC,
@@ -216,7 +217,13 @@ public class ExtractMetaprogramsTask extends CompilationUnitTask
 								factory.makeListNode(Collections.<AnnotationNode> emptyList())),
 						factory.makeParameterizedTypeNode(factory.makeUnparameterizedTypeNode(parseNameNode("Context",
 								NameCategory.TYPE)), factory.makeListNode(Collections.<TypeArgumentNode> emptyList())),
-						factory.makeIdentifierNode("context")))), null,
+						factory.makeIdentifierNode("context")), factory.makeVariableNode(
+						factory.makeVariableModifiersNode(false,
+								factory.makeListNode(Collections.<AnnotationNode> emptyList())),
+						factory.makeParameterizedTypeNode(factory.makeUnparameterizedTypeNode(parseNameNode(
+								"BsjNodeFactory", NameCategory.TYPE)),
+								factory.makeListNode(Collections.<TypeArgumentNode> emptyList())),
+						factory.makeIdentifierNode("factory")))), null,
 				factory.makeListNode(Collections.<UnparameterizedTypeNode> emptyList()),
 				factory.makeListNode(Collections.<TypeParameterNode> emptyList()), null);
 
@@ -296,14 +303,14 @@ public class ExtractMetaprogramsTask extends CompilationUnitTask
 		Constructor<? extends BsjMetaprogram<A>> constructor;
 		try
 		{
-			constructor = metaprogramClass.getConstructor(Context.class);
+			constructor = metaprogramClass.getConstructor(Context.class, BsjNodeFactory.class);
 		} catch (NoSuchMethodException e)
 		{
 			throw new IllegalStateException("Class we just compiled does not have the right constructor!", e);
 		}
 		try
 		{
-			return constructor.newInstance(context);
+			return constructor.newInstance(context, factory);
 		} catch (IllegalArgumentException e)
 		{
 			throw new IllegalStateException("Instantiation of BSJ metaprogram class failed!", e);

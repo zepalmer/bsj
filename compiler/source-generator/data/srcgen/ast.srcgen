@@ -1474,6 +1474,8 @@ MetaprogramAnchorNode<T extends Node>* :: Node
     @docs
         The replacement field on this node is used to indicate the node with which this node will be replaced once the
         execution of this metaprogram terminates.  This is initially defaulted to a no-op.
+    @include
+        MetaprogramAnchorNode.java
 
 # TODO: more info, such as explicit dependencies, imports, etc. (once syntax is available)
 MetaprogramNode :: Node

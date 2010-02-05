@@ -37,6 +37,11 @@ public class SourceSerializationTask extends CompilationUnitTask implements BsjC
 				BsjCompilerLocation.GENERATED_SOURCE_PATH, getTracker().getName(), Kind.SOURCE, null);
 		bsjFileObject.setCharContent(source);
 		
+		if (LOGGER.isTraceEnabled())
+		{
+			LOGGER.trace("Serializing " + getTracker().getName() + " as follows: \n" + source);
+		}
+		
 		getTracker().setStatus(CompilationUnitStatus.COMPLETE);
 	}
 
