@@ -289,6 +289,8 @@ public class ExtractMetaprogramsTask extends CompilationUnitTask
 		// TODO: get from SPI or something
 		// TODO: use BsjCompiler interface
 		StandardBsjCompiler compiler = new StandardBsjCompiler(fileManager);
+		// TODO: if this compilation fails, the resulting exception won't make much sense; we need to translate it back
+		// to the file from which it originated
 		compiler.compile(Arrays.asList(metaprogramSourceFile));
 
 		ClassLoader metaprogramClassLoader = fileManager.getClassLoader(BsjCompilerLocation.CLASS_OUTPUT);
