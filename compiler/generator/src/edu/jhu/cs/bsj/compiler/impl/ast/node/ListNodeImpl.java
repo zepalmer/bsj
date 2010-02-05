@@ -12,6 +12,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
+import edu.jhu.cs.bsj.compiler.impl.utils.ProxyList;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class ListNodeImpl<T extends Node> extends NodeImpl implements ListNode<T>
@@ -155,7 +156,24 @@ public class ListNodeImpl<T extends Node> extends NodeImpl implements ListNode<T
 	public ListNodeImpl(List<? extends T> children, BsjSourceLocation startLocation, BsjSourceLocation stopLocation)
 	{
 		super(startLocation, stopLocation);
-		this.children = new ArrayList<T>(children);
+		// TODO: replace the following implementations with something more efficient than instanceof
+		this.children = new ProxyList<T>(new ArrayList<T>(children))
+		{
+			protected void elementAdded(int index, T element)
+			{
+				if (element instanceof NodeImpl)
+				{
+					((NodeImpl)element).setParent(ListNodeImpl.this);
+				}
+			}
+			protected void elementRemoved(int index, T element)
+			{
+				if (element instanceof NodeImpl)
+				{
+					((NodeImpl)element).setParent(null);
+				}
+			}
+		};
 	}
 
 	/**

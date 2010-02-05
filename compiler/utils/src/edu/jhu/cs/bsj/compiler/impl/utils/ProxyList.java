@@ -26,6 +26,11 @@ public abstract class ProxyList<T> implements List<T>
 	{
 		super();
 		this.backingList = backingList;
+		
+		for (int i=0;i<backingList.size();i++)
+		{
+			elementAdded(i, backingList.get(i));
+		}
 	}
 
 	/**

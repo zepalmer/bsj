@@ -95,6 +95,8 @@ public class ExtractMetaprogramsTask extends CompilationUnitTask
 		for (MetaprogramAnchorNode<?> anchor : anchors)
 		{
 			// Use polymorphic dispatch to quickly obtain the class of the node
+			// TODO: turns out that modern VMs are not horribly slow with instanceof
+			// so ditch the "clever" thing here and clean it up
 			BsjNodeOperation<Void, Void> handleAnchor = new BsjDefaultNodeOperation<Void, Void>()
 			{
 				@Override
