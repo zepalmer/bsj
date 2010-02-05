@@ -2352,7 +2352,10 @@ public class SourceGenerator
 				if (def.classDoc != null && def.classDoc.length() > 0)
 				{
 					writer.writeStartElement("doc");
-					writer.writeCData(def.classDoc);
+					String doc = "\n" + def.classDoc;
+					doc = doc.replaceAll("\n","\n            ");
+					doc = doc + "\n        ";
+					writer.writeCData(doc);
 					writer.writeEndElement();
 				}
 
