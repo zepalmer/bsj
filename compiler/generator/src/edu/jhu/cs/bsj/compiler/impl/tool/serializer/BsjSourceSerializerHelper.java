@@ -1142,7 +1142,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	public Void executeStringLiteralNode(StringLiteralNode node, PrependablePrintStream p)
 	{
 		p.print("\"");
-		p.print(node.getValue().replaceAll("\n", "\\\\n"));// TODO any other whitespace to translate?
+		p.print(escape(node.getValue()));
 		p.print("\"");
 		return null;
 	}
@@ -1711,4 +1711,50 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 		ret.append(" */");
 		return ret.toString();
 	}
+	
+	/**
+	 * Escapes the provided string.
+	 * 
+	 * @param string The string to escape.
+	 * @return The escaped string.
+	 */
+	public static final String escape(String string)
+	{
+		StringBuilder sb = new StringBuilder();
+		for (char c : string.toCharArray())
+		{
+			switch (c)
+			{
+				case '\\':
+					sb.append("\\\\");
+					break;
+				case '\n':
+					sb.append("\\n");
+					break;
+				case '\b':
+					sb.append("\\b");
+					break;
+				case '\t':
+					sb.append("\\t");
+					break;
+				case '\r':
+					sb.append("\\r");
+					break;
+				case '\f':
+					sb.append("\\f");
+					break;
+				case '\"':
+					sb.append("\\\"");
+					break;
+				case '\'':
+					sb.append("\\\'");
+					break;
+				default:
+					sb.append(c);
+					break;
+			}
+		}
+		return sb.toString();
+	}
+
 }
