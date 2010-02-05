@@ -254,14 +254,6 @@ public class ExtractMetaprogramsTask extends CompilationUnitTask
 		}
 
 		Map<BsjCompilerLocation, LocationManager> locationMap = new HashMap<BsjCompilerLocation, LocationManager>();
-		// TODO: remove local file management in favor of InMemoryLocationManager (and regression test!)
-		// File tmpdir = new File("./local/compile-temp");
-		// tmpdir.mkdirs();
-		// LocationManager tmplm = new RegularFileLocationManager(null, tmpdir);
-
-		// locationMap.put(BsjCompilerLocation.SOURCE_PATH, tmplm);
-		// locationMap.put(BsjCompilerLocation.GENERATED_SOURCE_PATH, tmplm);
-		// locationMap.put(BsjCompilerLocation.CLASS_OUTPUT, tmplm);
 		locationMap.put(BsjCompilerLocation.SOURCE_PATH, new InMemoryLocationManager(null));
 		locationMap.put(BsjCompilerLocation.GENERATED_SOURCE_PATH, new InMemoryLocationManager(null));
 		locationMap.put(BsjCompilerLocation.CLASS_OUTPUT, new InMemoryLocationManager(null));
@@ -296,7 +288,7 @@ public class ExtractMetaprogramsTask extends CompilationUnitTask
 		Class<? extends BsjMetaprogram<A>> metaprogramClass;
 		try
 		{
-			metaprogramClass = (Class<? extends BsjMetaprogram<A>>) metaprogramClassLoader.loadClass(fullyQualifiedMetaprogramClassName);
+			metaprogramClass = metaprogramClassCast(metaprogramClassLoader.loadClass(fullyQualifiedMetaprogramClassName));
 		} catch (ClassNotFoundException e)
 		{
 			throw new IllegalStateException("Class we just compiled is not found!", e);
@@ -325,6 +317,23 @@ public class ExtractMetaprogramsTask extends CompilationUnitTask
 		{
 			throw new IllegalStateException("Instantiation of BSJ metaprogram class failed!", e);
 		}
+	}
+
+	/**
+	 * A convenience casting method.  This method performs a casting operation from the specified class to that of a
+	 * metaprogram using the parameterized anchor type.  This method is <i>type unsafe</i>; it does not actually ensure
+	 * that the class in question has this property.  However, forcing the class cast operation into a seperate method
+	 * allows the {@link SuppressWarnings} annotation to target only this cast and none of the rest of the method from
+	 * which it is called.
+	 * @param <A> The type of anchor node used by the metaprogram class.
+	 * @param loadClass The class to cast.
+	 * @return The casted result.
+	 */
+	@SuppressWarnings("unchecked")
+	private <A extends MetaprogramAnchorNode<? extends Node>> Class<? extends BsjMetaprogram<A>> metaprogramClassCast(
+			Class<?> loadClass)
+	{
+		return (Class<? extends BsjMetaprogram<A>>) loadClass;
 	}
 
 	/**
