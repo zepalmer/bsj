@@ -12,7 +12,6 @@ import java.util.Map;
 
 import edu.jhu.cs.bsj.compiler.ast.AccessModifier;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
-import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceSerializer;
 import edu.jhu.cs.bsj.compiler.ast.NameCategory;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationNode;
@@ -38,7 +37,6 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.BlockStatementMetaprogramAnchorNode
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.TypeDeclarationMetaprogramAnchorNode;
-import edu.jhu.cs.bsj.compiler.ast.util.BsjDefaultNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.util.BsjTypedNodeNoOpVisitor;
 import edu.jhu.cs.bsj.compiler.exception.BsjCompilerException;
 import edu.jhu.cs.bsj.compiler.impl.metaprogram.BsjMetaprogram;
@@ -68,7 +66,7 @@ public class ExtractMetaprogramsTask extends CompilationUnitTask
 	/** The packages which should be imported by metaprograms. */
 	private static String[] IMPORT_PACKAGES = { "edu.jhu.cs.bsj.compiler.impl.metaprogram",
 			"edu.jhu.cs.bsj.compiler.ast", "edu.jhu.cs.bsj.compiler.ast.node", "edu.jhu.cs.bsj.compiler.ast.node.meta",
-			"edu.jhu.cs.bsj.compiler.metaprogram"};
+			"edu.jhu.cs.bsj.compiler.metaprogram" };
 
 	/** A field containing the factory which should be used as this task is executing. */
 	private BsjNodeFactory factory;
@@ -94,63 +92,16 @@ public class ExtractMetaprogramsTask extends CompilationUnitTask
 		// Handle each anchor in turn
 		for (MetaprogramAnchorNode<?> anchor : anchors)
 		{
-			// Use polymorphic dispatch to quickly obtain the class of the node
-			// TODO: turns out that modern VMs are not horribly slow with instanceof
-			// so ditch the "clever" thing here and clean it up
-			BsjNodeOperation<Void, Void> handleAnchor = new BsjDefaultNodeOperation<Void, Void>()
+			if (anchor instanceof BlockStatementMetaprogramAnchorNode)
 			{
-				@Override
-				public Void executeDefault(Node node, Void p)
-				{
-					throw new IllegalStateException("Don't know how to handle metaprogram anchor of type "
-							+ node.getClass());
-				}
-
-				@Override
-				public Void executeBlockStatementMetaprogramAnchorNode(BlockStatementMetaprogramAnchorNode node, Void p)
-				{
-					try
-					{
-						new MetaprogramAnchorHandler<BlockStatementMetaprogramAnchorNode>(
-								BlockStatementMetaprogramAnchorNode.class).handleAnchor(node);
-						return null;
-					} catch (IOException ioe)
-					{
-						throw new RuntimeIOException(ioe);
-					} catch (BsjCompilerException bce)
-					{
-						throw new RuntimeBsjCompilerException(bce);
-					}
-				}
-
-				@Override
-				public Void executeTypeDeclarationMetaprogramAnchorNode(TypeDeclarationMetaprogramAnchorNode node,
-						Void p)
-				{
-					try
-					{
-						new MetaprogramAnchorHandler<TypeDeclarationMetaprogramAnchorNode>(
-								TypeDeclarationMetaprogramAnchorNode.class).handleAnchor(node);
-						return null;
-					} catch (IOException ioe)
-					{
-						throw new RuntimeIOException(ioe);
-					} catch (BsjCompilerException bce)
-					{
-						throw new RuntimeBsjCompilerException(bce);
-					}
-				}
-			};
-
-			try
+				handleAnchor((BlockStatementMetaprogramAnchorNode) anchor, BlockStatementMetaprogramAnchorNode.class);
+			} else if (anchor instanceof TypeDeclarationMetaprogramAnchorNode)
 			{
-				anchor.executeOperation(handleAnchor, null);
-			} catch (RuntimeIOException ioe)
+				handleAnchor((TypeDeclarationMetaprogramAnchorNode) anchor, TypeDeclarationMetaprogramAnchorNode.class);
+			} else
 			{
-				throw ioe.getE();
-			} catch (RuntimeBsjCompilerException bce)
-			{
-				throw bce.getE();
+				throw new IllegalStateException("Don't know how to handle metaprogram anchor of type "
+						+ anchor.getClass());
 			}
 		}
 
@@ -184,219 +135,195 @@ public class ExtractMetaprogramsTask extends CompilationUnitTask
 		}
 	}
 
-	/**
-	 * A module designed to handle an anchor for this task. These methods are contained within an inner class to tame
-	 * the use of type arguments.
-	 * 
-	 * @author Zachary Palmer
-	 * 
-	 * @param <A> The type of the anchor to handle.
-	 * @param <R> The type of the node which is used to replace the anchor.
-	 */
-	private class MetaprogramAnchorHandler<A extends MetaprogramAnchorNode<? extends Node>>
+	private <A extends MetaprogramAnchorNode<? extends Node>> void handleAnchor(A anchor, Class<A> anchorClass)
+			throws IOException, BsjCompilerException
 	{
-		/** The type of the anchor node. */
-		private Class<A> anchorClass;
+		// Build a metaprogram profile for this anchor
+		MetaprogramProfile profile = buildProfile(anchor, anchorClass);
 
-		public MetaprogramAnchorHandler(Class<A> anchorClass)
+		// Clear the metaprogram from the anchor (so it can't reflect on itself or anything messy like that)
+		// TODO: is this necessary? has this already been done?
+		anchor.setMetaprogram(null);
+
+		// Register the metaprogram profile with the metacompilation manager
+		metacompilationManager.registerMetaprogramProfile(profile);
+
+		getTracker().setMetaprogramsOutstanding(getTracker().getMetaprogramsOutstanding() + 1);
+	}
+
+	private <A extends MetaprogramAnchorNode<? extends Node>> MetaprogramProfile buildProfile(A anchor,
+			Class<A> anchorClass) throws IOException, BsjCompilerException
+	{
+		Context<A> context = new ContextImpl<A>(anchor);
+		BsjMetaprogram<A> metaprogram = compileMetaprogram(anchor.getMetaprogram(), context, anchorClass);
+
+		return new MetaprogramProfile(metaprogram, getTracker());
+	}
+
+	private <A extends MetaprogramAnchorNode<? extends Node>> BsjMetaprogram<A> compileMetaprogram(
+			MetaprogramNode metaprogramNode, Context<A> context, Class<A> anchorClass) throws IOException,
+			BsjCompilerException
+	{
+		if (LOGGER.isTraceEnabled())
 		{
-			super();
-			this.anchorClass = anchorClass;
+			LOGGER.trace("Generating metaprogram class for " + getTracker().getName());
 		}
 
-		public void handleAnchor(A anchor) throws IOException, BsjCompilerException
+		// *** Start by building the metaprogram compilation unit
+		// TODO: what kind of package declaration should a metaprogram have?
+		String metaprogramPackageName = "foo";
+
+		List<ImportNode> imports = new ArrayList<ImportNode>();
+		for (String packageString : IMPORT_PACKAGES)
 		{
-			// Build a metaprogram profile for this anchor
-			MetaprogramProfile profile = buildProfile(anchor);
-
-			// Clear the metaprogram from the anchor (so it can't reflect on itself or anything messy like that)
-			// TODO: is this necessary? has this already been done?
-			anchor.setMetaprogram(null);
-
-			// Register the metaprogram profile with the metacompilation manager
-			metacompilationManager.registerMetaprogramProfile(profile);
-
-			getTracker().setMetaprogramsOutstanding(getTracker().getMetaprogramsOutstanding() + 1);
+			imports.add(factory.makeImportOnDemandNode(parseNameNode(packageString, NameCategory.PACKAGE), false));
 		}
 
-		private MetaprogramProfile buildProfile(A anchor) throws IOException, BsjCompilerException
+		// Get metaprogram class name
+		// TODO: get a unique identifier
+		String metaprogramClassName = "BsjMetaprogram$$$";
+		String fullyQualifiedMetaprogramClassName = metaprogramPackageName + "." + metaprogramClassName;
+
+		// Create metaprogram nodes
+		PackageDeclarationNode packageDeclarationNode = factory.makePackageDeclarationNode(parseNameNode(
+				metaprogramPackageName, NameCategory.PACKAGE),
+				factory.makeListNode(Collections.<AnnotationNode> emptyList()));
+
+		// TODO: don't deep copy here (for efficiency)? this means we have to null out the list's parent first?
+		BlockNode methodBlock = factory.makeBlockNode(metaprogramNode.getBody().deepCopy(factory));
+
+		MethodDeclarationNode executeMethodImplementation = factory.makeMethodDeclarationNode(methodBlock,
+				factory.makeMethodModifiersNode(AccessModifier.PUBLIC, false, false, true, false, false, false,
+						factory.makeListNode(Collections.<AnnotationNode> emptyList())),
+				factory.makeIdentifierNode("execute"), factory.makeListNode(Collections.<VariableNode> emptyList()),
+				null, factory.makeVoidTypeNode(),
+				factory.makeListNode(Collections.<UnparameterizedTypeNode> emptyList()),
+				factory.makeListNode(Collections.<TypeParameterNode> emptyList()), null);
+
+		ConstructorDeclarationNode constructorImplementation = factory.makeConstructorDeclarationNode(
+				factory.makeIdentifierNode(metaprogramClassName),
+				factory.makeConstructorBodyNode(
+						factory.makeSuperclassConstructorInvocationNode(
+								null,
+								factory.makeListNode(Arrays.<ExpressionNode> asList(factory.makeFieldAccessByNameNode(parseNameNode(
+										"context", NameCategory.EXPRESSION)))),
+								factory.makeListNode(Collections.<TypeNode> emptyList())),
+						factory.makeListNode(Collections.<BlockStatementNode> emptyList())),
+				factory.makeConstructorModifiersNode(AccessModifier.PUBLIC,
+						factory.makeListNode(Collections.<AnnotationNode> emptyList())),
+				factory.makeListNode(Arrays.<VariableNode> asList(factory.makeVariableNode(
+						factory.makeVariableModifiersNode(false,
+								factory.makeListNode(Collections.<AnnotationNode> emptyList())),
+						factory.makeParameterizedTypeNode(factory.makeUnparameterizedTypeNode(parseNameNode("Context",
+								NameCategory.TYPE)), factory.makeListNode(Collections.<TypeArgumentNode> emptyList())),
+						factory.makeIdentifierNode("context")))), null,
+				factory.makeListNode(Collections.<UnparameterizedTypeNode> emptyList()),
+				factory.makeListNode(Collections.<TypeParameterNode> emptyList()), null);
+
+		ClassBodyNode body = factory.makeClassBodyNode(factory.makeListNode(Arrays.<ClassMemberNode> asList(
+				executeMethodImplementation, constructorImplementation)));
+
+		TypeDeclarationNode metaprogramClassNode = factory.makeClassDeclarationNode(
+				factory.makeClassModifiersNode(AccessModifier.PUBLIC, false, false, false, false,
+						factory.makeListNode(Collections.<AnnotationNode> emptyList())),
+				factory.makeParameterizedTypeNode(
+						factory.makeUnparameterizedTypeNode(parseNameNode("AbstractBsjMetaprogram", NameCategory.TYPE)),
+						factory.makeListNode(Arrays.<TypeArgumentNode> asList(factory.makeUnparameterizedTypeNode(parseNameNode(
+								anchorClass.getName(), NameCategory.AMBIGUOUS))))),
+				factory.makeListNode(Collections.<TypeNode> emptyList()), body,
+				factory.makeListNode(Collections.<TypeParameterNode> emptyList()),
+				factory.makeIdentifierNode(metaprogramClassName), null);
+
+		CompilationUnitNode metaprogramCompilationUnitNode = factory.makeCompilationUnitNode(packageDeclarationNode,
+				factory.makeListNode(imports), factory.makeListNode(Collections.singletonList(metaprogramClassNode)));
+
+		if (LOGGER.isTraceEnabled())
 		{
-			Context<A> context = new ContextImpl<A>(anchor);
-			BsjMetaprogram<A> metaprogram = compileMetaprogram(anchor.getMetaprogram(), context);
-
-			return new MetaprogramProfile(metaprogram, getTracker());
-		}
-
-		private BsjMetaprogram<A> compileMetaprogram(MetaprogramNode metaprogramNode, Context<A> context)
-				throws IOException, BsjCompilerException
-		{
-			if (LOGGER.isTraceEnabled())
-			{
-				LOGGER.trace("Generating metaprogram class for " + getTracker().getName());
-			}
-
-			// *** Start by building the metaprogram compilation unit
-			// TODO: what kind of package declaration should a metaprogram have?
-			String metaprogramPackageName = "foo";
-
-			List<ImportNode> imports = new ArrayList<ImportNode>();
-			for (String packageString : IMPORT_PACKAGES)
-			{
-				imports.add(factory.makeImportOnDemandNode(parseNameNode(packageString, NameCategory.PACKAGE), false));
-			}
-
-			// Get metaprogram class name
-			// TODO: get a unique identifier
-			String metaprogramClassName = "BsjMetaprogram$$$";
-			String fullyQualifiedMetaprogramClassName = metaprogramPackageName + "." + metaprogramClassName;
-			
-			// Create metaprogram nodes
-			PackageDeclarationNode packageDeclarationNode = factory.makePackageDeclarationNode(
-					parseNameNode(metaprogramPackageName, NameCategory.PACKAGE),
-					factory.makeListNode(Collections.<AnnotationNode>emptyList()));
-
-			// TODO: don't deep copy here (for efficiency)? this means we have to null out the list's parent first?
-			BlockNode methodBlock = factory.makeBlockNode(metaprogramNode.getBody().deepCopy(factory));
-
-			MethodDeclarationNode executeMethodImplementation = factory.makeMethodDeclarationNode(methodBlock,
-					factory.makeMethodModifiersNode(AccessModifier.PUBLIC, false, false, true, false, false, false,
-							factory.makeListNode(Collections.<AnnotationNode> emptyList())),
-					factory.makeIdentifierNode("execute"),
-					factory.makeListNode(Collections.<VariableNode> emptyList()), null, factory.makeVoidTypeNode(),
-					factory.makeListNode(Collections.<UnparameterizedTypeNode> emptyList()),
-					factory.makeListNode(Collections.<TypeParameterNode> emptyList()), null);
-
-			ConstructorDeclarationNode constructorImplementation = factory.makeConstructorDeclarationNode(
-					factory.makeIdentifierNode(metaprogramClassName),
-					factory.makeConstructorBodyNode(
-							factory.makeSuperclassConstructorInvocationNode(
-									null,
-									factory.makeListNode(Arrays.<ExpressionNode> asList(factory.makeFieldAccessByNameNode(parseNameNode(
-											"context", NameCategory.EXPRESSION)))),
-									factory.makeListNode(Collections.<TypeNode> emptyList())),
-							factory.makeListNode(Collections.<BlockStatementNode> emptyList())),
-					factory.makeConstructorModifiersNode(AccessModifier.PUBLIC,
-							factory.makeListNode(Collections.<AnnotationNode> emptyList())),
-					factory.makeListNode(Arrays.<VariableNode> asList(factory.makeVariableNode(
-							factory.makeVariableModifiersNode(false,
-									factory.makeListNode(Collections.<AnnotationNode> emptyList())),
-							factory.makeParameterizedTypeNode(factory.makeUnparameterizedTypeNode(parseNameNode(
-									"Context", NameCategory.TYPE)),
-									factory.makeListNode(Collections.<TypeArgumentNode> emptyList())),
-							factory.makeIdentifierNode("context")))), null,
-					factory.makeListNode(Collections.<UnparameterizedTypeNode> emptyList()),
-					factory.makeListNode(Collections.<TypeParameterNode> emptyList()), null);
-
-			ClassBodyNode body = factory.makeClassBodyNode(factory.makeListNode(Arrays.<ClassMemberNode> asList(
-					executeMethodImplementation, constructorImplementation)));
-
-			TypeDeclarationNode metaprogramClassNode = factory.makeClassDeclarationNode(
-					factory.makeClassModifiersNode(AccessModifier.PUBLIC, false, false, false, false,
-							factory.makeListNode(Collections.<AnnotationNode> emptyList())),
-					factory.makeParameterizedTypeNode(
-							factory.makeUnparameterizedTypeNode(parseNameNode("AbstractBsjMetaprogram",
-									NameCategory.TYPE)),
-							factory.makeListNode(Arrays.<TypeArgumentNode> asList(factory.makeUnparameterizedTypeNode(parseNameNode(
-									anchorClass.getName(), NameCategory.AMBIGUOUS))))),
-					factory.makeListNode(Collections.<TypeNode> emptyList()), body,
-					factory.makeListNode(Collections.<TypeParameterNode> emptyList()),
-					factory.makeIdentifierNode(metaprogramClassName), null);
-
-			CompilationUnitNode metaprogramCompilationUnitNode = factory.makeCompilationUnitNode(
-					packageDeclarationNode,
-					factory.makeListNode(imports),
-					factory.makeListNode(Collections.singletonList(metaprogramClassNode)));
-			
-			if (LOGGER.isTraceEnabled())
-			{
-				// TODO: get from SPI or toolkit
-				BsjSourceSerializer serializer = new BsjSourceSerializerImpl();
-				String source = serializer.executeCompilationUnitNode(metaprogramCompilationUnitNode, null);
-				LOGGER.trace("Generated metaprogram class " + fullyQualifiedMetaprogramClassName + " for " +
-						getTracker().getName() + "; source looks like this: \n" + source);
-			}
-
-			// *** Compile the metaprogram in memory
-			if (LOGGER.isTraceEnabled())
-			{
-				LOGGER.trace("Compiling metaprogram class " + fullyQualifiedMetaprogramClassName + " for "
-						+ getTracker().getName());
-			}
-
-			Map<BsjCompilerLocation, LocationManager> locationMap = new HashMap<BsjCompilerLocation, LocationManager>();
-			// TODO: remove local file management in favor of InMemoryLocationManager (and regression test!)
-//			File tmpdir = new File("./local/compile-temp");
-//			tmpdir.mkdirs();
-//			LocationManager tmplm = new RegularFileLocationManager(null, tmpdir);
-			
-//			locationMap.put(BsjCompilerLocation.SOURCE_PATH, tmplm);
-//			locationMap.put(BsjCompilerLocation.GENERATED_SOURCE_PATH, tmplm);
-//			locationMap.put(BsjCompilerLocation.CLASS_OUTPUT, tmplm);
-			locationMap.put(BsjCompilerLocation.SOURCE_PATH, new InMemoryLocationManager(null));
-			locationMap.put(BsjCompilerLocation.GENERATED_SOURCE_PATH, new InMemoryLocationManager(null));
-			locationMap.put(BsjCompilerLocation.CLASS_OUTPUT, new InMemoryLocationManager(null));
-			// use current metaprogram classpath for metaprogram's meta- and object classpaths
-			locationMap.put(BsjCompilerLocation.METAPROGRAM_CLASSPATH,
-					metacompilationManager.getFileManager().getLocationManager(
-							BsjCompilerLocation.METAPROGRAM_CLASSPATH));
-			locationMap.put(BsjCompilerLocation.METAPROGRAM_SYSTEM_CLASSPATH,
-					metacompilationManager.getFileManager().getLocationManager(
-							BsjCompilerLocation.METAPROGRAM_SYSTEM_CLASSPATH));
-			locationMap.put(BsjCompilerLocation.OBJECT_PROGRAM_CLASSPATH,
-					metacompilationManager.getFileManager().getLocationManager(
-							BsjCompilerLocation.METAPROGRAM_CLASSPATH));
-			locationMap.put(BsjCompilerLocation.OBJECT_PROGRAM_SYSTEM_CLASSPATH,
-					metacompilationManager.getFileManager().getLocationManager(
-							BsjCompilerLocation.METAPROGRAM_SYSTEM_CLASSPATH));
-			// TODO: annotation processors should be set to in-memory locations
-
-			BsjFileManager fileManager = new LocationMappedFileManager(locationMap);
-			BsjFileObject metaprogramSourceFile = fileManager.getFileForOutput(BsjCompilerLocation.SOURCE_PATH,
-					metaprogramPackageName, metaprogramClassName + ".bsj", null);
-			// TODO: get from SPI or toolkit or similar
-			// TODO: we shouldn't need to reserialize just to parse again - add compile to API that takes trees
+			// TODO: get from SPI or toolkit
 			BsjSourceSerializer serializer = new BsjSourceSerializerImpl();
 			String source = serializer.executeCompilationUnitNode(metaprogramCompilationUnitNode, null);
-			metaprogramSourceFile.setCharContent(source);
+			LOGGER.trace("Generated metaprogram class " + fullyQualifiedMetaprogramClassName + " for "
+					+ getTracker().getName() + "; source looks like this: \n" + source);
+		}
 
-			// TODO: get from SPI or something
-			// TODO: use BsjCompiler interface
-			StandardBsjCompiler compiler = new StandardBsjCompiler(fileManager);
-			compiler.compile(Arrays.asList(metaprogramSourceFile));
+		// *** Compile the metaprogram in memory
+		if (LOGGER.isTraceEnabled())
+		{
+			LOGGER.trace("Compiling metaprogram class " + fullyQualifiedMetaprogramClassName + " for "
+					+ getTracker().getName());
+		}
 
-			ClassLoader metaprogramClassLoader = fileManager.getClassLoader(BsjCompilerLocation.CLASS_OUTPUT);
-			Class<? extends BsjMetaprogram<A>> metaprogramClass;
-			try
-			{
-				metaprogramClass = (Class<? extends BsjMetaprogram<A>>) metaprogramClassLoader.loadClass(fullyQualifiedMetaprogramClassName);
-			} catch (ClassNotFoundException e)
-			{
-				throw new IllegalStateException("Class we just compiled is not found!", e);
-			}
-			Constructor<? extends BsjMetaprogram<A>> constructor;
-			try
-			{
-				constructor = metaprogramClass.getConstructor(Context.class);
-			} catch (NoSuchMethodException e)
-			{
-				throw new IllegalStateException("Class we just compiled does not have the right constructor!", e);
-			}
-			try
-			{
-				return constructor.newInstance(context);
-			} catch (IllegalArgumentException e)
-			{
-				throw new IllegalStateException("Instantiation of BSJ metaprogram class failed!", e);
-			} catch (InstantiationException e)
-			{
-				throw new IllegalStateException("Instantiation of BSJ metaprogram class failed!", e);
-			} catch (IllegalAccessException e)
-			{
-				throw new IllegalStateException("Instantiation of BSJ metaprogram class failed!", e);
-			} catch (InvocationTargetException e)
-			{
-				throw new IllegalStateException("Instantiation of BSJ metaprogram class failed!", e);
-			}
+		Map<BsjCompilerLocation, LocationManager> locationMap = new HashMap<BsjCompilerLocation, LocationManager>();
+		// TODO: remove local file management in favor of InMemoryLocationManager (and regression test!)
+		// File tmpdir = new File("./local/compile-temp");
+		// tmpdir.mkdirs();
+		// LocationManager tmplm = new RegularFileLocationManager(null, tmpdir);
+
+		// locationMap.put(BsjCompilerLocation.SOURCE_PATH, tmplm);
+		// locationMap.put(BsjCompilerLocation.GENERATED_SOURCE_PATH, tmplm);
+		// locationMap.put(BsjCompilerLocation.CLASS_OUTPUT, tmplm);
+		locationMap.put(BsjCompilerLocation.SOURCE_PATH, new InMemoryLocationManager(null));
+		locationMap.put(BsjCompilerLocation.GENERATED_SOURCE_PATH, new InMemoryLocationManager(null));
+		locationMap.put(BsjCompilerLocation.CLASS_OUTPUT, new InMemoryLocationManager(null));
+		// use current metaprogram classpath for metaprogram's meta- and object classpaths
+		locationMap.put(BsjCompilerLocation.METAPROGRAM_CLASSPATH,
+				metacompilationManager.getFileManager().getLocationManager(BsjCompilerLocation.METAPROGRAM_CLASSPATH));
+		locationMap.put(BsjCompilerLocation.METAPROGRAM_SYSTEM_CLASSPATH,
+				metacompilationManager.getFileManager().getLocationManager(
+						BsjCompilerLocation.METAPROGRAM_SYSTEM_CLASSPATH));
+		locationMap.put(BsjCompilerLocation.OBJECT_PROGRAM_CLASSPATH,
+				metacompilationManager.getFileManager().getLocationManager(BsjCompilerLocation.METAPROGRAM_CLASSPATH));
+		locationMap.put(BsjCompilerLocation.OBJECT_PROGRAM_SYSTEM_CLASSPATH,
+				metacompilationManager.getFileManager().getLocationManager(
+						BsjCompilerLocation.METAPROGRAM_SYSTEM_CLASSPATH));
+		// TODO: annotation processors should be set to in-memory locations
+
+		BsjFileManager fileManager = new LocationMappedFileManager(locationMap);
+		BsjFileObject metaprogramSourceFile = fileManager.getFileForOutput(BsjCompilerLocation.SOURCE_PATH,
+				metaprogramPackageName, metaprogramClassName + ".bsj", null);
+		// TODO: get from SPI or toolkit or similar
+		// TODO: we shouldn't need to reserialize just to parse again - add compile to API that takes trees
+		BsjSourceSerializer serializer = new BsjSourceSerializerImpl();
+		String source = serializer.executeCompilationUnitNode(metaprogramCompilationUnitNode, null);
+		metaprogramSourceFile.setCharContent(source);
+
+		// TODO: get from SPI or something
+		// TODO: use BsjCompiler interface
+		StandardBsjCompiler compiler = new StandardBsjCompiler(fileManager);
+		compiler.compile(Arrays.asList(metaprogramSourceFile));
+
+		ClassLoader metaprogramClassLoader = fileManager.getClassLoader(BsjCompilerLocation.CLASS_OUTPUT);
+		Class<? extends BsjMetaprogram<A>> metaprogramClass;
+		try
+		{
+			metaprogramClass = (Class<? extends BsjMetaprogram<A>>) metaprogramClassLoader.loadClass(fullyQualifiedMetaprogramClassName);
+		} catch (ClassNotFoundException e)
+		{
+			throw new IllegalStateException("Class we just compiled is not found!", e);
+		}
+		Constructor<? extends BsjMetaprogram<A>> constructor;
+		try
+		{
+			constructor = metaprogramClass.getConstructor(Context.class);
+		} catch (NoSuchMethodException e)
+		{
+			throw new IllegalStateException("Class we just compiled does not have the right constructor!", e);
+		}
+		try
+		{
+			return constructor.newInstance(context);
+		} catch (IllegalArgumentException e)
+		{
+			throw new IllegalStateException("Instantiation of BSJ metaprogram class failed!", e);
+		} catch (InstantiationException e)
+		{
+			throw new IllegalStateException("Instantiation of BSJ metaprogram class failed!", e);
+		} catch (IllegalAccessException e)
+		{
+			throw new IllegalStateException("Instantiation of BSJ metaprogram class failed!", e);
+		} catch (InvocationTargetException e)
+		{
+			throw new IllegalStateException("Instantiation of BSJ metaprogram class failed!", e);
 		}
 	}
 
@@ -419,52 +346,6 @@ public class ExtractMetaprogramsTask extends CompilationUnitTask
 		public List<MetaprogramAnchorNode<?>> getMetaprogramAnchors()
 		{
 			return metaprogramAnchors;
-		}
-	}
-
-	/**
-	 * Runtime exception wrapper for {@link IOException}. Used to throw IOExceptions through the anchor handling
-	 * operation.
-	 * 
-	 * @author Zachary Palmer
-	 */
-	private static class RuntimeIOException extends RuntimeException
-	{
-		private static final long serialVersionUID = 1L;
-		private IOException e;
-
-		public RuntimeIOException(IOException e)
-		{
-			super();
-			this.e = e;
-		}
-
-		public IOException getE()
-		{
-			return e;
-		}
-	}
-
-	/**
-	 * Runtime exception wrapper for {@link BsjCompilerException}. Used to throw BsjCompilerException through the anchor
-	 * handling operation.
-	 * 
-	 * @author Zachary Palmer
-	 */
-	private static class RuntimeBsjCompilerException extends RuntimeException
-	{
-		private static final long serialVersionUID = 1L;
-		private BsjCompilerException e;
-
-		public RuntimeBsjCompilerException(BsjCompilerException e)
-		{
-			super();
-			this.e = e;
-		}
-
-		public BsjCompilerException getE()
-		{
-			return e;
 		}
 	}
 }
