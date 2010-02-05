@@ -955,32 +955,69 @@ public class SourceGenerator
 
 	static abstract class ClassHierarchyBuildingHandler extends AbstractClassDefHandler
 	{
+		protected static enum ReviewMode
+		{
+			ALPHABETICAL, FILE_ORDER
+		}
+
 		protected Map<String, ClassDef> map;
 		protected Map<ClassDef, Map<String, String>> envs;
+		/** Contains the names of definitions in the order in which we saw them. */
+		protected List<String> defNames;
+
+		/** The mode of review for the definitions. */
+		protected ReviewMode mode;
+
+		protected ClassHierarchyBuildingHandler()
+		{
+			this(ReviewMode.ALPHABETICAL);
+		}
+
+		protected ClassHierarchyBuildingHandler(ReviewMode mode)
+		{
+			super();
+			this.mode = mode;
+		}
 
 		public void init() throws IOException
 		{
 			map = new HashMap<String, ClassDef>();
 			envs = new HashMap<ClassDef, Map<String, String>>();
+			defNames = new ArrayList<String>();
 		}
 
 		public void handleDefinition(ClassDef def, Map<String, String> env) throws IOException
 		{
 			map.put(def.getRawName(), def);
 			envs.put(def, new HashMap<String, String>(env));
+			defNames.add(def.getRawName());
 		}
 
 		public void finish() throws IOException
 		{
-			List<ClassDef> defList = new ArrayList<ClassDef>(map.values());
-			Collections.sort(defList, new Comparator<ClassDef>()
+			List<ClassDef> defList;
+			if (mode == ReviewMode.ALPHABETICAL)
 			{
-				@Override
-				public int compare(ClassDef o1, ClassDef o2)
+				defList = new ArrayList<ClassDef>(map.values());
+				Collections.sort(defList, new Comparator<ClassDef>()
 				{
-					return o1.name.compareTo(o2.name);
+					@Override
+					public int compare(ClassDef o1, ClassDef o2)
+					{
+						return o1.name.compareTo(o2.name);
+					}
+				});
+			} else if (mode == ReviewMode.FILE_ORDER)
+			{
+				defList = new ArrayList<ClassDef>();
+				for (String name : defNames)
+				{
+					defList.add(map.get(name));
 				}
-			});
+			} else
+			{
+				throw new IllegalStateException("Unrecognized review mode: " + mode);
+			}
 			for (ClassDef def : defList)
 			{
 				useDefinition(def);
@@ -2253,7 +2290,12 @@ public class SourceGenerator
 	static class XmlDefinitionWriter extends ClassHierarchyBuildingHandler
 	{
 		private XMLStreamWriter writer;
-		
+
+		protected XmlDefinitionWriter()
+		{
+			super(ReviewMode.FILE_ORDER);
+		}
+
 		@Override
 		public void init() throws IOException
 		{
@@ -2352,10 +2394,7 @@ public class SourceGenerator
 				if (def.classDoc != null && def.classDoc.length() > 0)
 				{
 					writer.writeStartElement("doc");
-					String doc = "\n" + def.classDoc;
-					doc = doc.replaceAll("\n","\n            ");
-					doc = doc + "\n        ";
-					writer.writeCData(doc);
+					writer.writeCData(indentationTreat(def.classDoc));
 					writer.writeEndElement();
 				}
 
@@ -2369,7 +2408,7 @@ public class SourceGenerator
 							sb.append("\n");
 						sb.append(toStringLine);
 					}
-					writer.writeCData(sb.toString());
+					writer.writeCData(indentationTreat(sb.toString()));
 					writer.writeEndElement();
 				}
 
@@ -2395,6 +2434,14 @@ public class SourceGenerator
 			{
 				throw new IllegalStateException(e);
 			}
+		}
+
+		private String indentationTreat(String s)
+		{
+			s = "\n" + s;
+			s = s.replaceAll("\n", "\n            ");
+			s = s + "\n        ";
+			return s;
 		}
 
 		@Override
