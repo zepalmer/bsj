@@ -268,6 +268,20 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
 
     /**
      * Creates a AnnotationElementListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public AnnotationElementListNode makeAnnotationElementListNode(
+            AnnotationElementNode... childrenElements)
+    {
+        this.before();
+        AnnotationElementListNode node = factory.makeAnnotationElementListNode(childrenElements);
+        this.after(node);
+        return node;
+    }
+
+    /**
+     * Creates a AnnotationElementListNode.
      * The specified start and stop locations are used.
      */
     @Override
@@ -278,6 +292,22 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     {
         this.before();
         AnnotationElementListNode node = factory.makeAnnotationElementListNode(children, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+
+    /**
+     * Creates a AnnotationElementListNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public AnnotationElementListNode makeAnnotationElementListNode(
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation,
+            AnnotationElementNode... childrenElements)
+    {
+        this.before();
+        AnnotationElementListNode node = factory.makeAnnotationElementListNode(startLocation, stopLocation, childrenElements);
         this.after(node);
         return node;
     }
@@ -360,6 +390,20 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
 
     /**
      * Creates a AnnotationListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public AnnotationListNode makeAnnotationListNode(
+            AnnotationNode... childrenElements)
+    {
+        this.before();
+        AnnotationListNode node = factory.makeAnnotationListNode(childrenElements);
+        this.after(node);
+        return node;
+    }
+
+    /**
+     * Creates a AnnotationListNode.
      * The specified start and stop locations are used.
      */
     @Override
@@ -370,6 +414,22 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     {
         this.before();
         AnnotationListNode node = factory.makeAnnotationListNode(children, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+
+    /**
+     * Creates a AnnotationListNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public AnnotationListNode makeAnnotationListNode(
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation,
+            AnnotationNode... childrenElements)
+    {
+        this.before();
+        AnnotationListNode node = factory.makeAnnotationListNode(startLocation, stopLocation, childrenElements);
         this.after(node);
         return node;
     }
@@ -390,6 +450,20 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
 
     /**
      * Creates a AnnotationMemberListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public AnnotationMemberListNode makeAnnotationMemberListNode(
+            AnnotationMemberNode... childrenElements)
+    {
+        this.before();
+        AnnotationMemberListNode node = factory.makeAnnotationMemberListNode(childrenElements);
+        this.after(node);
+        return node;
+    }
+
+    /**
+     * Creates a AnnotationMemberListNode.
      * The specified start and stop locations are used.
      */
     @Override
@@ -400,6 +474,22 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     {
         this.before();
         AnnotationMemberListNode node = factory.makeAnnotationMemberListNode(children, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+
+    /**
+     * Creates a AnnotationMemberListNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public AnnotationMemberListNode makeAnnotationMemberListNode(
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation,
+            AnnotationMemberNode... childrenElements)
+    {
+        this.before();
+        AnnotationMemberListNode node = factory.makeAnnotationMemberListNode(startLocation, stopLocation, childrenElements);
         this.after(node);
         return node;
     }
@@ -524,6 +614,20 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
 
     /**
      * Creates a AnnotationValueListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public AnnotationValueListNode makeAnnotationValueListNode(
+            AnnotationValueNode... childrenElements)
+    {
+        this.before();
+        AnnotationValueListNode node = factory.makeAnnotationValueListNode(childrenElements);
+        this.after(node);
+        return node;
+    }
+
+    /**
+     * Creates a AnnotationValueListNode.
      * The specified start and stop locations are used.
      */
     @Override
@@ -534,6 +638,22 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     {
         this.before();
         AnnotationValueListNode node = factory.makeAnnotationValueListNode(children, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+
+    /**
+     * Creates a AnnotationValueListNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public AnnotationValueListNode makeAnnotationValueListNode(
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation,
+            AnnotationValueNode... childrenElements)
+    {
+        this.before();
+        AnnotationValueListNode node = factory.makeAnnotationValueListNode(startLocation, stopLocation, childrenElements);
         this.after(node);
         return node;
     }
@@ -584,6 +704,20 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
 
     /**
      * Creates a AnonymousClassMemberListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public AnonymousClassMemberListNode makeAnonymousClassMemberListNode(
+            AnonymousClassMemberNode... childrenElements)
+    {
+        this.before();
+        AnonymousClassMemberListNode node = factory.makeAnonymousClassMemberListNode(childrenElements);
+        this.after(node);
+        return node;
+    }
+
+    /**
+     * Creates a AnonymousClassMemberListNode.
      * The specified start and stop locations are used.
      */
     @Override
@@ -594,6 +728,22 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     {
         this.before();
         AnonymousClassMemberListNode node = factory.makeAnonymousClassMemberListNode(children, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+
+    /**
+     * Creates a AnonymousClassMemberListNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public AnonymousClassMemberListNode makeAnonymousClassMemberListNode(
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation,
+            AnonymousClassMemberNode... childrenElements)
+    {
+        this.before();
+        AnonymousClassMemberListNode node = factory.makeAnonymousClassMemberListNode(startLocation, stopLocation, childrenElements);
         this.after(node);
         return node;
     }
@@ -904,6 +1054,20 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
 
     /**
      * Creates a BlockStatementListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public BlockStatementListNode makeBlockStatementListNode(
+            BlockStatementNode... childrenElements)
+    {
+        this.before();
+        BlockStatementListNode node = factory.makeBlockStatementListNode(childrenElements);
+        this.after(node);
+        return node;
+    }
+
+    /**
+     * Creates a BlockStatementListNode.
      * The specified start and stop locations are used.
      */
     @Override
@@ -914,6 +1078,22 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     {
         this.before();
         BlockStatementListNode node = factory.makeBlockStatementListNode(children, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+
+    /**
+     * Creates a BlockStatementListNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public BlockStatementListNode makeBlockStatementListNode(
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation,
+            BlockStatementNode... childrenElements)
+    {
+        this.before();
+        BlockStatementListNode node = factory.makeBlockStatementListNode(startLocation, stopLocation, childrenElements);
         this.after(node);
         return node;
     }
@@ -1025,6 +1205,20 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
 
     /**
      * Creates a CaseListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public CaseListNode makeCaseListNode(
+            CaseNode... childrenElements)
+    {
+        this.before();
+        CaseListNode node = factory.makeCaseListNode(childrenElements);
+        this.after(node);
+        return node;
+    }
+
+    /**
+     * Creates a CaseListNode.
      * The specified start and stop locations are used.
      */
     @Override
@@ -1035,6 +1229,22 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     {
         this.before();
         CaseListNode node = factory.makeCaseListNode(children, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+
+    /**
+     * Creates a CaseListNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public CaseListNode makeCaseListNode(
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation,
+            CaseNode... childrenElements)
+    {
+        this.before();
+        CaseListNode node = factory.makeCaseListNode(startLocation, stopLocation, childrenElements);
         this.after(node);
         return node;
     }
@@ -1087,6 +1297,20 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
 
     /**
      * Creates a CatchListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public CatchListNode makeCatchListNode(
+            CatchNode... childrenElements)
+    {
+        this.before();
+        CatchListNode node = factory.makeCatchListNode(childrenElements);
+        this.after(node);
+        return node;
+    }
+
+    /**
+     * Creates a CatchListNode.
      * The specified start and stop locations are used.
      */
     @Override
@@ -1097,6 +1321,22 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     {
         this.before();
         CatchListNode node = factory.makeCatchListNode(children, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+
+    /**
+     * Creates a CatchListNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public CatchListNode makeCatchListNode(
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation,
+            CatchNode... childrenElements)
+    {
+        this.before();
+        CatchListNode node = factory.makeCatchListNode(startLocation, stopLocation, childrenElements);
         this.after(node);
         return node;
     }
@@ -1281,6 +1521,20 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
 
     /**
      * Creates a ClassMemberListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public ClassMemberListNode makeClassMemberListNode(
+            ClassMemberNode... childrenElements)
+    {
+        this.before();
+        ClassMemberListNode node = factory.makeClassMemberListNode(childrenElements);
+        this.after(node);
+        return node;
+    }
+
+    /**
+     * Creates a ClassMemberListNode.
      * The specified start and stop locations are used.
      */
     @Override
@@ -1291,6 +1545,22 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     {
         this.before();
         ClassMemberListNode node = factory.makeClassMemberListNode(children, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+
+    /**
+     * Creates a ClassMemberListNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public ClassMemberListNode makeClassMemberListNode(
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation,
+            ClassMemberNode... childrenElements)
+    {
+        this.before();
+        ClassMemberListNode node = factory.makeClassMemberListNode(startLocation, stopLocation, childrenElements);
         this.after(node);
         return node;
     }
@@ -1587,6 +1857,20 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
 
     /**
      * Creates a DeclaredTypeListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public DeclaredTypeListNode makeDeclaredTypeListNode(
+            DeclaredTypeNode... childrenElements)
+    {
+        this.before();
+        DeclaredTypeListNode node = factory.makeDeclaredTypeListNode(childrenElements);
+        this.after(node);
+        return node;
+    }
+
+    /**
+     * Creates a DeclaredTypeListNode.
      * The specified start and stop locations are used.
      */
     @Override
@@ -1597,6 +1881,22 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     {
         this.before();
         DeclaredTypeListNode node = factory.makeDeclaredTypeListNode(children, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+
+    /**
+     * Creates a DeclaredTypeListNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public DeclaredTypeListNode makeDeclaredTypeListNode(
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation,
+            DeclaredTypeNode... childrenElements)
+    {
+        this.before();
+        DeclaredTypeListNode node = factory.makeDeclaredTypeListNode(startLocation, stopLocation, childrenElements);
         this.after(node);
         return node;
     }
@@ -1745,6 +2045,20 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
 
     /**
      * Creates a EnumConstantDeclarationListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public EnumConstantDeclarationListNode makeEnumConstantDeclarationListNode(
+            EnumConstantDeclarationNode... childrenElements)
+    {
+        this.before();
+        EnumConstantDeclarationListNode node = factory.makeEnumConstantDeclarationListNode(childrenElements);
+        this.after(node);
+        return node;
+    }
+
+    /**
+     * Creates a EnumConstantDeclarationListNode.
      * The specified start and stop locations are used.
      */
     @Override
@@ -1755,6 +2069,22 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     {
         this.before();
         EnumConstantDeclarationListNode node = factory.makeEnumConstantDeclarationListNode(children, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+
+    /**
+     * Creates a EnumConstantDeclarationListNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public EnumConstantDeclarationListNode makeEnumConstantDeclarationListNode(
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation,
+            EnumConstantDeclarationNode... childrenElements)
+    {
+        this.before();
+        EnumConstantDeclarationListNode node = factory.makeEnumConstantDeclarationListNode(startLocation, stopLocation, childrenElements);
         this.after(node);
         return node;
     }
@@ -1885,6 +2215,20 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
 
     /**
      * Creates a ExpressionListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public ExpressionListNode makeExpressionListNode(
+            ExpressionNode... childrenElements)
+    {
+        this.before();
+        ExpressionListNode node = factory.makeExpressionListNode(childrenElements);
+        this.after(node);
+        return node;
+    }
+
+    /**
+     * Creates a ExpressionListNode.
      * The specified start and stop locations are used.
      */
     @Override
@@ -1895,6 +2239,22 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     {
         this.before();
         ExpressionListNode node = factory.makeExpressionListNode(children, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+
+    /**
+     * Creates a ExpressionListNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public ExpressionListNode makeExpressionListNode(
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation,
+            ExpressionNode... childrenElements)
+    {
+        this.before();
+        ExpressionListNode node = factory.makeExpressionListNode(startLocation, stopLocation, childrenElements);
         this.after(node);
         return node;
     }
@@ -2271,6 +2631,20 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
 
     /**
      * Creates a ImportListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public ImportListNode makeImportListNode(
+            ImportNode... childrenElements)
+    {
+        this.before();
+        ImportListNode node = factory.makeImportListNode(childrenElements);
+        this.after(node);
+        return node;
+    }
+
+    /**
+     * Creates a ImportListNode.
      * The specified start and stop locations are used.
      */
     @Override
@@ -2281,6 +2655,22 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     {
         this.before();
         ImportListNode node = factory.makeImportListNode(children, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+
+    /**
+     * Creates a ImportListNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public ImportListNode makeImportListNode(
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation,
+            ImportNode... childrenElements)
+    {
+        this.before();
+        ImportListNode node = factory.makeImportListNode(startLocation, stopLocation, childrenElements);
         this.after(node);
         return node;
     }
@@ -2559,6 +2949,20 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
 
     /**
      * Creates a InterfaceMemberListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public InterfaceMemberListNode makeInterfaceMemberListNode(
+            InterfaceMemberNode... childrenElements)
+    {
+        this.before();
+        InterfaceMemberListNode node = factory.makeInterfaceMemberListNode(childrenElements);
+        this.after(node);
+        return node;
+    }
+
+    /**
+     * Creates a InterfaceMemberListNode.
      * The specified start and stop locations are used.
      */
     @Override
@@ -2569,6 +2973,22 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     {
         this.before();
         InterfaceMemberListNode node = factory.makeInterfaceMemberListNode(children, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+
+    /**
+     * Creates a InterfaceMemberListNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public InterfaceMemberListNode makeInterfaceMemberListNode(
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation,
+            InterfaceMemberNode... childrenElements)
+    {
+        this.before();
+        InterfaceMemberListNode node = factory.makeInterfaceMemberListNode(startLocation, stopLocation, childrenElements);
         this.after(node);
         return node;
     }
@@ -3293,6 +3713,20 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
 
     /**
      * Creates a StatementExpressionListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public StatementExpressionListNode makeStatementExpressionListNode(
+            StatementExpressionNode... childrenElements)
+    {
+        this.before();
+        StatementExpressionListNode node = factory.makeStatementExpressionListNode(childrenElements);
+        this.after(node);
+        return node;
+    }
+
+    /**
+     * Creates a StatementExpressionListNode.
      * The specified start and stop locations are used.
      */
     @Override
@@ -3303,6 +3737,22 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     {
         this.before();
         StatementExpressionListNode node = factory.makeStatementExpressionListNode(children, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+
+    /**
+     * Creates a StatementExpressionListNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public StatementExpressionListNode makeStatementExpressionListNode(
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation,
+            StatementExpressionNode... childrenElements)
+    {
+        this.before();
+        StatementExpressionListNode node = factory.makeStatementExpressionListNode(startLocation, stopLocation, childrenElements);
         this.after(node);
         return node;
     }
@@ -3613,6 +4063,20 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
 
     /**
      * Creates a TypeArgumentListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public TypeArgumentListNode makeTypeArgumentListNode(
+            TypeArgumentNode... childrenElements)
+    {
+        this.before();
+        TypeArgumentListNode node = factory.makeTypeArgumentListNode(childrenElements);
+        this.after(node);
+        return node;
+    }
+
+    /**
+     * Creates a TypeArgumentListNode.
      * The specified start and stop locations are used.
      */
     @Override
@@ -3623,6 +4087,22 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     {
         this.before();
         TypeArgumentListNode node = factory.makeTypeArgumentListNode(children, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+
+    /**
+     * Creates a TypeArgumentListNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public TypeArgumentListNode makeTypeArgumentListNode(
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation,
+            TypeArgumentNode... childrenElements)
+    {
+        this.before();
+        TypeArgumentListNode node = factory.makeTypeArgumentListNode(startLocation, stopLocation, childrenElements);
         this.after(node);
         return node;
     }
@@ -3675,6 +4155,20 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
 
     /**
      * Creates a TypeDeclarationListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public TypeDeclarationListNode makeTypeDeclarationListNode(
+            TypeDeclarationNode... childrenElements)
+    {
+        this.before();
+        TypeDeclarationListNode node = factory.makeTypeDeclarationListNode(childrenElements);
+        this.after(node);
+        return node;
+    }
+
+    /**
+     * Creates a TypeDeclarationListNode.
      * The specified start and stop locations are used.
      */
     @Override
@@ -3685,6 +4179,22 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     {
         this.before();
         TypeDeclarationListNode node = factory.makeTypeDeclarationListNode(children, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+
+    /**
+     * Creates a TypeDeclarationListNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public TypeDeclarationListNode makeTypeDeclarationListNode(
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation,
+            TypeDeclarationNode... childrenElements)
+    {
+        this.before();
+        TypeDeclarationListNode node = factory.makeTypeDeclarationListNode(startLocation, stopLocation, childrenElements);
         this.after(node);
         return node;
     }
@@ -3736,6 +4246,20 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
 
     /**
      * Creates a TypeListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public TypeListNode makeTypeListNode(
+            TypeNode... childrenElements)
+    {
+        this.before();
+        TypeListNode node = factory.makeTypeListNode(childrenElements);
+        this.after(node);
+        return node;
+    }
+
+    /**
+     * Creates a TypeListNode.
      * The specified start and stop locations are used.
      */
     @Override
@@ -3746,6 +4270,22 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     {
         this.before();
         TypeListNode node = factory.makeTypeListNode(children, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+
+    /**
+     * Creates a TypeListNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public TypeListNode makeTypeListNode(
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation,
+            TypeNode... childrenElements)
+    {
+        this.before();
+        TypeListNode node = factory.makeTypeListNode(startLocation, stopLocation, childrenElements);
         this.after(node);
         return node;
     }
@@ -3766,6 +4306,20 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
 
     /**
      * Creates a TypeParameterListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public TypeParameterListNode makeTypeParameterListNode(
+            TypeParameterNode... childrenElements)
+    {
+        this.before();
+        TypeParameterListNode node = factory.makeTypeParameterListNode(childrenElements);
+        this.after(node);
+        return node;
+    }
+
+    /**
+     * Creates a TypeParameterListNode.
      * The specified start and stop locations are used.
      */
     @Override
@@ -3776,6 +4330,22 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     {
         this.before();
         TypeParameterListNode node = factory.makeTypeParameterListNode(children, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+
+    /**
+     * Creates a TypeParameterListNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public TypeParameterListNode makeTypeParameterListNode(
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation,
+            TypeParameterNode... childrenElements)
+    {
+        this.before();
+        TypeParameterListNode node = factory.makeTypeParameterListNode(startLocation, stopLocation, childrenElements);
         this.after(node);
         return node;
     }
@@ -3892,6 +4462,20 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
 
     /**
      * Creates a UnparameterizedTypeListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public UnparameterizedTypeListNode makeUnparameterizedTypeListNode(
+            UnparameterizedTypeNode... childrenElements)
+    {
+        this.before();
+        UnparameterizedTypeListNode node = factory.makeUnparameterizedTypeListNode(childrenElements);
+        this.after(node);
+        return node;
+    }
+
+    /**
+     * Creates a UnparameterizedTypeListNode.
      * The specified start and stop locations are used.
      */
     @Override
@@ -3902,6 +4486,22 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     {
         this.before();
         UnparameterizedTypeListNode node = factory.makeUnparameterizedTypeListNode(children, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+
+    /**
+     * Creates a UnparameterizedTypeListNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public UnparameterizedTypeListNode makeUnparameterizedTypeListNode(
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation,
+            UnparameterizedTypeNode... childrenElements)
+    {
+        this.before();
+        UnparameterizedTypeListNode node = factory.makeUnparameterizedTypeListNode(startLocation, stopLocation, childrenElements);
         this.after(node);
         return node;
     }
@@ -4020,6 +4620,20 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
 
     /**
      * Creates a VariableDeclaratorListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public VariableDeclaratorListNode makeVariableDeclaratorListNode(
+            VariableDeclaratorNode... childrenElements)
+    {
+        this.before();
+        VariableDeclaratorListNode node = factory.makeVariableDeclaratorListNode(childrenElements);
+        this.after(node);
+        return node;
+    }
+
+    /**
+     * Creates a VariableDeclaratorListNode.
      * The specified start and stop locations are used.
      */
     @Override
@@ -4030,6 +4644,22 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     {
         this.before();
         VariableDeclaratorListNode node = factory.makeVariableDeclaratorListNode(children, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+
+    /**
+     * Creates a VariableDeclaratorListNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public VariableDeclaratorListNode makeVariableDeclaratorListNode(
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation,
+            VariableDeclaratorNode... childrenElements)
+    {
+        this.before();
+        VariableDeclaratorListNode node = factory.makeVariableDeclaratorListNode(startLocation, stopLocation, childrenElements);
         this.after(node);
         return node;
     }
@@ -4084,6 +4714,20 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
 
     /**
      * Creates a VariableInitializerListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public VariableInitializerListNode makeVariableInitializerListNode(
+            VariableInitializerNode... childrenElements)
+    {
+        this.before();
+        VariableInitializerListNode node = factory.makeVariableInitializerListNode(childrenElements);
+        this.after(node);
+        return node;
+    }
+
+    /**
+     * Creates a VariableInitializerListNode.
      * The specified start and stop locations are used.
      */
     @Override
@@ -4094,6 +4738,22 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     {
         this.before();
         VariableInitializerListNode node = factory.makeVariableInitializerListNode(children, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+
+    /**
+     * Creates a VariableInitializerListNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public VariableInitializerListNode makeVariableInitializerListNode(
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation,
+            VariableInitializerNode... childrenElements)
+    {
+        this.before();
+        VariableInitializerListNode node = factory.makeVariableInitializerListNode(startLocation, stopLocation, childrenElements);
         this.after(node);
         return node;
     }
@@ -4114,6 +4774,20 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
 
     /**
      * Creates a VariableListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public VariableListNode makeVariableListNode(
+            VariableNode... childrenElements)
+    {
+        this.before();
+        VariableListNode node = factory.makeVariableListNode(childrenElements);
+        this.after(node);
+        return node;
+    }
+
+    /**
+     * Creates a VariableListNode.
      * The specified start and stop locations are used.
      */
     @Override
@@ -4124,6 +4798,22 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     {
         this.before();
         VariableListNode node = factory.makeVariableListNode(children, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+
+    /**
+     * Creates a VariableListNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public VariableListNode makeVariableListNode(
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation,
+            VariableNode... childrenElements)
+    {
+        this.before();
+        VariableListNode node = factory.makeVariableListNode(startLocation, stopLocation, childrenElements);
         this.after(node);
         return node;
     }

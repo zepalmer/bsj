@@ -318,7 +318,6 @@ public class SourceGenerator
 	 * @param ps The stream to which to write the text.
 	 * @param props The properties to use as arguments.
 	 */
-	@SuppressWarnings("unused")
 	private static void printArgumentList(PrintStream ps, List<PropertyDefinition> props)
 	{
 		printArgumentList(ps, props, Collections.<String, String> emptyMap(), false);
@@ -1510,6 +1509,75 @@ public class SourceGenerator
 					dps.println("    }");
 					dps.println();
 
+					// Special ListNode constructor
+					if (propInstanceOf(def.getFullName(), "ListNode"))
+					{
+						// Write documentation
+						for (PrintStream ps : new PrintStream[] { ips, cps, dps })
+						{
+							ps.println("    /**");
+							ps.println("     * Creates a " + def.getBaseName() + ".");
+							if (!skipMake)
+							{
+								ps.println("     * The specified start and stop locations are used.");
+							} else
+							{
+								ps.println("     * The start and stop locations which have been set as properties of this factory are used.");
+							}
+							ps.println("     */");
+						}
+
+						// Create a list to fake the parameter list printer into printing a vararg
+						List<PropertyDefinition> fakeProps = new ArrayList<PropertyDefinition>();
+						PropertyDefinition listDef = null;
+						for (PropertyDefinition recProp : recProps)
+						{
+							if (recProp.getBaseType().equals("List") && listDef == null)
+							{
+								listDef = recProp;
+							} else
+							{
+								fakeProps.add(recProp);
+							}
+						}
+						fakeProps.add(new PropertyDefinition(listDef.getName() + "Elements", listDef.getTypeArg() + "...", null,
+								PropertyDefinition.Mode.NORMAL, ""));
+
+						// Write interface method description
+						ips.print("    public " + typeName + " make" + def.getBaseName());
+						printParameterList(ips, fakeProps, skipMake);
+						ips.println(";");
+						ips.println();
+
+						// Write backing class implementation
+						cps.println("    @Override");
+						cps.print("    public " + typeName + " make" + def.getBaseName());
+						printParameterList(cps, fakeProps, skipMake);
+						cps.println();
+						cps.println("    {");
+						cps.println("        List<" + listDef.getTypeArg() + "> " + listDef.getName() + " = Arrays.asList(" +
+								listDef.getName() + "Elements);");
+						cps.print("        return make" + def.getBaseName());
+						printArgumentList(cps, recProps);
+						cps.println(";");
+						cps.println("    }");
+						cps.println();
+
+						// Write decorator implementation
+						dps.println("    @Override");
+						dps.print("    public " + typeName + " make" + def.getBaseName());
+						printParameterList(dps, fakeProps, skipMake);
+						dps.println();
+						dps.println("    {");
+						dps.println("        this.before();");
+						dps.print("        " + typeName + " node = factory.make" + def.getBaseName());
+						printArgumentList(dps, fakeProps, skipMake);
+						dps.println(";");
+						dps.println("        this.after(node);");
+						dps.println("        return node;");
+						dps.println("    }");
+						dps.println();
+					}
 				}
 			}
 		}
