@@ -293,14 +293,20 @@
 
         <type name="ClassModifiersNode" super="ModifiersNode">
             <prop name="access" type="AccessModifier" desc="the access for the associated class" />
-            <prop name="abstractFlag" type="boolean" desc="whether or not the associated class is abstract" />
-            <prop name="staticFlag" type="boolean" desc="whether or not the associated class is static" />
-            <prop name="finalFlag" type="boolean" desc="whether or not the associated class is final" />
+            <prop name="abstractFlag" type="boolean" desc="whether or not the associated class is abstract"
+                default="false" />
+            <prop name="staticFlag" type="boolean" desc="whether or not the associated class is static"
+                default="false" />
+            <prop name="finalFlag" type="boolean" desc="whether or not the associated class is final"
+                default="false" />
             <prop name="strictfpFlag" type="boolean"
-                desc="whether or not the associated class uses strict floating-point" />
+                desc="whether or not the associated class uses strict floating-point" default="false" />
             <doc><![CDATA[
                 Represents the modifiers which can be associated with a class.
             ]]></doc>
+            <factory-method>
+                <prop name="access" />
+            </factory-method>
         </type>
 
         <type name="ConstructorModifiersNode" super="ModifiersNode">
@@ -313,52 +319,74 @@
         <type name="EnumModifiersNode" super="ModifiersNode">
             <prop name="access" type="AccessModifier" desc="the access for the associated enum" />
             <prop name="strictfpFlag" type="boolean"
-                desc="whether or not the associated enum uses strict floating-point" />
+                desc="whether or not the associated enum uses strict floating-point" default="false" />
             <doc><![CDATA[
                 Represents the modifiers which can be associated with an enum.  The <tt>static</tt> modifier is syntactically
                 legal but also implicit, so it does not appear here.
             ]]></doc>
+            <factory-method>
+                <prop name="access" />
+            </factory-method>
         </type>
 
         <type name="FieldModifiersNode" super="ModifiersNode">
             <prop name="access" type="AccessModifier" desc="the access for the associated fields" />
-            <prop name="staticFlag" type="boolean" desc="whether or not the associated class is static" />
-            <prop name="finalFlag" type="boolean" desc="whether or not the associated class is final" />
-            <prop name="transientFlag" type="boolean" desc="whether or not the associated class is transient" />
-            <prop name="volatileFlag" type="boolean" desc="whether or not the associated class is volatile" />
+            <prop name="staticFlag" type="boolean" desc="whether or not the associated class is static"
+                default="false" />
+            <prop name="finalFlag" type="boolean" desc="whether or not the associated class is final"
+                default="false" />
+            <prop name="transientFlag" type="boolean" desc="whether or not the associated class is transient"
+                default="false" />
+            <prop name="volatileFlag" type="boolean" desc="whether or not the associated class is volatile"
+                default="false" />
             <doc><![CDATA[
                 Represents the modifiers which can be associated with a field.
             ]]></doc>
+            <factory-method>
+                <prop name="access" />
+            </factory-method>
         </type>
 
         <type name="InterfaceModifiersNode" super="ModifiersNode">
             <prop name="access" type="AccessModifier" desc="the access for the associated interface" />
-            <prop name="staticFlag" type="boolean" desc="whether or not the associated interface is static" />
+            <prop name="staticFlag" type="boolean" desc="whether or not the associated interface is static"
+                default="false" />
             <prop name="strictfpFlag" type="boolean"
-                desc="whether or not the associated interface uses strict floating-point" />
+                desc="whether or not the associated interface uses strict floating-point" default="false" />
             <doc><![CDATA[
                 Represents the modifiers which can be associated with an interface.  While <tt>public</tt> and <tt>abstract</tt>
                 are syntactically legal modifiers, they are not included here because they are implicit to all interfaces.
             ]]></doc>
+            <factory-method>
+                <prop name="access" />
+            </factory-method>
         </type>
 
         <type name="MethodModifiersNode" super="ModifiersNode">
             <prop name="access" type="AccessModifier" desc="the access for the associated method" />
-            <prop name="abstractFlag" type="boolean" desc="whether or not the associated method is abstract" />
-            <prop name="staticFlag" type="boolean" desc="whether or not the associated method is static" />
-            <prop name="finalFlag" type="boolean" desc="whether or not the associated method is final" />
-            <prop name="synchronizedFlag" type="boolean" desc="whether or not the associated method is synchronized" />
-            <prop name="nativeFlag" type="boolean" desc="whether or not the associated method is native" />
+            <prop name="abstractFlag" type="boolean" desc="whether or not the associated method is abstract"
+                default="false" />
+            <prop name="staticFlag" type="boolean" desc="whether or not the associated method is static"
+                default="false" />
+            <prop name="finalFlag" type="boolean" desc="whether or not the associated method is final"
+                default="false" />
+            <prop name="synchronizedFlag" type="boolean" desc="whether or not the associated method is synchronized"
+                default="false" />
+            <prop name="nativeFlag" type="boolean" desc="whether or not the associated method is native"
+                default="false" />
             <prop name="strictfpFlag" type="boolean"
-                desc="whether or not the associated method uses strict floating-point" />
+                desc="whether or not the associated method uses strict floating-point" default="false" />
             <doc><![CDATA[
                 Represents the modifiers which can be associated with a method.
             ]]></doc>
+            <factory-method>
+                <prop name="access" />
+            </factory-method>
         </type>
 
         <type name="ModifiersNode" super="Node" mode="abstract">
             <prop name="annotations" type="AnnotationListNode" desc="the annotations modifying the subject"
-                default="makeAnnotationListNode()"/>
+                default="makeAnnotationListNode()" />
             <doc><![CDATA[
                 A node representing the modifiers applied to another node.  Modifiers may include flags (such as <tt>final</tt>
                 or <tt>strictfp</tt>) and annotations (such as <tt>@Override</tt>).  Subclasses of this node dictate precisely
@@ -367,10 +395,11 @@
         </type>
 
         <type name="VariableModifiersNode" super="ModifiersNode">
-            <prop name="finalFlag" type="boolean" desc="whether or not the associated variable is final" />
+            <prop name="finalFlag" type="boolean" desc="whether or not the associated variable is final" default="false"/>
             <doc><![CDATA[
                 Represents the modifiers which can be associated with a variable.
             ]]></doc>
+            <factory-method/>
         </type>
 
         <!-- ===================== EXPRESSION NODES ====================== -->

@@ -1636,6 +1636,36 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     }
 
     /**
+     * Creates a ClassModifiersNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public ClassModifiersNode makeClassModifiersNode(
+            AccessModifier access)
+    {
+        this.before();
+        ClassModifiersNode node = factory.makeClassModifiersNode(access);
+        this.after(node);
+        return node;
+    }
+
+    /**
+     * Creates a ClassModifiersNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public ClassModifiersNode makeClassModifiersNode(
+            AccessModifier access,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        ClassModifiersNode node = factory.makeClassModifiersNode(access, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+
+    /**
      * Creates a CodeLiteralNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -2230,6 +2260,36 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     }
 
     /**
+     * Creates a EnumModifiersNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public EnumModifiersNode makeEnumModifiersNode(
+            AccessModifier access)
+    {
+        this.before();
+        EnumModifiersNode node = factory.makeEnumModifiersNode(access);
+        this.after(node);
+        return node;
+    }
+
+    /**
+     * Creates a EnumModifiersNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public EnumModifiersNode makeEnumModifiersNode(
+            AccessModifier access,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        EnumModifiersNode node = factory.makeEnumModifiersNode(access, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+
+    /**
      * Creates a ExpressionListNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -2451,6 +2511,36 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     {
         this.before();
         FieldModifiersNode node = factory.makeFieldModifiersNode(access, staticFlag, finalFlag, transientFlag, volatileFlag, annotations, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+
+    /**
+     * Creates a FieldModifiersNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public FieldModifiersNode makeFieldModifiersNode(
+            AccessModifier access)
+    {
+        this.before();
+        FieldModifiersNode node = factory.makeFieldModifiersNode(access);
+        this.after(node);
+        return node;
+    }
+
+    /**
+     * Creates a FieldModifiersNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public FieldModifiersNode makeFieldModifiersNode(
+            AccessModifier access,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        FieldModifiersNode node = factory.makeFieldModifiersNode(access, startLocation, stopLocation);
         this.after(node);
         return node;
     }
@@ -3060,6 +3150,36 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     }
 
     /**
+     * Creates a InterfaceModifiersNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public InterfaceModifiersNode makeInterfaceModifiersNode(
+            AccessModifier access)
+    {
+        this.before();
+        InterfaceModifiersNode node = factory.makeInterfaceModifiersNode(access);
+        this.after(node);
+        return node;
+    }
+
+    /**
+     * Creates a InterfaceModifiersNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public InterfaceModifiersNode makeInterfaceModifiersNode(
+            AccessModifier access,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        InterfaceModifiersNode node = factory.makeInterfaceModifiersNode(access, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+
+    /**
      * Creates a JavadocNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -3337,6 +3457,36 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     {
         this.before();
         MethodModifiersNode node = factory.makeMethodModifiersNode(access, abstractFlag, staticFlag, finalFlag, synchronizedFlag, nativeFlag, strictfpFlag, annotations, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+
+    /**
+     * Creates a MethodModifiersNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public MethodModifiersNode makeMethodModifiersNode(
+            AccessModifier access)
+    {
+        this.before();
+        MethodModifiersNode node = factory.makeMethodModifiersNode(access);
+        this.after(node);
+        return node;
+    }
+
+    /**
+     * Creates a MethodModifiersNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public MethodModifiersNode makeMethodModifiersNode(
+            AccessModifier access,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        MethodModifiersNode node = factory.makeMethodModifiersNode(access, startLocation, stopLocation);
         this.after(node);
         return node;
     }
@@ -4876,6 +5026,34 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     {
         this.before();
         VariableModifiersNode node = factory.makeVariableModifiersNode(finalFlag, annotations, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+
+    /**
+     * Creates a VariableModifiersNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public VariableModifiersNode makeVariableModifiersNode()
+    {
+        this.before();
+        VariableModifiersNode node = factory.makeVariableModifiersNode();
+        this.after(node);
+        return node;
+    }
+
+    /**
+     * Creates a VariableModifiersNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public VariableModifiersNode makeVariableModifiersNode(
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        VariableModifiersNode node = factory.makeVariableModifiersNode(startLocation, stopLocation);
         this.after(node);
         return node;
     }

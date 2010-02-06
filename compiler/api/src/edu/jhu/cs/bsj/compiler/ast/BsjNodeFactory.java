@@ -906,6 +906,22 @@ public interface BsjNodeFactory
             BsjSourceLocation stopLocation);
 
     /**
+     * Creates a ClassModifiersNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public ClassModifiersNode makeClassModifiersNode(
+            AccessModifier access);
+
+    /**
+     * Creates a ClassModifiersNode.
+     * The specified start and stop locations are used.
+     */
+    public ClassModifiersNode makeClassModifiersNode(
+            AccessModifier access,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+
+    /**
      * Creates a CodeLiteralNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -1248,6 +1264,22 @@ public interface BsjNodeFactory
             BsjSourceLocation stopLocation);
 
     /**
+     * Creates a EnumModifiersNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public EnumModifiersNode makeEnumModifiersNode(
+            AccessModifier access);
+
+    /**
+     * Creates a EnumModifiersNode.
+     * The specified start and stop locations are used.
+     */
+    public EnumModifiersNode makeEnumModifiersNode(
+            AccessModifier access,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+
+    /**
      * Creates a ExpressionListNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -1372,6 +1404,22 @@ public interface BsjNodeFactory
             boolean transientFlag,
             boolean volatileFlag,
             AnnotationListNode annotations,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+
+    /**
+     * Creates a FieldModifiersNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public FieldModifiersNode makeFieldModifiersNode(
+            AccessModifier access);
+
+    /**
+     * Creates a FieldModifiersNode.
+     * The specified start and stop locations are used.
+     */
+    public FieldModifiersNode makeFieldModifiersNode(
+            AccessModifier access,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
 
@@ -1714,6 +1762,22 @@ public interface BsjNodeFactory
             BsjSourceLocation stopLocation);
 
     /**
+     * Creates a InterfaceModifiersNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public InterfaceModifiersNode makeInterfaceModifiersNode(
+            AccessModifier access);
+
+    /**
+     * Creates a InterfaceModifiersNode.
+     * The specified start and stop locations are used.
+     */
+    public InterfaceModifiersNode makeInterfaceModifiersNode(
+            AccessModifier access,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+
+    /**
      * Creates a JavadocNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -1880,6 +1944,22 @@ public interface BsjNodeFactory
             boolean nativeFlag,
             boolean strictfpFlag,
             AnnotationListNode annotations,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+
+    /**
+     * Creates a MethodModifiersNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public MethodModifiersNode makeMethodModifiersNode(
+            AccessModifier access);
+
+    /**
+     * Creates a MethodModifiersNode.
+     * The specified start and stop locations are used.
+     */
+    public MethodModifiersNode makeMethodModifiersNode(
+            AccessModifier access,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
 
@@ -2733,6 +2813,20 @@ public interface BsjNodeFactory
     public VariableModifiersNode makeVariableModifiersNode(
             boolean finalFlag,
             AnnotationListNode annotations,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+
+    /**
+     * Creates a VariableModifiersNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public VariableModifiersNode makeVariableModifiersNode();
+
+    /**
+     * Creates a VariableModifiersNode.
+     * The specified start and stop locations are used.
+     */
+    public VariableModifiersNode makeVariableModifiersNode(
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
 

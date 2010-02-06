@@ -1429,6 +1429,32 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
 
     /**
+     * Creates a ClassModifiersNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public ClassModifiersNode makeClassModifiersNode(
+            AccessModifier access)
+    {
+        ClassModifiersNode ret = new ClassModifiersNodeImpl(access, false, false, false, false, makeAnnotationListNode(), startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
+     * Creates a ClassModifiersNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public ClassModifiersNode makeClassModifiersNode(
+            AccessModifier access,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        ClassModifiersNode ret = new ClassModifiersNodeImpl(access, false, false, false, false, makeAnnotationListNode(), startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
      * Creates a CodeLiteralNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -1951,6 +1977,32 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
 
     /**
+     * Creates a EnumModifiersNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public EnumModifiersNode makeEnumModifiersNode(
+            AccessModifier access)
+    {
+        EnumModifiersNode ret = new EnumModifiersNodeImpl(access, false, makeAnnotationListNode(), startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
+     * Creates a EnumModifiersNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public EnumModifiersNode makeEnumModifiersNode(
+            AccessModifier access,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        EnumModifiersNode ret = new EnumModifiersNodeImpl(access, false, makeAnnotationListNode(), startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
      * Creates a ExpressionListNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -2145,6 +2197,32 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation stopLocation)
     {
         FieldModifiersNode ret = new FieldModifiersNodeImpl(access, staticFlag, finalFlag, transientFlag, volatileFlag, annotations, startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
+     * Creates a FieldModifiersNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public FieldModifiersNode makeFieldModifiersNode(
+            AccessModifier access)
+    {
+        FieldModifiersNode ret = new FieldModifiersNodeImpl(access, false, false, false, false, makeAnnotationListNode(), startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
+     * Creates a FieldModifiersNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public FieldModifiersNode makeFieldModifiersNode(
+            AccessModifier access,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        FieldModifiersNode ret = new FieldModifiersNodeImpl(access, false, false, false, false, makeAnnotationListNode(), startLocation, stopLocation);
         return ret;
     }
 
@@ -2677,6 +2755,32 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
 
     /**
+     * Creates a InterfaceModifiersNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public InterfaceModifiersNode makeInterfaceModifiersNode(
+            AccessModifier access)
+    {
+        InterfaceModifiersNode ret = new InterfaceModifiersNodeImpl(access, false, false, makeAnnotationListNode(), startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
+     * Creates a InterfaceModifiersNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public InterfaceModifiersNode makeInterfaceModifiersNode(
+            AccessModifier access,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        InterfaceModifiersNode ret = new InterfaceModifiersNodeImpl(access, false, false, makeAnnotationListNode(), startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
      * Creates a JavadocNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -2923,6 +3027,32 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation stopLocation)
     {
         MethodModifiersNode ret = new MethodModifiersNodeImpl(access, abstractFlag, staticFlag, finalFlag, synchronizedFlag, nativeFlag, strictfpFlag, annotations, startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
+     * Creates a MethodModifiersNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public MethodModifiersNode makeMethodModifiersNode(
+            AccessModifier access)
+    {
+        MethodModifiersNode ret = new MethodModifiersNodeImpl(access, false, false, false, false, false, false, makeAnnotationListNode(), startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
+     * Creates a MethodModifiersNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public MethodModifiersNode makeMethodModifiersNode(
+            AccessModifier access,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        MethodModifiersNode ret = new MethodModifiersNodeImpl(access, false, false, false, false, false, false, makeAnnotationListNode(), startLocation, stopLocation);
         return ret;
     }
 
@@ -4266,6 +4396,30 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation stopLocation)
     {
         VariableModifiersNode ret = new VariableModifiersNodeImpl(finalFlag, annotations, startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
+     * Creates a VariableModifiersNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public VariableModifiersNode makeVariableModifiersNode()
+    {
+        VariableModifiersNode ret = new VariableModifiersNodeImpl(false, makeAnnotationListNode(), startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
+     * Creates a VariableModifiersNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public VariableModifiersNode makeVariableModifiersNode(
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        VariableModifiersNode ret = new VariableModifiersNodeImpl(false, makeAnnotationListNode(), startLocation, stopLocation);
         return ret;
     }
 
