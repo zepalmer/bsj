@@ -139,6 +139,22 @@ public interface BsjNodeFactory
             BsjSourceLocation stopLocation);
 
     /**
+     * Creates a AnnotationElementListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public AnnotationElementListNode makeAnnotationElementListNode(
+            List<AnnotationElementNode> children);
+
+    /**
+     * Creates a AnnotationElementListNode.
+     * The specified start and stop locations are used.
+     */
+    public AnnotationElementListNode makeAnnotationElementListNode(
+            List<AnnotationElementNode> children,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+
+    /**
      * Creates a AnnotationElementNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -169,6 +185,38 @@ public interface BsjNodeFactory
      */
     public AnnotationExpressionValueNode makeAnnotationExpressionValueNode(
             NonAssignmentExpressionNode expression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+
+    /**
+     * Creates a AnnotationListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public AnnotationListNode makeAnnotationListNode(
+            List<AnnotationNode> children);
+
+    /**
+     * Creates a AnnotationListNode.
+     * The specified start and stop locations are used.
+     */
+    public AnnotationListNode makeAnnotationListNode(
+            List<AnnotationNode> children,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+
+    /**
+     * Creates a AnnotationMemberListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public AnnotationMemberListNode makeAnnotationMemberListNode(
+            List<AnnotationMemberNode> children);
+
+    /**
+     * Creates a AnnotationMemberListNode.
+     * The specified start and stop locations are used.
+     */
+    public AnnotationMemberListNode makeAnnotationMemberListNode(
+            List<AnnotationMemberNode> children,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
 
@@ -235,6 +283,22 @@ public interface BsjNodeFactory
             BsjSourceLocation stopLocation);
 
     /**
+     * Creates a AnnotationValueListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public AnnotationValueListNode makeAnnotationValueListNode(
+            List<AnnotationValueNode> children);
+
+    /**
+     * Creates a AnnotationValueListNode.
+     * The specified start and stop locations are used.
+     */
+    public AnnotationValueListNode makeAnnotationValueListNode(
+            List<AnnotationValueNode> children,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+
+    /**
      * Creates a AnonymousClassBodyNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -247,6 +311,22 @@ public interface BsjNodeFactory
      */
     public AnonymousClassBodyNode makeAnonymousClassBodyNode(
             ListNode<AnonymousClassMemberNode> members,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+
+    /**
+     * Creates a AnonymousClassMemberListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public AnonymousClassMemberListNode makeAnonymousClassMemberListNode(
+            List<AnonymousClassMemberNode> children);
+
+    /**
+     * Creates a AnonymousClassMemberListNode.
+     * The specified start and stop locations are used.
+     */
+    public AnonymousClassMemberListNode makeAnonymousClassMemberListNode(
+            List<AnonymousClassMemberNode> children,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
 
@@ -415,6 +495,22 @@ public interface BsjNodeFactory
             BsjSourceLocation stopLocation);
 
     /**
+     * Creates a BlockStatementListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public BlockStatementListNode makeBlockStatementListNode(
+            List<BlockStatementNode> children);
+
+    /**
+     * Creates a BlockStatementListNode.
+     * The specified start and stop locations are used.
+     */
+    public BlockStatementListNode makeBlockStatementListNode(
+            List<BlockStatementNode> children,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+
+    /**
      * Creates a BlockStatementMetaprogramAnchorNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -464,6 +560,22 @@ public interface BsjNodeFactory
             BsjSourceLocation stopLocation);
 
     /**
+     * Creates a CaseListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public CaseListNode makeCaseListNode(
+            List<CaseNode> children);
+
+    /**
+     * Creates a CaseListNode.
+     * The specified start and stop locations are used.
+     */
+    public CaseListNode makeCaseListNode(
+            List<CaseNode> children,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+
+    /**
      * Creates a CaseNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -478,6 +590,22 @@ public interface BsjNodeFactory
     public CaseNode makeCaseNode(
             ExpressionNode expression,
             ListNode<BlockStatementNode> statements,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+
+    /**
+     * Creates a CatchListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public CatchListNode makeCatchListNode(
+            List<CatchNode> children);
+
+    /**
+     * Creates a CatchListNode.
+     * The specified start and stop locations are used.
+     */
+    public CatchListNode makeCatchListNode(
+            List<CatchNode> children,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
 
@@ -572,6 +700,22 @@ public interface BsjNodeFactory
      */
     public ClassLiteralNode makeClassLiteralNode(
             LiteralizableTypeNode value,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+
+    /**
+     * Creates a ClassMemberListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public ClassMemberListNode makeClassMemberListNode(
+            List<ClassMemberNode> children);
+
+    /**
+     * Creates a ClassMemberListNode.
+     * The specified start and stop locations are used.
+     */
+    public ClassMemberListNode makeClassMemberListNode(
+            List<ClassMemberNode> children,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
 
@@ -740,6 +884,22 @@ public interface BsjNodeFactory
             BsjSourceLocation stopLocation);
 
     /**
+     * Creates a DeclaredTypeListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public DeclaredTypeListNode makeDeclaredTypeListNode(
+            List<DeclaredTypeNode> children);
+
+    /**
+     * Creates a DeclaredTypeListNode.
+     * The specified start and stop locations are used.
+     */
+    public DeclaredTypeListNode makeDeclaredTypeListNode(
+            List<DeclaredTypeNode> children,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+
+    /**
      * Creates a DoWhileLoopNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -812,6 +972,22 @@ public interface BsjNodeFactory
             BsjSourceLocation stopLocation);
 
     /**
+     * Creates a EnumConstantDeclarationListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public EnumConstantDeclarationListNode makeEnumConstantDeclarationListNode(
+            List<EnumConstantDeclarationNode> children);
+
+    /**
+     * Creates a EnumConstantDeclarationListNode.
+     * The specified start and stop locations are used.
+     */
+    public EnumConstantDeclarationListNode makeEnumConstantDeclarationListNode(
+            List<EnumConstantDeclarationNode> children,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+
+    /**
      * Creates a EnumConstantDeclarationNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -876,6 +1052,22 @@ public interface BsjNodeFactory
             AccessModifier access,
             boolean strictfpFlag,
             ListNode<AnnotationNode> annotations,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+
+    /**
+     * Creates a ExpressionListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public ExpressionListNode makeExpressionListNode(
+            List<ExpressionNode> children);
+
+    /**
+     * Creates a ExpressionListNode.
+     * The specified start and stop locations are used.
+     */
+    public ExpressionListNode makeExpressionListNode(
+            List<ExpressionNode> children,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
 
@@ -1082,6 +1274,22 @@ public interface BsjNodeFactory
             BsjSourceLocation stopLocation);
 
     /**
+     * Creates a ImportListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public ImportListNode makeImportListNode(
+            List<ImportNode> children);
+
+    /**
+     * Creates a ImportListNode.
+     * The specified start and stop locations are used.
+     */
+    public ImportListNode makeImportListNode(
+            List<ImportNode> children,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+
+    /**
      * Creates a ImportOnDemandNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -1228,6 +1436,22 @@ public interface BsjNodeFactory
             BsjSourceLocation stopLocation);
 
     /**
+     * Creates a InterfaceMemberListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public InterfaceMemberListNode makeInterfaceMemberListNode(
+            List<InterfaceMemberNode> children);
+
+    /**
+     * Creates a InterfaceMemberListNode.
+     * The specified start and stop locations are used.
+     */
+    public InterfaceMemberListNode makeInterfaceMemberListNode(
+            List<InterfaceMemberNode> children,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+
+    /**
      * Creates a InterfaceModifiersNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -1280,22 +1504,6 @@ public interface BsjNodeFactory
     public LabeledStatementNode makeLabeledStatementNode(
             IdentifierNode label,
             StatementNode statement,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation);
-
-    /**
-     * Creates a ListNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    public <T extends Node> ListNode<T> makeListNode(
-            List<T> children);
-
-    /**
-     * Creates a ListNode.
-     * The specified start and stop locations are used.
-     */
-    public <T extends Node> ListNode<T> makeListNode(
-            List<T> children,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
 
@@ -1654,6 +1862,22 @@ public interface BsjNodeFactory
             BsjSourceLocation stopLocation);
 
     /**
+     * Creates a StatementExpressionListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public StatementExpressionListNode makeStatementExpressionListNode(
+            List<StatementExpressionNode> children);
+
+    /**
+     * Creates a StatementExpressionListNode.
+     * The specified start and stop locations are used.
+     */
+    public StatementExpressionListNode makeStatementExpressionListNode(
+            List<StatementExpressionNode> children,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+
+    /**
      * Creates a StringLiteralNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -1818,6 +2042,22 @@ public interface BsjNodeFactory
             BsjSourceLocation stopLocation);
 
     /**
+     * Creates a TypeArgumentListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public TypeArgumentListNode makeTypeArgumentListNode(
+            List<TypeArgumentNode> children);
+
+    /**
+     * Creates a TypeArgumentListNode.
+     * The specified start and stop locations are used.
+     */
+    public TypeArgumentListNode makeTypeArgumentListNode(
+            List<TypeArgumentNode> children,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+
+    /**
      * Creates a TypeCastNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -1836,6 +2076,22 @@ public interface BsjNodeFactory
             BsjSourceLocation stopLocation);
 
     /**
+     * Creates a TypeDeclarationListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public TypeDeclarationListNode makeTypeDeclarationListNode(
+            List<TypeDeclarationNode> children);
+
+    /**
+     * Creates a TypeDeclarationListNode.
+     * The specified start and stop locations are used.
+     */
+    public TypeDeclarationListNode makeTypeDeclarationListNode(
+            List<TypeDeclarationNode> children,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+
+    /**
      * Creates a TypeDeclarationMetaprogramAnchorNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -1849,6 +2105,38 @@ public interface BsjNodeFactory
     public TypeDeclarationMetaprogramAnchorNode makeTypeDeclarationMetaprogramAnchorNode(
             TypeDeclarationNode replacement,
             MetaprogramNode metaprogram,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+
+    /**
+     * Creates a TypeListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public TypeListNode makeTypeListNode(
+            List<TypeNode> children);
+
+    /**
+     * Creates a TypeListNode.
+     * The specified start and stop locations are used.
+     */
+    public TypeListNode makeTypeListNode(
+            List<TypeNode> children,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+
+    /**
+     * Creates a TypeParameterListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public TypeParameterListNode makeTypeParameterListNode(
+            List<TypeParameterNode> children);
+
+    /**
+     * Creates a TypeParameterListNode.
+     * The specified start and stop locations are used.
+     */
+    public TypeParameterListNode makeTypeParameterListNode(
+            List<TypeParameterNode> children,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
 
@@ -1903,6 +2191,22 @@ public interface BsjNodeFactory
     public UnaryStatementExpressionNode makeUnaryStatementExpressionNode(
             ExpressionNode expression,
             UnaryStatementOperator operator,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+
+    /**
+     * Creates a UnparameterizedTypeListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public UnparameterizedTypeListNode makeUnparameterizedTypeListNode(
+            List<UnparameterizedTypeNode> children);
+
+    /**
+     * Creates a UnparameterizedTypeListNode.
+     * The specified start and stop locations are used.
+     */
+    public UnparameterizedTypeListNode makeUnparameterizedTypeListNode(
+            List<UnparameterizedTypeNode> children,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
 
@@ -1963,6 +2267,22 @@ public interface BsjNodeFactory
             BsjSourceLocation stopLocation);
 
     /**
+     * Creates a VariableDeclaratorListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public VariableDeclaratorListNode makeVariableDeclaratorListNode(
+            List<VariableDeclaratorNode> children);
+
+    /**
+     * Creates a VariableDeclaratorListNode.
+     * The specified start and stop locations are used.
+     */
+    public VariableDeclaratorListNode makeVariableDeclaratorListNode(
+            List<VariableDeclaratorNode> children,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+
+    /**
      * Creates a VariableDeclaratorNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -1979,6 +2299,38 @@ public interface BsjNodeFactory
             TypeNode type,
             IdentifierNode name,
             VariableInitializerNode initializer,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+
+    /**
+     * Creates a VariableInitializerListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public VariableInitializerListNode makeVariableInitializerListNode(
+            List<VariableInitializerNode> children);
+
+    /**
+     * Creates a VariableInitializerListNode.
+     * The specified start and stop locations are used.
+     */
+    public VariableInitializerListNode makeVariableInitializerListNode(
+            List<VariableInitializerNode> children,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+
+    /**
+     * Creates a VariableListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public VariableListNode makeVariableListNode(
+            List<VariableNode> children);
+
+    /**
+     * Creates a VariableListNode.
+     * The specified start and stop locations are used.
+     */
+    public VariableListNode makeVariableListNode(
+            List<VariableNode> children,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
 

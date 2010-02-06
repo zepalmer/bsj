@@ -69,7 +69,8 @@
             <xs:element name="include" type="include_T" minOccurs="0" maxOccurs="unbounded"/>
             <xs:element name="doc" type="doc_T"/>
             <xs:element name="toString" type="toString_T" minOccurs="0" maxOccurs="1"/>
-            <xs:element name="override" type="override_T" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="factory-override" type="override_T" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="constructor-override" type="override_T" minOccurs="0" maxOccurs="unbounded"/>
             <xs:element name="nogen" type="nogen_T" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
         <xs:attribute name="name" type="xs:string" use="required"/>

@@ -26,14 +26,16 @@ public class TypeDefinition
 	private List<String> includes;
 	private String docString;
 	private List<String> toStringLines;
-	private Map<String, String> overrideMap;
+	private Map<String, String> factoryOverrideMap;
+	private Map<String, String> constructorOverrideMap;
 	private boolean genConstructor;
 	private boolean genChildren;
 	private Mode mode;
 
 	public TypeDefinition(String baseName, String typeParameter, String superName, String superTypeArg,
 			String interfacePackage, String classPackage, List<String> tags, List<PropertyDefinition> properties,
-			List<String> includes, String docString, List<String> toStringLines, Map<String, String> overrideMap,
+			List<String> includes, String docString, List<String> toStringLines, Map<String, String> factoryOverrideMap,
+			Map<String,String> constructorOverrideMap,
 			boolean genConstructor, boolean genChildren, Mode mode)
 	{
 		super();
@@ -48,7 +50,8 @@ public class TypeDefinition
 		this.includes = includes;
 		this.docString = docString;
 		this.toStringLines = toStringLines;
-		this.overrideMap = overrideMap;
+		this.factoryOverrideMap = factoryOverrideMap;
+		this.constructorOverrideMap = constructorOverrideMap;
 		this.genConstructor = genConstructor;
 		this.genChildren = genChildren;
 		this.mode = mode;
@@ -187,9 +190,14 @@ public class TypeDefinition
 		return toStringLines;
 	}
 
-	public Map<String, String> getOverrideMap()
+	public Map<String, String> getFactoryOverrideMap()
 	{
-		return overrideMap;
+		return factoryOverrideMap;
+	}
+
+	public Map<String, String> getConstructorOverrideMap()
+	{
+		return constructorOverrideMap;
 	}
 
 	public boolean isGenConstructor()

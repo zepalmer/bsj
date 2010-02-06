@@ -69,6 +69,13 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	}
 
 	@Override
+	public Void executeAnnotationElementListNode(AnnotationElementListNode node, PrependablePrintStream p)
+	{
+		executeListNode(node, p);
+		return null;
+	}
+
+	@Override
 	public Void executeAnnotationElementNode(AnnotationElementNode node, PrependablePrintStream p)
 	{
 		node.getIdentifier().executeOperation(this, p);
@@ -81,6 +88,13 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	public Void executeAnnotationExpressionValueNode(AnnotationExpressionValueNode node, PrependablePrintStream p)
 	{
 		node.getExpression().executeOperation(this, p);
+		return null;
+	}
+
+	@Override
+	public Void executeAnnotationListNode(AnnotationListNode node, PrependablePrintStream p)
+	{
+		executeListNode(node, p);
 		return null;
 	}
 
@@ -102,6 +116,13 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 			p.print(" default ");
 			node.getDefaultValue().executeOperation(this, p);
 		}
+		return null;
+	}
+
+	@Override
+	public Void executeAnnotationMemberListNode(AnnotationMemberListNode node, PrependablePrintStream p)
+	{
+		executeListNode(node, p);
 		return null;
 	}
 
@@ -132,6 +153,13 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	}
 
 	@Override
+	public Void executeAnnotationValueListNode(AnnotationValueListNode node, PrependablePrintStream p)
+	{
+		executeListNode(node, p);
+		return null;
+	}
+
+	@Override
 	public Void executeAnonymousClassBodyNode(AnonymousClassBodyNode node, PrependablePrintStream p)
 	{
 		p.print("{\n");
@@ -139,6 +167,13 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 		handleListNode(node.getMembers(), "", "\n", "", p, true);
 		p.decPrependCount();
 		p.print("}\n");
+		return null;
+	}
+
+	@Override
+	public Void executeAnonymousClassMemberListNode(AnonymousClassMemberListNode node, PrependablePrintStream p)
+	{
+		executeListNode(node, p);
 		return null;
 	}
 
@@ -275,6 +310,13 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	}
 
 	@Override
+	public Void executeBlockStatementListNode(BlockStatementListNode node, PrependablePrintStream p)
+	{
+		executeListNode(node, p);
+		return null;
+	}
+
+	@Override
 	public Void executeBooleanLiteralNode(BooleanLiteralNode node, PrependablePrintStream p)
 	{
 		p.print(node.getValue() ? "true" : "false");
@@ -294,6 +336,13 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	}
 
 	@Override
+	public Void executeCaseListNode(CaseListNode node, PrependablePrintStream p)
+	{
+		executeListNode(node, p);
+		return null;
+	}
+
+	@Override
 	public Void executeCaseNode(CaseNode node, PrependablePrintStream p)
 	{
 		if (node.getExpression() == null)
@@ -308,6 +357,13 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 		p.incPrependCount();
 		handleListNode(node.getStatements(), "", ";\n", ";\n", p, true);
 		p.decPrependCount();
+		return null;
+	}
+
+	@Override
+	public Void executeCatchListNode(CatchListNode node, PrependablePrintStream p)
+	{
+		executeListNode(node, p);
 		return null;
 	}
 
@@ -369,6 +425,13 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	{
 		node.getValue().executeOperation(this, p);
 		p.print(".class");
+		return null;
+	}
+
+	@Override
+	public Void executeClassMemberListNode(ClassMemberListNode node, PrependablePrintStream p)
+	{
+		executeListNode(node, p);
 		return null;
 	}
 
@@ -539,6 +602,13 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	}
 
 	@Override
+	public Void executeDeclaredTypeListNode(DeclaredTypeListNode node, PrependablePrintStream p)
+	{
+		executeListNode(node, p);
+		return null;
+	}
+
+	@Override
 	public Void executeDoWhileLoopNode(DoWhileLoopNode node, PrependablePrintStream p)
 	{
 		p.print("do\n");
@@ -577,6 +647,13 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 		handleListNode(node.getMembers(), "", "", "", p, true);
 		p.decPrependCount();
 		p.print("}\n");
+		return null;
+	}
+
+	@Override
+	public Void executeEnumConstantDeclarationListNode(EnumConstantDeclarationListNode node, PrependablePrintStream p)
+	{
+		executeListNode(node, p);
 		return null;
 	}
 
@@ -625,6 +702,13 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 		{
 			p.print("strictfp ");
 		}
+		return null;
+	}
+
+	@Override
+	public Void executeExpressionListNode(ExpressionListNode node, PrependablePrintStream p)
+	{
+		executeListNode(node, p);
 		return null;
 	}
 
@@ -762,6 +846,13 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	}
 
 	@Override
+	public Void executeImportListNode(ImportListNode node, PrependablePrintStream p)
+	{
+		executeListNode(node, p);
+		return null;
+	}
+
+	@Override
 	public Void executeImportOnDemandNode(ImportOnDemandNode node, PrependablePrintStream p)
 	{
 		p.print("import ");
@@ -851,6 +942,13 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	}
 
 	@Override
+	public Void executeInterfaceMemberListNode(InterfaceMemberListNode node, PrependablePrintStream p)
+	{
+		executeListNode(node, p);
+		return null;
+	}
+
+	@Override
 	public Void executeInterfaceModifiersNode(InterfaceModifiersNode node, PrependablePrintStream p)
 	{
 		handleListNode(node.getAnnotations(), "", "\n", "\n", p, true);
@@ -881,14 +979,6 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 		node.getLabel().executeOperation(this, p);
 		p.print(": ");
 		node.getStatement().executeOperation(this, p);
-		return null;
-	}
-
-	@Override
-	public <T extends Node> Void executeListNode(ListNode<T> node, PrependablePrintStream p)
-	{
-		// just call the utility method with some defaults
-		handleListNode(node, "", ",", "\n", p, false);
 		return null;
 	}
 
@@ -1139,6 +1229,13 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	}
 
 	@Override
+	public Void executeStatementExpressionListNode(StatementExpressionListNode node, PrependablePrintStream p)
+	{
+		executeListNode(node, p);
+		return null;
+	}
+
+	@Override
 	public Void executeStringLiteralNode(StringLiteralNode node, PrependablePrintStream p)
 	{
 		p.print("\"");
@@ -1248,12 +1345,40 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	}
 
 	@Override
+	public Void executeTypeArgumentListNode(TypeArgumentListNode node, PrependablePrintStream p)
+	{
+		executeListNode(node, p);
+		return null;
+	}
+
+	@Override
 	public Void executeTypeCastNode(TypeCastNode node, PrependablePrintStream p)
 	{
 		p.print("(");
 		node.getType().executeOperation(this, p);
 		p.print(") ");
 		node.getExpression().executeOperation(this, p);
+		return null;
+	}
+
+	@Override
+	public Void executeTypeDeclarationListNode(TypeDeclarationListNode node, PrependablePrintStream p)
+	{
+		executeListNode(node, p);
+		return null;
+	}
+
+	@Override
+	public Void executeTypeListNode(TypeListNode node, PrependablePrintStream p)
+	{
+		executeListNode(node, p);
+		return null;
+	}
+
+	@Override
+	public Void executeTypeParameterListNode(TypeParameterListNode node, PrependablePrintStream p)
+	{
+		executeListNode(node, p);
 		return null;
 	}
 
@@ -1308,6 +1433,13 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	}
 
 	@Override
+	public Void executeUnparameterizedTypeListNode(UnparameterizedTypeListNode node, PrependablePrintStream p)
+	{
+		executeListNode(node, p);
+		return null;
+	}
+
+	@Override
 	public Void executeUnparameterizedTypeNode(UnparameterizedTypeNode node, PrependablePrintStream p)
 	{
 		node.getName().executeOperation(this, p);
@@ -1350,6 +1482,13 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	}
 
 	@Override
+	public Void executeVariableDeclaratorListNode(VariableDeclaratorListNode node, PrependablePrintStream p)
+	{
+		executeListNode(node, p);
+		return null;
+	}
+
+	@Override
 	public Void executeVariableDeclaratorNode(VariableDeclaratorNode node, PrependablePrintStream p)
 	{
 		node.getType().executeOperation(this, p);
@@ -1360,6 +1499,20 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 			p.print(" = ");
 			node.getInitializer().executeOperation(this, p);
 		}
+		return null;
+	}
+
+	@Override
+	public Void executeVariableInitializerListNode(VariableInitializerListNode node, PrependablePrintStream p)
+	{
+		executeListNode(node, p);
+		return null;
+	}
+
+	@Override
+	public Void executeVariableListNode(VariableListNode node, PrependablePrintStream p)
+	{
+		executeListNode(node, p);
 		return null;
 	}
 
@@ -1473,6 +1626,13 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	// ========================================================================
 	// ============================ Utility Methods ===========================
 	// ========================================================================
+
+	protected <T extends Node> Void executeListNode(ListNode<T> node, PrependablePrintStream p)
+	{
+		// just call the utility method with some defaults
+		handleListNode(node, "", ",", "\n", p, false);
+		return null;
+	}
 
 	protected void handleListNode(ListNode<? extends Node> node, String begin, String separator, String end,
 			PrependablePrintStream p, boolean doNothingIfEmpty)

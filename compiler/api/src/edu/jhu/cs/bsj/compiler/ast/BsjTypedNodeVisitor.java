@@ -145,6 +145,15 @@ public interface BsjTypedNodeVisitor
     public void visitAnnotationDeclarationNodeStart(AnnotationDeclarationNode node, boolean mostSpecific);
 
     /**
+     * Starts a visit for nodes of type AnnotationElementListNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitAnnotationElementListNodeStart(AnnotationElementListNode node, boolean mostSpecific);
+
+    /**
      * Starts a visit for nodes of type AnnotationElementNode.
      * @param node The node being visited.
      * @param mostSpecific <code>true</code> if this is the most specific call
@@ -161,6 +170,24 @@ public interface BsjTypedNodeVisitor
      *                     otherwise.
      */
     public void visitAnnotationExpressionValueNodeStart(AnnotationExpressionValueNode node, boolean mostSpecific);
+
+    /**
+     * Starts a visit for nodes of type AnnotationListNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitAnnotationListNodeStart(AnnotationListNode node, boolean mostSpecific);
+
+    /**
+     * Starts a visit for nodes of type AnnotationMemberListNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitAnnotationMemberListNodeStart(AnnotationMemberListNode node, boolean mostSpecific);
 
     /**
      * Starts a visit for nodes of type AnnotationMemberNode.
@@ -202,6 +229,15 @@ public interface BsjTypedNodeVisitor
     public void visitAnnotationNodeStart(AnnotationNode node);
 
     /**
+     * Starts a visit for nodes of type AnnotationValueListNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitAnnotationValueListNodeStart(AnnotationValueListNode node, boolean mostSpecific);
+
+    /**
      * Starts a visit for nodes of type AnnotationValueNode.
      * @param node The node being visited.
      */
@@ -215,6 +251,15 @@ public interface BsjTypedNodeVisitor
      *                     otherwise.
      */
     public void visitAnonymousClassBodyNodeStart(AnonymousClassBodyNode node, boolean mostSpecific);
+
+    /**
+     * Starts a visit for nodes of type AnonymousClassMemberListNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitAnonymousClassMemberListNodeStart(AnonymousClassMemberListNode node, boolean mostSpecific);
 
     /**
      * Starts a visit for nodes of type AnonymousClassMemberNode.
@@ -316,6 +361,15 @@ public interface BsjTypedNodeVisitor
     public void visitBlockNodeStart(BlockNode node, boolean mostSpecific);
 
     /**
+     * Starts a visit for nodes of type BlockStatementListNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitBlockStatementListNodeStart(BlockStatementListNode node, boolean mostSpecific);
+
+    /**
      * Starts a visit for nodes of type BlockStatementMetaprogramAnchorNode.
      * @param node The node being visited.
      * @param mostSpecific <code>true</code> if this is the most specific call
@@ -349,6 +403,15 @@ public interface BsjTypedNodeVisitor
     public void visitBreakNodeStart(BreakNode node, boolean mostSpecific);
 
     /**
+     * Starts a visit for nodes of type CaseListNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitCaseListNodeStart(CaseListNode node, boolean mostSpecific);
+
+    /**
      * Starts a visit for nodes of type CaseNode.
      * @param node The node being visited.
      * @param mostSpecific <code>true</code> if this is the most specific call
@@ -356,6 +419,15 @@ public interface BsjTypedNodeVisitor
      *                     otherwise.
      */
     public void visitCaseNodeStart(CaseNode node, boolean mostSpecific);
+
+    /**
+     * Starts a visit for nodes of type CatchListNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitCatchListNodeStart(CatchListNode node, boolean mostSpecific);
 
     /**
      * Starts a visit for nodes of type CatchNode.
@@ -407,6 +479,15 @@ public interface BsjTypedNodeVisitor
      *                     otherwise.
      */
     public void visitClassLiteralNodeStart(ClassLiteralNode node, boolean mostSpecific);
+
+    /**
+     * Starts a visit for nodes of type ClassMemberListNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitClassMemberListNodeStart(ClassMemberListNode node, boolean mostSpecific);
 
     /**
      * Starts a visit for nodes of type ClassMemberNode.
@@ -493,6 +574,15 @@ public interface BsjTypedNodeVisitor
     public void visitContinueNodeStart(ContinueNode node, boolean mostSpecific);
 
     /**
+     * Starts a visit for nodes of type DeclaredTypeListNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitDeclaredTypeListNodeStart(DeclaredTypeListNode node, boolean mostSpecific);
+
+    /**
      * Starts a visit for nodes of type DeclaredTypeNode.
      * @param node The node being visited.
      */
@@ -535,6 +625,15 @@ public interface BsjTypedNodeVisitor
     public void visitEnumBodyNodeStart(EnumBodyNode node, boolean mostSpecific);
 
     /**
+     * Starts a visit for nodes of type EnumConstantDeclarationListNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitEnumConstantDeclarationListNodeStart(EnumConstantDeclarationListNode node, boolean mostSpecific);
+
+    /**
      * Starts a visit for nodes of type EnumConstantDeclarationNode.
      * @param node The node being visited.
      * @param mostSpecific <code>true</code> if this is the most specific call
@@ -560,6 +659,15 @@ public interface BsjTypedNodeVisitor
      *                     otherwise.
      */
     public void visitEnumModifiersNodeStart(EnumModifiersNode node, boolean mostSpecific);
+
+    /**
+     * Starts a visit for nodes of type ExpressionListNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitExpressionListNodeStart(ExpressionListNode node, boolean mostSpecific);
 
     /**
      * Starts a visit for nodes of type ExpressionNode.
@@ -679,6 +787,15 @@ public interface BsjTypedNodeVisitor
     public void visitIfNodeStart(IfNode node, boolean mostSpecific);
 
     /**
+     * Starts a visit for nodes of type ImportListNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitImportListNodeStart(ImportListNode node, boolean mostSpecific);
+
+    /**
      * Starts a visit for nodes of type ImportNode.
      * @param node The node being visited.
      */
@@ -763,6 +880,15 @@ public interface BsjTypedNodeVisitor
     public void visitInterfaceDeclarationNodeStart(InterfaceDeclarationNode node, boolean mostSpecific);
 
     /**
+     * Starts a visit for nodes of type InterfaceMemberListNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitInterfaceMemberListNodeStart(InterfaceMemberListNode node, boolean mostSpecific);
+
+    /**
      * Starts a visit for nodes of type InterfaceMemberNode.
      * @param node The node being visited.
      */
@@ -798,11 +924,8 @@ public interface BsjTypedNodeVisitor
     /**
      * Starts a visit for nodes of type ListNode.
      * @param node The node being visited.
-     * @param mostSpecific <code>true</code> if this is the most specific call
-     *                     which can be made for this node; <code>false</code>
-     *                     otherwise.
      */
-    public void visitListNodeStart(ListNode<?> node, boolean mostSpecific);
+    public void visitListNodeStart(ListNode<?> node);
 
     /**
      * Starts a visit for nodes of type LiteralNode.
@@ -1039,6 +1162,15 @@ public interface BsjTypedNodeVisitor
     public void visitSingleElementAnnotationNodeStart(SingleElementAnnotationNode node, boolean mostSpecific);
 
     /**
+     * Starts a visit for nodes of type StatementExpressionListNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitStatementExpressionListNodeStart(StatementExpressionListNode node, boolean mostSpecific);
+
+    /**
      * Starts a visit for nodes of type StatementExpressionNode.
      * @param node The node being visited.
      */
@@ -1132,6 +1264,15 @@ public interface BsjTypedNodeVisitor
     public void visitTryNodeStart(TryNode node, boolean mostSpecific);
 
     /**
+     * Starts a visit for nodes of type TypeArgumentListNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitTypeArgumentListNodeStart(TypeArgumentListNode node, boolean mostSpecific);
+
+    /**
      * Starts a visit for nodes of type TypeArgumentNode.
      * @param node The node being visited.
      */
@@ -1145,6 +1286,15 @@ public interface BsjTypedNodeVisitor
      *                     otherwise.
      */
     public void visitTypeCastNodeStart(TypeCastNode node, boolean mostSpecific);
+
+    /**
+     * Starts a visit for nodes of type TypeDeclarationListNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitTypeDeclarationListNodeStart(TypeDeclarationListNode node, boolean mostSpecific);
 
     /**
      * Starts a visit for nodes of type TypeDeclarationMetaprogramAnchorNode.
@@ -1162,10 +1312,28 @@ public interface BsjTypedNodeVisitor
     public void visitTypeDeclarationNodeStart(TypeDeclarationNode node);
 
     /**
+     * Starts a visit for nodes of type TypeListNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitTypeListNodeStart(TypeListNode node, boolean mostSpecific);
+
+    /**
      * Starts a visit for nodes of type TypeNode.
      * @param node The node being visited.
      */
     public void visitTypeNodeStart(TypeNode node);
+
+    /**
+     * Starts a visit for nodes of type TypeParameterListNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitTypeParameterListNodeStart(TypeParameterListNode node, boolean mostSpecific);
 
     /**
      * Starts a visit for nodes of type TypeParameterNode.
@@ -1195,6 +1363,15 @@ public interface BsjTypedNodeVisitor
     public void visitUnaryStatementExpressionNodeStart(UnaryStatementExpressionNode node, boolean mostSpecific);
 
     /**
+     * Starts a visit for nodes of type UnparameterizedTypeListNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitUnparameterizedTypeListNodeStart(UnparameterizedTypeListNode node, boolean mostSpecific);
+
+    /**
      * Starts a visit for nodes of type UnparameterizedTypeNode.
      * @param node The node being visited.
      * @param mostSpecific <code>true</code> if this is the most specific call
@@ -1222,6 +1399,15 @@ public interface BsjTypedNodeVisitor
     public void visitVariableDeclarationNodeStart(VariableDeclarationNode node, boolean mostSpecific);
 
     /**
+     * Starts a visit for nodes of type VariableDeclaratorListNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitVariableDeclaratorListNodeStart(VariableDeclaratorListNode node, boolean mostSpecific);
+
+    /**
      * Starts a visit for nodes of type VariableDeclaratorNode.
      * @param node The node being visited.
      * @param mostSpecific <code>true</code> if this is the most specific call
@@ -1231,10 +1417,28 @@ public interface BsjTypedNodeVisitor
     public void visitVariableDeclaratorNodeStart(VariableDeclaratorNode node, boolean mostSpecific);
 
     /**
+     * Starts a visit for nodes of type VariableInitializerListNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitVariableInitializerListNodeStart(VariableInitializerListNode node, boolean mostSpecific);
+
+    /**
      * Starts a visit for nodes of type VariableInitializerNode.
      * @param node The node being visited.
      */
     public void visitVariableInitializerNodeStart(VariableInitializerNode node);
+
+    /**
+     * Starts a visit for nodes of type VariableListNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitVariableListNodeStart(VariableListNode node, boolean mostSpecific);
 
     /**
      * Starts a visit for nodes of type VariableModifiersNode.
@@ -1345,6 +1549,15 @@ public interface BsjTypedNodeVisitor
     public void visitAnnotationDeclarationNodeStop(AnnotationDeclarationNode node, boolean mostSpecific);
 
     /**
+     * Stops a visit for nodes of type AnnotationElementListNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitAnnotationElementListNodeStop(AnnotationElementListNode node, boolean mostSpecific);
+
+    /**
      * Stops a visit for nodes of type AnnotationElementNode.
      * @param node The node being visited.
      * @param mostSpecific <code>true</code> if this is the most specific call
@@ -1361,6 +1574,24 @@ public interface BsjTypedNodeVisitor
      *                     otherwise.
      */
     public void visitAnnotationExpressionValueNodeStop(AnnotationExpressionValueNode node, boolean mostSpecific);
+
+    /**
+     * Stops a visit for nodes of type AnnotationListNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitAnnotationListNodeStop(AnnotationListNode node, boolean mostSpecific);
+
+    /**
+     * Stops a visit for nodes of type AnnotationMemberListNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitAnnotationMemberListNodeStop(AnnotationMemberListNode node, boolean mostSpecific);
 
     /**
      * Stops a visit for nodes of type AnnotationMemberNode.
@@ -1402,6 +1633,15 @@ public interface BsjTypedNodeVisitor
     public void visitAnnotationNodeStop(AnnotationNode node);
 
     /**
+     * Stops a visit for nodes of type AnnotationValueListNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitAnnotationValueListNodeStop(AnnotationValueListNode node, boolean mostSpecific);
+
+    /**
      * Stops a visit for nodes of type AnnotationValueNode.
      * @param node The node being visited.
      */
@@ -1415,6 +1655,15 @@ public interface BsjTypedNodeVisitor
      *                     otherwise.
      */
     public void visitAnonymousClassBodyNodeStop(AnonymousClassBodyNode node, boolean mostSpecific);
+
+    /**
+     * Stops a visit for nodes of type AnonymousClassMemberListNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitAnonymousClassMemberListNodeStop(AnonymousClassMemberListNode node, boolean mostSpecific);
 
     /**
      * Stops a visit for nodes of type AnonymousClassMemberNode.
@@ -1516,6 +1765,15 @@ public interface BsjTypedNodeVisitor
     public void visitBlockNodeStop(BlockNode node, boolean mostSpecific);
 
     /**
+     * Stops a visit for nodes of type BlockStatementListNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitBlockStatementListNodeStop(BlockStatementListNode node, boolean mostSpecific);
+
+    /**
      * Stops a visit for nodes of type BlockStatementMetaprogramAnchorNode.
      * @param node The node being visited.
      * @param mostSpecific <code>true</code> if this is the most specific call
@@ -1549,6 +1807,15 @@ public interface BsjTypedNodeVisitor
     public void visitBreakNodeStop(BreakNode node, boolean mostSpecific);
 
     /**
+     * Stops a visit for nodes of type CaseListNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitCaseListNodeStop(CaseListNode node, boolean mostSpecific);
+
+    /**
      * Stops a visit for nodes of type CaseNode.
      * @param node The node being visited.
      * @param mostSpecific <code>true</code> if this is the most specific call
@@ -1556,6 +1823,15 @@ public interface BsjTypedNodeVisitor
      *                     otherwise.
      */
     public void visitCaseNodeStop(CaseNode node, boolean mostSpecific);
+
+    /**
+     * Stops a visit for nodes of type CatchListNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitCatchListNodeStop(CatchListNode node, boolean mostSpecific);
 
     /**
      * Stops a visit for nodes of type CatchNode.
@@ -1607,6 +1883,15 @@ public interface BsjTypedNodeVisitor
      *                     otherwise.
      */
     public void visitClassLiteralNodeStop(ClassLiteralNode node, boolean mostSpecific);
+
+    /**
+     * Stops a visit for nodes of type ClassMemberListNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitClassMemberListNodeStop(ClassMemberListNode node, boolean mostSpecific);
 
     /**
      * Stops a visit for nodes of type ClassMemberNode.
@@ -1693,6 +1978,15 @@ public interface BsjTypedNodeVisitor
     public void visitContinueNodeStop(ContinueNode node, boolean mostSpecific);
 
     /**
+     * Stops a visit for nodes of type DeclaredTypeListNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitDeclaredTypeListNodeStop(DeclaredTypeListNode node, boolean mostSpecific);
+
+    /**
      * Stops a visit for nodes of type DeclaredTypeNode.
      * @param node The node being visited.
      */
@@ -1735,6 +2029,15 @@ public interface BsjTypedNodeVisitor
     public void visitEnumBodyNodeStop(EnumBodyNode node, boolean mostSpecific);
 
     /**
+     * Stops a visit for nodes of type EnumConstantDeclarationListNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitEnumConstantDeclarationListNodeStop(EnumConstantDeclarationListNode node, boolean mostSpecific);
+
+    /**
      * Stops a visit for nodes of type EnumConstantDeclarationNode.
      * @param node The node being visited.
      * @param mostSpecific <code>true</code> if this is the most specific call
@@ -1760,6 +2063,15 @@ public interface BsjTypedNodeVisitor
      *                     otherwise.
      */
     public void visitEnumModifiersNodeStop(EnumModifiersNode node, boolean mostSpecific);
+
+    /**
+     * Stops a visit for nodes of type ExpressionListNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitExpressionListNodeStop(ExpressionListNode node, boolean mostSpecific);
 
     /**
      * Stops a visit for nodes of type ExpressionNode.
@@ -1879,6 +2191,15 @@ public interface BsjTypedNodeVisitor
     public void visitIfNodeStop(IfNode node, boolean mostSpecific);
 
     /**
+     * Stops a visit for nodes of type ImportListNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitImportListNodeStop(ImportListNode node, boolean mostSpecific);
+
+    /**
      * Stops a visit for nodes of type ImportNode.
      * @param node The node being visited.
      */
@@ -1963,6 +2284,15 @@ public interface BsjTypedNodeVisitor
     public void visitInterfaceDeclarationNodeStop(InterfaceDeclarationNode node, boolean mostSpecific);
 
     /**
+     * Stops a visit for nodes of type InterfaceMemberListNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitInterfaceMemberListNodeStop(InterfaceMemberListNode node, boolean mostSpecific);
+
+    /**
      * Stops a visit for nodes of type InterfaceMemberNode.
      * @param node The node being visited.
      */
@@ -1998,11 +2328,8 @@ public interface BsjTypedNodeVisitor
     /**
      * Stops a visit for nodes of type ListNode.
      * @param node The node being visited.
-     * @param mostSpecific <code>true</code> if this is the most specific call
-     *                     which can be made for this node; <code>false</code>
-     *                     otherwise.
      */
-    public void visitListNodeStop(ListNode<?> node, boolean mostSpecific);
+    public void visitListNodeStop(ListNode<?> node);
 
     /**
      * Stops a visit for nodes of type LiteralNode.
@@ -2239,6 +2566,15 @@ public interface BsjTypedNodeVisitor
     public void visitSingleElementAnnotationNodeStop(SingleElementAnnotationNode node, boolean mostSpecific);
 
     /**
+     * Stops a visit for nodes of type StatementExpressionListNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitStatementExpressionListNodeStop(StatementExpressionListNode node, boolean mostSpecific);
+
+    /**
      * Stops a visit for nodes of type StatementExpressionNode.
      * @param node The node being visited.
      */
@@ -2332,6 +2668,15 @@ public interface BsjTypedNodeVisitor
     public void visitTryNodeStop(TryNode node, boolean mostSpecific);
 
     /**
+     * Stops a visit for nodes of type TypeArgumentListNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitTypeArgumentListNodeStop(TypeArgumentListNode node, boolean mostSpecific);
+
+    /**
      * Stops a visit for nodes of type TypeArgumentNode.
      * @param node The node being visited.
      */
@@ -2345,6 +2690,15 @@ public interface BsjTypedNodeVisitor
      *                     otherwise.
      */
     public void visitTypeCastNodeStop(TypeCastNode node, boolean mostSpecific);
+
+    /**
+     * Stops a visit for nodes of type TypeDeclarationListNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitTypeDeclarationListNodeStop(TypeDeclarationListNode node, boolean mostSpecific);
 
     /**
      * Stops a visit for nodes of type TypeDeclarationMetaprogramAnchorNode.
@@ -2362,10 +2716,28 @@ public interface BsjTypedNodeVisitor
     public void visitTypeDeclarationNodeStop(TypeDeclarationNode node);
 
     /**
+     * Stops a visit for nodes of type TypeListNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitTypeListNodeStop(TypeListNode node, boolean mostSpecific);
+
+    /**
      * Stops a visit for nodes of type TypeNode.
      * @param node The node being visited.
      */
     public void visitTypeNodeStop(TypeNode node);
+
+    /**
+     * Stops a visit for nodes of type TypeParameterListNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitTypeParameterListNodeStop(TypeParameterListNode node, boolean mostSpecific);
 
     /**
      * Stops a visit for nodes of type TypeParameterNode.
@@ -2395,6 +2767,15 @@ public interface BsjTypedNodeVisitor
     public void visitUnaryStatementExpressionNodeStop(UnaryStatementExpressionNode node, boolean mostSpecific);
 
     /**
+     * Stops a visit for nodes of type UnparameterizedTypeListNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitUnparameterizedTypeListNodeStop(UnparameterizedTypeListNode node, boolean mostSpecific);
+
+    /**
      * Stops a visit for nodes of type UnparameterizedTypeNode.
      * @param node The node being visited.
      * @param mostSpecific <code>true</code> if this is the most specific call
@@ -2422,6 +2803,15 @@ public interface BsjTypedNodeVisitor
     public void visitVariableDeclarationNodeStop(VariableDeclarationNode node, boolean mostSpecific);
 
     /**
+     * Stops a visit for nodes of type VariableDeclaratorListNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitVariableDeclaratorListNodeStop(VariableDeclaratorListNode node, boolean mostSpecific);
+
+    /**
      * Stops a visit for nodes of type VariableDeclaratorNode.
      * @param node The node being visited.
      * @param mostSpecific <code>true</code> if this is the most specific call
@@ -2431,10 +2821,28 @@ public interface BsjTypedNodeVisitor
     public void visitVariableDeclaratorNodeStop(VariableDeclaratorNode node, boolean mostSpecific);
 
     /**
+     * Stops a visit for nodes of type VariableInitializerListNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitVariableInitializerListNodeStop(VariableInitializerListNode node, boolean mostSpecific);
+
+    /**
      * Stops a visit for nodes of type VariableInitializerNode.
      * @param node The node being visited.
      */
     public void visitVariableInitializerNodeStop(VariableInitializerNode node);
+
+    /**
+     * Stops a visit for nodes of type VariableListNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitVariableListNodeStop(VariableListNode node, boolean mostSpecific);
 
     /**
      * Stops a visit for nodes of type VariableModifiersNode.

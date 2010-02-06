@@ -4,9 +4,9 @@
 
     <!-- Java AST Nodes -->
     <srcgen ipkg="edu.jhu.cs.bsj.compiler.ast.node" cpkg="edu.jhu.cs.bsj.compiler.impl.ast.node">
-    
+
         <!-- ==================== TAGGING INTERFACES ==================== -->
-    
+
         <type name="AnnotationMemberNode" super="Node" mode="tag">
             <doc><![CDATA[
                 This tagging interface is used to denote AST nodes which can be used as members of an annotation declaration's
@@ -180,7 +180,7 @@
                 expression or an array initializer.          
             ]]></doc>
         </type>
-        
+
         <!-- ======================= NAMING NODES ======================= -->
 
         <type name="IdentifierNode" super="Node">
@@ -264,7 +264,7 @@
                 }
             ]]></toString>
         </type>
-        
+
         <!-- ====================== MODIFIER NODES ====================== -->
 
         <type name="AnnotationMethodModifiersNode" super="ModifiersNode">
@@ -367,7 +367,7 @@
                 Represents the modifiers which can be associated with a variable.
             ]]></doc>
         </type>
-        
+
         <!-- ===================== EXPRESSION NODES ====================== -->
 
         <type name="ArrayAccessNode" super="Node">
@@ -774,7 +774,7 @@
         </type>
 
         <!-- ===================== STATEMENT NODES ====================== -->
-        
+
         <type name="AssertStatementNode" super="Node">
             <tag name="StatementNode" />
             <prop name="testExpression" type="ExpressionNode" desc="the assertion's test expression" />
@@ -1123,7 +1123,7 @@
         </type>
 
         <!-- ======================= LITERAL NODES ====================== -->
-        
+
         <type name="BooleanLiteralNode" super="LiteralNode" superTypeArg="Boolean">
             <doc><![CDATA[
                 A node representing a boolean literal.
@@ -1181,7 +1181,7 @@
         </type>
 
         <!-- ======================= MEMBER NODES ======================= -->
-        
+
         <type name="AnnotationMethodDeclarationNode" super="Node">
             <tag name="AnnotationMemberNode" />
             <prop name="modifiers" type="AnnotationMethodModifiersNode" desc="the modifiers for this annotation method" />
@@ -1291,7 +1291,7 @@
                 will have a <tt>null</tt> body.
             ]]></doc>
         </type>
-        
+
         <!-- ===================== TYPE BODY NODES ====================== -->
 
         <type name="AnnotationBodyNode" super="Node">
@@ -1331,7 +1331,7 @@
                 Represents the body of an interface declaration.
             ]]></doc>
         </type>
-        
+
         <!-- ================== TYPE DECLARATION NODES ================== -->
 
         <type name="AnnotationDeclarationNode" super="NamedTypeDeclarationNode">
@@ -1431,7 +1431,7 @@
                 Represents the void declaration (a single semi-colon).
             ]]></doc>
         </type>
-        
+
         <!-- ===================== ANNOTATION NODES ===================== -->
 
         <type name="AnnotationAnnotationValueNode" super="Node">
@@ -1501,7 +1501,196 @@
                 <pre>@<i>type</i>(<i>value</i>)</pre>
             ]]></doc>
         </type>
-        
+
+        <!-- ======================== LIST NODES ======================== -->
+
+        <type name="ListNode" typeParam="T extends Node" super="Node" mode="abstract">
+            <prop name="children" type="List" typeArg="T" mode="readOnly" desc="the list of children" />
+            <include file="ListNode.java" />
+            <doc><![CDATA[
+                Represents a list of nodes.  Nodes do not simply have lists as properties as the ListNode allows
+                additional information to be tracked as necessary.
+                <p/>
+                This class is abstract and extended once for each type of list node required by the AST.  This is done
+                to avoid unsafe typecasts in metaprograms.  For instance, consider a case in which a node of type
+                <tt>X</tt> exists in a parent whose type is <tt>ListNode&lt;X&gt;</tt>.  Without further information,
+                that node would need to use the following code to fully access its parent:
+                <pre>
+                ListNode&lt;X&gt; parent = (ListNode&lt;X&gt;)getParent();
+                </pre>
+                In order to prevent this problem, this AST library creates an individual list node type for each list
+                element type, allowing the above code to be replaced by
+                <pre>
+                XListNode parent = (XListNode)getParent();
+                </pre>
+                which is guaranteed to be type checked at runtime.
+            ]]></doc>
+            <constructor-override prop="children"
+                expr="new ListNodeProxyList(new ArrayList&lt;T&gt;(children))" />
+            <nogen id="children" />
+        </type>
+
+        <type name="AnnotationElementListNode" super="ListNode" superTypeArg="AnnotationElementNode">
+            <doc><![CDATA[
+                Represents a list of {@link AnnotationElementNode}s.
+            ]]></doc>
+            <nogen id="children" />
+        </type>
+
+        <type name="AnnotationListNode" super="ListNode" superTypeArg="AnnotationNode">
+            <doc><![CDATA[
+                Represents a list of {@link AnnotationNode}s.
+            ]]></doc>
+            <nogen id="children" />
+        </type>
+
+        <type name="AnnotationMemberListNode" super="ListNode" superTypeArg="AnnotationMemberNode">
+            <doc><![CDATA[
+                Represents a list of {@link AnnotationMemberNode}s.
+            ]]></doc>
+            <nogen id="children" />
+        </type>
+
+        <type name="AnnotationValueListNode" super="ListNode" superTypeArg="AnnotationValueNode">
+            <doc><![CDATA[
+                Represents a list of {@link AnnotationValueNode}s.
+            ]]></doc>
+            <nogen id="children" />
+        </type>
+
+        <type name="AnonymousClassMemberListNode" super="ListNode" superTypeArg="AnonymousClassMemberNode">
+            <doc><![CDATA[
+                Represents a list of {@link AnonymousClassMemberNode}s.
+            ]]></doc>
+            <nogen id="children" />
+        </type>
+
+        <type name="BlockStatementListNode" super="ListNode" superTypeArg="BlockStatementNode">
+            <doc><![CDATA[
+                Represents a list of {@link BlockStatementNode}s.
+            ]]></doc>
+            <nogen id="children" />
+        </type>
+
+        <type name="CaseListNode" super="ListNode" superTypeArg="CaseNode">
+            <doc><![CDATA[
+                Represents a list of {@link CaseNode}s.
+            ]]></doc>
+            <nogen id="children" />
+        </type>
+
+        <type name="CatchListNode" super="ListNode" superTypeArg="CatchNode">
+            <doc><![CDATA[
+                Represents a list of {@link CatchNode}s.
+            ]]></doc>
+            <nogen id="children" />
+        </type>
+
+        <type name="ClassMemberListNode" super="ListNode" superTypeArg="ClassMemberNode">
+            <doc><![CDATA[
+                Represents a list of {@link ClassMemberNode}s.
+            ]]></doc>
+            <nogen id="children" />
+        </type>
+
+        <type name="DeclaredTypeListNode" super="ListNode" superTypeArg="DeclaredTypeNode">
+            <doc><![CDATA[
+                Represents a list of {@link DeclaredTypeNode}s.
+            ]]></doc>
+            <nogen id="children" />
+        </type>
+
+        <type name="EnumConstantDeclarationListNode" super="ListNode" superTypeArg="EnumConstantDeclarationNode">
+            <doc><![CDATA[
+                Represents a list of {@link EnumConstantDeclarationNode}s.
+            ]]></doc>
+            <nogen id="children" />
+        </type>
+
+        <type name="ExpressionListNode" super="ListNode" superTypeArg="ExpressionNode">
+            <doc><![CDATA[
+                Represents a list of {@link ExpressionNode}s.
+            ]]></doc>
+            <nogen id="children" />
+        </type>
+
+        <type name="ImportListNode" super="ListNode" superTypeArg="ImportNode">
+            <doc><![CDATA[
+                Represents a list of {@link ImportNode}s.
+            ]]></doc>
+            <nogen id="children" />
+        </type>
+
+        <type name="InterfaceMemberListNode" super="ListNode" superTypeArg="InterfaceMemberNode">
+            <doc><![CDATA[
+                Represents a list of {@link InterfaceMemberNode}s.
+            ]]></doc>
+            <nogen id="children" />
+        </type>
+
+        <type name="StatementExpressionListNode" super="ListNode" superTypeArg="StatementExpressionNode">
+            <doc><![CDATA[
+                Represents a list of {@link StatementExpressionNode}s.
+            ]]></doc>
+            <nogen id="children" />
+        </type>
+
+        <type name="TypeArgumentListNode" super="ListNode" superTypeArg="TypeArgumentNode">
+            <doc><![CDATA[
+                Represents a list of {@link TypeArgumentNode}s.
+            ]]></doc>
+            <nogen id="children" />
+        </type>
+
+        <type name="TypeDeclarationListNode" super="ListNode" superTypeArg="TypeDeclarationNode">
+            <doc><![CDATA[
+                Represents a list of {@link TypeDeclarationNode}s.
+            ]]></doc>
+            <nogen id="children" />
+        </type>
+
+        <type name="TypeListNode" super="ListNode" superTypeArg="TypeNode">
+            <doc><![CDATA[
+                Represents a list of {@link TypeNode}s.
+            ]]></doc>
+            <nogen id="children" />
+        </type>
+
+        <type name="TypeParameterListNode" super="ListNode" superTypeArg="TypeParameterNode">
+            <doc><![CDATA[
+                Represents a list of {@link TypeParameterNode}s.
+            ]]></doc>
+            <nogen id="children" />
+        </type>
+
+        <type name="UnparameterizedTypeListNode" super="ListNode" superTypeArg="UnparameterizedTypeNode">
+            <doc><![CDATA[
+                Represents a list of {@link UnparameterizedTypeNode}s.
+            ]]></doc>
+            <nogen id="children" />
+        </type>
+
+        <type name="VariableDeclaratorListNode" super="ListNode" superTypeArg="VariableDeclaratorNode">
+            <doc><![CDATA[
+                Represents a list of {@link VariableDeclaratorNode}s.
+            ]]></doc>
+            <nogen id="children" />
+        </type>
+
+        <type name="VariableInitializerListNode" super="ListNode" superTypeArg="VariableInitializerNode">
+            <doc><![CDATA[
+                Represents a list of {@link VariableInitializerNode}s.
+            ]]></doc>
+            <nogen id="children" />
+        </type>
+
+        <type name="VariableListNode" super="ListNode" superTypeArg="VariableNode">
+            <doc><![CDATA[
+                Represents a list of {@link VariableNode}s.
+            ]]></doc>
+            <nogen id="children" />
+        </type>
+
         <!-- ======================== BASE NODES ======================== -->
 
         <type name="AlternateConstructorInvocationNode" super="ConstructorInvocationNode">
@@ -1640,17 +1829,6 @@
             ]]></doc>
         </type>
 
-        <type name="ListNode" typeParam="T extends Node" super="Node">
-            <prop name="children" type="List" typeArg="T" mode="readOnly" desc="the list of children" />
-            <include file="ListNode.java" />
-            <doc><![CDATA[
-                Represents a list of nodes.  Nodes do not simply have lists as properties as the ListNode allows additional
-                information to be tracked as necessary.
-            ]]></doc>
-            <nogen id="cons" />
-            <nogen id="children" />
-        </type>
-
         <type name="Node" mode="abstract">
             <prop name="startLocation" type="BsjSourceLocation" mode="skip"
                 desc="the location at which this node's text starts (inclusive)" />
@@ -1748,12 +1926,12 @@
         </type>
 
     </srcgen>
-    
+
     <!-- BSJ AST Nodes -->
     <srcgen ipkg="edu.jhu.cs.bsj.compiler.ast.node.meta" cpkg="edu.jhu.cs.bsj.compiler.impl.ast.node.meta">
-    
+
         <!-- ==================== METAPROGRAM NODES ===================== -->
-        
+
         <type name="MetaprogramAnchorNode" typeParam="T extends Node" super="Node" mode="abstract">
             <prop name="replacement" type="T" mode="skip" desc="the replacement node for this metaprogram" />
             <prop name="metaprogram" type="MetaprogramNode" desc="the metaprogram on this node" />
@@ -1779,7 +1957,7 @@
             <doc><![CDATA[
                 A node representing a metaprogram as a block statement.
             ]]></doc>
-            <override prop="replacement" expr="makeVoidStatementNode()" />
+            <factory-override prop="replacement" expr="makeVoidStatementNode()" />
         </type>
 
         <type name="TypeDeclarationMetaprogramAnchorNode" super="MetaprogramAnchorNode" superTypeArg="TypeDeclarationNode">
@@ -1787,9 +1965,9 @@
             <doc><![CDATA[
                 A node representing a metaprogram found at the top level of a source file.
             ]]></doc>
-            <override prop="replacement" expr="makeVoidTypeDeclarationNode()" />
+            <factory-override prop="replacement" expr="makeVoidTypeDeclarationNode()" />
         </type>
-        
+
         <!-- ======================== OTHER NODES ======================= -->
 
         <type name="CodeLiteralNode" super="LiteralNode" superTypeArg="Node">

@@ -318,9 +318,23 @@ public class SourceGenerator
 	 * @param ps The stream to which to write the text.
 	 * @param props The properties to use as arguments.
 	 */
+	@SuppressWarnings("unused")
 	private static void printArgumentList(PrintStream ps, List<PropertyDefinition> props)
 	{
-		printArgumentList(ps, props, false);
+		printArgumentList(ps, props, Collections.<String, String> emptyMap(), false);
+	}
+
+	/**
+	 * Writes a list of arguments suitable for the provided properties.
+	 * 
+	 * @param ps The stream to which to write the text.
+	 * @param props The properties to use as arguments.
+	 * @param overrideMap The override map for this argument list.
+	 */
+	private static void printArgumentList(PrintStream ps, List<PropertyDefinition> props,
+			Map<String, String> overrideMap)
+	{
+		printArgumentList(ps, props, overrideMap, false);
 	}
 
 	/**
@@ -333,6 +347,21 @@ public class SourceGenerator
 	 */
 	private static void printArgumentList(PrintStream ps, List<PropertyDefinition> props, boolean skipMake)
 	{
+		printArgumentList(ps, props, Collections.<String, String> emptyMap(), skipMake);
+	}
+
+	/**
+	 * Writes a list of arguments suitable for the provided properties.
+	 * 
+	 * @param ps The stream to which to write the text.
+	 * @param props The properties to use as arguments.
+	 * @param overrideMap The override map for this argument list.
+	 * @param skipMake <code>true</code> to skip properties which are excluded from the factory's make call;
+	 *            <code>false</code> otherwise.
+	 */
+	private static void printArgumentList(PrintStream ps, List<PropertyDefinition> props,
+			Map<String, String> overrideMap, boolean skipMake)
+	{
 		boolean first = true;
 		ps.print("(");
 		for (PropertyDefinition p : props)
@@ -344,7 +373,13 @@ public class SourceGenerator
 					ps.print(", ");
 				}
 				first = false;
-				ps.print(p.getName());
+				if (overrideMap.containsKey(p.getName()))
+				{
+					ps.print(overrideMap.get(p.getName()).trim());
+				} else
+				{
+					ps.print(p.getName());
+				}
 			}
 		}
 		ps.print(")");
@@ -653,6 +688,10 @@ public class SourceGenerator
 					{
 						p = new PropertyDefinition(p.getName(), replacementMap.get(p.getBaseType()), null, p.getMode(),
 								p.getDescription());
+					} else if (replacementMap.containsKey(p.getTypeArg()))
+					{
+						p = new PropertyDefinition(p.getName(), p.getBaseType(), replacementMap.get(p.getTypeArg()),
+								p.getMode(), p.getDescription());
 					}
 					list.add(p);
 				}
@@ -783,16 +822,24 @@ public class SourceGenerator
 			ps.print("        super");
 			List<PropertyDefinition> superProps = new ArrayList<PropertyDefinition>(recProps);
 			superProps.removeAll(def.getProperties());
-			printArgumentList(ps, superProps);
+			printArgumentList(ps, superProps, def.getConstructorOverrideMap());
 			ps.println(";");
 			for (PropertyDefinition p : def.getProperties())
 			{
-				if (propInstanceOf(p.getBaseType(), "Node"))
+				String expr;
+				if (def.getConstructorOverrideMap().containsKey(p.getName()))
 				{
-					ps.println("        set" + capFirst(p.getName()) + "(" + p.getName() + ");");
+					expr = def.getConstructorOverrideMap().get(p.getName());
 				} else
 				{
-					ps.println("        this." + p.getName() + " = " + p.getName() + ";");
+					expr = p.getName();
+				}
+				if (propInstanceOf(p.getBaseType(), "Node"))
+				{
+					ps.println("        set" + capFirst(p.getName()) + "(" + expr + ");");
+				} else
+				{
+					ps.println("        this." + p.getName() + " = " + expr + ";");
 				}
 			}
 			ps.println("    }");
@@ -1079,7 +1126,7 @@ public class SourceGenerator
 				ps.println("     */");
 				if (def.getBaseSuperName() != null)
 					ps.println("    @Override");
-				ps.println("    public " + def.getNameWithTypeParameters() +" deepCopy(BsjNodeFactory factory)");
+				ps.println("    public " + def.getNameWithTypeParameters() + " deepCopy(BsjNodeFactory factory)");
 				ps.println("    {");
 				ps.println("        return factory.make" + def.getBaseName() + "(");
 				boolean first = true;
@@ -1439,33 +1486,7 @@ public class SourceGenerator
 					cps.println("    {");
 					String classname = def.getBaseName() + "Impl" + typeArg;
 					cps.print("        " + typeName + " ret = new " + classname);
-
-					// print constructor arguments - this is special because of the argMap
-					cps.print('(');
-					boolean first = true;
-					for (PropertyDefinition p : recProps)
-					{
-						if (first)
-						{
-							first = false;
-						} else
-						{
-							cps.print(", ");
-						}
-						String override = "";
-						if (def.getOverrideMap().containsKey(p.getName()))
-						{
-							override = def.getOverrideMap().get(p.getName()).trim();
-						}
-						if (override.length() > 0)
-						{
-							cps.print(override);
-						} else
-						{
-							cps.print(p.getName());
-						}
-					}
-					cps.print(')');
+					printArgumentList(cps, recProps, def.getFactoryOverrideMap());
 
 					cps.println(";");
 					// TODO: later, this is where we register created nodes with the central dependency validation
@@ -1798,7 +1819,7 @@ public class SourceGenerator
 			ps.incPrependCount(2);
 			ps.println("factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),");
 			ps.println("factory.makeIdentifierNode(\"make" + def.getBaseName() + "\"),");
-			ps.println("factory.makeListNode(");
+			ps.println("factory.makeExpressionListNode(");
 			ps.incPrependCount(2);
 			ps.print("Arrays.<ExpressionNode>asList(");
 			ps.incPrependCount(2);
@@ -1841,14 +1862,14 @@ public class SourceGenerator
 						ps.println("factory.makeIdentifierNode(\"asList\"),");
 						ps.println("NameCategory.METHOD),");
 						ps.decPrependCount(2);
-						ps.println("factory.makeListNode(lift" + capFirst(p.getName()) + "List),");
-						ps.println("factory.makeListNode(Collections.<TypeNode>singletonList(");
+						ps.println("factory.makeExpressionListNode(lift" + capFirst(p.getName()) + "List),");
+						ps.println("factory.makeTypeListNode(Collections.<TypeNode>singletonList(");
 						ps.incPrependCount(2);
 						ps.println("factory.makeUnparameterizedTypeNode(");
 						ps.incPrependCount(2);
 						ps.println("factory.makeSimpleNameNode(");
 						ps.incPrependCount(2);
-						ps.println("factory.makeIdentifierNode(argName),");
+						ps.println("factory.makeIdentifierNode(\"" + p.getTypeArg() + "\"),");
 						ps.print("NameCategory.TYPE)))))");
 						ps.decPrependCount(8);
 					}
@@ -1868,7 +1889,7 @@ public class SourceGenerator
 			ps.decPrependCount(2);
 			ps.println(")),");
 			ps.decPrependCount(2);
-			ps.println("factory.makeListNode(Collections.<TypeNode>emptyList()));");
+			ps.println("factory.makeTypeListNode(Collections.<TypeNode>emptyList()));");
 			ps.decPrependCount(4);
 			ps.println();
 			ps.println("return ret;");

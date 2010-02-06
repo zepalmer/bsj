@@ -34,7 +34,7 @@ import org.xml.sax.SAXException;
 public class SourceGeneratorParser
 {
 	public static File SRCGEN_SCHEMA_FILE = new File("data/srcgen/srcgen.xsd");
-	
+
 	/**
 	 * Creates a new parser.
 	 */
@@ -47,15 +47,15 @@ public class SourceGeneratorParser
 	 */
 	public SourceGenerationData parse(File file) throws IOException, ParserConfigurationException, SAXException
 	{
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		factory.setNamespaceAware(true);
 		DocumentBuilder builder = factory.newDocumentBuilder();
 		Document document = builder.parse(file);
-		
-        Schema schema = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI).newSchema(SRCGEN_SCHEMA_FILE);
-        Validator validator = schema.newValidator();
+
+		Schema schema = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI).newSchema(SRCGEN_SCHEMA_FILE);
+		Validator validator = schema.newValidator();
 		validator.validate(new DOMSource(document));
-		
+
 		Element topElement = document.getDocumentElement();
 
 		if (!topElement.getTagName().equals("srcgen"))
@@ -178,7 +178,8 @@ public class SourceGeneratorParser
 			List<String> includes = new ArrayList<String>();
 			String docString = null;
 			List<String> toStringLines = new ArrayList<String>();
-			Map<String, String> overrideMap = new HashMap<String, String>();
+			Map<String, String> factoryOverrideMap = new HashMap<String, String>();
+			Map<String, String> constructorOverrideMap = new HashMap<String, String>();
 			boolean genConstructor = true;
 			boolean genChildren = true;
 
@@ -206,9 +207,12 @@ public class SourceGeneratorParser
 					} else if (childTag.equals("toString"))
 					{
 						toStringLines = splitAndTrim(childElement.getTextContent());
-					} else if (childTag.equals("override"))
+					} else if (childTag.equals("factory-override"))
 					{
-						overrideMap.put(childElement.getAttribute("prop"), childElement.getAttribute("expr"));
+						factoryOverrideMap.put(childElement.getAttribute("prop"), childElement.getAttribute("expr"));
+					} else if (childTag.equals("constructor-override"))
+					{
+						constructorOverrideMap.put(childElement.getAttribute("prop"), childElement.getAttribute("expr"));
 					} else if (childTag.equals("nogen"))
 					{
 						String nogenString = childElement.getAttribute("id");
@@ -230,7 +234,8 @@ public class SourceGeneratorParser
 			}
 
 			return new TypeDefinition(name, typeParam, superName, superTypeArg, interfacePackageName, classPackageName,
-					tags, props, includes, docString, toStringLines, overrideMap, genConstructor, genChildren, mode);
+					tags, props, includes, docString, toStringLines, factoryOverrideMap, constructorOverrideMap,
+					genConstructor, genChildren, mode);
 		}
 
 		private String unindent(String s)

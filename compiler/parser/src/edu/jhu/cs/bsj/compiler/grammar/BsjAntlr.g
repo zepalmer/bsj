@@ -600,7 +600,7 @@ packageDeclaration returns [PackageDeclarationNode ret]
         @init{
             ruleStart("packageDeclaration");
             ListNode<AnnotationNode> annotationsNode = 
-                factory.makeListNode(Collections.<AnnotationNode>emptyList());
+                factory.makeAnnotationListNode(Collections.<AnnotationNode>emptyList());
         }
         @after {
             ruleStop();
@@ -627,7 +627,7 @@ importDeclarations returns [ListNode<ImportNode> ret]
             List<ImportNode> list = new ArrayList<ImportNode>();
         }
         @after {
-            $ret = factory.<ImportNode>makeListNode(list);
+            $ret = factory.makeImportListNode(list);
             ruleStop();
         }
     :
@@ -716,7 +716,7 @@ typeDeclarations returns [ListNode<TypeDeclarationNode> ret]
             List<TypeDeclarationNode> list = new ArrayList<TypeDeclarationNode>();
         }
         @after {
-            $ret = factory.<TypeDeclarationNode>makeListNode(list);
+            $ret = factory.makeTypeDeclarationListNode(list);
             ruleStop();
         }
     :
@@ -803,7 +803,7 @@ modifiers[boolean accessAllowed, Modifier... mods]
             Modifier accessAsModifier = null;
         }
         @after {
-            $annotations = factory.makeListNode(annotationList);
+            $annotations = factory.makeAnnotationListNode(annotationList);
             ruleStop();
         }
     :
@@ -1096,8 +1096,8 @@ normalClassDeclaration returns [ClassDeclarationNode ret]
         scope Rule;
         @init {
             ruleStart("normalClassDeclaration");
-            ListNode<TypeNode> typeListNode = factory.makeListNode(new ArrayList<TypeNode>());
-            ListNode<TypeParameterNode> typeParamsNode = factory.makeListNode(new ArrayList<TypeParameterNode>());
+            ListNode<TypeNode> typeListNode = factory.makeTypeListNode(new ArrayList<TypeNode>());
+            ListNode<TypeParameterNode> typeParamsNode = factory.makeTypeParameterListNode(new ArrayList<TypeParameterNode>());
         }         
         @after {
             ruleStop();
@@ -1139,7 +1139,7 @@ typeParameters returns [ListNode<TypeParameterNode> ret]
             List<TypeParameterNode> list = new ArrayList<TypeParameterNode>();
         }
         @after {
-            $ret = factory.<TypeParameterNode>makeListNode(list);
+            $ret = factory.makeTypeParameterListNode(list);
             ruleStop();
         }
     :   
@@ -1161,7 +1161,7 @@ typeParameter returns [TypeParameterNode ret]
         scope Rule;
         @init {
             ruleStart("typeParameter");
-            ListNode<DeclaredTypeNode> typeBoundNode = factory.makeListNode(Collections.<DeclaredTypeNode>emptyList());
+            ListNode<DeclaredTypeNode> typeBoundNode = factory.makeDeclaredTypeListNode(Collections.<DeclaredTypeNode>emptyList());
         }
         @after {
             ruleStop();
@@ -1189,7 +1189,7 @@ typeBound returns [ListNode<DeclaredTypeNode> ret]
             List<DeclaredTypeNode> list = new ArrayList<DeclaredTypeNode>();
         }
         @after {
-            $ret = factory.makeListNode(list);
+            $ret = factory.makeDeclaredTypeListNode(list);
             ruleStop();
         }
     :   
@@ -1210,7 +1210,7 @@ enumDeclaration returns [EnumDeclarationNode ret]
         scope Rule;
         @init {
             ruleStart("enumDeclaration");
-            ListNode<TypeNode> typeListNode = factory.makeListNode(new ArrayList<TypeNode>());
+            ListNode<TypeNode> typeListNode = factory.makeTypeListNode(new ArrayList<TypeNode>());
         } 
         @after {
             ruleStop();
@@ -1241,10 +1241,10 @@ enumBody returns [EnumBodyNode ret]
         scope Rule;
         @init {
             ruleStart("enumBody");
-            ListNode<EnumConstantDeclarationNode> enumConstantsNode = factory.makeListNode(
+            ListNode<EnumConstantDeclarationNode> enumConstantsNode = factory.makeEnumConstantDeclarationListNode(
                     Collections.<EnumConstantDeclarationNode>emptyList());
             ListNode<ClassMemberNode> enumBodyDeclarationsNode =
-                    factory.makeListNode(Collections.<ClassMemberNode>emptyList());
+                    factory.makeClassMemberListNode(Collections.<ClassMemberNode>emptyList());
         }
         @after {
             ruleStop();
@@ -1279,7 +1279,7 @@ enumConstants returns [ListNode<EnumConstantDeclarationNode> ret]
             List<EnumConstantDeclarationNode> list = new ArrayList<EnumConstantDeclarationNode>();
         }
         @after {
-            $ret = factory.<EnumConstantDeclarationNode>makeListNode(list);
+            $ret = factory.makeEnumConstantDeclarationListNode(list);
             ruleStop();
         }
     :
@@ -1300,8 +1300,8 @@ enumConstant returns [EnumConstantDeclarationNode ret]
         scope Rule;
         @init {
             ruleStart("enumConstant");
-            ListNode<AnnotationNode> annotationsNode = factory.makeListNode(Collections.<AnnotationNode>emptyList());
-            ListNode<ExpressionNode> argumentsNode = factory.makeListNode(Collections.<ExpressionNode>emptyList());
+            ListNode<AnnotationNode> annotationsNode = factory.makeAnnotationListNode(Collections.<AnnotationNode>emptyList());
+            ListNode<ExpressionNode> argumentsNode = factory.makeExpressionListNode(Collections.<ExpressionNode>emptyList());
             AnonymousClassBodyNode anonymousClassBodyNode = null;
         }
         @after {
@@ -1345,7 +1345,7 @@ enumBodyDeclarations returns [ListNode<ClassMemberNode> ret]
             List<ClassMemberNode> list = new ArrayList<ClassMemberNode>();
         }
         @after {
-            $ret = factory.makeListNode(list);
+            $ret = factory.makeClassMemberListNode(list);
             ruleStop();
         }
     :
@@ -1383,8 +1383,8 @@ normalInterfaceDeclaration returns [InterfaceDeclarationNode ret]
         scope Rule;
         @init {
             ruleStart("normalInterfaceDeclaration");
-            ListNode<TypeNode> typeListNode = factory.makeListNode(new ArrayList<TypeNode>());
-            ListNode<TypeParameterNode> typeParamsNode = factory.makeListNode(new ArrayList<TypeParameterNode>());
+            ListNode<TypeNode> typeListNode = factory.makeTypeListNode(new ArrayList<TypeNode>());
+            ListNode<TypeParameterNode> typeParamsNode = factory.makeTypeParameterListNode(new ArrayList<TypeParameterNode>());
         } 
         @after {
             ruleStop();
@@ -1423,7 +1423,7 @@ typeList returns [ListNode<TypeNode> ret]
             List<TypeNode> list = new ArrayList<TypeNode>();
         }
         @after {
-            $ret = factory.<TypeNode>makeListNode(list);
+            $ret = factory.makeTypeListNode(list);
             ruleStop();
         }
     :   
@@ -1446,7 +1446,7 @@ classBody returns [ClassBodyNode ret]
             List<ClassMemberNode> list = new ArrayList<ClassMemberNode>();
         }
         @after {
-            $ret = factory.makeClassBodyNode(factory.makeListNode(list));
+            $ret = factory.makeClassBodyNode(factory.makeClassMemberListNode(list));
             ruleStop();
         }
     :   
@@ -1467,7 +1467,7 @@ anonymousClassBody returns [AnonymousClassBodyNode ret]
             List<AnonymousClassMemberNode> list = new ArrayList<AnonymousClassMemberNode>();
         }
         @after {
-            $ret = factory.makeAnonymousClassBodyNode(factory.makeListNode(list));
+            $ret = factory.makeAnonymousClassBodyNode(factory.makeAnonymousClassMemberListNode(list));
             ruleStop();
         }
     :   
@@ -1488,7 +1488,7 @@ interfaceBody returns [InterfaceBodyNode ret]
             List<InterfaceMemberNode> list = new ArrayList<InterfaceMemberNode>();
         }
         @after {
-            $ret = factory.makeInterfaceBodyNode(factory.makeListNode(list));
+            $ret = factory.makeInterfaceBodyNode(factory.makeInterfaceMemberListNode(list));
             ruleStop();
         }
     :   
@@ -1640,8 +1640,8 @@ constructorDeclaration returns [ConstructorDeclarationNode ret]
         @init {
             ruleStart("constructorDeclaration");
             ListNode<TypeParameterNode> typeParametersNode =
-                    factory.makeListNode(Collections.<TypeParameterNode>emptyList());
-            ListNode<UnparameterizedTypeNode> throwsNode = factory.makeListNode(Collections.<UnparameterizedTypeNode>emptyList());
+                    factory.makeTypeParameterListNode(Collections.<TypeParameterNode>emptyList());
+            ListNode<UnparameterizedTypeNode> throwsNode = factory.makeUnparameterizedTypeListNode(Collections.<UnparameterizedTypeNode>emptyList());
         }
         @after {
             ruleStop();
@@ -1710,8 +1710,8 @@ methodDeclaration returns [MethodDeclarationNode ret]
             ruleStart("methodDeclaration");
             BlockNode blockNode = null;
             ListNode<TypeParameterNode> typeParametersNode =
-                    factory.makeListNode(Collections.<TypeParameterNode>emptyList());
-            ListNode<UnparameterizedTypeNode> throwsNode = factory.makeListNode(Collections.<UnparameterizedTypeNode>emptyList());
+                    factory.makeTypeParameterListNode(Collections.<TypeParameterNode>emptyList());
+            ListNode<UnparameterizedTypeNode> throwsNode = factory.makeUnparameterizedTypeListNode(Collections.<UnparameterizedTypeNode>emptyList());
             TypeNode returnTypeNode = null;
         }
         @after {
@@ -1791,7 +1791,7 @@ fieldDeclaration returns [FieldDeclarationNode ret]
         {
             $ret = factory.makeFieldDeclarationNode(
                     $fieldModifiers.ret,
-                    factory.makeListNode(list),
+                    factory.makeVariableDeclaratorListNode(list),
                     $javadoc.ret);
         }
     ;
@@ -1841,7 +1841,7 @@ interfaceMethodDeclaration returns [MethodDeclarationNode ret]
         @init {
             ruleStart("interfaceMethodDeclaration");
             TypeNode returnTypeNode = null;
-            ListNode<UnparameterizedTypeNode> throwsNode = factory.makeListNode(Collections.<UnparameterizedTypeNode>emptyList());
+            ListNode<UnparameterizedTypeNode> throwsNode = factory.makeUnparameterizedTypeListNode(Collections.<UnparameterizedTypeNode>emptyList());
         }
         @after {
             ruleStop();
@@ -1904,7 +1904,7 @@ throwsClause returns [ListNode<UnparameterizedTypeNode> ret]
             List<UnparameterizedTypeNode> list = new ArrayList<UnparameterizedTypeNode>();
         }
         @after {
-            $ret = factory.makeListNode(list);
+            $ret = factory.makeUnparameterizedTypeListNode(list);
             ruleStop();
         }
     :
@@ -2085,7 +2085,7 @@ typeArguments returns [ListNode<TypeArgumentNode> ret]
             List<TypeArgumentNode> list = new ArrayList<TypeArgumentNode>();
         }
         @after {
-            $ret = factory.<TypeArgumentNode>makeListNode(list);
+            $ret = factory.makeTypeArgumentListNode(list);
             ruleStop();
         }
     :   
@@ -2150,7 +2150,7 @@ formalParameters returns [ListNode<VariableNode> parameters, VariableNode vararg
         scope Rule;
         @init {
             ruleStart("formalParameters");
-            $parameters = factory.makeListNode(Collections.<VariableNode>emptyList());
+            $parameters = factory.makeVariableListNode(Collections.<VariableNode>emptyList());
             $varargParameter = null;
         }
         @after {
@@ -2176,7 +2176,7 @@ formalParameterDecls returns [ListNode<VariableNode> parameters, VariableNode va
             List<VariableNode> list = new ArrayList<VariableNode>();
         }
         @after {
-            $parameters = factory.makeListNode(list);
+            $parameters = factory.makeVariableListNode(list);
             ruleStop();
         }
     :
@@ -2276,7 +2276,7 @@ superclassConstructorInvocation returns [SuperclassConstructorInvocationNode ret
         @init {
             ruleStart("superclassConstructorInvocation");
             PrimaryExpressionNode qualifyingExpression = null;
-            ListNode<TypeNode> typeArgumentsNode = factory.makeListNode(Collections.<TypeNode>emptyList());
+            ListNode<TypeNode> typeArgumentsNode = factory.makeTypeListNode(Collections.<TypeNode>emptyList());
         }
         @after {
             ruleStop();
@@ -2330,7 +2330,7 @@ annotations returns [ListNode<AnnotationNode> ret]
             List<AnnotationNode> list = new ArrayList<AnnotationNode>();
         }
         @after {
-            $ret = factory.makeListNode(list);
+            $ret = factory.makeAnnotationListNode(list);
             ruleStop();
         }
     :   
@@ -2360,7 +2360,7 @@ annotation returns [AnnotationNode ret]
         '@' typeName
         {
             $ret = factory.makeNormalAnnotationNode(
-                    factory.makeListNode(new ArrayList<AnnotationElementNode>()),
+                    factory.makeAnnotationElementListNode(new ArrayList<AnnotationElementNode>()),
                     factory.makeUnparameterizedTypeNode($typeName.ret));
         }
         (
@@ -2396,7 +2396,7 @@ elementValuePairs returns [ListNode<AnnotationElementNode> ret]
             List<AnnotationElementNode> list = new ArrayList<AnnotationElementNode>();
         }
         @after {
-            $ret = factory.makeListNode(list);
+            $ret = factory.makeAnnotationElementListNode(list);
             ruleStop();
         }
     :
@@ -2485,7 +2485,7 @@ elementValueArrayInitializer returns [AnnotationArrayValueNode ret]
             List<AnnotationValueNode> list = new ArrayList<AnnotationValueNode>();
         }
         @after {
-            $ret = factory.makeAnnotationArrayValueNode(factory.makeListNode(list));
+            $ret = factory.makeAnnotationArrayValueNode(factory.makeAnnotationValueListNode(list));
             ruleStop();
         }
     :   
@@ -2539,7 +2539,7 @@ annotationTypeBody returns [AnnotationBodyNode ret]
             List<AnnotationMemberNode> list = new ArrayList<AnnotationMemberNode>();
         }
         @after {
-            $ret = factory.makeAnnotationBodyNode(factory.makeListNode(list));
+            $ret = factory.makeAnnotationBodyNode(factory.makeAnnotationMemberListNode(list));
             ruleStop();
         }
     :   
@@ -2659,7 +2659,7 @@ blockStatementList returns [ListNode<BlockStatementNode> ret]
             List<BlockStatementNode> list = new ArrayList<BlockStatementNode>();
         }
         @after {
-            $ret = factory.makeListNode(list);
+            $ret = factory.makeBlockStatementListNode(list);
             ruleStop();
         }
     :
@@ -2748,7 +2748,7 @@ localVariableDeclaration returns [VariableDeclarationNode ret]
         {
             $ret = factory.makeVariableDeclarationNode(
                     $variableModifiers.ret,
-                    factory.makeListNode(list));
+                    factory.makeVariableDeclaratorListNode(list));
         }
     ;
 
@@ -2898,7 +2898,7 @@ switchBlockStatementGroups returns [ListNode<CaseNode> ret]
             List<CaseNode> list = new ArrayList<CaseNode>();
         }
         @after {
-            $ret = factory.makeListNode(list);
+            $ret = factory.makeCaseListNode(list);
             ruleStop();
         }
     :   
@@ -2957,7 +2957,7 @@ trystatement returns [TryNode ret]
         scope Rule;
         @init {
             ruleStart("trystatement");
-            ListNode<CatchNode> catchList = factory.makeListNode(new ArrayList<CatchNode>());
+            ListNode<CatchNode> catchList = factory.makeCatchListNode(new ArrayList<CatchNode>());
             BlockNode finallyBlock = null;
         }    
         @after {
@@ -2997,7 +2997,7 @@ catches returns [ListNode<CatchNode> ret]
             List<CatchNode> list = new ArrayList<CatchNode>();
         }
         @after {
-            $ret = factory.<CatchNode>makeListNode(list);
+            $ret = factory.makeCatchListNode(list);
             ruleStop();
         }
     :   
@@ -3073,7 +3073,7 @@ forstatement returns [StatementNode ret]
             ForInitializerNode forInitNode = null;
             ExpressionNode expNode = null;
             ListNode<StatementExpressionNode> expListNode =
-                    factory.makeListNode(Collections.<StatementExpressionNode>emptyList());
+                    factory.makeStatementExpressionListNode(Collections.<StatementExpressionNode>emptyList());
         }
         @after {
             ruleStop();
@@ -3167,7 +3167,7 @@ statementExpressionList returns [ListNode<StatementExpressionNode> ret]
             List<StatementExpressionNode> list = new ArrayList<StatementExpressionNode>();
         }
         @after {
-            $ret = factory.makeListNode(list);
+            $ret = factory.makeStatementExpressionListNode(list);
             ruleStop();
         }
     :   
@@ -3190,7 +3190,7 @@ expressionList returns [ListNode<ExpressionNode> ret]
             List<ExpressionNode> list = new ArrayList<ExpressionNode>();
         }
         @after {
-            $ret = factory.makeListNode(list);
+            $ret = factory.makeExpressionListNode(list);
             ruleStop();
         }
     :   
@@ -4027,7 +4027,7 @@ unqualifiedClassInstantiation returns [UnqualifiedClassInstantiationNode ret]
             ruleStart("unqualifiedClassInstantiation");
             AnonymousClassBodyNode anonymousClassBodyNode = null;
             ListNode<TypeArgumentNode> typeArgumentsNode =
-                    factory.makeListNode(Collections.<TypeArgumentNode>emptyList());
+                    factory.makeTypeArgumentListNode(Collections.<TypeArgumentNode>emptyList());
         }
         @after {
             ruleStop();
@@ -4104,7 +4104,7 @@ methodInvocationByName returns [MethodInvocationByNameNode ret]
             $ret = factory.makeMethodInvocationByNameNode(
                     $methodName.ret,
                     $arguments.ret,
-                    factory.makeListNode(Collections.<TypeNode>emptyList()));
+                    factory.makeTypeListNode(Collections.<TypeNode>emptyList()));
         }
     ;
 
@@ -4119,7 +4119,7 @@ superMethodInvocation returns [SuperMethodInvocationNode ret]
         @init {
             ruleStart("superMethodInvocation");
             UnparameterizedTypeNode qualifyingTypeNode = null;
-            ListNode<TypeNode> typeArgumentsNode = factory.makeListNode(Collections.<TypeNode>emptyList());
+            ListNode<TypeNode> typeArgumentsNode = factory.makeTypeListNode(Collections.<TypeNode>emptyList());
         }
         @after {
             ruleStop();
@@ -4180,9 +4180,9 @@ qualifiedClassInstantiationPrimarySuffix[PrimaryExpressionNode in] returns [Qual
         @init {
             ruleStart("qualifiedClassInstantiationPrimarySuffix");
             ListNode<TypeArgumentNode> constructorTypeArgumentsNode =
-                    factory.makeListNode(Collections.<TypeArgumentNode>emptyList());
+                    factory.makeTypeArgumentListNode(Collections.<TypeArgumentNode>emptyList());
             ListNode<TypeArgumentNode> classTypeArgumentsNode =
-                    factory.makeListNode(Collections.<TypeArgumentNode>emptyList());
+                    factory.makeTypeArgumentListNode(Collections.<TypeArgumentNode>emptyList());
             AnonymousClassBodyNode anonymousClassBodyNode = null;
         }
         @after {
@@ -4229,7 +4229,7 @@ typeArgumentMethodInvocationSuffix[PrimaryExpressionNode in] returns [Restricted
         scope Rule;
         @init {
             ruleStart("typeArgumentMethodInvocationSuffix");
-            ListNode<TypeNode> typeArgumentsNode = factory.makeListNode(Collections.<TypeNode>emptyList());
+            ListNode<TypeNode> typeArgumentsNode = factory.makeTypeListNode(Collections.<TypeNode>emptyList());
         }
         @after {
             ruleStop();
@@ -4366,7 +4366,7 @@ arrayCreator returns [ArrayCreationNode ret]
         )*
         {
             $ret = factory.makeArrayInstantiatorCreationNode(
-                factory.makeListNode(list),
+                factory.makeExpressionListNode(list),
                 $createdName.ret,
                 levels);
         }        
@@ -4400,7 +4400,7 @@ arrayInitializer returns [ArrayInitializerNode ret]
     }
     @after {
             $ret = factory.makeArrayInitializerNode(
-                factory.makeListNode(list));
+                factory.makeVariableInitializerListNode(list));
             ruleStop();
     }
     :   
@@ -4468,7 +4468,7 @@ arguments returns [ListNode<ExpressionNode> ret]
     :
         {
             // initialize to empty list
-            $ret = factory.<ExpressionNode>makeListNode(new ArrayList<ExpressionNode>());
+            $ret = factory.makeExpressionListNode(new ArrayList<ExpressionNode>());
         }
         '(' (expressionList
             {

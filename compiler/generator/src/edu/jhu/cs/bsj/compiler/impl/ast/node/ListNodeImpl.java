@@ -5,8 +5,6 @@ import java.util.List;
 
 import javax.annotation.Generated;
 
-import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
-import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
@@ -15,22 +13,21 @@ import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.impl.utils.ProxyList;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public class ListNodeImpl<T extends Node> extends NodeImpl implements ListNode<T>
+public abstract class ListNodeImpl<T extends Node> extends NodeImpl implements ListNode<T>
 {
     /** The list of children. */
     private List<T> children;
 
     /** General constructor. */
-/* (not generating constructor)
-    public ListNodeImpl(
+    protected ListNodeImpl(
             List<T> children,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
         super(startLocation, stopLocation);
-        this.children = children;
+        this.children = new ListNodeProxyList(new ArrayList<T>(children));
     }
-*/
+
     /**
      * Gets the list of children.
      * @return The list of children.
@@ -84,13 +81,13 @@ public class ListNodeImpl<T extends Node> extends NodeImpl implements ListNode<T
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
         visitor.visitStartBegin(this);
-        visitor.visitListNodeStart(this, true);
+        visitor.visitListNodeStart(this);
         visitor.visitNodeStart(this);
         visitor.visitStartEnd(this);
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
         visitor.visitNodeStop(this);
-        visitor.visitListNodeStop(this, true);
+        visitor.visitListNodeStop(this);
         visitor.visitStopEnd(this);
     }
 
@@ -129,29 +126,7 @@ public class ListNodeImpl<T extends Node> extends NodeImpl implements ListNode<T
         return sb.toString();
     }
 
-    /**
-     * Executes an operation on this node.
-     * @param operation The operation to perform.
-     * @param p The parameter to pass to the operation.
-     * @return The result of the operation.
-     */
-    @Override
-    public <P,R> R executeOperation(BsjNodeOperation<P,R> operation, P p)
-    {
-        return operation.executeListNode(this, p);
-    }
 
-    /**
-     * Generates a deep copy of this node.
-     * @param factory The node factory to use to create the deep copy.
-     * @return The resulting deep copy node.
-     */
-    @Override
-    public ListNode<T> deepCopy(BsjNodeFactory factory)
-    {
-        return factory.makeListNode(
-                new ArrayList<T>(getChildren()));
-    }
     /**
      * Performs replacement for this node.
      * @param before The node to replace.
@@ -173,29 +148,6 @@ public class ListNodeImpl<T extends Node> extends NodeImpl implements ListNode<T
         return false;
     }
 
-	/** General constructor */
-	public ListNodeImpl(List<? extends T> children, BsjSourceLocation startLocation, BsjSourceLocation stopLocation)
-	{
-		super(startLocation, stopLocation);
-		// TODO: replace the following implementations with something more efficient than instanceof
-		this.children = new ProxyList<T>(new ArrayList<T>(children))
-		{
-			protected void elementAdded(int index, T element)
-			{
-				if (element instanceof NodeImpl)
-				{
-					((NodeImpl)element).setParent(ListNodeImpl.this);
-				}
-			}
-			protected void elementRemoved(int index, T element)
-			{
-				if (element instanceof NodeImpl)
-				{
-					((NodeImpl)element).setParent(null);
-				}
-			}
-		};
-	}
 
 	/**
 	 * Creates a list of this node's child objects. Modifying the list has no effect on this node.
@@ -207,6 +159,32 @@ public class ListNodeImpl<T extends Node> extends NodeImpl implements ListNode<T
 		List<Object> list = super.getChildObjects();
 		list.addAll(this.children);
 		return list;
+	}
+	
+	/**
+	 * A proxy list used a list node to ensure that children in the list can access the list node as a parent.
+	 * @author Zachary Palmer
+	 */
+	protected class ListNodeProxyList extends ProxyList<T>
+	{
+		public ListNodeProxyList(List<T> list)
+		{
+			super(new ArrayList<T>(list));
+		}
+		protected void elementAdded(int index, T element)
+		{
+			if (element instanceof NodeImpl)
+			{
+				((NodeImpl)element).setParent(ListNodeImpl.this);
+			}
+		}
+		protected void elementRemoved(int index, T element)
+		{
+			if (element instanceof NodeImpl)
+			{
+				((NodeImpl)element).setParent(null);
+			}
+		}
 	}
 	
 	// TODO: implement the List<T> interface

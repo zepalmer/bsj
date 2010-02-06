@@ -187,62 +187,62 @@ public class ExtractMetaprogramsTask extends CompilationUnitTask
 		// Create metaprogram nodes
 		PackageDeclarationNode packageDeclarationNode = factory.makePackageDeclarationNode(parseNameNode(
 				metaprogramPackageName, NameCategory.PACKAGE),
-				factory.makeListNode(Collections.<AnnotationNode> emptyList()));
+				factory.makeAnnotationListNode(Collections.<AnnotationNode> emptyList()));
 
 		// TODO: don't deep copy here (for efficiency)? this means we have to null out the list's parent first?
 		BlockNode methodBlock = factory.makeBlockNode(metaprogramNode.getBody().deepCopy(factory));
 
 		MethodDeclarationNode executeMethodImplementation = factory.makeMethodDeclarationNode(methodBlock,
 				factory.makeMethodModifiersNode(AccessModifier.PUBLIC, false, false, true, false, false, false,
-						factory.makeListNode(Collections.<AnnotationNode> emptyList())),
-				factory.makeIdentifierNode("execute"), factory.makeListNode(Collections.<VariableNode> emptyList()),
+						factory.makeAnnotationListNode(Collections.<AnnotationNode> emptyList())),
+				factory.makeIdentifierNode("execute"), factory.makeVariableListNode(Collections.<VariableNode> emptyList()),
 				null, factory.makeVoidTypeNode(),
-				factory.makeListNode(Collections.<UnparameterizedTypeNode> emptyList()),
-				factory.makeListNode(Collections.<TypeParameterNode> emptyList()), null);
+				factory.makeUnparameterizedTypeListNode(Collections.<UnparameterizedTypeNode> emptyList()),
+				factory.makeTypeParameterListNode(Collections.<TypeParameterNode> emptyList()), null);
 
 		ConstructorDeclarationNode constructorImplementation = factory.makeConstructorDeclarationNode(
 				factory.makeIdentifierNode(metaprogramClassName), factory.makeConstructorBodyNode(
 						factory.makeSuperclassConstructorInvocationNode(null,
-								factory.makeListNode(Arrays.<ExpressionNode> asList(
+								factory.makeExpressionListNode(Arrays.<ExpressionNode> asList(
 										factory.makeFieldAccessByNameNode(parseNameNode("context",
 												NameCategory.EXPRESSION)),
 										factory.makeFieldAccessByNameNode(parseNameNode("factory",
 												NameCategory.EXPRESSION)))),
-								factory.makeListNode(Collections.<TypeNode> emptyList())),
-						factory.makeListNode(Collections.<BlockStatementNode> emptyList())),
+								factory.makeTypeListNode(Collections.<TypeNode> emptyList())),
+						factory.makeBlockStatementListNode(Collections.<BlockStatementNode> emptyList())),
 				factory.makeConstructorModifiersNode(AccessModifier.PUBLIC,
-						factory.makeListNode(Collections.<AnnotationNode> emptyList())),
-				factory.makeListNode(Arrays.<VariableNode> asList(factory.makeVariableNode(
+						factory.makeAnnotationListNode(Collections.<AnnotationNode> emptyList())),
+				factory.makeVariableListNode(Arrays.<VariableNode> asList(factory.makeVariableNode(
 						factory.makeVariableModifiersNode(false,
-								factory.makeListNode(Collections.<AnnotationNode> emptyList())),
+								factory.makeAnnotationListNode(Collections.<AnnotationNode> emptyList())),
 						factory.makeParameterizedTypeNode(factory.makeUnparameterizedTypeNode(parseNameNode("Context",
-								NameCategory.TYPE)), factory.makeListNode(Collections.<TypeArgumentNode> emptyList())),
+								NameCategory.TYPE)), factory.makeTypeArgumentListNode(Collections.<TypeArgumentNode> emptyList())),
 						factory.makeIdentifierNode("context")), factory.makeVariableNode(
 						factory.makeVariableModifiersNode(false,
-								factory.makeListNode(Collections.<AnnotationNode> emptyList())),
+								factory.makeAnnotationListNode(Collections.<AnnotationNode> emptyList())),
 						factory.makeParameterizedTypeNode(factory.makeUnparameterizedTypeNode(parseNameNode(
 								"BsjNodeFactory", NameCategory.TYPE)),
-								factory.makeListNode(Collections.<TypeArgumentNode> emptyList())),
+								factory.makeTypeArgumentListNode(Collections.<TypeArgumentNode> emptyList())),
 						factory.makeIdentifierNode("factory")))), null,
-				factory.makeListNode(Collections.<UnparameterizedTypeNode> emptyList()),
-				factory.makeListNode(Collections.<TypeParameterNode> emptyList()), null);
+				factory.makeUnparameterizedTypeListNode(Collections.<UnparameterizedTypeNode> emptyList()),
+				factory.makeTypeParameterListNode(Collections.<TypeParameterNode> emptyList()), null);
 
-		ClassBodyNode body = factory.makeClassBodyNode(factory.makeListNode(Arrays.<ClassMemberNode> asList(
+		ClassBodyNode body = factory.makeClassBodyNode(factory.makeClassMemberListNode(Arrays.<ClassMemberNode> asList(
 				executeMethodImplementation, constructorImplementation)));
 
 		TypeDeclarationNode metaprogramClassNode = factory.makeClassDeclarationNode(
 				factory.makeClassModifiersNode(AccessModifier.PUBLIC, false, false, false, false,
-						factory.makeListNode(Collections.<AnnotationNode> emptyList())),
+						factory.makeAnnotationListNode(Collections.<AnnotationNode> emptyList())),
 				factory.makeParameterizedTypeNode(
 						factory.makeUnparameterizedTypeNode(parseNameNode("AbstractBsjMetaprogram", NameCategory.TYPE)),
-						factory.makeListNode(Arrays.<TypeArgumentNode> asList(factory.makeUnparameterizedTypeNode(parseNameNode(
+						factory.makeTypeArgumentListNode(Arrays.<TypeArgumentNode> asList(factory.makeUnparameterizedTypeNode(parseNameNode(
 								anchorClass.getName(), NameCategory.AMBIGUOUS))))),
-				factory.makeListNode(Collections.<TypeNode> emptyList()), body,
-				factory.makeListNode(Collections.<TypeParameterNode> emptyList()),
+				factory.makeTypeListNode(Collections.<TypeNode> emptyList()), body,
+				factory.makeTypeParameterListNode(Collections.<TypeParameterNode> emptyList()),
 				factory.makeIdentifierNode(metaprogramClassName), null);
 
 		CompilationUnitNode metaprogramCompilationUnitNode = factory.makeCompilationUnitNode(packageDeclarationNode,
-				factory.makeListNode(imports), factory.makeListNode(Collections.singletonList(metaprogramClassNode)));
+				factory.makeImportListNode(imports), factory.makeTypeDeclarationListNode(Collections.singletonList(metaprogramClassNode)));
 
 		if (LOGGER.isTraceEnabled())
 		{

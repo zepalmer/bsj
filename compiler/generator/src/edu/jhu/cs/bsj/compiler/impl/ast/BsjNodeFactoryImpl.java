@@ -221,6 +221,32 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
 
     /**
+     * Creates a AnnotationElementListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public AnnotationElementListNode makeAnnotationElementListNode(
+            List<AnnotationElementNode> children)
+    {
+        AnnotationElementListNode ret = new AnnotationElementListNodeImpl(children, startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
+     * Creates a AnnotationElementListNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public AnnotationElementListNode makeAnnotationElementListNode(
+            List<AnnotationElementNode> children,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        AnnotationElementListNode ret = new AnnotationElementListNodeImpl(children, startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
      * Creates a AnnotationElementNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -271,6 +297,58 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation stopLocation)
     {
         AnnotationExpressionValueNode ret = new AnnotationExpressionValueNodeImpl(expression, startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
+     * Creates a AnnotationListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public AnnotationListNode makeAnnotationListNode(
+            List<AnnotationNode> children)
+    {
+        AnnotationListNode ret = new AnnotationListNodeImpl(children, startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
+     * Creates a AnnotationListNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public AnnotationListNode makeAnnotationListNode(
+            List<AnnotationNode> children,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        AnnotationListNode ret = new AnnotationListNodeImpl(children, startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
+     * Creates a AnnotationMemberListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public AnnotationMemberListNode makeAnnotationMemberListNode(
+            List<AnnotationMemberNode> children)
+    {
+        AnnotationMemberListNode ret = new AnnotationMemberListNodeImpl(children, startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
+     * Creates a AnnotationMemberListNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public AnnotationMemberListNode makeAnnotationMemberListNode(
+            List<AnnotationMemberNode> children,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        AnnotationMemberListNode ret = new AnnotationMemberListNodeImpl(children, startLocation, stopLocation);
         return ret;
     }
 
@@ -367,6 +445,32 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
 
     /**
+     * Creates a AnnotationValueListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public AnnotationValueListNode makeAnnotationValueListNode(
+            List<AnnotationValueNode> children)
+    {
+        AnnotationValueListNode ret = new AnnotationValueListNodeImpl(children, startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
+     * Creates a AnnotationValueListNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public AnnotationValueListNode makeAnnotationValueListNode(
+            List<AnnotationValueNode> children,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        AnnotationValueListNode ret = new AnnotationValueListNodeImpl(children, startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
      * Creates a AnonymousClassBodyNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -389,6 +493,32 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation stopLocation)
     {
         AnonymousClassBodyNode ret = new AnonymousClassBodyNodeImpl(members, startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
+     * Creates a AnonymousClassMemberListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public AnonymousClassMemberListNode makeAnonymousClassMemberListNode(
+            List<AnonymousClassMemberNode> children)
+    {
+        AnonymousClassMemberListNode ret = new AnonymousClassMemberListNodeImpl(children, startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
+     * Creates a AnonymousClassMemberListNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public AnonymousClassMemberListNode makeAnonymousClassMemberListNode(
+            List<AnonymousClassMemberNode> children,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        AnonymousClassMemberListNode ret = new AnonymousClassMemberListNodeImpl(children, startLocation, stopLocation);
         return ret;
     }
 
@@ -647,6 +777,32 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
 
     /**
+     * Creates a BlockStatementListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public BlockStatementListNode makeBlockStatementListNode(
+            List<BlockStatementNode> children)
+    {
+        BlockStatementListNode ret = new BlockStatementListNodeImpl(children, startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
+     * Creates a BlockStatementListNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public BlockStatementListNode makeBlockStatementListNode(
+            List<BlockStatementNode> children,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        BlockStatementListNode ret = new BlockStatementListNodeImpl(children, startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
      * Creates a BlockStatementMetaprogramAnchorNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -726,6 +882,32 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
 
     /**
+     * Creates a CaseListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public CaseListNode makeCaseListNode(
+            List<CaseNode> children)
+    {
+        CaseListNode ret = new CaseListNodeImpl(children, startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
+     * Creates a CaseListNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public CaseListNode makeCaseListNode(
+            List<CaseNode> children,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        CaseListNode ret = new CaseListNodeImpl(children, startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
      * Creates a CaseNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -750,6 +932,32 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation stopLocation)
     {
         CaseNode ret = new CaseNodeImpl(expression, statements, startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
+     * Creates a CatchListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public CatchListNode makeCatchListNode(
+            List<CatchNode> children)
+    {
+        CatchListNode ret = new CatchListNodeImpl(children, startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
+     * Creates a CatchListNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public CatchListNode makeCatchListNode(
+            List<CatchNode> children,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        CatchListNode ret = new CatchListNodeImpl(children, startLocation, stopLocation);
         return ret;
     }
 
@@ -894,6 +1102,32 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation stopLocation)
     {
         ClassLiteralNode ret = new ClassLiteralNodeImpl(value, startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
+     * Creates a ClassMemberListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public ClassMemberListNode makeClassMemberListNode(
+            List<ClassMemberNode> children)
+    {
+        ClassMemberListNode ret = new ClassMemberListNodeImpl(children, startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
+     * Creates a ClassMemberListNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public ClassMemberListNode makeClassMemberListNode(
+            List<ClassMemberNode> children,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        ClassMemberListNode ret = new ClassMemberListNodeImpl(children, startLocation, stopLocation);
         return ret;
     }
 
@@ -1142,6 +1376,32 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
 
     /**
+     * Creates a DeclaredTypeListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public DeclaredTypeListNode makeDeclaredTypeListNode(
+            List<DeclaredTypeNode> children)
+    {
+        DeclaredTypeListNode ret = new DeclaredTypeListNodeImpl(children, startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
+     * Creates a DeclaredTypeListNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public DeclaredTypeListNode makeDeclaredTypeListNode(
+            List<DeclaredTypeNode> children,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        DeclaredTypeListNode ret = new DeclaredTypeListNodeImpl(children, startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
      * Creates a DoWhileLoopNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -1254,6 +1514,32 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
 
     /**
+     * Creates a EnumConstantDeclarationListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public EnumConstantDeclarationListNode makeEnumConstantDeclarationListNode(
+            List<EnumConstantDeclarationNode> children)
+    {
+        EnumConstantDeclarationListNode ret = new EnumConstantDeclarationListNodeImpl(children, startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
+     * Creates a EnumConstantDeclarationListNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public EnumConstantDeclarationListNode makeEnumConstantDeclarationListNode(
+            List<EnumConstantDeclarationNode> children,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        EnumConstantDeclarationListNode ret = new EnumConstantDeclarationListNodeImpl(children, startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
      * Creates a EnumConstantDeclarationNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -1348,6 +1634,32 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation stopLocation)
     {
         EnumModifiersNode ret = new EnumModifiersNodeImpl(access, strictfpFlag, annotations, startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
+     * Creates a ExpressionListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public ExpressionListNode makeExpressionListNode(
+            List<ExpressionNode> children)
+    {
+        ExpressionListNode ret = new ExpressionListNodeImpl(children, startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
+     * Creates a ExpressionListNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public ExpressionListNode makeExpressionListNode(
+            List<ExpressionNode> children,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        ExpressionListNode ret = new ExpressionListNodeImpl(children, startLocation, stopLocation);
         return ret;
     }
 
@@ -1664,6 +1976,32 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
 
     /**
+     * Creates a ImportListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public ImportListNode makeImportListNode(
+            List<ImportNode> children)
+    {
+        ImportListNode ret = new ImportListNodeImpl(children, startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
+     * Creates a ImportListNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public ImportListNode makeImportListNode(
+            List<ImportNode> children,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        ImportListNode ret = new ImportListNodeImpl(children, startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
      * Creates a ImportOnDemandNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -1890,6 +2228,32 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
 
     /**
+     * Creates a InterfaceMemberListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public InterfaceMemberListNode makeInterfaceMemberListNode(
+            List<InterfaceMemberNode> children)
+    {
+        InterfaceMemberListNode ret = new InterfaceMemberListNodeImpl(children, startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
+     * Creates a InterfaceMemberListNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public InterfaceMemberListNode makeInterfaceMemberListNode(
+            List<InterfaceMemberNode> children,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        InterfaceMemberListNode ret = new InterfaceMemberListNodeImpl(children, startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
      * Creates a InterfaceModifiersNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -1972,32 +2336,6 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation stopLocation)
     {
         LabeledStatementNode ret = new LabeledStatementNodeImpl(label, statement, startLocation, stopLocation);
-        return ret;
-    }
-
-    /**
-     * Creates a ListNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    @Override
-    public <T extends Node> ListNode<T> makeListNode(
-            List<T> children)
-    {
-        ListNode<T> ret = new ListNodeImpl<T>(children, startLocation, stopLocation);
-        return ret;
-    }
-
-    /**
-     * Creates a ListNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public <T extends Node> ListNode<T> makeListNode(
-            List<T> children,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        ListNode<T> ret = new ListNodeImpl<T>(children, startLocation, stopLocation);
         return ret;
     }
 
@@ -2536,6 +2874,32 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
 
     /**
+     * Creates a StatementExpressionListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public StatementExpressionListNode makeStatementExpressionListNode(
+            List<StatementExpressionNode> children)
+    {
+        StatementExpressionListNode ret = new StatementExpressionListNodeImpl(children, startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
+     * Creates a StatementExpressionListNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public StatementExpressionListNode makeStatementExpressionListNode(
+            List<StatementExpressionNode> children,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        StatementExpressionListNode ret = new StatementExpressionListNodeImpl(children, startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
      * Creates a StringLiteralNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -2790,6 +3154,32 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
 
     /**
+     * Creates a TypeArgumentListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public TypeArgumentListNode makeTypeArgumentListNode(
+            List<TypeArgumentNode> children)
+    {
+        TypeArgumentListNode ret = new TypeArgumentListNodeImpl(children, startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
+     * Creates a TypeArgumentListNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public TypeArgumentListNode makeTypeArgumentListNode(
+            List<TypeArgumentNode> children,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        TypeArgumentListNode ret = new TypeArgumentListNodeImpl(children, startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
      * Creates a TypeCastNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -2818,6 +3208,32 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
 
     /**
+     * Creates a TypeDeclarationListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public TypeDeclarationListNode makeTypeDeclarationListNode(
+            List<TypeDeclarationNode> children)
+    {
+        TypeDeclarationListNode ret = new TypeDeclarationListNodeImpl(children, startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
+     * Creates a TypeDeclarationListNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public TypeDeclarationListNode makeTypeDeclarationListNode(
+            List<TypeDeclarationNode> children,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        TypeDeclarationListNode ret = new TypeDeclarationListNodeImpl(children, startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
      * Creates a TypeDeclarationMetaprogramAnchorNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -2841,6 +3257,58 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation stopLocation)
     {
         TypeDeclarationMetaprogramAnchorNode ret = new TypeDeclarationMetaprogramAnchorNodeImpl(makeVoidTypeDeclarationNode(), metaprogram, startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
+     * Creates a TypeListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public TypeListNode makeTypeListNode(
+            List<TypeNode> children)
+    {
+        TypeListNode ret = new TypeListNodeImpl(children, startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
+     * Creates a TypeListNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public TypeListNode makeTypeListNode(
+            List<TypeNode> children,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        TypeListNode ret = new TypeListNodeImpl(children, startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
+     * Creates a TypeParameterListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public TypeParameterListNode makeTypeParameterListNode(
+            List<TypeParameterNode> children)
+    {
+        TypeParameterListNode ret = new TypeParameterListNodeImpl(children, startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
+     * Creates a TypeParameterListNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public TypeParameterListNode makeTypeParameterListNode(
+            List<TypeParameterNode> children,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        TypeParameterListNode ret = new TypeParameterListNodeImpl(children, startLocation, stopLocation);
         return ret;
     }
 
@@ -2925,6 +3393,32 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation stopLocation)
     {
         UnaryStatementExpressionNode ret = new UnaryStatementExpressionNodeImpl(expression, operator, startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
+     * Creates a UnparameterizedTypeListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public UnparameterizedTypeListNode makeUnparameterizedTypeListNode(
+            List<UnparameterizedTypeNode> children)
+    {
+        UnparameterizedTypeListNode ret = new UnparameterizedTypeListNodeImpl(children, startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
+     * Creates a UnparameterizedTypeListNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public UnparameterizedTypeListNode makeUnparameterizedTypeListNode(
+            List<UnparameterizedTypeNode> children,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        UnparameterizedTypeListNode ret = new UnparameterizedTypeListNodeImpl(children, startLocation, stopLocation);
         return ret;
     }
 
@@ -3015,6 +3509,32 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
 
     /**
+     * Creates a VariableDeclaratorListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public VariableDeclaratorListNode makeVariableDeclaratorListNode(
+            List<VariableDeclaratorNode> children)
+    {
+        VariableDeclaratorListNode ret = new VariableDeclaratorListNodeImpl(children, startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
+     * Creates a VariableDeclaratorListNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public VariableDeclaratorListNode makeVariableDeclaratorListNode(
+            List<VariableDeclaratorNode> children,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        VariableDeclaratorListNode ret = new VariableDeclaratorListNodeImpl(children, startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
      * Creates a VariableDeclaratorNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -3041,6 +3561,58 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation stopLocation)
     {
         VariableDeclaratorNode ret = new VariableDeclaratorNodeImpl(type, name, initializer, startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
+     * Creates a VariableInitializerListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public VariableInitializerListNode makeVariableInitializerListNode(
+            List<VariableInitializerNode> children)
+    {
+        VariableInitializerListNode ret = new VariableInitializerListNodeImpl(children, startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
+     * Creates a VariableInitializerListNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public VariableInitializerListNode makeVariableInitializerListNode(
+            List<VariableInitializerNode> children,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        VariableInitializerListNode ret = new VariableInitializerListNodeImpl(children, startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
+     * Creates a VariableListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public VariableListNode makeVariableListNode(
+            List<VariableNode> children)
+    {
+        VariableListNode ret = new VariableListNodeImpl(children, startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
+     * Creates a VariableListNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public VariableListNode makeVariableListNode(
+            List<VariableNode> children,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        VariableListNode ret = new VariableListNodeImpl(children, startLocation, stopLocation);
         return ret;
     }
 

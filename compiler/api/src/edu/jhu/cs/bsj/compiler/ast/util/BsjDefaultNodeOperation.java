@@ -81,6 +81,16 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
      * @param node The node in question.
      * @param p The parameter to this node operation.
      */
+    public R executeAnnotationElementListNode(AnnotationElementListNode node, P p)
+    {
+        return executeDefault(node, p);
+    }
+
+    /**
+     * Executes the default operation for this node.
+     * @param node The node in question.
+     * @param p The parameter to this node operation.
+     */
     public R executeAnnotationElementNode(AnnotationElementNode node, P p)
     {
         return executeDefault(node, p);
@@ -92,6 +102,26 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
      * @param p The parameter to this node operation.
      */
     public R executeAnnotationExpressionValueNode(AnnotationExpressionValueNode node, P p)
+    {
+        return executeDefault(node, p);
+    }
+
+    /**
+     * Executes the default operation for this node.
+     * @param node The node in question.
+     * @param p The parameter to this node operation.
+     */
+    public R executeAnnotationListNode(AnnotationListNode node, P p)
+    {
+        return executeDefault(node, p);
+    }
+
+    /**
+     * Executes the default operation for this node.
+     * @param node The node in question.
+     * @param p The parameter to this node operation.
+     */
+    public R executeAnnotationMemberListNode(AnnotationMemberListNode node, P p)
     {
         return executeDefault(node, p);
     }
@@ -131,7 +161,27 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
      * @param node The node in question.
      * @param p The parameter to this node operation.
      */
+    public R executeAnnotationValueListNode(AnnotationValueListNode node, P p)
+    {
+        return executeDefault(node, p);
+    }
+
+    /**
+     * Executes the default operation for this node.
+     * @param node The node in question.
+     * @param p The parameter to this node operation.
+     */
     public R executeAnonymousClassBodyNode(AnonymousClassBodyNode node, P p)
+    {
+        return executeDefault(node, p);
+    }
+
+    /**
+     * Executes the default operation for this node.
+     * @param node The node in question.
+     * @param p The parameter to this node operation.
+     */
+    public R executeAnonymousClassMemberListNode(AnonymousClassMemberListNode node, P p)
     {
         return executeDefault(node, p);
     }
@@ -231,6 +281,16 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
      * @param node The node in question.
      * @param p The parameter to this node operation.
      */
+    public R executeBlockStatementListNode(BlockStatementListNode node, P p)
+    {
+        return executeDefault(node, p);
+    }
+
+    /**
+     * Executes the default operation for this node.
+     * @param node The node in question.
+     * @param p The parameter to this node operation.
+     */
     public R executeBlockStatementMetaprogramAnchorNode(BlockStatementMetaprogramAnchorNode node, P p)
     {
         return executeDefault(node, p);
@@ -261,7 +321,27 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
      * @param node The node in question.
      * @param p The parameter to this node operation.
      */
+    public R executeCaseListNode(CaseListNode node, P p)
+    {
+        return executeDefault(node, p);
+    }
+
+    /**
+     * Executes the default operation for this node.
+     * @param node The node in question.
+     * @param p The parameter to this node operation.
+     */
     public R executeCaseNode(CaseNode node, P p)
+    {
+        return executeDefault(node, p);
+    }
+
+    /**
+     * Executes the default operation for this node.
+     * @param node The node in question.
+     * @param p The parameter to this node operation.
+     */
+    public R executeCatchListNode(CatchListNode node, P p)
     {
         return executeDefault(node, p);
     }
@@ -312,6 +392,16 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
      * @param p The parameter to this node operation.
      */
     public R executeClassLiteralNode(ClassLiteralNode node, P p)
+    {
+        return executeDefault(node, p);
+    }
+
+    /**
+     * Executes the default operation for this node.
+     * @param node The node in question.
+     * @param p The parameter to this node operation.
+     */
+    public R executeClassMemberListNode(ClassMemberListNode node, P p)
     {
         return executeDefault(node, p);
     }
@@ -401,6 +491,16 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
      * @param node The node in question.
      * @param p The parameter to this node operation.
      */
+    public R executeDeclaredTypeListNode(DeclaredTypeListNode node, P p)
+    {
+        return executeDefault(node, p);
+    }
+
+    /**
+     * Executes the default operation for this node.
+     * @param node The node in question.
+     * @param p The parameter to this node operation.
+     */
     public R executeDoWhileLoopNode(DoWhileLoopNode node, P p)
     {
         return executeDefault(node, p);
@@ -441,6 +541,16 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
      * @param node The node in question.
      * @param p The parameter to this node operation.
      */
+    public R executeEnumConstantDeclarationListNode(EnumConstantDeclarationListNode node, P p)
+    {
+        return executeDefault(node, p);
+    }
+
+    /**
+     * Executes the default operation for this node.
+     * @param node The node in question.
+     * @param p The parameter to this node operation.
+     */
     public R executeEnumConstantDeclarationNode(EnumConstantDeclarationNode node, P p)
     {
         return executeDefault(node, p);
@@ -462,6 +572,16 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
      * @param p The parameter to this node operation.
      */
     public R executeEnumModifiersNode(EnumModifiersNode node, P p)
+    {
+        return executeDefault(node, p);
+    }
+
+    /**
+     * Executes the default operation for this node.
+     * @param node The node in question.
+     * @param p The parameter to this node operation.
+     */
+    public R executeExpressionListNode(ExpressionListNode node, P p)
     {
         return executeDefault(node, p);
     }
@@ -581,6 +701,16 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
      * @param node The node in question.
      * @param p The parameter to this node operation.
      */
+    public R executeImportListNode(ImportListNode node, P p)
+    {
+        return executeDefault(node, p);
+    }
+
+    /**
+     * Executes the default operation for this node.
+     * @param node The node in question.
+     * @param p The parameter to this node operation.
+     */
     public R executeImportOnDemandNode(ImportOnDemandNode node, P p)
     {
         return executeDefault(node, p);
@@ -661,6 +791,16 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
      * @param node The node in question.
      * @param p The parameter to this node operation.
      */
+    public R executeInterfaceMemberListNode(InterfaceMemberListNode node, P p)
+    {
+        return executeDefault(node, p);
+    }
+
+    /**
+     * Executes the default operation for this node.
+     * @param node The node in question.
+     * @param p The parameter to this node operation.
+     */
     public R executeInterfaceModifiersNode(InterfaceModifiersNode node, P p)
     {
         return executeDefault(node, p);
@@ -682,16 +822,6 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
      * @param p The parameter to this node operation.
      */
     public R executeLabeledStatementNode(LabeledStatementNode node, P p)
-    {
-        return executeDefault(node, p);
-    }
-
-    /**
-     * Executes the default operation for this node.
-     * @param node The node in question.
-     * @param p The parameter to this node operation.
-     */
-    public <T extends Node> R executeListNode(ListNode<T> node, P p)
     {
         return executeDefault(node, p);
     }
@@ -881,6 +1011,16 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
      * @param node The node in question.
      * @param p The parameter to this node operation.
      */
+    public R executeStatementExpressionListNode(StatementExpressionListNode node, P p)
+    {
+        return executeDefault(node, p);
+    }
+
+    /**
+     * Executes the default operation for this node.
+     * @param node The node in question.
+     * @param p The parameter to this node operation.
+     */
     public R executeStringLiteralNode(StringLiteralNode node, P p)
     {
         return executeDefault(node, p);
@@ -971,6 +1111,16 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
      * @param node The node in question.
      * @param p The parameter to this node operation.
      */
+    public R executeTypeArgumentListNode(TypeArgumentListNode node, P p)
+    {
+        return executeDefault(node, p);
+    }
+
+    /**
+     * Executes the default operation for this node.
+     * @param node The node in question.
+     * @param p The parameter to this node operation.
+     */
     public R executeTypeCastNode(TypeCastNode node, P p)
     {
         return executeDefault(node, p);
@@ -981,7 +1131,37 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
      * @param node The node in question.
      * @param p The parameter to this node operation.
      */
+    public R executeTypeDeclarationListNode(TypeDeclarationListNode node, P p)
+    {
+        return executeDefault(node, p);
+    }
+
+    /**
+     * Executes the default operation for this node.
+     * @param node The node in question.
+     * @param p The parameter to this node operation.
+     */
     public R executeTypeDeclarationMetaprogramAnchorNode(TypeDeclarationMetaprogramAnchorNode node, P p)
+    {
+        return executeDefault(node, p);
+    }
+
+    /**
+     * Executes the default operation for this node.
+     * @param node The node in question.
+     * @param p The parameter to this node operation.
+     */
+    public R executeTypeListNode(TypeListNode node, P p)
+    {
+        return executeDefault(node, p);
+    }
+
+    /**
+     * Executes the default operation for this node.
+     * @param node The node in question.
+     * @param p The parameter to this node operation.
+     */
+    public R executeTypeParameterListNode(TypeParameterListNode node, P p)
     {
         return executeDefault(node, p);
     }
@@ -1021,6 +1201,16 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
      * @param node The node in question.
      * @param p The parameter to this node operation.
      */
+    public R executeUnparameterizedTypeListNode(UnparameterizedTypeListNode node, P p)
+    {
+        return executeDefault(node, p);
+    }
+
+    /**
+     * Executes the default operation for this node.
+     * @param node The node in question.
+     * @param p The parameter to this node operation.
+     */
     public R executeUnparameterizedTypeNode(UnparameterizedTypeNode node, P p)
     {
         return executeDefault(node, p);
@@ -1051,7 +1241,37 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
      * @param node The node in question.
      * @param p The parameter to this node operation.
      */
+    public R executeVariableDeclaratorListNode(VariableDeclaratorListNode node, P p)
+    {
+        return executeDefault(node, p);
+    }
+
+    /**
+     * Executes the default operation for this node.
+     * @param node The node in question.
+     * @param p The parameter to this node operation.
+     */
     public R executeVariableDeclaratorNode(VariableDeclaratorNode node, P p)
+    {
+        return executeDefault(node, p);
+    }
+
+    /**
+     * Executes the default operation for this node.
+     * @param node The node in question.
+     * @param p The parameter to this node operation.
+     */
+    public R executeVariableInitializerListNode(VariableInitializerListNode node, P p)
+    {
+        return executeDefault(node, p);
+    }
+
+    /**
+     * Executes the default operation for this node.
+     * @param node The node in question.
+     * @param p The parameter to this node operation.
+     */
+    public R executeVariableListNode(VariableListNode node, P p)
     {
         return executeDefault(node, p);
     }
