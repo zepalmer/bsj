@@ -1796,7 +1796,6 @@
             <doc><![CDATA[
                 A node representing a code literal.
             ]]></doc>
-            <override prop="replacement" expr="" />
         </type>
 
     </srcgen>
