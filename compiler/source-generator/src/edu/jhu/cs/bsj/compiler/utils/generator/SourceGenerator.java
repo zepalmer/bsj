@@ -16,12 +16,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.xml.stream.FactoryConfigurationError;
-import javax.xml.stream.XMLOutputFactory;
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamWriter;
+import javax.xml.parsers.ParserConfigurationException;
 
-import edu.jhu.cs.bsj.compiler.impl.utils.Pair;
+import org.xml.sax.SAXException;
+
 import edu.jhu.cs.bsj.compiler.impl.utils.PrependablePrintStream;
 
 /**
@@ -32,7 +30,7 @@ import edu.jhu.cs.bsj.compiler.impl.utils.PrependablePrintStream;
  */
 public class SourceGenerator
 {
-	private static final File CONTENTS_FILE = new File("data/srcgen/main.srcgen");
+	private static final File CONTENTS_FILE = new File("data/srcgen/ast.xml");
 	private static final File SUPPLEMENTS_DIR = new File("data/srcgen/supplement/");
 	private static final File TARGET_DIR = new File("out/");
 	private static final File TARGET_IMPL_DIR = new File(TARGET_DIR.getAbsolutePath() + File.separator
@@ -70,19 +68,17 @@ public class SourceGenerator
 	private static final Set<String> CLONEABLE_NAMES = Collections.unmodifiableSet(new HashSet<String>(
 			Arrays.asList(new String[] { "BsjSourceLocation", })));
 
-	private Set<ClassDefHandler> handlers = new HashSet<ClassDefHandler>();
-	private Map<String, String> envMap = new HashMap<String, String>();
-	private Map<String, String> argMap = new HashMap<String, String>();
+	private Set<TypeDefinitionHandler> handlers = new HashSet<TypeDefinitionHandler>();
 
 	public static void main(String[] arg) throws Exception
 	{
 		SourceGenerator sg = new SourceGenerator();
 		for (Class<?> c : SourceGenerator.class.getDeclaredClasses())
 		{
-			Class<? extends ClassDefHandler> handlerClass;
+			Class<? extends TypeDefinitionHandler> handlerClass;
 			try
 			{
-				handlerClass = c.asSubclass(ClassDefHandler.class);
+				handlerClass = c.asSubclass(TypeDefinitionHandler.class);
 			} catch (ClassCastException cce)
 			{
 				// Not a ClassDefHandler
@@ -91,7 +87,7 @@ public class SourceGenerator
 
 			try
 			{
-				ClassDefHandler handler = handlerClass.newInstance();
+				TypeDefinitionHandler handler = handlerClass.newInstance();
 				sg.handlers.add(handler);
 			} catch (InstantiationException ie)
 			{
@@ -127,429 +123,33 @@ public class SourceGenerator
 		return contents;
 	}
 
-	static class Line
-	{
-		public String string;
-		public String filename;
-		public int number;
-
-		public Line(String string, String filename, int number)
-		{
-			super();
-			this.string = string;
-			this.filename = filename;
-			this.number = number;
-		}
-
-		public static List<Line> tag(List<String> list, String filename)
-		{
-			List<Line> ret = new ArrayList<Line>();
-			int n = 0;
-			for (String s : list)
-			{
-				ret.add(new Line(s, filename, ++n));
-			}
-			return ret;
-		}
-	}
-
-	public void run() throws IOException
+	public void run() throws IOException, SAXException, ParserConfigurationException
 	{
 		// Clear the target directory
 		rmrf(TARGET_DIR);
 		TARGET_DIR.mkdirs();
 
 		// Initialize each handler
-		for (ClassDefHandler handler : handlers)
+		for (TypeDefinitionHandler handler : handlers)
 			handler.init();
 
-		// Parse contents file
-		List<Line> lines = parse(CONTENTS_FILE);
+		// Parse the XML file for definitions
+		SourceGenerationData data = new SourceGeneratorParser().parse(CONTENTS_FILE);
 
-		// Process the contents file
-		lines = new LinkedList<Line>(lines);
-
-		process(lines, CONTENTS_FILE.getParentFile());
+		// For each type, inform each handler
+		for (TypeDefinition type : data.getTypes())
+		{
+			for (TypeDefinitionHandler handler : handlers)
+			{
+				handler.handleDefinition(type);
+			}
+		}
 
 		// Finish each handler
-		for (ClassDefHandler handler : handlers)
+		for (TypeDefinitionHandler handler : handlers)
 			handler.finish();
 	}
 
-	private List<Line> parse(File file) throws IOException
-	{
-		String contents = getFileAsString(file);
-		List<String> strings = new ArrayList<String>(Arrays.asList(contents.split("\n")));
-
-		// Strip comments
-		for (int i = 0; i < strings.size(); i++)
-		{
-			String s = strings.get(i);
-			if (s.contains("#"))
-			{
-				int index = s.indexOf("#");
-				while (index != -1)
-				{
-					if (index == 0 || s.charAt(index - 1) != '&')
-					{
-						s = s.substring(0, s.indexOf("#"));
-						strings.set(i, s);
-						break;
-					}
-					index = s.indexOf('#', index + 1);
-				}
-			}
-		}
-
-		return Line.tag(strings, file.getName());
-	}
-
-	private void process(List<Line> lines, File relDir) throws IOException
-	{
-		while (lines.size() > 0 && lines.get(0).string.trim().length() == 0)
-		{
-			lines.remove(0);
-		}
-		while (lines.size() > 0)
-		{
-			if (lines.get(0).string.trim().startsWith("!"))
-			{
-				Line line = lines.remove(0);
-				String command = line.string.trim();
-				String op = command.substring(0, command.indexOf(' '));
-				String arg = command.substring(op.length()).trim();
-
-				if (op.equals("!set"))
-				{
-					parseMapLine("set", this.envMap, arg, command);
-				} else if (op.equals("!arg"))
-				{
-					parseMapLine("arg", this.argMap, arg, command);
-				} else if (op.equals("!include"))
-				{
-					String path = arg;
-					File f = new File(relDir.getPath() + File.separator + path).getCanonicalFile();
-					List<Line> includeLines = parse(f);
-					process(includeLines, f.getParentFile());
-				} else
-				{
-					throw new IllegalArgumentException("Unknown command " + command);
-				}
-			} else
-			{
-				processEntry(lines);
-			}
-			while (lines.size() > 0 && lines.get(0).string.trim().length() == 0)
-			{
-				lines.remove(0);
-			}
-		}
-	}
-
-	private void parseMapLine(String name, Map<String, String> map, String arg, String command)
-	{
-		String[] pieces = arg.split("=");
-		if ((pieces.length == 1) && (arg.endsWith("=")))
-		{
-			pieces = new String[] { pieces[0], "" };
-		}
-		if (pieces.length != 2)
-		{
-			throw new IllegalArgumentException("Malformed " + name + " command " + command);
-		}
-		map.put(pieces[0], pieces[1]);
-	}
-
-	private void processEntry(List<Line> lines) throws IOException
-	{
-		Line classdef = lines.remove(0);
-		String classname, supername;
-		List<String> taggingInterfaces = new ArrayList<String>();
-		if (classdef.string.contains("::"))
-		{
-			String[] data = classdef.string.split("::");
-			assert (data.length == 2);
-			classname = data[0].trim();
-			supername = data[1].trim();
-			if (supername.contains("+"))
-			{
-				String[] supersplit = supername.split("\\+");
-				supername = supersplit[0].trim();
-				taggingInterfaces.addAll(Arrays.asList(supersplit[1].trim().split(",")));
-			}
-		} else
-		{
-			classname = classdef.string.trim();
-			supername = null;
-		}
-
-		List<String> docStrings = new ArrayList<String>();
-		List<String> includeFilenames = new ArrayList<String>();
-		List<String> toStringLines = null;
-
-		Mode mode = null;
-		List<Prop> props = new ArrayList<Prop>();
-		while (lines.size() > 0 && lines.get(0).string.trim().length() > 0)
-		{
-			Line line = lines.remove(0);
-			String errorPrefix = "#" + line.number + ": " + classname + ": ";
-			String orig = line.string;
-			String s = orig.trim();
-			s = s.replaceAll("\\s", " ");
-			if (s.startsWith("@"))
-			{
-				if (s.equals("@props"))
-				{
-					mode = Mode.PROP;
-				} else if (s.equals("@docs"))
-				{
-					mode = Mode.DOC;
-				} else if (s.equals("@include"))
-				{
-					mode = Mode.INCLUDE;
-				} else if (s.equals("@toString"))
-				{
-					mode = Mode.TOSTRING;
-				} else
-				{
-					throw new IllegalArgumentException(errorPrefix + "Unknown mode " + s);
-				}
-			} else
-			{
-				if (mode == Mode.PROP)
-				{
-					props.add(parseProp(s));
-				} else if (mode == Mode.DOC)
-				{
-					docStrings.add(orig);
-				} else if (mode == Mode.INCLUDE)
-				{
-					includeFilenames.add(s);
-				} else if (mode == Mode.TOSTRING)
-				{
-					if (toStringLines == null)
-					{
-						toStringLines = new ArrayList<String>();
-					}
-					toStringLines.add(s);
-				} else if (mode == null)
-				{
-					throw new IllegalArgumentException(errorPrefix + "Mode not set");
-				} else
-				{
-					throw new IllegalStateException(errorPrefix + "Unknown mode " + mode);
-				}
-			}
-		}
-
-		ClassMode classMode = ClassMode.CONCRETE;
-		if (classname.endsWith("*"))
-		{
-			classMode = ClassMode.ABSTRACT;
-			classname = classname.substring(0, classname.length() - 1);
-		} else if (classname.endsWith("+"))
-		{
-			classMode = ClassMode.INTERFACE;
-			classname = classname.substring(0, classname.length() - 1);
-		}
-
-		StringBuilder classDocBuilder = new StringBuilder();
-		if (docStrings.size() > 0)
-		{
-			int minIndent = Integer.MAX_VALUE;
-			for (String s : docStrings)
-			{
-				int count = 0;
-				while (count < s.length() && Character.isWhitespace(s.charAt(count)))
-					count++;
-				minIndent = Math.min(count, minIndent);
-			}
-			for (String s : docStrings)
-			{
-				if (classDocBuilder.length() > 0)
-					classDocBuilder.append('\n');
-				classDocBuilder.append(s.substring(minIndent));
-			}
-		}
-
-		ClassDef def = new ClassDef(classname, supername, taggingInterfaces, props, includeFilenames, classMode,
-				classDocBuilder.toString(), toStringLines, this.argMap);
-
-		for (ClassDefHandler handler : handlers)
-		{
-			handler.handleDefinition(def, envMap);
-		}
-	}
-
-	private Prop parseProp(String s)
-	{
-		boolean readOnly = false;
-		boolean skipMake = false;
-
-		s = s.trim();
-		String name, type, comment;
-		if (s.contains("|"))
-		{
-			comment = s.substring(s.lastIndexOf('|') + 1).trim();
-			s = s.substring(0, s.lastIndexOf('|')).trim();
-		} else
-		{
-			comment = null;
-		}
-
-		name = s.substring(0, s.indexOf(' ')).trim();
-		type = s.substring(s.indexOf(' ')).trim();
-
-		if (name.endsWith("*"))
-		{
-			name = name.substring(0, name.length() - 1);
-			readOnly = true;
-		} else if (name.endsWith("+"))
-		{
-			name = name.substring(0, name.length() - 1);
-			readOnly = true;
-			skipMake = true;
-		}
-
-		return new Prop(name, type, comment, readOnly, skipMake);
-	}
-
-	static enum Mode
-	{
-		PROP, DOC, INCLUDE, TOSTRING
-	}
-
-	static class Prop
-	{
-		String name;
-		String type;
-		String desc;
-		/** If true, no setter should be generated. */
-		boolean readOnly;
-		/**
-		 * If true, no parameter will be provided in the make call (meaning that the factory has to figure things out
-		 * for itself).
-		 */
-		boolean skipMake;
-
-		public Prop(String name, String type, String desc, boolean readOnly, boolean skipMake)
-		{
-			super();
-			this.name = name;
-			this.type = type;
-			this.desc = desc;
-			this.readOnly = readOnly;
-			this.skipMake = skipMake;
-		}
-	}
-
-	static enum ClassMode
-	{
-		CONCRETE, ABSTRACT, INTERFACE
-	}
-
-	static class ClassDef
-	{
-		String name;
-		String sname; // superclass name
-		List<String> tags; // tagging interface names
-		List<Prop> props;
-		List<String> includeFilenames;
-		ClassMode mode;
-		String classDoc;
-		List<String> toStringLines;
-		Map<String, String> argMap;
-
-		public ClassDef(String name, String sname, List<String> tags, List<Prop> props, List<String> includeFilenames,
-				ClassMode mode, String classDoc, List<String> toStringLines, Map<String, String> argMap)
-		{
-			super();
-			this.name = name;
-			this.sname = sname;
-			this.tags = tags;
-			this.props = props;
-			this.includeFilenames = includeFilenames;
-			this.mode = mode;
-			this.classDoc = classDoc;
-			this.toStringLines = toStringLines;
-			this.argMap = new HashMap<String, String>(argMap);
-		}
-
-		public String getRawName()
-		{
-			if (name.contains("<"))
-			{
-				return name.substring(0, name.indexOf('<'));
-			} else
-			{
-				return name;
-			}
-		}
-
-		public String getRawSname()
-		{
-			if (sname == null)
-				return null;
-			if (sname.contains("<"))
-			{
-				return sname.substring(0, sname.indexOf('<'));
-			} else
-			{
-				return sname;
-			}
-		}
-
-		public String getNameParam()
-		{
-			if (name.contains("<"))
-			{
-				return name.substring(name.indexOf('<'));
-			} else
-			{
-				return "";
-			}
-		}
-
-		public String getSnameParam()
-		{
-			if (sname == null)
-				return null;
-			if (sname.contains("<"))
-			{
-				return sname.substring(sname.indexOf('<'));
-			} else
-			{
-				return "";
-			}
-		}
-
-		public String getNameArg()
-		{
-			String nameParam = getNameParam();
-			if (nameParam.length() > 0)
-			{
-				String[] pieces = nameParam.substring(1, nameParam.length() - 1).split(",");
-				StringBuilder sb = new StringBuilder("<");
-				for (int i = 0; i < pieces.length; i++)
-				{
-					if (i > 0)
-						sb.append(',');
-					if (pieces[i].contains(" "))
-					{
-						pieces[i] = pieces[i].substring(0, pieces[i].indexOf(' ')).trim();
-					}
-					sb.append(pieces[i]);
-				}
-				sb.append(">");
-				return sb.toString();
-			} else
-			{
-				return "";
-			}
-		}
-	}
-
-	/* handles the definition for an AST class */
 	/**
 	 * Capitalizes the first letter of a string.
 	 * 
@@ -675,7 +275,7 @@ public class SourceGenerator
 	 * @param ps The stream to which to write the text.
 	 * @param props The properties to use as parameters.
 	 */
-	private static void printParameterList(PrintStream ps, List<Prop> props)
+	private static void printParameterList(PrintStream ps, List<PropertyDefinition> props)
 	{
 		printParameterList(ps, props, false);
 	}
@@ -688,16 +288,16 @@ public class SourceGenerator
 	 * @param skipMake <code>true</code> to skip properties which are excluded from the factory's make call;
 	 *            <code>false</code> otherwise.
 	 */
-	private static void printParameterList(PrintStream ps, List<Prop> props, boolean skipMake)
+	private static void printParameterList(PrintStream ps, List<PropertyDefinition> props, boolean skipMake)
 	{
 		boolean first = true;
 		ps.print("(");
 		if (props.size() > 0)
 		{
 			ps.println();
-			for (Prop p : props)
+			for (PropertyDefinition p : props)
 			{
-				if (!p.skipMake || !skipMake)
+				if (p.getMode() != PropertyDefinition.Mode.SKIP || !skipMake)
 				{
 					if (!first)
 					{
@@ -705,7 +305,7 @@ public class SourceGenerator
 					}
 					first = false;
 
-					ps.print("            " + p.type + " " + p.name);
+					ps.print("            " + p.getFullType() + " " + p.getName());
 				}
 			}
 		}
@@ -718,7 +318,7 @@ public class SourceGenerator
 	 * @param ps The stream to which to write the text.
 	 * @param props The properties to use as arguments.
 	 */
-	private static void printArgumentList(PrintStream ps, List<Prop> props)
+	private static void printArgumentList(PrintStream ps, List<PropertyDefinition> props)
 	{
 		printArgumentList(ps, props, false);
 	}
@@ -731,20 +331,20 @@ public class SourceGenerator
 	 * @param skipMake <code>true</code> to skip properties which are excluded from the factory's make call;
 	 *            <code>false</code> otherwise.
 	 */
-	private static void printArgumentList(PrintStream ps, List<Prop> props, boolean skipMake)
+	private static void printArgumentList(PrintStream ps, List<PropertyDefinition> props, boolean skipMake)
 	{
 		boolean first = true;
 		ps.print("(");
-		for (Prop p : props)
+		for (PropertyDefinition p : props)
 		{
-			if (!p.skipMake || !skipMake)
+			if (p.getMode() != PropertyDefinition.Mode.SKIP || !skipMake)
 			{
 				if (!first)
 				{
 					ps.print(", ");
 				}
 				first = false;
-				ps.print(p.name);
+				ps.print(p.getName());
 			}
 		}
 		ps.print(")");
@@ -785,11 +385,11 @@ public class SourceGenerator
 	/**
 	 * An interface implemented by those modules that wish to handle class definitions.
 	 */
-	static interface ClassDefHandler
+	static interface TypeDefinitionHandler
 	{
 		public void init() throws IOException;
 
-		public void handleDefinition(ClassDef def, Map<String, String> env) throws IOException;
+		public void handleDefinition(TypeDefinition def) throws IOException;
 
 		public void finish() throws IOException;
 	}
@@ -800,13 +400,13 @@ public class SourceGenerator
 	static class InterfaceWriter extends ClassHierarchyBuildingHandler
 	{
 		@Override
-		public void useDefinition(ClassDef def) throws IOException
+		public void useDefinition(TypeDefinition def) throws IOException
 		{
-			String pkg = envs.get(def).get("iPackage");
+			String pkg = def.getInterfacePackage();
 			if (pkg == null)
 				pkg = "";
 			File classFile = new File(TARGET_IFACE_DIR.getAbsolutePath() + File.separator
-					+ pkg.replaceAll("\\.", File.separator) + File.separator + def.getRawName() + ".java");
+					+ pkg.replaceAll("\\.", File.separator) + File.separator + def.getBaseName() + ".java");
 			classFile.getParentFile().mkdirs();
 			FileOutputStream fos = new FileOutputStream(classFile);
 			PrintStream ps = new PrintStream(fos);
@@ -816,16 +416,16 @@ public class SourceGenerator
 
 			// imports
 			printImports(ps, false);
-			includeAllImports(ps, def.includeFilenames, "nodes" + File.separator + "interface");
+			includeAllImports(ps, def.getIncludes(), "nodes" + File.separator + "interface");
 
 			ps.println("/**");
-			ps.println(" * " + def.classDoc.replaceAll("\n", "\n * "));
+			ps.println(" * " + def.getDocString().replaceAll("\n", "\n * "));
 			ps.println(" */");
 
 			StringBuilder extendsClause = new StringBuilder();
-			if (def.sname != null)
-				extendsClause.append(def.sname);
-			for (String tag : def.tags)
+			if (def.getFullSuper() != null)
+				extendsClause.append(def.getFullSuper());
+			for (String tag : def.getTags())
 			{
 				if (extendsClause.length() > 0)
 					extendsClause.append(", ");
@@ -835,24 +435,25 @@ public class SourceGenerator
 				extendsClause.insert(0, " extends ");
 
 			printGeneratedClause(ps);
-			ps.println("public interface " + def.name + extendsClause.toString());
+			ps.println("public interface " + def.getFullName() + extendsClause.toString());
 			ps.println("{");
 			// gen getters and setters
-			for (Prop p : def.props)
+			for (PropertyDefinition p : def.getProperties())
 			{
 				ps.println("    /**");
-				ps.println("     * Gets " + p.desc + ".");
-				ps.println("     * @return " + capFirst(p.desc) + ".");
+				ps.println("     * Gets " + p.getDescription() + ".");
+				ps.println("     * @return " + capFirst(p.getDescription()) + ".");
 				ps.println("     */");
-				ps.println("    public " + p.type + " get" + capFirst(p.name) + "();");
+				ps.println("    public " + p.getFullType() + " get" + capFirst(p.getName()) + "();");
 				ps.println();
-				if (!p.readOnly)
+				if (p.getMode() == PropertyDefinition.Mode.NORMAL)
 				{
 					ps.println("    /**");
-					ps.println("     * Changes " + p.desc + ".");
-					ps.println("     * @param " + p.name + " " + capFirst(p.desc) + ".");
+					ps.println("     * Changes " + p.getDescription() + ".");
+					ps.println("     * @param " + p.getName() + " " + capFirst(p.getDescription()) + ".");
 					ps.println("     */");
-					ps.println("    public void set" + capFirst(p.name) + "(" + p.type + " " + p.name + ");");
+					ps.println("    public void set" + capFirst(p.getName()) + "(" + p.getFullType() + " "
+							+ p.getName() + ");");
 					ps.println();
 				}
 			}
@@ -863,12 +464,12 @@ public class SourceGenerator
 			ps.println("     * @param factory The node factory to use to create the deep copy.");
 			ps.println("     * @return The resulting deep copy node.");
 			ps.println("     */");
-			if (def.sname != null)
+			if (def.getBaseSuperName() != null)
 				ps.println("    @Override");
-			ps.println("    public " + def.getRawName() + def.getNameArg() + " deepCopy(BsjNodeFactory factory);");
+			ps.println("    public " + def.getNameWithTypeParameters() + " deepCopy(BsjNodeFactory factory);");
 
 			// write bodies
-			includeAllBodies(ps, def.includeFilenames, "nodes" + File.separator + "interface");
+			includeAllBodies(ps, def.getIncludes(), "nodes" + File.separator + "interface");
 			ps.println("}");
 		}
 	}
@@ -878,7 +479,7 @@ public class SourceGenerator
 	 * 
 	 * @author Zachary Palmer
 	 */
-	static abstract class AbstractClassDefHandler implements ClassDefHandler
+	static abstract class AbstractClassDefHandler implements TypeDefinitionHandler
 	{
 		/**
 		 * Creates a templated output file for a handler.
@@ -895,7 +496,7 @@ public class SourceGenerator
 		 *         <code>}</code>.
 		 * @throws IOException If an I/O error occurs.
 		 */
-		protected PrependablePrintStream createOutputFile(String pkg, ClassMode mode, boolean implementation,
+		protected PrependablePrintStream createOutputFile(String pkg, TypeDefinition.Mode mode, boolean implementation,
 				String type, boolean includes, String extendsName, String... implementsNames) throws IOException
 		{
 			String name;
@@ -921,13 +522,13 @@ public class SourceGenerator
 			}
 			printGeneratedClause(ret);
 			ret.print("public ");
-			if (mode == ClassMode.CONCRETE)
+			if (mode == TypeDefinition.Mode.CONCRETE)
 			{
 				ret.print("class");
-			} else if (mode == ClassMode.ABSTRACT)
+			} else if (mode == TypeDefinition.Mode.ABSTRACT)
 			{
 				ret.print("abstract class");
-			} else if (mode == ClassMode.INTERFACE)
+			} else if (mode == TypeDefinition.Mode.INTERFACE)
 			{
 				ret.print("interface");
 			}
@@ -960,8 +561,7 @@ public class SourceGenerator
 			ALPHABETICAL, FILE_ORDER
 		}
 
-		protected Map<String, ClassDef> map;
-		protected Map<ClassDef, Map<String, String>> envs;
+		protected Map<String, TypeDefinition> map;
 		/** Contains the names of definitions in the order in which we saw them. */
 		protected List<String> defNames;
 
@@ -981,35 +581,33 @@ public class SourceGenerator
 
 		public void init() throws IOException
 		{
-			map = new HashMap<String, ClassDef>();
-			envs = new HashMap<ClassDef, Map<String, String>>();
+			map = new HashMap<String, TypeDefinition>();
 			defNames = new ArrayList<String>();
 		}
 
-		public void handleDefinition(ClassDef def, Map<String, String> env) throws IOException
+		public void handleDefinition(TypeDefinition def) throws IOException
 		{
-			map.put(def.getRawName(), def);
-			envs.put(def, new HashMap<String, String>(env));
-			defNames.add(def.getRawName());
+			map.put(def.getBaseName(), def);
+			defNames.add(def.getBaseName());
 		}
 
 		public void finish() throws IOException
 		{
-			List<ClassDef> defList;
+			List<TypeDefinition> defList;
 			if (mode == ReviewMode.ALPHABETICAL)
 			{
-				defList = new ArrayList<ClassDef>(map.values());
-				Collections.sort(defList, new Comparator<ClassDef>()
+				defList = new ArrayList<TypeDefinition>(map.values());
+				Collections.sort(defList, new Comparator<TypeDefinition>()
 				{
 					@Override
-					public int compare(ClassDef o1, ClassDef o2)
+					public int compare(TypeDefinition a, TypeDefinition b)
 					{
-						return o1.name.compareTo(o2.name);
+						return a.getBaseName().compareTo(b.getBaseName());
 					}
 				});
 			} else if (mode == ReviewMode.FILE_ORDER)
 			{
-				defList = new ArrayList<ClassDef>();
+				defList = new ArrayList<TypeDefinition>();
 				for (String name : defNames)
 				{
 					defList.add(map.get(name));
@@ -1018,19 +616,19 @@ public class SourceGenerator
 			{
 				throw new IllegalStateException("Unrecognized review mode: " + mode);
 			}
-			for (ClassDef def : defList)
+			for (TypeDefinition def : defList)
 			{
 				useDefinition(def);
 			}
 		}
 
-		protected boolean defInstanceOf(ClassDef def, String classname)
+		protected boolean defInstanceOf(TypeDefinition def, String classname)
 		{
 			while (def != null)
 			{
-				if (def.getRawName().equals(classname))
+				if (def.getBaseName().equals(classname))
 					return true;
-				def = map.get(def.getRawSname());
+				def = map.get(def.getBaseSuperName());
 			}
 			return false;
 		}
@@ -1042,32 +640,32 @@ public class SourceGenerator
 			return defInstanceOf(map.get(propType), classname);
 		}
 
-		protected List<Prop> getRecursiveProps(ClassDef def)
+		protected List<PropertyDefinition> getRecursiveProps(TypeDefinition def)
 		{
-			List<Prop> list = new ArrayList<Prop>();
+			List<PropertyDefinition> list = new ArrayList<PropertyDefinition>();
 			// maps type parameter names to their values
 			Map<String, String> replacementMap = new HashMap<String, String>();
 			while (def != null)
 			{
-				for (Prop p : def.props)
+				for (PropertyDefinition p : def.getProperties())
 				{
-					if (replacementMap.containsKey(p.type))
+					if (replacementMap.containsKey(p.getBaseType()))
 					{
-						p = new Prop(p.name, replacementMap.get(p.type), p.desc, p.readOnly, p.skipMake);
+						p = new PropertyDefinition(p.getName(), replacementMap.get(p.getBaseType()), null, p.getMode(),
+								p.getDescription());
 					}
 					list.add(p);
 				}
 
-				if (def.getSnameParam() == null || def.getSnameParam().length() == 0)
+				if (def.getSuperTypeArg() == null || def.getSuperTypeArg().length() == 0)
 				{
-					def = map.get(def.getRawSname());
+					def = map.get(def.getBaseSuperName());
 				} else
 				{
-					String superparam = def.getSnameParam();
-					superparam = superparam.substring(1, superparam.length() - 1);
-					def = map.get(def.getRawSname());
+					String superparam = def.getSuperTypeArg();
+					def = map.get(def.getBaseSuperName());
 
-					String nameParamPart = def.getNameParam().substring(1, def.getNameParam().length() - 1);
+					String nameParamPart = def.getUnboundedTypeParameter();
 					String[] param = nameParamPart.split(",");
 					for (int i = 0; i < param.length; i++)
 					{
@@ -1083,43 +681,44 @@ public class SourceGenerator
 			return list;
 		}
 
-		public abstract void useDefinition(ClassDef def) throws IOException;
+		public abstract void useDefinition(TypeDefinition def) throws IOException;
 
-		protected void propAbstract(PropertyTypeAbstractor abstractor, Prop p, PrependablePrintStream ps, ClassDef def)
+		protected void propAbstract(PropertyTypeAbstractor abstractor, PropertyDefinition p, PrependablePrintStream ps,
+				TypeDefinition def)
 		{
-			if (DIRECT_COPY_NAMES.contains(p.type))
+			if (DIRECT_COPY_NAMES.contains(p.getBaseType()))
 			{
 				abstractor.directCopy(ps, p);
-			} else if (propInstanceOf(p.type, "Node"))
+			} else if (propInstanceOf(p.getBaseType(), "Node"))
 			{
 				abstractor.node(ps, p);
-			} else if (CLONEABLE_NAMES.contains(p.type))
+			} else if (CLONEABLE_NAMES.contains(p.getBaseType()))
 			{
 				abstractor.cloneable(ps, p);
-			} else if (p.type.startsWith("List<"))
+			} else if (p.getBaseType().equals("List"))
 			{
 				abstractor.list(ps, p);
-			} else if (p.type.equals("Void"))
+			} else if (p.getBaseType().equals("Void"))
 			{
 				abstractor.voidType(ps, p);
 			} else
 			{
-				throw new IllegalStateException("Don't know how to handle a value of type " + p.type
-						+ " for definition " + def.name);
+				throw new IllegalStateException("Don't know how to handle a value of type " + p.getFullType()
+						+ " for definition " + def.getFullName());
 			}
 		}
 
 		static interface PropertyTypeAbstractor
 		{
-			void directCopy(PrependablePrintStream ps, Prop p);
+			void directCopy(PrependablePrintStream ps, PropertyDefinition p);
 
-			void node(PrependablePrintStream ps, Prop p);
+			void node(PrependablePrintStream ps, PropertyDefinition p);
 
-			void cloneable(PrependablePrintStream ps, Prop p);
+			void cloneable(PrependablePrintStream ps, PropertyDefinition p);
 
-			void list(PrependablePrintStream ps, Prop p);
+			void list(PrependablePrintStream ps, PropertyDefinition p);
 
-			void voidType(PrependablePrintStream ps, Prop p);
+			void voidType(PrependablePrintStream ps, PropertyDefinition p);
 		}
 	}
 
@@ -1128,23 +727,20 @@ public class SourceGenerator
 	 */
 	static class BackingClassWriter extends ClassHierarchyBuildingHandler
 	{
-		public void useDefinition(ClassDef def) throws IOException
+		public void useDefinition(TypeDefinition def) throws IOException
 		{
-			if (def.mode == ClassMode.INTERFACE)
+			if (def.getMode() == TypeDefinition.Mode.INTERFACE)
 			{
 				return;
 			}
 
-			String rawclassname = def.getRawName() + "Impl";
-			String classname = rawclassname + def.getNameParam();
-			String superclassname = def.getRawSname() + "Impl" + def.getSnameParam();
+			String rawclassname = def.getBaseName() + "Impl";
+			String classname = rawclassname
+					+ (def.getTypeParameter() == null ? "" : "<" + def.getTypeParameter() + ">");
+			String superclassname = def.getBaseSuperName() + "Impl"
+					+ (def.getUnboundedSuperTypeArg() == null ? "" : "<" + def.getUnboundedSuperTypeArg() + ">");
 
-			String stopGenStr = envs.get(def).get("stopGen");
-			if (stopGenStr == null)
-				stopGenStr = "";
-			Set<String> stopGen = new HashSet<String>(Arrays.asList(stopGenStr.split(",")));
-
-			String pkg = envs.get(def).get("cPackage");
+			String pkg = def.getClassPackage();
 			if (pkg == null)
 				pkg = "";
 			File classFile = new File(TARGET_IMPL_DIR.getAbsolutePath() + File.separator
@@ -1158,84 +754,86 @@ public class SourceGenerator
 			ps.println("");
 
 			printImports(ps, true);
-			includeAllImports(ps, def.includeFilenames, "nodes" + File.separator + "implementation");
+			includeAllImports(ps, def.getIncludes(), "nodes" + File.separator + "implementation");
 
 			printGeneratedClause(ps);
-			ps.println("public " + (def.mode == ClassMode.CONCRETE ? "" : "abstract ") + "class " + classname
-					+ (def.sname == null ? "" : " extends " + superclassname) + " implements " + def.getRawName()
-					+ def.getNameArg());
+			ps.println("public " + (def.getMode() == TypeDefinition.Mode.CONCRETE ? "" : "abstract ") + "class "
+					+ classname + (def.getBaseSuperName() == null ? "" : " extends " + superclassname) + " implements "
+					+ def.getNameWithTypeParameters());
 			ps.println("{");
 
 			// gen properties
-			for (Prop p : def.props)
+			for (PropertyDefinition p : def.getProperties())
 			{
-				ps.println("    /** " + capFirst(p.desc) + ". */");
-				ps.println("    private " + p.type + " " + p.name + ";");
+				ps.println("    /** " + capFirst(p.getDescription()) + ". */");
+				ps.println("    private " + p.getFullType() + " " + p.getName() + ";");
 				ps.println();
 			}
 
 			// gen constructor
 			ps.println("    /** General constructor. */");
-			if (stopGen.contains("cons"))
-				ps.println("/* // stopGen=" + stopGenStr); // stopGen logic
-			ps.print("    " + (def.mode == ClassMode.CONCRETE ? "public" : "protected") + " " + rawclassname);
-			List<Prop> recProps = getRecursiveProps(def);
+			if (!def.isGenConstructor())
+				ps.println("/* (not generating constructor)"); // nogen logic
+			ps.print("    " + (def.getMode() == TypeDefinition.Mode.CONCRETE ? "public" : "protected") + " "
+					+ rawclassname);
+			List<PropertyDefinition> recProps = getRecursiveProps(def);
 			printParameterList(ps, recProps);
 			ps.println();
 			ps.println("    {");
 			ps.print("        super");
-			List<Prop> superProps = new ArrayList<Prop>(recProps);
-			superProps.removeAll(def.props);
+			List<PropertyDefinition> superProps = new ArrayList<PropertyDefinition>(recProps);
+			superProps.removeAll(def.getProperties());
 			printArgumentList(ps, superProps);
 			ps.println(";");
-			for (Prop p : def.props)
+			for (PropertyDefinition p : def.getProperties())
 			{
-				if (propInstanceOf(p.type, "Node"))
+				if (propInstanceOf(p.getBaseType(), "Node"))
 				{
-					ps.println("        set" + capFirst(p.name) + "(" + p.name + ");");
+					ps.println("        set" + capFirst(p.getName()) + "(" + p.getName() + ");");
 				} else
 				{
-					ps.println("        this." + p.name + " = " + p.name + ";");
+					ps.println("        this." + p.getName() + " = " + p.getName() + ";");
 				}
 			}
 			ps.println("    }");
-			if (stopGen.contains("cons"))
-				ps.print("*/"); // stopGen logic
+			if (!def.isGenConstructor())
+				ps.print("*/"); // nogen logic
 			ps.println();
 
 			// gen getters and setters
-			for (Prop p : def.props)
+			for (PropertyDefinition p : def.getProperties())
 			{
 				ps.println("    /**");
-				ps.println("     * Gets " + p.desc + ".");
-				ps.println("     * @return " + capFirst(p.desc) + ".");
+				ps.println("     * Gets " + p.getDescription() + ".");
+				ps.println("     * @return " + capFirst(p.getDescription()) + ".");
 				ps.println("     */");
-				ps.println("    public " + p.type + " get" + capFirst(p.name) + "()");
+				ps.println("    public " + p.getFullType() + " get" + capFirst(p.getName()) + "()");
 				ps.println("    {");
-				ps.println("        return this." + p.name + ";");
+				ps.println("        return this." + p.getName() + ";");
 				ps.println("    }");
 				ps.println();
-				if (!p.readOnly)
+				if (p.getMode() == PropertyDefinition.Mode.NORMAL)
 				{
 					ps.println("    /**");
-					ps.println("     * Changes " + p.desc + ".");
-					ps.println("     * @param " + p.name + " " + capFirst(p.desc) + ".");
+					ps.println("     * Changes " + p.getDescription() + ".");
+					ps.println("     * @param " + p.getName() + " " + capFirst(p.getDescription()) + ".");
 					ps.println("     */");
-					ps.println("    public void set" + capFirst(p.name) + "(" + p.type + " " + p.name + ")");
+					ps.println("    public void set" + capFirst(p.getName()) + "(" + p.getFullType() + " "
+							+ p.getName() + ")");
 					ps.println("    {");
-					if (propInstanceOf(p.type, "Node"))
+					if (propInstanceOf(p.getBaseType(), "Node"))
 					{
-						ps.println("        if (this." + p.name + " instanceof NodeImpl)");
+						ps.println("        if (this." + p.getName() + " instanceof NodeImpl)");
 						ps.println("        {");
-						ps.println("            ((NodeImpl)this." + p.name + ").setParent(null);");
+						ps.println("            ((NodeImpl)this." + p.getName() + ").setParent(null);");
 						ps.println("        }");
 					}
-					ps.println("        this." + p.name + " = " + p.name + ";");
-					if (propInstanceOf(p.type, "Node"))
+					ps.println("        this." + p.getName() + " = " + p.getName() + ";");
+					if (propInstanceOf(p.getBaseType(), "Node"))
 					{
-						ps.println("        if (this." + p.name + " instanceof NodeImpl)");
+						ps.println("        if (this." + p.getName() + " instanceof NodeImpl)");
 						ps.println("        {");
-						ps.println("            ((NodeImpl)this." + p.name + ").setParent(this);");
+						ps.println("            ((NodeImpl)this." + p.getName() + ").setParent(this);");
 						ps.println("        }");
 					}
 					ps.println("    }");
@@ -1251,31 +849,31 @@ public class SourceGenerator
 			ps.println("     *");
 			ps.println("     * @param visitor The visitor to visit this node's children.");
 			ps.println("     */");
-			if (def.sname != null)
+			if (def.getBaseSuperName() != null)
 			{
 				ps.println("    @Override");
 			}
 			ps.println("    protected void receiveToChildren(BsjNodeVisitor visitor)");
 			ps.println("    {");
-			if (def.sname != null)
+			if (def.getBaseSuperName() != null)
 			{
 				ps.println("        super.receiveToChildren(visitor);");
 			}
-			for (Prop p : def.props)
+			for (PropertyDefinition p : def.getProperties())
 			{
-				if (propInstanceOf(p.type, "Node"))
+				if (propInstanceOf(p.getBaseType(), "Node"))
 				{
-					ps.println("        if (this." + p.name + " != null)");
+					ps.println("        if (this." + p.getName() + " != null)");
 					ps.println("        {");
-					ps.println("            this." + p.name + ".receive(visitor);");
+					ps.println("            this." + p.getName() + ".receive(visitor);");
 					ps.println("        }");
-				} else if (p.type.startsWith("List<"))
+				} else if (p.getBaseType().equals("List"))
 				{
 					// Let's assume that the list contains node objects!
 					// TODO: this is pretty shoddy - can we improve on this?
-					ps.println("        if (this." + p.name + " != null)");
+					ps.println("        if (this." + p.getName() + " != null)");
 					ps.println("        {");
-					ps.println("            for (Node node : this." + p.name + ")");
+					ps.println("            for (Node node : this." + p.getName() + ")");
 					ps.println("            {");
 					ps.println("                node.receive(visitor);");
 					ps.println("            }");
@@ -1293,31 +891,31 @@ public class SourceGenerator
 			ps.println("     *");
 			ps.println("     * @param visitor The visitor to visit this node's children.");
 			ps.println("     */");
-			if (def.sname != null)
+			if (def.getBaseSuperName() != null)
 			{
 				ps.println("    @Override");
 			}
 			ps.println("    protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)");
 			ps.println("    {");
-			if (def.sname != null)
+			if (def.getBaseSuperName() != null)
 			{
 				ps.println("        super.receiveTypedToChildren(visitor);");
 			}
-			for (Prop p : def.props)
+			for (PropertyDefinition p : def.getProperties())
 			{
-				if (propInstanceOf(p.type, "Node"))
+				if (propInstanceOf(p.getBaseType(), "Node"))
 				{
-					ps.println("        if (this." + p.name + " != null)");
+					ps.println("        if (this." + p.getName() + " != null)");
 					ps.println("        {");
-					ps.println("            this." + p.name + ".receiveTyped(visitor);");
+					ps.println("            this." + p.getName() + ".receiveTyped(visitor);");
 					ps.println("        }");
-				} else if (p.type.startsWith("List<"))
+				} else if (p.getBaseType().equals("List"))
 				{
 					// Let's assume that the list contains node objects!
 					// TODO: this is pretty shoddy - can we improve on this?
-					ps.println("        if (this." + p.name + " != null)");
+					ps.println("        if (this." + p.getName() + " != null)");
 					ps.println("        {");
-					ps.println("            for (Node node : this." + p.name + ")");
+					ps.println("            for (Node node : this." + p.getName() + ")");
 					ps.println("            {");
 					ps.println("                node.receiveTyped(visitor);");
 					ps.println("            }");
@@ -1326,42 +924,42 @@ public class SourceGenerator
 			}
 			ps.println("    }");
 			ps.println();
-			if (def.sname != null)
+			if (def.getBaseSuperName() != null)
 			{
 				ps.println("    @Override");
 			}
 			ps.println("    public void receiveTyped(BsjTypedNodeVisitor visitor)");
 			ps.println("    {");
 			ps.println("        visitor.visitStartBegin(this);");
-			ClassDef cur = def;
-			List<ClassDef> backtrack = new LinkedList<ClassDef>();
+			TypeDefinition cur = def;
+			List<TypeDefinition> backtrack = new LinkedList<TypeDefinition>();
 			while (cur != null)
 			{
-				ps.print("        visitor.visit" + cur.getRawName() + "Start(this");
-				if (cur.mode == ClassMode.CONCRETE)
+				ps.print("        visitor.visit" + cur.getBaseName() + "Start(this");
+				if (cur.getMode() == TypeDefinition.Mode.CONCRETE)
 				{
 					ps.print(", ");
 					ps.print(String.valueOf(cur == def));
 				}
 				ps.println(");");
 				backtrack.add(0, cur);
-				cur = this.map.get(cur.getRawSname());
+				cur = this.map.get(cur.getBaseSuperName());
 			}
-			for (String tag : def.tags)
+			for (String tag : def.getTags())
 			{
 				ps.println("        visitor.visit" + tag.trim() + "Start(this);");
 			}
 			ps.println("        visitor.visitStartEnd(this);");
 			ps.println("        receiveTypedToChildren(visitor);");
 			ps.println("        visitor.visitStopBegin(this);");
-			for (String tag : def.tags)
+			for (String tag : def.getTags())
 			{
 				ps.println("        visitor.visit" + tag.trim() + "Stop(this);");
 			}
-			for (ClassDef edef : backtrack)
+			for (TypeDefinition edef : backtrack)
 			{
-				ps.print("        visitor.visit" + edef.getRawName() + "Stop(this");
-				if (edef.mode == ClassMode.CONCRETE)
+				ps.print("        visitor.visit" + edef.getBaseName() + "Stop(this");
+				if (edef.getMode() == TypeDefinition.Mode.CONCRETE)
 				{
 					ps.print(", ");
 					ps.print(String.valueOf(edef == def));
@@ -1378,25 +976,25 @@ public class SourceGenerator
 			ps.println("     * effect on this node.");
 			ps.println("     * @return A list of this node's children.");
 			ps.println("     */");
-			if (stopGen.contains("children"))
-				ps.println("/* // stopGen=" + stopGenStr); // stopGen logic
-			if (def.sname != null)
+			if (!def.isGenChildren())
+				ps.println("/* // (not generating children)"); // nogen logic
+			if (def.getBaseSuperName() != null)
 			{
 				ps.println("    @Override");
 			}
 			ps.println("    public List<Object> getChildObjects()");
 			ps.println("    {");
 			ps.println("        List<Object> list = "
-					+ (def.sname == null ? "new ArrayList<Object>();" : "super.getChildObjects();"));
-			for (Prop p : def.props)
+					+ (def.getBaseSuperName() == null ? "new ArrayList<Object>();" : "super.getChildObjects();"));
+			for (PropertyDefinition p : def.getProperties())
 			{
-				ps.println("        list.add(get" + Character.toUpperCase(p.name.charAt(0)) + p.name.substring(1)
-						+ "());");
+				ps.println("        list.add(get" + Character.toUpperCase(p.getName().charAt(0))
+						+ p.getName().substring(1) + "());");
 			}
 			ps.println("        return list;");
 			ps.println("    }");
-			if (stopGen.contains("children"))
-				ps.print("*/"); // stopGen logic
+			if (!def.isGenChildren())
+				ps.print("*/"); // nogen logic
 			ps.println();
 
 			// add logic for toString
@@ -1407,12 +1005,12 @@ public class SourceGenerator
 			ps.println("    public String toString()");
 			ps.println("    {");
 			ps.println("        StringBuilder sb = new StringBuilder();");
-			if (def.toStringLines == null)
+			if (def.getToStringLines() == null || def.getToStringLines().size() == 0)
 			{
 				ps.println("        sb.append(this.getClass().getSimpleName());");
 				ps.println("        sb.append('[');");
 				boolean firstProp = true;
-				for (Prop p : recProps)
+				for (PropertyDefinition p : recProps)
 				{
 					if (firstProp)
 					{
@@ -1421,18 +1019,18 @@ public class SourceGenerator
 					{
 						ps.println("        sb.append(',');");
 					}
-					String capName = Character.toUpperCase(p.name.charAt(0)) + p.name.substring(1);
-					ps.println("        sb.append(\"" + p.name + "=\");");
-					if (propInstanceOf(p.type, "Node"))
+					String capName = Character.toUpperCase(p.getName().charAt(0)) + p.getName().substring(1);
+					ps.println("        sb.append(\"" + p.getName() + "=\");");
+					if (propInstanceOf(p.getBaseType(), "Node"))
 					{
 						ps.println("        sb.append(this.get" + capName + "() == null? \"null\" : this.get" + capName
 								+ "().getClass().getSimpleName());");
 					} else
 					{
 						String typeString;
-						if (PRIMITIVE_TYPES.contains(p.type))
+						if (PRIMITIVE_TYPES.contains(p.getBaseType()))
 						{
-							typeString = "\"" + p.type + "\"";
+							typeString = "\"" + p.getBaseType() + "\"";
 						} else
 						{
 							typeString = "this.get" + capName + "() != null ? this.get" + capName
@@ -1445,7 +1043,7 @@ public class SourceGenerator
 				ps.println("        sb.append(']');");
 			} else
 			{
-				for (String toStringLine : def.toStringLines)
+				for (String toStringLine : def.getToStringLines())
 				{
 					ps.println("        " + toStringLine);
 				}
@@ -1455,7 +1053,7 @@ public class SourceGenerator
 			ps.println();
 
 			// add node operation implementation
-			if (def.mode == ClassMode.CONCRETE)
+			if (def.getMode() == TypeDefinition.Mode.CONCRETE)
 			{
 				ps.println("    /**");
 				ps.println("     * Executes an operation on this node.");
@@ -1466,28 +1064,28 @@ public class SourceGenerator
 				ps.println("    @Override");
 				ps.println("    public <P,R> R executeOperation(BsjNodeOperation<P,R> operation, P p)");
 				ps.println("    {");
-				ps.println("        return operation.execute" + def.getRawName() + "(this, p);");
+				ps.println("        return operation.execute" + def.getBaseName() + "(this, p);");
 				ps.println("    }");
 			}
 			ps.println();
 
 			// add deep copy implementation
-			if (def.mode == ClassMode.CONCRETE)
+			if (def.getMode() == TypeDefinition.Mode.CONCRETE)
 			{
 				ps.println("    /**");
 				ps.println("     * Generates a deep copy of this node.");
 				ps.println("     * @param factory The node factory to use to create the deep copy.");
 				ps.println("     * @return The resulting deep copy node.");
 				ps.println("     */");
-				if (def.sname != null)
+				if (def.getBaseSuperName() != null)
 					ps.println("    @Override");
-				ps.println("    public " + def.getRawName() + def.getNameArg() + " deepCopy(BsjNodeFactory factory)");
+				ps.println("    public " + def.getNameWithTypeParameters() +" deepCopy(BsjNodeFactory factory)");
 				ps.println("    {");
-				ps.println("        return factory.make" + def.getRawName() + "(");
+				ps.println("        return factory.make" + def.getBaseName() + "(");
 				boolean first = true;
-				for (Prop p : recProps)
+				for (PropertyDefinition p : recProps)
 				{
-					if (p.skipMake)
+					if (p.getMode() == PropertyDefinition.Mode.SKIP)
 						continue;
 					if (first)
 					{
@@ -1500,27 +1098,27 @@ public class SourceGenerator
 
 					propAbstract(new PropertyTypeAbstractor()
 					{
-						public void directCopy(PrependablePrintStream ps, Prop p)
+						public void directCopy(PrependablePrintStream ps, PropertyDefinition p)
 						{
-							ps.print("get" + capFirst(p.name) + "()");
+							ps.print("get" + capFirst(p.getName()) + "()");
 						}
 
-						public void node(PrependablePrintStream ps, Prop p)
+						public void node(PrependablePrintStream ps, PropertyDefinition p)
 						{
-							ps.print("get" + capFirst(p.name) + "().deepCopy(factory)");
+							ps.print("get" + capFirst(p.getName()) + "().deepCopy(factory)");
 						}
 
-						public void cloneable(PrependablePrintStream ps, Prop p)
+						public void cloneable(PrependablePrintStream ps, PropertyDefinition p)
 						{
-							ps.print("(" + p.type + ")(get" + capFirst(p.name) + "().clone())");
+							ps.print("(" + p.getFullType() + ")(get" + capFirst(p.getName()) + "().clone())");
 						}
 
-						public void list(PrependablePrintStream ps, Prop p)
+						public void list(PrependablePrintStream ps, PropertyDefinition p)
 						{
-							ps.print("new Array" + p.type + "(get" + capFirst(p.name) + "())");
+							ps.print("new Array" + p.getFullType() + "(get" + capFirst(p.getName()) + "())");
 						}
 
-						public void voidType(PrependablePrintStream ps, Prop p)
+						public void voidType(PrependablePrintStream ps, PropertyDefinition p)
 						{
 							ps.print("null");
 						}
@@ -1539,9 +1137,9 @@ public class SourceGenerator
 			ps.println("     *         specified <tt>before</tt> node is not a child of this node.");
 			ps.println("     */");
 			boolean suppress = false;
-			for (Prop p : def.props)
+			for (PropertyDefinition p : def.getProperties())
 			{
-				if (p.type.contains("<"))
+				if (p.getTypeArg() != null)
 				{
 					suppress = true;
 					break;
@@ -1553,7 +1151,7 @@ public class SourceGenerator
 			}
 			ps.println("    public <N extends Node> boolean replace(N before, N after)");
 			ps.println("    {");
-			if (def.sname != null)
+			if (def.getBaseSuperName() != null)
 			{
 				ps.println("        if (super.replace(before,after))");
 				ps.println("            return true;");
@@ -1563,29 +1161,29 @@ public class SourceGenerator
 				ps.println("            throw new IllegalArgumentException(\"Cannot replace node with before value of null.\");");
 			}
 			ps.println();
-			for (Prop p : def.props)
+			for (PropertyDefinition p : def.getProperties())
 			{
-				if (propInstanceOf(p.type, "Node"))
+				if (propInstanceOf(p.getBaseType(), "Node"))
 				{
-					String propClass = p.type;
+					String propClass = p.getBaseType();
 					boolean generic = false;
 					String typeArg = "";
-					if (propClass.contains("<"))
+					if (p.getTypeArg() != null)
 					{
-						propClass = propClass.substring(0, propClass.indexOf('<')) + "<?>";
+						propClass = propClass + "<?>";
 						generic = true;
-						typeArg = p.type.substring(p.type.indexOf('<') + 1, p.type.length() - 1);
+						typeArg = p.getTypeArg();
 						if (typeArg.contains(" "))
 						{
 							typeArg = typeArg.substring(0, typeArg.indexOf(" "));
 						}
 					}
-					ps.println("        if (before.equals(this." + p.name + ") && (after instanceof " + propClass
+					ps.println("        if (before.equals(this." + p.getName() + ") && (after instanceof " + propClass
 							+ "))");
 					ps.println("        {");
 					if (generic)
 					{
-						if (p.type.startsWith("ListNode"))
+						if (p.getBaseType().equals("ListNode"))
 						{
 							ps.println("            for (Object listval : ((ListNode<?>)after).getChildren())");
 							ps.println("            {");
@@ -1593,21 +1191,22 @@ public class SourceGenerator
 							ps.println("            }");
 						} else
 						{
-							throw new IllegalStateException("Don't know how to assert type safety for type " + p.type);
+							throw new IllegalStateException("Don't know how to assert type safety for type "
+									+ p.getFullType());
 						}
 					}
-					ps.println("            set" + capFirst(p.name) + "((" + p.type + ")after);");
+					ps.println("            set" + capFirst(p.getName()) + "((" + p.getFullType() + ")after);");
 					ps.println("            return true;");
 					ps.println("        }");
-				} else if (p.type.startsWith("List<"))
+				} else if (p.getBaseType().equals("List"))
 				{
-					String typeArg = p.type.substring(5, p.type.length() - 1);
+					String typeArg = p.getTypeArg();
 					// block to scope out index
 					ps.println("        {");
-					ps.println("            int index = " + p.name + ".indexOf(before);");
+					ps.println("            int index = " + p.getName() + ".indexOf(before);");
 					ps.println("            if (index != -1)");
 					// TODO: YUCK YUCK YUCK - this compels me further to make different types for each list node!
-					ps.println("                " + p.name + ".set(index, (" + typeArg + ")after);");
+					ps.println("                " + p.getName() + ".set(index, (" + typeArg + ")after);");
 					ps.println("        }");
 				}
 			}
@@ -1616,7 +1215,7 @@ public class SourceGenerator
 			ps.println();
 
 			// add supplements
-			includeAllBodies(ps, def.includeFilenames, "nodes" + File.separator + "implementation");
+			includeAllBodies(ps, def.getIncludes(), "nodes" + File.separator + "implementation");
 
 			ps.println("}");
 		}
@@ -1643,19 +1242,19 @@ public class SourceGenerator
 		}
 
 		@Override
-		public void handleDefinition(ClassDef def, Map<String, String> env) throws IOException
+		public void handleDefinition(TypeDefinition def) throws IOException
 		{
-			String tname = def.getRawName();
-			String sname = def.getRawSname();
+			String tname = def.getBaseName();
+			String sname = def.getBaseSuperName();
 
-			if (def.getNameParam().length() > 0)
+			if (def.getTypeParameter() != null)
 				parameterizedTypes.add(tname);
 
 			if (!subtypeMap.containsKey(sname))
 				subtypeMap.put(sname, new HashSet<String>());
 			subtypeMap.get(sname).add(tname);
 			supertypeMap.put(tname, sname);
-			if (def.mode != ClassMode.CONCRETE)
+			if (def.getMode() != TypeDefinition.Mode.CONCRETE)
 				abstractTypes.add(tname);
 		}
 
@@ -1685,14 +1284,14 @@ public class SourceGenerator
 			Collections.sort(sortedNames);
 
 			// Write interface
-			PrintStream ps = createOutputFile("edu.jhu.cs.bsj.compiler.ast", ClassMode.INTERFACE, false,
+			PrintStream ps = createOutputFile("edu.jhu.cs.bsj.compiler.ast", TypeDefinition.Mode.INTERFACE, false,
 					"BsjTypedNodeVisitor", true, null);
 			writeTypeBody(ps, false, sortedNames, concreteTypeNameSet);
 			ps.println("}");
 			ps.close();
 
 			// Write default implementation
-			ps = createOutputFile("edu.jhu.cs.bsj.compiler.ast.util", ClassMode.CONCRETE, false,
+			ps = createOutputFile("edu.jhu.cs.bsj.compiler.ast.util", TypeDefinition.Mode.CONCRETE, false,
 					"BsjTypedNodeNoOpVisitor", true, null, "BsjTypedNodeVisitor");
 			writeTypeBody(ps, true, sortedNames, concreteTypeNameSet);
 			ps.println("}");
@@ -1765,27 +1364,27 @@ public class SourceGenerator
 		{
 			super.init();
 
-			this.ips = createOutputFile("edu.jhu.cs.bsj.compiler.ast", ClassMode.INTERFACE, false, "BsjNodeFactory",
-					true, null);
-			this.cps = createOutputFile("edu.jhu.cs.bsj.compiler.impl.ast", ClassMode.CONCRETE, true,
+			this.ips = createOutputFile("edu.jhu.cs.bsj.compiler.ast", TypeDefinition.Mode.INTERFACE, false,
+					"BsjNodeFactory", true, null);
+			this.cps = createOutputFile("edu.jhu.cs.bsj.compiler.impl.ast", TypeDefinition.Mode.CONCRETE, true,
 					"BsjNodeFactoryImpl", true, null, "BsjNodeFactory");
-			this.dps = createOutputFile("edu.jhu.cs.bsj.compiler.ast.util", ClassMode.ABSTRACT, false,
+			this.dps = createOutputFile("edu.jhu.cs.bsj.compiler.ast.util", TypeDefinition.Mode.ABSTRACT, false,
 					"BsjNodeFactoryDecorator", true, null, "BsjNodeFactory");
 		}
 
 		@Override
-		public void useDefinition(ClassDef def) throws IOException
+		public void useDefinition(TypeDefinition def) throws IOException
 		{
-			if (def.mode == ClassMode.CONCRETE)
+			if (def.getMode() == TypeDefinition.Mode.CONCRETE)
 			{
-				List<Prop> recProps = getRecursiveProps(def);
+				List<PropertyDefinition> recProps = getRecursiveProps(def);
 				String typeParam;
 				String typeName;
 				String typeArg;
-				if (def.getNameParam().length() > 0)
+				if (def.getTypeParameter() != null)
 				{
-					typeParam = def.getNameParam();
-					String[] args = typeParam.substring(1, typeParam.length() - 1).split(",");
+					typeParam = def.getTypeParameter();
+					String[] args = typeParam.split(",");
 					for (int i = 0; i < args.length; i++)
 					{
 						if (args[i].contains(" "))
@@ -1806,8 +1405,8 @@ public class SourceGenerator
 					typeParam = null;
 					typeArg = "";
 				}
-				typeName = def.getRawName() + typeArg;
-				String typeParamS = typeParam == null ? "" : (typeParam + " ");
+				typeName = def.getBaseName() + typeArg;
+				String typeParamS = typeParam == null ? "" : ("<" + typeParam + "> ");
 
 				for (boolean skipMake : new boolean[] { true, false })
 				{
@@ -1815,7 +1414,7 @@ public class SourceGenerator
 					for (PrintStream ps : new PrintStream[] { ips, cps, dps })
 					{
 						ps.println("    /**");
-						ps.println("     * Creates a " + def.getRawName() + ".");
+						ps.println("     * Creates a " + def.getBaseName() + ".");
 						if (!skipMake)
 						{
 							ps.println("     * The specified start and stop locations are used.");
@@ -1827,24 +1426,24 @@ public class SourceGenerator
 					}
 
 					// Write interface method description
-					ips.print("    public " + typeParamS + typeName + " make" + def.getRawName());
+					ips.print("    public " + typeParamS + typeName + " make" + def.getBaseName());
 					printParameterList(ips, recProps, skipMake);
 					ips.println(";");
 					ips.println();
 
 					// Write backing class implementation
 					cps.println("    @Override");
-					cps.print("    public " + typeParamS + typeName + " make" + def.getRawName());
+					cps.print("    public " + typeParamS + typeName + " make" + def.getBaseName());
 					printParameterList(cps, recProps, skipMake);
 					cps.println();
 					cps.println("    {");
-					String classname = def.getRawName() + "Impl" + typeArg;
+					String classname = def.getBaseName() + "Impl" + typeArg;
 					cps.print("        " + typeName + " ret = new " + classname);
 
 					// print constructor arguments - this is special because of the argMap
 					cps.print('(');
 					boolean first = true;
-					for (Prop p : recProps)
+					for (PropertyDefinition p : recProps)
 					{
 						if (first)
 						{
@@ -1854,16 +1453,16 @@ public class SourceGenerator
 							cps.print(", ");
 						}
 						String override = "";
-						if (def.argMap.containsKey(p.name))
+						if (def.getOverrideMap().containsKey(p.getName()))
 						{
-							override = def.argMap.get(p.name).trim();
+							override = def.getOverrideMap().get(p.getName()).trim();
 						}
 						if (override.length() > 0)
 						{
 							cps.print(override);
 						} else
 						{
-							cps.print(p.name);
+							cps.print(p.getName());
 						}
 					}
 					cps.print(')');
@@ -1877,12 +1476,12 @@ public class SourceGenerator
 
 					// Write decorator implementation
 					dps.println("    @Override");
-					dps.print("    public " + typeParamS + typeName + " make" + def.getRawName());
+					dps.print("    public " + typeParamS + typeName + " make" + def.getBaseName());
 					printParameterList(dps, recProps, skipMake);
 					dps.println();
 					dps.println("    {");
 					dps.println("        this.before();");
-					dps.print("        " + typeName + " node = factory.make" + def.getRawName());
+					dps.print("        " + typeName + " node = factory.make" + def.getBaseName());
 					printArgumentList(dps, recProps, skipMake);
 					dps.println(";");
 					dps.println("        this.after(node);");
@@ -1929,28 +1528,26 @@ public class SourceGenerator
 		{
 			super.init();
 
-			ips = createOutputFile("edu.jhu.cs.bsj.compiler.ast", ClassMode.INTERFACE, false, "BsjNodeOperation<P,R>",
-					true, null);
-			nps = createOutputFile("edu.jhu.cs.bsj.compiler.ast.util", ClassMode.CONCRETE, false,
+			ips = createOutputFile("edu.jhu.cs.bsj.compiler.ast", TypeDefinition.Mode.INTERFACE, false,
+					"BsjNodeOperation<P,R>", true, null);
+			nps = createOutputFile("edu.jhu.cs.bsj.compiler.ast.util", TypeDefinition.Mode.CONCRETE, false,
 					"BsjNodeNoOpOperation<P,R>", true, null, "BsjNodeOperation<P,R>");
-			pps = createOutputFile("edu.jhu.cs.bsj.compiler.ast.util", ClassMode.ABSTRACT, false,
+			pps = createOutputFile("edu.jhu.cs.bsj.compiler.ast.util", TypeDefinition.Mode.ABSTRACT, false,
 					"BsjNodeOperationProxy<POrig,ROrig,PNew,RNew>", true, null, "BsjNodeOperation<PNew,RNew>");
-			dps = createOutputFile("edu.jhu.cs.bsj.compiler.ast.util", ClassMode.ABSTRACT, false,
+			dps = createOutputFile("edu.jhu.cs.bsj.compiler.ast.util", TypeDefinition.Mode.ABSTRACT, false,
 					"BsjDefaultNodeOperation<P,R>", true, null, "BsjNodeOperation<P,R>");
 		}
 
 		@Override
-		public void useDefinition(ClassDef def) throws IOException
+		public void useDefinition(TypeDefinition def) throws IOException
 		{
-			if (def.mode == ClassMode.CONCRETE)
+			if (def.getMode() == TypeDefinition.Mode.CONCRETE)
 			{
-				String typeParam;
 				String typeName;
 				String typeArg;
-				if (def.getNameParam().length() > 0)
+				if (def.getTypeParameter() != null)
 				{
-					typeParam = def.getNameParam();
-					String[] args = typeParam.substring(1, typeParam.length() - 1).split(",");
+					String[] args = def.getTypeParameter().split(",");
 					for (int i = 0; i < args.length; i++)
 					{
 						if (args[i].contains(" "))
@@ -1968,19 +1565,18 @@ public class SourceGenerator
 					typeArg = sb.toString();
 				} else
 				{
-					typeParam = null;
 					typeArg = "";
 				}
-				typeName = def.getRawName() + typeArg;
-				String typeParamS = typeParam == null ? "" : (typeParam + " ");
+				typeName = def.getBaseName() + typeArg;
+				String typeParamS = def.getTypeParameter() == null ? "" : ("<" + def.getTypeParameter() + "> ");
 
 				ips.println("    /**");
-				ips.println("     * Executes this operation against a " + def.getRawName() + ".");
-				ips.println("     * @param node The " + def.getRawName() + " in question.");
+				ips.println("     * Executes this operation against a " + def.getBaseName() + ".");
+				ips.println("     * @param node The " + def.getBaseName() + " in question.");
 				ips.println("     * @param p The parameter to use.");
 				ips.println("     * @return The result of the operation.");
 				ips.println("     */");
-				ips.println("    public " + typeParamS + "R execute" + def.getRawName() + "(" + typeName
+				ips.println("    public " + typeParamS + "R execute" + def.getBaseName() + "(" + typeName
 						+ " node, P p);");
 				ips.println();
 
@@ -1990,7 +1586,7 @@ public class SourceGenerator
 				nps.println("     * @param p Ignored.");
 				nps.println("     * @return <code>null</code>, always.");
 				nps.println("     */");
-				nps.println("    public " + typeParamS + "R execute" + def.getRawName() + "(" + typeName
+				nps.println("    public " + typeParamS + "R execute" + def.getBaseName() + "(" + typeName
 						+ " node, P p)");
 				nps.println("    {");
 				nps.println("        return null;");
@@ -2003,11 +1599,11 @@ public class SourceGenerator
 				pps.println("     * @param p The value to pass through the proxy filter and into the backing operation.");
 				pps.println("     * @return The result of this operation (after being passed through the proxy filter).");
 				pps.println("     */");
-				pps.println("    public " + typeParamS + "RNew execute" + def.getRawName() + "(" + typeName
+				pps.println("    public " + typeParamS + "RNew execute" + def.getBaseName() + "(" + typeName
 						+ " node, PNew p)");
 				pps.println("    {");
 				pps.println("        POrig porig = before(p);");
-				pps.println("        ROrig rorig = this.backingOp.execute" + def.getRawName() + "(node, porig);");
+				pps.println("        ROrig rorig = this.backingOp.execute" + def.getBaseName() + "(node, porig);");
 				pps.println("        return after(rorig);");
 				pps.println("    }");
 				pps.println();
@@ -2017,7 +1613,7 @@ public class SourceGenerator
 				dps.println("     * @param node The node in question.");
 				dps.println("     * @param p The parameter to this node operation.");
 				dps.println("     */");
-				dps.println("    public " + typeParamS + "R execute" + def.getRawName() + "(" + typeName
+				dps.println("    public " + typeParamS + "R execute" + def.getBaseName() + "(" + typeName
 						+ " node, P p)");
 				dps.println("    {");
 				dps.println("        return executeDefault(node, p);");
@@ -2057,7 +1653,7 @@ public class SourceGenerator
 		public void init() throws IOException
 		{
 			super.init();
-			ps = createOutputFile("edu.jhu.cs.bsj.compiler.impl.tool.compiler", ClassMode.CONCRETE, true,
+			ps = createOutputFile("edu.jhu.cs.bsj.compiler.impl.tool.compiler", TypeDefinition.Mode.CONCRETE, true,
 					"BsjTreeLifter", true, null, "BsjNodeOperation<ExpressionNode,ExpressionNode>");
 			ps.incPrependCount();
 			ps.println("private BsjNodeFactory factory;");
@@ -2094,66 +1690,69 @@ public class SourceGenerator
 		}
 
 		@Override
-		public void useDefinition(ClassDef def) throws IOException
+		public void useDefinition(TypeDefinition def) throws IOException
 		{
-			List<Prop> recProp = this.getRecursiveProps(def);
-			if (def.mode != ClassMode.CONCRETE)
+			List<PropertyDefinition> recProp = this.getRecursiveProps(def);
+			if (def.getMode() != TypeDefinition.Mode.CONCRETE)
 				return;
 
 			ps.println("@Override");
 			String typeargString = "";
-			if (def.getNameParam().length() > 0)
-				typeargString = def.getNameParam() + " ";
-			ps.println("public " + typeargString + "ExpressionNode execute" + def.getRawName() + "(" + def.getRawName()
-					+ def.getNameArg() + " node, ExpressionNode factoryNode)");
-			if (def.getNameParam().length() > 0)
+			if (def.getTypeParameter() != null)
+				typeargString = "<" + def.getTypeParameter() + "> ";
+			ps.println("public " + typeargString + "ExpressionNode execute" + def.getBaseName() + "("
+					+ def.getBaseName()
+					+ (def.getUnboundedTypeParameter() == null ? "" : "<" + def.getUnboundedTypeParameter() + ">")
+					+ " node, ExpressionNode factoryNode)");
+			if (def.getTypeParameter() != null)
 			{
 				// defer this to a method which accepts the type argument as a parameter - default to our type arg
 				ps.println("{");
 				ps.println("    String typeName;");
-				ps.println("    if (argsFor" + def.getRawName() + "Stack.size() == 0)");
+				ps.println("    if (argsFor" + def.getBaseName() + "Stack.size() == 0)");
 				ps.println("    {");
-				String typeName = def.getNameArg().substring(1, def.getNameArg().length() - 1);
-				ps.println("        typeName = \"" + typeName + "\";");
+				ps.println("        typeName = \"" + def.getUnboundedTypeParameter() + "\";");
 				ps.println("    } else");
 				ps.println("    {");
-				ps.println("        typeName = argsFor" + def.getRawName() + "Stack.peek();");
+				ps.println("        typeName = argsFor" + def.getBaseName() + "Stack.peek();");
 				ps.println("    }");
-				ps.println("    return execute" + def.getRawName() + "(node, factoryNode, typeName);");
+				ps.println("    return execute" + def.getBaseName() + "(node, factoryNode, typeName);");
 				ps.println("}");
 				ps.println();
-				ps.println("protected " + typeargString + "ExpressionNode execute" + def.getRawName() + "("
-						+ def.getRawName() + def.getNameArg() + " node, ExpressionNode factoryNode, String argName)");
+				ps.println("protected " + typeargString + "ExpressionNode execute" + def.getBaseName() + "("
+						+ def.getBaseName()
+						+ (def.getTypeParameter() == null ? "" : "<" + def.getUnboundedTypeParameter() + ">")
+						+ " node, ExpressionNode factoryNode, String argName)");
 			}
 			ps.println("{");
 			ps.incPrependCount();
-			for (Prop p : recProp)
+			for (PropertyDefinition p : recProp)
 			{
-				if (p.skipMake && !p.name.matches("st(art|op)Location"))
+				if (p.isSkipMake() && !p.getName().matches("st(art|op)Location"))
 					continue;
 
 				propAbstract(new PropertyTypeAbstractor()
 				{
-					public void voidType(PrependablePrintStream ps, Prop p)
+					public void voidType(PrependablePrintStream ps, PropertyDefinition p)
 					{
 						// Intentionally doing nothing. We'll just use "null" below.
 					}
 
-					public void node(PrependablePrintStream ps, Prop p)
+					public void node(PrependablePrintStream ps, PropertyDefinition p)
 					{
-						boolean generic = (p.type.contains("<"));
+						boolean generic = (p.getTypeArg() != null);
 						String rawName = null;
 						if (generic)
 						{
-							rawName = p.type.substring(0, p.type.indexOf('<'));
-							String typeArg = p.type.substring(p.type.indexOf('<') + 1, p.type.indexOf('>'));
+							rawName = p.getBaseType();
+							String typeArg = p.getTypeArg();
 							ps.println("argsFor" + rawName + "Stack.push(\"" + typeArg + "\");");
 						}
-						ps.println("ExpressionNode lift" + capFirst(p.name) + " = ");
+						ps.println("ExpressionNode lift" + capFirst(p.getName()) + " = ");
 						ps.incPrependCount(2);
-						ps.println("node.get" + capFirst(p.name) + "() != null ?");
+						ps.println("node.get" + capFirst(p.getName()) + "() != null ?");
 						ps.incPrependCount(2);
-						ps.println("node.get" + capFirst(p.name) + "().executeOperation(this,factoryNode) :");
+						ps.println("node.get" + capFirst(p.getName()) + "().executeOperation(this,factoryNode) :");
 						ps.println("factory.makeNullLiteralNode(null);");
 						ps.decPrependCount(4);
 						if (generic)
@@ -2162,30 +1761,31 @@ public class SourceGenerator
 						}
 					}
 
-					public void list(PrependablePrintStream ps, Prop p)
+					public void list(PrependablePrintStream ps, PropertyDefinition p)
 					{
-						String typeArg = p.type.substring(5, p.type.length() - 1);
-						ps.println("List<ExpressionNode> lift" + capFirst(p.name)
+						String typeArg = p.getTypeArg();
+						ps.println("List<ExpressionNode> lift" + capFirst(p.getName())
 								+ "List = new ArrayList<ExpressionNode>();");
-						ps.println("for (" + typeArg + " listval : node.get" + capFirst(p.name) + "())");
+						ps.println("for (" + typeArg + " listval : node.get" + capFirst(p.getName()) + "())");
 						ps.println("{");
-						ps.println("    lift" + capFirst(p.name) + "List.add(");
+						ps.println("    lift" + capFirst(p.getName()) + "List.add(");
 						ps.println("            listval != null ? ");
 						ps.println("			        listval.executeOperation(this,factoryNode) :");
 						ps.println("                    null);");
 						ps.println("}");
 					}
 
-					public void directCopy(PrependablePrintStream ps, Prop p)
+					public void directCopy(PrependablePrintStream ps, PropertyDefinition p)
 					{
-						ps.println(p.type + " lift" + capFirst(p.name) + "Value = ");
-						ps.println("        node.get" + capFirst(p.name) + "();");
+						ps.println(p.getFullType() + " lift" + capFirst(p.getName()) + "Value = ");
+						ps.println("        node.get" + capFirst(p.getName()) + "();");
 					}
 
-					public void cloneable(PrependablePrintStream ps, Prop p)
+					public void cloneable(PrependablePrintStream ps, PropertyDefinition p)
 					{
-						ps.println("ExpressionNode lift" + capFirst(p.name) + "MetaClone = ");
-						ps.println("        expressionize" + p.type + "(node.get" + capFirst(p.name) + "());");
+						ps.println("ExpressionNode lift" + capFirst(p.getName()) + "MetaClone = ");
+						ps.println("        expressionize" + p.getBaseType() + "(node.get" + capFirst(p.getName())
+								+ "());");
 					}
 				}, p, ps, def);
 			}
@@ -2197,15 +1797,15 @@ public class SourceGenerator
 			ps.println("factory.makeMethodInvocationByExpressionNode(");
 			ps.incPrependCount(2);
 			ps.println("factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),");
-			ps.println("factory.makeIdentifierNode(\"make" + def.getRawName() + "\"),");
+			ps.println("factory.makeIdentifierNode(\"make" + def.getBaseName() + "\"),");
 			ps.println("factory.makeListNode(");
 			ps.incPrependCount(2);
 			ps.print("Arrays.<ExpressionNode>asList(");
 			ps.incPrependCount(2);
 			boolean first = true;
-			for (Prop p : recProp)
+			for (PropertyDefinition p : recProp)
 			{
-				if (p.skipMake && !p.name.matches("st(art|op)Location"))
+				if (p.isSkipMake() && !p.getName().matches("st(art|op)Location"))
 					continue;
 				if (first)
 				{
@@ -2217,17 +1817,17 @@ public class SourceGenerator
 				ps.println();
 				propAbstract(new PropertyTypeAbstractor()
 				{
-					public void voidType(PrependablePrintStream ps, Prop p)
+					public void voidType(PrependablePrintStream ps, PropertyDefinition p)
 					{
 						ps.print("factory.makeNullLiteralNode(null)");
 					}
 
-					public void node(PrependablePrintStream ps, Prop p)
+					public void node(PrependablePrintStream ps, PropertyDefinition p)
 					{
-						ps.print("lift" + capFirst(p.name));
+						ps.print("lift" + capFirst(p.getName()));
 					}
 
-					public void list(PrependablePrintStream ps, Prop p)
+					public void list(PrependablePrintStream ps, PropertyDefinition p)
 					{
 						ps.println("factory.makeMethodInvocationByNameNode(");
 						ps.incPrependCount(2);
@@ -2241,7 +1841,7 @@ public class SourceGenerator
 						ps.println("factory.makeIdentifierNode(\"asList\"),");
 						ps.println("NameCategory.METHOD),");
 						ps.decPrependCount(2);
-						ps.println("factory.makeListNode(lift" + capFirst(p.name) + "List),");
+						ps.println("factory.makeListNode(lift" + capFirst(p.getName()) + "List),");
 						ps.println("factory.makeListNode(Collections.<TypeNode>singletonList(");
 						ps.incPrependCount(2);
 						ps.println("factory.makeUnparameterizedTypeNode(");
@@ -2253,14 +1853,15 @@ public class SourceGenerator
 						ps.decPrependCount(8);
 					}
 
-					public void directCopy(PrependablePrintStream ps, Prop p)
+					public void directCopy(PrependablePrintStream ps, PropertyDefinition p)
 					{
-						ps.print("expressionize" + capFirst(p.type) + "(lift" + capFirst(p.name) + "Value)");
+						ps.print("expressionize" + capFirst(p.getBaseType()) + "(lift" + capFirst(p.getName())
+								+ "Value)");
 					}
 
-					public void cloneable(PrependablePrintStream ps, Prop p)
+					public void cloneable(PrependablePrintStream ps, PropertyDefinition p)
 					{
-						ps.print("lift" + capFirst(p.name) + "MetaClone");
+						ps.print("lift" + capFirst(p.getName()) + "MetaClone");
 					}
 				}, p, ps, def);
 			}
@@ -2283,179 +1884,6 @@ public class SourceGenerator
 			ps.decPrependCount();
 			ps.println("}");
 			ps.close();
-		}
-
-	}
-
-	static class XmlDefinitionWriter extends ClassHierarchyBuildingHandler
-	{
-		private XMLStreamWriter writer;
-
-		protected XmlDefinitionWriter()
-		{
-			super(ReviewMode.FILE_ORDER);
-		}
-
-		@Override
-		public void init() throws IOException
-		{
-			super.init();
-			try
-			{
-				writer = XMLOutputFactory.newInstance().createXMLStreamWriter(
-						new FileOutputStream(TARGET_DIR.getPath() + File.separator + "test.xml"));
-				writer.writeStartDocument();
-				writer.writeStartElement("srcgen");
-			} catch (XMLStreamException e)
-			{
-				throw new IllegalStateException(e);
-			} catch (FactoryConfigurationError e)
-			{
-				throw new IllegalStateException(e);
-			}
-		}
-
-		private Pair<String, String> splitType(String type)
-		{
-			if (type == null)
-			{
-				return new Pair<String, String>(null, null);
-			} else if (type.indexOf('<') != -1)
-			{
-				return new Pair<String, String>(type.substring(0, type.indexOf('<')), type.substring(
-						type.indexOf('<') + 1, type.length() - 1));
-			} else
-			{
-				return new Pair<String, String>(type, null);
-			}
-		}
-
-		@Override
-		public void useDefinition(ClassDef def) throws IOException
-		{
-			try
-			{
-				writer.writeStartElement("type");
-
-				Pair<String, String> baseType = splitType(def.name);
-				Pair<String, String> superType = splitType(def.sname);
-
-				writer.writeAttribute("name", baseType.getFirst());
-				if (baseType.getSecond() != null)
-					writer.writeAttribute("typeParam", baseType.getSecond());
-				if (superType.getFirst() != null)
-					writer.writeAttribute("super", superType.getFirst());
-				if (superType.getSecond() != null)
-					writer.writeAttribute("superTypeArg", superType.getSecond());
-
-				switch (def.mode)
-				{
-					case ABSTRACT:
-						writer.writeAttribute("mode", "abstract");
-						break;
-					case INTERFACE:
-						writer.writeAttribute("mode", "tag");
-						break;
-				}
-
-				for (String tag : def.tags)
-				{
-					writer.writeEmptyElement("tag");
-					writer.writeAttribute("name", tag.trim());
-				}
-
-				for (Prop p : def.props)
-				{
-					writer.writeEmptyElement("prop");
-
-					writer.writeAttribute("name", p.name);
-					Pair<String, String> ptype = splitType(p.type);
-					writer.writeAttribute("type", ptype.getFirst());
-					if (ptype.getSecond() != null)
-					{
-						writer.writeAttribute("typeArg", ptype.getSecond());
-					}
-					if (p.skipMake)
-					{
-						writer.writeAttribute("mode", "skip");
-					} else if (p.readOnly)
-					{
-						writer.writeAttribute("mode", "readOnly");
-					}
-					writer.writeAttribute("desc", p.desc);
-				}
-
-				for (String include : def.includeFilenames)
-				{
-					writer.writeEmptyElement("include");
-					writer.writeAttribute("file", include.trim());
-				}
-
-				if (def.classDoc != null && def.classDoc.length() > 0)
-				{
-					writer.writeStartElement("doc");
-					writer.writeCData(indentationTreat(def.classDoc));
-					writer.writeEndElement();
-				}
-
-				if (def.toStringLines != null && def.toStringLines.size() > 0)
-				{
-					writer.writeStartElement("toString");
-					StringBuilder sb = new StringBuilder();
-					for (String toStringLine : def.toStringLines)
-					{
-						if (sb.length() > 0)
-							sb.append("\n");
-						sb.append(toStringLine);
-					}
-					writer.writeCData(indentationTreat(sb.toString()));
-					writer.writeEndElement();
-				}
-
-				String stopGen = envs.get(def).get("stopGen");
-				if (stopGen != null && stopGen.length() > 0)
-				{
-					for (String nogen : stopGen.split(","))
-					{
-						writer.writeEmptyElement("nogen");
-						writer.writeAttribute("id", nogen.trim());
-					}
-				}
-
-				for (Map.Entry<String, String> entry : def.argMap.entrySet())
-				{
-					writer.writeEmptyElement("override");
-					writer.writeAttribute("prop", entry.getKey());
-					writer.writeAttribute("expr", entry.getValue());
-				}
-
-				writer.writeEndElement();
-			} catch (XMLStreamException e)
-			{
-				throw new IllegalStateException(e);
-			}
-		}
-
-		private String indentationTreat(String s)
-		{
-			s = "\n" + s;
-			s = s.replaceAll("\n", "\n                ");
-			s = s + "\n            ";
-			return s;
-		}
-
-		@Override
-		public void finish() throws IOException
-		{
-			super.finish();
-			try
-			{
-				writer.writeEndDocument();
-				writer.close();
-			} catch (XMLStreamException e)
-			{
-				throw new IllegalStateException(e);
-			}
 		}
 
 	}

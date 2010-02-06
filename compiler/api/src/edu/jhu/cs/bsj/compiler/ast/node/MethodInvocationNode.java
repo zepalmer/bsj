@@ -8,7 +8,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
  * A superclass for method invocation nodes.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public interface MethodInvocationNode extends Node, RestrictedPrimaryExpressionNode,  StatementExpressionNode
+public interface MethodInvocationNode extends Node, RestrictedPrimaryExpressionNode, StatementExpressionNode
 {
     /**
      * Gets the arguments to pass to the method.

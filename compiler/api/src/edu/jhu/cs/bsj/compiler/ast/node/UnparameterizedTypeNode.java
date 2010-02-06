@@ -10,7 +10,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
  * Unparameterized types also represent type parameters, such as the <tt>T</tt> in <tt>Set<T></tt>.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public interface UnparameterizedTypeNode extends Node, DeclaredTypeNode,  LiteralizableTypeNode
+public interface UnparameterizedTypeNode extends Node, DeclaredTypeNode, LiteralizableTypeNode
 {
     /**
      * Gets the name of the type.

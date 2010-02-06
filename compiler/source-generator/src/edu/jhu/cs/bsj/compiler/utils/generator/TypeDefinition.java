@@ -75,6 +75,62 @@ public class TypeDefinition
 			return superName + "<" + superTypeArg + ">";
 		}
 	}
+	
+	public String getUnboundedTypeParameter()
+	{
+		if (typeParameter == null)
+		{
+			return null;
+		} else
+		{
+			if (typeParameter.indexOf(' ')!=-1)
+			{
+				return typeParameter.substring(0, typeParameter.indexOf(' '));
+			} else
+			{
+				return typeParameter;
+			}
+		}
+	}
+
+	public String getUnboundedSuperTypeArg()
+	{
+		if (superTypeArg == null)
+		{
+			return null;
+		} else
+		{
+			if (superTypeArg.indexOf(' ')!=-1)
+			{
+				return superTypeArg.substring(0, superTypeArg.indexOf(' '));
+			} else
+			{
+				return superTypeArg;
+			}
+		}
+	}
+
+	public String getTypeParameterWithDelimiters()
+	{
+		if (typeParameter == null)
+		{
+			return null;
+		} else
+		{
+			return "<" + typeParameter + ">";
+		}
+	}
+	
+	public String getNameWithTypeParameters()
+	{
+		if (typeParameter == null)
+		{
+			return getBaseName();
+		} else
+		{
+			return getBaseName() + "<" + getUnboundedTypeParameter() + ">";
+		}
+	}
 
 	public String getBaseName()
 	{
@@ -86,7 +142,7 @@ public class TypeDefinition
 		return typeParameter;
 	}
 
-	public String getSuperName()
+	public String getBaseSuperName()
 	{
 		return superName;
 	}
@@ -149,5 +205,10 @@ public class TypeDefinition
 	public Mode getMode()
 	{
 		return mode;
+	}
+	
+	public String toString()
+	{
+		return "TypeDef:" + getFullName();
 	}
 }

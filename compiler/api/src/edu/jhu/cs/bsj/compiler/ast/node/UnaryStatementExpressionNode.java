@@ -18,7 +18,7 @@ import edu.jhu.cs.bsj.compiler.ast.UnaryStatementOperator;
  * those expressions, nodes of type {@link UnaryExpressionNode} should be used.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public interface UnaryStatementExpressionNode extends Node, NonAssignmentExpressionNode,  StatementExpressionNode
+public interface UnaryStatementExpressionNode extends Node, NonAssignmentExpressionNode, StatementExpressionNode
 {
     /**
      * Gets the expression on which to operate.

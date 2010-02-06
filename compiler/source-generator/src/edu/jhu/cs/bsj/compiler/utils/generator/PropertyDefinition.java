@@ -28,6 +28,16 @@ public class PropertyDefinition
 		this.mode = mode;
 		this.description = description;
 	}
+	
+	public boolean isSkipMake()
+	{
+		return this.mode == Mode.SKIP;
+	}
+	
+	public boolean isReadOnly()
+	{
+		return this.mode != Mode.NORMAL;
+	}
 
 	public String getName()
 	{
@@ -63,5 +73,10 @@ public class PropertyDefinition
 		{
 			return getBaseType() + "<" + getTypeArg() + ">";
 		}
+	}
+	
+	public String toString()
+	{
+		return "PropDef:" + getName() + ":" + getFullType();
 	}
 }

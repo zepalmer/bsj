@@ -2384,7 +2384,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
         String typeName;
         if (argsForListNodeStack.size() == 0)
         {
-            typeName = "T";
+            typeName = "T extends Node";
         } else
         {
             typeName = argsForListNodeStack.peek();

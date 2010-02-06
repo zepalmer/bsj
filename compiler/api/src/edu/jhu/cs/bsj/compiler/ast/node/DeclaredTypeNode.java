@@ -9,7 +9,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
  * created by a declaration statement.  Arrays and primitives are not declared types because they are not declared.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public interface DeclaredTypeNode extends Node, ReferenceTypeNode,  BaseTypeNode
+public interface DeclaredTypeNode extends Node, ReferenceTypeNode, BaseTypeNode
 {
     /**
      * Generates a deep copy of this node.

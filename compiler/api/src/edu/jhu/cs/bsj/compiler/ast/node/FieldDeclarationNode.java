@@ -8,7 +8,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
  * A node representing a field declaration.  Constants are represented by this node as well.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public interface FieldDeclarationNode extends Node, ClassMemberNode,  InterfaceMemberNode,  AnnotationMemberNode,  AnonymousClassMemberNode
+public interface FieldDeclarationNode extends Node, ClassMemberNode, InterfaceMemberNode, AnnotationMemberNode, AnonymousClassMemberNode
 {
     /**
      * Gets the modifiers for this field.

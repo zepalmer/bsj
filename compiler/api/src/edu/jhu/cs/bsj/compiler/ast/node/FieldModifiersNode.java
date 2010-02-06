@@ -6,7 +6,7 @@ import edu.jhu.cs.bsj.compiler.ast.AccessModifier;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 
 /**
- * 
+ * Represents the modifiers which can be associated with a field.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public interface FieldModifiersNode extends ModifiersNode

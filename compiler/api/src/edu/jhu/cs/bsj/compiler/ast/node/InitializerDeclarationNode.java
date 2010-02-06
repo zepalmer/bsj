@@ -5,10 +5,15 @@ import javax.annotation.Generated;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 
 /**
- * 
+ * Declares an initializer, whether static or otherwise, as in
+ * <pre>
+ * static {
+ *     <i>statement...</i>
+ * }
+ * </pre>
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public interface InitializerDeclarationNode extends Node, ClassMemberNode,  AnonymousClassMemberNode
+public interface InitializerDeclarationNode extends Node, ClassMemberNode, AnonymousClassMemberNode
 {
     /**
      * Gets whether or not the initializer is static.

@@ -8,7 +8,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
  * Represents an array type.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public interface ArrayTypeNode extends Node, ReferenceTypeNode,  LiteralizableTypeNode
+public interface ArrayTypeNode extends Node, ReferenceTypeNode, LiteralizableTypeNode
 {
     /**
      * Gets the element type of the array.

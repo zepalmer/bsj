@@ -8,7 +8,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
  * A node representing the void type.  This is used, for example, in method return values.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public interface VoidTypeNode extends Node, TypeNode,  LiteralizableTypeNode
+public interface VoidTypeNode extends Node, TypeNode, LiteralizableTypeNode
 {
     /**
      * Generates a deep copy of this node.

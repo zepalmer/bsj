@@ -42,21 +42,15 @@ public class SourceGeneratorParser
 	{
 	}
 
-	public static void main(String[] args) throws Exception
-	{
-		SourceGenerationData data = new SourceGeneratorParser().parse("data/srcgen/ast.xml");
-		System.out.println(data);
-	}
-
 	/**
 	 * Parses the provided XML, returning a collection of type definitions.
 	 */
-	public SourceGenerationData parse(String sourceFile) throws IOException, ParserConfigurationException, SAXException
+	public SourceGenerationData parse(File file) throws IOException, ParserConfigurationException, SAXException
 	{
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		factory.setNamespaceAware(true);
 		DocumentBuilder builder = factory.newDocumentBuilder();
-		Document document = builder.parse(new File(sourceFile));
+		Document document = builder.parse(file);
 		
         Schema schema = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI).newSchema(SRCGEN_SCHEMA_FILE);
         Validator validator = schema.newValidator();

@@ -21,7 +21,7 @@ public class ListNodeImpl<T extends Node> extends NodeImpl implements ListNode<T
     private List<T> children;
 
     /** General constructor. */
-/* // stopGen=cons,children
+/* (not generating constructor)
     public ListNodeImpl(
             List<T> children,
             BsjSourceLocation startLocation,
@@ -99,7 +99,7 @@ public class ListNodeImpl<T extends Node> extends NodeImpl implements ListNode<T
      * effect on this node.
      * @return A list of this node's children.
      */
-/* // stopGen=cons,children
+/* // (not generating children)
     @Override
     public List<Object> getChildObjects()
     {

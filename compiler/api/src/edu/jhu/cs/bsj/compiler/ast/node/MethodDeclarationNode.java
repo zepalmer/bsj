@@ -20,7 +20,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
  * will have a <tt>null</tt> body.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public interface MethodDeclarationNode extends Node, ClassMemberNode,  InterfaceMemberNode,  AnonymousClassMemberNode
+public interface MethodDeclarationNode extends Node, ClassMemberNode, InterfaceMemberNode, AnonymousClassMemberNode
 {
     /**
      * Gets the body of this method.
