@@ -100,8 +100,8 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
      */
     @Override
     public AlternateConstructorInvocationNode makeAlternateConstructorInvocationNode(
-            ListNode<ExpressionNode> arguments,
-            ListNode<TypeNode> typeArguments)
+            ExpressionListNode arguments,
+            TypeListNode typeArguments)
     {
         this.before();
         AlternateConstructorInvocationNode node = factory.makeAlternateConstructorInvocationNode(arguments, typeArguments);
@@ -115,8 +115,8 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
      */
     @Override
     public AlternateConstructorInvocationNode makeAlternateConstructorInvocationNode(
-            ListNode<ExpressionNode> arguments,
-            ListNode<TypeNode> typeArguments,
+            ExpressionListNode arguments,
+            TypeListNode typeArguments,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
@@ -162,7 +162,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
      */
     @Override
     public AnnotationArrayValueNode makeAnnotationArrayValueNode(
-            ListNode<AnnotationValueNode> values)
+            AnnotationValueListNode values)
     {
         this.before();
         AnnotationArrayValueNode node = factory.makeAnnotationArrayValueNode(values);
@@ -176,7 +176,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
      */
     @Override
     public AnnotationArrayValueNode makeAnnotationArrayValueNode(
-            ListNode<AnnotationValueNode> values,
+            AnnotationValueListNode values,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
@@ -192,7 +192,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
      */
     @Override
     public AnnotationBodyNode makeAnnotationBodyNode(
-            ListNode<AnnotationMemberNode> members)
+            AnnotationMemberListNode members)
     {
         this.before();
         AnnotationBodyNode node = factory.makeAnnotationBodyNode(members);
@@ -206,7 +206,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
      */
     @Override
     public AnnotationBodyNode makeAnnotationBodyNode(
-            ListNode<AnnotationMemberNode> members,
+            AnnotationMemberListNode members,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
@@ -448,7 +448,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
      */
     @Override
     public AnnotationMethodModifiersNode makeAnnotationMethodModifiersNode(
-            ListNode<AnnotationNode> annotations)
+            AnnotationListNode annotations)
     {
         this.before();
         AnnotationMethodModifiersNode node = factory.makeAnnotationMethodModifiersNode(annotations);
@@ -462,7 +462,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
      */
     @Override
     public AnnotationMethodModifiersNode makeAnnotationMethodModifiersNode(
-            ListNode<AnnotationNode> annotations,
+            AnnotationListNode annotations,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
@@ -481,7 +481,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
             AccessModifier access,
             boolean staticFlag,
             boolean strictfpFlag,
-            ListNode<AnnotationNode> annotations)
+            AnnotationListNode annotations)
     {
         this.before();
         AnnotationModifiersNode node = factory.makeAnnotationModifiersNode(access, staticFlag, strictfpFlag, annotations);
@@ -498,7 +498,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
             AccessModifier access,
             boolean staticFlag,
             boolean strictfpFlag,
-            ListNode<AnnotationNode> annotations,
+            AnnotationListNode annotations,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
@@ -544,7 +544,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
      */
     @Override
     public AnonymousClassBodyNode makeAnonymousClassBodyNode(
-            ListNode<AnonymousClassMemberNode> members)
+            AnonymousClassMemberListNode members)
     {
         this.before();
         AnonymousClassBodyNode node = factory.makeAnonymousClassBodyNode(members);
@@ -558,7 +558,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
      */
     @Override
     public AnonymousClassBodyNode makeAnonymousClassBodyNode(
-            ListNode<AnonymousClassMemberNode> members,
+            AnonymousClassMemberListNode members,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
@@ -670,7 +670,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
      */
     @Override
     public ArrayInitializerNode makeArrayInitializerNode(
-            ListNode<VariableInitializerNode> initializers)
+            VariableInitializerListNode initializers)
     {
         this.before();
         ArrayInitializerNode node = factory.makeArrayInitializerNode(initializers);
@@ -684,7 +684,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
      */
     @Override
     public ArrayInitializerNode makeArrayInitializerNode(
-            ListNode<VariableInitializerNode> initializers,
+            VariableInitializerListNode initializers,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
@@ -700,7 +700,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
      */
     @Override
     public ArrayInstantiatorCreationNode makeArrayInstantiatorCreationNode(
-            ListNode<ExpressionNode> dimExpressions,
+            ExpressionListNode dimExpressions,
             BaseTypeNode baseType,
             int arrayLevels)
     {
@@ -716,7 +716,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
      */
     @Override
     public ArrayInstantiatorCreationNode makeArrayInstantiatorCreationNode(
-            ListNode<ExpressionNode> dimExpressions,
+            ExpressionListNode dimExpressions,
             BaseTypeNode baseType,
             int arrayLevels,
             BsjSourceLocation startLocation,
@@ -864,7 +864,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
      */
     @Override
     public BlockNode makeBlockNode(
-            ListNode<BlockStatementNode> statements)
+            BlockStatementListNode statements)
     {
         this.before();
         BlockNode node = factory.makeBlockNode(statements);
@@ -878,7 +878,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
      */
     @Override
     public BlockNode makeBlockNode(
-            ListNode<BlockStatementNode> statements,
+            BlockStatementListNode statements,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
@@ -1046,7 +1046,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     @Override
     public CaseNode makeCaseNode(
             ExpressionNode expression,
-            ListNode<BlockStatementNode> statements)
+            BlockStatementListNode statements)
     {
         this.before();
         CaseNode node = factory.makeCaseNode(expression, statements);
@@ -1061,7 +1061,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     @Override
     public CaseNode makeCaseNode(
             ExpressionNode expression,
-            ListNode<BlockStatementNode> statements,
+            BlockStatementListNode statements,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
@@ -1169,7 +1169,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
      */
     @Override
     public ClassBodyNode makeClassBodyNode(
-            ListNode<ClassMemberNode> members)
+            ClassMemberListNode members)
     {
         this.before();
         ClassBodyNode node = factory.makeClassBodyNode(members);
@@ -1183,7 +1183,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
      */
     @Override
     public ClassBodyNode makeClassBodyNode(
-            ListNode<ClassMemberNode> members,
+            ClassMemberListNode members,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
@@ -1201,9 +1201,9 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     public ClassDeclarationNode makeClassDeclarationNode(
             ClassModifiersNode modifiers,
             TypeNode extendsClause,
-            ListNode<TypeNode> implementsClause,
+            TypeListNode implementsClause,
             ClassBodyNode body,
-            ListNode<TypeParameterNode> typeParameters,
+            TypeParameterListNode typeParameters,
             IdentifierNode identifier,
             JavadocNode javadoc)
     {
@@ -1221,9 +1221,9 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     public ClassDeclarationNode makeClassDeclarationNode(
             ClassModifiersNode modifiers,
             TypeNode extendsClause,
-            ListNode<TypeNode> implementsClause,
+            TypeListNode implementsClause,
             ClassBodyNode body,
-            ListNode<TypeParameterNode> typeParameters,
+            TypeParameterListNode typeParameters,
             IdentifierNode identifier,
             JavadocNode javadoc,
             BsjSourceLocation startLocation,
@@ -1306,7 +1306,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
             boolean staticFlag,
             boolean finalFlag,
             boolean strictfpFlag,
-            ListNode<AnnotationNode> annotations)
+            AnnotationListNode annotations)
     {
         this.before();
         ClassModifiersNode node = factory.makeClassModifiersNode(access, abstractFlag, staticFlag, finalFlag, strictfpFlag, annotations);
@@ -1325,7 +1325,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
             boolean staticFlag,
             boolean finalFlag,
             boolean strictfpFlag,
-            ListNode<AnnotationNode> annotations,
+            AnnotationListNode annotations,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
@@ -1372,8 +1372,8 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     @Override
     public CompilationUnitNode makeCompilationUnitNode(
             PackageDeclarationNode packageDeclaration,
-            ListNode<ImportNode> imports,
-            ListNode<TypeDeclarationNode> typeDecls)
+            ImportListNode imports,
+            TypeDeclarationListNode typeDecls)
     {
         this.before();
         CompilationUnitNode node = factory.makeCompilationUnitNode(packageDeclaration, imports, typeDecls);
@@ -1388,8 +1388,8 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     @Override
     public CompilationUnitNode makeCompilationUnitNode(
             PackageDeclarationNode packageDeclaration,
-            ListNode<ImportNode> imports,
-            ListNode<TypeDeclarationNode> typeDecls,
+            ImportListNode imports,
+            TypeDeclarationListNode typeDecls,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
@@ -1440,7 +1440,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     @Override
     public ConstructorBodyNode makeConstructorBodyNode(
             ConstructorInvocationNode constructorInvocation,
-            ListNode<BlockStatementNode> statements)
+            BlockStatementListNode statements)
     {
         this.before();
         ConstructorBodyNode node = factory.makeConstructorBodyNode(constructorInvocation, statements);
@@ -1455,7 +1455,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     @Override
     public ConstructorBodyNode makeConstructorBodyNode(
             ConstructorInvocationNode constructorInvocation,
-            ListNode<BlockStatementNode> statements,
+            BlockStatementListNode statements,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
@@ -1474,10 +1474,10 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
             IdentifierNode identifier,
             ConstructorBodyNode body,
             ConstructorModifiersNode modifiers,
-            ListNode<VariableNode> parameters,
+            VariableListNode parameters,
             VariableNode varargParameter,
-            ListNode<UnparameterizedTypeNode> throwTypes,
-            ListNode<TypeParameterNode> typeParameters,
+            UnparameterizedTypeListNode throwTypes,
+            TypeParameterListNode typeParameters,
             JavadocNode javadoc)
     {
         this.before();
@@ -1495,10 +1495,10 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
             IdentifierNode identifier,
             ConstructorBodyNode body,
             ConstructorModifiersNode modifiers,
-            ListNode<VariableNode> parameters,
+            VariableListNode parameters,
             VariableNode varargParameter,
-            ListNode<UnparameterizedTypeNode> throwTypes,
-            ListNode<TypeParameterNode> typeParameters,
+            UnparameterizedTypeListNode throwTypes,
+            TypeParameterListNode typeParameters,
             JavadocNode javadoc,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
@@ -1516,7 +1516,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     @Override
     public ConstructorModifiersNode makeConstructorModifiersNode(
             AccessModifier access,
-            ListNode<AnnotationNode> annotations)
+            AnnotationListNode annotations)
     {
         this.before();
         ConstructorModifiersNode node = factory.makeConstructorModifiersNode(access, annotations);
@@ -1531,7 +1531,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     @Override
     public ConstructorModifiersNode makeConstructorModifiersNode(
             AccessModifier access,
-            ListNode<AnnotationNode> annotations,
+            AnnotationListNode annotations,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
@@ -1703,8 +1703,8 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
      */
     @Override
     public EnumBodyNode makeEnumBodyNode(
-            ListNode<EnumConstantDeclarationNode> constants,
-            ListNode<ClassMemberNode> members)
+            EnumConstantDeclarationListNode constants,
+            ClassMemberListNode members)
     {
         this.before();
         EnumBodyNode node = factory.makeEnumBodyNode(constants, members);
@@ -1718,8 +1718,8 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
      */
     @Override
     public EnumBodyNode makeEnumBodyNode(
-            ListNode<EnumConstantDeclarationNode> constants,
-            ListNode<ClassMemberNode> members,
+            EnumConstantDeclarationListNode constants,
+            ClassMemberListNode members,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
@@ -1765,9 +1765,9 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
      */
     @Override
     public EnumConstantDeclarationNode makeEnumConstantDeclarationNode(
-            ListNode<AnnotationNode> annotations,
+            AnnotationListNode annotations,
             IdentifierNode identifier,
-            ListNode<ExpressionNode> arguments,
+            ExpressionListNode arguments,
             AnonymousClassBodyNode body,
             JavadocNode javadoc)
     {
@@ -1783,9 +1783,9 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
      */
     @Override
     public EnumConstantDeclarationNode makeEnumConstantDeclarationNode(
-            ListNode<AnnotationNode> annotations,
+            AnnotationListNode annotations,
             IdentifierNode identifier,
-            ListNode<ExpressionNode> arguments,
+            ExpressionListNode arguments,
             AnonymousClassBodyNode body,
             JavadocNode javadoc,
             BsjSourceLocation startLocation,
@@ -1804,7 +1804,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     @Override
     public EnumDeclarationNode makeEnumDeclarationNode(
             EnumModifiersNode modifiers,
-            ListNode<TypeNode> implementsClause,
+            TypeListNode implementsClause,
             EnumBodyNode body,
             IdentifierNode identifier,
             JavadocNode javadoc)
@@ -1822,7 +1822,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     @Override
     public EnumDeclarationNode makeEnumDeclarationNode(
             EnumModifiersNode modifiers,
-            ListNode<TypeNode> implementsClause,
+            TypeListNode implementsClause,
             EnumBodyNode body,
             IdentifierNode identifier,
             JavadocNode javadoc,
@@ -1843,7 +1843,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     public EnumModifiersNode makeEnumModifiersNode(
             AccessModifier access,
             boolean strictfpFlag,
-            ListNode<AnnotationNode> annotations)
+            AnnotationListNode annotations)
     {
         this.before();
         EnumModifiersNode node = factory.makeEnumModifiersNode(access, strictfpFlag, annotations);
@@ -1859,7 +1859,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     public EnumModifiersNode makeEnumModifiersNode(
             AccessModifier access,
             boolean strictfpFlag,
-            ListNode<AnnotationNode> annotations,
+            AnnotationListNode annotations,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
@@ -1998,7 +1998,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     @Override
     public FieldDeclarationNode makeFieldDeclarationNode(
             FieldModifiersNode modifiers,
-            ListNode<VariableDeclaratorNode> declarators,
+            VariableDeclaratorListNode declarators,
             JavadocNode javadoc)
     {
         this.before();
@@ -2014,7 +2014,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     @Override
     public FieldDeclarationNode makeFieldDeclarationNode(
             FieldModifiersNode modifiers,
-            ListNode<VariableDeclaratorNode> declarators,
+            VariableDeclaratorListNode declarators,
             JavadocNode javadoc,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
@@ -2036,7 +2036,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
             boolean finalFlag,
             boolean transientFlag,
             boolean volatileFlag,
-            ListNode<AnnotationNode> annotations)
+            AnnotationListNode annotations)
     {
         this.before();
         FieldModifiersNode node = factory.makeFieldModifiersNode(access, staticFlag, finalFlag, transientFlag, volatileFlag, annotations);
@@ -2055,7 +2055,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
             boolean finalFlag,
             boolean transientFlag,
             boolean volatileFlag,
-            ListNode<AnnotationNode> annotations,
+            AnnotationListNode annotations,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
@@ -2131,7 +2131,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
      */
     @Override
     public ForInitializerExpressionNode makeForInitializerExpressionNode(
-            ListNode<StatementExpressionNode> expressions)
+            StatementExpressionListNode expressions)
     {
         this.before();
         ForInitializerExpressionNode node = factory.makeForInitializerExpressionNode(expressions);
@@ -2145,7 +2145,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
      */
     @Override
     public ForInitializerExpressionNode makeForInitializerExpressionNode(
-            ListNode<StatementExpressionNode> expressions,
+            StatementExpressionListNode expressions,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
@@ -2163,7 +2163,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     public ForLoopNode makeForLoopNode(
             ForInitializerNode initializer,
             ExpressionNode condition,
-            ListNode<StatementExpressionNode> update,
+            StatementExpressionListNode update,
             StatementNode statement)
     {
         this.before();
@@ -2180,7 +2180,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     public ForLoopNode makeForLoopNode(
             ForInitializerNode initializer,
             ExpressionNode condition,
-            ListNode<StatementExpressionNode> update,
+            StatementExpressionListNode update,
             StatementNode statement,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
@@ -2479,7 +2479,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
      */
     @Override
     public InterfaceBodyNode makeInterfaceBodyNode(
-            ListNode<InterfaceMemberNode> members)
+            InterfaceMemberListNode members)
     {
         this.before();
         InterfaceBodyNode node = factory.makeInterfaceBodyNode(members);
@@ -2493,7 +2493,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
      */
     @Override
     public InterfaceBodyNode makeInterfaceBodyNode(
-            ListNode<InterfaceMemberNode> members,
+            InterfaceMemberListNode members,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
@@ -2510,9 +2510,9 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     @Override
     public InterfaceDeclarationNode makeInterfaceDeclarationNode(
             InterfaceModifiersNode modifiers,
-            ListNode<TypeNode> extendsClause,
+            TypeListNode extendsClause,
             InterfaceBodyNode body,
-            ListNode<TypeParameterNode> typeParameters,
+            TypeParameterListNode typeParameters,
             IdentifierNode identifier,
             JavadocNode javadoc)
     {
@@ -2529,9 +2529,9 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     @Override
     public InterfaceDeclarationNode makeInterfaceDeclarationNode(
             InterfaceModifiersNode modifiers,
-            ListNode<TypeNode> extendsClause,
+            TypeListNode extendsClause,
             InterfaceBodyNode body,
-            ListNode<TypeParameterNode> typeParameters,
+            TypeParameterListNode typeParameters,
             IdentifierNode identifier,
             JavadocNode javadoc,
             BsjSourceLocation startLocation,
@@ -2582,7 +2582,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
             AccessModifier access,
             boolean staticFlag,
             boolean strictfpFlag,
-            ListNode<AnnotationNode> annotations)
+            AnnotationListNode annotations)
     {
         this.before();
         InterfaceModifiersNode node = factory.makeInterfaceModifiersNode(access, staticFlag, strictfpFlag, annotations);
@@ -2599,7 +2599,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
             AccessModifier access,
             boolean staticFlag,
             boolean strictfpFlag,
-            ListNode<AnnotationNode> annotations,
+            AnnotationListNode annotations,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
@@ -2707,7 +2707,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
      */
     @Override
     public MetaprogramNode makeMetaprogramNode(
-            ListNode<BlockStatementNode> body)
+            BlockStatementListNode body)
     {
         this.before();
         MetaprogramNode node = factory.makeMetaprogramNode(body);
@@ -2721,7 +2721,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
      */
     @Override
     public MetaprogramNode makeMetaprogramNode(
-            ListNode<BlockStatementNode> body,
+            BlockStatementListNode body,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
@@ -2740,11 +2740,11 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
             BlockNode body,
             MethodModifiersNode modifiers,
             IdentifierNode identifier,
-            ListNode<VariableNode> parameters,
+            VariableListNode parameters,
             VariableNode varargParameter,
             TypeNode returnType,
-            ListNode<UnparameterizedTypeNode> throwTypes,
-            ListNode<TypeParameterNode> typeParameters,
+            UnparameterizedTypeListNode throwTypes,
+            TypeParameterListNode typeParameters,
             JavadocNode javadoc)
     {
         this.before();
@@ -2762,11 +2762,11 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
             BlockNode body,
             MethodModifiersNode modifiers,
             IdentifierNode identifier,
-            ListNode<VariableNode> parameters,
+            VariableListNode parameters,
             VariableNode varargParameter,
             TypeNode returnType,
-            ListNode<UnparameterizedTypeNode> throwTypes,
-            ListNode<TypeParameterNode> typeParameters,
+            UnparameterizedTypeListNode throwTypes,
+            TypeParameterListNode typeParameters,
             JavadocNode javadoc,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
@@ -2785,8 +2785,8 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     public MethodInvocationByExpressionNode makeMethodInvocationByExpressionNode(
             PrimaryExpressionNode expression,
             IdentifierNode identifier,
-            ListNode<ExpressionNode> arguments,
-            ListNode<TypeNode> typeArguments)
+            ExpressionListNode arguments,
+            TypeListNode typeArguments)
     {
         this.before();
         MethodInvocationByExpressionNode node = factory.makeMethodInvocationByExpressionNode(expression, identifier, arguments, typeArguments);
@@ -2802,8 +2802,8 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     public MethodInvocationByExpressionNode makeMethodInvocationByExpressionNode(
             PrimaryExpressionNode expression,
             IdentifierNode identifier,
-            ListNode<ExpressionNode> arguments,
-            ListNode<TypeNode> typeArguments,
+            ExpressionListNode arguments,
+            TypeListNode typeArguments,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
@@ -2820,8 +2820,8 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     @Override
     public MethodInvocationByNameNode makeMethodInvocationByNameNode(
             NameNode name,
-            ListNode<ExpressionNode> arguments,
-            ListNode<TypeNode> typeArguments)
+            ExpressionListNode arguments,
+            TypeListNode typeArguments)
     {
         this.before();
         MethodInvocationByNameNode node = factory.makeMethodInvocationByNameNode(name, arguments, typeArguments);
@@ -2836,8 +2836,8 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     @Override
     public MethodInvocationByNameNode makeMethodInvocationByNameNode(
             NameNode name,
-            ListNode<ExpressionNode> arguments,
-            ListNode<TypeNode> typeArguments,
+            ExpressionListNode arguments,
+            TypeListNode typeArguments,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
@@ -2860,7 +2860,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
             boolean synchronizedFlag,
             boolean nativeFlag,
             boolean strictfpFlag,
-            ListNode<AnnotationNode> annotations)
+            AnnotationListNode annotations)
     {
         this.before();
         MethodModifiersNode node = factory.makeMethodModifiersNode(access, abstractFlag, staticFlag, finalFlag, synchronizedFlag, nativeFlag, strictfpFlag, annotations);
@@ -2881,7 +2881,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
             boolean synchronizedFlag,
             boolean nativeFlag,
             boolean strictfpFlag,
-            ListNode<AnnotationNode> annotations,
+            AnnotationListNode annotations,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
@@ -2897,7 +2897,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
      */
     @Override
     public NormalAnnotationNode makeNormalAnnotationNode(
-            ListNode<AnnotationElementNode> arguments,
+            AnnotationElementListNode arguments,
             UnparameterizedTypeNode annotationType)
     {
         this.before();
@@ -2912,7 +2912,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
      */
     @Override
     public NormalAnnotationNode makeNormalAnnotationNode(
-            ListNode<AnnotationElementNode> arguments,
+            AnnotationElementListNode arguments,
             UnparameterizedTypeNode annotationType,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
@@ -2960,7 +2960,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     @Override
     public PackageDeclarationNode makePackageDeclarationNode(
             NameNode name,
-            ListNode<AnnotationNode> annotations)
+            AnnotationListNode annotations)
     {
         this.before();
         PackageDeclarationNode node = factory.makePackageDeclarationNode(name, annotations);
@@ -2975,7 +2975,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     @Override
     public PackageDeclarationNode makePackageDeclarationNode(
             NameNode name,
-            ListNode<AnnotationNode> annotations,
+            AnnotationListNode annotations,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
@@ -2992,7 +2992,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     @Override
     public ParameterizedTypeNode makeParameterizedTypeNode(
             UnparameterizedTypeNode baseType,
-            ListNode<TypeArgumentNode> typeArguments)
+            TypeArgumentListNode typeArguments)
     {
         this.before();
         ParameterizedTypeNode node = factory.makeParameterizedTypeNode(baseType, typeArguments);
@@ -3007,7 +3007,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     @Override
     public ParameterizedTypeNode makeParameterizedTypeNode(
             UnparameterizedTypeNode baseType,
-            ListNode<TypeArgumentNode> typeArguments,
+            TypeArgumentListNode typeArguments,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
@@ -3117,9 +3117,9 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     public QualifiedClassInstantiationNode makeQualifiedClassInstantiationNode(
             ExpressionNode enclosingExpression,
             IdentifierNode identifier,
-            ListNode<TypeArgumentNode> typeArguments,
-            ListNode<TypeArgumentNode> constructorTypeArguments,
-            ListNode<ExpressionNode> arguments,
+            TypeArgumentListNode typeArguments,
+            TypeArgumentListNode constructorTypeArguments,
+            ExpressionListNode arguments,
             AnonymousClassBodyNode body)
     {
         this.before();
@@ -3136,9 +3136,9 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     public QualifiedClassInstantiationNode makeQualifiedClassInstantiationNode(
             ExpressionNode enclosingExpression,
             IdentifierNode identifier,
-            ListNode<TypeArgumentNode> typeArguments,
-            ListNode<TypeArgumentNode> constructorTypeArguments,
-            ListNode<ExpressionNode> arguments,
+            TypeArgumentListNode typeArguments,
+            TypeArgumentListNode constructorTypeArguments,
+            ExpressionListNode arguments,
             AnonymousClassBodyNode body,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
@@ -3377,8 +3377,8 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     public SuperMethodInvocationNode makeSuperMethodInvocationNode(
             UnparameterizedTypeNode type,
             IdentifierNode identifier,
-            ListNode<ExpressionNode> arguments,
-            ListNode<TypeNode> typeArguments)
+            ExpressionListNode arguments,
+            TypeListNode typeArguments)
     {
         this.before();
         SuperMethodInvocationNode node = factory.makeSuperMethodInvocationNode(type, identifier, arguments, typeArguments);
@@ -3394,8 +3394,8 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     public SuperMethodInvocationNode makeSuperMethodInvocationNode(
             UnparameterizedTypeNode type,
             IdentifierNode identifier,
-            ListNode<ExpressionNode> arguments,
-            ListNode<TypeNode> typeArguments,
+            ExpressionListNode arguments,
+            TypeListNode typeArguments,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
@@ -3412,8 +3412,8 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     @Override
     public SuperclassConstructorInvocationNode makeSuperclassConstructorInvocationNode(
             PrimaryExpressionNode qualifyingExpression,
-            ListNode<ExpressionNode> arguments,
-            ListNode<TypeNode> typeArguments)
+            ExpressionListNode arguments,
+            TypeListNode typeArguments)
     {
         this.before();
         SuperclassConstructorInvocationNode node = factory.makeSuperclassConstructorInvocationNode(qualifyingExpression, arguments, typeArguments);
@@ -3428,8 +3428,8 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     @Override
     public SuperclassConstructorInvocationNode makeSuperclassConstructorInvocationNode(
             PrimaryExpressionNode qualifyingExpression,
-            ListNode<ExpressionNode> arguments,
-            ListNode<TypeNode> typeArguments,
+            ExpressionListNode arguments,
+            TypeListNode typeArguments,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
@@ -3446,7 +3446,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     @Override
     public SwitchNode makeSwitchNode(
             ExpressionNode expression,
-            ListNode<CaseNode> cases)
+            CaseListNode cases)
     {
         this.before();
         SwitchNode node = factory.makeSwitchNode(expression, cases);
@@ -3461,7 +3461,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     @Override
     public SwitchNode makeSwitchNode(
             ExpressionNode expression,
-            ListNode<CaseNode> cases,
+            CaseListNode cases,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
@@ -3570,7 +3570,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     @Override
     public TryNode makeTryNode(
             BlockNode block,
-            ListNode<CatchNode> catches,
+            CatchListNode catches,
             BlockNode finallyBlock)
     {
         this.before();
@@ -3586,7 +3586,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     @Override
     public TryNode makeTryNode(
             BlockNode block,
-            ListNode<CatchNode> catches,
+            CatchListNode catches,
             BlockNode finallyBlock,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
@@ -3787,7 +3787,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     @Override
     public TypeParameterNode makeTypeParameterNode(
             IdentifierNode identifier,
-            ListNode<DeclaredTypeNode> bounds)
+            DeclaredTypeListNode bounds)
     {
         this.before();
         TypeParameterNode node = factory.makeTypeParameterNode(identifier, bounds);
@@ -3802,7 +3802,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     @Override
     public TypeParameterNode makeTypeParameterNode(
             IdentifierNode identifier,
-            ListNode<DeclaredTypeNode> bounds,
+            DeclaredTypeListNode bounds,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
@@ -3943,8 +3943,8 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     @Override
     public UnqualifiedClassInstantiationNode makeUnqualifiedClassInstantiationNode(
             DeclaredTypeNode type,
-            ListNode<TypeArgumentNode> constructorTypeArguments,
-            ListNode<ExpressionNode> arguments,
+            TypeArgumentListNode constructorTypeArguments,
+            ExpressionListNode arguments,
             AnonymousClassBodyNode body)
     {
         this.before();
@@ -3960,8 +3960,8 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     @Override
     public UnqualifiedClassInstantiationNode makeUnqualifiedClassInstantiationNode(
             DeclaredTypeNode type,
-            ListNode<TypeArgumentNode> constructorTypeArguments,
-            ListNode<ExpressionNode> arguments,
+            TypeArgumentListNode constructorTypeArguments,
+            ExpressionListNode arguments,
             AnonymousClassBodyNode body,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
@@ -3979,7 +3979,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     @Override
     public VariableDeclarationNode makeVariableDeclarationNode(
             VariableModifiersNode modifiers,
-            ListNode<VariableDeclaratorNode> declarators)
+            VariableDeclaratorListNode declarators)
     {
         this.before();
         VariableDeclarationNode node = factory.makeVariableDeclarationNode(modifiers, declarators);
@@ -3994,7 +3994,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     @Override
     public VariableDeclarationNode makeVariableDeclarationNode(
             VariableModifiersNode modifiers,
-            ListNode<VariableDeclaratorNode> declarators,
+            VariableDeclaratorListNode declarators,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
@@ -4135,7 +4135,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     @Override
     public VariableModifiersNode makeVariableModifiersNode(
             boolean finalFlag,
-            ListNode<AnnotationNode> annotations)
+            AnnotationListNode annotations)
     {
         this.before();
         VariableModifiersNode node = factory.makeVariableModifiersNode(finalFlag, annotations);
@@ -4150,7 +4150,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     @Override
     public VariableModifiersNode makeVariableModifiersNode(
             boolean finalFlag,
-            ListNode<AnnotationNode> annotations,
+            AnnotationListNode annotations,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {

@@ -19,13 +19,13 @@ public interface NormalAnnotationNode extends AnnotationNode
      * Gets the arguments.
      * @return The arguments.
      */
-    public ListNode<AnnotationElementNode> getArguments();
+    public AnnotationElementListNode getArguments();
 
     /**
      * Changes the arguments.
      * @param arguments The arguments.
      */
-    public void setArguments(ListNode<AnnotationElementNode> arguments);
+    public void setArguments(AnnotationElementListNode arguments);
 
     /**
      * Generates a deep copy of this node.

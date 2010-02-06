@@ -9,12 +9,11 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
-import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.ExpressionListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.MethodInvocationByNameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.NameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
-import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
+import edu.jhu.cs.bsj.compiler.ast.node.TypeListNode;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class MethodInvocationByNameNodeImpl extends MethodInvocationNodeImpl implements MethodInvocationByNameNode
@@ -25,8 +24,8 @@ public class MethodInvocationByNameNodeImpl extends MethodInvocationNodeImpl imp
     /** General constructor. */
     public MethodInvocationByNameNodeImpl(
             NameNode name,
-            ListNode<ExpressionNode> arguments,
-            ListNode<TypeNode> typeArguments,
+            ExpressionListNode arguments,
+            TypeListNode typeArguments,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {

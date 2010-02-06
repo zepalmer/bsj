@@ -10,9 +10,10 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
  * for (<i>initializers</i>; <i>condition</i>; <i>updaters</i>)
  *     <i>body</i>
  * </pre>
- * If the loop has no initializers, the <tt>initializer</tt> field is <tt>null</tt>.  If the loop has no updates,
- * the <tt>update</tt> field is a {@link ListNode} with no children.  If the loop has no termination condition, the
- * <tt>condition</tt> field is <tt>null</tt>.  The <tt>update</tt> field should never be <tt>null</tt>.
+ * If the loop has no initializers, the <tt>initializer</tt> field is <tt>null</tt>.  If the loop has no
+ * updates, the <tt>update</tt> field is a {@link StatementExpressionListNode} with no children.  If the
+ * loop has no termination condition, the <tt>condition</tt> field is <tt>null</tt>.  The <tt>update</tt>
+ * field should never be <tt>null</tt>.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public interface ForLoopNode extends Node, StatementNode
@@ -45,13 +46,13 @@ public interface ForLoopNode extends Node, StatementNode
      * Gets the loop's update operation.
      * @return The loop's update operation.
      */
-    public ListNode<StatementExpressionNode> getUpdate();
+    public StatementExpressionListNode getUpdate();
 
     /**
      * Changes the loop's update operation.
      * @param update The loop's update operation.
      */
-    public void setUpdate(ListNode<StatementExpressionNode> update);
+    public void setUpdate(StatementExpressionListNode update);
 
     /**
      * Gets the loop's statement.

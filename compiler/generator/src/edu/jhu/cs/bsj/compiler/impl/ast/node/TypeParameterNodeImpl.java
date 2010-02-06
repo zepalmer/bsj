@@ -9,9 +9,8 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
-import edu.jhu.cs.bsj.compiler.ast.node.DeclaredTypeNode;
+import edu.jhu.cs.bsj.compiler.ast.node.DeclaredTypeListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeParameterNode;
 
@@ -22,12 +21,12 @@ public class TypeParameterNodeImpl extends NodeImpl implements TypeParameterNode
     private IdentifierNode identifier;
 
     /** The bounds over the base type. */
-    private ListNode<DeclaredTypeNode> bounds;
+    private DeclaredTypeListNode bounds;
 
     /** General constructor. */
     public TypeParameterNodeImpl(
             IdentifierNode identifier,
-            ListNode<DeclaredTypeNode> bounds,
+            DeclaredTypeListNode bounds,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
@@ -66,7 +65,7 @@ public class TypeParameterNodeImpl extends NodeImpl implements TypeParameterNode
      * Gets the bounds over the base type.
      * @return The bounds over the base type.
      */
-    public ListNode<DeclaredTypeNode> getBounds()
+    public DeclaredTypeListNode getBounds()
     {
         return this.bounds;
     }
@@ -75,7 +74,7 @@ public class TypeParameterNodeImpl extends NodeImpl implements TypeParameterNode
      * Changes the bounds over the base type.
      * @param bounds The bounds over the base type.
      */
-    public void setBounds(ListNode<DeclaredTypeNode> bounds)
+    public void setBounds(DeclaredTypeListNode bounds)
     {
         if (this.bounds instanceof NodeImpl)
         {
@@ -213,7 +212,6 @@ public class TypeParameterNodeImpl extends NodeImpl implements TypeParameterNode
      * @return <code>true</code> if the replacement was successful; <code>false</code> if the
      *         specified <tt>before</tt> node is not a child of this node.
      */
-    @SuppressWarnings("unchecked")
     public <N extends Node> boolean replace(N before, N after)
     {
         if (super.replace(before,after))
@@ -224,13 +222,9 @@ public class TypeParameterNodeImpl extends NodeImpl implements TypeParameterNode
             setIdentifier((IdentifierNode)after);
             return true;
         }
-        if (before.equals(this.bounds) && (after instanceof ListNode<?>))
+        if (before.equals(this.bounds) && (after instanceof DeclaredTypeListNode))
         {
-            for (Object listval : ((ListNode<?>)after).getChildren())
-            {
-                DeclaredTypeNode.class.cast(listval);
-            }
-            setBounds((ListNode<DeclaredTypeNode>)after);
+            setBounds((DeclaredTypeListNode)after);
             return true;
         }
         return false;

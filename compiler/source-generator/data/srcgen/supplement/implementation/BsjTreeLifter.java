@@ -80,10 +80,5 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode, List
 		}
 	}
 
-	/**
-	 * The stack of type parameterizations for the ListNode handler. If this stack is empty, the invoker of
-	 * executeListNode is calling it directly (that is, it is not being called from this lifter directly).
-	 */
-	private Stack<String> argsForListNodeStack = new Stack<String>();
 	/* GEN:stop */
 }

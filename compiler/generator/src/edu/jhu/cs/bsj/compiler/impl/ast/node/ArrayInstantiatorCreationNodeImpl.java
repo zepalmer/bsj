@@ -11,19 +11,18 @@ import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.ArrayInstantiatorCreationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.BaseTypeNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.ExpressionListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class ArrayInstantiatorCreationNodeImpl extends ArrayCreationNodeImpl implements ArrayInstantiatorCreationNode
 {
     /** The dimension expressions for this array. */
-    private ListNode<ExpressionNode> dimExpressions;
+    private ExpressionListNode dimExpressions;
 
     /** General constructor. */
     public ArrayInstantiatorCreationNodeImpl(
-            ListNode<ExpressionNode> dimExpressions,
+            ExpressionListNode dimExpressions,
             BaseTypeNode baseType,
             int arrayLevels,
             BsjSourceLocation startLocation,
@@ -37,7 +36,7 @@ public class ArrayInstantiatorCreationNodeImpl extends ArrayCreationNodeImpl imp
      * Gets the dimension expressions for this array.
      * @return The dimension expressions for this array.
      */
-    public ListNode<ExpressionNode> getDimExpressions()
+    public ExpressionListNode getDimExpressions()
     {
         return this.dimExpressions;
     }
@@ -46,7 +45,7 @@ public class ArrayInstantiatorCreationNodeImpl extends ArrayCreationNodeImpl imp
      * Changes the dimension expressions for this array.
      * @param dimExpressions The dimension expressions for this array.
      */
-    public void setDimExpressions(ListNode<ExpressionNode> dimExpressions)
+    public void setDimExpressions(ExpressionListNode dimExpressions)
     {
         if (this.dimExpressions instanceof NodeImpl)
         {
@@ -181,19 +180,14 @@ public class ArrayInstantiatorCreationNodeImpl extends ArrayCreationNodeImpl imp
      * @return <code>true</code> if the replacement was successful; <code>false</code> if the
      *         specified <tt>before</tt> node is not a child of this node.
      */
-    @SuppressWarnings("unchecked")
     public <N extends Node> boolean replace(N before, N after)
     {
         if (super.replace(before,after))
             return true;
 
-        if (before.equals(this.dimExpressions) && (after instanceof ListNode<?>))
+        if (before.equals(this.dimExpressions) && (after instanceof ExpressionListNode))
         {
-            for (Object listval : ((ListNode<?>)after).getChildren())
-            {
-                ExpressionNode.class.cast(listval);
-            }
-            setDimExpressions((ListNode<ExpressionNode>)after);
+            setDimExpressions((ExpressionListNode)after);
             return true;
         }
         return false;

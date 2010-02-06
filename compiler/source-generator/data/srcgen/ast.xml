@@ -353,7 +353,7 @@
         </type>
 
         <type name="ModifiersNode" super="Node" mode="abstract">
-            <prop name="annotations" type="ListNode" typeArg="AnnotationNode" desc="the annotations modifying the subject" />
+            <prop name="annotations" type="AnnotationListNode" desc="the annotations modifying the subject" />
             <doc><![CDATA[
                 A node representing the modifiers applied to another node.  Modifiers may include flags (such as <tt>final</tt>
                 or <tt>strictfp</tt>) and annotations (such as <tt>@Override</tt>).  Subclasses of this node dictate precisely
@@ -404,7 +404,7 @@
         </type>
 
         <type name="ArrayInstantiatorCreationNode" super="ArrayCreationNode">
-            <prop name="dimExpressions" type="ListNode" typeArg="ExpressionNode"
+            <prop name="dimExpressions" type="ExpressionListNode"
                 desc="the dimension expressions for this array" />
             <doc><![CDATA[
                 Represents the creation of an array with instantiator, as in
@@ -443,9 +443,9 @@
         <type name="ClassInstantiationNode" super="Node" mode="abstract">
             <tag name="RestrictedPrimaryExpressionNode" />
             <tag name="StatementExpressionNode" />
-            <prop name="constructorTypeArguments" type="ListNode" typeArg="TypeArgumentNode"
+            <prop name="constructorTypeArguments" type="TypeArgumentListNode"
                 desc="the type arguments for the constructor" />
-            <prop name="arguments" type="ListNode" typeArg="ExpressionNode" desc="the arguments to the constructor" />
+            <prop name="arguments" type="ExpressionListNode" desc="the arguments to the constructor" />
             <prop name="body" type="AnonymousClassBodyNode" desc="the body of the anonymous class" />
             <doc><![CDATA[
                 Acts as a parent to class instantiation nodes. 
@@ -565,8 +565,8 @@
         <type name="MethodInvocationNode" super="Node" mode="abstract">
             <tag name="RestrictedPrimaryExpressionNode" />
             <tag name="StatementExpressionNode" />
-            <prop name="arguments" type="ListNode" typeArg="ExpressionNode" desc="the arguments to pass to the method" />
-            <prop name="typeArguments" type="ListNode" typeArg="TypeNode" desc="the type arguments for the method" />
+            <prop name="arguments" type="ExpressionListNode" desc="the arguments to pass to the method" />
+            <prop name="typeArguments" type="TypeListNode" desc="the type arguments for the method" />
             <doc><![CDATA[
                 A superclass for method invocation nodes.
             ]]></doc>
@@ -591,7 +591,7 @@
         <type name="QualifiedClassInstantiationNode" super="ClassInstantiationNode">
             <prop name="enclosingExpression" type="ExpressionNode" desc="the expression enclosing the non-static inner class" />
             <prop name="identifier" type="IdentifierNode" desc="the name of the class being instantiated" />
-            <prop name="typeArguments" type="ListNode" typeArg="TypeArgumentNode"
+            <prop name="typeArguments" type="TypeArgumentListNode"
                 desc="the type arguments to apply to the class being instantiated" />
             <doc><![CDATA[
                 A node representing the qualified instantiation of a class, as in:
@@ -655,8 +655,8 @@
             <tag name="StatementExpressionNode" />
             <prop name="type" type="UnparameterizedTypeNode" desc="the qualifying type" />
             <prop name="identifier" type="IdentifierNode" desc="the identifier of the method being invoked" />
-            <prop name="arguments" type="ListNode" typeArg="ExpressionNode" desc="the arguments to pass to the method" />
-            <prop name="typeArguments" type="ListNode" typeArg="TypeNode" desc="the type arguments for the method" />
+            <prop name="arguments" type="ExpressionListNode" desc="the arguments to pass to the method" />
+            <prop name="typeArguments" type="TypeListNode" desc="the type arguments for the method" />
             <doc><![CDATA[
                 A node representing a method invocation from <tt>super</tt>, such as in the expression
                 <pre>
@@ -793,7 +793,7 @@
 
         <type name="BlockNode" super="Node">
             <tag name="StatementNode" />
-            <prop name="statements" type="ListNode" typeArg="BlockStatementNode"
+            <prop name="statements" type="BlockStatementListNode"
                 desc="the statements contained in this block statement" />
             <doc><![CDATA[
                 Represents a block of statements, as in
@@ -875,7 +875,7 @@
             <tag name="StatementNode" />
             <prop name="initializer" type="ForInitializerNode" desc="the initializer used for this for loop" />
             <prop name="condition" type="ExpressionNode" desc="the loop's termination condition" />
-            <prop name="update" type="ListNode" typeArg="StatementExpressionNode" desc="the loop's update operation" />
+            <prop name="update" type="StatementExpressionListNode" desc="the loop's update operation" />
             <prop name="statement" type="StatementNode" desc="the loop's statement" />
             <doc><![CDATA[
                 A node representing a for-loop, as in:
@@ -883,9 +883,10 @@
                 for (<i>initializers</i>; <i>condition</i>; <i>updaters</i>)
                     <i>body</i>
                 </pre>
-                If the loop has no initializers, the <tt>initializer</tt> field is <tt>null</tt>.  If the loop has no updates,
-                the <tt>update</tt> field is a {@link ListNode} with no children.  If the loop has no termination condition, the
-                <tt>condition</tt> field is <tt>null</tt>.  The <tt>update</tt> field should never be <tt>null</tt>.
+                If the loop has no initializers, the <tt>initializer</tt> field is <tt>null</tt>.  If the loop has no
+                updates, the <tt>update</tt> field is a {@link StatementExpressionListNode} with no children.  If the
+                loop has no termination condition, the <tt>condition</tt> field is <tt>null</tt>.  The <tt>update</tt>
+                field should never be <tt>null</tt>.
             ]]></doc>
         </type>
 
@@ -938,7 +939,7 @@
         <type name="SwitchNode" super="Node">
             <tag name="StatementNode" />
             <prop name="expression" type="ExpressionNode" desc="the expression over which to switch" />
-            <prop name="cases" type="ListNode" typeArg="CaseNode" desc="the cases in this switch" />
+            <prop name="cases" type="CaseListNode" desc="the cases in this switch" />
             <doc><![CDATA[
                 A node to represent switch statements, as in:
                 <pre>
@@ -978,7 +979,7 @@
         <type name="TryNode" super="Node">
             <tag name="StatementNode" />
             <prop name="block" type="BlockNode" desc="the block in which to try" />
-            <prop name="catches" type="ListNode" typeArg="CatchNode" desc="the catch conditions" />
+            <prop name="catches" type="CatchListNode" desc="the catch conditions" />
             <prop name="finallyBlock" type="BlockNode" desc="the finally block" />
             <doc><![CDATA[
                 A node to represent a try-catch block, as in:
@@ -1001,7 +1002,7 @@
         <type name="VariableDeclarationNode" super="Node">
             <tag name="BlockStatementNode" />
             <prop name="modifiers" type="VariableModifiersNode" desc="the modifiers for this variable" />
-            <prop name="declarators" type="ListNode" typeArg="VariableDeclaratorNode" desc="the variable declarators for this node" />
+            <prop name="declarators" type="VariableDeclaratorListNode" desc="the variable declarators for this node" />
             <doc><![CDATA[
                 A node for the declaration of a variable, as in:
                     <pre>
@@ -1071,7 +1072,7 @@
         <type name="ParameterizedTypeNode" super="Node">
             <tag name="DeclaredTypeNode" />
             <prop name="baseType" type="UnparameterizedTypeNode" desc="the base type being parameterized" />
-            <prop name="typeArguments" type="ListNode" typeArg="TypeArgumentNode" desc="the type arguments for this node" />
+            <prop name="typeArguments" type="TypeArgumentListNode" desc="the type arguments for this node" />
             <doc><![CDATA[
                 A node representing parameterized types.  This node represents the use of a type which has type arguments, such
                 as Set<String> (which would be represented by the unparameterized type Set and the single-element argument list
@@ -1088,7 +1089,7 @@
                 another type which is parameterized, such as in <tt>A&lt;X&gt;.B</tt>.  In that case, the root node is a
                 <tt>ParameterizedTypeSelectNode</tt>.  The <tt>select</tt> child is an <tt>UnparameterizedTypeNode</tt>
                 containing the name "B"; the <tt>base</tt> child is a {@link ParameterizedTypeNode}.  The <tt>base</tt> has
-                children of an {@link UnparameterizedTypeNode} containing the name "A" and a {@link ListNode} containing the
+                children of an {@link UnparameterizedTypeNode} containing the name "A" and a {@link TypeArgumentListNode} containing the
                 type argument with the name "X".
             ]]></doc>
         </type>
@@ -1202,11 +1203,11 @@
             <prop name="identifier" type="IdentifierNode" desc="the identifier for the name of this constructor" />
             <prop name="body" type="ConstructorBodyNode" desc="the body of this constructor" />
             <prop name="modifiers" type="ConstructorModifiersNode" desc="the modifiers for this constructor" />
-            <prop name="parameters" type="ListNode" typeArg="VariableNode" desc="the parameters declared by this constructor" />
+            <prop name="parameters" type="VariableListNode" desc="the parameters declared by this constructor" />
             <prop name="varargParameter" type="VariableNode" desc="the vararg parameter declared by this method" />
-            <prop name="throwTypes" type="ListNode" typeArg="UnparameterizedTypeNode"
+            <prop name="throwTypes" type="UnparameterizedTypeListNode"
                 desc="the types of exceptions thrown by this constructor" />
-            <prop name="typeParameters" type="ListNode" typeArg="TypeParameterNode"
+            <prop name="typeParameters" type="TypeParameterListNode"
                 desc="this constructor's applicable type parameters" />
             <prop name="javadoc" type="JavadocNode" desc="the associated javadoc comment for this node" />
             <doc><![CDATA[
@@ -1220,9 +1221,9 @@
         </type>
 
         <type name="EnumConstantDeclarationNode" super="Node">
-            <prop name="annotations" type="ListNode" typeArg="AnnotationNode" desc="the annotations on this constant" />
+            <prop name="annotations" type="AnnotationListNode" desc="the annotations on this constant" />
             <prop name="identifier" type="IdentifierNode" desc="the name of this constant" />
-            <prop name="arguments" type="ListNode" typeArg="ExpressionNode" desc="the arguments to the enum constructor" />
+            <prop name="arguments" type="ExpressionListNode" desc="the arguments to the enum constructor" />
             <prop name="body" type="AnonymousClassBodyNode" desc="the body used to anonymously subclass the constant" />
             <prop name="javadoc" type="JavadocNode" desc="the associated javadoc comment for this node" />
             <doc><![CDATA[
@@ -1238,7 +1239,7 @@
             <tag name="AnnotationMemberNode" />
             <tag name="AnonymousClassMemberNode" />
             <prop name="modifiers" type="FieldModifiersNode" desc="the modifiers for this field" />
-            <prop name="declarators" type="ListNode" typeArg="VariableDeclaratorNode" desc="the variable declarators for this node" />
+            <prop name="declarators" type="VariableDeclaratorListNode" desc="the variable declarators for this node" />
             <prop name="javadoc" type="JavadocNode" desc="the associated javadoc comment for this node" />
             <doc><![CDATA[
                 A node representing a field declaration.  Constants are represented by this node as well.
@@ -1267,12 +1268,12 @@
             <prop name="body" type="BlockNode" desc="the body of this method" />
             <prop name="modifiers" type="MethodModifiersNode" desc="the modifiers for this method" />
             <prop name="identifier" type="IdentifierNode" desc="this method's name" />
-            <prop name="parameters" type="ListNode" typeArg="VariableNode" desc="the parameters declared by this method" />
+            <prop name="parameters" type="VariableListNode" desc="the parameters declared by this method" />
             <prop name="varargParameter" type="VariableNode" desc="the vararg parameter declared by this method" />
             <prop name="returnType" type="TypeNode" desc="the type of value returned" />
-            <prop name="throwTypes" type="ListNode" typeArg="UnparameterizedTypeNode"
+            <prop name="throwTypes" type="UnparameterizedTypeListNode"
                 desc="the types of exceptions thrown by this method" />
-            <prop name="typeParameters" type="ListNode" typeArg="TypeParameterNode"
+            <prop name="typeParameters" type="TypeParameterListNode"
                 desc="this method's applicable type parameters" />
             <prop name="javadoc" type="JavadocNode" desc="the associated javadoc comment for this node" />
             <doc><![CDATA[
@@ -1295,14 +1296,14 @@
         <!-- ===================== TYPE BODY NODES ====================== -->
 
         <type name="AnnotationBodyNode" super="Node">
-            <prop name="members" type="ListNode" typeArg="AnnotationMemberNode" desc="the members of this annotation body" />
+            <prop name="members" type="AnnotationMemberListNode" desc="the members of this annotation body" />
             <doc><![CDATA[
                 Represents the body of an annotation declaration.
             ]]></doc>
         </type>
 
         <type name="AnonymousClassBodyNode" super="Node">
-            <prop name="members" type="ListNode" typeArg="AnonymousClassMemberNode" desc="the members of this anonymous class body" />
+            <prop name="members" type="AnonymousClassMemberListNode" desc="the members of this anonymous class body" />
             <doc><![CDATA[
                 Represents the body of an anonymous class declaration.  This body is distinct from {@link ClassBodyNode} in that
                 it does not permit constructors.  There is no corresponding <tt>AnonymousClassDeclarationNode</tt> because the
@@ -1311,22 +1312,22 @@
         </type>
 
         <type name="ClassBodyNode" super="Node">
-            <prop name="members" type="ListNode" typeArg="ClassMemberNode" desc="the members of this class body" />
+            <prop name="members" type="ClassMemberListNode" desc="the members of this class body" />
             <doc><![CDATA[
                 Represents the body of a class declaration.
             ]]></doc>
         </type>
 
         <type name="EnumBodyNode" super="Node">
-            <prop name="constants" type="ListNode" typeArg="EnumConstantDeclarationNode" desc="the enumeration constants" />
-            <prop name="members" type="ListNode" typeArg="ClassMemberNode" desc="the members of the class body part" />
+            <prop name="constants" type="EnumConstantDeclarationListNode" desc="the enumeration constants" />
+            <prop name="members" type="ClassMemberListNode" desc="the members of the class body part" />
             <doc><![CDATA[
                 Represents the body of an enum declaration.
             ]]></doc>
         </type>
 
         <type name="InterfaceBodyNode" super="Node">
-            <prop name="members" type="ListNode" typeArg="InterfaceMemberNode" desc="the members of this interface body" />
+            <prop name="members" type="InterfaceMemberListNode" desc="the members of this interface body" />
             <doc><![CDATA[
                 Represents the body of an interface declaration.
             ]]></doc>
@@ -1353,9 +1354,9 @@
             <tag name="InlineTypeDeclarableNode" />
             <prop name="modifiers" type="ClassModifiersNode" desc="the modifiers for this type" />
             <prop name="extendsClause" type="TypeNode" desc="the extends clause" />
-            <prop name="implementsClause" type="ListNode" typeArg="TypeNode" desc="the implements clause" />
+            <prop name="implementsClause" type="TypeListNode" desc="the implements clause" />
             <prop name="body" type="ClassBodyNode" desc="the body of this class" />
-            <prop name="typeParameters" type="ListNode" typeArg="TypeParameterNode" desc="this class's type parameters" />
+            <prop name="typeParameters" type="TypeParameterListNode" desc="this class's type parameters" />
             <doc><![CDATA[
                 Represents the declaration of a class, as in:
                 <pre>
@@ -1371,7 +1372,7 @@
         <type name="EnumDeclarationNode" super="NamedTypeDeclarationNode">
             <tag name="InlineTypeDeclarableNode" />
             <prop name="modifiers" type="EnumModifiersNode" desc="the modifiers for this type" />
-            <prop name="implementsClause" type="ListNode" typeArg="TypeNode" desc="the implements clause" />
+            <prop name="implementsClause" type="TypeListNode" desc="the implements clause" />
             <prop name="body" type="EnumBodyNode" desc="this enum's body" />
             <doc><![CDATA[
                 Represents the declaration of a class, as in:
@@ -1387,9 +1388,9 @@
 
         <type name="InterfaceDeclarationNode" super="NamedTypeDeclarationNode">
             <prop name="modifiers" type="InterfaceModifiersNode" desc="the modifiers for this type" />
-            <prop name="extendsClause" type="ListNode" typeArg="TypeNode" desc="the extends clause" />
+            <prop name="extendsClause" type="TypeListNode" desc="the extends clause" />
             <prop name="body" type="InterfaceBodyNode" desc="this interface's body" />
-            <prop name="typeParameters" type="ListNode" typeArg="TypeParameterNode" desc="this class's type parameters" />
+            <prop name="typeParameters" type="TypeParameterListNode" desc="this class's type parameters" />
             <doc><![CDATA[
                 Represents the declaration of an interface, as in:
                 <pre>
@@ -1448,7 +1449,7 @@
 
         <type name="AnnotationArrayValueNode" super="Node">
             <tag name="AnnotationValueNode" />
-            <prop name="values" type="ListNode" typeArg="AnnotationValueNode" desc="the array values" />
+            <prop name="values" type="AnnotationValueListNode" desc="the array values" />
             <doc><![CDATA[
                 A value in an annotation representing an array.  This node is distinct from the {@link ArrayInitializerNode}
                 because it allows annotations (by way of {@link AnnotationAnnotationValueNode}) as well as expressions.
@@ -1483,7 +1484,7 @@
         </type>
 
         <type name="NormalAnnotationNode" super="AnnotationNode">
-            <prop name="arguments" type="ListNode" typeArg="AnnotationElementNode" desc="the arguments" />
+            <prop name="arguments" type="AnnotationElementListNode" desc="the arguments" />
             <doc><![CDATA[
                 Represents the usage of an annotation, as in:
                 <pre>@<i>type</i></pre>
@@ -1706,7 +1707,7 @@
 
         <type name="ArrayInitializerNode" super="Node">
             <tag name="VariableInitializerNode" />
-            <prop name="initializers" type="ListNode" typeArg="VariableInitializerNode" desc="the initializers for the array" />
+            <prop name="initializers" type="VariableInitializerListNode" desc="the initializers for the array" />
             <doc><![CDATA[
                 A node representing the initialization of an array, as in:
                 <pre>
@@ -1718,7 +1719,7 @@
 
         <type name="CaseNode" super="Node">
             <prop name="expression" type="ExpressionNode" desc="the expression used in this case label" />
-            <prop name="statements" type="ListNode" typeArg="BlockStatementNode" desc="the statements to execute in this case node" />
+            <prop name="statements" type="BlockStatementListNode" desc="the statements to execute in this case node" />
             <doc><![CDATA[
                 A node representing a switch's case block, as in:
                 <pre>
@@ -1750,8 +1751,8 @@
 
         <type name="CompilationUnitNode" super="Node">
             <prop name="packageDeclaration" type="PackageDeclarationNode" desc="the package declaration for this unit" />
-            <prop name="imports" type="ListNode" typeArg="ImportNode" desc="the imports used in this unit" />
-            <prop name="typeDecls" type="ListNode" typeArg="TypeDeclarationNode" desc="the type declarations of this unit" />
+            <prop name="imports" type="ImportListNode" desc="the imports used in this unit" />
+            <prop name="typeDecls" type="TypeDeclarationListNode" desc="the type declarations of this unit" />
             <doc><![CDATA[
                 Represents a BSJ compilation unit.
             ]]></doc>
@@ -1759,7 +1760,7 @@
 
         <type name="ConstructorBodyNode" super="Node">
             <prop name="constructorInvocation" type="ConstructorInvocationNode" desc="the (nullable) constructor invocation" />
-            <prop name="statements" type="ListNode" typeArg="BlockStatementNode"
+            <prop name="statements" type="BlockStatementListNode"
                 desc="the statements contained in this constructor" />
             <doc><![CDATA[
                 Represents a constructor body.  For example, in
@@ -1777,8 +1778,8 @@
         </type>
 
         <type name="ConstructorInvocationNode" super="Node" mode="abstract">
-            <prop name="arguments" type="ListNode" typeArg="ExpressionNode" desc="the arguments to pass to the method" />
-            <prop name="typeArguments" type="ListNode" typeArg="TypeNode" desc="the type arguments for the method" />
+            <prop name="arguments" type="ExpressionListNode" desc="the arguments to pass to the method" />
+            <prop name="typeArguments" type="TypeListNode" desc="the type arguments for the method" />
             <doc><![CDATA[
                 This class is a common superclass to both types of explicit constructor invocations: alternate constructor
                 invocations (those using the <tt>this</tt> keyword) and superclass constructor invocations (those using the
@@ -1802,7 +1803,7 @@
 
         <type name="ForInitializerExpressionNode" super="Node">
             <tag name="ForInitializerNode" />
-            <prop name="expressions" type="ListNode" typeArg="StatementExpressionNode" desc="the expressions used in this initializer" />
+            <prop name="expressions" type="StatementExpressionListNode" desc="the expressions used in this initializer" />
             <doc><![CDATA[
                 Represents a for loop initializer which contains expressions.  For example, in
                 <pre>for (i=0,j=0;i<n || j<m;i++,j++)</pre>
@@ -1842,7 +1843,7 @@
 
         <type name="PackageDeclarationNode" super="Node">
             <prop name="name" type="NameNode" desc="the name of the package" />
-            <prop name="annotations" type="ListNode" typeArg="AnnotationNode" desc="the annotations on the package declaration" />
+            <prop name="annotations" type="AnnotationListNode" desc="the annotations on the package declaration" />
             <doc><![CDATA[
                 A node representing a package declaration, as in
                 <pre>
@@ -1874,7 +1875,7 @@
 
         <type name="TypeParameterNode" super="Node">
             <prop name="identifier" type="IdentifierNode" desc="the base type name for the parameter" />
-            <prop name="bounds" type="ListNode" typeArg="DeclaredTypeNode" desc="the bounds over the base type" />
+            <prop name="bounds" type="DeclaredTypeListNode" desc="the bounds over the base type" />
             <doc><![CDATA[
                 A node for type parameters, as in:
                 <pre>
@@ -1943,7 +1944,7 @@
         </type>
 
         <type name="MetaprogramNode" super="Node">
-            <prop name="body" type="ListNode" typeArg="BlockStatementNode" desc="the list of statements in the metaprogram's body" />
+            <prop name="body" type="BlockStatementListNode" desc="the list of statements in the metaprogram's body" />
             <doc><![CDATA[
                 A node for metaprograms, as in
                 <pre>

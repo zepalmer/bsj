@@ -12,9 +12,8 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.FieldDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.FieldModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.JavadocNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
-import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclaratorNode;
+import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclaratorListNode;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class FieldDeclarationNodeImpl extends NodeImpl implements FieldDeclarationNode
@@ -23,7 +22,7 @@ public class FieldDeclarationNodeImpl extends NodeImpl implements FieldDeclarati
     private FieldModifiersNode modifiers;
 
     /** The variable declarators for this node. */
-    private ListNode<VariableDeclaratorNode> declarators;
+    private VariableDeclaratorListNode declarators;
 
     /** The associated javadoc comment for this node. */
     private JavadocNode javadoc;
@@ -31,7 +30,7 @@ public class FieldDeclarationNodeImpl extends NodeImpl implements FieldDeclarati
     /** General constructor. */
     public FieldDeclarationNodeImpl(
             FieldModifiersNode modifiers,
-            ListNode<VariableDeclaratorNode> declarators,
+            VariableDeclaratorListNode declarators,
             JavadocNode javadoc,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
@@ -72,7 +71,7 @@ public class FieldDeclarationNodeImpl extends NodeImpl implements FieldDeclarati
      * Gets the variable declarators for this node.
      * @return The variable declarators for this node.
      */
-    public ListNode<VariableDeclaratorNode> getDeclarators()
+    public VariableDeclaratorListNode getDeclarators()
     {
         return this.declarators;
     }
@@ -81,7 +80,7 @@ public class FieldDeclarationNodeImpl extends NodeImpl implements FieldDeclarati
      * Changes the variable declarators for this node.
      * @param declarators The variable declarators for this node.
      */
-    public void setDeclarators(ListNode<VariableDeclaratorNode> declarators)
+    public void setDeclarators(VariableDeclaratorListNode declarators)
     {
         if (this.declarators instanceof NodeImpl)
         {
@@ -266,7 +265,6 @@ public class FieldDeclarationNodeImpl extends NodeImpl implements FieldDeclarati
      * @return <code>true</code> if the replacement was successful; <code>false</code> if the
      *         specified <tt>before</tt> node is not a child of this node.
      */
-    @SuppressWarnings("unchecked")
     public <N extends Node> boolean replace(N before, N after)
     {
         if (super.replace(before,after))
@@ -277,13 +275,9 @@ public class FieldDeclarationNodeImpl extends NodeImpl implements FieldDeclarati
             setModifiers((FieldModifiersNode)after);
             return true;
         }
-        if (before.equals(this.declarators) && (after instanceof ListNode<?>))
+        if (before.equals(this.declarators) && (after instanceof VariableDeclaratorListNode))
         {
-            for (Object listval : ((ListNode<?>)after).getChildren())
-            {
-                VariableDeclaratorNode.class.cast(listval);
-            }
-            setDeclarators((ListNode<VariableDeclaratorNode>)after);
+            setDeclarators((VariableDeclaratorListNode)after);
             return true;
         }
         if (before.equals(this.javadoc) && (after instanceof JavadocNode))

@@ -9,9 +9,8 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.node.AnnotationListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationMethodModifiersNode;
-import edu.jhu.cs.bsj.compiler.ast.node.AnnotationNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
@@ -19,7 +18,7 @@ public class AnnotationMethodModifiersNodeImpl extends ModifiersNodeImpl impleme
 {
     /** General constructor. */
     public AnnotationMethodModifiersNodeImpl(
-            ListNode<AnnotationNode> annotations,
+            AnnotationListNode annotations,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {

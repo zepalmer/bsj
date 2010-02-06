@@ -19,13 +19,13 @@ public interface ArrayInstantiatorCreationNode extends ArrayCreationNode
      * Gets the dimension expressions for this array.
      * @return The dimension expressions for this array.
      */
-    public ListNode<ExpressionNode> getDimExpressions();
+    public ExpressionListNode getDimExpressions();
 
     /**
      * Changes the dimension expressions for this array.
      * @param dimExpressions The dimension expressions for this array.
      */
-    public void setDimExpressions(ListNode<ExpressionNode> dimExpressions);
+    public void setDimExpressions(ExpressionListNode dimExpressions);
 
     /**
      * Generates a deep copy of this node.

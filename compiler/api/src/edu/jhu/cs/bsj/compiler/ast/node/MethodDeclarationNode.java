@@ -62,13 +62,13 @@ public interface MethodDeclarationNode extends Node, ClassMemberNode, InterfaceM
      * Gets the parameters declared by this method.
      * @return The parameters declared by this method.
      */
-    public ListNode<VariableNode> getParameters();
+    public VariableListNode getParameters();
 
     /**
      * Changes the parameters declared by this method.
      * @param parameters The parameters declared by this method.
      */
-    public void setParameters(ListNode<VariableNode> parameters);
+    public void setParameters(VariableListNode parameters);
 
     /**
      * Gets the vararg parameter declared by this method.
@@ -98,25 +98,25 @@ public interface MethodDeclarationNode extends Node, ClassMemberNode, InterfaceM
      * Gets the types of exceptions thrown by this method.
      * @return The types of exceptions thrown by this method.
      */
-    public ListNode<UnparameterizedTypeNode> getThrowTypes();
+    public UnparameterizedTypeListNode getThrowTypes();
 
     /**
      * Changes the types of exceptions thrown by this method.
      * @param throwTypes The types of exceptions thrown by this method.
      */
-    public void setThrowTypes(ListNode<UnparameterizedTypeNode> throwTypes);
+    public void setThrowTypes(UnparameterizedTypeListNode throwTypes);
 
     /**
      * Gets this method's applicable type parameters.
      * @return This method's applicable type parameters.
      */
-    public ListNode<TypeParameterNode> getTypeParameters();
+    public TypeParameterListNode getTypeParameters();
 
     /**
      * Changes this method's applicable type parameters.
      * @param typeParameters This method's applicable type parameters.
      */
-    public void setTypeParameters(ListNode<TypeParameterNode> typeParameters);
+    public void setTypeParameters(TypeParameterListNode typeParameters);
 
     /**
      * Gets the associated javadoc comment for this node.

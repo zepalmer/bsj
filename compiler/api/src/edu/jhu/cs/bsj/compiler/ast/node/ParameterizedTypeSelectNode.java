@@ -9,7 +9,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
  * another type which is parameterized, such as in <tt>A&lt;X&gt;.B</tt>.  In that case, the root node is a
  * <tt>ParameterizedTypeSelectNode</tt>.  The <tt>select</tt> child is an <tt>UnparameterizedTypeNode</tt>
  * containing the name "B"; the <tt>base</tt> child is a {@link ParameterizedTypeNode}.  The <tt>base</tt> has
- * children of an {@link UnparameterizedTypeNode} containing the name "A" and a {@link ListNode} containing the
+ * children of an {@link UnparameterizedTypeNode} containing the name "A" and a {@link TypeArgumentListNode} containing the
  * type argument with the name "X".
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})

@@ -14,13 +14,13 @@ public interface InterfaceBodyNode extends Node
      * Gets the members of this interface body.
      * @return The members of this interface body.
      */
-    public ListNode<InterfaceMemberNode> getMembers();
+    public InterfaceMemberListNode getMembers();
 
     /**
      * Changes the members of this interface body.
      * @param members The members of this interface body.
      */
-    public void setMembers(ListNode<InterfaceMemberNode> members);
+    public void setMembers(InterfaceMemberListNode members);
 
     /**
      * Generates a deep copy of this node.

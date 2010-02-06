@@ -9,27 +9,26 @@ import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.AnonymousClassBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassInstantiationNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.ExpressionListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
-import edu.jhu.cs.bsj.compiler.ast.node.TypeArgumentNode;
+import edu.jhu.cs.bsj.compiler.ast.node.TypeArgumentListNode;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public abstract class ClassInstantiationNodeImpl extends NodeImpl implements ClassInstantiationNode
 {
     /** The type arguments for the constructor. */
-    private ListNode<TypeArgumentNode> constructorTypeArguments;
+    private TypeArgumentListNode constructorTypeArguments;
 
     /** The arguments to the constructor. */
-    private ListNode<ExpressionNode> arguments;
+    private ExpressionListNode arguments;
 
     /** The body of the anonymous class. */
     private AnonymousClassBodyNode body;
 
     /** General constructor. */
     protected ClassInstantiationNodeImpl(
-            ListNode<TypeArgumentNode> constructorTypeArguments,
-            ListNode<ExpressionNode> arguments,
+            TypeArgumentListNode constructorTypeArguments,
+            ExpressionListNode arguments,
             AnonymousClassBodyNode body,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
@@ -44,7 +43,7 @@ public abstract class ClassInstantiationNodeImpl extends NodeImpl implements Cla
      * Gets the type arguments for the constructor.
      * @return The type arguments for the constructor.
      */
-    public ListNode<TypeArgumentNode> getConstructorTypeArguments()
+    public TypeArgumentListNode getConstructorTypeArguments()
     {
         return this.constructorTypeArguments;
     }
@@ -53,7 +52,7 @@ public abstract class ClassInstantiationNodeImpl extends NodeImpl implements Cla
      * Changes the type arguments for the constructor.
      * @param constructorTypeArguments The type arguments for the constructor.
      */
-    public void setConstructorTypeArguments(ListNode<TypeArgumentNode> constructorTypeArguments)
+    public void setConstructorTypeArguments(TypeArgumentListNode constructorTypeArguments)
     {
         if (this.constructorTypeArguments instanceof NodeImpl)
         {
@@ -70,7 +69,7 @@ public abstract class ClassInstantiationNodeImpl extends NodeImpl implements Cla
      * Gets the arguments to the constructor.
      * @return The arguments to the constructor.
      */
-    public ListNode<ExpressionNode> getArguments()
+    public ExpressionListNode getArguments()
     {
         return this.arguments;
     }
@@ -79,7 +78,7 @@ public abstract class ClassInstantiationNodeImpl extends NodeImpl implements Cla
      * Changes the arguments to the constructor.
      * @param arguments The arguments to the constructor.
      */
-    public void setArguments(ListNode<ExpressionNode> arguments)
+    public void setArguments(ExpressionListNode arguments)
     {
         if (this.arguments instanceof NodeImpl)
         {
@@ -236,28 +235,19 @@ public abstract class ClassInstantiationNodeImpl extends NodeImpl implements Cla
      * @return <code>true</code> if the replacement was successful; <code>false</code> if the
      *         specified <tt>before</tt> node is not a child of this node.
      */
-    @SuppressWarnings("unchecked")
     public <N extends Node> boolean replace(N before, N after)
     {
         if (super.replace(before,after))
             return true;
 
-        if (before.equals(this.constructorTypeArguments) && (after instanceof ListNode<?>))
+        if (before.equals(this.constructorTypeArguments) && (after instanceof TypeArgumentListNode))
         {
-            for (Object listval : ((ListNode<?>)after).getChildren())
-            {
-                TypeArgumentNode.class.cast(listval);
-            }
-            setConstructorTypeArguments((ListNode<TypeArgumentNode>)after);
+            setConstructorTypeArguments((TypeArgumentListNode)after);
             return true;
         }
-        if (before.equals(this.arguments) && (after instanceof ListNode<?>))
+        if (before.equals(this.arguments) && (after instanceof ExpressionListNode))
         {
-            for (Object listval : ((ListNode<?>)after).getChildren())
-            {
-                ExpressionNode.class.cast(listval);
-            }
-            setArguments((ListNode<ExpressionNode>)after);
+            setArguments((ExpressionListNode)after);
             return true;
         }
         if (before.equals(this.body) && (after instanceof AnonymousClassBodyNode))

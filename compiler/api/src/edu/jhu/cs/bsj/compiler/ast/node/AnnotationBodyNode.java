@@ -14,13 +14,13 @@ public interface AnnotationBodyNode extends Node
      * Gets the members of this annotation body.
      * @return The members of this annotation body.
      */
-    public ListNode<AnnotationMemberNode> getMembers();
+    public AnnotationMemberListNode getMembers();
 
     /**
      * Changes the members of this annotation body.
      * @param members The members of this annotation body.
      */
-    public void setMembers(ListNode<AnnotationMemberNode> members);
+    public void setMembers(AnnotationMemberListNode members);
 
     /**
      * Generates a deep copy of this node.

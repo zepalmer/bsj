@@ -33,13 +33,13 @@ public interface EnumDeclarationNode extends NamedTypeDeclarationNode, InlineTyp
      * Gets the implements clause.
      * @return The implements clause.
      */
-    public ListNode<TypeNode> getImplementsClause();
+    public TypeListNode getImplementsClause();
 
     /**
      * Changes the implements clause.
      * @param implementsClause The implements clause.
      */
-    public void setImplementsClause(ListNode<TypeNode> implementsClause);
+    public void setImplementsClause(TypeListNode implementsClause);
 
     /**
      * Gets this enum's body.

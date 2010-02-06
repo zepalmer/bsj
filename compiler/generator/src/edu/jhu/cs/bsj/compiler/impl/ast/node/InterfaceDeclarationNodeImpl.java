@@ -14,10 +14,9 @@ import edu.jhu.cs.bsj.compiler.ast.node.InterfaceBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.InterfaceDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.InterfaceModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.JavadocNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
-import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
-import edu.jhu.cs.bsj.compiler.ast.node.TypeParameterNode;
+import edu.jhu.cs.bsj.compiler.ast.node.TypeListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.TypeParameterListNode;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class InterfaceDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl implements InterfaceDeclarationNode
@@ -26,20 +25,20 @@ public class InterfaceDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl i
     private InterfaceModifiersNode modifiers;
 
     /** The extends clause. */
-    private ListNode<TypeNode> extendsClause;
+    private TypeListNode extendsClause;
 
     /** This interface's body. */
     private InterfaceBodyNode body;
 
     /** This class's type parameters. */
-    private ListNode<TypeParameterNode> typeParameters;
+    private TypeParameterListNode typeParameters;
 
     /** General constructor. */
     public InterfaceDeclarationNodeImpl(
             InterfaceModifiersNode modifiers,
-            ListNode<TypeNode> extendsClause,
+            TypeListNode extendsClause,
             InterfaceBodyNode body,
-            ListNode<TypeParameterNode> typeParameters,
+            TypeParameterListNode typeParameters,
             IdentifierNode identifier,
             JavadocNode javadoc,
             BsjSourceLocation startLocation,
@@ -82,7 +81,7 @@ public class InterfaceDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl i
      * Gets the extends clause.
      * @return The extends clause.
      */
-    public ListNode<TypeNode> getExtendsClause()
+    public TypeListNode getExtendsClause()
     {
         return this.extendsClause;
     }
@@ -91,7 +90,7 @@ public class InterfaceDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl i
      * Changes the extends clause.
      * @param extendsClause The extends clause.
      */
-    public void setExtendsClause(ListNode<TypeNode> extendsClause)
+    public void setExtendsClause(TypeListNode extendsClause)
     {
         if (this.extendsClause instanceof NodeImpl)
         {
@@ -134,7 +133,7 @@ public class InterfaceDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl i
      * Gets this class's type parameters.
      * @return This class's type parameters.
      */
-    public ListNode<TypeParameterNode> getTypeParameters()
+    public TypeParameterListNode getTypeParameters()
     {
         return this.typeParameters;
     }
@@ -143,7 +142,7 @@ public class InterfaceDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl i
      * Changes this class's type parameters.
      * @param typeParameters This class's type parameters.
      */
-    public void setTypeParameters(ListNode<TypeParameterNode> typeParameters)
+    public void setTypeParameters(TypeParameterListNode typeParameters)
     {
         if (this.typeParameters instanceof NodeImpl)
         {
@@ -317,7 +316,6 @@ public class InterfaceDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl i
      * @return <code>true</code> if the replacement was successful; <code>false</code> if the
      *         specified <tt>before</tt> node is not a child of this node.
      */
-    @SuppressWarnings("unchecked")
     public <N extends Node> boolean replace(N before, N after)
     {
         if (super.replace(before,after))
@@ -328,13 +326,9 @@ public class InterfaceDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl i
             setModifiers((InterfaceModifiersNode)after);
             return true;
         }
-        if (before.equals(this.extendsClause) && (after instanceof ListNode<?>))
+        if (before.equals(this.extendsClause) && (after instanceof TypeListNode))
         {
-            for (Object listval : ((ListNode<?>)after).getChildren())
-            {
-                TypeNode.class.cast(listval);
-            }
-            setExtendsClause((ListNode<TypeNode>)after);
+            setExtendsClause((TypeListNode)after);
             return true;
         }
         if (before.equals(this.body) && (after instanceof InterfaceBodyNode))
@@ -342,13 +336,9 @@ public class InterfaceDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl i
             setBody((InterfaceBodyNode)after);
             return true;
         }
-        if (before.equals(this.typeParameters) && (after instanceof ListNode<?>))
+        if (before.equals(this.typeParameters) && (after instanceof TypeParameterListNode))
         {
-            for (Object listval : ((ListNode<?>)after).getChildren())
-            {
-                TypeParameterNode.class.cast(listval);
-            }
-            setTypeParameters((ListNode<TypeParameterNode>)after);
+            setTypeParameters((TypeParameterListNode)after);
             return true;
         }
         return false;

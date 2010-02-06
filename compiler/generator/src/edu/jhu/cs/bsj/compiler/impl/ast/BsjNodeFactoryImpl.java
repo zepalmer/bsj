@@ -88,8 +88,8 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     @Override
     public AlternateConstructorInvocationNode makeAlternateConstructorInvocationNode(
-            ListNode<ExpressionNode> arguments,
-            ListNode<TypeNode> typeArguments)
+            ExpressionListNode arguments,
+            TypeListNode typeArguments)
     {
         AlternateConstructorInvocationNode ret = new AlternateConstructorInvocationNodeImpl(arguments, typeArguments, startLocation, stopLocation);
         return ret;
@@ -101,8 +101,8 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     @Override
     public AlternateConstructorInvocationNode makeAlternateConstructorInvocationNode(
-            ListNode<ExpressionNode> arguments,
-            ListNode<TypeNode> typeArguments,
+            ExpressionListNode arguments,
+            TypeListNode typeArguments,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
@@ -142,7 +142,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     @Override
     public AnnotationArrayValueNode makeAnnotationArrayValueNode(
-            ListNode<AnnotationValueNode> values)
+            AnnotationValueListNode values)
     {
         AnnotationArrayValueNode ret = new AnnotationArrayValueNodeImpl(values, startLocation, stopLocation);
         return ret;
@@ -154,7 +154,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     @Override
     public AnnotationArrayValueNode makeAnnotationArrayValueNode(
-            ListNode<AnnotationValueNode> values,
+            AnnotationValueListNode values,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
@@ -168,7 +168,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     @Override
     public AnnotationBodyNode makeAnnotationBodyNode(
-            ListNode<AnnotationMemberNode> members)
+            AnnotationMemberListNode members)
     {
         AnnotationBodyNode ret = new AnnotationBodyNodeImpl(members, startLocation, stopLocation);
         return ret;
@@ -180,7 +180,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     @Override
     public AnnotationBodyNode makeAnnotationBodyNode(
-            ListNode<AnnotationMemberNode> members,
+            AnnotationMemberListNode members,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
@@ -392,7 +392,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     @Override
     public AnnotationMethodModifiersNode makeAnnotationMethodModifiersNode(
-            ListNode<AnnotationNode> annotations)
+            AnnotationListNode annotations)
     {
         AnnotationMethodModifiersNode ret = new AnnotationMethodModifiersNodeImpl(annotations, startLocation, stopLocation);
         return ret;
@@ -404,7 +404,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     @Override
     public AnnotationMethodModifiersNode makeAnnotationMethodModifiersNode(
-            ListNode<AnnotationNode> annotations,
+            AnnotationListNode annotations,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
@@ -421,7 +421,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             AccessModifier access,
             boolean staticFlag,
             boolean strictfpFlag,
-            ListNode<AnnotationNode> annotations)
+            AnnotationListNode annotations)
     {
         AnnotationModifiersNode ret = new AnnotationModifiersNodeImpl(access, staticFlag, strictfpFlag, annotations, startLocation, stopLocation);
         return ret;
@@ -436,7 +436,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             AccessModifier access,
             boolean staticFlag,
             boolean strictfpFlag,
-            ListNode<AnnotationNode> annotations,
+            AnnotationListNode annotations,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
@@ -476,7 +476,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     @Override
     public AnonymousClassBodyNode makeAnonymousClassBodyNode(
-            ListNode<AnonymousClassMemberNode> members)
+            AnonymousClassMemberListNode members)
     {
         AnonymousClassBodyNode ret = new AnonymousClassBodyNodeImpl(members, startLocation, stopLocation);
         return ret;
@@ -488,7 +488,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     @Override
     public AnonymousClassBodyNode makeAnonymousClassBodyNode(
-            ListNode<AnonymousClassMemberNode> members,
+            AnonymousClassMemberListNode members,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
@@ -586,7 +586,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     @Override
     public ArrayInitializerNode makeArrayInitializerNode(
-            ListNode<VariableInitializerNode> initializers)
+            VariableInitializerListNode initializers)
     {
         ArrayInitializerNode ret = new ArrayInitializerNodeImpl(initializers, startLocation, stopLocation);
         return ret;
@@ -598,7 +598,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     @Override
     public ArrayInitializerNode makeArrayInitializerNode(
-            ListNode<VariableInitializerNode> initializers,
+            VariableInitializerListNode initializers,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
@@ -612,7 +612,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     @Override
     public ArrayInstantiatorCreationNode makeArrayInstantiatorCreationNode(
-            ListNode<ExpressionNode> dimExpressions,
+            ExpressionListNode dimExpressions,
             BaseTypeNode baseType,
             int arrayLevels)
     {
@@ -626,7 +626,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     @Override
     public ArrayInstantiatorCreationNode makeArrayInstantiatorCreationNode(
-            ListNode<ExpressionNode> dimExpressions,
+            ExpressionListNode dimExpressions,
             BaseTypeNode baseType,
             int arrayLevels,
             BsjSourceLocation startLocation,
@@ -756,7 +756,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     @Override
     public BlockNode makeBlockNode(
-            ListNode<BlockStatementNode> statements)
+            BlockStatementListNode statements)
     {
         BlockNode ret = new BlockNodeImpl(statements, startLocation, stopLocation);
         return ret;
@@ -768,7 +768,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     @Override
     public BlockNode makeBlockNode(
-            ListNode<BlockStatementNode> statements,
+            BlockStatementListNode statements,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
@@ -914,7 +914,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     @Override
     public CaseNode makeCaseNode(
             ExpressionNode expression,
-            ListNode<BlockStatementNode> statements)
+            BlockStatementListNode statements)
     {
         CaseNode ret = new CaseNodeImpl(expression, statements, startLocation, stopLocation);
         return ret;
@@ -927,7 +927,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     @Override
     public CaseNode makeCaseNode(
             ExpressionNode expression,
-            ListNode<BlockStatementNode> statements,
+            BlockStatementListNode statements,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
@@ -1021,7 +1021,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     @Override
     public ClassBodyNode makeClassBodyNode(
-            ListNode<ClassMemberNode> members)
+            ClassMemberListNode members)
     {
         ClassBodyNode ret = new ClassBodyNodeImpl(members, startLocation, stopLocation);
         return ret;
@@ -1033,7 +1033,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     @Override
     public ClassBodyNode makeClassBodyNode(
-            ListNode<ClassMemberNode> members,
+            ClassMemberListNode members,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
@@ -1049,9 +1049,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public ClassDeclarationNode makeClassDeclarationNode(
             ClassModifiersNode modifiers,
             TypeNode extendsClause,
-            ListNode<TypeNode> implementsClause,
+            TypeListNode implementsClause,
             ClassBodyNode body,
-            ListNode<TypeParameterNode> typeParameters,
+            TypeParameterListNode typeParameters,
             IdentifierNode identifier,
             JavadocNode javadoc)
     {
@@ -1067,9 +1067,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public ClassDeclarationNode makeClassDeclarationNode(
             ClassModifiersNode modifiers,
             TypeNode extendsClause,
-            ListNode<TypeNode> implementsClause,
+            TypeListNode implementsClause,
             ClassBodyNode body,
-            ListNode<TypeParameterNode> typeParameters,
+            TypeParameterListNode typeParameters,
             IdentifierNode identifier,
             JavadocNode javadoc,
             BsjSourceLocation startLocation,
@@ -1142,7 +1142,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             boolean staticFlag,
             boolean finalFlag,
             boolean strictfpFlag,
-            ListNode<AnnotationNode> annotations)
+            AnnotationListNode annotations)
     {
         ClassModifiersNode ret = new ClassModifiersNodeImpl(access, abstractFlag, staticFlag, finalFlag, strictfpFlag, annotations, startLocation, stopLocation);
         return ret;
@@ -1159,7 +1159,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             boolean staticFlag,
             boolean finalFlag,
             boolean strictfpFlag,
-            ListNode<AnnotationNode> annotations,
+            AnnotationListNode annotations,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
@@ -1200,8 +1200,8 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     @Override
     public CompilationUnitNode makeCompilationUnitNode(
             PackageDeclarationNode packageDeclaration,
-            ListNode<ImportNode> imports,
-            ListNode<TypeDeclarationNode> typeDecls)
+            ImportListNode imports,
+            TypeDeclarationListNode typeDecls)
     {
         CompilationUnitNode ret = new CompilationUnitNodeImpl(packageDeclaration, imports, typeDecls, startLocation, stopLocation);
         return ret;
@@ -1214,8 +1214,8 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     @Override
     public CompilationUnitNode makeCompilationUnitNode(
             PackageDeclarationNode packageDeclaration,
-            ListNode<ImportNode> imports,
-            ListNode<TypeDeclarationNode> typeDecls,
+            ImportListNode imports,
+            TypeDeclarationListNode typeDecls,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
@@ -1260,7 +1260,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     @Override
     public ConstructorBodyNode makeConstructorBodyNode(
             ConstructorInvocationNode constructorInvocation,
-            ListNode<BlockStatementNode> statements)
+            BlockStatementListNode statements)
     {
         ConstructorBodyNode ret = new ConstructorBodyNodeImpl(constructorInvocation, statements, startLocation, stopLocation);
         return ret;
@@ -1273,7 +1273,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     @Override
     public ConstructorBodyNode makeConstructorBodyNode(
             ConstructorInvocationNode constructorInvocation,
-            ListNode<BlockStatementNode> statements,
+            BlockStatementListNode statements,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
@@ -1290,10 +1290,10 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             IdentifierNode identifier,
             ConstructorBodyNode body,
             ConstructorModifiersNode modifiers,
-            ListNode<VariableNode> parameters,
+            VariableListNode parameters,
             VariableNode varargParameter,
-            ListNode<UnparameterizedTypeNode> throwTypes,
-            ListNode<TypeParameterNode> typeParameters,
+            UnparameterizedTypeListNode throwTypes,
+            TypeParameterListNode typeParameters,
             JavadocNode javadoc)
     {
         ConstructorDeclarationNode ret = new ConstructorDeclarationNodeImpl(identifier, body, modifiers, parameters, varargParameter, throwTypes, typeParameters, javadoc, startLocation, stopLocation);
@@ -1309,10 +1309,10 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             IdentifierNode identifier,
             ConstructorBodyNode body,
             ConstructorModifiersNode modifiers,
-            ListNode<VariableNode> parameters,
+            VariableListNode parameters,
             VariableNode varargParameter,
-            ListNode<UnparameterizedTypeNode> throwTypes,
-            ListNode<TypeParameterNode> typeParameters,
+            UnparameterizedTypeListNode throwTypes,
+            TypeParameterListNode typeParameters,
             JavadocNode javadoc,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
@@ -1328,7 +1328,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     @Override
     public ConstructorModifiersNode makeConstructorModifiersNode(
             AccessModifier access,
-            ListNode<AnnotationNode> annotations)
+            AnnotationListNode annotations)
     {
         ConstructorModifiersNode ret = new ConstructorModifiersNodeImpl(access, annotations, startLocation, stopLocation);
         return ret;
@@ -1341,7 +1341,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     @Override
     public ConstructorModifiersNode makeConstructorModifiersNode(
             AccessModifier access,
-            ListNode<AnnotationNode> annotations,
+            AnnotationListNode annotations,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
@@ -1491,8 +1491,8 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     @Override
     public EnumBodyNode makeEnumBodyNode(
-            ListNode<EnumConstantDeclarationNode> constants,
-            ListNode<ClassMemberNode> members)
+            EnumConstantDeclarationListNode constants,
+            ClassMemberListNode members)
     {
         EnumBodyNode ret = new EnumBodyNodeImpl(constants, members, startLocation, stopLocation);
         return ret;
@@ -1504,8 +1504,8 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     @Override
     public EnumBodyNode makeEnumBodyNode(
-            ListNode<EnumConstantDeclarationNode> constants,
-            ListNode<ClassMemberNode> members,
+            EnumConstantDeclarationListNode constants,
+            ClassMemberListNode members,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
@@ -1545,9 +1545,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     @Override
     public EnumConstantDeclarationNode makeEnumConstantDeclarationNode(
-            ListNode<AnnotationNode> annotations,
+            AnnotationListNode annotations,
             IdentifierNode identifier,
-            ListNode<ExpressionNode> arguments,
+            ExpressionListNode arguments,
             AnonymousClassBodyNode body,
             JavadocNode javadoc)
     {
@@ -1561,9 +1561,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     @Override
     public EnumConstantDeclarationNode makeEnumConstantDeclarationNode(
-            ListNode<AnnotationNode> annotations,
+            AnnotationListNode annotations,
             IdentifierNode identifier,
-            ListNode<ExpressionNode> arguments,
+            ExpressionListNode arguments,
             AnonymousClassBodyNode body,
             JavadocNode javadoc,
             BsjSourceLocation startLocation,
@@ -1580,7 +1580,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     @Override
     public EnumDeclarationNode makeEnumDeclarationNode(
             EnumModifiersNode modifiers,
-            ListNode<TypeNode> implementsClause,
+            TypeListNode implementsClause,
             EnumBodyNode body,
             IdentifierNode identifier,
             JavadocNode javadoc)
@@ -1596,7 +1596,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     @Override
     public EnumDeclarationNode makeEnumDeclarationNode(
             EnumModifiersNode modifiers,
-            ListNode<TypeNode> implementsClause,
+            TypeListNode implementsClause,
             EnumBodyNode body,
             IdentifierNode identifier,
             JavadocNode javadoc,
@@ -1615,7 +1615,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public EnumModifiersNode makeEnumModifiersNode(
             AccessModifier access,
             boolean strictfpFlag,
-            ListNode<AnnotationNode> annotations)
+            AnnotationListNode annotations)
     {
         EnumModifiersNode ret = new EnumModifiersNodeImpl(access, strictfpFlag, annotations, startLocation, stopLocation);
         return ret;
@@ -1629,7 +1629,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public EnumModifiersNode makeEnumModifiersNode(
             AccessModifier access,
             boolean strictfpFlag,
-            ListNode<AnnotationNode> annotations,
+            AnnotationListNode annotations,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
@@ -1750,7 +1750,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     @Override
     public FieldDeclarationNode makeFieldDeclarationNode(
             FieldModifiersNode modifiers,
-            ListNode<VariableDeclaratorNode> declarators,
+            VariableDeclaratorListNode declarators,
             JavadocNode javadoc)
     {
         FieldDeclarationNode ret = new FieldDeclarationNodeImpl(modifiers, declarators, javadoc, startLocation, stopLocation);
@@ -1764,7 +1764,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     @Override
     public FieldDeclarationNode makeFieldDeclarationNode(
             FieldModifiersNode modifiers,
-            ListNode<VariableDeclaratorNode> declarators,
+            VariableDeclaratorListNode declarators,
             JavadocNode javadoc,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
@@ -1784,7 +1784,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             boolean finalFlag,
             boolean transientFlag,
             boolean volatileFlag,
-            ListNode<AnnotationNode> annotations)
+            AnnotationListNode annotations)
     {
         FieldModifiersNode ret = new FieldModifiersNodeImpl(access, staticFlag, finalFlag, transientFlag, volatileFlag, annotations, startLocation, stopLocation);
         return ret;
@@ -1801,7 +1801,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             boolean finalFlag,
             boolean transientFlag,
             boolean volatileFlag,
-            ListNode<AnnotationNode> annotations,
+            AnnotationListNode annotations,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
@@ -1867,7 +1867,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     @Override
     public ForInitializerExpressionNode makeForInitializerExpressionNode(
-            ListNode<StatementExpressionNode> expressions)
+            StatementExpressionListNode expressions)
     {
         ForInitializerExpressionNode ret = new ForInitializerExpressionNodeImpl(expressions, startLocation, stopLocation);
         return ret;
@@ -1879,7 +1879,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     @Override
     public ForInitializerExpressionNode makeForInitializerExpressionNode(
-            ListNode<StatementExpressionNode> expressions,
+            StatementExpressionListNode expressions,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
@@ -1895,7 +1895,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public ForLoopNode makeForLoopNode(
             ForInitializerNode initializer,
             ExpressionNode condition,
-            ListNode<StatementExpressionNode> update,
+            StatementExpressionListNode update,
             StatementNode statement)
     {
         ForLoopNode ret = new ForLoopNodeImpl(initializer, condition, update, statement, startLocation, stopLocation);
@@ -1910,7 +1910,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public ForLoopNode makeForLoopNode(
             ForInitializerNode initializer,
             ExpressionNode condition,
-            ListNode<StatementExpressionNode> update,
+            StatementExpressionListNode update,
             StatementNode statement,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
@@ -2171,7 +2171,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     @Override
     public InterfaceBodyNode makeInterfaceBodyNode(
-            ListNode<InterfaceMemberNode> members)
+            InterfaceMemberListNode members)
     {
         InterfaceBodyNode ret = new InterfaceBodyNodeImpl(members, startLocation, stopLocation);
         return ret;
@@ -2183,7 +2183,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     @Override
     public InterfaceBodyNode makeInterfaceBodyNode(
-            ListNode<InterfaceMemberNode> members,
+            InterfaceMemberListNode members,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
@@ -2198,9 +2198,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     @Override
     public InterfaceDeclarationNode makeInterfaceDeclarationNode(
             InterfaceModifiersNode modifiers,
-            ListNode<TypeNode> extendsClause,
+            TypeListNode extendsClause,
             InterfaceBodyNode body,
-            ListNode<TypeParameterNode> typeParameters,
+            TypeParameterListNode typeParameters,
             IdentifierNode identifier,
             JavadocNode javadoc)
     {
@@ -2215,9 +2215,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     @Override
     public InterfaceDeclarationNode makeInterfaceDeclarationNode(
             InterfaceModifiersNode modifiers,
-            ListNode<TypeNode> extendsClause,
+            TypeListNode extendsClause,
             InterfaceBodyNode body,
-            ListNode<TypeParameterNode> typeParameters,
+            TypeParameterListNode typeParameters,
             IdentifierNode identifier,
             JavadocNode javadoc,
             BsjSourceLocation startLocation,
@@ -2262,7 +2262,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             AccessModifier access,
             boolean staticFlag,
             boolean strictfpFlag,
-            ListNode<AnnotationNode> annotations)
+            AnnotationListNode annotations)
     {
         InterfaceModifiersNode ret = new InterfaceModifiersNodeImpl(access, staticFlag, strictfpFlag, annotations, startLocation, stopLocation);
         return ret;
@@ -2277,7 +2277,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             AccessModifier access,
             boolean staticFlag,
             boolean strictfpFlag,
-            ListNode<AnnotationNode> annotations,
+            AnnotationListNode annotations,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
@@ -2371,7 +2371,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     @Override
     public MetaprogramNode makeMetaprogramNode(
-            ListNode<BlockStatementNode> body)
+            BlockStatementListNode body)
     {
         MetaprogramNode ret = new MetaprogramNodeImpl(body, startLocation, stopLocation);
         return ret;
@@ -2383,7 +2383,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     @Override
     public MetaprogramNode makeMetaprogramNode(
-            ListNode<BlockStatementNode> body,
+            BlockStatementListNode body,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
@@ -2400,11 +2400,11 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BlockNode body,
             MethodModifiersNode modifiers,
             IdentifierNode identifier,
-            ListNode<VariableNode> parameters,
+            VariableListNode parameters,
             VariableNode varargParameter,
             TypeNode returnType,
-            ListNode<UnparameterizedTypeNode> throwTypes,
-            ListNode<TypeParameterNode> typeParameters,
+            UnparameterizedTypeListNode throwTypes,
+            TypeParameterListNode typeParameters,
             JavadocNode javadoc)
     {
         MethodDeclarationNode ret = new MethodDeclarationNodeImpl(body, modifiers, identifier, parameters, varargParameter, returnType, throwTypes, typeParameters, javadoc, startLocation, stopLocation);
@@ -2420,11 +2420,11 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BlockNode body,
             MethodModifiersNode modifiers,
             IdentifierNode identifier,
-            ListNode<VariableNode> parameters,
+            VariableListNode parameters,
             VariableNode varargParameter,
             TypeNode returnType,
-            ListNode<UnparameterizedTypeNode> throwTypes,
-            ListNode<TypeParameterNode> typeParameters,
+            UnparameterizedTypeListNode throwTypes,
+            TypeParameterListNode typeParameters,
             JavadocNode javadoc,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
@@ -2441,8 +2441,8 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public MethodInvocationByExpressionNode makeMethodInvocationByExpressionNode(
             PrimaryExpressionNode expression,
             IdentifierNode identifier,
-            ListNode<ExpressionNode> arguments,
-            ListNode<TypeNode> typeArguments)
+            ExpressionListNode arguments,
+            TypeListNode typeArguments)
     {
         MethodInvocationByExpressionNode ret = new MethodInvocationByExpressionNodeImpl(expression, identifier, arguments, typeArguments, startLocation, stopLocation);
         return ret;
@@ -2456,8 +2456,8 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public MethodInvocationByExpressionNode makeMethodInvocationByExpressionNode(
             PrimaryExpressionNode expression,
             IdentifierNode identifier,
-            ListNode<ExpressionNode> arguments,
-            ListNode<TypeNode> typeArguments,
+            ExpressionListNode arguments,
+            TypeListNode typeArguments,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
@@ -2472,8 +2472,8 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     @Override
     public MethodInvocationByNameNode makeMethodInvocationByNameNode(
             NameNode name,
-            ListNode<ExpressionNode> arguments,
-            ListNode<TypeNode> typeArguments)
+            ExpressionListNode arguments,
+            TypeListNode typeArguments)
     {
         MethodInvocationByNameNode ret = new MethodInvocationByNameNodeImpl(name, arguments, typeArguments, startLocation, stopLocation);
         return ret;
@@ -2486,8 +2486,8 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     @Override
     public MethodInvocationByNameNode makeMethodInvocationByNameNode(
             NameNode name,
-            ListNode<ExpressionNode> arguments,
-            ListNode<TypeNode> typeArguments,
+            ExpressionListNode arguments,
+            TypeListNode typeArguments,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
@@ -2508,7 +2508,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             boolean synchronizedFlag,
             boolean nativeFlag,
             boolean strictfpFlag,
-            ListNode<AnnotationNode> annotations)
+            AnnotationListNode annotations)
     {
         MethodModifiersNode ret = new MethodModifiersNodeImpl(access, abstractFlag, staticFlag, finalFlag, synchronizedFlag, nativeFlag, strictfpFlag, annotations, startLocation, stopLocation);
         return ret;
@@ -2527,7 +2527,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             boolean synchronizedFlag,
             boolean nativeFlag,
             boolean strictfpFlag,
-            ListNode<AnnotationNode> annotations,
+            AnnotationListNode annotations,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
@@ -2541,7 +2541,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     @Override
     public NormalAnnotationNode makeNormalAnnotationNode(
-            ListNode<AnnotationElementNode> arguments,
+            AnnotationElementListNode arguments,
             UnparameterizedTypeNode annotationType)
     {
         NormalAnnotationNode ret = new NormalAnnotationNodeImpl(arguments, annotationType, startLocation, stopLocation);
@@ -2554,7 +2554,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     @Override
     public NormalAnnotationNode makeNormalAnnotationNode(
-            ListNode<AnnotationElementNode> arguments,
+            AnnotationElementListNode arguments,
             UnparameterizedTypeNode annotationType,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
@@ -2596,7 +2596,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     @Override
     public PackageDeclarationNode makePackageDeclarationNode(
             NameNode name,
-            ListNode<AnnotationNode> annotations)
+            AnnotationListNode annotations)
     {
         PackageDeclarationNode ret = new PackageDeclarationNodeImpl(name, annotations, startLocation, stopLocation);
         return ret;
@@ -2609,7 +2609,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     @Override
     public PackageDeclarationNode makePackageDeclarationNode(
             NameNode name,
-            ListNode<AnnotationNode> annotations,
+            AnnotationListNode annotations,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
@@ -2624,7 +2624,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     @Override
     public ParameterizedTypeNode makeParameterizedTypeNode(
             UnparameterizedTypeNode baseType,
-            ListNode<TypeArgumentNode> typeArguments)
+            TypeArgumentListNode typeArguments)
     {
         ParameterizedTypeNode ret = new ParameterizedTypeNodeImpl(baseType, typeArguments, startLocation, stopLocation);
         return ret;
@@ -2637,7 +2637,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     @Override
     public ParameterizedTypeNode makeParameterizedTypeNode(
             UnparameterizedTypeNode baseType,
-            ListNode<TypeArgumentNode> typeArguments,
+            TypeArgumentListNode typeArguments,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
@@ -2733,9 +2733,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public QualifiedClassInstantiationNode makeQualifiedClassInstantiationNode(
             ExpressionNode enclosingExpression,
             IdentifierNode identifier,
-            ListNode<TypeArgumentNode> typeArguments,
-            ListNode<TypeArgumentNode> constructorTypeArguments,
-            ListNode<ExpressionNode> arguments,
+            TypeArgumentListNode typeArguments,
+            TypeArgumentListNode constructorTypeArguments,
+            ExpressionListNode arguments,
             AnonymousClassBodyNode body)
     {
         QualifiedClassInstantiationNode ret = new QualifiedClassInstantiationNodeImpl(enclosingExpression, identifier, typeArguments, constructorTypeArguments, arguments, body, startLocation, stopLocation);
@@ -2750,9 +2750,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public QualifiedClassInstantiationNode makeQualifiedClassInstantiationNode(
             ExpressionNode enclosingExpression,
             IdentifierNode identifier,
-            ListNode<TypeArgumentNode> typeArguments,
-            ListNode<TypeArgumentNode> constructorTypeArguments,
-            ListNode<ExpressionNode> arguments,
+            TypeArgumentListNode typeArguments,
+            TypeArgumentListNode constructorTypeArguments,
+            ExpressionListNode arguments,
             AnonymousClassBodyNode body,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
@@ -2961,8 +2961,8 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public SuperMethodInvocationNode makeSuperMethodInvocationNode(
             UnparameterizedTypeNode type,
             IdentifierNode identifier,
-            ListNode<ExpressionNode> arguments,
-            ListNode<TypeNode> typeArguments)
+            ExpressionListNode arguments,
+            TypeListNode typeArguments)
     {
         SuperMethodInvocationNode ret = new SuperMethodInvocationNodeImpl(type, identifier, arguments, typeArguments, startLocation, stopLocation);
         return ret;
@@ -2976,8 +2976,8 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public SuperMethodInvocationNode makeSuperMethodInvocationNode(
             UnparameterizedTypeNode type,
             IdentifierNode identifier,
-            ListNode<ExpressionNode> arguments,
-            ListNode<TypeNode> typeArguments,
+            ExpressionListNode arguments,
+            TypeListNode typeArguments,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
@@ -2992,8 +2992,8 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     @Override
     public SuperclassConstructorInvocationNode makeSuperclassConstructorInvocationNode(
             PrimaryExpressionNode qualifyingExpression,
-            ListNode<ExpressionNode> arguments,
-            ListNode<TypeNode> typeArguments)
+            ExpressionListNode arguments,
+            TypeListNode typeArguments)
     {
         SuperclassConstructorInvocationNode ret = new SuperclassConstructorInvocationNodeImpl(qualifyingExpression, arguments, typeArguments, startLocation, stopLocation);
         return ret;
@@ -3006,8 +3006,8 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     @Override
     public SuperclassConstructorInvocationNode makeSuperclassConstructorInvocationNode(
             PrimaryExpressionNode qualifyingExpression,
-            ListNode<ExpressionNode> arguments,
-            ListNode<TypeNode> typeArguments,
+            ExpressionListNode arguments,
+            TypeListNode typeArguments,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
@@ -3022,7 +3022,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     @Override
     public SwitchNode makeSwitchNode(
             ExpressionNode expression,
-            ListNode<CaseNode> cases)
+            CaseListNode cases)
     {
         SwitchNode ret = new SwitchNodeImpl(expression, cases, startLocation, stopLocation);
         return ret;
@@ -3035,7 +3035,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     @Override
     public SwitchNode makeSwitchNode(
             ExpressionNode expression,
-            ListNode<CaseNode> cases,
+            CaseListNode cases,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
@@ -3130,7 +3130,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     @Override
     public TryNode makeTryNode(
             BlockNode block,
-            ListNode<CatchNode> catches,
+            CatchListNode catches,
             BlockNode finallyBlock)
     {
         TryNode ret = new TryNodeImpl(block, catches, finallyBlock, startLocation, stopLocation);
@@ -3144,7 +3144,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     @Override
     public TryNode makeTryNode(
             BlockNode block,
-            ListNode<CatchNode> catches,
+            CatchListNode catches,
             BlockNode finallyBlock,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
@@ -3319,7 +3319,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     @Override
     public TypeParameterNode makeTypeParameterNode(
             IdentifierNode identifier,
-            ListNode<DeclaredTypeNode> bounds)
+            DeclaredTypeListNode bounds)
     {
         TypeParameterNode ret = new TypeParameterNodeImpl(identifier, bounds, startLocation, stopLocation);
         return ret;
@@ -3332,7 +3332,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     @Override
     public TypeParameterNode makeTypeParameterNode(
             IdentifierNode identifier,
-            ListNode<DeclaredTypeNode> bounds,
+            DeclaredTypeListNode bounds,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
@@ -3455,8 +3455,8 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     @Override
     public UnqualifiedClassInstantiationNode makeUnqualifiedClassInstantiationNode(
             DeclaredTypeNode type,
-            ListNode<TypeArgumentNode> constructorTypeArguments,
-            ListNode<ExpressionNode> arguments,
+            TypeArgumentListNode constructorTypeArguments,
+            ExpressionListNode arguments,
             AnonymousClassBodyNode body)
     {
         UnqualifiedClassInstantiationNode ret = new UnqualifiedClassInstantiationNodeImpl(type, constructorTypeArguments, arguments, body, startLocation, stopLocation);
@@ -3470,8 +3470,8 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     @Override
     public UnqualifiedClassInstantiationNode makeUnqualifiedClassInstantiationNode(
             DeclaredTypeNode type,
-            ListNode<TypeArgumentNode> constructorTypeArguments,
-            ListNode<ExpressionNode> arguments,
+            TypeArgumentListNode constructorTypeArguments,
+            ExpressionListNode arguments,
             AnonymousClassBodyNode body,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
@@ -3487,7 +3487,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     @Override
     public VariableDeclarationNode makeVariableDeclarationNode(
             VariableModifiersNode modifiers,
-            ListNode<VariableDeclaratorNode> declarators)
+            VariableDeclaratorListNode declarators)
     {
         VariableDeclarationNode ret = new VariableDeclarationNodeImpl(modifiers, declarators, startLocation, stopLocation);
         return ret;
@@ -3500,7 +3500,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     @Override
     public VariableDeclarationNode makeVariableDeclarationNode(
             VariableModifiersNode modifiers,
-            ListNode<VariableDeclaratorNode> declarators,
+            VariableDeclaratorListNode declarators,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
@@ -3623,7 +3623,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     @Override
     public VariableModifiersNode makeVariableModifiersNode(
             boolean finalFlag,
-            ListNode<AnnotationNode> annotations)
+            AnnotationListNode annotations)
     {
         VariableModifiersNode ret = new VariableModifiersNodeImpl(finalFlag, annotations, startLocation, stopLocation);
         return ret;
@@ -3636,7 +3636,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     @Override
     public VariableModifiersNode makeVariableModifiersNode(
             boolean finalFlag,
-            ListNode<AnnotationNode> annotations,
+            AnnotationListNode annotations,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {

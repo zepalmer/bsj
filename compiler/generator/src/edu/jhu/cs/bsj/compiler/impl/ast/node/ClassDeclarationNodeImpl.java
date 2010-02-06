@@ -14,10 +14,10 @@ import edu.jhu.cs.bsj.compiler.ast.node.ClassDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.JavadocNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
+import edu.jhu.cs.bsj.compiler.ast.node.TypeListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
-import edu.jhu.cs.bsj.compiler.ast.node.TypeParameterNode;
+import edu.jhu.cs.bsj.compiler.ast.node.TypeParameterListNode;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class ClassDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl implements ClassDeclarationNode
@@ -29,21 +29,21 @@ public class ClassDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl imple
     private TypeNode extendsClause;
 
     /** The implements clause. */
-    private ListNode<TypeNode> implementsClause;
+    private TypeListNode implementsClause;
 
     /** The body of this class. */
     private ClassBodyNode body;
 
     /** This class's type parameters. */
-    private ListNode<TypeParameterNode> typeParameters;
+    private TypeParameterListNode typeParameters;
 
     /** General constructor. */
     public ClassDeclarationNodeImpl(
             ClassModifiersNode modifiers,
             TypeNode extendsClause,
-            ListNode<TypeNode> implementsClause,
+            TypeListNode implementsClause,
             ClassBodyNode body,
-            ListNode<TypeParameterNode> typeParameters,
+            TypeParameterListNode typeParameters,
             IdentifierNode identifier,
             JavadocNode javadoc,
             BsjSourceLocation startLocation,
@@ -113,7 +113,7 @@ public class ClassDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl imple
      * Gets the implements clause.
      * @return The implements clause.
      */
-    public ListNode<TypeNode> getImplementsClause()
+    public TypeListNode getImplementsClause()
     {
         return this.implementsClause;
     }
@@ -122,7 +122,7 @@ public class ClassDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl imple
      * Changes the implements clause.
      * @param implementsClause The implements clause.
      */
-    public void setImplementsClause(ListNode<TypeNode> implementsClause)
+    public void setImplementsClause(TypeListNode implementsClause)
     {
         if (this.implementsClause instanceof NodeImpl)
         {
@@ -165,7 +165,7 @@ public class ClassDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl imple
      * Gets this class's type parameters.
      * @return This class's type parameters.
      */
-    public ListNode<TypeParameterNode> getTypeParameters()
+    public TypeParameterListNode getTypeParameters()
     {
         return this.typeParameters;
     }
@@ -174,7 +174,7 @@ public class ClassDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl imple
      * Changes this class's type parameters.
      * @param typeParameters This class's type parameters.
      */
-    public void setTypeParameters(ListNode<TypeParameterNode> typeParameters)
+    public void setTypeParameters(TypeParameterListNode typeParameters)
     {
         if (this.typeParameters instanceof NodeImpl)
         {
@@ -363,7 +363,6 @@ public class ClassDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl imple
      * @return <code>true</code> if the replacement was successful; <code>false</code> if the
      *         specified <tt>before</tt> node is not a child of this node.
      */
-    @SuppressWarnings("unchecked")
     public <N extends Node> boolean replace(N before, N after)
     {
         if (super.replace(before,after))
@@ -379,13 +378,9 @@ public class ClassDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl imple
             setExtendsClause((TypeNode)after);
             return true;
         }
-        if (before.equals(this.implementsClause) && (after instanceof ListNode<?>))
+        if (before.equals(this.implementsClause) && (after instanceof TypeListNode))
         {
-            for (Object listval : ((ListNode<?>)after).getChildren())
-            {
-                TypeNode.class.cast(listval);
-            }
-            setImplementsClause((ListNode<TypeNode>)after);
+            setImplementsClause((TypeListNode)after);
             return true;
         }
         if (before.equals(this.body) && (after instanceof ClassBodyNode))
@@ -393,13 +388,9 @@ public class ClassDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl imple
             setBody((ClassBodyNode)after);
             return true;
         }
-        if (before.equals(this.typeParameters) && (after instanceof ListNode<?>))
+        if (before.equals(this.typeParameters) && (after instanceof TypeParameterListNode))
         {
-            for (Object listval : ((ListNode<?>)after).getChildren())
-            {
-                TypeParameterNode.class.cast(listval);
-            }
-            setTypeParameters((ListNode<TypeParameterNode>)after);
+            setTypeParameters((TypeParameterListNode)after);
             return true;
         }
         return false;

@@ -10,19 +10,18 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.AnonymousClassBodyNode;
-import edu.jhu.cs.bsj.compiler.ast.node.AnonymousClassMemberNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.AnonymousClassMemberListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class AnonymousClassBodyNodeImpl extends NodeImpl implements AnonymousClassBodyNode
 {
     /** The members of this anonymous class body. */
-    private ListNode<AnonymousClassMemberNode> members;
+    private AnonymousClassMemberListNode members;
 
     /** General constructor. */
     public AnonymousClassBodyNodeImpl(
-            ListNode<AnonymousClassMemberNode> members,
+            AnonymousClassMemberListNode members,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
@@ -34,7 +33,7 @@ public class AnonymousClassBodyNodeImpl extends NodeImpl implements AnonymousCla
      * Gets the members of this anonymous class body.
      * @return The members of this anonymous class body.
      */
-    public ListNode<AnonymousClassMemberNode> getMembers()
+    public AnonymousClassMemberListNode getMembers()
     {
         return this.members;
     }
@@ -43,7 +42,7 @@ public class AnonymousClassBodyNodeImpl extends NodeImpl implements AnonymousCla
      * Changes the members of this anonymous class body.
      * @param members The members of this anonymous class body.
      */
-    public void setMembers(ListNode<AnonymousClassMemberNode> members)
+    public void setMembers(AnonymousClassMemberListNode members)
     {
         if (this.members instanceof NodeImpl)
         {
@@ -168,19 +167,14 @@ public class AnonymousClassBodyNodeImpl extends NodeImpl implements AnonymousCla
      * @return <code>true</code> if the replacement was successful; <code>false</code> if the
      *         specified <tt>before</tt> node is not a child of this node.
      */
-    @SuppressWarnings("unchecked")
     public <N extends Node> boolean replace(N before, N after)
     {
         if (super.replace(before,after))
             return true;
 
-        if (before.equals(this.members) && (after instanceof ListNode<?>))
+        if (before.equals(this.members) && (after instanceof AnonymousClassMemberListNode))
         {
-            for (Object listval : ((ListNode<?>)after).getChildren())
-            {
-                AnonymousClassMemberNode.class.cast(listval);
-            }
-            setMembers((ListNode<AnonymousClassMemberNode>)after);
+            setMembers((AnonymousClassMemberListNode)after);
             return true;
         }
         return false;

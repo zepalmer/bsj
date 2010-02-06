@@ -14,9 +14,8 @@ import edu.jhu.cs.bsj.compiler.ast.node.EnumDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.EnumModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.JavadocNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
-import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
+import edu.jhu.cs.bsj.compiler.ast.node.TypeListNode;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class EnumDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl implements EnumDeclarationNode
@@ -25,7 +24,7 @@ public class EnumDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl implem
     private EnumModifiersNode modifiers;
 
     /** The implements clause. */
-    private ListNode<TypeNode> implementsClause;
+    private TypeListNode implementsClause;
 
     /** This enum's body. */
     private EnumBodyNode body;
@@ -33,7 +32,7 @@ public class EnumDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl implem
     /** General constructor. */
     public EnumDeclarationNodeImpl(
             EnumModifiersNode modifiers,
-            ListNode<TypeNode> implementsClause,
+            TypeListNode implementsClause,
             EnumBodyNode body,
             IdentifierNode identifier,
             JavadocNode javadoc,
@@ -76,7 +75,7 @@ public class EnumDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl implem
      * Gets the implements clause.
      * @return The implements clause.
      */
-    public ListNode<TypeNode> getImplementsClause()
+    public TypeListNode getImplementsClause()
     {
         return this.implementsClause;
     }
@@ -85,7 +84,7 @@ public class EnumDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl implem
      * Changes the implements clause.
      * @param implementsClause The implements clause.
      */
-    public void setImplementsClause(ListNode<TypeNode> implementsClause)
+    public void setImplementsClause(TypeListNode implementsClause)
     {
         if (this.implementsClause instanceof NodeImpl)
         {
@@ -274,7 +273,6 @@ public class EnumDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl implem
      * @return <code>true</code> if the replacement was successful; <code>false</code> if the
      *         specified <tt>before</tt> node is not a child of this node.
      */
-    @SuppressWarnings("unchecked")
     public <N extends Node> boolean replace(N before, N after)
     {
         if (super.replace(before,after))
@@ -285,13 +283,9 @@ public class EnumDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl implem
             setModifiers((EnumModifiersNode)after);
             return true;
         }
-        if (before.equals(this.implementsClause) && (after instanceof ListNode<?>))
+        if (before.equals(this.implementsClause) && (after instanceof TypeListNode))
         {
-            for (Object listval : ((ListNode<?>)after).getChildren())
-            {
-                TypeNode.class.cast(listval);
-            }
-            setImplementsClause((ListNode<TypeNode>)after);
+            setImplementsClause((TypeListNode)after);
             return true;
         }
         if (before.equals(this.body) && (after instanceof EnumBodyNode))

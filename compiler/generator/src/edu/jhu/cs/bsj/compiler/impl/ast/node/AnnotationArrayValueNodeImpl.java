@@ -10,19 +10,18 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationArrayValueNode;
-import edu.jhu.cs.bsj.compiler.ast.node.AnnotationValueNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.AnnotationValueListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class AnnotationArrayValueNodeImpl extends NodeImpl implements AnnotationArrayValueNode
 {
     /** The array values. */
-    private ListNode<AnnotationValueNode> values;
+    private AnnotationValueListNode values;
 
     /** General constructor. */
     public AnnotationArrayValueNodeImpl(
-            ListNode<AnnotationValueNode> values,
+            AnnotationValueListNode values,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
@@ -34,7 +33,7 @@ public class AnnotationArrayValueNodeImpl extends NodeImpl implements Annotation
      * Gets the array values.
      * @return The array values.
      */
-    public ListNode<AnnotationValueNode> getValues()
+    public AnnotationValueListNode getValues()
     {
         return this.values;
     }
@@ -43,7 +42,7 @@ public class AnnotationArrayValueNodeImpl extends NodeImpl implements Annotation
      * Changes the array values.
      * @param values The array values.
      */
-    public void setValues(ListNode<AnnotationValueNode> values)
+    public void setValues(AnnotationValueListNode values)
     {
         if (this.values instanceof NodeImpl)
         {
@@ -170,19 +169,14 @@ public class AnnotationArrayValueNodeImpl extends NodeImpl implements Annotation
      * @return <code>true</code> if the replacement was successful; <code>false</code> if the
      *         specified <tt>before</tt> node is not a child of this node.
      */
-    @SuppressWarnings("unchecked")
     public <N extends Node> boolean replace(N before, N after)
     {
         if (super.replace(before,after))
             return true;
 
-        if (before.equals(this.values) && (after instanceof ListNode<?>))
+        if (before.equals(this.values) && (after instanceof AnnotationValueListNode))
         {
-            for (Object listval : ((ListNode<?>)after).getChildren())
-            {
-                AnnotationValueNode.class.cast(listval);
-            }
-            setValues((ListNode<AnnotationValueNode>)after);
+            setValues((AnnotationValueListNode)after);
             return true;
         }
         return false;

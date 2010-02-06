@@ -26,13 +26,13 @@ public interface FieldDeclarationNode extends Node, ClassMemberNode, InterfaceMe
      * Gets the variable declarators for this node.
      * @return The variable declarators for this node.
      */
-    public ListNode<VariableDeclaratorNode> getDeclarators();
+    public VariableDeclaratorListNode getDeclarators();
 
     /**
      * Changes the variable declarators for this node.
      * @param declarators The variable declarators for this node.
      */
-    public void setDeclarators(ListNode<VariableDeclaratorNode> declarators);
+    public void setDeclarators(VariableDeclaratorListNode declarators);
 
     /**
      * Gets the associated javadoc comment for this node.

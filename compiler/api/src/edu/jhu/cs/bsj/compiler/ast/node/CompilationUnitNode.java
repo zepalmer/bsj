@@ -26,25 +26,25 @@ public interface CompilationUnitNode extends Node
      * Gets the imports used in this unit.
      * @return The imports used in this unit.
      */
-    public ListNode<ImportNode> getImports();
+    public ImportListNode getImports();
 
     /**
      * Changes the imports used in this unit.
      * @param imports The imports used in this unit.
      */
-    public void setImports(ListNode<ImportNode> imports);
+    public void setImports(ImportListNode imports);
 
     /**
      * Gets the type declarations of this unit.
      * @return The type declarations of this unit.
      */
-    public ListNode<TypeDeclarationNode> getTypeDecls();
+    public TypeDeclarationListNode getTypeDecls();
 
     /**
      * Changes the type declarations of this unit.
      * @param typeDecls The type declarations of this unit.
      */
-    public void setTypeDecls(ListNode<TypeDeclarationNode> typeDecls);
+    public void setTypeDecls(TypeDeclarationListNode typeDecls);
 
     /**
      * Generates a deep copy of this node.

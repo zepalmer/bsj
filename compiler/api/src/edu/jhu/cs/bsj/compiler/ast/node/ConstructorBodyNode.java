@@ -36,13 +36,13 @@ public interface ConstructorBodyNode extends Node
      * Gets the statements contained in this constructor.
      * @return The statements contained in this constructor.
      */
-    public ListNode<BlockStatementNode> getStatements();
+    public BlockStatementListNode getStatements();
 
     /**
      * Changes the statements contained in this constructor.
      * @param statements The statements contained in this constructor.
      */
-    public void setStatements(ListNode<BlockStatementNode> statements);
+    public void setStatements(BlockStatementListNode statements);
 
     /**
      * Generates a deep copy of this node.

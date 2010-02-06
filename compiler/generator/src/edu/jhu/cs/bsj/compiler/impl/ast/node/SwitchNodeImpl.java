@@ -9,9 +9,8 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
-import edu.jhu.cs.bsj.compiler.ast.node.CaseNode;
+import edu.jhu.cs.bsj.compiler.ast.node.CaseListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.SwitchNode;
 
@@ -22,12 +21,12 @@ public class SwitchNodeImpl extends NodeImpl implements SwitchNode
     private ExpressionNode expression;
 
     /** The cases in this switch. */
-    private ListNode<CaseNode> cases;
+    private CaseListNode cases;
 
     /** General constructor. */
     public SwitchNodeImpl(
             ExpressionNode expression,
-            ListNode<CaseNode> cases,
+            CaseListNode cases,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
@@ -66,7 +65,7 @@ public class SwitchNodeImpl extends NodeImpl implements SwitchNode
      * Gets the cases in this switch.
      * @return The cases in this switch.
      */
-    public ListNode<CaseNode> getCases()
+    public CaseListNode getCases()
     {
         return this.cases;
     }
@@ -75,7 +74,7 @@ public class SwitchNodeImpl extends NodeImpl implements SwitchNode
      * Changes the cases in this switch.
      * @param cases The cases in this switch.
      */
-    public void setCases(ListNode<CaseNode> cases)
+    public void setCases(CaseListNode cases)
     {
         if (this.cases instanceof NodeImpl)
         {
@@ -215,7 +214,6 @@ public class SwitchNodeImpl extends NodeImpl implements SwitchNode
      * @return <code>true</code> if the replacement was successful; <code>false</code> if the
      *         specified <tt>before</tt> node is not a child of this node.
      */
-    @SuppressWarnings("unchecked")
     public <N extends Node> boolean replace(N before, N after)
     {
         if (super.replace(before,after))
@@ -226,13 +224,9 @@ public class SwitchNodeImpl extends NodeImpl implements SwitchNode
             setExpression((ExpressionNode)after);
             return true;
         }
-        if (before.equals(this.cases) && (after instanceof ListNode<?>))
+        if (before.equals(this.cases) && (after instanceof CaseListNode))
         {
-            for (Object listval : ((ListNode<?>)after).getChildren())
-            {
-                CaseNode.class.cast(listval);
-            }
-            setCases((ListNode<CaseNode>)after);
+            setCases((CaseListNode)after);
             return true;
         }
         return false;

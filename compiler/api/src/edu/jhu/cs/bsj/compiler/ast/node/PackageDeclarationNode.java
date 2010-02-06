@@ -34,13 +34,13 @@ public interface PackageDeclarationNode extends Node
      * Gets the annotations on the package declaration.
      * @return The annotations on the package declaration.
      */
-    public ListNode<AnnotationNode> getAnnotations();
+    public AnnotationListNode getAnnotations();
 
     /**
      * Changes the annotations on the package declaration.
      * @param annotations The annotations on the package declaration.
      */
-    public void setAnnotations(ListNode<AnnotationNode> annotations);
+    public void setAnnotations(AnnotationListNode annotations);
 
     /**
      * Generates a deep copy of this node.

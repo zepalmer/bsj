@@ -36,13 +36,13 @@ public interface VariableDeclarationNode extends Node, BlockStatementNode
      * Gets the variable declarators for this node.
      * @return The variable declarators for this node.
      */
-    public ListNode<VariableDeclaratorNode> getDeclarators();
+    public VariableDeclaratorListNode getDeclarators();
 
     /**
      * Changes the variable declarators for this node.
      * @param declarators The variable declarators for this node.
      */
-    public void setDeclarators(ListNode<VariableDeclaratorNode> declarators);
+    public void setDeclarators(VariableDeclaratorListNode declarators);
 
     /**
      * Generates a deep copy of this node.

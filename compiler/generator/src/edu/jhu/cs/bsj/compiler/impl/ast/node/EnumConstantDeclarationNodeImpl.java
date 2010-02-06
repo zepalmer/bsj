@@ -9,26 +9,25 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
-import edu.jhu.cs.bsj.compiler.ast.node.AnnotationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.AnnotationListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.AnonymousClassBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.EnumConstantDeclarationNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
+import edu.jhu.cs.bsj.compiler.ast.node.ExpressionListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.JavadocNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumConstantDeclarationNode
 {
     /** The annotations on this constant. */
-    private ListNode<AnnotationNode> annotations;
+    private AnnotationListNode annotations;
 
     /** The name of this constant. */
     private IdentifierNode identifier;
 
     /** The arguments to the enum constructor. */
-    private ListNode<ExpressionNode> arguments;
+    private ExpressionListNode arguments;
 
     /** The body used to anonymously subclass the constant. */
     private AnonymousClassBodyNode body;
@@ -38,9 +37,9 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
 
     /** General constructor. */
     public EnumConstantDeclarationNodeImpl(
-            ListNode<AnnotationNode> annotations,
+            AnnotationListNode annotations,
             IdentifierNode identifier,
-            ListNode<ExpressionNode> arguments,
+            ExpressionListNode arguments,
             AnonymousClassBodyNode body,
             JavadocNode javadoc,
             BsjSourceLocation startLocation,
@@ -58,7 +57,7 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
      * Gets the annotations on this constant.
      * @return The annotations on this constant.
      */
-    public ListNode<AnnotationNode> getAnnotations()
+    public AnnotationListNode getAnnotations()
     {
         return this.annotations;
     }
@@ -67,7 +66,7 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
      * Changes the annotations on this constant.
      * @param annotations The annotations on this constant.
      */
-    public void setAnnotations(ListNode<AnnotationNode> annotations)
+    public void setAnnotations(AnnotationListNode annotations)
     {
         if (this.annotations instanceof NodeImpl)
         {
@@ -110,7 +109,7 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
      * Gets the arguments to the enum constructor.
      * @return The arguments to the enum constructor.
      */
-    public ListNode<ExpressionNode> getArguments()
+    public ExpressionListNode getArguments()
     {
         return this.arguments;
     }
@@ -119,7 +118,7 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
      * Changes the arguments to the enum constructor.
      * @param arguments The arguments to the enum constructor.
      */
-    public void setArguments(ListNode<ExpressionNode> arguments)
+    public void setArguments(ExpressionListNode arguments)
     {
         if (this.arguments instanceof NodeImpl)
         {
@@ -348,19 +347,14 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
      * @return <code>true</code> if the replacement was successful; <code>false</code> if the
      *         specified <tt>before</tt> node is not a child of this node.
      */
-    @SuppressWarnings("unchecked")
     public <N extends Node> boolean replace(N before, N after)
     {
         if (super.replace(before,after))
             return true;
 
-        if (before.equals(this.annotations) && (after instanceof ListNode<?>))
+        if (before.equals(this.annotations) && (after instanceof AnnotationListNode))
         {
-            for (Object listval : ((ListNode<?>)after).getChildren())
-            {
-                AnnotationNode.class.cast(listval);
-            }
-            setAnnotations((ListNode<AnnotationNode>)after);
+            setAnnotations((AnnotationListNode)after);
             return true;
         }
         if (before.equals(this.identifier) && (after instanceof IdentifierNode))
@@ -368,13 +362,9 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
             setIdentifier((IdentifierNode)after);
             return true;
         }
-        if (before.equals(this.arguments) && (after instanceof ListNode<?>))
+        if (before.equals(this.arguments) && (after instanceof ExpressionListNode))
         {
-            for (Object listval : ((ListNode<?>)after).getChildren())
-            {
-                ExpressionNode.class.cast(listval);
-            }
-            setArguments((ListNode<ExpressionNode>)after);
+            setArguments((ExpressionListNode)after);
             return true;
         }
         if (before.equals(this.body) && (after instanceof AnonymousClassBodyNode))

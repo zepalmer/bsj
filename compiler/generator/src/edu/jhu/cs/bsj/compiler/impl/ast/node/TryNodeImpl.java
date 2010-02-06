@@ -10,8 +10,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.BlockNode;
-import edu.jhu.cs.bsj.compiler.ast.node.CatchNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.CatchListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.TryNode;
 
@@ -22,7 +21,7 @@ public class TryNodeImpl extends NodeImpl implements TryNode
     private BlockNode block;
 
     /** The catch conditions. */
-    private ListNode<CatchNode> catches;
+    private CatchListNode catches;
 
     /** The finally block. */
     private BlockNode finallyBlock;
@@ -30,7 +29,7 @@ public class TryNodeImpl extends NodeImpl implements TryNode
     /** General constructor. */
     public TryNodeImpl(
             BlockNode block,
-            ListNode<CatchNode> catches,
+            CatchListNode catches,
             BlockNode finallyBlock,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
@@ -71,7 +70,7 @@ public class TryNodeImpl extends NodeImpl implements TryNode
      * Gets the catch conditions.
      * @return The catch conditions.
      */
-    public ListNode<CatchNode> getCatches()
+    public CatchListNode getCatches()
     {
         return this.catches;
     }
@@ -80,7 +79,7 @@ public class TryNodeImpl extends NodeImpl implements TryNode
      * Changes the catch conditions.
      * @param catches The catch conditions.
      */
-    public void setCatches(ListNode<CatchNode> catches)
+    public void setCatches(CatchListNode catches)
     {
         if (this.catches instanceof NodeImpl)
         {
@@ -259,7 +258,6 @@ public class TryNodeImpl extends NodeImpl implements TryNode
      * @return <code>true</code> if the replacement was successful; <code>false</code> if the
      *         specified <tt>before</tt> node is not a child of this node.
      */
-    @SuppressWarnings("unchecked")
     public <N extends Node> boolean replace(N before, N after)
     {
         if (super.replace(before,after))
@@ -270,13 +268,9 @@ public class TryNodeImpl extends NodeImpl implements TryNode
             setBlock((BlockNode)after);
             return true;
         }
-        if (before.equals(this.catches) && (after instanceof ListNode<?>))
+        if (before.equals(this.catches) && (after instanceof CatchListNode))
         {
-            for (Object listval : ((ListNode<?>)after).getChildren())
-            {
-                CatchNode.class.cast(listval);
-            }
-            setCatches((ListNode<CatchNode>)after);
+            setCatches((CatchListNode)after);
             return true;
         }
         if (before.equals(this.finallyBlock) && (after instanceof BlockNode))

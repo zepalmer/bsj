@@ -38,13 +38,13 @@ public interface CaseNode extends Node
      * Gets the statements to execute in this case node.
      * @return The statements to execute in this case node.
      */
-    public ListNode<BlockStatementNode> getStatements();
+    public BlockStatementListNode getStatements();
 
     /**
      * Changes the statements to execute in this case node.
      * @param statements The statements to execute in this case node.
      */
-    public void setStatements(ListNode<BlockStatementNode> statements);
+    public void setStatements(BlockStatementListNode statements);
 
     /**
      * Generates a deep copy of this node.

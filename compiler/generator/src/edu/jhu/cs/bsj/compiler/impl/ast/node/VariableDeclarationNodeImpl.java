@@ -9,10 +9,9 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
-import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclarationNode;
-import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclaratorNode;
+import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclaratorListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableModifiersNode;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
@@ -22,12 +21,12 @@ public class VariableDeclarationNodeImpl extends NodeImpl implements VariableDec
     private VariableModifiersNode modifiers;
 
     /** The variable declarators for this node. */
-    private ListNode<VariableDeclaratorNode> declarators;
+    private VariableDeclaratorListNode declarators;
 
     /** General constructor. */
     public VariableDeclarationNodeImpl(
             VariableModifiersNode modifiers,
-            ListNode<VariableDeclaratorNode> declarators,
+            VariableDeclaratorListNode declarators,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
@@ -66,7 +65,7 @@ public class VariableDeclarationNodeImpl extends NodeImpl implements VariableDec
      * Gets the variable declarators for this node.
      * @return The variable declarators for this node.
      */
-    public ListNode<VariableDeclaratorNode> getDeclarators()
+    public VariableDeclaratorListNode getDeclarators()
     {
         return this.declarators;
     }
@@ -75,7 +74,7 @@ public class VariableDeclarationNodeImpl extends NodeImpl implements VariableDec
      * Changes the variable declarators for this node.
      * @param declarators The variable declarators for this node.
      */
-    public void setDeclarators(ListNode<VariableDeclaratorNode> declarators)
+    public void setDeclarators(VariableDeclaratorListNode declarators)
     {
         if (this.declarators instanceof NodeImpl)
         {
@@ -215,7 +214,6 @@ public class VariableDeclarationNodeImpl extends NodeImpl implements VariableDec
      * @return <code>true</code> if the replacement was successful; <code>false</code> if the
      *         specified <tt>before</tt> node is not a child of this node.
      */
-    @SuppressWarnings("unchecked")
     public <N extends Node> boolean replace(N before, N after)
     {
         if (super.replace(before,after))
@@ -226,13 +224,9 @@ public class VariableDeclarationNodeImpl extends NodeImpl implements VariableDec
             setModifiers((VariableModifiersNode)after);
             return true;
         }
-        if (before.equals(this.declarators) && (after instanceof ListNode<?>))
+        if (before.equals(this.declarators) && (after instanceof VariableDeclaratorListNode))
         {
-            for (Object listval : ((ListNode<?>)after).getChildren())
-            {
-                VariableDeclaratorNode.class.cast(listval);
-            }
-            setDeclarators((ListNode<VariableDeclaratorNode>)after);
+            setDeclarators((VariableDeclaratorListNode)after);
             return true;
         }
         return false;

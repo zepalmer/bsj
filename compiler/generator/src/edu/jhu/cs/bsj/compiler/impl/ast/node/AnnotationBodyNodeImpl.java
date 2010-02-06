@@ -10,19 +10,18 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationBodyNode;
-import edu.jhu.cs.bsj.compiler.ast.node.AnnotationMemberNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.AnnotationMemberListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class AnnotationBodyNodeImpl extends NodeImpl implements AnnotationBodyNode
 {
     /** The members of this annotation body. */
-    private ListNode<AnnotationMemberNode> members;
+    private AnnotationMemberListNode members;
 
     /** General constructor. */
     public AnnotationBodyNodeImpl(
-            ListNode<AnnotationMemberNode> members,
+            AnnotationMemberListNode members,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
@@ -34,7 +33,7 @@ public class AnnotationBodyNodeImpl extends NodeImpl implements AnnotationBodyNo
      * Gets the members of this annotation body.
      * @return The members of this annotation body.
      */
-    public ListNode<AnnotationMemberNode> getMembers()
+    public AnnotationMemberListNode getMembers()
     {
         return this.members;
     }
@@ -43,7 +42,7 @@ public class AnnotationBodyNodeImpl extends NodeImpl implements AnnotationBodyNo
      * Changes the members of this annotation body.
      * @param members The members of this annotation body.
      */
-    public void setMembers(ListNode<AnnotationMemberNode> members)
+    public void setMembers(AnnotationMemberListNode members)
     {
         if (this.members instanceof NodeImpl)
         {
@@ -168,19 +167,14 @@ public class AnnotationBodyNodeImpl extends NodeImpl implements AnnotationBodyNo
      * @return <code>true</code> if the replacement was successful; <code>false</code> if the
      *         specified <tt>before</tt> node is not a child of this node.
      */
-    @SuppressWarnings("unchecked")
     public <N extends Node> boolean replace(N before, N after)
     {
         if (super.replace(before,after))
             return true;
 
-        if (before.equals(this.members) && (after instanceof ListNode<?>))
+        if (before.equals(this.members) && (after instanceof AnnotationMemberListNode))
         {
-            for (Object listval : ((ListNode<?>)after).getChildren())
-            {
-                AnnotationMemberNode.class.cast(listval);
-            }
-            setMembers((ListNode<AnnotationMemberNode>)after);
+            setMembers((AnnotationMemberListNode)after);
             return true;
         }
         return false;

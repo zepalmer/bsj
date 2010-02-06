@@ -10,19 +10,18 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.ForInitializerExpressionNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
-import edu.jhu.cs.bsj.compiler.ast.node.StatementExpressionNode;
+import edu.jhu.cs.bsj.compiler.ast.node.StatementExpressionListNode;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class ForInitializerExpressionNodeImpl extends NodeImpl implements ForInitializerExpressionNode
 {
     /** The expressions used in this initializer. */
-    private ListNode<StatementExpressionNode> expressions;
+    private StatementExpressionListNode expressions;
 
     /** General constructor. */
     public ForInitializerExpressionNodeImpl(
-            ListNode<StatementExpressionNode> expressions,
+            StatementExpressionListNode expressions,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
@@ -34,7 +33,7 @@ public class ForInitializerExpressionNodeImpl extends NodeImpl implements ForIni
      * Gets the expressions used in this initializer.
      * @return The expressions used in this initializer.
      */
-    public ListNode<StatementExpressionNode> getExpressions()
+    public StatementExpressionListNode getExpressions()
     {
         return this.expressions;
     }
@@ -43,7 +42,7 @@ public class ForInitializerExpressionNodeImpl extends NodeImpl implements ForIni
      * Changes the expressions used in this initializer.
      * @param expressions The expressions used in this initializer.
      */
-    public void setExpressions(ListNode<StatementExpressionNode> expressions)
+    public void setExpressions(StatementExpressionListNode expressions)
     {
         if (this.expressions instanceof NodeImpl)
         {
@@ -170,19 +169,14 @@ public class ForInitializerExpressionNodeImpl extends NodeImpl implements ForIni
      * @return <code>true</code> if the replacement was successful; <code>false</code> if the
      *         specified <tt>before</tt> node is not a child of this node.
      */
-    @SuppressWarnings("unchecked")
     public <N extends Node> boolean replace(N before, N after)
     {
         if (super.replace(before,after))
             return true;
 
-        if (before.equals(this.expressions) && (after instanceof ListNode<?>))
+        if (before.equals(this.expressions) && (after instanceof StatementExpressionListNode))
         {
-            for (Object listval : ((ListNode<?>)after).getChildren())
-            {
-                StatementExpressionNode.class.cast(listval);
-            }
-            setExpressions((ListNode<StatementExpressionNode>)after);
+            setExpressions((StatementExpressionListNode)after);
             return true;
         }
         return false;

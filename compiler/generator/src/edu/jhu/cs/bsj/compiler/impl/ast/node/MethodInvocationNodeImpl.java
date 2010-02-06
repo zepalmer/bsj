@@ -7,25 +7,24 @@ import javax.annotation.Generated;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
-import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.ExpressionListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.MethodInvocationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
-import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
+import edu.jhu.cs.bsj.compiler.ast.node.TypeListNode;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public abstract class MethodInvocationNodeImpl extends NodeImpl implements MethodInvocationNode
 {
     /** The arguments to pass to the method. */
-    private ListNode<ExpressionNode> arguments;
+    private ExpressionListNode arguments;
 
     /** The type arguments for the method. */
-    private ListNode<TypeNode> typeArguments;
+    private TypeListNode typeArguments;
 
     /** General constructor. */
     protected MethodInvocationNodeImpl(
-            ListNode<ExpressionNode> arguments,
-            ListNode<TypeNode> typeArguments,
+            ExpressionListNode arguments,
+            TypeListNode typeArguments,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
@@ -38,7 +37,7 @@ public abstract class MethodInvocationNodeImpl extends NodeImpl implements Metho
      * Gets the arguments to pass to the method.
      * @return The arguments to pass to the method.
      */
-    public ListNode<ExpressionNode> getArguments()
+    public ExpressionListNode getArguments()
     {
         return this.arguments;
     }
@@ -47,7 +46,7 @@ public abstract class MethodInvocationNodeImpl extends NodeImpl implements Metho
      * Changes the arguments to pass to the method.
      * @param arguments The arguments to pass to the method.
      */
-    public void setArguments(ListNode<ExpressionNode> arguments)
+    public void setArguments(ExpressionListNode arguments)
     {
         if (this.arguments instanceof NodeImpl)
         {
@@ -64,7 +63,7 @@ public abstract class MethodInvocationNodeImpl extends NodeImpl implements Metho
      * Gets the type arguments for the method.
      * @return The type arguments for the method.
      */
-    public ListNode<TypeNode> getTypeArguments()
+    public TypeListNode getTypeArguments()
     {
         return this.typeArguments;
     }
@@ -73,7 +72,7 @@ public abstract class MethodInvocationNodeImpl extends NodeImpl implements Metho
      * Changes the type arguments for the method.
      * @param typeArguments The type arguments for the method.
      */
-    public void setTypeArguments(ListNode<TypeNode> typeArguments)
+    public void setTypeArguments(TypeListNode typeArguments)
     {
         if (this.typeArguments instanceof NodeImpl)
         {
@@ -192,28 +191,19 @@ public abstract class MethodInvocationNodeImpl extends NodeImpl implements Metho
      * @return <code>true</code> if the replacement was successful; <code>false</code> if the
      *         specified <tt>before</tt> node is not a child of this node.
      */
-    @SuppressWarnings("unchecked")
     public <N extends Node> boolean replace(N before, N after)
     {
         if (super.replace(before,after))
             return true;
 
-        if (before.equals(this.arguments) && (after instanceof ListNode<?>))
+        if (before.equals(this.arguments) && (after instanceof ExpressionListNode))
         {
-            for (Object listval : ((ListNode<?>)after).getChildren())
-            {
-                ExpressionNode.class.cast(listval);
-            }
-            setArguments((ListNode<ExpressionNode>)after);
+            setArguments((ExpressionListNode)after);
             return true;
         }
-        if (before.equals(this.typeArguments) && (after instanceof ListNode<?>))
+        if (before.equals(this.typeArguments) && (after instanceof TypeListNode))
         {
-            for (Object listval : ((ListNode<?>)after).getChildren())
-            {
-                TypeNode.class.cast(listval);
-            }
-            setTypeArguments((ListNode<TypeNode>)after);
+            setTypeArguments((TypeListNode)after);
             return true;
         }
         return false;

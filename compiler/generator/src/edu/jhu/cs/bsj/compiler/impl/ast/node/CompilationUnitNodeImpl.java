@@ -10,11 +10,10 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ImportNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.ImportListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.PackageDeclarationNode;
-import edu.jhu.cs.bsj.compiler.ast.node.TypeDeclarationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.TypeDeclarationListNode;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnitNode
@@ -23,16 +22,16 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
     private PackageDeclarationNode packageDeclaration;
 
     /** The imports used in this unit. */
-    private ListNode<ImportNode> imports;
+    private ImportListNode imports;
 
     /** The type declarations of this unit. */
-    private ListNode<TypeDeclarationNode> typeDecls;
+    private TypeDeclarationListNode typeDecls;
 
     /** General constructor. */
     public CompilationUnitNodeImpl(
             PackageDeclarationNode packageDeclaration,
-            ListNode<ImportNode> imports,
-            ListNode<TypeDeclarationNode> typeDecls,
+            ImportListNode imports,
+            TypeDeclarationListNode typeDecls,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
@@ -72,7 +71,7 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
      * Gets the imports used in this unit.
      * @return The imports used in this unit.
      */
-    public ListNode<ImportNode> getImports()
+    public ImportListNode getImports()
     {
         return this.imports;
     }
@@ -81,7 +80,7 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
      * Changes the imports used in this unit.
      * @param imports The imports used in this unit.
      */
-    public void setImports(ListNode<ImportNode> imports)
+    public void setImports(ImportListNode imports)
     {
         if (this.imports instanceof NodeImpl)
         {
@@ -98,7 +97,7 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
      * Gets the type declarations of this unit.
      * @return The type declarations of this unit.
      */
-    public ListNode<TypeDeclarationNode> getTypeDecls()
+    public TypeDeclarationListNode getTypeDecls()
     {
         return this.typeDecls;
     }
@@ -107,7 +106,7 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
      * Changes the type declarations of this unit.
      * @param typeDecls The type declarations of this unit.
      */
-    public void setTypeDecls(ListNode<TypeDeclarationNode> typeDecls)
+    public void setTypeDecls(TypeDeclarationListNode typeDecls)
     {
         if (this.typeDecls instanceof NodeImpl)
         {
@@ -258,7 +257,6 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
      * @return <code>true</code> if the replacement was successful; <code>false</code> if the
      *         specified <tt>before</tt> node is not a child of this node.
      */
-    @SuppressWarnings("unchecked")
     public <N extends Node> boolean replace(N before, N after)
     {
         if (super.replace(before,after))
@@ -269,22 +267,14 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
             setPackageDeclaration((PackageDeclarationNode)after);
             return true;
         }
-        if (before.equals(this.imports) && (after instanceof ListNode<?>))
+        if (before.equals(this.imports) && (after instanceof ImportListNode))
         {
-            for (Object listval : ((ListNode<?>)after).getChildren())
-            {
-                ImportNode.class.cast(listval);
-            }
-            setImports((ListNode<ImportNode>)after);
+            setImports((ImportListNode)after);
             return true;
         }
-        if (before.equals(this.typeDecls) && (after instanceof ListNode<?>))
+        if (before.equals(this.typeDecls) && (after instanceof TypeDeclarationListNode))
         {
-            for (Object listval : ((ListNode<?>)after).getChildren())
-            {
-                TypeDeclarationNode.class.cast(listval);
-            }
-            setTypeDecls((ListNode<TypeDeclarationNode>)after);
+            setTypeDecls((TypeDeclarationListNode)after);
             return true;
         }
         return false;

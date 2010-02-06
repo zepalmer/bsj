@@ -10,19 +10,18 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassBodyNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ClassMemberNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.ClassMemberListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class ClassBodyNodeImpl extends NodeImpl implements ClassBodyNode
 {
     /** The members of this class body. */
-    private ListNode<ClassMemberNode> members;
+    private ClassMemberListNode members;
 
     /** General constructor. */
     public ClassBodyNodeImpl(
-            ListNode<ClassMemberNode> members,
+            ClassMemberListNode members,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
@@ -34,7 +33,7 @@ public class ClassBodyNodeImpl extends NodeImpl implements ClassBodyNode
      * Gets the members of this class body.
      * @return The members of this class body.
      */
-    public ListNode<ClassMemberNode> getMembers()
+    public ClassMemberListNode getMembers()
     {
         return this.members;
     }
@@ -43,7 +42,7 @@ public class ClassBodyNodeImpl extends NodeImpl implements ClassBodyNode
      * Changes the members of this class body.
      * @param members The members of this class body.
      */
-    public void setMembers(ListNode<ClassMemberNode> members)
+    public void setMembers(ClassMemberListNode members)
     {
         if (this.members instanceof NodeImpl)
         {
@@ -168,19 +167,14 @@ public class ClassBodyNodeImpl extends NodeImpl implements ClassBodyNode
      * @return <code>true</code> if the replacement was successful; <code>false</code> if the
      *         specified <tt>before</tt> node is not a child of this node.
      */
-    @SuppressWarnings("unchecked")
     public <N extends Node> boolean replace(N before, N after)
     {
         if (super.replace(before,after))
             return true;
 
-        if (before.equals(this.members) && (after instanceof ListNode<?>))
+        if (before.equals(this.members) && (after instanceof ClassMemberListNode))
         {
-            for (Object listval : ((ListNode<?>)after).getChildren())
-            {
-                ClassMemberNode.class.cast(listval);
-            }
-            setMembers((ListNode<ClassMemberNode>)after);
+            setMembers((ClassMemberListNode)after);
             return true;
         }
         return false;

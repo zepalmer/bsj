@@ -55,13 +55,13 @@ public interface ConstructorDeclarationNode extends Node, ClassMemberNode
      * Gets the parameters declared by this constructor.
      * @return The parameters declared by this constructor.
      */
-    public ListNode<VariableNode> getParameters();
+    public VariableListNode getParameters();
 
     /**
      * Changes the parameters declared by this constructor.
      * @param parameters The parameters declared by this constructor.
      */
-    public void setParameters(ListNode<VariableNode> parameters);
+    public void setParameters(VariableListNode parameters);
 
     /**
      * Gets the vararg parameter declared by this method.
@@ -79,25 +79,25 @@ public interface ConstructorDeclarationNode extends Node, ClassMemberNode
      * Gets the types of exceptions thrown by this constructor.
      * @return The types of exceptions thrown by this constructor.
      */
-    public ListNode<UnparameterizedTypeNode> getThrowTypes();
+    public UnparameterizedTypeListNode getThrowTypes();
 
     /**
      * Changes the types of exceptions thrown by this constructor.
      * @param throwTypes The types of exceptions thrown by this constructor.
      */
-    public void setThrowTypes(ListNode<UnparameterizedTypeNode> throwTypes);
+    public void setThrowTypes(UnparameterizedTypeListNode throwTypes);
 
     /**
      * Gets this constructor's applicable type parameters.
      * @return This constructor's applicable type parameters.
      */
-    public ListNode<TypeParameterNode> getTypeParameters();
+    public TypeParameterListNode getTypeParameters();
 
     /**
      * Changes this constructor's applicable type parameters.
      * @param typeParameters This constructor's applicable type parameters.
      */
-    public void setTypeParameters(ListNode<TypeParameterNode> typeParameters);
+    public void setTypeParameters(TypeParameterListNode typeParameters);
 
     /**
      * Gets the associated javadoc comment for this node.

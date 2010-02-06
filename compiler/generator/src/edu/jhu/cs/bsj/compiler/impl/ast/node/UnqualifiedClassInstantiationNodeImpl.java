@@ -11,10 +11,9 @@ import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.AnonymousClassBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.DeclaredTypeNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.ExpressionListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
-import edu.jhu.cs.bsj.compiler.ast.node.TypeArgumentNode;
+import edu.jhu.cs.bsj.compiler.ast.node.TypeArgumentListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.UnqualifiedClassInstantiationNode;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
@@ -26,8 +25,8 @@ public class UnqualifiedClassInstantiationNodeImpl extends ClassInstantiationNod
     /** General constructor. */
     public UnqualifiedClassInstantiationNodeImpl(
             DeclaredTypeNode type,
-            ListNode<TypeArgumentNode> constructorTypeArguments,
-            ListNode<ExpressionNode> arguments,
+            TypeArgumentListNode constructorTypeArguments,
+            ExpressionListNode arguments,
             AnonymousClassBodyNode body,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)

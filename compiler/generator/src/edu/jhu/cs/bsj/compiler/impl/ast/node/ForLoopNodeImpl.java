@@ -12,9 +12,8 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ForInitializerNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ForLoopNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
-import edu.jhu.cs.bsj.compiler.ast.node.StatementExpressionNode;
+import edu.jhu.cs.bsj.compiler.ast.node.StatementExpressionListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.StatementNode;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
@@ -27,7 +26,7 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
     private ExpressionNode condition;
 
     /** The loop's update operation. */
-    private ListNode<StatementExpressionNode> update;
+    private StatementExpressionListNode update;
 
     /** The loop's statement. */
     private StatementNode statement;
@@ -36,7 +35,7 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
     public ForLoopNodeImpl(
             ForInitializerNode initializer,
             ExpressionNode condition,
-            ListNode<StatementExpressionNode> update,
+            StatementExpressionListNode update,
             StatementNode statement,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
@@ -104,7 +103,7 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
      * Gets the loop's update operation.
      * @return The loop's update operation.
      */
-    public ListNode<StatementExpressionNode> getUpdate()
+    public StatementExpressionListNode getUpdate()
     {
         return this.update;
     }
@@ -113,7 +112,7 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
      * Changes the loop's update operation.
      * @param update The loop's update operation.
      */
-    public void setUpdate(ListNode<StatementExpressionNode> update)
+    public void setUpdate(StatementExpressionListNode update)
     {
         if (this.update instanceof NodeImpl)
         {
@@ -305,7 +304,6 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
      * @return <code>true</code> if the replacement was successful; <code>false</code> if the
      *         specified <tt>before</tt> node is not a child of this node.
      */
-    @SuppressWarnings("unchecked")
     public <N extends Node> boolean replace(N before, N after)
     {
         if (super.replace(before,after))
@@ -321,13 +319,9 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
             setCondition((ExpressionNode)after);
             return true;
         }
-        if (before.equals(this.update) && (after instanceof ListNode<?>))
+        if (before.equals(this.update) && (after instanceof StatementExpressionListNode))
         {
-            for (Object listval : ((ListNode<?>)after).getChildren())
-            {
-                StatementExpressionNode.class.cast(listval);
-            }
-            setUpdate((ListNode<StatementExpressionNode>)after);
+            setUpdate((StatementExpressionListNode)after);
             return true;
         }
         if (before.equals(this.statement) && (after instanceof StatementNode))

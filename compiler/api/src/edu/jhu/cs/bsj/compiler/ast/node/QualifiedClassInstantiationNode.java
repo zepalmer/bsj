@@ -59,13 +59,13 @@ public interface QualifiedClassInstantiationNode extends ClassInstantiationNode
      * Gets the type arguments to apply to the class being instantiated.
      * @return The type arguments to apply to the class being instantiated.
      */
-    public ListNode<TypeArgumentNode> getTypeArguments();
+    public TypeArgumentListNode getTypeArguments();
 
     /**
      * Changes the type arguments to apply to the class being instantiated.
      * @param typeArguments The type arguments to apply to the class being instantiated.
      */
-    public void setTypeArguments(ListNode<TypeArgumentNode> typeArguments);
+    public void setTypeArguments(TypeArgumentListNode typeArguments);
 
     /**
      * Generates a deep copy of this node.

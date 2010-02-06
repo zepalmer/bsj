@@ -64,25 +64,25 @@ public interface SuperMethodInvocationNode extends Node, RestrictedPrimaryExpres
      * Gets the arguments to pass to the method.
      * @return The arguments to pass to the method.
      */
-    public ListNode<ExpressionNode> getArguments();
+    public ExpressionListNode getArguments();
 
     /**
      * Changes the arguments to pass to the method.
      * @param arguments The arguments to pass to the method.
      */
-    public void setArguments(ListNode<ExpressionNode> arguments);
+    public void setArguments(ExpressionListNode arguments);
 
     /**
      * Gets the type arguments for the method.
      * @return The type arguments for the method.
      */
-    public ListNode<TypeNode> getTypeArguments();
+    public TypeListNode getTypeArguments();
 
     /**
      * Changes the type arguments for the method.
      * @param typeArguments The type arguments for the method.
      */
-    public void setTypeArguments(ListNode<TypeNode> typeArguments);
+    public void setTypeArguments(TypeListNode typeArguments);
 
     /**
      * Generates a deep copy of this node.

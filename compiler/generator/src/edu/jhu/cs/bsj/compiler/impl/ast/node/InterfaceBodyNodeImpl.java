@@ -10,19 +10,18 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.InterfaceBodyNode;
-import edu.jhu.cs.bsj.compiler.ast.node.InterfaceMemberNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.InterfaceMemberListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class InterfaceBodyNodeImpl extends NodeImpl implements InterfaceBodyNode
 {
     /** The members of this interface body. */
-    private ListNode<InterfaceMemberNode> members;
+    private InterfaceMemberListNode members;
 
     /** General constructor. */
     public InterfaceBodyNodeImpl(
-            ListNode<InterfaceMemberNode> members,
+            InterfaceMemberListNode members,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
@@ -34,7 +33,7 @@ public class InterfaceBodyNodeImpl extends NodeImpl implements InterfaceBodyNode
      * Gets the members of this interface body.
      * @return The members of this interface body.
      */
-    public ListNode<InterfaceMemberNode> getMembers()
+    public InterfaceMemberListNode getMembers()
     {
         return this.members;
     }
@@ -43,7 +42,7 @@ public class InterfaceBodyNodeImpl extends NodeImpl implements InterfaceBodyNode
      * Changes the members of this interface body.
      * @param members The members of this interface body.
      */
-    public void setMembers(ListNode<InterfaceMemberNode> members)
+    public void setMembers(InterfaceMemberListNode members)
     {
         if (this.members instanceof NodeImpl)
         {
@@ -168,19 +167,14 @@ public class InterfaceBodyNodeImpl extends NodeImpl implements InterfaceBodyNode
      * @return <code>true</code> if the replacement was successful; <code>false</code> if the
      *         specified <tt>before</tt> node is not a child of this node.
      */
-    @SuppressWarnings("unchecked")
     public <N extends Node> boolean replace(N before, N after)
     {
         if (super.replace(before,after))
             return true;
 
-        if (before.equals(this.members) && (after instanceof ListNode<?>))
+        if (before.equals(this.members) && (after instanceof InterfaceMemberListNode))
         {
-            for (Object listval : ((ListNode<?>)after).getChildren())
-            {
-                InterfaceMemberNode.class.cast(listval);
-            }
-            setMembers((ListNode<InterfaceMemberNode>)after);
+            setMembers((InterfaceMemberListNode)after);
             return true;
         }
         return false;

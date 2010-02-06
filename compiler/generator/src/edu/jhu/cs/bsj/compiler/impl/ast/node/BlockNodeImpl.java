@@ -10,19 +10,18 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.BlockNode;
-import edu.jhu.cs.bsj.compiler.ast.node.BlockStatementNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.BlockStatementListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class BlockNodeImpl extends NodeImpl implements BlockNode
 {
     /** The statements contained in this block statement. */
-    private ListNode<BlockStatementNode> statements;
+    private BlockStatementListNode statements;
 
     /** General constructor. */
     public BlockNodeImpl(
-            ListNode<BlockStatementNode> statements,
+            BlockStatementListNode statements,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
@@ -34,7 +33,7 @@ public class BlockNodeImpl extends NodeImpl implements BlockNode
      * Gets the statements contained in this block statement.
      * @return The statements contained in this block statement.
      */
-    public ListNode<BlockStatementNode> getStatements()
+    public BlockStatementListNode getStatements()
     {
         return this.statements;
     }
@@ -43,7 +42,7 @@ public class BlockNodeImpl extends NodeImpl implements BlockNode
      * Changes the statements contained in this block statement.
      * @param statements The statements contained in this block statement.
      */
-    public void setStatements(ListNode<BlockStatementNode> statements)
+    public void setStatements(BlockStatementListNode statements)
     {
         if (this.statements instanceof NodeImpl)
         {
@@ -170,19 +169,14 @@ public class BlockNodeImpl extends NodeImpl implements BlockNode
      * @return <code>true</code> if the replacement was successful; <code>false</code> if the
      *         specified <tt>before</tt> node is not a child of this node.
      */
-    @SuppressWarnings("unchecked")
     public <N extends Node> boolean replace(N before, N after)
     {
         if (super.replace(before,after))
             return true;
 
-        if (before.equals(this.statements) && (after instanceof ListNode<?>))
+        if (before.equals(this.statements) && (after instanceof BlockStatementListNode))
         {
-            for (Object listval : ((ListNode<?>)after).getChildren())
-            {
-                BlockStatementNode.class.cast(listval);
-            }
-            setStatements((ListNode<BlockStatementNode>)after);
+            setStatements((BlockStatementListNode)after);
             return true;
         }
         return false;

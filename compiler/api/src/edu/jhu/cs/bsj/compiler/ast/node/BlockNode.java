@@ -20,13 +20,13 @@ public interface BlockNode extends Node, StatementNode
      * Gets the statements contained in this block statement.
      * @return The statements contained in this block statement.
      */
-    public ListNode<BlockStatementNode> getStatements();
+    public BlockStatementListNode getStatements();
 
     /**
      * Changes the statements contained in this block statement.
      * @param statements The statements contained in this block statement.
      */
-    public void setStatements(ListNode<BlockStatementNode> statements);
+    public void setStatements(BlockStatementListNode statements);
 
     /**
      * Generates a deep copy of this node.

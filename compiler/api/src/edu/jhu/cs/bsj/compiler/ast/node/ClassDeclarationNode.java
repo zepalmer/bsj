@@ -45,13 +45,13 @@ public interface ClassDeclarationNode extends NamedTypeDeclarationNode, InlineTy
      * Gets the implements clause.
      * @return The implements clause.
      */
-    public ListNode<TypeNode> getImplementsClause();
+    public TypeListNode getImplementsClause();
 
     /**
      * Changes the implements clause.
      * @param implementsClause The implements clause.
      */
-    public void setImplementsClause(ListNode<TypeNode> implementsClause);
+    public void setImplementsClause(TypeListNode implementsClause);
 
     /**
      * Gets the body of this class.
@@ -69,13 +69,13 @@ public interface ClassDeclarationNode extends NamedTypeDeclarationNode, InlineTy
      * Gets this class's type parameters.
      * @return This class's type parameters.
      */
-    public ListNode<TypeParameterNode> getTypeParameters();
+    public TypeParameterListNode getTypeParameters();
 
     /**
      * Changes this class's type parameters.
      * @param typeParameters This class's type parameters.
      */
-    public void setTypeParameters(ListNode<TypeParameterNode> typeParameters);
+    public void setTypeParameters(TypeParameterListNode typeParameters);
 
     /**
      * Generates a deep copy of this node.

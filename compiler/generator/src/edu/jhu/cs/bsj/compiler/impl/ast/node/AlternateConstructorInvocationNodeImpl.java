@@ -10,18 +10,17 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.AlternateConstructorInvocationNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.ExpressionListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
-import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
+import edu.jhu.cs.bsj.compiler.ast.node.TypeListNode;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class AlternateConstructorInvocationNodeImpl extends ConstructorInvocationNodeImpl implements AlternateConstructorInvocationNode
 {
     /** General constructor. */
     public AlternateConstructorInvocationNodeImpl(
-            ListNode<ExpressionNode> arguments,
-            ListNode<TypeNode> typeArguments,
+            ExpressionListNode arguments,
+            TypeListNode typeArguments,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {

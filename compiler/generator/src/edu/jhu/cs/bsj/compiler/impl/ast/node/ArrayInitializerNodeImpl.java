@@ -10,19 +10,18 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.ArrayInitializerNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
-import edu.jhu.cs.bsj.compiler.ast.node.VariableInitializerNode;
+import edu.jhu.cs.bsj.compiler.ast.node.VariableInitializerListNode;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class ArrayInitializerNodeImpl extends NodeImpl implements ArrayInitializerNode
 {
     /** The initializers for the array. */
-    private ListNode<VariableInitializerNode> initializers;
+    private VariableInitializerListNode initializers;
 
     /** General constructor. */
     public ArrayInitializerNodeImpl(
-            ListNode<VariableInitializerNode> initializers,
+            VariableInitializerListNode initializers,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
@@ -34,7 +33,7 @@ public class ArrayInitializerNodeImpl extends NodeImpl implements ArrayInitializ
      * Gets the initializers for the array.
      * @return The initializers for the array.
      */
-    public ListNode<VariableInitializerNode> getInitializers()
+    public VariableInitializerListNode getInitializers()
     {
         return this.initializers;
     }
@@ -43,7 +42,7 @@ public class ArrayInitializerNodeImpl extends NodeImpl implements ArrayInitializ
      * Changes the initializers for the array.
      * @param initializers The initializers for the array.
      */
-    public void setInitializers(ListNode<VariableInitializerNode> initializers)
+    public void setInitializers(VariableInitializerListNode initializers)
     {
         if (this.initializers instanceof NodeImpl)
         {
@@ -170,19 +169,14 @@ public class ArrayInitializerNodeImpl extends NodeImpl implements ArrayInitializ
      * @return <code>true</code> if the replacement was successful; <code>false</code> if the
      *         specified <tt>before</tt> node is not a child of this node.
      */
-    @SuppressWarnings("unchecked")
     public <N extends Node> boolean replace(N before, N after)
     {
         if (super.replace(before,after))
             return true;
 
-        if (before.equals(this.initializers) && (after instanceof ListNode<?>))
+        if (before.equals(this.initializers) && (after instanceof VariableInitializerListNode))
         {
-            for (Object listval : ((ListNode<?>)after).getChildren())
-            {
-                VariableInitializerNode.class.cast(listval);
-            }
-            setInitializers((ListNode<VariableInitializerNode>)after);
+            setInitializers((VariableInitializerListNode)after);
             return true;
         }
         return false;

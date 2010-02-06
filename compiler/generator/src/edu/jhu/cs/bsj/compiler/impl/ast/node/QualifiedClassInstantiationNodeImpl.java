@@ -10,12 +10,12 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.AnonymousClassBodyNode;
+import edu.jhu.cs.bsj.compiler.ast.node.ExpressionListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.QualifiedClassInstantiationNode;
-import edu.jhu.cs.bsj.compiler.ast.node.TypeArgumentNode;
+import edu.jhu.cs.bsj.compiler.ast.node.TypeArgumentListNode;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeImpl implements QualifiedClassInstantiationNode
@@ -27,15 +27,15 @@ public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeI
     private IdentifierNode identifier;
 
     /** The type arguments to apply to the class being instantiated. */
-    private ListNode<TypeArgumentNode> typeArguments;
+    private TypeArgumentListNode typeArguments;
 
     /** General constructor. */
     public QualifiedClassInstantiationNodeImpl(
             ExpressionNode enclosingExpression,
             IdentifierNode identifier,
-            ListNode<TypeArgumentNode> typeArguments,
-            ListNode<TypeArgumentNode> constructorTypeArguments,
-            ListNode<ExpressionNode> arguments,
+            TypeArgumentListNode typeArguments,
+            TypeArgumentListNode constructorTypeArguments,
+            ExpressionListNode arguments,
             AnonymousClassBodyNode body,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
@@ -102,7 +102,7 @@ public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeI
      * Gets the type arguments to apply to the class being instantiated.
      * @return The type arguments to apply to the class being instantiated.
      */
-    public ListNode<TypeArgumentNode> getTypeArguments()
+    public TypeArgumentListNode getTypeArguments()
     {
         return this.typeArguments;
     }
@@ -111,7 +111,7 @@ public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeI
      * Changes the type arguments to apply to the class being instantiated.
      * @param typeArguments The type arguments to apply to the class being instantiated.
      */
-    public void setTypeArguments(ListNode<TypeArgumentNode> typeArguments)
+    public void setTypeArguments(TypeArgumentListNode typeArguments)
     {
         if (this.typeArguments instanceof NodeImpl)
         {
@@ -276,7 +276,6 @@ public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeI
      * @return <code>true</code> if the replacement was successful; <code>false</code> if the
      *         specified <tt>before</tt> node is not a child of this node.
      */
-    @SuppressWarnings("unchecked")
     public <N extends Node> boolean replace(N before, N after)
     {
         if (super.replace(before,after))
@@ -292,13 +291,9 @@ public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeI
             setIdentifier((IdentifierNode)after);
             return true;
         }
-        if (before.equals(this.typeArguments) && (after instanceof ListNode<?>))
+        if (before.equals(this.typeArguments) && (after instanceof TypeArgumentListNode))
         {
-            for (Object listval : ((ListNode<?>)after).getChildren())
-            {
-                TypeArgumentNode.class.cast(listval);
-            }
-            setTypeArguments((ListNode<TypeArgumentNode>)after);
+            setTypeArguments((TypeArgumentListNode)after);
             return true;
         }
         return false;

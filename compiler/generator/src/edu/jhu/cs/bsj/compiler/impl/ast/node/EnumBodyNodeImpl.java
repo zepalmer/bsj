@@ -9,25 +9,24 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
-import edu.jhu.cs.bsj.compiler.ast.node.ClassMemberNode;
+import edu.jhu.cs.bsj.compiler.ast.node.ClassMemberListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.EnumBodyNode;
-import edu.jhu.cs.bsj.compiler.ast.node.EnumConstantDeclarationNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.EnumConstantDeclarationListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class EnumBodyNodeImpl extends NodeImpl implements EnumBodyNode
 {
     /** The enumeration constants. */
-    private ListNode<EnumConstantDeclarationNode> constants;
+    private EnumConstantDeclarationListNode constants;
 
     /** The members of the class body part. */
-    private ListNode<ClassMemberNode> members;
+    private ClassMemberListNode members;
 
     /** General constructor. */
     public EnumBodyNodeImpl(
-            ListNode<EnumConstantDeclarationNode> constants,
-            ListNode<ClassMemberNode> members,
+            EnumConstantDeclarationListNode constants,
+            ClassMemberListNode members,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
@@ -40,7 +39,7 @@ public class EnumBodyNodeImpl extends NodeImpl implements EnumBodyNode
      * Gets the enumeration constants.
      * @return The enumeration constants.
      */
-    public ListNode<EnumConstantDeclarationNode> getConstants()
+    public EnumConstantDeclarationListNode getConstants()
     {
         return this.constants;
     }
@@ -49,7 +48,7 @@ public class EnumBodyNodeImpl extends NodeImpl implements EnumBodyNode
      * Changes the enumeration constants.
      * @param constants The enumeration constants.
      */
-    public void setConstants(ListNode<EnumConstantDeclarationNode> constants)
+    public void setConstants(EnumConstantDeclarationListNode constants)
     {
         if (this.constants instanceof NodeImpl)
         {
@@ -66,7 +65,7 @@ public class EnumBodyNodeImpl extends NodeImpl implements EnumBodyNode
      * Gets the members of the class body part.
      * @return The members of the class body part.
      */
-    public ListNode<ClassMemberNode> getMembers()
+    public ClassMemberListNode getMembers()
     {
         return this.members;
     }
@@ -75,7 +74,7 @@ public class EnumBodyNodeImpl extends NodeImpl implements EnumBodyNode
      * Changes the members of the class body part.
      * @param members The members of the class body part.
      */
-    public void setMembers(ListNode<ClassMemberNode> members)
+    public void setMembers(ClassMemberListNode members)
     {
         if (this.members instanceof NodeImpl)
         {
@@ -213,28 +212,19 @@ public class EnumBodyNodeImpl extends NodeImpl implements EnumBodyNode
      * @return <code>true</code> if the replacement was successful; <code>false</code> if the
      *         specified <tt>before</tt> node is not a child of this node.
      */
-    @SuppressWarnings("unchecked")
     public <N extends Node> boolean replace(N before, N after)
     {
         if (super.replace(before,after))
             return true;
 
-        if (before.equals(this.constants) && (after instanceof ListNode<?>))
+        if (before.equals(this.constants) && (after instanceof EnumConstantDeclarationListNode))
         {
-            for (Object listval : ((ListNode<?>)after).getChildren())
-            {
-                EnumConstantDeclarationNode.class.cast(listval);
-            }
-            setConstants((ListNode<EnumConstantDeclarationNode>)after);
+            setConstants((EnumConstantDeclarationListNode)after);
             return true;
         }
-        if (before.equals(this.members) && (after instanceof ListNode<?>))
+        if (before.equals(this.members) && (after instanceof ClassMemberListNode))
         {
-            for (Object listval : ((ListNode<?>)after).getChildren())
-            {
-                ClassMemberNode.class.cast(listval);
-            }
-            setMembers((ListNode<ClassMemberNode>)after);
+            setMembers((ClassMemberListNode)after);
             return true;
         }
         return false;

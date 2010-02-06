@@ -9,8 +9,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
-import edu.jhu.cs.bsj.compiler.ast.node.BlockStatementNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.BlockStatementListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.NodeImpl;
@@ -19,11 +18,11 @@ import edu.jhu.cs.bsj.compiler.impl.ast.node.NodeImpl;
 public class MetaprogramNodeImpl extends NodeImpl implements MetaprogramNode
 {
     /** The list of statements in the metaprogram's body. */
-    private ListNode<BlockStatementNode> body;
+    private BlockStatementListNode body;
 
     /** General constructor. */
     public MetaprogramNodeImpl(
-            ListNode<BlockStatementNode> body,
+            BlockStatementListNode body,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
@@ -35,7 +34,7 @@ public class MetaprogramNodeImpl extends NodeImpl implements MetaprogramNode
      * Gets the list of statements in the metaprogram's body.
      * @return The list of statements in the metaprogram's body.
      */
-    public ListNode<BlockStatementNode> getBody()
+    public BlockStatementListNode getBody()
     {
         return this.body;
     }
@@ -44,7 +43,7 @@ public class MetaprogramNodeImpl extends NodeImpl implements MetaprogramNode
      * Changes the list of statements in the metaprogram's body.
      * @param body The list of statements in the metaprogram's body.
      */
-    public void setBody(ListNode<BlockStatementNode> body)
+    public void setBody(BlockStatementListNode body)
     {
         if (this.body instanceof NodeImpl)
         {
@@ -169,19 +168,14 @@ public class MetaprogramNodeImpl extends NodeImpl implements MetaprogramNode
      * @return <code>true</code> if the replacement was successful; <code>false</code> if the
      *         specified <tt>before</tt> node is not a child of this node.
      */
-    @SuppressWarnings("unchecked")
     public <N extends Node> boolean replace(N before, N after)
     {
         if (super.replace(before,after))
             return true;
 
-        if (before.equals(this.body) && (after instanceof ListNode<?>))
+        if (before.equals(this.body) && (after instanceof BlockStatementListNode))
         {
-            for (Object listval : ((ListNode<?>)after).getChildren())
-            {
-                BlockStatementNode.class.cast(listval);
-            }
-            setBody((ListNode<BlockStatementNode>)after);
+            setBody((BlockStatementListNode)after);
             return true;
         }
         return false;

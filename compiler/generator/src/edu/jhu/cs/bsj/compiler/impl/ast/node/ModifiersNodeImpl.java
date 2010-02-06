@@ -7,8 +7,7 @@ import javax.annotation.Generated;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
-import edu.jhu.cs.bsj.compiler.ast.node.AnnotationNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.AnnotationListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 
@@ -16,11 +15,11 @@ import edu.jhu.cs.bsj.compiler.ast.node.Node;
 public abstract class ModifiersNodeImpl extends NodeImpl implements ModifiersNode
 {
     /** The annotations modifying the subject. */
-    private ListNode<AnnotationNode> annotations;
+    private AnnotationListNode annotations;
 
     /** General constructor. */
     protected ModifiersNodeImpl(
-            ListNode<AnnotationNode> annotations,
+            AnnotationListNode annotations,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
@@ -32,7 +31,7 @@ public abstract class ModifiersNodeImpl extends NodeImpl implements ModifiersNod
      * Gets the annotations modifying the subject.
      * @return The annotations modifying the subject.
      */
-    public ListNode<AnnotationNode> getAnnotations()
+    public AnnotationListNode getAnnotations()
     {
         return this.annotations;
     }
@@ -41,7 +40,7 @@ public abstract class ModifiersNodeImpl extends NodeImpl implements ModifiersNod
      * Changes the annotations modifying the subject.
      * @param annotations The annotations modifying the subject.
      */
-    public void setAnnotations(ListNode<AnnotationNode> annotations)
+    public void setAnnotations(AnnotationListNode annotations)
     {
         if (this.annotations instanceof NodeImpl)
         {
@@ -144,19 +143,14 @@ public abstract class ModifiersNodeImpl extends NodeImpl implements ModifiersNod
      * @return <code>true</code> if the replacement was successful; <code>false</code> if the
      *         specified <tt>before</tt> node is not a child of this node.
      */
-    @SuppressWarnings("unchecked")
     public <N extends Node> boolean replace(N before, N after)
     {
         if (super.replace(before,after))
             return true;
 
-        if (before.equals(this.annotations) && (after instanceof ListNode<?>))
+        if (before.equals(this.annotations) && (after instanceof AnnotationListNode))
         {
-            for (Object listval : ((ListNode<?>)after).getChildren())
-            {
-                AnnotationNode.class.cast(listval);
-            }
-            setAnnotations((ListNode<AnnotationNode>)after);
+            setAnnotations((AnnotationListNode)after);
             return true;
         }
         return false;

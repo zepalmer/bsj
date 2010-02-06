@@ -37,13 +37,13 @@ public interface TypeParameterNode extends Node
      * Gets the bounds over the base type.
      * @return The bounds over the base type.
      */
-    public ListNode<DeclaredTypeNode> getBounds();
+    public DeclaredTypeListNode getBounds();
 
     /**
      * Changes the bounds over the base type.
      * @param bounds The bounds over the base type.
      */
-    public void setBounds(ListNode<DeclaredTypeNode> bounds);
+    public void setBounds(DeclaredTypeListNode bounds);
 
     /**
      * Generates a deep copy of this node.

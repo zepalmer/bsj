@@ -9,10 +9,9 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
-import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.ParameterizedTypeNode;
-import edu.jhu.cs.bsj.compiler.ast.node.TypeArgumentNode;
+import edu.jhu.cs.bsj.compiler.ast.node.TypeArgumentListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.UnparameterizedTypeNode;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
@@ -22,12 +21,12 @@ public class ParameterizedTypeNodeImpl extends NodeImpl implements Parameterized
     private UnparameterizedTypeNode baseType;
 
     /** The type arguments for this node. */
-    private ListNode<TypeArgumentNode> typeArguments;
+    private TypeArgumentListNode typeArguments;
 
     /** General constructor. */
     public ParameterizedTypeNodeImpl(
             UnparameterizedTypeNode baseType,
-            ListNode<TypeArgumentNode> typeArguments,
+            TypeArgumentListNode typeArguments,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
@@ -66,7 +65,7 @@ public class ParameterizedTypeNodeImpl extends NodeImpl implements Parameterized
      * Gets the type arguments for this node.
      * @return The type arguments for this node.
      */
-    public ListNode<TypeArgumentNode> getTypeArguments()
+    public TypeArgumentListNode getTypeArguments()
     {
         return this.typeArguments;
     }
@@ -75,7 +74,7 @@ public class ParameterizedTypeNodeImpl extends NodeImpl implements Parameterized
      * Changes the type arguments for this node.
      * @param typeArguments The type arguments for this node.
      */
-    public void setTypeArguments(ListNode<TypeArgumentNode> typeArguments)
+    public void setTypeArguments(TypeArgumentListNode typeArguments)
     {
         if (this.typeArguments instanceof NodeImpl)
         {
@@ -215,7 +214,6 @@ public class ParameterizedTypeNodeImpl extends NodeImpl implements Parameterized
      * @return <code>true</code> if the replacement was successful; <code>false</code> if the
      *         specified <tt>before</tt> node is not a child of this node.
      */
-    @SuppressWarnings("unchecked")
     public <N extends Node> boolean replace(N before, N after)
     {
         if (super.replace(before,after))
@@ -226,13 +224,9 @@ public class ParameterizedTypeNodeImpl extends NodeImpl implements Parameterized
             setBaseType((UnparameterizedTypeNode)after);
             return true;
         }
-        if (before.equals(this.typeArguments) && (after instanceof ListNode<?>))
+        if (before.equals(this.typeArguments) && (after instanceof TypeArgumentListNode))
         {
-            for (Object listval : ((ListNode<?>)after).getChildren())
-            {
-                TypeArgumentNode.class.cast(listval);
-            }
-            setTypeArguments((ListNode<TypeArgumentNode>)after);
+            setTypeArguments((TypeArgumentListNode)after);
             return true;
         }
         return false;

@@ -55,16 +55,16 @@ public interface BsjNodeFactory
      * The start and stop locations which have been set as properties of this factory are used.
      */
     public AlternateConstructorInvocationNode makeAlternateConstructorInvocationNode(
-            ListNode<ExpressionNode> arguments,
-            ListNode<TypeNode> typeArguments);
+            ExpressionListNode arguments,
+            TypeListNode typeArguments);
 
     /**
      * Creates a AlternateConstructorInvocationNode.
      * The specified start and stop locations are used.
      */
     public AlternateConstructorInvocationNode makeAlternateConstructorInvocationNode(
-            ListNode<ExpressionNode> arguments,
-            ListNode<TypeNode> typeArguments,
+            ExpressionListNode arguments,
+            TypeListNode typeArguments,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
 
@@ -89,14 +89,14 @@ public interface BsjNodeFactory
      * The start and stop locations which have been set as properties of this factory are used.
      */
     public AnnotationArrayValueNode makeAnnotationArrayValueNode(
-            ListNode<AnnotationValueNode> values);
+            AnnotationValueListNode values);
 
     /**
      * Creates a AnnotationArrayValueNode.
      * The specified start and stop locations are used.
      */
     public AnnotationArrayValueNode makeAnnotationArrayValueNode(
-            ListNode<AnnotationValueNode> values,
+            AnnotationValueListNode values,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
 
@@ -105,14 +105,14 @@ public interface BsjNodeFactory
      * The start and stop locations which have been set as properties of this factory are used.
      */
     public AnnotationBodyNode makeAnnotationBodyNode(
-            ListNode<AnnotationMemberNode> members);
+            AnnotationMemberListNode members);
 
     /**
      * Creates a AnnotationBodyNode.
      * The specified start and stop locations are used.
      */
     public AnnotationBodyNode makeAnnotationBodyNode(
-            ListNode<AnnotationMemberNode> members,
+            AnnotationMemberListNode members,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
 
@@ -249,14 +249,14 @@ public interface BsjNodeFactory
      * The start and stop locations which have been set as properties of this factory are used.
      */
     public AnnotationMethodModifiersNode makeAnnotationMethodModifiersNode(
-            ListNode<AnnotationNode> annotations);
+            AnnotationListNode annotations);
 
     /**
      * Creates a AnnotationMethodModifiersNode.
      * The specified start and stop locations are used.
      */
     public AnnotationMethodModifiersNode makeAnnotationMethodModifiersNode(
-            ListNode<AnnotationNode> annotations,
+            AnnotationListNode annotations,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
 
@@ -268,7 +268,7 @@ public interface BsjNodeFactory
             AccessModifier access,
             boolean staticFlag,
             boolean strictfpFlag,
-            ListNode<AnnotationNode> annotations);
+            AnnotationListNode annotations);
 
     /**
      * Creates a AnnotationModifiersNode.
@@ -278,7 +278,7 @@ public interface BsjNodeFactory
             AccessModifier access,
             boolean staticFlag,
             boolean strictfpFlag,
-            ListNode<AnnotationNode> annotations,
+            AnnotationListNode annotations,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
 
@@ -303,14 +303,14 @@ public interface BsjNodeFactory
      * The start and stop locations which have been set as properties of this factory are used.
      */
     public AnonymousClassBodyNode makeAnonymousClassBodyNode(
-            ListNode<AnonymousClassMemberNode> members);
+            AnonymousClassMemberListNode members);
 
     /**
      * Creates a AnonymousClassBodyNode.
      * The specified start and stop locations are used.
      */
     public AnonymousClassBodyNode makeAnonymousClassBodyNode(
-            ListNode<AnonymousClassMemberNode> members,
+            AnonymousClassMemberListNode members,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
 
@@ -373,14 +373,14 @@ public interface BsjNodeFactory
      * The start and stop locations which have been set as properties of this factory are used.
      */
     public ArrayInitializerNode makeArrayInitializerNode(
-            ListNode<VariableInitializerNode> initializers);
+            VariableInitializerListNode initializers);
 
     /**
      * Creates a ArrayInitializerNode.
      * The specified start and stop locations are used.
      */
     public ArrayInitializerNode makeArrayInitializerNode(
-            ListNode<VariableInitializerNode> initializers,
+            VariableInitializerListNode initializers,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
 
@@ -389,7 +389,7 @@ public interface BsjNodeFactory
      * The start and stop locations which have been set as properties of this factory are used.
      */
     public ArrayInstantiatorCreationNode makeArrayInstantiatorCreationNode(
-            ListNode<ExpressionNode> dimExpressions,
+            ExpressionListNode dimExpressions,
             BaseTypeNode baseType,
             int arrayLevels);
 
@@ -398,7 +398,7 @@ public interface BsjNodeFactory
      * The specified start and stop locations are used.
      */
     public ArrayInstantiatorCreationNode makeArrayInstantiatorCreationNode(
-            ListNode<ExpressionNode> dimExpressions,
+            ExpressionListNode dimExpressions,
             BaseTypeNode baseType,
             int arrayLevels,
             BsjSourceLocation startLocation,
@@ -483,14 +483,14 @@ public interface BsjNodeFactory
      * The start and stop locations which have been set as properties of this factory are used.
      */
     public BlockNode makeBlockNode(
-            ListNode<BlockStatementNode> statements);
+            BlockStatementListNode statements);
 
     /**
      * Creates a BlockNode.
      * The specified start and stop locations are used.
      */
     public BlockNode makeBlockNode(
-            ListNode<BlockStatementNode> statements,
+            BlockStatementListNode statements,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
 
@@ -581,7 +581,7 @@ public interface BsjNodeFactory
      */
     public CaseNode makeCaseNode(
             ExpressionNode expression,
-            ListNode<BlockStatementNode> statements);
+            BlockStatementListNode statements);
 
     /**
      * Creates a CaseNode.
@@ -589,7 +589,7 @@ public interface BsjNodeFactory
      */
     public CaseNode makeCaseNode(
             ExpressionNode expression,
-            ListNode<BlockStatementNode> statements,
+            BlockStatementListNode statements,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
 
@@ -648,14 +648,14 @@ public interface BsjNodeFactory
      * The start and stop locations which have been set as properties of this factory are used.
      */
     public ClassBodyNode makeClassBodyNode(
-            ListNode<ClassMemberNode> members);
+            ClassMemberListNode members);
 
     /**
      * Creates a ClassBodyNode.
      * The specified start and stop locations are used.
      */
     public ClassBodyNode makeClassBodyNode(
-            ListNode<ClassMemberNode> members,
+            ClassMemberListNode members,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
 
@@ -666,9 +666,9 @@ public interface BsjNodeFactory
     public ClassDeclarationNode makeClassDeclarationNode(
             ClassModifiersNode modifiers,
             TypeNode extendsClause,
-            ListNode<TypeNode> implementsClause,
+            TypeListNode implementsClause,
             ClassBodyNode body,
-            ListNode<TypeParameterNode> typeParameters,
+            TypeParameterListNode typeParameters,
             IdentifierNode identifier,
             JavadocNode javadoc);
 
@@ -679,9 +679,9 @@ public interface BsjNodeFactory
     public ClassDeclarationNode makeClassDeclarationNode(
             ClassModifiersNode modifiers,
             TypeNode extendsClause,
-            ListNode<TypeNode> implementsClause,
+            TypeListNode implementsClause,
             ClassBodyNode body,
-            ListNode<TypeParameterNode> typeParameters,
+            TypeParameterListNode typeParameters,
             IdentifierNode identifier,
             JavadocNode javadoc,
             BsjSourceLocation startLocation,
@@ -729,7 +729,7 @@ public interface BsjNodeFactory
             boolean staticFlag,
             boolean finalFlag,
             boolean strictfpFlag,
-            ListNode<AnnotationNode> annotations);
+            AnnotationListNode annotations);
 
     /**
      * Creates a ClassModifiersNode.
@@ -741,7 +741,7 @@ public interface BsjNodeFactory
             boolean staticFlag,
             boolean finalFlag,
             boolean strictfpFlag,
-            ListNode<AnnotationNode> annotations,
+            AnnotationListNode annotations,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
 
@@ -767,8 +767,8 @@ public interface BsjNodeFactory
      */
     public CompilationUnitNode makeCompilationUnitNode(
             PackageDeclarationNode packageDeclaration,
-            ListNode<ImportNode> imports,
-            ListNode<TypeDeclarationNode> typeDecls);
+            ImportListNode imports,
+            TypeDeclarationListNode typeDecls);
 
     /**
      * Creates a CompilationUnitNode.
@@ -776,8 +776,8 @@ public interface BsjNodeFactory
      */
     public CompilationUnitNode makeCompilationUnitNode(
             PackageDeclarationNode packageDeclaration,
-            ListNode<ImportNode> imports,
-            ListNode<TypeDeclarationNode> typeDecls,
+            ImportListNode imports,
+            TypeDeclarationListNode typeDecls,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
 
@@ -807,7 +807,7 @@ public interface BsjNodeFactory
      */
     public ConstructorBodyNode makeConstructorBodyNode(
             ConstructorInvocationNode constructorInvocation,
-            ListNode<BlockStatementNode> statements);
+            BlockStatementListNode statements);
 
     /**
      * Creates a ConstructorBodyNode.
@@ -815,7 +815,7 @@ public interface BsjNodeFactory
      */
     public ConstructorBodyNode makeConstructorBodyNode(
             ConstructorInvocationNode constructorInvocation,
-            ListNode<BlockStatementNode> statements,
+            BlockStatementListNode statements,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
 
@@ -827,10 +827,10 @@ public interface BsjNodeFactory
             IdentifierNode identifier,
             ConstructorBodyNode body,
             ConstructorModifiersNode modifiers,
-            ListNode<VariableNode> parameters,
+            VariableListNode parameters,
             VariableNode varargParameter,
-            ListNode<UnparameterizedTypeNode> throwTypes,
-            ListNode<TypeParameterNode> typeParameters,
+            UnparameterizedTypeListNode throwTypes,
+            TypeParameterListNode typeParameters,
             JavadocNode javadoc);
 
     /**
@@ -841,10 +841,10 @@ public interface BsjNodeFactory
             IdentifierNode identifier,
             ConstructorBodyNode body,
             ConstructorModifiersNode modifiers,
-            ListNode<VariableNode> parameters,
+            VariableListNode parameters,
             VariableNode varargParameter,
-            ListNode<UnparameterizedTypeNode> throwTypes,
-            ListNode<TypeParameterNode> typeParameters,
+            UnparameterizedTypeListNode throwTypes,
+            TypeParameterListNode typeParameters,
             JavadocNode javadoc,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
@@ -855,7 +855,7 @@ public interface BsjNodeFactory
      */
     public ConstructorModifiersNode makeConstructorModifiersNode(
             AccessModifier access,
-            ListNode<AnnotationNode> annotations);
+            AnnotationListNode annotations);
 
     /**
      * Creates a ConstructorModifiersNode.
@@ -863,7 +863,7 @@ public interface BsjNodeFactory
      */
     public ConstructorModifiersNode makeConstructorModifiersNode(
             AccessModifier access,
-            ListNode<AnnotationNode> annotations,
+            AnnotationListNode annotations,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
 
@@ -958,16 +958,16 @@ public interface BsjNodeFactory
      * The start and stop locations which have been set as properties of this factory are used.
      */
     public EnumBodyNode makeEnumBodyNode(
-            ListNode<EnumConstantDeclarationNode> constants,
-            ListNode<ClassMemberNode> members);
+            EnumConstantDeclarationListNode constants,
+            ClassMemberListNode members);
 
     /**
      * Creates a EnumBodyNode.
      * The specified start and stop locations are used.
      */
     public EnumBodyNode makeEnumBodyNode(
-            ListNode<EnumConstantDeclarationNode> constants,
-            ListNode<ClassMemberNode> members,
+            EnumConstantDeclarationListNode constants,
+            ClassMemberListNode members,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
 
@@ -992,9 +992,9 @@ public interface BsjNodeFactory
      * The start and stop locations which have been set as properties of this factory are used.
      */
     public EnumConstantDeclarationNode makeEnumConstantDeclarationNode(
-            ListNode<AnnotationNode> annotations,
+            AnnotationListNode annotations,
             IdentifierNode identifier,
-            ListNode<ExpressionNode> arguments,
+            ExpressionListNode arguments,
             AnonymousClassBodyNode body,
             JavadocNode javadoc);
 
@@ -1003,9 +1003,9 @@ public interface BsjNodeFactory
      * The specified start and stop locations are used.
      */
     public EnumConstantDeclarationNode makeEnumConstantDeclarationNode(
-            ListNode<AnnotationNode> annotations,
+            AnnotationListNode annotations,
             IdentifierNode identifier,
-            ListNode<ExpressionNode> arguments,
+            ExpressionListNode arguments,
             AnonymousClassBodyNode body,
             JavadocNode javadoc,
             BsjSourceLocation startLocation,
@@ -1017,7 +1017,7 @@ public interface BsjNodeFactory
      */
     public EnumDeclarationNode makeEnumDeclarationNode(
             EnumModifiersNode modifiers,
-            ListNode<TypeNode> implementsClause,
+            TypeListNode implementsClause,
             EnumBodyNode body,
             IdentifierNode identifier,
             JavadocNode javadoc);
@@ -1028,7 +1028,7 @@ public interface BsjNodeFactory
      */
     public EnumDeclarationNode makeEnumDeclarationNode(
             EnumModifiersNode modifiers,
-            ListNode<TypeNode> implementsClause,
+            TypeListNode implementsClause,
             EnumBodyNode body,
             IdentifierNode identifier,
             JavadocNode javadoc,
@@ -1042,7 +1042,7 @@ public interface BsjNodeFactory
     public EnumModifiersNode makeEnumModifiersNode(
             AccessModifier access,
             boolean strictfpFlag,
-            ListNode<AnnotationNode> annotations);
+            AnnotationListNode annotations);
 
     /**
      * Creates a EnumModifiersNode.
@@ -1051,7 +1051,7 @@ public interface BsjNodeFactory
     public EnumModifiersNode makeEnumModifiersNode(
             AccessModifier access,
             boolean strictfpFlag,
-            ListNode<AnnotationNode> annotations,
+            AnnotationListNode annotations,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
 
@@ -1127,7 +1127,7 @@ public interface BsjNodeFactory
      */
     public FieldDeclarationNode makeFieldDeclarationNode(
             FieldModifiersNode modifiers,
-            ListNode<VariableDeclaratorNode> declarators,
+            VariableDeclaratorListNode declarators,
             JavadocNode javadoc);
 
     /**
@@ -1136,7 +1136,7 @@ public interface BsjNodeFactory
      */
     public FieldDeclarationNode makeFieldDeclarationNode(
             FieldModifiersNode modifiers,
-            ListNode<VariableDeclaratorNode> declarators,
+            VariableDeclaratorListNode declarators,
             JavadocNode javadoc,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
@@ -1151,7 +1151,7 @@ public interface BsjNodeFactory
             boolean finalFlag,
             boolean transientFlag,
             boolean volatileFlag,
-            ListNode<AnnotationNode> annotations);
+            AnnotationListNode annotations);
 
     /**
      * Creates a FieldModifiersNode.
@@ -1163,7 +1163,7 @@ public interface BsjNodeFactory
             boolean finalFlag,
             boolean transientFlag,
             boolean volatileFlag,
-            ListNode<AnnotationNode> annotations,
+            AnnotationListNode annotations,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
 
@@ -1204,14 +1204,14 @@ public interface BsjNodeFactory
      * The start and stop locations which have been set as properties of this factory are used.
      */
     public ForInitializerExpressionNode makeForInitializerExpressionNode(
-            ListNode<StatementExpressionNode> expressions);
+            StatementExpressionListNode expressions);
 
     /**
      * Creates a ForInitializerExpressionNode.
      * The specified start and stop locations are used.
      */
     public ForInitializerExpressionNode makeForInitializerExpressionNode(
-            ListNode<StatementExpressionNode> expressions,
+            StatementExpressionListNode expressions,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
 
@@ -1222,7 +1222,7 @@ public interface BsjNodeFactory
     public ForLoopNode makeForLoopNode(
             ForInitializerNode initializer,
             ExpressionNode condition,
-            ListNode<StatementExpressionNode> update,
+            StatementExpressionListNode update,
             StatementNode statement);
 
     /**
@@ -1232,7 +1232,7 @@ public interface BsjNodeFactory
     public ForLoopNode makeForLoopNode(
             ForInitializerNode initializer,
             ExpressionNode condition,
-            ListNode<StatementExpressionNode> update,
+            StatementExpressionListNode update,
             StatementNode statement,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
@@ -1398,14 +1398,14 @@ public interface BsjNodeFactory
      * The start and stop locations which have been set as properties of this factory are used.
      */
     public InterfaceBodyNode makeInterfaceBodyNode(
-            ListNode<InterfaceMemberNode> members);
+            InterfaceMemberListNode members);
 
     /**
      * Creates a InterfaceBodyNode.
      * The specified start and stop locations are used.
      */
     public InterfaceBodyNode makeInterfaceBodyNode(
-            ListNode<InterfaceMemberNode> members,
+            InterfaceMemberListNode members,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
 
@@ -1415,9 +1415,9 @@ public interface BsjNodeFactory
      */
     public InterfaceDeclarationNode makeInterfaceDeclarationNode(
             InterfaceModifiersNode modifiers,
-            ListNode<TypeNode> extendsClause,
+            TypeListNode extendsClause,
             InterfaceBodyNode body,
-            ListNode<TypeParameterNode> typeParameters,
+            TypeParameterListNode typeParameters,
             IdentifierNode identifier,
             JavadocNode javadoc);
 
@@ -1427,9 +1427,9 @@ public interface BsjNodeFactory
      */
     public InterfaceDeclarationNode makeInterfaceDeclarationNode(
             InterfaceModifiersNode modifiers,
-            ListNode<TypeNode> extendsClause,
+            TypeListNode extendsClause,
             InterfaceBodyNode body,
-            ListNode<TypeParameterNode> typeParameters,
+            TypeParameterListNode typeParameters,
             IdentifierNode identifier,
             JavadocNode javadoc,
             BsjSourceLocation startLocation,
@@ -1459,7 +1459,7 @@ public interface BsjNodeFactory
             AccessModifier access,
             boolean staticFlag,
             boolean strictfpFlag,
-            ListNode<AnnotationNode> annotations);
+            AnnotationListNode annotations);
 
     /**
      * Creates a InterfaceModifiersNode.
@@ -1469,7 +1469,7 @@ public interface BsjNodeFactory
             AccessModifier access,
             boolean staticFlag,
             boolean strictfpFlag,
-            ListNode<AnnotationNode> annotations,
+            AnnotationListNode annotations,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
 
@@ -1528,14 +1528,14 @@ public interface BsjNodeFactory
      * The start and stop locations which have been set as properties of this factory are used.
      */
     public MetaprogramNode makeMetaprogramNode(
-            ListNode<BlockStatementNode> body);
+            BlockStatementListNode body);
 
     /**
      * Creates a MetaprogramNode.
      * The specified start and stop locations are used.
      */
     public MetaprogramNode makeMetaprogramNode(
-            ListNode<BlockStatementNode> body,
+            BlockStatementListNode body,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
 
@@ -1547,11 +1547,11 @@ public interface BsjNodeFactory
             BlockNode body,
             MethodModifiersNode modifiers,
             IdentifierNode identifier,
-            ListNode<VariableNode> parameters,
+            VariableListNode parameters,
             VariableNode varargParameter,
             TypeNode returnType,
-            ListNode<UnparameterizedTypeNode> throwTypes,
-            ListNode<TypeParameterNode> typeParameters,
+            UnparameterizedTypeListNode throwTypes,
+            TypeParameterListNode typeParameters,
             JavadocNode javadoc);
 
     /**
@@ -1562,11 +1562,11 @@ public interface BsjNodeFactory
             BlockNode body,
             MethodModifiersNode modifiers,
             IdentifierNode identifier,
-            ListNode<VariableNode> parameters,
+            VariableListNode parameters,
             VariableNode varargParameter,
             TypeNode returnType,
-            ListNode<UnparameterizedTypeNode> throwTypes,
-            ListNode<TypeParameterNode> typeParameters,
+            UnparameterizedTypeListNode throwTypes,
+            TypeParameterListNode typeParameters,
             JavadocNode javadoc,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
@@ -1578,8 +1578,8 @@ public interface BsjNodeFactory
     public MethodInvocationByExpressionNode makeMethodInvocationByExpressionNode(
             PrimaryExpressionNode expression,
             IdentifierNode identifier,
-            ListNode<ExpressionNode> arguments,
-            ListNode<TypeNode> typeArguments);
+            ExpressionListNode arguments,
+            TypeListNode typeArguments);
 
     /**
      * Creates a MethodInvocationByExpressionNode.
@@ -1588,8 +1588,8 @@ public interface BsjNodeFactory
     public MethodInvocationByExpressionNode makeMethodInvocationByExpressionNode(
             PrimaryExpressionNode expression,
             IdentifierNode identifier,
-            ListNode<ExpressionNode> arguments,
-            ListNode<TypeNode> typeArguments,
+            ExpressionListNode arguments,
+            TypeListNode typeArguments,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
 
@@ -1599,8 +1599,8 @@ public interface BsjNodeFactory
      */
     public MethodInvocationByNameNode makeMethodInvocationByNameNode(
             NameNode name,
-            ListNode<ExpressionNode> arguments,
-            ListNode<TypeNode> typeArguments);
+            ExpressionListNode arguments,
+            TypeListNode typeArguments);
 
     /**
      * Creates a MethodInvocationByNameNode.
@@ -1608,8 +1608,8 @@ public interface BsjNodeFactory
      */
     public MethodInvocationByNameNode makeMethodInvocationByNameNode(
             NameNode name,
-            ListNode<ExpressionNode> arguments,
-            ListNode<TypeNode> typeArguments,
+            ExpressionListNode arguments,
+            TypeListNode typeArguments,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
 
@@ -1625,7 +1625,7 @@ public interface BsjNodeFactory
             boolean synchronizedFlag,
             boolean nativeFlag,
             boolean strictfpFlag,
-            ListNode<AnnotationNode> annotations);
+            AnnotationListNode annotations);
 
     /**
      * Creates a MethodModifiersNode.
@@ -1639,7 +1639,7 @@ public interface BsjNodeFactory
             boolean synchronizedFlag,
             boolean nativeFlag,
             boolean strictfpFlag,
-            ListNode<AnnotationNode> annotations,
+            AnnotationListNode annotations,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
 
@@ -1648,7 +1648,7 @@ public interface BsjNodeFactory
      * The start and stop locations which have been set as properties of this factory are used.
      */
     public NormalAnnotationNode makeNormalAnnotationNode(
-            ListNode<AnnotationElementNode> arguments,
+            AnnotationElementListNode arguments,
             UnparameterizedTypeNode annotationType);
 
     /**
@@ -1656,7 +1656,7 @@ public interface BsjNodeFactory
      * The specified start and stop locations are used.
      */
     public NormalAnnotationNode makeNormalAnnotationNode(
-            ListNode<AnnotationElementNode> arguments,
+            AnnotationElementListNode arguments,
             UnparameterizedTypeNode annotationType,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
@@ -1683,7 +1683,7 @@ public interface BsjNodeFactory
      */
     public PackageDeclarationNode makePackageDeclarationNode(
             NameNode name,
-            ListNode<AnnotationNode> annotations);
+            AnnotationListNode annotations);
 
     /**
      * Creates a PackageDeclarationNode.
@@ -1691,7 +1691,7 @@ public interface BsjNodeFactory
      */
     public PackageDeclarationNode makePackageDeclarationNode(
             NameNode name,
-            ListNode<AnnotationNode> annotations,
+            AnnotationListNode annotations,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
 
@@ -1701,7 +1701,7 @@ public interface BsjNodeFactory
      */
     public ParameterizedTypeNode makeParameterizedTypeNode(
             UnparameterizedTypeNode baseType,
-            ListNode<TypeArgumentNode> typeArguments);
+            TypeArgumentListNode typeArguments);
 
     /**
      * Creates a ParameterizedTypeNode.
@@ -1709,7 +1709,7 @@ public interface BsjNodeFactory
      */
     public ParameterizedTypeNode makeParameterizedTypeNode(
             UnparameterizedTypeNode baseType,
-            ListNode<TypeArgumentNode> typeArguments,
+            TypeArgumentListNode typeArguments,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
 
@@ -1770,9 +1770,9 @@ public interface BsjNodeFactory
     public QualifiedClassInstantiationNode makeQualifiedClassInstantiationNode(
             ExpressionNode enclosingExpression,
             IdentifierNode identifier,
-            ListNode<TypeArgumentNode> typeArguments,
-            ListNode<TypeArgumentNode> constructorTypeArguments,
-            ListNode<ExpressionNode> arguments,
+            TypeArgumentListNode typeArguments,
+            TypeArgumentListNode constructorTypeArguments,
+            ExpressionListNode arguments,
             AnonymousClassBodyNode body);
 
     /**
@@ -1782,9 +1782,9 @@ public interface BsjNodeFactory
     public QualifiedClassInstantiationNode makeQualifiedClassInstantiationNode(
             ExpressionNode enclosingExpression,
             IdentifierNode identifier,
-            ListNode<TypeArgumentNode> typeArguments,
-            ListNode<TypeArgumentNode> constructorTypeArguments,
-            ListNode<ExpressionNode> arguments,
+            TypeArgumentListNode typeArguments,
+            TypeArgumentListNode constructorTypeArguments,
+            ExpressionListNode arguments,
             AnonymousClassBodyNode body,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
@@ -1918,8 +1918,8 @@ public interface BsjNodeFactory
     public SuperMethodInvocationNode makeSuperMethodInvocationNode(
             UnparameterizedTypeNode type,
             IdentifierNode identifier,
-            ListNode<ExpressionNode> arguments,
-            ListNode<TypeNode> typeArguments);
+            ExpressionListNode arguments,
+            TypeListNode typeArguments);
 
     /**
      * Creates a SuperMethodInvocationNode.
@@ -1928,8 +1928,8 @@ public interface BsjNodeFactory
     public SuperMethodInvocationNode makeSuperMethodInvocationNode(
             UnparameterizedTypeNode type,
             IdentifierNode identifier,
-            ListNode<ExpressionNode> arguments,
-            ListNode<TypeNode> typeArguments,
+            ExpressionListNode arguments,
+            TypeListNode typeArguments,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
 
@@ -1939,8 +1939,8 @@ public interface BsjNodeFactory
      */
     public SuperclassConstructorInvocationNode makeSuperclassConstructorInvocationNode(
             PrimaryExpressionNode qualifyingExpression,
-            ListNode<ExpressionNode> arguments,
-            ListNode<TypeNode> typeArguments);
+            ExpressionListNode arguments,
+            TypeListNode typeArguments);
 
     /**
      * Creates a SuperclassConstructorInvocationNode.
@@ -1948,8 +1948,8 @@ public interface BsjNodeFactory
      */
     public SuperclassConstructorInvocationNode makeSuperclassConstructorInvocationNode(
             PrimaryExpressionNode qualifyingExpression,
-            ListNode<ExpressionNode> arguments,
-            ListNode<TypeNode> typeArguments,
+            ExpressionListNode arguments,
+            TypeListNode typeArguments,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
 
@@ -1959,7 +1959,7 @@ public interface BsjNodeFactory
      */
     public SwitchNode makeSwitchNode(
             ExpressionNode expression,
-            ListNode<CaseNode> cases);
+            CaseListNode cases);
 
     /**
      * Creates a SwitchNode.
@@ -1967,7 +1967,7 @@ public interface BsjNodeFactory
      */
     public SwitchNode makeSwitchNode(
             ExpressionNode expression,
-            ListNode<CaseNode> cases,
+            CaseListNode cases,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
 
@@ -2027,7 +2027,7 @@ public interface BsjNodeFactory
      */
     public TryNode makeTryNode(
             BlockNode block,
-            ListNode<CatchNode> catches,
+            CatchListNode catches,
             BlockNode finallyBlock);
 
     /**
@@ -2036,7 +2036,7 @@ public interface BsjNodeFactory
      */
     public TryNode makeTryNode(
             BlockNode block,
-            ListNode<CatchNode> catches,
+            CatchListNode catches,
             BlockNode finallyBlock,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
@@ -2146,7 +2146,7 @@ public interface BsjNodeFactory
      */
     public TypeParameterNode makeTypeParameterNode(
             IdentifierNode identifier,
-            ListNode<DeclaredTypeNode> bounds);
+            DeclaredTypeListNode bounds);
 
     /**
      * Creates a TypeParameterNode.
@@ -2154,7 +2154,7 @@ public interface BsjNodeFactory
      */
     public TypeParameterNode makeTypeParameterNode(
             IdentifierNode identifier,
-            ListNode<DeclaredTypeNode> bounds,
+            DeclaredTypeListNode bounds,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
 
@@ -2232,8 +2232,8 @@ public interface BsjNodeFactory
      */
     public UnqualifiedClassInstantiationNode makeUnqualifiedClassInstantiationNode(
             DeclaredTypeNode type,
-            ListNode<TypeArgumentNode> constructorTypeArguments,
-            ListNode<ExpressionNode> arguments,
+            TypeArgumentListNode constructorTypeArguments,
+            ExpressionListNode arguments,
             AnonymousClassBodyNode body);
 
     /**
@@ -2242,8 +2242,8 @@ public interface BsjNodeFactory
      */
     public UnqualifiedClassInstantiationNode makeUnqualifiedClassInstantiationNode(
             DeclaredTypeNode type,
-            ListNode<TypeArgumentNode> constructorTypeArguments,
-            ListNode<ExpressionNode> arguments,
+            TypeArgumentListNode constructorTypeArguments,
+            ExpressionListNode arguments,
             AnonymousClassBodyNode body,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
@@ -2254,7 +2254,7 @@ public interface BsjNodeFactory
      */
     public VariableDeclarationNode makeVariableDeclarationNode(
             VariableModifiersNode modifiers,
-            ListNode<VariableDeclaratorNode> declarators);
+            VariableDeclaratorListNode declarators);
 
     /**
      * Creates a VariableDeclarationNode.
@@ -2262,7 +2262,7 @@ public interface BsjNodeFactory
      */
     public VariableDeclarationNode makeVariableDeclarationNode(
             VariableModifiersNode modifiers,
-            ListNode<VariableDeclaratorNode> declarators,
+            VariableDeclaratorListNode declarators,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
 
@@ -2340,7 +2340,7 @@ public interface BsjNodeFactory
      */
     public VariableModifiersNode makeVariableModifiersNode(
             boolean finalFlag,
-            ListNode<AnnotationNode> annotations);
+            AnnotationListNode annotations);
 
     /**
      * Creates a VariableModifiersNode.
@@ -2348,7 +2348,7 @@ public interface BsjNodeFactory
      */
     public VariableModifiersNode makeVariableModifiersNode(
             boolean finalFlag,
-            ListNode<AnnotationNode> annotations,
+            AnnotationListNode annotations,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
 

@@ -9,10 +9,9 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
-import edu.jhu.cs.bsj.compiler.ast.node.BlockStatementNode;
+import edu.jhu.cs.bsj.compiler.ast.node.BlockStatementListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ConstructorBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ConstructorInvocationNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
@@ -22,12 +21,12 @@ public class ConstructorBodyNodeImpl extends NodeImpl implements ConstructorBody
     private ConstructorInvocationNode constructorInvocation;
 
     /** The statements contained in this constructor. */
-    private ListNode<BlockStatementNode> statements;
+    private BlockStatementListNode statements;
 
     /** General constructor. */
     public ConstructorBodyNodeImpl(
             ConstructorInvocationNode constructorInvocation,
-            ListNode<BlockStatementNode> statements,
+            BlockStatementListNode statements,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
@@ -66,7 +65,7 @@ public class ConstructorBodyNodeImpl extends NodeImpl implements ConstructorBody
      * Gets the statements contained in this constructor.
      * @return The statements contained in this constructor.
      */
-    public ListNode<BlockStatementNode> getStatements()
+    public BlockStatementListNode getStatements()
     {
         return this.statements;
     }
@@ -75,7 +74,7 @@ public class ConstructorBodyNodeImpl extends NodeImpl implements ConstructorBody
      * Changes the statements contained in this constructor.
      * @param statements The statements contained in this constructor.
      */
-    public void setStatements(ListNode<BlockStatementNode> statements)
+    public void setStatements(BlockStatementListNode statements)
     {
         if (this.statements instanceof NodeImpl)
         {
@@ -213,7 +212,6 @@ public class ConstructorBodyNodeImpl extends NodeImpl implements ConstructorBody
      * @return <code>true</code> if the replacement was successful; <code>false</code> if the
      *         specified <tt>before</tt> node is not a child of this node.
      */
-    @SuppressWarnings("unchecked")
     public <N extends Node> boolean replace(N before, N after)
     {
         if (super.replace(before,after))
@@ -224,13 +222,9 @@ public class ConstructorBodyNodeImpl extends NodeImpl implements ConstructorBody
             setConstructorInvocation((ConstructorInvocationNode)after);
             return true;
         }
-        if (before.equals(this.statements) && (after instanceof ListNode<?>))
+        if (before.equals(this.statements) && (after instanceof BlockStatementListNode))
         {
-            for (Object listval : ((ListNode<?>)after).getChildren())
-            {
-                BlockStatementNode.class.cast(listval);
-            }
-            setStatements((ListNode<BlockStatementNode>)after);
+            setStatements((BlockStatementListNode)after);
             return true;
         }
         return false;

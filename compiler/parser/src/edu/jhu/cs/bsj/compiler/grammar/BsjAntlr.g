@@ -599,7 +599,7 @@ packageDeclaration returns [PackageDeclarationNode ret]
         scope Rule;
         @init{
             ruleStart("packageDeclaration");
-            ListNode<AnnotationNode> annotationsNode = 
+            AnnotationListNode annotationsNode = 
                 factory.makeAnnotationListNode(Collections.<AnnotationNode>emptyList());
         }
         @after {
@@ -620,7 +620,7 @@ packageDeclaration returns [PackageDeclarationNode ret]
         }
     ;
 
-importDeclarations returns [ListNode<ImportNode> ret]
+importDeclarations returns [ImportListNode ret]
         scope Rule;
         @init {
             ruleStart("importDeclarations");
@@ -709,7 +709,7 @@ javadoc returns [JavadocNode ret] // TODO: parse out Javadoc contents
     :
     ;
 
-typeDeclarations returns [ListNode<TypeDeclarationNode> ret]
+typeDeclarations returns [TypeDeclarationListNode ret]
         scope Rule;
         @init {
             ruleStart("typeDeclarations");
@@ -792,7 +792,7 @@ classOrInterfaceDeclaration returns [TypeDeclarationNode ret]
 // * whether or not access modifiers are allowed (if false, access modifiers are parsed like normal modifiers)
 // * a list of those modifiers which are allowed
 modifiers[boolean accessAllowed, Modifier... mods]
-    returns [ModifierSet modifiers, AccessModifier access, ListNode<AnnotationNode> annotations]
+    returns [ModifierSet modifiers, AccessModifier access, AnnotationListNode annotations]
         scope Rule;
         @init {
             ruleStart("classOrInterfaceDeclaration");
@@ -1096,8 +1096,8 @@ normalClassDeclaration returns [ClassDeclarationNode ret]
         scope Rule;
         @init {
             ruleStart("normalClassDeclaration");
-            ListNode<TypeNode> typeListNode = factory.makeTypeListNode(new ArrayList<TypeNode>());
-            ListNode<TypeParameterNode> typeParamsNode = factory.makeTypeParameterListNode(new ArrayList<TypeParameterNode>());
+            TypeListNode typeListNode = factory.makeTypeListNode(new ArrayList<TypeNode>());
+            TypeParameterListNode typeParamsNode = factory.makeTypeParameterListNode(new ArrayList<TypeParameterNode>());
         }         
         @after {
             ruleStop();
@@ -1132,7 +1132,7 @@ normalClassDeclaration returns [ClassDeclarationNode ret]
     ;
 
 
-typeParameters returns [ListNode<TypeParameterNode> ret]
+typeParameters returns [TypeParameterListNode ret]
         scope Rule;
         @init {
             ruleStart("typeParameters");
@@ -1161,7 +1161,7 @@ typeParameter returns [TypeParameterNode ret]
         scope Rule;
         @init {
             ruleStart("typeParameter");
-            ListNode<DeclaredTypeNode> typeBoundNode = factory.makeDeclaredTypeListNode(Collections.<DeclaredTypeNode>emptyList());
+            DeclaredTypeListNode typeBoundNode = factory.makeDeclaredTypeListNode(Collections.<DeclaredTypeNode>emptyList());
         }
         @after {
             ruleStop();
@@ -1182,7 +1182,7 @@ typeParameter returns [TypeParameterNode ret]
     ;
 
 
-typeBound returns [ListNode<DeclaredTypeNode> ret]
+typeBound returns [DeclaredTypeListNode ret]
         scope Rule;
         @init {
             ruleStart("typeBound");
@@ -1210,7 +1210,7 @@ enumDeclaration returns [EnumDeclarationNode ret]
         scope Rule;
         @init {
             ruleStart("enumDeclaration");
-            ListNode<TypeNode> typeListNode = factory.makeTypeListNode(new ArrayList<TypeNode>());
+            TypeListNode typeListNode = factory.makeTypeListNode(new ArrayList<TypeNode>());
         } 
         @after {
             ruleStop();
@@ -1241,9 +1241,9 @@ enumBody returns [EnumBodyNode ret]
         scope Rule;
         @init {
             ruleStart("enumBody");
-            ListNode<EnumConstantDeclarationNode> enumConstantsNode = factory.makeEnumConstantDeclarationListNode(
+            EnumConstantDeclarationListNode enumConstantsNode = factory.makeEnumConstantDeclarationListNode(
                     Collections.<EnumConstantDeclarationNode>emptyList());
-            ListNode<ClassMemberNode> enumBodyDeclarationsNode =
+            ClassMemberListNode enumBodyDeclarationsNode =
                     factory.makeClassMemberListNode(Collections.<ClassMemberNode>emptyList());
         }
         @after {
@@ -1272,7 +1272,7 @@ enumBody returns [EnumBodyNode ret]
         }
     ;
 
-enumConstants returns [ListNode<EnumConstantDeclarationNode> ret]
+enumConstants returns [EnumConstantDeclarationListNode ret]
         scope Rule;
         @init {
             ruleStart("enumConstants");
@@ -1300,8 +1300,8 @@ enumConstant returns [EnumConstantDeclarationNode ret]
         scope Rule;
         @init {
             ruleStart("enumConstant");
-            ListNode<AnnotationNode> annotationsNode = factory.makeAnnotationListNode(Collections.<AnnotationNode>emptyList());
-            ListNode<ExpressionNode> argumentsNode = factory.makeExpressionListNode(Collections.<ExpressionNode>emptyList());
+            AnnotationListNode annotationsNode = factory.makeAnnotationListNode(Collections.<AnnotationNode>emptyList());
+            ExpressionListNode argumentsNode = factory.makeExpressionListNode(Collections.<ExpressionNode>emptyList());
             AnonymousClassBodyNode anonymousClassBodyNode = null;
         }
         @after {
@@ -1338,7 +1338,7 @@ enumConstant returns [EnumConstantDeclarationNode ret]
         }
     ;
 
-enumBodyDeclarations returns [ListNode<ClassMemberNode> ret]
+enumBodyDeclarations returns [ClassMemberListNode ret]
         scope Rule;
         @init {
             ruleStart("enumBodyDeclarations");
@@ -1383,8 +1383,8 @@ normalInterfaceDeclaration returns [InterfaceDeclarationNode ret]
         scope Rule;
         @init {
             ruleStart("normalInterfaceDeclaration");
-            ListNode<TypeNode> typeListNode = factory.makeTypeListNode(new ArrayList<TypeNode>());
-            ListNode<TypeParameterNode> typeParamsNode = factory.makeTypeParameterListNode(new ArrayList<TypeParameterNode>());
+            TypeListNode typeListNode = factory.makeTypeListNode(new ArrayList<TypeNode>());
+            TypeParameterListNode typeParamsNode = factory.makeTypeParameterListNode(new ArrayList<TypeParameterNode>());
         } 
         @after {
             ruleStop();
@@ -1416,7 +1416,7 @@ normalInterfaceDeclaration returns [InterfaceDeclarationNode ret]
         }
     ;
 
-typeList returns [ListNode<TypeNode> ret]
+typeList returns [TypeListNode ret]
         scope Rule;
         @init {
             ruleStart("typeList");
@@ -1639,9 +1639,9 @@ constructorDeclaration returns [ConstructorDeclarationNode ret]
         scope Rule;
         @init {
             ruleStart("constructorDeclaration");
-            ListNode<TypeParameterNode> typeParametersNode =
+            TypeParameterListNode typeParametersNode =
                     factory.makeTypeParameterListNode(Collections.<TypeParameterNode>emptyList());
-            ListNode<UnparameterizedTypeNode> throwsNode = factory.makeUnparameterizedTypeListNode(Collections.<UnparameterizedTypeNode>emptyList());
+            UnparameterizedTypeListNode throwsNode = factory.makeUnparameterizedTypeListNode(Collections.<UnparameterizedTypeNode>emptyList());
         }
         @after {
             ruleStop();
@@ -1680,7 +1680,7 @@ constructorBody returns [ConstructorBodyNode ret]
         scope Rule;
         @init {
             ruleStart("constructorBody");
-            ListNode<BlockStatementNode> listNode = null;
+            BlockStatementListNode listNode = null;
             ConstructorInvocationNode constructorInvocationNode = null;
         }
         @after {
@@ -1709,9 +1709,9 @@ methodDeclaration returns [MethodDeclarationNode ret]
         @init {
             ruleStart("methodDeclaration");
             BlockNode blockNode = null;
-            ListNode<TypeParameterNode> typeParametersNode =
+            TypeParameterListNode typeParametersNode =
                     factory.makeTypeParameterListNode(Collections.<TypeParameterNode>emptyList());
-            ListNode<UnparameterizedTypeNode> throwsNode = factory.makeUnparameterizedTypeListNode(Collections.<UnparameterizedTypeNode>emptyList());
+            UnparameterizedTypeListNode throwsNode = factory.makeUnparameterizedTypeListNode(Collections.<UnparameterizedTypeNode>emptyList());
             TypeNode returnTypeNode = null;
         }
         @after {
@@ -1841,7 +1841,7 @@ interfaceMethodDeclaration returns [MethodDeclarationNode ret]
         @init {
             ruleStart("interfaceMethodDeclaration");
             TypeNode returnTypeNode = null;
-            ListNode<UnparameterizedTypeNode> throwsNode = factory.makeUnparameterizedTypeListNode(Collections.<UnparameterizedTypeNode>emptyList());
+            UnparameterizedTypeListNode throwsNode = factory.makeUnparameterizedTypeListNode(Collections.<UnparameterizedTypeNode>emptyList());
         }
         @after {
             ruleStop();
@@ -1897,7 +1897,7 @@ interfaceFieldDeclaration returns [FieldDeclarationNode ret]
         }
     ;
 
-throwsClause returns [ListNode<UnparameterizedTypeNode> ret]
+throwsClause returns [UnparameterizedTypeListNode ret]
         scope Rule;
         @init {
             ruleStart("throwsClause");
@@ -2078,7 +2078,7 @@ primitiveType returns [PrimitiveTypeNode ret]
 //     Map.Entry<K,V> entry;
 // this node would parse
 //     <K,V>
-typeArguments returns [ListNode<TypeArgumentNode> ret]
+typeArguments returns [TypeArgumentListNode ret]
         scope Rule;
         @init {
             ruleStart("typeArguments");
@@ -2146,7 +2146,7 @@ typeArgument returns [TypeArgumentNode ret]
 //     public void foo(int x, int y)
 // this rule matches
 //     (int x, int y)
-formalParameters returns [ListNode<VariableNode> parameters, VariableNode varargParameter]
+formalParameters returns [VariableListNode parameters, VariableNode varargParameter]
         scope Rule;
         @init {
             ruleStart("formalParameters");
@@ -2169,7 +2169,7 @@ formalParameters returns [ListNode<VariableNode> parameters, VariableNode vararg
     ;
 
 // This rule is expected to produce a list of parameter declarations (multiple results)
-formalParameterDecls returns [ListNode<VariableNode> parameters, VariableNode varargParameter]
+formalParameterDecls returns [VariableListNode parameters, VariableNode varargParameter]
         scope Rule;
         @init {
             ruleStart("formalParameterDecls");
@@ -2276,7 +2276,7 @@ superclassConstructorInvocation returns [SuperclassConstructorInvocationNode ret
         @init {
             ruleStart("superclassConstructorInvocation");
             PrimaryExpressionNode qualifyingExpression = null;
-            ListNode<TypeNode> typeArgumentsNode = factory.makeTypeListNode(Collections.<TypeNode>emptyList());
+            TypeListNode typeArgumentsNode = factory.makeTypeListNode(Collections.<TypeNode>emptyList());
         }
         @after {
             ruleStop();
@@ -2323,7 +2323,7 @@ explicitConstructorInvocation returns [ConstructorInvocationNode ret]
         }
     ;
 
-annotations returns [ListNode<AnnotationNode> ret]
+annotations returns [AnnotationListNode ret]
         scope Rule;
         @init {
             ruleStart("annotations");
@@ -2389,7 +2389,7 @@ annotation returns [AnnotationNode ret]
 //     @Foo(bar="baz",happy=5)
 // this rule would parse
 //     bar="baz",happy=5
-elementValuePairs returns [ListNode<AnnotationElementNode> ret]
+elementValuePairs returns [AnnotationElementListNode ret]
         scope Rule;
         @init {
             ruleStart("elementValuePairs");
@@ -2652,7 +2652,7 @@ block returns [BlockNode ret]
         }
     ;
 
-blockStatementList returns [ListNode<BlockStatementNode> ret]
+blockStatementList returns [BlockStatementListNode ret]
         scope Rule;
         @init {
             ruleStart("blockStatementList");
@@ -2891,7 +2891,7 @@ statement returns [StatementNode ret]
         }
     ;
 
-switchBlockStatementGroups returns [ListNode<CaseNode> ret]
+switchBlockStatementGroups returns [CaseListNode ret]
         scope Rule;
         @init {
             ruleStart("switchBlockStatementGroups");
@@ -2914,7 +2914,7 @@ switchBlockStatementGroup returns [CaseNode ret]
         scope Rule;
         @init {
             ruleStart("switchBlockStatementGroup");
-            ListNode<BlockStatementNode> listNode = null;
+            BlockStatementListNode listNode = null;
             ExpressionNode label = null;
         }
         @after {
@@ -2957,7 +2957,7 @@ trystatement returns [TryNode ret]
         scope Rule;
         @init {
             ruleStart("trystatement");
-            ListNode<CatchNode> catchList = factory.makeCatchListNode(new ArrayList<CatchNode>());
+            CatchListNode catchList = factory.makeCatchListNode(new ArrayList<CatchNode>());
             BlockNode finallyBlock = null;
         }    
         @after {
@@ -2990,7 +2990,7 @@ trystatement returns [TryNode ret]
         }        
     ;
 
-catches returns [ListNode<CatchNode> ret]
+catches returns [CatchListNode ret]
         scope Rule;
         @init {
             ruleStart("catches");
@@ -3072,7 +3072,7 @@ forstatement returns [StatementNode ret]
             ruleStart("forstatement");
             ForInitializerNode forInitNode = null;
             ExpressionNode expNode = null;
-            ListNode<StatementExpressionNode> expListNode =
+            StatementExpressionListNode expListNode =
                     factory.makeStatementExpressionListNode(Collections.<StatementExpressionNode>emptyList());
         }
         @after {
@@ -3160,7 +3160,7 @@ parExpression returns [ExpressionNode ret]
         }
     ;
 
-statementExpressionList returns [ListNode<StatementExpressionNode> ret]
+statementExpressionList returns [StatementExpressionListNode ret]
         scope Rule;
         @init {
             ruleStart("statementExpressionList");
@@ -3183,7 +3183,7 @@ statementExpressionList returns [ListNode<StatementExpressionNode> ret]
         )*
     ;
 
-expressionList returns [ListNode<ExpressionNode> ret]
+expressionList returns [ExpressionListNode ret]
         scope Rule;
         @init {
             ruleStart("expressionList");
@@ -4026,7 +4026,7 @@ unqualifiedClassInstantiation returns [UnqualifiedClassInstantiationNode ret]
         @init {
             ruleStart("unqualifiedClassInstantiation");
             AnonymousClassBodyNode anonymousClassBodyNode = null;
-            ListNode<TypeArgumentNode> typeArgumentsNode =
+            TypeArgumentListNode typeArgumentsNode =
                     factory.makeTypeArgumentListNode(Collections.<TypeArgumentNode>emptyList());
         }
         @after {
@@ -4119,7 +4119,7 @@ superMethodInvocation returns [SuperMethodInvocationNode ret]
         @init {
             ruleStart("superMethodInvocation");
             UnparameterizedTypeNode qualifyingTypeNode = null;
-            ListNode<TypeNode> typeArgumentsNode = factory.makeTypeListNode(Collections.<TypeNode>emptyList());
+            TypeListNode typeArgumentsNode = factory.makeTypeListNode(Collections.<TypeNode>emptyList());
         }
         @after {
             ruleStop();
@@ -4179,9 +4179,9 @@ qualifiedClassInstantiationPrimarySuffix[PrimaryExpressionNode in] returns [Qual
         scope Rule;
         @init {
             ruleStart("qualifiedClassInstantiationPrimarySuffix");
-            ListNode<TypeArgumentNode> constructorTypeArgumentsNode =
+            TypeArgumentListNode constructorTypeArgumentsNode =
                     factory.makeTypeArgumentListNode(Collections.<TypeArgumentNode>emptyList());
-            ListNode<TypeArgumentNode> classTypeArgumentsNode =
+            TypeArgumentListNode classTypeArgumentsNode =
                     factory.makeTypeArgumentListNode(Collections.<TypeArgumentNode>emptyList());
             AnonymousClassBodyNode anonymousClassBodyNode = null;
         }
@@ -4229,7 +4229,7 @@ typeArgumentMethodInvocationSuffix[PrimaryExpressionNode in] returns [Restricted
         scope Rule;
         @init {
             ruleStart("typeArgumentMethodInvocationSuffix");
-            ListNode<TypeNode> typeArgumentsNode = factory.makeTypeListNode(Collections.<TypeNode>emptyList());
+            TypeListNode typeArgumentsNode = factory.makeTypeListNode(Collections.<TypeNode>emptyList());
         }
         @after {
             ruleStop();
@@ -4441,7 +4441,7 @@ createdName returns [BaseTypeNode ret]
         }    
     ;
 
-nonWildcardTypeArguments returns [ListNode<TypeNode> ret]
+nonWildcardTypeArguments returns [TypeListNode ret]
         scope Rule;
         @init {
             ruleStart("nonWildcardTypeArguments");
@@ -4457,7 +4457,7 @@ nonWildcardTypeArguments returns [ListNode<TypeNode> ret]
         '>'
     ;
 
-arguments returns [ListNode<ExpressionNode> ret]
+arguments returns [ExpressionListNode ret]
         scope Rule;
         @init {
             ruleStart("arguments");

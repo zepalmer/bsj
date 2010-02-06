@@ -16,13 +16,13 @@ public interface ModifiersNode extends Node
      * Gets the annotations modifying the subject.
      * @return The annotations modifying the subject.
      */
-    public ListNode<AnnotationNode> getAnnotations();
+    public AnnotationListNode getAnnotations();
 
     /**
      * Changes the annotations modifying the subject.
      * @param annotations The annotations modifying the subject.
      */
-    public void setAnnotations(ListNode<AnnotationNode> annotations);
+    public void setAnnotations(AnnotationListNode annotations);
 
     /**
      * Generates a deep copy of this node.

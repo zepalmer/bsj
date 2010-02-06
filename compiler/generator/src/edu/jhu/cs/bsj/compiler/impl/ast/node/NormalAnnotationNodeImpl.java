@@ -9,8 +9,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
-import edu.jhu.cs.bsj.compiler.ast.node.AnnotationElementNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.AnnotationElementListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.NormalAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.UnparameterizedTypeNode;
@@ -19,11 +18,11 @@ import edu.jhu.cs.bsj.compiler.ast.node.UnparameterizedTypeNode;
 public class NormalAnnotationNodeImpl extends AnnotationNodeImpl implements NormalAnnotationNode
 {
     /** The arguments. */
-    private ListNode<AnnotationElementNode> arguments;
+    private AnnotationElementListNode arguments;
 
     /** General constructor. */
     public NormalAnnotationNodeImpl(
-            ListNode<AnnotationElementNode> arguments,
+            AnnotationElementListNode arguments,
             UnparameterizedTypeNode annotationType,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
@@ -36,7 +35,7 @@ public class NormalAnnotationNodeImpl extends AnnotationNodeImpl implements Norm
      * Gets the arguments.
      * @return The arguments.
      */
-    public ListNode<AnnotationElementNode> getArguments()
+    public AnnotationElementListNode getArguments()
     {
         return this.arguments;
     }
@@ -45,7 +44,7 @@ public class NormalAnnotationNodeImpl extends AnnotationNodeImpl implements Norm
      * Changes the arguments.
      * @param arguments The arguments.
      */
-    public void setArguments(ListNode<AnnotationElementNode> arguments)
+    public void setArguments(AnnotationElementListNode arguments)
     {
         if (this.arguments instanceof NodeImpl)
         {
@@ -176,19 +175,14 @@ public class NormalAnnotationNodeImpl extends AnnotationNodeImpl implements Norm
      * @return <code>true</code> if the replacement was successful; <code>false</code> if the
      *         specified <tt>before</tt> node is not a child of this node.
      */
-    @SuppressWarnings("unchecked")
     public <N extends Node> boolean replace(N before, N after)
     {
         if (super.replace(before,after))
             return true;
 
-        if (before.equals(this.arguments) && (after instanceof ListNode<?>))
+        if (before.equals(this.arguments) && (after instanceof AnnotationElementListNode))
         {
-            for (Object listval : ((ListNode<?>)after).getChildren())
-            {
-                AnnotationElementNode.class.cast(listval);
-            }
-            setArguments((ListNode<AnnotationElementNode>)after);
+            setArguments((AnnotationElementListNode)after);
             return true;
         }
         return false;
