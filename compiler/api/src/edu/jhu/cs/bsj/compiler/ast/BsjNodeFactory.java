@@ -331,6 +331,22 @@ public interface BsjNodeFactory
             BsjSourceLocation stopLocation);
 
     /**
+     * Creates a AnnotationModifiersNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public AnnotationModifiersNode makeAnnotationModifiersNode(
+            AccessModifier access);
+
+    /**
+     * Creates a AnnotationModifiersNode.
+     * The specified start and stop locations are used.
+     */
+    public AnnotationModifiersNode makeAnnotationModifiersNode(
+            AccessModifier access,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+
+    /**
      * Creates a AnnotationValueListNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */

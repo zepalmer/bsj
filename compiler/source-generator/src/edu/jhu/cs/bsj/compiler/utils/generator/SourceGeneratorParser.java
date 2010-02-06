@@ -182,6 +182,7 @@ public class SourceGeneratorParser
 			Map<String, String> constructorOverrideMap = new HashMap<String, String>();
 			boolean genConstructor = true;
 			boolean genChildren = true;
+			List<FactoryMethodDefinition> factoryMethodDefinitions = new ArrayList<FactoryMethodDefinition>();
 
 			NodeList children = e.getChildNodes();
 			for (int i = 0; i < children.getLength(); i++)
@@ -226,6 +227,10 @@ public class SourceGeneratorParser
 						{
 							throw new IllegalStateException("Unknown nogen id: " + nogenString);
 						}
+					} else if (childTag.equals("factory-method"))
+					{
+						FactoryMethodHandler handler = new FactoryMethodHandler();
+						factoryMethodDefinitions.add(handler.handle(childElement));
 					} else
 					{
 						throw new IllegalStateException("Unknown subtag for type: " + childTag);
@@ -235,7 +240,7 @@ public class SourceGeneratorParser
 
 			return new TypeDefinition(name, typeParam, superName, superTypeArg, interfacePackageName, classPackageName,
 					tags, props, includes, docString, toStringLines, factoryOverrideMap, constructorOverrideMap,
-					genConstructor, genChildren, mode);
+					genConstructor, genChildren, factoryMethodDefinitions, mode);
 		}
 
 		private String unindent(String s)
@@ -311,6 +316,7 @@ public class SourceGeneratorParser
 			String typeArg = getAttributeValue(e, "typeArg");
 			PropertyDefinition.Mode mode;
 			String description = getAttributeValue(e, "desc");
+			String defaultExpression = getAttributeValue(e, "default");
 
 			String modeString = getAttributeValue(e, "mode");
 			if (modeString == null || modeString.equals("normal"))
@@ -327,7 +333,38 @@ public class SourceGeneratorParser
 				throw new IllegalStateException("Unknown property mode: " + modeString);
 			}
 
-			return new PropertyDefinition(name, baseType, typeArg, mode, description);
+			return new PropertyDefinition(name, baseType, typeArg, mode, description, defaultExpression);
+		}
+	}
+
+	static class FactoryMethodHandler implements ElementHandler<FactoryMethodDefinition>
+	{
+		@Override
+		public FactoryMethodDefinition handle(Element e)
+		{
+			List<FactoryMethodPropertyDefinition> properties = new ArrayList<FactoryMethodPropertyDefinition>();
+
+			NodeList children = e.getChildNodes();
+			for (int i = 0; i < children.getLength(); i++)
+			{
+				Node node = children.item(i);
+				if (node instanceof Element)
+				{
+					Element childElement = (Element) node;
+					String childTag = childElement.getTagName();
+					if (childTag.equals("prop"))
+					{
+						String propName = childElement.getAttribute("name");
+						boolean propVisible = childElement.hasAttribute("visible") ? Boolean.parseBoolean(childElement.getAttribute("visible"))
+								: true;
+						properties.add(new FactoryMethodPropertyDefinition(propName, propVisible));
+					} else
+					{
+						throw new IllegalStateException("Factory method tag does not understand child " + childTag);
+					}
+				}
+			}
+			return new FactoryMethodDefinition(properties);
 		}
 	}
 }

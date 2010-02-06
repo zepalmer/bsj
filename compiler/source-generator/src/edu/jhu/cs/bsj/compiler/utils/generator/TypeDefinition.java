@@ -30,13 +30,14 @@ public class TypeDefinition
 	private Map<String, String> constructorOverrideMap;
 	private boolean genConstructor;
 	private boolean genChildren;
+	private List<FactoryMethodDefinition> factoryMethods;
 	private Mode mode;
 
 	public TypeDefinition(String baseName, String typeParameter, String superName, String superTypeArg,
 			String interfacePackage, String classPackage, List<String> tags, List<PropertyDefinition> properties,
-			List<String> includes, String docString, List<String> toStringLines, Map<String, String> factoryOverrideMap,
-			Map<String,String> constructorOverrideMap,
-			boolean genConstructor, boolean genChildren, Mode mode)
+			List<String> includes, String docString, List<String> toStringLines,
+			Map<String, String> factoryOverrideMap, Map<String, String> constructorOverrideMap, boolean genConstructor,
+			boolean genChildren, List<FactoryMethodDefinition> factoryMethods, Mode mode)
 	{
 		super();
 		this.baseName = baseName;
@@ -54,6 +55,7 @@ public class TypeDefinition
 		this.constructorOverrideMap = constructorOverrideMap;
 		this.genConstructor = genConstructor;
 		this.genChildren = genChildren;
+		this.factoryMethods = factoryMethods;
 		this.mode = mode;
 	}
 
@@ -208,6 +210,16 @@ public class TypeDefinition
 	public boolean isGenChildren()
 	{
 		return genChildren;
+	}
+	
+	public String getSuperName()
+	{
+		return superName;
+	}
+
+	public List<FactoryMethodDefinition> getFactoryMethods()
+	{
+		return factoryMethods;
 	}
 
 	public Mode getMode()

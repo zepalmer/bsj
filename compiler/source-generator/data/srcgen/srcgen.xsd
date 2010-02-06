@@ -33,6 +33,7 @@
         <xs:attribute name="typeArg" type="xs:string" use="optional"/>
         <xs:attribute name="mode" type="propMode_T" use="optional" default="normal"/>
         <xs:attribute name="desc" type="xs:string" use="required"/>
+        <xs:attribute name="default" type="xs:string" use="optional"/>
     </xs:complexType>
     
     <xs:complexType name="include_T">
@@ -61,6 +62,17 @@
     <xs:complexType name="nogen_T">
         <xs:attribute name="id" type="nogenArg_T" use="required"/>
     </xs:complexType>
+    
+    <xs:complexType name="factoryMethod_prop_T">
+        <xs:attribute name="name" type="xs:string" use="required"/>
+        <xs:attribute name="visible" type="xs:boolean" use="optional" default="true"/>
+    </xs:complexType>
+    
+    <xs:complexType name="factoryMethod_T">
+        <xs:sequence>
+            <xs:element name="prop" type="factoryMethod_prop_T" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence> 
+    </xs:complexType>
 
     <xs:complexType name="type_T">
         <xs:sequence>
@@ -72,6 +84,7 @@
             <xs:element name="factory-override" type="override_T" minOccurs="0" maxOccurs="unbounded"/>
             <xs:element name="constructor-override" type="override_T" minOccurs="0" maxOccurs="unbounded"/>
             <xs:element name="nogen" type="nogen_T" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="factory-method" type="factoryMethod_T" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
         <xs:attribute name="name" type="xs:string" use="required"/>
         <xs:attribute name="typeParam" type="xs:string" use="optional"/>

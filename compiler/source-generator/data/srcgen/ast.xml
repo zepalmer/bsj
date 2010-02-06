@@ -277,14 +277,18 @@
 
         <type name="AnnotationModifiersNode" super="ModifiersNode">
             <prop name="access" type="AccessModifier" desc="the access for the associated annotation" />
-            <prop name="staticFlag" type="boolean" desc="whether or not the associated annotation is static" />
+            <prop name="staticFlag" type="boolean" desc="whether or not the associated annotation is static"
+                default="false" />
             <prop name="strictfpFlag" type="boolean"
-                desc="whether or not the associated annotation uses strict floating-point" />
+                desc="whether or not the associated annotation uses strict floating-point" default="false" />
             <doc><![CDATA[
                 Represents the modifiers which can be associated with an annotation.  While <tt>public</tt> and
                 <tt>abstract</tt> are syntactically legal modifiers, they are not included here because they are implicit to all
                 annotations.
             ]]></doc>
+            <factory-method>
+                <prop name="access" />
+            </factory-method>
         </type>
 
         <type name="ClassModifiersNode" super="ModifiersNode">
@@ -353,7 +357,8 @@
         </type>
 
         <type name="ModifiersNode" super="Node" mode="abstract">
-            <prop name="annotations" type="AnnotationListNode" desc="the annotations modifying the subject" />
+            <prop name="annotations" type="AnnotationListNode" desc="the annotations modifying the subject"
+                default="makeAnnotationListNode()"/>
             <doc><![CDATA[
                 A node representing the modifiers applied to another node.  Modifiers may include flags (such as <tt>final</tt>
                 or <tt>strictfp</tt>) and annotations (such as <tt>@Override</tt>).  Subclasses of this node dictate precisely
@@ -404,8 +409,7 @@
         </type>
 
         <type name="ArrayInstantiatorCreationNode" super="ArrayCreationNode">
-            <prop name="dimExpressions" type="ExpressionListNode"
-                desc="the dimension expressions for this array" />
+            <prop name="dimExpressions" type="ExpressionListNode" desc="the dimension expressions for this array" />
             <doc><![CDATA[
                 Represents the creation of an array with instantiator, as in
                 <pre>
@@ -443,8 +447,7 @@
         <type name="ClassInstantiationNode" super="Node" mode="abstract">
             <tag name="RestrictedPrimaryExpressionNode" />
             <tag name="StatementExpressionNode" />
-            <prop name="constructorTypeArguments" type="TypeArgumentListNode"
-                desc="the type arguments for the constructor" />
+            <prop name="constructorTypeArguments" type="TypeArgumentListNode" desc="the type arguments for the constructor" />
             <prop name="arguments" type="ExpressionListNode" desc="the arguments to the constructor" />
             <prop name="body" type="AnonymousClassBodyNode" desc="the body of the anonymous class" />
             <doc><![CDATA[
@@ -591,8 +594,7 @@
         <type name="QualifiedClassInstantiationNode" super="ClassInstantiationNode">
             <prop name="enclosingExpression" type="ExpressionNode" desc="the expression enclosing the non-static inner class" />
             <prop name="identifier" type="IdentifierNode" desc="the name of the class being instantiated" />
-            <prop name="typeArguments" type="TypeArgumentListNode"
-                desc="the type arguments to apply to the class being instantiated" />
+            <prop name="typeArguments" type="TypeArgumentListNode" desc="the type arguments to apply to the class being instantiated" />
             <doc><![CDATA[
                 A node representing the qualified instantiation of a class, as in:
                 <pre>
@@ -793,8 +795,7 @@
 
         <type name="BlockNode" super="Node">
             <tag name="StatementNode" />
-            <prop name="statements" type="BlockStatementListNode"
-                desc="the statements contained in this block statement" />
+            <prop name="statements" type="BlockStatementListNode" desc="the statements contained in this block statement" />
             <doc><![CDATA[
                 Represents a block of statements, as in
                 <pre>
@@ -1205,10 +1206,8 @@
             <prop name="modifiers" type="ConstructorModifiersNode" desc="the modifiers for this constructor" />
             <prop name="parameters" type="VariableListNode" desc="the parameters declared by this constructor" />
             <prop name="varargParameter" type="VariableNode" desc="the vararg parameter declared by this method" />
-            <prop name="throwTypes" type="UnparameterizedTypeListNode"
-                desc="the types of exceptions thrown by this constructor" />
-            <prop name="typeParameters" type="TypeParameterListNode"
-                desc="this constructor's applicable type parameters" />
+            <prop name="throwTypes" type="UnparameterizedTypeListNode" desc="the types of exceptions thrown by this constructor" />
+            <prop name="typeParameters" type="TypeParameterListNode" desc="this constructor's applicable type parameters" />
             <prop name="javadoc" type="JavadocNode" desc="the associated javadoc comment for this node" />
             <doc><![CDATA[
                 A node representing a constructor declaration, as in:
@@ -1271,10 +1270,8 @@
             <prop name="parameters" type="VariableListNode" desc="the parameters declared by this method" />
             <prop name="varargParameter" type="VariableNode" desc="the vararg parameter declared by this method" />
             <prop name="returnType" type="TypeNode" desc="the type of value returned" />
-            <prop name="throwTypes" type="UnparameterizedTypeListNode"
-                desc="the types of exceptions thrown by this method" />
-            <prop name="typeParameters" type="TypeParameterListNode"
-                desc="this method's applicable type parameters" />
+            <prop name="throwTypes" type="UnparameterizedTypeListNode" desc="the types of exceptions thrown by this method" />
+            <prop name="typeParameters" type="TypeParameterListNode" desc="this method's applicable type parameters" />
             <prop name="javadoc" type="JavadocNode" desc="the associated javadoc comment for this node" />
             <doc><![CDATA[
                 A node representing a method declaration, as in:
@@ -1760,8 +1757,7 @@
 
         <type name="ConstructorBodyNode" super="Node">
             <prop name="constructorInvocation" type="ConstructorInvocationNode" desc="the (nullable) constructor invocation" />
-            <prop name="statements" type="BlockStatementListNode"
-                desc="the statements contained in this constructor" />
+            <prop name="statements" type="BlockStatementListNode" desc="the statements contained in this constructor" />
             <doc><![CDATA[
                 Represents a constructor body.  For example, in
                 <pre>
@@ -1933,6 +1929,11 @@
 
         <!-- ==================== METAPROGRAM NODES ===================== -->
 
+        <!--
+            TODO: problem with using "skip" on the replacement property is that the skipMake=false factory
+            method still allows it to be specified. Is that what we want or should there be another property
+            mode ("hidden") which is invisible even during skip make?
+        -->
         <type name="MetaprogramAnchorNode" typeParam="T extends Node" super="Node" mode="abstract">
             <prop name="replacement" type="T" mode="skip" desc="the replacement node for this metaprogram" />
             <prop name="metaprogram" type="MetaprogramNode" desc="the metaprogram on this node" />

@@ -524,6 +524,32 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
 
     /**
+     * Creates a AnnotationModifiersNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public AnnotationModifiersNode makeAnnotationModifiersNode(
+            AccessModifier access)
+    {
+        AnnotationModifiersNode ret = new AnnotationModifiersNodeImpl(access, false, false, makeAnnotationListNode(), startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
+     * Creates a AnnotationModifiersNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public AnnotationModifiersNode makeAnnotationModifiersNode(
+            AccessModifier access,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        AnnotationModifiersNode ret = new AnnotationModifiersNodeImpl(access, false, false, makeAnnotationListNode(), startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
      * Creates a AnnotationValueListNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */

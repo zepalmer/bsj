@@ -18,8 +18,10 @@ public class PropertyDefinition
 	private String typeArg;
 	private Mode mode;
 	private String description;
+	private String defaultExpression;
 	
-	public PropertyDefinition(String name, String baseType, String typeArg, Mode mode, String description)
+	public PropertyDefinition(String name, String baseType, String typeArg, Mode mode, String description,
+			String defaultExpression)
 	{
 		super();
 		this.name = name;
@@ -27,8 +29,9 @@ public class PropertyDefinition
 		this.typeArg = typeArg;
 		this.mode = mode;
 		this.description = description;
+		this.defaultExpression = defaultExpression;
 	}
-	
+
 	public boolean isSkipMake()
 	{
 		return this.mode == Mode.SKIP;
@@ -64,6 +67,11 @@ public class PropertyDefinition
 		return description;
 	}
 	
+	public String getDefaultExpression()
+	{
+		return defaultExpression;
+	}
+
 	public String getFullType()
 	{
 		if (this.typeArg == null)

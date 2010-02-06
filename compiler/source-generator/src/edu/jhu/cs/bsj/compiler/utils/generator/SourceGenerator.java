@@ -686,11 +686,11 @@ public class SourceGenerator
 					if (replacementMap.containsKey(p.getBaseType()))
 					{
 						p = new PropertyDefinition(p.getName(), replacementMap.get(p.getBaseType()), null, p.getMode(),
-								p.getDescription());
+								p.getDescription(), p.getDefaultExpression());
 					} else if (replacementMap.containsKey(p.getTypeArg()))
 					{
 						p = new PropertyDefinition(p.getName(), p.getBaseType(), replacementMap.get(p.getTypeArg()),
-								p.getMode(), p.getDescription());
+								p.getMode(), p.getDescription(), p.getDefaultExpression());
 					}
 					list.add(p);
 				}
@@ -1424,159 +1424,26 @@ public class SourceGenerator
 			if (def.getMode() == TypeDefinition.Mode.CONCRETE)
 			{
 				List<PropertyDefinition> recProps = getRecursiveProps(def);
-				String typeParam;
-				String typeName;
-				String typeArg;
-				if (def.getTypeParameter() != null)
-				{
-					typeParam = def.getTypeParameter();
-					String[] args = typeParam.split(",");
-					for (int i = 0; i < args.length; i++)
-					{
-						if (args[i].contains(" "))
-							args[i] = args[i].substring(0, args[i].indexOf(' ')).trim();
-					}
-					StringBuilder sb = new StringBuilder();
-					for (String s : args)
-					{
-						if (sb.length() > 0)
-							sb.append(",");
-						sb.append(s);
-					}
-					sb.insert(0, "<");
-					sb.append(">");
-					typeArg = sb.toString();
-				} else
-				{
-					typeParam = null;
-					typeArg = "";
-				}
-				typeName = def.getBaseName() + typeArg;
-				String typeParamS = typeParam == null ? "" : ("<" + typeParam + "> ");
 
+				// Write normal factory method
+				List<FactoryMethodPropertyDefinition> standardFactoryMethodProperties = new ArrayList<FactoryMethodPropertyDefinition>();
+				for (PropertyDefinition p : recProps)
+				{
+					standardFactoryMethodProperties.add(new FactoryMethodPropertyDefinition(p.getName(), true));
+				}
+				FactoryMethodDefinition standardFactoryDefinition = new FactoryMethodDefinition(
+						standardFactoryMethodProperties);
 				for (boolean skipMake : new boolean[] { true, false })
 				{
-					// Write documentation
-					for (PrintStream ps : new PrintStream[] { ips, cps, dps })
+					writeFactoryMethod(def, standardFactoryDefinition, skipMake);
+				}
+				
+				// Write extra factory methods as instructed
+				for (FactoryMethodDefinition methodDefinition : def.getFactoryMethods())
+				{
+					for (boolean skipMake : new boolean[] { true, false })
 					{
-						ps.println("    /**");
-						ps.println("     * Creates a " + def.getBaseName() + ".");
-						if (!skipMake)
-						{
-							ps.println("     * The specified start and stop locations are used.");
-						} else
-						{
-							ps.println("     * The start and stop locations which have been set as properties of this factory are used.");
-						}
-						ps.println("     */");
-					}
-
-					// Write interface method description
-					ips.print("    public " + typeParamS + typeName + " make" + def.getBaseName());
-					printParameterList(ips, recProps, skipMake);
-					ips.println(";");
-					ips.println();
-
-					// Write backing class implementation
-					cps.println("    @Override");
-					cps.print("    public " + typeParamS + typeName + " make" + def.getBaseName());
-					printParameterList(cps, recProps, skipMake);
-					cps.println();
-					cps.println("    {");
-					String classname = def.getBaseName() + "Impl" + typeArg;
-					cps.print("        " + typeName + " ret = new " + classname);
-					printArgumentList(cps, recProps, def.getFactoryOverrideMap());
-
-					cps.println(";");
-					// TODO: later, this is where we register created nodes with the central dependency validation
-					// authority
-					cps.println("        return ret;");
-					cps.println("    }");
-					cps.println();
-
-					// Write decorator implementation
-					dps.println("    @Override");
-					dps.print("    public " + typeParamS + typeName + " make" + def.getBaseName());
-					printParameterList(dps, recProps, skipMake);
-					dps.println();
-					dps.println("    {");
-					dps.println("        this.before();");
-					dps.print("        " + typeName + " node = factory.make" + def.getBaseName());
-					printArgumentList(dps, recProps, skipMake);
-					dps.println(";");
-					dps.println("        this.after(node);");
-					dps.println("        return node;");
-					dps.println("    }");
-					dps.println();
-
-					// Special ListNode constructor
-					if (propInstanceOf(def.getFullName(), "ListNode"))
-					{
-						// Write documentation
-						for (PrintStream ps : new PrintStream[] { ips, cps, dps })
-						{
-							ps.println("    /**");
-							ps.println("     * Creates a " + def.getBaseName() + ".");
-							if (!skipMake)
-							{
-								ps.println("     * The specified start and stop locations are used.");
-							} else
-							{
-								ps.println("     * The start and stop locations which have been set as properties of this factory are used.");
-							}
-							ps.println("     */");
-						}
-
-						// Create a list to fake the parameter list printer into printing a vararg
-						List<PropertyDefinition> fakeProps = new ArrayList<PropertyDefinition>();
-						PropertyDefinition listDef = null;
-						for (PropertyDefinition recProp : recProps)
-						{
-							if (recProp.getBaseType().equals("List") && listDef == null)
-							{
-								listDef = recProp;
-							} else
-							{
-								fakeProps.add(recProp);
-							}
-						}
-						fakeProps.add(new PropertyDefinition(listDef.getName() + "Elements", listDef.getTypeArg() + "...", null,
-								PropertyDefinition.Mode.NORMAL, ""));
-
-						// Write interface method description
-						ips.print("    public " + typeName + " make" + def.getBaseName());
-						printParameterList(ips, fakeProps, skipMake);
-						ips.println(";");
-						ips.println();
-
-						// Write backing class implementation
-						cps.println("    @Override");
-						cps.print("    public " + typeName + " make" + def.getBaseName());
-						printParameterList(cps, fakeProps, skipMake);
-						cps.println();
-						cps.println("    {");
-						cps.println("        List<" + listDef.getTypeArg() + "> " + listDef.getName() + " = Arrays.asList(" +
-								listDef.getName() + "Elements);");
-						cps.print("        return make" + def.getBaseName());
-						printArgumentList(cps, recProps);
-						cps.println(";");
-						cps.println("    }");
-						cps.println();
-
-						// Write decorator implementation
-						dps.println("    @Override");
-						dps.print("    public " + typeName + " make" + def.getBaseName());
-						printParameterList(dps, fakeProps, skipMake);
-						dps.println();
-						dps.println("    {");
-						dps.println("        this.before();");
-						dps.print("        " + typeName + " node = factory.make" + def.getBaseName());
-						printArgumentList(dps, fakeProps, skipMake);
-						dps.println(";");
-						dps.println("        this.after(node);");
-						dps.println("        return node;");
-						dps.println("    }");
-						dps.println();
+						writeFactoryMethod(def, methodDefinition, skipMake);
 					}
 				}
 			}
@@ -1595,6 +1462,209 @@ public class SourceGenerator
 
 			dps.println("}");
 			dps.close();
+		}
+
+		private void writeFactoryMethod(TypeDefinition def, FactoryMethodDefinition methodDefinition, boolean skipMake)
+		{
+			String typeParam;
+			String typeName;
+			String typeArg;
+			if (def.getTypeParameter() != null)
+			{
+				typeParam = def.getTypeParameter();
+				String[] args = typeParam.split(",");
+				for (int i = 0; i < args.length; i++)
+				{
+					if (args[i].contains(" "))
+						args[i] = args[i].substring(0, args[i].indexOf(' ')).trim();
+				}
+				StringBuilder sb = new StringBuilder();
+				for (String s : args)
+				{
+					if (sb.length() > 0)
+						sb.append(",");
+					sb.append(s);
+				}
+				sb.insert(0, "<");
+				sb.append(">");
+				typeArg = sb.toString();
+			} else
+			{
+				typeParam = null;
+				typeArg = "";
+			}
+			typeName = def.getBaseName() + typeArg;
+			String typeParamS = typeParam == null ? "" : ("<" + typeParam + "> ");
+
+			// Property analysis: what is required as input?
+			List<PropertyDefinition> recProps = getRecursiveProps(def);
+			List<PropertyDefinition> argProps = new ArrayList<PropertyDefinition>();
+			for (PropertyDefinition recProp : recProps)
+			{
+				if (methodDefinition.isVisible(recProp.getName()) ||
+						recProp.isSkipMake() && !skipMake)
+				{
+					argProps.add(recProp);
+				}
+			}
+
+			// Write documentation
+			for (PrintStream ps : new PrintStream[] { ips, cps, dps })
+			{
+				ps.println("    /**");
+				ps.println("     * Creates a " + def.getBaseName() + ".");
+				if (!skipMake)
+				{
+					ps.println("     * The specified start and stop locations are used.");
+				} else
+				{
+					ps.println("     * The start and stop locations which have been set as properties of this factory are used.");
+				}
+				ps.println("     */");
+			}
+
+			// Write interface method description
+			ips.print("    public " + typeParamS + typeName + " make" + def.getBaseName());
+			printParameterList(ips, argProps, skipMake);
+			ips.println(";");
+			ips.println();
+
+			// Write backing class implementation
+			cps.println("    @Override");
+			cps.print("    public " + typeParamS + typeName + " make" + def.getBaseName());
+			printParameterList(cps, argProps, skipMake);
+			cps.println();
+			cps.println("    {");
+			String classname = def.getBaseName() + "Impl" + typeArg;
+			cps.print("        " + typeName + " ret = new " + classname);
+
+			printFactoryArgumentList(cps, recProps, def.getFactoryOverrideMap(), methodDefinition);
+
+			cps.println(";");
+			// TODO: later, this is where we register created nodes with the central dependency validation
+			// authority
+			cps.println("        return ret;");
+			cps.println("    }");
+			cps.println();
+
+			// Write decorator implementation
+			dps.println("    @Override");
+			dps.print("    public " + typeParamS + typeName + " make" + def.getBaseName());
+			printParameterList(dps, argProps, skipMake);
+			dps.println();
+			dps.println("    {");
+			dps.println("        this.before();");
+			dps.print("        " + typeName + " node = factory.make" + def.getBaseName());
+			printArgumentList(dps, argProps, skipMake);
+			dps.println(";");
+			dps.println("        this.after(node);");
+			dps.println("        return node;");
+			dps.println("    }");
+			dps.println();
+
+			// Special ListNode constructor
+			if (propInstanceOf(def.getFullName(), "ListNode"))
+			{
+				// Write documentation
+				for (PrintStream ps : new PrintStream[] { ips, cps, dps })
+				{
+					ps.println("    /**");
+					ps.println("     * Creates a " + def.getBaseName() + ".");
+					if (!skipMake)
+					{
+						ps.println("     * The specified start and stop locations are used.");
+					} else
+					{
+						ps.println("     * The start and stop locations which have been set as properties of this factory are used.");
+					}
+					ps.println("     */");
+				}
+
+				// Create a list to fake the parameter list printer into printing a vararg
+				List<PropertyDefinition> fakeProps = new ArrayList<PropertyDefinition>();
+				PropertyDefinition listDef = null;
+				for (PropertyDefinition recProp : recProps)
+				{
+					if (recProp.getBaseType().equals("List") && listDef == null)
+					{
+						listDef = recProp;
+					} else
+					{
+						fakeProps.add(recProp);
+					}
+				}
+				fakeProps.add(new PropertyDefinition(listDef.getName() + "Elements", listDef.getTypeArg() + "...",
+						null, PropertyDefinition.Mode.NORMAL, "", listDef.getDefaultExpression()));
+
+				// Write interface method description
+				ips.print("    public " + typeName + " make" + def.getBaseName());
+				printParameterList(ips, fakeProps, skipMake);
+				ips.println(";");
+				ips.println();
+
+				// Write backing class implementation
+				cps.println("    @Override");
+				cps.print("    public " + typeName + " make" + def.getBaseName());
+				printParameterList(cps, fakeProps, skipMake);
+				cps.println();
+				cps.println("    {");
+				cps.println("        List<" + listDef.getTypeArg() + "> " + listDef.getName() + " = Arrays.asList("
+						+ listDef.getName() + "Elements);");
+				cps.print("        return make" + def.getBaseName());
+				printArgumentList(cps, recProps);
+				cps.println(";");
+				cps.println("    }");
+				cps.println();
+
+				// Write decorator implementation
+				dps.println("    @Override");
+				dps.print("    public " + typeName + " make" + def.getBaseName());
+				printParameterList(dps, fakeProps, skipMake);
+				dps.println();
+				dps.println("    {");
+				dps.println("        this.before();");
+				dps.print("        " + typeName + " node = factory.make" + def.getBaseName());
+				printArgumentList(dps, fakeProps, skipMake);
+				dps.println(";");
+				dps.println("        this.after(node);");
+				dps.println("        return node;");
+				dps.println("    }");
+				dps.println();
+			}
+		}
+
+		private void printFactoryArgumentList(PrintStream ps, List<PropertyDefinition> props,
+				Map<String, String> overrideMap, FactoryMethodDefinition methodDefinition)
+		{
+			boolean first = true;
+			ps.print("(");
+			for (PropertyDefinition p : props)
+			{
+				if (!first)
+				{
+					ps.print(", ");
+				}
+				first = false;
+				if (overrideMap.containsKey(p.getName()))
+				{
+					ps.print(overrideMap.get(p.getName()).trim());
+				} else if (methodDefinition.isVisible(p.getName()))
+				{
+					ps.print(p.getName());
+				} else if (p.getDefaultExpression() != null)
+				{
+					ps.print(p.getDefaultExpression());
+				} else if (p.isSkipMake())
+				{
+					// If the property is skip make, assume it will be supplied anyway
+					ps.print(p.getName());
+				} else
+				{
+					throw new IllegalStateException("Property " + p.getName()
+							+ " is invisible in factory method with no default.");
+				}
+			}
+			ps.print(")");
 		}
 	}
 
