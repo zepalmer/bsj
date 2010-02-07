@@ -848,6 +848,32 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
 
     /**
+     * Creates a AssertStatementNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public AssertStatementNode makeAssertStatementNode(
+            ExpressionNode testExpression)
+    {
+        AssertStatementNode ret = new AssertStatementNodeImpl(testExpression, null, startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
+     * Creates a AssertStatementNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public AssertStatementNode makeAssertStatementNode(
+            ExpressionNode testExpression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        AssertStatementNode ret = new AssertStatementNodeImpl(testExpression, null, startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
      * Creates a AssignmentNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -1061,6 +1087,30 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation stopLocation)
     {
         BreakNode ret = new BreakNodeImpl(label, startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
+     * Creates a BreakNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public BreakNode makeBreakNode()
+    {
+        BreakNode ret = new BreakNodeImpl(null, startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
+     * Creates a BreakNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public BreakNode makeBreakNode(
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        BreakNode ret = new BreakNodeImpl(null, startLocation, stopLocation);
         return ret;
     }
 
@@ -1609,6 +1659,40 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
 
     /**
+     * Creates a ConstructorDeclarationNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public ConstructorDeclarationNode makeConstructorDeclarationNode(
+            IdentifierNode identifier,
+            ConstructorBodyNode body,
+            ConstructorModifiersNode modifiers,
+            VariableListNode parameters,
+            JavadocNode javadoc)
+    {
+        ConstructorDeclarationNode ret = new ConstructorDeclarationNodeImpl(identifier, body, modifiers, parameters, null, makeUnparameterizedTypeListNode(), makeTypeParameterListNode(), javadoc, startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
+     * Creates a ConstructorDeclarationNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public ConstructorDeclarationNode makeConstructorDeclarationNode(
+            IdentifierNode identifier,
+            ConstructorBodyNode body,
+            ConstructorModifiersNode modifiers,
+            VariableListNode parameters,
+            JavadocNode javadoc,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        ConstructorDeclarationNode ret = new ConstructorDeclarationNodeImpl(identifier, body, modifiers, parameters, null, makeUnparameterizedTypeListNode(), makeTypeParameterListNode(), javadoc, startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
      * Creates a ConstructorModifiersNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -1659,6 +1743,30 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation stopLocation)
     {
         ContinueNode ret = new ContinueNodeImpl(label, startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
+     * Creates a ContinueNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public ContinueNode makeContinueNode()
+    {
+        ContinueNode ret = new ContinueNodeImpl(null, startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
+     * Creates a ContinueNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public ContinueNode makeContinueNode(
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        ContinueNode ret = new ContinueNodeImpl(null, startLocation, stopLocation);
         return ret;
     }
 
@@ -1909,6 +2017,38 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation stopLocation)
     {
         EnumConstantDeclarationNode ret = new EnumConstantDeclarationNodeImpl(annotations, identifier, arguments, body, javadoc, startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
+     * Creates a EnumConstantDeclarationNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public EnumConstantDeclarationNode makeEnumConstantDeclarationNode(
+            AnnotationListNode annotations,
+            IdentifierNode identifier,
+            ExpressionListNode arguments,
+            JavadocNode javadoc)
+    {
+        EnumConstantDeclarationNode ret = new EnumConstantDeclarationNodeImpl(annotations, identifier, arguments, null, javadoc, startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
+     * Creates a EnumConstantDeclarationNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public EnumConstantDeclarationNode makeEnumConstantDeclarationNode(
+            AnnotationListNode annotations,
+            IdentifierNode identifier,
+            ExpressionListNode arguments,
+            JavadocNode javadoc,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        EnumConstantDeclarationNode ret = new EnumConstantDeclarationNodeImpl(annotations, identifier, arguments, null, javadoc, startLocation, stopLocation);
         return ret;
     }
 
@@ -2389,6 +2529,34 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation stopLocation)
     {
         IfNode ret = new IfNodeImpl(condition, thenStatement, elseStatement, startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
+     * Creates a IfNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public IfNode makeIfNode(
+            ExpressionNode condition,
+            StatementNode thenStatement)
+    {
+        IfNode ret = new IfNodeImpl(condition, thenStatement, null, startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
+     * Creates a IfNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public IfNode makeIfNode(
+            ExpressionNode condition,
+            StatementNode thenStatement,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        IfNode ret = new IfNodeImpl(condition, thenStatement, null, startLocation, stopLocation);
         return ret;
     }
 
@@ -2929,6 +3097,42 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
 
     /**
+     * Creates a MethodDeclarationNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public MethodDeclarationNode makeMethodDeclarationNode(
+            BlockNode body,
+            MethodModifiersNode modifiers,
+            IdentifierNode identifier,
+            VariableListNode parameters,
+            TypeNode returnType,
+            JavadocNode javadoc)
+    {
+        MethodDeclarationNode ret = new MethodDeclarationNodeImpl(body, modifiers, identifier, parameters, null, returnType, makeUnparameterizedTypeListNode(), makeTypeParameterListNode(), javadoc, startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
+     * Creates a MethodDeclarationNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public MethodDeclarationNode makeMethodDeclarationNode(
+            BlockNode body,
+            MethodModifiersNode modifiers,
+            IdentifierNode identifier,
+            VariableListNode parameters,
+            TypeNode returnType,
+            JavadocNode javadoc,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        MethodDeclarationNode ret = new MethodDeclarationNodeImpl(body, modifiers, identifier, parameters, null, returnType, makeUnparameterizedTypeListNode(), makeTypeParameterListNode(), javadoc, startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
      * Creates a MethodInvocationByExpressionNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -3135,6 +3339,32 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation stopLocation)
     {
         PackageDeclarationNode ret = new PackageDeclarationNodeImpl(name, annotations, startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
+     * Creates a PackageDeclarationNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public PackageDeclarationNode makePackageDeclarationNode(
+            NameNode name)
+    {
+        PackageDeclarationNode ret = new PackageDeclarationNodeImpl(name, makeAnnotationListNode(), startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
+     * Creates a PackageDeclarationNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public PackageDeclarationNode makePackageDeclarationNode(
+            NameNode name,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        PackageDeclarationNode ret = new PackageDeclarationNodeImpl(name, makeAnnotationListNode(), startLocation, stopLocation);
         return ret;
     }
 
@@ -3501,6 +3731,32 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
 
     /**
+     * Creates a SuperFieldAccessNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public SuperFieldAccessNode makeSuperFieldAccessNode(
+            IdentifierNode identifier)
+    {
+        SuperFieldAccessNode ret = new SuperFieldAccessNodeImpl(null, identifier, startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
+     * Creates a SuperFieldAccessNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public SuperFieldAccessNode makeSuperFieldAccessNode(
+            IdentifierNode identifier,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        SuperFieldAccessNode ret = new SuperFieldAccessNodeImpl(null, identifier, startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
      * Creates a SuperMethodInvocationNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -3529,6 +3785,64 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation stopLocation)
     {
         SuperMethodInvocationNode ret = new SuperMethodInvocationNodeImpl(type, identifier, arguments, typeArguments, startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
+     * Creates a SuperMethodInvocationNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public SuperMethodInvocationNode makeSuperMethodInvocationNode(
+            IdentifierNode identifier,
+            ExpressionListNode arguments)
+    {
+        SuperMethodInvocationNode ret = new SuperMethodInvocationNodeImpl(null, identifier, arguments, makeTypeListNode(), startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
+     * Creates a SuperMethodInvocationNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public SuperMethodInvocationNode makeSuperMethodInvocationNode(
+            IdentifierNode identifier,
+            ExpressionListNode arguments,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        SuperMethodInvocationNode ret = new SuperMethodInvocationNodeImpl(null, identifier, arguments, makeTypeListNode(), startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
+     * Creates a SuperMethodInvocationNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public SuperMethodInvocationNode makeSuperMethodInvocationNode(
+            IdentifierNode identifier,
+            ExpressionListNode arguments,
+            TypeListNode typeArguments)
+    {
+        SuperMethodInvocationNode ret = new SuperMethodInvocationNodeImpl(null, identifier, arguments, typeArguments, startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
+     * Creates a SuperMethodInvocationNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public SuperMethodInvocationNode makeSuperMethodInvocationNode(
+            IdentifierNode identifier,
+            ExpressionListNode arguments,
+            TypeListNode typeArguments,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        SuperMethodInvocationNode ret = new SuperMethodInvocationNodeImpl(null, identifier, arguments, typeArguments, startLocation, stopLocation);
         return ret;
     }
 
@@ -3645,6 +3959,30 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
 
     /**
+     * Creates a ThisNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public ThisNode makeThisNode()
+    {
+        ThisNode ret = new ThisNodeImpl(null, startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
+     * Creates a ThisNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public ThisNode makeThisNode(
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        ThisNode ret = new ThisNodeImpl(null, startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
      * Creates a ThrowNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -3697,6 +4035,62 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation stopLocation)
     {
         TryNode ret = new TryNodeImpl(block, catches, finallyBlock, startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
+     * Creates a TryNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public TryNode makeTryNode(
+            BlockNode block,
+            BlockNode finallyBlock)
+    {
+        TryNode ret = new TryNodeImpl(block, makeCatchListNode(), finallyBlock, startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
+     * Creates a TryNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public TryNode makeTryNode(
+            BlockNode block,
+            BlockNode finallyBlock,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        TryNode ret = new TryNodeImpl(block, makeCatchListNode(), finallyBlock, startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
+     * Creates a TryNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public TryNode makeTryNode(
+            BlockNode block,
+            CatchListNode catches)
+    {
+        TryNode ret = new TryNodeImpl(block, catches, null, startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
+     * Creates a TryNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public TryNode makeTryNode(
+            BlockNode block,
+            CatchListNode catches,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        TryNode ret = new TryNodeImpl(block, catches, null, startLocation, stopLocation);
         return ret;
     }
 
@@ -4154,6 +4548,60 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation stopLocation)
     {
         UnqualifiedClassInstantiationNode ret = new UnqualifiedClassInstantiationNodeImpl(type, constructorTypeArguments, arguments, body, startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
+     * Creates a UnqualifiedClassInstantiationNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public UnqualifiedClassInstantiationNode makeUnqualifiedClassInstantiationNode(
+            DeclaredTypeNode type)
+    {
+        UnqualifiedClassInstantiationNode ret = new UnqualifiedClassInstantiationNodeImpl(type, makeTypeArgumentListNode(), makeExpressionListNode(), null, startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
+     * Creates a UnqualifiedClassInstantiationNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public UnqualifiedClassInstantiationNode makeUnqualifiedClassInstantiationNode(
+            DeclaredTypeNode type,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        UnqualifiedClassInstantiationNode ret = new UnqualifiedClassInstantiationNodeImpl(type, makeTypeArgumentListNode(), makeExpressionListNode(), null, startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
+     * Creates a UnqualifiedClassInstantiationNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public UnqualifiedClassInstantiationNode makeUnqualifiedClassInstantiationNode(
+            DeclaredTypeNode type,
+            ExpressionListNode arguments)
+    {
+        UnqualifiedClassInstantiationNode ret = new UnqualifiedClassInstantiationNodeImpl(type, makeTypeArgumentListNode(), arguments, null, startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
+     * Creates a UnqualifiedClassInstantiationNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public UnqualifiedClassInstantiationNode makeUnqualifiedClassInstantiationNode(
+            DeclaredTypeNode type,
+            ExpressionListNode arguments,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        UnqualifiedClassInstantiationNode ret = new UnqualifiedClassInstantiationNodeImpl(type, makeTypeArgumentListNode(), arguments, null, startLocation, stopLocation);
         return ret;
     }
 

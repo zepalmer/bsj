@@ -229,7 +229,7 @@ public class SourceGeneratorParser
 						}
 					} else if (childTag.equals("factory-method"))
 					{
-						FactoryMethodHandler handler = new FactoryMethodHandler();
+						FactoryMethodHandler handler = new FactoryMethodHandler(props);
 						factoryMethodDefinitions.add(handler.handle(childElement));
 					} else
 					{
@@ -339,6 +339,14 @@ public class SourceGeneratorParser
 
 	static class FactoryMethodHandler implements ElementHandler<FactoryMethodDefinition>
 	{
+		private List<PropertyDefinition> definitions;
+
+		public FactoryMethodHandler(List<PropertyDefinition> definitions)
+		{
+			super();
+			this.definitions = definitions;
+		}
+
 		@Override
 		public FactoryMethodDefinition handle(Element e)
 		{
@@ -358,6 +366,13 @@ public class SourceGeneratorParser
 						boolean propVisible = childElement.hasAttribute("visible") ? Boolean.parseBoolean(childElement.getAttribute("visible"))
 								: true;
 						properties.add(new FactoryMethodPropertyDefinition(propName, propVisible));
+					} else if (childTag.equals("use-defaults"))
+					{
+						for (PropertyDefinition def : definitions)
+						{
+							properties.add(new FactoryMethodPropertyDefinition(def.getName(),
+									def.getDefaultExpression() == null));
+						}
 					} else
 					{
 						throw new IllegalStateException("Factory method tag does not understand child " + childTag);

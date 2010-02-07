@@ -287,7 +287,7 @@
                 annotations.
             ]]></doc>
             <factory-method>
-                <prop name="access" />
+                <use-defaults/>
             </factory-method>
         </type>
 
@@ -305,7 +305,7 @@
                 Represents the modifiers which can be associated with a class.
             ]]></doc>
             <factory-method>
-                <prop name="access" />
+                <use-defaults/>
             </factory-method>
         </type>
 
@@ -325,7 +325,7 @@
                 legal but also implicit, so it does not appear here.
             ]]></doc>
             <factory-method>
-                <prop name="access" />
+                <use-defaults/>
             </factory-method>
         </type>
 
@@ -343,7 +343,7 @@
                 Represents the modifiers which can be associated with a field.
             ]]></doc>
             <factory-method>
-                <prop name="access" />
+                <use-defaults/>
             </factory-method>
         </type>
 
@@ -358,7 +358,7 @@
                 are syntactically legal modifiers, they are not included here because they are implicit to all interfaces.
             ]]></doc>
             <factory-method>
-                <prop name="access" />
+                <use-defaults/>
             </factory-method>
         </type>
 
@@ -380,7 +380,7 @@
                 Represents the modifiers which can be associated with a method.
             ]]></doc>
             <factory-method>
-                <prop name="access" />
+                <use-defaults/>
             </factory-method>
         </type>
 
@@ -395,11 +395,12 @@
         </type>
 
         <type name="VariableModifiersNode" super="ModifiersNode">
-            <prop name="finalFlag" type="boolean" desc="whether or not the associated variable is final" default="false"/>
+            <prop name="finalFlag" type="boolean" desc="whether or not the associated variable is final"
+                default="false" />
             <doc><![CDATA[
                 Represents the modifiers which can be associated with a variable.
             ]]></doc>
-            <factory-method/>
+            <factory-method />
         </type>
 
         <!-- ===================== EXPRESSION NODES ====================== -->
@@ -476,9 +477,12 @@
         <type name="ClassInstantiationNode" super="Node" mode="abstract">
             <tag name="RestrictedPrimaryExpressionNode" />
             <tag name="StatementExpressionNode" />
-            <prop name="constructorTypeArguments" type="TypeArgumentListNode" desc="the type arguments for the constructor" />
-            <prop name="arguments" type="ExpressionListNode" desc="the arguments to the constructor" />
-            <prop name="body" type="AnonymousClassBodyNode" desc="the body of the anonymous class" />
+            <prop name="constructorTypeArguments" type="TypeArgumentListNode" desc="the type arguments for the constructor"
+                default="makeTypeArgumentListNode()" />
+            <prop name="arguments" type="ExpressionListNode" desc="the arguments to the constructor"
+                default="makeExpressionListNode()" />
+            <prop name="body" type="AnonymousClassBodyNode" desc="the body of the anonymous class"
+                default="null" />
             <doc><![CDATA[
                 Acts as a parent to class instantiation nodes. 
             ]]></doc>
@@ -598,10 +602,14 @@
             <tag name="RestrictedPrimaryExpressionNode" />
             <tag name="StatementExpressionNode" />
             <prop name="arguments" type="ExpressionListNode" desc="the arguments to pass to the method" />
-            <prop name="typeArguments" type="TypeListNode" desc="the type arguments for the method" />
+            <prop name="typeArguments" type="TypeListNode" desc="the type arguments for the method"
+                default="makeTypeListNode()" />
             <doc><![CDATA[
                 A superclass for method invocation nodes.
             ]]></doc>
+            <factory-method>
+                <use-defaults/>
+            </factory-method>
         </type>
 
         <type name="ParenthesizedExpressionNode" super="Node">
@@ -652,7 +660,7 @@
 
         <type name="SuperFieldAccessNode" super="Node">
             <tag name="RestrictedPrimaryExpressionNode" />
-            <prop name="type" type="UnparameterizedTypeNode" desc="the qualifying type" />
+            <prop name="type" type="UnparameterizedTypeNode" desc="the qualifying type" default="null" />
             <prop name="identifier" type="IdentifierNode" desc="the identifier of the field being accessed" />
             <doc><![CDATA[
                 A node representing a field selection from <tt>super</tt>, such as in the expression
@@ -679,15 +687,19 @@
                 enclosing instance's superclass (<tt>A</tt>) rather than the inner class's superclass (<tt>Object</tt>).  If a
                 type qualification is not necessary (and it usually won't be), <tt>type</tt> should be <tt>null</tt>.
             ]]></doc>
+            <factory-method>
+                <use-defaults/>
+            </factory-method>
         </type>
 
         <type name="SuperMethodInvocationNode" super="Node">
             <tag name="RestrictedPrimaryExpressionNode" />
             <tag name="StatementExpressionNode" />
-            <prop name="type" type="UnparameterizedTypeNode" desc="the qualifying type" />
+            <prop name="type" type="UnparameterizedTypeNode" desc="the qualifying type" default="null" />
             <prop name="identifier" type="IdentifierNode" desc="the identifier of the method being invoked" />
             <prop name="arguments" type="ExpressionListNode" desc="the arguments to pass to the method" />
-            <prop name="typeArguments" type="TypeListNode" desc="the type arguments for the method" />
+            <prop name="typeArguments" type="TypeListNode" desc="the type arguments for the method"
+                default="makeTypeListNode()" />
             <doc><![CDATA[
                 A node representing a method invocation from <tt>super</tt>, such as in the expression
                 <pre>
@@ -717,11 +729,19 @@
                 enclosing instance's superclass (<tt>A</tt>) rather than the inner class's superclass (<tt>Object</tt>).  If a
                 type qualification is not necessary (and it usually won't be), <tt>type</tt> should be <tt>null</tt>.
             ]]></doc>
+            <factory-method>
+                <use-defaults/>
+            </factory-method>
+            <factory-method>
+                <prop name="identifier" />
+                <prop name="arguments" />
+                <prop name="typeArguments" />
+            </factory-method>
         </type>
 
         <type name="ThisNode" super="Node">
             <tag name="RestrictedPrimaryExpressionNode" />
-            <prop name="type" type="UnparameterizedTypeNode" desc="the qualifying type" />
+            <prop name="type" type="UnparameterizedTypeNode" desc="the qualifying type" default="null" />
             <doc><![CDATA[
                 A node representing the code snippet <tt>this</tt> in terms of a value, such as in the expression
                 <pre>
@@ -742,6 +762,7 @@
                 In that case, the <tt>type</tt> field contains the name of the qualified <tt>this</tt>.  Usually, <tt>this</tt>
                 is unqualified and the <tt>type</tt> field is <tt>null</tt>.
             ]]></doc>
+            <factory-method />
         </type>
 
         <type name="TypeCastNode" super="Node">
@@ -802,6 +823,13 @@
                 </pre>
                 If this class is not anonymous, the <tt>body</tt> field is <tt>null</tt>.
             ]]></doc>
+            <factory-method>
+                <use-defaults/>
+            </factory-method>
+            <factory-method>
+                <prop name="type" />
+                <prop name="arguments" />
+            </factory-method>
         </type>
 
         <!-- ===================== STATEMENT NODES ====================== -->
@@ -809,7 +837,8 @@
         <type name="AssertStatementNode" super="Node">
             <tag name="StatementNode" />
             <prop name="testExpression" type="ExpressionNode" desc="the assertion's test expression" />
-            <prop name="messageExpression" type="ExpressionNode" desc="the assertion's message expression" />
+            <prop name="messageExpression" type="ExpressionNode" desc="the assertion's message expression"
+                default="null" />
             <doc><![CDATA[
                 Represents an assert statement, as in
                 <pre>
@@ -820,6 +849,9 @@
                     assert <i>expr</i> : <i>expr</i>;
                 </pre>
             ]]></doc>
+            <factory-method>
+                <use-defaults/>
+            </factory-method>
         </type>
 
         <type name="BlockNode" super="Node">
@@ -838,24 +870,26 @@
 
         <type name="BreakNode" super="Node">
             <tag name="StatementNode" />
-            <prop name="label" type="IdentifierNode" desc="the break label" />
+            <prop name="label" type="IdentifierNode" desc="the break label" default="null" />
             <doc><![CDATA[
                 A node representing break statements, as in:
                 <pre>
                     break <i>label</i>;
                 </pre>
             ]]></doc>
+            <factory-method />
         </type>
 
         <type name="ContinueNode" super="Node">
             <tag name="StatementNode" />
-            <prop name="label" type="IdentifierNode" desc="the continue label" />
+            <prop name="label" type="IdentifierNode" desc="the continue label" default="null" />
             <doc><![CDATA[
                 A node representing continue statements, as in:
                 <pre>
                     continue <i>label</i>;
                 </pre>
             ]]></doc>
+            <factory-method />
         </type>
 
         <type name="DoWhileLoopNode" super="Node">
@@ -924,13 +958,16 @@
             <tag name="StatementNode" />
             <prop name="condition" type="ExpressionNode" desc="the condition" />
             <prop name="thenStatement" type="StatementNode" desc="the then branch's statement" />
-            <prop name="elseStatement" type="StatementNode" desc="the else branch's statement" />
+            <prop name="elseStatement" type="StatementNode" desc="the else branch's statement" default="null" />
             <doc><![CDATA[
                 A node representing an if-then-else statement, as in:
                 <pre>
                 if (<i>condition</i>) then <i>statement</i> else <i>statement</i>
                 </pre>
             ]]></doc>
+            <factory-method>
+                <use-defaults/>
+            </factory-method>
         </type>
 
         <type name="InlineTypeDeclarationNode" super="Node">
@@ -1009,8 +1046,8 @@
         <type name="TryNode" super="Node">
             <tag name="StatementNode" />
             <prop name="block" type="BlockNode" desc="the block in which to try" />
-            <prop name="catches" type="CatchListNode" desc="the catch conditions" />
-            <prop name="finallyBlock" type="BlockNode" desc="the finally block" />
+            <prop name="catches" type="CatchListNode" desc="the catch conditions" default="makeCatchListNode()" />
+            <prop name="finallyBlock" type="BlockNode" desc="the finally block" default="null" />
             <doc><![CDATA[
                 A node to represent a try-catch block, as in:
                 <pre>
@@ -1027,6 +1064,14 @@
                 If no catch block exists, the <tt>catches</tt> list node will contain no children.  If no finally block exists,
                 <tt>finallyBlock</tt> will be <tt>null</tt>.  <tt>catches</tt> is not permitted to be <tt>null</tt>.
             ]]></doc>
+            <factory-method>
+                <prop name="block" />
+                <prop name="finallyBlock" />
+            </factory-method>
+            <factory-method>
+                <prop name="block" />
+                <prop name="catches" />
+            </factory-method>
         </type>
 
         <type name="VariableDeclarationNode" super="Node">
@@ -1234,9 +1279,12 @@
             <prop name="body" type="ConstructorBodyNode" desc="the body of this constructor" />
             <prop name="modifiers" type="ConstructorModifiersNode" desc="the modifiers for this constructor" />
             <prop name="parameters" type="VariableListNode" desc="the parameters declared by this constructor" />
-            <prop name="varargParameter" type="VariableNode" desc="the vararg parameter declared by this method" />
-            <prop name="throwTypes" type="UnparameterizedTypeListNode" desc="the types of exceptions thrown by this constructor" />
-            <prop name="typeParameters" type="TypeParameterListNode" desc="this constructor's applicable type parameters" />
+            <prop name="varargParameter" type="VariableNode" desc="the vararg parameter declared by this method"
+                default="null" />
+            <prop name="throwTypes" type="UnparameterizedTypeListNode" desc="the types of exceptions thrown by this constructor"
+                default="makeUnparameterizedTypeListNode()" />
+            <prop name="typeParameters" type="TypeParameterListNode" desc="this constructor's applicable type parameters"
+                default="makeTypeParameterListNode()" />
             <prop name="javadoc" type="JavadocNode" desc="the associated javadoc comment for this node" />
             <doc><![CDATA[
                 A node representing a constructor declaration, as in:
@@ -1246,19 +1294,26 @@
                 </pre>
                 See {@link MethodDeclarationNode} for more information.
             ]]></doc>
+            <factory-method>
+                <use-defaults/>
+            </factory-method>
         </type>
 
         <type name="EnumConstantDeclarationNode" super="Node">
             <prop name="annotations" type="AnnotationListNode" desc="the annotations on this constant" />
             <prop name="identifier" type="IdentifierNode" desc="the name of this constant" />
             <prop name="arguments" type="ExpressionListNode" desc="the arguments to the enum constructor" />
-            <prop name="body" type="AnonymousClassBodyNode" desc="the body used to anonymously subclass the constant" />
+            <prop name="body" type="AnonymousClassBodyNode" desc="the body used to anonymously subclass the constant"
+                default="null"/>
             <prop name="javadoc" type="JavadocNode" desc="the associated javadoc comment for this node" />
             <doc><![CDATA[
                 A node representing an enum constant.  While enum constants typically consist of a single name, many optional
                 extensions exist.  In the likely case that this constant is not an anonymous subclass, <tt>body</tt> is
                 <tt>null</tt>.
             ]]></doc>
+            <factory-method>
+                <use-defaults/>
+            </factory-method>
         </type>
 
         <type name="FieldDeclarationNode" super="Node">
@@ -1297,10 +1352,12 @@
             <prop name="modifiers" type="MethodModifiersNode" desc="the modifiers for this method" />
             <prop name="identifier" type="IdentifierNode" desc="this method's name" />
             <prop name="parameters" type="VariableListNode" desc="the parameters declared by this method" />
-            <prop name="varargParameter" type="VariableNode" desc="the vararg parameter declared by this method" />
+            <prop name="varargParameter" type="VariableNode" desc="the vararg parameter declared by this method" default="null"/>
             <prop name="returnType" type="TypeNode" desc="the type of value returned" />
-            <prop name="throwTypes" type="UnparameterizedTypeListNode" desc="the types of exceptions thrown by this method" />
-            <prop name="typeParameters" type="TypeParameterListNode" desc="this method's applicable type parameters" />
+            <prop name="throwTypes" type="UnparameterizedTypeListNode" desc="the types of exceptions thrown by this method"
+                default="makeUnparameterizedTypeListNode()"/>
+            <prop name="typeParameters" type="TypeParameterListNode" desc="this method's applicable type parameters"
+                default="makeTypeParameterListNode()"/>
             <prop name="javadoc" type="JavadocNode" desc="the associated javadoc comment for this node" />
             <doc><![CDATA[
                 A node representing a method declaration, as in:
@@ -1317,6 +1374,9 @@
                 <pre>public abstract void foo();</pre>
                 will have a <tt>null</tt> body.
             ]]></doc>
+            <factory-method>
+                <use-defaults/>
+            </factory-method>
         </type>
 
         <!-- ===================== TYPE BODY NODES ====================== -->
@@ -1804,7 +1864,8 @@
 
         <type name="ConstructorInvocationNode" super="Node" mode="abstract">
             <prop name="arguments" type="ExpressionListNode" desc="the arguments to pass to the method" />
-            <prop name="typeArguments" type="TypeListNode" desc="the type arguments for the method" />
+            <prop name="typeArguments" type="TypeListNode" desc="the type arguments for the method"
+                default="makeTypeListNode()" />
             <doc><![CDATA[
                 This class is a common superclass to both types of explicit constructor invocations: alternate constructor
                 invocations (those using the <tt>this</tt> keyword) and superclass constructor invocations (those using the
@@ -1812,6 +1873,9 @@
                 language specification treats these two entities as distinct (and there are some corner cases for the superclass
                 constructor syntax which are best contained
             ]]></doc>
+            <factory-method>
+                <prop name="arguments" />
+            </factory-method>
         </type>
 
         <type name="ForInitializerDeclarationNode" super="Node">
@@ -1868,7 +1932,8 @@
 
         <type name="PackageDeclarationNode" super="Node">
             <prop name="name" type="NameNode" desc="the name of the package" />
-            <prop name="annotations" type="AnnotationListNode" desc="the annotations on the package declaration" />
+            <prop name="annotations" type="AnnotationListNode" desc="the annotations on the package declaration"
+                default="makeAnnotationListNode()" />
             <doc><![CDATA[
                 A node representing a package declaration, as in
                 <pre>
@@ -1880,6 +1945,9 @@
                     package <i>packageName</i>;
                 </pre>
             ]]></doc>
+            <factory-method>
+                <prop name="name" />
+            </factory-method>
         </type>
 
         <type name="SuperclassConstructorInvocationNode" super="ConstructorInvocationNode">

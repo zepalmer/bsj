@@ -68,10 +68,18 @@
         <xs:attribute name="visible" type="xs:boolean" use="optional" default="true"/>
     </xs:complexType>
     
+    <xs:complexType name="factoryMethod_useDefaults_T">
+    </xs:complexType>
+    
     <xs:complexType name="factoryMethod_T">
-        <xs:sequence>
-            <xs:element name="prop" type="factoryMethod_prop_T" minOccurs="0" maxOccurs="unbounded"/>
-        </xs:sequence> 
+        <xs:choice>
+            <xs:sequence>
+                <xs:element name="prop" type="factoryMethod_prop_T" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+            <xs:sequence>
+                <xs:element name="use-defaults" type="factoryMethod_useDefaults_T"/>
+            </xs:sequence>
+        </xs:choice> 
     </xs:complexType>
 
     <xs:complexType name="type_T">

@@ -535,6 +535,22 @@ public interface BsjNodeFactory
             BsjSourceLocation stopLocation);
 
     /**
+     * Creates a AssertStatementNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public AssertStatementNode makeAssertStatementNode(
+            ExpressionNode testExpression);
+
+    /**
+     * Creates a AssertStatementNode.
+     * The specified start and stop locations are used.
+     */
+    public AssertStatementNode makeAssertStatementNode(
+            ExpressionNode testExpression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+
+    /**
      * Creates a AssignmentNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -668,6 +684,20 @@ public interface BsjNodeFactory
      */
     public BreakNode makeBreakNode(
             IdentifierNode label,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+
+    /**
+     * Creates a BreakNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public BreakNode makeBreakNode();
+
+    /**
+     * Creates a BreakNode.
+     * The specified start and stop locations are used.
+     */
+    public BreakNode makeBreakNode(
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
 
@@ -1026,6 +1056,30 @@ public interface BsjNodeFactory
             BsjSourceLocation stopLocation);
 
     /**
+     * Creates a ConstructorDeclarationNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public ConstructorDeclarationNode makeConstructorDeclarationNode(
+            IdentifierNode identifier,
+            ConstructorBodyNode body,
+            ConstructorModifiersNode modifiers,
+            VariableListNode parameters,
+            JavadocNode javadoc);
+
+    /**
+     * Creates a ConstructorDeclarationNode.
+     * The specified start and stop locations are used.
+     */
+    public ConstructorDeclarationNode makeConstructorDeclarationNode(
+            IdentifierNode identifier,
+            ConstructorBodyNode body,
+            ConstructorModifiersNode modifiers,
+            VariableListNode parameters,
+            JavadocNode javadoc,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+
+    /**
      * Creates a ConstructorModifiersNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -1056,6 +1110,20 @@ public interface BsjNodeFactory
      */
     public ContinueNode makeContinueNode(
             IdentifierNode label,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+
+    /**
+     * Creates a ContinueNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public ContinueNode makeContinueNode();
+
+    /**
+     * Creates a ContinueNode.
+     * The specified start and stop locations are used.
+     */
+    public ContinueNode makeContinueNode(
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
 
@@ -1215,6 +1283,28 @@ public interface BsjNodeFactory
             IdentifierNode identifier,
             ExpressionListNode arguments,
             AnonymousClassBodyNode body,
+            JavadocNode javadoc,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+
+    /**
+     * Creates a EnumConstantDeclarationNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public EnumConstantDeclarationNode makeEnumConstantDeclarationNode(
+            AnnotationListNode annotations,
+            IdentifierNode identifier,
+            ExpressionListNode arguments,
+            JavadocNode javadoc);
+
+    /**
+     * Creates a EnumConstantDeclarationNode.
+     * The specified start and stop locations are used.
+     */
+    public EnumConstantDeclarationNode makeEnumConstantDeclarationNode(
+            AnnotationListNode annotations,
+            IdentifierNode identifier,
+            ExpressionListNode arguments,
             JavadocNode javadoc,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
@@ -1526,6 +1616,24 @@ public interface BsjNodeFactory
             ExpressionNode condition,
             StatementNode thenStatement,
             StatementNode elseStatement,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+
+    /**
+     * Creates a IfNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public IfNode makeIfNode(
+            ExpressionNode condition,
+            StatementNode thenStatement);
+
+    /**
+     * Creates a IfNode.
+     * The specified start and stop locations are used.
+     */
+    public IfNode makeIfNode(
+            ExpressionNode condition,
+            StatementNode thenStatement,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
 
@@ -1876,6 +1984,32 @@ public interface BsjNodeFactory
             BsjSourceLocation stopLocation);
 
     /**
+     * Creates a MethodDeclarationNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public MethodDeclarationNode makeMethodDeclarationNode(
+            BlockNode body,
+            MethodModifiersNode modifiers,
+            IdentifierNode identifier,
+            VariableListNode parameters,
+            TypeNode returnType,
+            JavadocNode javadoc);
+
+    /**
+     * Creates a MethodDeclarationNode.
+     * The specified start and stop locations are used.
+     */
+    public MethodDeclarationNode makeMethodDeclarationNode(
+            BlockNode body,
+            MethodModifiersNode modifiers,
+            IdentifierNode identifier,
+            VariableListNode parameters,
+            TypeNode returnType,
+            JavadocNode javadoc,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+
+    /**
      * Creates a MethodInvocationByExpressionNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -2012,6 +2146,22 @@ public interface BsjNodeFactory
     public PackageDeclarationNode makePackageDeclarationNode(
             NameNode name,
             AnnotationListNode annotations,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+
+    /**
+     * Creates a PackageDeclarationNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public PackageDeclarationNode makePackageDeclarationNode(
+            NameNode name);
+
+    /**
+     * Creates a PackageDeclarationNode.
+     * The specified start and stop locations are used.
+     */
+    public PackageDeclarationNode makePackageDeclarationNode(
+            NameNode name,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
 
@@ -2248,6 +2398,22 @@ public interface BsjNodeFactory
             BsjSourceLocation stopLocation);
 
     /**
+     * Creates a SuperFieldAccessNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public SuperFieldAccessNode makeSuperFieldAccessNode(
+            IdentifierNode identifier);
+
+    /**
+     * Creates a SuperFieldAccessNode.
+     * The specified start and stop locations are used.
+     */
+    public SuperFieldAccessNode makeSuperFieldAccessNode(
+            IdentifierNode identifier,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+
+    /**
      * Creates a SuperMethodInvocationNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -2263,6 +2429,44 @@ public interface BsjNodeFactory
      */
     public SuperMethodInvocationNode makeSuperMethodInvocationNode(
             UnparameterizedTypeNode type,
+            IdentifierNode identifier,
+            ExpressionListNode arguments,
+            TypeListNode typeArguments,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+
+    /**
+     * Creates a SuperMethodInvocationNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public SuperMethodInvocationNode makeSuperMethodInvocationNode(
+            IdentifierNode identifier,
+            ExpressionListNode arguments);
+
+    /**
+     * Creates a SuperMethodInvocationNode.
+     * The specified start and stop locations are used.
+     */
+    public SuperMethodInvocationNode makeSuperMethodInvocationNode(
+            IdentifierNode identifier,
+            ExpressionListNode arguments,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+
+    /**
+     * Creates a SuperMethodInvocationNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public SuperMethodInvocationNode makeSuperMethodInvocationNode(
+            IdentifierNode identifier,
+            ExpressionListNode arguments,
+            TypeListNode typeArguments);
+
+    /**
+     * Creates a SuperMethodInvocationNode.
+     * The specified start and stop locations are used.
+     */
+    public SuperMethodInvocationNode makeSuperMethodInvocationNode(
             IdentifierNode identifier,
             ExpressionListNode arguments,
             TypeListNode typeArguments,
@@ -2342,6 +2546,20 @@ public interface BsjNodeFactory
             BsjSourceLocation stopLocation);
 
     /**
+     * Creates a ThisNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public ThisNode makeThisNode();
+
+    /**
+     * Creates a ThisNode.
+     * The specified start and stop locations are used.
+     */
+    public ThisNode makeThisNode(
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+
+    /**
      * Creates a ThrowNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -2374,6 +2592,42 @@ public interface BsjNodeFactory
             BlockNode block,
             CatchListNode catches,
             BlockNode finallyBlock,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+
+    /**
+     * Creates a TryNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public TryNode makeTryNode(
+            BlockNode block,
+            BlockNode finallyBlock);
+
+    /**
+     * Creates a TryNode.
+     * The specified start and stop locations are used.
+     */
+    public TryNode makeTryNode(
+            BlockNode block,
+            BlockNode finallyBlock,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+
+    /**
+     * Creates a TryNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public TryNode makeTryNode(
+            BlockNode block,
+            CatchListNode catches);
+
+    /**
+     * Creates a TryNode.
+     * The specified start and stop locations are used.
+     */
+    public TryNode makeTryNode(
+            BlockNode block,
+            CatchListNode catches,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
 
@@ -2661,6 +2915,40 @@ public interface BsjNodeFactory
             TypeArgumentListNode constructorTypeArguments,
             ExpressionListNode arguments,
             AnonymousClassBodyNode body,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+
+    /**
+     * Creates a UnqualifiedClassInstantiationNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public UnqualifiedClassInstantiationNode makeUnqualifiedClassInstantiationNode(
+            DeclaredTypeNode type);
+
+    /**
+     * Creates a UnqualifiedClassInstantiationNode.
+     * The specified start and stop locations are used.
+     */
+    public UnqualifiedClassInstantiationNode makeUnqualifiedClassInstantiationNode(
+            DeclaredTypeNode type,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+
+    /**
+     * Creates a UnqualifiedClassInstantiationNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public UnqualifiedClassInstantiationNode makeUnqualifiedClassInstantiationNode(
+            DeclaredTypeNode type,
+            ExpressionListNode arguments);
+
+    /**
+     * Creates a UnqualifiedClassInstantiationNode.
+     * The specified start and stop locations are used.
+     */
+    public UnqualifiedClassInstantiationNode makeUnqualifiedClassInstantiationNode(
+            DeclaredTypeNode type,
+            ExpressionListNode arguments,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
 
