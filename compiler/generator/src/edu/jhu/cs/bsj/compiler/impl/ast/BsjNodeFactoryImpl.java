@@ -112,6 +112,32 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
 
     /**
+     * Creates a AlternateConstructorInvocationNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public AlternateConstructorInvocationNode makeAlternateConstructorInvocationNode(
+            ExpressionListNode arguments)
+    {
+        AlternateConstructorInvocationNode ret = new AlternateConstructorInvocationNodeImpl(arguments, makeTypeListNode(), startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
+     * Creates a AlternateConstructorInvocationNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public AlternateConstructorInvocationNode makeAlternateConstructorInvocationNode(
+            ExpressionListNode arguments,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        AlternateConstructorInvocationNode ret = new AlternateConstructorInvocationNodeImpl(arguments, makeTypeListNode(), startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
      * Creates a AnnotationAnnotationValueNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -1717,6 +1743,32 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation stopLocation)
     {
         ConstructorModifiersNode ret = new ConstructorModifiersNodeImpl(access, annotations, startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
+     * Creates a ConstructorModifiersNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public ConstructorModifiersNode makeConstructorModifiersNode(
+            AccessModifier access)
+    {
+        ConstructorModifiersNode ret = new ConstructorModifiersNodeImpl(access, makeAnnotationListNode(), startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
+     * Creates a ConstructorModifiersNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public ConstructorModifiersNode makeConstructorModifiersNode(
+            AccessModifier access,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        ConstructorModifiersNode ret = new ConstructorModifiersNodeImpl(access, makeAnnotationListNode(), startLocation, stopLocation);
         return ret;
     }
 
@@ -3873,6 +3925,32 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation stopLocation)
     {
         SuperclassConstructorInvocationNode ret = new SuperclassConstructorInvocationNodeImpl(qualifyingExpression, arguments, typeArguments, startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
+     * Creates a SuperclassConstructorInvocationNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public SuperclassConstructorInvocationNode makeSuperclassConstructorInvocationNode(
+            ExpressionListNode arguments)
+    {
+        SuperclassConstructorInvocationNode ret = new SuperclassConstructorInvocationNodeImpl(null, arguments, makeTypeListNode(), startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
+     * Creates a SuperclassConstructorInvocationNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public SuperclassConstructorInvocationNode makeSuperclassConstructorInvocationNode(
+            ExpressionListNode arguments,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        SuperclassConstructorInvocationNode ret = new SuperclassConstructorInvocationNodeImpl(null, arguments, makeTypeListNode(), startLocation, stopLocation);
         return ret;
     }
 

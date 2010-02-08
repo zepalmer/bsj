@@ -1,5 +1,6 @@
 package edu.jhu.cs.bsj.compiler.utils.generator;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -32,6 +33,8 @@ public class TypeDefinition
 	private boolean genChildren;
 	private List<FactoryMethodDefinition> factoryMethods;
 	private Mode mode;
+	
+	private TypeDefinition superDefinition;
 
 	public TypeDefinition(String baseName, String typeParameter, String superName, String superTypeArg,
 			String interfacePackage, String classPackage, List<String> tags, List<PropertyDefinition> properties,
@@ -136,6 +139,18 @@ public class TypeDefinition
 			return getBaseName() + "<" + getUnboundedTypeParameter() + ">";
 		}
 	}
+	
+	public List<PropertyDefinition> getRecursiveProperties()
+	{
+		List<PropertyDefinition> props = new ArrayList<PropertyDefinition>();
+		TypeDefinition def = this;
+		while (def != null)
+		{
+			props.addAll(def.getProperties());
+			def = def.getSuperDefinition();
+		}
+		return props;
+	}
 
 	public String getBaseName()
 	{
@@ -227,6 +242,16 @@ public class TypeDefinition
 		return mode;
 	}
 	
+	public TypeDefinition getSuperDefinition()
+	{
+		return superDefinition;
+	}
+
+	public void setSuperDefinition(TypeDefinition superDefinition)
+	{
+		this.superDefinition = superDefinition;
+	}
+
 	public String toString()
 	{
 		return "TypeDef:" + getFullName();

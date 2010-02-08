@@ -1431,7 +1431,7 @@ public class SourceGenerator
 				{
 					standardFactoryMethodProperties.add(new FactoryMethodPropertyDefinition(p.getName(), true));
 				}
-				FactoryMethodDefinition standardFactoryDefinition = new FactoryMethodDefinition(
+				FactoryMethodDefinition standardFactoryDefinition = new EnumeratedFactoryMethodDefinition(
 						standardFactoryMethodProperties);
 				for (boolean skipMake : new boolean[] { true, false })
 				{

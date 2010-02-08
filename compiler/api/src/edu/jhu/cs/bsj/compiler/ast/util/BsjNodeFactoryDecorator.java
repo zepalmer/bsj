@@ -127,6 +127,36 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     }
 
     /**
+     * Creates a AlternateConstructorInvocationNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public AlternateConstructorInvocationNode makeAlternateConstructorInvocationNode(
+            ExpressionListNode arguments)
+    {
+        this.before();
+        AlternateConstructorInvocationNode node = factory.makeAlternateConstructorInvocationNode(arguments);
+        this.after(node);
+        return node;
+    }
+
+    /**
+     * Creates a AlternateConstructorInvocationNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public AlternateConstructorInvocationNode makeAlternateConstructorInvocationNode(
+            ExpressionListNode arguments,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        AlternateConstructorInvocationNode node = factory.makeAlternateConstructorInvocationNode(arguments, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+
+    /**
      * Creates a AnnotationAnnotationValueNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -1963,6 +1993,36 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     {
         this.before();
         ConstructorModifiersNode node = factory.makeConstructorModifiersNode(access, annotations, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+
+    /**
+     * Creates a ConstructorModifiersNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public ConstructorModifiersNode makeConstructorModifiersNode(
+            AccessModifier access)
+    {
+        this.before();
+        ConstructorModifiersNode node = factory.makeConstructorModifiersNode(access);
+        this.after(node);
+        return node;
+    }
+
+    /**
+     * Creates a ConstructorModifiersNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public ConstructorModifiersNode makeConstructorModifiersNode(
+            AccessModifier access,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        ConstructorModifiersNode node = factory.makeConstructorModifiersNode(access, startLocation, stopLocation);
         this.after(node);
         return node;
     }
@@ -4423,6 +4483,36 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     {
         this.before();
         SuperclassConstructorInvocationNode node = factory.makeSuperclassConstructorInvocationNode(qualifyingExpression, arguments, typeArguments, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+
+    /**
+     * Creates a SuperclassConstructorInvocationNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public SuperclassConstructorInvocationNode makeSuperclassConstructorInvocationNode(
+            ExpressionListNode arguments)
+    {
+        this.before();
+        SuperclassConstructorInvocationNode node = factory.makeSuperclassConstructorInvocationNode(arguments);
+        this.after(node);
+        return node;
+    }
+
+    /**
+     * Creates a SuperclassConstructorInvocationNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public SuperclassConstructorInvocationNode makeSuperclassConstructorInvocationNode(
+            ExpressionListNode arguments,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        SuperclassConstructorInvocationNode node = factory.makeSuperclassConstructorInvocationNode(arguments, startLocation, stopLocation);
         this.after(node);
         return node;
     }

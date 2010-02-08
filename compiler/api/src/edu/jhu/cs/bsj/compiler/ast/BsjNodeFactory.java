@@ -69,6 +69,22 @@ public interface BsjNodeFactory
             BsjSourceLocation stopLocation);
 
     /**
+     * Creates a AlternateConstructorInvocationNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public AlternateConstructorInvocationNode makeAlternateConstructorInvocationNode(
+            ExpressionListNode arguments);
+
+    /**
+     * Creates a AlternateConstructorInvocationNode.
+     * The specified start and stop locations are used.
+     */
+    public AlternateConstructorInvocationNode makeAlternateConstructorInvocationNode(
+            ExpressionListNode arguments,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+
+    /**
      * Creates a AnnotationAnnotationValueNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -1094,6 +1110,22 @@ public interface BsjNodeFactory
     public ConstructorModifiersNode makeConstructorModifiersNode(
             AccessModifier access,
             AnnotationListNode annotations,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+
+    /**
+     * Creates a ConstructorModifiersNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public ConstructorModifiersNode makeConstructorModifiersNode(
+            AccessModifier access);
+
+    /**
+     * Creates a ConstructorModifiersNode.
+     * The specified start and stop locations are used.
+     */
+    public ConstructorModifiersNode makeConstructorModifiersNode(
+            AccessModifier access,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
 
@@ -2490,6 +2522,22 @@ public interface BsjNodeFactory
             PrimaryExpressionNode qualifyingExpression,
             ExpressionListNode arguments,
             TypeListNode typeArguments,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+
+    /**
+     * Creates a SuperclassConstructorInvocationNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public SuperclassConstructorInvocationNode makeSuperclassConstructorInvocationNode(
+            ExpressionListNode arguments);
+
+    /**
+     * Creates a SuperclassConstructorInvocationNode.
+     * The specified start and stop locations are used.
+     */
+    public SuperclassConstructorInvocationNode makeSuperclassConstructorInvocationNode(
+            ExpressionListNode arguments,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
 

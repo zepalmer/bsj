@@ -1,41 +1,20 @@
 package edu.jhu.cs.bsj.compiler.utils.generator;
 
-import java.util.List;
-
-/**
- * Defines a supplementary factory method.
- * @author Zachary Palmer
- */
-public class FactoryMethodDefinition
+public interface FactoryMethodDefinition
 {
-	/** The properties which are visible for this definition. */
-	private List<FactoryMethodPropertyDefinition> properties;
 
-	public FactoryMethodDefinition(List<FactoryMethodPropertyDefinition> properties)
-	{
-		super();
-		this.properties = properties;
-	}
-
-	public List<FactoryMethodPropertyDefinition> getProperties()
-	{
-		return properties;
-	}
-	
 	/**
 	 * Determines if the property of the specified name is visible.
 	 * @param name The name of the property.
 	 * @return <code>true</code> if the property is visible; <code>false</code> otherwise.
 	 */
-	public boolean isVisible(String name)
-	{
-		for (FactoryMethodPropertyDefinition def : this.properties)
-		{
-			if (def.getName().equals(name))
-			{
-				return def.isVisible();
-			}
-		}
-		return false;
-	}
+	public boolean isVisible(String name);
+
+	/**
+	 * Notifies this factory method definition of its parent.  This may be important for some factory method definition
+	 * classes.
+	 * @param typeDefinition The type definition that this factory method definition is serving.
+	 */
+	public void setParent(TypeDefinition typeDefinition);
+
 }

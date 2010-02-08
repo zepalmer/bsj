@@ -64,7 +64,35 @@ public class SourceGeneratorParser
 		}
 
 		SrcgenHandler handler = new SrcgenHandler(null, null);
-		return new SourceGenerationData(handler.handle(topElement));
+		Collection<TypeDefinition> typeDefinitions = handler.handle(topElement);
+		
+		postProcess(typeDefinitions);
+		
+		return new SourceGenerationData(typeDefinitions);
+	}
+	
+	private void postProcess(Collection<TypeDefinition> typeDefinitions)
+	{
+		// Post processing
+		Map<String, TypeDefinition> typeMapByName = new HashMap<String, TypeDefinition>();
+		for (TypeDefinition typeDefinition : typeDefinitions)
+		{
+			typeMapByName.put(typeDefinition.getBaseName(), typeDefinition);
+		}
+		for (TypeDefinition typeDefinition : typeDefinitions)
+		{
+			if (typeDefinition.getSuperName() != null)
+			{
+				TypeDefinition superDefinition = typeMapByName.get(typeDefinition.getSuperName());
+				if (superDefinition == null)
+				{
+					throw new IllegalStateException("Type " + typeDefinition + " has supertype "
+							+ typeDefinition.getSuperName() + " which was not declared.");
+				}
+				typeDefinition.setSuperDefinition(superDefinition);
+			}
+		}
+
 	}
 
 	private static String getAttributeValue(Element e, String attribute)
@@ -126,6 +154,7 @@ public class SourceGeneratorParser
 					}
 				}
 			}
+
 			return types;
 		}
 	}
@@ -229,7 +258,7 @@ public class SourceGeneratorParser
 						}
 					} else if (childTag.equals("factory-method"))
 					{
-						FactoryMethodHandler handler = new FactoryMethodHandler(props);
+						FactoryMethodHandler handler = new FactoryMethodHandler();
 						factoryMethodDefinitions.add(handler.handle(childElement));
 					} else
 					{
@@ -238,9 +267,15 @@ public class SourceGeneratorParser
 				}
 			}
 
-			return new TypeDefinition(name, typeParam, superName, superTypeArg, interfacePackageName, classPackageName,
-					tags, props, includes, docString, toStringLines, factoryOverrideMap, constructorOverrideMap,
-					genConstructor, genChildren, factoryMethodDefinitions, mode);
+			TypeDefinition typeDefinition = new TypeDefinition(name, typeParam, superName, superTypeArg,
+					interfacePackageName, classPackageName, tags, props, includes, docString, toStringLines,
+					factoryOverrideMap, constructorOverrideMap, genConstructor, genChildren, factoryMethodDefinitions,
+					mode);
+			for (FactoryMethodDefinition factoryMethodDefinition : factoryMethodDefinitions)
+			{
+				factoryMethodDefinition.setParent(typeDefinition);
+			}
+			return typeDefinition;
 		}
 
 		private String unindent(String s)
@@ -339,12 +374,9 @@ public class SourceGeneratorParser
 
 	static class FactoryMethodHandler implements ElementHandler<FactoryMethodDefinition>
 	{
-		private List<PropertyDefinition> definitions;
-
-		public FactoryMethodHandler(List<PropertyDefinition> definitions)
+		public FactoryMethodHandler()
 		{
 			super();
-			this.definitions = definitions;
 		}
 
 		@Override
@@ -368,18 +400,14 @@ public class SourceGeneratorParser
 						properties.add(new FactoryMethodPropertyDefinition(propName, propVisible));
 					} else if (childTag.equals("use-defaults"))
 					{
-						for (PropertyDefinition def : definitions)
-						{
-							properties.add(new FactoryMethodPropertyDefinition(def.getName(),
-									def.getDefaultExpression() == null));
-						}
+						return new UseDefaultsFactoryMethodDefinition();
 					} else
 					{
 						throw new IllegalStateException("Factory method tag does not understand child " + childTag);
 					}
 				}
 			}
-			return new FactoryMethodDefinition(properties);
+			return new EnumeratedFactoryMethodDefinition(properties);
 		}
 	}
 }

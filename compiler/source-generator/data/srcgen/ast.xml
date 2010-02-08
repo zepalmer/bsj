@@ -287,7 +287,7 @@
                 annotations.
             ]]></doc>
             <factory-method>
-                <use-defaults/>
+                <use-defaults />
             </factory-method>
         </type>
 
@@ -305,7 +305,7 @@
                 Represents the modifiers which can be associated with a class.
             ]]></doc>
             <factory-method>
-                <use-defaults/>
+                <use-defaults />
             </factory-method>
         </type>
 
@@ -314,6 +314,9 @@
             <doc><![CDATA[
                 Represents the modifiers which can be associated with a constructor.
             ]]></doc>
+            <factory-method>
+                <use-defaults/>
+            </factory-method>
         </type>
 
         <type name="EnumModifiersNode" super="ModifiersNode">
@@ -325,7 +328,7 @@
                 legal but also implicit, so it does not appear here.
             ]]></doc>
             <factory-method>
-                <use-defaults/>
+                <use-defaults />
             </factory-method>
         </type>
 
@@ -343,7 +346,7 @@
                 Represents the modifiers which can be associated with a field.
             ]]></doc>
             <factory-method>
-                <use-defaults/>
+                <use-defaults />
             </factory-method>
         </type>
 
@@ -358,7 +361,7 @@
                 are syntactically legal modifiers, they are not included here because they are implicit to all interfaces.
             ]]></doc>
             <factory-method>
-                <use-defaults/>
+                <use-defaults />
             </factory-method>
         </type>
 
@@ -380,7 +383,7 @@
                 Represents the modifiers which can be associated with a method.
             ]]></doc>
             <factory-method>
-                <use-defaults/>
+                <use-defaults />
             </factory-method>
         </type>
 
@@ -608,7 +611,7 @@
                 A superclass for method invocation nodes.
             ]]></doc>
             <factory-method>
-                <use-defaults/>
+                <use-defaults />
             </factory-method>
         </type>
 
@@ -688,7 +691,7 @@
                 type qualification is not necessary (and it usually won't be), <tt>type</tt> should be <tt>null</tt>.
             ]]></doc>
             <factory-method>
-                <use-defaults/>
+                <use-defaults />
             </factory-method>
         </type>
 
@@ -730,7 +733,7 @@
                 type qualification is not necessary (and it usually won't be), <tt>type</tt> should be <tt>null</tt>.
             ]]></doc>
             <factory-method>
-                <use-defaults/>
+                <use-defaults />
             </factory-method>
             <factory-method>
                 <prop name="identifier" />
@@ -824,7 +827,7 @@
                 If this class is not anonymous, the <tt>body</tt> field is <tt>null</tt>.
             ]]></doc>
             <factory-method>
-                <use-defaults/>
+                <use-defaults />
             </factory-method>
             <factory-method>
                 <prop name="type" />
@@ -850,7 +853,7 @@
                 </pre>
             ]]></doc>
             <factory-method>
-                <use-defaults/>
+                <use-defaults />
             </factory-method>
         </type>
 
@@ -966,7 +969,7 @@
                 </pre>
             ]]></doc>
             <factory-method>
-                <use-defaults/>
+                <use-defaults />
             </factory-method>
         </type>
 
@@ -1295,7 +1298,7 @@
                 See {@link MethodDeclarationNode} for more information.
             ]]></doc>
             <factory-method>
-                <use-defaults/>
+                <use-defaults />
             </factory-method>
         </type>
 
@@ -1304,7 +1307,7 @@
             <prop name="identifier" type="IdentifierNode" desc="the name of this constant" />
             <prop name="arguments" type="ExpressionListNode" desc="the arguments to the enum constructor" />
             <prop name="body" type="AnonymousClassBodyNode" desc="the body used to anonymously subclass the constant"
-                default="null"/>
+                default="null" />
             <prop name="javadoc" type="JavadocNode" desc="the associated javadoc comment for this node" />
             <doc><![CDATA[
                 A node representing an enum constant.  While enum constants typically consist of a single name, many optional
@@ -1312,7 +1315,7 @@
                 <tt>null</tt>.
             ]]></doc>
             <factory-method>
-                <use-defaults/>
+                <use-defaults />
             </factory-method>
         </type>
 
@@ -1352,12 +1355,13 @@
             <prop name="modifiers" type="MethodModifiersNode" desc="the modifiers for this method" />
             <prop name="identifier" type="IdentifierNode" desc="this method's name" />
             <prop name="parameters" type="VariableListNode" desc="the parameters declared by this method" />
-            <prop name="varargParameter" type="VariableNode" desc="the vararg parameter declared by this method" default="null"/>
+            <prop name="varargParameter" type="VariableNode" desc="the vararg parameter declared by this method"
+                default="null" />
             <prop name="returnType" type="TypeNode" desc="the type of value returned" />
             <prop name="throwTypes" type="UnparameterizedTypeListNode" desc="the types of exceptions thrown by this method"
-                default="makeUnparameterizedTypeListNode()"/>
+                default="makeUnparameterizedTypeListNode()" />
             <prop name="typeParameters" type="TypeParameterListNode" desc="this method's applicable type parameters"
-                default="makeTypeParameterListNode()"/>
+                default="makeTypeParameterListNode()" />
             <prop name="javadoc" type="JavadocNode" desc="the associated javadoc comment for this node" />
             <doc><![CDATA[
                 A node representing a method declaration, as in:
@@ -1375,7 +1379,7 @@
                 will have a <tt>null</tt> body.
             ]]></doc>
             <factory-method>
-                <use-defaults/>
+                <use-defaults />
             </factory-method>
         </type>
 
@@ -1789,6 +1793,9 @@
                 Note that this only applies to <i>alternate</i> constructor invocations (those using the <tt>this</tt> keyword).
                 For superclass constructor invocations, see {@link SuperclassConstructorInvocationNode}.
             ]]></doc>
+            <factory-method>
+                <use-defaults />
+            </factory-method>
         </type>
 
         <type name="ArrayInitializerNode" super="Node">
@@ -1951,7 +1958,8 @@
         </type>
 
         <type name="SuperclassConstructorInvocationNode" super="ConstructorInvocationNode">
-            <prop name="qualifyingExpression" type="PrimaryExpressionNode" desc="the qualifying expression for the enclosing object" />
+            <prop name="qualifyingExpression" type="PrimaryExpressionNode" desc="the qualifying expression for the enclosing object"
+                default="null" />
             <doc><![CDATA[
                 Represents an alternate constructor invocation, as in
                 <pre>
@@ -1964,6 +1972,9 @@
                 .  Note that this only applies to <i>superclass</i> constructor invocations (those using the <tt>super</tt>
                 keyword).  For alternate constructor invocations, see {@link AlternateConstructorInvocationNode}.
             ]]></doc>
+            <factory-method>
+                <use-defaults />
+            </factory-method>
         </type>
 
         <type name="TypeParameterNode" super="Node">

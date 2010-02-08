@@ -16,23 +16,15 @@ import edu.jhu.cs.bsj.compiler.ast.BsjSourceSerializer;
 import edu.jhu.cs.bsj.compiler.ast.NameCategory;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.BlockNode;
-import edu.jhu.cs.bsj.compiler.ast.node.BlockStatementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassBodyNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ClassMemberNode;
 import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ConstructorDeclarationNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ImportNode;
 import edu.jhu.cs.bsj.compiler.ast.node.MethodDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.NameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.PackageDeclarationNode;
-import edu.jhu.cs.bsj.compiler.ast.node.TypeArgumentNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeDeclarationNode;
-import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
-import edu.jhu.cs.bsj.compiler.ast.node.TypeParameterNode;
-import edu.jhu.cs.bsj.compiler.ast.node.UnparameterizedTypeNode;
-import edu.jhu.cs.bsj.compiler.ast.node.VariableNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.BlockStatementMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramNode;
@@ -193,56 +185,38 @@ public class ExtractMetaprogramsTask extends CompilationUnitTask
 		BlockNode methodBlock = factory.makeBlockNode(metaprogramNode.getBody().deepCopy(factory));
 
 		MethodDeclarationNode executeMethodImplementation = factory.makeMethodDeclarationNode(methodBlock,
-				factory.makeMethodModifiersNode(AccessModifier.PUBLIC, false, false, true, false, false, false,
-						factory.makeAnnotationListNode(Collections.<AnnotationNode> emptyList())),
-				factory.makeIdentifierNode("execute"), factory.makeVariableListNode(Collections.<VariableNode> emptyList()),
-				null, factory.makeVoidTypeNode(),
-				factory.makeUnparameterizedTypeListNode(Collections.<UnparameterizedTypeNode> emptyList()),
-				factory.makeTypeParameterListNode(Collections.<TypeParameterNode> emptyList()), null);
+				factory.makeMethodModifiersNode(AccessModifier.PUBLIC), factory.makeIdentifierNode("execute"),
+				factory.makeVariableListNode(), factory.makeVoidTypeNode(), null);
 
 		ConstructorDeclarationNode constructorImplementation = factory.makeConstructorDeclarationNode(
 				factory.makeIdentifierNode(metaprogramClassName), factory.makeConstructorBodyNode(
-						factory.makeSuperclassConstructorInvocationNode(null,
-								factory.makeExpressionListNode(Arrays.<ExpressionNode> asList(
-										factory.makeFieldAccessByNameNode(parseNameNode("context",
-												NameCategory.EXPRESSION)),
-										factory.makeFieldAccessByNameNode(parseNameNode("factory",
-												NameCategory.EXPRESSION)))),
-								factory.makeTypeListNode(Collections.<TypeNode> emptyList())),
-						factory.makeBlockStatementListNode(Collections.<BlockStatementNode> emptyList())),
-				factory.makeConstructorModifiersNode(AccessModifier.PUBLIC,
-						factory.makeAnnotationListNode(Collections.<AnnotationNode> emptyList())),
-				factory.makeVariableListNode(Arrays.<VariableNode> asList(factory.makeVariableNode(
-						factory.makeVariableModifiersNode(false,
-								factory.makeAnnotationListNode(Collections.<AnnotationNode> emptyList())),
-						factory.makeParameterizedTypeNode(factory.makeUnparameterizedTypeNode(parseNameNode("Context",
-								NameCategory.TYPE)), factory.makeTypeArgumentListNode(Collections.<TypeArgumentNode> emptyList())),
-						factory.makeIdentifierNode("context")), factory.makeVariableNode(
-						factory.makeVariableModifiersNode(false,
-								factory.makeAnnotationListNode(Collections.<AnnotationNode> emptyList())),
-						factory.makeParameterizedTypeNode(factory.makeUnparameterizedTypeNode(parseNameNode(
-								"BsjNodeFactory", NameCategory.TYPE)),
-								factory.makeTypeArgumentListNode(Collections.<TypeArgumentNode> emptyList())),
-						factory.makeIdentifierNode("factory")))), null,
-				factory.makeUnparameterizedTypeListNode(Collections.<UnparameterizedTypeNode> emptyList()),
-				factory.makeTypeParameterListNode(Collections.<TypeParameterNode> emptyList()), null);
+						factory.makeSuperclassConstructorInvocationNode(factory.makeExpressionListNode(
+								factory.makeFieldAccessByNameNode(parseNameNode("context", NameCategory.EXPRESSION)),
+								factory.makeFieldAccessByNameNode(parseNameNode("factory", NameCategory.EXPRESSION)))),
+						factory.makeBlockStatementListNode()),
+				factory.makeConstructorModifiersNode(AccessModifier.PUBLIC), factory.makeVariableListNode(
+						factory.makeVariableNode(factory.makeVariableModifiersNode(),
+								factory.makeParameterizedTypeNode(factory.makeUnparameterizedTypeNode(parseNameNode(
+										"Context", NameCategory.TYPE)), factory.makeTypeArgumentListNode()),
+								factory.makeIdentifierNode("context")), factory.makeVariableNode(
+								factory.makeVariableModifiersNode(), factory.makeParameterizedTypeNode(
+										factory.makeUnparameterizedTypeNode(parseNameNode("BsjNodeFactory",
+												NameCategory.TYPE)), factory.makeTypeArgumentListNode()),
+								factory.makeIdentifierNode("factory"))), null);
 
-		ClassBodyNode body = factory.makeClassBodyNode(factory.makeClassMemberListNode(Arrays.<ClassMemberNode> asList(
-				executeMethodImplementation, constructorImplementation)));
+		ClassBodyNode body = factory.makeClassBodyNode(factory.makeClassMemberListNode(executeMethodImplementation,
+				constructorImplementation));
 
 		TypeDeclarationNode metaprogramClassNode = factory.makeClassDeclarationNode(
-				factory.makeClassModifiersNode(AccessModifier.PUBLIC, false, false, false, false,
-						factory.makeAnnotationListNode(Collections.<AnnotationNode> emptyList())),
-				factory.makeParameterizedTypeNode(
-						factory.makeUnparameterizedTypeNode(parseNameNode("AbstractBsjMetaprogram", NameCategory.TYPE)),
-						factory.makeTypeArgumentListNode(Arrays.<TypeArgumentNode> asList(factory.makeUnparameterizedTypeNode(parseNameNode(
-								anchorClass.getName(), NameCategory.AMBIGUOUS))))),
-				factory.makeTypeListNode(Collections.<TypeNode> emptyList()), body,
-				factory.makeTypeParameterListNode(Collections.<TypeParameterNode> emptyList()),
-				factory.makeIdentifierNode(metaprogramClassName), null);
+				factory.makeClassModifiersNode(AccessModifier.PUBLIC),
+				factory.makeParameterizedTypeNode(factory.makeUnparameterizedTypeNode(parseNameNode(
+						"AbstractBsjMetaprogram", NameCategory.TYPE)),
+						factory.makeTypeArgumentListNode(factory.makeUnparameterizedTypeNode(parseNameNode(
+								anchorClass.getName(), NameCategory.AMBIGUOUS)))), factory.makeTypeListNode(), body,
+				factory.makeTypeParameterListNode(), factory.makeIdentifierNode(metaprogramClassName), null);
 
 		CompilationUnitNode metaprogramCompilationUnitNode = factory.makeCompilationUnitNode(packageDeclarationNode,
-				factory.makeImportListNode(imports), factory.makeTypeDeclarationListNode(Collections.singletonList(metaprogramClassNode)));
+				factory.makeImportListNode(imports), factory.makeTypeDeclarationListNode(metaprogramClassNode));
 
 		if (LOGGER.isTraceEnabled())
 		{
