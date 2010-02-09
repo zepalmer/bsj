@@ -1331,6 +1331,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	{
 		p.print("throw ");
 		node.getExpression().executeOperation(this, p);
+		p.print(";");
 		return null;
 	}
 
