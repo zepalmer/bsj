@@ -554,6 +554,66 @@ typeDeclarationBsjMetaprogramAnchor returns [TypeDeclarationMetaprogramAnchorNod
         }
     ;    
 
+annotationMemberBsjMetaprogramAnchor returns [AnnotationMemberMetaprogramAnchorNode ret]
+        scope Rule;
+        @init {
+            ruleStart("annotationMemberBsjMetaprogramAnchor");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        bsjMetaprogram
+        {
+            $ret = factory.makeAnnotationMemberMetaprogramAnchorNode($bsjMetaprogram.ret);
+        }
+    ;
+
+anonymousClassMemberBsjMetaprogramAnchor returns [AnonymousClassMemberMetaprogramAnchorNode ret]
+        scope Rule;
+        @init {
+            ruleStart("anonymousClassMemberBsjMetaprogramAnchor");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        bsjMetaprogram
+        {
+            $ret = factory.makeAnonymousClassMemberMetaprogramAnchorNode($bsjMetaprogram.ret);
+        }
+    ;
+
+classMemberBsjMetaprogramAnchor returns [ClassMemberMetaprogramAnchorNode ret]
+        scope Rule;
+        @init {
+            ruleStart("classMemberBsjMetaprogramAnchor");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        bsjMetaprogram
+        {
+            $ret = factory.makeClassMemberMetaprogramAnchorNode($bsjMetaprogram.ret);
+        }
+    ;
+
+interfaceMemberBsjMetaprogramAnchor returns [InterfaceMemberMetaprogramAnchorNode ret]
+        scope Rule;
+        @init {
+            ruleStart("interfaceMemberBsjMetaprogramAnchor");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        bsjMetaprogram
+        {
+            $ret = factory.makeInterfaceMemberMetaprogramAnchorNode($bsjMetaprogram.ret);
+        }
+    ;
+
 blockStatementBsjMetaprogramAnchor returns [BlockStatementMetaprogramAnchorNode ret]
         scope Rule;
         @init {
@@ -1529,6 +1589,14 @@ classBodyDeclaration returns [ClassMemberNode ret]
             ruleStop();
         }
     :
+        /* This has to go at the top so it overrides the anonymousClassMemberBsjMetaprogramAnchor
+         * Otherwise, it would be impossible to create a metaprogram that could replace itself with an initializer or
+         * a constructor. */
+        {configuration.getMetaprogramsSupported()}?=> classMemberBsjMetaprogramAnchor
+        {
+            $ret = $classMemberBsjMetaprogramAnchor.ret;
+        }
+    |
         voidTypeDeclaration
         {
             $ret = $voidTypeDeclaration.ret;
@@ -1547,11 +1615,6 @@ classBodyDeclaration returns [ClassMemberNode ret]
         memberDecl
         {
             $ret = $memberDecl.ret;
-        }
-    |
-        {configuration.getMetaprogramsSupported()}?=> typeDeclarationBsjMetaprogramAnchor
-        {
-            $ret = $typeDeclarationBsjMetaprogramAnchor.ret;
         }
     ;
 
@@ -1579,9 +1642,9 @@ anonymousClassBodyDeclaration returns [AnonymousClassMemberNode ret]
             $ret = $memberDecl.ret;
         }
     |
-        {configuration.getMetaprogramsSupported()}?=> typeDeclarationBsjMetaprogramAnchor
+        {configuration.getMetaprogramsSupported()}?=> anonymousClassMemberBsjMetaprogramAnchor
         {
-            $ret = $typeDeclarationBsjMetaprogramAnchor.ret;
+            $ret = $anonymousClassMemberBsjMetaprogramAnchor.ret;
         }
     ;
 
@@ -1830,9 +1893,9 @@ interfaceBodyDeclaration returns [InterfaceMemberNode ret]
             $ret = $voidTypeDeclaration.ret;
         }
     |
-        {configuration.getMetaprogramsSupported()}?=> typeDeclarationBsjMetaprogramAnchor
+        {configuration.getMetaprogramsSupported()}?=> interfaceMemberBsjMetaprogramAnchor
         {
-            $ret = $typeDeclarationBsjMetaprogramAnchor.ret;
+            $ret = $interfaceMemberBsjMetaprogramAnchor.ret;
         }
     ;
 
@@ -2597,9 +2660,9 @@ annotationTypeElementDeclaration returns [AnnotationMemberNode ret]
             $ret = $voidTypeDeclaration.ret;
         }
     |
-        {configuration.getMetaprogramsSupported()}?=> typeDeclarationBsjMetaprogramAnchor
+        {configuration.getMetaprogramsSupported()}?=> annotationMemberBsjMetaprogramAnchor
         {
-            $ret = $typeDeclarationBsjMetaprogramAnchor.ret;
+            $ret = $annotationMemberBsjMetaprogramAnchor.ret;
         }
     ;
 

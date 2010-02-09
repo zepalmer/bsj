@@ -3,8 +3,12 @@ package edu.jhu.cs.bsj.compiler.ast;
 import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.node.*;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.AnnotationMemberMetaprogramAnchorNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.AnonymousClassMemberMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.BlockStatementMetaprogramAnchorNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.ClassMemberMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.CodeLiteralNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.InterfaceMemberMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.TypeDeclarationMetaprogramAnchorNode;
 
@@ -107,6 +111,14 @@ public interface BsjNodeOperation<P,R>
     public R executeAnnotationMemberListNode(AnnotationMemberListNode node, P p);
 
     /**
+     * Executes this operation against a AnnotationMemberMetaprogramAnchorNode.
+     * @param node The AnnotationMemberMetaprogramAnchorNode in question.
+     * @param p The parameter to use.
+     * @return The result of the operation.
+     */
+    public R executeAnnotationMemberMetaprogramAnchorNode(AnnotationMemberMetaprogramAnchorNode node, P p);
+
+    /**
      * Executes this operation against a AnnotationMethodDeclarationNode.
      * @param node The AnnotationMethodDeclarationNode in question.
      * @param p The parameter to use.
@@ -153,6 +165,14 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeAnonymousClassMemberListNode(AnonymousClassMemberListNode node, P p);
+
+    /**
+     * Executes this operation against a AnonymousClassMemberMetaprogramAnchorNode.
+     * @param node The AnonymousClassMemberMetaprogramAnchorNode in question.
+     * @param p The parameter to use.
+     * @return The result of the operation.
+     */
+    public R executeAnonymousClassMemberMetaprogramAnchorNode(AnonymousClassMemberMetaprogramAnchorNode node, P p);
 
     /**
      * Executes this operation against a ArrayAccessNode.
@@ -329,6 +349,14 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeClassMemberListNode(ClassMemberListNode node, P p);
+
+    /**
+     * Executes this operation against a ClassMemberMetaprogramAnchorNode.
+     * @param node The ClassMemberMetaprogramAnchorNode in question.
+     * @param p The parameter to use.
+     * @return The result of the operation.
+     */
+    public R executeClassMemberMetaprogramAnchorNode(ClassMemberMetaprogramAnchorNode node, P p);
 
     /**
      * Executes this operation against a ClassModifiersNode.
@@ -641,6 +669,14 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeInterfaceMemberListNode(InterfaceMemberListNode node, P p);
+
+    /**
+     * Executes this operation against a InterfaceMemberMetaprogramAnchorNode.
+     * @param node The InterfaceMemberMetaprogramAnchorNode in question.
+     * @param p The parameter to use.
+     * @return The result of the operation.
+     */
+    public R executeInterfaceMemberMetaprogramAnchorNode(InterfaceMemberMetaprogramAnchorNode node, P p);
 
     /**
      * Executes this operation against a InterfaceModifiersNode.

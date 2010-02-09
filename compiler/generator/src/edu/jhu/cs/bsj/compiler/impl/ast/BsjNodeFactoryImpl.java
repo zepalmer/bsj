@@ -15,13 +15,21 @@ import edu.jhu.cs.bsj.compiler.ast.PrimitiveType;
 import edu.jhu.cs.bsj.compiler.ast.UnaryOperator;
 import edu.jhu.cs.bsj.compiler.ast.UnaryStatementOperator;
 import edu.jhu.cs.bsj.compiler.ast.node.*;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.AnnotationMemberMetaprogramAnchorNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.AnonymousClassMemberMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.BlockStatementMetaprogramAnchorNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.ClassMemberMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.CodeLiteralNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.InterfaceMemberMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.TypeDeclarationMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.*;
+import edu.jhu.cs.bsj.compiler.impl.ast.node.meta.AnnotationMemberMetaprogramAnchorNodeImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.node.meta.AnonymousClassMemberMetaprogramAnchorNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.meta.BlockStatementMetaprogramAnchorNodeImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.node.meta.ClassMemberMetaprogramAnchorNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.meta.CodeLiteralNodeImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.node.meta.InterfaceMemberMetaprogramAnchorNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.meta.MetaprogramNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.meta.TypeDeclarationMetaprogramAnchorNodeImpl;
 
@@ -458,6 +466,33 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
 
     /**
+     * Creates a AnnotationMemberMetaprogramAnchorNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public AnnotationMemberMetaprogramAnchorNode makeAnnotationMemberMetaprogramAnchorNode(
+            MetaprogramNode metaprogram)
+    {
+        AnnotationMemberMetaprogramAnchorNode ret = new AnnotationMemberMetaprogramAnchorNodeImpl(makeVoidTypeDeclarationNode(), metaprogram, startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
+     * Creates a AnnotationMemberMetaprogramAnchorNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public AnnotationMemberMetaprogramAnchorNode makeAnnotationMemberMetaprogramAnchorNode(
+            AnnotationMemberNode replacement,
+            MetaprogramNode metaprogram,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        AnnotationMemberMetaprogramAnchorNode ret = new AnnotationMemberMetaprogramAnchorNodeImpl(makeVoidTypeDeclarationNode(), metaprogram, startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
      * Creates a AnnotationMethodDeclarationNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -703,6 +738,33 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     {
         List<AnonymousClassMemberNode> children = Arrays.asList(childrenElements);
         return makeAnonymousClassMemberListNode(children, startLocation, stopLocation);
+    }
+
+    /**
+     * Creates a AnonymousClassMemberMetaprogramAnchorNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public AnonymousClassMemberMetaprogramAnchorNode makeAnonymousClassMemberMetaprogramAnchorNode(
+            MetaprogramNode metaprogram)
+    {
+        AnonymousClassMemberMetaprogramAnchorNode ret = new AnonymousClassMemberMetaprogramAnchorNodeImpl(makeVoidTypeDeclarationNode(), metaprogram, startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
+     * Creates a AnonymousClassMemberMetaprogramAnchorNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public AnonymousClassMemberMetaprogramAnchorNode makeAnonymousClassMemberMetaprogramAnchorNode(
+            AnonymousClassMemberNode replacement,
+            MetaprogramNode metaprogram,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        AnonymousClassMemberMetaprogramAnchorNode ret = new AnonymousClassMemberMetaprogramAnchorNodeImpl(makeVoidTypeDeclarationNode(), metaprogram, startLocation, stopLocation);
+        return ret;
     }
 
     /**
@@ -1466,6 +1528,33 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     {
         List<ClassMemberNode> children = Arrays.asList(childrenElements);
         return makeClassMemberListNode(children, startLocation, stopLocation);
+    }
+
+    /**
+     * Creates a ClassMemberMetaprogramAnchorNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public ClassMemberMetaprogramAnchorNode makeClassMemberMetaprogramAnchorNode(
+            MetaprogramNode metaprogram)
+    {
+        ClassMemberMetaprogramAnchorNode ret = new ClassMemberMetaprogramAnchorNodeImpl(makeVoidTypeDeclarationNode(), metaprogram, startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
+     * Creates a ClassMemberMetaprogramAnchorNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public ClassMemberMetaprogramAnchorNode makeClassMemberMetaprogramAnchorNode(
+            ClassMemberNode replacement,
+            MetaprogramNode metaprogram,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        ClassMemberMetaprogramAnchorNode ret = new ClassMemberMetaprogramAnchorNodeImpl(makeVoidTypeDeclarationNode(), metaprogram, startLocation, stopLocation);
+        return ret;
     }
 
     /**
@@ -2940,6 +3029,33 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     {
         List<InterfaceMemberNode> children = Arrays.asList(childrenElements);
         return makeInterfaceMemberListNode(children, startLocation, stopLocation);
+    }
+
+    /**
+     * Creates a InterfaceMemberMetaprogramAnchorNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public InterfaceMemberMetaprogramAnchorNode makeInterfaceMemberMetaprogramAnchorNode(
+            MetaprogramNode metaprogram)
+    {
+        InterfaceMemberMetaprogramAnchorNode ret = new InterfaceMemberMetaprogramAnchorNodeImpl(makeVoidTypeDeclarationNode(), metaprogram, startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
+     * Creates a InterfaceMemberMetaprogramAnchorNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public InterfaceMemberMetaprogramAnchorNode makeInterfaceMemberMetaprogramAnchorNode(
+            InterfaceMemberNode replacement,
+            MetaprogramNode metaprogram,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        InterfaceMemberMetaprogramAnchorNode ret = new InterfaceMemberMetaprogramAnchorNodeImpl(makeVoidTypeDeclarationNode(), metaprogram, startLocation, stopLocation);
+        return ret;
     }
 
     /**

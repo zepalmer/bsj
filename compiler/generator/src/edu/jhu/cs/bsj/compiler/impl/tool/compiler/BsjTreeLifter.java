@@ -18,8 +18,12 @@ import edu.jhu.cs.bsj.compiler.ast.PrimitiveType;
 import edu.jhu.cs.bsj.compiler.ast.UnaryOperator;
 import edu.jhu.cs.bsj.compiler.ast.UnaryStatementOperator;
 import edu.jhu.cs.bsj.compiler.ast.node.*;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.AnnotationMemberMetaprogramAnchorNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.AnonymousClassMemberMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.BlockStatementMetaprogramAnchorNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.ClassMemberMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.CodeLiteralNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.InterfaceMemberMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.TypeDeclarationMetaprogramAnchorNode;
 
@@ -544,6 +548,32 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
     }
     
     @Override
+    public ExpressionNode executeAnnotationMemberMetaprogramAnchorNode(AnnotationMemberMetaprogramAnchorNode node, ExpressionNode factoryNode)
+    {
+        ExpressionNode liftMetaprogram = 
+                node.getMetaprogram() != null ?
+                        node.getMetaprogram().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        ExpressionNode liftStartLocationMetaClone = 
+                expressionizeBsjSourceLocation(node.getStartLocation());
+        ExpressionNode liftStopLocationMetaClone = 
+                expressionizeBsjSourceLocation(node.getStopLocation());
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeAnnotationMemberMetaprogramAnchorNode"),
+                        factory.makeExpressionListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        liftMetaprogram,
+                                        liftStartLocationMetaClone,
+                                        liftStopLocationMetaClone)),
+                        factory.makeTypeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
+    }
+    
+    @Override
     public ExpressionNode executeAnnotationMethodDeclarationNode(AnnotationMethodDeclarationNode node, ExpressionNode factoryNode)
     {
         ExpressionNode liftModifiers = 
@@ -753,6 +783,32 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                                                 factory.makeSimpleNameNode(
                                                                         factory.makeIdentifierNode("AnonymousClassMemberNode"),
                                                                         NameCategory.TYPE))))),
+                                        liftStartLocationMetaClone,
+                                        liftStopLocationMetaClone)),
+                        factory.makeTypeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
+    }
+    
+    @Override
+    public ExpressionNode executeAnonymousClassMemberMetaprogramAnchorNode(AnonymousClassMemberMetaprogramAnchorNode node, ExpressionNode factoryNode)
+    {
+        ExpressionNode liftMetaprogram = 
+                node.getMetaprogram() != null ?
+                        node.getMetaprogram().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        ExpressionNode liftStartLocationMetaClone = 
+                expressionizeBsjSourceLocation(node.getStartLocation());
+        ExpressionNode liftStopLocationMetaClone = 
+                expressionizeBsjSourceLocation(node.getStopLocation());
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeAnonymousClassMemberMetaprogramAnchorNode"),
+                        factory.makeExpressionListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        liftMetaprogram,
                                         liftStartLocationMetaClone,
                                         liftStopLocationMetaClone)),
                         factory.makeTypeListNode(Collections.<TypeNode>emptyList()));
@@ -1467,6 +1523,32 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                                                 factory.makeSimpleNameNode(
                                                                         factory.makeIdentifierNode("ClassMemberNode"),
                                                                         NameCategory.TYPE))))),
+                                        liftStartLocationMetaClone,
+                                        liftStopLocationMetaClone)),
+                        factory.makeTypeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
+    }
+    
+    @Override
+    public ExpressionNode executeClassMemberMetaprogramAnchorNode(ClassMemberMetaprogramAnchorNode node, ExpressionNode factoryNode)
+    {
+        ExpressionNode liftMetaprogram = 
+                node.getMetaprogram() != null ?
+                        node.getMetaprogram().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        ExpressionNode liftStartLocationMetaClone = 
+                expressionizeBsjSourceLocation(node.getStartLocation());
+        ExpressionNode liftStopLocationMetaClone = 
+                expressionizeBsjSourceLocation(node.getStopLocation());
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeClassMemberMetaprogramAnchorNode"),
+                        factory.makeExpressionListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        liftMetaprogram,
                                         liftStartLocationMetaClone,
                                         liftStopLocationMetaClone)),
                         factory.makeTypeListNode(Collections.<TypeNode>emptyList()));
@@ -2791,6 +2873,32 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                                                 factory.makeSimpleNameNode(
                                                                         factory.makeIdentifierNode("InterfaceMemberNode"),
                                                                         NameCategory.TYPE))))),
+                                        liftStartLocationMetaClone,
+                                        liftStopLocationMetaClone)),
+                        factory.makeTypeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
+    }
+    
+    @Override
+    public ExpressionNode executeInterfaceMemberMetaprogramAnchorNode(InterfaceMemberMetaprogramAnchorNode node, ExpressionNode factoryNode)
+    {
+        ExpressionNode liftMetaprogram = 
+                node.getMetaprogram() != null ?
+                        node.getMetaprogram().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        ExpressionNode liftStartLocationMetaClone = 
+                expressionizeBsjSourceLocation(node.getStartLocation());
+        ExpressionNode liftStopLocationMetaClone = 
+                expressionizeBsjSourceLocation(node.getStopLocation());
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeInterfaceMemberMetaprogramAnchorNode"),
+                        factory.makeExpressionListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        liftMetaprogram,
                                         liftStartLocationMetaClone,
                                         liftStopLocationMetaClone)),
                         factory.makeTypeListNode(Collections.<TypeNode>emptyList()));

@@ -5,8 +5,12 @@ import java.util.List;
 import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.node.*;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.AnnotationMemberMetaprogramAnchorNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.AnonymousClassMemberMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.BlockStatementMetaprogramAnchorNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.ClassMemberMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.CodeLiteralNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.InterfaceMemberMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.TypeDeclarationMetaprogramAnchorNode;
 
@@ -285,6 +289,23 @@ public interface BsjNodeFactory
             AnnotationMemberNode... childrenElements);
 
     /**
+     * Creates a AnnotationMemberMetaprogramAnchorNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public AnnotationMemberMetaprogramAnchorNode makeAnnotationMemberMetaprogramAnchorNode(
+            MetaprogramNode metaprogram);
+
+    /**
+     * Creates a AnnotationMemberMetaprogramAnchorNode.
+     * The specified start and stop locations are used.
+     */
+    public AnnotationMemberMetaprogramAnchorNode makeAnnotationMemberMetaprogramAnchorNode(
+            AnnotationMemberNode replacement,
+            MetaprogramNode metaprogram,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+
+    /**
      * Creates a AnnotationMethodDeclarationNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -441,6 +462,23 @@ public interface BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
             AnonymousClassMemberNode... childrenElements);
+
+    /**
+     * Creates a AnonymousClassMemberMetaprogramAnchorNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public AnonymousClassMemberMetaprogramAnchorNode makeAnonymousClassMemberMetaprogramAnchorNode(
+            MetaprogramNode metaprogram);
+
+    /**
+     * Creates a AnonymousClassMemberMetaprogramAnchorNode.
+     * The specified start and stop locations are used.
+     */
+    public AnonymousClassMemberMetaprogramAnchorNode makeAnonymousClassMemberMetaprogramAnchorNode(
+            AnonymousClassMemberNode replacement,
+            MetaprogramNode metaprogram,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
 
     /**
      * Creates a ArrayAccessNode.
@@ -924,6 +962,23 @@ public interface BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
             ClassMemberNode... childrenElements);
+
+    /**
+     * Creates a ClassMemberMetaprogramAnchorNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public ClassMemberMetaprogramAnchorNode makeClassMemberMetaprogramAnchorNode(
+            MetaprogramNode metaprogram);
+
+    /**
+     * Creates a ClassMemberMetaprogramAnchorNode.
+     * The specified start and stop locations are used.
+     */
+    public ClassMemberMetaprogramAnchorNode makeClassMemberMetaprogramAnchorNode(
+            ClassMemberNode replacement,
+            MetaprogramNode metaprogram,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
 
     /**
      * Creates a ClassModifiersNode.
@@ -1878,6 +1933,23 @@ public interface BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
             InterfaceMemberNode... childrenElements);
+
+    /**
+     * Creates a InterfaceMemberMetaprogramAnchorNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public InterfaceMemberMetaprogramAnchorNode makeInterfaceMemberMetaprogramAnchorNode(
+            MetaprogramNode metaprogram);
+
+    /**
+     * Creates a InterfaceMemberMetaprogramAnchorNode.
+     * The specified start and stop locations are used.
+     */
+    public InterfaceMemberMetaprogramAnchorNode makeInterfaceMemberMetaprogramAnchorNode(
+            InterfaceMemberNode replacement,
+            MetaprogramNode metaprogram,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
 
     /**
      * Creates a InterfaceModifiersNode.

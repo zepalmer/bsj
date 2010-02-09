@@ -14,8 +14,12 @@ import edu.jhu.cs.bsj.compiler.ast.PrimitiveType;
 import edu.jhu.cs.bsj.compiler.ast.UnaryOperator;
 import edu.jhu.cs.bsj.compiler.ast.UnaryStatementOperator;
 import edu.jhu.cs.bsj.compiler.ast.node.*;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.AnnotationMemberMetaprogramAnchorNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.AnonymousClassMemberMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.BlockStatementMetaprogramAnchorNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.ClassMemberMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.CodeLiteralNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.InterfaceMemberMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.TypeDeclarationMetaprogramAnchorNode;
 
@@ -525,6 +529,37 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     }
 
     /**
+     * Creates a AnnotationMemberMetaprogramAnchorNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public AnnotationMemberMetaprogramAnchorNode makeAnnotationMemberMetaprogramAnchorNode(
+            MetaprogramNode metaprogram)
+    {
+        this.before();
+        AnnotationMemberMetaprogramAnchorNode node = factory.makeAnnotationMemberMetaprogramAnchorNode(metaprogram);
+        this.after(node);
+        return node;
+    }
+
+    /**
+     * Creates a AnnotationMemberMetaprogramAnchorNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public AnnotationMemberMetaprogramAnchorNode makeAnnotationMemberMetaprogramAnchorNode(
+            AnnotationMemberNode replacement,
+            MetaprogramNode metaprogram,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        AnnotationMemberMetaprogramAnchorNode node = factory.makeAnnotationMemberMetaprogramAnchorNode(replacement, metaprogram, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+
+    /**
      * Creates a AnnotationMethodDeclarationNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -804,6 +839,37 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     {
         this.before();
         AnonymousClassMemberListNode node = factory.makeAnonymousClassMemberListNode(startLocation, stopLocation, childrenElements);
+        this.after(node);
+        return node;
+    }
+
+    /**
+     * Creates a AnonymousClassMemberMetaprogramAnchorNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public AnonymousClassMemberMetaprogramAnchorNode makeAnonymousClassMemberMetaprogramAnchorNode(
+            MetaprogramNode metaprogram)
+    {
+        this.before();
+        AnonymousClassMemberMetaprogramAnchorNode node = factory.makeAnonymousClassMemberMetaprogramAnchorNode(metaprogram);
+        this.after(node);
+        return node;
+    }
+
+    /**
+     * Creates a AnonymousClassMemberMetaprogramAnchorNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public AnonymousClassMemberMetaprogramAnchorNode makeAnonymousClassMemberMetaprogramAnchorNode(
+            AnonymousClassMemberNode replacement,
+            MetaprogramNode metaprogram,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        AnonymousClassMemberMetaprogramAnchorNode node = factory.makeAnonymousClassMemberMetaprogramAnchorNode(replacement, metaprogram, startLocation, stopLocation);
         this.after(node);
         return node;
     }
@@ -1679,6 +1745,37 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     {
         this.before();
         ClassMemberListNode node = factory.makeClassMemberListNode(startLocation, stopLocation, childrenElements);
+        this.after(node);
+        return node;
+    }
+
+    /**
+     * Creates a ClassMemberMetaprogramAnchorNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public ClassMemberMetaprogramAnchorNode makeClassMemberMetaprogramAnchorNode(
+            MetaprogramNode metaprogram)
+    {
+        this.before();
+        ClassMemberMetaprogramAnchorNode node = factory.makeClassMemberMetaprogramAnchorNode(metaprogram);
+        this.after(node);
+        return node;
+    }
+
+    /**
+     * Creates a ClassMemberMetaprogramAnchorNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public ClassMemberMetaprogramAnchorNode makeClassMemberMetaprogramAnchorNode(
+            ClassMemberNode replacement,
+            MetaprogramNode metaprogram,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        ClassMemberMetaprogramAnchorNode node = factory.makeClassMemberMetaprogramAnchorNode(replacement, metaprogram, startLocation, stopLocation);
         this.after(node);
         return node;
     }
@@ -3361,6 +3458,37 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     {
         this.before();
         InterfaceMemberListNode node = factory.makeInterfaceMemberListNode(startLocation, stopLocation, childrenElements);
+        this.after(node);
+        return node;
+    }
+
+    /**
+     * Creates a InterfaceMemberMetaprogramAnchorNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public InterfaceMemberMetaprogramAnchorNode makeInterfaceMemberMetaprogramAnchorNode(
+            MetaprogramNode metaprogram)
+    {
+        this.before();
+        InterfaceMemberMetaprogramAnchorNode node = factory.makeInterfaceMemberMetaprogramAnchorNode(metaprogram);
+        this.after(node);
+        return node;
+    }
+
+    /**
+     * Creates a InterfaceMemberMetaprogramAnchorNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public InterfaceMemberMetaprogramAnchorNode makeInterfaceMemberMetaprogramAnchorNode(
+            InterfaceMemberNode replacement,
+            MetaprogramNode metaprogram,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        InterfaceMemberMetaprogramAnchorNode node = factory.makeInterfaceMemberMetaprogramAnchorNode(replacement, metaprogram, startLocation, stopLocation);
         this.after(node);
         return node;
     }

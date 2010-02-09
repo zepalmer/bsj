@@ -4,8 +4,12 @@ import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.node.*;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.AnnotationMemberMetaprogramAnchorNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.AnonymousClassMemberMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.BlockStatementMetaprogramAnchorNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.ClassMemberMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.CodeLiteralNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.InterfaceMemberMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.TypeDeclarationMetaprogramAnchorNode;
 
@@ -131,6 +135,16 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
      * @param node The node in question.
      * @param p The parameter to this node operation.
      */
+    public R executeAnnotationMemberMetaprogramAnchorNode(AnnotationMemberMetaprogramAnchorNode node, P p)
+    {
+        return executeDefault(node, p);
+    }
+
+    /**
+     * Executes the default operation for this node.
+     * @param node The node in question.
+     * @param p The parameter to this node operation.
+     */
     public R executeAnnotationMethodDeclarationNode(AnnotationMethodDeclarationNode node, P p)
     {
         return executeDefault(node, p);
@@ -182,6 +196,16 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
      * @param p The parameter to this node operation.
      */
     public R executeAnonymousClassMemberListNode(AnonymousClassMemberListNode node, P p)
+    {
+        return executeDefault(node, p);
+    }
+
+    /**
+     * Executes the default operation for this node.
+     * @param node The node in question.
+     * @param p The parameter to this node operation.
+     */
+    public R executeAnonymousClassMemberMetaprogramAnchorNode(AnonymousClassMemberMetaprogramAnchorNode node, P p)
     {
         return executeDefault(node, p);
     }
@@ -402,6 +426,16 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
      * @param p The parameter to this node operation.
      */
     public R executeClassMemberListNode(ClassMemberListNode node, P p)
+    {
+        return executeDefault(node, p);
+    }
+
+    /**
+     * Executes the default operation for this node.
+     * @param node The node in question.
+     * @param p The parameter to this node operation.
+     */
+    public R executeClassMemberMetaprogramAnchorNode(ClassMemberMetaprogramAnchorNode node, P p)
     {
         return executeDefault(node, p);
     }
@@ -792,6 +826,16 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
      * @param p The parameter to this node operation.
      */
     public R executeInterfaceMemberListNode(InterfaceMemberListNode node, P p)
+    {
+        return executeDefault(node, p);
+    }
+
+    /**
+     * Executes the default operation for this node.
+     * @param node The node in question.
+     * @param p The parameter to this node operation.
+     */
+    public R executeInterfaceMemberMetaprogramAnchorNode(InterfaceMemberMetaprogramAnchorNode node, P p)
     {
         return executeDefault(node, p);
     }

@@ -2070,6 +2070,38 @@
             <factory-override prop="replacement" expr="makeVoidStatementNode()" />
         </type>
 
+        <type name="AnnotationMemberMetaprogramAnchorNode" super="MetaprogramAnchorNode" superTypeArg="AnnotationMemberNode">
+            <tag name="AnnotationMemberNode" />
+            <doc><![CDATA[
+                A node representing a metaprogram found in an annotation declaration.
+            ]]></doc>
+            <factory-override prop="replacement" expr="makeVoidTypeDeclarationNode()" />
+        </type>
+
+        <type name="AnonymousClassMemberMetaprogramAnchorNode" super="MetaprogramAnchorNode" superTypeArg="AnonymousClassMemberNode">
+            <tag name="AnonymousClassMemberNode" />
+            <doc><![CDATA[
+                A node representing a metaprogram found in an anonymous class body.
+            ]]></doc>
+            <factory-override prop="replacement" expr="makeVoidTypeDeclarationNode()" />
+        </type>
+
+        <type name="ClassMemberMetaprogramAnchorNode" super="MetaprogramAnchorNode" superTypeArg="ClassMemberNode">
+            <tag name="ClassMemberNode" />
+            <doc><![CDATA[
+                A node representing a metaprogram found in a class body.
+            ]]></doc>
+            <factory-override prop="replacement" expr="makeVoidTypeDeclarationNode()" />
+        </type>
+
+        <type name="InterfaceMemberMetaprogramAnchorNode" super="MetaprogramAnchorNode" superTypeArg="InterfaceMemberNode">
+            <tag name="InterfaceMemberNode" />
+            <doc><![CDATA[
+                A node representing a metaprogram found in an intereface body.
+            ]]></doc>
+            <factory-override prop="replacement" expr="makeVoidTypeDeclarationNode()" />
+        </type>
+
         <type name="TypeDeclarationMetaprogramAnchorNode" super="MetaprogramAnchorNode" superTypeArg="TypeDeclarationNode">
             <tag name="TypeDeclarationNode" />
             <doc><![CDATA[
