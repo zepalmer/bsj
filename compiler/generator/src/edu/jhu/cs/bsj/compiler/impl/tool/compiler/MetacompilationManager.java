@@ -7,6 +7,9 @@ import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Queue;
 
+import javax.tools.DiagnosticListener;
+import javax.tools.JavaFileObject;
+
 import org.apache.log4j.Logger;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
@@ -49,6 +52,10 @@ public class MetacompilationManager
 	 * The file management abstraction to use.
 	 */
 	private BsjFileManager fileManager;
+	/**
+	 * The listener to which we will report events.
+	 */
+	private DiagnosticListener<? super JavaFileObject> diagnosticListener;
 	
 	/**
 	 * Represents the queue of metaprograms which remain to be executed.
@@ -59,13 +66,15 @@ public class MetacompilationManager
 	 * Creates a new compilation unit manager.
 	 * @param factory The node factory to use.
 	 * @param fileManager The file management abstraction to use.
+	 * @param diagnosticListener The listener to which diagnostics will be reported.  Must not be <code>null</code>.
 	 */
-	public MetacompilationManager(BsjNodeFactory factory, BsjFileManager fileManager)
+	public MetacompilationManager(BsjNodeFactory factory, BsjFileManager fileManager, DiagnosticListener<? super JavaFileObject> diagnosticListener)
 	{
 		this.trackerMap = new HashMap<String, CompilationUnitTracker>();
 		this.priorityQueue = new PriorityQueue<BsjCompilerTask>();
 		this.factory = factory;
 		this.fileManager = fileManager;
+		this.diagnosticListener = diagnosticListener;
 		this.metaprogramQueue = new PriorityQueue<MetaprogramProfile>();
 		
 		this.priorityQueue.offer(new MetaprogramExecutionTask());
@@ -201,5 +210,10 @@ public class MetacompilationManager
 	public BsjFileManager getFileManager()
 	{
 		return fileManager;
+	}
+
+	public DiagnosticListener<? super JavaFileObject> getDiagnosticListener()
+	{
+		return diagnosticListener;
 	}
 }

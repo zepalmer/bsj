@@ -265,7 +265,8 @@ public class ExtractMetaprogramsTask extends CompilationUnitTask
 		StandardBsjCompiler compiler = new StandardBsjCompiler(fileManager);
 		// TODO: if this compilation fails, the resulting exception won't make much sense; we need to translate it back
 		// to the file from which it originated
-		compiler.compile(Arrays.asList(metaprogramSourceFile));
+		// TODO: perhaps we want to surround the diagnostics that this compilation subprocess produces in a wrapper?
+		compiler.compile(Arrays.asList(metaprogramSourceFile), this.metacompilationManager.getDiagnosticListener());
 
 		ClassLoader metaprogramClassLoader = fileManager.getClassLoader(BsjCompilerLocation.CLASS_OUTPUT);
 		Class<? extends BsjMetaprogram<A>> metaprogramClass;

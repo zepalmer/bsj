@@ -6,8 +6,10 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.tools.DiagnosticListener;
 import javax.tools.JavaCompiler;
 import javax.tools.JavaFileManager;
+import javax.tools.JavaFileObject;
 import javax.tools.StandardLocation;
 import javax.tools.ToolProvider;
 import javax.tools.JavaFileObject.Kind;
@@ -17,6 +19,7 @@ import org.apache.log4j.Logger;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 import edu.jhu.cs.bsj.compiler.exception.BsjCompilerException;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeFactoryImpl;
+import edu.jhu.cs.bsj.compiler.impl.tool.compiler.diagnostic.DiagnosticPrintingListener;
 import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.BsjCompilerLocation;
 import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.BsjFileManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.BsjFileObject;
@@ -44,7 +47,7 @@ public class StandardBsjCompiler implements BsjCompiler
 	 */
 	private Logger LOGGER = Logger.getLogger(this.getClass());
 
-	/*        *** The following fields are used in compilation. They are not valid unless compilation is in progress. */
+	/*         *** The following fields are used in compilation. They are not valid unless compilation is in progress. */
 
 	/**
 	 * Tracks the progress of compilation units through the compilation process. This data structure performs the
@@ -82,10 +85,13 @@ public class StandardBsjCompiler implements BsjCompiler
 	 * compiler at construction. If this method terminates normally, compilation was successful.
 	 * 
 	 * @param units The compilation units to compile.
+	 * @param listener The diagnostic listener to which events should be reported.  If <code>null</code>, a default
+	 * listener is used which reports diagnostic messages to standard error.
 	 * @throws BsjCompilerException If compilation fails.
 	 * @throws IOException If an I/O error occurs.
 	 */
-	public void compile(Iterable<BsjFileObject> units) throws BsjCompilerException, IOException
+	public void compile(Iterable<BsjFileObject> units, DiagnosticListener<? super JavaFileObject> listener)
+			throws BsjCompilerException, IOException
 	{
 		if (LOGGER.isDebugEnabled())
 		{
@@ -105,9 +111,15 @@ public class StandardBsjCompiler implements BsjCompiler
 			}
 			LOGGER.debug(sb.toString());
 		}
+		
+		// Ensure listener is sane
+		if (listener == null)
+		{
+			listener = new DiagnosticPrintingListener<JavaFileObject>(System.err);
+		}
 
 		// Start compilation
-		initialize();
+		initialize(listener);
 
 		// Initialize the compilation unit manager with the names of the files it must compile
 		for (BsjFileObject file : units)
@@ -145,7 +157,7 @@ public class StandardBsjCompiler implements BsjCompiler
 				this.bsjFileManager.getLocationManager(BsjCompilerLocation.OBJECT_PROGRAM_CLASSPATH));
 		objectProgramLocationMap.put(StandardLocation.PLATFORM_CLASS_PATH,
 				this.bsjFileManager.getLocationManager(BsjCompilerLocation.OBJECT_PROGRAM_SYSTEM_CLASSPATH));
-		
+
 		JavaFileManager objectProgramFileManager = new LocationMappedFileManager(objectProgramLocationMap);
 
 		// Retrieve generated source files
@@ -167,13 +179,13 @@ public class StandardBsjCompiler implements BsjCompiler
 	/**
 	 * Initializes the data structures used by the compiler.
 	 */
-	private void initialize()
+	private void initialize(DiagnosticListener<? super JavaFileObject> listener)
 	{
 		if (LOGGER.isTraceEnabled())
 		{
 			LOGGER.trace("Initializing compiler data structures.");
 		}
-		this.metacompilationManager = new MetacompilationManager(this.factory, this.bsjFileManager);
+		this.metacompilationManager = new MetacompilationManager(this.factory, this.bsjFileManager, listener);
 	}
 
 	/**
