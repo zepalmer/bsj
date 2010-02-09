@@ -336,6 +336,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 			p.print(" ");
 			node.getLabel().executeOperation(this, p);
 		}
+		p.print(";");
 		return null;
 	}
 
@@ -359,7 +360,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 			p.print(":\n");
 		}
 		p.incPrependCount();
-		handleListNode(node.getStatements(), "", ";\n", ";\n", p, true);
+		handleListNode(node.getStatements(), "", "\n", "\n", p, true);
 		p.decPrependCount();
 		return null;
 	}
