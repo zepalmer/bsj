@@ -16,6 +16,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Iterator;
@@ -41,8 +42,6 @@ import javax.swing.tree.TreeNode;
 import org.apache.log4j.PropertyConfigurator;
 
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
-import edu.jhu.cs.bsj.compiler.exception.BsjCompilerException;
-import edu.jhu.cs.bsj.compiler.exception.BsjCompositeCompilerException;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeFactoryImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.serializer.BsjSourceSerializerImpl;
 import edu.jhu.cs.bsj.compiler.impl.utils.PrependablePrintStream;
@@ -179,10 +178,10 @@ public class AntlrAstViewer
 		frame.setVisible(true);
 	}
 
-	public static Node stringToAst(String s) throws Exception
+	public static Node stringToAst(String s, PrintStream ps) throws Exception
 	{
 		BsjParserImpl parser = new BsjParserImpl(new BsjNodeFactoryImpl());
-		return parser.parse(new InputStreamReader(new ByteArrayInputStream(s.getBytes())));
+		return parser.parse(new InputStreamReader(new ByteArrayInputStream(s.getBytes())), null);
 	}
 
 	private static Properties properties = new Properties();
@@ -334,61 +333,42 @@ public class AntlrAstViewer
 		{
 			public void actionPerformed(ActionEvent event)
 			{
-				boolean failure;
+				tree.setModel(new DefaultTreeModel(new DefaultMutableTreeNode()));
 				ByteArrayOutputStream errorBuffer = new ByteArrayOutputStream();
 				PrependablePrintStream errorps = new PrependablePrintStream(errorBuffer, "    ", 0);
+				boolean errorShown = false;
+				setSource(source.getText());
+				saveProperties();
+
+				Node node = null;
 				try
 				{
-					boolean errorShown = false;
-					setSource(source.getText());
-					saveProperties();
-
-					Node node = stringToAst(getSource());
-					if (node != null)
-					{
-						try
-						{
-							String serializedSourceStr = node.executeOperation(new BsjSourceSerializerImpl(), null);
-							serializedSource.setText(serializedSourceStr);
-						} catch (Throwable t)
-						{
-							t.printStackTrace(errorps);
-							errorShown = true;
-						}
-					} else
-					{
-						serializedSource.setText("");
-					}
-
-					tree.setModel(new DefaultTreeModel(new SwingCommonTreeNode(null, node)));
-					if (!errorShown)
-						errorps.println("(no error)");
-					failure = false;
-				} catch (BsjCompositeCompilerException bcce)
-				{
-					bcce.printStackTrace(errorps);
-					errorps.println("containing " + bcce.getErrors().size() + " exceptions:");
-					errorps.incPrependCount();
-					for (BsjCompilerException e : bcce.getErrors())
-					{
-						errorps.println("including:");
-						errorps.incPrependCount();
-						e.printStackTrace(errorps);
-						errorps.decPrependCount();
-					}
-					errorps.decPrependCount();
-					failure = true;
+					node = stringToAst(getSource(), errorps);
 				} catch (Exception e)
 				{
 					e.printStackTrace(errorps);
-					failure = true;
 				}
+				if (node != null)
+				{
+					try
+					{
+						String serializedSourceStr = node.executeOperation(new BsjSourceSerializerImpl(), null);
+						serializedSource.setText(serializedSourceStr);
+					} catch (Throwable t)
+					{
+						t.printStackTrace(errorps);
+						errorShown = true;
+					}
+				} else
+				{
+					serializedSource.setText("");
+				}
+
+				tree.setModel(new DefaultTreeModel(new SwingCommonTreeNode(null, node)));
+				if (!errorShown)
+					errorps.println("(no error)");
 				errorps.close();
 				error.setText(errorBuffer.toString());
-				if (failure)
-				{
-					tree.setModel(new DefaultTreeModel(new DefaultMutableTreeNode()));
-				}
 			}
 		});
 		frame.addComponentListener(new ComponentAdapter()

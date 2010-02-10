@@ -2,8 +2,9 @@ package edu.jhu.cs.bsj.compiler.tool.parser;
 
 import java.io.IOException;
 import java.io.Reader;
-import java.util.ArrayList;
-import java.util.List;
+
+import javax.tools.DiagnosticListener;
+import javax.tools.JavaFileObject;
 
 import org.antlr.runtime.ANTLRReaderStream;
 import org.antlr.runtime.RecognitionException;
@@ -11,8 +12,7 @@ import org.antlr.runtime.TokenRewriteStream;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
-import edu.jhu.cs.bsj.compiler.exception.BsjCompilerException;
-import edu.jhu.cs.bsj.compiler.exception.BsjCompositeCompilerException;
+import edu.jhu.cs.bsj.compiler.impl.utils.diagnostic.DiagnosticPrintingListener;
 import edu.jhu.cs.bsj.compiler.tool.parser.antlr.BsjAntlrLexer;
 import edu.jhu.cs.bsj.compiler.tool.parser.antlr.BsjAntlrParser;
 
@@ -45,14 +45,21 @@ public class BsjParserImpl
 	 * This method generates a BSJ heterogeneous AST from the provided source stream.
 	 * 
 	 * @param reader The {@link Reader} to use to read the input file.
+	 * @param diagnosticListener The listener to which diagnostics are reported. If <code>null</code>, a default
+	 *            listener is used which reports messages to standard error.
 	 * @throws IOException If an I/O error occurs.
-	 * @throws BsjCompositeCompilerError If one or more parse errors occur.
 	 */
-	public CompilationUnitNode parse(Reader reader) throws IOException, BsjCompilerException,
-			BsjCompositeCompilerException
+	public CompilationUnitNode parse(Reader reader, DiagnosticListener<? super JavaFileObject> diagnosticListener)
+			throws IOException
 	{
+		if (diagnosticListener==null)
+		{
+			diagnosticListener = new DiagnosticPrintingListener<JavaFileObject>(System.err);
+		}
 		BsjAntlrLexer lexer = new BsjAntlrLexer(new ANTLRReaderStream(reader));
+		lexer.setDiagnosticListener(diagnosticListener);
 		BsjAntlrParser parser = new BsjAntlrParser(new TokenRewriteStream(lexer));
+		parser.setDiagnosticListener(diagnosticListener);
 		parser.setFactory(factory);
 
 		CompilationUnitNode compilationUnitNode;
@@ -62,20 +69,6 @@ public class BsjParserImpl
 		} catch (RecognitionException re)
 		{
 			throw new RuntimeException(re); // throw an exception of our own instead (to avoid passing ANTLR deps)
-		}
-
-		List<BsjCompilerException> exceptions = new ArrayList<BsjCompilerException>();
-		if (lexer.getExceptions().size() > 0)
-		{
-			exceptions.addAll(lexer.getExceptions());
-		}
-		if (parser.getExceptions().size() > 0)
-		{
-			exceptions.addAll(parser.getExceptions());
-		}
-		if (exceptions.size() > 0)
-		{
-			throw new BsjCompositeCompilerException(exceptions);
 		}
 
 		return compilationUnitNode;

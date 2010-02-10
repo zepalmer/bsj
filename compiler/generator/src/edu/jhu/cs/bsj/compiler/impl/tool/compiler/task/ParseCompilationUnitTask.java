@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.Reader;
 
 import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
-import edu.jhu.cs.bsj.compiler.exception.BsjCompilerException;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.CompilationUnitStatus;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.CompilationUnitTracker;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.MetacompilationManager;
@@ -22,12 +21,12 @@ public class ParseCompilationUnitTask extends CompilationUnitTask
 	}
 
 	@Override
-	public void execute(MetacompilationManager manager) throws IOException, BsjCompilerException
+	public void execute(MetacompilationManager manager) throws IOException
 	{
 		Reader reader = getTracker().getFile().openReader(true); // TODO: parameterize ignoring of encoding errors?
 		// TODO: get a standard BsjParser once that interface exists
 		BsjParserImpl parser = new BsjParserImpl(manager.getFactory());
-		CompilationUnitNode node = parser.parse(reader);
+		CompilationUnitNode node = parser.parse(reader, manager.getDiagnosticListener());
 		
 		getTracker().setAst(node);
 		getTracker().setStatus(CompilationUnitStatus.PARSED);

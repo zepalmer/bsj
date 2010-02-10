@@ -69,11 +69,15 @@ scope Rule {
 @lexer::header{
     package edu.jhu.cs.bsj.compiler.tool.parser.antlr;
 
+    import javax.tools.Diagnostic;
+    import javax.tools.DiagnosticListener;
+    import javax.tools.JavaFileObject;
+    
     import org.apache.log4j.Logger;
     
     import edu.jhu.cs.bsj.compiler.ast.*;
-    import edu.jhu.cs.bsj.compiler.exception.*;
-    import edu.jhu.cs.bsj.compiler.exception.lexer.*;
+    import edu.jhu.cs.bsj.compiler.diagnostic.*;
+    import edu.jhu.cs.bsj.compiler.diagnostic.lexer.*;
     
     import edu.jhu.cs.bsj.compiler.tool.parser.antlr.util.BsjAntlrParserUtils;
 }
@@ -95,37 +99,60 @@ scope Rule {
     }
     
     // *** SOURCE LOCATION TRACKING *******************************************
-    /** The current resource name to store in source locations. */
-    private String resourceName = "<unknown>";
+    /** The resource which is being parsed. */
+    private JavaFileObject resource;
     /** Getter for the resource name indicating which resource is being parsed. */
-    public String getResourceName()
+    public JavaFileObject getResource()
     {
-        return resourceName;
+        return resource;
     }
-    public void setResourceName(String resourceName)
+    public void setResource(JavaFileObject resource)
     {
-        this.resourceName = resourceName;
+        this.resource = resource;
+    }
+    /**
+     * Produces a resource name for the resource in this parser.
+     */
+    protected String getResourceName()
+    {
+        return this.resource == null ? "<unknown>" : this.resource.toString();
+    }
+    /**
+     * Retrieves the line number for the specified relative token index (as per input.LT).
+     */
+    protected int getLineNumber()
+    {
+        return this.getLine();
+    }
+    /**
+     * Retrieves the line number for the specified relative token index (as per input.LT).
+     */
+    protected int getColumnNumber()
+    {
+        return this.getCharPositionInLine() + 1;
     }
     /**
      * Retrieves a source location object describing the start of the specified relative token index (as per input.LT).
      */
     protected BsjSourceLocation getSourceLocation(int rel)
     {
-        return new BsjSourceLocation(this.resourceName, this.getLine(), this.getCharPositionInLine() + 1);
+        return new BsjSourceLocation(getResourceName(), this.getLine(), this.getCharPositionInLine() + 1);
     }
 
     // *** ERROR REPORTING AND HANDLING ***************************************
-    /** A list of exceptions which have occurred since this lexer was created. */
-    private List<BsjLexerException> exceptions = new ArrayList<BsjLexerException>();
+    /** The diagnostic listener to which we report events. */
+    private DiagnosticListener<? super JavaFileObject> diagnosticListener;
     
-    /**
-     * Retrieves the list of exceptions that has been accumulated since the creation of this lexer.  If the list has
-     * a size of zero, it is safe to assume that everything went smoothly.
-     * @return The list of errors this lexer has accumulated.
-     */
-    public List<BsjLexerException> getExceptions()
+    /** Assigns a diagnostic listener to this parser. */
+    public void setDiagnosticListener(DiagnosticListener<? super JavaFileObject> diagnosticListener)
     {
-        return this.exceptions;
+        this.diagnosticListener = diagnosticListener;
+    }
+    
+    /** Reports a diagnostic. */
+    private void reportDiagnostic(Diagnostic<? extends JavaFileObject> diagnostic)
+    {
+        this.diagnosticListener.report(diagnostic);
     }
     
     /**
@@ -137,10 +164,9 @@ scope Rule {
     public void displayRecognitionError(String[] tokenNames, RecognitionException e)
     {
         int character = input.LT(1);
-        BsjLexerException bsjException =
-                BsjAntlrParserUtils.convertFromLexer(
-                        e, tokenNames, getSourceLocation(1), character);
-        exceptions.add(bsjException);
+        BsjLexerDiagnostic diagnostic = BsjAntlrParserUtils.convertFromLexer(
+                e, tokenNames, getLineNumber(), getColumnNumber(), resource, character);
+        reportDiagnostic(diagnostic);
     }
 }
 
@@ -158,14 +184,18 @@ scope Rule {
     import java.util.Set;
     import java.util.Stack;
     
+    import javax.tools.Diagnostic;
+    import javax.tools.DiagnosticListener;
+    import javax.tools.JavaFileObject;
+
     import org.apache.log4j.Logger;
 
     import edu.jhu.cs.bsj.compiler.ast.*;
     import edu.jhu.cs.bsj.compiler.ast.node.*;
     import edu.jhu.cs.bsj.compiler.ast.node.meta.*;
     import edu.jhu.cs.bsj.compiler.ast.util.*;
-    import edu.jhu.cs.bsj.compiler.exception.*;
-    import edu.jhu.cs.bsj.compiler.exception.parser.*;
+    import edu.jhu.cs.bsj.compiler.diagnostic.*;
+    import edu.jhu.cs.bsj.compiler.diagnostic.parser.*;
     
     import edu.jhu.cs.bsj.compiler.tool.parser.antlr.util.BsjAntlrParserUtils;
     import edu.jhu.cs.bsj.compiler.tool.parser.antlr.util.BsjParserConfiguration;
@@ -187,16 +217,39 @@ scope Rule {
     }
     
     // *** SOURCE LOCATION TRACKING *******************************************
-    /** The current resource name to store in source locations. */
-    private String resourceName = "<unknown>";
+    /** The resource which is being parsed. */
+    private JavaFileObject resource;
     /** Getter for the resource name indicating which resource is being parsed. */
-    public String getResourceName()
+    public JavaFileObject getResource()
     {
-        return resourceName;
+        return resource;
     }
-    public void setResourceName(String resourceName)
+    public void setResource(JavaFileObject resource)
     {
-        this.resourceName = resourceName;
+        this.resource = resource;
+    }
+    /**
+     * Produces a resource name for the resource in this parser.
+     */
+    protected String getResourceName()
+    {
+        return this.resource == null ? "<unknown>" : this.resource.toString();
+    }
+    /**
+     * Retrieves the line number for the specified relative token index (as per input.LT).
+     */
+    protected int getLineNumber(int rel)
+    {
+        Token token = input.LT(rel);
+        return token == null ? BsjSourceLocation.NOPOS : token.getLine();
+    }
+    /**
+     * Retrieves the line number for the specified relative token index (as per input.LT).
+     */
+    protected int getColumnNumber(int rel)
+    {
+        Token token = input.LT(rel);
+        return token == null ? BsjSourceLocation.NOPOS : token.getCharPositionInLine() + 1;
     }
     /**
      * Retrieves a source location object describing the start of the specified relative token index (as per input.LT).
@@ -205,7 +258,7 @@ scope Rule {
     {
         Token token = input.LT(rel);
         return new BsjSourceLocation(
-                this.resourceName,
+                getResourceName(),
                 token==null ? BsjSourceLocation.NOPOS : token.getLine(),
                 token==null ? BsjSourceLocation.NOPOS : token.getCharPositionInLine() + 1);
     }
@@ -234,7 +287,7 @@ scope Rule {
                 if (!factorySourceLocationOverride)
                 {
 	                BsjSourceLocation start = 
-	                        new BsjSourceLocation(resourceName, $Rule::firstToken.getLine(),
+	                        new BsjSourceLocation(getResourceName(), $Rule::firstToken.getLine(),
 	                                $Rule::firstToken.getCharPositionInLine() + 1);
 	                setStartSourceLocation(start);
 	                
@@ -242,10 +295,10 @@ scope Rule {
 	                Token token = input.LT(-1);
 	                if (token == null)
 	                {
-	                    stop = new BsjSourceLocation(resourceName, BsjSourceLocation.NOPOS, BsjSourceLocation.NOPOS);
+	                    stop = new BsjSourceLocation(getResourceName(), BsjSourceLocation.NOPOS, BsjSourceLocation.NOPOS);
 	                } else
 	                {
-	                    stop = new BsjSourceLocation(resourceName, token.getLine(),
+	                    stop = new BsjSourceLocation(getResourceName(), token.getLine(),
 	                            token.getCharPositionInLine() + token.getText().length() + 1);
 	                }
 	                
@@ -360,33 +413,42 @@ scope Rule {
             switch (state[mod.ordinal()])
             {
                 case DISALLOWED:
-                    exceptions.add(new InvalidModifierException(
-                            $Rule::name, getSourceLocation(-1), mod.toString().toLowerCase()));
+                    reportDiagnostic(new InvalidModifierDiagnostic<JavaFileObject>(
+                            getLineNumber(-1),
+                            getColumnNumber(-1),
+                            resource,
+                            $Rule::name,
+                            mod.toString().toLowerCase()));
                     break;
                 case NOT_SEEN:
                     state[mod.ordinal()] = ModifierState.SEEN;
                     break;
                 case SEEN:
-                    exceptions.add(new DuplicateModifierException(
-                            $Rule::name, getSourceLocation(-1), mod.toString().toLowerCase()));
+                    reportDiagnostic(new DuplicateModifierDiagnostic<JavaFileObject>(
+                            getLineNumber(-1),
+                            getColumnNumber(-1),
+                            resource,
+                            $Rule::name,
+                            mod.toString().toLowerCase()));
                     break;
             }
         }
     }
     
     // *** ERROR REPORTING AND HANDLING ***************************************
-    /** A list of exceptions which have occurred since this parser was created. */
-    private List<BsjParserException> exceptions = new ArrayList<BsjParserException>();
+    /** The diagnostic listener to which we report events. */
+    private DiagnosticListener<? super JavaFileObject> diagnosticListener;
     
-    /**
-     * Retrieves the list of exceptions that has been accumulated since the creation of this parser.  A standard use
-     * case for the BSJ ANTLR parser is to instantiate it, parse one source element, and then check this list.  If the
-     * list has a size of zero, it is safe to assume that everything went smoothly.
-     * @return The list of errors this parser has accumulated.
-     */
-    public List<BsjParserException> getExceptions()
+    /** Assigns a diagnostic listener to this parser. */
+    public void setDiagnosticListener(DiagnosticListener<? super JavaFileObject> diagnosticListener)
     {
-        return this.exceptions;
+        this.diagnosticListener = diagnosticListener;
+    }
+    
+    /** Reports a diagnostic. */
+    private void reportDiagnostic(Diagnostic<? extends JavaFileObject> diagnostic)
+    {
+        this.diagnosticListener.report(diagnostic);
     }
     
     /**
@@ -397,10 +459,10 @@ scope Rule {
     @Override
     public void displayRecognitionError(String[] tokenNames, RecognitionException e)
     {
-        BsjParserException bsjException =
+        Diagnostic<? extends JavaFileObject> diagnostic =
                 BsjAntlrParserUtils.convertFromParser(
-                        e, tokenNames, getSourceLocation(1), input.LT(1), $Rule::name);
-        exceptions.add(bsjException);
+                        e, tokenNames, getLineNumber(1), getColumnNumber(1), resource, input.LT(1), $Rule::name);
+        reportDiagnostic(diagnostic);
     }
     
     // Extracts the content of a javadoc comment into a string.
@@ -749,9 +811,10 @@ javadoc returns [JavadocNode ret] // TODO: parse out Javadoc contents
                 {
                     Token token = input.get(index);
                     BsjSourceLocation startSourceLocation = new BsjSourceLocation(
-                            resourceName, token.getLine(), token.getCharPositionInLine() + 1);
+                            getResourceName(), token.getLine(), token.getCharPositionInLine() + 1);
                     BsjSourceLocation stopSourceLocation = new BsjSourceLocation(
-                            resourceName, token.getLine(), token.getCharPositionInLine() + token.getText().length() + 1);
+                            getResourceName(), token.getLine(),
+                            token.getCharPositionInLine() + token.getText().length() + 1);
                     factory.setStartSourceLocation(startSourceLocation);
                     factory.setStopSourceLocation(stopSourceLocation);
                     factorySourceLocationOverride = true;
@@ -901,15 +964,19 @@ modifiers[boolean accessAllowed, Modifier... mods]
                     {
                         if ($access == currentAccess)
                         {
-                            exceptions.add(new DuplicateModifierException(
+                            reportDiagnostic(new DuplicateModifierDiagnostic<JavaFileObject>(
+                                    getLineNumber(-1),
+                                    getColumnNumber(-1),
+                                    resource,
                                     $Rule::name,
-                                    getSourceLocation(-1),
                                     currentAccess.toString().toLowerCase()));
                         } else
                         {
-                            exceptions.add(new ConflictingAccessModifierException(
+                            reportDiagnostic(new ConflictingAccessModifierDiagnostic<JavaFileObject>(
+                                    getLineNumber(-1),
+                                    getColumnNumber(-1),
+                                    resource,
                                     $Rule::name,
-                                    getSourceLocation(-1),
                                     $access.toString().toLowerCase(),
                                     currentAccess.toString().toLowerCase()));
                         }
@@ -4701,9 +4768,11 @@ intLiteral [boolean isNegative] returns [LiteralNode<?> ret]
                     (isNegative ? "-" : "") + ibr.string, ibr.base);
             } catch (NumberFormatException nfe)
             {
-                exceptions.add(new InvalidIntegerLiteralException(
+                reportDiagnostic(new InvalidIntegerLiteralDiagnostic<JavaFileObject>(
+                        getLineNumber(-1),
+                        getColumnNumber(-1),
+                        resource,
                         $Rule::name,
-                        getSourceLocation(-1),
                         (isNegative?"-":"")+$INTLITERAL.text));
             }
             $ret = factory.makeIntLiteralNode(i);
@@ -4731,9 +4800,11 @@ longLiteral [boolean isNegative] returns [LiteralNode<?> ret]
                     (isNegative ? "-" : "") + ibr.string, ibr.base);
             } catch (NumberFormatException nfe)
             {
-                exceptions.add(new InvalidIntegerLiteralException(
+                reportDiagnostic(new InvalidIntegerLiteralDiagnostic<JavaFileObject>(
+                        getLineNumber(-1),
+                        getColumnNumber(-1),
+                        resource,
                         $Rule::name,
-                        getSourceLocation(-1),
                         (isNegative?"-":"")+$LONGLITERAL.text));
             }
             $ret = factory.makeLongLiteralNode(l);
@@ -4762,30 +4833,26 @@ lexicalLiteral returns [LiteralNode<?> ret]
         FLOATLITERAL
         {
             String s = $FLOATLITERAL.text;
-            Float f;
-            try
-            {
-                f = BsjAntlrParserUtils.parseFloat(s, getSourceLocation(-1), $Rule::name);
-            } catch (BsjParserException e)
-            {
-                exceptions.add(e);
-                f = Float.NaN;
-            }
+            float f = BsjAntlrParserUtils.parseFloat(
+                    s,
+                    getLineNumber(-1),
+                    getColumnNumber(-1),
+                    resource,
+                    diagnosticListener,
+                    $Rule::name);
             $ret = factory.makeFloatLiteralNode(f);
         }
     |   
         DOUBLELITERAL
         {
             String s = $DOUBLELITERAL.text;
-            Double d;
-            try
-            {
-                d = BsjAntlrParserUtils.parseDouble(s, getSourceLocation(-1), $Rule::name);
-            } catch (BsjParserException e)
-            {
-                exceptions.add(e);
-                d = Double.NaN;
-            }
+            double d = BsjAntlrParserUtils.parseDouble(
+                    s,
+                    getLineNumber(-1),
+                    getColumnNumber(-1),
+                    resource,
+                    diagnosticListener,
+                    $Rule::name);
             $ret = factory.makeDoubleLiteralNode(d);
         }
     |   

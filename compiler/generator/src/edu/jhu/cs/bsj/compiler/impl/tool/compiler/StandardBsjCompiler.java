@@ -17,15 +17,14 @@ import javax.tools.JavaFileObject.Kind;
 import org.apache.log4j.Logger;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
-import edu.jhu.cs.bsj.compiler.exception.BsjCompilerException;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeFactoryImpl;
-import edu.jhu.cs.bsj.compiler.impl.tool.compiler.diagnostic.DiagnosticPrintingListener;
 import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.BsjCompilerLocation;
 import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.BsjFileManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.BsjFileObject;
 import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.InMemoryLocationManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.LocationManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.LocationMappedFileManager;
+import edu.jhu.cs.bsj.compiler.impl.utils.diagnostic.DiagnosticPrintingListener;
 import edu.jhu.cs.bsj.compiler.tool.BsjCompiler;
 
 /**
@@ -87,11 +86,10 @@ public class StandardBsjCompiler implements BsjCompiler
 	 * @param units The compilation units to compile.
 	 * @param listener The diagnostic listener to which events should be reported.  If <code>null</code>, a default
 	 * listener is used which reports diagnostic messages to standard error.
-	 * @throws BsjCompilerException If compilation fails.
 	 * @throws IOException If an I/O error occurs.
 	 */
 	public void compile(Iterable<BsjFileObject> units, DiagnosticListener<? super JavaFileObject> listener)
-			throws BsjCompilerException, IOException
+			throws IOException
 	{
 		if (LOGGER.isDebugEnabled())
 		{
@@ -141,7 +139,7 @@ public class StandardBsjCompiler implements BsjCompiler
 		terminate();
 	}
 
-	private void compileGeneratedSources() throws BsjCompilerException, IOException
+	private void compileGeneratedSources() throws IOException
 	{
 		// Build file manager for the compiler
 		Map<StandardLocation, LocationManager> objectProgramLocationMap = new HashMap<StandardLocation, LocationManager>();

@@ -2,7 +2,6 @@ package edu.jhu.cs.bsj.compiler.impl.tool.compiler.task;
 
 import java.io.IOException;
 
-import edu.jhu.cs.bsj.compiler.exception.BsjCompilerException;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.CompilationUnitStatus;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.CompilationUnitTracker;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.MetacompilationManager;
@@ -24,7 +23,7 @@ public class MetaprogramExecutionTask extends AbstractBsjCompilerTask
 	}
 
 	@Override
-	public void execute(MetacompilationManager manager) throws IOException, BsjCompilerException
+	public void execute(MetacompilationManager manager) throws IOException
 	{
 		MetaprogramProfile profile = manager.getNextMetaprogramProfile();
 		if (profile==null)

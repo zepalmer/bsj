@@ -1,7 +1,6 @@
 package edu.jhu.cs.bsj.tests.compiler.tool.parser;
 
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -67,13 +66,13 @@ public class RegeneratorTest
 
         // parse it to an AST
         BsjParserImpl parser = new BsjParserImpl(new BsjNodeFactoryImpl());
-        Node ast = parser.parse(new InputStreamReader(input));
+        Node ast = parser.parse(new InputStreamReader(input), null);
 
         // regenerate it once
         String regen1 = ast.executeOperation(new BsjSourceSerializerImpl(), null);
         
         // use the regenerated version to create another AST
-        Node newAst = parser.parse(new InputStreamReader(new ByteArrayInputStream(regen1.getBytes())));
+        Node newAst = parser.parse(new InputStreamReader(new ByteArrayInputStream(regen1.getBytes())), null);
                 
         // regenerate it again from the new AST
         String regen2 = newAst.executeOperation(new BsjSourceSerializerImpl(), null);

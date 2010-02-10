@@ -1,4 +1,4 @@
-package edu.jhu.cs.bsj.compiler.impl.tool.compiler.diagnostic;
+package edu.jhu.cs.bsj.compiler.impl.utils.diagnostic;
 
 import java.io.OutputStream;
 import java.io.PrintStream;

@@ -1,17 +1,22 @@
 package edu.jhu.cs.bsj.compiler.tool.parser.antlr.util;
 
+import javax.tools.DiagnosticListener;
+import javax.tools.JavaFileObject;
+
 import org.antlr.runtime.MismatchedTokenException;
+import org.antlr.runtime.MissingTokenException;
 import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.Token;
 import org.antlr.runtime.UnwantedTokenException;
 
-import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
-import edu.jhu.cs.bsj.compiler.exception.lexer.BsjLexerException;
-import edu.jhu.cs.bsj.compiler.exception.parser.BsjParserException;
-import edu.jhu.cs.bsj.compiler.exception.parser.ExtraneousTokenException;
-import edu.jhu.cs.bsj.compiler.exception.parser.InvalidFloatingPointLiteralException;
-import edu.jhu.cs.bsj.compiler.exception.parser.MissingTokenException;
-import edu.jhu.cs.bsj.compiler.exception.parser.WrongTokenException;
+import edu.jhu.cs.bsj.compiler.diagnostic.lexer.BsjLexerDiagnostic;
+import edu.jhu.cs.bsj.compiler.diagnostic.lexer.GeneralLexerFailureDiagnostic;
+import edu.jhu.cs.bsj.compiler.diagnostic.parser.BsjParserDiagnostic;
+import edu.jhu.cs.bsj.compiler.diagnostic.parser.ExtraneousTokenDiagnostic;
+import edu.jhu.cs.bsj.compiler.diagnostic.parser.GeneralParseFailureDiagnostic;
+import edu.jhu.cs.bsj.compiler.diagnostic.parser.InvalidFloatingPointLiteralDiagnostic;
+import edu.jhu.cs.bsj.compiler.diagnostic.parser.MissingTokenDiagnostic;
+import edu.jhu.cs.bsj.compiler.diagnostic.parser.UnexpectedTokenDiagnostic;
 
 public class BsjAntlrParserUtils
 {
@@ -140,39 +145,47 @@ public class BsjAntlrParserUtils
 	/**
 	 * Parses the provided string as a <tt>float</tt>.
 	 * 
-	 * @param s The input string.
-	 * @param source The BSJ source location at which this string appears.
-	 * @param ruleName The name of the current rule.
-	 * @return The parsed float.
-	 * @throws BsjParserException If parsing failed.
+	 * @param s The input string representing the literal.
+	 * @param lineNumber The line number at which the input string is found.
+	 * @param columnNumber The column number at which the input string starts.
+	 * @param resource The resource in which this input string is found.
+	 * @param listener The listener to which diagnostics should be reported.
+	 * @param ruleName The name of the rule which is calling this method.
+	 * @return The resulting floating point value, or {@link Float#NaN} if the value is invalid.
 	 */
-	public static float parseFloat(String s, BsjSourceLocation source, String ruleName) throws BsjParserException
+	public static float parseFloat(String s, int lineNumber, int columnNumber, JavaFileObject resource,
+			DiagnosticListener<? super JavaFileObject> listener, String ruleName)
 	{
 		String nums = s.substring(0, s.length() - 1);
 		float f = Float.parseFloat(nums);
 		if (!isFloatingPointZero(s) && f == 0.0f)
 		{
-			throw new InvalidFloatingPointLiteralException(ruleName, source, s,
-					InvalidFloatingPointLiteralException.FailureType.TOO_SMALL);
+			listener.report(new InvalidFloatingPointLiteralDiagnostic<JavaFileObject>(lineNumber, columnNumber,
+					resource, ruleName, s, InvalidFloatingPointLiteralDiagnostic.FailureType.TOO_SMALL));
+			return Float.NaN;
 		}
 		if (Float.isInfinite(f))
 		{
-			throw new InvalidFloatingPointLiteralException(ruleName, source, s,
-					InvalidFloatingPointLiteralException.FailureType.TOO_LARGE);
+			listener.report(new InvalidFloatingPointLiteralDiagnostic<JavaFileObject>(lineNumber, columnNumber,
+					resource, ruleName, s, InvalidFloatingPointLiteralDiagnostic.FailureType.TOO_LARGE));
+			return Float.NaN;
 		}
 		return f;
 	}
 
 	/**
-	 * Parses the provided string as a <tt>double</tt>.
+	 * Parses the provided string as a <tt>float</tt>.
 	 * 
-	 * @param s The input string.
-	 * @param source The BSJ source location at which this string appears.
-	 * @param ruleName The name of the current rule.
-	 * @return The parsed double.
-	 * @throws BsjParserException If parsing failed.
+	 * @param s The input string representing the literal.
+	 * @param lineNumber The line number at which the input string is found.
+	 * @param columnNumber The column number at which the input string starts.
+	 * @param resource The resource in which this input string is found.
+	 * @param listener The listener to which diagnostics should be reported.
+	 * @param ruleName The name of the rule which is calling this method.
+	 * @return The resulting floating point value, or {@link Float#NaN} if the value is invalid.
 	 */
-	public static double parseDouble(String s, BsjSourceLocation source, String ruleName) throws BsjParserException
+	public static double parseDouble(String s, int lineNumber, int columnNumber, JavaFileObject resource,
+			DiagnosticListener<? super JavaFileObject> listener, String ruleName)
 	{
 		String nums = s;
 		if (s.endsWith("d") || s.endsWith("D"))
@@ -182,74 +195,76 @@ public class BsjAntlrParserUtils
 		double d = Double.parseDouble(nums);
 		if (!isFloatingPointZero(s) && d == 0.0)
 		{
-			throw new InvalidFloatingPointLiteralException(ruleName, source, s,
-					InvalidFloatingPointLiteralException.FailureType.TOO_SMALL);
+			listener.report(new InvalidFloatingPointLiteralDiagnostic<JavaFileObject>(lineNumber, columnNumber,
+					resource, ruleName, s, InvalidFloatingPointLiteralDiagnostic.FailureType.TOO_SMALL));
+			return Double.NaN;
 		}
 		if (Double.isInfinite(d))
 		{
-			throw new InvalidFloatingPointLiteralException(ruleName, source, s,
-					InvalidFloatingPointLiteralException.FailureType.TOO_LARGE);
+			listener.report(new InvalidFloatingPointLiteralDiagnostic<JavaFileObject>(lineNumber, columnNumber,
+					resource, ruleName, s, InvalidFloatingPointLiteralDiagnostic.FailureType.TOO_LARGE));
+			return Double.NaN;
 		}
 		return d;
 	}
 
 	/**
-	 * Produces a {@link BsjParserException} which corresponds to the specified ANTLR exception when thrown from the
-	 * parser. This method is used to prevent the BSJ API from thowing ANTLR errors and thus causing the users of BSJ to
-	 * have a build dependency on the ANTLR package.
+	 * Processes an ANTLR {@link RecognitionException} for the BSJ ANTLR parser, producing a {@link BsjParserDiagnostic}
+	 * which reflects the same information. This method is used to prevent the BSJ API from thowing ANTLR errors and
+	 * thus causing the users of BSJ to have a build dependency on the ANTLR package.
 	 * 
 	 * @param e The ANTLR exception.
 	 * @param tokenNames The names of the tokens according to the parser.
-	 * @param location The location at which the exception occurred.
+	 * @param lineNumber The line number on which the exception occurred.
+	 * @param columnNumber The column at which the exception occurred.
+	 * @param resource The resource being parsed when the exception occurred.
 	 * @param last The most recently parsed token.
 	 * @param ruleName The name of the rule that threw the exception.
-	 * @return The corresponding {@link BsjParserException}.
+	 * @return The corresponding {@link BsjParserDiagnostic}.
 	 */
-	public static BsjParserException convertFromParser(
-			RecognitionException re, String[] tokenNames, BsjSourceLocation location, Token last, String ruleName)
+	public static BsjParserDiagnostic<? extends JavaFileObject> convertFromParser(RecognitionException re,
+			String[] tokenNames, int lineNumber, int columnNumber, JavaFileObject resource, Token last, String ruleName)
 	{
-        if (re instanceof UnwantedTokenException)
-        {
-        	UnwantedTokenException ute = (UnwantedTokenException)re;
-        	return new ExtraneousTokenException(
-        			ruleName, location, re,
-        			ute.expecting == Token.EOF ? "EOF" : tokenNames[ute.expecting],
-        			last.getText());
-        } else if (re instanceof org.antlr.runtime.MissingTokenException)
-        {
-        	org.antlr.runtime.MissingTokenException mte = (org.antlr.runtime.MissingTokenException)re;
-        	return new MissingTokenException(
-        			ruleName, location, re,
-        			mte.expecting == Token.EOF ? "EOF" : tokenNames[mte.expecting]);
-        } else if (re instanceof MismatchedTokenException)
-        {
-        	MismatchedTokenException mte = (MismatchedTokenException)re;
-        	return new WrongTokenException(
-        			ruleName, location, re,
-        			tokenNames[last.getType()],
-        			last.getText(),
-        			tokenNames[mte.expecting]);
-        } else
-        {
-        	return new BsjParserException(ruleName, location, re);
-        }
+		if (re instanceof UnwantedTokenException)
+		{
+			UnwantedTokenException ute = (UnwantedTokenException) re;
+			return new ExtraneousTokenDiagnostic<JavaFileObject>(lineNumber, columnNumber, resource, ruleName,
+					ute.expecting == Token.EOF ? "EOF" : tokenNames[ute.expecting], last.getText());
+		} else if (re instanceof org.antlr.runtime.MissingTokenException)
+		{
+			MissingTokenException mte = (MissingTokenException) re;
+			return new MissingTokenDiagnostic<JavaFileObject>(lineNumber, columnNumber, resource, ruleName,
+					mte.expecting == Token.EOF ? "EOF" : tokenNames[mte.expecting]);
+		} else if (re instanceof MismatchedTokenException)
+		{
+			MismatchedTokenException mte = (MismatchedTokenException) re;
+			return new UnexpectedTokenDiagnostic<JavaFileObject>(lineNumber, columnNumber, resource, ruleName,
+					last.getType() == Token.EOF ? "EOF" : tokenNames[last.getType()], last.getText(),
+					mte.expecting == Token.EOF ? "EOF" : tokenNames[mte.expecting]);
+		} else
+		{
+			return new GeneralParseFailureDiagnostic<JavaFileObject>(lineNumber, columnNumber, resource, ruleName,
+					last.getType() == Token.EOF ? "EOF" : tokenNames[last.getType()], last.getText());
+		}
 	}
-	
+
 	/**
-	 * Produces a {@link BsjLexerException} which corresponds to the specified ANTLR exception when thrown from the
-	 * lexer. This method is used to prevent the BSJ API from thowing ANTLR errors and thus causing the users of BSJ to
-	 * have a build dependency on the ANTLR package.
+	 * Processes an ANTLR {@link RecognitionException} for the BSJ ANTLR lexer, producing a {@link BsjLexerDiagnostic}
+	 * which reflects the same information. This method is used to prevent the BSJ API from thowing ANTLR errors and
+	 * thus causing the users of BSJ to have a build dependency on the ANTLR package.
 	 * 
 	 * @param e The ANTLR exception.
 	 * @param tokenNames The names of the tokens according to the lexer.
-	 * @param location The location at which the exception occurred.
+	 * @param lineNumber The line number on which the exception occurred.
+	 * @param columnNumber The column at which the exception occurred.
+	 * @param resource The resource being parsed when the exception occurred.
 	 * @param last The most recently used character.
-	 * @return The corresponding {@link BsjLexerException}.
+	 * @return The corresponding {@link BsjLexerDiagnostic}.
 	 */
-	public static BsjLexerException convertFromLexer(
-			RecognitionException re, String[] tokenNames, BsjSourceLocation location, int last)
+	public static BsjLexerDiagnostic<? extends JavaFileObject> convertFromLexer(RecognitionException re,
+			String[] tokenNames, int lineNumber, int columnNumber, JavaFileObject resource, int last)
 	{
 		// TODO: can we be more specific?
-        return new BsjLexerException(location, last);
+		return new GeneralLexerFailureDiagnostic<JavaFileObject>(lineNumber, columnNumber, resource, last);
 	}
 }

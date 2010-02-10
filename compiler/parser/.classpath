@@ -7,5 +7,6 @@
 	<classpathentry exported="true" kind="lib" path=".gen/bin" sourcepath=".gen/src"/>
 	<classpathentry kind="lib" path="lib/antlr.jar"/>
 	<classpathentry kind="lib" path="lib/log4j.jar"/>
+	<classpathentry kind="src" path="/BSJ Utilities"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

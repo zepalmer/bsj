@@ -30,7 +30,6 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.TypeDeclarationMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.util.BsjTypedNodeNoOpVisitor;
-import edu.jhu.cs.bsj.compiler.exception.BsjCompilerException;
 import edu.jhu.cs.bsj.compiler.impl.metaprogram.BsjMetaprogram;
 import edu.jhu.cs.bsj.compiler.impl.metaprogram.ContextImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.CompilationUnitStatus;
@@ -71,7 +70,7 @@ public class ExtractMetaprogramsTask extends CompilationUnitTask
 	}
 
 	@Override
-	public void execute(MetacompilationManager manager) throws IOException, BsjCompilerException
+	public void execute(MetacompilationManager manager) throws IOException
 	{
 		this.factory = manager.getFactory();
 		this.metacompilationManager = manager;
@@ -128,7 +127,7 @@ public class ExtractMetaprogramsTask extends CompilationUnitTask
 	}
 
 	private <A extends MetaprogramAnchorNode<? extends Node>> void handleAnchor(A anchor, Class<A> anchorClass)
-			throws IOException, BsjCompilerException
+			throws IOException
 	{
 		// Build a metaprogram profile for this anchor
 		MetaprogramProfile profile = buildProfile(anchor, anchorClass);
@@ -144,7 +143,7 @@ public class ExtractMetaprogramsTask extends CompilationUnitTask
 	}
 
 	private <A extends MetaprogramAnchorNode<? extends Node>> MetaprogramProfile buildProfile(A anchor,
-			Class<A> anchorClass) throws IOException, BsjCompilerException
+			Class<A> anchorClass) throws IOException
 	{
 		Context<A> context = new ContextImpl<A>(anchor);
 		BsjMetaprogram<A> metaprogram = compileMetaprogram(anchor.getMetaprogram(), context, anchorClass);
@@ -153,8 +152,7 @@ public class ExtractMetaprogramsTask extends CompilationUnitTask
 	}
 
 	private <A extends MetaprogramAnchorNode<? extends Node>> BsjMetaprogram<A> compileMetaprogram(
-			MetaprogramNode metaprogramNode, Context<A> context, Class<A> anchorClass) throws IOException,
-			BsjCompilerException
+			MetaprogramNode metaprogramNode, Context<A> context, Class<A> anchorClass) throws IOException
 	{
 		if (LOGGER.isTraceEnabled())
 		{

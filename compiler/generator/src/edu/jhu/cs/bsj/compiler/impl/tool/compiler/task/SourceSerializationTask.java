@@ -5,7 +5,6 @@ import java.io.IOException;
 import javax.tools.JavaFileObject.Kind;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceSerializer;
-import edu.jhu.cs.bsj.compiler.exception.BsjCompilerException;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.CompilationUnitStatus;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.CompilationUnitTracker;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.MetacompilationManager;
@@ -28,7 +27,7 @@ public class SourceSerializationTask extends CompilationUnitTask implements BsjC
 	}
 
 	@Override
-	public void execute(MetacompilationManager manager) throws IOException, BsjCompilerException
+	public void execute(MetacompilationManager manager) throws IOException
 	{
 		// TODO: is there a better way to fetch a source serializer? SPI? Toolkit?
 		BsjSourceSerializer serializer = new BsjSourceSerializerImpl();

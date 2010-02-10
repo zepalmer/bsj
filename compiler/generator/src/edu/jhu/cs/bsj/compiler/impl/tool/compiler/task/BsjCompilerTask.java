@@ -2,7 +2,6 @@ package edu.jhu.cs.bsj.compiler.impl.tool.compiler.task;
 
 import java.io.IOException;
 
-import edu.jhu.cs.bsj.compiler.exception.BsjCompilerException;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.MetacompilationManager;
 
 /**
@@ -13,14 +12,13 @@ import edu.jhu.cs.bsj.compiler.impl.tool.compiler.MetacompilationManager;
 public interface BsjCompilerTask extends Comparable<BsjCompilerTask>
 {
 	/**
-	 * Executes this task.
+	 * Executes this task.  If errors occur, they are reported to the diagnostic listener on the metacompilation
+	 * manager.
 	 * 
 	 * @param manager The manager which owns the specified tracker.
 	 * @throws IOException If an I/O error occurs.
-	 * @throws BsjCompilerException If a compilation error occurs.
 	 */
-	public void execute(MetacompilationManager manager) throws IOException,
-			BsjCompilerException;
+	public void execute(MetacompilationManager manager) throws IOException;
 	
 	/**
 	 * Retrieves the {@link TaskPriority} of this compiler task.

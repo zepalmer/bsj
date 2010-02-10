@@ -13,7 +13,6 @@ import javax.tools.JavaFileObject;
 import org.apache.log4j.Logger;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
-import edu.jhu.cs.bsj.compiler.exception.BsjCompilerException;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.task.BsjCompilerTask;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.task.MetaprogramExecutionTask;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.task.ParseCompilationUnitTask;
@@ -184,10 +183,9 @@ public class MetacompilationManager
 	/**
 	 * Instructs this compilation unit manager to do more work.
 	 * @throws IOException If an I/O error occurs.
-	 * @throws BsjCompilerException If a compilation error occurs.
 	 * @throws IllegalStateException If no more work exists to be done.
 	 */
-	public void doWork() throws IOException, BsjCompilerException, IllegalStateException
+	public void doWork() throws IOException, IllegalStateException
 	{
 		if (this.priorityQueue.size() == 0)
 		{
