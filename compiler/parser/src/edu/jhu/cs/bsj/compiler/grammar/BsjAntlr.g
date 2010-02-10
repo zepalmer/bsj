@@ -596,13 +596,75 @@ bsjMetaprogram returns [MetaprogramNode ret]
         }
     :
         '[' ':'
+        preamble
         blockStatementList
         ':' ']'
         {
-            $ret = factory.makeMetaprogramNode($blockStatementList.ret);
+            $ret = factory.makeMetaprogramNode($preamble.ret, $blockStatementList.ret);
         }
     ;
 
+/* This rule parses a BSJ metaprogram preamble */
+preamble returns [MetaprogramPreambleListNode ret]
+        scope Rule;
+        @init {
+            ruleStart("preamble");
+            List<MetaprogramPreambleNode> list = new ArrayList<MetaprogramPreambleNode>();
+        }
+        @after {
+            $ret = factory.makeMetaprogramPreambleListNode(list);
+            ruleStop();
+        }
+    :
+        (
+            preambleStatement
+            {
+                list.add($preambleStatement.ret);
+            }
+        )*
+    ;
+
+/* This rule parses a single preamble statement */
+preambleStatement returns [MetaprogramPreambleNode ret]
+        scope Rule;
+        @init {
+            ruleStart("preamble");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        metaprogramImport
+        {
+            $ret = $metaprogramImport.ret;
+        }
+    ;
+
+metaprogramImport returns [MetaprogramImportNode ret]
+        scope Rule;
+        @init {
+            ruleStart("metaprogramImport");
+        }
+        @after {
+            ruleStop();
+        }
+    :   
+        '#import'
+        importBody
+        ';'
+        {
+            ImportNode node;
+            if ($importBody.onDemand)
+            {
+                node = factory.makeImportOnDemandNode($importBody.name, $importBody.staticImport);
+            } else
+            {
+                node = factory.makeImportSingleTypeNode($importBody.name, $importBody.staticImport);
+            }
+            $ret = factory.makeMetaprogramImportNode(node);
+        }
+    ;
+    
 typeDeclarationBsjMetaprogramAnchor returns [TypeDeclarationMetaprogramAnchorNode ret]
         scope Rule;
         @init {

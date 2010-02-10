@@ -11,7 +11,11 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.ClassMemberMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.CodeLiteralNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.InterfaceMemberMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramAnchorNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramPreambleListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramPreambleNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.TypeDeclarationMetaprogramAnchorNode;
 
 /**
@@ -1160,6 +1164,28 @@ public class BsjTypedNodeNoOpVisitor implements BsjTypedNodeVisitor
     }
 
     /**
+     * Starts a visit for nodes of type MetaprogramImportListNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitMetaprogramImportListNodeStart(MetaprogramImportListNode node, boolean mostSpecific)
+    {
+    }
+
+    /**
+     * Starts a visit for nodes of type MetaprogramImportNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitMetaprogramImportNodeStart(MetaprogramImportNode node, boolean mostSpecific)
+    {
+    }
+
+    /**
      * Starts a visit for nodes of type MetaprogramNode.
      * @param node The node being visited.
      * @param mostSpecific <code>true</code> if this is the most specific call
@@ -1167,6 +1193,25 @@ public class BsjTypedNodeNoOpVisitor implements BsjTypedNodeVisitor
      *                     otherwise.
      */
     public void visitMetaprogramNodeStart(MetaprogramNode node, boolean mostSpecific)
+    {
+    }
+
+    /**
+     * Starts a visit for nodes of type MetaprogramPreambleListNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitMetaprogramPreambleListNodeStart(MetaprogramPreambleListNode node, boolean mostSpecific)
+    {
+    }
+
+    /**
+     * Starts a visit for nodes of type MetaprogramPreambleNode.
+     * @param node The node being visited.
+     */
+    public void visitMetaprogramPreambleNodeStart(MetaprogramPreambleNode node)
     {
     }
 
@@ -2933,6 +2978,28 @@ public class BsjTypedNodeNoOpVisitor implements BsjTypedNodeVisitor
     }
 
     /**
+     * Stops a visit for nodes of type MetaprogramImportListNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitMetaprogramImportListNodeStop(MetaprogramImportListNode node, boolean mostSpecific)
+    {
+    }
+
+    /**
+     * Stops a visit for nodes of type MetaprogramImportNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitMetaprogramImportNodeStop(MetaprogramImportNode node, boolean mostSpecific)
+    {
+    }
+
+    /**
      * Stops a visit for nodes of type MetaprogramNode.
      * @param node The node being visited.
      * @param mostSpecific <code>true</code> if this is the most specific call
@@ -2940,6 +3007,25 @@ public class BsjTypedNodeNoOpVisitor implements BsjTypedNodeVisitor
      *                     otherwise.
      */
     public void visitMetaprogramNodeStop(MetaprogramNode node, boolean mostSpecific)
+    {
+    }
+
+    /**
+     * Stops a visit for nodes of type MetaprogramPreambleListNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitMetaprogramPreambleListNodeStop(MetaprogramPreambleListNode node, boolean mostSpecific)
+    {
+    }
+
+    /**
+     * Stops a visit for nodes of type MetaprogramPreambleNode.
+     * @param node The node being visited.
+     */
+    public void visitMetaprogramPreambleNodeStop(MetaprogramPreambleNode node)
     {
     }
 

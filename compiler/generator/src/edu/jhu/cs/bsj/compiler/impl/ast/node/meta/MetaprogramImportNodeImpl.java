@@ -9,82 +9,50 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
-import edu.jhu.cs.bsj.compiler.ast.node.BlockStatementListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.ImportNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramPreambleListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.NodeImpl;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public class MetaprogramNodeImpl extends NodeImpl implements MetaprogramNode
+public class MetaprogramImportNodeImpl extends NodeImpl implements MetaprogramImportNode
 {
-    /** The preamble statements for this metaprogram. */
-    private MetaprogramPreambleListNode preamble;
-
-    /** The list of statements in the metaprogram's body. */
-    private BlockStatementListNode body;
+    /** The import for the metaprogram. */
+    private ImportNode importNode;
 
     /** General constructor. */
-    public MetaprogramNodeImpl(
-            MetaprogramPreambleListNode preamble,
-            BlockStatementListNode body,
+    public MetaprogramImportNodeImpl(
+            ImportNode importNode,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
         super(startLocation, stopLocation);
-        setPreamble(preamble);
-        setBody(body);
+        setImportNode(importNode);
     }
 
     /**
-     * Gets the preamble statements for this metaprogram.
-     * @return The preamble statements for this metaprogram.
+     * Gets the import for the metaprogram.
+     * @return The import for the metaprogram.
      */
-    public MetaprogramPreambleListNode getPreamble()
+    public ImportNode getImportNode()
     {
-        return this.preamble;
+        return this.importNode;
     }
 
     /**
-     * Changes the preamble statements for this metaprogram.
-     * @param preamble The preamble statements for this metaprogram.
+     * Changes the import for the metaprogram.
+     * @param importNode The import for the metaprogram.
      */
-    public void setPreamble(MetaprogramPreambleListNode preamble)
+    public void setImportNode(ImportNode importNode)
     {
-        if (this.preamble instanceof NodeImpl)
+        if (this.importNode instanceof NodeImpl)
         {
-            ((NodeImpl)this.preamble).setParent(null);
+            ((NodeImpl)this.importNode).setParent(null);
         }
-        this.preamble = preamble;
-        if (this.preamble instanceof NodeImpl)
+        this.importNode = importNode;
+        if (this.importNode instanceof NodeImpl)
         {
-            ((NodeImpl)this.preamble).setParent(this);
-        }
-    }
-
-    /**
-     * Gets the list of statements in the metaprogram's body.
-     * @return The list of statements in the metaprogram's body.
-     */
-    public BlockStatementListNode getBody()
-    {
-        return this.body;
-    }
-
-    /**
-     * Changes the list of statements in the metaprogram's body.
-     * @param body The list of statements in the metaprogram's body.
-     */
-    public void setBody(BlockStatementListNode body)
-    {
-        if (this.body instanceof NodeImpl)
-        {
-            ((NodeImpl)this.body).setParent(null);
-        }
-        this.body = body;
-        if (this.body instanceof NodeImpl)
-        {
-            ((NodeImpl)this.body).setParent(this);
+            ((NodeImpl)this.importNode).setParent(this);
         }
     }
 
@@ -99,13 +67,9 @@ public class MetaprogramNodeImpl extends NodeImpl implements MetaprogramNode
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.preamble != null)
+        if (this.importNode != null)
         {
-            this.preamble.receive(visitor);
-        }
-        if (this.body != null)
-        {
-            this.body.receive(visitor);
+            this.importNode.receive(visitor);
         }
     }
 
@@ -120,13 +84,9 @@ public class MetaprogramNodeImpl extends NodeImpl implements MetaprogramNode
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.preamble != null)
+        if (this.importNode != null)
         {
-            this.preamble.receiveTyped(visitor);
-        }
-        if (this.body != null)
-        {
-            this.body.receiveTyped(visitor);
+            this.importNode.receiveTyped(visitor);
         }
     }
 
@@ -134,13 +94,15 @@ public class MetaprogramNodeImpl extends NodeImpl implements MetaprogramNode
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
         visitor.visitStartBegin(this);
-        visitor.visitMetaprogramNodeStart(this, true);
+        visitor.visitMetaprogramImportNodeStart(this, true);
         visitor.visitNodeStart(this);
+        visitor.visitMetaprogramPreambleNodeStart(this);
         visitor.visitStartEnd(this);
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
+        visitor.visitMetaprogramPreambleNodeStop(this);
         visitor.visitNodeStop(this);
-        visitor.visitMetaprogramNodeStop(this, true);
+        visitor.visitMetaprogramImportNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
 
@@ -153,8 +115,7 @@ public class MetaprogramNodeImpl extends NodeImpl implements MetaprogramNode
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(getPreamble());
-        list.add(getBody());
+        list.add(getImportNode());
         return list;
     }
 
@@ -167,11 +128,8 @@ public class MetaprogramNodeImpl extends NodeImpl implements MetaprogramNode
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
-        sb.append("preamble=");
-        sb.append(this.getPreamble() == null? "null" : this.getPreamble().getClass().getSimpleName());
-        sb.append(',');
-        sb.append("body=");
-        sb.append(this.getBody() == null? "null" : this.getBody().getClass().getSimpleName());
+        sb.append("importNode=");
+        sb.append(this.getImportNode() == null? "null" : this.getImportNode().getClass().getSimpleName());
         sb.append(',');
         sb.append("startLocation=");
         sb.append(String.valueOf(this.getStartLocation()) + ":" + (this.getStartLocation() != null ? this.getStartLocation().getClass().getSimpleName() : "null"));
@@ -191,7 +149,7 @@ public class MetaprogramNodeImpl extends NodeImpl implements MetaprogramNode
     @Override
     public <P,R> R executeOperation(BsjNodeOperation<P,R> operation, P p)
     {
-        return operation.executeMetaprogramNode(this, p);
+        return operation.executeMetaprogramImportNode(this, p);
     }
 
     /**
@@ -200,11 +158,10 @@ public class MetaprogramNodeImpl extends NodeImpl implements MetaprogramNode
      * @return The resulting deep copy node.
      */
     @Override
-    public MetaprogramNode deepCopy(BsjNodeFactory factory)
+    public MetaprogramImportNode deepCopy(BsjNodeFactory factory)
     {
-        return factory.makeMetaprogramNode(
-                getPreamble().deepCopy(factory),
-                getBody().deepCopy(factory));
+        return factory.makeMetaprogramImportNode(
+                getImportNode().deepCopy(factory));
     }
     /**
      * Performs replacement for this node.
@@ -218,14 +175,9 @@ public class MetaprogramNodeImpl extends NodeImpl implements MetaprogramNode
         if (super.replace(before,after))
             return true;
 
-        if (before.equals(this.preamble) && (after instanceof MetaprogramPreambleListNode))
+        if (before.equals(this.importNode) && (after instanceof ImportNode))
         {
-            setPreamble((MetaprogramPreambleListNode)after);
-            return true;
-        }
-        if (before.equals(this.body) && (after instanceof BlockStatementListNode))
-        {
-            setBody((BlockStatementListNode)after);
+            setImportNode((ImportNode)after);
             return true;
         }
         return false;

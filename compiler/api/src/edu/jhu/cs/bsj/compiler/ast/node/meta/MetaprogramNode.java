@@ -16,6 +16,18 @@ import edu.jhu.cs.bsj.compiler.ast.node.Node;
 public interface MetaprogramNode extends Node
 {
     /**
+     * Gets the preamble statements for this metaprogram.
+     * @return The preamble statements for this metaprogram.
+     */
+    public MetaprogramPreambleListNode getPreamble();
+
+    /**
+     * Changes the preamble statements for this metaprogram.
+     * @param preamble The preamble statements for this metaprogram.
+     */
+    public void setPreamble(MetaprogramPreambleListNode preamble);
+
+    /**
      * Gets the list of statements in the metaprogram's body.
      * @return The list of statements in the metaprogram's body.
      */

@@ -10,7 +10,10 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.BlockStatementMetaprogramAnchorNode
 import edu.jhu.cs.bsj.compiler.ast.node.meta.ClassMemberMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.CodeLiteralNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.InterfaceMemberMetaprogramAnchorNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramPreambleListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.TypeDeclarationMetaprogramAnchorNode;
 
 /**
@@ -1167,10 +1170,49 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
      * @param p The value to pass through the proxy filter and into the backing operation.
      * @return The result of this operation (after being passed through the proxy filter).
      */
+    public RNew executeMetaprogramImportListNode(MetaprogramImportListNode node, PNew p)
+    {
+        POrig porig = before(p);
+        ROrig rorig = this.backingOp.executeMetaprogramImportListNode(node, porig);
+        return after(rorig);
+    }
+
+    /**
+     * Decorates this operation, turning it over to the backing operation.
+     * @param node The node to affect.
+     * @param p The value to pass through the proxy filter and into the backing operation.
+     * @return The result of this operation (after being passed through the proxy filter).
+     */
+    public RNew executeMetaprogramImportNode(MetaprogramImportNode node, PNew p)
+    {
+        POrig porig = before(p);
+        ROrig rorig = this.backingOp.executeMetaprogramImportNode(node, porig);
+        return after(rorig);
+    }
+
+    /**
+     * Decorates this operation, turning it over to the backing operation.
+     * @param node The node to affect.
+     * @param p The value to pass through the proxy filter and into the backing operation.
+     * @return The result of this operation (after being passed through the proxy filter).
+     */
     public RNew executeMetaprogramNode(MetaprogramNode node, PNew p)
     {
         POrig porig = before(p);
         ROrig rorig = this.backingOp.executeMetaprogramNode(node, porig);
+        return after(rorig);
+    }
+
+    /**
+     * Decorates this operation, turning it over to the backing operation.
+     * @param node The node to affect.
+     * @param p The value to pass through the proxy filter and into the backing operation.
+     * @return The result of this operation (after being passed through the proxy filter).
+     */
+    public RNew executeMetaprogramPreambleListNode(MetaprogramPreambleListNode node, PNew p)
+    {
+        POrig porig = before(p);
+        ROrig rorig = this.backingOp.executeMetaprogramPreambleListNode(node, porig);
         return after(rorig);
     }
 

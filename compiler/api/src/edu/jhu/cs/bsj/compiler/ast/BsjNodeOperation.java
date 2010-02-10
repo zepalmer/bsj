@@ -9,7 +9,10 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.BlockStatementMetaprogramAnchorNode
 import edu.jhu.cs.bsj.compiler.ast.node.meta.ClassMemberMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.CodeLiteralNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.InterfaceMemberMetaprogramAnchorNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramPreambleListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.TypeDeclarationMetaprogramAnchorNode;
 
 /**
@@ -711,12 +714,36 @@ public interface BsjNodeOperation<P,R>
     public R executeLongLiteralNode(LongLiteralNode node, P p);
 
     /**
+     * Executes this operation against a MetaprogramImportListNode.
+     * @param node The MetaprogramImportListNode in question.
+     * @param p The parameter to use.
+     * @return The result of the operation.
+     */
+    public R executeMetaprogramImportListNode(MetaprogramImportListNode node, P p);
+
+    /**
+     * Executes this operation against a MetaprogramImportNode.
+     * @param node The MetaprogramImportNode in question.
+     * @param p The parameter to use.
+     * @return The result of the operation.
+     */
+    public R executeMetaprogramImportNode(MetaprogramImportNode node, P p);
+
+    /**
      * Executes this operation against a MetaprogramNode.
      * @param node The MetaprogramNode in question.
      * @param p The parameter to use.
      * @return The result of the operation.
      */
     public R executeMetaprogramNode(MetaprogramNode node, P p);
+
+    /**
+     * Executes this operation against a MetaprogramPreambleListNode.
+     * @param node The MetaprogramPreambleListNode in question.
+     * @param p The parameter to use.
+     * @return The result of the operation.
+     */
+    public R executeMetaprogramPreambleListNode(MetaprogramPreambleListNode node, P p);
 
     /**
      * Executes this operation against a MethodDeclarationNode.

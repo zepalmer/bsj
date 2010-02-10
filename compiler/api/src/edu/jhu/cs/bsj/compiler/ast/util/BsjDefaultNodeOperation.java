@@ -10,7 +10,10 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.BlockStatementMetaprogramAnchorNode
 import edu.jhu.cs.bsj.compiler.ast.node.meta.ClassMemberMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.CodeLiteralNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.InterfaceMemberMetaprogramAnchorNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramPreambleListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.TypeDeclarationMetaprogramAnchorNode;
 
 /**
@@ -885,7 +888,37 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
      * @param node The node in question.
      * @param p The parameter to this node operation.
      */
+    public R executeMetaprogramImportListNode(MetaprogramImportListNode node, P p)
+    {
+        return executeDefault(node, p);
+    }
+
+    /**
+     * Executes the default operation for this node.
+     * @param node The node in question.
+     * @param p The parameter to this node operation.
+     */
+    public R executeMetaprogramImportNode(MetaprogramImportNode node, P p)
+    {
+        return executeDefault(node, p);
+    }
+
+    /**
+     * Executes the default operation for this node.
+     * @param node The node in question.
+     * @param p The parameter to this node operation.
+     */
     public R executeMetaprogramNode(MetaprogramNode node, P p)
+    {
+        return executeDefault(node, p);
+    }
+
+    /**
+     * Executes the default operation for this node.
+     * @param node The node in question.
+     * @param p The parameter to this node operation.
+     */
+    public R executeMetaprogramPreambleListNode(MetaprogramPreambleListNode node, P p)
     {
         return executeDefault(node, p);
     }

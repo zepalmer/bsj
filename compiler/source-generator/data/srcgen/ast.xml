@@ -1830,10 +1830,15 @@
         <type name="CompilationUnitNode" super="Node">
             <prop name="packageDeclaration" type="PackageDeclarationNode" desc="the package declaration for this unit" />
             <prop name="imports" type="ImportListNode" desc="the imports used in this unit" />
+            <prop name="metaimports" type="MetaprogramImportListNode" desc="the global metaprogram imports used in this unit"
+                    default="makeMetaprogramImportListNode()"/>
             <prop name="typeDecls" type="TypeDeclarationListNode" desc="the type declarations of this unit" />
             <doc><![CDATA[
                 Represents a BSJ compilation unit.
             ]]></doc>
+            <factory-method>
+                <use-defaults/>
+            </factory-method>
         </type>
 
         <type name="ConstructorBodyNode" super="Node">
@@ -2032,6 +2037,31 @@
 
     <!-- BSJ AST Nodes -->
     <srcgen ipkg="edu.jhu.cs.bsj.compiler.ast.node.meta" cpkg="edu.jhu.cs.bsj.compiler.impl.ast.node.meta">
+    
+        <!-- ==================== TAGGING INTERFACES ==================== -->
+        
+        <type name="MetaprogramPreambleNode" super="Node" mode="tag">
+            <doc><![CDATA[
+                This tagging interface is implemented by any node which can be used in a metaprogram preamble.
+            ]]></doc>
+        </type>
+        
+        <!-- ====================== PREAMBLE NODES ====================== -->
+        
+        <type name="MetaprogramImportNode" super="Node">
+            <tag name="MetaprogramPreambleNode"/>
+            <prop name="importNode" type="ImportNode" desc="the import for the metaprogram"/>
+            <doc><![CDATA[
+                Represents a metaprogram import, as in
+                <pre>
+                #import com.example.*;
+                </pre>
+                or
+                <pre>
+                #import static com.example.Utilities.foo;
+                </pre>
+            ]]></doc>
+        </type>
 
         <!-- ==================== METAPROGRAM NODES ===================== -->
 
@@ -2051,6 +2081,7 @@
         </type>
 
         <type name="MetaprogramNode" super="Node">
+            <prop name="preamble" type="MetaprogramPreambleListNode" desc="the preamble statements for this metaprogram" />
             <prop name="body" type="BlockStatementListNode" desc="the list of statements in the metaprogram's body" />
             <doc><![CDATA[
                 A node for metaprograms, as in
@@ -2106,6 +2137,22 @@
                 A node representing a metaprogram found at the top level of a source file.
             ]]></doc>
             <factory-override prop="replacement" expr="makeNoOperationNode()" />
+        </type>
+        
+        <!-- ========================= LIST NODES ======================= -->
+        
+        <type name="MetaprogramImportListNode" super="ListNode" superTypeArg="MetaprogramImportNode">
+            <doc><![CDATA[
+                Represents a list of {@link MetaprogramImportNode}s.
+            ]]></doc>
+            <nogen id="children" />
+        </type>
+
+        <type name="MetaprogramPreambleListNode" super="ListNode" superTypeArg="MetaprogramPreambleNode">
+            <doc><![CDATA[
+                Represents a list of {@link MetaprogramPreambleNode}s.
+            ]]></doc>
+            <nogen id="children" />
         </type>
 
         <!-- ======================== OTHER NODES ======================= -->

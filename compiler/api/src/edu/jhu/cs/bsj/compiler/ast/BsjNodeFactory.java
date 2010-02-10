@@ -11,7 +11,11 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.BlockStatementMetaprogramAnchorNode
 import edu.jhu.cs.bsj.compiler.ast.node.meta.ClassMemberMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.CodeLiteralNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.InterfaceMemberMetaprogramAnchorNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramPreambleListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramPreambleNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.TypeDeclarationMetaprogramAnchorNode;
 
 /**
@@ -1045,6 +1049,28 @@ public interface BsjNodeFactory
     public CompilationUnitNode makeCompilationUnitNode(
             PackageDeclarationNode packageDeclaration,
             ImportListNode imports,
+            MetaprogramImportListNode metaimports,
+            TypeDeclarationListNode typeDecls);
+
+    /**
+     * Creates a CompilationUnitNode.
+     * The specified start and stop locations are used.
+     */
+    public CompilationUnitNode makeCompilationUnitNode(
+            PackageDeclarationNode packageDeclaration,
+            ImportListNode imports,
+            MetaprogramImportListNode metaimports,
+            TypeDeclarationListNode typeDecls,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+
+    /**
+     * Creates a CompilationUnitNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public CompilationUnitNode makeCompilationUnitNode(
+            PackageDeclarationNode packageDeclaration,
+            ImportListNode imports,
             TypeDeclarationListNode typeDecls);
 
     /**
@@ -2040,10 +2066,59 @@ public interface BsjNodeFactory
             BsjSourceLocation stopLocation);
 
     /**
+     * Creates a MetaprogramImportListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public MetaprogramImportListNode makeMetaprogramImportListNode(
+            List<MetaprogramImportNode> children);
+
+    /**
+     * Creates a MetaprogramImportListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public MetaprogramImportListNode makeMetaprogramImportListNode(
+            MetaprogramImportNode... childrenElements);
+
+    /**
+     * Creates a MetaprogramImportListNode.
+     * The specified start and stop locations are used.
+     */
+    public MetaprogramImportListNode makeMetaprogramImportListNode(
+            List<MetaprogramImportNode> children,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+
+    /**
+     * Creates a MetaprogramImportListNode.
+     * The specified start and stop locations are used.
+     */
+    public MetaprogramImportListNode makeMetaprogramImportListNode(
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation,
+            MetaprogramImportNode... childrenElements);
+
+    /**
+     * Creates a MetaprogramImportNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public MetaprogramImportNode makeMetaprogramImportNode(
+            ImportNode importNode);
+
+    /**
+     * Creates a MetaprogramImportNode.
+     * The specified start and stop locations are used.
+     */
+    public MetaprogramImportNode makeMetaprogramImportNode(
+            ImportNode importNode,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+
+    /**
      * Creates a MetaprogramNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
     public MetaprogramNode makeMetaprogramNode(
+            MetaprogramPreambleListNode preamble,
             BlockStatementListNode body);
 
     /**
@@ -2051,9 +2126,42 @@ public interface BsjNodeFactory
      * The specified start and stop locations are used.
      */
     public MetaprogramNode makeMetaprogramNode(
+            MetaprogramPreambleListNode preamble,
             BlockStatementListNode body,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
+
+    /**
+     * Creates a MetaprogramPreambleListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public MetaprogramPreambleListNode makeMetaprogramPreambleListNode(
+            List<MetaprogramPreambleNode> children);
+
+    /**
+     * Creates a MetaprogramPreambleListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public MetaprogramPreambleListNode makeMetaprogramPreambleListNode(
+            MetaprogramPreambleNode... childrenElements);
+
+    /**
+     * Creates a MetaprogramPreambleListNode.
+     * The specified start and stop locations are used.
+     */
+    public MetaprogramPreambleListNode makeMetaprogramPreambleListNode(
+            List<MetaprogramPreambleNode> children,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+
+    /**
+     * Creates a MetaprogramPreambleListNode.
+     * The specified start and stop locations are used.
+     */
+    public MetaprogramPreambleListNode makeMetaprogramPreambleListNode(
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation,
+            MetaprogramPreambleNode... childrenElements);
 
     /**
      * Creates a MethodDeclarationNode.

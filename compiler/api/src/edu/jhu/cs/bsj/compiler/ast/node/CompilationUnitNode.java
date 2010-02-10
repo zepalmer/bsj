@@ -3,6 +3,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
 import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportListNode;
 
 /**
  * Represents a BSJ compilation unit.
@@ -33,6 +34,18 @@ public interface CompilationUnitNode extends Node
      * @param imports The imports used in this unit.
      */
     public void setImports(ImportListNode imports);
+
+    /**
+     * Gets the global metaprogram imports used in this unit.
+     * @return The global metaprogram imports used in this unit.
+     */
+    public MetaprogramImportListNode getMetaimports();
+
+    /**
+     * Changes the global metaprogram imports used in this unit.
+     * @param metaimports The global metaprogram imports used in this unit.
+     */
+    public void setMetaimports(MetaprogramImportListNode metaimports);
 
     /**
      * Gets the type declarations of this unit.

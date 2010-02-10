@@ -14,6 +14,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.ImportListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.PackageDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeDeclarationListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportListNode;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnitNode
@@ -24,6 +25,9 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
     /** The imports used in this unit. */
     private ImportListNode imports;
 
+    /** The global metaprogram imports used in this unit. */
+    private MetaprogramImportListNode metaimports;
+
     /** The type declarations of this unit. */
     private TypeDeclarationListNode typeDecls;
 
@@ -31,6 +35,7 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
     public CompilationUnitNodeImpl(
             PackageDeclarationNode packageDeclaration,
             ImportListNode imports,
+            MetaprogramImportListNode metaimports,
             TypeDeclarationListNode typeDecls,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
@@ -38,6 +43,7 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
         super(startLocation, stopLocation);
         setPackageDeclaration(packageDeclaration);
         setImports(imports);
+        setMetaimports(metaimports);
         setTypeDecls(typeDecls);
     }
 
@@ -94,6 +100,32 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
     }
 
     /**
+     * Gets the global metaprogram imports used in this unit.
+     * @return The global metaprogram imports used in this unit.
+     */
+    public MetaprogramImportListNode getMetaimports()
+    {
+        return this.metaimports;
+    }
+
+    /**
+     * Changes the global metaprogram imports used in this unit.
+     * @param metaimports The global metaprogram imports used in this unit.
+     */
+    public void setMetaimports(MetaprogramImportListNode metaimports)
+    {
+        if (this.metaimports instanceof NodeImpl)
+        {
+            ((NodeImpl)this.metaimports).setParent(null);
+        }
+        this.metaimports = metaimports;
+        if (this.metaimports instanceof NodeImpl)
+        {
+            ((NodeImpl)this.metaimports).setParent(this);
+        }
+    }
+
+    /**
      * Gets the type declarations of this unit.
      * @return The type declarations of this unit.
      */
@@ -138,6 +170,10 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
         {
             this.imports.receive(visitor);
         }
+        if (this.metaimports != null)
+        {
+            this.metaimports.receive(visitor);
+        }
         if (this.typeDecls != null)
         {
             this.typeDecls.receive(visitor);
@@ -162,6 +198,10 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
         if (this.imports != null)
         {
             this.imports.receiveTyped(visitor);
+        }
+        if (this.metaimports != null)
+        {
+            this.metaimports.receiveTyped(visitor);
         }
         if (this.typeDecls != null)
         {
@@ -194,6 +234,7 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
         List<Object> list = super.getChildObjects();
         list.add(getPackageDeclaration());
         list.add(getImports());
+        list.add(getMetaimports());
         list.add(getTypeDecls());
         return list;
     }
@@ -212,6 +253,9 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
         sb.append(',');
         sb.append("imports=");
         sb.append(this.getImports() == null? "null" : this.getImports().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("metaimports=");
+        sb.append(this.getMetaimports() == null? "null" : this.getMetaimports().getClass().getSimpleName());
         sb.append(',');
         sb.append("typeDecls=");
         sb.append(this.getTypeDecls() == null? "null" : this.getTypeDecls().getClass().getSimpleName());
@@ -248,6 +292,7 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
         return factory.makeCompilationUnitNode(
                 getPackageDeclaration().deepCopy(factory),
                 getImports().deepCopy(factory),
+                getMetaimports().deepCopy(factory),
                 getTypeDecls().deepCopy(factory));
     }
     /**
@@ -270,6 +315,11 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
         if (before.equals(this.imports) && (after instanceof ImportListNode))
         {
             setImports((ImportListNode)after);
+            return true;
+        }
+        if (before.equals(this.metaimports) && (after instanceof MetaprogramImportListNode))
+        {
+            setMetaimports((MetaprogramImportListNode)after);
             return true;
         }
         if (before.equals(this.typeDecls) && (after instanceof TypeDeclarationListNode))
