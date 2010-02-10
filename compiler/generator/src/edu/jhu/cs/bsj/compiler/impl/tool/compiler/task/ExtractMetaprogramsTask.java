@@ -5,7 +5,6 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,7 +13,6 @@ import edu.jhu.cs.bsj.compiler.ast.AccessModifier;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceSerializer;
 import edu.jhu.cs.bsj.compiler.ast.NameCategory;
-import edu.jhu.cs.bsj.compiler.ast.node.AnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.BlockNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
@@ -27,7 +25,9 @@ import edu.jhu.cs.bsj.compiler.ast.node.PackageDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.BlockStatementMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramAnchorNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramPreambleNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.TypeDeclarationMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.util.BsjTypedNodeNoOpVisitor;
 import edu.jhu.cs.bsj.compiler.impl.metaprogram.BsjMetaprogram;
@@ -163,10 +163,47 @@ public class ExtractMetaprogramsTask extends CompilationUnitTask
 		// TODO: what kind of package declaration should a metaprogram have?
 		String metaprogramPackageName = "foo";
 
+		// Process default imports
 		List<ImportNode> imports = new ArrayList<ImportNode>();
 		for (String packageString : IMPORT_PACKAGES)
 		{
 			imports.add(factory.makeImportOnDemandNode(parseNameNode(packageString, NameCategory.PACKAGE), false));
+		}
+		
+		// Find compilation unit
+		CompilationUnitNode compilationUnitNode = null;
+		{
+			Node node = metaprogramNode;
+			while (node != null && !(node instanceof CompilationUnitNode))
+			{
+				node = node.getParent();
+			}
+			if (node != null)
+			{
+				compilationUnitNode = (CompilationUnitNode)node;
+			}
+		}
+		
+		// Get global imports
+		if (compilationUnitNode != null)
+		{
+			for (MetaprogramImportNode metaprogramImportNode : compilationUnitNode.getMetaimports().getChildren())
+			{
+				imports.add(metaprogramImportNode.getImportNode());
+			}
+		}
+		
+		// Process preamble
+		for (MetaprogramPreambleNode preambleNode : metaprogramNode.getPreamble().getChildren())
+		{
+			if (preambleNode instanceof MetaprogramImportNode)
+			{
+				MetaprogramImportNode metaprogramImportNode = (MetaprogramImportNode)preambleNode;
+				imports.add(metaprogramImportNode.getImportNode());
+			} else
+			{
+				throw new IllegalStateException("Unrecognized preamble node type: " + preambleNode.getClass());
+			}
 		}
 
 		// Get metaprogram class name
@@ -174,10 +211,9 @@ public class ExtractMetaprogramsTask extends CompilationUnitTask
 		String metaprogramClassName = "BsjMetaprogram$$$";
 		String fullyQualifiedMetaprogramClassName = metaprogramPackageName + "." + metaprogramClassName;
 
-		// Create metaprogram nodes
+		// Create nodes for this metaprogram
 		PackageDeclarationNode packageDeclarationNode = factory.makePackageDeclarationNode(parseNameNode(
-				metaprogramPackageName, NameCategory.PACKAGE),
-				factory.makeAnnotationListNode(Collections.<AnnotationNode> emptyList()));
+				metaprogramPackageName, NameCategory.PACKAGE));
 
 		// TODO: don't deep copy here (for efficiency)? this means we have to null out the list's parent first?
 		BlockNode methodBlock = factory.makeBlockNode(metaprogramNode.getBody().deepCopy(factory));
