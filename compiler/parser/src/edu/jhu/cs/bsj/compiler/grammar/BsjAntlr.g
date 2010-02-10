@@ -763,39 +763,52 @@ importDeclarations returns [ImportListNode ret]
         )*
     ;
 
+importBody returns [boolean staticImport, boolean onDemand, NameNode name]
+        scope Rule;
+        @init {
+            ruleStart("importBody");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        (
+            'static'
+            {
+                $staticImport = true;
+            }
+        )?
+        packageOrTypeName
+        {
+            $name = $packageOrTypeName.ret;
+        }
+        (
+            '.' '*'
+            {
+                $onDemand = true;
+            }
+        )?
+    ;
+
 importDeclaration returns [ImportNode ret]
         scope Rule;
         @init {
             ruleStart("importDeclaration");
-            boolean staticImport = false;
-            boolean onDemand = false;
         }
         @after {
             ruleStop();
         }
     :   
         'import'
-        (
-            'static'
-            {
-                staticImport = true;
-            }
-        )?
-        packageOrTypeName
-        (
-            '.' '*'
-            {
-                onDemand = true;
-            }
-        )?
+        importBody
         ';'
         {
-            if (onDemand)
+            if ($importBody.onDemand)
             {
-                $ret = factory.makeImportOnDemandNode($packageOrTypeName.ret, staticImport);
+                $ret = factory.makeImportOnDemandNode($importBody.name, $importBody.staticImport);
             } else
             {
-                $ret = factory.makeImportSingleTypeNode($packageOrTypeName.ret, staticImport);
+                $ret = factory.makeImportSingleTypeNode($importBody.name, $importBody.staticImport);
             }
         }
     ;
@@ -867,9 +880,9 @@ typeDeclaration returns [TypeDeclarationNode ret]
             $ret = $classOrInterfaceDeclaration.ret;
         }
     |
-        voidTypeDeclaration
+        noOp
         {
-            $ret = $voidTypeDeclaration.ret;
+            $ret = $noOp.ret;
         }
     |
         {configuration.getMetaprogramsSupported()}?=> typeDeclarationBsjMetaprogramAnchor
@@ -878,10 +891,10 @@ typeDeclaration returns [TypeDeclarationNode ret]
         }
     ;
 
-voidTypeDeclaration returns [VoidTypeDeclarationNode ret]
+noOp returns [NoOperationNode ret]
         scope Rule;
         @init {
-            ruleStart("voidTypeDeclaration");
+            ruleStart("noOp");
         }
         @after {
             ruleStop();
@@ -889,7 +902,7 @@ voidTypeDeclaration returns [VoidTypeDeclarationNode ret]
     :
         ';'
         {
-            $ret = factory.makeVoidTypeDeclarationNode();
+            $ret = factory.makeNoOperationNode();
         }
     ;
 
@@ -1666,9 +1679,9 @@ classBodyDeclaration returns [ClassMemberNode ret]
             $ret = $classMemberBsjMetaprogramAnchor.ret;
         }
     |
-        voidTypeDeclaration
+        noOp
         {
-            $ret = $voidTypeDeclaration.ret;
+            $ret = $noOp.ret;
         }
     |
         initializerBlock
@@ -1696,9 +1709,9 @@ anonymousClassBodyDeclaration returns [AnonymousClassMemberNode ret]
             ruleStop();
         }
     :
-        voidTypeDeclaration
+        noOp
         {
-            $ret = $voidTypeDeclaration.ret;
+            $ret = $noOp.ret;
         }
     |
         initializerBlock
@@ -1957,9 +1970,9 @@ interfaceBodyDeclaration returns [InterfaceMemberNode ret]
             $ret = $classDeclaration.ret;
         }
     |   
-        voidTypeDeclaration
+        noOp
         {
-            $ret = $voidTypeDeclaration.ret;
+            $ret = $noOp.ret;
         }
     |
         {configuration.getMetaprogramsSupported()}?=> interfaceMemberBsjMetaprogramAnchor
@@ -2724,9 +2737,9 @@ annotationTypeElementDeclaration returns [AnnotationMemberNode ret]
             $ret = $annotationTypeDeclaration.ret;
         }
     |   
-        voidTypeDeclaration
+        noOp
         {
-            $ret = $voidTypeDeclaration.ret;
+            $ret = $noOp.ret;
         }
     |
         {configuration.getMetaprogramsSupported()}?=> annotationMemberBsjMetaprogramAnchor
@@ -3017,9 +3030,9 @@ statement returns [StatementNode ret]
                 $s.ret);
         }
     |   
-        ';'
+        noOp
         {
-            $ret = factory.makeVoidStatementNode();
+            $ret = $noOp.ret;
         }
     ;
 
@@ -4952,6 +4965,14 @@ localVariableHeader
 /********************************************************************************************
                   Lexer section
 *********************************************************************************************/
+
+/* *** BSJ lexer rules **************************************************** */
+
+METAIMPORT
+    :   '#import'
+    ;
+
+/* *** Java lexer rules *************************************************** */
 
 LONGLITERAL
     :   IntegerNumber LongSuffix
