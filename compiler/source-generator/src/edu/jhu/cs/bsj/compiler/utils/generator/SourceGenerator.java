@@ -1957,9 +1957,7 @@ public class SourceGenerator
 			ps.incPrependCount(2);
 			ps.println("factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),");
 			ps.println("factory.makeIdentifierNode(\"make" + def.getBaseName() + "\"),");
-			ps.println("factory.makeExpressionListNode(");
-			ps.incPrependCount(2);
-			ps.print("Arrays.<ExpressionNode>asList(");
+			ps.print("factory.makeExpressionListNode(");
 			ps.incPrependCount(2);
 			boolean first = true;
 			for (PropertyDefinition p : recProp)
@@ -1992,8 +1990,18 @@ public class SourceGenerator
 						ps.incPrependCount(2);
 						ps.println("factory.makeQualifiedNameNode(");
 						ps.incPrependCount(2);
+						ps.println("factory.makeQualifiedNameNode(");
+						ps.incPrependCount(2);
+						ps.println("factory.makeQualifiedNameNode(");
+						ps.incPrependCount(2);
 						ps.println("factory.makeSimpleNameNode(");
 						ps.incPrependCount(2);
+						ps.println("factory.makeIdentifierNode(\"java\"),");
+						ps.println("NameCategory.PACKAGE),");
+						ps.decPrependCount(2);
+						ps.println("factory.makeIdentifierNode(\"util\"),");
+						ps.println("NameCategory.PACKAGE),");
+						ps.decPrependCount(2);
 						ps.println("factory.makeIdentifierNode(\"Arrays\"),");
 						ps.println("NameCategory.TYPE),");
 						ps.decPrependCount(2);
@@ -2001,14 +2009,14 @@ public class SourceGenerator
 						ps.println("NameCategory.METHOD),");
 						ps.decPrependCount(2);
 						ps.println("factory.makeExpressionListNode(lift" + capFirst(p.getName()) + "List),");
-						ps.println("factory.makeTypeListNode(Collections.<TypeNode>singletonList(");
+						ps.println("factory.makeTypeListNode(");
 						ps.incPrependCount(2);
 						ps.println("factory.makeUnparameterizedTypeNode(");
 						ps.incPrependCount(2);
 						ps.println("factory.makeSimpleNameNode(");
 						ps.incPrependCount(2);
 						ps.println("factory.makeIdentifierNode(\"" + p.getTypeArg() + "\"),");
-						ps.print("NameCategory.TYPE)))))");
+						ps.print("NameCategory.TYPE))))");
 						ps.decPrependCount(8);
 					}
 
@@ -2024,10 +2032,9 @@ public class SourceGenerator
 					}
 				}, p, ps, def);
 			}
+			ps.println("),");
 			ps.decPrependCount(2);
-			ps.println(")),");
-			ps.decPrependCount(2);
-			ps.println("factory.makeTypeListNode(Collections.<TypeNode>emptyList()));");
+			ps.println("factory.makeTypeListNode());");
 			ps.decPrependCount(4);
 			ps.println();
 			ps.println("return ret;");

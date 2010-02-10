@@ -72,11 +72,11 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode, List
 			return factory.makeUnqualifiedClassInstantiationNode(
 					factory.makeUnparameterizedTypeNode(factory.makeSimpleNameNode(
 							factory.makeIdentifierNode("BsjSourceLocation"), NameCategory.TYPE)),
-					factory.makeTypeArgumentListNode(Collections.<TypeArgumentNode>emptyList()),
-					factory.makeExpressionListNode(Arrays.<ExpressionNode>asList(
+					factory.makeTypeArgumentListNode(),
+					factory.makeExpressionListNode(
 							factory.makeStringLiteralNode(location.getResourceName()),
 							factory.makeIntLiteralNode(location.getLine()),
-							factory.makeIntLiteralNode(location.getColumn()))), null);
+							factory.makeIntLiteralNode(location.getColumn())), null);
 		}
 	}
 
