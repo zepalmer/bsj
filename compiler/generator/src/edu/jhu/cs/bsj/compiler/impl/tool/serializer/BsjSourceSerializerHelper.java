@@ -619,7 +619,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 		node.getStatement().executeOperation(this, p);
 		p.print("while (");
 		node.getCondition().executeOperation(this, p);
-		p.print(")");
+		p.print(");");
 		return null;
 	}
 
