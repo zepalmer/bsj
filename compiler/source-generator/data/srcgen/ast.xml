@@ -1829,9 +1829,9 @@
 
         <type name="CompilationUnitNode" super="Node">
             <prop name="packageDeclaration" type="PackageDeclarationNode" desc="the package declaration for this unit" />
-            <prop name="imports" type="ImportListNode" desc="the imports used in this unit" />
             <prop name="metaimports" type="MetaprogramImportListNode" desc="the global metaprogram imports used in this unit"
                     default="makeMetaprogramImportListNode()"/>
+            <prop name="imports" type="ImportListNode" desc="the imports used in this unit" />
             <prop name="typeDecls" type="TypeDeclarationListNode" desc="the type declarations of this unit" />
             <doc><![CDATA[
                 Represents a BSJ compilation unit.

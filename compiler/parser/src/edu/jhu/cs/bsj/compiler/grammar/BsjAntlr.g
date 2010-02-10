@@ -776,7 +776,8 @@ compilationUnit returns [CompilationUnitNode ret]
         {
             $ret = factory.makeCompilationUnitNode(
                         $packageDeclaration.ret,
-                        $importDeclarations.ret,
+                        $importDeclarations.metaprogramImportList,
+                        $importDeclarations.importList,
                         $typeDeclarations.ret);
         }
     ;
@@ -806,21 +807,28 @@ packageDeclaration returns [PackageDeclarationNode ret]
         }
     ;
 
-importDeclarations returns [ImportListNode ret]
+importDeclarations returns [ImportListNode importList, MetaprogramImportListNode metaprogramImportList]
         scope Rule;
         @init {
             ruleStart("importDeclarations");
-            List<ImportNode> list = new ArrayList<ImportNode>();
+            List<ImportNode> importList = new ArrayList<ImportNode>();
+            List<MetaprogramImportNode> metaprogramImportList = new ArrayList<MetaprogramImportNode>();
         }
         @after {
-            $ret = factory.makeImportListNode(list);
+            $importList = factory.makeImportListNode(importList);
+            $metaprogramImportList = factory.makeMetaprogramImportListNode(metaprogramImportList);
             ruleStop();
         }
     :
         (
             importDeclaration
             {
-                list.add($importDeclaration.ret);
+                importList.add($importDeclaration.ret);
+            }
+        |
+            metaprogramImport
+            {
+                metaprogramImportList.add($metaprogramImport.ret);
             }
         )*
     ;

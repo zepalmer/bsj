@@ -22,11 +22,11 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
     /** The package declaration for this unit. */
     private PackageDeclarationNode packageDeclaration;
 
-    /** The imports used in this unit. */
-    private ImportListNode imports;
-
     /** The global metaprogram imports used in this unit. */
     private MetaprogramImportListNode metaimports;
+
+    /** The imports used in this unit. */
+    private ImportListNode imports;
 
     /** The type declarations of this unit. */
     private TypeDeclarationListNode typeDecls;
@@ -34,16 +34,16 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
     /** General constructor. */
     public CompilationUnitNodeImpl(
             PackageDeclarationNode packageDeclaration,
-            ImportListNode imports,
             MetaprogramImportListNode metaimports,
+            ImportListNode imports,
             TypeDeclarationListNode typeDecls,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
         super(startLocation, stopLocation);
         setPackageDeclaration(packageDeclaration);
-        setImports(imports);
         setMetaimports(metaimports);
+        setImports(imports);
         setTypeDecls(typeDecls);
     }
 
@@ -74,32 +74,6 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
     }
 
     /**
-     * Gets the imports used in this unit.
-     * @return The imports used in this unit.
-     */
-    public ImportListNode getImports()
-    {
-        return this.imports;
-    }
-
-    /**
-     * Changes the imports used in this unit.
-     * @param imports The imports used in this unit.
-     */
-    public void setImports(ImportListNode imports)
-    {
-        if (this.imports instanceof NodeImpl)
-        {
-            ((NodeImpl)this.imports).setParent(null);
-        }
-        this.imports = imports;
-        if (this.imports instanceof NodeImpl)
-        {
-            ((NodeImpl)this.imports).setParent(this);
-        }
-    }
-
-    /**
      * Gets the global metaprogram imports used in this unit.
      * @return The global metaprogram imports used in this unit.
      */
@@ -122,6 +96,32 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
         if (this.metaimports instanceof NodeImpl)
         {
             ((NodeImpl)this.metaimports).setParent(this);
+        }
+    }
+
+    /**
+     * Gets the imports used in this unit.
+     * @return The imports used in this unit.
+     */
+    public ImportListNode getImports()
+    {
+        return this.imports;
+    }
+
+    /**
+     * Changes the imports used in this unit.
+     * @param imports The imports used in this unit.
+     */
+    public void setImports(ImportListNode imports)
+    {
+        if (this.imports instanceof NodeImpl)
+        {
+            ((NodeImpl)this.imports).setParent(null);
+        }
+        this.imports = imports;
+        if (this.imports instanceof NodeImpl)
+        {
+            ((NodeImpl)this.imports).setParent(this);
         }
     }
 
@@ -166,13 +166,13 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
         {
             this.packageDeclaration.receive(visitor);
         }
-        if (this.imports != null)
-        {
-            this.imports.receive(visitor);
-        }
         if (this.metaimports != null)
         {
             this.metaimports.receive(visitor);
+        }
+        if (this.imports != null)
+        {
+            this.imports.receive(visitor);
         }
         if (this.typeDecls != null)
         {
@@ -195,13 +195,13 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
         {
             this.packageDeclaration.receiveTyped(visitor);
         }
-        if (this.imports != null)
-        {
-            this.imports.receiveTyped(visitor);
-        }
         if (this.metaimports != null)
         {
             this.metaimports.receiveTyped(visitor);
+        }
+        if (this.imports != null)
+        {
+            this.imports.receiveTyped(visitor);
         }
         if (this.typeDecls != null)
         {
@@ -233,8 +233,8 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
     {
         List<Object> list = super.getChildObjects();
         list.add(getPackageDeclaration());
-        list.add(getImports());
         list.add(getMetaimports());
+        list.add(getImports());
         list.add(getTypeDecls());
         return list;
     }
@@ -251,11 +251,11 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
         sb.append("packageDeclaration=");
         sb.append(this.getPackageDeclaration() == null? "null" : this.getPackageDeclaration().getClass().getSimpleName());
         sb.append(',');
-        sb.append("imports=");
-        sb.append(this.getImports() == null? "null" : this.getImports().getClass().getSimpleName());
-        sb.append(',');
         sb.append("metaimports=");
         sb.append(this.getMetaimports() == null? "null" : this.getMetaimports().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("imports=");
+        sb.append(this.getImports() == null? "null" : this.getImports().getClass().getSimpleName());
         sb.append(',');
         sb.append("typeDecls=");
         sb.append(this.getTypeDecls() == null? "null" : this.getTypeDecls().getClass().getSimpleName());
@@ -291,8 +291,8 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
     {
         return factory.makeCompilationUnitNode(
                 getPackageDeclaration().deepCopy(factory),
-                getImports().deepCopy(factory),
                 getMetaimports().deepCopy(factory),
+                getImports().deepCopy(factory),
                 getTypeDecls().deepCopy(factory));
     }
     /**
@@ -312,14 +312,14 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
             setPackageDeclaration((PackageDeclarationNode)after);
             return true;
         }
-        if (before.equals(this.imports) && (after instanceof ImportListNode))
-        {
-            setImports((ImportListNode)after);
-            return true;
-        }
         if (before.equals(this.metaimports) && (after instanceof MetaprogramImportListNode))
         {
             setMetaimports((MetaprogramImportListNode)after);
+            return true;
+        }
+        if (before.equals(this.imports) && (after instanceof ImportListNode))
+        {
+            setImports((ImportListNode)after);
             return true;
         }
         if (before.equals(this.typeDecls) && (after instanceof TypeDeclarationListNode))

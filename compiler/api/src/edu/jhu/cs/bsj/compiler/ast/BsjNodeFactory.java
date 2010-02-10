@@ -1048,8 +1048,8 @@ public interface BsjNodeFactory
      */
     public CompilationUnitNode makeCompilationUnitNode(
             PackageDeclarationNode packageDeclaration,
-            ImportListNode imports,
             MetaprogramImportListNode metaimports,
+            ImportListNode imports,
             TypeDeclarationListNode typeDecls);
 
     /**
@@ -1058,8 +1058,8 @@ public interface BsjNodeFactory
      */
     public CompilationUnitNode makeCompilationUnitNode(
             PackageDeclarationNode packageDeclaration,
-            ImportListNode imports,
             MetaprogramImportListNode metaimports,
+            ImportListNode imports,
             TypeDeclarationListNode typeDecls,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);

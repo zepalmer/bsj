@@ -24,18 +24,6 @@ public interface CompilationUnitNode extends Node
     public void setPackageDeclaration(PackageDeclarationNode packageDeclaration);
 
     /**
-     * Gets the imports used in this unit.
-     * @return The imports used in this unit.
-     */
-    public ImportListNode getImports();
-
-    /**
-     * Changes the imports used in this unit.
-     * @param imports The imports used in this unit.
-     */
-    public void setImports(ImportListNode imports);
-
-    /**
      * Gets the global metaprogram imports used in this unit.
      * @return The global metaprogram imports used in this unit.
      */
@@ -46,6 +34,18 @@ public interface CompilationUnitNode extends Node
      * @param metaimports The global metaprogram imports used in this unit.
      */
     public void setMetaimports(MetaprogramImportListNode metaimports);
+
+    /**
+     * Gets the imports used in this unit.
+     * @return The imports used in this unit.
+     */
+    public ImportListNode getImports();
+
+    /**
+     * Changes the imports used in this unit.
+     * @param imports The imports used in this unit.
+     */
+    public void setImports(ImportListNode imports);
 
     /**
      * Gets the type declarations of this unit.

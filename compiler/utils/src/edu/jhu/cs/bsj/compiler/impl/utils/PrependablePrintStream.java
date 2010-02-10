@@ -415,6 +415,7 @@ public class PrependablePrintStream extends PrintStream
 	 */
 	public synchronized void print(String s)
 	{
+		s = String.valueOf(s);
 		byte[] b = s.getBytes();
 		this.write(b, 0, b.length);
 	}

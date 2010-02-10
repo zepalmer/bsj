@@ -1634,13 +1634,13 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getPackageDeclaration() != null ?
                         node.getPackageDeclaration().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode(null);
-        ExpressionNode liftImports = 
-                node.getImports() != null ?
-                        node.getImports().executeOperation(this,factoryNode) :
-                        factory.makeNullLiteralNode(null);
         ExpressionNode liftMetaimports = 
                 node.getMetaimports() != null ?
                         node.getMetaimports().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        ExpressionNode liftImports = 
+                node.getImports() != null ?
+                        node.getImports().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode(null);
         ExpressionNode liftTypeDecls = 
                 node.getTypeDecls() != null ?
@@ -1658,8 +1658,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeExpressionListNode(
                                 Arrays.<ExpressionNode>asList(
                                         liftPackageDeclaration,
-                                        liftImports,
                                         liftMetaimports,
+                                        liftImports,
                                         liftTypeDecls,
                                         liftStartLocationMetaClone,
                                         liftStopLocationMetaClone)),

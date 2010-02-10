@@ -1891,12 +1891,12 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     @Override
     public CompilationUnitNode makeCompilationUnitNode(
             PackageDeclarationNode packageDeclaration,
-            ImportListNode imports,
             MetaprogramImportListNode metaimports,
+            ImportListNode imports,
             TypeDeclarationListNode typeDecls)
     {
         this.before();
-        CompilationUnitNode node = factory.makeCompilationUnitNode(packageDeclaration, imports, metaimports, typeDecls);
+        CompilationUnitNode node = factory.makeCompilationUnitNode(packageDeclaration, metaimports, imports, typeDecls);
         this.after(node);
         return node;
     }
@@ -1908,14 +1908,14 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     @Override
     public CompilationUnitNode makeCompilationUnitNode(
             PackageDeclarationNode packageDeclaration,
-            ImportListNode imports,
             MetaprogramImportListNode metaimports,
+            ImportListNode imports,
             TypeDeclarationListNode typeDecls,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
         this.before();
-        CompilationUnitNode node = factory.makeCompilationUnitNode(packageDeclaration, imports, metaimports, typeDecls, startLocation, stopLocation);
+        CompilationUnitNode node = factory.makeCompilationUnitNode(packageDeclaration, metaimports, imports, typeDecls, startLocation, stopLocation);
         this.after(node);
         return node;
     }

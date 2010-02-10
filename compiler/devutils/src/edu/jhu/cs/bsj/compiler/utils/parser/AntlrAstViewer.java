@@ -38,6 +38,7 @@ import javax.swing.border.TitledBorder;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
+import javax.tools.JavaFileObject;
 
 import org.apache.log4j.PropertyConfigurator;
 
@@ -45,6 +46,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeFactoryImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.serializer.BsjSourceSerializerImpl;
 import edu.jhu.cs.bsj.compiler.impl.utils.PrependablePrintStream;
+import edu.jhu.cs.bsj.compiler.impl.utils.diagnostic.DiagnosticPrintingListener;
 import edu.jhu.cs.bsj.compiler.tool.parser.BsjParserImpl;
 
 public class AntlrAstViewer
@@ -181,7 +183,8 @@ public class AntlrAstViewer
 	public static Node stringToAst(String s, PrintStream ps) throws Exception
 	{
 		BsjParserImpl parser = new BsjParserImpl(new BsjNodeFactoryImpl());
-		return parser.parse(new InputStreamReader(new ByteArrayInputStream(s.getBytes())), null);
+		return parser.parse(new InputStreamReader(new ByteArrayInputStream(s.getBytes())),
+				new DiagnosticPrintingListener<JavaFileObject>(ps));
 	}
 
 	private static Properties properties = new Properties();
@@ -336,7 +339,6 @@ public class AntlrAstViewer
 				tree.setModel(new DefaultTreeModel(new DefaultMutableTreeNode()));
 				ByteArrayOutputStream errorBuffer = new ByteArrayOutputStream();
 				PrependablePrintStream errorps = new PrependablePrintStream(errorBuffer, "    ", 0);
-				boolean errorShown = false;
 				setSource(source.getText());
 				saveProperties();
 
@@ -357,7 +359,6 @@ public class AntlrAstViewer
 					} catch (Throwable t)
 					{
 						t.printStackTrace(errorps);
-						errorShown = true;
 					}
 				} else
 				{
@@ -365,10 +366,13 @@ public class AntlrAstViewer
 				}
 
 				tree.setModel(new DefaultTreeModel(new SwingCommonTreeNode(null, node)));
-				if (!errorShown)
-					errorps.println("(no error)");
 				errorps.close();
-				error.setText(errorBuffer.toString());
+				String errorString = errorBuffer.toString();
+				if (errorString.length() == 0)
+				{
+					errorString = "(no error)";
+				}
+				error.setText(errorString);
 			}
 		});
 		frame.addComponentListener(new ComponentAdapter()

@@ -1659,11 +1659,11 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     @Override
     public CompilationUnitNode makeCompilationUnitNode(
             PackageDeclarationNode packageDeclaration,
-            ImportListNode imports,
             MetaprogramImportListNode metaimports,
+            ImportListNode imports,
             TypeDeclarationListNode typeDecls)
     {
-        CompilationUnitNode ret = new CompilationUnitNodeImpl(packageDeclaration, imports, metaimports, typeDecls, startLocation, stopLocation);
+        CompilationUnitNode ret = new CompilationUnitNodeImpl(packageDeclaration, metaimports, imports, typeDecls, startLocation, stopLocation);
         return ret;
     }
 
@@ -1674,13 +1674,13 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     @Override
     public CompilationUnitNode makeCompilationUnitNode(
             PackageDeclarationNode packageDeclaration,
-            ImportListNode imports,
             MetaprogramImportListNode metaimports,
+            ImportListNode imports,
             TypeDeclarationListNode typeDecls,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        CompilationUnitNode ret = new CompilationUnitNodeImpl(packageDeclaration, imports, metaimports, typeDecls, startLocation, stopLocation);
+        CompilationUnitNode ret = new CompilationUnitNodeImpl(packageDeclaration, metaimports, imports, typeDecls, startLocation, stopLocation);
         return ret;
     }
 
@@ -1694,7 +1694,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ImportListNode imports,
             TypeDeclarationListNode typeDecls)
     {
-        CompilationUnitNode ret = new CompilationUnitNodeImpl(packageDeclaration, imports, makeMetaprogramImportListNode(), typeDecls, startLocation, stopLocation);
+        CompilationUnitNode ret = new CompilationUnitNodeImpl(packageDeclaration, makeMetaprogramImportListNode(), imports, typeDecls, startLocation, stopLocation);
         return ret;
     }
 
@@ -1710,7 +1710,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        CompilationUnitNode ret = new CompilationUnitNodeImpl(packageDeclaration, imports, makeMetaprogramImportListNode(), typeDecls, startLocation, stopLocation);
+        CompilationUnitNode ret = new CompilationUnitNodeImpl(packageDeclaration, makeMetaprogramImportListNode(), imports, typeDecls, startLocation, stopLocation);
         return ret;
     }
 
