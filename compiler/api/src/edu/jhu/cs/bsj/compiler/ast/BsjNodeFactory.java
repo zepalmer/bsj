@@ -2202,6 +2202,21 @@ public interface BsjNodeFactory
             BsjSourceLocation stopLocation);
 
     /**
+     * Creates a NoOperationNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public NoOperationNode makeNoOperationNode(
+);
+
+    /**
+     * Creates a NoOperationNode.
+     * The specified start and stop locations are used.
+     */
+    public NoOperationNode makeNoOperationNode(
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+
+    /**
      * Creates a NormalAnnotationNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -3255,36 +3270,6 @@ public interface BsjNodeFactory
             VariableModifiersNode modifiers,
             TypeNode type,
             IdentifierNode identifier,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation);
-
-    /**
-     * Creates a VoidStatementNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    public VoidStatementNode makeVoidStatementNode(
-);
-
-    /**
-     * Creates a VoidStatementNode.
-     * The specified start and stop locations are used.
-     */
-    public VoidStatementNode makeVoidStatementNode(
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation);
-
-    /**
-     * Creates a VoidTypeDeclarationNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    public VoidTypeDeclarationNode makeVoidTypeDeclarationNode(
-);
-
-    /**
-     * Creates a VoidTypeDeclarationNode.
-     * The specified start and stop locations are used.
-     */
-    public VoidTypeDeclarationNode makeVoidTypeDeclarationNode(
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
 

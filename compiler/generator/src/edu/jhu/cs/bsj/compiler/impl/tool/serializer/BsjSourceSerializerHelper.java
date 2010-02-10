@@ -1133,6 +1133,13 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	}
 
 	@Override
+	public Void executeNoOperationNode(NoOperationNode node, PrependablePrintStream p)
+	{
+		p.print(";");
+		return null;
+	}
+
+	@Override
 	public Void executeNormalAnnotationNode(NormalAnnotationNode node, PrependablePrintStream p)
 	{
 		p.print("@");
@@ -1570,20 +1577,6 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 		node.getType().executeOperation(this, p);
 		p.print(" ");
 		node.getIdentifier().executeOperation(this, p);
-		return null;
-	}
-
-	@Override
-	public Void executeVoidStatementNode(VoidStatementNode node, PrependablePrintStream p)
-	{
-		p.print(";");
-		return null;
-	}
-
-	@Override
-	public Void executeVoidTypeDeclarationNode(VoidTypeDeclarationNode node, PrependablePrintStream p)
-	{
-		p.print(";");
 		return null;
 	}
 

@@ -3237,6 +3237,27 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
     }
     
     @Override
+    public ExpressionNode executeNoOperationNode(NoOperationNode node, ExpressionNode factoryNode)
+    {
+        ExpressionNode liftStartLocationMetaClone = 
+                expressionizeBsjSourceLocation(node.getStartLocation());
+        ExpressionNode liftStopLocationMetaClone = 
+                expressionizeBsjSourceLocation(node.getStopLocation());
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeNoOperationNode"),
+                        factory.makeExpressionListNode(
+                                Arrays.<ExpressionNode>asList(
+                                        liftStartLocationMetaClone,
+                                        liftStopLocationMetaClone)),
+                        factory.makeTypeListNode(Collections.<TypeNode>emptyList()));
+        
+        return ret;
+    }
+    
+    @Override
     public ExpressionNode executeNormalAnnotationNode(NormalAnnotationNode node, ExpressionNode factoryNode)
     {
         ExpressionNode liftArguments = 
@@ -4601,48 +4622,6 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                         liftModifiers,
                                         liftType,
                                         liftIdentifier,
-                                        liftStartLocationMetaClone,
-                                        liftStopLocationMetaClone)),
-                        factory.makeTypeListNode(Collections.<TypeNode>emptyList()));
-        
-        return ret;
-    }
-    
-    @Override
-    public ExpressionNode executeVoidStatementNode(VoidStatementNode node, ExpressionNode factoryNode)
-    {
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
-        
-        ExpressionNode ret =
-                factory.makeMethodInvocationByExpressionNode(
-                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                        factory.makeIdentifierNode("makeVoidStatementNode"),
-                        factory.makeExpressionListNode(
-                                Arrays.<ExpressionNode>asList(
-                                        liftStartLocationMetaClone,
-                                        liftStopLocationMetaClone)),
-                        factory.makeTypeListNode(Collections.<TypeNode>emptyList()));
-        
-        return ret;
-    }
-    
-    @Override
-    public ExpressionNode executeVoidTypeDeclarationNode(VoidTypeDeclarationNode node, ExpressionNode factoryNode)
-    {
-        ExpressionNode liftStartLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStartLocation());
-        ExpressionNode liftStopLocationMetaClone = 
-                expressionizeBsjSourceLocation(node.getStopLocation());
-        
-        ExpressionNode ret =
-                factory.makeMethodInvocationByExpressionNode(
-                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                        factory.makeIdentifierNode("makeVoidTypeDeclarationNode"),
-                        factory.makeExpressionListNode(
-                                Arrays.<ExpressionNode>asList(
                                         liftStartLocationMetaClone,
                                         liftStopLocationMetaClone)),
                         factory.makeTypeListNode(Collections.<TypeNode>emptyList()));

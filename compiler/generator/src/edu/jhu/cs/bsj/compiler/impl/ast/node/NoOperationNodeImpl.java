@@ -9,14 +9,14 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.node.NoOperationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
-import edu.jhu.cs.bsj.compiler.ast.node.VoidStatementNode;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public class VoidStatementNodeImpl extends NodeImpl implements VoidStatementNode
+public class NoOperationNodeImpl extends NodeImpl implements NoOperationNode
 {
     /** General constructor. */
-    public VoidStatementNodeImpl(
+    public NoOperationNodeImpl(
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
@@ -53,15 +53,17 @@ public class VoidStatementNodeImpl extends NodeImpl implements VoidStatementNode
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
         visitor.visitStartBegin(this);
-        visitor.visitVoidStatementNodeStart(this, true);
+        visitor.visitNoOperationNodeStart(this, true);
         visitor.visitNodeStart(this);
         visitor.visitStatementNodeStart(this);
+        visitor.visitTypeDeclarationNodeStart(this);
         visitor.visitStartEnd(this);
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
         visitor.visitStatementNodeStop(this);
+        visitor.visitTypeDeclarationNodeStop(this);
         visitor.visitNodeStop(this);
-        visitor.visitVoidStatementNodeStop(this, true);
+        visitor.visitNoOperationNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
 
@@ -104,7 +106,7 @@ public class VoidStatementNodeImpl extends NodeImpl implements VoidStatementNode
     @Override
     public <P,R> R executeOperation(BsjNodeOperation<P,R> operation, P p)
     {
-        return operation.executeVoidStatementNode(this, p);
+        return operation.executeNoOperationNode(this, p);
     }
 
     /**
@@ -113,9 +115,9 @@ public class VoidStatementNodeImpl extends NodeImpl implements VoidStatementNode
      * @return The resulting deep copy node.
      */
     @Override
-    public VoidStatementNode deepCopy(BsjNodeFactory factory)
+    public NoOperationNode deepCopy(BsjNodeFactory factory)
     {
-        return factory.makeVoidStatementNode(
+        return factory.makeNoOperationNode(
 );
     }
     /**

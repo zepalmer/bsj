@@ -3912,6 +3912,35 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     }
 
     /**
+     * Creates a NoOperationNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public NoOperationNode makeNoOperationNode(
+)
+    {
+        this.before();
+        NoOperationNode node = factory.makeNoOperationNode();
+        this.after(node);
+        return node;
+    }
+
+    /**
+     * Creates a NoOperationNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public NoOperationNode makeNoOperationNode(
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        NoOperationNode node = factory.makeNoOperationNode(startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+
+    /**
      * Creates a NormalAnnotationNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -5818,64 +5847,6 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     {
         this.before();
         VariableNode node = factory.makeVariableNode(modifiers, type, identifier, startLocation, stopLocation);
-        this.after(node);
-        return node;
-    }
-
-    /**
-     * Creates a VoidStatementNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    @Override
-    public VoidStatementNode makeVoidStatementNode(
-)
-    {
-        this.before();
-        VoidStatementNode node = factory.makeVoidStatementNode();
-        this.after(node);
-        return node;
-    }
-
-    /**
-     * Creates a VoidStatementNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public VoidStatementNode makeVoidStatementNode(
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        this.before();
-        VoidStatementNode node = factory.makeVoidStatementNode(startLocation, stopLocation);
-        this.after(node);
-        return node;
-    }
-
-    /**
-     * Creates a VoidTypeDeclarationNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    @Override
-    public VoidTypeDeclarationNode makeVoidTypeDeclarationNode(
-)
-    {
-        this.before();
-        VoidTypeDeclarationNode node = factory.makeVoidTypeDeclarationNode();
-        this.after(node);
-        return node;
-    }
-
-    /**
-     * Creates a VoidTypeDeclarationNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public VoidTypeDeclarationNode makeVoidTypeDeclarationNode(
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        this.before();
-        VoidTypeDeclarationNode node = factory.makeVoidTypeDeclarationNode(startLocation, stopLocation);
         this.after(node);
         return node;
     }

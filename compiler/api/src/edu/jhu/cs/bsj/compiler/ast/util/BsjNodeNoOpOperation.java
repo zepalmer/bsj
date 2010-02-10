@@ -1017,6 +1017,17 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
      * @param p Ignored.
      * @return <code>null</code>, always.
      */
+    public R executeNoOperationNode(NoOperationNode node, P p)
+    {
+        return null;
+    }
+
+    /**
+     * Performs no operation.
+     * @param node Ignored.
+     * @param p Ignored.
+     * @return <code>null</code>, always.
+     */
     public R executeNormalAnnotationNode(NormalAnnotationNode node, P p)
     {
         return null;
@@ -1458,28 +1469,6 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
      * @return <code>null</code>, always.
      */
     public R executeVariableNode(VariableNode node, P p)
-    {
-        return null;
-    }
-
-    /**
-     * Performs no operation.
-     * @param node Ignored.
-     * @param p Ignored.
-     * @return <code>null</code>, always.
-     */
-    public R executeVoidStatementNode(VoidStatementNode node, P p)
-    {
-        return null;
-    }
-
-    /**
-     * Performs no operation.
-     * @param node Ignored.
-     * @param p Ignored.
-     * @return <code>null</code>, always.
-     */
-    public R executeVoidTypeDeclarationNode(VoidTypeDeclarationNode node, P p)
     {
         return null;
     }

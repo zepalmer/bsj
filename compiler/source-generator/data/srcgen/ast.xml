@@ -1115,14 +1115,6 @@
             ]]></doc>
         </type>
 
-        <type name="VoidStatementNode" super="Node">
-            <tag name="StatementNode" />
-            <doc><![CDATA[
-                A node representing a void statement, as in
-                <pre>;</pre>        
-            ]]></doc>
-        </type>
-
         <type name="WhileLoopNode" super="Node">
             <tag name="StatementNode" />
             <prop name="condition" type="ExpressionNode" desc="the loop's condition" />
@@ -1513,13 +1505,6 @@
             <prop name="javadoc" type="JavadocNode" desc="the associated javadoc comment for this node" />
             <doc><![CDATA[
                 Acts as a superclass for all named type declarations.
-            ]]></doc>
-        </type>
-
-        <type name="VoidTypeDeclarationNode" super="Node">
-            <tag name="TypeDeclarationNode" />
-            <doc><![CDATA[
-                Represents the void declaration (a single semi-colon).
             ]]></doc>
         </type>
 
@@ -1936,6 +1921,19 @@
                 The parent class for all BSJ AST nodes.
             ]]></doc>
         </type>
+        
+        <type name="NoOperationNode" super="Node">
+            <tag name="StatementNode" />
+            <tag name="TypeDeclarationNode" />
+            <doc><![CDATA[
+                A node representing a no-op, as in
+                <pre>
+                ;
+                </pre>
+                This node may appear as a type declaration (in the top level of a compilation unit or as a type member)
+                or as a statement.  Either way, it has no effect.
+            ]]></doc>
+        </type>
 
         <type name="PackageDeclarationNode" super="Node">
             <prop name="name" type="NameNode" desc="the name of the package" />
@@ -2067,7 +2065,7 @@
             <doc><![CDATA[
                 A node representing a metaprogram as a block statement.
             ]]></doc>
-            <factory-override prop="replacement" expr="makeVoidStatementNode()" />
+            <factory-override prop="replacement" expr="makeNoOperationNode()" />
         </type>
 
         <type name="AnnotationMemberMetaprogramAnchorNode" super="MetaprogramAnchorNode" superTypeArg="AnnotationMemberNode">
@@ -2075,7 +2073,7 @@
             <doc><![CDATA[
                 A node representing a metaprogram found in an annotation declaration.
             ]]></doc>
-            <factory-override prop="replacement" expr="makeVoidTypeDeclarationNode()" />
+            <factory-override prop="replacement" expr="makeNoOperationNode()" />
         </type>
 
         <type name="AnonymousClassMemberMetaprogramAnchorNode" super="MetaprogramAnchorNode" superTypeArg="AnonymousClassMemberNode">
@@ -2083,7 +2081,7 @@
             <doc><![CDATA[
                 A node representing a metaprogram found in an anonymous class body.
             ]]></doc>
-            <factory-override prop="replacement" expr="makeVoidTypeDeclarationNode()" />
+            <factory-override prop="replacement" expr="makeNoOperationNode()" />
         </type>
 
         <type name="ClassMemberMetaprogramAnchorNode" super="MetaprogramAnchorNode" superTypeArg="ClassMemberNode">
@@ -2091,7 +2089,7 @@
             <doc><![CDATA[
                 A node representing a metaprogram found in a class body.
             ]]></doc>
-            <factory-override prop="replacement" expr="makeVoidTypeDeclarationNode()" />
+            <factory-override prop="replacement" expr="makeNoOperationNode()" />
         </type>
 
         <type name="InterfaceMemberMetaprogramAnchorNode" super="MetaprogramAnchorNode" superTypeArg="InterfaceMemberNode">
@@ -2099,7 +2097,7 @@
             <doc><![CDATA[
                 A node representing a metaprogram found in an intereface body.
             ]]></doc>
-            <factory-override prop="replacement" expr="makeVoidTypeDeclarationNode()" />
+            <factory-override prop="replacement" expr="makeNoOperationNode()" />
         </type>
 
         <type name="TypeDeclarationMetaprogramAnchorNode" super="MetaprogramAnchorNode" superTypeArg="TypeDeclarationNode">
@@ -2107,7 +2105,7 @@
             <doc><![CDATA[
                 A node representing a metaprogram found at the top level of a source file.
             ]]></doc>
-            <factory-override prop="replacement" expr="makeVoidTypeDeclarationNode()" />
+            <factory-override prop="replacement" expr="makeNoOperationNode()" />
         </type>
 
         <!-- ======================== OTHER NODES ======================= -->

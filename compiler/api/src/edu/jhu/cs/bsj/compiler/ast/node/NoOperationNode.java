@@ -5,10 +5,15 @@ import javax.annotation.Generated;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 
 /**
- * Represents the void declaration (a single semi-colon).
+ * A node representing a no-op, as in
+ * <pre>
+ * ;
+ * </pre>
+ * This node may appear as a type declaration (in the top level of a compilation unit or as a type member)
+ * or as a statement.  Either way, it has no effect.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public interface VoidTypeDeclarationNode extends Node, TypeDeclarationNode
+public interface NoOperationNode extends Node, StatementNode, TypeDeclarationNode
 {
     /**
      * Generates a deep copy of this node.
@@ -16,5 +21,5 @@ public interface VoidTypeDeclarationNode extends Node, TypeDeclarationNode
      * @return The resulting deep copy node.
      */
     @Override
-    public VoidTypeDeclarationNode deepCopy(BsjNodeFactory factory);
+    public NoOperationNode deepCopy(BsjNodeFactory factory);
 }

@@ -473,7 +473,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public AnnotationMemberMetaprogramAnchorNode makeAnnotationMemberMetaprogramAnchorNode(
             MetaprogramNode metaprogram)
     {
-        AnnotationMemberMetaprogramAnchorNode ret = new AnnotationMemberMetaprogramAnchorNodeImpl(makeVoidTypeDeclarationNode(), metaprogram, startLocation, stopLocation);
+        AnnotationMemberMetaprogramAnchorNode ret = new AnnotationMemberMetaprogramAnchorNodeImpl(makeNoOperationNode(), metaprogram, startLocation, stopLocation);
         return ret;
     }
 
@@ -488,7 +488,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        AnnotationMemberMetaprogramAnchorNode ret = new AnnotationMemberMetaprogramAnchorNodeImpl(makeVoidTypeDeclarationNode(), metaprogram, startLocation, stopLocation);
+        AnnotationMemberMetaprogramAnchorNode ret = new AnnotationMemberMetaprogramAnchorNodeImpl(makeNoOperationNode(), metaprogram, startLocation, stopLocation);
         return ret;
     }
 
@@ -748,7 +748,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public AnonymousClassMemberMetaprogramAnchorNode makeAnonymousClassMemberMetaprogramAnchorNode(
             MetaprogramNode metaprogram)
     {
-        AnonymousClassMemberMetaprogramAnchorNode ret = new AnonymousClassMemberMetaprogramAnchorNodeImpl(makeVoidTypeDeclarationNode(), metaprogram, startLocation, stopLocation);
+        AnonymousClassMemberMetaprogramAnchorNode ret = new AnonymousClassMemberMetaprogramAnchorNodeImpl(makeNoOperationNode(), metaprogram, startLocation, stopLocation);
         return ret;
     }
 
@@ -763,7 +763,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        AnonymousClassMemberMetaprogramAnchorNode ret = new AnonymousClassMemberMetaprogramAnchorNodeImpl(makeVoidTypeDeclarationNode(), metaprogram, startLocation, stopLocation);
+        AnonymousClassMemberMetaprogramAnchorNode ret = new AnonymousClassMemberMetaprogramAnchorNodeImpl(makeNoOperationNode(), metaprogram, startLocation, stopLocation);
         return ret;
     }
 
@@ -1107,7 +1107,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public BlockStatementMetaprogramAnchorNode makeBlockStatementMetaprogramAnchorNode(
             MetaprogramNode metaprogram)
     {
-        BlockStatementMetaprogramAnchorNode ret = new BlockStatementMetaprogramAnchorNodeImpl(makeVoidStatementNode(), metaprogram, startLocation, stopLocation);
+        BlockStatementMetaprogramAnchorNode ret = new BlockStatementMetaprogramAnchorNodeImpl(makeNoOperationNode(), metaprogram, startLocation, stopLocation);
         return ret;
     }
 
@@ -1122,7 +1122,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        BlockStatementMetaprogramAnchorNode ret = new BlockStatementMetaprogramAnchorNodeImpl(makeVoidStatementNode(), metaprogram, startLocation, stopLocation);
+        BlockStatementMetaprogramAnchorNode ret = new BlockStatementMetaprogramAnchorNodeImpl(makeNoOperationNode(), metaprogram, startLocation, stopLocation);
         return ret;
     }
 
@@ -1538,7 +1538,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public ClassMemberMetaprogramAnchorNode makeClassMemberMetaprogramAnchorNode(
             MetaprogramNode metaprogram)
     {
-        ClassMemberMetaprogramAnchorNode ret = new ClassMemberMetaprogramAnchorNodeImpl(makeVoidTypeDeclarationNode(), metaprogram, startLocation, stopLocation);
+        ClassMemberMetaprogramAnchorNode ret = new ClassMemberMetaprogramAnchorNodeImpl(makeNoOperationNode(), metaprogram, startLocation, stopLocation);
         return ret;
     }
 
@@ -1553,7 +1553,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        ClassMemberMetaprogramAnchorNode ret = new ClassMemberMetaprogramAnchorNodeImpl(makeVoidTypeDeclarationNode(), metaprogram, startLocation, stopLocation);
+        ClassMemberMetaprogramAnchorNode ret = new ClassMemberMetaprogramAnchorNodeImpl(makeNoOperationNode(), metaprogram, startLocation, stopLocation);
         return ret;
     }
 
@@ -3039,7 +3039,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public InterfaceMemberMetaprogramAnchorNode makeInterfaceMemberMetaprogramAnchorNode(
             MetaprogramNode metaprogram)
     {
-        InterfaceMemberMetaprogramAnchorNode ret = new InterfaceMemberMetaprogramAnchorNodeImpl(makeVoidTypeDeclarationNode(), metaprogram, startLocation, stopLocation);
+        InterfaceMemberMetaprogramAnchorNode ret = new InterfaceMemberMetaprogramAnchorNodeImpl(makeNoOperationNode(), metaprogram, startLocation, stopLocation);
         return ret;
     }
 
@@ -3054,7 +3054,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        InterfaceMemberMetaprogramAnchorNode ret = new InterfaceMemberMetaprogramAnchorNodeImpl(makeVoidTypeDeclarationNode(), metaprogram, startLocation, stopLocation);
+        InterfaceMemberMetaprogramAnchorNode ret = new InterfaceMemberMetaprogramAnchorNodeImpl(makeNoOperationNode(), metaprogram, startLocation, stopLocation);
         return ret;
     }
 
@@ -3425,6 +3425,31 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation stopLocation)
     {
         MethodModifiersNode ret = new MethodModifiersNodeImpl(access, false, false, false, false, false, false, makeAnnotationListNode(), startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
+     * Creates a NoOperationNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public NoOperationNode makeNoOperationNode(
+)
+    {
+        NoOperationNode ret = new NoOperationNodeImpl(startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
+     * Creates a NoOperationNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public NoOperationNode makeNoOperationNode(
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        NoOperationNode ret = new NoOperationNodeImpl(startLocation, stopLocation);
         return ret;
     }
 
@@ -4428,7 +4453,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public TypeDeclarationMetaprogramAnchorNode makeTypeDeclarationMetaprogramAnchorNode(
             MetaprogramNode metaprogram)
     {
-        TypeDeclarationMetaprogramAnchorNode ret = new TypeDeclarationMetaprogramAnchorNodeImpl(makeVoidTypeDeclarationNode(), metaprogram, startLocation, stopLocation);
+        TypeDeclarationMetaprogramAnchorNode ret = new TypeDeclarationMetaprogramAnchorNodeImpl(makeNoOperationNode(), metaprogram, startLocation, stopLocation);
         return ret;
     }
 
@@ -4443,7 +4468,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        TypeDeclarationMetaprogramAnchorNode ret = new TypeDeclarationMetaprogramAnchorNodeImpl(makeVoidTypeDeclarationNode(), metaprogram, startLocation, stopLocation);
+        TypeDeclarationMetaprogramAnchorNode ret = new TypeDeclarationMetaprogramAnchorNodeImpl(makeNoOperationNode(), metaprogram, startLocation, stopLocation);
         return ret;
     }
 
@@ -5092,56 +5117,6 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation stopLocation)
     {
         VariableNode ret = new VariableNodeImpl(modifiers, type, identifier, startLocation, stopLocation);
-        return ret;
-    }
-
-    /**
-     * Creates a VoidStatementNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    @Override
-    public VoidStatementNode makeVoidStatementNode(
-)
-    {
-        VoidStatementNode ret = new VoidStatementNodeImpl(startLocation, stopLocation);
-        return ret;
-    }
-
-    /**
-     * Creates a VoidStatementNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public VoidStatementNode makeVoidStatementNode(
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        VoidStatementNode ret = new VoidStatementNodeImpl(startLocation, stopLocation);
-        return ret;
-    }
-
-    /**
-     * Creates a VoidTypeDeclarationNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    @Override
-    public VoidTypeDeclarationNode makeVoidTypeDeclarationNode(
-)
-    {
-        VoidTypeDeclarationNode ret = new VoidTypeDeclarationNodeImpl(startLocation, stopLocation);
-        return ret;
-    }
-
-    /**
-     * Creates a VoidTypeDeclarationNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public VoidTypeDeclarationNode makeVoidTypeDeclarationNode(
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        VoidTypeDeclarationNode ret = new VoidTypeDeclarationNodeImpl(startLocation, stopLocation);
         return ret;
     }
 

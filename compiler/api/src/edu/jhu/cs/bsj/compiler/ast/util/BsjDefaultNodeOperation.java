@@ -935,6 +935,16 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
      * @param node The node in question.
      * @param p The parameter to this node operation.
      */
+    public R executeNoOperationNode(NoOperationNode node, P p)
+    {
+        return executeDefault(node, p);
+    }
+
+    /**
+     * Executes the default operation for this node.
+     * @param node The node in question.
+     * @param p The parameter to this node operation.
+     */
     public R executeNormalAnnotationNode(NormalAnnotationNode node, P p)
     {
         return executeDefault(node, p);
@@ -1336,26 +1346,6 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
      * @param p The parameter to this node operation.
      */
     public R executeVariableNode(VariableNode node, P p)
-    {
-        return executeDefault(node, p);
-    }
-
-    /**
-     * Executes the default operation for this node.
-     * @param node The node in question.
-     * @param p The parameter to this node operation.
-     */
-    public R executeVoidStatementNode(VoidStatementNode node, P p)
-    {
-        return executeDefault(node, p);
-    }
-
-    /**
-     * Executes the default operation for this node.
-     * @param node The node in question.
-     * @param p The parameter to this node operation.
-     */
-    public R executeVoidTypeDeclarationNode(VoidTypeDeclarationNode node, P p)
     {
         return executeDefault(node, p);
     }

@@ -751,6 +751,14 @@ public interface BsjNodeOperation<P,R>
     public R executeMethodModifiersNode(MethodModifiersNode node, P p);
 
     /**
+     * Executes this operation against a NoOperationNode.
+     * @param node The NoOperationNode in question.
+     * @param p The parameter to use.
+     * @return The result of the operation.
+     */
+    public R executeNoOperationNode(NoOperationNode node, P p);
+
+    /**
      * Executes this operation against a NormalAnnotationNode.
      * @param node The NormalAnnotationNode in question.
      * @param p The parameter to use.
@@ -1077,22 +1085,6 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeVariableNode(VariableNode node, P p);
-
-    /**
-     * Executes this operation against a VoidStatementNode.
-     * @param node The VoidStatementNode in question.
-     * @param p The parameter to use.
-     * @return The result of the operation.
-     */
-    public R executeVoidStatementNode(VoidStatementNode node, P p);
-
-    /**
-     * Executes this operation against a VoidTypeDeclarationNode.
-     * @param node The VoidTypeDeclarationNode in question.
-     * @param p The parameter to use.
-     * @return The result of the operation.
-     */
-    public R executeVoidTypeDeclarationNode(VoidTypeDeclarationNode node, P p);
 
     /**
      * Executes this operation against a VoidTypeNode.

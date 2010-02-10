@@ -1064,6 +1064,15 @@ public interface BsjTypedNodeVisitor
     public void visitNamedTypeDeclarationNodeStart(NamedTypeDeclarationNode node);
 
     /**
+     * Starts a visit for nodes of type NoOperationNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitNoOperationNodeStart(NoOperationNode node, boolean mostSpecific);
+
+    /**
      * Starts a visit for nodes of type Node.
      * @param node The node being visited.
      */
@@ -1497,24 +1506,6 @@ public interface BsjTypedNodeVisitor
      *                     otherwise.
      */
     public void visitVariableNodeStart(VariableNode node, boolean mostSpecific);
-
-    /**
-     * Starts a visit for nodes of type VoidStatementNode.
-     * @param node The node being visited.
-     * @param mostSpecific <code>true</code> if this is the most specific call
-     *                     which can be made for this node; <code>false</code>
-     *                     otherwise.
-     */
-    public void visitVoidStatementNodeStart(VoidStatementNode node, boolean mostSpecific);
-
-    /**
-     * Starts a visit for nodes of type VoidTypeDeclarationNode.
-     * @param node The node being visited.
-     * @param mostSpecific <code>true</code> if this is the most specific call
-     *                     which can be made for this node; <code>false</code>
-     *                     otherwise.
-     */
-    public void visitVoidTypeDeclarationNodeStart(VoidTypeDeclarationNode node, boolean mostSpecific);
 
     /**
      * Starts a visit for nodes of type VoidTypeNode.
@@ -2504,6 +2495,15 @@ public interface BsjTypedNodeVisitor
     public void visitNamedTypeDeclarationNodeStop(NamedTypeDeclarationNode node);
 
     /**
+     * Stops a visit for nodes of type NoOperationNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitNoOperationNodeStop(NoOperationNode node, boolean mostSpecific);
+
+    /**
      * Stops a visit for nodes of type Node.
      * @param node The node being visited.
      */
@@ -2937,24 +2937,6 @@ public interface BsjTypedNodeVisitor
      *                     otherwise.
      */
     public void visitVariableNodeStop(VariableNode node, boolean mostSpecific);
-
-    /**
-     * Stops a visit for nodes of type VoidStatementNode.
-     * @param node The node being visited.
-     * @param mostSpecific <code>true</code> if this is the most specific call
-     *                     which can be made for this node; <code>false</code>
-     *                     otherwise.
-     */
-    public void visitVoidStatementNodeStop(VoidStatementNode node, boolean mostSpecific);
-
-    /**
-     * Stops a visit for nodes of type VoidTypeDeclarationNode.
-     * @param node The node being visited.
-     * @param mostSpecific <code>true</code> if this is the most specific call
-     *                     which can be made for this node; <code>false</code>
-     *                     otherwise.
-     */
-    public void visitVoidTypeDeclarationNodeStop(VoidTypeDeclarationNode node, boolean mostSpecific);
 
     /**
      * Stops a visit for nodes of type VoidTypeNode.
