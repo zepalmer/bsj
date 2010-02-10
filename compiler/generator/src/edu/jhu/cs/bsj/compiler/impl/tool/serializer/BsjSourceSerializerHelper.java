@@ -384,7 +384,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	public Void executeCharLiteralNode(CharLiteralNode node, PrependablePrintStream p)
 	{
 		p.print("'");
-		p.print(node.getValue());
+		p.print(escape(node.getValue().toString()));
 		p.print("'");
 		return null;
 	}
@@ -601,6 +601,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 			p.print(" ");
 			node.getLabel().executeOperation(this, p);
 		}
+		p.print(";");
 		return null;
 	}
 
@@ -801,7 +802,29 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	@Override
 	public Void executeForInitializerDeclarationNode(ForInitializerDeclarationNode node, PrependablePrintStream p)
 	{
-		node.getDeclaration().executeOperation(this, p);
+		boolean first = true;
+		node.getDeclaration().getModifiers().executeOperation(this, p);
+		
+		for (VariableDeclaratorNode item : node.getDeclaration().getDeclarators().getChildren())
+		{
+			if (first)
+			{
+				first = false;
+				item.getType().executeOperation(this, p);
+				p.print(" ");
+			} else
+			{
+				p.print(", ");
+			}
+
+			item.getName().executeOperation(this, p);
+			if (item.getInitializer() != null)
+			{
+				p.print(" = ");
+				item.getInitializer().executeOperation(this, p);
+			}
+		}
+		
 		return null;
 	}
 
@@ -815,6 +838,10 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	@Override
 	public Void executeForLoopNode(ForLoopNode node, PrependablePrintStream p)
 	{
+//        for (int i = 0, x = 0; i < 798; i++)
+//        {
+//
+//        }
 		p.print("for (");
 		if (node.getInitializer() != null)
 		{
