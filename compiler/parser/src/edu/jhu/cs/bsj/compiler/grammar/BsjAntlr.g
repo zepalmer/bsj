@@ -298,15 +298,17 @@ scope Rule {
         }
         public IntegerBaseResult(String string)
         {
-            if (string.length()>1 && string.charAt(0)=='0')
-            {
-                this.base = 8;
-                this.string = string.substring(1);
-            } else if (string.startsWith("0x") || string.startsWith("0X"))
+			if (string.startsWith("0x") || string.startsWith("0X"))
             {
                 this.base = 16;
                 this.string = string.substring(2);
-            } else
+            } 
+            else if (string.length()>1 && string.charAt(0)=='0')
+            {
+                this.base = 8;
+                this.string = string.substring(1);
+            } 
+            else
             {
                 this.base = 10;
                 this.string = string;
