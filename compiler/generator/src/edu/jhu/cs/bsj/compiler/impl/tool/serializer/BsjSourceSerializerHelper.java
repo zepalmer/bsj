@@ -394,7 +394,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	{
 		p.print("{\n");
 		p.incPrependCount();
-		handleListNode(node.getMembers(), "", "\n", "", p, true);
+		handleListNode(node.getMembers(), "", "\n", "\n", p, true);
 		p.decPrependCount();
 		p.print("}\n");
 		return null;
@@ -742,8 +742,10 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	@Override
 	public Void executeFieldDeclarationNode(FieldDeclarationNode node, PrependablePrintStream p)
 	{
-		for (Node item : node.getDeclarators().getChildren())
+		Node item = null;
+		for (int i = 0; i < node.getDeclarators().getChildren().size(); i++)
 		{
+			item = node.getDeclarators().getChildren().get(i);
 			if (node.getJavadoc() != null)
 			{
 				node.getJavadoc().executeOperation(this, p);
@@ -751,7 +753,11 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 			}
 			node.getModifiers().executeOperation(this, p);
 			item.executeOperation(this, p);
-			p.print(";\n");
+			p.print(";");
+			if (i != node.getDeclarators().getChildren().size() - 1)
+			{
+				p.print("\n");
+			}
 		}
 		return null;
 	}
