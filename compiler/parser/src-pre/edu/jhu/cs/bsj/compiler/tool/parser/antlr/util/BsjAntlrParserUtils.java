@@ -249,6 +249,13 @@ public class BsjAntlrParserUtils
 	{
 		// We use this int parsing routine because Long.parseLong is not up to the job.
 		// Specifically, Long.parseLong("0x8000000000000000",16) causes an exception
+		
+		// chop off the suffix if it is present
+		if (s.endsWith("L") || s.endsWith("l"))
+		{
+			s = s.substring(0, s.length()-1);
+		}
+		
 		char[] chars = s.toCharArray();
 		int index = 0;
 		

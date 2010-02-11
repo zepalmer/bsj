@@ -4079,6 +4079,12 @@ restrictedPrimary returns [RestrictedPrimaryExpressionNode ret]
                 $ret = $lexicalLiteral.ret;
             }
         |
+            // class literal for primitive types
+            primitiveClassLiteral
+            {
+                $ret = $primitiveClassLiteral.ret;
+            }            
+        |
             // class literal for declared types
             classLiteralName=typeName '.' 'class'
             {
