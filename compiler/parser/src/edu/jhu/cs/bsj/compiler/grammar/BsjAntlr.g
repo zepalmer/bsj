@@ -4086,10 +4086,10 @@ restrictedPrimary returns [RestrictedPrimaryExpressionNode ret]
             }            
         |
             // class literal for declared types
-            classLiteralName=typeName '.' 'class'
+            classLiteralName
             {
-                $ret = factory.makeClassLiteralNode(factory.makeUnparameterizedTypeNode($classLiteralName.ret));
-            } 
+            	$ret = $classLiteralName.ret;
+            }
         |
             // void class literal
             voidClassLiteral 
@@ -4464,6 +4464,30 @@ arrayAccess[RestrictedPrimaryExpressionNode in] returns [ArrayAccessNode ret]
                 $ret = factory.makeArrayAccessNode($ret, $b.ret);
             }
         )*
+    ;
+
+classLiteralName returns [ClassLiteralNode ret]
+        scope Rule;
+        @init {
+            ruleStart("classLiteralName");
+            LiteralizableTypeNode typeNode = null;
+        }
+        @after {
+            $ret = factory.makeClassLiteralNode(typeNode);
+            ruleStop();
+        }
+    :
+        typeName
+        {
+            typeNode = factory.makeUnparameterizedTypeNode($typeName.ret);
+        }
+        (
+            arrayTypeIndicator[typeNode]
+            {
+                typeNode = $arrayTypeIndicator.ret;
+            }
+        )?
+        '.' 'class'
     ;
 
 primitiveClassLiteral returns [ClassLiteralNode ret]
