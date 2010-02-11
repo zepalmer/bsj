@@ -3535,12 +3535,12 @@ assignmentOperator returns [AssignmentOperator ret]
     |    
         '>' '>' '>' '='
         {
-            $ret = AssignmentOperator.RIGHT_SHIFT_ASSIGNMENT;
+            $ret = AssignmentOperator.UNSIGNED_RIGHT_SHIFT_ASSIGNMENT;
         }        
     |   
         '>' '>' '='
         {
-            $ret = AssignmentOperator.UNSIGNED_RIGHT_SHIFT_ASSIGNMENT;
+            $ret = AssignmentOperator.RIGHT_SHIFT_ASSIGNMENT;
         }         
     ;
 
