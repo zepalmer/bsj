@@ -4139,6 +4139,14 @@ restrictedPrimary returns [RestrictedPrimaryExpressionNode ret]
                 $ret = $unqualifiedClassInstantiation.ret;
             }
         |
+            // method invocation from super
+            // this rule must preceed the superFieldAccess rule or it will not be parsed correctly
+            // ideally, backtracking would prevent this... but it doesn't seem to do so
+            superMethodInvocation
+            {
+                $ret = $superMethodInvocation.ret;
+            }
+        |
             // field access from super
             superFieldAccess
             {
@@ -4149,12 +4157,6 @@ restrictedPrimary returns [RestrictedPrimaryExpressionNode ret]
             methodInvocationByName
             {
                 $ret = $methodInvocationByName.ret;
-            }
-        |
-            // method invocation from super
-            superMethodInvocation
-            {
-                $ret = $superMethodInvocation.ret;
             }
         |
             // method invocation against a type with type arguments

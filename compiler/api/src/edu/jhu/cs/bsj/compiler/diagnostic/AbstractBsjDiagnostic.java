@@ -103,8 +103,8 @@ public abstract class AbstractBsjDiagnostic<T extends JavaFileObject> implements
 	@Override
 	public String getMessage(Locale locale)
 	{
-		// TODO Auto-generated method stub
-		return null;
+		// TODO provide a real default; otherwise, leave this implementation out and force subclasses to provide one
+		return this.getClass().toString();
 	}
 
 	/**
