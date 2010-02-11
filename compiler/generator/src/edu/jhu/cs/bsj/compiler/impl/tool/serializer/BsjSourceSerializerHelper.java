@@ -189,7 +189,10 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	{
 		node.getArrayExpression().executeOperation(this, p);
 		p.print("[");
-		node.getIndexExpression().executeOperation(this, p);
+		if (node.getIndexExpression() != null)
+		{
+			node.getIndexExpression().executeOperation(this, p);
+		}
 		p.print("]");
 		return null;
 	}
@@ -213,7 +216,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	@Override
 	public Void executeArrayInitializerNode(ArrayInitializerNode node, PrependablePrintStream p)
 	{
-		handleListNode(node.getInitializers(), "{", ", ", "}", p, true);
+		handleListNode(node.getInitializers(), "{", ", ", "}", p, false);
 		return null;
 	}
 
