@@ -722,7 +722,10 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	@Override
 	public Void executeExpressionStatementNode(ExpressionStatementNode node, PrependablePrintStream p)
 	{
-		node.getExpression().executeOperation(this, p);
+		if (node.getExpression() != null)
+		{
+			node.getExpression().executeOperation(this, p);
+		}
 		p.print(";");
 		return null;
 	}

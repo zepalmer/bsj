@@ -4847,7 +4847,7 @@ intLiteral [boolean isNegative] returns [LiteralNode<?> ret]
             Integer i = null;
             try
             {
-                i = Integer.parseInt(
+                i = (int)Long.parseLong(
                     (isNegative ? "-" : "") + ibr.string, ibr.base);
             } catch (NumberFormatException nfe)
             {
