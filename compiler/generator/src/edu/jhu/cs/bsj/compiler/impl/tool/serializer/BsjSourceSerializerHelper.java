@@ -804,7 +804,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	@Override
 	public Void executeFloatLiteralNode(FloatLiteralNode node, PrependablePrintStream p)
 	{
-		p.print(node.getValue().toString());
+		p.print(node.getValue().toString()+"f");
 		return null;
 	}
 
@@ -1030,7 +1030,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	@Override
 	public Void executeLongLiteralNode(LongLiteralNode node, PrependablePrintStream p)
 	{
-		p.print(node.getValue().toString());
+		p.print(node.getValue().toString()+"L");
 		return null;
 	}
 
