@@ -56,7 +56,7 @@ public class BsjParserImpl
 		{
 			diagnosticListener = new DiagnosticPrintingListener<JavaFileObject>(System.err);
 		}
-		BsjAntlrLexer lexer = new BsjAntlrLexer(new ANTLRReaderStream(reader));
+		BsjAntlrLexer lexer = new BsjAntlrLexer(new ANTLRReaderStream(new JavaUnicodeEscapeReader(reader)));
 		lexer.setDiagnosticListener(diagnosticListener);
 		BsjAntlrParser parser = new BsjAntlrParser(new TokenRewriteStream(lexer));
 		parser.setDiagnosticListener(diagnosticListener);
