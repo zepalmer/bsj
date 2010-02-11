@@ -339,36 +339,6 @@ scope Rule {
         };
     }
     
-    // *** DATA STRUCTURE FOR LITERAL PARSING *********************************
-    static class IntegerBaseResult
-    {
-        public int base;
-        public String string;
-        public IntegerBaseResult(int base, String string)
-        {
-            this.base = base;
-            this.string = string;
-        }
-        public IntegerBaseResult(String string)
-        {
-			if (string.startsWith("0x") || string.startsWith("0X"))
-            {
-                this.base = 16;
-                this.string = string.substring(2);
-            } 
-            else if (string.length()>1 && string.charAt(0)=='0')
-            {
-                this.base = 8;
-                this.string = string.substring(1);
-            } 
-            else
-            {
-                this.base = 10;
-                this.string = string;
-            }
-        }
-    }
-    
     // *** DATA STRUCTURE FOR MODIFIER PARSING ********************************
     enum Modifier // does not cover access modifiers
     {
@@ -4845,21 +4815,15 @@ intLiteral [boolean isNegative] returns [LiteralNode<?> ret]
     :  
         INTLITERAL
         {
-            IntegerBaseResult ibr = new IntegerBaseResult($INTLITERAL.text);
-            Integer i = null;
-            try
-            {
-                i = (int)Long.parseLong(
-                    (isNegative ? "-" : "") + ibr.string, ibr.base);
-            } catch (NumberFormatException nfe)
-            {
-                reportDiagnostic(new InvalidIntegerLiteralDiagnostic<JavaFileObject>(
-                        getLineNumber(-1),
-                        getColumnNumber(-1),
-                        resource,
-                        $Rule::name,
-                        (isNegative?"-":"")+$INTLITERAL.text));
-            }
+            String s = $INTLITERAL.text;
+            Integer i = BsjAntlrParserUtils.parseInt(
+                    s,
+                    isNegative,
+                    getLineNumber(-1),
+                    getColumnNumber(-1),
+                    resource,
+                    diagnosticListener,
+                    $Rule::name);
             $ret = factory.makeIntLiteralNode(i);
         }
     ;   
@@ -4876,24 +4840,16 @@ longLiteral [boolean isNegative] returns [LiteralNode<?> ret]
         LONGLITERAL
         {
             String s = $LONGLITERAL.text;
-            s = s.substring(0, s.length()-1);
-            IntegerBaseResult ibr = new IntegerBaseResult(s);
-            Long l = null;
-            try
-            {
-                l = Long.parseLong(
-                    (isNegative ? "-" : "") + ibr.string, ibr.base);
-            } catch (NumberFormatException nfe)
-            {
-                reportDiagnostic(new InvalidIntegerLiteralDiagnostic<JavaFileObject>(
-                        getLineNumber(-1),
-                        getColumnNumber(-1),
-                        resource,
-                        $Rule::name,
-                        (isNegative?"-":"")+$LONGLITERAL.text));
-            }
+            Long l = BsjAntlrParserUtils.parseLong(
+                    s,
+                    isNegative,
+                    getLineNumber(-1),
+                    getColumnNumber(-1),
+                    resource,
+                    diagnosticListener,
+                    $Rule::name);
             $ret = factory.makeLongLiteralNode(l);
-        }    
+        }
     ;
 
 lexicalLiteral returns [LiteralNode<?> ret]

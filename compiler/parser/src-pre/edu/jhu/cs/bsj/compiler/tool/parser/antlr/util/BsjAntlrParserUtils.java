@@ -15,6 +15,7 @@ import edu.jhu.cs.bsj.compiler.diagnostic.parser.BsjParserDiagnostic;
 import edu.jhu.cs.bsj.compiler.diagnostic.parser.ExtraneousTokenDiagnostic;
 import edu.jhu.cs.bsj.compiler.diagnostic.parser.GeneralParseFailureDiagnostic;
 import edu.jhu.cs.bsj.compiler.diagnostic.parser.InvalidFloatingPointLiteralDiagnostic;
+import edu.jhu.cs.bsj.compiler.diagnostic.parser.InvalidIntegerLiteralDiagnostic;
 import edu.jhu.cs.bsj.compiler.diagnostic.parser.MissingTokenDiagnostic;
 import edu.jhu.cs.bsj.compiler.diagnostic.parser.UnexpectedTokenDiagnostic;
 
@@ -139,6 +140,176 @@ public class BsjAntlrParserUtils
 				}
 			}
 			return true;
+		}
+	}
+
+	/**
+	 * Determines the base of the specified character sequence if it is interpreted as a number.
+	 * @param c The character sequence.
+	 * @param i The index at which to start the examination.
+	 * @return The proposed base for this character sequence: one of <code>16</code>, <code>8</code>, or
+	 *         <code>10</code>.
+	 */
+	private static final int getBase(char[] c, int i)
+	{
+		if (c.length > i + 1 && c[i] == '0' && (c[i + 1] == 'x' || c[i + 1] == 'X'))
+		{
+			return 16;
+		} else if (c.length > i && c[i] == '0')
+		{
+			return 8;
+		} else
+		{
+			return 10;
+		}
+	}
+
+	/**
+	 * Parses the provided string as an <tt>int</tt>.
+	 * 
+	 * @param s The input string representing the literal.
+	 * @param isNegative <code>true</code> if this string is prepended with a minus sign; <code>false</code> otherwise.
+	 * @param lineNumber The line number at which the input string is found.
+	 * @param columnNumber The column number at which the input string starts.
+	 * @param resource The resource in which this input string is found.
+	 * @param listener The listener to which diagnostics should be reported.
+	 * @param ruleName The name of the rule which is calling this method.
+	 * @return The resulting integer value. If an error occurs, <code>null</code> is returned.
+	 */
+	public static Integer parseInt(String s, boolean isNegative, int lineNumber, int columnNumber,
+			JavaFileObject resource, DiagnosticListener<? super JavaFileObject> listener, String ruleName)
+	{
+		// We use this int parsing routine because Integer.parseInt is not up to the job.
+		// Specifically, Integer.parseInt("0x80000000",16) causes an exception
+		char[] chars = s.toCharArray();
+		int index = 0;
+		
+		int base = getBase(chars, index);
+		int acc; 
+		char c;
+		switch (base)
+		{
+			case 10:
+				return Integer.parseInt(isNegative?("-"+s):s);
+			case 16:
+				if (chars.length <= 10)
+				{
+					acc = 0;
+					for (int i=2;i<chars.length;i++)
+					{
+						acc <<= 4;
+						c = chars[i];
+						acc+=hexCharValue(c);
+					}
+					if (isNegative)
+						acc = -acc;
+					return acc;
+				}
+				break;
+			case 8:
+				if (chars.length < 12 || (chars.length == 12 && chars[1] <= '3'))
+				{
+					acc = 0;
+					for (int i=1;i<chars.length;i++)
+					{
+						acc <<= 3;
+						c = chars[i];
+						acc += (c - '0');
+					}
+					if (isNegative)
+						acc = -acc;
+					return acc;
+				}
+				break;
+		}
+		
+		listener.report(new InvalidIntegerLiteralDiagnostic<JavaFileObject>(
+                        lineNumber,
+                        columnNumber,
+                        resource,
+                        ruleName,
+                        (isNegative?"-":"")+s));
+		return null;
+	}
+
+	/**
+	 * Parses the provided string as an <tt>long</tt>.
+	 * 
+	 * @param s The input string representing the literal.
+	 * @param isNegative <code>true</code> if this string is prepended with a minus sign; <code>false</code> otherwise.
+	 * @param lineNumber The line number at which the input string is found.
+	 * @param columnNumber The column number at which the input string starts.
+	 * @param resource The resource in which this input string is found.
+	 * @param listener The listener to which diagnostics should be reported.
+	 * @param ruleName The name of the rule which is calling this method.
+	 * @return The resulting integer value. If an error occurs, <code>null</code> is returned.
+	 */
+	public static Long parseLong(String s, boolean isNegative, int lineNumber, int columnNumber,
+			JavaFileObject resource, DiagnosticListener<? super JavaFileObject> listener, String ruleName)
+	{
+		// We use this int parsing routine because Long.parseLong is not up to the job.
+		// Specifically, Long.parseLong("0x8000000000000000",16) causes an exception
+		char[] chars = s.toCharArray();
+		int index = 0;
+		
+		int base = getBase(chars, index);
+		long acc; 
+		char c;
+		switch (base)
+		{
+			case 10:
+				return Long.parseLong(isNegative?("-"+s):s);
+			case 16:
+				if (chars.length <= 18)
+				{
+					acc = 0;
+					for (int i=2;i<chars.length;i++)
+					{
+						acc <<= 4;
+						c = chars[i];
+						acc+=hexCharValue(c);
+					}
+					return acc;
+				}
+				break;
+			case 8:
+				if (chars.length < 23 || (chars.length == 23 && chars[1] <= '1'))
+				{
+					acc = 0;
+					for (int i=1;i<chars.length;i++)
+					{
+						acc <<= 3;
+						c = chars[i];
+						acc += (c - '0');
+					}
+					return acc;
+				}
+				break;
+		}
+		
+		listener.report(new InvalidIntegerLiteralDiagnostic<JavaFileObject>(
+                        lineNumber,
+                        columnNumber,
+                        resource,
+                        ruleName,
+                        (isNegative?"-":"")+s));
+		return null;
+	}
+
+	private static int hexCharValue(char c)
+	{
+		if (c>='0' && c<='9')
+		{
+			return c - '0';
+		} else if (c>='a' && c<='f')
+		{
+			return c - ('a' - 10);
+		} else if (c>='A' && c<='F')
+		{
+			return c - ('A' - 10);
+		} else
+		{
+			throw new IllegalStateException("Illegal hex character: " + c);
 		}
 	}
 
