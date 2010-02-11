@@ -40,7 +40,7 @@ public class BsjAntlrParserUtils
 				if (chars[i] >= '0' && chars[i] <= '9')
 				{
 					StringBuilder nums = new StringBuilder();
-					while (nums.length() < 3 && i < chars.length - 1 && chars[i] >= '0' && chars[i] <= '9')
+					while (nums.length() < 3 && i < chars.length && chars[i] >= '0' && chars[i] <= '9')
 					{
 						nums.append(chars[i]);
 						i++;
