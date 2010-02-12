@@ -22,3 +22,4 @@
 Whenever possible:
 	* Annotation-anchored metaprograms
 	* Annotation sugar for static code snippets
+	* Some consideration for metaprogram members? (local methods, etc.)
