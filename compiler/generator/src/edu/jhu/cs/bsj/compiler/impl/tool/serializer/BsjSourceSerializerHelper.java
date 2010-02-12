@@ -1197,7 +1197,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	public Void executeParameterizedTypeNode(ParameterizedTypeNode node, PrependablePrintStream p)
 	{
 		node.getBaseType().executeOperation(this, p);
-		handleListNode(node.getTypeArguments(), "<", " , ", ">", p, true);
+		handleListNode(node.getTypeArguments(), "<", ", ", ">", p, true);
 		return null;
 	}
 
