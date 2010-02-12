@@ -37,6 +37,7 @@
           target: prebuild                      
          - - - - - - - - - - - - - - - - - -->
 	<target name="prebuild" description="Builds the sources on which the ANTLR parser depends">
+		<mkdir dir="${genbin}"/>
 		<javac
 		        destdir="${genbin}"
 		        srcdir="${presrc}"
