@@ -2106,10 +2106,10 @@ throwsClause returns [UnparameterizedTypeListNode ret]
         )*
     ;
 
-nonprimitiveType returns [ReferenceTypeNode ret]
+referenceType returns [ReferenceTypeNode ret]
         scope Rule;
         @init {
-            ruleStart("nonprimitiveType");
+            ruleStart("referenceType");
         }
         @after {
             ruleStop();
@@ -2304,7 +2304,7 @@ typeArgument returns [TypeArgumentNode ret]
             ruleStop();
         }
     :
-        unboundedType=classOrInterfaceType
+        unboundedType=referenceType
         {
             $ret = $unboundedType.ret;
         }
@@ -2320,7 +2320,7 @@ typeArgument returns [TypeArgumentNode ret]
         |
             SUPER { upper = false; }
         )
-        boundedType=classOrInterfaceType
+        boundedType=referenceType
         {
             $ret = factory.makeWildcardTypeNode($boundedType.ret, upper);
         }
