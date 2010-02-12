@@ -2125,6 +2125,11 @@ referenceType returns [ReferenceTypeNode ret]
                 $ret = $arrayTypeIndicator.ret;
             }
         )?
+    |
+        primitiveType arrayTypeIndicator[$primitiveType.ret]
+        {
+            $ret = $arrayTypeIndicator.ret;
+        }
     ;
 
 // This rule matches any legal Java type.
