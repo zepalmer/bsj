@@ -13,10 +13,12 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.BlockStatementMetaprogramAnchorNode
 import edu.jhu.cs.bsj.compiler.ast.node.meta.ClassMemberMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.CodeLiteralNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.InterfaceMemberMetaprogramAnchorNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependsNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramPreambleListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramTargetNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.TypeDeclarationMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.impl.utils.PrependablePrintStream;
 
@@ -870,6 +872,13 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	}
 
 	@Override
+	public Void executeIdentifierListNode(IdentifierListNode node, PrependablePrintStream p)
+	{
+		handleListNode(node, "", ",", "", p, true);
+		return null;
+	}
+
+	@Override
 	public Void executeIdentifierNode(IdentifierNode node, PrependablePrintStream p)
 	{
 		p.print(node.getIdentifier());
@@ -1139,6 +1148,13 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 			p.print("synchronized ");
 		}
 
+		return null;
+	}
+
+	@Override
+	public Void executeNameListNode(NameListNode node, PrependablePrintStream p)
+	{
+		handleListNode(node, "", ",", "", p, true);
 		return null;
 	}
 
@@ -1670,6 +1686,15 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	}
 
 	@Override
+	public Void executeMetaprogramDependsNode(MetaprogramDependsNode node, PrependablePrintStream p)
+	{
+		p.print("#depends ");
+		this.handleListNode(node.getTargetNames(), "", ",", "", p, true);
+		p.println(";");
+		return null;
+	}
+
+	@Override
 	public Void executeMetaprogramImportListNode(MetaprogramImportListNode node, PrependablePrintStream p)
 	{
 		handleListNode(node, "", "\n", "\n\n", p, true);
@@ -1705,6 +1730,15 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	public Void executeMetaprogramPreambleListNode(MetaprogramPreambleListNode node, PrependablePrintStream p)
 	{
 		handleListNode(node, "", "\n", "\n", p, true);
+		return null;
+	}
+
+	@Override
+	public Void executeMetaprogramTargetNode(MetaprogramTargetNode node, PrependablePrintStream p)
+	{
+		p.print("#target ");
+		this.handleListNode(node.getTargets(), "", ",", "", p, true);
+		p.println(";");
 		return null;
 	}
 

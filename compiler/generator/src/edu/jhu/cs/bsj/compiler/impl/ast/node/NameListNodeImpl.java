@@ -10,16 +10,16 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.node.NameListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.NameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
-import edu.jhu.cs.bsj.compiler.ast.node.TypeListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public class TypeListNodeImpl extends ListNodeImpl<TypeNode> implements TypeListNode
+public class NameListNodeImpl extends ListNodeImpl<NameNode> implements NameListNode
 {
     /** General constructor. */
-    public TypeListNodeImpl(
-            List<TypeNode> children,
+    public NameListNodeImpl(
+            List<NameNode> children,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
@@ -56,7 +56,7 @@ public class TypeListNodeImpl extends ListNodeImpl<TypeNode> implements TypeList
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
         visitor.visitStartBegin(this);
-        visitor.visitTypeListNodeStart(this, true);
+        visitor.visitNameListNodeStart(this, true);
         visitor.visitListNodeStart(this);
         visitor.visitNodeStart(this);
         visitor.visitStartEnd(this);
@@ -64,7 +64,7 @@ public class TypeListNodeImpl extends ListNodeImpl<TypeNode> implements TypeList
         visitor.visitStopBegin(this);
         visitor.visitNodeStop(this);
         visitor.visitListNodeStop(this);
-        visitor.visitTypeListNodeStop(this, true);
+        visitor.visitNameListNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
 
@@ -110,7 +110,7 @@ public class TypeListNodeImpl extends ListNodeImpl<TypeNode> implements TypeList
     @Override
     public <P,R> R executeOperation(BsjNodeOperation<P,R> operation, P p)
     {
-        return operation.executeTypeListNode(this, p);
+        return operation.executeNameListNode(this, p);
     }
 
     /**
@@ -119,10 +119,10 @@ public class TypeListNodeImpl extends ListNodeImpl<TypeNode> implements TypeList
      * @return The resulting deep copy node.
      */
     @Override
-    public TypeListNode deepCopy(BsjNodeFactory factory)
+    public NameListNode deepCopy(BsjNodeFactory factory)
     {
-        return factory.makeTypeListNode(
-                new ArrayList<TypeNode>(getChildren()));
+        return factory.makeNameListNode(
+                new ArrayList<NameNode>(getChildren()));
     }
     /**
      * Performs replacement for this node.

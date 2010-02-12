@@ -9,10 +9,12 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.BlockStatementMetaprogramAnchorNode
 import edu.jhu.cs.bsj.compiler.ast.node.meta.ClassMemberMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.CodeLiteralNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.InterfaceMemberMetaprogramAnchorNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependsNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramPreambleListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramTargetNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.TypeDeclarationMetaprogramAnchorNode;
 
 /**
@@ -578,6 +580,14 @@ public interface BsjNodeOperation<P,R>
     public R executeForLoopNode(ForLoopNode node, P p);
 
     /**
+     * Executes this operation against a IdentifierListNode.
+     * @param node The IdentifierListNode in question.
+     * @param p The parameter to use.
+     * @return The result of the operation.
+     */
+    public R executeIdentifierListNode(IdentifierListNode node, P p);
+
+    /**
      * Executes this operation against a IdentifierNode.
      * @param node The IdentifierNode in question.
      * @param p The parameter to use.
@@ -714,6 +724,14 @@ public interface BsjNodeOperation<P,R>
     public R executeLongLiteralNode(LongLiteralNode node, P p);
 
     /**
+     * Executes this operation against a MetaprogramDependsNode.
+     * @param node The MetaprogramDependsNode in question.
+     * @param p The parameter to use.
+     * @return The result of the operation.
+     */
+    public R executeMetaprogramDependsNode(MetaprogramDependsNode node, P p);
+
+    /**
      * Executes this operation against a MetaprogramImportListNode.
      * @param node The MetaprogramImportListNode in question.
      * @param p The parameter to use.
@@ -746,6 +764,14 @@ public interface BsjNodeOperation<P,R>
     public R executeMetaprogramPreambleListNode(MetaprogramPreambleListNode node, P p);
 
     /**
+     * Executes this operation against a MetaprogramTargetNode.
+     * @param node The MetaprogramTargetNode in question.
+     * @param p The parameter to use.
+     * @return The result of the operation.
+     */
+    public R executeMetaprogramTargetNode(MetaprogramTargetNode node, P p);
+
+    /**
      * Executes this operation against a MethodDeclarationNode.
      * @param node The MethodDeclarationNode in question.
      * @param p The parameter to use.
@@ -776,6 +802,14 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeMethodModifiersNode(MethodModifiersNode node, P p);
+
+    /**
+     * Executes this operation against a NameListNode.
+     * @param node The NameListNode in question.
+     * @param p The parameter to use.
+     * @return The result of the operation.
+     */
+    public R executeNameListNode(NameListNode node, P p);
 
     /**
      * Executes this operation against a NoOperationNode.

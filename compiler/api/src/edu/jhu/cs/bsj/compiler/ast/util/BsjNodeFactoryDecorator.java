@@ -20,11 +20,13 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.BlockStatementMetaprogramAnchorNode
 import edu.jhu.cs.bsj.compiler.ast.node.meta.ClassMemberMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.CodeLiteralNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.InterfaceMemberMetaprogramAnchorNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependsNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramPreambleListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramPreambleNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramTargetNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.TypeDeclarationMetaprogramAnchorNode;
 
 /**
@@ -3029,6 +3031,66 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     }
 
     /**
+     * Creates a IdentifierListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public IdentifierListNode makeIdentifierListNode(
+            List<IdentifierNode> children)
+    {
+        this.before();
+        IdentifierListNode node = factory.makeIdentifierListNode(children);
+        this.after(node);
+        return node;
+    }
+
+    /**
+     * Creates a IdentifierListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public IdentifierListNode makeIdentifierListNode(
+            IdentifierNode... childrenElements)
+    {
+        this.before();
+        IdentifierListNode node = factory.makeIdentifierListNode(childrenElements);
+        this.after(node);
+        return node;
+    }
+
+    /**
+     * Creates a IdentifierListNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public IdentifierListNode makeIdentifierListNode(
+            List<IdentifierNode> children,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        IdentifierListNode node = factory.makeIdentifierListNode(children, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+
+    /**
+     * Creates a IdentifierListNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public IdentifierListNode makeIdentifierListNode(
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation,
+            IdentifierNode... childrenElements)
+    {
+        this.before();
+        IdentifierListNode node = factory.makeIdentifierListNode(startLocation, stopLocation, childrenElements);
+        this.after(node);
+        return node;
+    }
+
+    /**
      * Creates a IdentifierNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -3692,6 +3754,36 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     }
 
     /**
+     * Creates a MetaprogramDependsNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public MetaprogramDependsNode makeMetaprogramDependsNode(
+            NameListNode targetNames)
+    {
+        this.before();
+        MetaprogramDependsNode node = factory.makeMetaprogramDependsNode(targetNames);
+        this.after(node);
+        return node;
+    }
+
+    /**
+     * Creates a MetaprogramDependsNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public MetaprogramDependsNode makeMetaprogramDependsNode(
+            NameListNode targetNames,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        MetaprogramDependsNode node = factory.makeMetaprogramDependsNode(targetNames, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+
+    /**
      * Creates a MetaprogramImportListNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -3869,6 +3961,36 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     {
         this.before();
         MetaprogramPreambleListNode node = factory.makeMetaprogramPreambleListNode(startLocation, stopLocation, childrenElements);
+        this.after(node);
+        return node;
+    }
+
+    /**
+     * Creates a MetaprogramTargetNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public MetaprogramTargetNode makeMetaprogramTargetNode(
+            IdentifierListNode targets)
+    {
+        this.before();
+        MetaprogramTargetNode node = factory.makeMetaprogramTargetNode(targets);
+        this.after(node);
+        return node;
+    }
+
+    /**
+     * Creates a MetaprogramTargetNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public MetaprogramTargetNode makeMetaprogramTargetNode(
+            IdentifierListNode targets,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        MetaprogramTargetNode node = factory.makeMetaprogramTargetNode(targets, startLocation, stopLocation);
         this.after(node);
         return node;
     }
@@ -4099,6 +4221,66 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     {
         this.before();
         MethodModifiersNode node = factory.makeMethodModifiersNode(access, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+
+    /**
+     * Creates a NameListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public NameListNode makeNameListNode(
+            List<NameNode> children)
+    {
+        this.before();
+        NameListNode node = factory.makeNameListNode(children);
+        this.after(node);
+        return node;
+    }
+
+    /**
+     * Creates a NameListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public NameListNode makeNameListNode(
+            NameNode... childrenElements)
+    {
+        this.before();
+        NameListNode node = factory.makeNameListNode(childrenElements);
+        this.after(node);
+        return node;
+    }
+
+    /**
+     * Creates a NameListNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public NameListNode makeNameListNode(
+            List<NameNode> children,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        NameListNode node = factory.makeNameListNode(children, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+
+    /**
+     * Creates a NameListNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public NameListNode makeNameListNode(
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation,
+            NameNode... childrenElements)
+    {
+        this.before();
+        NameListNode node = factory.makeNameListNode(startLocation, stopLocation, childrenElements);
         this.after(node);
         return node;
     }

@@ -74,14 +74,13 @@ public class MetaprogramImportListNodeImpl extends ListNodeImpl<MetaprogramImpor
      * effect on this node.
      * @return A list of this node's children.
      */
-/* // (not generating children)
     @Override
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
         return list;
     }
-*/
+
     /**
      * Obtains a human-readable description of this node.
      * @return A human-readable description of this node.

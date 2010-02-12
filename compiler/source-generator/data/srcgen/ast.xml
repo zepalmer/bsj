@@ -1124,7 +1124,7 @@
                 <pre>
                 while (<i>condition</i>)
                     statement
-                </pre>
+                </pre>/
             ]]></doc>
         </type>
 
@@ -1610,161 +1610,150 @@
             <doc><![CDATA[
                 Represents a list of {@link AnnotationElementNode}s.
             ]]></doc>
-            <nogen id="children" />
         </type>
 
         <type name="AnnotationListNode" super="ListNode" superTypeArg="AnnotationNode">
             <doc><![CDATA[
                 Represents a list of {@link AnnotationNode}s.
             ]]></doc>
-            <nogen id="children" />
         </type>
 
         <type name="AnnotationMemberListNode" super="ListNode" superTypeArg="AnnotationMemberNode">
             <doc><![CDATA[
                 Represents a list of {@link AnnotationMemberNode}s.
             ]]></doc>
-            <nogen id="children" />
         </type>
 
         <type name="AnnotationValueListNode" super="ListNode" superTypeArg="AnnotationValueNode">
             <doc><![CDATA[
                 Represents a list of {@link AnnotationValueNode}s.
             ]]></doc>
-            <nogen id="children" />
         </type>
 
         <type name="AnonymousClassMemberListNode" super="ListNode" superTypeArg="AnonymousClassMemberNode">
             <doc><![CDATA[
                 Represents a list of {@link AnonymousClassMemberNode}s.
             ]]></doc>
-            <nogen id="children" />
         </type>
 
         <type name="BlockStatementListNode" super="ListNode" superTypeArg="BlockStatementNode">
             <doc><![CDATA[
                 Represents a list of {@link BlockStatementNode}s.
             ]]></doc>
-            <nogen id="children" />
         </type>
 
         <type name="CaseListNode" super="ListNode" superTypeArg="CaseNode">
             <doc><![CDATA[
                 Represents a list of {@link CaseNode}s.
             ]]></doc>
-            <nogen id="children" />
         </type>
 
         <type name="CatchListNode" super="ListNode" superTypeArg="CatchNode">
             <doc><![CDATA[
                 Represents a list of {@link CatchNode}s.
             ]]></doc>
-            <nogen id="children" />
         </type>
 
         <type name="ClassMemberListNode" super="ListNode" superTypeArg="ClassMemberNode">
             <doc><![CDATA[
                 Represents a list of {@link ClassMemberNode}s.
             ]]></doc>
-            <nogen id="children" />
         </type>
 
         <type name="DeclaredTypeListNode" super="ListNode" superTypeArg="DeclaredTypeNode">
             <doc><![CDATA[
                 Represents a list of {@link DeclaredTypeNode}s.
             ]]></doc>
-            <nogen id="children" />
         </type>
 
         <type name="EnumConstantDeclarationListNode" super="ListNode" superTypeArg="EnumConstantDeclarationNode">
             <doc><![CDATA[
                 Represents a list of {@link EnumConstantDeclarationNode}s.
             ]]></doc>
-            <nogen id="children" />
         </type>
 
         <type name="ExpressionListNode" super="ListNode" superTypeArg="ExpressionNode">
             <doc><![CDATA[
                 Represents a list of {@link ExpressionNode}s.
             ]]></doc>
-            <nogen id="children" />
+        </type>
+
+        <type name="IdentifierListNode" super="ListNode" superTypeArg="IdentifierNode">
+            <doc><![CDATA[
+                Represents a list of {@link IdentifierNode}s.
+            ]]></doc>
         </type>
 
         <type name="ImportListNode" super="ListNode" superTypeArg="ImportNode">
             <doc><![CDATA[
                 Represents a list of {@link ImportNode}s.
             ]]></doc>
-            <nogen id="children" />
         </type>
 
         <type name="InterfaceMemberListNode" super="ListNode" superTypeArg="InterfaceMemberNode">
             <doc><![CDATA[
                 Represents a list of {@link InterfaceMemberNode}s.
             ]]></doc>
-            <nogen id="children" />
+        </type>
+
+        <type name="NameListNode" super="ListNode" superTypeArg="NameNode">
+            <doc><![CDATA[
+                Represents a list of {@link NameNode}s.
+            ]]></doc>
         </type>
 
         <type name="StatementExpressionListNode" super="ListNode" superTypeArg="StatementExpressionNode">
             <doc><![CDATA[
                 Represents a list of {@link StatementExpressionNode}s.
             ]]></doc>
-            <nogen id="children" />
         </type>
 
         <type name="TypeArgumentListNode" super="ListNode" superTypeArg="TypeArgumentNode">
             <doc><![CDATA[
                 Represents a list of {@link TypeArgumentNode}s.
             ]]></doc>
-            <nogen id="children" />
         </type>
 
         <type name="TypeDeclarationListNode" super="ListNode" superTypeArg="TypeDeclarationNode">
             <doc><![CDATA[
                 Represents a list of {@link TypeDeclarationNode}s.
             ]]></doc>
-            <nogen id="children" />
         </type>
 
         <type name="TypeListNode" super="ListNode" superTypeArg="TypeNode">
             <doc><![CDATA[
                 Represents a list of {@link TypeNode}s.
             ]]></doc>
-            <nogen id="children" />
         </type>
 
         <type name="TypeParameterListNode" super="ListNode" superTypeArg="TypeParameterNode">
             <doc><![CDATA[
                 Represents a list of {@link TypeParameterNode}s.
             ]]></doc>
-            <nogen id="children" />
         </type>
 
         <type name="UnparameterizedTypeListNode" super="ListNode" superTypeArg="UnparameterizedTypeNode">
             <doc><![CDATA[
                 Represents a list of {@link UnparameterizedTypeNode}s.
             ]]></doc>
-            <nogen id="children" />
         </type>
 
         <type name="VariableDeclaratorListNode" super="ListNode" superTypeArg="VariableDeclaratorNode">
             <doc><![CDATA[
                 Represents a list of {@link VariableDeclaratorNode}s.
             ]]></doc>
-            <nogen id="children" />
         </type>
 
         <type name="VariableInitializerListNode" super="ListNode" superTypeArg="VariableInitializerNode">
             <doc><![CDATA[
                 Represents a list of {@link VariableInitializerNode}s.
             ]]></doc>
-            <nogen id="children" />
         </type>
 
         <type name="VariableListNode" super="ListNode" superTypeArg="VariableNode">
             <doc><![CDATA[
                 Represents a list of {@link VariableNode}s.
             ]]></doc>
-            <nogen id="children" />
         </type>
 
         <!-- ======================== BASE NODES ======================== -->
@@ -2048,6 +2037,17 @@
 
         <!-- ====================== PREAMBLE NODES ====================== -->
 
+        <type name="MetaprogramDependsNode" super="Node">
+            <tag name="MetaprogramPreambleNode" />
+            <prop name="targetNames" type="NameListNode" desc="the names of the metaprogram targets on which to depend" />
+            <doc><![CDATA[
+                Represents a metaprogram dependency declaration, as in
+                <pre>
+                #depends com.example.Foo.target;
+                </pre>
+            ]]></doc>
+        </type>
+
         <type name="MetaprogramImportNode" super="Node">
             <tag name="MetaprogramPreambleNode" />
             <prop name="importNode" type="ImportNode" desc="the import for the metaprogram" />
@@ -2059,6 +2059,17 @@
                 or
                 <pre>
                 #import static com.example.Utilities.foo;
+                </pre>
+            ]]></doc>
+        </type>
+
+        <type name="MetaprogramTargetNode" super="Node">
+            <tag name="MetaprogramPreambleNode" />
+            <prop name="targets" type="IdentifierListNode" desc="the names of the metaprogram targets in which to participate" />
+            <doc><![CDATA[
+                Represents a metaprogram target declaration, as in
+                <pre>
+                #target target;
                 </pre>
             ]]></doc>
         </type>
@@ -2146,14 +2157,12 @@
             <doc><![CDATA[
                 Represents a list of {@link MetaprogramImportNode}s.
             ]]></doc>
-            <nogen id="children" />
         </type>
 
         <type name="MetaprogramPreambleListNode" super="ListNode" superTypeArg="MetaprogramPreambleNode">
             <doc><![CDATA[
                 Represents a list of {@link MetaprogramPreambleNode}s.
             ]]></doc>
-            <nogen id="children" />
         </type>
 
         <!-- ======================== OTHER NODES ======================= -->
@@ -2174,19 +2183,20 @@
     <srcgen>
         <srcgen cpkg="edu.jhu.cs.bsj.compiler.diagnostic.lexer">
             <diagnostic name="BsjLexerDiagnostic">
-                <prop name="character" type="int" desc="the character which caused this diagnostic"/>
+                <prop name="character" type="int" desc="the character which caused this diagnostic" />
                 <doc><![CDATA[
                     A diagnostic which acts as a supertype for all BSJ lexer diagnostics.
                 ]]></doc>
             </diagnostic>
-            
-            <diagnostic name="GeneralLexerFailureDiagnostic" code="lexer.error.generalFailure" super="BsjLexerDiagnostic">
+
+            <diagnostic name="GeneralLexerFailureDiagnostic" code="lexer.error.generalFailure"
+                super="BsjLexerDiagnostic">
                 <doc><![CDATA[
                     A diagnostic indicating a general lexer failure.
                 ]]></doc>
             </diagnostic>
         </srcgen>
-    
+
         <srcgen cpkg="edu.jhu.cs.bsj.compiler.diagnostic.parser">
             <diagnostic name="BsjParserDiagnostic">
                 <prop name="ruleName" type="String" desc="the rule which caused this diagnostic" />

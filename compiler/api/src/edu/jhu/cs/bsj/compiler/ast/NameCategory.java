@@ -18,5 +18,7 @@ public enum NameCategory
 	/** Indicates that this name refers to either a package <i>or</i> a type. */
 	PACKAGE_OR_TYPE,
 	/** Indicates that this name refers to either a package, a type, or an expression. */
-	AMBIGUOUS
+	AMBIGUOUS,
+	/** Indicates that this name refers to a metaprogram target. */
+	METAPROGRAM_TARGET,
 }

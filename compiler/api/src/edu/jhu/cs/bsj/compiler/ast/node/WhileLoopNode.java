@@ -9,7 +9,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
  * <pre>
  * while (<i>condition</i>)
  *     statement
- * </pre>
+ * </pre>/
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public interface WhileLoopNode extends Node, StatementNode

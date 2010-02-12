@@ -21,11 +21,13 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.BlockStatementMetaprogramAnchorNode
 import edu.jhu.cs.bsj.compiler.ast.node.meta.ClassMemberMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.CodeLiteralNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.InterfaceMemberMetaprogramAnchorNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependsNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramPreambleListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramPreambleNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramTargetNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.TypeDeclarationMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.*;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.meta.AnnotationMemberMetaprogramAnchorNodeImpl;
@@ -34,10 +36,12 @@ import edu.jhu.cs.bsj.compiler.impl.ast.node.meta.BlockStatementMetaprogramAncho
 import edu.jhu.cs.bsj.compiler.impl.ast.node.meta.ClassMemberMetaprogramAnchorNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.meta.CodeLiteralNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.meta.InterfaceMemberMetaprogramAnchorNodeImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.node.meta.MetaprogramDependsNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.meta.MetaprogramImportListNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.meta.MetaprogramImportNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.meta.MetaprogramNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.meta.MetaprogramPreambleListNodeImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.node.meta.MetaprogramTargetNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.meta.TypeDeclarationMetaprogramAnchorNodeImpl;
 
 /**
@@ -2657,6 +2661,58 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
 
     /**
+     * Creates a IdentifierListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public IdentifierListNode makeIdentifierListNode(
+            List<IdentifierNode> children)
+    {
+        IdentifierListNode ret = new IdentifierListNodeImpl(children, startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
+     * Creates a IdentifierListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public IdentifierListNode makeIdentifierListNode(
+            IdentifierNode... childrenElements)
+    {
+        List<IdentifierNode> children = Arrays.asList(childrenElements);
+        return makeIdentifierListNode(children, startLocation, stopLocation);
+    }
+
+    /**
+     * Creates a IdentifierListNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public IdentifierListNode makeIdentifierListNode(
+            List<IdentifierNode> children,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        IdentifierListNode ret = new IdentifierListNodeImpl(children, startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
+     * Creates a IdentifierListNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public IdentifierListNode makeIdentifierListNode(
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation,
+            IdentifierNode... childrenElements)
+    {
+        List<IdentifierNode> children = Arrays.asList(childrenElements);
+        return makeIdentifierListNode(children, startLocation, stopLocation);
+    }
+
+    /**
      * Creates a IdentifierNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -3236,6 +3292,32 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
 
     /**
+     * Creates a MetaprogramDependsNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public MetaprogramDependsNode makeMetaprogramDependsNode(
+            NameListNode targetNames)
+    {
+        MetaprogramDependsNode ret = new MetaprogramDependsNodeImpl(targetNames, startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
+     * Creates a MetaprogramDependsNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public MetaprogramDependsNode makeMetaprogramDependsNode(
+            NameListNode targetNames,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        MetaprogramDependsNode ret = new MetaprogramDependsNodeImpl(targetNames, startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
      * Creates a MetaprogramImportListNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -3391,6 +3473,32 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     {
         List<MetaprogramPreambleNode> children = Arrays.asList(childrenElements);
         return makeMetaprogramPreambleListNode(children, startLocation, stopLocation);
+    }
+
+    /**
+     * Creates a MetaprogramTargetNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public MetaprogramTargetNode makeMetaprogramTargetNode(
+            IdentifierListNode targets)
+    {
+        MetaprogramTargetNode ret = new MetaprogramTargetNodeImpl(targets, startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
+     * Creates a MetaprogramTargetNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public MetaprogramTargetNode makeMetaprogramTargetNode(
+            IdentifierListNode targets,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        MetaprogramTargetNode ret = new MetaprogramTargetNodeImpl(targets, startLocation, stopLocation);
+        return ret;
     }
 
     /**
@@ -3597,6 +3705,58 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     {
         MethodModifiersNode ret = new MethodModifiersNodeImpl(access, false, false, false, false, false, false, makeAnnotationListNode(), startLocation, stopLocation);
         return ret;
+    }
+
+    /**
+     * Creates a NameListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public NameListNode makeNameListNode(
+            List<NameNode> children)
+    {
+        NameListNode ret = new NameListNodeImpl(children, startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
+     * Creates a NameListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public NameListNode makeNameListNode(
+            NameNode... childrenElements)
+    {
+        List<NameNode> children = Arrays.asList(childrenElements);
+        return makeNameListNode(children, startLocation, stopLocation);
+    }
+
+    /**
+     * Creates a NameListNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public NameListNode makeNameListNode(
+            List<NameNode> children,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        NameListNode ret = new NameListNodeImpl(children, startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
+     * Creates a NameListNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public NameListNode makeNameListNode(
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation,
+            NameNode... childrenElements)
+    {
+        List<NameNode> children = Arrays.asList(childrenElements);
+        return makeNameListNode(children, startLocation, stopLocation);
     }
 
     /**

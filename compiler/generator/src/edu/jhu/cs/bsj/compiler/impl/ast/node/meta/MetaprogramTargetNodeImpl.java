@@ -1,6 +1,5 @@
-package edu.jhu.cs.bsj.compiler.impl.ast.node;
+package edu.jhu.cs.bsj.compiler.impl.ast.node.meta;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Generated;
@@ -10,20 +9,51 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.node.IdentifierListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
-import edu.jhu.cs.bsj.compiler.ast.node.TypeListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramTargetNode;
+import edu.jhu.cs.bsj.compiler.impl.ast.node.NodeImpl;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public class TypeListNodeImpl extends ListNodeImpl<TypeNode> implements TypeListNode
+public class MetaprogramTargetNodeImpl extends NodeImpl implements MetaprogramTargetNode
 {
+    /** The names of the metaprogram targets in which to participate. */
+    private IdentifierListNode targets;
+
     /** General constructor. */
-    public TypeListNodeImpl(
-            List<TypeNode> children,
+    public MetaprogramTargetNodeImpl(
+            IdentifierListNode targets,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        super(children, startLocation, stopLocation);
+        super(startLocation, stopLocation);
+        setTargets(targets);
+    }
+
+    /**
+     * Gets the names of the metaprogram targets in which to participate.
+     * @return The names of the metaprogram targets in which to participate.
+     */
+    public IdentifierListNode getTargets()
+    {
+        return this.targets;
+    }
+
+    /**
+     * Changes the names of the metaprogram targets in which to participate.
+     * @param targets The names of the metaprogram targets in which to participate.
+     */
+    public void setTargets(IdentifierListNode targets)
+    {
+        if (this.targets instanceof NodeImpl)
+        {
+            ((NodeImpl)this.targets).setParent(null);
+        }
+        this.targets = targets;
+        if (this.targets instanceof NodeImpl)
+        {
+            ((NodeImpl)this.targets).setParent(this);
+        }
     }
 
     /**
@@ -37,6 +67,10 @@ public class TypeListNodeImpl extends ListNodeImpl<TypeNode> implements TypeList
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
+        if (this.targets != null)
+        {
+            this.targets.receive(visitor);
+        }
     }
 
     /**
@@ -50,21 +84,25 @@ public class TypeListNodeImpl extends ListNodeImpl<TypeNode> implements TypeList
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
+        if (this.targets != null)
+        {
+            this.targets.receiveTyped(visitor);
+        }
     }
 
     @Override
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
         visitor.visitStartBegin(this);
-        visitor.visitTypeListNodeStart(this, true);
-        visitor.visitListNodeStart(this);
+        visitor.visitMetaprogramTargetNodeStart(this, true);
         visitor.visitNodeStart(this);
+        visitor.visitMetaprogramPreambleNodeStart(this);
         visitor.visitStartEnd(this);
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
+        visitor.visitMetaprogramPreambleNodeStop(this);
         visitor.visitNodeStop(this);
-        visitor.visitListNodeStop(this);
-        visitor.visitTypeListNodeStop(this, true);
+        visitor.visitMetaprogramTargetNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
 
@@ -77,6 +115,7 @@ public class TypeListNodeImpl extends ListNodeImpl<TypeNode> implements TypeList
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
+        list.add(getTargets());
         return list;
     }
 
@@ -89,8 +128,8 @@ public class TypeListNodeImpl extends ListNodeImpl<TypeNode> implements TypeList
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
-        sb.append("children=");
-        sb.append(String.valueOf(this.getChildren()) + ":" + (this.getChildren() != null ? this.getChildren().getClass().getSimpleName() : "null"));
+        sb.append("targets=");
+        sb.append(this.getTargets() == null? "null" : this.getTargets().getClass().getSimpleName());
         sb.append(',');
         sb.append("startLocation=");
         sb.append(String.valueOf(this.getStartLocation()) + ":" + (this.getStartLocation() != null ? this.getStartLocation().getClass().getSimpleName() : "null"));
@@ -110,7 +149,7 @@ public class TypeListNodeImpl extends ListNodeImpl<TypeNode> implements TypeList
     @Override
     public <P,R> R executeOperation(BsjNodeOperation<P,R> operation, P p)
     {
-        return operation.executeTypeListNode(this, p);
+        return operation.executeMetaprogramTargetNode(this, p);
     }
 
     /**
@@ -119,10 +158,10 @@ public class TypeListNodeImpl extends ListNodeImpl<TypeNode> implements TypeList
      * @return The resulting deep copy node.
      */
     @Override
-    public TypeListNode deepCopy(BsjNodeFactory factory)
+    public MetaprogramTargetNode deepCopy(BsjNodeFactory factory)
     {
-        return factory.makeTypeListNode(
-                new ArrayList<TypeNode>(getChildren()));
+        return factory.makeMetaprogramTargetNode(
+                getTargets().deepCopy(factory));
     }
     /**
      * Performs replacement for this node.
@@ -136,6 +175,11 @@ public class TypeListNodeImpl extends ListNodeImpl<TypeNode> implements TypeList
         if (super.replace(before,after))
             return true;
 
+        if (before.equals(this.targets) && (after instanceof IdentifierListNode))
+        {
+            setTargets((IdentifierListNode)after);
+            return true;
+        }
         return false;
     }
 

@@ -10,11 +10,13 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.ClassMemberMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.CodeLiteralNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.InterfaceMemberMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramAnchorNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependsNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramPreambleListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramPreambleNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramTargetNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.TypeDeclarationMetaprogramAnchorNode;
 
 /**
@@ -804,6 +806,15 @@ public interface BsjTypedNodeVisitor
     public void visitForLoopNodeStart(ForLoopNode node, boolean mostSpecific);
 
     /**
+     * Starts a visit for nodes of type IdentifierListNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitIdentifierListNodeStart(IdentifierListNode node, boolean mostSpecific);
+
+    /**
      * Starts a visit for nodes of type IdentifierNode.
      * @param node The node being visited.
      * @param mostSpecific <code>true</code> if this is the most specific call
@@ -999,6 +1010,15 @@ public interface BsjTypedNodeVisitor
     public void visitMetaprogramAnchorNodeStart(MetaprogramAnchorNode<?> node);
 
     /**
+     * Starts a visit for nodes of type MetaprogramDependsNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitMetaprogramDependsNodeStart(MetaprogramDependsNode node, boolean mostSpecific);
+
+    /**
      * Starts a visit for nodes of type MetaprogramImportListNode.
      * @param node The node being visited.
      * @param mostSpecific <code>true</code> if this is the most specific call
@@ -1039,6 +1059,15 @@ public interface BsjTypedNodeVisitor
      * @param node The node being visited.
      */
     public void visitMetaprogramPreambleNodeStart(MetaprogramPreambleNode node);
+
+    /**
+     * Starts a visit for nodes of type MetaprogramTargetNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitMetaprogramTargetNodeStart(MetaprogramTargetNode node, boolean mostSpecific);
 
     /**
      * Starts a visit for nodes of type MethodDeclarationNode.
@@ -1087,6 +1116,15 @@ public interface BsjTypedNodeVisitor
      * @param node The node being visited.
      */
     public void visitModifiersNodeStart(ModifiersNode node);
+
+    /**
+     * Starts a visit for nodes of type NameListNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitNameListNodeStart(NameListNode node, boolean mostSpecific);
 
     /**
      * Starts a visit for nodes of type NameNode.
@@ -2268,6 +2306,15 @@ public interface BsjTypedNodeVisitor
     public void visitForLoopNodeStop(ForLoopNode node, boolean mostSpecific);
 
     /**
+     * Stops a visit for nodes of type IdentifierListNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitIdentifierListNodeStop(IdentifierListNode node, boolean mostSpecific);
+
+    /**
      * Stops a visit for nodes of type IdentifierNode.
      * @param node The node being visited.
      * @param mostSpecific <code>true</code> if this is the most specific call
@@ -2463,6 +2510,15 @@ public interface BsjTypedNodeVisitor
     public void visitMetaprogramAnchorNodeStop(MetaprogramAnchorNode<?> node);
 
     /**
+     * Stops a visit for nodes of type MetaprogramDependsNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitMetaprogramDependsNodeStop(MetaprogramDependsNode node, boolean mostSpecific);
+
+    /**
      * Stops a visit for nodes of type MetaprogramImportListNode.
      * @param node The node being visited.
      * @param mostSpecific <code>true</code> if this is the most specific call
@@ -2503,6 +2559,15 @@ public interface BsjTypedNodeVisitor
      * @param node The node being visited.
      */
     public void visitMetaprogramPreambleNodeStop(MetaprogramPreambleNode node);
+
+    /**
+     * Stops a visit for nodes of type MetaprogramTargetNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitMetaprogramTargetNodeStop(MetaprogramTargetNode node, boolean mostSpecific);
 
     /**
      * Stops a visit for nodes of type MethodDeclarationNode.
@@ -2551,6 +2616,15 @@ public interface BsjTypedNodeVisitor
      * @param node The node being visited.
      */
     public void visitModifiersNodeStop(ModifiersNode node);
+
+    /**
+     * Stops a visit for nodes of type NameListNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitNameListNodeStop(NameListNode node, boolean mostSpecific);
 
     /**
      * Stops a visit for nodes of type NameNode.

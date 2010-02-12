@@ -11,11 +11,13 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.BlockStatementMetaprogramAnchorNode
 import edu.jhu.cs.bsj.compiler.ast.node.meta.ClassMemberMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.CodeLiteralNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.InterfaceMemberMetaprogramAnchorNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependsNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramPreambleListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramPreambleNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramTargetNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.TypeDeclarationMetaprogramAnchorNode;
 
 /**
@@ -1697,6 +1699,38 @@ public interface BsjNodeFactory
             BsjSourceLocation stopLocation);
 
     /**
+     * Creates a IdentifierListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public IdentifierListNode makeIdentifierListNode(
+            List<IdentifierNode> children);
+
+    /**
+     * Creates a IdentifierListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public IdentifierListNode makeIdentifierListNode(
+            IdentifierNode... childrenElements);
+
+    /**
+     * Creates a IdentifierListNode.
+     * The specified start and stop locations are used.
+     */
+    public IdentifierListNode makeIdentifierListNode(
+            List<IdentifierNode> children,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+
+    /**
+     * Creates a IdentifierListNode.
+     * The specified start and stop locations are used.
+     */
+    public IdentifierListNode makeIdentifierListNode(
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation,
+            IdentifierNode... childrenElements);
+
+    /**
      * Creates a IdentifierNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -2066,6 +2100,22 @@ public interface BsjNodeFactory
             BsjSourceLocation stopLocation);
 
     /**
+     * Creates a MetaprogramDependsNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public MetaprogramDependsNode makeMetaprogramDependsNode(
+            NameListNode targetNames);
+
+    /**
+     * Creates a MetaprogramDependsNode.
+     * The specified start and stop locations are used.
+     */
+    public MetaprogramDependsNode makeMetaprogramDependsNode(
+            NameListNode targetNames,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+
+    /**
      * Creates a MetaprogramImportListNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -2162,6 +2212,22 @@ public interface BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
             MetaprogramPreambleNode... childrenElements);
+
+    /**
+     * Creates a MetaprogramTargetNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public MetaprogramTargetNode makeMetaprogramTargetNode(
+            IdentifierListNode targets);
+
+    /**
+     * Creates a MetaprogramTargetNode.
+     * The specified start and stop locations are used.
+     */
+    public MetaprogramTargetNode makeMetaprogramTargetNode(
+            IdentifierListNode targets,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
 
     /**
      * Creates a MethodDeclarationNode.
@@ -2308,6 +2374,38 @@ public interface BsjNodeFactory
             AccessModifier access,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
+
+    /**
+     * Creates a NameListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public NameListNode makeNameListNode(
+            List<NameNode> children);
+
+    /**
+     * Creates a NameListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public NameListNode makeNameListNode(
+            NameNode... childrenElements);
+
+    /**
+     * Creates a NameListNode.
+     * The specified start and stop locations are used.
+     */
+    public NameListNode makeNameListNode(
+            List<NameNode> children,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+
+    /**
+     * Creates a NameListNode.
+     * The specified start and stop locations are used.
+     */
+    public NameListNode makeNameListNode(
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation,
+            NameNode... childrenElements);
 
     /**
      * Creates a NoOperationNode.
