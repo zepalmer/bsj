@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -26,6 +27,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 import edu.jhu.cs.bsj.compiler.ast.NameCategory;
 import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
+import edu.jhu.cs.bsj.compiler.ast.node.MethodDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeFactoryImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.BsjTreeLifter;
@@ -86,7 +88,7 @@ public class BsjTreeLifterTest
 	 * Attempt to lift, recompile, and regenerate a Java file, then compare to the original source.
 	 * 
 	 * @param file the file to manipulate.
-	 * @return true if the lifted, recompiled, and regenerated file is equal to the origina (regenerated).
+	 * @return true if the lifted, recompiled, and regenerated file is equal to the original (regenerated).
 	 */
 	public boolean liftJavaFile(File file)
 	{
@@ -115,7 +117,10 @@ public class BsjTreeLifterTest
 
 		// get the lifted code
 		ExpressionNode metaAst = ast.executeOperation(treeLifter, metaFactory);
-//TODO replace expressions w/ methods
+		
+		//TODO replace expressions w/ methods
+		List<MethodDeclarationNode> methods = divideLiftIntoMethods(metaAst);
+
 		// compile the lifted code and get the result
 		String liftedProgram = null;
 		try
@@ -132,6 +137,23 @@ public class BsjTreeLifterTest
 	}
 
 	/**
+	 * Mutates metaAst by removing expressions down to a certain depth and replacing them with method invocations.
+	 * @param metaAst the lifted AST to be divided.
+	 * @return the list of method declarations corresponding to the mutated AST.
+	 */
+	private List<MethodDeclarationNode> divideLiftIntoMethods(ExpressionNode metaAst)
+    {
+        // TODO Auto-generated method stub
+	    List<MethodDeclarationNode> methods = new ArrayList<MethodDeclarationNode>();
+	    
+	    
+	    metaAst.receiveTyped(new BsjLiftedCodeVisitor(methods));
+	    
+	    
+        return methods;
+    }
+
+    /**
 	 * Compiles and runs a block of code which generates a lifted AST.
 	 * 
 	 * @param code the AST for generating the lifted AST.
@@ -149,7 +171,8 @@ public class BsjTreeLifterTest
 		sb.append("public class WrapperClass\n{\npublic Node runLiftedCode()\n{\n");
 		sb.append("BsjNodeFactory " + factoryName + " = new BsjNodeFactoryImpl();\nreturn ");
 		sb.append(code.executeOperation(new BsjSourceSerializerImpl(), null));
-		String wrapperCode = sb.append(";\n}\n}").toString();
+		sb.append(";\n}\n}");
+		String wrapperCode = sb.toString();
 
 		// setup the compilation environment
 		JavaCompiler jc = ToolProvider.getSystemJavaCompiler();
