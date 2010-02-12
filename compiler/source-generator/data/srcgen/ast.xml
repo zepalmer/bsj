@@ -315,7 +315,7 @@
                 Represents the modifiers which can be associated with a constructor.
             ]]></doc>
             <factory-method>
-                <use-defaults/>
+                <use-defaults />
             </factory-method>
         </type>
 
@@ -1830,14 +1830,14 @@
         <type name="CompilationUnitNode" super="Node">
             <prop name="packageDeclaration" type="PackageDeclarationNode" desc="the package declaration for this unit" />
             <prop name="metaimports" type="MetaprogramImportListNode" desc="the global metaprogram imports used in this unit"
-                    default="makeMetaprogramImportListNode()"/>
+                default="makeMetaprogramImportListNode()" />
             <prop name="imports" type="ImportListNode" desc="the imports used in this unit" />
             <prop name="typeDecls" type="TypeDeclarationListNode" desc="the type declarations of this unit" />
             <doc><![CDATA[
                 Represents a BSJ compilation unit.
             ]]></doc>
             <factory-method>
-                <use-defaults/>
+                <use-defaults />
             </factory-method>
         </type>
 
@@ -1926,7 +1926,7 @@
                 The parent class for all BSJ AST nodes.
             ]]></doc>
         </type>
-        
+
         <type name="NoOperationNode" super="Node">
             <tag name="StatementNode" />
             <tag name="TypeDeclarationNode" />
@@ -2037,20 +2037,20 @@
 
     <!-- BSJ AST Nodes -->
     <srcgen ipkg="edu.jhu.cs.bsj.compiler.ast.node.meta" cpkg="edu.jhu.cs.bsj.compiler.impl.ast.node.meta">
-    
+
         <!-- ==================== TAGGING INTERFACES ==================== -->
-        
+
         <type name="MetaprogramPreambleNode" super="Node" mode="tag">
             <doc><![CDATA[
                 This tagging interface is implemented by any node which can be used in a metaprogram preamble.
             ]]></doc>
         </type>
-        
+
         <!-- ====================== PREAMBLE NODES ====================== -->
-        
+
         <type name="MetaprogramImportNode" super="Node">
-            <tag name="MetaprogramPreambleNode"/>
-            <prop name="importNode" type="ImportNode" desc="the import for the metaprogram"/>
+            <tag name="MetaprogramPreambleNode" />
+            <prop name="importNode" type="ImportNode" desc="the import for the metaprogram" />
             <doc><![CDATA[
                 Represents a metaprogram import, as in
                 <pre>
@@ -2107,7 +2107,8 @@
             <factory-override prop="replacement" expr="makeNoOperationNode()" />
         </type>
 
-        <type name="AnonymousClassMemberMetaprogramAnchorNode" super="MetaprogramAnchorNode" superTypeArg="AnonymousClassMemberNode">
+        <type name="AnonymousClassMemberMetaprogramAnchorNode" super="MetaprogramAnchorNode"
+            superTypeArg="AnonymousClassMemberNode">
             <tag name="AnonymousClassMemberNode" />
             <doc><![CDATA[
                 A node representing a metaprogram found in an anonymous class body.
@@ -2138,9 +2139,9 @@
             ]]></doc>
             <factory-override prop="replacement" expr="makeNoOperationNode()" />
         </type>
-        
+
         <!-- ========================= LIST NODES ======================= -->
-        
+
         <type name="MetaprogramImportListNode" super="ListNode" superTypeArg="MetaprogramImportNode">
             <doc><![CDATA[
                 Represents a list of {@link MetaprogramImportNode}s.
@@ -2163,5 +2164,125 @@
             ]]></doc>
         </type>
 
+    </srcgen>
+
+    <!--
+        TODO: move these to another file (prereq: include directive in srcgen.xsd and appropriate processing
+        in parser
+    -->
+    <!-- Diagnostics -->
+    <srcgen>
+        <srcgen cpkg="edu.jhu.cs.bsj.compiler.diagnostic.lexer">
+            <diagnostic name="BsjLexerDiagnostic">
+                <prop name="character" type="int" desc="the character which caused this diagnostic"/>
+                <doc><![CDATA[
+                    A diagnostic which acts as a supertype for all BSJ lexer diagnostics.
+                ]]></doc>
+            </diagnostic>
+            
+            <diagnostic name="GeneralLexerFailureDiagnostic" code="lexer.error.generalFailure" super="BsjLexerDiagnostic">
+                <doc><![CDATA[
+                    A diagnostic indicating a general lexer failure.
+                ]]></doc>
+            </diagnostic>
+        </srcgen>
+    
+        <srcgen cpkg="edu.jhu.cs.bsj.compiler.diagnostic.parser">
+            <diagnostic name="BsjParserDiagnostic">
+                <prop name="ruleName" type="String" desc="the rule which caused this diagnostic" />
+                <doc><![CDATA[
+                    A diagnostic which acts as the parent for all parser diagnostics.
+                ]]></doc>
+            </diagnostic>
+
+            <diagnostic name="ConflictingAccessModifierDiagnostic" code="bsj.parser.error.conflictingAccessModifier"
+                super="BsjParserDiagnostic">
+                <prop name="firstModifier" type="String" desc="the first modifier which conflicts" />
+                <prop name="secondModifier" type="String" desc="the second modifier which conflicts" />
+                <doc><![CDATA[
+                    A diagnostic which represents a conflicting access modifier.
+                ]]></doc>
+            </diagnostic>
+
+            <diagnostic name="DuplicateModifierDiagnostic" code="bsj.parser.error.duplicateModifier"
+                super="BsjParserDiagnostic">
+                <prop name="modifier" type="String" desc="the modifier which was duplicated" />
+                <doc><![CDATA[
+                    A diagnostic representing a duplicated modifier.
+                ]]></doc>
+            </diagnostic>
+
+            <diagnostic name="ExtraneousTokenDiagnostic" code="bsj.parser.error.extraneousToken"
+                super="BsjParserDiagnostic">
+                <prop name="extraneousType" type="String" desc="the type of the extraneous token" />
+                <prop name="extraneousToken" type="String" desc="the text of the extraneous token" />
+                <doc><![CDATA[
+                    A diagnostic representing the presence of an extraneous token.
+                ]]></doc>
+            </diagnostic>
+
+            <diagnostic name="FloatingPointLiteralTooLargeDiagnostic" code="bsj.parser.error.invalidFloatingPointLiteral.tooLarge"
+                super="InvalidFloatingPointLiteralDiagnostic">
+                <doc><![CDATA[
+                    A diagnostic indicating that a floating point literal was too large to fit into its type.
+                ]]></doc>
+            </diagnostic>
+
+            <diagnostic name="FloatingPointLiteralTooSmallDiagnostic" code="bsj.parser.error.invalidFloatingPointLiteral.tooSmall"
+                super="InvalidFloatingPointLiteralDiagnostic">
+                <doc><![CDATA[
+                    A diagnostic indicating that a floating point literal was too small to fit into its type.
+                ]]></doc>
+            </diagnostic>
+
+            <diagnostic name="GeneralParseFailureDiagnostic" code="bsj.parser.error.generalParseFailure"
+                super="BsjParserDiagnostic">
+                <prop name="tokenType" type="String" desc="the type of the token where the errors started" />
+                <prop name="tokenText" type="String" desc="the text of the token where the errors started" />
+                <doc><![CDATA[
+                    A diagnostic representing a general parsing failure starting at a given location.
+                ]]></doc>
+            </diagnostic>
+
+            <diagnostic name="InvalidFloatingPointLiteralDiagnostic" super="BsjParserDiagnostic">
+                <prop name="literalText" type="String" desc="the text of the invalid literal" />
+                <doc><![CDATA[
+                    A diagnostic representing an invalid floating point literal.
+                ]]></doc>
+            </diagnostic>
+
+            <diagnostic name="InvalidIntegerLiteralDiagnostic" code="bsj.parser.error.invalidIntegerLiteral"
+                super="BsjParserDiagnostic">
+                <prop name="literalText" type="String" desc="the text of the invalid literal" />
+                <doc><![CDATA[
+                    A diagnostic representing an invalid floating point literal.
+                ]]></doc>
+            </diagnostic>
+
+            <diagnostic name="InvalidModifierDiagnostic" code="bsj.parser.error.invalidModifier"
+                super="BsjParserDiagnostic">
+                <prop name="modifier" type="String" desc="the modifier which was used incorrectly" />
+                <doc><![CDATA[
+                    A diagnostic representing an invalid modifier (a modifier which appeared in an incorrect context).
+                ]]></doc>
+            </diagnostic>
+
+            <diagnostic name="MissingTokenDiagnostic" code="bsj.parser.error.missingToken" super="BsjParserDiagnostic">
+                <prop name="tokenType" type="String" desc="the type of the missing token" />
+                <doc><![CDATA[
+                    A diagnostic representing a missing token.
+                ]]></doc>
+            </diagnostic>
+
+            <diagnostic name="UnexpectedTokenDiagnostic" code="bsj.parser.error.unexpectedToken"
+                super="BsjParserDiagnostic">
+                <prop name="tokenType" type="String" desc="the type of the token which was found" />
+                <prop name="tokenText" type="String" desc="the text of the token which was found" />
+                <prop name="expectedType" type="String" desc="the type of the expected token" />
+                <doc><![CDATA[
+                    A diagnostic representing the presence of one token where another was expected.
+                ]]></doc>
+            </diagnostic>
+        </srcgen>
     </srcgen>
 </srcgen>

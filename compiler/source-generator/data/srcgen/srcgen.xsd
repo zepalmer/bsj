@@ -101,6 +101,16 @@
         <xs:attribute name="mode" type="typeMode_T" use="optional" default="concrete"/>
     </xs:complexType>
     
+    <xs:complexType name="diagnostic_T">
+        <xs:sequence>
+            <xs:element name="prop" type="prop_T" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="doc" type="doc_T"/>
+        </xs:sequence>
+        <xs:attribute name="name" type="xs:string" use="required"/>
+        <xs:attribute name="super" type="xs:string" use="optional"/>
+        <xs:attribute name="code" type="xs:string" use="optional"/>
+    </xs:complexType>
+    
     <xs:complexType name="srcgen_T">
         <xs:choice>
             <xs:sequence>
@@ -108,6 +118,9 @@
             </xs:sequence>
             <xs:sequence>
                 <xs:element name="type" type="type_T" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+            <xs:sequence>
+                <xs:element name="diagnostic" type="diagnostic_T" minOccurs="0" maxOccurs="unbounded"/>
             </xs:sequence>
         </xs:choice>
         <xs:attribute name="ipkg" type="xs:string" use="optional"/>

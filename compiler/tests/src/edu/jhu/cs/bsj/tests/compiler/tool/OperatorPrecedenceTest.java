@@ -1,6 +1,6 @@
 package edu.jhu.cs.bsj.tests.compiler.tool;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 

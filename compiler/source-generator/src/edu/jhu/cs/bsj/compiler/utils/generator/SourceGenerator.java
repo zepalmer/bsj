@@ -21,6 +21,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
 
 import edu.jhu.cs.bsj.compiler.impl.utils.PrependablePrintStream;
+import edu.jhu.cs.bsj.compiler.utils.generator.TypeDefinition.Mode;
 
 /**
  * This class generates some patternistic sources for the BSJ parser. The code is awful; it's not intended for long-term
@@ -68,17 +69,17 @@ public class SourceGenerator
 	private static final Set<String> CLONEABLE_NAMES = Collections.unmodifiableSet(new HashSet<String>(
 			Arrays.asList(new String[] { "BsjSourceLocation", })));
 
-	private Set<TypeDefinitionHandler> handlers = new HashSet<TypeDefinitionHandler>();
+	private Set<DefinitionHandler> handlers = new HashSet<DefinitionHandler>();
 
 	public static void main(String[] arg) throws Exception
 	{
 		SourceGenerator sg = new SourceGenerator();
 		for (Class<?> c : SourceGenerator.class.getDeclaredClasses())
 		{
-			Class<? extends TypeDefinitionHandler> handlerClass;
+			Class<? extends DefinitionHandler> handlerClass;
 			try
 			{
-				handlerClass = c.asSubclass(TypeDefinitionHandler.class);
+				handlerClass = c.asSubclass(DefinitionHandler.class);
 			} catch (ClassCastException cce)
 			{
 				// Not a ClassDefHandler
@@ -87,7 +88,7 @@ public class SourceGenerator
 
 			try
 			{
-				TypeDefinitionHandler handler = handlerClass.newInstance();
+				DefinitionHandler handler = handlerClass.newInstance();
 				sg.handlers.add(handler);
 			} catch (InstantiationException ie)
 			{
@@ -130,7 +131,7 @@ public class SourceGenerator
 		TARGET_DIR.mkdirs();
 
 		// Initialize each handler
-		for (TypeDefinitionHandler handler : handlers)
+		for (DefinitionHandler handler : handlers)
 			handler.init();
 
 		// Parse the XML file for definitions
@@ -139,14 +140,23 @@ public class SourceGenerator
 		// For each type, inform each handler
 		for (TypeDefinition type : data.getTypes())
 		{
-			for (TypeDefinitionHandler handler : handlers)
+			for (DefinitionHandler handler : handlers)
 			{
-				handler.handleDefinition(type);
+				handler.handleTypeDefinition(type);
+			}
+		}
+
+		// For each diagnostic, inform each handler
+		for (DiagnosticDefinition diagnostic : data.getDiagnostics())
+		{
+			for (DefinitionHandler handler : handlers)
+			{
+				handler.handleDiagnosticDefinition(diagnostic);
 			}
 		}
 
 		// Finish each handler
-		for (TypeDefinitionHandler handler : handlers)
+		for (DefinitionHandler handler : handlers)
 			handler.finish();
 	}
 
@@ -419,11 +429,13 @@ public class SourceGenerator
 	/**
 	 * An interface implemented by those modules that wish to handle class definitions.
 	 */
-	static interface TypeDefinitionHandler
+	static interface DefinitionHandler
 	{
 		public void init() throws IOException;
 
-		public void handleDefinition(TypeDefinition def) throws IOException;
+		public void handleTypeDefinition(TypeDefinition def) throws IOException;
+
+		public void handleDiagnosticDefinition(DiagnosticDefinition def) throws IOException;
 
 		public void finish() throws IOException;
 	}
@@ -513,8 +525,16 @@ public class SourceGenerator
 	 * 
 	 * @author Zachary Palmer
 	 */
-	static abstract class AbstractClassDefHandler implements TypeDefinitionHandler
+	static abstract class AbstractDefinitionHandler implements DefinitionHandler
 	{
+		/**
+		 * A do-nothing diagnostic definition handling method for backwards compatibility.
+		 */
+		@Override
+		public void handleDiagnosticDefinition(DiagnosticDefinition def) throws IOException
+		{
+		}
+
 		/**
 		 * Creates a templated output file for a handler.
 		 * 
@@ -524,6 +544,8 @@ public class SourceGenerator
 		 *            interface class.
 		 * @param type The name of the type. No extension is permitted; type arguments are allowed.
 		 * @param includes <code>true</code> if a supplemental include file should be expected.
+		 * @param headerString A string to insert before the class definition header (for programmatic Javadocs and the
+		 *            like as necessary) or <code>null</code> to avoid using this feature.
 		 * @param extendsName The type to extend or <code>null</code> for no extends clause.
 		 * @param implementsNames The types to implement or an empty array for no implements clause.
 		 * @return The print stream writing to that file. The body will be written and ready to be closed with a
@@ -531,7 +553,8 @@ public class SourceGenerator
 		 * @throws IOException If an I/O error occurs.
 		 */
 		protected PrependablePrintStream createOutputFile(String pkg, TypeDefinition.Mode mode, boolean implementation,
-				String type, boolean includes, String extendsName, String... implementsNames) throws IOException
+				String type, boolean includes, String headerString, String extendsName, String... implementsNames)
+				throws IOException
 		{
 			String name;
 			if (type.indexOf('<') != -1)
@@ -553,6 +576,10 @@ public class SourceGenerator
 			if (includes)
 			{
 				includeAllImports(ret, Collections.singleton(name), implementation ? "implementation" : "interface");
+			}
+			if (headerString != null)
+			{
+				ret.println(headerString);
 			}
 			printGeneratedClause(ret);
 			ret.print("public ");
@@ -588,7 +615,8 @@ public class SourceGenerator
 		}
 	}
 
-	static abstract class ClassHierarchyBuildingHandler extends AbstractClassDefHandler
+	// TODO: eliminate most of this functionality or at least reimplement on the TypeDefinition class
+	static abstract class ClassHierarchyBuildingHandler extends AbstractDefinitionHandler
 	{
 		protected static enum ReviewMode
 		{
@@ -619,7 +647,7 @@ public class SourceGenerator
 			defNames = new ArrayList<String>();
 		}
 
-		public void handleDefinition(TypeDefinition def) throws IOException
+		public void handleTypeDefinition(TypeDefinition def) throws IOException
 		{
 			map.put(def.getBaseName(), def);
 			defNames.add(def.getBaseName());
@@ -1270,7 +1298,7 @@ public class SourceGenerator
 	/**
 	 * Writes the BsjTypedNodeVisitor interface.
 	 */
-	static class BsjTypedNodeVisitorWriter extends AbstractClassDefHandler
+	static class BsjTypedNodeVisitorWriter extends AbstractDefinitionHandler
 	{
 		private Map<String, Set<String>> subtypeMap;
 		private Map<String, String> supertypeMap;
@@ -1288,7 +1316,7 @@ public class SourceGenerator
 		}
 
 		@Override
-		public void handleDefinition(TypeDefinition def) throws IOException
+		public void handleTypeDefinition(TypeDefinition def) throws IOException
 		{
 			String tname = def.getBaseName();
 			String sname = def.getBaseSuperName();
@@ -1331,14 +1359,14 @@ public class SourceGenerator
 
 			// Write interface
 			PrintStream ps = createOutputFile("edu.jhu.cs.bsj.compiler.ast", TypeDefinition.Mode.INTERFACE, false,
-					"BsjTypedNodeVisitor", true, null);
+					"BsjTypedNodeVisitor", true, null, null);
 			writeTypeBody(ps, false, sortedNames, concreteTypeNameSet);
 			ps.println("}");
 			ps.close();
 
 			// Write default implementation
 			ps = createOutputFile("edu.jhu.cs.bsj.compiler.ast.util", TypeDefinition.Mode.CONCRETE, false,
-					"BsjTypedNodeNoOpVisitor", true, null, "BsjTypedNodeVisitor");
+					"BsjTypedNodeNoOpVisitor", true, null, null, "BsjTypedNodeVisitor");
 			writeTypeBody(ps, true, sortedNames, concreteTypeNameSet);
 			ps.println("}");
 			ps.close();
@@ -1411,11 +1439,11 @@ public class SourceGenerator
 			super.init();
 
 			this.ips = createOutputFile("edu.jhu.cs.bsj.compiler.ast", TypeDefinition.Mode.INTERFACE, false,
-					"BsjNodeFactory", true, null);
+					"BsjNodeFactory", true, null, null);
 			this.cps = createOutputFile("edu.jhu.cs.bsj.compiler.impl.ast", TypeDefinition.Mode.CONCRETE, true,
-					"BsjNodeFactoryImpl", true, null, "BsjNodeFactory");
+					"BsjNodeFactoryImpl", true, null, null, "BsjNodeFactory");
 			this.dps = createOutputFile("edu.jhu.cs.bsj.compiler.ast.util", TypeDefinition.Mode.ABSTRACT, false,
-					"BsjNodeFactoryDecorator", true, null, "BsjNodeFactory");
+					"BsjNodeFactoryDecorator", true, null, null, "BsjNodeFactory");
 		}
 
 		@Override
@@ -1437,7 +1465,7 @@ public class SourceGenerator
 				{
 					writeFactoryMethod(def, standardFactoryDefinition, skipMake);
 				}
-				
+
 				// Write extra factory methods as instructed
 				for (FactoryMethodDefinition methodDefinition : def.getFactoryMethods())
 				{
@@ -1501,8 +1529,7 @@ public class SourceGenerator
 			List<PropertyDefinition> argProps = new ArrayList<PropertyDefinition>();
 			for (PropertyDefinition recProp : recProps)
 			{
-				if (methodDefinition.isVisible(recProp.getName()) ||
-						recProp.isSkipMake() && !skipMake)
+				if (methodDefinition.isVisible(recProp.getName()) || recProp.isSkipMake() && !skipMake)
 				{
 					argProps.add(recProp);
 				}
@@ -1688,13 +1715,13 @@ public class SourceGenerator
 			super.init();
 
 			ips = createOutputFile("edu.jhu.cs.bsj.compiler.ast", TypeDefinition.Mode.INTERFACE, false,
-					"BsjNodeOperation<P,R>", true, null);
+					"BsjNodeOperation<P,R>", true, null, null);
 			nps = createOutputFile("edu.jhu.cs.bsj.compiler.ast.util", TypeDefinition.Mode.CONCRETE, false,
-					"BsjNodeNoOpOperation<P,R>", true, null, "BsjNodeOperation<P,R>");
+					"BsjNodeNoOpOperation<P,R>", true, null, null, "BsjNodeOperation<P,R>");
 			pps = createOutputFile("edu.jhu.cs.bsj.compiler.ast.util", TypeDefinition.Mode.ABSTRACT, false,
-					"BsjNodeOperationProxy<POrig,ROrig,PNew,RNew>", true, null, "BsjNodeOperation<PNew,RNew>");
+					"BsjNodeOperationProxy<POrig,ROrig,PNew,RNew>", true, null, null, "BsjNodeOperation<PNew,RNew>");
 			dps = createOutputFile("edu.jhu.cs.bsj.compiler.ast.util", TypeDefinition.Mode.ABSTRACT, false,
-					"BsjDefaultNodeOperation<P,R>", true, null, "BsjNodeOperation<P,R>");
+					"BsjDefaultNodeOperation<P,R>", true, null, null, "BsjNodeOperation<P,R>");
 		}
 
 		@Override
@@ -1813,7 +1840,7 @@ public class SourceGenerator
 		{
 			super.init();
 			ps = createOutputFile("edu.jhu.cs.bsj.compiler.impl.tool.compiler", TypeDefinition.Mode.CONCRETE, true,
-					"BsjTreeLifter", true, null, "BsjNodeOperation<ExpressionNode,ExpressionNode>");
+					"BsjTreeLifter", true, null, null, "BsjNodeOperation<ExpressionNode,ExpressionNode>");
 			ps.incPrependCount();
 			ps.println("private BsjNodeFactory factory;");
 			ps.println();
@@ -2050,6 +2077,133 @@ public class SourceGenerator
 			ps.decPrependCount();
 			ps.println("}");
 			ps.close();
+		}
+
+	}
+
+	static class DiagnosticDefinitionHandler extends AbstractDefinitionHandler
+	{
+		private PrependablePrintStream dps;
+
+		@Override
+		public void init() throws IOException
+		{
+		}
+
+		@Override
+		public void handleDiagnosticDefinition(DiagnosticDefinition def) throws IOException
+		{
+			dps = createOutputFile(def.getClassPackage(), def.getCode() == null ? Mode.ABSTRACT : Mode.CONCRETE, false,
+					def.getName() + "<T extends javax.tools.JavaFileObject>", false,
+					"import edu.jhu.cs.bsj.compiler.diagnostic.*;\n\n/**\n * "
+							+ def.getDocString().replaceAll("\n", "\n * ") + "\n */", def.getSuperName() + "<T>");
+			dps.incPrependCount();
+
+			if (def.getCode() != null)
+			{
+				dps.println("/** The code for this diagnostic. */");
+				dps.println("public static final String CODE = \"" + def.getCode() + "\";");
+				dps.println();
+			}
+
+			for (PropertyDefinition prop : def.getProperties())
+			{
+				dps.println("/** " + capFirst(prop.getDescription()) + ". */");
+				dps.println("private " + prop.getFullType() + " " + prop.getName() + ";");
+				dps.println();
+			}
+
+			List<PropertyDefinition> consParams = new ArrayList<PropertyDefinition>();
+			consParams.add(new PropertyDefinition("lineNumber", "long", null, PropertyDefinition.Mode.NORMAL, "", null));
+			consParams.add(new PropertyDefinition("columnNumber", "long", null, PropertyDefinition.Mode.NORMAL, "",
+					null));
+			consParams.add(new PropertyDefinition("source", "T", null, PropertyDefinition.Mode.NORMAL, "", null));
+			PropertyDefinition.Mode overrideMode = def.getCode() == null ? PropertyDefinition.Mode.NORMAL
+					: PropertyDefinition.Mode.SKIP;
+			consParams.add(new PropertyDefinition("code", "String", null, overrideMode, null,
+					def.getCode() == null ? null : "CODE"));
+			// TODO: parameterization of diagnostic kind
+			consParams.add(new PropertyDefinition("kind", "javax.tools.Diagnostic.Kind", null, overrideMode, null,
+					def.getCode() == null ? null : "Kind.ERROR"));
+			consParams.addAll(def.getRecursiveProperties(true));
+
+			List<PropertyDefinition> superParams = new ArrayList<PropertyDefinition>(consParams);
+			superParams.removeAll(def.getProperties());
+
+			dps.print("public " + def.getName());
+			printParameterList(dps, consParams, true);
+			dps.println();
+			dps.println("{");
+			dps.incPrependCount();
+			dps.print("super");
+			// TODO: override map
+			Map<String, String> overrideMap = new HashMap<String, String>();
+			for (PropertyDefinition prop : superParams)
+			{
+				if (prop.getDefaultExpression() != null)
+				{
+					overrideMap.put(prop.getName(), prop.getDefaultExpression());
+				}
+			}
+			printArgumentList(dps, superParams, overrideMap);
+			dps.println(";");
+
+			for (PropertyDefinition prop : def.getProperties())
+			{
+				dps.println("this." + prop.getName() + " = " + prop.getName() + ";");
+			}
+
+			dps.decPrependCount();
+			dps.println("}");
+			dps.println();
+
+			for (PropertyDefinition prop : def.getProperties())
+			{
+				dps.println("/**");
+				dps.println(" * Retrieves " + prop.getDescription() + ".");
+				dps.println(" * @return " + capFirst(prop.getDescription()) + ".");
+				dps.println(" */");
+				dps.println("public " + prop.getFullType() + " get" + capFirst(prop.getName()) + "()");
+				dps.println("{");
+				dps.incPrependCount();
+				dps.println("return this." + prop.getName() + ";");
+				dps.decPrependCount();
+				dps.println("}");
+				dps.println();
+			}
+
+			dps.println("@Override");
+			dps.println("protected List<Object> getMessageArgs()");
+			dps.println("{");
+			dps.incPrependCount();
+			dps.print("List<Object> args = ");
+			if (def.getSuperName().equals("AbstractBsjDiagnostic"))
+			{
+				dps.println("new ArrayList<Object>();");
+			} else
+			{
+				dps.println("super.getMessageArgs();");
+			}
+			for (PropertyDefinition prop : def.getProperties())
+			{
+				dps.println("args.add(this." + prop.getName() + ");");
+			}
+			dps.println("return args;");
+			dps.decPrependCount();
+			dps.println("}");
+
+			dps.decPrependCount();
+			dps.println("}");
+		}
+
+		@Override
+		public void handleTypeDefinition(TypeDefinition def) throws IOException
+		{
+		}
+
+		@Override
+		public void finish() throws IOException
+		{
 		}
 
 	}

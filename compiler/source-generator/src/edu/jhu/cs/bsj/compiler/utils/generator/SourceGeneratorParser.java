@@ -64,32 +64,37 @@ public class SourceGeneratorParser
 		}
 
 		SrcgenHandler handler = new SrcgenHandler(null, null);
-		Collection<TypeDefinition> typeDefinitions = handler.handle(topElement);
-		
-		postProcess(typeDefinitions);
-		
-		return new SourceGenerationData(typeDefinitions);
+		SourceGenerationData data = handler.handle(topElement);
+
+		establishHierarchy(data.getTypes(), true);
+		establishHierarchy(data.getDiagnostics(), false);
+
+		return data;
 	}
-	
-	private void postProcess(Collection<TypeDefinition> typeDefinitions)
+
+	private <T extends HierarchyDefinition<T>> void establishHierarchy(Collection<T> definitions,
+			boolean noParentIsError)
 	{
 		// Post processing
-		Map<String, TypeDefinition> typeMapByName = new HashMap<String, TypeDefinition>();
-		for (TypeDefinition typeDefinition : typeDefinitions)
+		Map<String, T> typeMapByName = new HashMap<String, T>();
+		for (T definition : definitions)
 		{
-			typeMapByName.put(typeDefinition.getBaseName(), typeDefinition);
+			typeMapByName.put(definition.getName(), definition);
 		}
-		for (TypeDefinition typeDefinition : typeDefinitions)
+		for (T definition : definitions)
 		{
-			if (typeDefinition.getSuperName() != null)
+			if (definition.getSuperName() != null)
 			{
-				TypeDefinition superDefinition = typeMapByName.get(typeDefinition.getSuperName());
+				T superDefinition = typeMapByName.get(definition.getSuperName());
 				if (superDefinition == null)
 				{
-					throw new IllegalStateException("Type " + typeDefinition + " has supertype "
-							+ typeDefinition.getSuperName() + " which was not declared.");
+					if (noParentIsError)
+					{
+						throw new IllegalStateException("Type " + definition + " has supertype "
+								+ definition.getSuperName() + " which was not declared.");
+					}
 				}
-				typeDefinition.setSuperDefinition(superDefinition);
+				definition.setParent(superDefinition);
 			}
 		}
 
@@ -100,12 +105,74 @@ public class SourceGeneratorParser
 		return e.hasAttribute(attribute) ? e.getAttribute(attribute) : null;
 	}
 
+	private static String unindent(String s)
+	{
+		List<String> strings = splitAndTrim(s);
+		StringBuilder sb = new StringBuilder();
+		for (String string : strings)
+		{
+			if (sb.length() > 0)
+				sb.append("\n");
+			sb.append(string);
+		}
+		return sb.toString();
+	}
+
+	private static List<String> splitAndTrim(String s)
+	{
+		List<String> strings = splitStrings(s);
+		if (strings.size() == 0)
+			return Collections.emptyList();
+		int spaces = calculateMinimalWhitespace(strings);
+		removePrefix(strings, spaces);
+		return strings;
+	}
+
+	private static List<String> splitStrings(String s)
+	{
+		List<String> strings = new LinkedList<String>(Arrays.asList(s.split("\n")));
+		while (strings.size() > 0 && strings.get(0).trim().length() == 0)
+			strings.remove(0);
+		while (strings.size() > 0 && strings.get(strings.size() - 1).trim().length() == 0)
+			strings.remove(strings.size() - 1);
+		for (int i = 0; i < strings.size(); i++)
+		{
+			strings.set(i, strings.get(i).replaceAll("\t", "    "));
+		}
+		return strings;
+	}
+
+	private static int calculateMinimalWhitespace(List<String> strings)
+	{
+		if (strings.size() == 0)
+			return 0;
+		int space = Integer.MAX_VALUE;
+		for (String string : strings)
+		{
+			int whitespaces = 0;
+			while (string.length() > whitespaces && string.charAt(whitespaces) == ' ')
+			{
+				whitespaces++;
+			}
+			space = Math.min(space, whitespaces);
+		}
+		return space;
+	}
+
+	private static void removePrefix(List<String> strings, int spaces)
+	{
+		for (int i = 0; i < strings.size(); i++)
+		{
+			strings.set(i, strings.get(i).substring(spaces));
+		}
+	}
+
 	static interface ElementHandler<T>
 	{
 		public T handle(Element e);
 	}
 
-	static class SrcgenHandler implements ElementHandler<Collection<TypeDefinition>>
+	static class SrcgenHandler implements ElementHandler<SourceGenerationData>
 	{
 		/** The standing interface package name. */
 		private String interfacePackageName;
@@ -119,9 +186,10 @@ public class SourceGeneratorParser
 			this.classPackageName = classPackageName;
 		}
 
-		public Collection<TypeDefinition> handle(Element e)
+		public SourceGenerationData handle(Element e)
 		{
 			Collection<TypeDefinition> types = new ArrayList<TypeDefinition>();
+			Collection<DiagnosticDefinition> diagnostics = new ArrayList<DiagnosticDefinition>();
 
 			if (e.hasAttribute("ipkg"))
 			{
@@ -143,11 +211,17 @@ public class SourceGeneratorParser
 					if (childTag.equals("srcgen"))
 					{
 						SrcgenHandler handler = new SrcgenHandler(interfacePackageName, classPackageName);
-						types.addAll(handler.handle(childElement));
+						SourceGenerationData childData = handler.handle(childElement);
+						types.addAll(childData.getTypes());
+						diagnostics.addAll(childData.getDiagnostics());
 					} else if (childTag.equals("type"))
 					{
 						TypeHandler handler = new TypeHandler(interfacePackageName, classPackageName);
 						types.add(handler.handle(childElement));
+					} else if (childTag.equals("diagnostic"))
+					{
+						DiagnosticHandler handler = new DiagnosticHandler(classPackageName);
+						diagnostics.add(handler.handle(childElement));
 					} else
 					{
 						throw new IllegalStateException(childTag);
@@ -155,7 +229,7 @@ public class SourceGeneratorParser
 				}
 			}
 
-			return types;
+			return new SourceGenerationData(types, diagnostics);
 		}
 	}
 
@@ -277,68 +351,6 @@ public class SourceGeneratorParser
 			}
 			return typeDefinition;
 		}
-
-		private String unindent(String s)
-		{
-			List<String> strings = splitAndTrim(s);
-			StringBuilder sb = new StringBuilder();
-			for (String string : strings)
-			{
-				if (sb.length() > 0)
-					sb.append("\n");
-				sb.append(string);
-			}
-			return sb.toString();
-		}
-
-		private List<String> splitAndTrim(String s)
-		{
-			List<String> strings = splitStrings(s);
-			if (strings.size() == 0)
-				return Collections.emptyList();
-			int spaces = calculateMinimalWhitespace(strings);
-			removePrefix(strings, spaces);
-			return strings;
-		}
-
-		private List<String> splitStrings(String s)
-		{
-			List<String> strings = new LinkedList<String>(Arrays.asList(s.split("\n")));
-			while (strings.size() > 0 && strings.get(0).trim().length() == 0)
-				strings.remove(0);
-			while (strings.size() > 0 && strings.get(strings.size() - 1).trim().length() == 0)
-				strings.remove(strings.size() - 1);
-			for (int i = 0; i < strings.size(); i++)
-			{
-				strings.set(i, strings.get(i).replaceAll("\t", "    "));
-			}
-			return strings;
-		}
-
-		private int calculateMinimalWhitespace(List<String> strings)
-		{
-			if (strings.size() == 0)
-				return 0;
-			int space = Integer.MAX_VALUE;
-			for (String string : strings)
-			{
-				int whitespaces = 0;
-				while (string.length() > whitespaces && string.charAt(whitespaces) == ' ')
-				{
-					whitespaces++;
-				}
-				space = Math.min(space, whitespaces);
-			}
-			return space;
-		}
-
-		private void removePrefix(List<String> strings, int spaces)
-		{
-			for (int i = 0; i < strings.size(); i++)
-			{
-				strings.set(i, strings.get(i).substring(spaces));
-			}
-		}
 	}
 
 	static class PropertyHandler implements ElementHandler<PropertyDefinition>
@@ -408,6 +420,58 @@ public class SourceGeneratorParser
 				}
 			}
 			return new EnumeratedFactoryMethodDefinition(properties);
+		}
+	}
+
+	static class DiagnosticHandler implements ElementHandler<DiagnosticDefinition>
+	{
+		/** The standing class package name. */
+		private String classPackageName;
+
+		public DiagnosticHandler(String classPackageName)
+		{
+			super();
+			this.classPackageName = classPackageName;
+		}
+
+		@Override
+		public DiagnosticDefinition handle(Element e)
+		{
+			String name = e.getAttribute("name");
+			String superName = getAttributeValue(e, "super");
+			if (superName == null)
+			{
+				superName = "AbstractBsjDiagnostic";
+			}
+			List<PropertyDefinition> props = new ArrayList<PropertyDefinition>();
+			String docString = null;
+			String code = getAttributeValue(e, "code");
+
+			NodeList children = e.getChildNodes();
+			for (int i = 0; i < children.getLength(); i++)
+			{
+				Node node = children.item(i);
+				if (node instanceof Element)
+				{
+					Element childElement = (Element) node;
+					String childTag = childElement.getTagName();
+					if (childTag.equals("prop"))
+					{
+						PropertyHandler handler = new PropertyHandler();
+						props.add(handler.handle(childElement));
+					} else if (childTag.equals("doc"))
+					{
+						docString = unindent(childElement.getTextContent());
+					} else
+					{
+						throw new IllegalStateException("Unknown subtag for type: " + childTag);
+					}
+				}
+			}
+
+			DiagnosticDefinition diagnosticDefinition = new DiagnosticDefinition(name, superName, classPackageName,
+					props, docString, code);
+			return diagnosticDefinition;
 		}
 	}
 }

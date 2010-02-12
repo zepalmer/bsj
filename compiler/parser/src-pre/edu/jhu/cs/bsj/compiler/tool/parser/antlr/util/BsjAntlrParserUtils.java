@@ -13,8 +13,9 @@ import edu.jhu.cs.bsj.compiler.diagnostic.lexer.BsjLexerDiagnostic;
 import edu.jhu.cs.bsj.compiler.diagnostic.lexer.GeneralLexerFailureDiagnostic;
 import edu.jhu.cs.bsj.compiler.diagnostic.parser.BsjParserDiagnostic;
 import edu.jhu.cs.bsj.compiler.diagnostic.parser.ExtraneousTokenDiagnostic;
+import edu.jhu.cs.bsj.compiler.diagnostic.parser.FloatingPointLiteralTooLargeDiagnostic;
+import edu.jhu.cs.bsj.compiler.diagnostic.parser.FloatingPointLiteralTooSmallDiagnostic;
 import edu.jhu.cs.bsj.compiler.diagnostic.parser.GeneralParseFailureDiagnostic;
-import edu.jhu.cs.bsj.compiler.diagnostic.parser.InvalidFloatingPointLiteralDiagnostic;
 import edu.jhu.cs.bsj.compiler.diagnostic.parser.InvalidIntegerLiteralDiagnostic;
 import edu.jhu.cs.bsj.compiler.diagnostic.parser.MissingTokenDiagnostic;
 import edu.jhu.cs.bsj.compiler.diagnostic.parser.UnexpectedTokenDiagnostic;
@@ -338,14 +339,14 @@ public class BsjAntlrParserUtils
 		float f = Float.parseFloat(nums);
 		if (!isFloatingPointZero(s) && f == 0.0f)
 		{
-			listener.report(new InvalidFloatingPointLiteralDiagnostic<JavaFileObject>(lineNumber, columnNumber,
-					resource, ruleName, s, InvalidFloatingPointLiteralDiagnostic.FailureType.TOO_SMALL));
+			listener.report(new FloatingPointLiteralTooSmallDiagnostic<JavaFileObject>(lineNumber, columnNumber,
+					resource, ruleName, s));
 			return Float.NaN;
 		}
 		if (Float.isInfinite(f))
 		{
-			listener.report(new InvalidFloatingPointLiteralDiagnostic<JavaFileObject>(lineNumber, columnNumber,
-					resource, ruleName, s, InvalidFloatingPointLiteralDiagnostic.FailureType.TOO_LARGE));
+			listener.report(new FloatingPointLiteralTooLargeDiagnostic<JavaFileObject>(lineNumber, columnNumber,
+					resource, ruleName, s));
 			return Float.NaN;
 		}
 		return f;
@@ -373,14 +374,14 @@ public class BsjAntlrParserUtils
 		double d = Double.parseDouble(nums);
 		if (!isFloatingPointZero(s) && d == 0.0)
 		{
-			listener.report(new InvalidFloatingPointLiteralDiagnostic<JavaFileObject>(lineNumber, columnNumber,
-					resource, ruleName, s, InvalidFloatingPointLiteralDiagnostic.FailureType.TOO_SMALL));
+			listener.report(new FloatingPointLiteralTooSmallDiagnostic<JavaFileObject>(lineNumber, columnNumber,
+					resource, ruleName, s));
 			return Double.NaN;
 		}
 		if (Double.isInfinite(d))
 		{
-			listener.report(new InvalidFloatingPointLiteralDiagnostic<JavaFileObject>(lineNumber, columnNumber,
-					resource, ruleName, s, InvalidFloatingPointLiteralDiagnostic.FailureType.TOO_LARGE));
+			listener.report(new FloatingPointLiteralTooLargeDiagnostic<JavaFileObject>(lineNumber, columnNumber,
+					resource, ruleName, s));
 			return Double.NaN;
 		}
 		return d;

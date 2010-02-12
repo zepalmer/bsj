@@ -1,70 +1,76 @@
 package edu.jhu.cs.bsj.compiler.diagnostic.parser;
 
-import java.util.Arrays;
 import java.util.List;
 
-import javax.tools.JavaFileObject;
+import javax.annotation.Generated;
 
 /**
- * Represents a diagnostic which indicates that the token in a given position was not the one which was expected.
- * 
- * @author Zachary Palmer
- * 
- * @param <T> The type of source for this diagnostic.
+ * A diagnostic representing the presence of one token where another was expected.
  */
-public class UnexpectedTokenDiagnostic<T extends JavaFileObject> extends BsjParserDiagnostic<T>
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
+public class UnexpectedTokenDiagnostic<T extends javax.tools.JavaFileObject> extends BsjParserDiagnostic<T>
 {
-	/** The code for this diagnostic. */
-	public static final String CODE = "bsj.parser.error.extraneousToken";
-
-	/** The type of the token which was found. */
-	private String tokenType;
-	/** The text of the token which was found. */
-	private String tokenText;
-	/** The type of the token which was expected. */
-	private String expectedType;
-
-	public UnexpectedTokenDiagnostic(long lineNumber, long columnNumber, T source, String rule,
-			String tokenType, String tokenText, String expectedType)
-	{
-		super(lineNumber, columnNumber, source, CODE, Kind.ERROR, rule);
-		this.tokenType = tokenType;
-		this.tokenText = tokenText;
-		this.expectedType = expectedType;
-	}
-
-	/**
-	 * Retrieves the name of the type of token which was found.
-	 * @return The type of token which was found.
-	 */
-	public String getTokenType()
-	{
-		return tokenType;
-	}
-
-	/**
-	 * Retrieves the text of the token which was found.
-	 * @return The text of the token.
-	 */
-	public String getTokenText()
-	{
-		return tokenText;
-	}
-
-	/**
-	 * Retrieves the type of token that was expected.
-	 * @return The expected token type.
-	 */
-	public String getExpectedType()
-	{
-		return expectedType;
-	}
-
-	@Override
-	protected List<Object> getMessageArgs()
-	{
-		List<Object> args = super.getMessageArgs();
-		args.addAll(Arrays.asList(tokenType, tokenText, expectedType));
-		return args;
-	}
+    /** The code for this diagnostic. */
+    public static final String CODE = "bsj.parser.error.unexpectedToken";
+    
+    /** The type of the token which was found. */
+    private String tokenType;
+    
+    /** The text of the token which was found. */
+    private String tokenText;
+    
+    /** The type of the expected token. */
+    private String expectedType;
+    
+    public UnexpectedTokenDiagnostic(
+                long lineNumber,
+                long columnNumber,
+                T source,
+                String ruleName,
+                String tokenType,
+                String tokenText,
+                String expectedType)
+    {
+        super(lineNumber, columnNumber, source, CODE, Kind.ERROR, ruleName);
+        this.tokenType = tokenType;
+        this.tokenText = tokenText;
+        this.expectedType = expectedType;
+    }
+    
+    /**
+     * Retrieves the type of the token which was found.
+     * @return The type of the token which was found.
+     */
+    public String getTokenType()
+    {
+        return this.tokenType;
+    }
+    
+    /**
+     * Retrieves the text of the token which was found.
+     * @return The text of the token which was found.
+     */
+    public String getTokenText()
+    {
+        return this.tokenText;
+    }
+    
+    /**
+     * Retrieves the type of the expected token.
+     * @return The type of the expected token.
+     */
+    public String getExpectedType()
+    {
+        return this.expectedType;
+    }
+    
+    @Override
+    protected List<Object> getMessageArgs()
+    {
+        List<Object> args = super.getMessageArgs();
+        args.add(this.tokenType);
+        args.add(this.tokenText);
+        args.add(this.expectedType);
+        return args;
+    }
 }

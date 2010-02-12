@@ -1,6 +1,5 @@
 package edu.jhu.cs.bsj.compiler.utils.generator;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -9,7 +8,7 @@ import java.util.Map;
  * 
  * @author Zachary Palmer
  */
-public class TypeDefinition
+public class TypeDefinition extends PropertyBasedHierarchyDefinition<TypeDefinition>
 {
 	enum Mode
 	{
@@ -34,7 +33,7 @@ public class TypeDefinition
 	private List<FactoryMethodDefinition> factoryMethods;
 	private Mode mode;
 	
-	private TypeDefinition superDefinition;
+	private TypeDefinition parent;
 
 	public TypeDefinition(String baseName, String typeParameter, String superName, String superTypeArg,
 			String interfacePackage, String classPackage, List<String> tags, List<PropertyDefinition> properties,
@@ -140,18 +139,6 @@ public class TypeDefinition
 		}
 	}
 	
-	public List<PropertyDefinition> getRecursiveProperties()
-	{
-		List<PropertyDefinition> props = new ArrayList<PropertyDefinition>();
-		TypeDefinition def = this;
-		while (def != null)
-		{
-			props.addAll(def.getProperties());
-			def = def.getSuperDefinition();
-		}
-		return props;
-	}
-
 	public String getBaseName()
 	{
 		return baseName;
@@ -242,14 +229,22 @@ public class TypeDefinition
 		return mode;
 	}
 	
-	public TypeDefinition getSuperDefinition()
+	@Override
+	public String getName()
 	{
-		return superDefinition;
+		return getBaseName();
 	}
 
-	public void setSuperDefinition(TypeDefinition superDefinition)
+	@Override
+	public TypeDefinition getParent()
 	{
-		this.superDefinition = superDefinition;
+		return this.parent;
+	}
+
+	@Override
+	public void setParent(TypeDefinition parent)
+	{
+		this.parent = parent;
 	}
 
 	public String toString()

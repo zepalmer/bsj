@@ -1,49 +1,47 @@
 package edu.jhu.cs.bsj.compiler.diagnostic.parser;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-import javax.tools.JavaFileObject;
+import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.diagnostic.AbstractBsjDiagnostic;
 
 /**
- * This type of diagnostic represents those diagnostics which are produced by the BSJ parser.
- * 
- * @author Zachary Palmer
- * 
- * @param <T> The type of the source of this diagnostic.
+ * A diagnostic which acts as the parent for all parser diagnostics.
  */
-public abstract class BsjParserDiagnostic<T extends JavaFileObject> extends AbstractBsjDiagnostic<T>
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
+public abstract class BsjParserDiagnostic<T extends javax.tools.JavaFileObject> extends AbstractBsjDiagnostic<T>
 {
-	/**
-	 * The rule in which this diagnostic occurred.
-	 */
-	private String ruleName;
-	
-	/**
-	 * @param rule The rule which produced this diagnostic.
-	 * @see AbstractBsjDiagnostic#AbstractBsjDiagnostic(long, long, JavaFileObject, String, javax.tools.Diagnostic.Kind)
-	 */
-	public BsjParserDiagnostic(long lineNumber, long columnNumber, T source, String code, Kind kind, String rule)
-	{
-		super(lineNumber, columnNumber, source, code, kind);
-		this.ruleName = rule;
-	}
-
-	/**
-	 * Retrieves the name of the rule in which this diagnostic was produced.
-	 * @return The name of this diagnostic's rule.
-	 */
-	public String getRuleName()
-	{
-		return ruleName;
-	}
-
-	@Override
-	protected List<Object> getMessageArgs()
-	{
-		return new ArrayList<Object>(Arrays.asList(this.ruleName));
-	}
+    /** The rule which caused this diagnostic. */
+    private String ruleName;
+    
+    public BsjParserDiagnostic(
+                long lineNumber,
+                long columnNumber,
+                T source,
+                String code,
+                javax.tools.Diagnostic.Kind kind,
+                String ruleName)
+    {
+        super(lineNumber, columnNumber, source, code, kind);
+        this.ruleName = ruleName;
+    }
+    
+    /**
+     * Retrieves the rule which caused this diagnostic.
+     * @return The rule which caused this diagnostic.
+     */
+    public String getRuleName()
+    {
+        return this.ruleName;
+    }
+    
+    @Override
+    protected List<Object> getMessageArgs()
+    {
+        List<Object> args = new ArrayList<Object>();
+        args.add(this.ruleName);
+        return args;
+    }
 }

@@ -1,46 +1,46 @@
 package edu.jhu.cs.bsj.compiler.diagnostic.parser;
 
-import java.util.Arrays;
 import java.util.List;
 
-import javax.tools.JavaFileObject;
+import javax.annotation.Generated;
 
 /**
- * Represents a diagnostic which indicates the absence of a required token.
- * 
- * @author Zachary Palmer
- * 
- * @param <T> The type of source for this diagnostic.
+ * A diagnostic representing a missing token.
  */
-public class MissingTokenDiagnostic<T extends JavaFileObject> extends BsjParserDiagnostic<T>
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
+public class MissingTokenDiagnostic<T extends javax.tools.JavaFileObject> extends BsjParserDiagnostic<T>
 {
-	/** The code for this diagnostic. */
-	public static final String CODE = "bsj.parser.error.extraneousToken";
-
-	/** The type of the missing token. */
-	private String tokenType;
-
-	public MissingTokenDiagnostic(long lineNumber, long columnNumber, T source, String rule,
-			String tokenType)
-	{
-		super(lineNumber, columnNumber, source, CODE, Kind.ERROR, rule);
-		this.tokenType = tokenType;
-	}
-
-	/**
-	 * Retrieves the name of the type of token which was missing.
-	 * @return The type of token which was missing.
-	 */
-	public String getTokenType()
-	{
-		return tokenType;
-	}
-
-	@Override
-	protected List<Object> getMessageArgs()
-	{
-		List<Object> args = super.getMessageArgs();
-		args.addAll(Arrays.asList(tokenType));
-		return args;
-	}
+    /** The code for this diagnostic. */
+    public static final String CODE = "bsj.parser.error.missingToken";
+    
+    /** The type of the missing token. */
+    private String tokenType;
+    
+    public MissingTokenDiagnostic(
+                long lineNumber,
+                long columnNumber,
+                T source,
+                String ruleName,
+                String tokenType)
+    {
+        super(lineNumber, columnNumber, source, CODE, Kind.ERROR, ruleName);
+        this.tokenType = tokenType;
+    }
+    
+    /**
+     * Retrieves the type of the missing token.
+     * @return The type of the missing token.
+     */
+    public String getTokenType()
+    {
+        return this.tokenType;
+    }
+    
+    @Override
+    protected List<Object> getMessageArgs()
+    {
+        List<Object> args = super.getMessageArgs();
+        args.add(this.tokenType);
+        return args;
+    }
 }
