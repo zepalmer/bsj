@@ -1,6 +1,5 @@
 0.1
 	* Parses ASTs, executes basic metaprograms, and produces valid .class files.
-	* Probably uses subprocess calls to invoke compiler for sake of simplicity; thus, may be system-dependent.
 	* No support for dependency analysis.
 	* No support for code literal sugar or splicing.
 	* No support for metaprogram local methods or global metaprogram imports.
@@ -8,25 +7,18 @@
 	* No preamble processing.
 	
 0.2
-	* Preamble processing added.
-	* Local metaprogram method declarations.
+	* Metaprogram preamble processing.
+	* Metaprogram imports
+	* Dependency analysis
+	* Name analysis
 
 0.3
-	* Dependency analysis.
-	* No support for resolving concurrent metaprogram execution; all metaprograms must have unique target names.
+	* BSJ-level type checking
+	* Simple code literal sugar based on type checker
 
 0.4
-	* Support for shared target names with AST manipulation merges.  Detect conflicts as necessary.
-	* Static metaprogram dependency sugar.
+	* Code literal splicing
 
-0.5
-	* Bulk import sugar.
-	* Code literal and splice sugar.
-	* Annotational metaprogram sugar.
-
-0.6
-	* Java Compiler API integration
-	
-General Future Targets
-	* Performance tuning and general niftiness.
-	* Generated Java source should look as much as possible like original static source in BSJ file.
+Whenever possible:
+	* Annotation-anchored metaprograms
+	* Annotation sugar for static code snippets
