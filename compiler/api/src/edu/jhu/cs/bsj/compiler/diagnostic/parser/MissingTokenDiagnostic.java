@@ -1,5 +1,8 @@
 package edu.jhu.cs.bsj.compiler.diagnostic.parser;
 
+import java.util.Arrays;
+import java.util.List;
+
 import javax.tools.JavaFileObject;
 
 /**
@@ -31,5 +34,13 @@ public class MissingTokenDiagnostic<T extends JavaFileObject> extends BsjParserD
 	public String getTokenType()
 	{
 		return tokenType;
+	}
+
+	@Override
+	protected List<Object> getMessageArgs()
+	{
+		List<Object> args = super.getMessageArgs();
+		args.addAll(Arrays.asList(tokenType));
+		return args;
 	}
 }

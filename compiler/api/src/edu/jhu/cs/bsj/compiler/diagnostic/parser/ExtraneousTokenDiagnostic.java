@@ -1,5 +1,8 @@
 package edu.jhu.cs.bsj.compiler.diagnostic.parser;
 
+import java.util.Arrays;
+import java.util.List;
+
 import javax.tools.JavaFileObject;
 
 /**
@@ -43,5 +46,13 @@ public class ExtraneousTokenDiagnostic<T extends JavaFileObject> extends BsjPars
 	public String getTokenText()
 	{
 		return tokenText;
+	}
+
+	@Override
+	protected List<Object> getMessageArgs()
+	{
+		List<Object> args = super.getMessageArgs();
+		args.addAll(Arrays.asList(tokenType,tokenText));
+		return args;
 	}
 }

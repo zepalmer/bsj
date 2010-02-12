@@ -1,9 +1,13 @@
 package edu.jhu.cs.bsj.compiler.diagnostic;
 
+import java.util.List;
 import java.util.Locale;
 
 import javax.tools.Diagnostic;
 import javax.tools.JavaFileObject;
+
+import edu.jhu.cs.bsj.compiler.impl.utils.i18n.InternationalizationUtilities;
+import edu.jhu.cs.bsj.compiler.impl.utils.i18n.PropertyBasedStringRepository;
 
 /**
  * An abstract base class used for convenient creation of BSJ diagnostics.
@@ -100,12 +104,43 @@ public abstract class AbstractBsjDiagnostic<T extends JavaFileObject> implements
 		return this.lineNumber;
 	}
 
+	/**
+	 * Retrieves a message for this diagnostic.  The message is generated from a classpath properties file's format
+	 * string (see {@link PropertyBasedStringRepository}) using this diagnostic's code.  The arguments provided to the
+	 * format string are based on the specific subclass but always start with (in order) the name of the file for which
+	 * this diagnostic was created, the line number, and the column number.  The format strings make use of positional
+	 * format arguments where necessary to ensure that the appropriate information is used.
+	 */
 	@Override
 	public String getMessage(Locale locale)
 	{
-		// TODO provide a real default; otherwise, leave this implementation out and force subclasses to provide one
-		return this.getClass().toString();
+		String formatString = InternationalizationUtilities.MESSAGE_REPOSITORY.lookup(locale, getCode());
+		if (formatString == null)
+		{
+			// try to produce a default message in English with a warning
+			formatString = InternationalizationUtilities.MESSAGE_REPOSITORY.lookup(Locale.US, getCode());;
+			if (formatString == null)
+			{
+				// no hope!  no hope!
+				return "(could not get string for key " + getCode() + ")";
+			}
+			formatString = "(no strings found for language=" + locale.getDisplayLanguage() + ") " + formatString;
+		}
+		
+		List<Object> args = getMessageArgs();
+		Object[] realArgs = new Object[args.size()+3];
+		realArgs[0] = this.getSource().getName();
+		realArgs[1] = this.getLineNumber();
+		realArgs[2] = this.getColumnNumber();
+		System.arraycopy(args.toArray(), 0, realArgs, 3, args.size());
+		return String.format(locale, formatString, realArgs);
 	}
+	
+	/**
+	 * Retrieves arguments which should be used to format the message for this diagnostic.
+	 * @return The arguments to use.
+	 */
+	protected abstract List<Object> getMessageArgs();
 
 	/**
 	 * Retrieves the character index from the beginning of the file at which the event occurred.

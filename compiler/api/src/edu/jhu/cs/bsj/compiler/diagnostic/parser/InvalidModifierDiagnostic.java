@@ -1,5 +1,8 @@
 package edu.jhu.cs.bsj.compiler.diagnostic.parser;
 
+import java.util.Arrays;
+import java.util.List;
+
 import javax.tools.JavaFileObject;
 
 public class InvalidModifierDiagnostic<T extends JavaFileObject> extends BsjParserDiagnostic<T>
@@ -23,5 +26,14 @@ public class InvalidModifierDiagnostic<T extends JavaFileObject> extends BsjPars
 	public String getModifier()
 	{
 		return modifier;
+	}
+
+	@Override
+	protected List<Object> getMessageArgs()
+	{
+		List<Object> args = super.getMessageArgs();
+		args.addAll(Arrays.asList(modifier));
+		return args;
+
 	}
 }

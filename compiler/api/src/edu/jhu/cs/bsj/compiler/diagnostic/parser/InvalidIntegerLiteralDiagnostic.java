@@ -1,5 +1,8 @@
 package edu.jhu.cs.bsj.compiler.diagnostic.parser;
 
+import java.util.Arrays;
+import java.util.List;
+
 import javax.tools.JavaFileObject;
 
 /**
@@ -30,5 +33,13 @@ public class InvalidIntegerLiteralDiagnostic<T extends JavaFileObject> extends B
 	public String getLiteralText()
 	{
 		return literalText;
+	}
+
+	@Override
+	protected List<Object> getMessageArgs()
+	{
+		List<Object> args = super.getMessageArgs();
+		args.addAll(Arrays.asList(literalText));
+		return args;
 	}
 }

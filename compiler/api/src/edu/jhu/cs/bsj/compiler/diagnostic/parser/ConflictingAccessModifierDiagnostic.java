@@ -1,5 +1,8 @@
 package edu.jhu.cs.bsj.compiler.diagnostic.parser;
 
+import java.util.Arrays;
+import java.util.List;
+
 import javax.tools.JavaFileObject;
 
 /**
@@ -45,5 +48,13 @@ public class ConflictingAccessModifierDiagnostic<T extends JavaFileObject> exten
 	public String getSecondModifier()
 	{
 		return secondModifier;
+	}
+
+	@Override
+	protected List<Object> getMessageArgs()
+	{
+		List<Object> args = super.getMessageArgs();
+		args.addAll(Arrays.asList(firstModifier, secondModifier));
+		return args;
 	}
 }

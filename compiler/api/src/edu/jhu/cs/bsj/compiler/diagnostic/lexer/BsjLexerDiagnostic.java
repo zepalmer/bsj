@@ -1,5 +1,9 @@
 package edu.jhu.cs.bsj.compiler.diagnostic.lexer;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import javax.tools.JavaFileObject;
 
 import edu.jhu.cs.bsj.compiler.diagnostic.AbstractBsjDiagnostic;
@@ -37,6 +41,10 @@ public abstract class BsjLexerDiagnostic<T extends JavaFileObject> extends Abstr
 	{
 		return character;
 	}
-	
-	
+
+	@Override
+	protected List<Object> getMessageArgs()
+	{
+		return new ArrayList<Object>(Arrays.asList(character));
+	}
 }

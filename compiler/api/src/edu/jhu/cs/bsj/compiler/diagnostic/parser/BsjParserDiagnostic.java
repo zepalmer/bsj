@@ -1,5 +1,9 @@
 package edu.jhu.cs.bsj.compiler.diagnostic.parser;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import javax.tools.JavaFileObject;
 
 import edu.jhu.cs.bsj.compiler.diagnostic.AbstractBsjDiagnostic;
@@ -35,5 +39,11 @@ public abstract class BsjParserDiagnostic<T extends JavaFileObject> extends Abst
 	public String getRuleName()
 	{
 		return ruleName;
+	}
+
+	@Override
+	protected List<Object> getMessageArgs()
+	{
+		return new ArrayList<Object>(Arrays.asList(this.ruleName));
 	}
 }
