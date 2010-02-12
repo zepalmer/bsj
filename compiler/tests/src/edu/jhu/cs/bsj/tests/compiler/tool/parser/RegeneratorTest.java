@@ -7,6 +7,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 
+import junit.framework.Assert;
+
 import org.junit.Test;
 
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
@@ -46,7 +48,7 @@ public class RegeneratorTest
                 catch (Exception e)
                 {                	
                     e.printStackTrace();
-                    System.out.println("ERROR: " + e.getMessage());//fail();
+                    Assert.fail();
                 }
             }            
         }

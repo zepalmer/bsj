@@ -115,7 +115,7 @@ public class BsjTreeLifterTest
 
 		// get the lifted code
 		ExpressionNode metaAst = ast.executeOperation(treeLifter, metaFactory);
-
+//TODO replace expressions w/ methods
 		// compile the lifted code and get the result
 		String liftedProgram = null;
 		try
