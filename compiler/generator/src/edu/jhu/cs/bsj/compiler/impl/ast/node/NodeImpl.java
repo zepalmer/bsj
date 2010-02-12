@@ -89,8 +89,7 @@ public abstract class NodeImpl implements Node
     public List<Object> getChildObjects()
     {
         List<Object> list = new ArrayList<Object>();
-        list.add(getStartLocation());
-        list.add(getStopLocation());
+        list.add(getStartLocation().toString() + " - " + getStopLocation().toString());
         return list;
     }
 

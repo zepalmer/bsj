@@ -1062,8 +1062,18 @@ public class SourceGenerator
 					+ (def.getBaseSuperName() == null ? "new ArrayList<Object>();" : "super.getChildObjects();"));
 			for (PropertyDefinition p : def.getProperties())
 			{
-				ps.println("        list.add(get" + Character.toUpperCase(p.getName().charAt(0))
-						+ p.getName().substring(1) + "());");
+				// special handling for startLocation and stopLocation
+				if (p.getName().equals("startLocation"))
+				{
+					ps.println("        list.add(getStartLocation().toString() + \" - \" + getStopLocation().toString());");
+				} else if (p.getName().equals("stopLocation"))
+				{
+					// intentionally doing nothing - handling for startLocation covers this one as well
+				} else
+				{
+					ps.println("        list.add(get" + Character.toUpperCase(p.getName().charAt(0))
+							+ p.getName().substring(1) + "());");
+				}
 			}
 			ps.println("        return list;");
 			ps.println("    }");
