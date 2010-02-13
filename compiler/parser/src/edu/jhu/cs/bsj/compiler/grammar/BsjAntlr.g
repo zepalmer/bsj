@@ -608,6 +608,16 @@ preambleStatement returns [MetaprogramPreambleNode ret]
         {
             $ret = $metaprogramImport.ret;
         }
+    |
+        metaprogramDependency
+        {
+            $ret = $metaprogramDependency.ret;
+        }
+    |
+        metaprogramTarget
+        {
+            $ret = $metaprogramTarget.ret;
+        }
     ;
 
 metaprogramImport returns [MetaprogramImportNode ret]
@@ -634,7 +644,104 @@ metaprogramImport returns [MetaprogramImportNode ret]
             $ret = factory.makeMetaprogramImportNode(node);
         }
     ;
+
+metaprogramDependency returns [MetaprogramDependsNode ret]
+        scope Rule;
+        @init {
+            ruleStart("metaprogramDependency");
+        }
+        @after {
+            ruleStop();
+        }
+    :   
+        '#depends'
+        metaprogramNameList
+        ';'
+        {
+            $ret = factory.makeMetaprogramDependsNode($metaprogramNameList.ret);
+        }
+    ;
+
+metaprogramTarget returns [MetaprogramTargetNode ret]
+        scope Rule;
+        @init {
+            ruleStart("metaprogramTargetNode");
+        }
+        @after {
+            ruleStop();
+        }
+    :   
+        '#target'
+        identifierList
+        ';'
+        {
+            $ret = factory.makeMetaprogramTargetNode($identifierList.ret);
+        }
+    ;
+
+metaprogramNameList returns [NameListNode ret]
+        scope Rule;
+        @init {
+            ruleStart("metaprogramNameList");
+            List<NameNode> names = new ArrayList<NameNode>();
+        }
+        @after {
+            $ret = factory.makeNameListNode(names);
+            ruleStop();
+        }
+    :
+        a=metaprogramName
+        {
+            names.add($a.ret);
+        }
+        (
+            ',' b=metaprogramName
+            {
+                names.add($b.ret);
+            }
+        )*
+        ','?
+    ;
+
+metaprogramName returns [NameNode ret]
+        scope Rule;
+        @init {
+            ruleStart("metaprogramName");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        categorizedName[NameCategory.PACKAGE_OR_TYPE, NameCategory.TYPE, NameCategory.METAPROGRAM_TARGET]
+        {
+            $ret = $categorizedName.ret;
+        }
+    ;
     
+identifierList returns [IdentifierListNode ret]
+        scope Rule;
+        @init {
+            ruleStart("metaprogramIdentifierList");
+            List<IdentifierNode> ids = new ArrayList<IdentifierNode>();
+        }
+        @after {
+            $ret = factory.makeIdentifierListNode(ids);
+            ruleStop();
+        }
+    :
+        a=identifier
+        {
+            ids.add($a.ret);
+        }
+        (
+            ',' b=identifier
+            {
+                ids.add($b.ret);
+            }
+        )*
+        ','?
+    ;
+        
 typeDeclarationBsjMetaprogramAnchor returns [TypeDeclarationMetaprogramAnchorNode ret]
         scope Rule;
         @init {
@@ -4798,7 +4905,7 @@ ambiguousName returns [NameNode ret]
 // Parses a name (a dot-separated sequence of identifiers) and assigns each of them the specified category.  The top
 // name node is assigned another category.  This rule does not correspond directly to anything in the JLS; it is used as
 // a parsing subroutine.
-categorizedName[NameCategory category, NameCategory lastCategory] returns [NameNode ret]
+categorizedName[NameCategory... category] returns [NameNode ret]
         scope Rule;
         @init {
             ruleStart("categorizedName");
@@ -4808,7 +4915,7 @@ categorizedName[NameCategory category, NameCategory lastCategory] returns [NameN
             $ret = null;
             for (int i=0;i<identifierNodes.size();i++)
             {
-                NameCategory currentCategory = (i==identifierNodes.size()-1) ? lastCategory : category;
+                NameCategory currentCategory = category[Math.max(0, category.length - identifierNodes.size() + i)];
                 if (i==0)
                 {
                     $ret = factory.makeSimpleNameNode(identifierNodes.get(0), currentCategory);
