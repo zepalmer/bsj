@@ -643,10 +643,10 @@ metaprogramDependency returns [MetaprogramDependsNode ret]
         }
     :   
         '#depends'
-        metaprogramNameList
+        metaprogramTargetNameList
         ';'
         {
-            $ret = factory.makeMetaprogramDependsNode($metaprogramNameList.ret);
+            $ret = factory.makeMetaprogramDependsNode($metaprogramTargetNameList.ret);
         }
     ;
 
@@ -667,10 +667,10 @@ metaprogramTarget returns [MetaprogramTargetNode ret]
         }
     ;
 
-metaprogramNameList returns [NameListNode ret]
+metaprogramTargetNameList returns [NameListNode ret]
         scope Rule;
         @init {
-            ruleStart("metaprogramNameList");
+            ruleStart("metaprogramTargetNameList");
             List<NameNode> names = new ArrayList<NameNode>();
         }
         @after {
@@ -678,12 +678,12 @@ metaprogramNameList returns [NameListNode ret]
             ruleStop();
         }
     :
-        a=metaprogramName
+        a=metaprogramTargetName
         {
             names.add($a.ret);
         }
         (
-            ',' b=metaprogramName
+            b=metaprogramTargetName
             {
                 names.add($b.ret);
             }
@@ -691,16 +691,16 @@ metaprogramNameList returns [NameListNode ret]
         ','?
     ;
 
-metaprogramName returns [NameNode ret]
+metaprogramTargetName returns [NameNode ret]
         scope Rule;
         @init {
-            ruleStart("metaprogramName");
+            ruleStart("metaprogramTargetName");
         }
         @after {
             ruleStop();
         }
     :
-        categorizedName[NameCategory.PACKAGE_OR_TYPE, NameCategory.TYPE, NameCategory.METAPROGRAM_TARGET]
+        categorizedName[NameCategory.PACKAGE_OR_TYPE, NameCategory.METAPROGRAM_TARGET]
         {
             $ret = $categorizedName.ret;
         }
