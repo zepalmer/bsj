@@ -14,7 +14,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependsNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramPreambleListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramPreambleNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramTargetNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.TypeDeclarationMetaprogramAnchorNode;
 
@@ -1022,7 +1022,7 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
      * @param p Ignored.
      * @return <code>null</code>, always.
      */
-    public R executeMetaprogramPreambleListNode(MetaprogramPreambleListNode node, P p)
+    public R executeMetaprogramPreambleNode(MetaprogramPreambleNode node, P p)
     {
         return null;
     }

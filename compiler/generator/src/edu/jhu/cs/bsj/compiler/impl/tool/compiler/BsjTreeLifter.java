@@ -26,7 +26,6 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependsNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramPreambleListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramPreambleNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramTargetNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.TypeDeclarationMetaprogramAnchorNode;
@@ -3203,16 +3202,20 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
     }
     
     @Override
-    public ExpressionNode executeMetaprogramPreambleListNode(MetaprogramPreambleListNode node, ExpressionNode factoryNode)
+    public ExpressionNode executeMetaprogramPreambleNode(MetaprogramPreambleNode node, ExpressionNode factoryNode)
     {
-        List<ExpressionNode> liftChildrenList = new ArrayList<ExpressionNode>();
-        for (MetaprogramPreambleNode listval : node.getChildren())
-        {
-            liftChildrenList.add(
-                    listval != null ? 
-        			        listval.executeOperation(this,factoryNode) :
-                            null);
-        }
+        ExpressionNode liftImports = 
+                node.getImports() != null ?
+                        node.getImports().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        ExpressionNode liftTarget = 
+                node.getTarget() != null ?
+                        node.getTarget().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        ExpressionNode liftDepends = 
+                node.getDepends() != null ?
+                        node.getDepends().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         ExpressionNode liftStartLocationMetaClone = 
                 expressionizeBsjSourceLocation(node.getStartLocation());
         ExpressionNode liftStopLocationMetaClone = 
@@ -3221,27 +3224,11 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
         ExpressionNode ret =
                 factory.makeMethodInvocationByExpressionNode(
                         factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
-                        factory.makeIdentifierNode("makeMetaprogramPreambleListNode"),
+                        factory.makeIdentifierNode("makeMetaprogramPreambleNode"),
                         factory.makeExpressionListNode(
-                                factory.makeMethodInvocationByNameNode(
-                                        factory.makeQualifiedNameNode(
-                                                factory.makeQualifiedNameNode(
-                                                        factory.makeQualifiedNameNode(
-                                                                factory.makeSimpleNameNode(
-                                                                        factory.makeIdentifierNode("java"),
-                                                                        NameCategory.PACKAGE),
-                                                                factory.makeIdentifierNode("util"),
-                                                                NameCategory.PACKAGE),
-                                                        factory.makeIdentifierNode("Arrays"),
-                                                        NameCategory.TYPE),
-                                                factory.makeIdentifierNode("asList"),
-                                                NameCategory.METHOD),
-                                        factory.makeExpressionListNode(liftChildrenList),
-                                        factory.makeTypeListNode(
-                                                factory.makeUnparameterizedTypeNode(
-                                                        factory.makeSimpleNameNode(
-                                                                factory.makeIdentifierNode("MetaprogramPreambleNode"),
-                                                                NameCategory.TYPE)))),
+                                liftImports,
+                                liftTarget,
+                                liftDepends,
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
                         factory.makeTypeListNode());

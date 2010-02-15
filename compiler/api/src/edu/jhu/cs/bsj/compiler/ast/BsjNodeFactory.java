@@ -15,7 +15,6 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependsNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramPreambleListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramPreambleNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramTargetNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.TypeDeclarationMetaprogramAnchorNode;
@@ -2168,7 +2167,7 @@ public interface BsjNodeFactory
      * The start and stop locations which have been set as properties of this factory are used.
      */
     public MetaprogramNode makeMetaprogramNode(
-            MetaprogramPreambleListNode preamble,
+            MetaprogramPreambleNode preamble,
             BlockStatementListNode body);
 
     /**
@@ -2176,42 +2175,30 @@ public interface BsjNodeFactory
      * The specified start and stop locations are used.
      */
     public MetaprogramNode makeMetaprogramNode(
-            MetaprogramPreambleListNode preamble,
+            MetaprogramPreambleNode preamble,
             BlockStatementListNode body,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
 
     /**
-     * Creates a MetaprogramPreambleListNode.
+     * Creates a MetaprogramPreambleNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
-    public MetaprogramPreambleListNode makeMetaprogramPreambleListNode(
-            List<MetaprogramPreambleNode> children);
+    public MetaprogramPreambleNode makeMetaprogramPreambleNode(
+            MetaprogramImportListNode imports,
+            MetaprogramTargetNode target,
+            MetaprogramDependsNode depends);
 
     /**
-     * Creates a MetaprogramPreambleListNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    public MetaprogramPreambleListNode makeMetaprogramPreambleListNode(
-            MetaprogramPreambleNode... childrenElements);
-
-    /**
-     * Creates a MetaprogramPreambleListNode.
+     * Creates a MetaprogramPreambleNode.
      * The specified start and stop locations are used.
      */
-    public MetaprogramPreambleListNode makeMetaprogramPreambleListNode(
-            List<MetaprogramPreambleNode> children,
+    public MetaprogramPreambleNode makeMetaprogramPreambleNode(
+            MetaprogramImportListNode imports,
+            MetaprogramTargetNode target,
+            MetaprogramDependsNode depends,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
-
-    /**
-     * Creates a MetaprogramPreambleListNode.
-     * The specified start and stop locations are used.
-     */
-    public MetaprogramPreambleListNode makeMetaprogramPreambleListNode(
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation,
-            MetaprogramPreambleNode... childrenElements);
 
     /**
      * Creates a MetaprogramTargetNode.

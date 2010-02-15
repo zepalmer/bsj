@@ -9,82 +9,114 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
-import edu.jhu.cs.bsj.compiler.ast.node.BlockStatementListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependsNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramPreambleNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramTargetNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.NodeImpl;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public class MetaprogramNodeImpl extends NodeImpl implements MetaprogramNode
+public class MetaprogramPreambleNodeImpl extends NodeImpl implements MetaprogramPreambleNode
 {
-    /** The preamble for this metaprogram. */
-    private MetaprogramPreambleNode preamble;
+    /** The imports for this metaprogram. */
+    private MetaprogramImportListNode imports;
 
-    /** The list of statements in the metaprogram's body. */
-    private BlockStatementListNode body;
+    /** The targets for this metaprogram. */
+    private MetaprogramTargetNode target;
+
+    /** The dependencies for this metaprogram. */
+    private MetaprogramDependsNode depends;
 
     /** General constructor. */
-    public MetaprogramNodeImpl(
-            MetaprogramPreambleNode preamble,
-            BlockStatementListNode body,
+    public MetaprogramPreambleNodeImpl(
+            MetaprogramImportListNode imports,
+            MetaprogramTargetNode target,
+            MetaprogramDependsNode depends,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
         super(startLocation, stopLocation);
-        setPreamble(preamble);
-        setBody(body);
+        setImports(imports);
+        setTarget(target);
+        setDepends(depends);
     }
 
     /**
-     * Gets the preamble for this metaprogram.
-     * @return The preamble for this metaprogram.
+     * Gets the imports for this metaprogram.
+     * @return The imports for this metaprogram.
      */
-    public MetaprogramPreambleNode getPreamble()
+    public MetaprogramImportListNode getImports()
     {
-        return this.preamble;
+        return this.imports;
     }
 
     /**
-     * Changes the preamble for this metaprogram.
-     * @param preamble The preamble for this metaprogram.
+     * Changes the imports for this metaprogram.
+     * @param imports The imports for this metaprogram.
      */
-    public void setPreamble(MetaprogramPreambleNode preamble)
+    public void setImports(MetaprogramImportListNode imports)
     {
-        if (this.preamble instanceof NodeImpl)
+        if (this.imports instanceof NodeImpl)
         {
-            ((NodeImpl)this.preamble).setParent(null);
+            ((NodeImpl)this.imports).setParent(null);
         }
-        this.preamble = preamble;
-        if (this.preamble instanceof NodeImpl)
+        this.imports = imports;
+        if (this.imports instanceof NodeImpl)
         {
-            ((NodeImpl)this.preamble).setParent(this);
+            ((NodeImpl)this.imports).setParent(this);
         }
     }
 
     /**
-     * Gets the list of statements in the metaprogram's body.
-     * @return The list of statements in the metaprogram's body.
+     * Gets the targets for this metaprogram.
+     * @return The targets for this metaprogram.
      */
-    public BlockStatementListNode getBody()
+    public MetaprogramTargetNode getTarget()
     {
-        return this.body;
+        return this.target;
     }
 
     /**
-     * Changes the list of statements in the metaprogram's body.
-     * @param body The list of statements in the metaprogram's body.
+     * Changes the targets for this metaprogram.
+     * @param target The targets for this metaprogram.
      */
-    public void setBody(BlockStatementListNode body)
+    public void setTarget(MetaprogramTargetNode target)
     {
-        if (this.body instanceof NodeImpl)
+        if (this.target instanceof NodeImpl)
         {
-            ((NodeImpl)this.body).setParent(null);
+            ((NodeImpl)this.target).setParent(null);
         }
-        this.body = body;
-        if (this.body instanceof NodeImpl)
+        this.target = target;
+        if (this.target instanceof NodeImpl)
         {
-            ((NodeImpl)this.body).setParent(this);
+            ((NodeImpl)this.target).setParent(this);
+        }
+    }
+
+    /**
+     * Gets the dependencies for this metaprogram.
+     * @return The dependencies for this metaprogram.
+     */
+    public MetaprogramDependsNode getDepends()
+    {
+        return this.depends;
+    }
+
+    /**
+     * Changes the dependencies for this metaprogram.
+     * @param depends The dependencies for this metaprogram.
+     */
+    public void setDepends(MetaprogramDependsNode depends)
+    {
+        if (this.depends instanceof NodeImpl)
+        {
+            ((NodeImpl)this.depends).setParent(null);
+        }
+        this.depends = depends;
+        if (this.depends instanceof NodeImpl)
+        {
+            ((NodeImpl)this.depends).setParent(this);
         }
     }
 
@@ -99,13 +131,17 @@ public class MetaprogramNodeImpl extends NodeImpl implements MetaprogramNode
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.preamble != null)
+        if (this.imports != null)
         {
-            this.preamble.receive(visitor);
+            this.imports.receive(visitor);
         }
-        if (this.body != null)
+        if (this.target != null)
         {
-            this.body.receive(visitor);
+            this.target.receive(visitor);
+        }
+        if (this.depends != null)
+        {
+            this.depends.receive(visitor);
         }
     }
 
@@ -120,13 +156,17 @@ public class MetaprogramNodeImpl extends NodeImpl implements MetaprogramNode
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.preamble != null)
+        if (this.imports != null)
         {
-            this.preamble.receiveTyped(visitor);
+            this.imports.receiveTyped(visitor);
         }
-        if (this.body != null)
+        if (this.target != null)
         {
-            this.body.receiveTyped(visitor);
+            this.target.receiveTyped(visitor);
+        }
+        if (this.depends != null)
+        {
+            this.depends.receiveTyped(visitor);
         }
     }
 
@@ -134,13 +174,13 @@ public class MetaprogramNodeImpl extends NodeImpl implements MetaprogramNode
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
         visitor.visitStartBegin(this);
-        visitor.visitMetaprogramNodeStart(this, true);
+        visitor.visitMetaprogramPreambleNodeStart(this, true);
         visitor.visitNodeStart(this);
         visitor.visitStartEnd(this);
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
         visitor.visitNodeStop(this);
-        visitor.visitMetaprogramNodeStop(this, true);
+        visitor.visitMetaprogramPreambleNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
 
@@ -153,8 +193,9 @@ public class MetaprogramNodeImpl extends NodeImpl implements MetaprogramNode
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(getPreamble());
-        list.add(getBody());
+        list.add(getImports());
+        list.add(getTarget());
+        list.add(getDepends());
         return list;
     }
 
@@ -167,11 +208,14 @@ public class MetaprogramNodeImpl extends NodeImpl implements MetaprogramNode
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
-        sb.append("preamble=");
-        sb.append(this.getPreamble() == null? "null" : this.getPreamble().getClass().getSimpleName());
+        sb.append("imports=");
+        sb.append(this.getImports() == null? "null" : this.getImports().getClass().getSimpleName());
         sb.append(',');
-        sb.append("body=");
-        sb.append(this.getBody() == null? "null" : this.getBody().getClass().getSimpleName());
+        sb.append("target=");
+        sb.append(this.getTarget() == null? "null" : this.getTarget().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("depends=");
+        sb.append(this.getDepends() == null? "null" : this.getDepends().getClass().getSimpleName());
         sb.append(',');
         sb.append("startLocation=");
         sb.append(String.valueOf(this.getStartLocation()) + ":" + (this.getStartLocation() != null ? this.getStartLocation().getClass().getSimpleName() : "null"));
@@ -191,7 +235,7 @@ public class MetaprogramNodeImpl extends NodeImpl implements MetaprogramNode
     @Override
     public <P,R> R executeOperation(BsjNodeOperation<P,R> operation, P p)
     {
-        return operation.executeMetaprogramNode(this, p);
+        return operation.executeMetaprogramPreambleNode(this, p);
     }
 
     /**
@@ -200,11 +244,12 @@ public class MetaprogramNodeImpl extends NodeImpl implements MetaprogramNode
      * @return The resulting deep copy node.
      */
     @Override
-    public MetaprogramNode deepCopy(BsjNodeFactory factory)
+    public MetaprogramPreambleNode deepCopy(BsjNodeFactory factory)
     {
-        return factory.makeMetaprogramNode(
-                getPreamble().deepCopy(factory),
-                getBody().deepCopy(factory));
+        return factory.makeMetaprogramPreambleNode(
+                getImports().deepCopy(factory),
+                getTarget().deepCopy(factory),
+                getDepends().deepCopy(factory));
     }
     /**
      * Performs replacement for this node.
@@ -218,14 +263,19 @@ public class MetaprogramNodeImpl extends NodeImpl implements MetaprogramNode
         if (super.replace(before,after))
             return true;
 
-        if (before.equals(this.preamble) && (after instanceof MetaprogramPreambleNode))
+        if (before.equals(this.imports) && (after instanceof MetaprogramImportListNode))
         {
-            setPreamble((MetaprogramPreambleNode)after);
+            setImports((MetaprogramImportListNode)after);
             return true;
         }
-        if (before.equals(this.body) && (after instanceof BlockStatementListNode))
+        if (before.equals(this.target) && (after instanceof MetaprogramTargetNode))
         {
-            setBody((BlockStatementListNode)after);
+            setTarget((MetaprogramTargetNode)after);
+            return true;
+        }
+        if (before.equals(this.depends) && (after instanceof MetaprogramDependsNode))
+        {
+            setDepends((MetaprogramDependsNode)after);
             return true;
         }
         return false;

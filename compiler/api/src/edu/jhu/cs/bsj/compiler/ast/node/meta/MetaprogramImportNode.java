@@ -17,7 +17,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.Node;
  * </pre>
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public interface MetaprogramImportNode extends Node, MetaprogramPreambleNode
+public interface MetaprogramImportNode extends Node
 {
     /**
      * Gets the import for the metaprogram.

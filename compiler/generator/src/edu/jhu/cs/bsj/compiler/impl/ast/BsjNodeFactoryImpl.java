@@ -25,7 +25,6 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependsNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramPreambleListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramPreambleNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramTargetNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.TypeDeclarationMetaprogramAnchorNode;
@@ -40,7 +39,7 @@ import edu.jhu.cs.bsj.compiler.impl.ast.node.meta.MetaprogramDependsNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.meta.MetaprogramImportListNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.meta.MetaprogramImportNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.meta.MetaprogramNodeImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.node.meta.MetaprogramPreambleListNodeImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.node.meta.MetaprogramPreambleNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.meta.MetaprogramTargetNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.meta.TypeDeclarationMetaprogramAnchorNodeImpl;
 
@@ -3401,7 +3400,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     @Override
     public MetaprogramNode makeMetaprogramNode(
-            MetaprogramPreambleListNode preamble,
+            MetaprogramPreambleNode preamble,
             BlockStatementListNode body)
     {
         MetaprogramNode ret = new MetaprogramNodeImpl(preamble, body, startLocation, stopLocation);
@@ -3414,7 +3413,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     @Override
     public MetaprogramNode makeMetaprogramNode(
-            MetaprogramPreambleListNode preamble,
+            MetaprogramPreambleNode preamble,
             BlockStatementListNode body,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
@@ -3424,55 +3423,33 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
 
     /**
-     * Creates a MetaprogramPreambleListNode.
+     * Creates a MetaprogramPreambleNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
     @Override
-    public MetaprogramPreambleListNode makeMetaprogramPreambleListNode(
-            List<MetaprogramPreambleNode> children)
+    public MetaprogramPreambleNode makeMetaprogramPreambleNode(
+            MetaprogramImportListNode imports,
+            MetaprogramTargetNode target,
+            MetaprogramDependsNode depends)
     {
-        MetaprogramPreambleListNode ret = new MetaprogramPreambleListNodeImpl(children, startLocation, stopLocation);
+        MetaprogramPreambleNode ret = new MetaprogramPreambleNodeImpl(imports, target, depends, startLocation, stopLocation);
         return ret;
     }
 
     /**
-     * Creates a MetaprogramPreambleListNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    @Override
-    public MetaprogramPreambleListNode makeMetaprogramPreambleListNode(
-            MetaprogramPreambleNode... childrenElements)
-    {
-        List<MetaprogramPreambleNode> children = Arrays.asList(childrenElements);
-        return makeMetaprogramPreambleListNode(children, startLocation, stopLocation);
-    }
-
-    /**
-     * Creates a MetaprogramPreambleListNode.
+     * Creates a MetaprogramPreambleNode.
      * The specified start and stop locations are used.
      */
     @Override
-    public MetaprogramPreambleListNode makeMetaprogramPreambleListNode(
-            List<MetaprogramPreambleNode> children,
+    public MetaprogramPreambleNode makeMetaprogramPreambleNode(
+            MetaprogramImportListNode imports,
+            MetaprogramTargetNode target,
+            MetaprogramDependsNode depends,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        MetaprogramPreambleListNode ret = new MetaprogramPreambleListNodeImpl(children, startLocation, stopLocation);
+        MetaprogramPreambleNode ret = new MetaprogramPreambleNodeImpl(imports, target, depends, startLocation, stopLocation);
         return ret;
-    }
-
-    /**
-     * Creates a MetaprogramPreambleListNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public MetaprogramPreambleListNode makeMetaprogramPreambleListNode(
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation,
-            MetaprogramPreambleNode... childrenElements)
-    {
-        List<MetaprogramPreambleNode> children = Arrays.asList(childrenElements);
-        return makeMetaprogramPreambleListNode(children, startLocation, stopLocation);
     }
 
     /**

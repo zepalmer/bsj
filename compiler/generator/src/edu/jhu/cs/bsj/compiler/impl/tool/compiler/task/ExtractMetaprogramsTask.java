@@ -27,7 +27,6 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.BlockStatementMetaprogramAnchorNode
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramPreambleNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.TypeDeclarationMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.util.BsjTypedNodeNoOpVisitor;
 import edu.jhu.cs.bsj.compiler.impl.metaprogram.BsjMetaprogram;
@@ -169,7 +168,7 @@ public class ExtractMetaprogramsTask extends CompilationUnitTask
 		{
 			imports.add(factory.makeImportOnDemandNode(parseNameNode(packageString, NameCategory.PACKAGE), false));
 		}
-		
+
 		// Find compilation unit
 		CompilationUnitNode compilationUnitNode = null;
 		{
@@ -180,10 +179,10 @@ public class ExtractMetaprogramsTask extends CompilationUnitTask
 			}
 			if (node != null)
 			{
-				compilationUnitNode = (CompilationUnitNode)node;
+				compilationUnitNode = (CompilationUnitNode) node;
 			}
 		}
-		
+
 		// Get global imports
 		if (compilationUnitNode != null)
 		{
@@ -192,18 +191,11 @@ public class ExtractMetaprogramsTask extends CompilationUnitTask
 				imports.add(metaprogramImportNode.getImportNode());
 			}
 		}
-		
-		// Process preamble
-		for (MetaprogramPreambleNode preambleNode : metaprogramNode.getPreamble().getChildren())
+
+		// Process preamble imports
+		for (MetaprogramImportNode importNode : metaprogramNode.getPreamble().getImports().getChildren())
 		{
-			if (preambleNode instanceof MetaprogramImportNode)
-			{
-				MetaprogramImportNode metaprogramImportNode = (MetaprogramImportNode)preambleNode;
-				imports.add(metaprogramImportNode.getImportNode());
-			} else
-			{
-				throw new IllegalStateException("Unrecognized preamble node type: " + preambleNode.getClass());
-			}
+			imports.add(importNode.getImportNode());
 		}
 
 		// Get metaprogram class name

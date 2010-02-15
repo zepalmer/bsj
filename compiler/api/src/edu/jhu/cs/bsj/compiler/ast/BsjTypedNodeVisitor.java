@@ -14,7 +14,6 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependsNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramPreambleListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramPreambleNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramTargetNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.TypeDeclarationMetaprogramAnchorNode;
@@ -1046,19 +1045,13 @@ public interface BsjTypedNodeVisitor
     public void visitMetaprogramNodeStart(MetaprogramNode node, boolean mostSpecific);
 
     /**
-     * Starts a visit for nodes of type MetaprogramPreambleListNode.
+     * Starts a visit for nodes of type MetaprogramPreambleNode.
      * @param node The node being visited.
      * @param mostSpecific <code>true</code> if this is the most specific call
      *                     which can be made for this node; <code>false</code>
      *                     otherwise.
      */
-    public void visitMetaprogramPreambleListNodeStart(MetaprogramPreambleListNode node, boolean mostSpecific);
-
-    /**
-     * Starts a visit for nodes of type MetaprogramPreambleNode.
-     * @param node The node being visited.
-     */
-    public void visitMetaprogramPreambleNodeStart(MetaprogramPreambleNode node);
+    public void visitMetaprogramPreambleNodeStart(MetaprogramPreambleNode node, boolean mostSpecific);
 
     /**
      * Starts a visit for nodes of type MetaprogramTargetNode.
@@ -2546,19 +2539,13 @@ public interface BsjTypedNodeVisitor
     public void visitMetaprogramNodeStop(MetaprogramNode node, boolean mostSpecific);
 
     /**
-     * Stops a visit for nodes of type MetaprogramPreambleListNode.
+     * Stops a visit for nodes of type MetaprogramPreambleNode.
      * @param node The node being visited.
      * @param mostSpecific <code>true</code> if this is the most specific call
      *                     which can be made for this node; <code>false</code>
      *                     otherwise.
      */
-    public void visitMetaprogramPreambleListNodeStop(MetaprogramPreambleListNode node, boolean mostSpecific);
-
-    /**
-     * Stops a visit for nodes of type MetaprogramPreambleNode.
-     * @param node The node being visited.
-     */
-    public void visitMetaprogramPreambleNodeStop(MetaprogramPreambleNode node);
+    public void visitMetaprogramPreambleNodeStop(MetaprogramPreambleNode node, boolean mostSpecific);
 
     /**
      * Stops a visit for nodes of type MetaprogramTargetNode.

@@ -13,7 +13,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.Node;
  * </pre>
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public interface MetaprogramTargetNode extends Node, MetaprogramPreambleNode
+public interface MetaprogramTargetNode extends Node
 {
     /**
      * Gets the names of the metaprogram targets in which to participate.

@@ -575,49 +575,37 @@ bsjMetaprogram returns [MetaprogramNode ret]
     ;
 
 /* This rule parses a BSJ metaprogram preamble */
-preamble returns [MetaprogramPreambleListNode ret]
+preamble returns [MetaprogramPreambleNode ret]
         scope Rule;
         @init {
             ruleStart("preamble");
-            List<MetaprogramPreambleNode> list = new ArrayList<MetaprogramPreambleNode>();
+            List<MetaprogramImportNode> list = new ArrayList<MetaprogramImportNode>();
+            MetaprogramTargetNode target = null;
+            MetaprogramDependsNode depends = null;
         }
         @after {
-            $ret = factory.makeMetaprogramPreambleListNode(list);
+            $ret = factory.makeMetaprogramPreambleNode(factory.makeMetaprogramImportListNode(list), target,depends);
             ruleStop();
         }
     :
         (
-            preambleStatement
+            metaprogramImport
             {
-                list.add($preambleStatement.ret);
+                list.add($metaprogramImport.ret);
             }
         )*
-    ;
-
-/* This rule parses a single preamble statement */
-preambleStatement returns [MetaprogramPreambleNode ret]
-        scope Rule;
-        @init {
-            ruleStart("preamble");
-        }
-        @after {
-            ruleStop();
-        }
-    :
-        metaprogramImport
-        {
-            $ret = $metaprogramImport.ret;
-        }
-    |
-        metaprogramDependency
-        {
-            $ret = $metaprogramDependency.ret;
-        }
-    |
-        metaprogramTarget
-        {
-            $ret = $metaprogramTarget.ret;
-        }
+        (
+            metaprogramTarget
+            {
+                target = $metaprogramTarget.ret;
+            }
+        )?
+        (
+            metaprogramDependency
+            {
+                depends = $metaprogramDependency.ret;
+            }
+        )?
     ;
 
 metaprogramImport returns [MetaprogramImportNode ret]

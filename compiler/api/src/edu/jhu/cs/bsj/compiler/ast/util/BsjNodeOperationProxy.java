@@ -14,7 +14,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependsNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramPreambleListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramPreambleNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramTargetNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.TypeDeclarationMetaprogramAnchorNode;
 
@@ -1237,10 +1237,10 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
      * @param p The value to pass through the proxy filter and into the backing operation.
      * @return The result of this operation (after being passed through the proxy filter).
      */
-    public RNew executeMetaprogramPreambleListNode(MetaprogramPreambleListNode node, PNew p)
+    public RNew executeMetaprogramPreambleNode(MetaprogramPreambleNode node, PNew p)
     {
         POrig porig = before(p);
-        ROrig rorig = this.backingOp.executeMetaprogramPreambleListNode(node, porig);
+        ROrig rorig = this.backingOp.executeMetaprogramPreambleNode(node, porig);
         return after(rorig);
     }
 

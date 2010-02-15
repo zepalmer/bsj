@@ -17,7 +17,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependsNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramPreambleListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramPreambleNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramTargetNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.TypeDeclarationMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.impl.utils.PrependablePrintStream;
@@ -1727,9 +1727,13 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	}
 
 	@Override
-	public Void executeMetaprogramPreambleListNode(MetaprogramPreambleListNode node, PrependablePrintStream p)
+	public Void executeMetaprogramPreambleNode(MetaprogramPreambleNode node, PrependablePrintStream p)
 	{
-		handleListNode(node, "", "\n", "\n", p, true);
+		handleListNode(node.getImports(), "", "\n", "\n", p, true);
+		if (node.getTarget() != null)
+			node.getTarget().executeOperation(this, p);
+		if (node.getDepends() != null)
+			node.getDepends().executeOperation(this, p);
 		return null;
 	}
 

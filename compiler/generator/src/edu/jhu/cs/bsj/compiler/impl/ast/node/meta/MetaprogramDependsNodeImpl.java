@@ -96,11 +96,9 @@ public class MetaprogramDependsNodeImpl extends NodeImpl implements MetaprogramD
         visitor.visitStartBegin(this);
         visitor.visitMetaprogramDependsNodeStart(this, true);
         visitor.visitNodeStart(this);
-        visitor.visitMetaprogramPreambleNodeStart(this);
         visitor.visitStartEnd(this);
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
-        visitor.visitMetaprogramPreambleNodeStop(this);
         visitor.visitNodeStop(this);
         visitor.visitMetaprogramDependsNodeStop(this, true);
         visitor.visitStopEnd(this);

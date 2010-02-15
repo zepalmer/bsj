@@ -24,7 +24,6 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependsNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramPreambleListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramPreambleNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramTargetNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.TypeDeclarationMetaprogramAnchorNode;
@@ -3879,7 +3878,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
      */
     @Override
     public MetaprogramNode makeMetaprogramNode(
-            MetaprogramPreambleListNode preamble,
+            MetaprogramPreambleNode preamble,
             BlockStatementListNode body)
     {
         this.before();
@@ -3894,7 +3893,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
      */
     @Override
     public MetaprogramNode makeMetaprogramNode(
-            MetaprogramPreambleListNode preamble,
+            MetaprogramPreambleNode preamble,
             BlockStatementListNode body,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
@@ -3906,61 +3905,35 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     }
 
     /**
-     * Creates a MetaprogramPreambleListNode.
+     * Creates a MetaprogramPreambleNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
     @Override
-    public MetaprogramPreambleListNode makeMetaprogramPreambleListNode(
-            List<MetaprogramPreambleNode> children)
+    public MetaprogramPreambleNode makeMetaprogramPreambleNode(
+            MetaprogramImportListNode imports,
+            MetaprogramTargetNode target,
+            MetaprogramDependsNode depends)
     {
         this.before();
-        MetaprogramPreambleListNode node = factory.makeMetaprogramPreambleListNode(children);
+        MetaprogramPreambleNode node = factory.makeMetaprogramPreambleNode(imports, target, depends);
         this.after(node);
         return node;
     }
 
     /**
-     * Creates a MetaprogramPreambleListNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    @Override
-    public MetaprogramPreambleListNode makeMetaprogramPreambleListNode(
-            MetaprogramPreambleNode... childrenElements)
-    {
-        this.before();
-        MetaprogramPreambleListNode node = factory.makeMetaprogramPreambleListNode(childrenElements);
-        this.after(node);
-        return node;
-    }
-
-    /**
-     * Creates a MetaprogramPreambleListNode.
+     * Creates a MetaprogramPreambleNode.
      * The specified start and stop locations are used.
      */
     @Override
-    public MetaprogramPreambleListNode makeMetaprogramPreambleListNode(
-            List<MetaprogramPreambleNode> children,
+    public MetaprogramPreambleNode makeMetaprogramPreambleNode(
+            MetaprogramImportListNode imports,
+            MetaprogramTargetNode target,
+            MetaprogramDependsNode depends,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
         this.before();
-        MetaprogramPreambleListNode node = factory.makeMetaprogramPreambleListNode(children, startLocation, stopLocation);
-        this.after(node);
-        return node;
-    }
-
-    /**
-     * Creates a MetaprogramPreambleListNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public MetaprogramPreambleListNode makeMetaprogramPreambleListNode(
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation,
-            MetaprogramPreambleNode... childrenElements)
-    {
-        this.before();
-        MetaprogramPreambleListNode node = factory.makeMetaprogramPreambleListNode(startLocation, stopLocation, childrenElements);
+        MetaprogramPreambleNode node = factory.makeMetaprogramPreambleNode(imports, target, depends, startLocation, stopLocation);
         this.after(node);
         return node;
     }

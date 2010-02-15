@@ -2029,16 +2029,9 @@
 
         <!-- ==================== TAGGING INTERFACES ==================== -->
 
-        <type name="MetaprogramPreambleNode" super="Node" mode="tag">
-            <doc><![CDATA[
-                This tagging interface is implemented by any node which can be used in a metaprogram preamble.
-            ]]></doc>
-        </type>
-
         <!-- ====================== PREAMBLE NODES ====================== -->
 
         <type name="MetaprogramDependsNode" super="Node">
-            <tag name="MetaprogramPreambleNode" />
             <prop name="targetNames" type="NameListNode" desc="the names of the metaprogram targets on which to depend" />
             <doc><![CDATA[
                 Represents a metaprogram dependency declaration, as in
@@ -2049,7 +2042,6 @@
         </type>
 
         <type name="MetaprogramImportNode" super="Node">
-            <tag name="MetaprogramPreambleNode" />
             <prop name="importNode" type="ImportNode" desc="the import for the metaprogram" />
             <doc><![CDATA[
                 Represents a metaprogram import, as in
@@ -2063,8 +2055,16 @@
             ]]></doc>
         </type>
 
+        <type name="MetaprogramPreambleNode" super="Node">
+            <prop name="imports" type="MetaprogramImportListNode" desc="the imports for this metaprogram" />
+            <prop name="target" type="MetaprogramTargetNode" desc="the targets for this metaprogram" />
+            <prop name="depends" type="MetaprogramDependsNode" desc="the dependencies for this metaprogram" />
+            <doc><![CDATA[
+                This node represents a metaprogram's preamble.
+            ]]></doc>
+        </type>
+
         <type name="MetaprogramTargetNode" super="Node">
-            <tag name="MetaprogramPreambleNode" />
             <prop name="targets" type="IdentifierListNode" desc="the names of the metaprogram targets in which to participate" />
             <doc><![CDATA[
                 Represents a metaprogram target declaration, as in
@@ -2092,7 +2092,7 @@
         </type>
 
         <type name="MetaprogramNode" super="Node">
-            <prop name="preamble" type="MetaprogramPreambleListNode" desc="the preamble statements for this metaprogram" />
+            <prop name="preamble" type="MetaprogramPreambleNode" desc="the preamble for this metaprogram" />
             <prop name="body" type="BlockStatementListNode" desc="the list of statements in the metaprogram's body" />
             <doc><![CDATA[
                 A node for metaprograms, as in
@@ -2156,12 +2156,6 @@
         <type name="MetaprogramImportListNode" super="ListNode" superTypeArg="MetaprogramImportNode">
             <doc><![CDATA[
                 Represents a list of {@link MetaprogramImportNode}s.
-            ]]></doc>
-        </type>
-
-        <type name="MetaprogramPreambleListNode" super="ListNode" superTypeArg="MetaprogramPreambleNode">
-            <doc><![CDATA[
-                Represents a list of {@link MetaprogramPreambleNode}s.
             ]]></doc>
         </type>
 
