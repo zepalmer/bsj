@@ -11,5 +11,12 @@ public interface NameNode
 	 *                               another category.
 	 */
 	public void assertCategory(NameCategory category);
+	
+	/**
+	 * Retrieves a qualified string representation of this name.  For simple names, this is merely the text of the name;
+	 * for qualified names, this is a dot-separated name sequence.
+	 * @return The qualified representation of this name.
+	 */
+	public String getNameString();
 	/* GEN:stop */
 }

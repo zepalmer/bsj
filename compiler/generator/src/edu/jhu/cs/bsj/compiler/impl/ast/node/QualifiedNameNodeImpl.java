@@ -239,4 +239,13 @@ public class QualifiedNameNodeImpl extends NameNodeImpl implements QualifiedName
         return false;
     }
 
+	/**
+	 * Retrieves a string representation of this name.
+	 * @return The string representation of this name.
+	 */
+	public String getNameString()
+	{
+		return getBase().getNameString() + "." + getIdentifier().getIdentifier();
+	}
+
 }

@@ -1,5 +1,7 @@
 package edu.jhu.cs.bsj.compiler.impl.metaprogram;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.metaprogram.Context;
@@ -11,10 +13,15 @@ import edu.jhu.cs.bsj.compiler.metaprogram.Context;
  */
 public abstract class AbstractBsjMetaprogram<T extends MetaprogramAnchorNode<?>> implements BsjMetaprogram<T>
 {
+	/** The next UID to be assigned to a metaprogram. */
+	private static final AtomicInteger NEXT_ID = new AtomicInteger(0);
+	
 	/** The context for this metaprogram. */
 	private Context<T> context;
 	/** The node factory for this metaprogram. */
 	private BsjNodeFactory factory;
+	/** The ID number of this metaprogram. */
+	private int id = NEXT_ID.getAndIncrement();
 	
 	// TODO: do we want to move the context to a field on execute()?
 	// this would decrease the amount of control we have over the field (user could write to it)... but do we care?
@@ -53,4 +60,13 @@ public abstract class AbstractBsjMetaprogram<T extends MetaprogramAnchorNode<?>>
 	 * metaprogrammer's code.
 	 */
 	public abstract void execute();
+	
+	/**
+	 * Retrieves the ID number for this metaprogram.
+	 * @return This metaprogram's unique ID.
+	 */
+	public int getID()
+	{
+		return this.id;
+	}
 }

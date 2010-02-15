@@ -1,5 +1,7 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.compiler;
 
+import java.util.Collection;
+
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.impl.metaprogram.BsjMetaprogram;
 
@@ -18,14 +20,22 @@ public class MetaprogramProfile
 	private MetaprogramAnchorNode<?> anchor;
 	/** The tracker which is affected by this metaprogram. */
 	private CompilationUnitTracker tracker;
-
+	
+	/** The fully-qualified names of the targets on which the metaprogram in this profile depends. */
+	private Collection<String> dependencyNames;
+	/** The fully-qualified names of the targets in which the metaprogram in this profile participates. */
+	private Collection<String> targetNames;
+	
 	// TODO: dependency analysis metadata?
-	public MetaprogramProfile(BsjMetaprogram<?> metaprogram, MetaprogramAnchorNode<?> anchor, CompilationUnitTracker tracker)
+	public MetaprogramProfile(BsjMetaprogram<?> metaprogram, MetaprogramAnchorNode<?> anchor, CompilationUnitTracker tracker,
+			Collection<String> dependencyNames, Collection<String> targetNames)
 	{
 		super();
 		this.metaprogram = metaprogram;
 		this.anchor = anchor;
 		this.tracker = tracker;
+		this.dependencyNames = dependencyNames;
+		this.targetNames = targetNames;
 	}
 
 	public BsjMetaprogram<?> getMetaprogram()
@@ -41,5 +51,15 @@ public class MetaprogramProfile
 	public CompilationUnitTracker getTracker()
 	{
 		return tracker;
+	}
+
+	public Collection<String> getDependencyNames()
+	{
+		return dependencyNames;
+	}
+
+	public Collection<String> getTargetNames()
+	{
+		return targetNames;
 	}
 }

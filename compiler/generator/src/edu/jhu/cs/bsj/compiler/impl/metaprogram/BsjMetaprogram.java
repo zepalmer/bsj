@@ -23,4 +23,9 @@ public interface BsjMetaprogram<T extends MetaprogramAnchorNode<?>>
 	 */
 	public void execute();
 
+	/**
+	 * Retrieves the ID number of this metaprogram.  Metaprogram IDs must be unique for any given compilation pass.
+	 * @return The metaprogram ID.
+	 */
+	public int getID();
 }

@@ -13,6 +13,7 @@ import javax.tools.JavaFileObject;
 import org.apache.log4j.Logger;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
+import edu.jhu.cs.bsj.compiler.impl.tool.compiler.dependency.DependencyManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.task.BsjCompilerTask;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.task.MetaprogramExecutionTask;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.task.ParseCompilationUnitTask;
@@ -57,9 +58,9 @@ public class MetacompilationManager
 	private DiagnosticListener<? super JavaFileObject> diagnosticListener;
 	
 	/**
-	 * Represents the queue of metaprograms which remain to be executed.
+	 * Represents the metaprogram dependency manager.
 	 */
-	private Queue<MetaprogramProfile> metaprogramQueue;
+	private DependencyManager dependencyManager;
 
 	/**
 	 * Creates a new compilation unit manager.
@@ -74,8 +75,8 @@ public class MetacompilationManager
 		this.factory = factory;
 		this.fileManager = fileManager;
 		this.diagnosticListener = diagnosticListener;
-		this.metaprogramQueue = new PriorityQueue<MetaprogramProfile>();
 		
+		this.dependencyManager = new DependencyManager();
 		this.priorityQueue.offer(new MetaprogramExecutionTask());
 	}
 	
@@ -127,7 +128,7 @@ public class MetacompilationManager
 	 */
 	public void registerMetaprogramProfile(MetaprogramProfile profile)
 	{
-		this.metaprogramQueue.offer(profile);
+		this.dependencyManager.registerMetaprogramProfile(profile);
 	}
 	
 	/**
@@ -137,13 +138,16 @@ public class MetacompilationManager
 	 */
 	public MetaprogramProfile getNextMetaprogramProfile()
 	{
-		if (this.metaprogramQueue.size()>0)
-		{
-			return this.metaprogramQueue.poll();
-		} else
-		{
-			return null;
-		}
+		return this.dependencyManager.getNextMetaprogram();
+	}
+	
+	/**
+	 * Indicates that the specified profile's metaprogram has been executed.
+	 * @param profile The profile of the metaprogram which was executed.
+	 */
+	public void notifyExecuted(MetaprogramProfile profile)
+	{
+		this.dependencyManager.notifyExecuted(profile);
 	}
 
 	/**

@@ -184,4 +184,13 @@ public class SimpleNameNodeImpl extends NameNodeImpl implements SimpleNameNode
         return false;
     }
 
+	/**
+	 * Retrieves a string representation of this name.
+	 * @return The string representation of this name.
+	 */
+	public String getNameString()
+	{
+		return getIdentifier().getIdentifier();
+	}
+
 }

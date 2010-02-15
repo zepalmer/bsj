@@ -17,9 +17,11 @@ import edu.jhu.cs.bsj.compiler.ast.node.BlockNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ConstructorDeclarationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ImportNode;
 import edu.jhu.cs.bsj.compiler.ast.node.MethodDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.NameNode;
+import edu.jhu.cs.bsj.compiler.ast.node.NamedTypeDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.PackageDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeDeclarationNode;
@@ -27,6 +29,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.BlockStatementMetaprogramAnchorNode
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramPreambleNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.TypeDeclarationMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.util.BsjTypedNodeNoOpVisitor;
 import edu.jhu.cs.bsj.compiler.impl.metaprogram.BsjMetaprogram;
@@ -130,6 +133,10 @@ public class ExtractMetaprogramsTask extends CompilationUnitTask
 	{
 		// Build a metaprogram profile for this anchor
 		MetaprogramProfile profile = buildProfile(anchor, anchorClass);
+		if (LOGGER.isTraceEnabled())
+		{
+			LOGGER.trace("Metaprogram " + profile.getMetaprogram().getID() + " created with deps " + profile.getDependencyNames() + " and targets " + profile.getTargetNames());
+		}
 
 		// Clear the metaprogram from the anchor (so it can't reflect on itself or anything messy like that)
 		// TODO: is this necessary? has this already been done?
@@ -144,10 +151,42 @@ public class ExtractMetaprogramsTask extends CompilationUnitTask
 	private <A extends MetaprogramAnchorNode<? extends Node>> MetaprogramProfile buildProfile(A anchor,
 			Class<A> anchorClass) throws IOException
 	{
-		Context<A> context = new ContextImpl<A>(anchor);
-		BsjMetaprogram<A> metaprogram = compileMetaprogram(anchor.getMetaprogram(), context, anchorClass);
+		MetaprogramNode metaprogramNode = anchor.getMetaprogram();
+		List<String> qualifiedTargetNames = new ArrayList<String>();
+		List<String> dependencyNames = new ArrayList<String>();
 
-		return new MetaprogramProfile(metaprogram, anchor, getTracker());
+		// if there's a preamble, deal with it
+		if (metaprogramNode.getPreamble() != null)
+		{
+			MetaprogramPreambleNode metaprogramPreambleNode = metaprogramNode.getPreamble();
+			if (metaprogramPreambleNode.getTarget() != null)
+			{
+				// determine qualifying prefix
+				String qualifyingPrefix = getQualifyingPrefix(anchor);
+				if (qualifyingPrefix.length() > 0)
+					qualifyingPrefix = qualifyingPrefix + ".";
+
+				for (IdentifierNode id : metaprogramPreambleNode.getTarget().getTargets().getChildren())
+				{
+					qualifiedTargetNames.add(qualifyingPrefix + id.getIdentifier());
+				}
+			}
+			
+			if (metaprogramPreambleNode.getDepends() != null)
+			{
+				for (NameNode dependsName : metaprogramPreambleNode.getDepends().getTargetNames().getChildren())
+				{
+					// TODO: what if the dependency name isn't fully qualified?  (need type info)
+					dependencyNames.add(dependsName.getNameString());
+				}
+			}
+		}
+		
+		// now build the metaprogram itself
+		Context<A> context = new ContextImpl<A>(anchor);
+		BsjMetaprogram<A> metaprogram = compileMetaprogram(metaprogramNode, context, anchorClass);
+
+		return new MetaprogramProfile(metaprogram, anchor, getTracker(), dependencyNames, qualifiedTargetNames);
 	}
 
 	private <A extends MetaprogramAnchorNode<? extends Node>> BsjMetaprogram<A> compileMetaprogram(
@@ -345,6 +384,44 @@ public class ExtractMetaprogramsTask extends CompilationUnitTask
 			Class<?> loadClass)
 	{
 		return (Class<? extends BsjMetaprogram<A>>) loadClass;
+	}
+
+	/**
+	 * Retrieves the qualifying prefix for the specified anchor.
+	 * 
+	 * @param <A> The type of anchor node used here.
+	 * @param anchor The anchor node to use.
+	 * @return The fully-qualified name of the type surrounding this anchor.
+	 */
+	// TODO: replace this with a general NodeOperation that can determine the fully qualified name of any node
+	// TODO: what implications does this naming scheme have w.r.t. local and anonymous classes?
+	private <A extends MetaprogramAnchorNode<? extends Node>> String getQualifyingPrefix(A anchor)
+	{
+		StringBuilder sb = new StringBuilder();
+		Node node = anchor;
+		while (!(node instanceof CompilationUnitNode))
+		{
+			if (node instanceof NamedTypeDeclarationNode)
+			{
+				NamedTypeDeclarationNode namedTypeDeclarationNode = (NamedTypeDeclarationNode) node;
+				if (sb.length() > 0)
+					sb.insert(0, '.');
+				sb.insert(0, namedTypeDeclarationNode.getIdentifier().getIdentifier());
+			}
+			node = node.getParent();
+		}
+		if (node != null)
+		{
+			CompilationUnitNode compilationUnitNode = (CompilationUnitNode) node;
+			if (compilationUnitNode.getPackageDeclaration() != null)
+			{
+				NameNode nameNode = compilationUnitNode.getPackageDeclaration().getName();
+				if (sb.length()>0)
+					sb.insert(0, ".");
+				sb.insert(0,nameNode.getNameString());
+			}
+		}
+		return sb.toString();
 	}
 
 	/**

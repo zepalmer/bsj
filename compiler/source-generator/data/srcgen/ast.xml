@@ -215,6 +215,7 @@
         <type name="QualifiedNameNode" super="NameNode">
             <prop name="base" type="NameNode" desc="the name being qualified" />
             <prop name="identifier" type="IdentifierNode" desc="the identifier used to qualify the base name" />
+            <include file="QualifiedNameNode.java" />
             <doc><![CDATA[
                 Represents a qualified name, as in
                 <pre>
@@ -245,6 +246,7 @@
 
         <type name="SimpleNameNode" super="NameNode">
             <prop name="identifier" type="IdentifierNode" desc="the identifier used as a simple name" />
+            <include file="SimpleNameNode.java" />
             <doc><![CDATA[
                 Represents a simple name, as in
                 <pre>

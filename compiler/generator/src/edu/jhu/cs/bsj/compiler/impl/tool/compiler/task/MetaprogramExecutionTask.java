@@ -52,6 +52,7 @@ public class MetaprogramExecutionTask extends AbstractBsjCompilerTask
 	{
 		// Run the metaprogram
 		profile.getMetaprogram().execute();
+		manager.notifyExecuted(profile);
 		
 		// Have the metaprogram replace itself with its replacement node
 		profile.getAnchor().getParent().replace(profile.getAnchor(), profile.getAnchor().getReplacement());
