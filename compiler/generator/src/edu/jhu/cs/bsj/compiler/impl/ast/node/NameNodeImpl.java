@@ -122,7 +122,8 @@ public abstract class NameNodeImpl extends NodeImpl implements NameNode
 			return;
 		if (this.category == NameCategory.AMBIGUOUS)
 		{
-			if (category != NameCategory.METHOD)
+			if (category == NameCategory.PACKAGE || category == NameCategory.TYPE ||
+					category == NameCategory.EXPRESSION)
 			{
 				this.category = category;
 				return;

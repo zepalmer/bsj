@@ -18,7 +18,8 @@ public abstract class NameNodeImpl
 			return;
 		if (this.category == NameCategory.AMBIGUOUS)
 		{
-			if (category != NameCategory.METHOD)
+			if (category == NameCategory.PACKAGE || category == NameCategory.TYPE ||
+					category == NameCategory.EXPRESSION)
 			{
 				this.category = category;
 				return;
