@@ -12,7 +12,6 @@ import javax.tools.JavaFileManager;
 import javax.tools.JavaFileObject.Kind;
 
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.JavaFileManagerUtilities;
-import edu.jhu.cs.bsj.compiler.impl.tool.javacompiler.ByteArrayJavaFileObject;
 
 /**
  * Provides a memory-based file system wrapper for a specific location.
@@ -65,10 +64,10 @@ public class InMemoryLocationManager extends AbstractLocationManager
 		}
 		
 		// create the file if it does not already exist
-        ByteArrayJavaFileObject fileObject = null;
+        InMemoryFileObject fileObject = null;
         try
         {
-            fileObject = new ByteArrayJavaFileObject(
+            fileObject = new InMemoryFileObject(
             		null,
                     relativeName, 
                     JavaFileManagerUtilities.getKindFor(relativeName));
@@ -107,10 +106,10 @@ public class InMemoryLocationManager extends AbstractLocationManager
 		}
 		
 		// create the Java file if it does not already exist
-        ByteArrayJavaFileObject javaFileObject = null;
+        InMemoryFileObject javaFileObject = null;
         try
         {
-            javaFileObject = new ByteArrayJavaFileObject(
+            javaFileObject = new InMemoryFileObject(
             		null, 
             		className + kind.extension, 
             		kind);

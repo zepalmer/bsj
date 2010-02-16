@@ -1,4 +1,4 @@
-package edu.jhu.cs.bsj.compiler.impl.tool.javacompiler;
+package edu.jhu.cs.bsj.compiler.impl.tool.filemanager;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -8,11 +8,9 @@ import java.io.OutputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.AbstractFileObject;
-import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.BsjFileObject;
 import edu.jhu.cs.bsj.compiler.impl.utils.StringUtilities;
 
-public class ByteArrayJavaFileObject extends AbstractFileObject implements BsjFileObject
+public class InMemoryFileObject extends AbstractFileObject implements BsjFileObject
 {
     /**
      * Stores the content of this file object.
@@ -30,7 +28,7 @@ public class ByteArrayJavaFileObject extends AbstractFileObject implements BsjFi
      * @param bytes the content of the class.
      * @throws URISyntaxException on error.
      */
-    public ByteArrayJavaFileObject(String encodingName, 
+    public InMemoryFileObject(String encodingName, 
     		String fileName, Kind kind) throws URISyntaxException
     {
     	super(encodingName);
