@@ -33,25 +33,25 @@ public interface ClassDeclarationNode extends NamedTypeDeclarationNode, InlineTy
      * Gets the extends clause.
      * @return The extends clause.
      */
-    public TypeNode getExtendsClause();
+    public DeclaredTypeNode getExtendsClause();
 
     /**
      * Changes the extends clause.
      * @param extendsClause The extends clause.
      */
-    public void setExtendsClause(TypeNode extendsClause);
+    public void setExtendsClause(DeclaredTypeNode extendsClause);
 
     /**
      * Gets the implements clause.
      * @return The implements clause.
      */
-    public TypeListNode getImplementsClause();
+    public DeclaredTypeListNode getImplementsClause();
 
     /**
      * Changes the implements clause.
      * @param implementsClause The implements clause.
      */
-    public void setImplementsClause(TypeListNode implementsClause);
+    public void setImplementsClause(DeclaredTypeListNode implementsClause);
 
     /**
      * Gets the body of this class.

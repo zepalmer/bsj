@@ -9,13 +9,13 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.node.DeclaredTypeListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.EnumBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.EnumDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.EnumModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.JavadocNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
-import edu.jhu.cs.bsj.compiler.ast.node.TypeListNode;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class EnumDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl implements EnumDeclarationNode
@@ -24,7 +24,7 @@ public class EnumDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl implem
     private EnumModifiersNode modifiers;
 
     /** The implements clause. */
-    private TypeListNode implementsClause;
+    private DeclaredTypeListNode implementsClause;
 
     /** This enum's body. */
     private EnumBodyNode body;
@@ -32,7 +32,7 @@ public class EnumDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl implem
     /** General constructor. */
     public EnumDeclarationNodeImpl(
             EnumModifiersNode modifiers,
-            TypeListNode implementsClause,
+            DeclaredTypeListNode implementsClause,
             EnumBodyNode body,
             IdentifierNode identifier,
             JavadocNode javadoc,
@@ -75,7 +75,7 @@ public class EnumDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl implem
      * Gets the implements clause.
      * @return The implements clause.
      */
-    public TypeListNode getImplementsClause()
+    public DeclaredTypeListNode getImplementsClause()
     {
         return this.implementsClause;
     }
@@ -84,7 +84,7 @@ public class EnumDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl implem
      * Changes the implements clause.
      * @param implementsClause The implements clause.
      */
-    public void setImplementsClause(TypeListNode implementsClause)
+    public void setImplementsClause(DeclaredTypeListNode implementsClause)
     {
         if (this.implementsClause instanceof NodeImpl)
         {
@@ -283,9 +283,9 @@ public class EnumDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl implem
             setModifiers((EnumModifiersNode)after);
             return true;
         }
-        if (before.equals(this.getImplementsClause()) && (after instanceof TypeListNode))
+        if (before.equals(this.getImplementsClause()) && (after instanceof DeclaredTypeListNode))
         {
-            setImplementsClause((TypeListNode)after);
+            setImplementsClause((DeclaredTypeListNode)after);
             return true;
         }
         if (before.equals(this.getBody()) && (after instanceof EnumBodyNode))

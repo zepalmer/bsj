@@ -12,11 +12,11 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassModifiersNode;
+import edu.jhu.cs.bsj.compiler.ast.node.DeclaredTypeListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.DeclaredTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.JavadocNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
-import edu.jhu.cs.bsj.compiler.ast.node.TypeListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeParameterListNode;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
@@ -26,10 +26,10 @@ public class ClassDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl imple
     private ClassModifiersNode modifiers;
 
     /** The extends clause. */
-    private TypeNode extendsClause;
+    private DeclaredTypeNode extendsClause;
 
     /** The implements clause. */
-    private TypeListNode implementsClause;
+    private DeclaredTypeListNode implementsClause;
 
     /** The body of this class. */
     private ClassBodyNode body;
@@ -40,8 +40,8 @@ public class ClassDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl imple
     /** General constructor. */
     public ClassDeclarationNodeImpl(
             ClassModifiersNode modifiers,
-            TypeNode extendsClause,
-            TypeListNode implementsClause,
+            DeclaredTypeNode extendsClause,
+            DeclaredTypeListNode implementsClause,
             ClassBodyNode body,
             TypeParameterListNode typeParameters,
             IdentifierNode identifier,
@@ -87,7 +87,7 @@ public class ClassDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl imple
      * Gets the extends clause.
      * @return The extends clause.
      */
-    public TypeNode getExtendsClause()
+    public DeclaredTypeNode getExtendsClause()
     {
         return this.extendsClause;
     }
@@ -96,7 +96,7 @@ public class ClassDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl imple
      * Changes the extends clause.
      * @param extendsClause The extends clause.
      */
-    public void setExtendsClause(TypeNode extendsClause)
+    public void setExtendsClause(DeclaredTypeNode extendsClause)
     {
         if (this.extendsClause instanceof NodeImpl)
         {
@@ -113,7 +113,7 @@ public class ClassDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl imple
      * Gets the implements clause.
      * @return The implements clause.
      */
-    public TypeListNode getImplementsClause()
+    public DeclaredTypeListNode getImplementsClause()
     {
         return this.implementsClause;
     }
@@ -122,7 +122,7 @@ public class ClassDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl imple
      * Changes the implements clause.
      * @param implementsClause The implements clause.
      */
-    public void setImplementsClause(TypeListNode implementsClause)
+    public void setImplementsClause(DeclaredTypeListNode implementsClause)
     {
         if (this.implementsClause instanceof NodeImpl)
         {
@@ -373,14 +373,14 @@ public class ClassDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl imple
             setModifiers((ClassModifiersNode)after);
             return true;
         }
-        if (before.equals(this.getExtendsClause()) && (after instanceof TypeNode))
+        if (before.equals(this.getExtendsClause()) && (after instanceof DeclaredTypeNode))
         {
-            setExtendsClause((TypeNode)after);
+            setExtendsClause((DeclaredTypeNode)after);
             return true;
         }
-        if (before.equals(this.getImplementsClause()) && (after instanceof TypeListNode))
+        if (before.equals(this.getImplementsClause()) && (after instanceof DeclaredTypeListNode))
         {
-            setImplementsClause((TypeListNode)after);
+            setImplementsClause((DeclaredTypeListNode)after);
             return true;
         }
         if (before.equals(this.getBody()) && (after instanceof ClassBodyNode))

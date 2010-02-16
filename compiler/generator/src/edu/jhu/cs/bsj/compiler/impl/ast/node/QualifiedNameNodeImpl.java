@@ -247,5 +247,25 @@ public class QualifiedNameNodeImpl extends NameNodeImpl implements QualifiedName
 	{
 		return getBase().getNameString() + "." + getIdentifier().getIdentifier();
 	}
+	
+	/**
+	 * Asserts that this node should fall into the specified category.  This override of the {@link NameNodeImpl}
+	 * implementation also enforces certain constraints, such as that everything to the left of a package name must
+	 * always be a package name.
+	 * @param category The category into which this node should fall.
+	 * @throws IllegalStateException If this node cannot fall into that category because it has already been marked with
+	 *                               another category.
+	 */
+	@Override
+	public void assertCategory(NameCategory category)
+	{
+		super.assertCategory(category);
+		switch (category)
+		{
+			case PACKAGE:
+				getBase().assertCategory(category);
+				break;
+		}
+	}
 
 }

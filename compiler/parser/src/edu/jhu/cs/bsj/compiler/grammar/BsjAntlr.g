@@ -1383,8 +1383,8 @@ normalClassDeclaration returns [ClassDeclarationNode ret]
         scope Rule;
         @init {
             ruleStart("normalClassDeclaration");
-            TypeListNode typeListNode = factory.makeTypeListNode(new ArrayList<TypeNode>());
-            TypeParameterListNode typeParamsNode = factory.makeTypeParameterListNode(new ArrayList<TypeParameterNode>());
+            DeclaredTypeListNode declaredTypeListNode = factory.makeDeclaredTypeListNode();
+            TypeParameterListNode typeParamsNode = factory.makeTypeParameterListNode();
         }         
         @after {
             ruleStop();
@@ -1398,19 +1398,19 @@ normalClassDeclaration returns [ClassDeclarationNode ret]
                 typeParamsNode = $typeParameters.ret;
             }
         )?
-        ('extends' type)?
+        ('extends' classOrInterfaceType)?
         (
-            'implements' typeList
+            'implements' declaredTypeList
             {
-                typeListNode = $typeList.ret;
+                declaredTypeListNode = $declaredTypeList.ret;
             }
         )?            
         classBody
         {            
             $ret = factory.makeClassDeclarationNode(
                     $classModifiers.ret,
-                    $type.ret,
-                    typeListNode,
+                    $classOrInterfaceType.ret,
+                    declaredTypeListNode,
                     $classBody.ret,
                     typeParamsNode,                    
                     $id.ret,
@@ -1497,7 +1497,7 @@ enumDeclaration returns [EnumDeclarationNode ret]
         scope Rule;
         @init {
             ruleStart("enumDeclaration");
-            TypeListNode typeListNode = factory.makeTypeListNode(new ArrayList<TypeNode>());
+            DeclaredTypeListNode declaredTypeListNode = factory.makeDeclaredTypeListNode();
         } 
         @after {
             ruleStop();
@@ -1507,16 +1507,16 @@ enumDeclaration returns [EnumDeclarationNode ret]
         'enum' 
         id=identifier
         (
-            'implements' typeList
+            'implements' declaredTypeList
             {
-                typeListNode = $typeList.ret;
+                declaredTypeListNode = $declaredTypeList.ret;
             }
         )?
         enumBody
         {
             $ret = factory.makeEnumDeclarationNode(
                         $enumModifiers.ret,
-                        typeListNode,
+                        declaredTypeListNode,
                         $enumBody.ret,
                         $id.ret,
                         $javadoc.ret);
@@ -1670,8 +1670,8 @@ normalInterfaceDeclaration returns [InterfaceDeclarationNode ret]
         scope Rule;
         @init {
             ruleStart("normalInterfaceDeclaration");
-            TypeListNode typeListNode = factory.makeTypeListNode(new ArrayList<TypeNode>());
-            TypeParameterListNode typeParamsNode = factory.makeTypeParameterListNode(new ArrayList<TypeParameterNode>());
+            DeclaredTypeListNode declaredTypeListNode = factory.makeDeclaredTypeListNode();
+            TypeParameterListNode typeParamsNode = factory.makeTypeParameterListNode();
         } 
         @after {
             ruleStop();
@@ -1686,21 +1686,44 @@ normalInterfaceDeclaration returns [InterfaceDeclarationNode ret]
             }
         )?
         (
-            'extends' typeList
+            'extends' declaredTypeList
             {
-                typeListNode = $typeList.ret;
+                declaredTypeListNode = $declaredTypeList.ret;
             }
         )?        
         interfaceBody
         {
             $ret = factory.makeInterfaceDeclarationNode(
                     $interfaceModifiers.ret,
-                    typeListNode,
+                    declaredTypeListNode,
                     $interfaceBody.ret,
                     typeParamsNode,
                     $id.ret,
                     $javadoc.ret);
         }
+    ;
+
+declaredTypeList returns [DeclaredTypeListNode ret]
+        scope Rule;
+        @init {
+            ruleStart("typeList");
+            List<DeclaredTypeNode> list = new ArrayList<DeclaredTypeNode>();
+        }
+        @after {
+            $ret = factory.makeDeclaredTypeListNode(list);
+            ruleStop();
+        }
+    :   
+        a=classOrInterfaceType
+        {
+            list.add($a.ret);
+        }
+        (
+            ',' b=classOrInterfaceType
+            {
+                list.add($b.ret);
+            }
+        )*
     ;
 
 typeList returns [TypeListNode ret]

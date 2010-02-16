@@ -9,13 +9,13 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.node.DeclaredTypeListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.InterfaceBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.InterfaceDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.InterfaceModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.JavadocNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
-import edu.jhu.cs.bsj.compiler.ast.node.TypeListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeParameterListNode;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
@@ -25,7 +25,7 @@ public class InterfaceDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl i
     private InterfaceModifiersNode modifiers;
 
     /** The extends clause. */
-    private TypeListNode extendsClause;
+    private DeclaredTypeListNode extendsClause;
 
     /** This interface's body. */
     private InterfaceBodyNode body;
@@ -36,7 +36,7 @@ public class InterfaceDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl i
     /** General constructor. */
     public InterfaceDeclarationNodeImpl(
             InterfaceModifiersNode modifiers,
-            TypeListNode extendsClause,
+            DeclaredTypeListNode extendsClause,
             InterfaceBodyNode body,
             TypeParameterListNode typeParameters,
             IdentifierNode identifier,
@@ -81,7 +81,7 @@ public class InterfaceDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl i
      * Gets the extends clause.
      * @return The extends clause.
      */
-    public TypeListNode getExtendsClause()
+    public DeclaredTypeListNode getExtendsClause()
     {
         return this.extendsClause;
     }
@@ -90,7 +90,7 @@ public class InterfaceDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl i
      * Changes the extends clause.
      * @param extendsClause The extends clause.
      */
-    public void setExtendsClause(TypeListNode extendsClause)
+    public void setExtendsClause(DeclaredTypeListNode extendsClause)
     {
         if (this.extendsClause instanceof NodeImpl)
         {
@@ -326,9 +326,9 @@ public class InterfaceDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl i
             setModifiers((InterfaceModifiersNode)after);
             return true;
         }
-        if (before.equals(this.getExtendsClause()) && (after instanceof TypeListNode))
+        if (before.equals(this.getExtendsClause()) && (after instanceof DeclaredTypeListNode))
         {
-            setExtendsClause((TypeListNode)after);
+            setExtendsClause((DeclaredTypeListNode)after);
             return true;
         }
         if (before.equals(this.getBody()) && (after instanceof InterfaceBodyNode))

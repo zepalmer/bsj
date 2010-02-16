@@ -33,13 +33,13 @@ public interface InterfaceDeclarationNode extends NamedTypeDeclarationNode
      * Gets the extends clause.
      * @return The extends clause.
      */
-    public TypeListNode getExtendsClause();
+    public DeclaredTypeListNode getExtendsClause();
 
     /**
      * Changes the extends clause.
      * @param extendsClause The extends clause.
      */
-    public void setExtendsClause(TypeListNode extendsClause);
+    public void setExtendsClause(DeclaredTypeListNode extendsClause);
 
     /**
      * Gets this interface's body.

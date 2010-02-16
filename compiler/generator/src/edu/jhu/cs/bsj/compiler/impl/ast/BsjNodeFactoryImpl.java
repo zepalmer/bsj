@@ -1431,8 +1431,8 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     @Override
     public ClassDeclarationNode makeClassDeclarationNode(
             ClassModifiersNode modifiers,
-            TypeNode extendsClause,
-            TypeListNode implementsClause,
+            DeclaredTypeNode extendsClause,
+            DeclaredTypeListNode implementsClause,
             ClassBodyNode body,
             TypeParameterListNode typeParameters,
             IdentifierNode identifier,
@@ -1449,8 +1449,8 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     @Override
     public ClassDeclarationNode makeClassDeclarationNode(
             ClassModifiersNode modifiers,
-            TypeNode extendsClause,
-            TypeListNode implementsClause,
+            DeclaredTypeNode extendsClause,
+            DeclaredTypeListNode implementsClause,
             ClassBodyNode body,
             TypeParameterListNode typeParameters,
             IdentifierNode identifier,
@@ -2242,7 +2242,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     @Override
     public EnumDeclarationNode makeEnumDeclarationNode(
             EnumModifiersNode modifiers,
-            TypeListNode implementsClause,
+            DeclaredTypeListNode implementsClause,
             EnumBodyNode body,
             IdentifierNode identifier,
             JavadocNode javadoc)
@@ -2258,7 +2258,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     @Override
     public EnumDeclarationNode makeEnumDeclarationNode(
             EnumModifiersNode modifiers,
-            TypeListNode implementsClause,
+            DeclaredTypeListNode implementsClause,
             EnumBodyNode body,
             IdentifierNode identifier,
             JavadocNode javadoc,
@@ -3044,7 +3044,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     @Override
     public InterfaceDeclarationNode makeInterfaceDeclarationNode(
             InterfaceModifiersNode modifiers,
-            TypeListNode extendsClause,
+            DeclaredTypeListNode extendsClause,
             InterfaceBodyNode body,
             TypeParameterListNode typeParameters,
             IdentifierNode identifier,
@@ -3061,7 +3061,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     @Override
     public InterfaceDeclarationNode makeInterfaceDeclarationNode(
             InterfaceModifiersNode modifiers,
-            TypeListNode extendsClause,
+            DeclaredTypeListNode extendsClause,
             InterfaceBodyNode body,
             TypeParameterListNode typeParameters,
             IdentifierNode identifier,

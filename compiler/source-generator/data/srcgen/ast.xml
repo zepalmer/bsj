@@ -1437,8 +1437,8 @@
         <type name="ClassDeclarationNode" super="NamedTypeDeclarationNode">
             <tag name="InlineTypeDeclarableNode" />
             <prop name="modifiers" type="ClassModifiersNode" desc="the modifiers for this type" />
-            <prop name="extendsClause" type="TypeNode" desc="the extends clause" />
-            <prop name="implementsClause" type="TypeListNode" desc="the implements clause" />
+            <prop name="extendsClause" type="DeclaredTypeNode" desc="the extends clause" />
+            <prop name="implementsClause" type="DeclaredTypeListNode" desc="the implements clause" />
             <prop name="body" type="ClassBodyNode" desc="the body of this class" />
             <prop name="typeParameters" type="TypeParameterListNode" desc="this class's type parameters" />
             <doc><![CDATA[
@@ -1456,7 +1456,7 @@
         <type name="EnumDeclarationNode" super="NamedTypeDeclarationNode">
             <tag name="InlineTypeDeclarableNode" />
             <prop name="modifiers" type="EnumModifiersNode" desc="the modifiers for this type" />
-            <prop name="implementsClause" type="TypeListNode" desc="the implements clause" />
+            <prop name="implementsClause" type="DeclaredTypeListNode" desc="the implements clause" />
             <prop name="body" type="EnumBodyNode" desc="this enum's body" />
             <doc><![CDATA[
                 Represents the declaration of a class, as in:
@@ -1472,7 +1472,7 @@
 
         <type name="InterfaceDeclarationNode" super="NamedTypeDeclarationNode">
             <prop name="modifiers" type="InterfaceModifiersNode" desc="the modifiers for this type" />
-            <prop name="extendsClause" type="TypeListNode" desc="the extends clause" />
+            <prop name="extendsClause" type="DeclaredTypeListNode" desc="the extends clause" />
             <prop name="body" type="InterfaceBodyNode" desc="this interface's body" />
             <prop name="typeParameters" type="TypeParameterListNode" desc="this class's type parameters" />
             <doc><![CDATA[

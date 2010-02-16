@@ -277,7 +277,7 @@ public class ExtractMetaprogramsTask extends CompilationUnitTask
 				factory.makeParameterizedTypeNode(factory.makeUnparameterizedTypeNode(parseNameNode(
 						"AbstractBsjMetaprogram", NameCategory.TYPE)),
 						factory.makeTypeArgumentListNode(factory.makeUnparameterizedTypeNode(parseNameNode(
-								anchorClass.getName(), NameCategory.AMBIGUOUS)))), factory.makeTypeListNode(), body,
+								anchorClass.getName(), NameCategory.AMBIGUOUS)))), factory.makeDeclaredTypeListNode(), body,
 				factory.makeTypeParameterListNode(), factory.makeIdentifierNode(metaprogramClassName), null);
 
 		CompilationUnitNode metaprogramCompilationUnitNode = factory.makeCompilationUnitNode(packageDeclarationNode,
