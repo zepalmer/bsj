@@ -259,27 +259,27 @@ public class VariableDeclaratorNodeImpl extends NodeImpl implements VariableDecl
      * @return <code>true</code> if the replacement was successful; <code>false</code> if the
      *         specified <tt>before</tt> node is not a child of this node.
      */
-    public <N extends Node> boolean replace(N before, N after)
+    public boolean replace(Node before, Node after)
     {
-        if (super.replace(before,after))
-            return true;
-
-        if (before.equals(this.type) && (after instanceof TypeNode))
+        if (before==null)
+            throw new IllegalArgumentException("Cannot replace node with before value of null.");
+        
+        if (before.equals(this.getType()) && (after instanceof TypeNode))
         {
             setType((TypeNode)after);
             return true;
         }
-        if (before.equals(this.name) && (after instanceof IdentifierNode))
+        if (before.equals(this.getName()) && (after instanceof IdentifierNode))
         {
             setName((IdentifierNode)after);
             return true;
         }
-        if (before.equals(this.initializer) && (after instanceof VariableInitializerNode))
+        if (before.equals(this.getInitializer()) && (after instanceof VariableInitializerNode))
         {
             setInitializer((VariableInitializerNode)after);
             return true;
         }
         return false;
     }
-
+    
 }

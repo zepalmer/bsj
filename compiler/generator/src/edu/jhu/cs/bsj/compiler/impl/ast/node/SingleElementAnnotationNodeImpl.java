@@ -175,17 +175,22 @@ public class SingleElementAnnotationNodeImpl extends AnnotationNodeImpl implemen
      * @return <code>true</code> if the replacement was successful; <code>false</code> if the
      *         specified <tt>before</tt> node is not a child of this node.
      */
-    public <N extends Node> boolean replace(N before, N after)
+    public boolean replace(Node before, Node after)
     {
-        if (super.replace(before,after))
-            return true;
-
-        if (before.equals(this.value) && (after instanceof AnnotationValueNode))
+        if (before==null)
+            throw new IllegalArgumentException("Cannot replace node with before value of null.");
+        
+        if (before.equals(this.getValue()) && (after instanceof AnnotationValueNode))
         {
             setValue((AnnotationValueNode)after);
             return true;
         }
+        if (before.equals(this.getAnnotationType()) && (after instanceof UnparameterizedTypeNode))
+        {
+            setAnnotationType((UnparameterizedTypeNode)after);
+            return true;
+        }
         return false;
     }
-
+    
 }

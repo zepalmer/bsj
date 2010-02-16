@@ -484,52 +484,52 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
      * @return <code>true</code> if the replacement was successful; <code>false</code> if the
      *         specified <tt>before</tt> node is not a child of this node.
      */
-    public <N extends Node> boolean replace(N before, N after)
+    public boolean replace(Node before, Node after)
     {
-        if (super.replace(before,after))
-            return true;
-
-        if (before.equals(this.identifier) && (after instanceof IdentifierNode))
+        if (before==null)
+            throw new IllegalArgumentException("Cannot replace node with before value of null.");
+        
+        if (before.equals(this.getIdentifier()) && (after instanceof IdentifierNode))
         {
             setIdentifier((IdentifierNode)after);
             return true;
         }
-        if (before.equals(this.body) && (after instanceof ConstructorBodyNode))
+        if (before.equals(this.getBody()) && (after instanceof ConstructorBodyNode))
         {
             setBody((ConstructorBodyNode)after);
             return true;
         }
-        if (before.equals(this.modifiers) && (after instanceof ConstructorModifiersNode))
+        if (before.equals(this.getModifiers()) && (after instanceof ConstructorModifiersNode))
         {
             setModifiers((ConstructorModifiersNode)after);
             return true;
         }
-        if (before.equals(this.parameters) && (after instanceof VariableListNode))
+        if (before.equals(this.getParameters()) && (after instanceof VariableListNode))
         {
             setParameters((VariableListNode)after);
             return true;
         }
-        if (before.equals(this.varargParameter) && (after instanceof VariableNode))
+        if (before.equals(this.getVarargParameter()) && (after instanceof VariableNode))
         {
             setVarargParameter((VariableNode)after);
             return true;
         }
-        if (before.equals(this.throwTypes) && (after instanceof UnparameterizedTypeListNode))
+        if (before.equals(this.getThrowTypes()) && (after instanceof UnparameterizedTypeListNode))
         {
             setThrowTypes((UnparameterizedTypeListNode)after);
             return true;
         }
-        if (before.equals(this.typeParameters) && (after instanceof TypeParameterListNode))
+        if (before.equals(this.getTypeParameters()) && (after instanceof TypeParameterListNode))
         {
             setTypeParameters((TypeParameterListNode)after);
             return true;
         }
-        if (before.equals(this.javadoc) && (after instanceof JavadocNode))
+        if (before.equals(this.getJavadoc()) && (after instanceof JavadocNode))
         {
             setJavadoc((JavadocNode)after);
             return true;
         }
         return false;
     }
-
+    
 }

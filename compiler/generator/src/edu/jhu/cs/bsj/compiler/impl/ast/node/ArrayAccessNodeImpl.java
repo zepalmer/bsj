@@ -214,22 +214,22 @@ public class ArrayAccessNodeImpl extends NodeImpl implements ArrayAccessNode
      * @return <code>true</code> if the replacement was successful; <code>false</code> if the
      *         specified <tt>before</tt> node is not a child of this node.
      */
-    public <N extends Node> boolean replace(N before, N after)
+    public boolean replace(Node before, Node after)
     {
-        if (super.replace(before,after))
-            return true;
-
-        if (before.equals(this.arrayExpression) && (after instanceof RestrictedPrimaryExpressionNode))
+        if (before==null)
+            throw new IllegalArgumentException("Cannot replace node with before value of null.");
+        
+        if (before.equals(this.getArrayExpression()) && (after instanceof RestrictedPrimaryExpressionNode))
         {
             setArrayExpression((RestrictedPrimaryExpressionNode)after);
             return true;
         }
-        if (before.equals(this.indexExpression) && (after instanceof ExpressionNode))
+        if (before.equals(this.getIndexExpression()) && (after instanceof ExpressionNode))
         {
             setIndexExpression((ExpressionNode)after);
             return true;
         }
         return false;
     }
-
+    
 }

@@ -137,12 +137,22 @@ public class BlockStatementMetaprogramAnchorNodeImpl extends MetaprogramAnchorNo
      * @return <code>true</code> if the replacement was successful; <code>false</code> if the
      *         specified <tt>before</tt> node is not a child of this node.
      */
-    public <N extends Node> boolean replace(N before, N after)
+    public boolean replace(Node before, Node after)
     {
-        if (super.replace(before,after))
+        if (before==null)
+            throw new IllegalArgumentException("Cannot replace node with before value of null.");
+        
+        if (before.equals(this.getReplacement()) && (after instanceof BlockStatementNode))
+        {
+            setReplacement((BlockStatementNode)after);
             return true;
-
+        }
+        if (before.equals(this.getMetaprogram()) && (after instanceof MetaprogramNode))
+        {
+            setMetaprogram((MetaprogramNode)after);
+            return true;
+        }
         return false;
     }
-
+    
 }

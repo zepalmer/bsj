@@ -214,22 +214,22 @@ public class ParameterizedTypeNodeImpl extends NodeImpl implements Parameterized
      * @return <code>true</code> if the replacement was successful; <code>false</code> if the
      *         specified <tt>before</tt> node is not a child of this node.
      */
-    public <N extends Node> boolean replace(N before, N after)
+    public boolean replace(Node before, Node after)
     {
-        if (super.replace(before,after))
-            return true;
-
-        if (before.equals(this.baseType) && (after instanceof UnparameterizedTypeNode))
+        if (before==null)
+            throw new IllegalArgumentException("Cannot replace node with before value of null.");
+        
+        if (before.equals(this.getBaseType()) && (after instanceof UnparameterizedTypeNode))
         {
             setBaseType((UnparameterizedTypeNode)after);
             return true;
         }
-        if (before.equals(this.typeArguments) && (after instanceof TypeArgumentListNode))
+        if (before.equals(this.getTypeArguments()) && (after instanceof TypeArgumentListNode))
         {
             setTypeArguments((TypeArgumentListNode)after);
             return true;
         }
         return false;
     }
-
+    
 }

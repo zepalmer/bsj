@@ -258,27 +258,27 @@ public class MetaprogramPreambleNodeImpl extends NodeImpl implements Metaprogram
      * @return <code>true</code> if the replacement was successful; <code>false</code> if the
      *         specified <tt>before</tt> node is not a child of this node.
      */
-    public <N extends Node> boolean replace(N before, N after)
+    public boolean replace(Node before, Node after)
     {
-        if (super.replace(before,after))
-            return true;
-
-        if (before.equals(this.imports) && (after instanceof MetaprogramImportListNode))
+        if (before==null)
+            throw new IllegalArgumentException("Cannot replace node with before value of null.");
+        
+        if (before.equals(this.getImports()) && (after instanceof MetaprogramImportListNode))
         {
             setImports((MetaprogramImportListNode)after);
             return true;
         }
-        if (before.equals(this.target) && (after instanceof MetaprogramTargetNode))
+        if (before.equals(this.getTarget()) && (after instanceof MetaprogramTargetNode))
         {
             setTarget((MetaprogramTargetNode)after);
             return true;
         }
-        if (before.equals(this.depends) && (after instanceof MetaprogramDependsNode))
+        if (before.equals(this.getDepends()) && (after instanceof MetaprogramDependsNode))
         {
             setDepends((MetaprogramDependsNode)after);
             return true;
         }
         return false;
     }
-
+    
 }

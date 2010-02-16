@@ -10,7 +10,6 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.AnonymousClassBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassInstantiationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeArgumentListNode;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
@@ -227,35 +226,5 @@ public abstract class ClassInstantiationNodeImpl extends NodeImpl implements Cla
         return sb.toString();
     }
 
-
-    /**
-     * Performs replacement for this node.
-     * @param before The node to replace.
-     * @param after The node to replace the <tt>before</tt> node.
-     * @return <code>true</code> if the replacement was successful; <code>false</code> if the
-     *         specified <tt>before</tt> node is not a child of this node.
-     */
-    public <N extends Node> boolean replace(N before, N after)
-    {
-        if (super.replace(before,after))
-            return true;
-
-        if (before.equals(this.constructorTypeArguments) && (after instanceof TypeArgumentListNode))
-        {
-            setConstructorTypeArguments((TypeArgumentListNode)after);
-            return true;
-        }
-        if (before.equals(this.arguments) && (after instanceof ExpressionListNode))
-        {
-            setArguments((ExpressionListNode)after);
-            return true;
-        }
-        if (before.equals(this.body) && (after instanceof AnonymousClassBodyNode))
-        {
-            setBody((AnonymousClassBodyNode)after);
-            return true;
-        }
-        return false;
-    }
 
 }

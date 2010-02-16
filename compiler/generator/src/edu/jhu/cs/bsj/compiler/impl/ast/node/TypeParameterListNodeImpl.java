@@ -131,12 +131,18 @@ public class TypeParameterListNodeImpl extends ListNodeImpl<TypeParameterNode> i
      * @return <code>true</code> if the replacement was successful; <code>false</code> if the
      *         specified <tt>before</tt> node is not a child of this node.
      */
-    public <N extends Node> boolean replace(N before, N after)
+    public boolean replace(Node before, Node after)
     {
-        if (super.replace(before,after))
-            return true;
-
+        if (before==null)
+            throw new IllegalArgumentException("Cannot replace node with before value of null.");
+        
+        if (after instanceof TypeParameterNode)
+        {
+            int index = getChildren().indexOf(before);
+            if (index != -1)
+                getChildren().set(index, (TypeParameterNode)after);
+        }
         return false;
     }
-
+    
 }

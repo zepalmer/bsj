@@ -257,27 +257,27 @@ public class ConditionalExpressionNodeImpl extends NodeImpl implements Condition
      * @return <code>true</code> if the replacement was successful; <code>false</code> if the
      *         specified <tt>before</tt> node is not a child of this node.
      */
-    public <N extends Node> boolean replace(N before, N after)
+    public boolean replace(Node before, Node after)
     {
-        if (super.replace(before,after))
-            return true;
-
-        if (before.equals(this.condition) && (after instanceof ExpressionNode))
+        if (before==null)
+            throw new IllegalArgumentException("Cannot replace node with before value of null.");
+        
+        if (before.equals(this.getCondition()) && (after instanceof ExpressionNode))
         {
             setCondition((ExpressionNode)after);
             return true;
         }
-        if (before.equals(this.trueExpression) && (after instanceof ExpressionNode))
+        if (before.equals(this.getTrueExpression()) && (after instanceof ExpressionNode))
         {
             setTrueExpression((ExpressionNode)after);
             return true;
         }
-        if (before.equals(this.falseExpression) && (after instanceof ExpressionNode))
+        if (before.equals(this.getFalseExpression()) && (after instanceof ExpressionNode))
         {
             setFalseExpression((ExpressionNode)after);
             return true;
         }
         return false;
     }
-
+    
 }

@@ -1,5 +1,6 @@
 package edu.jhu.cs.bsj.compiler.utils.generator;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -250,5 +251,42 @@ public class TypeDefinition extends PropertyBasedHierarchyDefinition<TypeDefinit
 	public String toString()
 	{
 		return "TypeDef:" + getFullName();
+	}
+
+	@Override
+	public List<PropertyDefinition> getRecursiveProperties(boolean parentFirst)
+	{
+		List<PropertyDefinition> props = super.getRecursiveProperties(parentFirst);
+		Map<String,String> typeArgMap = new HashMap<String, String>();
+		TypeDefinition def = this;
+		while (def != null && def.getParent() != null)
+		{
+			if (def.getSuperTypeArg() != null && def.getParent().getTypeParameter() != null)
+			{
+				String typeParam = def.getParent().getTypeParameter();
+				if (typeParam.indexOf(' ') != -1)
+					typeParam = typeParam.substring(0, typeParam.indexOf(' '));
+				typeArgMap.put(typeParam, def.getSuperTypeArg());
+			}
+			def = def.getParent();
+		}
+		
+		for (int i=0;i<props.size();i++)
+		{
+			PropertyDefinition propdef = props.get(i);
+			if (typeArgMap.containsKey(propdef.getBaseType()))
+			{
+				propdef = new PropertyDefinition(propdef.getName(), typeArgMap.get(propdef.getBaseType()), propdef.getTypeArg(),
+						propdef.getMode(), propdef.getDescription(), propdef.getDefaultExpression());
+			}
+			if (typeArgMap.containsKey(propdef.getTypeArg()))
+			{
+				propdef = new PropertyDefinition(propdef.getName(), propdef.getBaseType(), typeArgMap.get(propdef.getTypeArg()),
+						propdef.getMode(), propdef.getDescription(), propdef.getDefaultExpression());
+			}
+			props.set(i, propdef);
+		}
+		
+		return props;
 	}
 }

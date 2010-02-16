@@ -363,37 +363,47 @@ public class ClassDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl imple
      * @return <code>true</code> if the replacement was successful; <code>false</code> if the
      *         specified <tt>before</tt> node is not a child of this node.
      */
-    public <N extends Node> boolean replace(N before, N after)
+    public boolean replace(Node before, Node after)
     {
-        if (super.replace(before,after))
-            return true;
-
-        if (before.equals(this.modifiers) && (after instanceof ClassModifiersNode))
+        if (before==null)
+            throw new IllegalArgumentException("Cannot replace node with before value of null.");
+        
+        if (before.equals(this.getModifiers()) && (after instanceof ClassModifiersNode))
         {
             setModifiers((ClassModifiersNode)after);
             return true;
         }
-        if (before.equals(this.extendsClause) && (after instanceof TypeNode))
+        if (before.equals(this.getExtendsClause()) && (after instanceof TypeNode))
         {
             setExtendsClause((TypeNode)after);
             return true;
         }
-        if (before.equals(this.implementsClause) && (after instanceof TypeListNode))
+        if (before.equals(this.getImplementsClause()) && (after instanceof TypeListNode))
         {
             setImplementsClause((TypeListNode)after);
             return true;
         }
-        if (before.equals(this.body) && (after instanceof ClassBodyNode))
+        if (before.equals(this.getBody()) && (after instanceof ClassBodyNode))
         {
             setBody((ClassBodyNode)after);
             return true;
         }
-        if (before.equals(this.typeParameters) && (after instanceof TypeParameterListNode))
+        if (before.equals(this.getTypeParameters()) && (after instanceof TypeParameterListNode))
         {
             setTypeParameters((TypeParameterListNode)after);
             return true;
         }
+        if (before.equals(this.getIdentifier()) && (after instanceof IdentifierNode))
+        {
+            setIdentifier((IdentifierNode)after);
+            return true;
+        }
+        if (before.equals(this.getJavadoc()) && (after instanceof JavadocNode))
+        {
+            setJavadoc((JavadocNode)after);
+            return true;
+        }
         return false;
     }
-
+    
 }

@@ -168,17 +168,17 @@ public class MetaprogramDependsNodeImpl extends NodeImpl implements MetaprogramD
      * @return <code>true</code> if the replacement was successful; <code>false</code> if the
      *         specified <tt>before</tt> node is not a child of this node.
      */
-    public <N extends Node> boolean replace(N before, N after)
+    public boolean replace(Node before, Node after)
     {
-        if (super.replace(before,after))
-            return true;
-
-        if (before.equals(this.targetNames) && (after instanceof NameListNode))
+        if (before==null)
+            throw new IllegalArgumentException("Cannot replace node with before value of null.");
+        
+        if (before.equals(this.getTargetNames()) && (after instanceof NameListNode))
         {
             setTargetNames((NameListNode)after);
             return true;
         }
         return false;
     }
-
+    
 }

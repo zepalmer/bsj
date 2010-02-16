@@ -258,27 +258,27 @@ public class IfNodeImpl extends NodeImpl implements IfNode
      * @return <code>true</code> if the replacement was successful; <code>false</code> if the
      *         specified <tt>before</tt> node is not a child of this node.
      */
-    public <N extends Node> boolean replace(N before, N after)
+    public boolean replace(Node before, Node after)
     {
-        if (super.replace(before,after))
-            return true;
-
-        if (before.equals(this.condition) && (after instanceof ExpressionNode))
+        if (before==null)
+            throw new IllegalArgumentException("Cannot replace node with before value of null.");
+        
+        if (before.equals(this.getCondition()) && (after instanceof ExpressionNode))
         {
             setCondition((ExpressionNode)after);
             return true;
         }
-        if (before.equals(this.thenStatement) && (after instanceof StatementNode))
+        if (before.equals(this.getThenStatement()) && (after instanceof StatementNode))
         {
             setThenStatement((StatementNode)after);
             return true;
         }
-        if (before.equals(this.elseStatement) && (after instanceof StatementNode))
+        if (before.equals(this.getElseStatement()) && (after instanceof StatementNode))
         {
             setElseStatement((StatementNode)after);
             return true;
         }
         return false;
     }
-
+    
 }

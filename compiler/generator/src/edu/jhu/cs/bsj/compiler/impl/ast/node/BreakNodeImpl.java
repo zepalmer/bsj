@@ -169,17 +169,17 @@ public class BreakNodeImpl extends NodeImpl implements BreakNode
      * @return <code>true</code> if the replacement was successful; <code>false</code> if the
      *         specified <tt>before</tt> node is not a child of this node.
      */
-    public <N extends Node> boolean replace(N before, N after)
+    public boolean replace(Node before, Node after)
     {
-        if (super.replace(before,after))
-            return true;
-
-        if (before.equals(this.label) && (after instanceof IdentifierNode))
+        if (before==null)
+            throw new IllegalArgumentException("Cannot replace node with before value of null.");
+        
+        if (before.equals(this.getLabel()) && (after instanceof IdentifierNode))
         {
             setLabel((IdentifierNode)after);
             return true;
         }
         return false;
     }
-
+    
 }

@@ -302,32 +302,32 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
      * @return <code>true</code> if the replacement was successful; <code>false</code> if the
      *         specified <tt>before</tt> node is not a child of this node.
      */
-    public <N extends Node> boolean replace(N before, N after)
+    public boolean replace(Node before, Node after)
     {
-        if (super.replace(before,after))
-            return true;
-
-        if (before.equals(this.packageDeclaration) && (after instanceof PackageDeclarationNode))
+        if (before==null)
+            throw new IllegalArgumentException("Cannot replace node with before value of null.");
+        
+        if (before.equals(this.getPackageDeclaration()) && (after instanceof PackageDeclarationNode))
         {
             setPackageDeclaration((PackageDeclarationNode)after);
             return true;
         }
-        if (before.equals(this.metaimports) && (after instanceof MetaprogramImportListNode))
+        if (before.equals(this.getMetaimports()) && (after instanceof MetaprogramImportListNode))
         {
             setMetaimports((MetaprogramImportListNode)after);
             return true;
         }
-        if (before.equals(this.imports) && (after instanceof ImportListNode))
+        if (before.equals(this.getImports()) && (after instanceof ImportListNode))
         {
             setImports((ImportListNode)after);
             return true;
         }
-        if (before.equals(this.typeDecls) && (after instanceof TypeDeclarationListNode))
+        if (before.equals(this.getTypeDecls()) && (after instanceof TypeDeclarationListNode))
         {
             setTypeDecls((TypeDeclarationListNode)after);
             return true;
         }
         return false;
     }
-
+    
 }

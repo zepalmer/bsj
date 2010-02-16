@@ -273,27 +273,37 @@ public class EnumDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl implem
      * @return <code>true</code> if the replacement was successful; <code>false</code> if the
      *         specified <tt>before</tt> node is not a child of this node.
      */
-    public <N extends Node> boolean replace(N before, N after)
+    public boolean replace(Node before, Node after)
     {
-        if (super.replace(before,after))
-            return true;
-
-        if (before.equals(this.modifiers) && (after instanceof EnumModifiersNode))
+        if (before==null)
+            throw new IllegalArgumentException("Cannot replace node with before value of null.");
+        
+        if (before.equals(this.getModifiers()) && (after instanceof EnumModifiersNode))
         {
             setModifiers((EnumModifiersNode)after);
             return true;
         }
-        if (before.equals(this.implementsClause) && (after instanceof TypeListNode))
+        if (before.equals(this.getImplementsClause()) && (after instanceof TypeListNode))
         {
             setImplementsClause((TypeListNode)after);
             return true;
         }
-        if (before.equals(this.body) && (after instanceof EnumBodyNode))
+        if (before.equals(this.getBody()) && (after instanceof EnumBodyNode))
         {
             setBody((EnumBodyNode)after);
             return true;
         }
+        if (before.equals(this.getIdentifier()) && (after instanceof IdentifierNode))
+        {
+            setIdentifier((IdentifierNode)after);
+            return true;
+        }
+        if (before.equals(this.getJavadoc()) && (after instanceof JavadocNode))
+        {
+            setJavadoc((JavadocNode)after);
+            return true;
+        }
         return false;
     }
-
+    
 }

@@ -316,32 +316,42 @@ public class InterfaceDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl i
      * @return <code>true</code> if the replacement was successful; <code>false</code> if the
      *         specified <tt>before</tt> node is not a child of this node.
      */
-    public <N extends Node> boolean replace(N before, N after)
+    public boolean replace(Node before, Node after)
     {
-        if (super.replace(before,after))
-            return true;
-
-        if (before.equals(this.modifiers) && (after instanceof InterfaceModifiersNode))
+        if (before==null)
+            throw new IllegalArgumentException("Cannot replace node with before value of null.");
+        
+        if (before.equals(this.getModifiers()) && (after instanceof InterfaceModifiersNode))
         {
             setModifiers((InterfaceModifiersNode)after);
             return true;
         }
-        if (before.equals(this.extendsClause) && (after instanceof TypeListNode))
+        if (before.equals(this.getExtendsClause()) && (after instanceof TypeListNode))
         {
             setExtendsClause((TypeListNode)after);
             return true;
         }
-        if (before.equals(this.body) && (after instanceof InterfaceBodyNode))
+        if (before.equals(this.getBody()) && (after instanceof InterfaceBodyNode))
         {
             setBody((InterfaceBodyNode)after);
             return true;
         }
-        if (before.equals(this.typeParameters) && (after instanceof TypeParameterListNode))
+        if (before.equals(this.getTypeParameters()) && (after instanceof TypeParameterListNode))
         {
             setTypeParameters((TypeParameterListNode)after);
             return true;
         }
+        if (before.equals(this.getIdentifier()) && (after instanceof IdentifierNode))
+        {
+            setIdentifier((IdentifierNode)after);
+            return true;
+        }
+        if (before.equals(this.getJavadoc()) && (after instanceof JavadocNode))
+        {
+            setJavadoc((JavadocNode)after);
+            return true;
+        }
         return false;
     }
-
+    
 }

@@ -533,57 +533,57 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
      * @return <code>true</code> if the replacement was successful; <code>false</code> if the
      *         specified <tt>before</tt> node is not a child of this node.
      */
-    public <N extends Node> boolean replace(N before, N after)
+    public boolean replace(Node before, Node after)
     {
-        if (super.replace(before,after))
-            return true;
-
-        if (before.equals(this.body) && (after instanceof BlockNode))
+        if (before==null)
+            throw new IllegalArgumentException("Cannot replace node with before value of null.");
+        
+        if (before.equals(this.getBody()) && (after instanceof BlockNode))
         {
             setBody((BlockNode)after);
             return true;
         }
-        if (before.equals(this.modifiers) && (after instanceof MethodModifiersNode))
+        if (before.equals(this.getModifiers()) && (after instanceof MethodModifiersNode))
         {
             setModifiers((MethodModifiersNode)after);
             return true;
         }
-        if (before.equals(this.identifier) && (after instanceof IdentifierNode))
+        if (before.equals(this.getIdentifier()) && (after instanceof IdentifierNode))
         {
             setIdentifier((IdentifierNode)after);
             return true;
         }
-        if (before.equals(this.parameters) && (after instanceof VariableListNode))
+        if (before.equals(this.getParameters()) && (after instanceof VariableListNode))
         {
             setParameters((VariableListNode)after);
             return true;
         }
-        if (before.equals(this.varargParameter) && (after instanceof VariableNode))
+        if (before.equals(this.getVarargParameter()) && (after instanceof VariableNode))
         {
             setVarargParameter((VariableNode)after);
             return true;
         }
-        if (before.equals(this.returnType) && (after instanceof TypeNode))
+        if (before.equals(this.getReturnType()) && (after instanceof TypeNode))
         {
             setReturnType((TypeNode)after);
             return true;
         }
-        if (before.equals(this.throwTypes) && (after instanceof UnparameterizedTypeListNode))
+        if (before.equals(this.getThrowTypes()) && (after instanceof UnparameterizedTypeListNode))
         {
             setThrowTypes((UnparameterizedTypeListNode)after);
             return true;
         }
-        if (before.equals(this.typeParameters) && (after instanceof TypeParameterListNode))
+        if (before.equals(this.getTypeParameters()) && (after instanceof TypeParameterListNode))
         {
             setTypeParameters((TypeParameterListNode)after);
             return true;
         }
-        if (before.equals(this.javadoc) && (after instanceof JavadocNode))
+        if (before.equals(this.getJavadoc()) && (after instanceof JavadocNode))
         {
             setJavadoc((JavadocNode)after);
             return true;
         }
         return false;
     }
-
+    
 }

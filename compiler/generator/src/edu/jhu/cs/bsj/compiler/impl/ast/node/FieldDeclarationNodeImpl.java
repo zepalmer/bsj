@@ -265,27 +265,27 @@ public class FieldDeclarationNodeImpl extends NodeImpl implements FieldDeclarati
      * @return <code>true</code> if the replacement was successful; <code>false</code> if the
      *         specified <tt>before</tt> node is not a child of this node.
      */
-    public <N extends Node> boolean replace(N before, N after)
+    public boolean replace(Node before, Node after)
     {
-        if (super.replace(before,after))
-            return true;
-
-        if (before.equals(this.modifiers) && (after instanceof FieldModifiersNode))
+        if (before==null)
+            throw new IllegalArgumentException("Cannot replace node with before value of null.");
+        
+        if (before.equals(this.getModifiers()) && (after instanceof FieldModifiersNode))
         {
             setModifiers((FieldModifiersNode)after);
             return true;
         }
-        if (before.equals(this.declarators) && (after instanceof VariableDeclaratorListNode))
+        if (before.equals(this.getDeclarators()) && (after instanceof VariableDeclaratorListNode))
         {
             setDeclarators((VariableDeclaratorListNode)after);
             return true;
         }
-        if (before.equals(this.javadoc) && (after instanceof JavadocNode))
+        if (before.equals(this.getJavadoc()) && (after instanceof JavadocNode))
         {
             setJavadoc((JavadocNode)after);
             return true;
         }
         return false;
     }
-
+    
 }

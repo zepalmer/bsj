@@ -1212,91 +1212,78 @@ public class SourceGenerator
 				ps.println("    }");
 			}
 
+			ps.incPrependCount();
+
 			// add logic for node replacement
-			ps.println("    /**");
-			ps.println("     * Performs replacement for this node.");
-			ps.println("     * @param before The node to replace.");
-			ps.println("     * @param after The node to replace the <tt>before</tt> node.");
-			ps.println("     * @return <code>true</code> if the replacement was successful; <code>false</code> if the");
-			ps.println("     *         specified <tt>before</tt> node is not a child of this node.");
-			ps.println("     */");
-			boolean suppress = false;
-			for (PropertyDefinition p : def.getProperties())
+			if (def.getMode() == TypeDefinition.Mode.CONCRETE)
 			{
-				if (p.getTypeArg() != null)
+				ps.println("/**");
+				ps.println(" * Performs replacement for this node.");
+				ps.println(" * @param before The node to replace.");
+				ps.println(" * @param after The node to replace the <tt>before</tt> node.");
+				ps.println(" * @return <code>true</code> if the replacement was successful; <code>false</code> if the");
+				ps.println(" *         specified <tt>before</tt> node is not a child of this node.");
+				ps.println(" */");
+				ps.println("public boolean replace(Node before, Node after)");
+				ps.println("{");
+				ps.incPrependCount();
+				ps.println("if (before==null)");
+				ps.println("    throw new IllegalArgumentException(\"Cannot replace node with before value of null.\");");
+				ps.println();
+				for (PropertyDefinition p : def.getRecursiveProperties())
 				{
-					suppress = true;
-					break;
-				}
-			}
-			if (suppress)
-			{
-				ps.println("    @SuppressWarnings(\"unchecked\")");
-			}
-			ps.println("    public <N extends Node> boolean replace(N before, N after)");
-			ps.println("    {");
-			if (def.getBaseSuperName() != null)
-			{
-				ps.println("        if (super.replace(before,after))");
-				ps.println("            return true;");
-			} else
-			{
-				ps.println("        if (before==null)");
-				ps.println("            throw new IllegalArgumentException(\"Cannot replace node with before value of null.\");");
-			}
-			ps.println();
-			for (PropertyDefinition p : def.getProperties())
-			{
-				if (propInstanceOf(p.getBaseType(), "Node"))
-				{
-					String propClass = p.getBaseType();
-					boolean generic = false;
-					String typeArg = "";
-					if (p.getTypeArg() != null)
+					if (propInstanceOf(p.getBaseType(), "Node"))
 					{
-						propClass = propClass + "<?>";
-						generic = true;
-						typeArg = p.getTypeArg();
-						if (typeArg.contains(" "))
-						{
-							typeArg = typeArg.substring(0, typeArg.indexOf(" "));
-						}
-					}
-					ps.println("        if (before.equals(this." + p.getName() + ") && (after instanceof " + propClass
-							+ "))");
-					ps.println("        {");
-					if (generic)
+						if (p.getTypeArg() != null)
+							throw new IllegalStateException(
+									"Don't know how to handle replacement for parameterized node type!");
+						ps.println("if (before.equals(this.get" + capFirst(p.getName()) + "()) && (after instanceof "
+								+ p.getBaseType() + "))");
+						ps.println("{");
+						ps.println("    set" + capFirst(p.getName()) + "((" + p.getFullType() + ")after);");
+						ps.println("    return true;");
+						ps.println("}");
+					} else if (p.getBaseType().equals("List"))
 					{
-						if (p.getBaseType().equals("ListNode"))
+						String typeArg = p.getTypeArg();
+						String rawTypeArg;
+						boolean typeParamParam;
+						if (typeArg.indexOf('<') == -1)
 						{
-							ps.println("            for (Object listval : ((ListNode<?>)after).getChildren())");
-							ps.println("            {");
-							ps.println("                " + typeArg + ".class.cast(listval);");
-							ps.println("            }");
+							rawTypeArg = typeArg;
+							typeParamParam = false;
 						} else
 						{
-							throw new IllegalStateException("Don't know how to assert type safety for type "
-									+ p.getFullType());
+							rawTypeArg = typeArg.substring(typeArg.indexOf('<'));
+							typeParamParam = true;
 						}
+						boolean nodeType = (propInstanceOf(rawTypeArg, "Node"));
+						
+						if (typeParamParam && nodeType)
+						{
+							throw new IllegalStateException("Can't handle list of parameterized nodes!");
+						}
+						if (!nodeType)
+						{
+							// Uninteresting; it's not a node, so it can't be a replacement target.
+							continue;
+						}
+						
+						ps.println("if (after instanceof " + typeArg + ")");
+						ps.println("{");
+						ps.println("    int index = get" + capFirst(p.getName()) + "().indexOf(before);");
+						ps.println("    if (index != -1)");
+						ps.println("        get" + capFirst(p.getName()) + "().set(index, (" + typeArg + ")after);");
+						ps.println("}");
 					}
-					ps.println("            set" + capFirst(p.getName()) + "((" + p.getFullType() + ")after);");
-					ps.println("            return true;");
-					ps.println("        }");
-				} else if (p.getBaseType().equals("List"))
-				{
-					String typeArg = p.getTypeArg();
-					// block to scope out index
-					ps.println("        {");
-					ps.println("            int index = " + p.getName() + ".indexOf(before);");
-					ps.println("            if (index != -1)");
-					// TODO: YUCK YUCK YUCK - this compels me further to make different types for each list node!
-					ps.println("                " + p.getName() + ".set(index, (" + typeArg + ")after);");
-					ps.println("        }");
 				}
+				ps.println("return false;");
+				ps.decPrependCount();
+				ps.println("}");
+				ps.println();
 			}
-			ps.println("        return false;");
-			ps.println("    }");
-			ps.println();
+
+			ps.decPrependCount();
 
 			// add supplements
 			includeAllBodies(ps, def.getIncludes(), "nodes" + File.separator + "implementation");

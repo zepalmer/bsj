@@ -242,22 +242,22 @@ public class AssignmentNodeImpl extends NodeImpl implements AssignmentNode
      * @return <code>true</code> if the replacement was successful; <code>false</code> if the
      *         specified <tt>before</tt> node is not a child of this node.
      */
-    public <N extends Node> boolean replace(N before, N after)
+    public boolean replace(Node before, Node after)
     {
-        if (super.replace(before,after))
-            return true;
-
-        if (before.equals(this.variable) && (after instanceof ExpressionNode))
+        if (before==null)
+            throw new IllegalArgumentException("Cannot replace node with before value of null.");
+        
+        if (before.equals(this.getVariable()) && (after instanceof ExpressionNode))
         {
             setVariable((ExpressionNode)after);
             return true;
         }
-        if (before.equals(this.expression) && (after instanceof ExpressionNode))
+        if (before.equals(this.getExpression()) && (after instanceof ExpressionNode))
         {
             setExpression((ExpressionNode)after);
             return true;
         }
         return false;
     }
-
+    
 }

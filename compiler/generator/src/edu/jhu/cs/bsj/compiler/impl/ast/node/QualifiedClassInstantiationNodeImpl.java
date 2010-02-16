@@ -276,27 +276,42 @@ public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeI
      * @return <code>true</code> if the replacement was successful; <code>false</code> if the
      *         specified <tt>before</tt> node is not a child of this node.
      */
-    public <N extends Node> boolean replace(N before, N after)
+    public boolean replace(Node before, Node after)
     {
-        if (super.replace(before,after))
-            return true;
-
-        if (before.equals(this.enclosingExpression) && (after instanceof ExpressionNode))
+        if (before==null)
+            throw new IllegalArgumentException("Cannot replace node with before value of null.");
+        
+        if (before.equals(this.getEnclosingExpression()) && (after instanceof ExpressionNode))
         {
             setEnclosingExpression((ExpressionNode)after);
             return true;
         }
-        if (before.equals(this.identifier) && (after instanceof IdentifierNode))
+        if (before.equals(this.getIdentifier()) && (after instanceof IdentifierNode))
         {
             setIdentifier((IdentifierNode)after);
             return true;
         }
-        if (before.equals(this.typeArguments) && (after instanceof TypeArgumentListNode))
+        if (before.equals(this.getTypeArguments()) && (after instanceof TypeArgumentListNode))
         {
             setTypeArguments((TypeArgumentListNode)after);
             return true;
         }
+        if (before.equals(this.getConstructorTypeArguments()) && (after instanceof TypeArgumentListNode))
+        {
+            setConstructorTypeArguments((TypeArgumentListNode)after);
+            return true;
+        }
+        if (before.equals(this.getArguments()) && (after instanceof ExpressionListNode))
+        {
+            setArguments((ExpressionListNode)after);
+            return true;
+        }
+        if (before.equals(this.getBody()) && (after instanceof AnonymousClassBodyNode))
+        {
+            setBody((AnonymousClassBodyNode)after);
+            return true;
+        }
         return false;
     }
-
+    
 }

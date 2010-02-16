@@ -349,37 +349,37 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
      * @return <code>true</code> if the replacement was successful; <code>false</code> if the
      *         specified <tt>before</tt> node is not a child of this node.
      */
-    public <N extends Node> boolean replace(N before, N after)
+    public boolean replace(Node before, Node after)
     {
-        if (super.replace(before,after))
-            return true;
-
-        if (before.equals(this.modifiers) && (after instanceof AnnotationMethodModifiersNode))
+        if (before==null)
+            throw new IllegalArgumentException("Cannot replace node with before value of null.");
+        
+        if (before.equals(this.getModifiers()) && (after instanceof AnnotationMethodModifiersNode))
         {
             setModifiers((AnnotationMethodModifiersNode)after);
             return true;
         }
-        if (before.equals(this.type) && (after instanceof TypeNode))
+        if (before.equals(this.getType()) && (after instanceof TypeNode))
         {
             setType((TypeNode)after);
             return true;
         }
-        if (before.equals(this.identifier) && (after instanceof IdentifierNode))
+        if (before.equals(this.getIdentifier()) && (after instanceof IdentifierNode))
         {
             setIdentifier((IdentifierNode)after);
             return true;
         }
-        if (before.equals(this.defaultValue) && (after instanceof AnnotationValueNode))
+        if (before.equals(this.getDefaultValue()) && (after instanceof AnnotationValueNode))
         {
             setDefaultValue((AnnotationValueNode)after);
             return true;
         }
-        if (before.equals(this.javadoc) && (after instanceof JavadocNode))
+        if (before.equals(this.getJavadoc()) && (after instanceof JavadocNode))
         {
             setJavadoc((JavadocNode)after);
             return true;
         }
         return false;
     }
-
+    
 }

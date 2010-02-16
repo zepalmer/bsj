@@ -304,32 +304,32 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
      * @return <code>true</code> if the replacement was successful; <code>false</code> if the
      *         specified <tt>before</tt> node is not a child of this node.
      */
-    public <N extends Node> boolean replace(N before, N after)
+    public boolean replace(Node before, Node after)
     {
-        if (super.replace(before,after))
-            return true;
-
-        if (before.equals(this.initializer) && (after instanceof ForInitializerNode))
+        if (before==null)
+            throw new IllegalArgumentException("Cannot replace node with before value of null.");
+        
+        if (before.equals(this.getInitializer()) && (after instanceof ForInitializerNode))
         {
             setInitializer((ForInitializerNode)after);
             return true;
         }
-        if (before.equals(this.condition) && (after instanceof ExpressionNode))
+        if (before.equals(this.getCondition()) && (after instanceof ExpressionNode))
         {
             setCondition((ExpressionNode)after);
             return true;
         }
-        if (before.equals(this.update) && (after instanceof StatementExpressionListNode))
+        if (before.equals(this.getUpdate()) && (after instanceof StatementExpressionListNode))
         {
             setUpdate((StatementExpressionListNode)after);
             return true;
         }
-        if (before.equals(this.statement) && (after instanceof StatementNode))
+        if (before.equals(this.getStatement()) && (after instanceof StatementNode))
         {
             setStatement((StatementNode)after);
             return true;
         }
         return false;
     }
-
+    
 }

@@ -169,17 +169,17 @@ public class ThisNodeImpl extends NodeImpl implements ThisNode
      * @return <code>true</code> if the replacement was successful; <code>false</code> if the
      *         specified <tt>before</tt> node is not a child of this node.
      */
-    public <N extends Node> boolean replace(N before, N after)
+    public boolean replace(Node before, Node after)
     {
-        if (super.replace(before,after))
-            return true;
-
-        if (before.equals(this.type) && (after instanceof UnparameterizedTypeNode))
+        if (before==null)
+            throw new IllegalArgumentException("Cannot replace node with before value of null.");
+        
+        if (before.equals(this.getType()) && (after instanceof UnparameterizedTypeNode))
         {
             setType((UnparameterizedTypeNode)after);
             return true;
         }
         return false;
     }
-
+    
 }
