@@ -24,6 +24,7 @@ import junit.framework.Assert;
 import org.junit.Test;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceSerializer;
 import edu.jhu.cs.bsj.compiler.ast.NameCategory;
 import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
@@ -50,10 +51,16 @@ import edu.jhu.cs.bsj.compiler.tool.parser.BsjParserImpl;
  */
 public class BsjTreeLifterTest
 {
+	// private variables used in testing
 	private static final String[] META_IMPORTS = { "edu.jhu.cs.bsj.compiler.ast.*",
 			"edu.jhu.cs.bsj.compiler.ast.node.*", "edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeFactoryImpl",
-			"edu.jhu.cs.bsj.compiler.ast.node.meta.*", "java.util.*" };
-
+			"edu.jhu.cs.bsj.compiler.ast.node.meta.*", "java.util.*" };	
+	private BsjNodeFactory factory = new BsjNodeFactoryImpl();
+	private BsjTreeLifter treeLifter = new BsjTreeLifter(factory);
+	private BsjParserImpl parser = new BsjParserImpl(new BsjNodeFactoryImpl());
+	private String factoryName = "factory";
+	private BsjSourceSerializer serializer = new BsjSourceSerializerImpl();
+	
 	/**
 	 * Test the BsjTreeLifter on files in the examples directory.
 	 */
@@ -92,11 +99,6 @@ public class BsjTreeLifterTest
 	 */
 	public boolean liftJavaFile(File file)
 	{
-		BsjNodeFactory factory = new BsjNodeFactoryImpl();
-		BsjTreeLifter treeLifter = new BsjTreeLifter(factory);
-		BsjParserImpl parser = new BsjParserImpl(new BsjNodeFactoryImpl());
-		String factoryName = "factory";
-
 		// parse the original source
 		Node ast = null;
 		try
@@ -109,7 +111,7 @@ public class BsjTreeLifterTest
 		}
 
 		// regenerate and save the original source
-		String originalProgram = ast.executeOperation(new BsjSourceSerializerImpl(), null);
+		String originalProgram = ast.executeOperation(serializer, null);
 
 		// create a metaFactory for use in the lifted code
 		ExpressionNode metaFactory = factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
@@ -120,12 +122,14 @@ public class BsjTreeLifterTest
 		
 		//TODO replace expressions w/ methods
 		List<MethodDeclarationNode> methods = divideLiftIntoMethods(metaAst);
+		System.out.println(metaAst.executeOperation(serializer, null));
+		System.out.println(methods.get(1821).executeOperation(serializer, null));
 
 		// compile the lifted code and get the result
 		String liftedProgram = null;
 		try
 		{
-			liftedProgram = compileMeta(metaAst, factoryName).executeOperation(new BsjSourceSerializerImpl(), null);
+			liftedProgram = compileMeta(metaAst, factoryName, methods).executeOperation(serializer, null);
 		} catch (Exception e)
 		{
 			e.printStackTrace();
@@ -143,12 +147,8 @@ public class BsjTreeLifterTest
 	 */
 	private List<MethodDeclarationNode> divideLiftIntoMethods(ExpressionNode metaAst)
     {
-        // TODO Auto-generated method stub
 	    List<MethodDeclarationNode> methods = new ArrayList<MethodDeclarationNode>();
-	    
-	    
 	    metaAst.receiveTyped(new BsjLiftedCodeVisitor(methods));
-	    
 	    
         return methods;
     }
@@ -158,9 +158,13 @@ public class BsjTreeLifterTest
 	 * 
 	 * @param code the AST for generating the lifted AST.
 	 * @param factoryName the name of the meta factory referenced in the lifted AST.
+     * @param methods list of method declarations for methods used in meta code
 	 * @return the lifted AST.
 	 */
-	public CompilationUnitNode compileMeta(ExpressionNode code, String factoryName) throws Exception
+	public CompilationUnitNode compileMeta(
+			ExpressionNode code, 
+			String factoryName, 
+			List<MethodDeclarationNode> methods) throws Exception
 	{
 		// build the source for the wrapper that runs the lifted code
 		StringBuilder sb = new StringBuilder();
@@ -168,10 +172,17 @@ public class BsjTreeLifterTest
 		{
 			sb.append("import ").append(s).append(";\n");
 		}
-		sb.append("public class WrapperClass\n{\npublic Node runLiftedCode()\n{\n");
-		sb.append("BsjNodeFactory " + factoryName + " = new BsjNodeFactoryImpl();\nreturn ");
-		sb.append(code.executeOperation(new BsjSourceSerializerImpl(), null));
-		sb.append(";\n}\n}");
+		sb.append("public class WrapperClass\n{\n");
+		sb.append("static BsjNodeFactory " + factoryName + " = new BsjNodeFactoryImpl();\n");
+		sb.append("public Node runLiftedCode()\n{\n\nreturn ");
+		sb.append(code.executeOperation(serializer, null));
+		sb.append(";\n}\n");
+		for (MethodDeclarationNode method : methods)
+		{
+			sb.append(method.executeOperation(serializer, null));
+			sb.append("\n");
+		}
+		sb.append("\n}");
 		String wrapperCode = sb.toString();
 
 		// setup the compilation environment

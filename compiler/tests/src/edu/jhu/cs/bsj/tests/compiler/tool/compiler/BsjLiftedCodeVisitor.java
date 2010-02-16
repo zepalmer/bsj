@@ -61,29 +61,42 @@ public class BsjLiftedCodeVisitor extends BsjTypedNodeNoOpVisitor
         
         for (ExpressionNode argExpr : node.getArguments().getChildren())
         {
+        	// build new method name
+        	String methodName = "method" + methodId++;
+
+        	// build the new method declaration and add it to the list
             MethodDeclarationNode newMethod = factory.makeMethodDeclarationNode(
-                    factory.makeBlockNode(factory.makeBlockStatementListNode(factory.makeReturnNode(argExpr))), 
+                    factory.makeBlockNode(
+                    		factory.makeBlockStatementListNode(
+                    				factory.makeReturnNode(argExpr))), 
                     factory.makeMethodModifiersNode(
                             AccessModifier.PUBLIC, false, true, false, false, 
                             false, false, factory.makeAnnotationListNode()), 
-                    factory.makeIdentifierNode("method" + methodId++), 
+                    factory.makeIdentifierNode(methodName), 
                     factory.makeVariableListNode(), 
                     factory.makeUnparameterizedTypeNode(
                             factory.makeSimpleNameNode(
-                                    factory.makeIdentifierNode("ExpressionNode"), NameCategory.TYPE)), 
+                                    factory.makeIdentifierNode(
+                                    		argExpr.getClass().getSimpleName()
+                                    		.substring(0, argExpr.getClass()
+                                    		.getSimpleName().length() - 4)), NameCategory.TYPE)), 
                     null);
-
-            //TODO
-//            newArgList.add(
-//                    factory.makeMethodInvocationByNameNode(
-//                            name, 
-//                            arguments, 
-//                            typeArguments));
             
             methods.add(newMethod);
+            
+            //TODO done?
+            // add a call to the new method to the new argument list
+            newArgList.add(
+                    factory.makeMethodInvocationByNameNode(
+                            factory.makeSimpleNameNode(
+                            		factory.makeIdentifierNode(methodName), NameCategory.METHOD), 
+                            factory.makeExpressionListNode(), 
+                            factory.makeTypeListNode()));
+            
+            
         }        
 
-        
+        // replace the nodes arguments with method calls
         ExpressionListNode newArguments = factory.makeExpressionListNode(newArgList);
         node.setArguments(newArguments);
     }
