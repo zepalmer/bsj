@@ -31,7 +31,7 @@ import edu.jhu.cs.bsj.compiler.utils.generator.TypeDefinition.Mode;
  */
 public class SourceGenerator
 {
-	private static final File CONTENTS_FILE = new File("data/srcgen/ast.xml");
+	private static final File CONTENTS_FILE = new File("data/srcgen/srcgen.xml");
 	private static final File SUPPLEMENTS_DIR = new File("data/srcgen/supplement/");
 	private static final File TARGET_DIR = new File("out/");
 	private static final File TARGET_IMPL_DIR = new File(TARGET_DIR.getAbsolutePath() + File.separator

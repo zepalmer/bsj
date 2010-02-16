@@ -63,7 +63,7 @@ public class SourceGeneratorParser
 			throw new IllegalArgumentException("Top level node was not <srcgen ...>");
 		}
 
-		SrcgenHandler handler = new SrcgenHandler(null, null);
+		SrcgenHandler handler = new SrcgenHandler(file.getParentFile(), null, null);
 		SourceGenerationData data = handler.handle(topElement);
 
 		establishHierarchy(data.getTypes(), true);
@@ -174,14 +174,17 @@ public class SourceGeneratorParser
 
 	static class SrcgenHandler implements ElementHandler<SourceGenerationData>
 	{
+		/** The file to which pathnames in the XML are relative. */
+		private File relativeFile;
 		/** The standing interface package name. */
 		private String interfacePackageName;
 		/** The standing class package name. */
 		private String classPackageName;
 
-		public SrcgenHandler(String interfacePackageName, String classPackageName)
+		public SrcgenHandler(File relativeFile, String interfacePackageName, String classPackageName)
 		{
 			super();
+			this.relativeFile = relativeFile;
 			this.interfacePackageName = interfacePackageName;
 			this.classPackageName = classPackageName;
 		}
@@ -210,7 +213,7 @@ public class SourceGeneratorParser
 					String childTag = childElement.getTagName();
 					if (childTag.equals("srcgen"))
 					{
-						SrcgenHandler handler = new SrcgenHandler(interfacePackageName, classPackageName);
+						SrcgenHandler handler = new SrcgenHandler(relativeFile, interfacePackageName, classPackageName);
 						SourceGenerationData childData = handler.handle(childElement);
 						types.addAll(childData.getTypes());
 						diagnostics.addAll(childData.getDiagnostics());
@@ -222,6 +225,27 @@ public class SourceGeneratorParser
 					{
 						DiagnosticHandler handler = new DiagnosticHandler(classPackageName);
 						diagnostics.add(handler.handle(childElement));
+					} else if (childTag.equals("import"))
+					{
+						SourceGeneratorParser parser = new SourceGeneratorParser();
+						String path = childElement.getAttribute("path");
+						path = this.relativeFile.getPath() + File.separator + path;
+						SourceGenerationData childData;
+						try
+						{
+							childData = parser.parse(new File(path));
+						} catch (IOException e1)
+						{
+							throw new IllegalStateException("Failure while reading imported file " +path, e1);
+						} catch (ParserConfigurationException e1)
+						{
+							throw new IllegalStateException("Failure while reading imported file " +path, e1);
+						} catch (SAXException e1)
+						{
+							throw new IllegalStateException("Failure while reading imported file " +path, e1);
+						}
+						types.addAll(childData.getTypes());
+						diagnostics.addAll(childData.getDiagnostics());
 					} else
 					{
 						throw new IllegalStateException(childTag);

@@ -1,0 +1,118 @@
+<srcgen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="./srcgen.xsd">
+    <!-- Diagnostics -->
+    <srcgen>
+        <srcgen cpkg="edu.jhu.cs.bsj.compiler.diagnostic.lexer">
+            <diagnostic name="BsjLexerDiagnostic">
+                <prop name="character" type="int" desc="the character which caused this diagnostic" />
+                <doc><![CDATA[
+                    A diagnostic which acts as a supertype for all BSJ lexer diagnostics.
+                ]]></doc>
+            </diagnostic>
+
+            <diagnostic name="GeneralLexerFailureDiagnostic" code="lexer.error.generalFailure"
+                super="BsjLexerDiagnostic">
+                <doc><![CDATA[
+                    A diagnostic indicating a general lexer failure.
+                ]]></doc>
+            </diagnostic>
+        </srcgen>
+
+        <srcgen cpkg="edu.jhu.cs.bsj.compiler.diagnostic.parser">
+            <diagnostic name="BsjParserDiagnostic">
+                <prop name="ruleName" type="String" desc="the rule which caused this diagnostic" />
+                <doc><![CDATA[
+                    A diagnostic which acts as the parent for all parser diagnostics.
+                ]]></doc>
+            </diagnostic>
+
+            <diagnostic name="ConflictingAccessModifierDiagnostic" code="bsj.parser.error.conflictingAccessModifier"
+                super="BsjParserDiagnostic">
+                <prop name="firstModifier" type="String" desc="the first modifier which conflicts" />
+                <prop name="secondModifier" type="String" desc="the second modifier which conflicts" />
+                <doc><![CDATA[
+                    A diagnostic which represents a conflicting access modifier.
+                ]]></doc>
+            </diagnostic>
+
+            <diagnostic name="DuplicateModifierDiagnostic" code="bsj.parser.error.duplicateModifier"
+                super="BsjParserDiagnostic">
+                <prop name="modifier" type="String" desc="the modifier which was duplicated" />
+                <doc><![CDATA[
+                    A diagnostic representing a duplicated modifier.
+                ]]></doc>
+            </diagnostic>
+
+            <diagnostic name="ExtraneousTokenDiagnostic" code="bsj.parser.error.extraneousToken"
+                super="BsjParserDiagnostic">
+                <prop name="extraneousType" type="String" desc="the type of the extraneous token" />
+                <prop name="extraneousToken" type="String" desc="the text of the extraneous token" />
+                <doc><![CDATA[
+                    A diagnostic representing the presence of an extraneous token.
+                ]]></doc>
+            </diagnostic>
+
+            <diagnostic name="FloatingPointLiteralTooLargeDiagnostic" code="bsj.parser.error.invalidFloatingPointLiteral.tooLarge"
+                super="InvalidFloatingPointLiteralDiagnostic">
+                <doc><![CDATA[
+                    A diagnostic indicating that a floating point literal was too large to fit into its type.
+                ]]></doc>
+            </diagnostic>
+
+            <diagnostic name="FloatingPointLiteralTooSmallDiagnostic" code="bsj.parser.error.invalidFloatingPointLiteral.tooSmall"
+                super="InvalidFloatingPointLiteralDiagnostic">
+                <doc><![CDATA[
+                    A diagnostic indicating that a floating point literal was too small to fit into its type.
+                ]]></doc>
+            </diagnostic>
+
+            <diagnostic name="GeneralParseFailureDiagnostic" code="bsj.parser.error.generalParseFailure"
+                super="BsjParserDiagnostic">
+                <prop name="tokenType" type="String" desc="the type of the token where the errors started" />
+                <prop name="tokenText" type="String" desc="the text of the token where the errors started" />
+                <doc><![CDATA[
+                    A diagnostic representing a general parsing failure starting at a given location.
+                ]]></doc>
+            </diagnostic>
+
+            <diagnostic name="InvalidFloatingPointLiteralDiagnostic" super="BsjParserDiagnostic">
+                <prop name="literalText" type="String" desc="the text of the invalid literal" />
+                <doc><![CDATA[
+                    A diagnostic representing an invalid floating point literal.
+                ]]></doc>
+            </diagnostic>
+
+            <diagnostic name="InvalidIntegerLiteralDiagnostic" code="bsj.parser.error.invalidIntegerLiteral"
+                super="BsjParserDiagnostic">
+                <prop name="literalText" type="String" desc="the text of the invalid literal" />
+                <doc><![CDATA[
+                    A diagnostic representing an invalid floating point literal.
+                ]]></doc>
+            </diagnostic>
+
+            <diagnostic name="InvalidModifierDiagnostic" code="bsj.parser.error.invalidModifier"
+                super="BsjParserDiagnostic">
+                <prop name="modifier" type="String" desc="the modifier which was used incorrectly" />
+                <doc><![CDATA[
+                    A diagnostic representing an invalid modifier (a modifier which appeared in an incorrect context).
+                ]]></doc>
+            </diagnostic>
+
+            <diagnostic name="MissingTokenDiagnostic" code="bsj.parser.error.missingToken" super="BsjParserDiagnostic">
+                <prop name="tokenType" type="String" desc="the type of the missing token" />
+                <doc><![CDATA[
+                    A diagnostic representing a missing token.
+                ]]></doc>
+            </diagnostic>
+
+            <diagnostic name="UnexpectedTokenDiagnostic" code="bsj.parser.error.unexpectedToken"
+                super="BsjParserDiagnostic">
+                <prop name="tokenType" type="String" desc="the type of the token which was found" />
+                <prop name="tokenText" type="String" desc="the text of the token which was found" />
+                <prop name="expectedType" type="String" desc="the type of the expected token" />
+                <doc><![CDATA[
+                    A diagnostic representing the presence of one token where another was expected.
+                ]]></doc>
+            </diagnostic>
+        </srcgen>
+    </srcgen>
+</srcgen>
