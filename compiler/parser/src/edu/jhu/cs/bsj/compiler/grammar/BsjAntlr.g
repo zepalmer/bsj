@@ -700,7 +700,7 @@ metaprogramTargetName returns [NameNode ret]
             ruleStop();
         }
     :
-        categorizedName[NameCategory.PACKAGE_OR_TYPE, NameCategory.METAPROGRAM_TARGET]
+        categorizedName[NameCategory.PACKAGE_OR_TYPE, NameCategory.TYPE, NameCategory.METAPROGRAM_TARGET]
         {
             $ret = $categorizedName.ret;
         }
