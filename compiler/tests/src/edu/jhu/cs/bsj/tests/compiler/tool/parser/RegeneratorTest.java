@@ -11,6 +11,7 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceSerializer;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeFactoryImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.serializer.BsjSourceSerializerImpl;
@@ -19,6 +20,10 @@ import edu.jhu.cs.bsj.compiler.tool.parser.BsjParserImpl;
 
 public class RegeneratorTest
 {
+	// private variables used in testing
+	private BsjParserImpl parser = new BsjParserImpl(new BsjNodeFactoryImpl());
+	private BsjSourceSerializer serializer = new BsjSourceSerializerImpl();
+	
     @Test
     public void testRegeneratorOnExamples()
     {
@@ -66,18 +71,17 @@ public class RegeneratorTest
         // read the java file in
         FileInputStream input = new FileInputStream(file);        
 
-        // parse it to an AST
-        BsjParserImpl parser = new BsjParserImpl(new BsjNodeFactoryImpl());
+        // parse it to an AST        
         Node ast = parser.parse(new InputStreamReader(input), null);
 
         // regenerate it once
-        String regen1 = ast.executeOperation(new BsjSourceSerializerImpl(), null);
+        String regen1 = ast.executeOperation(serializer, null);
         
         // use the regenerated version to create another AST
         Node newAst = parser.parse(new InputStreamReader(new ByteArrayInputStream(regen1.getBytes())), null);
                 
         // regenerate it again from the new AST
-        String regen2 = newAst.executeOperation(new BsjSourceSerializerImpl(), null);
+        String regen2 = newAst.executeOperation(serializer, null);
         
         // the twice regenerated source should equal the once regenerated source
         return regen1.equals(regen2);
