@@ -907,15 +907,11 @@ importBody returns [boolean staticImport, boolean onDemand, NameNode name]
             ruleStop();
         }
     :
-        (
-            'static'
-            {
-                $staticImport = true;
-            }
-        )?
-        packageOrTypeName
+        'static' typeName
         {
-            $name = $packageOrTypeName.ret;
+            $staticImport = true;
+            $onDemand = false;
+            $name = $typeName.ret;
         }
         (
             '.' '*'
@@ -923,6 +919,20 @@ importBody returns [boolean staticImport, boolean onDemand, NameNode name]
                 $onDemand = true;
             }
         )?
+    |
+        packageOrTypeName '.' '*'
+        {
+            $staticImport = false;
+            $onDemand = true;
+            $name = $packageOrTypeName.ret;
+        }
+    |
+        typeName
+        {
+            $staticImport = false;
+            $onDemand = false;
+            $name = $typeName.ret;
+        }
     ;
 
 importDeclaration returns [ImportNode ret]
