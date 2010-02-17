@@ -1267,6 +1267,13 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	}
 
 	@Override
+	public Void executeReferenceTypeListNode(ReferenceTypeListNode node, PrependablePrintStream p)
+	{
+		handleListNode(node, "", ",", "", p, false);
+		return null;
+	}
+
+	@Override
 	public Void executeReturnNode(ReturnNode node, PrependablePrintStream p)
 	{
 		p.print("return");

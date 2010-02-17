@@ -892,6 +892,14 @@ public interface BsjNodeOperation<P,R>
     public R executeQualifiedNameNode(QualifiedNameNode node, P p);
 
     /**
+     * Executes this operation against a ReferenceTypeListNode.
+     * @param node The ReferenceTypeListNode in question.
+     * @param p The parameter to use.
+     * @return The result of the operation.
+     */
+    public R executeReferenceTypeListNode(ReferenceTypeListNode node, P p);
+
+    /**
      * Executes this operation against a ReturnNode.
      * @param node The ReturnNode in question.
      * @param p The parameter to use.

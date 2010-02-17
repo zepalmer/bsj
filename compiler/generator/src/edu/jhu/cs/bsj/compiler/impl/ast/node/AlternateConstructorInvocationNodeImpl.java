@@ -12,7 +12,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.AlternateConstructorInvocationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
-import edu.jhu.cs.bsj.compiler.ast.node.TypeListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.ReferenceTypeListNode;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class AlternateConstructorInvocationNodeImpl extends ConstructorInvocationNodeImpl implements AlternateConstructorInvocationNode
@@ -20,7 +20,7 @@ public class AlternateConstructorInvocationNodeImpl extends ConstructorInvocatio
     /** General constructor. */
     public AlternateConstructorInvocationNodeImpl(
             ExpressionListNode arguments,
-            TypeListNode typeArguments,
+            ReferenceTypeListNode typeArguments,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
@@ -146,9 +146,9 @@ public class AlternateConstructorInvocationNodeImpl extends ConstructorInvocatio
             setArguments((ExpressionListNode)after);
             return true;
         }
-        if (before.equals(this.getTypeArguments()) && (after instanceof TypeListNode))
+        if (before.equals(this.getTypeArguments()) && (after instanceof ReferenceTypeListNode))
         {
-            setTypeArguments((TypeListNode)after);
+            setTypeArguments((ReferenceTypeListNode)after);
             return true;
         }
         return false;

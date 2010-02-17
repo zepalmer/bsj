@@ -12,8 +12,8 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
+import edu.jhu.cs.bsj.compiler.ast.node.ReferenceTypeListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.SuperMethodInvocationNode;
-import edu.jhu.cs.bsj.compiler.ast.node.TypeListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.UnparameterizedTypeNode;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
@@ -29,14 +29,14 @@ public class SuperMethodInvocationNodeImpl extends NodeImpl implements SuperMeth
     private ExpressionListNode arguments;
 
     /** The type arguments for the method. */
-    private TypeListNode typeArguments;
+    private ReferenceTypeListNode typeArguments;
 
     /** General constructor. */
     public SuperMethodInvocationNodeImpl(
             UnparameterizedTypeNode type,
             IdentifierNode identifier,
             ExpressionListNode arguments,
-            TypeListNode typeArguments,
+            ReferenceTypeListNode typeArguments,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
@@ -129,7 +129,7 @@ public class SuperMethodInvocationNodeImpl extends NodeImpl implements SuperMeth
      * Gets the type arguments for the method.
      * @return The type arguments for the method.
      */
-    public TypeListNode getTypeArguments()
+    public ReferenceTypeListNode getTypeArguments()
     {
         return this.typeArguments;
     }
@@ -138,7 +138,7 @@ public class SuperMethodInvocationNodeImpl extends NodeImpl implements SuperMeth
      * Changes the type arguments for the method.
      * @param typeArguments The type arguments for the method.
      */
-    public void setTypeArguments(TypeListNode typeArguments)
+    public void setTypeArguments(ReferenceTypeListNode typeArguments)
     {
         if (this.typeArguments instanceof NodeImpl)
         {
@@ -326,9 +326,9 @@ public class SuperMethodInvocationNodeImpl extends NodeImpl implements SuperMeth
             setArguments((ExpressionListNode)after);
             return true;
         }
-        if (before.equals(this.getTypeArguments()) && (after instanceof TypeListNode))
+        if (before.equals(this.getTypeArguments()) && (after instanceof ReferenceTypeListNode))
         {
-            setTypeArguments((TypeListNode)after);
+            setTypeArguments((ReferenceTypeListNode)after);
             return true;
         }
         return false;

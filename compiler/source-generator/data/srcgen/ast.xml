@@ -607,8 +607,8 @@
             <tag name="RestrictedPrimaryExpressionNode" />
             <tag name="StatementExpressionNode" />
             <prop name="arguments" type="ExpressionListNode" desc="the arguments to pass to the method" />
-            <prop name="typeArguments" type="TypeListNode" desc="the type arguments for the method"
-                default="makeTypeListNode()" />
+            <prop name="typeArguments" type="ReferenceTypeListNode" desc="the type arguments for the method"
+                default="makeReferenceTypeListNode()" />
             <doc><![CDATA[
                 A superclass for method invocation nodes.
             ]]></doc>
@@ -703,8 +703,8 @@
             <prop name="type" type="UnparameterizedTypeNode" desc="the qualifying type" default="null" />
             <prop name="identifier" type="IdentifierNode" desc="the identifier of the method being invoked" />
             <prop name="arguments" type="ExpressionListNode" desc="the arguments to pass to the method" />
-            <prop name="typeArguments" type="TypeListNode" desc="the type arguments for the method"
-                default="makeTypeListNode()" />
+            <prop name="typeArguments" type="ReferenceTypeListNode" desc="the type arguments for the method"
+                default="makeReferenceTypeListNode()" />
             <doc><![CDATA[
                 A node representing a method invocation from <tt>super</tt>, such as in the expression
                 <pre>
@@ -1704,6 +1704,12 @@
             ]]></doc>
         </type>
 
+        <type name="ReferenceTypeListNode" super="ListNode" superTypeArg="ReferenceTypeNode">
+            <doc><![CDATA[
+                Represents a list of {@link ReferenceTypeNode}s.
+            ]]></doc>
+        </type>
+
         <type name="StatementExpressionListNode" super="ListNode" superTypeArg="StatementExpressionNode">
             <doc><![CDATA[
                 Represents a list of {@link StatementExpressionNode}s.
@@ -1852,8 +1858,8 @@
 
         <type name="ConstructorInvocationNode" super="Node" mode="abstract">
             <prop name="arguments" type="ExpressionListNode" desc="the arguments to pass to the method" />
-            <prop name="typeArguments" type="TypeListNode" desc="the type arguments for the method"
-                default="makeTypeListNode()" />
+            <prop name="typeArguments" type="ReferenceTypeListNode" desc="the type arguments for the method"
+                default="makeReferenceTypeListNode()" />
             <doc><![CDATA[
                 This class is a common superclass to both types of explicit constructor invocations: alternate constructor
                 invocations (those using the <tt>this</tt> keyword) and superclass constructor invocations (those using the

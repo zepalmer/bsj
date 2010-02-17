@@ -242,7 +242,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftTypeArguments,
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -267,7 +267,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftAnnotation,
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -292,7 +292,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftValues,
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -317,7 +317,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftMembers,
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -357,7 +357,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftJavadoc,
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -397,14 +397,14 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                                 factory.makeIdentifierNode("asList"),
                                                 NameCategory.METHOD),
                                         factory.makeExpressionListNode(liftChildrenList),
-                                        factory.makeTypeListNode(
+                                        factory.makeReferenceTypeListNode(
                                                 factory.makeUnparameterizedTypeNode(
                                                         factory.makeSimpleNameNode(
                                                                 factory.makeIdentifierNode("AnnotationElementNode"),
                                                                 NameCategory.TYPE)))),
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -434,7 +434,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftValue,
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -459,7 +459,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftExpression,
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -499,14 +499,14 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                                 factory.makeIdentifierNode("asList"),
                                                 NameCategory.METHOD),
                                         factory.makeExpressionListNode(liftChildrenList),
-                                        factory.makeTypeListNode(
+                                        factory.makeReferenceTypeListNode(
                                                 factory.makeUnparameterizedTypeNode(
                                                         factory.makeSimpleNameNode(
                                                                 factory.makeIdentifierNode("AnnotationNode"),
                                                                 NameCategory.TYPE)))),
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -546,14 +546,14 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                                 factory.makeIdentifierNode("asList"),
                                                 NameCategory.METHOD),
                                         factory.makeExpressionListNode(liftChildrenList),
-                                        factory.makeTypeListNode(
+                                        factory.makeReferenceTypeListNode(
                                                 factory.makeUnparameterizedTypeNode(
                                                         factory.makeSimpleNameNode(
                                                                 factory.makeIdentifierNode("AnnotationMemberNode"),
                                                                 NameCategory.TYPE)))),
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -578,7 +578,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftMetaprogram,
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -623,7 +623,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftJavadoc,
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -648,7 +648,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftAnnotations,
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -682,7 +682,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftAnnotations,
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -722,14 +722,14 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                                 factory.makeIdentifierNode("asList"),
                                                 NameCategory.METHOD),
                                         factory.makeExpressionListNode(liftChildrenList),
-                                        factory.makeTypeListNode(
+                                        factory.makeReferenceTypeListNode(
                                                 factory.makeUnparameterizedTypeNode(
                                                         factory.makeSimpleNameNode(
                                                                 factory.makeIdentifierNode("AnnotationValueNode"),
                                                                 NameCategory.TYPE)))),
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -754,7 +754,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftMembers,
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -794,14 +794,14 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                                 factory.makeIdentifierNode("asList"),
                                                 NameCategory.METHOD),
                                         factory.makeExpressionListNode(liftChildrenList),
-                                        factory.makeTypeListNode(
+                                        factory.makeReferenceTypeListNode(
                                                 factory.makeUnparameterizedTypeNode(
                                                         factory.makeSimpleNameNode(
                                                                 factory.makeIdentifierNode("AnonymousClassMemberNode"),
                                                                 NameCategory.TYPE)))),
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -826,7 +826,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftMetaprogram,
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -856,7 +856,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftIndexExpression,
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -889,7 +889,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 expressionizeInt(liftArrayLevelsValue),
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -914,7 +914,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftInitializers,
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -947,7 +947,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 expressionizeInt(liftArrayLevelsValue),
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -972,7 +972,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftType,
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -1002,7 +1002,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftMessageExpression,
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -1035,7 +1035,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftExpression,
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -1068,7 +1068,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 expressionizeBinaryOperator(liftOperatorValue),
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -1093,7 +1093,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftStatements,
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -1133,14 +1133,14 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                                 factory.makeIdentifierNode("asList"),
                                                 NameCategory.METHOD),
                                         factory.makeExpressionListNode(liftChildrenList),
-                                        factory.makeTypeListNode(
+                                        factory.makeReferenceTypeListNode(
                                                 factory.makeUnparameterizedTypeNode(
                                                         factory.makeSimpleNameNode(
                                                                 factory.makeIdentifierNode("BlockStatementNode"),
                                                                 NameCategory.TYPE)))),
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -1165,7 +1165,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftMetaprogram,
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -1188,7 +1188,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 expressionizeBoolean(liftValueValue),
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -1213,7 +1213,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftLabel,
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -1253,14 +1253,14 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                                 factory.makeIdentifierNode("asList"),
                                                 NameCategory.METHOD),
                                         factory.makeExpressionListNode(liftChildrenList),
-                                        factory.makeTypeListNode(
+                                        factory.makeReferenceTypeListNode(
                                                 factory.makeUnparameterizedTypeNode(
                                                         factory.makeSimpleNameNode(
                                                                 factory.makeIdentifierNode("CaseNode"),
                                                                 NameCategory.TYPE)))),
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -1290,7 +1290,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftStatements,
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -1330,14 +1330,14 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                                 factory.makeIdentifierNode("asList"),
                                                 NameCategory.METHOD),
                                         factory.makeExpressionListNode(liftChildrenList),
-                                        factory.makeTypeListNode(
+                                        factory.makeReferenceTypeListNode(
                                                 factory.makeUnparameterizedTypeNode(
                                                         factory.makeSimpleNameNode(
                                                                 factory.makeIdentifierNode("CatchNode"),
                                                                 NameCategory.TYPE)))),
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -1367,7 +1367,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftParameter,
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -1390,7 +1390,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 expressionizeCharacter(liftValueValue),
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -1415,7 +1415,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftMembers,
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -1470,7 +1470,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftJavadoc,
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -1495,7 +1495,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftValue,
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -1535,14 +1535,14 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                                 factory.makeIdentifierNode("asList"),
                                                 NameCategory.METHOD),
                                         factory.makeExpressionListNode(liftChildrenList),
-                                        factory.makeTypeListNode(
+                                        factory.makeReferenceTypeListNode(
                                                 factory.makeUnparameterizedTypeNode(
                                                         factory.makeSimpleNameNode(
                                                                 factory.makeIdentifierNode("ClassMemberNode"),
                                                                 NameCategory.TYPE)))),
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -1567,7 +1567,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftMetaprogram,
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -1607,7 +1607,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftAnnotations,
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -1632,7 +1632,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftValue,
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -1672,7 +1672,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftTypeDecls,
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -1707,7 +1707,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftFalseExpression,
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -1737,7 +1737,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftStatements,
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -1797,7 +1797,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftJavadoc,
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -1825,7 +1825,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftAnnotations,
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -1850,7 +1850,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftLabel,
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -1890,14 +1890,14 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                                 factory.makeIdentifierNode("asList"),
                                                 NameCategory.METHOD),
                                         factory.makeExpressionListNode(liftChildrenList),
-                                        factory.makeTypeListNode(
+                                        factory.makeReferenceTypeListNode(
                                                 factory.makeUnparameterizedTypeNode(
                                                         factory.makeSimpleNameNode(
                                                                 factory.makeIdentifierNode("DeclaredTypeNode"),
                                                                 NameCategory.TYPE)))),
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -1927,7 +1927,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftStatement,
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -1950,7 +1950,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 expressionizeDouble(liftValueValue),
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -1985,7 +1985,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftStatement,
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -2015,7 +2015,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftMembers,
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -2055,14 +2055,14 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                                 factory.makeIdentifierNode("asList"),
                                                 NameCategory.METHOD),
                                         factory.makeExpressionListNode(liftChildrenList),
-                                        factory.makeTypeListNode(
+                                        factory.makeReferenceTypeListNode(
                                                 factory.makeUnparameterizedTypeNode(
                                                         factory.makeSimpleNameNode(
                                                                 factory.makeIdentifierNode("EnumConstantDeclarationNode"),
                                                                 NameCategory.TYPE)))),
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -2107,7 +2107,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftJavadoc,
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -2152,7 +2152,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftJavadoc,
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -2183,7 +2183,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftAnnotations,
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -2223,14 +2223,14 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                                 factory.makeIdentifierNode("asList"),
                                                 NameCategory.METHOD),
                                         factory.makeExpressionListNode(liftChildrenList),
-                                        factory.makeTypeListNode(
+                                        factory.makeReferenceTypeListNode(
                                                 factory.makeUnparameterizedTypeNode(
                                                         factory.makeSimpleNameNode(
                                                                 factory.makeIdentifierNode("ExpressionNode"),
                                                                 NameCategory.TYPE)))),
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -2255,7 +2255,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftExpression,
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -2285,7 +2285,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftIdentifier,
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -2310,7 +2310,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftName,
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -2345,7 +2345,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftJavadoc,
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -2385,7 +2385,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftAnnotations,
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -2408,7 +2408,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 expressionizeFloat(liftValueValue),
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -2433,7 +2433,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftDeclaration,
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -2458,7 +2458,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftExpressions,
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -2498,7 +2498,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftStatement,
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -2538,14 +2538,14 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                                 factory.makeIdentifierNode("asList"),
                                                 NameCategory.METHOD),
                                         factory.makeExpressionListNode(liftChildrenList),
-                                        factory.makeTypeListNode(
+                                        factory.makeReferenceTypeListNode(
                                                 factory.makeUnparameterizedTypeNode(
                                                         factory.makeSimpleNameNode(
                                                                 factory.makeIdentifierNode("IdentifierNode"),
                                                                 NameCategory.TYPE)))),
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -2568,7 +2568,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 expressionizeString(liftIdentifierValue),
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -2603,7 +2603,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftElseStatement,
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -2643,14 +2643,14 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                                 factory.makeIdentifierNode("asList"),
                                                 NameCategory.METHOD),
                                         factory.makeExpressionListNode(liftChildrenList),
-                                        factory.makeTypeListNode(
+                                        factory.makeReferenceTypeListNode(
                                                 factory.makeUnparameterizedTypeNode(
                                                         factory.makeSimpleNameNode(
                                                                 factory.makeIdentifierNode("ImportNode"),
                                                                 NameCategory.TYPE)))),
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -2678,7 +2678,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 expressionizeBoolean(liftStaticImportValue),
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -2706,7 +2706,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 expressionizeBoolean(liftStaticImportValue),
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -2734,7 +2734,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftBody,
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -2759,7 +2759,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftDeclaration,
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -2789,7 +2789,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftType,
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -2812,7 +2812,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 expressionizeInteger(liftValueValue),
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -2837,7 +2837,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftMembers,
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -2887,7 +2887,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftJavadoc,
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -2927,14 +2927,14 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                                 factory.makeIdentifierNode("asList"),
                                                 NameCategory.METHOD),
                                         factory.makeExpressionListNode(liftChildrenList),
-                                        factory.makeTypeListNode(
+                                        factory.makeReferenceTypeListNode(
                                                 factory.makeUnparameterizedTypeNode(
                                                         factory.makeSimpleNameNode(
                                                                 factory.makeIdentifierNode("InterfaceMemberNode"),
                                                                 NameCategory.TYPE)))),
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -2959,7 +2959,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftMetaprogram,
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -2993,7 +2993,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftAnnotations,
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -3016,7 +3016,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 expressionizeString(liftTextValue),
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -3046,7 +3046,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftStatement,
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -3069,7 +3069,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 expressionizeLong(liftValueValue),
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -3094,7 +3094,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftTargetNames,
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -3134,14 +3134,14 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                                 factory.makeIdentifierNode("asList"),
                                                 NameCategory.METHOD),
                                         factory.makeExpressionListNode(liftChildrenList),
-                                        factory.makeTypeListNode(
+                                        factory.makeReferenceTypeListNode(
                                                 factory.makeUnparameterizedTypeNode(
                                                         factory.makeSimpleNameNode(
                                                                 factory.makeIdentifierNode("MetaprogramImportNode"),
                                                                 NameCategory.TYPE)))),
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -3166,7 +3166,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftImportNode,
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -3196,7 +3196,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftBody,
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -3231,7 +3231,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftDepends,
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -3256,7 +3256,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftTargets,
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -3321,7 +3321,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftJavadoc,
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -3361,7 +3361,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftTypeArguments,
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -3396,7 +3396,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftTypeArguments,
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -3442,7 +3442,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftAnnotations,
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -3482,14 +3482,14 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                                 factory.makeIdentifierNode("asList"),
                                                 NameCategory.METHOD),
                                         factory.makeExpressionListNode(liftChildrenList),
-                                        factory.makeTypeListNode(
+                                        factory.makeReferenceTypeListNode(
                                                 factory.makeUnparameterizedTypeNode(
                                                         factory.makeSimpleNameNode(
                                                                 factory.makeIdentifierNode("NameNode"),
                                                                 NameCategory.TYPE)))),
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -3509,7 +3509,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeExpressionListNode(
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -3539,7 +3539,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftAnnotationType,
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -3560,7 +3560,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 factory.makeNullLiteralNode(null),
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -3590,7 +3590,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftAnnotations,
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -3620,7 +3620,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftTypeArguments,
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -3650,7 +3650,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftSelect,
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -3675,7 +3675,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftExpression,
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -3698,7 +3698,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 expressionizePrimitiveType(liftPrimitiveTypeValue),
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -3748,7 +3748,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftBody,
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -3781,7 +3781,54 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 expressionizeNameCategory(liftCategoryValue),
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
+        
+        return ret;
+    }
+    
+    @Override
+    public ExpressionNode executeReferenceTypeListNode(ReferenceTypeListNode node, ExpressionNode factoryNode)
+    {
+        List<ExpressionNode> liftChildrenList = new ArrayList<ExpressionNode>();
+        for (ReferenceTypeNode listval : node.getChildren())
+        {
+            liftChildrenList.add(
+                    listval != null ? 
+        			        listval.executeOperation(this,factoryNode) :
+                            null);
+        }
+        ExpressionNode liftStartLocationMetaClone = 
+                expressionizeBsjSourceLocation(node.getStartLocation());
+        ExpressionNode liftStopLocationMetaClone = 
+                expressionizeBsjSourceLocation(node.getStopLocation());
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeReferenceTypeListNode"),
+                        factory.makeExpressionListNode(
+                                factory.makeMethodInvocationByNameNode(
+                                        factory.makeQualifiedNameNode(
+                                                factory.makeQualifiedNameNode(
+                                                        factory.makeQualifiedNameNode(
+                                                                factory.makeSimpleNameNode(
+                                                                        factory.makeIdentifierNode("java"),
+                                                                        NameCategory.PACKAGE),
+                                                                factory.makeIdentifierNode("util"),
+                                                                NameCategory.PACKAGE),
+                                                        factory.makeIdentifierNode("Arrays"),
+                                                        NameCategory.TYPE),
+                                                factory.makeIdentifierNode("asList"),
+                                                NameCategory.METHOD),
+                                        factory.makeExpressionListNode(liftChildrenList),
+                                        factory.makeReferenceTypeListNode(
+                                                factory.makeUnparameterizedTypeNode(
+                                                        factory.makeSimpleNameNode(
+                                                                factory.makeIdentifierNode("ReferenceTypeNode"),
+                                                                NameCategory.TYPE)))),
+                                liftStartLocationMetaClone,
+                                liftStopLocationMetaClone),
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -3806,7 +3853,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftExpression,
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -3834,7 +3881,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 expressionizeNameCategory(liftCategoryValue),
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -3864,7 +3911,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftAnnotationType,
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -3904,14 +3951,14 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                                 factory.makeIdentifierNode("asList"),
                                                 NameCategory.METHOD),
                                         factory.makeExpressionListNode(liftChildrenList),
-                                        factory.makeTypeListNode(
+                                        factory.makeReferenceTypeListNode(
                                                 factory.makeUnparameterizedTypeNode(
                                                         factory.makeSimpleNameNode(
                                                                 factory.makeIdentifierNode("StatementExpressionNode"),
                                                                 NameCategory.TYPE)))),
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -3934,7 +3981,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 expressionizeString(liftValueValue),
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -3964,7 +4011,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftIdentifier,
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -4004,7 +4051,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftTypeArguments,
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -4039,7 +4086,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftTypeArguments,
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -4069,7 +4116,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftCases,
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -4099,7 +4146,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftBlock,
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -4124,7 +4171,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftType,
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -4149,7 +4196,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftExpression,
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -4184,7 +4231,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftFinallyBlock,
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -4224,14 +4271,14 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                                 factory.makeIdentifierNode("asList"),
                                                 NameCategory.METHOD),
                                         factory.makeExpressionListNode(liftChildrenList),
-                                        factory.makeTypeListNode(
+                                        factory.makeReferenceTypeListNode(
                                                 factory.makeUnparameterizedTypeNode(
                                                         factory.makeSimpleNameNode(
                                                                 factory.makeIdentifierNode("TypeArgumentNode"),
                                                                 NameCategory.TYPE)))),
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -4261,7 +4308,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftType,
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -4301,14 +4348,14 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                                 factory.makeIdentifierNode("asList"),
                                                 NameCategory.METHOD),
                                         factory.makeExpressionListNode(liftChildrenList),
-                                        factory.makeTypeListNode(
+                                        factory.makeReferenceTypeListNode(
                                                 factory.makeUnparameterizedTypeNode(
                                                         factory.makeSimpleNameNode(
                                                                 factory.makeIdentifierNode("TypeDeclarationNode"),
                                                                 NameCategory.TYPE)))),
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -4333,7 +4380,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftMetaprogram,
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -4373,14 +4420,14 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                                 factory.makeIdentifierNode("asList"),
                                                 NameCategory.METHOD),
                                         factory.makeExpressionListNode(liftChildrenList),
-                                        factory.makeTypeListNode(
+                                        factory.makeReferenceTypeListNode(
                                                 factory.makeUnparameterizedTypeNode(
                                                         factory.makeSimpleNameNode(
                                                                 factory.makeIdentifierNode("TypeNode"),
                                                                 NameCategory.TYPE)))),
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -4420,14 +4467,14 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                                 factory.makeIdentifierNode("asList"),
                                                 NameCategory.METHOD),
                                         factory.makeExpressionListNode(liftChildrenList),
-                                        factory.makeTypeListNode(
+                                        factory.makeReferenceTypeListNode(
                                                 factory.makeUnparameterizedTypeNode(
                                                         factory.makeSimpleNameNode(
                                                                 factory.makeIdentifierNode("TypeParameterNode"),
                                                                 NameCategory.TYPE)))),
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -4457,7 +4504,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftBounds,
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -4485,7 +4532,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 expressionizeUnaryOperator(liftOperatorValue),
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -4513,7 +4560,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 expressionizeUnaryStatementOperator(liftOperatorValue),
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -4553,14 +4600,14 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                                 factory.makeIdentifierNode("asList"),
                                                 NameCategory.METHOD),
                                         factory.makeExpressionListNode(liftChildrenList),
-                                        factory.makeTypeListNode(
+                                        factory.makeReferenceTypeListNode(
                                                 factory.makeUnparameterizedTypeNode(
                                                         factory.makeSimpleNameNode(
                                                                 factory.makeIdentifierNode("UnparameterizedTypeNode"),
                                                                 NameCategory.TYPE)))),
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -4585,7 +4632,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftName,
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -4625,7 +4672,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftBody,
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -4655,7 +4702,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftDeclarators,
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -4695,14 +4742,14 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                                 factory.makeIdentifierNode("asList"),
                                                 NameCategory.METHOD),
                                         factory.makeExpressionListNode(liftChildrenList),
-                                        factory.makeTypeListNode(
+                                        factory.makeReferenceTypeListNode(
                                                 factory.makeUnparameterizedTypeNode(
                                                         factory.makeSimpleNameNode(
                                                                 factory.makeIdentifierNode("VariableDeclaratorNode"),
                                                                 NameCategory.TYPE)))),
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -4737,7 +4784,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftInitializer,
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -4777,14 +4824,14 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                                 factory.makeIdentifierNode("asList"),
                                                 NameCategory.METHOD),
                                         factory.makeExpressionListNode(liftChildrenList),
-                                        factory.makeTypeListNode(
+                                        factory.makeReferenceTypeListNode(
                                                 factory.makeUnparameterizedTypeNode(
                                                         factory.makeSimpleNameNode(
                                                                 factory.makeIdentifierNode("VariableInitializerNode"),
                                                                 NameCategory.TYPE)))),
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -4824,14 +4871,14 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                                 factory.makeIdentifierNode("asList"),
                                                 NameCategory.METHOD),
                                         factory.makeExpressionListNode(liftChildrenList),
-                                        factory.makeTypeListNode(
+                                        factory.makeReferenceTypeListNode(
                                                 factory.makeUnparameterizedTypeNode(
                                                         factory.makeSimpleNameNode(
                                                                 factory.makeIdentifierNode("VariableNode"),
                                                                 NameCategory.TYPE)))),
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -4859,7 +4906,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftAnnotations,
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -4894,7 +4941,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftIdentifier,
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -4914,7 +4961,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeExpressionListNode(
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -4944,7 +4991,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 liftStatement,
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }
@@ -4972,7 +5019,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 expressionizeBoolean(liftUpperBoundValue),
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
-                        factory.makeTypeListNode());
+                        factory.makeReferenceTypeListNode());
         
         return ret;
     }

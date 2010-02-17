@@ -65,7 +65,7 @@ public interface BsjNodeFactory
      */
     public AlternateConstructorInvocationNode makeAlternateConstructorInvocationNode(
             ExpressionListNode arguments,
-            TypeListNode typeArguments);
+            ReferenceTypeListNode typeArguments);
 
     /**
      * Creates a AlternateConstructorInvocationNode.
@@ -73,7 +73,7 @@ public interface BsjNodeFactory
      */
     public AlternateConstructorInvocationNode makeAlternateConstructorInvocationNode(
             ExpressionListNode arguments,
-            TypeListNode typeArguments,
+            ReferenceTypeListNode typeArguments,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
 
@@ -2282,7 +2282,7 @@ public interface BsjNodeFactory
             PrimaryExpressionNode expression,
             IdentifierNode identifier,
             ExpressionListNode arguments,
-            TypeListNode typeArguments);
+            ReferenceTypeListNode typeArguments);
 
     /**
      * Creates a MethodInvocationByExpressionNode.
@@ -2292,7 +2292,7 @@ public interface BsjNodeFactory
             PrimaryExpressionNode expression,
             IdentifierNode identifier,
             ExpressionListNode arguments,
-            TypeListNode typeArguments,
+            ReferenceTypeListNode typeArguments,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
 
@@ -2303,7 +2303,7 @@ public interface BsjNodeFactory
     public MethodInvocationByNameNode makeMethodInvocationByNameNode(
             NameNode name,
             ExpressionListNode arguments,
-            TypeListNode typeArguments);
+            ReferenceTypeListNode typeArguments);
 
     /**
      * Creates a MethodInvocationByNameNode.
@@ -2312,7 +2312,7 @@ public interface BsjNodeFactory
     public MethodInvocationByNameNode makeMethodInvocationByNameNode(
             NameNode name,
             ExpressionListNode arguments,
-            TypeListNode typeArguments,
+            ReferenceTypeListNode typeArguments,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
 
@@ -2592,6 +2592,38 @@ public interface BsjNodeFactory
             BsjSourceLocation stopLocation);
 
     /**
+     * Creates a ReferenceTypeListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public ReferenceTypeListNode makeReferenceTypeListNode(
+            List<ReferenceTypeNode> children);
+
+    /**
+     * Creates a ReferenceTypeListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public ReferenceTypeListNode makeReferenceTypeListNode(
+            ReferenceTypeNode... childrenElements);
+
+    /**
+     * Creates a ReferenceTypeListNode.
+     * The specified start and stop locations are used.
+     */
+    public ReferenceTypeListNode makeReferenceTypeListNode(
+            List<ReferenceTypeNode> children,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+
+    /**
+     * Creates a ReferenceTypeListNode.
+     * The specified start and stop locations are used.
+     */
+    public ReferenceTypeListNode makeReferenceTypeListNode(
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation,
+            ReferenceTypeNode... childrenElements);
+
+    /**
      * Creates a ReturnNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -2733,7 +2765,7 @@ public interface BsjNodeFactory
             UnparameterizedTypeNode type,
             IdentifierNode identifier,
             ExpressionListNode arguments,
-            TypeListNode typeArguments);
+            ReferenceTypeListNode typeArguments);
 
     /**
      * Creates a SuperMethodInvocationNode.
@@ -2743,7 +2775,7 @@ public interface BsjNodeFactory
             UnparameterizedTypeNode type,
             IdentifierNode identifier,
             ExpressionListNode arguments,
-            TypeListNode typeArguments,
+            ReferenceTypeListNode typeArguments,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
 
@@ -2772,7 +2804,7 @@ public interface BsjNodeFactory
     public SuperMethodInvocationNode makeSuperMethodInvocationNode(
             IdentifierNode identifier,
             ExpressionListNode arguments,
-            TypeListNode typeArguments);
+            ReferenceTypeListNode typeArguments);
 
     /**
      * Creates a SuperMethodInvocationNode.
@@ -2781,7 +2813,7 @@ public interface BsjNodeFactory
     public SuperMethodInvocationNode makeSuperMethodInvocationNode(
             IdentifierNode identifier,
             ExpressionListNode arguments,
-            TypeListNode typeArguments,
+            ReferenceTypeListNode typeArguments,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
 
@@ -2792,7 +2824,7 @@ public interface BsjNodeFactory
     public SuperclassConstructorInvocationNode makeSuperclassConstructorInvocationNode(
             PrimaryExpressionNode qualifyingExpression,
             ExpressionListNode arguments,
-            TypeListNode typeArguments);
+            ReferenceTypeListNode typeArguments);
 
     /**
      * Creates a SuperclassConstructorInvocationNode.
@@ -2801,7 +2833,7 @@ public interface BsjNodeFactory
     public SuperclassConstructorInvocationNode makeSuperclassConstructorInvocationNode(
             PrimaryExpressionNode qualifyingExpression,
             ExpressionListNode arguments,
-            TypeListNode typeArguments,
+            ReferenceTypeListNode typeArguments,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
 

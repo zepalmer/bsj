@@ -1,5 +1,6 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Generated;
@@ -9,54 +10,20 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
-import edu.jhu.cs.bsj.compiler.ast.node.ExpressionListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
-import edu.jhu.cs.bsj.compiler.ast.node.PrimaryExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ReferenceTypeListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.SuperclassConstructorInvocationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.ReferenceTypeNode;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public class SuperclassConstructorInvocationNodeImpl extends ConstructorInvocationNodeImpl implements SuperclassConstructorInvocationNode
+public class ReferenceTypeListNodeImpl extends ListNodeImpl<ReferenceTypeNode> implements ReferenceTypeListNode
 {
-    /** The qualifying expression for the enclosing object. */
-    private PrimaryExpressionNode qualifyingExpression;
-
     /** General constructor. */
-    public SuperclassConstructorInvocationNodeImpl(
-            PrimaryExpressionNode qualifyingExpression,
-            ExpressionListNode arguments,
-            ReferenceTypeListNode typeArguments,
+    public ReferenceTypeListNodeImpl(
+            List<ReferenceTypeNode> children,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        super(arguments, typeArguments, startLocation, stopLocation);
-        setQualifyingExpression(qualifyingExpression);
-    }
-
-    /**
-     * Gets the qualifying expression for the enclosing object.
-     * @return The qualifying expression for the enclosing object.
-     */
-    public PrimaryExpressionNode getQualifyingExpression()
-    {
-        return this.qualifyingExpression;
-    }
-
-    /**
-     * Changes the qualifying expression for the enclosing object.
-     * @param qualifyingExpression The qualifying expression for the enclosing object.
-     */
-    public void setQualifyingExpression(PrimaryExpressionNode qualifyingExpression)
-    {
-        if (this.qualifyingExpression instanceof NodeImpl)
-        {
-            ((NodeImpl)this.qualifyingExpression).setParent(null);
-        }
-        this.qualifyingExpression = qualifyingExpression;
-        if (this.qualifyingExpression instanceof NodeImpl)
-        {
-            ((NodeImpl)this.qualifyingExpression).setParent(this);
-        }
+        super(children, startLocation, stopLocation);
     }
 
     /**
@@ -70,10 +37,6 @@ public class SuperclassConstructorInvocationNodeImpl extends ConstructorInvocati
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.qualifyingExpression != null)
-        {
-            this.qualifyingExpression.receive(visitor);
-        }
     }
 
     /**
@@ -87,25 +50,21 @@ public class SuperclassConstructorInvocationNodeImpl extends ConstructorInvocati
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.qualifyingExpression != null)
-        {
-            this.qualifyingExpression.receiveTyped(visitor);
-        }
     }
 
     @Override
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
         visitor.visitStartBegin(this);
-        visitor.visitSuperclassConstructorInvocationNodeStart(this, true);
-        visitor.visitConstructorInvocationNodeStart(this);
+        visitor.visitReferenceTypeListNodeStart(this, true);
+        visitor.visitListNodeStart(this);
         visitor.visitNodeStart(this);
         visitor.visitStartEnd(this);
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
         visitor.visitNodeStop(this);
-        visitor.visitConstructorInvocationNodeStop(this);
-        visitor.visitSuperclassConstructorInvocationNodeStop(this, true);
+        visitor.visitListNodeStop(this);
+        visitor.visitReferenceTypeListNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
 
@@ -118,7 +77,6 @@ public class SuperclassConstructorInvocationNodeImpl extends ConstructorInvocati
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(getQualifyingExpression());
         return list;
     }
 
@@ -131,14 +89,8 @@ public class SuperclassConstructorInvocationNodeImpl extends ConstructorInvocati
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
-        sb.append("qualifyingExpression=");
-        sb.append(this.getQualifyingExpression() == null? "null" : this.getQualifyingExpression().getClass().getSimpleName());
-        sb.append(',');
-        sb.append("arguments=");
-        sb.append(this.getArguments() == null? "null" : this.getArguments().getClass().getSimpleName());
-        sb.append(',');
-        sb.append("typeArguments=");
-        sb.append(this.getTypeArguments() == null? "null" : this.getTypeArguments().getClass().getSimpleName());
+        sb.append("children=");
+        sb.append(String.valueOf(this.getChildren()) + ":" + (this.getChildren() != null ? this.getChildren().getClass().getSimpleName() : "null"));
         sb.append(',');
         sb.append("startLocation=");
         sb.append(String.valueOf(this.getStartLocation()) + ":" + (this.getStartLocation() != null ? this.getStartLocation().getClass().getSimpleName() : "null"));
@@ -158,7 +110,7 @@ public class SuperclassConstructorInvocationNodeImpl extends ConstructorInvocati
     @Override
     public <P,R> R executeOperation(BsjNodeOperation<P,R> operation, P p)
     {
-        return operation.executeSuperclassConstructorInvocationNode(this, p);
+        return operation.executeReferenceTypeListNode(this, p);
     }
 
     /**
@@ -167,12 +119,10 @@ public class SuperclassConstructorInvocationNodeImpl extends ConstructorInvocati
      * @return The resulting deep copy node.
      */
     @Override
-    public SuperclassConstructorInvocationNode deepCopy(BsjNodeFactory factory)
+    public ReferenceTypeListNode deepCopy(BsjNodeFactory factory)
     {
-        return factory.makeSuperclassConstructorInvocationNode(
-                getQualifyingExpression().deepCopy(factory),
-                getArguments().deepCopy(factory),
-                getTypeArguments().deepCopy(factory));
+        return factory.makeReferenceTypeListNode(
+                new ArrayList<ReferenceTypeNode>(getChildren()));
     }
     /**
      * Performs replacement for this node.
@@ -186,20 +136,11 @@ public class SuperclassConstructorInvocationNodeImpl extends ConstructorInvocati
         if (before==null)
             throw new IllegalArgumentException("Cannot replace node with before value of null.");
         
-        if (before.equals(this.getQualifyingExpression()) && (after instanceof PrimaryExpressionNode))
+        if (after instanceof ReferenceTypeNode)
         {
-            setQualifyingExpression((PrimaryExpressionNode)after);
-            return true;
-        }
-        if (before.equals(this.getArguments()) && (after instanceof ExpressionListNode))
-        {
-            setArguments((ExpressionListNode)after);
-            return true;
-        }
-        if (before.equals(this.getTypeArguments()) && (after instanceof ReferenceTypeListNode))
-        {
-            setTypeArguments((ReferenceTypeListNode)after);
-            return true;
+            int index = getChildren().indexOf(before);
+            if (index != -1)
+                getChildren().set(index, (ReferenceTypeNode)after);
         }
         return false;
     }

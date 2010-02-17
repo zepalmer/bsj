@@ -1240,6 +1240,15 @@ public interface BsjTypedNodeVisitor
     public void visitQualifiedNameNodeStart(QualifiedNameNode node, boolean mostSpecific);
 
     /**
+     * Starts a visit for nodes of type ReferenceTypeListNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitReferenceTypeListNodeStart(ReferenceTypeListNode node, boolean mostSpecific);
+
+    /**
      * Starts a visit for nodes of type ReferenceTypeNode.
      * @param node The node being visited.
      */
@@ -2732,6 +2741,15 @@ public interface BsjTypedNodeVisitor
      *                     otherwise.
      */
     public void visitQualifiedNameNodeStop(QualifiedNameNode node, boolean mostSpecific);
+
+    /**
+     * Stops a visit for nodes of type ReferenceTypeListNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitReferenceTypeListNodeStop(ReferenceTypeListNode node, boolean mostSpecific);
 
     /**
      * Stops a visit for nodes of type ReferenceTypeNode.

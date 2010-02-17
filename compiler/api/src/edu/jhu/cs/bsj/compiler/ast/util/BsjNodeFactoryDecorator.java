@@ -110,7 +110,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     @Override
     public AlternateConstructorInvocationNode makeAlternateConstructorInvocationNode(
             ExpressionListNode arguments,
-            TypeListNode typeArguments)
+            ReferenceTypeListNode typeArguments)
     {
         this.before();
         AlternateConstructorInvocationNode node = factory.makeAlternateConstructorInvocationNode(arguments, typeArguments);
@@ -125,7 +125,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     @Override
     public AlternateConstructorInvocationNode makeAlternateConstructorInvocationNode(
             ExpressionListNode arguments,
-            TypeListNode typeArguments,
+            ReferenceTypeListNode typeArguments,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
@@ -4063,7 +4063,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
             PrimaryExpressionNode expression,
             IdentifierNode identifier,
             ExpressionListNode arguments,
-            TypeListNode typeArguments)
+            ReferenceTypeListNode typeArguments)
     {
         this.before();
         MethodInvocationByExpressionNode node = factory.makeMethodInvocationByExpressionNode(expression, identifier, arguments, typeArguments);
@@ -4080,7 +4080,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
             PrimaryExpressionNode expression,
             IdentifierNode identifier,
             ExpressionListNode arguments,
-            TypeListNode typeArguments,
+            ReferenceTypeListNode typeArguments,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
@@ -4098,7 +4098,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     public MethodInvocationByNameNode makeMethodInvocationByNameNode(
             NameNode name,
             ExpressionListNode arguments,
-            TypeListNode typeArguments)
+            ReferenceTypeListNode typeArguments)
     {
         this.before();
         MethodInvocationByNameNode node = factory.makeMethodInvocationByNameNode(name, arguments, typeArguments);
@@ -4114,7 +4114,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     public MethodInvocationByNameNode makeMethodInvocationByNameNode(
             NameNode name,
             ExpressionListNode arguments,
-            TypeListNode typeArguments,
+            ReferenceTypeListNode typeArguments,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
@@ -4610,6 +4610,66 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     }
 
     /**
+     * Creates a ReferenceTypeListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public ReferenceTypeListNode makeReferenceTypeListNode(
+            List<ReferenceTypeNode> children)
+    {
+        this.before();
+        ReferenceTypeListNode node = factory.makeReferenceTypeListNode(children);
+        this.after(node);
+        return node;
+    }
+
+    /**
+     * Creates a ReferenceTypeListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public ReferenceTypeListNode makeReferenceTypeListNode(
+            ReferenceTypeNode... childrenElements)
+    {
+        this.before();
+        ReferenceTypeListNode node = factory.makeReferenceTypeListNode(childrenElements);
+        this.after(node);
+        return node;
+    }
+
+    /**
+     * Creates a ReferenceTypeListNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public ReferenceTypeListNode makeReferenceTypeListNode(
+            List<ReferenceTypeNode> children,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        ReferenceTypeListNode node = factory.makeReferenceTypeListNode(children, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+
+    /**
+     * Creates a ReferenceTypeListNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public ReferenceTypeListNode makeReferenceTypeListNode(
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation,
+            ReferenceTypeNode... childrenElements)
+    {
+        this.before();
+        ReferenceTypeListNode node = factory.makeReferenceTypeListNode(startLocation, stopLocation, childrenElements);
+        this.after(node);
+        return node;
+    }
+
+    /**
      * Creates a ReturnNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -4864,7 +4924,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
             UnparameterizedTypeNode type,
             IdentifierNode identifier,
             ExpressionListNode arguments,
-            TypeListNode typeArguments)
+            ReferenceTypeListNode typeArguments)
     {
         this.before();
         SuperMethodInvocationNode node = factory.makeSuperMethodInvocationNode(type, identifier, arguments, typeArguments);
@@ -4881,7 +4941,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
             UnparameterizedTypeNode type,
             IdentifierNode identifier,
             ExpressionListNode arguments,
-            TypeListNode typeArguments,
+            ReferenceTypeListNode typeArguments,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
@@ -4931,7 +4991,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     public SuperMethodInvocationNode makeSuperMethodInvocationNode(
             IdentifierNode identifier,
             ExpressionListNode arguments,
-            TypeListNode typeArguments)
+            ReferenceTypeListNode typeArguments)
     {
         this.before();
         SuperMethodInvocationNode node = factory.makeSuperMethodInvocationNode(identifier, arguments, typeArguments);
@@ -4947,7 +5007,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     public SuperMethodInvocationNode makeSuperMethodInvocationNode(
             IdentifierNode identifier,
             ExpressionListNode arguments,
-            TypeListNode typeArguments,
+            ReferenceTypeListNode typeArguments,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
@@ -4965,7 +5025,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     public SuperclassConstructorInvocationNode makeSuperclassConstructorInvocationNode(
             PrimaryExpressionNode qualifyingExpression,
             ExpressionListNode arguments,
-            TypeListNode typeArguments)
+            ReferenceTypeListNode typeArguments)
     {
         this.before();
         SuperclassConstructorInvocationNode node = factory.makeSuperclassConstructorInvocationNode(qualifyingExpression, arguments, typeArguments);
@@ -4981,7 +5041,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     public SuperclassConstructorInvocationNode makeSuperclassConstructorInvocationNode(
             PrimaryExpressionNode qualifyingExpression,
             ExpressionListNode arguments,
-            TypeListNode typeArguments,
+            ReferenceTypeListNode typeArguments,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {

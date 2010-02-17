@@ -1726,6 +1726,29 @@ declaredTypeList returns [DeclaredTypeListNode ret]
         )*
     ;
 
+referenceTypeList returns [ReferenceTypeListNode ret]
+        scope Rule;
+        @init {
+            ruleStart("typeList");
+            List<ReferenceTypeNode> list = new ArrayList<ReferenceTypeNode>();
+        }
+        @after {
+            $ret = factory.makeReferenceTypeListNode(list);
+            ruleStop();
+        }
+    :   
+        a=referenceType
+        {
+            list.add($a.ret);
+        }
+        (
+            ',' b=referenceType
+            {
+                list.add($b.ret);
+            }
+        )*
+    ;
+
 typeList returns [TypeListNode ret]
         scope Rule;
         @init {
@@ -2594,7 +2617,7 @@ superclassConstructorInvocation returns [SuperclassConstructorInvocationNode ret
         @init {
             ruleStart("superclassConstructorInvocation");
             PrimaryExpressionNode qualifyingExpression = null;
-            TypeListNode typeArgumentsNode = factory.makeTypeListNode(Collections.<TypeNode>emptyList());
+            ReferenceTypeListNode typeArgumentsNode = factory.makeReferenceTypeListNode();
         }
         @after {
             ruleStop();
@@ -4430,7 +4453,7 @@ methodInvocationByName returns [MethodInvocationByNameNode ret]
             $ret = factory.makeMethodInvocationByNameNode(
                     $methodName.ret,
                     $arguments.ret,
-                    factory.makeTypeListNode(Collections.<TypeNode>emptyList()));
+                    factory.makeReferenceTypeListNode());
         }
     ;
 
@@ -4445,7 +4468,7 @@ superMethodInvocation returns [SuperMethodInvocationNode ret]
         @init {
             ruleStart("superMethodInvocation");
             UnparameterizedTypeNode qualifyingTypeNode = null;
-            TypeListNode typeArgumentsNode = factory.makeTypeListNode(Collections.<TypeNode>emptyList());
+            ReferenceTypeListNode typeArgumentsNode = factory.makeReferenceTypeListNode();
         }
         @after {
             ruleStop();
@@ -4555,7 +4578,7 @@ typeArgumentMethodInvocationSuffix[PrimaryExpressionNode in] returns [Restricted
         scope Rule;
         @init {
             ruleStart("typeArgumentMethodInvocationSuffix");
-            TypeListNode typeArgumentsNode = factory.makeTypeListNode(Collections.<TypeNode>emptyList());
+            ReferenceTypeListNode typeArgumentsNode = factory.makeReferenceTypeListNode();
         }
         @after {
             ruleStop();
@@ -4791,7 +4814,7 @@ createdName returns [BaseTypeNode ret]
         }    
     ;
 
-nonWildcardTypeArguments returns [TypeListNode ret]
+nonWildcardTypeArguments returns [ReferenceTypeListNode ret]
         scope Rule;
         @init {
             ruleStart("nonWildcardTypeArguments");
@@ -4800,9 +4823,9 @@ nonWildcardTypeArguments returns [TypeListNode ret]
             ruleStop();
         }
     :   
-        '<' typeList
+        '<' referenceTypeList
         {
-            $ret = $typeList.ret;
+            $ret = $referenceTypeList.ret;
         }
         '>'
     ;

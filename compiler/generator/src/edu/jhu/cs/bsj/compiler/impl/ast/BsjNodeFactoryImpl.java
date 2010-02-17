@@ -108,7 +108,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     @Override
     public AlternateConstructorInvocationNode makeAlternateConstructorInvocationNode(
             ExpressionListNode arguments,
-            TypeListNode typeArguments)
+            ReferenceTypeListNode typeArguments)
     {
         AlternateConstructorInvocationNode ret = new AlternateConstructorInvocationNodeImpl(arguments, typeArguments, startLocation, stopLocation);
         return ret;
@@ -121,7 +121,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     @Override
     public AlternateConstructorInvocationNode makeAlternateConstructorInvocationNode(
             ExpressionListNode arguments,
-            TypeListNode typeArguments,
+            ReferenceTypeListNode typeArguments,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
@@ -137,7 +137,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public AlternateConstructorInvocationNode makeAlternateConstructorInvocationNode(
             ExpressionListNode arguments)
     {
-        AlternateConstructorInvocationNode ret = new AlternateConstructorInvocationNodeImpl(arguments, makeTypeListNode(), startLocation, stopLocation);
+        AlternateConstructorInvocationNode ret = new AlternateConstructorInvocationNodeImpl(arguments, makeReferenceTypeListNode(), startLocation, stopLocation);
         return ret;
     }
 
@@ -151,7 +151,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        AlternateConstructorInvocationNode ret = new AlternateConstructorInvocationNodeImpl(arguments, makeTypeListNode(), startLocation, stopLocation);
+        AlternateConstructorInvocationNode ret = new AlternateConstructorInvocationNodeImpl(arguments, makeReferenceTypeListNode(), startLocation, stopLocation);
         return ret;
     }
 
@@ -3565,7 +3565,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             PrimaryExpressionNode expression,
             IdentifierNode identifier,
             ExpressionListNode arguments,
-            TypeListNode typeArguments)
+            ReferenceTypeListNode typeArguments)
     {
         MethodInvocationByExpressionNode ret = new MethodInvocationByExpressionNodeImpl(expression, identifier, arguments, typeArguments, startLocation, stopLocation);
         return ret;
@@ -3580,7 +3580,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             PrimaryExpressionNode expression,
             IdentifierNode identifier,
             ExpressionListNode arguments,
-            TypeListNode typeArguments,
+            ReferenceTypeListNode typeArguments,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
@@ -3596,7 +3596,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public MethodInvocationByNameNode makeMethodInvocationByNameNode(
             NameNode name,
             ExpressionListNode arguments,
-            TypeListNode typeArguments)
+            ReferenceTypeListNode typeArguments)
     {
         MethodInvocationByNameNode ret = new MethodInvocationByNameNodeImpl(name, arguments, typeArguments, startLocation, stopLocation);
         return ret;
@@ -3610,7 +3610,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public MethodInvocationByNameNode makeMethodInvocationByNameNode(
             NameNode name,
             ExpressionListNode arguments,
-            TypeListNode typeArguments,
+            ReferenceTypeListNode typeArguments,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
@@ -4044,6 +4044,58 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
 
     /**
+     * Creates a ReferenceTypeListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public ReferenceTypeListNode makeReferenceTypeListNode(
+            List<ReferenceTypeNode> children)
+    {
+        ReferenceTypeListNode ret = new ReferenceTypeListNodeImpl(children, startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
+     * Creates a ReferenceTypeListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public ReferenceTypeListNode makeReferenceTypeListNode(
+            ReferenceTypeNode... childrenElements)
+    {
+        List<ReferenceTypeNode> children = Arrays.asList(childrenElements);
+        return makeReferenceTypeListNode(children, startLocation, stopLocation);
+    }
+
+    /**
+     * Creates a ReferenceTypeListNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public ReferenceTypeListNode makeReferenceTypeListNode(
+            List<ReferenceTypeNode> children,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        ReferenceTypeListNode ret = new ReferenceTypeListNodeImpl(children, startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
+     * Creates a ReferenceTypeListNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public ReferenceTypeListNode makeReferenceTypeListNode(
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation,
+            ReferenceTypeNode... childrenElements)
+    {
+        List<ReferenceTypeNode> children = Arrays.asList(childrenElements);
+        return makeReferenceTypeListNode(children, startLocation, stopLocation);
+    }
+
+    /**
      * Creates a ReturnNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -4266,7 +4318,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             UnparameterizedTypeNode type,
             IdentifierNode identifier,
             ExpressionListNode arguments,
-            TypeListNode typeArguments)
+            ReferenceTypeListNode typeArguments)
     {
         SuperMethodInvocationNode ret = new SuperMethodInvocationNodeImpl(type, identifier, arguments, typeArguments, startLocation, stopLocation);
         return ret;
@@ -4281,7 +4333,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             UnparameterizedTypeNode type,
             IdentifierNode identifier,
             ExpressionListNode arguments,
-            TypeListNode typeArguments,
+            ReferenceTypeListNode typeArguments,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
@@ -4298,7 +4350,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             IdentifierNode identifier,
             ExpressionListNode arguments)
     {
-        SuperMethodInvocationNode ret = new SuperMethodInvocationNodeImpl(null, identifier, arguments, makeTypeListNode(), startLocation, stopLocation);
+        SuperMethodInvocationNode ret = new SuperMethodInvocationNodeImpl(null, identifier, arguments, makeReferenceTypeListNode(), startLocation, stopLocation);
         return ret;
     }
 
@@ -4313,7 +4365,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        SuperMethodInvocationNode ret = new SuperMethodInvocationNodeImpl(null, identifier, arguments, makeTypeListNode(), startLocation, stopLocation);
+        SuperMethodInvocationNode ret = new SuperMethodInvocationNodeImpl(null, identifier, arguments, makeReferenceTypeListNode(), startLocation, stopLocation);
         return ret;
     }
 
@@ -4325,7 +4377,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public SuperMethodInvocationNode makeSuperMethodInvocationNode(
             IdentifierNode identifier,
             ExpressionListNode arguments,
-            TypeListNode typeArguments)
+            ReferenceTypeListNode typeArguments)
     {
         SuperMethodInvocationNode ret = new SuperMethodInvocationNodeImpl(null, identifier, arguments, typeArguments, startLocation, stopLocation);
         return ret;
@@ -4339,7 +4391,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public SuperMethodInvocationNode makeSuperMethodInvocationNode(
             IdentifierNode identifier,
             ExpressionListNode arguments,
-            TypeListNode typeArguments,
+            ReferenceTypeListNode typeArguments,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
@@ -4355,7 +4407,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public SuperclassConstructorInvocationNode makeSuperclassConstructorInvocationNode(
             PrimaryExpressionNode qualifyingExpression,
             ExpressionListNode arguments,
-            TypeListNode typeArguments)
+            ReferenceTypeListNode typeArguments)
     {
         SuperclassConstructorInvocationNode ret = new SuperclassConstructorInvocationNodeImpl(qualifyingExpression, arguments, typeArguments, startLocation, stopLocation);
         return ret;
@@ -4369,7 +4421,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public SuperclassConstructorInvocationNode makeSuperclassConstructorInvocationNode(
             PrimaryExpressionNode qualifyingExpression,
             ExpressionListNode arguments,
-            TypeListNode typeArguments,
+            ReferenceTypeListNode typeArguments,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
@@ -4385,7 +4437,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public SuperclassConstructorInvocationNode makeSuperclassConstructorInvocationNode(
             ExpressionListNode arguments)
     {
-        SuperclassConstructorInvocationNode ret = new SuperclassConstructorInvocationNodeImpl(null, arguments, makeTypeListNode(), startLocation, stopLocation);
+        SuperclassConstructorInvocationNode ret = new SuperclassConstructorInvocationNodeImpl(null, arguments, makeReferenceTypeListNode(), startLocation, stopLocation);
         return ret;
     }
 
@@ -4399,7 +4451,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        SuperclassConstructorInvocationNode ret = new SuperclassConstructorInvocationNodeImpl(null, arguments, makeTypeListNode(), startLocation, stopLocation);
+        SuperclassConstructorInvocationNode ret = new SuperclassConstructorInvocationNodeImpl(null, arguments, makeReferenceTypeListNode(), startLocation, stopLocation);
         return ret;
     }
 

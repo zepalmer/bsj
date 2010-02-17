@@ -9,7 +9,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.ConstructorInvocationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.TypeListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.ReferenceTypeListNode;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public abstract class ConstructorInvocationNodeImpl extends NodeImpl implements ConstructorInvocationNode
@@ -18,12 +18,12 @@ public abstract class ConstructorInvocationNodeImpl extends NodeImpl implements 
     private ExpressionListNode arguments;
 
     /** The type arguments for the method. */
-    private TypeListNode typeArguments;
+    private ReferenceTypeListNode typeArguments;
 
     /** General constructor. */
     protected ConstructorInvocationNodeImpl(
             ExpressionListNode arguments,
-            TypeListNode typeArguments,
+            ReferenceTypeListNode typeArguments,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
@@ -62,7 +62,7 @@ public abstract class ConstructorInvocationNodeImpl extends NodeImpl implements 
      * Gets the type arguments for the method.
      * @return The type arguments for the method.
      */
-    public TypeListNode getTypeArguments()
+    public ReferenceTypeListNode getTypeArguments()
     {
         return this.typeArguments;
     }
@@ -71,7 +71,7 @@ public abstract class ConstructorInvocationNodeImpl extends NodeImpl implements 
      * Changes the type arguments for the method.
      * @param typeArguments The type arguments for the method.
      */
-    public void setTypeArguments(TypeListNode typeArguments)
+    public void setTypeArguments(ReferenceTypeListNode typeArguments)
     {
         if (this.typeArguments instanceof NodeImpl)
         {

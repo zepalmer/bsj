@@ -30,13 +30,13 @@ public interface ConstructorInvocationNode extends Node
      * Gets the type arguments for the method.
      * @return The type arguments for the method.
      */
-    public TypeListNode getTypeArguments();
+    public ReferenceTypeListNode getTypeArguments();
 
     /**
      * Changes the type arguments for the method.
      * @param typeArguments The type arguments for the method.
      */
-    public void setTypeArguments(TypeListNode typeArguments);
+    public void setTypeArguments(ReferenceTypeListNode typeArguments);
 
     /**
      * Generates a deep copy of this node.

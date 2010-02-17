@@ -2033,7 +2033,7 @@ public class SourceGenerator
 						ps.println("NameCategory.METHOD),");
 						ps.decPrependCount(2);
 						ps.println("factory.makeExpressionListNode(lift" + capFirst(p.getName()) + "List),");
-						ps.println("factory.makeTypeListNode(");
+						ps.println("factory.makeReferenceTypeListNode(");
 						ps.incPrependCount(2);
 						ps.println("factory.makeUnparameterizedTypeNode(");
 						ps.incPrependCount(2);
@@ -2058,7 +2058,7 @@ public class SourceGenerator
 			}
 			ps.println("),");
 			ps.decPrependCount(2);
-			ps.println("factory.makeTypeListNode());");
+			ps.println("factory.makeReferenceTypeListNode());");
 			ps.decPrependCount(4);
 			ps.println();
 			ps.println("return ret;");

@@ -14,7 +14,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.MethodInvocationByExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.PrimaryExpressionNode;
-import edu.jhu.cs.bsj.compiler.ast.node.TypeListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.ReferenceTypeListNode;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class MethodInvocationByExpressionNodeImpl extends MethodInvocationNodeImpl implements MethodInvocationByExpressionNode
@@ -30,7 +30,7 @@ public class MethodInvocationByExpressionNodeImpl extends MethodInvocationNodeIm
             PrimaryExpressionNode expression,
             IdentifierNode identifier,
             ExpressionListNode arguments,
-            TypeListNode typeArguments,
+            ReferenceTypeListNode typeArguments,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
@@ -246,9 +246,9 @@ public class MethodInvocationByExpressionNodeImpl extends MethodInvocationNodeIm
             setArguments((ExpressionListNode)after);
             return true;
         }
-        if (before.equals(this.getTypeArguments()) && (after instanceof TypeListNode))
+        if (before.equals(this.getTypeArguments()) && (after instanceof ReferenceTypeListNode))
         {
-            setTypeArguments((TypeListNode)after);
+            setTypeArguments((ReferenceTypeListNode)after);
             return true;
         }
         return false;
