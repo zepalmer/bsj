@@ -4219,9 +4219,9 @@ restrictedPrimary returns [RestrictedPrimaryExpressionNode ret]
             }            
         |
             // class literal for declared types
-            classLiteralName
+            declaredClassLiteral
             {
-            	$ret = $classLiteralName.ret;
+            	$ret = $declaredClassLiteral.ret;
             }
         |
             // void class literal
@@ -4599,7 +4599,7 @@ arrayAccess[RestrictedPrimaryExpressionNode in] returns [ArrayAccessNode ret]
         )*
     ;
 
-classLiteralName returns [ClassLiteralNode ret]
+declaredClassLiteral returns [ClassLiteralNode ret]
         scope Rule;
         @init {
             ruleStart("classLiteralName");
