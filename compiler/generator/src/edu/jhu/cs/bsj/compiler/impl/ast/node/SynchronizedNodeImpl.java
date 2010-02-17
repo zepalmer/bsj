@@ -206,8 +206,8 @@ public class SynchronizedNodeImpl extends NodeImpl implements SynchronizedNode
         return factory.makeSynchronizedNode(
                 getExpression().deepCopy(factory),
                 getBlock().deepCopy(factory),
-                (BsjSourceLocation)(getStartLocation().clone()),
-                (BsjSourceLocation)(getStopLocation().clone()));
+                getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
+                getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
     }
     /**
      * Performs replacement for this node.

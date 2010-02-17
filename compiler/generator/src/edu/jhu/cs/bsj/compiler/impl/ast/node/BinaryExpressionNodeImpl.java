@@ -234,8 +234,8 @@ public class BinaryExpressionNodeImpl extends NodeImpl implements BinaryExpressi
                 getLeftOperand().deepCopy(factory),
                 getRightOperand().deepCopy(factory),
                 getOperator(),
-                (BsjSourceLocation)(getStartLocation().clone()),
-                (BsjSourceLocation)(getStopLocation().clone()));
+                getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
+                getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
     }
     /**
      * Performs replacement for this node.

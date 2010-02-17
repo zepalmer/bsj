@@ -319,8 +319,8 @@ public class MethodModifiersNodeImpl extends ModifiersNodeImpl implements Method
                 getNativeFlag(),
                 getStrictfpFlag(),
                 getAnnotations().deepCopy(factory),
-                (BsjSourceLocation)(getStartLocation().clone()),
-                (BsjSourceLocation)(getStopLocation().clone()));
+                getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
+                getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
     }
     /**
      * Performs replacement for this node.

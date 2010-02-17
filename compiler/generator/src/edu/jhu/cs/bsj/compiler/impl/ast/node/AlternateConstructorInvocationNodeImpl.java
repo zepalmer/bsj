@@ -128,8 +128,8 @@ public class AlternateConstructorInvocationNodeImpl extends ConstructorInvocatio
         return factory.makeAlternateConstructorInvocationNode(
                 getArguments().deepCopy(factory),
                 getTypeArguments().deepCopy(factory),
-                (BsjSourceLocation)(getStartLocation().clone()),
-                (BsjSourceLocation)(getStopLocation().clone()));
+                getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
+                getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
     }
     /**
      * Performs replacement for this node.

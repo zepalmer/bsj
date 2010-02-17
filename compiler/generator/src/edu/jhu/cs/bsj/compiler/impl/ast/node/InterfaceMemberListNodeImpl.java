@@ -123,8 +123,8 @@ public class InterfaceMemberListNodeImpl extends ListNodeImpl<InterfaceMemberNod
     {
         return factory.makeInterfaceMemberListNode(
                 new ArrayList<InterfaceMemberNode>(getChildren()),
-                (BsjSourceLocation)(getStartLocation().clone()),
-                (BsjSourceLocation)(getStopLocation().clone()));
+                getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
+                getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
     }
     /**
      * Performs replacement for this node.

@@ -121,8 +121,8 @@ public class DoubleLiteralNodeImpl extends LiteralNodeImpl<Double> implements Do
     {
         return factory.makeDoubleLiteralNode(
                 getValue(),
-                (BsjSourceLocation)(getStartLocation().clone()),
-                (BsjSourceLocation)(getStopLocation().clone()));
+                getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
+                getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
     }
     /**
      * Performs replacement for this node.

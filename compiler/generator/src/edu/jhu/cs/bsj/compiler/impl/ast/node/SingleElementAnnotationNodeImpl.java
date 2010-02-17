@@ -167,8 +167,8 @@ public class SingleElementAnnotationNodeImpl extends AnnotationNodeImpl implemen
         return factory.makeSingleElementAnnotationNode(
                 getValue().deepCopy(factory),
                 getAnnotationType().deepCopy(factory),
-                (BsjSourceLocation)(getStartLocation().clone()),
-                (BsjSourceLocation)(getStopLocation().clone()));
+                getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
+                getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
     }
     /**
      * Performs replacement for this node.

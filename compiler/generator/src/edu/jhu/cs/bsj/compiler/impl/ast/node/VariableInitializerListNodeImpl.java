@@ -123,8 +123,8 @@ public class VariableInitializerListNodeImpl extends ListNodeImpl<VariableInitia
     {
         return factory.makeVariableInitializerListNode(
                 new ArrayList<VariableInitializerNode>(getChildren()),
-                (BsjSourceLocation)(getStartLocation().clone()),
-                (BsjSourceLocation)(getStopLocation().clone()));
+                getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
+                getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
     }
     /**
      * Performs replacement for this node.

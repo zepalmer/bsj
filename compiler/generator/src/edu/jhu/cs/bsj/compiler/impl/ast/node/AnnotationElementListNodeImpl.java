@@ -123,8 +123,8 @@ public class AnnotationElementListNodeImpl extends ListNodeImpl<AnnotationElemen
     {
         return factory.makeAnnotationElementListNode(
                 new ArrayList<AnnotationElementNode>(getChildren()),
-                (BsjSourceLocation)(getStartLocation().clone()),
-                (BsjSourceLocation)(getStopLocation().clone()));
+                getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
+                getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
     }
     /**
      * Performs replacement for this node.

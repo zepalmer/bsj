@@ -121,8 +121,8 @@ public class FloatLiteralNodeImpl extends LiteralNodeImpl<Float> implements Floa
     {
         return factory.makeFloatLiteralNode(
                 getValue(),
-                (BsjSourceLocation)(getStartLocation().clone()),
-                (BsjSourceLocation)(getStopLocation().clone()));
+                getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
+                getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
     }
     /**
      * Performs replacement for this node.

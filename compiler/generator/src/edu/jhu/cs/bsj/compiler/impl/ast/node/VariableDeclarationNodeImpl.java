@@ -206,8 +206,8 @@ public class VariableDeclarationNodeImpl extends NodeImpl implements VariableDec
         return factory.makeVariableDeclarationNode(
                 getModifiers().deepCopy(factory),
                 getDeclarators().deepCopy(factory),
-                (BsjSourceLocation)(getStartLocation().clone()),
-                (BsjSourceLocation)(getStopLocation().clone()));
+                getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
+                getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
     }
     /**
      * Performs replacement for this node.

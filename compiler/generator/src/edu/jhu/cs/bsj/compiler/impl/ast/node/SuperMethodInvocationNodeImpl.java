@@ -298,8 +298,8 @@ public class SuperMethodInvocationNodeImpl extends NodeImpl implements SuperMeth
                 getIdentifier().deepCopy(factory),
                 getArguments().deepCopy(factory),
                 getTypeArguments().deepCopy(factory),
-                (BsjSourceLocation)(getStartLocation().clone()),
-                (BsjSourceLocation)(getStopLocation().clone()));
+                getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
+                getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
     }
     /**
      * Performs replacement for this node.

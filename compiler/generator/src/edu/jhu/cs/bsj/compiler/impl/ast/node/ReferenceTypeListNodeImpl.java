@@ -123,8 +123,8 @@ public class ReferenceTypeListNodeImpl extends ListNodeImpl<ReferenceTypeNode> i
     {
         return factory.makeReferenceTypeListNode(
                 new ArrayList<ReferenceTypeNode>(getChildren()),
-                (BsjSourceLocation)(getStartLocation().clone()),
-                (BsjSourceLocation)(getStopLocation().clone()));
+                getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
+                getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
     }
     /**
      * Performs replacement for this node.

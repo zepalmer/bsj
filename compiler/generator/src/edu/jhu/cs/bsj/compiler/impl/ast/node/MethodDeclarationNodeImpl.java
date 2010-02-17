@@ -525,8 +525,8 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
                 getThrowTypes().deepCopy(factory),
                 getTypeParameters().deepCopy(factory),
                 getJavadoc().deepCopy(factory),
-                (BsjSourceLocation)(getStartLocation().clone()),
-                (BsjSourceLocation)(getStopLocation().clone()));
+                getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
+                getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
     }
     /**
      * Performs replacement for this node.

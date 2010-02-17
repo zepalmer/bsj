@@ -1196,7 +1196,8 @@ public class SourceGenerator
 
 						public void cloneable(PrependablePrintStream ps, PropertyDefinition p)
 						{
-							ps.print("(" + p.getFullType() + ")(get" + capFirst(p.getName()) + "().clone())");
+							ps.print("get" + capFirst(p.getName()) + "() == null ? null : (" + p.getFullType()
+									+ ")(get" + capFirst(p.getName()) + "().clone())");
 						}
 
 						public void list(PrependablePrintStream ps, PropertyDefinition p)
@@ -1260,7 +1261,7 @@ public class SourceGenerator
 							typeParamParam = true;
 						}
 						boolean nodeType = (propInstanceOf(rawTypeArg, "Node"));
-						
+
 						if (typeParamParam && nodeType)
 						{
 							throw new IllegalStateException("Can't handle list of parameterized nodes!");
@@ -1270,7 +1271,7 @@ public class SourceGenerator
 							// Uninteresting; it's not a node, so it can't be a replacement target.
 							continue;
 						}
-						
+
 						ps.println("if (after instanceof " + typeArg + ")");
 						ps.println("{");
 						ps.println("    int index = get" + capFirst(p.getName()) + "().indexOf(before);");
@@ -1528,8 +1529,8 @@ public class SourceGenerator
 			List<PropertyDefinition> argProps = new ArrayList<PropertyDefinition>();
 			for (PropertyDefinition recProp : recProps)
 			{
-				if ((methodDefinition.isVisible(recProp.getName()) || (recProp.isSkipMake() && !skipMake)) &&
-						!recProp.isHide())
+				if ((methodDefinition.isVisible(recProp.getName()) || (recProp.isSkipMake() && !skipMake))
+						&& !recProp.isHide())
 				{
 					argProps.add(recProp);
 				}

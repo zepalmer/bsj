@@ -123,8 +123,8 @@ public class CaseListNodeImpl extends ListNodeImpl<CaseNode> implements CaseList
     {
         return factory.makeCaseListNode(
                 new ArrayList<CaseNode>(getChildren()),
-                (BsjSourceLocation)(getStartLocation().clone()),
-                (BsjSourceLocation)(getStopLocation().clone()));
+                getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
+                getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
     }
     /**
      * Performs replacement for this node.

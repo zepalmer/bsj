@@ -123,8 +123,8 @@ public class TypeListNodeImpl extends ListNodeImpl<TypeNode> implements TypeList
     {
         return factory.makeTypeListNode(
                 new ArrayList<TypeNode>(getChildren()),
-                (BsjSourceLocation)(getStartLocation().clone()),
-                (BsjSourceLocation)(getStopLocation().clone()));
+                getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
+                getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
     }
     /**
      * Performs replacement for this node.

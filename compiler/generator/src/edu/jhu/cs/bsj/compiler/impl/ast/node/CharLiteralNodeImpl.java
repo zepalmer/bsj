@@ -121,8 +121,8 @@ public class CharLiteralNodeImpl extends LiteralNodeImpl<Character> implements C
     {
         return factory.makeCharLiteralNode(
                 getValue(),
-                (BsjSourceLocation)(getStartLocation().clone()),
-                (BsjSourceLocation)(getStopLocation().clone()));
+                getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
+                getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
     }
     /**
      * Performs replacement for this node.

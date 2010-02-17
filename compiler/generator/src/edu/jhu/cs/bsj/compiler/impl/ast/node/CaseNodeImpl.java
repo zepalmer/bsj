@@ -204,8 +204,8 @@ public class CaseNodeImpl extends NodeImpl implements CaseNode
         return factory.makeCaseNode(
                 getExpression().deepCopy(factory),
                 getStatements().deepCopy(factory),
-                (BsjSourceLocation)(getStartLocation().clone()),
-                (BsjSourceLocation)(getStopLocation().clone()));
+                getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
+                getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
     }
     /**
      * Performs replacement for this node.

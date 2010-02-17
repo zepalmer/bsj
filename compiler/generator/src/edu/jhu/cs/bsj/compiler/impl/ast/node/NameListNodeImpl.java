@@ -123,8 +123,8 @@ public class NameListNodeImpl extends ListNodeImpl<NameNode> implements NameList
     {
         return factory.makeNameListNode(
                 new ArrayList<NameNode>(getChildren()),
-                (BsjSourceLocation)(getStartLocation().clone()),
-                (BsjSourceLocation)(getStopLocation().clone()));
+                getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
+                getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
     }
     /**
      * Performs replacement for this node.

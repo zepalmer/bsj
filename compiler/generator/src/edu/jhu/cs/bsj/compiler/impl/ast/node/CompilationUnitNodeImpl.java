@@ -294,8 +294,8 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
                 getMetaimports().deepCopy(factory),
                 getImports().deepCopy(factory),
                 getTypeDecls().deepCopy(factory),
-                (BsjSourceLocation)(getStartLocation().clone()),
-                (BsjSourceLocation)(getStopLocation().clone()));
+                getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
+                getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
     }
     /**
      * Performs replacement for this node.

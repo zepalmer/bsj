@@ -123,8 +123,8 @@ public class TypeDeclarationListNodeImpl extends ListNodeImpl<TypeDeclarationNod
     {
         return factory.makeTypeDeclarationListNode(
                 new ArrayList<TypeDeclarationNode>(getChildren()),
-                (BsjSourceLocation)(getStartLocation().clone()),
-                (BsjSourceLocation)(getStopLocation().clone()));
+                getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
+                getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
     }
     /**
      * Performs replacement for this node.

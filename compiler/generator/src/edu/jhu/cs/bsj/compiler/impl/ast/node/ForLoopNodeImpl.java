@@ -296,8 +296,8 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
                 getCondition().deepCopy(factory),
                 getUpdate().deepCopy(factory),
                 getStatement().deepCopy(factory),
-                (BsjSourceLocation)(getStartLocation().clone()),
-                (BsjSourceLocation)(getStopLocation().clone()));
+                getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
+                getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
     }
     /**
      * Performs replacement for this node.

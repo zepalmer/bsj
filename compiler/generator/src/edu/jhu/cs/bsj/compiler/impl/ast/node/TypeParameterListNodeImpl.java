@@ -123,8 +123,8 @@ public class TypeParameterListNodeImpl extends ListNodeImpl<TypeParameterNode> i
     {
         return factory.makeTypeParameterListNode(
                 new ArrayList<TypeParameterNode>(getChildren()),
-                (BsjSourceLocation)(getStartLocation().clone()),
-                (BsjSourceLocation)(getStopLocation().clone()));
+                getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
+                getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
     }
     /**
      * Performs replacement for this node.
