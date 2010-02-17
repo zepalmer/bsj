@@ -200,12 +200,12 @@ public class ExtractMetaprogramsTask extends CompilationUnitTask
 		// *** Start by building the metaprogram compilation unit
 		// TODO: what kind of package declaration should a metaprogram have?
 		String metaprogramPackageName = "foo";
-
+		
 		// Process default imports
 		List<ImportNode> imports = new ArrayList<ImportNode>();
 		for (String packageString : IMPORT_PACKAGES)
 		{
-			imports.add(factory.makeImportOnDemandNode(parseNameNode(packageString, NameCategory.PACKAGE), false));
+			imports.add(factory.makeImportOnDemandNode(parseNameNode(packageString, NameCategory.PACKAGE)));
 		}
 
 		// Find compilation unit

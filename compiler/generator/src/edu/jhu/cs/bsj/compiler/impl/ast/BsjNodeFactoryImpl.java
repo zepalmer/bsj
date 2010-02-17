@@ -2849,10 +2849,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     @Override
     public ImportOnDemandNode makeImportOnDemandNode(
-            NameNode name,
-            boolean staticImport)
+            NameNode name)
     {
-        ImportOnDemandNode ret = new ImportOnDemandNodeImpl(name, staticImport, startLocation, stopLocation);
+        ImportOnDemandNode ret = new ImportOnDemandNodeImpl(name, startLocation, stopLocation);
         return ret;
     }
 
@@ -2863,11 +2862,10 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     @Override
     public ImportOnDemandNode makeImportOnDemandNode(
             NameNode name,
-            boolean staticImport,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        ImportOnDemandNode ret = new ImportOnDemandNodeImpl(name, staticImport, startLocation, stopLocation);
+        ImportOnDemandNode ret = new ImportOnDemandNodeImpl(name, startLocation, stopLocation);
         return ret;
     }
 
@@ -2877,10 +2875,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     @Override
     public ImportSingleTypeNode makeImportSingleTypeNode(
-            NameNode name,
-            boolean staticImport)
+            NameNode name)
     {
-        ImportSingleTypeNode ret = new ImportSingleTypeNodeImpl(name, staticImport, startLocation, stopLocation);
+        ImportSingleTypeNode ret = new ImportSingleTypeNodeImpl(name, startLocation, stopLocation);
         return ret;
     }
 
@@ -2891,11 +2888,10 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     @Override
     public ImportSingleTypeNode makeImportSingleTypeNode(
             NameNode name,
-            boolean staticImport,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        ImportSingleTypeNode ret = new ImportSingleTypeNodeImpl(name, staticImport, startLocation, stopLocation);
+        ImportSingleTypeNode ret = new ImportSingleTypeNodeImpl(name, startLocation, stopLocation);
         return ret;
     }
 
@@ -4173,6 +4169,32 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
 
     /**
+     * Creates a SingleStaticImportNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public SingleStaticImportNode makeSingleStaticImportNode(
+            NameNode name)
+    {
+        SingleStaticImportNode ret = new SingleStaticImportNodeImpl(name, startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
+     * Creates a SingleStaticImportNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public SingleStaticImportNode makeSingleStaticImportNode(
+            NameNode name,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        SingleStaticImportNode ret = new SingleStaticImportNodeImpl(name, startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
      * Creates a StatementExpressionListNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -4222,6 +4244,32 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     {
         List<StatementExpressionNode> children = Arrays.asList(childrenElements);
         return makeStatementExpressionListNode(children, startLocation, stopLocation);
+    }
+
+    /**
+     * Creates a StaticImportOnDemandNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public StaticImportOnDemandNode makeStaticImportOnDemandNode(
+            NameNode name)
+    {
+        StaticImportOnDemandNode ret = new StaticImportOnDemandNodeImpl(name, startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
+     * Creates a StaticImportOnDemandNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public StaticImportOnDemandNode makeStaticImportOnDemandNode(
+            NameNode name,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        StaticImportOnDemandNode ret = new StaticImportOnDemandNodeImpl(name, startLocation, stopLocation);
+        return ret;
     }
 
     /**

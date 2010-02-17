@@ -23,18 +23,6 @@ public interface ImportSingleTypeNode extends Node, ImportNode
     public void setName(NameNode name);
 
     /**
-     * Gets the static-ness of the import.
-     * @return The static-ness of the import.
-     */
-    public boolean getStaticImport();
-
-    /**
-     * Changes the static-ness of the import.
-     * @param staticImport The static-ness of the import.
-     */
-    public void setStaticImport(boolean staticImport);
-
-    /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.
      * @return The resulting deep copy node.

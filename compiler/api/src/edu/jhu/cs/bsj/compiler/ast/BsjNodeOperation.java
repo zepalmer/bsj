@@ -924,12 +924,28 @@ public interface BsjNodeOperation<P,R>
     public R executeSingleElementAnnotationNode(SingleElementAnnotationNode node, P p);
 
     /**
+     * Executes this operation against a SingleStaticImportNode.
+     * @param node The SingleStaticImportNode in question.
+     * @param p The parameter to use.
+     * @return The result of the operation.
+     */
+    public R executeSingleStaticImportNode(SingleStaticImportNode node, P p);
+
+    /**
      * Executes this operation against a StatementExpressionListNode.
      * @param node The StatementExpressionListNode in question.
      * @param p The parameter to use.
      * @return The result of the operation.
      */
     public R executeStatementExpressionListNode(StatementExpressionListNode node, P p);
+
+    /**
+     * Executes this operation against a StaticImportOnDemandNode.
+     * @param node The StaticImportOnDemandNode in question.
+     * @param p The parameter to use.
+     * @return The result of the operation.
+     */
+    public R executeStaticImportOnDemandNode(StaticImportOnDemandNode node, P p);
 
     /**
      * Executes this operation against a StringLiteralNode.

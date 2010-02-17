@@ -1288,6 +1288,15 @@ public interface BsjTypedNodeVisitor
     public void visitSingleElementAnnotationNodeStart(SingleElementAnnotationNode node, boolean mostSpecific);
 
     /**
+     * Starts a visit for nodes of type SingleStaticImportNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitSingleStaticImportNodeStart(SingleStaticImportNode node, boolean mostSpecific);
+
+    /**
      * Starts a visit for nodes of type StatementExpressionListNode.
      * @param node The node being visited.
      * @param mostSpecific <code>true</code> if this is the most specific call
@@ -1307,6 +1316,15 @@ public interface BsjTypedNodeVisitor
      * @param node The node being visited.
      */
     public void visitStatementNodeStart(StatementNode node);
+
+    /**
+     * Starts a visit for nodes of type StaticImportOnDemandNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitStaticImportOnDemandNodeStart(StaticImportOnDemandNode node, boolean mostSpecific);
 
     /**
      * Starts a visit for nodes of type StringLiteralNode.
@@ -2791,6 +2809,15 @@ public interface BsjTypedNodeVisitor
     public void visitSingleElementAnnotationNodeStop(SingleElementAnnotationNode node, boolean mostSpecific);
 
     /**
+     * Stops a visit for nodes of type SingleStaticImportNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitSingleStaticImportNodeStop(SingleStaticImportNode node, boolean mostSpecific);
+
+    /**
      * Stops a visit for nodes of type StatementExpressionListNode.
      * @param node The node being visited.
      * @param mostSpecific <code>true</code> if this is the most specific call
@@ -2810,6 +2837,15 @@ public interface BsjTypedNodeVisitor
      * @param node The node being visited.
      */
     public void visitStatementNodeStop(StatementNode node);
+
+    /**
+     * Stops a visit for nodes of type StaticImportOnDemandNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitStaticImportOnDemandNodeStop(StaticImportOnDemandNode node, boolean mostSpecific);
 
     /**
      * Stops a visit for nodes of type StringLiteralNode.

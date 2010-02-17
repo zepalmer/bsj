@@ -19,19 +19,14 @@ public class ImportOnDemandNodeImpl extends NodeImpl implements ImportOnDemandNo
     /** The name of the package to import. */
     private NameNode name;
 
-    /** The static-ness of the import. */
-    private boolean staticImport;
-
     /** General constructor. */
     public ImportOnDemandNodeImpl(
             NameNode name,
-            boolean staticImport,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
         super(startLocation, stopLocation);
         setName(name);
-        this.staticImport = staticImport;
     }
 
     /**
@@ -58,24 +53,6 @@ public class ImportOnDemandNodeImpl extends NodeImpl implements ImportOnDemandNo
         {
             ((NodeImpl)this.name).setParent(this);
         }
-    }
-
-    /**
-     * Gets the static-ness of the import.
-     * @return The static-ness of the import.
-     */
-    public boolean getStaticImport()
-    {
-        return this.staticImport;
-    }
-
-    /**
-     * Changes the static-ness of the import.
-     * @param staticImport The static-ness of the import.
-     */
-    public void setStaticImport(boolean staticImport)
-    {
-        this.staticImport = staticImport;
     }
 
     /**
@@ -138,7 +115,6 @@ public class ImportOnDemandNodeImpl extends NodeImpl implements ImportOnDemandNo
     {
         List<Object> list = super.getChildObjects();
         list.add(getName());
-        list.add(getStaticImport());
         return list;
     }
 
@@ -153,9 +129,6 @@ public class ImportOnDemandNodeImpl extends NodeImpl implements ImportOnDemandNo
         sb.append('[');
         sb.append("name=");
         sb.append(this.getName() == null? "null" : this.getName().getClass().getSimpleName());
-        sb.append(',');
-        sb.append("staticImport=");
-        sb.append(String.valueOf(this.getStaticImport()) + ":" + ("boolean"));
         sb.append(',');
         sb.append("startLocation=");
         sb.append(String.valueOf(this.getStartLocation()) + ":" + (this.getStartLocation() != null ? this.getStartLocation().getClass().getSimpleName() : "null"));
@@ -188,7 +161,6 @@ public class ImportOnDemandNodeImpl extends NodeImpl implements ImportOnDemandNo
     {
         return factory.makeImportOnDemandNode(
                 getName().deepCopy(factory),
-                getStaticImport(),
                 (BsjSourceLocation)(getStartLocation().clone()),
                 (BsjSourceLocation)(getStopLocation().clone()));
     }

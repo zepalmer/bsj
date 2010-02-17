@@ -9,18 +9,18 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
-import edu.jhu.cs.bsj.compiler.ast.node.ImportSingleTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.NameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
+import edu.jhu.cs.bsj.compiler.ast.node.SingleStaticImportNode;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public class ImportSingleTypeNodeImpl extends NodeImpl implements ImportSingleTypeNode
+public class SingleStaticImportNodeImpl extends NodeImpl implements SingleStaticImportNode
 {
     /** The name of the type to import. */
     private NameNode name;
 
     /** General constructor. */
-    public ImportSingleTypeNodeImpl(
+    public SingleStaticImportNodeImpl(
             NameNode name,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
@@ -93,7 +93,7 @@ public class ImportSingleTypeNodeImpl extends NodeImpl implements ImportSingleTy
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
         visitor.visitStartBegin(this);
-        visitor.visitImportSingleTypeNodeStart(this, true);
+        visitor.visitSingleStaticImportNodeStart(this, true);
         visitor.visitNodeStart(this);
         visitor.visitImportNodeStart(this);
         visitor.visitStartEnd(this);
@@ -101,7 +101,7 @@ public class ImportSingleTypeNodeImpl extends NodeImpl implements ImportSingleTy
         visitor.visitStopBegin(this);
         visitor.visitImportNodeStop(this);
         visitor.visitNodeStop(this);
-        visitor.visitImportSingleTypeNodeStop(this, true);
+        visitor.visitSingleStaticImportNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
 
@@ -148,7 +148,7 @@ public class ImportSingleTypeNodeImpl extends NodeImpl implements ImportSingleTy
     @Override
     public <P,R> R executeOperation(BsjNodeOperation<P,R> operation, P p)
     {
-        return operation.executeImportSingleTypeNode(this, p);
+        return operation.executeSingleStaticImportNode(this, p);
     }
 
     /**
@@ -157,9 +157,9 @@ public class ImportSingleTypeNodeImpl extends NodeImpl implements ImportSingleTy
      * @return The resulting deep copy node.
      */
     @Override
-    public ImportSingleTypeNode deepCopy(BsjNodeFactory factory)
+    public SingleStaticImportNode deepCopy(BsjNodeFactory factory)
     {
-        return factory.makeImportSingleTypeNode(
+        return factory.makeSingleStaticImportNode(
                 getName().deepCopy(factory),
                 (BsjSourceLocation)(getStartLocation().clone()),
                 (BsjSourceLocation)(getStopLocation().clone()));

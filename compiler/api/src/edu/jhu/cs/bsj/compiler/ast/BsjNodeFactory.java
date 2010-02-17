@@ -1816,8 +1816,7 @@ public interface BsjNodeFactory
      * The start and stop locations which have been set as properties of this factory are used.
      */
     public ImportOnDemandNode makeImportOnDemandNode(
-            NameNode name,
-            boolean staticImport);
+            NameNode name);
 
     /**
      * Creates a ImportOnDemandNode.
@@ -1825,7 +1824,6 @@ public interface BsjNodeFactory
      */
     public ImportOnDemandNode makeImportOnDemandNode(
             NameNode name,
-            boolean staticImport,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
 
@@ -1834,8 +1832,7 @@ public interface BsjNodeFactory
      * The start and stop locations which have been set as properties of this factory are used.
      */
     public ImportSingleTypeNode makeImportSingleTypeNode(
-            NameNode name,
-            boolean staticImport);
+            NameNode name);
 
     /**
      * Creates a ImportSingleTypeNode.
@@ -1843,7 +1840,6 @@ public interface BsjNodeFactory
      */
     public ImportSingleTypeNode makeImportSingleTypeNode(
             NameNode name,
-            boolean staticImport,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
 
@@ -2671,6 +2667,22 @@ public interface BsjNodeFactory
             BsjSourceLocation stopLocation);
 
     /**
+     * Creates a SingleStaticImportNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public SingleStaticImportNode makeSingleStaticImportNode(
+            NameNode name);
+
+    /**
+     * Creates a SingleStaticImportNode.
+     * The specified start and stop locations are used.
+     */
+    public SingleStaticImportNode makeSingleStaticImportNode(
+            NameNode name,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+
+    /**
      * Creates a StatementExpressionListNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -2701,6 +2713,22 @@ public interface BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
             StatementExpressionNode... childrenElements);
+
+    /**
+     * Creates a StaticImportOnDemandNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public StaticImportOnDemandNode makeStaticImportOnDemandNode(
+            NameNode name);
+
+    /**
+     * Creates a StaticImportOnDemandNode.
+     * The specified start and stop locations are used.
+     */
+    public StaticImportOnDemandNode makeStaticImportOnDemandNode(
+            NameNode name,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
 
     /**
      * Creates a StringLiteralNode.

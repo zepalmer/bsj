@@ -1510,10 +1510,36 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
      * @param p The value to pass through the proxy filter and into the backing operation.
      * @return The result of this operation (after being passed through the proxy filter).
      */
+    public RNew executeSingleStaticImportNode(SingleStaticImportNode node, PNew p)
+    {
+        POrig porig = before(p);
+        ROrig rorig = this.backingOp.executeSingleStaticImportNode(node, porig);
+        return after(rorig);
+    }
+
+    /**
+     * Decorates this operation, turning it over to the backing operation.
+     * @param node The node to affect.
+     * @param p The value to pass through the proxy filter and into the backing operation.
+     * @return The result of this operation (after being passed through the proxy filter).
+     */
     public RNew executeStatementExpressionListNode(StatementExpressionListNode node, PNew p)
     {
         POrig porig = before(p);
         ROrig rorig = this.backingOp.executeStatementExpressionListNode(node, porig);
+        return after(rorig);
+    }
+
+    /**
+     * Decorates this operation, turning it over to the backing operation.
+     * @param node The node to affect.
+     * @param p The value to pass through the proxy filter and into the backing operation.
+     * @return The result of this operation (after being passed through the proxy filter).
+     */
+    public RNew executeStaticImportOnDemandNode(StaticImportOnDemandNode node, PNew p)
+    {
+        POrig porig = before(p);
+        ROrig rorig = this.backingOp.executeStaticImportOnDemandNode(node, porig);
         return after(rorig);
     }
 

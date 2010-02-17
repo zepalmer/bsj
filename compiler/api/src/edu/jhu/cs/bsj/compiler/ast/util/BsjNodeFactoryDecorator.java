@@ -3247,11 +3247,10 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
      */
     @Override
     public ImportOnDemandNode makeImportOnDemandNode(
-            NameNode name,
-            boolean staticImport)
+            NameNode name)
     {
         this.before();
-        ImportOnDemandNode node = factory.makeImportOnDemandNode(name, staticImport);
+        ImportOnDemandNode node = factory.makeImportOnDemandNode(name);
         this.after(node);
         return node;
     }
@@ -3263,12 +3262,11 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     @Override
     public ImportOnDemandNode makeImportOnDemandNode(
             NameNode name,
-            boolean staticImport,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
         this.before();
-        ImportOnDemandNode node = factory.makeImportOnDemandNode(name, staticImport, startLocation, stopLocation);
+        ImportOnDemandNode node = factory.makeImportOnDemandNode(name, startLocation, stopLocation);
         this.after(node);
         return node;
     }
@@ -3279,11 +3277,10 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
      */
     @Override
     public ImportSingleTypeNode makeImportSingleTypeNode(
-            NameNode name,
-            boolean staticImport)
+            NameNode name)
     {
         this.before();
-        ImportSingleTypeNode node = factory.makeImportSingleTypeNode(name, staticImport);
+        ImportSingleTypeNode node = factory.makeImportSingleTypeNode(name);
         this.after(node);
         return node;
     }
@@ -3295,12 +3292,11 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     @Override
     public ImportSingleTypeNode makeImportSingleTypeNode(
             NameNode name,
-            boolean staticImport,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
         this.before();
-        ImportSingleTypeNode node = factory.makeImportSingleTypeNode(name, staticImport, startLocation, stopLocation);
+        ImportSingleTypeNode node = factory.makeImportSingleTypeNode(name, startLocation, stopLocation);
         this.after(node);
         return node;
     }
@@ -4759,6 +4755,36 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     }
 
     /**
+     * Creates a SingleStaticImportNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public SingleStaticImportNode makeSingleStaticImportNode(
+            NameNode name)
+    {
+        this.before();
+        SingleStaticImportNode node = factory.makeSingleStaticImportNode(name);
+        this.after(node);
+        return node;
+    }
+
+    /**
+     * Creates a SingleStaticImportNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public SingleStaticImportNode makeSingleStaticImportNode(
+            NameNode name,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        SingleStaticImportNode node = factory.makeSingleStaticImportNode(name, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+
+    /**
      * Creates a StatementExpressionListNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -4814,6 +4840,36 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     {
         this.before();
         StatementExpressionListNode node = factory.makeStatementExpressionListNode(startLocation, stopLocation, childrenElements);
+        this.after(node);
+        return node;
+    }
+
+    /**
+     * Creates a StaticImportOnDemandNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public StaticImportOnDemandNode makeStaticImportOnDemandNode(
+            NameNode name)
+    {
+        this.before();
+        StaticImportOnDemandNode node = factory.makeStaticImportOnDemandNode(name);
+        this.after(node);
+        return node;
+    }
+
+    /**
+     * Creates a StaticImportOnDemandNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public StaticImportOnDemandNode makeStaticImportOnDemandNode(
+            NameNode name,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        StaticImportOnDemandNode node = factory.makeStaticImportOnDemandNode(name, startLocation, stopLocation);
         this.after(node);
         return node;
     }

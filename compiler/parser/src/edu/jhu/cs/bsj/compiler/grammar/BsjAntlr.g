@@ -474,6 +474,31 @@ scope Rule {
     private void ruleStop()
     {
     }
+    
+    // *** PARSER ACTION SUBROUTINES ******************************************
+    private ImportNode createImport(boolean onDemand, boolean staticImport, NameNode name)
+    {
+        if (onDemand)
+        {
+            if (staticImport)
+            {
+                return factory.makeStaticImportOnDemandNode(name);
+            } else
+            {
+                return factory.makeImportOnDemandNode(name);
+            }
+            
+        } else
+        {
+            if (staticImport)
+            {
+                return factory.makeSingleStaticImportNode(name);
+            } else
+            {
+                return factory.makeImportSingleTypeNode(name);
+            }
+        }
+    }
 }
 
 
@@ -621,14 +646,7 @@ metaprogramImport returns [MetaprogramImportNode ret]
         importBody
         ';'
         {
-            ImportNode node;
-            if ($importBody.onDemand)
-            {
-                node = factory.makeImportOnDemandNode($importBody.name, $importBody.staticImport);
-            } else
-            {
-                node = factory.makeImportSingleTypeNode($importBody.name, $importBody.staticImport);
-            }
+            ImportNode node = createImport($importBody.onDemand, $importBody.staticImport, $importBody.name);
             $ret = factory.makeMetaprogramImportNode(node);
         }
     ;
@@ -948,13 +966,7 @@ importDeclaration returns [ImportNode ret]
         importBody
         ';'
         {
-            if ($importBody.onDemand)
-            {
-                $ret = factory.makeImportOnDemandNode($importBody.name, $importBody.staticImport);
-            } else
-            {
-                $ret = factory.makeImportSingleTypeNode($importBody.name, $importBody.staticImport);
-            }
+            $ret = createImport($importBody.onDemand, $importBody.staticImport, $importBody.name);
         }
     ;
 

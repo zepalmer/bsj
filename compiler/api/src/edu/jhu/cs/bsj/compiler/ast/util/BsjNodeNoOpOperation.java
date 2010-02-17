@@ -1253,7 +1253,29 @@ public class BsjNodeNoOpOperation<P,R> implements BsjNodeOperation<P,R>
      * @param p Ignored.
      * @return <code>null</code>, always.
      */
+    public R executeSingleStaticImportNode(SingleStaticImportNode node, P p)
+    {
+        return null;
+    }
+
+    /**
+     * Performs no operation.
+     * @param node Ignored.
+     * @param p Ignored.
+     * @return <code>null</code>, always.
+     */
     public R executeStatementExpressionListNode(StatementExpressionListNode node, P p)
+    {
+        return null;
+    }
+
+    /**
+     * Performs no operation.
+     * @param node Ignored.
+     * @param p Ignored.
+     * @return <code>null</code>, always.
+     */
+    public R executeStaticImportOnDemandNode(StaticImportOnDemandNode node, P p)
     {
         return null;
     }

@@ -911,10 +911,6 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	public Void executeImportOnDemandNode(ImportOnDemandNode node, PrependablePrintStream p)
 	{
 		p.print("import ");
-		if (node.getStaticImport())
-		{
-			p.print("static ");
-		}
 		node.getName().executeOperation(this, p);
 		p.print(".*;");
 		return null;
@@ -924,10 +920,6 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	public Void executeImportSingleTypeNode(ImportSingleTypeNode node, PrependablePrintStream p)
 	{
 		p.print("import ");
-		if (node.getStaticImport())
-		{
-			p.print("static ");
-		}
 		node.getName().executeOperation(this, p);
 		p.print(";");
 		return null;
@@ -1305,9 +1297,27 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	}
 
 	@Override
+	public Void executeSingleStaticImportNode(SingleStaticImportNode node, PrependablePrintStream p)
+	{
+		p.print("import static ");
+		node.getName().executeOperation(this, p);
+		p.print(";");
+		return null;
+	}
+
+	@Override
 	public Void executeStatementExpressionListNode(StatementExpressionListNode node, PrependablePrintStream p)
 	{
 		executeListNode(node, p);
+		return null;
+	}
+
+	@Override
+	public Void executeStaticImportOnDemandNode(StaticImportOnDemandNode node, PrependablePrintStream p)
+	{
+		p.print("import static ");
+		node.getName().executeOperation(this, p);
+		p.print(".*;");
 		return null;
 	}
 

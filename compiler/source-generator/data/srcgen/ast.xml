@@ -1898,7 +1898,6 @@
         <type name="ImportOnDemandNode" super="Node">
             <tag name="ImportNode" />
             <prop name="name" type="NameNode" desc="the name of the package to import" />
-            <prop name="staticImport" type="boolean" desc="the static-ness of the import" />
             <doc><![CDATA[
                 A node representing an on-demand import statement, such as "<tt>import java.util.*</tt>".
             ]]></doc>
@@ -1907,7 +1906,6 @@
         <type name="ImportSingleTypeNode" super="Node">
             <tag name="ImportNode" />
             <prop name="name" type="NameNode" desc="the name of the type to import" />
-            <prop name="staticImport" type="boolean" desc="the static-ness of the import" />
             <doc><![CDATA[
                 A node representing a single type import statement, such as "<tt>import java.util.Set</tt>".
             ]]></doc>
@@ -1955,6 +1953,22 @@
             <factory-method>
                 <prop name="name" />
             </factory-method>
+        </type>
+
+        <type name="SingleStaticImportNode" super="Node">
+            <tag name="ImportNode" />
+            <prop name="name" type="NameNode" desc="the name of the type to import" />
+            <doc><![CDATA[
+                A node representing a single static import statement, such as "<tt>import static java.util.Arrays.asList</tt>".
+            ]]></doc>
+        </type>
+
+        <type name="StaticImportOnDemandNode" super="Node">
+            <tag name="ImportNode" />
+            <prop name="name" type="NameNode" desc="the name of the package to import" />
+            <doc><![CDATA[
+                A node representing a static on-demand import statement, such as "<tt>import static java.util.Arrays.*</tt>".
+            ]]></doc>
         </type>
 
         <type name="SuperclassConstructorInvocationNode" super="ConstructorInvocationNode">

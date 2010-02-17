@@ -5,10 +5,10 @@ import javax.annotation.Generated;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 
 /**
- * A node representing an on-demand import statement, such as "<tt>import java.util.*</tt>".
+ * A node representing a static on-demand import statement, such as "<tt>import static java.util.Arrays.*</tt>".
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public interface ImportOnDemandNode extends Node, ImportNode
+public interface StaticImportOnDemandNode extends Node, ImportNode
 {
     /**
      * Gets the name of the package to import.
@@ -28,5 +28,5 @@ public interface ImportOnDemandNode extends Node, ImportNode
      * @return The resulting deep copy node.
      */
     @Override
-    public ImportOnDemandNode deepCopy(BsjNodeFactory factory);
+    public StaticImportOnDemandNode deepCopy(BsjNodeFactory factory);
 }

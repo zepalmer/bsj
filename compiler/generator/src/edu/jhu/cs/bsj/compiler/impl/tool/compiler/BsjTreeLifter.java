@@ -2662,8 +2662,6 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getName() != null ?
                         node.getName().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode(null);
-        boolean liftStaticImportValue = 
-                node.getStaticImport();
         ExpressionNode liftStartLocationMetaClone = 
                 expressionizeBsjSourceLocation(node.getStartLocation());
         ExpressionNode liftStopLocationMetaClone = 
@@ -2675,7 +2673,6 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeIdentifierNode("makeImportOnDemandNode"),
                         factory.makeExpressionListNode(
                                 liftName,
-                                expressionizeBoolean(liftStaticImportValue),
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
                         factory.makeReferenceTypeListNode());
@@ -2690,8 +2687,6 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getName() != null ?
                         node.getName().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode(null);
-        boolean liftStaticImportValue = 
-                node.getStaticImport();
         ExpressionNode liftStartLocationMetaClone = 
                 expressionizeBsjSourceLocation(node.getStartLocation());
         ExpressionNode liftStopLocationMetaClone = 
@@ -2703,7 +2698,6 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeIdentifierNode("makeImportSingleTypeNode"),
                         factory.makeExpressionListNode(
                                 liftName,
-                                expressionizeBoolean(liftStaticImportValue),
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
                         factory.makeReferenceTypeListNode());
@@ -3917,6 +3911,31 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
     }
     
     @Override
+    public ExpressionNode executeSingleStaticImportNode(SingleStaticImportNode node, ExpressionNode factoryNode)
+    {
+        ExpressionNode liftName = 
+                node.getName() != null ?
+                        node.getName().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        ExpressionNode liftStartLocationMetaClone = 
+                expressionizeBsjSourceLocation(node.getStartLocation());
+        ExpressionNode liftStopLocationMetaClone = 
+                expressionizeBsjSourceLocation(node.getStopLocation());
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeSingleStaticImportNode"),
+                        factory.makeExpressionListNode(
+                                liftName,
+                                liftStartLocationMetaClone,
+                                liftStopLocationMetaClone),
+                        factory.makeReferenceTypeListNode());
+        
+        return ret;
+    }
+    
+    @Override
     public ExpressionNode executeStatementExpressionListNode(StatementExpressionListNode node, ExpressionNode factoryNode)
     {
         List<ExpressionNode> liftChildrenList = new ArrayList<ExpressionNode>();
@@ -3956,6 +3975,31 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                                         factory.makeSimpleNameNode(
                                                                 factory.makeIdentifierNode("StatementExpressionNode"),
                                                                 NameCategory.TYPE)))),
+                                liftStartLocationMetaClone,
+                                liftStopLocationMetaClone),
+                        factory.makeReferenceTypeListNode());
+        
+        return ret;
+    }
+    
+    @Override
+    public ExpressionNode executeStaticImportOnDemandNode(StaticImportOnDemandNode node, ExpressionNode factoryNode)
+    {
+        ExpressionNode liftName = 
+                node.getName() != null ?
+                        node.getName().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        ExpressionNode liftStartLocationMetaClone = 
+                expressionizeBsjSourceLocation(node.getStartLocation());
+        ExpressionNode liftStopLocationMetaClone = 
+                expressionizeBsjSourceLocation(node.getStopLocation());
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeStaticImportOnDemandNode"),
+                        factory.makeExpressionListNode(
+                                liftName,
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
                         factory.makeReferenceTypeListNode());
