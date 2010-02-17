@@ -160,7 +160,9 @@ public class BreakNodeImpl extends NodeImpl implements BreakNode
     public BreakNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeBreakNode(
-                getLabel().deepCopy(factory));
+                getLabel().deepCopy(factory),
+                (BsjSourceLocation)(getStartLocation().clone()),
+                (BsjSourceLocation)(getStopLocation().clone()));
     }
     /**
      * Performs replacement for this node.

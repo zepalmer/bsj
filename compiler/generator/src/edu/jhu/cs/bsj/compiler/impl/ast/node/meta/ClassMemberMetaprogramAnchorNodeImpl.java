@@ -128,7 +128,9 @@ public class ClassMemberMetaprogramAnchorNodeImpl extends MetaprogramAnchorNodeI
     public ClassMemberMetaprogramAnchorNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeClassMemberMetaprogramAnchorNode(
-                getMetaprogram().deepCopy(factory));
+                getMetaprogram().deepCopy(factory),
+                (BsjSourceLocation)(getStartLocation().clone()),
+                (BsjSourceLocation)(getStopLocation().clone()));
     }
     /**
      * Performs replacement for this node.

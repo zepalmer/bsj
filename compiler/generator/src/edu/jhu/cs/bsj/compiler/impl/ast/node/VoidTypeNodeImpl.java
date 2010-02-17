@@ -118,7 +118,8 @@ public class VoidTypeNodeImpl extends NodeImpl implements VoidTypeNode
     public VoidTypeNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeVoidTypeNode(
-);
+                (BsjSourceLocation)(getStartLocation().clone()),
+                (BsjSourceLocation)(getStopLocation().clone()));
     }
     /**
      * Performs replacement for this node.

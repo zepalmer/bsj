@@ -122,7 +122,9 @@ public class NameListNodeImpl extends ListNodeImpl<NameNode> implements NameList
     public NameListNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeNameListNode(
-                new ArrayList<NameNode>(getChildren()));
+                new ArrayList<NameNode>(getChildren()),
+                (BsjSourceLocation)(getStartLocation().clone()),
+                (BsjSourceLocation)(getStopLocation().clone()));
     }
     /**
      * Performs replacement for this node.

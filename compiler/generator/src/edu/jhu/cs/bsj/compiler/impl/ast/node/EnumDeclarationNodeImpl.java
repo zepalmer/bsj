@@ -264,7 +264,9 @@ public class EnumDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl implem
                 getImplementsClause().deepCopy(factory),
                 getBody().deepCopy(factory),
                 getIdentifier().deepCopy(factory),
-                getJavadoc().deepCopy(factory));
+                getJavadoc().deepCopy(factory),
+                (BsjSourceLocation)(getStartLocation().clone()),
+                (BsjSourceLocation)(getStopLocation().clone()));
     }
     /**
      * Performs replacement for this node.

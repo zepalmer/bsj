@@ -120,7 +120,9 @@ public class BooleanLiteralNodeImpl extends LiteralNodeImpl<Boolean> implements 
     public BooleanLiteralNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeBooleanLiteralNode(
-                getValue());
+                getValue(),
+                (BsjSourceLocation)(getStartLocation().clone()),
+                (BsjSourceLocation)(getStopLocation().clone()));
     }
     /**
      * Performs replacement for this node.

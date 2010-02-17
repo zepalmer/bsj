@@ -128,7 +128,9 @@ public class AnonymousClassMemberMetaprogramAnchorNodeImpl extends MetaprogramAn
     public AnonymousClassMemberMetaprogramAnchorNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeAnonymousClassMemberMetaprogramAnchorNode(
-                getMetaprogram().deepCopy(factory));
+                getMetaprogram().deepCopy(factory),
+                (BsjSourceLocation)(getStartLocation().clone()),
+                (BsjSourceLocation)(getStopLocation().clone()));
     }
     /**
      * Performs replacement for this node.

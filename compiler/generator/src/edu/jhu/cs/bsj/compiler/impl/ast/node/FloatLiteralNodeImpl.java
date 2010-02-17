@@ -120,7 +120,9 @@ public class FloatLiteralNodeImpl extends LiteralNodeImpl<Float> implements Floa
     public FloatLiteralNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeFloatLiteralNode(
-                getValue());
+                getValue(),
+                (BsjSourceLocation)(getStartLocation().clone()),
+                (BsjSourceLocation)(getStopLocation().clone()));
     }
     /**
      * Performs replacement for this node.

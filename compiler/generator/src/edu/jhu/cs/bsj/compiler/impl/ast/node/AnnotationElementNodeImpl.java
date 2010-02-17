@@ -203,7 +203,9 @@ public class AnnotationElementNodeImpl extends NodeImpl implements AnnotationEle
     {
         return factory.makeAnnotationElementNode(
                 getIdentifier().deepCopy(factory),
-                getValue().deepCopy(factory));
+                getValue().deepCopy(factory),
+                (BsjSourceLocation)(getStartLocation().clone()),
+                (BsjSourceLocation)(getStopLocation().clone()));
     }
     /**
      * Performs replacement for this node.

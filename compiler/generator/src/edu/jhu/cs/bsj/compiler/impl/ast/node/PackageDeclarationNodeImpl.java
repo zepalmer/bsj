@@ -203,7 +203,9 @@ public class PackageDeclarationNodeImpl extends NodeImpl implements PackageDecla
     {
         return factory.makePackageDeclarationNode(
                 getName().deepCopy(factory),
-                getAnnotations().deepCopy(factory));
+                getAnnotations().deepCopy(factory),
+                (BsjSourceLocation)(getStartLocation().clone()),
+                (BsjSourceLocation)(getStopLocation().clone()));
     }
     /**
      * Performs replacement for this node.

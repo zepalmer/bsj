@@ -256,7 +256,9 @@ public class FieldDeclarationNodeImpl extends NodeImpl implements FieldDeclarati
         return factory.makeFieldDeclarationNode(
                 getModifiers().deepCopy(factory),
                 getDeclarators().deepCopy(factory),
-                getJavadoc().deepCopy(factory));
+                getJavadoc().deepCopy(factory),
+                (BsjSourceLocation)(getStartLocation().clone()),
+                (BsjSourceLocation)(getStopLocation().clone()));
     }
     /**
      * Performs replacement for this node.

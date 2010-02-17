@@ -122,7 +122,9 @@ public class ExpressionListNodeImpl extends ListNodeImpl<ExpressionNode> impleme
     public ExpressionListNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeExpressionListNode(
-                new ArrayList<ExpressionNode>(getChildren()));
+                new ArrayList<ExpressionNode>(getChildren()),
+                (BsjSourceLocation)(getStartLocation().clone()),
+                (BsjSourceLocation)(getStopLocation().clone()));
     }
     /**
      * Performs replacement for this node.

@@ -262,7 +262,9 @@ public class FieldModifiersNodeImpl extends ModifiersNodeImpl implements FieldMo
                 getFinalFlag(),
                 getTransientFlag(),
                 getVolatileFlag(),
-                getAnnotations().deepCopy(factory));
+                getAnnotations().deepCopy(factory),
+                (BsjSourceLocation)(getStartLocation().clone()),
+                (BsjSourceLocation)(getStopLocation().clone()));
     }
     /**
      * Performs replacement for this node.

@@ -141,7 +141,9 @@ public class JavadocNodeImpl extends NodeImpl implements JavadocNode
     public JavadocNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeJavadocNode(
-                getText());
+                getText(),
+                (BsjSourceLocation)(getStartLocation().clone()),
+                (BsjSourceLocation)(getStopLocation().clone()));
     }
     /**
      * Performs replacement for this node.

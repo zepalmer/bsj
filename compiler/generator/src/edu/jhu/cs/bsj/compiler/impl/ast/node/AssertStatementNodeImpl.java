@@ -204,7 +204,9 @@ public class AssertStatementNodeImpl extends NodeImpl implements AssertStatement
     {
         return factory.makeAssertStatementNode(
                 getTestExpression().deepCopy(factory),
-                getMessageExpression().deepCopy(factory));
+                getMessageExpression().deepCopy(factory),
+                (BsjSourceLocation)(getStartLocation().clone()),
+                (BsjSourceLocation)(getStopLocation().clone()));
     }
     /**
      * Performs replacement for this node.

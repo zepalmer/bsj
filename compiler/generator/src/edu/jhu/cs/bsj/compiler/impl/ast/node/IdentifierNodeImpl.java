@@ -131,7 +131,9 @@ public class IdentifierNodeImpl extends NodeImpl implements IdentifierNode
     public IdentifierNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeIdentifierNode(
-                getIdentifier());
+                getIdentifier(),
+                (BsjSourceLocation)(getStartLocation().clone()),
+                (BsjSourceLocation)(getStopLocation().clone()));
     }
     /**
      * Performs replacement for this node.

@@ -128,7 +128,9 @@ public class InterfaceMemberMetaprogramAnchorNodeImpl extends MetaprogramAnchorN
     public InterfaceMemberMetaprogramAnchorNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeInterfaceMemberMetaprogramAnchorNode(
-                getMetaprogram().deepCopy(factory));
+                getMetaprogram().deepCopy(factory),
+                (BsjSourceLocation)(getStartLocation().clone()),
+                (BsjSourceLocation)(getStopLocation().clone()));
     }
     /**
      * Performs replacement for this node.

@@ -121,7 +121,9 @@ public class ClassLiteralNodeImpl extends LiteralNodeImpl<LiteralizableTypeNode>
     public ClassLiteralNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeClassLiteralNode(
-                getValue().deepCopy(factory));
+                getValue().deepCopy(factory),
+                (BsjSourceLocation)(getStartLocation().clone()),
+                (BsjSourceLocation)(getStopLocation().clone()));
     }
     /**
      * Performs replacement for this node.

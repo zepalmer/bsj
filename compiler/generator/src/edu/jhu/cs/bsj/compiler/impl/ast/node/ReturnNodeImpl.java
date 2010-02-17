@@ -160,7 +160,9 @@ public class ReturnNodeImpl extends NodeImpl implements ReturnNode
     public ReturnNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeReturnNode(
-                getExpression().deepCopy(factory));
+                getExpression().deepCopy(factory),
+                (BsjSourceLocation)(getStartLocation().clone()),
+                (BsjSourceLocation)(getStopLocation().clone()));
     }
     /**
      * Performs replacement for this node.

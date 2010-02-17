@@ -212,7 +212,9 @@ public class QualifiedNameNodeImpl extends NameNodeImpl implements QualifiedName
         return factory.makeQualifiedNameNode(
                 getBase().deepCopy(factory),
                 getIdentifier().deepCopy(factory),
-                getCategory());
+                getCategory(),
+                (BsjSourceLocation)(getStartLocation().clone()),
+                (BsjSourceLocation)(getStopLocation().clone()));
     }
     /**
      * Performs replacement for this node.

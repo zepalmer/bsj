@@ -249,7 +249,9 @@ public class MetaprogramPreambleNodeImpl extends NodeImpl implements Metaprogram
         return factory.makeMetaprogramPreambleNode(
                 getImports().deepCopy(factory),
                 getTarget().deepCopy(factory),
-                getDepends().deepCopy(factory));
+                getDepends().deepCopy(factory),
+                (BsjSourceLocation)(getStartLocation().clone()),
+                (BsjSourceLocation)(getStopLocation().clone()));
     }
     /**
      * Performs replacement for this node.

@@ -122,7 +122,9 @@ public class EnumConstantDeclarationListNodeImpl extends ListNodeImpl<EnumConsta
     public EnumConstantDeclarationListNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeEnumConstantDeclarationListNode(
-                new ArrayList<EnumConstantDeclarationNode>(getChildren()));
+                new ArrayList<EnumConstantDeclarationNode>(getChildren()),
+                (BsjSourceLocation)(getStartLocation().clone()),
+                (BsjSourceLocation)(getStopLocation().clone()));
     }
     /**
      * Performs replacement for this node.

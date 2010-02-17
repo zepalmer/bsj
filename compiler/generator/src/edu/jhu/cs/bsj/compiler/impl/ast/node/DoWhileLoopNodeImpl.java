@@ -205,7 +205,9 @@ public class DoWhileLoopNodeImpl extends NodeImpl implements DoWhileLoopNode
     {
         return factory.makeDoWhileLoopNode(
                 getCondition().deepCopy(factory),
-                getStatement().deepCopy(factory));
+                getStatement().deepCopy(factory),
+                (BsjSourceLocation)(getStartLocation().clone()),
+                (BsjSourceLocation)(getStopLocation().clone()));
     }
     /**
      * Performs replacement for this node.

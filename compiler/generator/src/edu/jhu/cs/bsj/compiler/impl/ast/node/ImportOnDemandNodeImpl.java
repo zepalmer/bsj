@@ -188,7 +188,9 @@ public class ImportOnDemandNodeImpl extends NodeImpl implements ImportOnDemandNo
     {
         return factory.makeImportOnDemandNode(
                 getName().deepCopy(factory),
-                getStaticImport());
+                getStaticImport(),
+                (BsjSourceLocation)(getStartLocation().clone()),
+                (BsjSourceLocation)(getStopLocation().clone()));
     }
     /**
      * Performs replacement for this node.

@@ -205,7 +205,9 @@ public class WhileLoopNodeImpl extends NodeImpl implements WhileLoopNode
     {
         return factory.makeWhileLoopNode(
                 getCondition().deepCopy(factory),
-                getStatement().deepCopy(factory));
+                getStatement().deepCopy(factory),
+                (BsjSourceLocation)(getStartLocation().clone()),
+                (BsjSourceLocation)(getStopLocation().clone()));
     }
     /**
      * Performs replacement for this node.

@@ -293,7 +293,9 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
                 getPackageDeclaration().deepCopy(factory),
                 getMetaimports().deepCopy(factory),
                 getImports().deepCopy(factory),
-                getTypeDecls().deepCopy(factory));
+                getTypeDecls().deepCopy(factory),
+                (BsjSourceLocation)(getStartLocation().clone()),
+                (BsjSourceLocation)(getStopLocation().clone()));
     }
     /**
      * Performs replacement for this node.

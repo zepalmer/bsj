@@ -122,7 +122,9 @@ public class UnparameterizedTypeListNodeImpl extends ListNodeImpl<Unparameterize
     public UnparameterizedTypeListNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeUnparameterizedTypeListNode(
-                new ArrayList<UnparameterizedTypeNode>(getChildren()));
+                new ArrayList<UnparameterizedTypeNode>(getChildren()),
+                (BsjSourceLocation)(getStartLocation().clone()),
+                (BsjSourceLocation)(getStopLocation().clone()));
     }
     /**
      * Performs replacement for this node.

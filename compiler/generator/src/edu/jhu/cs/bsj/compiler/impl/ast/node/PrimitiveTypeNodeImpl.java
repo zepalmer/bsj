@@ -148,7 +148,9 @@ public class PrimitiveTypeNodeImpl extends NodeImpl implements PrimitiveTypeNode
     public PrimitiveTypeNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makePrimitiveTypeNode(
-                getPrimitiveType());
+                getPrimitiveType(),
+                (BsjSourceLocation)(getStartLocation().clone()),
+                (BsjSourceLocation)(getStopLocation().clone()));
     }
     /**
      * Performs replacement for this node.

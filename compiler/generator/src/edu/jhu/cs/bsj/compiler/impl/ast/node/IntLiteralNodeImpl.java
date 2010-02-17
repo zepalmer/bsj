@@ -120,7 +120,9 @@ public class IntLiteralNodeImpl extends LiteralNodeImpl<Integer> implements IntL
     public IntLiteralNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeIntLiteralNode(
-                getValue());
+                getValue(),
+                (BsjSourceLocation)(getStartLocation().clone()),
+                (BsjSourceLocation)(getStopLocation().clone()));
     }
     /**
      * Performs replacement for this node.

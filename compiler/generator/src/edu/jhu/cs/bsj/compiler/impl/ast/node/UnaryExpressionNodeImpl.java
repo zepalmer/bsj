@@ -189,7 +189,9 @@ public class UnaryExpressionNodeImpl extends NodeImpl implements UnaryExpression
     {
         return factory.makeUnaryExpressionNode(
                 getExpression().deepCopy(factory),
-                getOperator());
+                getOperator(),
+                (BsjSourceLocation)(getStartLocation().clone()),
+                (BsjSourceLocation)(getStopLocation().clone()));
     }
     /**
      * Performs replacement for this node.

@@ -162,7 +162,9 @@ public class UnparameterizedTypeNodeImpl extends NodeImpl implements Unparameter
     public UnparameterizedTypeNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeUnparameterizedTypeNode(
-                getName().deepCopy(factory));
+                getName().deepCopy(factory),
+                (BsjSourceLocation)(getStartLocation().clone()),
+                (BsjSourceLocation)(getStopLocation().clone()));
     }
     /**
      * Performs replacement for this node.

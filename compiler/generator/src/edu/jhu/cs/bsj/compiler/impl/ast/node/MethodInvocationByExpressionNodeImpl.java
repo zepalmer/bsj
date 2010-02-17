@@ -217,7 +217,9 @@ public class MethodInvocationByExpressionNodeImpl extends MethodInvocationNodeIm
                 getExpression().deepCopy(factory),
                 getIdentifier().deepCopy(factory),
                 getArguments().deepCopy(factory),
-                getTypeArguments().deepCopy(factory));
+                getTypeArguments().deepCopy(factory),
+                (BsjSourceLocation)(getStartLocation().clone()),
+                (BsjSourceLocation)(getStopLocation().clone()));
     }
     /**
      * Performs replacement for this node.

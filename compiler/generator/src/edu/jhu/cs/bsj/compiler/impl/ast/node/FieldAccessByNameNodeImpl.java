@@ -160,7 +160,9 @@ public class FieldAccessByNameNodeImpl extends NodeImpl implements FieldAccessBy
     public FieldAccessByNameNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeFieldAccessByNameNode(
-                getName().deepCopy(factory));
+                getName().deepCopy(factory),
+                (BsjSourceLocation)(getStartLocation().clone()),
+                (BsjSourceLocation)(getStopLocation().clone()));
     }
     /**
      * Performs replacement for this node.

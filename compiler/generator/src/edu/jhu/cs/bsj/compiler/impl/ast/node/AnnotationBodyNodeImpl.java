@@ -158,7 +158,9 @@ public class AnnotationBodyNodeImpl extends NodeImpl implements AnnotationBodyNo
     public AnnotationBodyNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeAnnotationBodyNode(
-                getMembers().deepCopy(factory));
+                getMembers().deepCopy(factory),
+                (BsjSourceLocation)(getStartLocation().clone()),
+                (BsjSourceLocation)(getStopLocation().clone()));
     }
     /**
      * Performs replacement for this node.

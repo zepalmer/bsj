@@ -159,7 +159,9 @@ public class MetaprogramImportNodeImpl extends NodeImpl implements MetaprogramIm
     public MetaprogramImportNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeMetaprogramImportNode(
-                getImportNode().deepCopy(factory));
+                getImportNode().deepCopy(factory),
+                (BsjSourceLocation)(getStartLocation().clone()),
+                (BsjSourceLocation)(getStopLocation().clone()));
     }
     /**
      * Performs replacement for this node.

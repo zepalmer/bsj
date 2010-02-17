@@ -171,7 +171,9 @@ public class ArrayInstantiatorCreationNodeImpl extends ArrayCreationNodeImpl imp
         return factory.makeArrayInstantiatorCreationNode(
                 getDimExpressions().deepCopy(factory),
                 getBaseType().deepCopy(factory),
-                getArrayLevels());
+                getArrayLevels(),
+                (BsjSourceLocation)(getStartLocation().clone()),
+                (BsjSourceLocation)(getStopLocation().clone()));
     }
     /**
      * Performs replacement for this node.

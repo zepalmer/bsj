@@ -122,7 +122,9 @@ public class IdentifierListNodeImpl extends ListNodeImpl<IdentifierNode> impleme
     public IdentifierListNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeIdentifierListNode(
-                new ArrayList<IdentifierNode>(getChildren()));
+                new ArrayList<IdentifierNode>(getChildren()),
+                (BsjSourceLocation)(getStartLocation().clone()),
+                (BsjSourceLocation)(getStopLocation().clone()));
     }
     /**
      * Performs replacement for this node.

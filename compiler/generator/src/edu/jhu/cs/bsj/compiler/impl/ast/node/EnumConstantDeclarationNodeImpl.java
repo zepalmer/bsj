@@ -338,7 +338,9 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
                 getIdentifier().deepCopy(factory),
                 getArguments().deepCopy(factory),
                 getBody().deepCopy(factory),
-                getJavadoc().deepCopy(factory));
+                getJavadoc().deepCopy(factory),
+                (BsjSourceLocation)(getStartLocation().clone()),
+                (BsjSourceLocation)(getStopLocation().clone()));
     }
     /**
      * Performs replacement for this node.

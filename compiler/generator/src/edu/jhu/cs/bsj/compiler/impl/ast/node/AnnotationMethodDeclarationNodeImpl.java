@@ -340,7 +340,9 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
                 getType().deepCopy(factory),
                 getIdentifier().deepCopy(factory),
                 getDefaultValue().deepCopy(factory),
-                getJavadoc().deepCopy(factory));
+                getJavadoc().deepCopy(factory),
+                (BsjSourceLocation)(getStartLocation().clone()),
+                (BsjSourceLocation)(getStopLocation().clone()));
     }
     /**
      * Performs replacement for this node.

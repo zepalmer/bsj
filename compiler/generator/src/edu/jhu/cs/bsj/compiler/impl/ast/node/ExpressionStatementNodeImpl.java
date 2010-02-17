@@ -160,7 +160,9 @@ public class ExpressionStatementNodeImpl extends NodeImpl implements ExpressionS
     public ExpressionStatementNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeExpressionStatementNode(
-                getExpression().deepCopy(factory));
+                getExpression().deepCopy(factory),
+                (BsjSourceLocation)(getStartLocation().clone()),
+                (BsjSourceLocation)(getStopLocation().clone()));
     }
     /**
      * Performs replacement for this node.

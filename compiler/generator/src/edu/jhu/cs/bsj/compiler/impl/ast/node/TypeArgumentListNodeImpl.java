@@ -122,7 +122,9 @@ public class TypeArgumentListNodeImpl extends ListNodeImpl<TypeArgumentNode> imp
     public TypeArgumentListNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeTypeArgumentListNode(
-                new ArrayList<TypeArgumentNode>(getChildren()));
+                new ArrayList<TypeArgumentNode>(getChildren()),
+                (BsjSourceLocation)(getStartLocation().clone()),
+                (BsjSourceLocation)(getStopLocation().clone()));
     }
     /**
      * Performs replacement for this node.

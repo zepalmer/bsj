@@ -120,7 +120,9 @@ public class NullLiteralNodeImpl extends LiteralNodeImpl<Void> implements NullLi
     public NullLiteralNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeNullLiteralNode(
-                null);
+                null,
+                (BsjSourceLocation)(getStartLocation().clone()),
+                (BsjSourceLocation)(getStopLocation().clone()));
     }
     /**
      * Performs replacement for this node.

@@ -206,7 +206,9 @@ public class InterfaceModifiersNodeImpl extends ModifiersNodeImpl implements Int
                 getAccess(),
                 getStaticFlag(),
                 getStrictfpFlag(),
-                getAnnotations().deepCopy(factory));
+                getAnnotations().deepCopy(factory),
+                (BsjSourceLocation)(getStartLocation().clone()),
+                (BsjSourceLocation)(getStopLocation().clone()));
     }
     /**
      * Performs replacement for this node.

@@ -307,7 +307,9 @@ public class InterfaceDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl i
                 getBody().deepCopy(factory),
                 getTypeParameters().deepCopy(factory),
                 getIdentifier().deepCopy(factory),
-                getJavadoc().deepCopy(factory));
+                getJavadoc().deepCopy(factory),
+                (BsjSourceLocation)(getStartLocation().clone()),
+                (BsjSourceLocation)(getStopLocation().clone()));
     }
     /**
      * Performs replacement for this node.

@@ -122,7 +122,9 @@ public class VariableListNodeImpl extends ListNodeImpl<VariableNode> implements 
     public VariableListNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeVariableListNode(
-                new ArrayList<VariableNode>(getChildren()));
+                new ArrayList<VariableNode>(getChildren()),
+                (BsjSourceLocation)(getStartLocation().clone()),
+                (BsjSourceLocation)(getStopLocation().clone()));
     }
     /**
      * Performs replacement for this node.

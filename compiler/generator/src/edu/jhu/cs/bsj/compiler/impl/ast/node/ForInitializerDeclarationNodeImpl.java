@@ -160,7 +160,9 @@ public class ForInitializerDeclarationNodeImpl extends NodeImpl implements ForIn
     public ForInitializerDeclarationNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeForInitializerDeclarationNode(
-                getDeclaration().deepCopy(factory));
+                getDeclaration().deepCopy(factory),
+                (BsjSourceLocation)(getStartLocation().clone()),
+                (BsjSourceLocation)(getStopLocation().clone()));
     }
     /**
      * Performs replacement for this node.

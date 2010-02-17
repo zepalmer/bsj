@@ -121,7 +121,9 @@ public class AnnotationMethodModifiersNodeImpl extends ModifiersNodeImpl impleme
     public AnnotationMethodModifiersNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeAnnotationMethodModifiersNode(
-                getAnnotations().deepCopy(factory));
+                getAnnotations().deepCopy(factory),
+                (BsjSourceLocation)(getStartLocation().clone()),
+                (BsjSourceLocation)(getStopLocation().clone()));
     }
     /**
      * Performs replacement for this node.

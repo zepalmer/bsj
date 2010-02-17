@@ -262,7 +262,9 @@ public class ClassModifiersNodeImpl extends ModifiersNodeImpl implements ClassMo
                 getStaticFlag(),
                 getFinalFlag(),
                 getStrictfpFlag(),
-                getAnnotations().deepCopy(factory));
+                getAnnotations().deepCopy(factory),
+                (BsjSourceLocation)(getStartLocation().clone()),
+                (BsjSourceLocation)(getStopLocation().clone()));
     }
     /**
      * Performs replacement for this node.

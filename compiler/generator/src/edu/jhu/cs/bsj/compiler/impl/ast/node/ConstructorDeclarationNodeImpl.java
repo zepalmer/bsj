@@ -475,7 +475,9 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
                 getVarargParameter().deepCopy(factory),
                 getThrowTypes().deepCopy(factory),
                 getTypeParameters().deepCopy(factory),
-                getJavadoc().deepCopy(factory));
+                getJavadoc().deepCopy(factory),
+                (BsjSourceLocation)(getStartLocation().clone()),
+                (BsjSourceLocation)(getStopLocation().clone()));
     }
     /**
      * Performs replacement for this node.

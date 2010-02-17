@@ -305,7 +305,6 @@ public interface BsjNodeFactory
      * The specified start and stop locations are used.
      */
     public AnnotationMemberMetaprogramAnchorNode makeAnnotationMemberMetaprogramAnchorNode(
-            AnnotationMemberNode replacement,
             MetaprogramNode metaprogram,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
@@ -480,7 +479,6 @@ public interface BsjNodeFactory
      * The specified start and stop locations are used.
      */
     public AnonymousClassMemberMetaprogramAnchorNode makeAnonymousClassMemberMetaprogramAnchorNode(
-            AnonymousClassMemberNode replacement,
             MetaprogramNode metaprogram,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
@@ -709,7 +707,6 @@ public interface BsjNodeFactory
      * The specified start and stop locations are used.
      */
     public BlockStatementMetaprogramAnchorNode makeBlockStatementMetaprogramAnchorNode(
-            BlockStatementNode replacement,
             MetaprogramNode metaprogram,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
@@ -980,7 +977,6 @@ public interface BsjNodeFactory
      * The specified start and stop locations are used.
      */
     public ClassMemberMetaprogramAnchorNode makeClassMemberMetaprogramAnchorNode(
-            ClassMemberNode replacement,
             MetaprogramNode metaprogram,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
@@ -2005,7 +2001,6 @@ public interface BsjNodeFactory
      * The specified start and stop locations are used.
      */
     public InterfaceMemberMetaprogramAnchorNode makeInterfaceMemberMetaprogramAnchorNode(
-            InterfaceMemberNode replacement,
             MetaprogramNode metaprogram,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
@@ -3085,7 +3080,6 @@ public interface BsjNodeFactory
      * The specified start and stop locations are used.
      */
     public TypeDeclarationMetaprogramAnchorNode makeTypeDeclarationMetaprogramAnchorNode(
-            TypeDeclarationNode replacement,
             MetaprogramNode metaprogram,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);

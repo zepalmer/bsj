@@ -120,7 +120,9 @@ public class DoubleLiteralNodeImpl extends LiteralNodeImpl<Double> implements Do
     public DoubleLiteralNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeDoubleLiteralNode(
-                getValue());
+                getValue(),
+                (BsjSourceLocation)(getStartLocation().clone()),
+                (BsjSourceLocation)(getStopLocation().clone()));
     }
     /**
      * Performs replacement for this node.

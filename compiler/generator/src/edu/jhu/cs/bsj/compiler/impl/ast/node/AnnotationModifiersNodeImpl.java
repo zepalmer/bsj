@@ -206,7 +206,9 @@ public class AnnotationModifiersNodeImpl extends ModifiersNodeImpl implements An
                 getAccess(),
                 getStaticFlag(),
                 getStrictfpFlag(),
-                getAnnotations().deepCopy(factory));
+                getAnnotations().deepCopy(factory),
+                (BsjSourceLocation)(getStartLocation().clone()),
+                (BsjSourceLocation)(getStopLocation().clone()));
     }
     /**
      * Performs replacement for this node.

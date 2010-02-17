@@ -162,7 +162,9 @@ public class ArrayTypeNodeImpl extends NodeImpl implements ArrayTypeNode
     public ArrayTypeNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeArrayTypeNode(
-                getType().deepCopy(factory));
+                getType().deepCopy(factory),
+                (BsjSourceLocation)(getStartLocation().clone()),
+                (BsjSourceLocation)(getStopLocation().clone()));
     }
     /**
      * Performs replacement for this node.

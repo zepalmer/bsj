@@ -122,7 +122,9 @@ public class CatchListNodeImpl extends ListNodeImpl<CatchNode> implements CatchL
     public CatchListNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeCatchListNode(
-                new ArrayList<CatchNode>(getChildren()));
+                new ArrayList<CatchNode>(getChildren()),
+                (BsjSourceLocation)(getStartLocation().clone()),
+                (BsjSourceLocation)(getStopLocation().clone()));
     }
     /**
      * Performs replacement for this node.

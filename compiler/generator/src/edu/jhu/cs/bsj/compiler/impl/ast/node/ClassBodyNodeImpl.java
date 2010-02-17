@@ -158,7 +158,9 @@ public class ClassBodyNodeImpl extends NodeImpl implements ClassBodyNode
     public ClassBodyNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeClassBodyNode(
-                getMembers().deepCopy(factory));
+                getMembers().deepCopy(factory),
+                (BsjSourceLocation)(getStartLocation().clone()),
+                (BsjSourceLocation)(getStopLocation().clone()));
     }
     /**
      * Performs replacement for this node.

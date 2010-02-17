@@ -159,7 +159,9 @@ public class MetaprogramTargetNodeImpl extends NodeImpl implements MetaprogramTa
     public MetaprogramTargetNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeMetaprogramTargetNode(
-                getTargets().deepCopy(factory));
+                getTargets().deepCopy(factory),
+                (BsjSourceLocation)(getStartLocation().clone()),
+                (BsjSourceLocation)(getStopLocation().clone()));
     }
     /**
      * Performs replacement for this node.

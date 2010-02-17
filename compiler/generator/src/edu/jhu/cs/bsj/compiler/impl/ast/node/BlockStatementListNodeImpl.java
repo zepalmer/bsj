@@ -122,7 +122,9 @@ public class BlockStatementListNodeImpl extends ListNodeImpl<BlockStatementNode>
     public BlockStatementListNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeBlockStatementListNode(
-                new ArrayList<BlockStatementNode>(getChildren()));
+                new ArrayList<BlockStatementNode>(getChildren()),
+                (BsjSourceLocation)(getStartLocation().clone()),
+                (BsjSourceLocation)(getStopLocation().clone()));
     }
     /**
      * Performs replacement for this node.

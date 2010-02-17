@@ -123,7 +123,9 @@ public class MetaprogramImportListNodeImpl extends ListNodeImpl<MetaprogramImpor
     public MetaprogramImportListNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeMetaprogramImportListNode(
-                new ArrayList<MetaprogramImportNode>(getChildren()));
+                new ArrayList<MetaprogramImportNode>(getChildren()),
+                (BsjSourceLocation)(getStartLocation().clone()),
+                (BsjSourceLocation)(getStopLocation().clone()));
     }
     /**
      * Performs replacement for this node.

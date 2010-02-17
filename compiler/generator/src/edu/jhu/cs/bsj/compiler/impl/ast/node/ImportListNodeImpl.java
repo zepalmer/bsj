@@ -122,7 +122,9 @@ public class ImportListNodeImpl extends ListNodeImpl<ImportNode> implements Impo
     public ImportListNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeImportListNode(
-                new ArrayList<ImportNode>(getChildren()));
+                new ArrayList<ImportNode>(getChildren()),
+                (BsjSourceLocation)(getStartLocation().clone()),
+                (BsjSourceLocation)(getStopLocation().clone()));
     }
     /**
      * Performs replacement for this node.

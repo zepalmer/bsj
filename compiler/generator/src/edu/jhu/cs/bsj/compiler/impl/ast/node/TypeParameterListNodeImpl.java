@@ -122,7 +122,9 @@ public class TypeParameterListNodeImpl extends ListNodeImpl<TypeParameterNode> i
     public TypeParameterListNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeTypeParameterListNode(
-                new ArrayList<TypeParameterNode>(getChildren()));
+                new ArrayList<TypeParameterNode>(getChildren()),
+                (BsjSourceLocation)(getStartLocation().clone()),
+                (BsjSourceLocation)(getStopLocation().clone()));
     }
     /**
      * Performs replacement for this node.

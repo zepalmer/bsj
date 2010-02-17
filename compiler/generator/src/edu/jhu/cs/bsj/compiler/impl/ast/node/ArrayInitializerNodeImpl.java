@@ -160,7 +160,9 @@ public class ArrayInitializerNodeImpl extends NodeImpl implements ArrayInitializ
     public ArrayInitializerNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeArrayInitializerNode(
-                getInitializers().deepCopy(factory));
+                getInitializers().deepCopy(factory),
+                (BsjSourceLocation)(getStartLocation().clone()),
+                (BsjSourceLocation)(getStopLocation().clone()));
     }
     /**
      * Performs replacement for this node.

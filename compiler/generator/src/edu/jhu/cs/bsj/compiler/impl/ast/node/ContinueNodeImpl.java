@@ -160,7 +160,9 @@ public class ContinueNodeImpl extends NodeImpl implements ContinueNode
     public ContinueNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeContinueNode(
-                getLabel().deepCopy(factory));
+                getLabel().deepCopy(factory),
+                (BsjSourceLocation)(getStartLocation().clone()),
+                (BsjSourceLocation)(getStopLocation().clone()));
     }
     /**
      * Performs replacement for this node.

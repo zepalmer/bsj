@@ -120,7 +120,9 @@ public class CharLiteralNodeImpl extends LiteralNodeImpl<Character> implements C
     public CharLiteralNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeCharLiteralNode(
-                getValue());
+                getValue(),
+                (BsjSourceLocation)(getStartLocation().clone()),
+                (BsjSourceLocation)(getStopLocation().clone()));
     }
     /**
      * Performs replacement for this node.

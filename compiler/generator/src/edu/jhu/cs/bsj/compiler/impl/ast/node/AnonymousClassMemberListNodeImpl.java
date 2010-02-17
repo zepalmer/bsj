@@ -122,7 +122,9 @@ public class AnonymousClassMemberListNodeImpl extends ListNodeImpl<AnonymousClas
     public AnonymousClassMemberListNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeAnonymousClassMemberListNode(
-                new ArrayList<AnonymousClassMemberNode>(getChildren()));
+                new ArrayList<AnonymousClassMemberNode>(getChildren()),
+                (BsjSourceLocation)(getStartLocation().clone()),
+                (BsjSourceLocation)(getStopLocation().clone()));
     }
     /**
      * Performs replacement for this node.

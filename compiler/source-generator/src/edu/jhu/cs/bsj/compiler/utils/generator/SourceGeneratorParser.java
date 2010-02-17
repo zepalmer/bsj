@@ -399,6 +399,9 @@ public class SourceGeneratorParser
 			} else if (modeString.equals("skip"))
 			{
 				mode = PropertyDefinition.Mode.SKIP;
+			} else if (modeString.equals("hide"))
+			{
+				mode = PropertyDefinition.Mode.HIDE;
 			} else
 			{
 				throw new IllegalStateException("Unknown property mode: " + modeString);

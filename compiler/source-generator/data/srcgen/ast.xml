@@ -2084,13 +2084,8 @@
 
         <!-- ==================== METAPROGRAM NODES ===================== -->
 
-        <!--
-            TODO: problem with using "skip" on the replacement property is that the skipMake=false factory
-            method still allows it to be specified. Is that what we want or should there be another property
-            mode ("hidden") which is invisible even during skip make?
-        -->
         <type name="MetaprogramAnchorNode" typeParam="T extends Node" super="Node" mode="abstract">
-            <prop name="replacement" type="T" mode="skip" desc="the replacement node for this metaprogram" />
+            <prop name="replacement" type="T" mode="hide" desc="the replacement node for this metaprogram" />
             <prop name="metaprogram" type="MetaprogramNode" desc="the metaprogram on this node" />
             <include file="MetaprogramAnchorNode.java" />
             <doc><![CDATA[

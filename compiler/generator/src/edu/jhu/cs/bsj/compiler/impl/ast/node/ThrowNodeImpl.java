@@ -160,7 +160,9 @@ public class ThrowNodeImpl extends NodeImpl implements ThrowNode
     public ThrowNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeThrowNode(
-                getExpression().deepCopy(factory));
+                getExpression().deepCopy(factory),
+                (BsjSourceLocation)(getStartLocation().clone()),
+                (BsjSourceLocation)(getStopLocation().clone()));
     }
     /**
      * Performs replacement for this node.

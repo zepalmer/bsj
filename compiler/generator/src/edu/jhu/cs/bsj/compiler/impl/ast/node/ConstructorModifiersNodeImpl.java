@@ -150,7 +150,9 @@ public class ConstructorModifiersNodeImpl extends ModifiersNodeImpl implements C
     {
         return factory.makeConstructorModifiersNode(
                 getAccess(),
-                getAnnotations().deepCopy(factory));
+                getAnnotations().deepCopy(factory),
+                (BsjSourceLocation)(getStartLocation().clone()),
+                (BsjSourceLocation)(getStopLocation().clone()));
     }
     /**
      * Performs replacement for this node.

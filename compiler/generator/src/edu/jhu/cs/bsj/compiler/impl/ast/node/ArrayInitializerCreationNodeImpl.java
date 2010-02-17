@@ -171,7 +171,9 @@ public class ArrayInitializerCreationNodeImpl extends ArrayCreationNodeImpl impl
         return factory.makeArrayInitializerCreationNode(
                 getInitializer().deepCopy(factory),
                 getBaseType().deepCopy(factory),
-                getArrayLevels());
+                getArrayLevels(),
+                (BsjSourceLocation)(getStartLocation().clone()),
+                (BsjSourceLocation)(getStopLocation().clone()));
     }
     /**
      * Performs replacement for this node.

@@ -178,7 +178,9 @@ public class UnqualifiedClassInstantiationNodeImpl extends ClassInstantiationNod
                 getType().deepCopy(factory),
                 getConstructorTypeArguments().deepCopy(factory),
                 getArguments().deepCopy(factory),
-                getBody().deepCopy(factory));
+                getBody().deepCopy(factory),
+                (BsjSourceLocation)(getStartLocation().clone()),
+                (BsjSourceLocation)(getStopLocation().clone()));
     }
     /**
      * Performs replacement for this node.

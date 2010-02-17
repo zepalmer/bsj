@@ -120,7 +120,9 @@ public class LongLiteralNodeImpl extends LiteralNodeImpl<Long> implements LongLi
     public LongLiteralNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeLongLiteralNode(
-                getValue());
+                getValue(),
+                (BsjSourceLocation)(getStartLocation().clone()),
+                (BsjSourceLocation)(getStopLocation().clone()));
     }
     /**
      * Performs replacement for this node.

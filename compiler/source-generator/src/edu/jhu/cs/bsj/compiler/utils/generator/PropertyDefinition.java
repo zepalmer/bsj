@@ -10,7 +10,8 @@ public class PropertyDefinition
 	{
 		NORMAL,
 		READ_ONLY,
-		SKIP
+		SKIP,
+		HIDE
 	}
 
 	private String name;
@@ -34,12 +35,17 @@ public class PropertyDefinition
 
 	public boolean isSkipMake()
 	{
-		return this.mode == Mode.SKIP;
+		return this.mode == Mode.SKIP || this.mode == Mode.HIDE;
 	}
 	
 	public boolean isReadOnly()
 	{
 		return this.mode != Mode.NORMAL;
+	}
+	
+	public boolean isHide()
+	{
+		return this.mode == Mode.HIDE;
 	}
 
 	public String getName()

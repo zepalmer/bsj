@@ -128,7 +128,9 @@ public class TypeDeclarationMetaprogramAnchorNodeImpl extends MetaprogramAnchorN
     public TypeDeclarationMetaprogramAnchorNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeTypeDeclarationMetaprogramAnchorNode(
-                getMetaprogram().deepCopy(factory));
+                getMetaprogram().deepCopy(factory),
+                (BsjSourceLocation)(getStartLocation().clone()),
+                (BsjSourceLocation)(getStopLocation().clone()));
     }
     /**
      * Performs replacement for this node.

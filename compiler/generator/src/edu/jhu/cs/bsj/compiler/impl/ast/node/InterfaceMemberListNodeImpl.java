@@ -122,7 +122,9 @@ public class InterfaceMemberListNodeImpl extends ListNodeImpl<InterfaceMemberNod
     public InterfaceMemberListNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeInterfaceMemberListNode(
-                new ArrayList<InterfaceMemberNode>(getChildren()));
+                new ArrayList<InterfaceMemberNode>(getChildren()),
+                (BsjSourceLocation)(getStartLocation().clone()),
+                (BsjSourceLocation)(getStopLocation().clone()));
     }
     /**
      * Performs replacement for this node.

@@ -160,7 +160,9 @@ public class ForInitializerExpressionNodeImpl extends NodeImpl implements ForIni
     public ForInitializerExpressionNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeForInitializerExpressionNode(
-                getExpressions().deepCopy(factory));
+                getExpressions().deepCopy(factory),
+                (BsjSourceLocation)(getStartLocation().clone()),
+                (BsjSourceLocation)(getStopLocation().clone()));
     }
     /**
      * Performs replacement for this node.

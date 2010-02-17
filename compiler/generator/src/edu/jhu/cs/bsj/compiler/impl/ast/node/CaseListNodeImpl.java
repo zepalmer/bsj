@@ -122,7 +122,9 @@ public class CaseListNodeImpl extends ListNodeImpl<CaseNode> implements CaseList
     public CaseListNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeCaseListNode(
-                new ArrayList<CaseNode>(getChildren()));
+                new ArrayList<CaseNode>(getChildren()),
+                (BsjSourceLocation)(getStartLocation().clone()),
+                (BsjSourceLocation)(getStopLocation().clone()));
     }
     /**
      * Performs replacement for this node.

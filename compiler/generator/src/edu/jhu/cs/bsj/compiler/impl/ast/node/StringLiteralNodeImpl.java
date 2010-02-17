@@ -120,7 +120,9 @@ public class StringLiteralNodeImpl extends LiteralNodeImpl<String> implements St
     public StringLiteralNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeStringLiteralNode(
-                getValue());
+                getValue(),
+                (BsjSourceLocation)(getStartLocation().clone()),
+                (BsjSourceLocation)(getStopLocation().clone()));
     }
     /**
      * Performs replacement for this node.

@@ -122,7 +122,9 @@ public class TypeDeclarationListNodeImpl extends ListNodeImpl<TypeDeclarationNod
     public TypeDeclarationListNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeTypeDeclarationListNode(
-                new ArrayList<TypeDeclarationNode>(getChildren()));
+                new ArrayList<TypeDeclarationNode>(getChildren()),
+                (BsjSourceLocation)(getStartLocation().clone()),
+                (BsjSourceLocation)(getStopLocation().clone()));
     }
     /**
      * Performs replacement for this node.

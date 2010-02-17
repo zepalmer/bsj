@@ -122,7 +122,9 @@ public class VariableDeclaratorListNodeImpl extends ListNodeImpl<VariableDeclara
     public VariableDeclaratorListNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeVariableDeclaratorListNode(
-                new ArrayList<VariableDeclaratorNode>(getChildren()));
+                new ArrayList<VariableDeclaratorNode>(getChildren()),
+                (BsjSourceLocation)(getStartLocation().clone()),
+                (BsjSourceLocation)(getStopLocation().clone()));
     }
     /**
      * Performs replacement for this node.

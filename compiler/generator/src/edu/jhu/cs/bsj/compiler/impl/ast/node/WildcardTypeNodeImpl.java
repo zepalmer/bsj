@@ -188,7 +188,9 @@ public class WildcardTypeNodeImpl extends NodeImpl implements WildcardTypeNode
     {
         return factory.makeWildcardTypeNode(
                 getBound().deepCopy(factory),
-                getUpperBound());
+                getUpperBound(),
+                (BsjSourceLocation)(getStartLocation().clone()),
+                (BsjSourceLocation)(getStopLocation().clone()));
     }
     /**
      * Performs replacement for this node.

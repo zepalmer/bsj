@@ -159,7 +159,9 @@ public class MetaprogramDependsNodeImpl extends NodeImpl implements MetaprogramD
     public MetaprogramDependsNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeMetaprogramDependsNode(
-                getTargetNames().deepCopy(factory));
+                getTargetNames().deepCopy(factory),
+                (BsjSourceLocation)(getStartLocation().clone()),
+                (BsjSourceLocation)(getStopLocation().clone()));
     }
     /**
      * Performs replacement for this node.

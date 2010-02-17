@@ -122,7 +122,9 @@ public class AnnotationValueListNodeImpl extends ListNodeImpl<AnnotationValueNod
     public AnnotationValueListNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeAnnotationValueListNode(
-                new ArrayList<AnnotationValueNode>(getChildren()));
+                new ArrayList<AnnotationValueNode>(getChildren()),
+                (BsjSourceLocation)(getStartLocation().clone()),
+                (BsjSourceLocation)(getStopLocation().clone()));
     }
     /**
      * Performs replacement for this node.

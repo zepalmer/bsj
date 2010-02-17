@@ -553,13 +553,12 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
      */
     @Override
     public AnnotationMemberMetaprogramAnchorNode makeAnnotationMemberMetaprogramAnchorNode(
-            AnnotationMemberNode replacement,
             MetaprogramNode metaprogram,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
         this.before();
-        AnnotationMemberMetaprogramAnchorNode node = factory.makeAnnotationMemberMetaprogramAnchorNode(replacement, metaprogram, startLocation, stopLocation);
+        AnnotationMemberMetaprogramAnchorNode node = factory.makeAnnotationMemberMetaprogramAnchorNode(metaprogram, startLocation, stopLocation);
         this.after(node);
         return node;
     }
@@ -868,13 +867,12 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
      */
     @Override
     public AnonymousClassMemberMetaprogramAnchorNode makeAnonymousClassMemberMetaprogramAnchorNode(
-            AnonymousClassMemberNode replacement,
             MetaprogramNode metaprogram,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
         this.before();
-        AnonymousClassMemberMetaprogramAnchorNode node = factory.makeAnonymousClassMemberMetaprogramAnchorNode(replacement, metaprogram, startLocation, stopLocation);
+        AnonymousClassMemberMetaprogramAnchorNode node = factory.makeAnonymousClassMemberMetaprogramAnchorNode(metaprogram, startLocation, stopLocation);
         this.after(node);
         return node;
     }
@@ -1279,13 +1277,12 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
      */
     @Override
     public BlockStatementMetaprogramAnchorNode makeBlockStatementMetaprogramAnchorNode(
-            BlockStatementNode replacement,
             MetaprogramNode metaprogram,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
         this.before();
-        BlockStatementMetaprogramAnchorNode node = factory.makeBlockStatementMetaprogramAnchorNode(replacement, metaprogram, startLocation, stopLocation);
+        BlockStatementMetaprogramAnchorNode node = factory.makeBlockStatementMetaprogramAnchorNode(metaprogram, startLocation, stopLocation);
         this.after(node);
         return node;
     }
@@ -1774,13 +1771,12 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
      */
     @Override
     public ClassMemberMetaprogramAnchorNode makeClassMemberMetaprogramAnchorNode(
-            ClassMemberNode replacement,
             MetaprogramNode metaprogram,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
         this.before();
-        ClassMemberMetaprogramAnchorNode node = factory.makeClassMemberMetaprogramAnchorNode(replacement, metaprogram, startLocation, stopLocation);
+        ClassMemberMetaprogramAnchorNode node = factory.makeClassMemberMetaprogramAnchorNode(metaprogram, startLocation, stopLocation);
         this.after(node);
         return node;
     }
@@ -3583,13 +3579,12 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
      */
     @Override
     public InterfaceMemberMetaprogramAnchorNode makeInterfaceMemberMetaprogramAnchorNode(
-            InterfaceMemberNode replacement,
             MetaprogramNode metaprogram,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
         this.before();
-        InterfaceMemberMetaprogramAnchorNode node = factory.makeInterfaceMemberMetaprogramAnchorNode(replacement, metaprogram, startLocation, stopLocation);
+        InterfaceMemberMetaprogramAnchorNode node = factory.makeInterfaceMemberMetaprogramAnchorNode(metaprogram, startLocation, stopLocation);
         this.after(node);
         return node;
     }
@@ -5503,13 +5498,12 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
      */
     @Override
     public TypeDeclarationMetaprogramAnchorNode makeTypeDeclarationMetaprogramAnchorNode(
-            TypeDeclarationNode replacement,
             MetaprogramNode metaprogram,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
         this.before();
-        TypeDeclarationMetaprogramAnchorNode node = factory.makeTypeDeclarationMetaprogramAnchorNode(replacement, metaprogram, startLocation, stopLocation);
+        TypeDeclarationMetaprogramAnchorNode node = factory.makeTypeDeclarationMetaprogramAnchorNode(metaprogram, startLocation, stopLocation);
         this.after(node);
         return node;
     }

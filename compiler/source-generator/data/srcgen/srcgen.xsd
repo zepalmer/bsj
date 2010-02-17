@@ -13,6 +13,7 @@
             <xs:enumeration value="normal"/>
             <xs:enumeration value="readOnly"/>
             <xs:enumeration value="skip"/>
+            <xs:enumeration value="hide"/>
         </xs:restriction>
     </xs:simpleType>
     

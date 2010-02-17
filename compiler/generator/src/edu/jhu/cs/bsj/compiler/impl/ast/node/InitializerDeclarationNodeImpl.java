@@ -190,7 +190,9 @@ public class InitializerDeclarationNodeImpl extends NodeImpl implements Initiali
     {
         return factory.makeInitializerDeclarationNode(
                 getStaticInitializer(),
-                getBody().deepCopy(factory));
+                getBody().deepCopy(factory),
+                (BsjSourceLocation)(getStartLocation().clone()),
+                (BsjSourceLocation)(getStopLocation().clone()));
     }
     /**
      * Performs replacement for this node.

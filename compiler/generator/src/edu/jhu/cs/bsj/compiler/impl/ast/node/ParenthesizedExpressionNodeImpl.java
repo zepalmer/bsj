@@ -160,7 +160,9 @@ public class ParenthesizedExpressionNodeImpl extends NodeImpl implements Parenth
     public ParenthesizedExpressionNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeParenthesizedExpressionNode(
-                getExpression().deepCopy(factory));
+                getExpression().deepCopy(factory),
+                (BsjSourceLocation)(getStartLocation().clone()),
+                (BsjSourceLocation)(getStopLocation().clone()));
     }
     /**
      * Performs replacement for this node.

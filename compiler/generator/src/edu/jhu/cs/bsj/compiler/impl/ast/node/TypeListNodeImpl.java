@@ -122,7 +122,9 @@ public class TypeListNodeImpl extends ListNodeImpl<TypeNode> implements TypeList
     public TypeListNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeTypeListNode(
-                new ArrayList<TypeNode>(getChildren()));
+                new ArrayList<TypeNode>(getChildren()),
+                (BsjSourceLocation)(getStartLocation().clone()),
+                (BsjSourceLocation)(getStopLocation().clone()));
     }
     /**
      * Performs replacement for this node.

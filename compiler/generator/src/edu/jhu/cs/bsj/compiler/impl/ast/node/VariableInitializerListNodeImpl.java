@@ -122,7 +122,9 @@ public class VariableInitializerListNodeImpl extends ListNodeImpl<VariableInitia
     public VariableInitializerListNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeVariableInitializerListNode(
-                new ArrayList<VariableInitializerNode>(getChildren()));
+                new ArrayList<VariableInitializerNode>(getChildren()),
+                (BsjSourceLocation)(getStartLocation().clone()),
+                (BsjSourceLocation)(getStopLocation().clone()));
     }
     /**
      * Performs replacement for this node.

@@ -1154,6 +1154,8 @@ public class SourceGenerator
 			ps.println();
 
 			// add deep copy implementation
+			// TODO: this doesn't properly deep copy hidden properties, for which the factory takes no arguments
+			// how do we deal with that?
 			if (def.getMode() == TypeDefinition.Mode.CONCRETE)
 			{
 				ps.println("    /**");
@@ -1169,7 +1171,7 @@ public class SourceGenerator
 				boolean first = true;
 				for (PropertyDefinition p : recProps)
 				{
-					if (p.getMode() == PropertyDefinition.Mode.SKIP)
+					if (p.isHide())
 						continue;
 					if (first)
 					{
@@ -1526,7 +1528,8 @@ public class SourceGenerator
 			List<PropertyDefinition> argProps = new ArrayList<PropertyDefinition>();
 			for (PropertyDefinition recProp : recProps)
 			{
-				if (methodDefinition.isVisible(recProp.getName()) || recProp.isSkipMake() && !skipMake)
+				if ((methodDefinition.isVisible(recProp.getName()) || (recProp.isSkipMake() && !skipMake)) &&
+						!recProp.isHide())
 				{
 					argProps.add(recProp);
 				}
@@ -1562,7 +1565,7 @@ public class SourceGenerator
 			String classname = def.getBaseName() + "Impl" + typeArg;
 			cps.print("        " + typeName + " ret = new " + classname);
 
-			printFactoryArgumentList(cps, recProps, def.getFactoryOverrideMap(), methodDefinition);
+			printFactoryArgumentList(cps, recProps, def.getFactoryOverrideMap(), methodDefinition, def);
 
 			cps.println(";");
 			// TODO: later, this is where we register created nodes with the central dependency validation
@@ -1658,7 +1661,7 @@ public class SourceGenerator
 		}
 
 		private void printFactoryArgumentList(PrintStream ps, List<PropertyDefinition> props,
-				Map<String, String> overrideMap, FactoryMethodDefinition methodDefinition)
+				Map<String, String> overrideMap, FactoryMethodDefinition methodDefinition, TypeDefinition def)
 		{
 			boolean first = true;
 			ps.print("(");

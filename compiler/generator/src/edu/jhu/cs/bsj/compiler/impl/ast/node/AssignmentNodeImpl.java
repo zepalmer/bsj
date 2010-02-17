@@ -233,7 +233,9 @@ public class AssignmentNodeImpl extends NodeImpl implements AssignmentNode
         return factory.makeAssignmentNode(
                 getVariable().deepCopy(factory),
                 getOperator(),
-                getExpression().deepCopy(factory));
+                getExpression().deepCopy(factory),
+                (BsjSourceLocation)(getStartLocation().clone()),
+                (BsjSourceLocation)(getStopLocation().clone()));
     }
     /**
      * Performs replacement for this node.

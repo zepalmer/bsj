@@ -493,7 +493,6 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     @Override
     public AnnotationMemberMetaprogramAnchorNode makeAnnotationMemberMetaprogramAnchorNode(
-            AnnotationMemberNode replacement,
             MetaprogramNode metaprogram,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
@@ -768,7 +767,6 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     @Override
     public AnonymousClassMemberMetaprogramAnchorNode makeAnonymousClassMemberMetaprogramAnchorNode(
-            AnonymousClassMemberNode replacement,
             MetaprogramNode metaprogram,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
@@ -1127,7 +1125,6 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     @Override
     public BlockStatementMetaprogramAnchorNode makeBlockStatementMetaprogramAnchorNode(
-            BlockStatementNode replacement,
             MetaprogramNode metaprogram,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
@@ -1558,7 +1555,6 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     @Override
     public ClassMemberMetaprogramAnchorNode makeClassMemberMetaprogramAnchorNode(
-            ClassMemberNode replacement,
             MetaprogramNode metaprogram,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
@@ -3143,7 +3139,6 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     @Override
     public InterfaceMemberMetaprogramAnchorNode makeInterfaceMemberMetaprogramAnchorNode(
-            InterfaceMemberNode replacement,
             MetaprogramNode metaprogram,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
@@ -4823,7 +4818,6 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     @Override
     public TypeDeclarationMetaprogramAnchorNode makeTypeDeclarationMetaprogramAnchorNode(
-            TypeDeclarationNode replacement,
             MetaprogramNode metaprogram,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
