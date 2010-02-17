@@ -159,7 +159,7 @@ public class BsjLiftedCodeVisitor extends BsjTypedNodeNoOpVisitor
                             factory.makeSimpleNameNode(
                             		factory.makeIdentifierNode(methodName), NameCategory.METHOD), 
                             factory.makeExpressionListNode(), 
-                            factory.makeTypeListNode()));
+                            factory.makeReferenceTypeListNode()));
         }        
 
         // replace the nodes arguments with method calls

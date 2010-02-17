@@ -28,7 +28,17 @@ public abstract class QualifiedNameNodeImpl
 		switch (category)
 		{
 			case PACKAGE:
-				getBase().assertCategory(category);
+				if (getBase().getCategory() != NameCategory.PACKAGE)
+				{
+					getBase().assertCategory(NameCategory.PACKAGE);
+				}
+				break;
+			case TYPE:
+				if (getBase().getCategory() != NameCategory.PACKAGE || getBase().getCategory() != NameCategory.TYPE
+						|| getBase().getCategory() != NameCategory.PACKAGE_OR_TYPE)
+				{
+					getBase().assertCategory(NameCategory.PACKAGE_OR_TYPE);
+				}
 				break;
 		}
 	}
