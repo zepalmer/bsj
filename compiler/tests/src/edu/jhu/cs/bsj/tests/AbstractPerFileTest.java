@@ -4,6 +4,8 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 
+import org.junit.Assert;
+
 /**
  * Represents a test class which assumes operations will be performed on a per-file basis.
  * @author Zachary Palmer
@@ -28,7 +30,14 @@ public abstract class AbstractPerFileTest
 			} else if (file.getName().endsWith(".java"))
 			{
 				System.out.println("Testing " + file.getAbsolutePath());
-				assertTrue(doFileTest(file));
+				try
+				{
+					assertTrue(doFileTest(file));
+				} catch (Exception e)
+				{
+					e.printStackTrace();
+					Assert.fail();
+				}
 			}
 		}
 	}
@@ -37,6 +46,7 @@ public abstract class AbstractPerFileTest
 	 * Executes the test for one file.
 	 * @param file The file to test.
 	 * @return <code>true</code> if the test succeeded; <code>false</code> if it failed.
+	 * @throws Exception If something goes wrong.
 	 */
-	protected abstract boolean doFileTest(File file);
+	protected abstract boolean doFileTest(File file) throws Exception;
 }
