@@ -66,6 +66,14 @@ public interface Node
 	 * node was not found.
 	 * @throws IllegalArgumentException If <tt>before</tt> is <code>null</code>.
 	 */
-	public <N extends Node> boolean replace(N before, N after);
+	public boolean replace(Node before, Node after);
+	
+	/**
+	 * A convenience method which retrieves the nearest ancestor of this node of the specified type.  Note that a node
+	 * is not its own ancestor; thus, providing this node's type as the node class will not retrieve this node.
+	 * @param nodeClass The class of ancestor to retrieve.
+	 * @return The ancestor in question or <code>null</code> if no such ancestor exists.
+	 */
+	public <N> N getNearestAncestorOfType(Class<N> nodeClass);
 	/* GEN:stop */
 }

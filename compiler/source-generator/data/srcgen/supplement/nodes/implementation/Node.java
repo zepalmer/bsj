@@ -73,5 +73,26 @@ public abstract class NodeImpl
 		// getParent method can just perform a registry lookup
 		this.parent = node;
 	}
+	
+	/**
+	 * A convenience method which retrieves the nearest ancestor of this node of the specified type.  Note that a node
+	 * is not its own ancestor; thus, providing this node's type as the node class will not retrieve this node.
+	 * @param nodeClass The class of ancestor to retrieve.
+	 * @return The ancestor in question or <code>null</code> if no such ancestor exists.
+	 */
+	public <N> N getNearestAncestorOfType(Class<N> nodeClass)
+	{
+		Node node = this.getParent();
+		while (node != null)
+		{
+			if (nodeClass.isInstance(node))
+			{
+				return nodeClass.cast(node);
+			}
+			node = node.getParent();
+		}
+		return null;
+	}
+	
 	/* GEN:stop */
 }
