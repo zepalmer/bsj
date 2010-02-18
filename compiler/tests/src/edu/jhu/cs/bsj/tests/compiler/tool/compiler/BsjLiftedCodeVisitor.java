@@ -60,6 +60,40 @@ public class BsjLiftedCodeVisitor extends BsjTypedNodeNoOpVisitor
     }
     
     /**
+     * Counts the number of nodes beneath a node.
+     */
+    public class CountingVisitor implements BsjNodeVisitor
+    {
+    	private int count;
+    	
+		public CountingVisitor(int count)
+		{
+			this.count = count;
+		}
+
+		public int getCount()
+		{
+			return count;
+		}
+
+		public void setCount(int count)
+		{
+			this.count = count;
+		}
+
+		@Override
+        public void visitStop(Node node)
+        {
+        }
+        
+        @Override
+        public void visitStart(Node node)
+        {
+            count++;
+        }
+    }
+    
+    /**
      * Stops a visit for nodes of type MethodInvocationNode.
      * @param node The node being visited.
      */
@@ -67,24 +101,13 @@ public class BsjLiftedCodeVisitor extends BsjTypedNodeNoOpVisitor
     {
         List<ExpressionNode> newArgList = new ArrayList<ExpressionNode>();
 
-        //TODO clean this up too
-        final int[] count = new int[1];
-        BsjNodeVisitor countingVisitor = new BsjNodeVisitor()
-        {
-            @Override
-            public void visitStop(Node node)
-            {
-            }
-            
-            @Override
-            public void visitStart(Node node)
-            {
-                count[0]++;
-            }
-        };
+        CountingVisitor countingVisitor = new CountingVisitor(0);
         node.receive(countingVisitor);
-        if (count[0] < 4000)
-            return;
+        
+        if (countingVisitor.getCount() < 4000)
+        {
+        	return;
+        }
         
         for (ExpressionNode argExpr : node.getArguments().getChildren())
         {
@@ -162,7 +185,7 @@ public class BsjLiftedCodeVisitor extends BsjTypedNodeNoOpVisitor
                             factory.makeReferenceTypeListNode()));
         }        
 
-        // replace the nodes arguments with method calls
+        // replace the node's arguments with method calls
         ExpressionListNode newArguments = factory.makeExpressionListNode(newArgList);
         node.setArguments(newArguments);
     }
