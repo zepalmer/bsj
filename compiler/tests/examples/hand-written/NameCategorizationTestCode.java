@@ -52,4 +52,18 @@ public class NameCategorizationTestCode
 			System.out.println(z.y);
 		}
 	}
+	
+	public void foo6(Foo arg)
+	{
+		System.out.println(arg.y);
+	}
+	
+	public NameCategorizationTestCode()
+	{
+	}
+	
+	public NameCategorizationTestCode(Foo f)
+	{
+		System.out.println(f.y);
+	}
 }

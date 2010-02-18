@@ -13,12 +13,14 @@ import edu.jhu.cs.bsj.compiler.ast.node.BlockStatementListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.BlockStatementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.CatchNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassBodyNode;
+import edu.jhu.cs.bsj.compiler.ast.node.ConstructorDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.EnhancedForLoopNode;
 import edu.jhu.cs.bsj.compiler.ast.node.EnumBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.FieldDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ForInitializerDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ForLoopNode;
 import edu.jhu.cs.bsj.compiler.ast.node.InterfaceBodyNode;
+import edu.jhu.cs.bsj.compiler.ast.node.MethodDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.NameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.QualifiedNameNode;
@@ -27,6 +29,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.TypeBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclaratorListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclaratorNode;
+import edu.jhu.cs.bsj.compiler.ast.node.VariableNode;
 import edu.jhu.cs.bsj.compiler.ast.util.BsjDefaultNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.util.BsjTypedNodeNoOpVisitor;
 
@@ -88,7 +91,7 @@ public class AmbiguousNameCategorizationVisitor extends BsjTypedNodeNoOpVisitor
 			return;
 		}
 
-		// TODO Auto-generated method stub
+		// TODO Other rules
 	}
 
 	/**
@@ -98,7 +101,7 @@ public class AmbiguousNameCategorizationVisitor extends BsjTypedNodeNoOpVisitor
 	 */
 	private void disambiguateQualifiedName(QualifiedNameNode node)
 	{
-		// TODO Auto-generated method stub
+		// TODO Qualified name rules
 	}
 
 	/**
@@ -182,7 +185,7 @@ public class AmbiguousNameCategorizationVisitor extends BsjTypedNodeNoOpVisitor
 		}
 
 		/**
-		 * Checks a variable declarator list to see if the requested node is covered by a prior declarator. 
+		 * Checks a variable declarator list to see if the requested node is covered by a prior declarator.
 		 */
 		@Override
 		public Boolean executeVariableDeclaratorListNode(VariableDeclaratorListNode node, List<Node> p)
@@ -248,7 +251,7 @@ public class AmbiguousNameCategorizationVisitor extends BsjTypedNodeNoOpVisitor
 			{
 				return false;
 			}
-			
+
 			ForInitializerDeclarationNode initializer = (ForInitializerDeclarationNode) node.getInitializer();
 			// How we proceed depends on how we got to the for loop.
 			int index;
@@ -277,15 +280,14 @@ public class AmbiguousNameCategorizationVisitor extends BsjTypedNodeNoOpVisitor
 			while (index > 0)
 			{
 				index--;
-				VariableDeclaratorNode variableDeclaratorNode = initializer.getDeclaration().getDeclarators().get(
-						index);
+				VariableDeclaratorNode variableDeclaratorNode = initializer.getDeclaration().getDeclarators().get(index);
 				if (variableDeclaratorNode.getName().getIdentifier().equals(name))
 				{
 					// We found a variable declaration in the for loop that covers our node
 					return true;
 				}
 			}
-				
+
 			return false;
 		}
 
@@ -305,7 +307,7 @@ public class AmbiguousNameCategorizationVisitor extends BsjTypedNodeNoOpVisitor
 					return true;
 				}
 			}
-			
+
 			return false;
 		}
 
@@ -370,7 +372,7 @@ public class AmbiguousNameCategorizationVisitor extends BsjTypedNodeNoOpVisitor
 		{
 			return checkTypeBodyNode(node, p);
 		}
-		
+
 		/**
 		 * Checks this type body for field declarations which provide the scope we want.
 		 */
@@ -380,7 +382,7 @@ public class AmbiguousNameCategorizationVisitor extends BsjTypedNodeNoOpVisitor
 			{
 				if (member instanceof FieldDeclarationNode)
 				{
-					FieldDeclarationNode fieldDeclarationNode = (FieldDeclarationNode)member;
+					FieldDeclarationNode fieldDeclarationNode = (FieldDeclarationNode) member;
 					for (VariableDeclaratorNode declarator : fieldDeclarationNode.getDeclarators())
 					{
 						if (declarator.getName().getIdentifier().equals(name))
@@ -388,6 +390,55 @@ public class AmbiguousNameCategorizationVisitor extends BsjTypedNodeNoOpVisitor
 							return true;
 						}
 					}
+				}
+			}
+			return false;
+		}
+
+		/**
+		 * Checks this method declaration's parameters to see if they provide the scope we want.
+		 */
+		@Override
+		public Boolean executeMethodDeclarationNode(MethodDeclarationNode node, List<Node> p)
+		{
+			Node prior = p.get(p.size() - 1);
+			// Only count those parameters if the request comes from inside of the body of the method
+			if (node.getBody().equals(prior))
+			{
+				for (VariableNode var : node.getParameters())
+				{
+					if (var.getIdentifier().getIdentifier().equals(name))
+					{
+						return true;
+					}
+				}
+				if (node.getVarargParameter() != null
+						&& node.getVarargParameter().getIdentifier().getIdentifier().equals(name))
+				{
+					return true;
+				}
+			}
+			return false;
+		}
+
+		@Override
+		public Boolean executeConstructorDeclarationNode(ConstructorDeclarationNode node, List<Node> p)
+		{
+			Node prior = p.get(p.size() - 1);
+			// Only count those parameters if the request comes from inside of the body of the method
+			if (node.getBody().equals(prior))
+			{
+				for (VariableNode var : node.getParameters())
+				{
+					if (var.getIdentifier().getIdentifier().equals(name))
+					{
+						return true;
+					}
+				}
+				if (node.getVarargParameter() != null
+						&& node.getVarargParameter().getIdentifier().getIdentifier().equals(name))
+				{
+					return true;
 				}
 			}
 			return false;
