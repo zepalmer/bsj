@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.NameCategory;
 import edu.jhu.cs.bsj.compiler.ast.node.BlockStatementListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.BlockStatementNode;
@@ -19,6 +20,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.SimpleNameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclaratorListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclaratorNode;
+import edu.jhu.cs.bsj.compiler.ast.util.BsjDefaultNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.util.BsjTypedNodeNoOpVisitor;
 
 /**
@@ -68,8 +70,7 @@ public class AmbiguousNameCategorizationVisitor extends BsjTypedNodeNoOpVisitor
 		// ***** If the Identifier appears within the scope (§6.3) of a local variable declaration (§14.4) or parameter
 		// declaration (§8.4.1, §8.8.1, §14.20) or field declaration (§8.3) with that name, then the AmbiguousName
 		// is reclassified as an ExpressionName.
-		if (inScopeOfLocalVariable(node, node.getNameString()) || inScopeOfParameter(node, node.getNameString())
-				|| inScopeOfField(node, node.getNameString()))
+		if (inExpressionNameScope(node, node.getNameString()))
 		{
 			if (LOGGER.isTraceEnabled())
 			{
@@ -94,216 +95,228 @@ public class AmbiguousNameCategorizationVisitor extends BsjTypedNodeNoOpVisitor
 	}
 
 	/**
-	 * Determines whether or not the specified node is in the scope of a local variable with the provided name. In this
-	 * method, the definition of "local variable" extends to catch block parameters and for loop variables.
+	 * Determines whether or not the specified node is in the scope of a local variable, field, or parameter declaration
+	 * with the specified name.
 	 * 
 	 * @param node The node to check.
 	 * @param name The name in question.
-	 * @return <code>true</code> if the given node is within the scope of a local variable of that name;
+	 * @return <code>true</code> if the given node is within the scope of an expression-named declaration of that name;
 	 *         <code>false</code> otherwise.
 	 */
-	private boolean inScopeOfLocalVariable(Node node, String name)
+	private boolean inExpressionNameScope(Node node, String name)
 	{
-		// First, let's see if we're inside of the initializer of a variable declarator. Variable declarators appear
-		// only in local variables and fields.
-		List<Node> list = new ArrayList<Node>();
-		Node iNode = node; // used as an iterator
-		while (iNode != null)
+		// First, we'll get the ancestry of the node
+		List<Node> ancestry = new ArrayList<Node>();
+		for (Node iNode = node; iNode != null; iNode = iNode.getParent())
 		{
-			list.clear();
-			VariableDeclaratorNode variableDeclaratorNode = iNode.getNearestAncestorOfType(
-					VariableDeclaratorNode.class, list);
-			if (variableDeclaratorNode != null
-					&& variableDeclaratorNode.getInitializer().equals(list.get(list.size() - 1)))
+			ancestry.add(iNode);
+		}
+
+		// Now we look at each node in turn as we scale the hierarchy and deal with it. (Skip the node itself, as it is
+		// not in scope of its own declarations.)
+		for (int i = 1; i < ancestry.size(); i++)
+		{
+			Node ancestor = ancestry.get(i);
+			BsjNodeOperation<List<Node>, Boolean> operation = new ExpressionNameScopeCheckingOperation(name);
+			if (ancestor.executeOperation(operation, ancestry.subList(0, i))) // sublist does not include this ancestor
 			{
-				// We're inside of a variable declarator. Does its name match ours?
-				if (variableDeclaratorNode.getName().getIdentifier().equals(name))
+				return true;
+			}
+		}
+
+		// We didn't find an appropriately-scoped expression name declaration.
+		return false;
+	}
+
+	/**
+	 * A class used to organize the different types of local variable checks performed by expression name scoping. It
+	 * accepts a list of the descendant chain which leads to the node for which we are doing the search and returns a
+	 * boolean indicating whether or not the executed node has access to scope which matches the requested name and
+	 * defines an expression name.
+	 * 
+	 * @author Zachary Palmer
+	 */
+	// TODO: change to a Node return type, returning the node which actually contains the definition?
+	private static class ExpressionNameScopeCheckingOperation extends BsjDefaultNodeOperation<List<Node>, Boolean>
+	{
+		/** The name we are trying to match. */
+		private String name;
+
+		public ExpressionNameScopeCheckingOperation(String name)
+		{
+			super();
+			this.name = name;
+		}
+
+		@Override
+		public Boolean executeDefault(Node node, List<Node> p)
+		{
+			// By default, we have not found what we're seeking.
+			return false;
+		}
+
+		/**
+		 * Checks a variable declarator to see if the requested node is inside of the initializer.
+		 */
+		@Override
+		public Boolean executeVariableDeclaratorNode(VariableDeclaratorNode node, List<Node> p)
+		{
+			Node prior = p.get(p.size() - 1);
+			if (node.getInitializer().equals(prior))
+			{
+				// We're inside of a variable declarator's initializer. Does its name match ours?
+				if (node.getName().getIdentifier().equals(name))
 				{
-					// Yes. Is it inside of a local variable declaration?
-					if (variableDeclaratorNode.getNearestAncestorOfType(VariableDeclarationNode.class) != null)
-					{
-						// We found it! (This is something insane, like "int x = (x=2)*2;".)
-						return true;
-					}
+					// We found it! (This is something insane, like "int x = (x=2)*2;".)
+					return true;
 				}
-				// Variable declarators show up inside of lists. Is one of the variable declarators to the left of this
-				// one named what we want? (Such as "int x = 5, y = x;".)
-				if (variableDeclaratorNode.getParent() instanceof VariableDeclaratorListNode)
+			}
+			return false;
+		}
+
+		/**
+		 * Checks a variable declarator list to see if the requested node is covered by a prior declarator. 
+		 */
+		@Override
+		public Boolean executeVariableDeclaratorListNode(VariableDeclaratorListNode node, List<Node> p)
+		{
+			// Is the prior node covered by a previous variable declarator in this list? (Such as "int x = 5, y = x;".)
+			Node prior = p.get(p.size() - 1);
+			node = (VariableDeclaratorListNode) prior.getParent();
+			int index = node.indexOf(prior);
+			while (index > 0)
+			{
+				index--;
+				VariableDeclaratorNode otherDeclarator = node.get(index);
+				if (otherDeclarator.getName().getIdentifier().equals(name))
 				{
-					VariableDeclaratorListNode variableDeclaratorListNode = (VariableDeclaratorListNode) variableDeclaratorNode.getParent();
-					int index = variableDeclaratorListNode.indexOf(variableDeclaratorNode);
-					while (index > 0)
+					// Found one
+					return true;
+				}
+			}
+			return false;
+		}
+
+		/**
+		 * Checks a block statement list to see if any variable declarations before the requested node produce a scope
+		 * with the given name.
+		 */
+		@Override
+		public Boolean executeBlockStatementListNode(BlockStatementListNode node, List<Node> p)
+		{
+			// Find the prior node
+			BlockStatementNode blockStatementNode = (BlockStatementNode) p.get(p.size() - 1);
+			// Get its index in the list
+			int index = node.indexOf(blockStatementNode);
+			// Look at all of the nodes before it - are any of them local variable declarations?
+			while (index > 0)
+			{
+				index--;
+				if (node.get(index) instanceof VariableDeclarationNode)
+				{
+					// Does this local variable declaration cover the name?
+					VariableDeclarationNode variableDeclarationNode = (VariableDeclarationNode) node.get(index);
+					for (VariableDeclaratorNode variableDeclaratorNode : variableDeclarationNode.getDeclarators())
 					{
-						index--;
-						VariableDeclaratorNode otherDeclarator = variableDeclaratorListNode.get(index);
-						if (otherDeclarator.getName().getIdentifier().equals(name))
+						if (variableDeclaratorNode.getName().getIdentifier().equals(name))
 						{
-							// Found one
+							// We found something in a parent block with the name we want.
 							return true;
 						}
 					}
 				}
 			}
-			iNode = variableDeclaratorNode;
+			return false;
 		}
 
-		// So we're not in a variable initializer. Perhaps we're in a block of statements and that block has an
-		// appropriate declarator?
-		iNode = node;
-		while (iNode != null)
+		/**
+		 * Checks a for loop to see if any variable declarations it might have apply to the requested node with the
+		 * given name.
+		 */
+		@Override
+		public Boolean executeForLoopNode(ForLoopNode node, List<Node> p)
 		{
-			list.clear();
-			BlockStatementListNode blockStatementListNode = iNode.getNearestAncestorOfType(
-					BlockStatementListNode.class, list);
-			if (blockStatementListNode != null)
+			// This for loop isn't worth anything to us if it doesn't declare some variables
+			if (!(node.getInitializer() instanceof ForInitializerDeclarationNode))
 			{
-				// Find our ancestor as the participant of the list
-				BlockStatementNode blockStatementNode = (BlockStatementNode) list.get(list.size() - 1);
-				// Get our ancestor's index
-				int index = blockStatementListNode.indexOf(blockStatementNode);
-				// Look at all of the nodes before us - are any of them local variable declarations?
-				while (index > 0)
-				{
-					index--;
-					if (blockStatementListNode.get(index) instanceof VariableDeclarationNode)
-					{
-						VariableDeclarationNode variableDeclarationNode = (VariableDeclarationNode) blockStatementListNode.get(index);
-						for (VariableDeclaratorNode variableDeclaratorNode : variableDeclarationNode.getDeclarators())
-						{
-							if (variableDeclaratorNode.getName().getIdentifier().equals(name))
-							{
-								// We found something in a parent block with the name we want.
-								return true;
-							}
-						}
-					}
-				}
+				return false;
 			}
-			// If we didn't find a block statement list, this will end the loop. Otherwise, it searches the parents of
-			// that block statement list (for nested blocks)
-			iNode = blockStatementListNode;
-		}
-
-		// So it's not a traditional variable initializer at all. Perhaps it's in a basic for loop?
-		iNode = node;
-		while (iNode != null)
-		{
-			list.clear();
-			ForLoopNode forLoopNode = iNode.getNearestAncestorOfType(ForLoopNode.class, list);
-			// If this for-loop has a variable declaration as an initializer, it's worth examining
-			if (forLoopNode != null && forLoopNode.getInitializer() instanceof ForInitializerDeclarationNode)
+			
+			ForInitializerDeclarationNode initializer = (ForInitializerDeclarationNode) node.getInitializer();
+			// How we proceed depends on how we got to the for loop.
+			int index;
+			if (p.get(p.size() - 1) instanceof ForInitializerDeclarationNode)
 			{
-				ForInitializerDeclarationNode initializer = (ForInitializerDeclarationNode) forLoopNode.getInitializer();
-				// How we proceed depends on how we got to the for loop.
-				int index;
-				if (list.get(list.size() - 1) instanceof ForInitializerDeclarationNode)
+				// If we're inside of an initializer, only the preceeding declarators are fair game.
+				// We need to get the variable declarator from which we came (assuming we're at least that
+				// deep). The order of the list, due to the AST type hierarchy, will be:
+				// ..., VariableDeclaratorNode, VariableDeclaratorListNode, VariableDeclarationNode, ForInit
+				if (p.size() >= 4)
 				{
-					// If we're inside of an initializer, only the preceeding declarators are fair game
-					// We need to get the variable declarator from which we came (assuming we're at least that
-					// deep). The order of the list, due to the AST type hierarchy, will be:
-					// ..., VariableDeclaratorNode, VariableDeclaratorListNode, VariableDeclarationNode, ForInit
-					if (list.size() >= 4)
-					{
-						index = initializer.getDeclaration().getDeclarators().indexOf(list.get(list.size() - 4));
-					} else
-					{
-						// Apparently, this node is the declarator itself or something. None of the declarations
-						// are in scope.
-						index = 0;
-					}
+					index = initializer.getDeclaration().getDeclarators().indexOf(p.get(p.size() - 4));
 				} else
 				{
-					// We're in some other part of the for loop; all declarators are fair game
-					index = initializer.getDeclaration().getDeclarators().size();
+					// Apparently, this node is the declarator itself or something. None of the declarations
+					// are in scope.
+					index = 0;
 				}
+			} else
+			{
+				// We're in some other part of the for loop; all declarators are fair game
+				index = initializer.getDeclaration().getDeclarators().size();
+			}
+
+			// Check each valid declarator to see if it's the one we want
+			while (index > 0)
+			{
+				index--;
+				VariableDeclaratorNode variableDeclaratorNode = initializer.getDeclaration().getDeclarators().get(
+						index);
+				if (variableDeclaratorNode.getName().getIdentifier().equals(name))
+				{
+					// We found a variable declaration in the for loop that covers our node
+					return true;
+				}
+			}
 				
-				// Check each valid declarator to see if it's the one we want
-				while (index > 0)
-				{
-					index--;
-					VariableDeclaratorNode variableDeclaratorNode = initializer.getDeclaration().getDeclarators().get(index);
-					if (variableDeclaratorNode.getName().getIdentifier().equals(name))
-					{
-						// We found a variable declaration in the for loop that covers our node
-						return true;
-					}
-				}
-			}
-			iNode = forLoopNode;
+			return false;
 		}
-		
-		// How about an enhanced for loop?
-		iNode = node;
-		while (iNode != null)
+
+		/**
+		 * Checks an enhanced for loop to see if its parameter provides the scope we want.
+		 */
+		@Override
+		public Boolean executeEnhancedForLoopNode(EnhancedForLoopNode node, List<Node> p)
 		{
-			list.clear();
-			EnhancedForLoopNode enhancedForLoopNode = iNode.getNearestAncestorOfType(EnhancedForLoopNode.class, list);
-			if (enhancedForLoopNode != null)
+			// The enhanced for loop's variable's scope is only the statement of the loop
+			if (p.get(p.size() - 1).equals(node.getStatement()))
 			{
-				// The enhanced for loop's variable's scope is only the statement of the loop
-				if (list.get(list.size()-1).equals(enhancedForLoopNode.getStatement()))
+				// We're inside of the enhanced for loop's statement, so the parameter it contains is applied to us.
+				if (node.getVariable().getIdentifier().getIdentifier().equals(name))
 				{
-					// We're inside of the enhanced for loop's statement, so the parameter it contains is applied to us.
-					if (enhancedForLoopNode.getVariable().getIdentifier().getIdentifier().equals(name))
-					{
-						// And it turns out that this is the node that matches our name!
-						return true;
-					}
+					// And it turns out that this is the node that matches our name!
+					return true;
 				}
 			}
-			iNode = enhancedForLoopNode;
+			
+			return false;
 		}
-		
-		// How about a catch block?
-		iNode = node;
-		while (iNode != null)
+
+		/**
+		 * Checks a catch block to determine if its parameter provides the scope we want.
+		 */
+		@Override
+		public Boolean executeCatchNode(CatchNode node, List<Node> p)
 		{
-			list.clear();
-			CatchNode catchNode = iNode.getNearestAncestorOfType(CatchNode.class, list);
-			if (catchNode != null)
+			if (p.get(p.size() - 1).equals(node.getBlock()))
 			{
-				// The catch node's parameter applies only to the block of statements in the exception handler
-				if (list.get(list.size()-1).equals(catchNode.getBlock()))
+				if (node.getParameter().getIdentifier().getIdentifier().equals(name))
 				{
-					if (catchNode.getParameter().getIdentifier().getIdentifier().equals(name))
-					{
-						// The catch block's argument applies to this name
-						return true;
-					}
+					// The catch block's argument applies to this name
+					return true;
 				}
 			}
-			iNode = catchNode;
+			return false;
 		}
-
-		// That's all the local variables we have - give up
-		return false;
-	}
-
-	/**
-	 * Determines whether or not the specified node is in the scope of a parameter with the provided name.
-	 * 
-	 * @param node The node to check.
-	 * @param name The name in question.
-	 * @return <code>true</code> if the given node is within the scope of a local variable of that name;
-	 *         <code>false</code> otherwise.
-	 */
-	private boolean inScopeOfParameter(Node node, String name)
-	{
-		// TODO
-		return false;
-	}
-
-	/**
-	 * Determines whether or not the specified node is in the scope of a field with the provided name.
-	 * 
-	 * @param node The node to check.
-	 * @param name The name in question.
-	 * @return <code>true</code> if the given node is within the scope of a local variable of that name;
-	 *         <code>false</code> otherwise.
-	 */
-	private boolean inScopeOfField(Node node, String name)
-	{
-		// TODO
-		return false;
 	}
 }
