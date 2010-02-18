@@ -55,7 +55,12 @@ public class BsjTreeLifterTest extends AbstractPerFileTest
 	private static final String[] META_IMPORTS = { "edu.jhu.cs.bsj.compiler.ast.*",
 			"edu.jhu.cs.bsj.compiler.ast.node.*", "edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeFactoryImpl",
 			"edu.jhu.cs.bsj.compiler.ast.node.meta.*", "java.util.*" };	
-	
+    private BsjNodeFactory factory = new BsjNodeFactoryImpl();
+    private BsjTreeLifter treeLifter = new BsjTreeLifter(factory);
+    private BsjParserImpl parser = new BsjParserImpl(new BsjNodeFactoryImpl());
+    private String factoryName = "factory";
+    private BsjSourceSerializer serializer = new BsjSourceSerializerImpl();
+    
 	/**
 	 * Test the BsjTreeLifter on files in the examples directory.
 	 */
@@ -79,12 +84,6 @@ public class BsjTreeLifterTest extends AbstractPerFileTest
 	 */
 	public boolean liftJavaFile(File file)
 	{
-	    BsjNodeFactory factory = new BsjNodeFactoryImpl();
-	    BsjTreeLifter treeLifter = new BsjTreeLifter(factory);
-	    BsjParserImpl parser = new BsjParserImpl(new BsjNodeFactoryImpl());
-	    String factoryName = "factory";
-	    BsjSourceSerializer serializer = new BsjSourceSerializerImpl();
-	    
 		// parse the original source
 		Node ast = null;
 		try
@@ -106,15 +105,8 @@ public class BsjTreeLifterTest extends AbstractPerFileTest
 		// get the lifted code
 		ExpressionNode metaAst = ast.executeOperation(treeLifter, metaFactory);
 		
-		//TODO replace expressions w/ methods
+		// replace expressions w/ methods
 		List<MethodDeclarationNode> methods = divideLiftIntoMethods(metaAst);
-//		System.out.println(metaAst.executeOperation(serializer, null));
-//		System.out.println("methods size="+methods.size());
-//		System.out.println("maxMemory="+Runtime.getRuntime().maxMemory());
-//		for (int i = methods.size()-1; i >= 0; i--)
-//		{
-//		    System.out.println(methods.get(i).executeOperation(serializer, null));
-//		}
 
 		// compile the lifted code and get the result
 		String liftedProgram = null;
@@ -140,7 +132,6 @@ public class BsjTreeLifterTest extends AbstractPerFileTest
     {
 	    List<MethodDeclarationNode> methods = new ArrayList<MethodDeclarationNode>();
 	    metaAst.receiveTyped(new BsjLiftedCodeVisitor(methods));
-	    
         return methods;
     }
 
