@@ -1,7 +1,5 @@
 package edu.jhu.cs.bsj.tests.compiler.tool.parser;
 
-import static org.junit.Assert.assertTrue;
-
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -16,9 +14,10 @@ import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeFactoryImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.serializer.BsjSourceSerializerImpl;
 import edu.jhu.cs.bsj.compiler.tool.parser.BsjParserImpl;
+import edu.jhu.cs.bsj.tests.AbstractPerFileTest;
 
 
-public class RegeneratorTest
+public class RegeneratorTest extends AbstractPerFileTest
 {
 	// private variables used in testing
 	private BsjParserImpl parser = new BsjParserImpl(new BsjNodeFactoryImpl());
@@ -31,35 +30,21 @@ public class RegeneratorTest
         findAndTestJavaFiles(exampleDir);
     }
 
-    /**
-     * Recursively find and test all java files in a directory.
-     * @param dir the directory to search.
-     */
-    private void findAndTestJavaFiles(File dir)
-    {
-        for (File file : dir.listFiles())
-        {
-            if (file.isDirectory())
-            {
-                findAndTestJavaFiles(file);
-            }
-            else if (file.getName().endsWith(".java"))
-            {
-                System.out.println("Testing " + file.getAbsolutePath());
-                try
-                {
-                    assertTrue(regenerateJavaFile(file));
-                } 
-                catch (Exception e)
-                {                	
-                    e.printStackTrace();
-                    Assert.fail();
-                }
-            }            
-        }
-    }
+    @Override
+	protected boolean doFileTest(File file)
+	{
+		try
+		{
+			return regenerateJavaFile(file);
+		} catch (Exception e)
+		{
+			e.printStackTrace();
+			Assert.fail();
+			return false;
+		}
+	}
 
-    /**
+	/**
      * Regenerate a Java file once, then again using the regenerated source as input.
      * Verify the two regenerated copies of the source are the same.
      * @param file the Java file to test.
