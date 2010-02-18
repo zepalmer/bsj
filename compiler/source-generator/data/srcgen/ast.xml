@@ -1584,6 +1584,7 @@
         <!-- ======================== LIST NODES ======================== -->
 
         <type name="ListNode" typeParam="T extends Node" super="Node" mode="abstract">
+            <interface name="List&lt;T&gt;"/>
             <prop name="children" type="List" typeArg="T" mode="readOnly" desc="the list of children" />
             <include file="ListNode.java" />
             <doc><![CDATA[

@@ -22,6 +22,7 @@ public class TypeDefinition extends PropertyBasedHierarchyDefinition<TypeDefinit
 	private String superTypeArg;
 	private String interfacePackage;
 	private String classPackage;
+	private List<String> interfaces; // used to denote non-tag interfaces such as List<T>
 	private List<String> tags;
 	private List<PropertyDefinition> properties;
 	private List<String> includes;
@@ -37,7 +38,7 @@ public class TypeDefinition extends PropertyBasedHierarchyDefinition<TypeDefinit
 	private TypeDefinition parent;
 
 	public TypeDefinition(String baseName, String typeParameter, String superName, String superTypeArg,
-			String interfacePackage, String classPackage, List<String> tags, List<PropertyDefinition> properties,
+			String interfacePackage, String classPackage, List<String> interfaces, List<String> tags, List<PropertyDefinition> properties,
 			List<String> includes, String docString, List<String> toStringLines,
 			Map<String, String> factoryOverrideMap, Map<String, String> constructorOverrideMap, boolean genConstructor,
 			boolean genChildren, List<FactoryMethodDefinition> factoryMethods, Mode mode)
@@ -49,6 +50,7 @@ public class TypeDefinition extends PropertyBasedHierarchyDefinition<TypeDefinit
 		this.superTypeArg = superTypeArg;
 		this.interfacePackage = interfacePackage;
 		this.classPackage = classPackage;
+		this.interfaces = interfaces;
 		this.tags = tags;
 		this.properties = properties;
 		this.includes = includes;
@@ -168,6 +170,11 @@ public class TypeDefinition extends PropertyBasedHierarchyDefinition<TypeDefinit
 	public String getClassPackage()
 	{
 		return classPackage;
+	}
+
+	public List<String> getInterfaces()
+	{
+		return interfaces;
 	}
 
 	public List<String> getTags()

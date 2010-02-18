@@ -25,7 +25,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
  * which is guaranteed to be type checked at runtime.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public interface ListNode<T extends Node> extends Node
+public interface ListNode<T extends Node> extends Node, List<T>
 {
     /**
      * Gets the list of children.

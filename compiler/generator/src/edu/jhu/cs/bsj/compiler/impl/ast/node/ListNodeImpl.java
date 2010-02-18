@@ -1,7 +1,10 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 
 import javax.annotation.Generated;
 
@@ -166,5 +169,210 @@ public abstract class ListNodeImpl<T extends Node> extends NodeImpl implements L
 		}
 	}
 	
-	// TODO: implement the List<T> interface
+	/**
+	 * A convenience method which passes this call to the list of nodes contained in this list node.
+	 */
+	@Override
+	public void add(int index, T element)
+	{
+		this.children.add(index, element);
+	}
+
+	/**
+	 * A convenience method which passes this call to the list of nodes contained in this list node.
+	 */
+	@Override
+	public boolean add(T e)
+	{
+		return this.children.add(e);
+	}
+
+	/**
+	 * A convenience method which passes this call to the list of nodes contained in this list node.
+	 */
+	@Override
+	public boolean addAll(Collection<? extends T> c)
+	{
+		return this.children.addAll(c);
+	}
+
+	/**
+	 * A convenience method which passes this call to the list of nodes contained in this list node.
+	 */
+	@Override
+	public boolean addAll(int index, Collection<? extends T> c)
+	{
+		return this.children.addAll(index, c);
+	}
+
+	/**
+	 * A convenience method which passes this call to the list of nodes contained in this list node.
+	 */
+	@Override
+	public void clear()
+	{
+		this.children.clear();
+	}
+
+	/**
+	 * A convenience method which passes this call to the list of nodes contained in this list node.
+	 */
+	@Override
+	public boolean contains(Object o)
+	{
+		return this.children.contains(o);
+	}
+
+	/**
+	 * A convenience method which passes this call to the list of nodes contained in this list node.
+	 */
+	@Override
+	public boolean containsAll(Collection<?> c)
+	{
+		return this.children.containsAll(c);
+	}
+
+	/**
+	 * A convenience method which passes this call to the list of nodes contained in this list node.
+	 */
+	@Override
+	public T get(int index)
+	{
+		return this.children.get(index);
+	}
+
+	/**
+	 * A convenience method which passes this call to the list of nodes contained in this list node.
+	 */
+	@Override
+	public int indexOf(Object o)
+	{
+		return this.children.indexOf(o);
+	}
+
+	/**
+	 * A convenience method which passes this call to the list of nodes contained in this list node.
+	 */
+	@Override
+	public boolean isEmpty()
+	{
+		return this.children.isEmpty();
+	}
+
+	/**
+	 * A convenience method which passes this call to the list of nodes contained in this list node.
+	 */
+	@Override
+	public Iterator<T> iterator()
+	{
+		return this.children.iterator();
+	}
+
+	/**
+	 * A convenience method which passes this call to the list of nodes contained in this list node.
+	 */
+	@Override
+	public int lastIndexOf(Object o)
+	{
+		return this.children.lastIndexOf(o);
+	}
+
+	/**
+	 * A convenience method which passes this call to the list of nodes contained in this list node.
+	 */
+	@Override
+	public ListIterator<T> listIterator()
+	{
+		return this.children.listIterator();
+	}
+
+	/**
+	 * A convenience method which passes this call to the list of nodes contained in this list node.
+	 */
+	@Override
+	public ListIterator<T> listIterator(int index)
+	{
+		return this.children.listIterator(index);
+	}
+
+	/**
+	 * A convenience method which passes this call to the list of nodes contained in this list node.
+	 */
+	@Override
+	public T remove(int index)
+	{
+		return this.children.remove(index);
+	}
+
+	/**
+	 * A convenience method which passes this call to the list of nodes contained in this list node.
+	 */
+	@Override
+	public boolean remove(Object o)
+	{
+		return this.children.remove(o);
+	}
+
+	/**
+	 * A convenience method which passes this call to the list of nodes contained in this list node.
+	 */
+	@Override
+	public boolean removeAll(Collection<?> c)
+	{
+		return this.children.removeAll(c);
+	}
+
+	/**
+	 * A convenience method which passes this call to the list of nodes contained in this list node.
+	 */
+	@Override
+	public boolean retainAll(Collection<?> c)
+	{
+		return this.children.retainAll(c);
+	}
+
+	/**
+	 * A convenience method which passes this call to the list of nodes contained in this list node.
+	 */
+	@Override
+	public T set(int index, T element)
+	{
+		return this.children.set(index, element);
+	}
+
+	/**
+	 * A convenience method which passes this call to the list of nodes contained in this list node.
+	 */
+	@Override
+	public int size()
+	{
+		return this.children.size();
+	}
+
+	/**
+	 * A convenience method which passes this call to the list of nodes contained in this list node.
+	 */
+	@Override
+	public List<T> subList(int fromIndex, int toIndex)
+	{
+		return this.children.subList(fromIndex, toIndex);
+	}
+
+	/**
+	 * A convenience method which passes this call to the list of nodes contained in this list node.
+	 */
+	@Override
+	public Object[] toArray()
+	{
+		return this.children.toArray();
+	}
+
+	/**
+	 * A convenience method which passes this call to the list of nodes contained in this list node.
+	 */
+	@Override
+	public <E> E[] toArray(E[] a)
+	{
+		return this.children.<E>toArray(a);
+	}
 }

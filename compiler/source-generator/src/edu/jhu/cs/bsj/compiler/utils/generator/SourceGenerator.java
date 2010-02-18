@@ -477,6 +477,12 @@ public class SourceGenerator
 					extendsClause.append(", ");
 				extendsClause.append(tag);
 			}
+			for (String tag : def.getInterfaces())
+			{
+				if (extendsClause.length() > 0)
+					extendsClause.append(", ");
+				extendsClause.append(tag);
+			}
 			if (extendsClause.length() > 0)
 				extendsClause.insert(0, " extends ");
 

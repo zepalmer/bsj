@@ -236,13 +236,13 @@ public class SourceGeneratorParser
 							childData = parser.parse(new File(path));
 						} catch (IOException e1)
 						{
-							throw new IllegalStateException("Failure while reading imported file " +path, e1);
+							throw new IllegalStateException("Failure while reading imported file " + path, e1);
 						} catch (ParserConfigurationException e1)
 						{
-							throw new IllegalStateException("Failure while reading imported file " +path, e1);
+							throw new IllegalStateException("Failure while reading imported file " + path, e1);
 						} catch (SAXException e1)
 						{
-							throw new IllegalStateException("Failure while reading imported file " +path, e1);
+							throw new IllegalStateException("Failure while reading imported file " + path, e1);
 						}
 						types.addAll(childData.getTypes());
 						diagnostics.addAll(childData.getDiagnostics());
@@ -300,6 +300,7 @@ public class SourceGeneratorParser
 				mode = TypeDefinition.Mode.CONCRETE;
 			}
 
+			List<String> interfaces = new ArrayList<String>();
 			List<String> tags = new ArrayList<String>();
 			List<PropertyDefinition> props = new ArrayList<PropertyDefinition>();
 			List<String> includes = new ArrayList<String>();
@@ -319,7 +320,10 @@ public class SourceGeneratorParser
 				{
 					Element childElement = (Element) node;
 					String childTag = childElement.getTagName();
-					if (childTag.equals("tag"))
+					if (childTag.equals("interface"))
+					{
+						interfaces.add(childElement.getAttribute("name"));
+					} else if (childTag.equals("tag"))
 					{
 						tags.add(childElement.getAttribute("name"));
 					} else if (childTag.equals("prop"))
@@ -366,9 +370,9 @@ public class SourceGeneratorParser
 			}
 
 			TypeDefinition typeDefinition = new TypeDefinition(name, typeParam, superName, superTypeArg,
-					interfacePackageName, classPackageName, tags, props, includes, docString, toStringLines,
-					factoryOverrideMap, constructorOverrideMap, genConstructor, genChildren, factoryMethodDefinitions,
-					mode);
+					interfacePackageName, classPackageName, interfaces, tags, props, includes, docString,
+					toStringLines, factoryOverrideMap, constructorOverrideMap, genConstructor, genChildren,
+					factoryMethodDefinitions, mode);
 			for (FactoryMethodDefinition factoryMethodDefinition : factoryMethodDefinitions)
 			{
 				factoryMethodDefinition.setParent(typeDefinition);

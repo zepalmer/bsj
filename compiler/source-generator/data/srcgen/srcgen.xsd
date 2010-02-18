@@ -24,6 +24,10 @@
         </xs:restriction>
     </xs:simpleType>
 
+    <xs:complexType name="interface_T">
+        <xs:attribute name="name" type="xs:string" use="required"/>
+    </xs:complexType>
+    
     <xs:complexType name="tag_T">
         <xs:attribute name="name" type="xs:string" use="required"/>
     </xs:complexType>
@@ -85,6 +89,7 @@
 
     <xs:complexType name="type_T">
         <xs:sequence>
+            <xs:element name="interface" type="interface_T" minOccurs="0" maxOccurs="unbounded"/>
             <xs:element name="tag" type="tag_T" minOccurs="0" maxOccurs="unbounded"/>
             <xs:element name="prop" type="prop_T" minOccurs="0" maxOccurs="unbounded"/>
             <xs:element name="include" type="include_T" minOccurs="0" maxOccurs="unbounded"/>
