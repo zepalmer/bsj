@@ -13,6 +13,7 @@ import org.junit.Test;
 
 import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeFactoryImpl;
+import edu.jhu.cs.bsj.compiler.impl.tool.compiler.AmbiguousNameCategorizationVisitor;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.InitialNameCategorizationVisitor;
 import edu.jhu.cs.bsj.compiler.tool.parser.BsjParserImpl;
 import edu.jhu.cs.bsj.tests.AbstractPerFileTest;
@@ -25,7 +26,7 @@ import edu.jhu.cs.bsj.tests.AbstractPerFileTest;
 public class NameCategorizationTest extends AbstractPerFileTest
 {
 	@Test
-	public void testInitialNameCategorization()
+	public void testNameCategorization()
 	{
 		log4jConfigure("trace", "edu.jhu.cs.bsj.compiler.impl.tool.filemanager/debug",
 				"edu.jhu.cs.bsj.compiler.tool.parser.antlr/debug");
@@ -57,8 +58,15 @@ public class NameCategorizationTest extends AbstractPerFileTest
 					}
 				});
 
-		InitialNameCategorizationVisitor visitor = new InitialNameCategorizationVisitor();
-		node.receiveTyped(visitor);
+		// Perform initial categorization
+		InitialNameCategorizationVisitor initialNameCategorizationVisitor = new InitialNameCategorizationVisitor();
+		node.receiveTyped(initialNameCategorizationVisitor);
+		
+		// Disambiguate
+		AmbiguousNameCategorizationVisitor ambiguousNameCategorizationVisitor = new AmbiguousNameCategorizationVisitor();
+		node.receiveTyped(ambiguousNameCategorizationVisitor);
+		
+		// TODO
 
 		return true;
 	}
