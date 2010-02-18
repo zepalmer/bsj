@@ -7,16 +7,23 @@ import org.apache.log4j.Logger;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.NameCategory;
+import edu.jhu.cs.bsj.compiler.ast.node.AnnotationBodyNode;
+import edu.jhu.cs.bsj.compiler.ast.node.AnonymousClassBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.BlockStatementListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.BlockStatementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.CatchNode;
+import edu.jhu.cs.bsj.compiler.ast.node.ClassBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.EnhancedForLoopNode;
+import edu.jhu.cs.bsj.compiler.ast.node.EnumBodyNode;
+import edu.jhu.cs.bsj.compiler.ast.node.FieldDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ForInitializerDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ForLoopNode;
+import edu.jhu.cs.bsj.compiler.ast.node.InterfaceBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.NameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.QualifiedNameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.SimpleNameNode;
+import edu.jhu.cs.bsj.compiler.ast.node.TypeBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclaratorListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclaratorNode;
@@ -314,6 +321,73 @@ public class AmbiguousNameCategorizationVisitor extends BsjTypedNodeNoOpVisitor
 				{
 					// The catch block's argument applies to this name
 					return true;
+				}
+			}
+			return false;
+		}
+
+		/**
+		 * Checks this type body for field declarations which provide the scope we want.
+		 */
+		@Override
+		public Boolean executeAnnotationBodyNode(AnnotationBodyNode node, List<Node> p)
+		{
+			return checkTypeBodyNode(node, p);
+		}
+
+		/**
+		 * Checks this type body for field declarations which provide the scope we want.
+		 */
+		@Override
+		public Boolean executeAnonymousClassBodyNode(AnonymousClassBodyNode node, List<Node> p)
+		{
+			return checkTypeBodyNode(node, p);
+		}
+
+		/**
+		 * Checks this type body for field declarations which provide the scope we want.
+		 */
+		@Override
+		public Boolean executeClassBodyNode(ClassBodyNode node, List<Node> p)
+		{
+			return checkTypeBodyNode(node, p);
+		}
+
+		/**
+		 * Checks this type body for field declarations which provide the scope we want.
+		 */
+		@Override
+		public Boolean executeEnumBodyNode(EnumBodyNode node, List<Node> p)
+		{
+			return checkTypeBodyNode(node, p);
+		}
+
+		/**
+		 * Checks this type body for field declarations which provide the scope we want.
+		 */
+		@Override
+		public Boolean executeInterfaceBodyNode(InterfaceBodyNode node, List<Node> p)
+		{
+			return checkTypeBodyNode(node, p);
+		}
+		
+		/**
+		 * Checks this type body for field declarations which provide the scope we want.
+		 */
+		private Boolean checkTypeBodyNode(TypeBodyNode node, List<Node> p)
+		{
+			for (Node member : node.getMembers())
+			{
+				if (member instanceof FieldDeclarationNode)
+				{
+					FieldDeclarationNode fieldDeclarationNode = (FieldDeclarationNode)member;
+					for (VariableDeclaratorNode declarator : fieldDeclarationNode.getDeclarators())
+					{
+						if (declarator.getName().getIdentifier().equals(name))
+						{
+							return true;
+						}
+					}
 				}
 			}
 			return false;
