@@ -189,16 +189,38 @@ public abstract class NodeImpl implements Node
 	 */
 	public <N> N getNearestAncestorOfType(Class<N> nodeClass)
 	{
+		return getNearestAncestorOfType(nodeClass, null);
+	}
+	
+	/**
+	 * A convenience method which retrieves the nearest ancestor of this node of the specified type.  If such an
+	 * ancestor exists and the provided list is not <code>null</code>, all of the ancestors between this node and the
+	 * returned ancestor are added to the list.
+	 * 
+	 * Note that a node is not its own ancestor; thus, providing this node's type as the node class will not retrieve
+	 * this node.
+	 * @param nodeClass The class of ancestor to retrieve.
+	 * @param list The list of ancestors or <code>null</code> for no ancestor recording.
+	 * @return The ancestor in question or <code>null</code> if no such ancestor exists.  If no such ancestor exists,
+	 *         the provided list is unmodified.
+	 */
+	public <N> N getNearestAncestorOfType(Class<N> nodeClass, List<? super Node> list)
+	{
+		List<Node> nodeList = new ArrayList<Node>();
 		Node node = this.getParent();
 		while (node != null)
 		{
 			if (nodeClass.isInstance(node))
 			{
+				if (list != null)
+				{
+					list.addAll(nodeList);
+				}
 				return nodeClass.cast(node);
 			}
+			nodeList.add(node);
 			node = node.getParent();
 		}
 		return null;
 	}
-	
 }
