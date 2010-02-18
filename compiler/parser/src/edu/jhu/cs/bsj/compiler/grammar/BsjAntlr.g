@@ -937,18 +937,19 @@ importBody returns [boolean staticImport, boolean onDemand, NameNode name]
             ruleStop();
         }
     :
-        'static' typeName
+        'static' typeName '.' '*'
+        {
+            $staticImport = true;
+            $onDemand = true;
+            $name = $typeName.ret;
+        }
+    |
+        'static' categorizedName[NameCategory.PACKAGE_OR_TYPE, NameCategory.TYPE, NameCategory.AMBIGUOUS]
         {
             $staticImport = true;
             $onDemand = false;
-            $name = $typeName.ret;
+            $name = $categorizedName.ret;
         }
-        (
-            '.' '*'
-            {
-                $onDemand = true;
-            }
-        )?
     |
         packageOrTypeName '.' '*'
         {
