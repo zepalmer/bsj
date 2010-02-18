@@ -19,7 +19,7 @@ import edu.jhu.cs.bsj.compiler.ast.util.BsjTypedNodeNoOpVisitor;
  * This visitor is used to categorize names in a parsed AST. Names are categorized into one of seven name categories:
  * the six specified in &#xA7;6 of the Java Language Specification and the metaprogram target name category specified in
  * the BSJ language specification. This visitor only categorizes names according to the rules in &#xA7;6.5.1 of the JLS;
- * the rules in &#xA7;6.5.2 are not handled here.
+ * the rules in the following sections are handled elsewhere.
  * 
  * @author Zachary Palmer
  */
