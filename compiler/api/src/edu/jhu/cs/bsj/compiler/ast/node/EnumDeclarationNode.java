@@ -7,7 +7,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 /**
  * Represents the declaration of a class, as in:
  * <pre>
- * <i>modifiers<i> enum <i>name</i> implements <i>type...</i>
+ * <i>modifiers</i> enum <i>name</i> implements <i>type...</i>
  * {
  *     <i>member</i>
  *     <i>...</i>

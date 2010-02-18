@@ -1461,7 +1461,7 @@
             <doc><![CDATA[
                 Represents the declaration of a class, as in:
                 <pre>
-                <i>modifiers<i> enum <i>name</i> implements <i>type...</i>
+                <i>modifiers</i> enum <i>name</i> implements <i>type...</i>
                 {
                     <i>member</i>
                     <i>...</i>
@@ -1478,7 +1478,7 @@
             <doc><![CDATA[
                 Represents the declaration of an interface, as in:
                 <pre>
-                <i>modifiers<i> interface <i>name</i>&lt;<i>typeParam...</i>&gt; extends <i>type...</i>
+                <i>modifiers</i> interface <i>name</i>&lt;<i>typeParam...</i>&gt; extends <i>type...</i>
                 {
                     <i>member</i>
                     <i>...</i>
