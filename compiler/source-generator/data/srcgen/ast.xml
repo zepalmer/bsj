@@ -1095,6 +1095,7 @@
                 or
                     <pre>
                     <i>type identifier</i> = <i>expression</i>, <i>identifier</i> = <i>expression</i>, ...;
+                    </pre>
             ]]></doc>
         </type>
 

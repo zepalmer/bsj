@@ -16,6 +16,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
  * or
  *     <pre>
  *     <i>type identifier</i> = <i>expression</i>, <i>identifier</i> = <i>expression</i>, ...;
+ *     </pre>
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public interface VariableDeclarationNode extends Node, BlockStatementNode
