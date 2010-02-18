@@ -1380,6 +1380,14 @@
 
         <!-- ===================== TYPE BODY NODES ====================== -->
 
+        <type name="TypeBodyNode" super="Node" mode="tag">
+            <prop name="members" type="ListNode" typeArg="? extends Node" mode="readOnly"
+                desc="the members of this type declaration body" />
+            <doc><![CDATA[
+                This interface is implemented by any node which represents the body of a type definition.
+            ]]></doc>
+        </type>
+
         <type name="AnnotationBodyNode" super="Node">
             <prop name="members" type="AnnotationMemberListNode" desc="the members of this annotation body" />
             <doc><![CDATA[
@@ -1584,7 +1592,7 @@
         <!-- ======================== LIST NODES ======================== -->
 
         <type name="ListNode" typeParam="T extends Node" super="Node" mode="abstract">
-            <interface name="List&lt;T&gt;"/>
+            <interface name="List&lt;T&gt;" />
             <prop name="children" type="List" typeArg="T" mode="readOnly" desc="the list of children" />
             <include file="ListNode.java" />
             <doc><![CDATA[

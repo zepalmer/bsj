@@ -1423,6 +1423,12 @@ public interface BsjTypedNodeVisitor
     public void visitTypeArgumentNodeStart(TypeArgumentNode node);
 
     /**
+     * Starts a visit for nodes of type TypeBodyNode.
+     * @param node The node being visited.
+     */
+    public void visitTypeBodyNodeStart(TypeBodyNode node);
+
+    /**
      * Starts a visit for nodes of type TypeCastNode.
      * @param node The node being visited.
      * @param mostSpecific <code>true</code> if this is the most specific call
@@ -2942,6 +2948,12 @@ public interface BsjTypedNodeVisitor
      * @param node The node being visited.
      */
     public void visitTypeArgumentNodeStop(TypeArgumentNode node);
+
+    /**
+     * Stops a visit for nodes of type TypeBodyNode.
+     * @param node The node being visited.
+     */
+    public void visitTypeBodyNodeStop(TypeBodyNode node);
 
     /**
      * Stops a visit for nodes of type TypeCastNode.
