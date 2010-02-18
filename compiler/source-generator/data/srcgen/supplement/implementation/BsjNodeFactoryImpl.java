@@ -58,5 +58,32 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         this.stopLocation = stopLocation;
     }
 
+	// MANUALLY SPECIFIED MAKE METHODS ///////////////////////////////////////
+
+	/**
+	 * Creates a {@link SingleStaticImportNode}. The provided name is interpreted as the full name of the import; that
+	 * is, the name "<tt>java.utils.Arrays.asList</tt>" would be used to create an import for that method by splitting
+	 * the name between its type and final identifier. The default start and stop location are used.
+	 */
+	public SingleStaticImportNode makeSingleStaticImportNode(
+    		QualifiedNameNode name)
+    {
+    	return makeSingleStaticImportNode(name.getBase(), name.getIdentifier());
+    }
+
+	/**
+	 * Creates a {@link SingleStaticImportNode}. The provided name is interpreted as the full name of the import; that
+	 * is, the name "<tt>java.utils.Arrays.asList</tt>" would be used to create an import for that method by splitting
+	 * the name between its type and final identifier. The specified start and stop locations are used.
+	 */
+	public SingleStaticImportNode makeSingleStaticImportNode(
+    		QualifiedNameNode name,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+    	return makeSingleStaticImportNode(name.getBase(), name.getIdentifier(), startLocation, stopLocation);
+    }
+
+
 /* GEN:stop */
 }

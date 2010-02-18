@@ -113,6 +113,14 @@
                     A diagnostic representing the presence of one token where another was expected.
                 ]]></doc>
             </diagnostic>
+
+            <diagnostic name="UnqualifiedSingleStaticImportNameDiagnostic" code="bsj.parser.error.invalidSingleStaticImportName"
+                super="BsjParserDiagnostic">
+                <prop name="name" type="String" desc="the name which was provided" />
+                <doc><![CDATA[
+                    A diagnostic representing a single static import which used an unqualified name.
+                ]]></doc>
+            </diagnostic>
         </srcgen>
     </srcgen>
 </srcgen>

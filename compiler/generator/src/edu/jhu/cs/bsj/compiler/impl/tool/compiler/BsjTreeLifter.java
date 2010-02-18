@@ -3917,6 +3917,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getName() != null ?
                         node.getName().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode(null);
+        ExpressionNode liftIdentifier = 
+                node.getIdentifier() != null ?
+                        node.getIdentifier().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         ExpressionNode liftStartLocationMetaClone = 
                 expressionizeBsjSourceLocation(node.getStartLocation());
         ExpressionNode liftStopLocationMetaClone = 
@@ -3928,6 +3932,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeIdentifierNode("makeSingleStaticImportNode"),
                         factory.makeExpressionListNode(
                                 liftName,
+                                liftIdentifier,
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
                         factory.makeReferenceTypeListNode());

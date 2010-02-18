@@ -1958,7 +1958,8 @@
 
         <type name="SingleStaticImportNode" super="Node">
             <tag name="ImportNode" />
-            <prop name="name" type="NameNode" desc="the name of the type to import" />
+            <prop name="name" type="NameNode" desc="the name of the type from which to import" />
+            <prop name="identifier" type="IdentifierNode" desc="the identifier to import from that type" />
             <doc><![CDATA[
                 A node representing a single static import statement, such as "<tt>import static java.util.Arrays.asList</tt>".
             ]]></doc>

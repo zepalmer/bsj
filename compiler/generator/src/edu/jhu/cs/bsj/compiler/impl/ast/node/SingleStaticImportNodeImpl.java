@@ -9,6 +9,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.NameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.SingleStaticImportNode;
@@ -16,22 +17,27 @@ import edu.jhu.cs.bsj.compiler.ast.node.SingleStaticImportNode;
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class SingleStaticImportNodeImpl extends NodeImpl implements SingleStaticImportNode
 {
-    /** The name of the type to import. */
+    /** The name of the type from which to import. */
     private NameNode name;
+
+    /** The identifier to import from that type. */
+    private IdentifierNode identifier;
 
     /** General constructor. */
     public SingleStaticImportNodeImpl(
             NameNode name,
+            IdentifierNode identifier,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
         super(startLocation, stopLocation);
         setName(name);
+        setIdentifier(identifier);
     }
 
     /**
-     * Gets the name of the type to import.
-     * @return The name of the type to import.
+     * Gets the name of the type from which to import.
+     * @return The name of the type from which to import.
      */
     public NameNode getName()
     {
@@ -39,8 +45,8 @@ public class SingleStaticImportNodeImpl extends NodeImpl implements SingleStatic
     }
 
     /**
-     * Changes the name of the type to import.
-     * @param name The name of the type to import.
+     * Changes the name of the type from which to import.
+     * @param name The name of the type from which to import.
      */
     public void setName(NameNode name)
     {
@@ -52,6 +58,32 @@ public class SingleStaticImportNodeImpl extends NodeImpl implements SingleStatic
         if (this.name instanceof NodeImpl)
         {
             ((NodeImpl)this.name).setParent(this);
+        }
+    }
+
+    /**
+     * Gets the identifier to import from that type.
+     * @return The identifier to import from that type.
+     */
+    public IdentifierNode getIdentifier()
+    {
+        return this.identifier;
+    }
+
+    /**
+     * Changes the identifier to import from that type.
+     * @param identifier The identifier to import from that type.
+     */
+    public void setIdentifier(IdentifierNode identifier)
+    {
+        if (this.identifier instanceof NodeImpl)
+        {
+            ((NodeImpl)this.identifier).setParent(null);
+        }
+        this.identifier = identifier;
+        if (this.identifier instanceof NodeImpl)
+        {
+            ((NodeImpl)this.identifier).setParent(this);
         }
     }
 
@@ -70,6 +102,10 @@ public class SingleStaticImportNodeImpl extends NodeImpl implements SingleStatic
         {
             this.name.receive(visitor);
         }
+        if (this.identifier != null)
+        {
+            this.identifier.receive(visitor);
+        }
     }
 
     /**
@@ -86,6 +122,10 @@ public class SingleStaticImportNodeImpl extends NodeImpl implements SingleStatic
         if (this.name != null)
         {
             this.name.receiveTyped(visitor);
+        }
+        if (this.identifier != null)
+        {
+            this.identifier.receiveTyped(visitor);
         }
     }
 
@@ -115,6 +155,7 @@ public class SingleStaticImportNodeImpl extends NodeImpl implements SingleStatic
     {
         List<Object> list = super.getChildObjects();
         list.add(getName());
+        list.add(getIdentifier());
         return list;
     }
 
@@ -129,6 +170,9 @@ public class SingleStaticImportNodeImpl extends NodeImpl implements SingleStatic
         sb.append('[');
         sb.append("name=");
         sb.append(this.getName() == null? "null" : this.getName().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("identifier=");
+        sb.append(this.getIdentifier() == null? "null" : this.getIdentifier().getClass().getSimpleName());
         sb.append(',');
         sb.append("startLocation=");
         sb.append(String.valueOf(this.getStartLocation()) + ":" + (this.getStartLocation() != null ? this.getStartLocation().getClass().getSimpleName() : "null"));
@@ -161,6 +205,7 @@ public class SingleStaticImportNodeImpl extends NodeImpl implements SingleStatic
     {
         return factory.makeSingleStaticImportNode(
                 getName().deepCopy(factory),
+                getIdentifier().deepCopy(factory),
                 getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
                 getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
     }
@@ -179,6 +224,11 @@ public class SingleStaticImportNodeImpl extends NodeImpl implements SingleStatic
         if (before.equals(this.getName()) && (after instanceof NameNode))
         {
             setName((NameNode)after);
+            return true;
+        }
+        if (before.equals(this.getIdentifier()) && (after instanceof IdentifierNode))
+        {
+            setIdentifier((IdentifierNode)after);
             return true;
         }
         return false;

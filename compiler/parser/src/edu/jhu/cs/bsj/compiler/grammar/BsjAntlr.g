@@ -492,7 +492,19 @@ scope Rule {
         {
             if (staticImport)
             {
-                return factory.makeSingleStaticImportNode(name);
+                if (name instanceof QualifiedNameNode)
+                {
+                    return factory.makeSingleStaticImportNode((QualifiedNameNode)name);
+                } else
+                {
+                    reportDiagnostic(new UnqualifiedSingleStaticImportNameDiagnostic<JavaFileObject>(
+                            getLineNumber(-1),
+                            getColumnNumber(-1),
+                            resource,
+                            $Rule::name,
+                            name.getNameString()));
+                    return null;
+                }
             } else
             {
                 return factory.makeImportSingleTypeNode(name);

@@ -103,6 +103,33 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.factory.setStopSourceLocation(stopLocation);
     }
 
+	// MANUALLY SPECIFIED MAKE METHODS ///////////////////////////////////////
+    // Since these methods call out to the other factory make methods, we don't decorate them.
+
+	/**
+	 * Creates a {@link SingleStaticImportNode}. The provided name is interpreted as the full name of the import; that
+	 * is, the name "<tt>java.utils.Arrays.asList</tt>" would be used to create an import for that method by splitting
+	 * the name between its type and final identifier. The default start and stop location are used.
+	 */
+	public SingleStaticImportNode makeSingleStaticImportNode(
+    		QualifiedNameNode name)
+    {
+    	return this.factory.makeSingleStaticImportNode(name);
+    }
+
+	/**
+	 * Creates a {@link SingleStaticImportNode}. The provided name is interpreted as the full name of the import; that
+	 * is, the name "<tt>java.utils.Arrays.asList</tt>" would be used to create an import for that method by splitting
+	 * the name between its type and final identifier. The specified start and stop locations are used.
+	 */
+	public SingleStaticImportNode makeSingleStaticImportNode(
+    		QualifiedNameNode name,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+    	return this.factory.makeSingleStaticImportNode(name, startLocation, stopLocation);
+    }
+
     /**
      * Creates a AlternateConstructorInvocationNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -4760,10 +4787,11 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
      */
     @Override
     public SingleStaticImportNode makeSingleStaticImportNode(
-            NameNode name)
+            NameNode name,
+            IdentifierNode identifier)
     {
         this.before();
-        SingleStaticImportNode node = factory.makeSingleStaticImportNode(name);
+        SingleStaticImportNode node = factory.makeSingleStaticImportNode(name, identifier);
         this.after(node);
         return node;
     }
@@ -4775,11 +4803,12 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     @Override
     public SingleStaticImportNode makeSingleStaticImportNode(
             NameNode name,
+            IdentifierNode identifier,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
         this.before();
-        SingleStaticImportNode node = factory.makeSingleStaticImportNode(name, startLocation, stopLocation);
+        SingleStaticImportNode node = factory.makeSingleStaticImportNode(name, identifier, startLocation, stopLocation);
         this.after(node);
         return node;
     }
