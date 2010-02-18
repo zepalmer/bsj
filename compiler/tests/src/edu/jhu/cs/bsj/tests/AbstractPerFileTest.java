@@ -10,6 +10,9 @@ import java.io.File;
  */
 public abstract class AbstractPerFileTest
 {
+	/** The directory containing the example sources. */
+	public static final File EXAMPLES = new File("examples");
+	
 	/**
 	 * Recursively find and test all java files in a directory.
 	 * 

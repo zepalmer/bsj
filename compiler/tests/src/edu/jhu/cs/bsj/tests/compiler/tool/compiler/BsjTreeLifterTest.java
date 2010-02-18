@@ -62,8 +62,7 @@ public class BsjTreeLifterTest extends AbstractPerFileTest
 	@Test
 	public void testLifterOnExamples()
 	{
-		File exampleDir = new File("examples");
-		findAndTestJavaFiles(exampleDir);
+		findAndTestJavaFiles(EXAMPLES);
 	}
 	
 	@Override

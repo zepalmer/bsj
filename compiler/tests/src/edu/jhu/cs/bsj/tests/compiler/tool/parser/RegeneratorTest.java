@@ -26,8 +26,7 @@ public class RegeneratorTest extends AbstractPerFileTest
     @Test
     public void testRegeneratorOnExamples()
     {
-        File exampleDir = new File("examples");        
-        findAndTestJavaFiles(exampleDir);
+        findAndTestJavaFiles(EXAMPLES);
     }
 
     @Override
