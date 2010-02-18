@@ -71,12 +71,12 @@ public class NameCategorizationVisitor extends BsjTypedNodeNoOpVisitor
             return NameCategory.TYPE;
         }
         // *** To the left of the "." in a single static import (§7.5.3) declaration
-        if (hasAncestry(node, NameNode.class, SingleStaticImportNode.class))
+        if (hasAncestry(node, SingleStaticImportNode.class))
         {
             return NameCategory.TYPE;
         }
         // *** To the left of the "." in a static import-on-demand (§7.5.4) declaration
-        if (hasAncestry(node, NameNode.class, StaticImportOnDemandNode.class))
+        if (hasAncestry(node, StaticImportOnDemandNode.class))
         {
             return NameCategory.TYPE;
         }
@@ -143,6 +143,11 @@ public class NameCategorizationVisitor extends BsjTypedNodeNoOpVisitor
         }
         // *** In a type-import-on-demand declaration (§7.5.2)
         if (hasAncestry(node, ImportOnDemandNode.class))
+        {
+        	return NameCategory.PACKAGE_OR_TYPE;
+        }
+        // This rule is not explicitly listed in the JLS v3 but seems appropriate
+        if (hasParentName(node, NameCategory.PACKAGE_OR_TYPE))
         {
         	return NameCategory.PACKAGE_OR_TYPE;
         }

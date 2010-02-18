@@ -10,7 +10,7 @@ import org.junit.Assert;
  * Represents a test class which assumes operations will be performed on a per-file basis.
  * @author Zachary Palmer
  */
-public abstract class AbstractPerFileTest
+public abstract class AbstractPerFileTest extends AbstractTest
 {
 	/** The directory containing the example sources. */
 	public static final File EXAMPLES = new File("examples");
