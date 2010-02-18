@@ -8,7 +8,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
  * Represents the body of a class declaration.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public interface ClassBodyNode extends Node
+public interface ClassBodyNode extends Node, TypeBodyNode
 {
     /**
      * Gets the members of this class body.

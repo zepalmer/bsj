@@ -8,7 +8,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
  * Represents the body of an enum declaration.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public interface EnumBodyNode extends Node
+public interface EnumBodyNode extends Node, TypeBodyNode
 {
     /**
      * Gets the enumeration constants.

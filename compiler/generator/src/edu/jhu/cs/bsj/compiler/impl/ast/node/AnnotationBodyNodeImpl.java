@@ -95,9 +95,11 @@ public class AnnotationBodyNodeImpl extends NodeImpl implements AnnotationBodyNo
         visitor.visitStartBegin(this);
         visitor.visitAnnotationBodyNodeStart(this, true);
         visitor.visitNodeStart(this);
+        visitor.visitTypeBodyNodeStart(this);
         visitor.visitStartEnd(this);
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
+        visitor.visitTypeBodyNodeStop(this);
         visitor.visitNodeStop(this);
         visitor.visitAnnotationBodyNodeStop(this, true);
         visitor.visitStopEnd(this);
