@@ -23,7 +23,7 @@ import edu.jhu.cs.bsj.compiler.ast.util.BsjTypedNodeNoOpVisitor;
  * 
  * @author Zachary Palmer
  */
-public class NameCategorizationVisitor extends BsjTypedNodeNoOpVisitor
+public class InitialNameCategorizationVisitor extends BsjTypedNodeNoOpVisitor
 {
 	/** The logger for this object. */
 	private Logger LOGGER = Logger.getLogger(this.getClass());
