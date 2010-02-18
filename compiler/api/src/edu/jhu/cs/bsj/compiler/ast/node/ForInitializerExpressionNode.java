@@ -6,7 +6,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 
 /**
  * Represents a for loop initializer which contains expressions.  For example, in
- * <pre>for (i=0,j=0;i<n || j<m;i++,j++)</pre>
+ * <pre>for (i=0,j=0;i&lt;n || j&lt;m;i++,j++)</pre>
  * this node represents
  * <pre>i=0,j=0</pre>
  */

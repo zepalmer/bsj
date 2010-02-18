@@ -6,7 +6,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 
 /**
  * Represents a for loop initializer which declares variables.  For example, in
- * <pre>for (int i=0;i<n;i++)</pre>
+ * <pre>for (int i=0;i&lt;n;i++)</pre>
  * this node represents
  * <pre>int i=0</pre>
  * Note that, due to the nature of {@link VariableDeclarationNode}, this can be a variable muilti-declaration.
