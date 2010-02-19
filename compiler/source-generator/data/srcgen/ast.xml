@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <srcgen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="./srcgen.xsd">
+    <factory interface="edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory" class="edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeFactoryImpl"
+        decorator="edu.jhu.cs.bsj.compiler.ast.util.BsjNodeFactoryDecorator" />
 
     <!-- Java AST Nodes -->
     <srcgen ipkg="edu.jhu.cs.bsj.compiler.ast.node" cpkg="edu.jhu.cs.bsj.compiler.impl.ast.node">
@@ -1389,7 +1391,7 @@
         </type>
 
         <type name="AnnotationBodyNode" super="Node">
-            <tag name="TypeBodyNode"/>
+            <tag name="TypeBodyNode" />
             <prop name="members" type="AnnotationMemberListNode" desc="the members of this annotation body" />
             <doc><![CDATA[
                 Represents the body of an annotation declaration.
@@ -1397,7 +1399,7 @@
         </type>
 
         <type name="AnonymousClassBodyNode" super="Node">
-            <tag name="TypeBodyNode"/>
+            <tag name="TypeBodyNode" />
             <prop name="members" type="AnonymousClassMemberListNode" desc="the members of this anonymous class body" />
             <doc><![CDATA[
                 Represents the body of an anonymous class declaration.  This body is distinct from {@link ClassBodyNode} in that
@@ -1407,7 +1409,7 @@
         </type>
 
         <type name="ClassBodyNode" super="Node">
-            <tag name="TypeBodyNode"/>
+            <tag name="TypeBodyNode" />
             <prop name="members" type="ClassMemberListNode" desc="the members of this class body" />
             <doc><![CDATA[
                 Represents the body of a class declaration.
@@ -1415,7 +1417,7 @@
         </type>
 
         <type name="EnumBodyNode" super="Node">
-            <tag name="TypeBodyNode"/>
+            <tag name="TypeBodyNode" />
             <prop name="constants" type="EnumConstantDeclarationListNode" desc="the enumeration constants" />
             <prop name="members" type="ClassMemberListNode" desc="the members of the class body part" />
             <doc><![CDATA[
@@ -1424,7 +1426,7 @@
         </type>
 
         <type name="InterfaceBodyNode" super="Node">
-            <tag name="TypeBodyNode"/>
+            <tag name="TypeBodyNode" />
             <prop name="members" type="InterfaceMemberListNode" desc="the members of this interface body" />
             <doc><![CDATA[
                 Represents the body of an interface declaration.

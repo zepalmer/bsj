@@ -21,6 +21,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
 
 import edu.jhu.cs.bsj.compiler.impl.utils.PrependablePrintStream;
+import edu.jhu.cs.bsj.compiler.impl.utils.StringUtilities;
 import edu.jhu.cs.bsj.compiler.utils.generator.TypeDefinition.Mode;
 
 /**
@@ -1432,29 +1433,55 @@ public class SourceGenerator
 	 */
 	static class FactoryWriter extends ClassHierarchyBuildingHandler
 	{
-		/** Print stream for the interface. */
-		PrintStream ips;
-		/** Print stream for the implementation. */
-		PrintStream cps;
-		/** Print stream for the decorator utility class. */
-		PrintStream dps;
+		/** A mapping from factory type names to their print streams. */
+		private Map<String, PrependablePrintStream> mapping;
 
 		@Override
 		public void init() throws IOException
 		{
 			super.init();
+			mapping = new HashMap<String, PrependablePrintStream>();
+		}
 
-			this.ips = createOutputFile("edu.jhu.cs.bsj.compiler.ast", TypeDefinition.Mode.INTERFACE, false,
-					"BsjNodeFactory", true, null, null);
-			this.cps = createOutputFile("edu.jhu.cs.bsj.compiler.impl.ast", TypeDefinition.Mode.CONCRETE, true,
-					"BsjNodeFactoryImpl", true, null, null, "BsjNodeFactory");
-			this.dps = createOutputFile("edu.jhu.cs.bsj.compiler.ast.util", TypeDefinition.Mode.ABSTRACT, false,
-					"BsjNodeFactoryDecorator", true, null, null, "BsjNodeFactory");
+		private void ensureStreams(FactoryProfile factoryProfile) throws IOException
+		{
+			if (!mapping.containsKey(factoryProfile.getInterfaceName()))
+			{
+				String typeName = StringUtilities.getSuffix(factoryProfile.getInterfaceName(), '.');
+				String packageName = StringUtilities.removeSuffix(factoryProfile.getInterfaceName(), '.');
+				PrependablePrintStream ips = createOutputFile(packageName, TypeDefinition.Mode.INTERFACE, false,
+						typeName, true, null, null);
+				mapping.put(factoryProfile.getInterfaceName(), ips);
+			}
+			if (!mapping.containsKey(factoryProfile.getClassName()))
+			{
+				String typeName = StringUtilities.getSuffix(factoryProfile.getClassName(), '.');
+				String packageName = StringUtilities.removeSuffix(factoryProfile.getClassName(), '.');
+				String ifaceName = StringUtilities.getSuffix(factoryProfile.getInterfaceName(), '.');
+				PrependablePrintStream cps = createOutputFile(packageName, TypeDefinition.Mode.CONCRETE, true,
+						typeName, true, null, null, ifaceName);
+				mapping.put(factoryProfile.getClassName(), cps);
+			}
+			if (!mapping.containsKey(factoryProfile.getDecoratorClassName()))
+			{
+				String typeName = StringUtilities.getSuffix(factoryProfile.getDecoratorClassName(), '.');
+				String packageName = StringUtilities.removeSuffix(factoryProfile.getDecoratorClassName(), '.');
+				String ifaceName = StringUtilities.getSuffix(factoryProfile.getInterfaceName(), '.');
+				PrependablePrintStream dps = createOutputFile(packageName, TypeDefinition.Mode.ABSTRACT, false,
+						typeName, true, null, null, ifaceName);
+				mapping.put(factoryProfile.getDecoratorClassName(), dps);
+			}
 		}
 
 		@Override
 		public void useDefinition(TypeDefinition def) throws IOException
 		{
+			ensureStreams(def.getFactoryProfile());
+			
+			PrependablePrintStream ips = mapping.get(def.getFactoryProfile().getInterfaceName());
+			PrependablePrintStream cps = mapping.get(def.getFactoryProfile().getClassName());
+			PrependablePrintStream dps = mapping.get(def.getFactoryProfile().getDecoratorClassName());
+
 			if (def.getMode() == TypeDefinition.Mode.CONCRETE)
 			{
 				List<PropertyDefinition> recProps = getRecursiveProps(def);
@@ -1469,7 +1496,7 @@ public class SourceGenerator
 						standardFactoryMethodProperties);
 				for (boolean skipMake : new boolean[] { true, false })
 				{
-					writeFactoryMethod(def, standardFactoryDefinition, skipMake);
+					writeFactoryMethod(ips, cps, dps, def, standardFactoryDefinition, skipMake);
 				}
 
 				// Write extra factory methods as instructed
@@ -1477,7 +1504,7 @@ public class SourceGenerator
 				{
 					for (boolean skipMake : new boolean[] { true, false })
 					{
-						writeFactoryMethod(def, methodDefinition, skipMake);
+						writeFactoryMethod(ips, cps, dps, def, methodDefinition, skipMake);
 					}
 				}
 			}
@@ -1487,18 +1514,16 @@ public class SourceGenerator
 		public void finish() throws IOException
 		{
 			super.finish();
-
-			ips.println("}");
-			ips.close();
-
-			cps.println("}");
-			cps.close();
-
-			dps.println("}");
-			dps.close();
+			
+			for (PrependablePrintStream pps : this.mapping.values())
+			{
+				pps.println("}");
+				pps.close();
+			}
 		}
 
-		private void writeFactoryMethod(TypeDefinition def, FactoryMethodDefinition methodDefinition, boolean skipMake)
+		private void writeFactoryMethod(PrintStream ips, PrintStream cps, PrintStream dps, TypeDefinition def,
+				FactoryMethodDefinition methodDefinition, boolean skipMake)
 		{
 			String typeParam;
 			String typeName;

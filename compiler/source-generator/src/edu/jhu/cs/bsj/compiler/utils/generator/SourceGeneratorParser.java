@@ -63,7 +63,7 @@ public class SourceGeneratorParser
 			throw new IllegalArgumentException("Top level node was not <srcgen ...>");
 		}
 
-		SrcgenHandler handler = new SrcgenHandler(file.getParentFile(), null, null);
+		SrcgenHandler handler = new SrcgenHandler(file.getParentFile(), null, null, null);
 		SourceGenerationData data = handler.handle(topElement);
 
 		establishHierarchy(data.getTypes(), true);
@@ -180,13 +180,17 @@ public class SourceGeneratorParser
 		private String interfacePackageName;
 		/** The standing class package name. */
 		private String classPackageName;
+		/** The standing factory interface name. */
+		private FactoryProfile factoryProfile;
 
-		public SrcgenHandler(File relativeFile, String interfacePackageName, String classPackageName)
+		public SrcgenHandler(File relativeFile, String interfacePackageName, String classPackageName,
+				FactoryProfile factoryProfile)
 		{
 			super();
 			this.relativeFile = relativeFile;
 			this.interfacePackageName = interfacePackageName;
 			this.classPackageName = classPackageName;
+			this.factoryProfile = factoryProfile;
 		}
 
 		public SourceGenerationData handle(Element e)
@@ -213,13 +217,14 @@ public class SourceGeneratorParser
 					String childTag = childElement.getTagName();
 					if (childTag.equals("srcgen"))
 					{
-						SrcgenHandler handler = new SrcgenHandler(relativeFile, interfacePackageName, classPackageName);
+						SrcgenHandler handler = new SrcgenHandler(relativeFile, interfacePackageName, classPackageName,
+								factoryProfile);
 						SourceGenerationData childData = handler.handle(childElement);
 						types.addAll(childData.getTypes());
 						diagnostics.addAll(childData.getDiagnostics());
 					} else if (childTag.equals("type"))
 					{
-						TypeHandler handler = new TypeHandler(interfacePackageName, classPackageName);
+						TypeHandler handler = new TypeHandler(interfacePackageName, classPackageName, factoryProfile);
 						types.add(handler.handle(childElement));
 					} else if (childTag.equals("diagnostic"))
 					{
@@ -246,6 +251,13 @@ public class SourceGeneratorParser
 						}
 						types.addAll(childData.getTypes());
 						diagnostics.addAll(childData.getDiagnostics());
+					} else if (childTag.equals("factory"))
+					{
+						String factoryInterfaceName = childElement.getAttribute("interface");
+						String factoryClassName = childElement.getAttribute("class");
+						String factoryDecoratorName = childElement.getAttribute("decorator");
+						this.factoryProfile = new FactoryProfile(factoryInterfaceName, factoryClassName,
+								factoryDecoratorName);
 					} else
 					{
 						throw new IllegalStateException(childTag);
@@ -263,12 +275,15 @@ public class SourceGeneratorParser
 		private String interfacePackageName;
 		/** The standing class package name. */
 		private String classPackageName;
+		/** The standing factory profile. */
+		private FactoryProfile factoryProfile;
 
-		public TypeHandler(String interfacePackageName, String classPackageName)
+		public TypeHandler(String interfacePackageName, String classPackageName, FactoryProfile factoryProfile)
 		{
 			super();
 			this.interfacePackageName = interfacePackageName;
 			this.classPackageName = classPackageName;
+			this.factoryProfile = factoryProfile;
 		}
 
 		@Override
@@ -370,8 +385,8 @@ public class SourceGeneratorParser
 			}
 
 			TypeDefinition typeDefinition = new TypeDefinition(name, typeParam, superName, superTypeArg,
-					interfacePackageName, classPackageName, interfaces, tags, props, includes, docString,
-					toStringLines, factoryOverrideMap, constructorOverrideMap, genConstructor, genChildren,
+					interfacePackageName, classPackageName, factoryProfile, interfaces, tags, props, includes,
+					docString, toStringLines, factoryOverrideMap, constructorOverrideMap, genConstructor, genChildren,
 					factoryMethodDefinitions, mode);
 			for (FactoryMethodDefinition factoryMethodDefinition : factoryMethodDefinitions)
 			{
