@@ -99,6 +99,7 @@ public class BsjC
 		File classOutput = new File(".");
 		File bsjSourcePath = new File("." + File.separator + "bsjgensrc");
 		
+		// apply the command line options that are present
 		if (cmd.hasOption("sourcepath"))
 		{
 			sourcePath = new File(cmd.getOptionValue("sourcepath"));
@@ -117,12 +118,13 @@ public class BsjC
 		}
 		map.put(BsjCompilerLocation.CLASS_OUTPUT, new RegularFileLocationManager(null, classOutput));
 		
-		
+		//TODO
 		map.put(BsjCompilerLocation.METAPROGRAM_SYSTEM_CLASSPATH, new UnionLocationManager(null,
 				System.getProperty("sun.boot.class.path")));
 		map.put(BsjCompilerLocation.METAPROGRAM_CLASSPATH, new UnionLocationManager(null,
 				System.getProperty("java.class.path")));
 		
+		//TODO
 		map.put(BsjCompilerLocation.OBJECT_PROGRAM_SYSTEM_CLASSPATH, new UnionLocationManager(null,
 				System.getProperty("sun.boot.class.path")));
 		map.put(BsjCompilerLocation.OBJECT_PROGRAM_CLASSPATH, new UnionLocationManager(null,
