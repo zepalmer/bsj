@@ -1476,6 +1476,12 @@ public class SourceGenerator
 		@Override
 		public void useDefinition(TypeDefinition def) throws IOException
 		{
+			if (def.getFactoryProfile() == null)
+			{
+				// A null factory profile indicates that no factory should be used for this type.
+				return;
+			}
+			
 			ensureStreams(def.getFactoryProfile());
 			
 			PrependablePrintStream ips = mapping.get(def.getFactoryProfile().getInterfaceName());
