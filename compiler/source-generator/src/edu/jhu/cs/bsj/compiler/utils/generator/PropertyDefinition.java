@@ -11,7 +11,7 @@ public class PropertyDefinition
 		NORMAL,
 		READ_ONLY,
 		SKIP,
-		HIDE
+		HIDE;
 	}
 
 	private String name;

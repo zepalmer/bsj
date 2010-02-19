@@ -86,6 +86,11 @@
             </xs:sequence>
         </xs:choice>
     </xs:complexType>
+    
+    <xs:complexType name="defaults_T">
+        <xs:attribute name="typeMode" type="xs:string" use="optional"/>
+        <xs:attribute name="propertyMode" type="xs:string" use="optional"/>
+    </xs:complexType>
 
     <xs:complexType name="factory_T">
         <xs:attribute name="interface" type="xs:string" use="required" />
@@ -130,6 +135,7 @@
     <xs:complexType name="srcgen_T">
         <xs:choice>
             <xs:sequence>
+                <xs:element name="defaults" type="defaults_T" minOccurs="0" maxOccurs="1" />
                 <xs:element name="factory" type="factory_T" minOccurs="0" maxOccurs="1" />
                 <xs:choice>
                     <xs:sequence>

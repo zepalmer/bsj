@@ -20,9 +20,7 @@ public class TypeDefinition extends PropertyBasedHierarchyDefinition<TypeDefinit
 	private String typeParameter;
 	private String superName;
 	private String superTypeArg;
-	private String interfacePackage;
-	private String classPackage;
-	private FactoryProfile factoryProfile;
+	private GenerationProfile profile;
 	private List<String> interfaces; // used to denote non-tag interfaces such as List<T>
 	private List<String> tags;
 	private List<PropertyDefinition> properties;
@@ -39,7 +37,7 @@ public class TypeDefinition extends PropertyBasedHierarchyDefinition<TypeDefinit
 	private TypeDefinition parent;
 
 	public TypeDefinition(String baseName, String typeParameter, String superName, String superTypeArg,
-			String interfacePackage, String classPackage, FactoryProfile factoryProfile, List<String> interfaces, List<String> tags, List<PropertyDefinition> properties,
+			GenerationProfile profile, List<String> interfaces, List<String> tags, List<PropertyDefinition> properties,
 			List<String> includes, String docString, List<String> toStringLines,
 			Map<String, String> factoryOverrideMap, Map<String, String> constructorOverrideMap, boolean genConstructor,
 			boolean genChildren, List<FactoryMethodDefinition> factoryMethods, Mode mode)
@@ -49,9 +47,7 @@ public class TypeDefinition extends PropertyBasedHierarchyDefinition<TypeDefinit
 		this.typeParameter = typeParameter;
 		this.superName = superName;
 		this.superTypeArg = superTypeArg;
-		this.interfacePackage = interfacePackage;
-		this.classPackage = classPackage;
-		this.factoryProfile = factoryProfile;
+		this.profile = profile;
 		this.interfaces = interfaces;
 		this.tags = tags;
 		this.properties = properties;
@@ -164,19 +160,9 @@ public class TypeDefinition extends PropertyBasedHierarchyDefinition<TypeDefinit
 		return superTypeArg;
 	}
 	
-	public String getInterfacePackage()
+	public GenerationProfile getProfile()
 	{
-		return interfacePackage;
-	}
-
-	public String getClassPackage()
-	{
-		return classPackage;
-	}
-
-	public FactoryProfile getFactoryProfile()
-	{
-		return factoryProfile;
+		return profile;
 	}
 
 	public List<String> getInterfaces()

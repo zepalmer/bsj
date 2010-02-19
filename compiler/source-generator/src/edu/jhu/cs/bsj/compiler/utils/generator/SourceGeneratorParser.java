@@ -26,6 +26,9 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import edu.jhu.cs.bsj.compiler.impl.utils.StringUtilities;
+import edu.jhu.cs.bsj.compiler.impl.utils.Utilities;
+
 /**
  * This module is responsible for reading the contents of the XML files and producing source generation data structures.
  * 
@@ -63,7 +66,7 @@ public class SourceGeneratorParser
 			throw new IllegalArgumentException("Top level node was not <srcgen ...>");
 		}
 
-		SrcgenHandler handler = new SrcgenHandler(file.getParentFile(), null, null, null);
+		SrcgenHandler handler = new SrcgenHandler(file.getParentFile(), new GenerationProfile());
 		SourceGenerationData data = handler.handle(topElement);
 
 		establishHierarchy(data.getTypes(), true);
@@ -167,6 +170,28 @@ public class SourceGeneratorParser
 		}
 	}
 
+	private static TypeDefinition.Mode getTypeDefinitionModeFromString(GenerationProfile profile, String modeString)
+	{
+		TypeDefinition.Mode mode;
+		if (modeString == null)
+		{
+			mode = profile.getProperty(GenerationProfile.DEFAULT_TYPE_MODE);
+		} else if (modeString.equals("concrete"))
+		{
+			mode = TypeDefinition.Mode.CONCRETE;
+		} else if (modeString.equals("abstract"))
+		{
+			mode = TypeDefinition.Mode.ABSTRACT;
+		} else if (modeString.equals("tag"))
+		{
+			mode = TypeDefinition.Mode.INTERFACE;
+		} else
+		{
+			throw new IllegalStateException("Unknown type mode string: " + modeString);
+		}
+		return mode;
+	}
+	
 	static interface ElementHandler<T>
 	{
 		public T handle(Element e);
@@ -176,21 +201,14 @@ public class SourceGeneratorParser
 	{
 		/** The file to which pathnames in the XML are relative. */
 		private File relativeFile;
-		/** The standing interface package name. */
-		private String interfacePackageName;
-		/** The standing class package name. */
-		private String classPackageName;
 		/** The standing factory interface name. */
-		private FactoryProfile factoryProfile;
+		private GenerationProfile profile;
 
-		public SrcgenHandler(File relativeFile, String interfacePackageName, String classPackageName,
-				FactoryProfile factoryProfile)
+		public SrcgenHandler(File relativeFile, GenerationProfile profile)
 		{
 			super();
 			this.relativeFile = relativeFile;
-			this.interfacePackageName = interfacePackageName;
-			this.classPackageName = classPackageName;
-			this.factoryProfile = factoryProfile;
+			this.profile = profile;
 		}
 
 		public SourceGenerationData handle(Element e)
@@ -200,11 +218,11 @@ public class SourceGeneratorParser
 
 			if (e.hasAttribute("ipkg"))
 			{
-				this.interfacePackageName = e.getAttribute("ipkg");
+				profile = profile.derive(GenerationProfile.GENERATED_INTERFACE_PACKAGE_NAME, e.getAttribute("ipkg"));
 			}
 			if (e.hasAttribute("cpkg"))
 			{
-				this.classPackageName = e.getAttribute("cpkg");
+				profile = profile.derive(GenerationProfile.GENERATED_CLASS_PACKAGE_NAME, e.getAttribute("cpkg"));
 			}
 
 			NodeList children = e.getChildNodes();
@@ -217,18 +235,17 @@ public class SourceGeneratorParser
 					String childTag = childElement.getTagName();
 					if (childTag.equals("srcgen"))
 					{
-						SrcgenHandler handler = new SrcgenHandler(relativeFile, interfacePackageName, classPackageName,
-								factoryProfile);
+						SrcgenHandler handler = new SrcgenHandler(relativeFile, profile);
 						SourceGenerationData childData = handler.handle(childElement);
 						types.addAll(childData.getTypes());
 						diagnostics.addAll(childData.getDiagnostics());
 					} else if (childTag.equals("type"))
 					{
-						TypeHandler handler = new TypeHandler(interfacePackageName, classPackageName, factoryProfile);
+						TypeHandler handler = new TypeHandler(profile);
 						types.add(handler.handle(childElement));
 					} else if (childTag.equals("diagnostic"))
 					{
-						DiagnosticHandler handler = new DiagnosticHandler(classPackageName);
+						DiagnosticHandler handler = new DiagnosticHandler(profile);
 						diagnostics.add(handler.handle(childElement));
 					} else if (childTag.equals("import"))
 					{
@@ -256,8 +273,24 @@ public class SourceGeneratorParser
 						String factoryInterfaceName = childElement.getAttribute("interface");
 						String factoryClassName = childElement.getAttribute("class");
 						String factoryDecoratorName = childElement.getAttribute("decorator");
-						this.factoryProfile = new FactoryProfile(factoryInterfaceName, factoryClassName,
-								factoryDecoratorName);
+						this.profile = this.profile.derive(GenerationProfile.FACTORY_INTERFACE_NAME,
+								factoryInterfaceName).derive(GenerationProfile.FACTORY_CLASS_NAME, factoryClassName).derive(
+								GenerationProfile.FACTORY_DECORATOR_CLASS_NAME, factoryDecoratorName);
+					} else if (childTag.equals("defaults"))
+					{
+						if (childElement.hasAttribute("typeMode"))
+						{
+							String defaultTypeMode = childElement.getAttribute("typeMode");
+							this.profile = this.profile.derive(GenerationProfile.DEFAULT_TYPE_MODE,
+									getTypeDefinitionModeFromString(profile, defaultTypeMode));
+						}
+						if (childElement.hasAttribute("propertyMode"))
+						{
+							String defaultPropertyMode = childElement.getAttribute("propertyMode");
+							this.profile = this.profile.derive(GenerationProfile.DEFAULT_PROPERTY_MODE,
+									Utilities.getEnumByName(PropertyDefinition.Mode.values(),
+											StringUtilities.convertCamelCaseToUpperCase(defaultPropertyMode)));
+						}
 					} else
 					{
 						throw new IllegalStateException(childTag);
@@ -271,19 +304,13 @@ public class SourceGeneratorParser
 
 	static class TypeHandler implements ElementHandler<TypeDefinition>
 	{
-		/** The standing interface package name. */
-		private String interfacePackageName;
-		/** The standing class package name. */
-		private String classPackageName;
 		/** The standing factory profile. */
-		private FactoryProfile factoryProfile;
+		private GenerationProfile profile;
 
-		public TypeHandler(String interfacePackageName, String classPackageName, FactoryProfile factoryProfile)
+		public TypeHandler(GenerationProfile profile)
 		{
 			super();
-			this.interfacePackageName = interfacePackageName;
-			this.classPackageName = classPackageName;
-			this.factoryProfile = factoryProfile;
+			this.profile = profile;
 		}
 
 		@Override
@@ -293,27 +320,7 @@ public class SourceGeneratorParser
 			String typeParam = getAttributeValue(e, "typeParam");
 			String superName = getAttributeValue(e, "super");
 			String superTypeArg = getAttributeValue(e, "superTypeArg");
-			TypeDefinition.Mode mode;
-			if (e.hasAttribute("mode"))
-			{
-				String modeString = e.getAttribute("mode");
-				if (modeString.equals("concrete"))
-				{
-					mode = TypeDefinition.Mode.CONCRETE;
-				} else if (modeString.equals("abstract"))
-				{
-					mode = TypeDefinition.Mode.ABSTRACT;
-				} else if (modeString.equals("tag"))
-				{
-					mode = TypeDefinition.Mode.INTERFACE;
-				} else
-				{
-					throw new IllegalStateException("Unknown type mode string: " + modeString);
-				}
-			} else
-			{
-				mode = TypeDefinition.Mode.CONCRETE;
-			}
+			TypeDefinition.Mode mode = getTypeDefinitionModeFromString(profile, getAttributeValue(e, "mode"));
 
 			List<String> interfaces = new ArrayList<String>();
 			List<String> tags = new ArrayList<String>();
@@ -343,7 +350,7 @@ public class SourceGeneratorParser
 						tags.add(childElement.getAttribute("name"));
 					} else if (childTag.equals("prop"))
 					{
-						PropertyHandler handler = new PropertyHandler();
+						PropertyHandler handler = new PropertyHandler(this.profile);
 						props.add(handler.handle(childElement));
 					} else if (childTag.equals("include"))
 					{
@@ -384,10 +391,9 @@ public class SourceGeneratorParser
 				}
 			}
 
-			TypeDefinition typeDefinition = new TypeDefinition(name, typeParam, superName, superTypeArg,
-					interfacePackageName, classPackageName, factoryProfile, interfaces, tags, props, includes,
-					docString, toStringLines, factoryOverrideMap, constructorOverrideMap, genConstructor, genChildren,
-					factoryMethodDefinitions, mode);
+			TypeDefinition typeDefinition = new TypeDefinition(name, typeParam, superName, superTypeArg, profile,
+					interfaces, tags, props, includes, docString, toStringLines, factoryOverrideMap,
+					constructorOverrideMap, genConstructor, genChildren, factoryMethodDefinitions, mode);
 			for (FactoryMethodDefinition factoryMethodDefinition : factoryMethodDefinitions)
 			{
 				factoryMethodDefinition.setParent(typeDefinition);
@@ -398,6 +404,14 @@ public class SourceGeneratorParser
 
 	static class PropertyHandler implements ElementHandler<PropertyDefinition>
 	{
+		private GenerationProfile profile;
+
+		public PropertyHandler(GenerationProfile profile)
+		{
+			super();
+			this.profile = profile;
+		}
+
 		@Override
 		public PropertyDefinition handle(Element e)
 		{
@@ -409,7 +423,10 @@ public class SourceGeneratorParser
 			String defaultExpression = getAttributeValue(e, "default");
 
 			String modeString = getAttributeValue(e, "mode");
-			if (modeString == null || modeString.equals("normal"))
+			if (modeString == null)
+			{
+				mode = profile.getProperty(GenerationProfile.DEFAULT_PROPERTY_MODE);
+			} else if (modeString.equals("normal"))
 			{
 				mode = PropertyDefinition.Mode.NORMAL;
 			} else if (modeString.equals("readOnly"))
@@ -471,13 +488,12 @@ public class SourceGeneratorParser
 
 	static class DiagnosticHandler implements ElementHandler<DiagnosticDefinition>
 	{
-		/** The standing class package name. */
-		private String classPackageName;
+		private GenerationProfile profile;
 
-		public DiagnosticHandler(String classPackageName)
+		public DiagnosticHandler(GenerationProfile profile)
 		{
 			super();
-			this.classPackageName = classPackageName;
+			this.profile = profile;
 		}
 
 		@Override
@@ -503,7 +519,7 @@ public class SourceGeneratorParser
 					String childTag = childElement.getTagName();
 					if (childTag.equals("prop"))
 					{
-						PropertyHandler handler = new PropertyHandler();
+						PropertyHandler handler = new PropertyHandler(this.profile);
 						props.add(handler.handle(childElement));
 					} else if (childTag.equals("doc"))
 					{
@@ -515,8 +531,8 @@ public class SourceGeneratorParser
 				}
 			}
 
-			DiagnosticDefinition diagnosticDefinition = new DiagnosticDefinition(name, superName, classPackageName,
-					props, docString, code);
+			DiagnosticDefinition diagnosticDefinition = new DiagnosticDefinition(name, superName,
+					profile.getProperty(GenerationProfile.GENERATED_CLASS_PACKAGE_NAME), props, docString, code);
 			return diagnosticDefinition;
 		}
 	}

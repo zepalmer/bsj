@@ -338,13 +338,13 @@
 
         <type name="FieldModifiersNode" super="ModifiersNode">
             <prop name="access" type="AccessModifier" desc="the access for the associated fields" />
-            <prop name="staticFlag" type="boolean" desc="whether or not the associated class is static"
+            <prop name="staticFlag" type="boolean" desc="whether or not the associated field is static"
                 default="false" />
-            <prop name="finalFlag" type="boolean" desc="whether or not the associated class is final"
+            <prop name="finalFlag" type="boolean" desc="whether or not the associated field is final"
                 default="false" />
-            <prop name="transientFlag" type="boolean" desc="whether or not the associated class is transient"
+            <prop name="transientFlag" type="boolean" desc="whether or not the associated field is transient"
                 default="false" />
-            <prop name="volatileFlag" type="boolean" desc="whether or not the associated class is volatile"
+            <prop name="volatileFlag" type="boolean" desc="whether or not the associated field is volatile"
                 default="false" />
             <doc><![CDATA[
                 Represents the modifiers which can be associated with a field.

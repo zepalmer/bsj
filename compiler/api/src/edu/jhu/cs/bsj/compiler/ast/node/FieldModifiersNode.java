@@ -24,50 +24,50 @@ public interface FieldModifiersNode extends ModifiersNode
     public void setAccess(AccessModifier access);
 
     /**
-     * Gets whether or not the associated class is static.
-     * @return Whether or not the associated class is static.
+     * Gets whether or not the associated field is static.
+     * @return Whether or not the associated field is static.
      */
     public boolean getStaticFlag();
 
     /**
-     * Changes whether or not the associated class is static.
-     * @param staticFlag Whether or not the associated class is static.
+     * Changes whether or not the associated field is static.
+     * @param staticFlag Whether or not the associated field is static.
      */
     public void setStaticFlag(boolean staticFlag);
 
     /**
-     * Gets whether or not the associated class is final.
-     * @return Whether or not the associated class is final.
+     * Gets whether or not the associated field is final.
+     * @return Whether or not the associated field is final.
      */
     public boolean getFinalFlag();
 
     /**
-     * Changes whether or not the associated class is final.
-     * @param finalFlag Whether or not the associated class is final.
+     * Changes whether or not the associated field is final.
+     * @param finalFlag Whether or not the associated field is final.
      */
     public void setFinalFlag(boolean finalFlag);
 
     /**
-     * Gets whether or not the associated class is transient.
-     * @return Whether or not the associated class is transient.
+     * Gets whether or not the associated field is transient.
+     * @return Whether or not the associated field is transient.
      */
     public boolean getTransientFlag();
 
     /**
-     * Changes whether or not the associated class is transient.
-     * @param transientFlag Whether or not the associated class is transient.
+     * Changes whether or not the associated field is transient.
+     * @param transientFlag Whether or not the associated field is transient.
      */
     public void setTransientFlag(boolean transientFlag);
 
     /**
-     * Gets whether or not the associated class is volatile.
-     * @return Whether or not the associated class is volatile.
+     * Gets whether or not the associated field is volatile.
+     * @return Whether or not the associated field is volatile.
      */
     public boolean getVolatileFlag();
 
     /**
-     * Changes whether or not the associated class is volatile.
-     * @param volatileFlag Whether or not the associated class is volatile.
+     * Changes whether or not the associated field is volatile.
+     * @param volatileFlag Whether or not the associated field is volatile.
      */
     public void setVolatileFlag(boolean volatileFlag);
 

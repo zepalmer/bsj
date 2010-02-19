@@ -50,4 +50,23 @@ public class StringUtilities
 			return string.substring(index + 1);
 		}
 	}
+	
+	/**
+	 * Converts a Java camel-case identifier into an upper-case identifier.
+	 * @param ident The identifier to convert.
+	 * @return The resulting identifier.
+	 */
+	public static String convertCamelCaseToUpperCase(String ident)
+	{
+		StringBuilder sb = new StringBuilder();
+		for (int i=0;i<ident.length();i++)
+		{
+			if (i>0 && Character.isUpperCase(ident.charAt(i)))
+			{
+				sb.append("_");
+			}
+			sb.append(Character.toUpperCase(ident.charAt(i)));
+		}
+		return sb.toString();
+	}
 }

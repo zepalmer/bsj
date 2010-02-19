@@ -20,6 +20,7 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.xml.sax.SAXException;
 
+import edu.jhu.cs.bsj.compiler.impl.utils.NullOutputStream;
 import edu.jhu.cs.bsj.compiler.impl.utils.PrependablePrintStream;
 import edu.jhu.cs.bsj.compiler.impl.utils.StringUtilities;
 import edu.jhu.cs.bsj.compiler.utils.generator.TypeDefinition.Mode;
@@ -449,7 +450,7 @@ public class SourceGenerator
 		@Override
 		public void useDefinition(TypeDefinition def) throws IOException
 		{
-			String pkg = def.getInterfacePackage();
+			String pkg = def.getProfile().getProperty(GenerationProfile.GENERATED_INTERFACE_PACKAGE_NAME);
 			if (pkg == null)
 				pkg = "";
 			File classFile = new File(TARGET_IFACE_DIR.getAbsolutePath() + File.separator
@@ -813,7 +814,7 @@ public class SourceGenerator
 			String superclassname = def.getBaseSuperName() + "Impl"
 					+ (def.getUnboundedSuperTypeArg() == null ? "" : "<" + def.getUnboundedSuperTypeArg() + ">");
 
-			String pkg = def.getClassPackage();
+			String pkg = def.getProfile().getProperty(GenerationProfile.GENERATED_CLASS_PACKAGE_NAME);
 			if (pkg == null)
 				pkg = "";
 			File classFile = new File(TARGET_IMPL_DIR.getAbsolutePath() + File.separator
@@ -1344,19 +1345,15 @@ public class SourceGenerator
 		{
 			// Generate name list in breadth-first order starting with root type
 			List<String> names = new ArrayList<String>();
-			for (String root : subtypeMap.get(null))
+			List<String> queue = new LinkedList<String>();
+			queue.add("Node");
+			while (queue.size() > 0)
 			{
-				// Breadth-first addition to the list
-				List<String> queue = new LinkedList<String>();
-				queue.add(root);
-				while (queue.size() > 0)
-				{
-					String type = queue.remove(0);
-					names.add(type);
-					Set<String> subs = subtypeMap.get(type);
-					if (subs != null)
-						queue.addAll(subs);
-				}
+				String type = queue.remove(0);
+				names.add(type);
+				Set<String> subs = subtypeMap.get(type);
+				if (subs != null)
+					queue.addAll(subs);
 			}
 
 			Set<String> concreteTypeNameSet = new HashSet<String>(names);
@@ -1443,50 +1440,57 @@ public class SourceGenerator
 			mapping = new HashMap<String, PrependablePrintStream>();
 		}
 
-		private void ensureStreams(FactoryProfile factoryProfile) throws IOException
+		private void ensureStreams(GenerationProfile generationProfile) throws IOException
 		{
-			if (!mapping.containsKey(factoryProfile.getInterfaceName()))
+			String interfaceName = generationProfile.getProperty(GenerationProfile.FACTORY_INTERFACE_NAME);
+			if (interfaceName != null && !mapping.containsKey(interfaceName))
 			{
-				String typeName = StringUtilities.getSuffix(factoryProfile.getInterfaceName(), '.');
-				String packageName = StringUtilities.removeSuffix(factoryProfile.getInterfaceName(), '.');
+				String typeName = StringUtilities.getSuffix(interfaceName, '.');
+				String packageName = StringUtilities.removeSuffix(interfaceName, '.');
 				PrependablePrintStream ips = createOutputFile(packageName, TypeDefinition.Mode.INTERFACE, false,
 						typeName, true, null, null);
-				mapping.put(factoryProfile.getInterfaceName(), ips);
+				mapping.put(interfaceName, ips);
 			}
-			if (!mapping.containsKey(factoryProfile.getClassName()))
+			String className = generationProfile.getProperty(GenerationProfile.FACTORY_CLASS_NAME);
+			if (className != null && !mapping.containsKey(className))
 			{
-				String typeName = StringUtilities.getSuffix(factoryProfile.getClassName(), '.');
-				String packageName = StringUtilities.removeSuffix(factoryProfile.getClassName(), '.');
-				String ifaceName = StringUtilities.getSuffix(factoryProfile.getInterfaceName(), '.');
+				String typeName = StringUtilities.getSuffix(className, '.');
+				String packageName = StringUtilities.removeSuffix(className, '.');
+				String ifaceName = interfaceName != null ? StringUtilities.getSuffix(interfaceName, '.') : null;
 				PrependablePrintStream cps = createOutputFile(packageName, TypeDefinition.Mode.CONCRETE, true,
 						typeName, true, null, null, ifaceName);
-				mapping.put(factoryProfile.getClassName(), cps);
+				mapping.put(className, cps);
 			}
-			if (!mapping.containsKey(factoryProfile.getDecoratorClassName()))
+			String decoratorClassName = generationProfile.getProperty(GenerationProfile.FACTORY_DECORATOR_CLASS_NAME);
+			if (decoratorClassName != null && !mapping.containsKey(decoratorClassName))
 			{
-				String typeName = StringUtilities.getSuffix(factoryProfile.getDecoratorClassName(), '.');
-				String packageName = StringUtilities.removeSuffix(factoryProfile.getDecoratorClassName(), '.');
-				String ifaceName = StringUtilities.getSuffix(factoryProfile.getInterfaceName(), '.');
+				String typeName = StringUtilities.getSuffix(decoratorClassName, '.');
+				String packageName = StringUtilities.removeSuffix(decoratorClassName, '.');
+				String ifaceName = interfaceName != null ? StringUtilities.getSuffix(interfaceName, '.') : null;
 				PrependablePrintStream dps = createOutputFile(packageName, TypeDefinition.Mode.ABSTRACT, false,
 						typeName, true, null, null, ifaceName);
-				mapping.put(factoryProfile.getDecoratorClassName(), dps);
+				mapping.put(decoratorClassName, dps);
 			}
+		}
+
+		private PrependablePrintStream getStream(TypeDefinition def, GenerationProfile.Element<String> element)
+		{
+			PrependablePrintStream pps = mapping.get(def.getProfile().getProperty(element));
+			if (pps == null)
+			{
+				pps = new PrependablePrintStream(new NullOutputStream());
+			}
+			return pps;
 		}
 
 		@Override
 		public void useDefinition(TypeDefinition def) throws IOException
 		{
-			if (def.getFactoryProfile() == null)
-			{
-				// A null factory profile indicates that no factory should be used for this type.
-				return;
-			}
-			
-			ensureStreams(def.getFactoryProfile());
-			
-			PrependablePrintStream ips = mapping.get(def.getFactoryProfile().getInterfaceName());
-			PrependablePrintStream cps = mapping.get(def.getFactoryProfile().getClassName());
-			PrependablePrintStream dps = mapping.get(def.getFactoryProfile().getDecoratorClassName());
+			ensureStreams(def.getProfile());
+
+			PrependablePrintStream ips = getStream(def, GenerationProfile.FACTORY_INTERFACE_NAME);
+			PrependablePrintStream cps = getStream(def, GenerationProfile.FACTORY_CLASS_NAME);
+			PrependablePrintStream dps = getStream(def, GenerationProfile.FACTORY_DECORATOR_CLASS_NAME);
 
 			if (def.getMode() == TypeDefinition.Mode.CONCRETE)
 			{
@@ -1520,7 +1524,7 @@ public class SourceGenerator
 		public void finish() throws IOException
 		{
 			super.finish();
-			
+
 			for (PrependablePrintStream pps : this.mapping.values())
 			{
 				pps.println("}");
