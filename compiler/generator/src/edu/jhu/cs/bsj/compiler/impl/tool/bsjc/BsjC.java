@@ -18,8 +18,6 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.PosixParser;
 
-import com.sun.corba.se.spi.ior.MakeImmutable;
-
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.StandardBsjCompiler;
 import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.BsjCompilerLocation;
 import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.BsjFileManager;
@@ -37,6 +35,11 @@ import edu.jhu.cs.bsj.compiler.impl.utils.diagnostic.DiagnosticPrintingListener;
  */
 public class BsjC
 {
+	/**
+	 * The bsjc version.
+	 */
+	public static final String VERSION = "0.1";
+	
 	/**
 	 * The {@link BsjFileManager} used for the filesystem abstraction.
 	 */
@@ -69,6 +72,7 @@ public class BsjC
 	 */
 	public static void main(String[] args) throws FileNotFoundException, IOException
 	{
+		// parse the command line arguments
 		CommandLineParser parser = new PosixParser();
 		CommandLine cmd = null;
 		try
@@ -76,21 +80,43 @@ public class BsjC
 			cmd = parser.parse(BsjC.initOptions(), args);
 		} catch (ParseException e)
 		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("Invalid command line arguments: " + e.getMessage());
 			System.exit(1);
 		}
 		
-
+		// display version info and exit if requested
+		if (cmd.hasOption("version"))
+		{
+			System.out.println("bsjc " + VERSION);
+			System.exit(0);
+		}
 		
-		
-		
-		
-		// TODO Auto-generated method stub
+		// map the locations for the file manager
 		Map<BsjCompilerLocation, LocationManager> map = new HashMap<BsjCompilerLocation, LocationManager>();
-		map.put(BsjCompilerLocation.SOURCE_PATH, new RegularFileLocationManager(null, new File(".")));//src
-		map.put(BsjCompilerLocation.GENERATED_SOURCE_PATH, new RegularFileLocationManager(null, new File(".\\gensrc")));//gensrc
-		map.put(BsjCompilerLocation.CLASS_OUTPUT, new RegularFileLocationManager(null, new File(".")));//bin
+		
+		// set the default values for the locations
+		File sourcePath = new File(".");
+		File classOutput = new File(".");
+		File bsjSourcePath = new File("." + File.separator + "bsjgensrc");
+		
+		if (cmd.hasOption("sourcepath"))
+		{
+			sourcePath = new File(cmd.getOptionValue("sourcepath"));
+		}
+		map.put(BsjCompilerLocation.SOURCE_PATH, new RegularFileLocationManager(null, sourcePath));
+		
+		if (cmd.hasOption("gsp"))
+		{
+			sourcePath = new File(cmd.getOptionValue("gsp"));
+		}
+		map.put(BsjCompilerLocation.GENERATED_SOURCE_PATH, new RegularFileLocationManager(null, bsjSourcePath));
+		
+		if (cmd.hasOption("d"))
+		{
+			classOutput = new File(cmd.getOptionValue("d"));
+		}
+		map.put(BsjCompilerLocation.CLASS_OUTPUT, new RegularFileLocationManager(null, classOutput));
+		
 		
 		map.put(BsjCompilerLocation.METAPROGRAM_SYSTEM_CLASSPATH, new UnionLocationManager(null,
 				System.getProperty("sun.boot.class.path")));
@@ -102,11 +128,11 @@ public class BsjC
 		map.put(BsjCompilerLocation.OBJECT_PROGRAM_CLASSPATH, new UnionLocationManager(null,
 				System.getProperty("java.class.path")));
 		
+		// create a new file manager from the options selected
 		BsjFileManager bfm = new LocationMappedFileManager(map);
-
-		// handle paths
 		
 		// get files for compilation
+		//TODO extract the source files from the command line
 		List<BsjFileObject> sourceFiles = new ArrayList<BsjFileObject>();		
 		for (String sourceFile : args)
 		{
@@ -117,32 +143,40 @@ public class BsjC
 							Kind.SOURCE));
 		}
 		
-		
-		// compile
+		// compile the source files using the file manager
 		BsjC bsjc = new BsjC();
 		bsjc.setBsjFileManager(bfm);
 		bsjc.setCompileObjects(sourceFiles);
 		bsjc.compile();
 	}
-
-	public void compile() throws IOException
-	{
-		StandardBsjCompiler compiler = new StandardBsjCompiler(bsjFileManager);
-		compiler.compile(compileObjects, listener);
-	}
 	
+	/**
+	 * Creates the set of valid Options for the bsjc.
+	 * @return the set of valid Options.
+	 */
 	public static Options initOptions()
 	{
 		Options options = new Options();
 		
 		options.addOption("cp", "classpath", true, 
 				"Specify where to find user class files and annotation processors");
+		
 		options.addOption("d", true, "Specify where to place generated class files");
+		
+		options.addOption("sourcepath", true, "Specify where to place generated class files");
+		
 		options.addOption("version", false, "Version information");
+		
 		options.addOption("gsp", "gensourcepath", true, 
 			"Specify where to place BSJ generated files");
 		
 		return options;
+	}
+
+	public void compile() throws IOException
+	{
+		StandardBsjCompiler compiler = new StandardBsjCompiler(bsjFileManager);
+		compiler.compile(compileObjects, listener);
 	}
 
 	/**
