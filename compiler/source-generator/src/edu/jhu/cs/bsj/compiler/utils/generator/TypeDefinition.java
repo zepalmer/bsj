@@ -35,7 +35,8 @@ public class TypeDefinition extends PropertyBasedHierarchyDefinition<TypeDefinit
 	private Mode mode;
 	
 	private TypeDefinition parent;
-
+	private Map<String,TypeDefinition> namespaceMap;
+	
 	public TypeDefinition(String baseName, String typeParameter, String superName, String superTypeArg,
 			GenerationProfile profile, List<String> interfaces, List<String> tags, List<PropertyDefinition> properties,
 			List<String> includes, String docString, List<String> toStringLines,
@@ -247,7 +248,7 @@ public class TypeDefinition extends PropertyBasedHierarchyDefinition<TypeDefinit
 	{
 		this.parent = parent;
 	}
-
+	
 	public String toString()
 	{
 		return "TypeDef:" + getFullName();
@@ -288,5 +289,15 @@ public class TypeDefinition extends PropertyBasedHierarchyDefinition<TypeDefinit
 		}
 		
 		return props;
+	}
+
+	public Map<String, TypeDefinition> getNamespaceMap()
+	{
+		return namespaceMap;
+	}
+
+	public void setNamespaceMap(Map<String, TypeDefinition> namespaceMap)
+	{
+		this.namespaceMap = namespaceMap;
 	}
 }

@@ -1247,7 +1247,7 @@ public class SourceGenerator
 					{
 						if (p.getTypeArg() != null)
 							throw new IllegalStateException(
-									"Don't know how to handle replacement for parameterized node type!");
+									"Don't know how to handle replacement for parameterized node type " + p.getBaseType() + "!");
 						ps.println("if (before.equals(this.get" + capFirst(p.getName()) + "()) && (after instanceof "
 								+ p.getBaseType() + "))");
 						ps.println("{");

@@ -98,6 +98,7 @@ public class SourceGeneratorParser
 					}
 				}
 				definition.setParent(superDefinition);
+				definition.setNamespaceMap(typeMapByName);
 			}
 		}
 

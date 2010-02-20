@@ -1,6 +1,8 @@
 package edu.jhu.cs.bsj.compiler.utils.generator;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 /**
  * This class represents the definition for a BSJ diagnostic.
@@ -16,6 +18,7 @@ public class DiagnosticDefinition extends PropertyBasedHierarchyDefinition<Diagn
 	private String code;
 	
 	private DiagnosticDefinition parent;
+	private Map<String,DiagnosticDefinition> namespaceMap;
 	
 	public DiagnosticDefinition(String name, String superName, String classPackage, List<PropertyDefinition> properties,
 			String docString, String code)
@@ -69,5 +72,21 @@ public class DiagnosticDefinition extends PropertyBasedHierarchyDefinition<Diagn
 	public void setParent(DiagnosticDefinition parent)
 	{
 		this.parent = parent;
+	}
+
+	public Map<String, DiagnosticDefinition> getNamespaceMap()
+	{
+		return namespaceMap;
+	}
+
+	public void setNamespaceMap(Map<String, DiagnosticDefinition> namespaceMap)
+	{
+		this.namespaceMap = namespaceMap;
+	}
+
+	@Override
+	public List<String> getTags()
+	{
+		return Collections.emptyList();
 	}
 }
