@@ -13,8 +13,9 @@ import org.junit.Test;
 
 import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeFactoryImpl;
-import edu.jhu.cs.bsj.compiler.impl.tool.compiler.AmbiguousNameCategorizationVisitor;
-import edu.jhu.cs.bsj.compiler.impl.tool.compiler.InitialNameCategorizationVisitor;
+import edu.jhu.cs.bsj.compiler.impl.tool.compiler.names.AmbiguousNameCategorizationVisitor;
+import edu.jhu.cs.bsj.compiler.impl.tool.compiler.names.InitialNameCategorizationVisitor;
+import edu.jhu.cs.bsj.compiler.impl.tool.compiler.names.PackageOrTypeNameCategorizationVisitor;
 import edu.jhu.cs.bsj.compiler.tool.parser.BsjParserImpl;
 import edu.jhu.cs.bsj.tests.AbstractPerFileTest;
 
@@ -61,12 +62,20 @@ public class NameCategorizationTest extends AbstractPerFileTest
 		// Perform initial categorization
 		InitialNameCategorizationVisitor initialNameCategorizationVisitor = new InitialNameCategorizationVisitor();
 		node.receiveTyped(initialNameCategorizationVisitor);
-		
+		// TODO: assert that all nodes got a category (requires removing default category and stopping parser from
+		// assigning categories)
+
+		// Identify packages and types
+		PackageOrTypeNameCategorizationVisitor packageOrTypeNameCategorizationVisitor = new PackageOrTypeNameCategorizationVisitor();
+		node.receiveTyped(packageOrTypeNameCategorizationVisitor);
+		// TODO: confirm that there are no PackageOrTypeNames left
+
 		// Disambiguate
 		AmbiguousNameCategorizationVisitor ambiguousNameCategorizationVisitor = new AmbiguousNameCategorizationVisitor();
 		node.receiveTyped(ambiguousNameCategorizationVisitor);
-		
-		// TODO
+		// TODO: confirm that either the visit failed to completely disambiguate or that no names are ambiguous
+
+		// TODO: rest of categorization
 
 		return true;
 	}

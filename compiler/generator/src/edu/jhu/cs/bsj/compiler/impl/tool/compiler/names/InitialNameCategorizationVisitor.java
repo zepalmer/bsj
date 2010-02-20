@@ -1,4 +1,4 @@
-package edu.jhu.cs.bsj.compiler.impl.tool.compiler;
+package edu.jhu.cs.bsj.compiler.impl.tool.compiler.names;
 
 import org.apache.log4j.Logger;
 
