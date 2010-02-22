@@ -72,9 +72,9 @@ public class BsjCompilerTest extends AbstractTest
 		BsjFileManager bfm = new LocationMappedFileManager(map);
 
 		String typeDeclCodeStr = "enum E { A, B }";
-		BsjNodeFactory factory = new BsjNodeFactoryImpl();
+		BsjNodeFactory factory = new BsjNodeFactoryImpl(null);
 		BsjParserImpl parser = new BsjParserImpl(factory);
-		CompilationUnitNode typeDeclCU = parser.parse(new StringReader(typeDeclCodeStr), null);
+		CompilationUnitNode typeDeclCU = parser.parse(null, new StringReader(typeDeclCodeStr), null);
 		TypeDeclarationNode typeDeclNode = typeDeclCU.getTypeDecls().getChildren().get(0);
 		ExpressionNode factoryExpression = factory.makeMethodInvocationByNameNode(factory.makeSimpleNameNode(
 				factory.makeIdentifierNode("getFactory"), NameCategory.METHOD), factory.makeExpressionListNode(),

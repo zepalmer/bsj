@@ -1061,10 +1061,43 @@ public interface BsjNodeFactory
             BsjSourceLocation stopLocation);
 
     /**
+     * Creates a CompilationUnitListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public CompilationUnitListNode makeCompilationUnitListNode(
+            List<CompilationUnitNode> children);
+
+    /**
+     * Creates a CompilationUnitListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public CompilationUnitListNode makeCompilationUnitListNode(
+            CompilationUnitNode... childrenElements);
+
+    /**
+     * Creates a CompilationUnitListNode.
+     * The specified start and stop locations are used.
+     */
+    public CompilationUnitListNode makeCompilationUnitListNode(
+            List<CompilationUnitNode> children,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+
+    /**
+     * Creates a CompilationUnitListNode.
+     * The specified start and stop locations are used.
+     */
+    public CompilationUnitListNode makeCompilationUnitListNode(
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation,
+            CompilationUnitNode... childrenElements);
+
+    /**
      * Creates a CompilationUnitNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
     public CompilationUnitNode makeCompilationUnitNode(
+            String name,
             PackageDeclarationNode packageDeclaration,
             MetaprogramImportListNode metaimports,
             ImportListNode imports,
@@ -1075,6 +1108,7 @@ public interface BsjNodeFactory
      * The specified start and stop locations are used.
      */
     public CompilationUnitNode makeCompilationUnitNode(
+            String name,
             PackageDeclarationNode packageDeclaration,
             MetaprogramImportListNode metaimports,
             ImportListNode imports,
@@ -1087,6 +1121,7 @@ public interface BsjNodeFactory
      * The start and stop locations which have been set as properties of this factory are used.
      */
     public CompilationUnitNode makeCompilationUnitNode(
+            String name,
             PackageDeclarationNode packageDeclaration,
             ImportListNode imports,
             TypeDeclarationListNode typeDecls);
@@ -1096,6 +1131,7 @@ public interface BsjNodeFactory
      * The specified start and stop locations are used.
      */
     public CompilationUnitNode makeCompilationUnitNode(
+            String name,
             PackageDeclarationNode packageDeclaration,
             ImportListNode imports,
             TypeDeclarationListNode typeDecls,
@@ -2486,6 +2522,54 @@ public interface BsjNodeFactory
      */
     public PackageDeclarationNode makePackageDeclarationNode(
             NameNode name,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+
+    /**
+     * Creates a PackageListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public PackageListNode makePackageListNode(
+            List<PackageNode> children);
+
+    /**
+     * Creates a PackageListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public PackageListNode makePackageListNode(
+            PackageNode... childrenElements);
+
+    /**
+     * Creates a PackageListNode.
+     * The specified start and stop locations are used.
+     */
+    public PackageListNode makePackageListNode(
+            List<PackageNode> children,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+
+    /**
+     * Creates a PackageListNode.
+     * The specified start and stop locations are used.
+     */
+    public PackageListNode makePackageListNode(
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation,
+            PackageNode... childrenElements);
+
+    /**
+     * Creates a PackageNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public PackageNode makePackageNode(
+            IdentifierNode name);
+
+    /**
+     * Creates a PackageNode.
+     * The specified start and stop locations are used.
+     */
+    public PackageNode makePackageNode(
+            IdentifierNode name,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
 

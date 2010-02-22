@@ -3,5 +3,5 @@
 <srcgen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="./srcgen.xsd">
     <import path="ast.xml"/>
     <import path="diagnostic.xml"/>
-    <import path="type.xml"/>
+    <!-- <import path="type.xml"/> -->
 </srcgen>

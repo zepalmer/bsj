@@ -3,36 +3,62 @@ package edu.jhu.cs.bsj.compiler.impl.tool.compiler.task;
 import java.io.IOException;
 import java.io.Reader;
 
+import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
-import edu.jhu.cs.bsj.compiler.impl.tool.compiler.CompilationUnitStatus;
-import edu.jhu.cs.bsj.compiler.impl.tool.compiler.CompilationUnitTracker;
+import edu.jhu.cs.bsj.compiler.ast.node.PackageNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.MetacompilationManager;
+import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.BsjFileObject;
+import edu.jhu.cs.bsj.compiler.impl.utils.StringUtilities;
 import edu.jhu.cs.bsj.compiler.tool.parser.BsjParserImpl;
 
 /**
- * Parses the compilation unit associated with the base tracker.
+ * Parses a compilation unit contained in a source file.
+ * 
  * @author Zachary Palmer
  */
-public class ParseCompilationUnitTask extends CompilationUnitTask
+public class ParseCompilationUnitTask extends AbstractBsjCompilerTask
 {
-	public ParseCompilationUnitTask(CompilationUnitTracker tracker)
+	/** The source file to parse. */
+	private BsjFileObject file;
+
+	/**
+	 * Creates a task for parsing the specified source file.
+	 * 
+	 * @param file The source file to parse.
+	 */
+	public ParseCompilationUnitTask(BsjFileObject file)
 	{
-		super(tracker, TaskPriority.PARSE);
+		super(TaskPriority.PARSE);
+		this.file = file;
 	}
 
 	@Override
 	public void execute(MetacompilationManager manager) throws IOException
 	{
-		Reader reader = getTracker().getFile().openReader(true); // TODO: parameterize ignoring of encoding errors?
+		BsjNodeFactory factory = manager.getFactory();
+		PackageNode rootPackage = manager.getRootPackage();
+
+		// Parse the file into a compilation unit
+		Reader reader = file.openReader(true); // TODO: parameterize ignoring of encoding errors?
 		// TODO: get a standard BsjParser once that interface exists
 		BsjParserImpl parser = new BsjParserImpl(manager.getFactory());
-		CompilationUnitNode node = parser.parse(reader, manager.getDiagnosticListener());
-		
-		getTracker().setAst(node);
-		getTracker().setStatus(CompilationUnitStatus.PARSED);
-		
-		// TODO: enqueue next task for the compilation unit
-		
-		manager.addTask(new ExtractMetaprogramsTask(getTracker()));
+		String compilationUnitName = StringUtilities.getSuffix(file.inferBinaryName(), '.');
+		CompilationUnitNode node = parser.parse(compilationUnitName, reader, manager.getDiagnosticListener());
+
+		// Find/create the package we're trying to use
+		String packageName = StringUtilities.removeSuffix(this.file.inferBinaryName(), '.');
+		PackageNode packageNode = rootPackage;
+		for (String componentName : packageName.split("\\."))
+		{
+			if (packageNode.getSubpackage(componentName) == null)
+			{
+				packageNode.addPackageNode(factory.makePackageNode(factory.makeIdentifierNode(componentName)));
+			}
+			packageNode = packageNode.getSubpackage(componentName);
+		}
+
+		// Add the compilation unit and enqueue it for extraction
+		packageNode.addCompilationUnitNode(node);
+		manager.addTask(new ExtractMetaprogramsTask(node));
 	}
 }

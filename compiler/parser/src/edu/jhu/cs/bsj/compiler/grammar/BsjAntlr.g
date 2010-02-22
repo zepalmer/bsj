@@ -855,7 +855,7 @@ blockStatementBsjMetaprogramAnchor returns [BlockStatementMetaprogramAnchorNode 
  * ===========================================================================
  */
 
-compilationUnit returns [CompilationUnitNode ret]
+compilationUnit[String name] returns [CompilationUnitNode ret]
         scope Rule;
         @init {
             ruleStart("compilationUnit");
@@ -870,6 +870,7 @@ compilationUnit returns [CompilationUnitNode ret]
         EOF
         {
             $ret = factory.makeCompilationUnitNode(
+                        name,
                         $packageDeclaration.ret,
                         $importDeclarations.metaprogramImportList,
                         $importDeclarations.importList,

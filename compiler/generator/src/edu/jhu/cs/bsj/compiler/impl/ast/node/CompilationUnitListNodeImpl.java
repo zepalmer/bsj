@@ -1,5 +1,6 @@
-package edu.jhu.cs.bsj.compiler.impl.ast.node.meta;
+package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Generated;
@@ -9,22 +10,20 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
-import edu.jhu.cs.bsj.compiler.ast.node.TypeDeclarationNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.TypeDeclarationMetaprogramAnchorNode;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public class TypeDeclarationMetaprogramAnchorNodeImpl extends MetaprogramAnchorNodeImpl<TypeDeclarationNode> implements TypeDeclarationMetaprogramAnchorNode
+public class CompilationUnitListNodeImpl extends ListNodeImpl<CompilationUnitNode> implements CompilationUnitListNode
 {
     /** General constructor. */
-    public TypeDeclarationMetaprogramAnchorNodeImpl(
-            TypeDeclarationNode replacement,
-            MetaprogramNode metaprogram,
+    public CompilationUnitListNodeImpl(
+            List<CompilationUnitNode> children,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        super(replacement, metaprogram, startLocation, stopLocation);
+        super(children, startLocation, stopLocation);
     }
 
     /**
@@ -57,17 +56,15 @@ public class TypeDeclarationMetaprogramAnchorNodeImpl extends MetaprogramAnchorN
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
         visitor.visitStartBegin(this);
-        visitor.visitTypeDeclarationMetaprogramAnchorNodeStart(this, true);
-        visitor.visitMetaprogramAnchorNodeStart(this);
+        visitor.visitCompilationUnitListNodeStart(this, true);
+        visitor.visitListNodeStart(this);
         visitor.visitNodeStart(this);
-        visitor.visitTypeDeclarationNodeStart(this);
         visitor.visitStartEnd(this);
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
-        visitor.visitTypeDeclarationNodeStop(this);
         visitor.visitNodeStop(this);
-        visitor.visitMetaprogramAnchorNodeStop(this);
-        visitor.visitTypeDeclarationMetaprogramAnchorNodeStop(this, true);
+        visitor.visitListNodeStop(this);
+        visitor.visitCompilationUnitListNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
 
@@ -92,8 +89,8 @@ public class TypeDeclarationMetaprogramAnchorNodeImpl extends MetaprogramAnchorN
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
-        sb.append("metaprogram=");
-        sb.append(this.getMetaprogram() == null? "null" : this.getMetaprogram().getClass().getSimpleName());
+        sb.append("children=");
+        sb.append(String.valueOf(this.getChildren()) + ":" + (this.getChildren() != null ? this.getChildren().getClass().getSimpleName() : "null"));
         sb.append(',');
         sb.append("startLocation=");
         sb.append(String.valueOf(this.getStartLocation()) + ":" + (this.getStartLocation() != null ? this.getStartLocation().getClass().getSimpleName() : "null"));
@@ -113,7 +110,7 @@ public class TypeDeclarationMetaprogramAnchorNodeImpl extends MetaprogramAnchorN
     @Override
     public <P,R> R executeOperation(BsjNodeOperation<P,R> operation, P p)
     {
-        return operation.executeTypeDeclarationMetaprogramAnchorNode(this, p);
+        return operation.executeCompilationUnitListNode(this, p);
     }
 
     /**
@@ -122,10 +119,10 @@ public class TypeDeclarationMetaprogramAnchorNodeImpl extends MetaprogramAnchorN
      * @return The resulting deep copy node.
      */
     @Override
-    public TypeDeclarationMetaprogramAnchorNode deepCopy(BsjNodeFactory factory)
+    public CompilationUnitListNode deepCopy(BsjNodeFactory factory)
     {
-        return factory.makeTypeDeclarationMetaprogramAnchorNode(
-                getMetaprogram().deepCopy(factory),
+        return factory.makeCompilationUnitListNode(
+                new ArrayList<CompilationUnitNode>(getChildren()),
                 getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
                 getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
     }
@@ -141,10 +138,11 @@ public class TypeDeclarationMetaprogramAnchorNodeImpl extends MetaprogramAnchorN
         if (before==null)
             throw new IllegalArgumentException("Cannot replace node with before value of null.");
         
-        if (before.equals(this.getMetaprogram()) && (after instanceof MetaprogramNode))
+        if (after instanceof CompilationUnitNode)
         {
-            setMetaprogram((MetaprogramNode)after);
-            return true;
+            int index = getChildren().indexOf(before);
+            if (index != -1)
+                getChildren().set(index, (CompilationUnitNode)after);
         }
         return false;
     }

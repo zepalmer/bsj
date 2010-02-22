@@ -333,6 +333,7 @@ public class SourceGeneratorParser
 			Map<String, String> constructorOverrideMap = new HashMap<String, String>();
 			boolean genConstructor = true;
 			boolean genChildren = true;
+			boolean genReplace = true;
 			List<FactoryMethodDefinition> factoryMethodDefinitions = new ArrayList<FactoryMethodDefinition>();
 
 			NodeList children = e.getChildNodes();
@@ -377,6 +378,9 @@ public class SourceGeneratorParser
 						} else if (nogenString.equals("children"))
 						{
 							genChildren = false;
+						} else if (nogenString.equals("replace"))
+						{
+							genReplace = false;
 						} else
 						{
 							throw new IllegalStateException("Unknown nogen id: " + nogenString);
@@ -394,7 +398,7 @@ public class SourceGeneratorParser
 
 			TypeDefinition typeDefinition = new TypeDefinition(name, typeParam, superName, superTypeArg, profile,
 					interfaces, tags, props, includes, docString, toStringLines, factoryOverrideMap,
-					constructorOverrideMap, genConstructor, genChildren, factoryMethodDefinitions, mode);
+					constructorOverrideMap, genConstructor, genChildren, genReplace, factoryMethodDefinitions, mode);
 			for (FactoryMethodDefinition factoryMethodDefinition : factoryMethodDefinitions)
 			{
 				factoryMethodDefinition.setParent(typeDefinition);

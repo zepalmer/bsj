@@ -19,6 +19,9 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportListNode;
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnitNode
 {
+    /** The name of the compilation unit. */
+    private String name;
+
     /** The package declaration for this unit. */
     private PackageDeclarationNode packageDeclaration;
 
@@ -33,6 +36,7 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
 
     /** General constructor. */
     public CompilationUnitNodeImpl(
+            String name,
             PackageDeclarationNode packageDeclaration,
             MetaprogramImportListNode metaimports,
             ImportListNode imports,
@@ -41,10 +45,20 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
             BsjSourceLocation stopLocation)
     {
         super(startLocation, stopLocation);
+        this.name = name;
         setPackageDeclaration(packageDeclaration);
         setMetaimports(metaimports);
         setImports(imports);
         setTypeDecls(typeDecls);
+    }
+
+    /**
+     * Gets the name of the compilation unit.
+     * @return The name of the compilation unit.
+     */
+    public String getName()
+    {
+        return this.name;
     }
 
     /**
@@ -232,6 +246,7 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
+        list.add(getName());
         list.add(getPackageDeclaration());
         list.add(getMetaimports());
         list.add(getImports());
@@ -248,6 +263,9 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
+        sb.append("name=");
+        sb.append(String.valueOf(this.getName()) + ":" + (this.getName() != null ? this.getName().getClass().getSimpleName() : "null"));
+        sb.append(',');
         sb.append("packageDeclaration=");
         sb.append(this.getPackageDeclaration() == null? "null" : this.getPackageDeclaration().getClass().getSimpleName());
         sb.append(',');
@@ -290,6 +308,7 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
     public CompilationUnitNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeCompilationUnitNode(
+                getName(),
                 getPackageDeclaration().deepCopy(factory),
                 getMetaimports().deepCopy(factory),
                 getImports().deepCopy(factory),

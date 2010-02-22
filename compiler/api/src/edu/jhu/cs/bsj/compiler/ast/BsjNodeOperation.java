@@ -380,6 +380,14 @@ public interface BsjNodeOperation<P,R>
     public R executeCodeLiteralNode(CodeLiteralNode node, P p);
 
     /**
+     * Executes this operation against a CompilationUnitListNode.
+     * @param node The CompilationUnitListNode in question.
+     * @param p The parameter to use.
+     * @return The result of the operation.
+     */
+    public R executeCompilationUnitListNode(CompilationUnitListNode node, P p);
+
+    /**
      * Executes this operation against a CompilationUnitNode.
      * @param node The CompilationUnitNode in question.
      * @param p The parameter to use.
@@ -842,6 +850,22 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executePackageDeclarationNode(PackageDeclarationNode node, P p);
+
+    /**
+     * Executes this operation against a PackageListNode.
+     * @param node The PackageListNode in question.
+     * @param p The parameter to use.
+     * @return The result of the operation.
+     */
+    public R executePackageListNode(PackageListNode node, P p);
+
+    /**
+     * Executes this operation against a PackageNode.
+     * @param node The PackageNode in question.
+     * @param p The parameter to use.
+     * @return The result of the operation.
+     */
+    public R executePackageNode(PackageNode node, P p);
 
     /**
      * Executes this operation against a ParameterizedTypeNode.

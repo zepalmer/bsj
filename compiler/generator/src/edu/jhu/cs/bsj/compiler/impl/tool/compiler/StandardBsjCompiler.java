@@ -18,6 +18,7 @@ import org.apache.log4j.Logger;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeFactoryImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.PackageNodeCallback;
 import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.BsjCompilerLocation;
 import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.BsjFileManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.BsjFileObject;
@@ -46,13 +47,17 @@ public class StandardBsjCompiler implements BsjCompiler
 	 */
 	private Logger LOGGER = Logger.getLogger(this.getClass());
 
-	/*         *** The following fields are used in compilation. They are not valid unless compilation is in progress. */
+	/* *** The following fields are used in compilation. They are not valid unless compilation is in progress. */
 
 	/**
 	 * Tracks the progress of compilation units through the compilation process. This data structure performs the
 	 * accounting of source files and source file-specific data structures.
 	 */
 	private MetacompilationManager metacompilationManager;
+	/**
+	 * The package callback module used in package nodes.
+	 */
+	private PackageNodeCallback packageNodeCallback;
 
 	// TODO: allow factory to be specified by user?
 	/**
@@ -70,7 +75,8 @@ public class StandardBsjCompiler implements BsjCompiler
 	{
 		super();
 		this.bsjFileManager = bsjFileManager;
-		this.factory = new BsjNodeFactoryImpl(); // TODO: get default factory through SPI
+		this.packageNodeCallback = new PackageNodeCallback();
+		this.factory = new BsjNodeFactoryImpl(this.packageNodeCallback); // TODO: get default factory through SPI
 	}
 
 	// TODO: allow the caller to specify a listener to receive exceptions in real time (as opposed to in batch)
@@ -122,7 +128,7 @@ public class StandardBsjCompiler implements BsjCompiler
 		// Initialize the compilation unit manager with the names of the files it must compile
 		for (BsjFileObject file : units)
 		{
-			this.metacompilationManager.addTarget(file);
+			this.metacompilationManager.addCompilationUnit(file);
 		}
 
 		// Allow the compilation unit manager to handle the work in the sense of a work queue
@@ -164,7 +170,7 @@ public class StandardBsjCompiler implements BsjCompiler
 
 		// Perform compilation
 		JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
-		// TODO: trap writer output and diagnostics and throw them as exceptions
+		// TODO: trap writer output and diagnostics and interpret them accordingly
 		JavaCompiler.CompilationTask task = compiler.getTask(null, objectProgramFileManager, null,
 				Collections.<String> emptyList(), Collections.<String> emptyList(), files);
 		if (!task.call())
@@ -184,6 +190,8 @@ public class StandardBsjCompiler implements BsjCompiler
 			LOGGER.trace("Initializing compiler data structures.");
 		}
 		this.metacompilationManager = new MetacompilationManager(this.factory, this.bsjFileManager, listener);
+		this.packageNodeCallback.setFileManager(bsjFileManager);
+		this.packageNodeCallback.setMetacompilationManager(metacompilationManager);
 	}
 
 	/**

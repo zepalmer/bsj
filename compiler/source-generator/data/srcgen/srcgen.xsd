@@ -21,6 +21,7 @@
         <xs:restriction base="xs:string">
             <xs:enumeration value="cons" />
             <xs:enumeration value="children" />
+            <xs:enumeration value="replace" />
         </xs:restriction>
     </xs:simpleType>
 
@@ -86,10 +87,10 @@
             </xs:sequence>
         </xs:choice>
     </xs:complexType>
-    
+
     <xs:complexType name="defaults_T">
-        <xs:attribute name="typeMode" type="xs:string" use="optional"/>
-        <xs:attribute name="propertyMode" type="xs:string" use="optional"/>
+        <xs:attribute name="typeMode" type="xs:string" use="optional" />
+        <xs:attribute name="propertyMode" type="xs:string" use="optional" />
     </xs:complexType>
 
     <xs:complexType name="factory_T">

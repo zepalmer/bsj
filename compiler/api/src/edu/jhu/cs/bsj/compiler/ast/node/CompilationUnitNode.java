@@ -6,11 +6,18 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportListNode;
 
 /**
- * Represents a BSJ compilation unit.
+ * Represents a BSJ compilation unit.  The name of the compilation unit is the name of the source file or
+ * binary file that represents it (without the extension).
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public interface CompilationUnitNode extends Node
 {
+    /**
+     * Gets the name of the compilation unit.
+     * @return The name of the compilation unit.
+     */
+    public String getName();
+
     /**
      * Gets the package declaration for this unit.
      * @return The package declaration for this unit.

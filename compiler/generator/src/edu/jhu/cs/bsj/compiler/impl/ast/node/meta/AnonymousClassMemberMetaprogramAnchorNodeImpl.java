@@ -92,9 +92,6 @@ public class AnonymousClassMemberMetaprogramAnchorNodeImpl extends MetaprogramAn
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
-        sb.append("replacement=");
-        sb.append(this.getReplacement() == null? "null" : this.getReplacement().getClass().getSimpleName());
-        sb.append(',');
         sb.append("metaprogram=");
         sb.append(this.getMetaprogram() == null? "null" : this.getMetaprogram().getClass().getSimpleName());
         sb.append(',');
@@ -144,11 +141,6 @@ public class AnonymousClassMemberMetaprogramAnchorNodeImpl extends MetaprogramAn
         if (before==null)
             throw new IllegalArgumentException("Cannot replace node with before value of null.");
         
-        if (before.equals(this.getReplacement()) && (after instanceof AnonymousClassMemberNode))
-        {
-            setReplacement((AnonymousClassMemberNode)after);
-            return true;
-        }
         if (before.equals(this.getMetaprogram()) && (after instanceof MetaprogramNode))
         {
             setMetaprogram((MetaprogramNode)after);

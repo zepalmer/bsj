@@ -34,15 +34,6 @@ public abstract class MetaprogramAnchorNodeImpl<T extends Node> extends NodeImpl
     }
 
     /**
-     * Gets the replacement node for this metaprogram.
-     * @return The replacement node for this metaprogram.
-     */
-    public T getReplacement()
-    {
-        return this.replacement;
-    }
-
-    /**
      * Gets the metaprogram on this node.
      * @return The metaprogram on this node.
      */
@@ -125,7 +116,6 @@ public abstract class MetaprogramAnchorNodeImpl<T extends Node> extends NodeImpl
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(getReplacement());
         list.add(getMetaprogram());
         return list;
     }
@@ -139,9 +129,6 @@ public abstract class MetaprogramAnchorNodeImpl<T extends Node> extends NodeImpl
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
-        sb.append("replacement=");
-        sb.append(String.valueOf(this.getReplacement()) + ":" + (this.getReplacement() != null ? this.getReplacement().getClass().getSimpleName() : "null"));
-        sb.append(',');
         sb.append("metaprogram=");
         sb.append(this.getMetaprogram() == null? "null" : this.getMetaprogram().getClass().getSimpleName());
         sb.append(',');
@@ -156,11 +143,21 @@ public abstract class MetaprogramAnchorNodeImpl<T extends Node> extends NodeImpl
 
 
 	/**
+	 * Retrieves the node with which this anchor will be replaced once its metaprogram executes.
+	 * @return The replacement node to use.
+	 */
+	public T getReplacement()
+	{
+		return this.replacement;
+	}
+	
+	/**
 	 * Changes the node with which this anchor will be replaced once its metaprogram executes.
 	 * @param replacement The replacement node to use.
 	 */
 	public void setReplacement(T replacement)
 	{
+		// TODO: some kind of control on this; setReplacement should probably only be called one time?
 		if (this.replacement instanceof NodeImpl)
 		{
 			((NodeImpl)this.replacement).setParent(null);

@@ -45,17 +45,31 @@ import edu.jhu.cs.bsj.compiler.impl.ast.node.meta.TypeDeclarationMetaprogramAnch
 
 /**
  * This class acts as a BSJ node factory for the standard BSJ compiler.
- *
+ * 
  * @author Zachary Palmer
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class BsjNodeFactoryImpl implements BsjNodeFactory
 {
-    /** The start location to use for new nodes. */
-    private BsjSourceLocation startLocation;
+	/** The start location to use for new nodes. */
+	private BsjSourceLocation startLocation;
 
-    /** The stop location to use for new nodes. */
-    private BsjSourceLocation stopLocation;
+	/** The stop location to use for new nodes. */
+	private BsjSourceLocation stopLocation;
+
+	/** The callback module to provide to package nodes. */
+	private PackageNodeCallback packageNodeCallback;
+
+	/**
+	 * Creates a new node factory.
+	 * 
+	 * @param fileManager The file manager to use when constructing package nodes. If no package nodes will ever be
+	 *            constructed by this node factory, it is safe to provide a <code>null</code> here.
+	 */
+	public BsjNodeFactoryImpl(PackageNodeCallback packageNodeCallback)
+	{
+		this.packageNodeCallback = packageNodeCallback;
+	}
 
 	/**
 	 * Retrieves the starting source location used for new nodes.
@@ -79,27 +93,29 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
 		return this.stopLocation;
 	}
 
-    /**
-     * Changes the starting source location used for new nodes.
-     * @param startLocation The new start location to use for new nodes.  <code>null</code> is a permissible value and
-     *                      indicates that no information is available.
-     */
-    @Override
-    public void setStartSourceLocation(BsjSourceLocation startLocation)
-    {
-        this.startLocation = startLocation;
-    }
+	/**
+	 * Changes the starting source location used for new nodes.
+	 * 
+	 * @param startLocation The new start location to use for new nodes. <code>null</code> is a permissible value and
+	 *            indicates that no information is available.
+	 */
+	@Override
+	public void setStartSourceLocation(BsjSourceLocation startLocation)
+	{
+		this.startLocation = startLocation;
+	}
 
-    /**
-     * Changes the ending source location used for new nodes.
-     * @param stopLocation The new stop location to use for new nodes.  <code>null</code> is a permissible value and
-     *                      indicates that no information is available.
-     */
-    @Override
-    public void setStopSourceLocation(BsjSourceLocation stopLocation)
-    {
-        this.stopLocation = stopLocation;
-    }
+	/**
+	 * Changes the ending source location used for new nodes.
+	 * 
+	 * @param stopLocation The new stop location to use for new nodes. <code>null</code> is a permissible value and
+	 *            indicates that no information is available.
+	 */
+	@Override
+	public void setStopSourceLocation(BsjSourceLocation stopLocation)
+	{
+		this.stopLocation = stopLocation;
+	}
 
 	// MANUALLY SPECIFIED MAKE METHODS ///////////////////////////////////////
 
@@ -108,25 +124,21 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
 	 * is, the name "<tt>java.utils.Arrays.asList</tt>" would be used to create an import for that method by splitting
 	 * the name between its type and final identifier. The default start and stop location are used.
 	 */
-	public SingleStaticImportNode makeSingleStaticImportNode(
-    		QualifiedNameNode name)
-    {
-    	return makeSingleStaticImportNode(name.getBase(), name.getIdentifier());
-    }
+	public SingleStaticImportNode makeSingleStaticImportNode(QualifiedNameNode name)
+	{
+		return makeSingleStaticImportNode(name.getBase(), name.getIdentifier());
+	}
 
 	/**
 	 * Creates a {@link SingleStaticImportNode}. The provided name is interpreted as the full name of the import; that
 	 * is, the name "<tt>java.utils.Arrays.asList</tt>" would be used to create an import for that method by splitting
 	 * the name between its type and final identifier. The specified start and stop locations are used.
 	 */
-	public SingleStaticImportNode makeSingleStaticImportNode(
-    		QualifiedNameNode name,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-    	return makeSingleStaticImportNode(name.getBase(), name.getIdentifier(), startLocation, stopLocation);
-    }
-
+	public SingleStaticImportNode makeSingleStaticImportNode(QualifiedNameNode name, BsjSourceLocation startLocation,
+			BsjSourceLocation stopLocation)
+	{
+		return makeSingleStaticImportNode(name.getBase(), name.getIdentifier(), startLocation, stopLocation);
+	}
 
     /**
      * Creates a AlternateConstructorInvocationNode.
@@ -1679,17 +1691,70 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
 
     /**
+     * Creates a CompilationUnitListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public CompilationUnitListNode makeCompilationUnitListNode(
+            List<CompilationUnitNode> children)
+    {
+        CompilationUnitListNode ret = new CompilationUnitListNodeImpl(children, startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
+     * Creates a CompilationUnitListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public CompilationUnitListNode makeCompilationUnitListNode(
+            CompilationUnitNode... childrenElements)
+    {
+        List<CompilationUnitNode> children = Arrays.asList(childrenElements);
+        return makeCompilationUnitListNode(children, startLocation, stopLocation);
+    }
+
+    /**
+     * Creates a CompilationUnitListNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public CompilationUnitListNode makeCompilationUnitListNode(
+            List<CompilationUnitNode> children,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        CompilationUnitListNode ret = new CompilationUnitListNodeImpl(children, startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
+     * Creates a CompilationUnitListNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public CompilationUnitListNode makeCompilationUnitListNode(
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation,
+            CompilationUnitNode... childrenElements)
+    {
+        List<CompilationUnitNode> children = Arrays.asList(childrenElements);
+        return makeCompilationUnitListNode(children, startLocation, stopLocation);
+    }
+
+    /**
      * Creates a CompilationUnitNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
     @Override
     public CompilationUnitNode makeCompilationUnitNode(
+            String name,
             PackageDeclarationNode packageDeclaration,
             MetaprogramImportListNode metaimports,
             ImportListNode imports,
             TypeDeclarationListNode typeDecls)
     {
-        CompilationUnitNode ret = new CompilationUnitNodeImpl(packageDeclaration, metaimports, imports, typeDecls, startLocation, stopLocation);
+        CompilationUnitNode ret = new CompilationUnitNodeImpl(name, packageDeclaration, metaimports, imports, typeDecls, startLocation, stopLocation);
         return ret;
     }
 
@@ -1699,6 +1764,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     @Override
     public CompilationUnitNode makeCompilationUnitNode(
+            String name,
             PackageDeclarationNode packageDeclaration,
             MetaprogramImportListNode metaimports,
             ImportListNode imports,
@@ -1706,7 +1772,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        CompilationUnitNode ret = new CompilationUnitNodeImpl(packageDeclaration, metaimports, imports, typeDecls, startLocation, stopLocation);
+        CompilationUnitNode ret = new CompilationUnitNodeImpl(name, packageDeclaration, metaimports, imports, typeDecls, startLocation, stopLocation);
         return ret;
     }
 
@@ -1716,11 +1782,12 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     @Override
     public CompilationUnitNode makeCompilationUnitNode(
+            String name,
             PackageDeclarationNode packageDeclaration,
             ImportListNode imports,
             TypeDeclarationListNode typeDecls)
     {
-        CompilationUnitNode ret = new CompilationUnitNodeImpl(packageDeclaration, makeMetaprogramImportListNode(), imports, typeDecls, startLocation, stopLocation);
+        CompilationUnitNode ret = new CompilationUnitNodeImpl(name, packageDeclaration, makeMetaprogramImportListNode(), imports, typeDecls, startLocation, stopLocation);
         return ret;
     }
 
@@ -1730,13 +1797,14 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     @Override
     public CompilationUnitNode makeCompilationUnitNode(
+            String name,
             PackageDeclarationNode packageDeclaration,
             ImportListNode imports,
             TypeDeclarationListNode typeDecls,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        CompilationUnitNode ret = new CompilationUnitNodeImpl(packageDeclaration, makeMetaprogramImportListNode(), imports, typeDecls, startLocation, stopLocation);
+        CompilationUnitNode ret = new CompilationUnitNodeImpl(name, packageDeclaration, makeMetaprogramImportListNode(), imports, typeDecls, startLocation, stopLocation);
         return ret;
     }
 
@@ -3884,6 +3952,84 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation stopLocation)
     {
         PackageDeclarationNode ret = new PackageDeclarationNodeImpl(name, makeAnnotationListNode(), startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
+     * Creates a PackageListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public PackageListNode makePackageListNode(
+            List<PackageNode> children)
+    {
+        PackageListNode ret = new PackageListNodeImpl(children, startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
+     * Creates a PackageListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public PackageListNode makePackageListNode(
+            PackageNode... childrenElements)
+    {
+        List<PackageNode> children = Arrays.asList(childrenElements);
+        return makePackageListNode(children, startLocation, stopLocation);
+    }
+
+    /**
+     * Creates a PackageListNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public PackageListNode makePackageListNode(
+            List<PackageNode> children,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        PackageListNode ret = new PackageListNodeImpl(children, startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
+     * Creates a PackageListNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public PackageListNode makePackageListNode(
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation,
+            PackageNode... childrenElements)
+    {
+        List<PackageNode> children = Arrays.asList(childrenElements);
+        return makePackageListNode(children, startLocation, stopLocation);
+    }
+
+    /**
+     * Creates a PackageNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public PackageNode makePackageNode(
+            IdentifierNode name)
+    {
+        PackageNode ret = new PackageNodeImpl(name, packageNodeCallback, startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
+     * Creates a PackageNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public PackageNode makePackageNode(
+            IdentifierNode name,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        PackageNode ret = new PackageNodeImpl(name, packageNodeCallback, startLocation, stopLocation);
         return ret;
     }
 

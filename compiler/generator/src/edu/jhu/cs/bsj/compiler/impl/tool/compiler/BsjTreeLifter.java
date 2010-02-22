@@ -1638,8 +1638,57 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
     }
     
     @Override
+    public ExpressionNode executeCompilationUnitListNode(CompilationUnitListNode node, ExpressionNode factoryNode)
+    {
+        List<ExpressionNode> liftChildrenList = new ArrayList<ExpressionNode>();
+        for (CompilationUnitNode listval : node.getChildren())
+        {
+            liftChildrenList.add(
+                    listval != null ? 
+        			        listval.executeOperation(this,factoryNode) :
+                            null);
+        }
+        ExpressionNode liftStartLocationMetaClone = 
+                expressionizeBsjSourceLocation(node.getStartLocation());
+        ExpressionNode liftStopLocationMetaClone = 
+                expressionizeBsjSourceLocation(node.getStopLocation());
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeCompilationUnitListNode"),
+                        factory.makeExpressionListNode(
+                                factory.makeMethodInvocationByNameNode(
+                                        factory.makeQualifiedNameNode(
+                                                factory.makeQualifiedNameNode(
+                                                        factory.makeQualifiedNameNode(
+                                                                factory.makeSimpleNameNode(
+                                                                        factory.makeIdentifierNode("java"),
+                                                                        NameCategory.PACKAGE),
+                                                                factory.makeIdentifierNode("util"),
+                                                                NameCategory.PACKAGE),
+                                                        factory.makeIdentifierNode("Arrays"),
+                                                        NameCategory.TYPE),
+                                                factory.makeIdentifierNode("asList"),
+                                                NameCategory.METHOD),
+                                        factory.makeExpressionListNode(liftChildrenList),
+                                        factory.makeReferenceTypeListNode(
+                                                factory.makeUnparameterizedTypeNode(
+                                                        factory.makeSimpleNameNode(
+                                                                factory.makeIdentifierNode("CompilationUnitNode"),
+                                                                NameCategory.TYPE)))),
+                                liftStartLocationMetaClone,
+                                liftStopLocationMetaClone),
+                        factory.makeReferenceTypeListNode());
+        
+        return ret;
+    }
+    
+    @Override
     public ExpressionNode executeCompilationUnitNode(CompilationUnitNode node, ExpressionNode factoryNode)
     {
+        String liftNameValue = 
+                node.getName();
         ExpressionNode liftPackageDeclaration = 
                 node.getPackageDeclaration() != null ?
                         node.getPackageDeclaration().executeOperation(this,factoryNode) :
@@ -1666,6 +1715,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
                         factory.makeIdentifierNode("makeCompilationUnitNode"),
                         factory.makeExpressionListNode(
+                                expressionizeString(liftNameValue),
                                 liftPackageDeclaration,
                                 liftMetaimports,
                                 liftImports,
@@ -3582,6 +3632,78 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeExpressionListNode(
                                 liftName,
                                 liftAnnotations,
+                                liftStartLocationMetaClone,
+                                liftStopLocationMetaClone),
+                        factory.makeReferenceTypeListNode());
+        
+        return ret;
+    }
+    
+    @Override
+    public ExpressionNode executePackageListNode(PackageListNode node, ExpressionNode factoryNode)
+    {
+        List<ExpressionNode> liftChildrenList = new ArrayList<ExpressionNode>();
+        for (PackageNode listval : node.getChildren())
+        {
+            liftChildrenList.add(
+                    listval != null ? 
+        			        listval.executeOperation(this,factoryNode) :
+                            null);
+        }
+        ExpressionNode liftStartLocationMetaClone = 
+                expressionizeBsjSourceLocation(node.getStartLocation());
+        ExpressionNode liftStopLocationMetaClone = 
+                expressionizeBsjSourceLocation(node.getStopLocation());
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makePackageListNode"),
+                        factory.makeExpressionListNode(
+                                factory.makeMethodInvocationByNameNode(
+                                        factory.makeQualifiedNameNode(
+                                                factory.makeQualifiedNameNode(
+                                                        factory.makeQualifiedNameNode(
+                                                                factory.makeSimpleNameNode(
+                                                                        factory.makeIdentifierNode("java"),
+                                                                        NameCategory.PACKAGE),
+                                                                factory.makeIdentifierNode("util"),
+                                                                NameCategory.PACKAGE),
+                                                        factory.makeIdentifierNode("Arrays"),
+                                                        NameCategory.TYPE),
+                                                factory.makeIdentifierNode("asList"),
+                                                NameCategory.METHOD),
+                                        factory.makeExpressionListNode(liftChildrenList),
+                                        factory.makeReferenceTypeListNode(
+                                                factory.makeUnparameterizedTypeNode(
+                                                        factory.makeSimpleNameNode(
+                                                                factory.makeIdentifierNode("PackageNode"),
+                                                                NameCategory.TYPE)))),
+                                liftStartLocationMetaClone,
+                                liftStopLocationMetaClone),
+                        factory.makeReferenceTypeListNode());
+        
+        return ret;
+    }
+    
+    @Override
+    public ExpressionNode executePackageNode(PackageNode node, ExpressionNode factoryNode)
+    {
+        ExpressionNode liftName = 
+                node.getName() != null ?
+                        node.getName().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        ExpressionNode liftStartLocationMetaClone = 
+                expressionizeBsjSourceLocation(node.getStartLocation());
+        ExpressionNode liftStopLocationMetaClone = 
+                expressionizeBsjSourceLocation(node.getStopLocation());
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makePackageNode"),
+                        factory.makeExpressionListNode(
+                                liftName,
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
                         factory.makeReferenceTypeListNode());

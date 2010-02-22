@@ -9,6 +9,7 @@ public enum TaskPriority
 {
 	PARSE(100),
 	EXTRACT(300),
+	COMPILE(400),
 	EXECUTE(500),
 	SERIALIZE(1000),
 	

@@ -1679,6 +1679,12 @@
             ]]></doc>
         </type>
 
+        <type name="CompilationUnitListNode" super="ListNode" superTypeArg="CompilationUnitNode">
+            <doc><![CDATA[
+                Represents a list of {@link CompilationUnitListNode}s.
+            ]]></doc>
+        </type>
+
         <type name="DeclaredTypeListNode" super="ListNode" superTypeArg="DeclaredTypeNode">
             <doc><![CDATA[
                 Represents a list of {@link DeclaredTypeNode}s.
@@ -1718,6 +1724,13 @@
         <type name="NameListNode" super="ListNode" superTypeArg="NameNode">
             <doc><![CDATA[
                 Represents a list of {@link NameNode}s.
+            ]]></doc>
+        </type>
+
+        <!-- TODO: remove? -->
+        <type name="PackageListNode" super="ListNode" superTypeArg="PackageNode">
+            <doc><![CDATA[
+                Represents a list of {@link PackageNode}s.
             ]]></doc>
         </type>
 
@@ -1842,13 +1855,15 @@
         </type>
 
         <type name="CompilationUnitNode" super="Node">
+            <prop name="name" type="String" mode="readOnly" desc="the name of the compilation unit" />
             <prop name="packageDeclaration" type="PackageDeclarationNode" desc="the package declaration for this unit" />
             <prop name="metaimports" type="MetaprogramImportListNode" desc="the global metaprogram imports used in this unit"
                 default="makeMetaprogramImportListNode()" />
             <prop name="imports" type="ImportListNode" desc="the imports used in this unit" />
             <prop name="typeDecls" type="TypeDeclarationListNode" desc="the type declarations of this unit" />
             <doc><![CDATA[
-                Represents a BSJ compilation unit.
+                Represents a BSJ compilation unit.  The name of the compilation unit is the name of the source file or
+                binary file that represents it (without the extension).
             ]]></doc>
             <factory-method>
                 <use-defaults />
@@ -1970,6 +1985,17 @@
             <factory-method>
                 <prop name="name" />
             </factory-method>
+        </type>
+
+        <type name="PackageNode" super="Node">
+            <prop name="name" type="IdentifierNode" mode="readOnly" desc="the simple name of this package" />
+            <prop name="packageNodeCallback" type="PackageNodeCallback" mode="hide"
+                desc="the callback module for this package node" />
+            <include file="PackageNode.java" />
+            <doc><![CDATA[
+                A node representing a package.  This node has no syntactic equivalent; it is used to represent the
+                object program package hierarchy.  
+            ]]></doc>
         </type>
 
         <type name="SingleStaticImportNode" super="Node">

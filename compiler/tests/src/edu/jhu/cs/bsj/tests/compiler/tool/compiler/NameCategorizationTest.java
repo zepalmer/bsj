@@ -16,6 +16,7 @@ import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeFactoryImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.names.AmbiguousNameCategorizationVisitor;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.names.InitialNameCategorizationVisitor;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.names.PackageOrTypeNameCategorizationVisitor;
+import edu.jhu.cs.bsj.compiler.impl.utils.StringUtilities;
 import edu.jhu.cs.bsj.compiler.tool.parser.BsjParserImpl;
 import edu.jhu.cs.bsj.tests.AbstractPerFileTest;
 
@@ -38,9 +39,9 @@ public class NameCategorizationTest extends AbstractPerFileTest
 	protected boolean doFileTest(File file) throws Exception
 	{
 		// TODO: get from SPI
-		BsjParserImpl parser = new BsjParserImpl(new BsjNodeFactoryImpl());
-		CompilationUnitNode node = parser.parse(new InputStreamReader(new FileInputStream(file)),
-				new DiagnosticListener<JavaFileObject>()
+		BsjParserImpl parser = new BsjParserImpl(new BsjNodeFactoryImpl(null));
+		CompilationUnitNode node = parser.parse(StringUtilities.removeSuffix(file.getName(), '.'),
+				new InputStreamReader(new FileInputStream(file)), new DiagnosticListener<JavaFileObject>()
 				{
 					@Override
 					public void report(Diagnostic<? extends JavaFileObject> diagnostic)

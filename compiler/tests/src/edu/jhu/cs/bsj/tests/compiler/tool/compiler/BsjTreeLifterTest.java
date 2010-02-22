@@ -38,6 +38,7 @@ import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.LocationManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.LocationMappedFileManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.UnionLocationManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.serializer.BsjSourceSerializerImpl;
+import edu.jhu.cs.bsj.compiler.impl.utils.StringUtilities;
 import edu.jhu.cs.bsj.compiler.tool.parser.BsjParserImpl;
 import edu.jhu.cs.bsj.tests.AbstractPerFileTest;
 
@@ -54,13 +55,13 @@ public class BsjTreeLifterTest extends AbstractPerFileTest
 	// private variables used in testing
 	private static final String[] META_IMPORTS = { "edu.jhu.cs.bsj.compiler.ast.*",
 			"edu.jhu.cs.bsj.compiler.ast.node.*", "edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeFactoryImpl",
-			"edu.jhu.cs.bsj.compiler.ast.node.meta.*", "java.util.*" };	
-    private BsjNodeFactory factory = new BsjNodeFactoryImpl();
-    private BsjTreeLifter treeLifter = new BsjTreeLifter(factory);
-    private BsjParserImpl parser = new BsjParserImpl(new BsjNodeFactoryImpl());
-    private String factoryName = "factory";
-    private BsjSourceSerializer serializer = new BsjSourceSerializerImpl();
-    
+			"edu.jhu.cs.bsj.compiler.ast.node.meta.*", "java.util.*" };
+	private BsjNodeFactory factory = new BsjNodeFactoryImpl(null);
+	private BsjTreeLifter treeLifter = new BsjTreeLifter(factory);
+	private BsjParserImpl parser = new BsjParserImpl(factory);
+	private String factoryName = "factory";
+	private BsjSourceSerializer serializer = new BsjSourceSerializerImpl();
+
 	/**
 	 * Test the BsjTreeLifter on files in the examples directory.
 	 */
@@ -69,7 +70,7 @@ public class BsjTreeLifterTest extends AbstractPerFileTest
 	{
 		findAndTestJavaFiles(EXAMPLES);
 	}
-	
+
 	@Override
 	protected boolean doFileTest(File file)
 	{
@@ -88,7 +89,8 @@ public class BsjTreeLifterTest extends AbstractPerFileTest
 		Node ast = null;
 		try
 		{
-			ast = parser.parse(new InputStreamReader(new FileInputStream(file)), null);
+			ast = parser.parse(StringUtilities.removeSuffix(file.getName(), '.'), new InputStreamReader(
+					new FileInputStream(file)), null);
 		} catch (Exception e)
 		{
 			e.printStackTrace();
@@ -104,7 +106,7 @@ public class BsjTreeLifterTest extends AbstractPerFileTest
 
 		// get the lifted code
 		ExpressionNode metaAst = ast.executeOperation(treeLifter, metaFactory);
-		
+
 		// replace expressions w/ methods
 		List<MethodDeclarationNode> methods = divideLiftIntoMethods(metaAst);
 
@@ -125,31 +127,30 @@ public class BsjTreeLifterTest extends AbstractPerFileTest
 
 	/**
 	 * Mutates metaAst by removing expressions down to a certain depth and replacing them with method invocations.
+	 * 
 	 * @param metaAst the lifted AST to be divided.
 	 * @return the list of method declarations corresponding to the mutated AST.
 	 */
 	private List<MethodDeclarationNode> divideLiftIntoMethods(ExpressionNode metaAst)
-    {
-	    List<MethodDeclarationNode> methods = new ArrayList<MethodDeclarationNode>();
-	    metaAst.receiveTyped(new BsjLiftedCodeVisitor(methods));
-        return methods;
-    }
+	{
+		List<MethodDeclarationNode> methods = new ArrayList<MethodDeclarationNode>();
+		metaAst.receiveTyped(new BsjLiftedCodeVisitor(methods));
+		return methods;
+	}
 
-    /**
+	/**
 	 * Compiles and runs a block of code which generates a lifted AST.
 	 * 
 	 * @param code the AST for generating the lifted AST.
 	 * @param factoryName the name of the meta factory referenced in the lifted AST.
-     * @param methods list of method declarations for methods used in meta code
+	 * @param methods list of method declarations for methods used in meta code
 	 * @return the lifted AST.
 	 */
-	public CompilationUnitNode compileMeta(
-			ExpressionNode code, 
-			String factoryName, 
-			List<MethodDeclarationNode> methods) throws Exception
+	public CompilationUnitNode compileMeta(ExpressionNode code, String factoryName, List<MethodDeclarationNode> methods)
+			throws Exception
 	{
-	    BsjSourceSerializer serializer = new BsjSourceSerializerImpl();
-	    
+		BsjSourceSerializer serializer = new BsjSourceSerializerImpl();
+
 		// build the source for the wrapper that runs the lifted code
 		StringBuilder sb = new StringBuilder();
 		for (String s : META_IMPORTS)

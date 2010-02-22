@@ -182,8 +182,8 @@ public class AntlrAstViewer
 
 	public static Node stringToAst(String s, PrintStream ps) throws Exception
 	{
-		BsjParserImpl parser = new BsjParserImpl(new BsjNodeFactoryImpl());
-		return parser.parse(new InputStreamReader(new ByteArrayInputStream(s.getBytes())),
+		BsjParserImpl parser = new BsjParserImpl(new BsjNodeFactoryImpl(null));
+		return parser.parse(null, new InputStreamReader(new ByteArrayInputStream(s.getBytes())),
 				new DiagnosticPrintingListener<JavaFileObject>(ps));
 	}
 

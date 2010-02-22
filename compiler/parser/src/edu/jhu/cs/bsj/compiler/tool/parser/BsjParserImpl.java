@@ -44,12 +44,13 @@ public class BsjParserImpl
 	/**
 	 * This method generates a BSJ heterogeneous AST from the provided source stream.
 	 * 
+	 * @param name The name of the compilation unit being parsed.
 	 * @param reader The {@link Reader} to use to read the input file.
 	 * @param diagnosticListener The listener to which diagnostics are reported. If <code>null</code>, a default
 	 *            listener is used which reports messages to standard error.
 	 * @throws IOException If an I/O error occurs.
 	 */
-	public CompilationUnitNode parse(Reader reader, DiagnosticListener<? super JavaFileObject> diagnosticListener)
+	public CompilationUnitNode parse(String name, Reader reader, DiagnosticListener<? super JavaFileObject> diagnosticListener)
 			throws IOException
 	{
 		if (diagnosticListener==null)
@@ -65,7 +66,7 @@ public class BsjParserImpl
 		CompilationUnitNode compilationUnitNode;
 		try
 		{
-			compilationUnitNode = parser.compilationUnit();
+			compilationUnitNode = parser.compilationUnit(name);
 		} catch (RecognitionException re)
 		{
 			throw new RuntimeException(re); // throw an exception of our own instead (to avoid passing ANTLR deps)

@@ -31,7 +31,7 @@ public class BsjLiftedCodeVisitor extends BsjTypedNodeNoOpVisitor
     {
         this.methods = methods;
         methodId = 0;
-        factory = new BsjNodeFactoryImpl();
+        factory = new BsjNodeFactoryImpl(null);
     }
 
     /**

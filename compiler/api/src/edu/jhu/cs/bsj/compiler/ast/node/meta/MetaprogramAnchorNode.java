@@ -13,12 +13,6 @@ import edu.jhu.cs.bsj.compiler.ast.node.Node;
 public interface MetaprogramAnchorNode<T extends Node> extends Node
 {
     /**
-     * Gets the replacement node for this metaprogram.
-     * @return The replacement node for this metaprogram.
-     */
-    public T getReplacement();
-
-    /**
      * Gets the metaprogram on this node.
      * @return The metaprogram on this node.
      */
@@ -37,6 +31,12 @@ public interface MetaprogramAnchorNode<T extends Node> extends Node
      */
     @Override
     public MetaprogramAnchorNode<T> deepCopy(BsjNodeFactory factory);
+	/**
+	 * Retrieves the node with which this anchor will be replaced once its metaprogram executes.
+	 * @return The replacement node to use.
+	 */
+	public T getReplacement();
+	
 	/**
 	 * Changes the node with which this anchor will be replaced once its metaprogram executes.
 	 * @param replacement The replacement node to use.

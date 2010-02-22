@@ -1,11 +1,10 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.compiler;
 
 import java.io.IOException;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.HashSet;
 import java.util.PriorityQueue;
 import java.util.Queue;
+import java.util.Set;
 
 import javax.tools.DiagnosticListener;
 import javax.tools.JavaFileObject;
@@ -13,9 +12,10 @@ import javax.tools.JavaFileObject;
 import org.apache.log4j.Logger;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
+import edu.jhu.cs.bsj.compiler.ast.node.PackageNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.dependency.DependencyManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.task.BsjCompilerTask;
-import edu.jhu.cs.bsj.compiler.impl.tool.compiler.task.MetaprogramExecutionTask;
+import edu.jhu.cs.bsj.compiler.impl.tool.compiler.task.ExecuteMetaprogramTask;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.task.ParseCompilationUnitTask;
 import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.BsjFileManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.BsjFileObject;
@@ -35,10 +35,9 @@ public class MetacompilationManager
 	private final Logger LOGGER = Logger.getLogger(this.getClass());
 
 	/**
-	 * Maps the names of compilation units to their respective trackers. The trackers contain the compilation unit-
-	 * specific data and the individual compilation unit statuses.
+	 * The collection of binary names we have been asked to compile. This is used to prevent duplicate loads.
 	 */
-	private Map<String, CompilationUnitTracker> trackerMap;
+	private Set<String> observedBinaryNames;
 	/**
 	 * Represents the work queue. Work to be performed is enqueued here. The queue is prioritized to allow preemption of
 	 * more basic tasks (such as when the type checker or metacompiler brings in another source unit for parsing).
@@ -61,6 +60,10 @@ public class MetacompilationManager
 	 * Represents the metaprogram dependency manager.
 	 */
 	private DependencyManager dependencyManager;
+	/**
+	 * The root package used during this compilation process.
+	 */
+	private PackageNode rootPackage;
 
 	/**
 	 * Creates a new compilation unit manager.
@@ -72,14 +75,16 @@ public class MetacompilationManager
 	public MetacompilationManager(BsjNodeFactory factory, BsjFileManager fileManager,
 			DiagnosticListener<? super JavaFileObject> diagnosticListener)
 	{
-		this.trackerMap = new HashMap<String, CompilationUnitTracker>();
+		this.observedBinaryNames = new HashSet<String>();
 		this.priorityQueue = new PriorityQueue<BsjCompilerTask>();
 		this.factory = factory;
 		this.fileManager = fileManager;
 		this.diagnosticListener = diagnosticListener;
 
 		this.dependencyManager = new DependencyManager();
-		this.priorityQueue.offer(new MetaprogramExecutionTask());
+		this.priorityQueue.offer(new ExecuteMetaprogramTask());
+
+		this.rootPackage = factory.makePackageNode(null);
 	}
 
 	/**
@@ -89,62 +94,35 @@ public class MetacompilationManager
 	 */
 	public void addTask(BsjCompilerTask task)
 	{
-		this.priorityQueue.offer(task);
-	}
-
-	// TODO: remove.  This approach is not sane.
-	/**
-	 * Adds a compilation unit target by name.  This function determines the name of the source file which would contain
-	 * that type by walking the contents of the source path and checking for files which could stand as the type.  For
-	 * example, consider the type <code>com.example.Foo.Bar</code> and assume it is named according to standard
-	 * conventions.  This method would search, in order for
-	 * <ul>
-	 * <li><code>com.bsj</code></li>
-	 * <li><code>com.java</code></li>
-	 * <li><code>com/example.bsj</code></li>
-	 * <li><code>com/example.java</code></li>
-	 * <li><code>com/example/Foo.bsj</code></li>
-	 * </ul>
-	 * At this point, it presumably would've found its source file.  If not, it would continue until it had exhausted
-	 * its alternatives.  Note that this approach is compatible with the definition of shadowing in &#xA7;6.3.1 of
-	 * the Java Language Specification v3 as well as the definition of contextually ambiguous name resolution in
-	 * &#xA7;6.5.2 of the same document.  For instance, in the particularly convoluted case of a class named
-	 * "<code>foo</code>" and another class named "<code>foo.Bar</code>", it would be impossible for another file 
-	 * 
-	 * 
-	 * @param typeName The type name of the target to add.
-	 * @return <code>true</code> if the target of the specified name was added; <code>false</code> if it did not exist
-	 *         or was previously loaded.
-	 */
-	public boolean addTargetByTypeName(String typeName)
-	{
-		if (trackerMap.containsKey(typeName))
+		if (LOGGER.isTraceEnabled())
 		{
-			// Already have that target.
-			return false;
+			LOGGER.trace("Received compiler task " + task);
 		}
-		// TODO: look up the file object on the filesystem and add it as a target below
-		return false;
+		this.priorityQueue.offer(task);
 	}
 
 	/**
 	 * Adds a compilation unit target.
 	 * 
-	 * @param file The file to compile.
+	 * @param file The file to load.
 	 * @return <code>true</code> if the target of the specified name was added; <code>false</code> if it did not exist
 	 *         or was previously loaded.
 	 */
-	public boolean addTarget(BsjFileObject file)
+	public boolean addCompilationUnit(BsjFileObject file)
 	{
 		String binaryName = file.inferBinaryName();
-		if (trackerMap.containsKey(binaryName))
+		if (observedBinaryNames.contains(binaryName))
 		{
 			// Already have that target.
 			return false;
 		}
-		CompilationUnitTracker tracker = new CompilationUnitTracker(file);
-		this.trackerMap.put(binaryName, tracker);
-		this.addTask(new ParseCompilationUnitTask(tracker));
+
+		// TODO: what if the file is a binary?
+
+		observedBinaryNames.add(binaryName);
+		
+		ParseCompilationUnitTask parseCompilationUnitTask = new ParseCompilationUnitTask(file);
+		this.addTask(parseCompilationUnitTask);
 		return true;
 	}
 
@@ -186,32 +164,7 @@ public class MetacompilationManager
 	 */
 	public boolean isFinished()
 	{
-		if (this.priorityQueue.size() == 0)
-		{
-			// Sanity check - make sure everyone is in completed state
-			for (CompilationUnitTracker tracker : this.trackerMap.values())
-			{
-				if (tracker.getStatus() != CompilationUnitStatus.COMPLETE)
-				{
-					throw new IllegalStateException("Internal error: ran out of work but not everyone is complete! ("
-							+ tracker.getName() + " is in state " + tracker.getStatus() + ")");
-				}
-			}
-			return true;
-		} else
-		{
-			return false;
-		}
-	}
-
-	/**
-	 * Retrieves a collection of all of the trackers that this compilation manager knows about.
-	 * 
-	 * @return A collection of all of the trackers that this compilation manager knows about.
-	 */
-	public Collection<CompilationUnitTracker> getAllTrackers()
-	{
-		return this.trackerMap.values();
+		return this.priorityQueue.size() == 0;
 	}
 
 	/**
@@ -248,5 +201,10 @@ public class MetacompilationManager
 	public DiagnosticListener<? super JavaFileObject> getDiagnosticListener()
 	{
 		return diagnosticListener;
+	}
+
+	public PackageNode getRootPackage()
+	{
+		return rootPackage;
 	}
 }

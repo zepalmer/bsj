@@ -16,7 +16,7 @@ public class OperatorPrecedenceTest
     @Test
     public void testBinaryOperatorMultiplicativeAndAdditive()
     {
-        BsjNodeFactoryImpl factory = new BsjNodeFactoryImpl();
+        BsjNodeFactoryImpl factory = new BsjNodeFactoryImpl(null);
         Node node = factory.makeBinaryExpressionNode(
                 factory.makeIntLiteralNode(5),
                 factory.makeBinaryExpressionNode(
@@ -32,7 +32,7 @@ public class OperatorPrecedenceTest
     @Test
     public void testBinaryOperatorAdditiveAndShift()
     {
-        BsjNodeFactoryImpl factory = new BsjNodeFactoryImpl();
+        BsjNodeFactoryImpl factory = new BsjNodeFactoryImpl(null);
         Node node = factory.makeBinaryExpressionNode(
                 factory.makeIntLiteralNode(5),
                 factory.makeBinaryExpressionNode(
@@ -48,7 +48,7 @@ public class OperatorPrecedenceTest
     @Test
     public void testBinaryOperatorShiftAndGreaterThan()
     {
-        BsjNodeFactoryImpl factory = new BsjNodeFactoryImpl();
+        BsjNodeFactoryImpl factory = new BsjNodeFactoryImpl(null);
         Node node = factory.makeBinaryExpressionNode(
                 factory.makeIntLiteralNode(5),
                 factory.makeBinaryExpressionNode(
@@ -64,7 +64,7 @@ public class OperatorPrecedenceTest
     @Test
     public void testBinaryOperatorGreaterThanAndEqual()
     {
-        BsjNodeFactoryImpl factory = new BsjNodeFactoryImpl();
+        BsjNodeFactoryImpl factory = new BsjNodeFactoryImpl(null);
         Node node = factory.makeBinaryExpressionNode(
                 factory.makeIntLiteralNode(5),
                 factory.makeBinaryExpressionNode(
@@ -80,7 +80,7 @@ public class OperatorPrecedenceTest
     @Test
     public void testBinaryOperatorEqualAndLogicalAnd()
     {
-        BsjNodeFactoryImpl factory = new BsjNodeFactoryImpl();
+        BsjNodeFactoryImpl factory = new BsjNodeFactoryImpl(null);
         Node node = factory.makeBinaryExpressionNode(
                 factory.makeIntLiteralNode(5),
                 factory.makeBinaryExpressionNode(
@@ -96,7 +96,7 @@ public class OperatorPrecedenceTest
     @Test
     public void testBinaryOperatorLogicalAndAndXor()
     {
-        BsjNodeFactoryImpl factory = new BsjNodeFactoryImpl();
+        BsjNodeFactoryImpl factory = new BsjNodeFactoryImpl(null);
         Node node = factory.makeBinaryExpressionNode(
                 factory.makeIntLiteralNode(5),
                 factory.makeBinaryExpressionNode(
@@ -112,7 +112,7 @@ public class OperatorPrecedenceTest
     @Test
     public void testBinaryOperatorXorAndLogicalOr()
     {
-        BsjNodeFactoryImpl factory = new BsjNodeFactoryImpl();
+        BsjNodeFactoryImpl factory = new BsjNodeFactoryImpl(null);
         Node node = factory.makeBinaryExpressionNode(
                 factory.makeIntLiteralNode(5),
                 factory.makeBinaryExpressionNode(
@@ -128,7 +128,7 @@ public class OperatorPrecedenceTest
     @Test
     public void testBinaryOperatorLogicalOrAndConditionalAnd()
     {
-        BsjNodeFactoryImpl factory = new BsjNodeFactoryImpl();
+        BsjNodeFactoryImpl factory = new BsjNodeFactoryImpl(null);
         Node node = factory.makeBinaryExpressionNode(
                 factory.makeIntLiteralNode(5),
                 factory.makeBinaryExpressionNode(
@@ -144,7 +144,7 @@ public class OperatorPrecedenceTest
     @Test
     public void testBinaryOperatorConditionalAndAndConditionalOr()
     {
-        BsjNodeFactoryImpl factory = new BsjNodeFactoryImpl();
+        BsjNodeFactoryImpl factory = new BsjNodeFactoryImpl(null);
         Node node = factory.makeBinaryExpressionNode(
                 factory.makeIntLiteralNode(5),
                 factory.makeBinaryExpressionNode(
@@ -160,7 +160,7 @@ public class OperatorPrecedenceTest
     @Test
     public void testBinaryOperatorAndConditionalExpression()
     {
-        BsjNodeFactoryImpl factory = new BsjNodeFactoryImpl();
+        BsjNodeFactoryImpl factory = new BsjNodeFactoryImpl(null);
         Node node = factory.makeBinaryExpressionNode(
                 factory.makeIntLiteralNode(5),
                 factory.makeConditionalExpressionNode(
@@ -176,7 +176,7 @@ public class OperatorPrecedenceTest
     @Test
     public void testBinaryOperatorAndAssignment()
     {
-        BsjNodeFactoryImpl factory = new BsjNodeFactoryImpl();
+        BsjNodeFactoryImpl factory = new BsjNodeFactoryImpl(null);
         Node node = factory.makeBinaryExpressionNode(
                 factory.makeIntLiteralNode(5),
                 factory.makeAssignmentNode(
@@ -192,7 +192,7 @@ public class OperatorPrecedenceTest
     @Test
     public void testConditionalExpressionAndAssignment()
     {
-        BsjNodeFactoryImpl factory = new BsjNodeFactoryImpl();
+        BsjNodeFactoryImpl factory = new BsjNodeFactoryImpl(null);
         Node node = factory.makeConditionalExpressionNode(
                 factory.makeAssignmentNode(
                         factory.makeIntLiteralNode(5),

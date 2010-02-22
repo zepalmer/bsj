@@ -41,17 +41,20 @@ public class SourceGenerator
 	private static final File TARGET_IFACE_DIR = new File(TARGET_DIR.getAbsolutePath() + File.separator + "interface");
 	private static final String[] IFACE_IMPORTS = { "edu.jhu.cs.bsj.compiler.ast.*",
 			"edu.jhu.cs.bsj.compiler.ast.node.*", "edu.jhu.cs.bsj.compiler.ast.node.meta.*", "java.util.*",
-			"javax.annotation.Generated" };
+			"java.io.*", "javax.annotation.Generated" };
 	private static final String[] CLASS_IMPORTS = { "edu.jhu.cs.bsj.compiler.impl.ast.*",
 			"edu.jhu.cs.bsj.compiler.impl.ast.node.*", "edu.jhu.cs.bsj.compiler.impl.ast.node.meta.*",
-			"edu.jhu.cs.bsj.compiler.impl.utils.*", "javax.annotation.Generated" };
-	private static final Set<String> PRIMITIVE_TYPES = new HashSet<String>(Arrays.asList(new String[] { "int", "long",
-			"boolean", "float", "double", "short", "byte", "char" }));
-	private static final Set<String> PRIMITIVE_CONTAINER_TYPES = new HashSet<String>(Arrays.asList(new String[] {
-			"Long", "Integer", "Short", "Byte", "Double", "Float", "Boolean", "String", "Character" }));
-	private static final Set<String> ENUM_TYPES = new HashSet<String>(Arrays.asList(new String[] { "AccessModifier",
+			"edu.jhu.cs.bsj.compiler.impl.utils.*", "javax.annotation.Generated",
+			"edu.jhu.cs.bsj.compiler.impl.tool.filemanager.*" };
+	private static final Set<String> PRIMITIVE_TYPES = new HashSet<String>(Arrays.asList("int", "long", "boolean",
+			"float", "double", "short", "byte", "char"));
+	private static final Set<String> PRIMITIVE_CONTAINER_TYPES = new HashSet<String>(Arrays.asList("Long", "Integer",
+			"Short", "Byte", "Double", "Float", "Boolean", "String", "Character"));
+	private static final Set<String> ENUM_TYPES = new HashSet<String>(Arrays.asList("AccessModifier",
 			"AssignmentOperator", "BinaryOperator", "NameCategory", "PrimitiveType", "UnaryOperator",
-			"UnaryStatementOperator" }));
+			"UnaryStatementOperator"));
+	/** Types which can be "deep copied" by reference copy because the instance is global to a compilation operation. */
+	private static final Set<String> COMPILE_GLOBAL_TYPES = new HashSet<String>(Arrays.asList("PackageNodeCallback"));
 
 	/** Names the types of objects which are "deep copied" by simply copying the reference. */
 	private static final Set<String> DIRECT_COPY_NAMES;
@@ -62,6 +65,7 @@ public class SourceGenerator
 		directCopy.addAll(PRIMITIVE_TYPES);
 		directCopy.addAll(PRIMITIVE_CONTAINER_TYPES);
 		directCopy.addAll(ENUM_TYPES);
+		directCopy.addAll(COMPILE_GLOBAL_TYPES);
 		DIRECT_COPY_NAMES = Collections.unmodifiableSet(directCopy);
 	}
 
@@ -494,21 +498,24 @@ public class SourceGenerator
 			// gen getters and setters
 			for (PropertyDefinition p : def.getProperties())
 			{
-				ps.println("    /**");
-				ps.println("     * Gets " + p.getDescription() + ".");
-				ps.println("     * @return " + capFirst(p.getDescription()) + ".");
-				ps.println("     */");
-				ps.println("    public " + p.getFullType() + " get" + capFirst(p.getName()) + "();");
-				ps.println();
-				if (p.getMode() == PropertyDefinition.Mode.NORMAL)
+				if (!p.isHide())
 				{
 					ps.println("    /**");
-					ps.println("     * Changes " + p.getDescription() + ".");
-					ps.println("     * @param " + p.getName() + " " + capFirst(p.getDescription()) + ".");
+					ps.println("     * Gets " + p.getDescription() + ".");
+					ps.println("     * @return " + capFirst(p.getDescription()) + ".");
 					ps.println("     */");
-					ps.println("    public void set" + capFirst(p.getName()) + "(" + p.getFullType() + " "
-							+ p.getName() + ");");
+					ps.println("    public " + p.getFullType() + " get" + capFirst(p.getName()) + "();");
 					ps.println();
+					if (!p.isReadOnly())
+					{
+						ps.println("    /**");
+						ps.println("     * Changes " + p.getDescription() + ".");
+						ps.println("     * @param " + p.getName() + " " + capFirst(p.getDescription()) + ".");
+						ps.println("     */");
+						ps.println("    public void set" + capFirst(p.getName()) + "(" + p.getFullType() + " "
+								+ p.getName() + ");");
+						ps.println();
+					}
 				}
 			}
 
@@ -869,7 +876,7 @@ public class SourceGenerator
 				{
 					expr = p.getName();
 				}
-				if (propInstanceOf(p.getBaseType(), "Node"))
+				if (propInstanceOf(p.getBaseType(), "Node") && !p.isReadOnly())
 				{
 					ps.println("        set" + capFirst(p.getName()) + "(" + expr + ");");
 				} else
@@ -885,41 +892,44 @@ public class SourceGenerator
 			// gen getters and setters
 			for (PropertyDefinition p : def.getProperties())
 			{
-				ps.println("    /**");
-				ps.println("     * Gets " + p.getDescription() + ".");
-				ps.println("     * @return " + capFirst(p.getDescription()) + ".");
-				ps.println("     */");
-				ps.println("    public " + p.getFullType() + " get" + capFirst(p.getName()) + "()");
-				ps.println("    {");
-				ps.println("        return this." + p.getName() + ";");
-				ps.println("    }");
-				ps.println();
-				if (p.getMode() == PropertyDefinition.Mode.NORMAL)
+				if (!p.isHide())
 				{
 					ps.println("    /**");
-					ps.println("     * Changes " + p.getDescription() + ".");
-					ps.println("     * @param " + p.getName() + " " + capFirst(p.getDescription()) + ".");
+					ps.println("     * Gets " + p.getDescription() + ".");
+					ps.println("     * @return " + capFirst(p.getDescription()) + ".");
 					ps.println("     */");
-					ps.println("    public void set" + capFirst(p.getName()) + "(" + p.getFullType() + " "
-							+ p.getName() + ")");
+					ps.println("    public " + p.getFullType() + " get" + capFirst(p.getName()) + "()");
 					ps.println("    {");
-					if (propInstanceOf(p.getBaseType(), "Node"))
-					{
-						ps.println("        if (this." + p.getName() + " instanceof NodeImpl)");
-						ps.println("        {");
-						ps.println("            ((NodeImpl)this." + p.getName() + ").setParent(null);");
-						ps.println("        }");
-					}
-					ps.println("        this." + p.getName() + " = " + p.getName() + ";");
-					if (propInstanceOf(p.getBaseType(), "Node"))
-					{
-						ps.println("        if (this." + p.getName() + " instanceof NodeImpl)");
-						ps.println("        {");
-						ps.println("            ((NodeImpl)this." + p.getName() + ").setParent(this);");
-						ps.println("        }");
-					}
+					ps.println("        return this." + p.getName() + ";");
 					ps.println("    }");
 					ps.println();
+					if (!p.isReadOnly())
+					{
+						ps.println("    /**");
+						ps.println("     * Changes " + p.getDescription() + ".");
+						ps.println("     * @param " + p.getName() + " " + capFirst(p.getDescription()) + ".");
+						ps.println("     */");
+						ps.println("    public void set" + capFirst(p.getName()) + "(" + p.getFullType() + " "
+								+ p.getName() + ")");
+						ps.println("    {");
+						if (propInstanceOf(p.getBaseType(), "Node"))
+						{
+							ps.println("        if (this." + p.getName() + " instanceof NodeImpl)");
+							ps.println("        {");
+							ps.println("            ((NodeImpl)this." + p.getName() + ").setParent(null);");
+							ps.println("        }");
+						}
+						ps.println("        this." + p.getName() + " = " + p.getName() + ";");
+						if (propInstanceOf(p.getBaseType(), "Node"))
+						{
+							ps.println("        if (this." + p.getName() + " instanceof NodeImpl)");
+							ps.println("        {");
+							ps.println("            ((NodeImpl)this." + p.getName() + ").setParent(this);");
+							ps.println("        }");
+						}
+						ps.println("    }");
+						ps.println();
+					}
 				}
 			}
 
@@ -1077,7 +1087,7 @@ public class SourceGenerator
 				} else if (p.getName().equals("stopLocation"))
 				{
 					// intentionally doing nothing - handling for startLocation covers this one as well
-				} else
+				} else if (!p.isHide())
 				{
 					ps.println("        list.add(get" + Character.toUpperCase(p.getName().charAt(0))
 							+ p.getName().substring(1) + "());");
@@ -1104,6 +1114,8 @@ public class SourceGenerator
 				boolean firstProp = true;
 				for (PropertyDefinition p : recProps)
 				{
+					if (p.isHide())
+						continue;
 					if (firstProp)
 					{
 						firstProp = false;
@@ -1235,6 +1247,10 @@ public class SourceGenerator
 				ps.println(" * @return <code>true</code> if the replacement was successful; <code>false</code> if the");
 				ps.println(" *         specified <tt>before</tt> node is not a child of this node.");
 				ps.println(" */");
+				if (!def.isGenReplace())
+				{
+					ps.println("/* (not generating replace method)");
+				}
 				ps.println("public boolean replace(Node before, Node after)");
 				ps.println("{");
 				ps.incPrependCount();
@@ -1245,9 +1261,12 @@ public class SourceGenerator
 				{
 					if (propInstanceOf(p.getBaseType(), "Node"))
 					{
+						if (p.isReadOnly())
+							continue;
 						if (p.getTypeArg() != null)
 							throw new IllegalStateException(
-									"Don't know how to handle replacement for parameterized node type " + p.getBaseType() + "!");
+									"Don't know how to handle replacement for parameterized node type "
+											+ p.getBaseType() + "!");
 						ps.println("if (before.equals(this.get" + capFirst(p.getName()) + "()) && (after instanceof "
 								+ p.getBaseType() + "))");
 						ps.println("{");
@@ -1291,6 +1310,10 @@ public class SourceGenerator
 				ps.println("return false;");
 				ps.decPrependCount();
 				ps.println("}");
+				if (!def.isGenReplace())
+				{
+					ps.println("*/");
+				}
 				ps.println();
 			}
 

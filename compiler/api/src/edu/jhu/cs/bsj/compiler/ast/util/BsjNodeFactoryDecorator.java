@@ -1909,18 +1909,79 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     }
 
     /**
+     * Creates a CompilationUnitListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public CompilationUnitListNode makeCompilationUnitListNode(
+            List<CompilationUnitNode> children)
+    {
+        this.before();
+        CompilationUnitListNode node = factory.makeCompilationUnitListNode(children);
+        this.after(node);
+        return node;
+    }
+
+    /**
+     * Creates a CompilationUnitListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public CompilationUnitListNode makeCompilationUnitListNode(
+            CompilationUnitNode... childrenElements)
+    {
+        this.before();
+        CompilationUnitListNode node = factory.makeCompilationUnitListNode(childrenElements);
+        this.after(node);
+        return node;
+    }
+
+    /**
+     * Creates a CompilationUnitListNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public CompilationUnitListNode makeCompilationUnitListNode(
+            List<CompilationUnitNode> children,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        CompilationUnitListNode node = factory.makeCompilationUnitListNode(children, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+
+    /**
+     * Creates a CompilationUnitListNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public CompilationUnitListNode makeCompilationUnitListNode(
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation,
+            CompilationUnitNode... childrenElements)
+    {
+        this.before();
+        CompilationUnitListNode node = factory.makeCompilationUnitListNode(startLocation, stopLocation, childrenElements);
+        this.after(node);
+        return node;
+    }
+
+    /**
      * Creates a CompilationUnitNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
     @Override
     public CompilationUnitNode makeCompilationUnitNode(
+            String name,
             PackageDeclarationNode packageDeclaration,
             MetaprogramImportListNode metaimports,
             ImportListNode imports,
             TypeDeclarationListNode typeDecls)
     {
         this.before();
-        CompilationUnitNode node = factory.makeCompilationUnitNode(packageDeclaration, metaimports, imports, typeDecls);
+        CompilationUnitNode node = factory.makeCompilationUnitNode(name, packageDeclaration, metaimports, imports, typeDecls);
         this.after(node);
         return node;
     }
@@ -1931,6 +1992,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
      */
     @Override
     public CompilationUnitNode makeCompilationUnitNode(
+            String name,
             PackageDeclarationNode packageDeclaration,
             MetaprogramImportListNode metaimports,
             ImportListNode imports,
@@ -1939,7 +2001,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
             BsjSourceLocation stopLocation)
     {
         this.before();
-        CompilationUnitNode node = factory.makeCompilationUnitNode(packageDeclaration, metaimports, imports, typeDecls, startLocation, stopLocation);
+        CompilationUnitNode node = factory.makeCompilationUnitNode(name, packageDeclaration, metaimports, imports, typeDecls, startLocation, stopLocation);
         this.after(node);
         return node;
     }
@@ -1950,12 +2012,13 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
      */
     @Override
     public CompilationUnitNode makeCompilationUnitNode(
+            String name,
             PackageDeclarationNode packageDeclaration,
             ImportListNode imports,
             TypeDeclarationListNode typeDecls)
     {
         this.before();
-        CompilationUnitNode node = factory.makeCompilationUnitNode(packageDeclaration, imports, typeDecls);
+        CompilationUnitNode node = factory.makeCompilationUnitNode(name, packageDeclaration, imports, typeDecls);
         this.after(node);
         return node;
     }
@@ -1966,6 +2029,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
      */
     @Override
     public CompilationUnitNode makeCompilationUnitNode(
+            String name,
             PackageDeclarationNode packageDeclaration,
             ImportListNode imports,
             TypeDeclarationListNode typeDecls,
@@ -1973,7 +2037,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
             BsjSourceLocation stopLocation)
     {
         this.before();
-        CompilationUnitNode node = factory.makeCompilationUnitNode(packageDeclaration, imports, typeDecls, startLocation, stopLocation);
+        CompilationUnitNode node = factory.makeCompilationUnitNode(name, packageDeclaration, imports, typeDecls, startLocation, stopLocation);
         this.after(node);
         return node;
     }
@@ -4425,6 +4489,96 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     {
         this.before();
         PackageDeclarationNode node = factory.makePackageDeclarationNode(name, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+
+    /**
+     * Creates a PackageListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public PackageListNode makePackageListNode(
+            List<PackageNode> children)
+    {
+        this.before();
+        PackageListNode node = factory.makePackageListNode(children);
+        this.after(node);
+        return node;
+    }
+
+    /**
+     * Creates a PackageListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public PackageListNode makePackageListNode(
+            PackageNode... childrenElements)
+    {
+        this.before();
+        PackageListNode node = factory.makePackageListNode(childrenElements);
+        this.after(node);
+        return node;
+    }
+
+    /**
+     * Creates a PackageListNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public PackageListNode makePackageListNode(
+            List<PackageNode> children,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        PackageListNode node = factory.makePackageListNode(children, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+
+    /**
+     * Creates a PackageListNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public PackageListNode makePackageListNode(
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation,
+            PackageNode... childrenElements)
+    {
+        this.before();
+        PackageListNode node = factory.makePackageListNode(startLocation, stopLocation, childrenElements);
+        this.after(node);
+        return node;
+    }
+
+    /**
+     * Creates a PackageNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public PackageNode makePackageNode(
+            IdentifierNode name)
+    {
+        this.before();
+        PackageNode node = factory.makePackageNode(name);
+        this.after(node);
+        return node;
+    }
+
+    /**
+     * Creates a PackageNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public PackageNode makePackageNode(
+            IdentifierNode name,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        PackageNode node = factory.makePackageNode(name, startLocation, stopLocation);
         this.after(node);
         return node;
     }

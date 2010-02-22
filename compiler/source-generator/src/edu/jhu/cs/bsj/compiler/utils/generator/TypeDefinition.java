@@ -31,6 +31,7 @@ public class TypeDefinition extends PropertyBasedHierarchyDefinition<TypeDefinit
 	private Map<String, String> constructorOverrideMap;
 	private boolean genConstructor;
 	private boolean genChildren;
+	private boolean genReplace;
 	private List<FactoryMethodDefinition> factoryMethods;
 	private Mode mode;
 	
@@ -41,7 +42,7 @@ public class TypeDefinition extends PropertyBasedHierarchyDefinition<TypeDefinit
 			GenerationProfile profile, List<String> interfaces, List<String> tags, List<PropertyDefinition> properties,
 			List<String> includes, String docString, List<String> toStringLines,
 			Map<String, String> factoryOverrideMap, Map<String, String> constructorOverrideMap, boolean genConstructor,
-			boolean genChildren, List<FactoryMethodDefinition> factoryMethods, Mode mode)
+			boolean genChildren, boolean genReplace, List<FactoryMethodDefinition> factoryMethods, Mode mode)
 	{
 		super();
 		this.baseName = baseName;
@@ -59,6 +60,7 @@ public class TypeDefinition extends PropertyBasedHierarchyDefinition<TypeDefinit
 		this.constructorOverrideMap = constructorOverrideMap;
 		this.genConstructor = genConstructor;
 		this.genChildren = genChildren;
+		this.genReplace = genReplace;
 		this.factoryMethods = factoryMethods;
 		this.mode = mode;
 	}
@@ -216,6 +218,11 @@ public class TypeDefinition extends PropertyBasedHierarchyDefinition<TypeDefinit
 		return genChildren;
 	}
 	
+	public boolean isGenReplace()
+	{
+		return genReplace;
+	}
+
 	public String getSuperName()
 	{
 		return superName;
