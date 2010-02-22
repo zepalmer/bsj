@@ -134,11 +134,11 @@ public class BsjC
 		// create a new file manager from the options selected
 		BsjFileManager bfm = new LocationMappedFileManager(map);
 		
-		// get files for compilation
-		//TODO extract the source files from the command line
+		// get files for compilation, any left over arguments are source files
 		List<BsjFileObject> sourceFiles = new ArrayList<BsjFileObject>();		
-		for (String sourceFile : args)
+		for (String sourceFile : cmd.getArgs())
 		{
+			//TODO parse absolute pathnames
 			sourceFiles.add(
 					bfm.getJavaFileForInput(
 							BsjCompilerLocation.SOURCE_PATH, 
