@@ -1,4 +1,4 @@
-package edu.jhu.cs.bsj.compiler.impl.tool.compiler.names;
+package edu.jhu.cs.bsj.compiler.impl.tool.compiler.operations;
 
 import java.util.ArrayList;
 import java.util.List;

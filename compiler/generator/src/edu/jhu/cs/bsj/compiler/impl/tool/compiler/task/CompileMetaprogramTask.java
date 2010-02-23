@@ -13,34 +13,27 @@ import edu.jhu.cs.bsj.compiler.ast.AccessModifier;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceSerializer;
 import edu.jhu.cs.bsj.compiler.ast.NameCategory;
-import edu.jhu.cs.bsj.compiler.ast.node.AnnotationDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.BlockNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassBodyNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ClassDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ConstructorDeclarationNode;
-import edu.jhu.cs.bsj.compiler.ast.node.EnumDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ImportNode;
-import edu.jhu.cs.bsj.compiler.ast.node.InterfaceDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.MethodDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.NameNode;
-import edu.jhu.cs.bsj.compiler.ast.node.NamedTypeDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.PackageDeclarationNode;
-import edu.jhu.cs.bsj.compiler.ast.node.PackageNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramPreambleNode;
-import edu.jhu.cs.bsj.compiler.ast.util.BsjDefaultNodeOperation;
 import edu.jhu.cs.bsj.compiler.impl.metaprogram.BsjMetaprogram;
 import edu.jhu.cs.bsj.compiler.impl.metaprogram.ContextImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.MetacompilationContext;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.MetaprogramProfile;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.StandardBsjCompiler;
-import edu.jhu.cs.bsj.compiler.impl.tool.compiler.names.AncestryExecutingNodeOperation;
+import edu.jhu.cs.bsj.compiler.impl.tool.compiler.operations.EnclosingTypeNamingNodeOperation;
 import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.BsjCompilerLocation;
 import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.BsjFileManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.BsjFileObject;
@@ -135,13 +128,11 @@ public class CompileMetaprogramTask extends AbstractBsjCompilerTask
 			if (metaprogramPreambleNode.getTarget() != null)
 			{
 				// determine qualifying prefix
-				String qualifyingPrefix = getQualifyingPrefix(anchor);
-				if (qualifyingPrefix.length() > 0)
-					qualifyingPrefix += ".";
+				NameNode nameNode = anchor.executeOperation(new EnclosingTypeNamingNodeOperation(factory), null);
 
 				for (IdentifierNode id : metaprogramPreambleNode.getTarget().getTargets().getChildren())
 				{
-					String targetName = qualifyingPrefix + id.getIdentifier();
+					String targetName = nameNode.getNameString() + "." + id.getIdentifier();
 					if (LOGGER.isTraceEnabled())
 					{
 						LOGGER.trace("Metaprogram for anchor " + anchor.getUid() + " has target " + targetName);
@@ -371,97 +362,5 @@ public class CompileMetaprogramTask extends AbstractBsjCompilerTask
 			Class<?> loadClass)
 	{
 		return (Class<? extends BsjMetaprogram<A>>) loadClass;
-	}
-
-	/**
-	 * Retrieves the qualifying prefix for the specified anchor.
-	 * 
-	 * @param <A> The type of anchor node used here.
-	 * @param anchor The anchor node to use.
-	 * @return The fully-qualified name of the type surrounding this anchor.
-	 */
-	// TODO: replace this with a general NodeOperation that can determine the fully qualified name of any node
-	// TODO: what implications does this naming scheme have w.r.t. local and anonymous classes?
-	private <A extends MetaprogramAnchorNode<? extends Node>> String getQualifyingPrefix(A anchor)
-	{
-		EnclosingTypeNameBuildingAncestorOperation op = new EnclosingTypeNameBuildingAncestorOperation();
-		anchor.executeOperation(new AncestryExecutingNodeOperation<Void>(op), null);
-		return op.getEnclosingTypeName();
-	}
-
-	private final class EnclosingTypeNameBuildingAncestorOperation extends BsjDefaultNodeOperation<List<Node>, Void>
-	{
-		// TODO: handle anonymous inner classes correctly
-		private StringBuilder sb = new StringBuilder();
-		private boolean seenTypeDeclarationYet = false;
-
-		@Override
-		public Void executeDefault(Node node, List<Node> p)
-		{
-			return null;
-		}
-
-		private void addComponent(String component)
-		{
-			if (sb.length() > 0)
-			{
-				sb.insert(0, '.');
-			}
-			sb.insert(0, component);
-		}
-
-		public String getEnclosingTypeName()
-		{
-			return sb.toString();
-		}
-
-		@Override
-		public Void executeAnnotationDeclarationNode(AnnotationDeclarationNode node, List<Node> p)
-		{
-			handleNamedTypeDeclarationNode(node);
-			return null;
-		}
-
-		@Override
-		public Void executeClassDeclarationNode(ClassDeclarationNode node, List<Node> p)
-		{
-			handleNamedTypeDeclarationNode(node);
-			return null;
-		}
-
-		@Override
-		public Void executeEnumDeclarationNode(EnumDeclarationNode node, List<Node> p)
-		{
-			handleNamedTypeDeclarationNode(node);
-			return null;
-		}
-
-		@Override
-		public Void executeInterfaceDeclarationNode(InterfaceDeclarationNode node, List<Node> p)
-		{
-			handleNamedTypeDeclarationNode(node);
-			return null;
-		}
-
-		private void handleNamedTypeDeclarationNode(NamedTypeDeclarationNode<?> node)
-		{
-			seenTypeDeclarationYet = true;
-			addComponent(node.getIdentifier().getIdentifier());
-		}
-
-		@Override
-		public Void executeCompilationUnitNode(CompilationUnitNode node, List<Node> p)
-		{
-			if (!seenTypeDeclarationYet)
-				addComponent(node.getName());
-			return null;
-		}
-
-		@Override
-		public Void executePackageNode(PackageNode node, List<Node> p)
-		{
-			addComponent(node.getName().getIdentifier());
-			return null;
-		}
 	}
 }

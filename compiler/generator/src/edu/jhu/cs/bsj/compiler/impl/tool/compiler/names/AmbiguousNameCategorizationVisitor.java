@@ -30,6 +30,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclaratorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableNode;
 import edu.jhu.cs.bsj.compiler.ast.util.BsjDefaultNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.util.BsjTypedNodeNoOpVisitor;
+import edu.jhu.cs.bsj.compiler.impl.tool.compiler.operations.AncestryExecutingNodeOperation;
 
 /**
  * This visitor disambiguates AST nodes which represent ambiguous names (as defined by &#xA7;6.5 of the JLS). After the
