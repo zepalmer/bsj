@@ -19,7 +19,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeParameterListNode;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public class InterfaceDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl implements InterfaceDeclarationNode
+public class InterfaceDeclarationNodeImpl extends NodeImpl implements InterfaceDeclarationNode
 {
     /** The modifiers for this type. */
     private InterfaceModifiersNode modifiers;
@@ -33,6 +33,12 @@ public class InterfaceDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl i
     /** This class's type parameters. */
     private TypeParameterListNode typeParameters;
 
+    /** The name of this declared type. */
+    private IdentifierNode identifier;
+
+    /** The associated javadoc comment for this node. */
+    private JavadocNode javadoc;
+
     /** General constructor. */
     public InterfaceDeclarationNodeImpl(
             InterfaceModifiersNode modifiers,
@@ -44,11 +50,13 @@ public class InterfaceDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl i
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        super(identifier, javadoc, startLocation, stopLocation);
+        super(startLocation, stopLocation);
         setModifiers(modifiers);
         setExtendsClause(extendsClause);
         setBody(body);
         setTypeParameters(typeParameters);
+        setIdentifier(identifier);
+        setJavadoc(javadoc);
     }
 
     /**
@@ -156,6 +164,58 @@ public class InterfaceDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl i
     }
 
     /**
+     * Gets the name of this declared type.
+     * @return The name of this declared type.
+     */
+    public IdentifierNode getIdentifier()
+    {
+        return this.identifier;
+    }
+
+    /**
+     * Changes the name of this declared type.
+     * @param identifier The name of this declared type.
+     */
+    public void setIdentifier(IdentifierNode identifier)
+    {
+        if (this.identifier instanceof NodeImpl)
+        {
+            ((NodeImpl)this.identifier).setParent(null);
+        }
+        this.identifier = identifier;
+        if (this.identifier instanceof NodeImpl)
+        {
+            ((NodeImpl)this.identifier).setParent(this);
+        }
+    }
+
+    /**
+     * Gets the associated javadoc comment for this node.
+     * @return The associated javadoc comment for this node.
+     */
+    public JavadocNode getJavadoc()
+    {
+        return this.javadoc;
+    }
+
+    /**
+     * Changes the associated javadoc comment for this node.
+     * @param javadoc The associated javadoc comment for this node.
+     */
+    public void setJavadoc(JavadocNode javadoc)
+    {
+        if (this.javadoc instanceof NodeImpl)
+        {
+            ((NodeImpl)this.javadoc).setParent(null);
+        }
+        this.javadoc = javadoc;
+        if (this.javadoc instanceof NodeImpl)
+        {
+            ((NodeImpl)this.javadoc).setParent(this);
+        }
+    }
+
+    /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
      * method first and then visit its subclass-specific children.
@@ -218,13 +278,13 @@ public class InterfaceDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl i
     {
         visitor.visitStartBegin(this);
         visitor.visitInterfaceDeclarationNodeStart(this, true);
-        visitor.visitNamedTypeDeclarationNodeStart(this);
         visitor.visitNodeStart(this);
+        visitor.visitNamedTypeDeclarationNodeStart(this);
         visitor.visitStartEnd(this);
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
-        visitor.visitNodeStop(this);
         visitor.visitNamedTypeDeclarationNodeStop(this);
+        visitor.visitNodeStop(this);
         visitor.visitInterfaceDeclarationNodeStop(this, true);
         visitor.visitStopEnd(this);
     }

@@ -12,7 +12,6 @@ public class UseDefaultsFactoryMethodDefinition implements FactoryMethodDefiniti
 	@Override
 	public boolean isVisible(String name)
 	{
-		// TODO: wrong properties definition - needs to be recursive
 		for (PropertyDefinition def : this.parent.getRecursiveProperties())
 		{
 			if (def.getName().equals(name))
@@ -20,7 +19,7 @@ public class UseDefaultsFactoryMethodDefinition implements FactoryMethodDefiniti
 				return def.getDefaultExpression() == null;
 			}
 		}
-		throw new IllegalStateException("Asked for visibility of unrecognized property " + name);
+		throw new IllegalStateException("Asked for visibility of unrecognized property " + name + " from " + parent.getName());
 	}
 
 	@Override

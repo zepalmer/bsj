@@ -10,7 +10,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
  * expression which contains this body implicitly stands as the declaration of that type.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public interface AnonymousClassBodyNode extends Node, TypeBodyNode
+public interface AnonymousClassBodyNode extends Node, TypeBodyNode<AnonymousClassMemberNode>
 {
     /**
      * Gets the members of this anonymous class body.

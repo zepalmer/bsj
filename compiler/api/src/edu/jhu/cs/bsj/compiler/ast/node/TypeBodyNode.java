@@ -8,13 +8,13 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
  * This interface is implemented by any node which represents the body of a type definition.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public interface TypeBodyNode extends Node
+public interface TypeBodyNode<T extends Node> extends Node
 {
     /**
      * Gets the members of this type declaration body.
      * @return The members of this type declaration body.
      */
-    public ListNode<? extends Node> getMembers();
+    public ListNode<? extends T> getMembers();
 
     /**
      * Generates a deep copy of this node.
@@ -22,5 +22,5 @@ public interface TypeBodyNode extends Node
      * @return The resulting deep copy node.
      */
     @Override
-    public TypeBodyNode deepCopy(BsjNodeFactory factory);
+    public TypeBodyNode<T> deepCopy(BsjNodeFactory factory);
 }

@@ -324,7 +324,7 @@ public class SourceGeneratorParser
 			TypeDefinition.Mode mode = getTypeDefinitionModeFromString(profile, getAttributeValue(e, "mode"));
 
 			List<String> interfaces = new ArrayList<String>();
-			List<String> tags = new ArrayList<String>();
+			List<TagReferenceDefinition> tags = new ArrayList<TagReferenceDefinition>();
 			List<PropertyDefinition> props = new ArrayList<PropertyDefinition>();
 			List<String> includes = new ArrayList<String>();
 			String docString = null;
@@ -349,7 +349,9 @@ public class SourceGeneratorParser
 						interfaces.add(childElement.getAttribute("name"));
 					} else if (childTag.equals("tag"))
 					{
-						tags.add(childElement.getAttribute("name"));
+						String tagName =  childElement.getAttribute("name");
+						String tagTypeArg = getAttributeValue(childElement, "typeArg");
+						tags.add(new TagReferenceDefinition(tagName, tagTypeArg));
 					} else if (childTag.equals("prop"))
 					{
 						PropertyHandler handler = new PropertyHandler(this.profile);

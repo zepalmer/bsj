@@ -8,7 +8,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
  * Acts as a superclass for all named type declarations.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public interface NamedTypeDeclarationNode extends Node, TypeDeclarationNode
+public interface NamedTypeDeclarationNode<T extends Node> extends Node, TypeDeclarationNode
 {
     /**
      * Gets the name of this declared type.
@@ -35,10 +35,16 @@ public interface NamedTypeDeclarationNode extends Node, TypeDeclarationNode
     public void setJavadoc(JavadocNode javadoc);
 
     /**
+     * Gets this type's body.
+     * @return This type's body.
+     */
+    public TypeBodyNode<? extends T> getBody();
+
+    /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.
      * @return The resulting deep copy node.
      */
     @Override
-    public NamedTypeDeclarationNode deepCopy(BsjNodeFactory factory);
+    public NamedTypeDeclarationNode<T> deepCopy(BsjNodeFactory factory);
 }

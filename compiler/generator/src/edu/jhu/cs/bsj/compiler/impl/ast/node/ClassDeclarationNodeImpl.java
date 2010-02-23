@@ -20,7 +20,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeParameterListNode;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public class ClassDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl implements ClassDeclarationNode
+public class ClassDeclarationNodeImpl extends NodeImpl implements ClassDeclarationNode
 {
     /** The modifiers for this type. */
     private ClassModifiersNode modifiers;
@@ -37,6 +37,12 @@ public class ClassDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl imple
     /** This class's type parameters. */
     private TypeParameterListNode typeParameters;
 
+    /** The name of this declared type. */
+    private IdentifierNode identifier;
+
+    /** The associated javadoc comment for this node. */
+    private JavadocNode javadoc;
+
     /** General constructor. */
     public ClassDeclarationNodeImpl(
             ClassModifiersNode modifiers,
@@ -49,12 +55,14 @@ public class ClassDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl imple
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        super(identifier, javadoc, startLocation, stopLocation);
+        super(startLocation, stopLocation);
         setModifiers(modifiers);
         setExtendsClause(extendsClause);
         setImplementsClause(implementsClause);
         setBody(body);
         setTypeParameters(typeParameters);
+        setIdentifier(identifier);
+        setJavadoc(javadoc);
     }
 
     /**
@@ -188,6 +196,58 @@ public class ClassDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl imple
     }
 
     /**
+     * Gets the name of this declared type.
+     * @return The name of this declared type.
+     */
+    public IdentifierNode getIdentifier()
+    {
+        return this.identifier;
+    }
+
+    /**
+     * Changes the name of this declared type.
+     * @param identifier The name of this declared type.
+     */
+    public void setIdentifier(IdentifierNode identifier)
+    {
+        if (this.identifier instanceof NodeImpl)
+        {
+            ((NodeImpl)this.identifier).setParent(null);
+        }
+        this.identifier = identifier;
+        if (this.identifier instanceof NodeImpl)
+        {
+            ((NodeImpl)this.identifier).setParent(this);
+        }
+    }
+
+    /**
+     * Gets the associated javadoc comment for this node.
+     * @return The associated javadoc comment for this node.
+     */
+    public JavadocNode getJavadoc()
+    {
+        return this.javadoc;
+    }
+
+    /**
+     * Changes the associated javadoc comment for this node.
+     * @param javadoc The associated javadoc comment for this node.
+     */
+    public void setJavadoc(JavadocNode javadoc)
+    {
+        if (this.javadoc instanceof NodeImpl)
+        {
+            ((NodeImpl)this.javadoc).setParent(null);
+        }
+        this.javadoc = javadoc;
+        if (this.javadoc instanceof NodeImpl)
+        {
+            ((NodeImpl)this.javadoc).setParent(this);
+        }
+    }
+
+    /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
      * method first and then visit its subclass-specific children.
@@ -258,15 +318,15 @@ public class ClassDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl imple
     {
         visitor.visitStartBegin(this);
         visitor.visitClassDeclarationNodeStart(this, true);
-        visitor.visitNamedTypeDeclarationNodeStart(this);
         visitor.visitNodeStart(this);
+        visitor.visitNamedTypeDeclarationNodeStart(this);
         visitor.visitInlineTypeDeclarableNodeStart(this);
         visitor.visitStartEnd(this);
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
+        visitor.visitNamedTypeDeclarationNodeStop(this);
         visitor.visitInlineTypeDeclarableNodeStop(this);
         visitor.visitNodeStop(this);
-        visitor.visitNamedTypeDeclarationNodeStop(this);
         visitor.visitClassDeclarationNodeStop(this, true);
         visitor.visitStopEnd(this);
     }

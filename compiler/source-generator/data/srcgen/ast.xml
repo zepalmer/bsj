@@ -80,6 +80,7 @@
         </type>
 
         <type name="ImportNode" super="Node" mode="tag">
+            <prop name="name" type="NameNode" desc="the name of the entity to be imported" />
             <doc><![CDATA[
                 This tagging interface is used to denote AST nodes which represent import statements.
             ]]></doc>
@@ -214,6 +215,7 @@
             ]]></doc>
         </type>
 
+        <!-- TODO: is the QNN vs. SNN distinction buying us anything useful or just a bunch of instanceof checks? -->
         <type name="QualifiedNameNode" super="NameNode">
             <prop name="base" type="NameNode" desc="the name being qualified" />
             <prop name="identifier" type="IdentifierNode" desc="the identifier used to qualify the base name" />
@@ -1382,8 +1384,8 @@
 
         <!-- ===================== TYPE BODY NODES ====================== -->
 
-        <type name="TypeBodyNode" super="Node" mode="tag">
-            <prop name="members" type="ListNode" typeArg="? extends Node" mode="readOnly"
+        <type name="TypeBodyNode" typeParam="T extends Node" super="Node" mode="tag">
+            <prop name="members" type="ListNode" typeArg="? extends T" mode="readOnly"
                 desc="the members of this type declaration body" />
             <doc><![CDATA[
                 This interface is implemented by any node which represents the body of a type definition.
@@ -1391,7 +1393,7 @@
         </type>
 
         <type name="AnnotationBodyNode" super="Node">
-            <tag name="TypeBodyNode" />
+            <tag name="TypeBodyNode" typeArg="AnnotationMemberNode" />
             <prop name="members" type="AnnotationMemberListNode" desc="the members of this annotation body" />
             <doc><![CDATA[
                 Represents the body of an annotation declaration.
@@ -1399,7 +1401,7 @@
         </type>
 
         <type name="AnonymousClassBodyNode" super="Node">
-            <tag name="TypeBodyNode" />
+            <tag name="TypeBodyNode" typeArg="AnonymousClassMemberNode" />
             <prop name="members" type="AnonymousClassMemberListNode" desc="the members of this anonymous class body" />
             <doc><![CDATA[
                 Represents the body of an anonymous class declaration.  This body is distinct from {@link ClassBodyNode} in that
@@ -1409,7 +1411,7 @@
         </type>
 
         <type name="ClassBodyNode" super="Node">
-            <tag name="TypeBodyNode" />
+            <tag name="TypeBodyNode" typeArg="ClassMemberNode" />
             <prop name="members" type="ClassMemberListNode" desc="the members of this class body" />
             <doc><![CDATA[
                 Represents the body of a class declaration.
@@ -1417,7 +1419,7 @@
         </type>
 
         <type name="EnumBodyNode" super="Node">
-            <tag name="TypeBodyNode" />
+            <tag name="TypeBodyNode" typeArg="ClassMemberNode" />
             <prop name="constants" type="EnumConstantDeclarationListNode" desc="the enumeration constants" />
             <prop name="members" type="ClassMemberListNode" desc="the members of the class body part" />
             <doc><![CDATA[
@@ -1426,7 +1428,7 @@
         </type>
 
         <type name="InterfaceBodyNode" super="Node">
-            <tag name="TypeBodyNode" />
+            <tag name="TypeBodyNode" typeArg="InterfaceMemberNode" />
             <prop name="members" type="InterfaceMemberListNode" desc="the members of this interface body" />
             <doc><![CDATA[
                 Represents the body of an interface declaration.
@@ -1435,7 +1437,8 @@
 
         <!-- ================== TYPE DECLARATION NODES ================== -->
 
-        <type name="AnnotationDeclarationNode" super="NamedTypeDeclarationNode">
+        <type name="AnnotationDeclarationNode" super="Node">
+            <tag name="NamedTypeDeclarationNode" typeArg="AnnotationMemberNode"/>
             <prop name="modifiers" type="AnnotationModifiersNode" desc="the modifiers for this type" />
             <prop name="body" type="AnnotationBodyNode" desc="this annotation's body" />
             <doc><![CDATA[
@@ -1450,7 +1453,8 @@
             ]]></doc>
         </type>
 
-        <type name="ClassDeclarationNode" super="NamedTypeDeclarationNode">
+        <type name="ClassDeclarationNode" super="Node">
+            <tag name="NamedTypeDeclarationNode" typeArg="ClassMemberNode"/>
             <tag name="InlineTypeDeclarableNode" />
             <prop name="modifiers" type="ClassModifiersNode" desc="the modifiers for this type" />
             <prop name="extendsClause" type="DeclaredTypeNode" desc="the extends clause" />
@@ -1469,7 +1473,8 @@
             ]]></doc>
         </type>
 
-        <type name="EnumDeclarationNode" super="NamedTypeDeclarationNode">
+        <type name="EnumDeclarationNode" super="Node">
+            <tag name="NamedTypeDeclarationNode" typeArg="ClassMemberNode"/>
             <tag name="InlineTypeDeclarableNode" />
             <prop name="modifiers" type="EnumModifiersNode" desc="the modifiers for this type" />
             <prop name="implementsClause" type="DeclaredTypeListNode" desc="the implements clause" />
@@ -1486,7 +1491,8 @@
             ]]></doc>
         </type>
 
-        <type name="InterfaceDeclarationNode" super="NamedTypeDeclarationNode">
+        <type name="InterfaceDeclarationNode" super="Node">
+            <tag name="NamedTypeDeclarationNode" typeArg="InterfaceMemberNode"/>
             <prop name="modifiers" type="InterfaceModifiersNode" desc="the modifiers for this type" />
             <prop name="extendsClause" type="DeclaredTypeListNode" desc="the extends clause" />
             <prop name="body" type="InterfaceBodyNode" desc="this interface's body" />
@@ -1517,10 +1523,11 @@
             ]]></doc>
         </type>
 
-        <type name="NamedTypeDeclarationNode" super="Node" mode="abstract">
+        <type name="NamedTypeDeclarationNode" typeParam="T extends Node" super="Node" mode="tag">
             <tag name="TypeDeclarationNode" />
             <prop name="identifier" type="IdentifierNode" desc="the name of this declared type" />
             <prop name="javadoc" type="JavadocNode" desc="the associated javadoc comment for this node" />
+            <prop name="body" type="TypeBodyNode" typeArg="? extends T" mode="readOnly" desc="this type's body" />
             <doc><![CDATA[
                 Acts as a superclass for all named type declarations.
             ]]></doc>

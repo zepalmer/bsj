@@ -18,7 +18,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.JavadocNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public class EnumDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl implements EnumDeclarationNode
+public class EnumDeclarationNodeImpl extends NodeImpl implements EnumDeclarationNode
 {
     /** The modifiers for this type. */
     private EnumModifiersNode modifiers;
@@ -28,6 +28,12 @@ public class EnumDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl implem
 
     /** This enum's body. */
     private EnumBodyNode body;
+
+    /** The name of this declared type. */
+    private IdentifierNode identifier;
+
+    /** The associated javadoc comment for this node. */
+    private JavadocNode javadoc;
 
     /** General constructor. */
     public EnumDeclarationNodeImpl(
@@ -39,10 +45,12 @@ public class EnumDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl implem
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        super(identifier, javadoc, startLocation, stopLocation);
+        super(startLocation, stopLocation);
         setModifiers(modifiers);
         setImplementsClause(implementsClause);
         setBody(body);
+        setIdentifier(identifier);
+        setJavadoc(javadoc);
     }
 
     /**
@@ -124,6 +132,58 @@ public class EnumDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl implem
     }
 
     /**
+     * Gets the name of this declared type.
+     * @return The name of this declared type.
+     */
+    public IdentifierNode getIdentifier()
+    {
+        return this.identifier;
+    }
+
+    /**
+     * Changes the name of this declared type.
+     * @param identifier The name of this declared type.
+     */
+    public void setIdentifier(IdentifierNode identifier)
+    {
+        if (this.identifier instanceof NodeImpl)
+        {
+            ((NodeImpl)this.identifier).setParent(null);
+        }
+        this.identifier = identifier;
+        if (this.identifier instanceof NodeImpl)
+        {
+            ((NodeImpl)this.identifier).setParent(this);
+        }
+    }
+
+    /**
+     * Gets the associated javadoc comment for this node.
+     * @return The associated javadoc comment for this node.
+     */
+    public JavadocNode getJavadoc()
+    {
+        return this.javadoc;
+    }
+
+    /**
+     * Changes the associated javadoc comment for this node.
+     * @param javadoc The associated javadoc comment for this node.
+     */
+    public void setJavadoc(JavadocNode javadoc)
+    {
+        if (this.javadoc instanceof NodeImpl)
+        {
+            ((NodeImpl)this.javadoc).setParent(null);
+        }
+        this.javadoc = javadoc;
+        if (this.javadoc instanceof NodeImpl)
+        {
+            ((NodeImpl)this.javadoc).setParent(this);
+        }
+    }
+
+    /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
      * method first and then visit its subclass-specific children.
@@ -178,15 +238,15 @@ public class EnumDeclarationNodeImpl extends NamedTypeDeclarationNodeImpl implem
     {
         visitor.visitStartBegin(this);
         visitor.visitEnumDeclarationNodeStart(this, true);
-        visitor.visitNamedTypeDeclarationNodeStart(this);
         visitor.visitNodeStart(this);
+        visitor.visitNamedTypeDeclarationNodeStart(this);
         visitor.visitInlineTypeDeclarableNodeStart(this);
         visitor.visitStartEnd(this);
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
+        visitor.visitNamedTypeDeclarationNodeStop(this);
         visitor.visitInlineTypeDeclarableNodeStop(this);
         visitor.visitNodeStop(this);
-        visitor.visitNamedTypeDeclarationNodeStop(this);
         visitor.visitEnumDeclarationNodeStop(this, true);
         visitor.visitStopEnd(this);
     }

@@ -85,7 +85,7 @@ public class DiagnosticDefinition extends PropertyBasedHierarchyDefinition<Diagn
 	}
 
 	@Override
-	public List<String> getTags()
+	public List<TagReferenceDefinition> getTags()
 	{
 		return Collections.emptyList();
 	}

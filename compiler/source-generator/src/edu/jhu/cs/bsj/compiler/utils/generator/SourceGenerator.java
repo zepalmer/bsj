@@ -477,17 +477,23 @@ public class SourceGenerator
 			StringBuilder extendsClause = new StringBuilder();
 			if (def.getFullSuper() != null)
 				extendsClause.append(def.getFullSuper());
-			for (String tag : def.getTags())
+			for (TagReferenceDefinition tag : def.getTags())
 			{
 				if (extendsClause.length() > 0)
 					extendsClause.append(", ");
-				extendsClause.append(tag);
+				extendsClause.append(tag.getName());
+				if (tag.getTypeArg() != null)
+				{
+					extendsClause.append('<');
+					extendsClause.append(tag.getTypeArg());
+					extendsClause.append('>');
+				}
 			}
-			for (String tag : def.getInterfaces())
+			for (String iface : def.getInterfaces())
 			{
 				if (extendsClause.length() > 0)
 					extendsClause.append(", ");
-				extendsClause.append(tag);
+				extendsClause.append(iface);
 			}
 			if (extendsClause.length() > 0)
 				extendsClause.insert(0, " extends ");
@@ -717,49 +723,10 @@ public class SourceGenerator
 			return defInstanceOf(map.get(propType), classname);
 		}
 
+		// TODO: deprecate this method
 		protected List<PropertyDefinition> getRecursiveProps(TypeDefinition def)
 		{
-			List<PropertyDefinition> list = new ArrayList<PropertyDefinition>();
-			// maps type parameter names to their values
-			Map<String, String> replacementMap = new HashMap<String, String>();
-			while (def != null)
-			{
-				for (PropertyDefinition p : def.getProperties())
-				{
-					if (replacementMap.containsKey(p.getBaseType()))
-					{
-						p = new PropertyDefinition(p.getName(), replacementMap.get(p.getBaseType()), null, p.getMode(),
-								p.getDescription(), p.getDefaultExpression());
-					} else if (replacementMap.containsKey(p.getTypeArg()))
-					{
-						p = new PropertyDefinition(p.getName(), p.getBaseType(), replacementMap.get(p.getTypeArg()),
-								p.getMode(), p.getDescription(), p.getDefaultExpression());
-					}
-					list.add(p);
-				}
-
-				if (def.getSuperTypeArg() == null || def.getSuperTypeArg().length() == 0)
-				{
-					def = map.get(def.getBaseSuperName());
-				} else
-				{
-					String superparam = def.getSuperTypeArg();
-					def = map.get(def.getBaseSuperName());
-
-					String nameParamPart = def.getUnboundedTypeParameter();
-					String[] param = nameParamPart.split(",");
-					for (int i = 0; i < param.length; i++)
-					{
-						if (param[i].contains(" "))
-							param[i] = param[i].substring(0, param[i].indexOf(' ')).trim();
-					}
-					String[] args = superparam.split(",");
-
-					for (int i = 0; i < args.length; i++)
-						replacementMap.put(param[i], args[i]);
-				}
-			}
-			return list;
+			return def.getRecursiveProperties();
 		}
 
 		public abstract void useDefinition(TypeDefinition def) throws IOException;
@@ -844,7 +811,7 @@ public class SourceGenerator
 			ps.println("{");
 
 			// gen properties
-			for (PropertyDefinition p : def.getProperties())
+			for (PropertyDefinition p : def.getResponsibleProperties(false))
 			{
 				ps.println("    /** " + capFirst(p.getDescription()) + ". */");
 				ps.println("    private " + p.getFullType() + " " + p.getName() + ";");
@@ -863,10 +830,10 @@ public class SourceGenerator
 			ps.println("    {");
 			ps.print("        super");
 			List<PropertyDefinition> superProps = new ArrayList<PropertyDefinition>(recProps);
-			superProps.removeAll(def.getProperties());
+			superProps.removeAll(def.getResponsibleProperties(false));
 			printArgumentList(ps, superProps, def.getConstructorOverrideMap());
 			ps.println(";");
-			for (PropertyDefinition p : def.getProperties())
+			for (PropertyDefinition p : def.getResponsibleProperties(false))
 			{
 				String expr;
 				if (def.getConstructorOverrideMap().containsKey(p.getName()))
@@ -890,7 +857,7 @@ public class SourceGenerator
 			ps.println();
 
 			// gen getters and setters
-			for (PropertyDefinition p : def.getProperties())
+			for (PropertyDefinition p : def.getResponsibleProperties(false))
 			{
 				if (!p.isHide())
 				{
@@ -1037,16 +1004,16 @@ public class SourceGenerator
 				backtrack.add(0, cur);
 				cur = this.map.get(cur.getBaseSuperName());
 			}
-			for (String tag : def.getTags())
+			for (TagReferenceDefinition tag : def.getTags())
 			{
-				ps.println("        visitor.visit" + tag.trim() + "Start(this);");
+				ps.println("        visitor.visit" + tag.getName() + "Start(this);");
 			}
 			ps.println("        visitor.visitStartEnd(this);");
 			ps.println("        receiveTypedToChildren(visitor);");
 			ps.println("        visitor.visitStopBegin(this);");
-			for (String tag : def.getTags())
+			for (TagReferenceDefinition tag : def.getTags())
 			{
-				ps.println("        visitor.visit" + tag.trim() + "Stop(this);");
+				ps.println("        visitor.visit" + tag.getName() + "Stop(this);");
 			}
 			for (TypeDefinition edef : backtrack)
 			{

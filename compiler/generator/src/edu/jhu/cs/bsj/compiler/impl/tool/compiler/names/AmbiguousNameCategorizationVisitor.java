@@ -359,7 +359,7 @@ public class AmbiguousNameCategorizationVisitor extends BsjTypedNodeNoOpVisitor
 		/**
 		 * Checks this type body for field declarations which provide the scope we want.
 		 */
-		private Node checkTypeBodyNode(TypeBodyNode node, List<Node> p)
+		private Node checkTypeBodyNode(TypeBodyNode<?> node, List<Node> p)
 		{
 			for (Node member : node.getMembers())
 			{

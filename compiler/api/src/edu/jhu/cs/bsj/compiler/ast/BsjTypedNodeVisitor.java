@@ -1138,7 +1138,7 @@ public interface BsjTypedNodeVisitor
      * Starts a visit for nodes of type NamedTypeDeclarationNode.
      * @param node The node being visited.
      */
-    public void visitNamedTypeDeclarationNodeStart(NamedTypeDeclarationNode node);
+    public void visitNamedTypeDeclarationNodeStart(NamedTypeDeclarationNode<?> node);
 
     /**
      * Starts a visit for nodes of type NoOperationNode.
@@ -1453,7 +1453,7 @@ public interface BsjTypedNodeVisitor
      * Starts a visit for nodes of type TypeBodyNode.
      * @param node The node being visited.
      */
-    public void visitTypeBodyNodeStart(TypeBodyNode node);
+    public void visitTypeBodyNodeStart(TypeBodyNode<?> node);
 
     /**
      * Starts a visit for nodes of type TypeCastNode.
@@ -2692,7 +2692,7 @@ public interface BsjTypedNodeVisitor
      * Stops a visit for nodes of type NamedTypeDeclarationNode.
      * @param node The node being visited.
      */
-    public void visitNamedTypeDeclarationNodeStop(NamedTypeDeclarationNode node);
+    public void visitNamedTypeDeclarationNodeStop(NamedTypeDeclarationNode<?> node);
 
     /**
      * Stops a visit for nodes of type NoOperationNode.
@@ -3007,7 +3007,7 @@ public interface BsjTypedNodeVisitor
      * Stops a visit for nodes of type TypeBodyNode.
      * @param node The node being visited.
      */
-    public void visitTypeBodyNodeStop(TypeBodyNode node);
+    public void visitTypeBodyNodeStop(TypeBodyNode<?> node);
 
     /**
      * Stops a visit for nodes of type TypeCastNode.

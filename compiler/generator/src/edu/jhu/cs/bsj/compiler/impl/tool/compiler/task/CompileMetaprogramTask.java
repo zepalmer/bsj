@@ -370,9 +370,9 @@ public class CompileMetaprogramTask extends AbstractBsjCompilerTask
 		Node node = anchor;
 		while (!(node instanceof CompilationUnitNode))
 		{
-			if (node instanceof NamedTypeDeclarationNode)
+			if (node instanceof NamedTypeDeclarationNode<?>)
 			{
-				NamedTypeDeclarationNode namedTypeDeclarationNode = (NamedTypeDeclarationNode) node;
+				NamedTypeDeclarationNode<?> namedTypeDeclarationNode = (NamedTypeDeclarationNode<?>) node;
 				if (sb.length() > 0)
 					sb.insert(0, '.');
 				sb.insert(0, namedTypeDeclarationNode.getIdentifier().getIdentifier());

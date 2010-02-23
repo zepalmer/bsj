@@ -8,7 +8,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
  * Represents the body of an annotation declaration.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public interface AnnotationBodyNode extends Node, TypeBodyNode
+public interface AnnotationBodyNode extends Node, TypeBodyNode<AnnotationMemberNode>
 {
     /**
      * Gets the members of this annotation body.

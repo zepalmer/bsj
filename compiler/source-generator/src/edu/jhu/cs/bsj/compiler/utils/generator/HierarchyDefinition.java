@@ -23,5 +23,5 @@ public interface HierarchyDefinition<T extends HierarchyDefinition<T>>
 	
 	public void setNamespaceMap(Map<String,T> map);
 	
-	public List<String> getTags();
+	public List<TagReferenceDefinition> getTags();
 }

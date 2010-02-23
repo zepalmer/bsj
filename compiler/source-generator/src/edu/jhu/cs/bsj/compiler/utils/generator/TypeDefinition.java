@@ -22,7 +22,7 @@ public class TypeDefinition extends PropertyBasedHierarchyDefinition<TypeDefinit
 	private String superTypeArg;
 	private GenerationProfile profile;
 	private List<String> interfaces; // used to denote non-tag interfaces such as List<T>
-	private List<String> tags;
+	private List<TagReferenceDefinition> tags;
 	private List<PropertyDefinition> properties;
 	private List<String> includes;
 	private String docString;
@@ -34,13 +34,13 @@ public class TypeDefinition extends PropertyBasedHierarchyDefinition<TypeDefinit
 	private boolean genReplace;
 	private List<FactoryMethodDefinition> factoryMethods;
 	private Mode mode;
-	
+
 	private TypeDefinition parent;
-	private Map<String,TypeDefinition> namespaceMap;
-	
+	private Map<String, TypeDefinition> namespaceMap;
+
 	public TypeDefinition(String baseName, String typeParameter, String superName, String superTypeArg,
-			GenerationProfile profile, List<String> interfaces, List<String> tags, List<PropertyDefinition> properties,
-			List<String> includes, String docString, List<String> toStringLines,
+			GenerationProfile profile, List<String> interfaces, List<TagReferenceDefinition> tags,
+			List<PropertyDefinition> properties, List<String> includes, String docString, List<String> toStringLines,
 			Map<String, String> factoryOverrideMap, Map<String, String> constructorOverrideMap, boolean genConstructor,
 			boolean genChildren, boolean genReplace, List<FactoryMethodDefinition> factoryMethods, Mode mode)
 	{
@@ -86,7 +86,7 @@ public class TypeDefinition extends PropertyBasedHierarchyDefinition<TypeDefinit
 			return superName + "<" + superTypeArg + ">";
 		}
 	}
-	
+
 	public String getUnboundedTypeParameter()
 	{
 		if (typeParameter == null)
@@ -94,7 +94,7 @@ public class TypeDefinition extends PropertyBasedHierarchyDefinition<TypeDefinit
 			return null;
 		} else
 		{
-			if (typeParameter.indexOf(' ')!=-1)
+			if (typeParameter.indexOf(' ') != -1)
 			{
 				return typeParameter.substring(0, typeParameter.indexOf(' '));
 			} else
@@ -111,7 +111,7 @@ public class TypeDefinition extends PropertyBasedHierarchyDefinition<TypeDefinit
 			return null;
 		} else
 		{
-			if (superTypeArg.indexOf(' ')!=-1)
+			if (superTypeArg.indexOf(' ') != -1)
 			{
 				return superTypeArg.substring(0, superTypeArg.indexOf(' '));
 			} else
@@ -131,7 +131,7 @@ public class TypeDefinition extends PropertyBasedHierarchyDefinition<TypeDefinit
 			return "<" + typeParameter + ">";
 		}
 	}
-	
+
 	public String getNameWithTypeParameters()
 	{
 		if (typeParameter == null)
@@ -142,7 +142,7 @@ public class TypeDefinition extends PropertyBasedHierarchyDefinition<TypeDefinit
 			return getBaseName() + "<" + getUnboundedTypeParameter() + ">";
 		}
 	}
-	
+
 	public String getBaseName()
 	{
 		return baseName;
@@ -162,7 +162,7 @@ public class TypeDefinition extends PropertyBasedHierarchyDefinition<TypeDefinit
 	{
 		return superTypeArg;
 	}
-	
+
 	public GenerationProfile getProfile()
 	{
 		return profile;
@@ -173,7 +173,7 @@ public class TypeDefinition extends PropertyBasedHierarchyDefinition<TypeDefinit
 		return interfaces;
 	}
 
-	public List<String> getTags()
+	public List<TagReferenceDefinition> getTags()
 	{
 		return tags;
 	}
@@ -217,7 +217,7 @@ public class TypeDefinition extends PropertyBasedHierarchyDefinition<TypeDefinit
 	{
 		return genChildren;
 	}
-	
+
 	public boolean isGenReplace()
 	{
 		return genReplace;
@@ -237,7 +237,7 @@ public class TypeDefinition extends PropertyBasedHierarchyDefinition<TypeDefinit
 	{
 		return mode;
 	}
-	
+
 	@Override
 	public String getName()
 	{
@@ -255,7 +255,7 @@ public class TypeDefinition extends PropertyBasedHierarchyDefinition<TypeDefinit
 	{
 		this.parent = parent;
 	}
-	
+
 	public String toString()
 	{
 		return "TypeDef:" + getFullName();
@@ -265,7 +265,7 @@ public class TypeDefinition extends PropertyBasedHierarchyDefinition<TypeDefinit
 	public List<PropertyDefinition> getRecursiveProperties(boolean parentFirst)
 	{
 		List<PropertyDefinition> props = super.getRecursiveProperties(parentFirst);
-		Map<String,String> typeArgMap = new HashMap<String, String>();
+		Map<String, String> typeArgMap = new HashMap<String, String>();
 		TypeDefinition def = this;
 		while (def != null && def.getParent() != null)
 		{
@@ -276,25 +276,34 @@ public class TypeDefinition extends PropertyBasedHierarchyDefinition<TypeDefinit
 					typeParam = typeParam.substring(0, typeParam.indexOf(' '));
 				typeArgMap.put(typeParam, def.getSuperTypeArg());
 			}
+			for (TagReferenceDefinition tag : def.getTags())
+			{
+				if (tag.getTypeArg()!=null)
+				{
+					typeArgMap.put(getNamespaceMap().get(tag.getName()).getTypeParameter(), tag.getTypeArg());
+				}
+			}
 			def = def.getParent();
 		}
-		
-		for (int i=0;i<props.size();i++)
+
+		for (int i = 0; i < props.size(); i++)
 		{
 			PropertyDefinition propdef = props.get(i);
 			if (typeArgMap.containsKey(propdef.getBaseType()))
 			{
-				propdef = new PropertyDefinition(propdef.getName(), typeArgMap.get(propdef.getBaseType()), propdef.getTypeArg(),
-						propdef.getMode(), propdef.getDescription(), propdef.getDefaultExpression());
+				propdef = new PropertyDefinition(propdef.getName(), typeArgMap.get(propdef.getBaseType()),
+						propdef.getTypeArg(), propdef.getMode(), propdef.getDescription(),
+						propdef.getDefaultExpression());
 			}
 			if (typeArgMap.containsKey(propdef.getTypeArg()))
 			{
-				propdef = new PropertyDefinition(propdef.getName(), propdef.getBaseType(), typeArgMap.get(propdef.getTypeArg()),
-						propdef.getMode(), propdef.getDescription(), propdef.getDefaultExpression());
+				propdef = new PropertyDefinition(propdef.getName(), propdef.getBaseType(),
+						typeArgMap.get(propdef.getTypeArg()), propdef.getMode(), propdef.getDescription(),
+						propdef.getDefaultExpression());
 			}
 			props.set(i, propdef);
 		}
-		
+
 		return props;
 	}
 

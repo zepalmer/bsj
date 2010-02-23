@@ -1335,7 +1335,7 @@ public class BsjTypedNodeNoOpVisitor implements BsjTypedNodeVisitor
      * Starts a visit for nodes of type NamedTypeDeclarationNode.
      * @param node The node being visited.
      */
-    public void visitNamedTypeDeclarationNodeStart(NamedTypeDeclarationNode node)
+    public void visitNamedTypeDeclarationNodeStart(NamedTypeDeclarationNode<?> node)
     {
     }
 
@@ -1726,7 +1726,7 @@ public class BsjTypedNodeNoOpVisitor implements BsjTypedNodeVisitor
      * Starts a visit for nodes of type TypeBodyNode.
      * @param node The node being visited.
      */
-    public void visitTypeBodyNodeStart(TypeBodyNode node)
+    public void visitTypeBodyNodeStart(TypeBodyNode<?> node)
     {
     }
 
@@ -3259,7 +3259,7 @@ public class BsjTypedNodeNoOpVisitor implements BsjTypedNodeVisitor
      * Stops a visit for nodes of type NamedTypeDeclarationNode.
      * @param node The node being visited.
      */
-    public void visitNamedTypeDeclarationNodeStop(NamedTypeDeclarationNode node)
+    public void visitNamedTypeDeclarationNodeStop(NamedTypeDeclarationNode<?> node)
     {
     }
 
@@ -3650,7 +3650,7 @@ public class BsjTypedNodeNoOpVisitor implements BsjTypedNodeVisitor
      * Stops a visit for nodes of type TypeBodyNode.
      * @param node The node being visited.
      */
-    public void visitTypeBodyNodeStop(TypeBodyNode node)
+    public void visitTypeBodyNodeStop(TypeBodyNode<?> node)
     {
     }
 
