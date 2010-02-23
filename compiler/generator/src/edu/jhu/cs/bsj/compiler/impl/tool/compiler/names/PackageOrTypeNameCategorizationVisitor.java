@@ -40,6 +40,14 @@ public class PackageOrTypeNameCategorizationVisitor extends BsjTypedNodeNoOpVisi
 	@Override
 	public void visitNameNodeStop(NameNode node)
 	{
+		if (node.getCategory() != NameCategory.PACKAGE_OR_TYPE)
+			return;
+		
+		if (LOGGER.isTraceEnabled())
+		{
+			LOGGER.trace("Deciding package or type for " + node.getNameString() + " at " + node.getStartLocation());
+		}
+		
 		if (node instanceof SimpleNameNode)
 		{
 			// If a type is in scope which has the same name as this node, the node refers to a type. Otherwise, this
@@ -282,8 +290,7 @@ public class PackageOrTypeNameCategorizationVisitor extends BsjTypedNodeNoOpVisi
 			@Override
 			public Node executeImportSingleTypeNode(ImportSingleTypeNode node, Void p)
 			{
-				// TODO Auto-generated method stub
-				return super.executeImportSingleTypeNode(node, p);
+				return getTypeDeclForNameNode(node.getName());
 			}
 
 			@Override

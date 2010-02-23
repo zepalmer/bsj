@@ -1,5 +1,6 @@
 package edu.jhu.cs.bsj.tests;
 
+import java.io.File;
 import java.util.Properties;
 
 import org.apache.log4j.PropertyConfigurator;
@@ -11,6 +12,9 @@ import org.apache.log4j.PropertyConfigurator;
  */
 public abstract class AbstractTest
 {
+	/** The directory containing the example sources. */
+	public static final File EXAMPLES = new File("examples");
+	
 	/**
 	 * Configures Log4J using the specified information.
 	 * 
