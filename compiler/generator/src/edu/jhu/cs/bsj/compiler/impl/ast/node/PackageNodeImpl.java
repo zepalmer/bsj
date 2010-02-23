@@ -1,6 +1,5 @@
 package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -351,29 +350,18 @@ public class PackageNodeImpl extends NodeImpl implements PackageNode
 	 * </pre>
 	 * 
 	 * @param name The simple name of the compilation unit to load. No file extension should be provided.
-	 * @return <code>true</code> if the compilation unit was located and will be loaded; <code>false</code> if it has
-	 *         already been loaded.
-	 * @throws FileNotFoundException If the specified compilation unit does not exist.
+	 * @return The loaded compilation unit or <code>null</code> if it does not exist.
 	 */
-	public boolean load(String name) throws FileNotFoundException
+	public CompilationUnitNode load(String name)
 	{
 		// TODO: if a compilation unit was explicitly added to this package node and overrides a source file, we should
 		// scream.
 		// If we've already loaded this compilation unit, bail out.
 		if (compilationUnitNodes.get(name) != null)
 		{
-			return false;
+			return compilationUnitNodes.get(name);
 		}
-		if (this.packageNodeCallback.load(this, name))
-		{
-			return true;
-		} else
-		{
-			String pname = getFullyQualifiedName();
-			if (pname == null)
-				pname = getName().getIdentifier();
-			throw new FileNotFoundException("Could not find compilation unit named " + name + " in package " + pname);
-		}
+		return this.packageNodeCallback.load(this, name);
 	}
 
 	/**
@@ -382,21 +370,11 @@ public class PackageNodeImpl extends NodeImpl implements PackageNode
 	 * @return <code>true</code> if at least one new compilation unit will be loaded; <code>false</code> if the entire
 	 *         package has already been loaded.
 	 */
-	public boolean loadAll()
+	public void loadAll()
 	{
-		boolean ret = false;
 		for (String name : packageNodeCallback.listCompilationUnitNames(this))
 		{
-			try
-			{
-				ret |= load(name);
-			} catch (FileNotFoundException fnfe)
-			{
-				// This only happens if a file was deleted from the file system.
-				// Current policy: ignore that.
-				// TODO: this indicates some kind of inconsistency of the file system during compilation. Scream?
-			}
+			load(name);
 		}
-		return ret;
 	}
 }

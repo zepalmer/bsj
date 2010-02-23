@@ -6,7 +6,7 @@ import java.util.Iterator;
 import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.CompilationUnitStatus;
-import edu.jhu.cs.bsj.compiler.impl.tool.compiler.MetacompilationManager;
+import edu.jhu.cs.bsj.compiler.impl.tool.compiler.MetacompilationContext;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.MetaprogramProfile;
 
 /**
@@ -25,43 +25,43 @@ public class ExecuteMetaprogramTask extends AbstractBsjCompilerTask
 	}
 
 	@Override
-	public void execute(MetacompilationManager manager) throws IOException
+	public void execute(MetacompilationContext context) throws IOException
 	{
-		MetaprogramProfile profile = manager.getNextMetaprogramProfile();
+		MetaprogramProfile profile = context.getDependencyManager().getNextMetaprogram();
 		if (profile==null)
 		{
-			finishMetaprogramExecutionPhase(manager);
+			finishMetaprogramExecutionPhase(context);
 		} else
 		{
-			execute(profile, manager);
+			execute(profile, context);
 		}
 	}
 
-	private void finishMetaprogramExecutionPhase(MetacompilationManager manager)
+	private void finishMetaprogramExecutionPhase(MetacompilationContext context)
 	{
-		Iterator<CompilationUnitNode> it = manager.getRootPackage().getRecursiveCompilationUnitIterator();
+		Iterator<CompilationUnitNode> it = context.getRootPackage().getRecursiveCompilationUnitIterator();
 		while (it.hasNext())
 		{
 			CompilationUnitNode node = it.next();
 			// TODO: skip nodes which represent binary files
-			manager.addTask(new SourceSerializationTask(node));
+			context.registerTask(new SourceSerializationTask(node));
 		}
 	}
 	
-	private void execute(MetaprogramProfile profile, MetacompilationManager manager)
+	private void execute(MetaprogramProfile profile, MetacompilationContext context)
 	{
 		// Run the metaprogram
 		profile.getMetaprogram().execute();
-		manager.notifyExecuted(profile);
+		context.getDependencyManager().notifyExecuted(profile);
 		
 		// Have the metaprogram replace itself with its replacement node
 		Node replacement = profile.getAnchor().getReplacement();
 		profile.getAnchor().getParent().replace(profile.getAnchor(), replacement);
 
 		// Schedule a task to walk over the replacement node and extract all of its descendent metaprograms
-		manager.addTask(new ExtractMetaprogramsTask(replacement));
+		context.registerTask(new ExtractMetaprogramsTask(replacement));
 		
 		// Re-enqueue this task so we can execute the next metaprogram when the time comes (which is probably right now)
-		manager.addTask(this);
+		context.registerTask(this);
 	}
 }

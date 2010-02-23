@@ -7,7 +7,7 @@ import java.util.List;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.util.BsjTypedNodeNoOpVisitor;
-import edu.jhu.cs.bsj.compiler.impl.tool.compiler.MetacompilationManager;
+import edu.jhu.cs.bsj.compiler.impl.tool.compiler.MetacompilationContext;
 
 public class ExtractMetaprogramsTask extends AbstractBsjCompilerTask
 {
@@ -28,7 +28,7 @@ public class ExtractMetaprogramsTask extends AbstractBsjCompilerTask
 	}
 
 	@Override
-	public void execute(MetacompilationManager manager) throws IOException
+	public void execute(MetacompilationContext context) throws IOException
 	{
 		MetaprogramAnchorLocator locator = new MetaprogramAnchorLocator();
 		this.node.receiveTyped(locator);
@@ -37,7 +37,7 @@ public class ExtractMetaprogramsTask extends AbstractBsjCompilerTask
 		// Handle each anchor in turn
 		for (MetaprogramAnchorNode<?> anchor : anchors)
 		{
-			manager.addTask(new CompileMetaprogramTask(anchor));
+			context.registerTask(new CompileMetaprogramTask(anchor));
 		}
 	}
 

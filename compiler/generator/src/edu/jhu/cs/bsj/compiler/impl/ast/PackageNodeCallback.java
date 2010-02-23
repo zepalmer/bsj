@@ -10,6 +10,7 @@ import java.util.Set;
 
 import javax.tools.JavaFileObject.Kind;
 
+import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
 import edu.jhu.cs.bsj.compiler.ast.node.PackageNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.MetacompilationManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.BsjCompilerLocation;
@@ -129,26 +130,25 @@ public class PackageNodeCallback
 	 * 
 	 * @param packageNode The package node making the request.
 	 * @param name The name of the compilation unit.
-	 * @return <code>true</code> if the compilation unit was found and will be loaded; <code>false</code> if it does not
-	 *         appear to exist.
+	 * @return The {@link CompilationUnitNode} which was found or <code>null</code> if no such compilation unit exists.
 	 */
-	public boolean load(PackageNode packageNode, String name)
+	public CompilationUnitNode load(PackageNode packageNode, String name)
 	{
 		String pname = packageNode.getFullyQualifiedName();
 		if (pname == null)
 		{
-			return false;
+			return null;
 		}
 
 		for (BsjFileObject file : findCompilationUnits(pname))
 		{
 			if (getCompilationUnitName(file).equals(name))
 			{
-				return this.metacompilationManager.addCompilationUnit(file);
+				return this.metacompilationManager.addCompilationUnitNow(file);
 			}
 		}
 
-		return false;
+		return null;
 	}
 
 	/**

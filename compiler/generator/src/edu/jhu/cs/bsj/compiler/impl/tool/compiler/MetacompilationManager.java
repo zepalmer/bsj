@@ -12,11 +12,13 @@ import javax.tools.JavaFileObject;
 import org.apache.log4j.Logger;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
+import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
 import edu.jhu.cs.bsj.compiler.ast.node.PackageNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.dependency.DependencyManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.task.BsjCompilerTask;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.task.ExecuteMetaprogramTask;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.task.ParseCompilationUnitTask;
+import edu.jhu.cs.bsj.compiler.impl.tool.compiler.task.TaskPriority;
 import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.BsjFileManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.BsjFileObject;
 
@@ -29,7 +31,7 @@ import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.BsjFileObject;
  * 
  * @author Zachary Palmer
  */
-public class MetacompilationManager
+public class MetacompilationManager implements MetacompilationContext
 {
 	/** A logger for this metacompilation manager. */
 	private final Logger LOGGER = Logger.getLogger(this.getClass());
@@ -92,7 +94,7 @@ public class MetacompilationManager
 	 * 
 	 * @param task The task to add.
 	 */
-	public void addTask(BsjCompilerTask task)
+	public void registerTask(BsjCompilerTask task)
 	{
 		if (LOGGER.isTraceEnabled())
 		{
@@ -122,8 +124,113 @@ public class MetacompilationManager
 		observedBinaryNames.add(binaryName);
 		
 		ParseCompilationUnitTask parseCompilationUnitTask = new ParseCompilationUnitTask(file);
-		this.addTask(parseCompilationUnitTask);
+		this.registerTask(parseCompilationUnitTask);
 		return true;
+	}
+
+	/**
+	 * Adds a compilation unit target.  This method does not schedule the file for parsing in the queue but rather
+	 * performs the immediate parsing and metaprogram extraction of the named compilation unit.
+	 * 
+	 * @param file The file to load.
+	 * @return The compilation unit which was loaded or <code>null</code> if the compilation unit does not exist.
+	 */
+	public CompilationUnitNode addCompilationUnitNow(BsjFileObject file)
+	{
+		String binaryName = file.inferBinaryName();
+		if (observedBinaryNames.contains(binaryName))
+		{
+			// Already have that target.  Let's go find it.
+			String compilationUnitName;
+			PackageNode packageNode = rootPackage;
+			if (binaryName.indexOf('.')!=-1)
+			{
+				String packageName;
+				packageName = binaryName.substring(0, binaryName.lastIndexOf('.'));
+				compilationUnitName = binaryName.substring(binaryName.lastIndexOf('.') + 1);
+				packageNode = packageNode.getSubpackage(packageName);
+			} else
+			{
+				compilationUnitName = binaryName;
+			}
+			return packageNode.getCompilationUnit(compilationUnitName);
+		}
+		
+		observedBinaryNames.add(binaryName);
+		
+		// Rather than blindly executing tasks, let's proxy out task addition so we can actively execute the ones we
+		// want
+		final PriorityQueue<BsjCompilerTask> queue = new PriorityQueue<BsjCompilerTask>();
+		MetacompilationContext contextProxy = new MetacompilationContext()
+		{
+			@Override
+			public void registerTask(BsjCompilerTask task)
+			{
+				if (task.getPriority().getPriority() <= TaskPriority.EXTRACT.getPriority())
+				{
+					queue.offer(task);
+				} else
+				{
+					MetacompilationManager.this.registerTask(task);
+				}
+			}
+			
+			@Override
+			public PackageNode getRootPackage()
+			{
+				return MetacompilationManager.this.getRootPackage();
+			}
+			
+			@Override
+			public BsjFileManager getFileManager()
+			{
+				return MetacompilationManager.this.getFileManager();
+			}
+			
+			@Override
+			public BsjNodeFactory getFactory()
+			{
+				return MetacompilationManager.this.getFactory();
+			}
+			
+			@Override
+			public DiagnosticListener<? super JavaFileObject> getDiagnosticListener()
+			{
+				return MetacompilationManager.this.getDiagnosticListener();
+			}
+			
+			@Override
+			public DependencyManager getDependencyManager()
+			{
+				return MetacompilationManager.this.getDependencyManager();
+			}
+		};
+		queue.offer(new ParseCompilationUnitTask(file));
+		while (queue.size() > 0)
+		{
+			try
+			{
+				queue.poll().execute(contextProxy);
+			} catch (IOException e)
+			{
+				// TODO: now what?
+				throw new IllegalStateException(e);
+			}
+		}
+		
+		String compilationUnitName;
+		PackageNode packageNode = rootPackage;
+		if (binaryName.indexOf('.')!=-1)
+		{
+			String packageName;
+			packageName = binaryName.substring(0, binaryName.lastIndexOf('.'));
+			compilationUnitName = binaryName.substring(binaryName.lastIndexOf('.') + 1);
+			packageNode = packageNode.getSubpackage(packageName);
+		} else
+		{
+			compilationUnitName = binaryName;
+		}
+		return packageNode.getCompilationUnit(compilationUnitName);
 	}
 
 	/**
@@ -206,5 +313,11 @@ public class MetacompilationManager
 	public PackageNode getRootPackage()
 	{
 		return rootPackage;
+	}
+
+	@Override
+	public DependencyManager getDependencyManager()
+	{
+		return this.dependencyManager;
 	}
 }

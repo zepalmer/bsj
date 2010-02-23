@@ -7,7 +7,7 @@ import javax.tools.JavaFileObject.Kind;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceSerializer;
 import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
 import edu.jhu.cs.bsj.compiler.ast.node.PackageNode;
-import edu.jhu.cs.bsj.compiler.impl.tool.compiler.MetacompilationManager;
+import edu.jhu.cs.bsj.compiler.impl.tool.compiler.MetacompilationContext;
 import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.BsjCompilerLocation;
 import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.BsjFileObject;
 import edu.jhu.cs.bsj.compiler.impl.tool.serializer.BsjSourceSerializerImpl;
@@ -30,7 +30,7 @@ public class SourceSerializationTask extends AbstractBsjCompilerTask
 	}
 
 	@Override
-	public void execute(MetacompilationManager manager) throws IOException
+	public void execute(MetacompilationContext context) throws IOException
 	{
 		// TODO: don't try to serialize code for read-only compilation units
 		// TODO: is there a better way to fetch a source serializer? SPI? Toolkit?
@@ -53,7 +53,7 @@ public class SourceSerializationTask extends AbstractBsjCompilerTask
 			className = compilationUnitNode.getName();
 		}
 		
-		BsjFileObject bsjFileObject = manager.getFileManager().getJavaFileForOutput(
+		BsjFileObject bsjFileObject = context.getFileManager().getJavaFileForOutput(
 				BsjCompilerLocation.GENERATED_SOURCE_PATH, compilationUnitNode.getName(), Kind.SOURCE, null);
 		bsjFileObject.setCharContent(source);
 		

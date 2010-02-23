@@ -82,39 +82,15 @@ public interface PackageNode
 	 * different file or when a type reference is found in an on-demand import). It is possible for metaprograms to
 	 * explicitly load compilation units which are not possible to infer, such as when the name of a compilation unit is
 	 * mentioned in metaprogram code but no object program code causes a direct reference.
-	 * <p/>
-	 * It should be noted that this method will return without completing the compilation unit loading operation. Due to
-	 * the fact that parsing, name analysis, and other such steps are required before the compilation unit becomes
-	 * visible in the tree, the compilation unit will not become available until the next metaprogram starts. For that
-	 * reason, an asynchronous programming approach to loading compilation units is recommended. Consider the following
-	 * example:
-	 * 
-	 * <pre>
-	 * [:
-	 *     #target load;
-	 *     ...
-	 *     packageNode.load(compilationUnitName);
-	 * :]
-	 * [:
-	 *     #depends load;
-	 *     // operations which depend on the loaded compilation unit
-	 *     ...
-	 * :]
-	 * </pre>
 	 * 
 	 * @param name The simple name of the compilation unit to load. No file extension should be provided.
-	 * @return <code>true</code> if the compilation unit was located and will be loaded; <code>false</code> if it has
-	 *         already been loaded.
-	 * @throws FileNotFoundException If the specified compilation unit does not exist.
+	 * @return The loaded compilation unit.
 	 */
-	public boolean load(String name) throws FileNotFoundException;
+	public CompilationUnitNode load(String name);
 
 	/**
 	 * Performs the load of every compilation unit available in this package.
-	 * 
-	 * @return <code>true</code> if at least one new compilation unit will be loaded; <code>false</code> if the entire
-	 *         package has already been loaded.
 	 */
-	public boolean loadAll();
+	public void loadAll();
 	/* GEN:stop */
 }

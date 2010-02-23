@@ -31,7 +31,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramPreambleNode;
 import edu.jhu.cs.bsj.compiler.impl.metaprogram.BsjMetaprogram;
 import edu.jhu.cs.bsj.compiler.impl.metaprogram.ContextImpl;
-import edu.jhu.cs.bsj.compiler.impl.tool.compiler.MetacompilationManager;
+import edu.jhu.cs.bsj.compiler.impl.tool.compiler.MetacompilationContext;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.MetaprogramProfile;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.StandardBsjCompiler;
 import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.BsjCompilerLocation;
@@ -57,8 +57,8 @@ public class CompileMetaprogramTask extends AbstractBsjCompilerTask
 
 	/** A field containing the factory which should be used as this task is executing. */
 	private BsjNodeFactory factory;
-	/** A field containing the metacompilation manager which should be used as this task is executing. */
-	private MetacompilationManager metacompilationManager;
+	/** A field containing the metacompilation context which should be used as this task is executing. */
+	private MetacompilationContext metacompilationContext;
 	/** A field containing the anchor of the metaprogram to extract. */
 	private MetaprogramAnchorNode<?> anchor;
 
@@ -69,10 +69,10 @@ public class CompileMetaprogramTask extends AbstractBsjCompilerTask
 	}
 
 	@Override
-	public void execute(MetacompilationManager manager) throws IOException
+	public void execute(MetacompilationContext context) throws IOException
 	{
-		this.factory = manager.getFactory();
-		this.metacompilationManager = manager;
+		this.factory = context.getFactory();
+		this.metacompilationContext = context;
 		handleAnchor(anchor);
 	}
 
@@ -112,7 +112,7 @@ public class CompileMetaprogramTask extends AbstractBsjCompilerTask
 		anchor.setMetaprogram(null);
 
 		// Register the metaprogram profile with the metacompilation manager
-		metacompilationManager.registerMetaprogramProfile(profile);
+		metacompilationContext.getDependencyManager().registerMetaprogramProfile(profile);
 	}
 
 	private <A extends MetaprogramAnchorNode<? extends Node>> MetaprogramProfile buildProfile(A anchor) throws IOException
@@ -274,14 +274,14 @@ public class CompileMetaprogramTask extends AbstractBsjCompilerTask
 		locationMap.put(BsjCompilerLocation.CLASS_OUTPUT, new InMemoryLocationManager(null));
 		// use current metaprogram classpath for metaprogram's meta- and object classpaths
 		locationMap.put(BsjCompilerLocation.METAPROGRAM_CLASSPATH,
-				metacompilationManager.getFileManager().getLocationManager(BsjCompilerLocation.METAPROGRAM_CLASSPATH));
+				metacompilationContext.getFileManager().getLocationManager(BsjCompilerLocation.METAPROGRAM_CLASSPATH));
 		locationMap.put(BsjCompilerLocation.METAPROGRAM_SYSTEM_CLASSPATH,
-				metacompilationManager.getFileManager().getLocationManager(
+				metacompilationContext.getFileManager().getLocationManager(
 						BsjCompilerLocation.METAPROGRAM_SYSTEM_CLASSPATH));
 		locationMap.put(BsjCompilerLocation.OBJECT_PROGRAM_CLASSPATH,
-				metacompilationManager.getFileManager().getLocationManager(BsjCompilerLocation.METAPROGRAM_CLASSPATH));
+				metacompilationContext.getFileManager().getLocationManager(BsjCompilerLocation.METAPROGRAM_CLASSPATH));
 		locationMap.put(BsjCompilerLocation.OBJECT_PROGRAM_SYSTEM_CLASSPATH,
-				metacompilationManager.getFileManager().getLocationManager(
+				metacompilationContext.getFileManager().getLocationManager(
 						BsjCompilerLocation.METAPROGRAM_SYSTEM_CLASSPATH));
 		// TODO: annotation processors should be set to in-memory locations
 
@@ -300,7 +300,7 @@ public class CompileMetaprogramTask extends AbstractBsjCompilerTask
 		// TODO: if this compilation fails, the resulting exception won't make much sense; we need to translate it back
 		// to the file from which it originated
 		// TODO: perhaps we want to surround the diagnostics that this compilation subprocess produces in a wrapper?
-		compiler.compile(Arrays.asList(metaprogramSourceFile), this.metacompilationManager.getDiagnosticListener());
+		compiler.compile(Arrays.asList(metaprogramSourceFile), this.metacompilationContext.getDiagnosticListener());
 
 		ClassLoader metaprogramClassLoader = fileManager.getClassLoader(BsjCompilerLocation.CLASS_OUTPUT);
 		Class<? extends BsjMetaprogram<A>> metaprogramClass;
