@@ -13,7 +13,7 @@ import org.apache.log4j.PropertyConfigurator;
 public abstract class AbstractTest
 {
 	/** The directory containing the example sources. */
-	public static final File EXAMPLES = new File("examples");
+	public static final File EXAMPLES = new File("resources" + File.separator + "source-code");
 	
 	/**
 	 * Configures Log4J using the specified information.
