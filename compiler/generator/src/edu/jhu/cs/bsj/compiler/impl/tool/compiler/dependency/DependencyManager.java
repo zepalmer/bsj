@@ -90,7 +90,11 @@ public class DependencyManager
 			for (String targetName : profile.getDependencyNames())
 			{
 				MetaprogramTarget target = this.targetMap.get(targetName);
-				// TODO: what if there are no members in this target?  target will be null... this is a compile error?
+				if (target == null)
+				{
+					// TODO: what if there are no members in this target?  target will be null... this is a compile error?
+					continue;
+				}
 				for (MetaprogramProfile dependency : target.getMembers())
 				{
 					if (this.waitingMetaprograms.contains(dependency))
