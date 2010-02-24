@@ -14,6 +14,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.AnnotationDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.JavadocNode;
+import edu.jhu.cs.bsj.compiler.ast.node.NamedTypeDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
@@ -316,4 +317,25 @@ public class AnnotationDeclarationNodeImpl extends NodeImpl implements Annotatio
         return false;
     }
     
+	/**
+	 * Retrieves the specified member type declaration from this node.
+	 * @param name The simple name of the member type declaration to retrieve.
+	 * @return The declaration of that type or <code>null</code> if no such declaration exists.
+	 */
+	public NamedTypeDeclarationNode<?> getTypeDeclaration(String name)
+	{
+		for (Node node : getBody().getMembers())
+		{
+			if (node instanceof NamedTypeDeclarationNode<?>)
+			{
+				NamedTypeDeclarationNode<?> namedTypeDeclarationNode = (NamedTypeDeclarationNode<?>)node;
+				if (namedTypeDeclarationNode.getIdentifier().getIdentifier().equals(name))
+				{
+					return namedTypeDeclarationNode;
+				}
+			}
+		}
+		return null;
+	}
+
 }

@@ -1527,6 +1527,7 @@
             <prop name="identifier" type="IdentifierNode" desc="the name of this declared type" />
             <prop name="javadoc" type="JavadocNode" desc="the associated javadoc comment for this node" />
             <prop name="body" type="TypeBodyNode" typeArg="? extends T" mode="readOnly" desc="this type's body" />
+            <include file="NamedTypeDeclarationNode.java" />
             <doc><![CDATA[
                 Acts as a superclass for all named type declarations.
             ]]></doc>

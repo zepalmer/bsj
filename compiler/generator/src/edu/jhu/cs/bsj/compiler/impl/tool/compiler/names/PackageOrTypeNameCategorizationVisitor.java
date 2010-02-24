@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 import edu.jhu.cs.bsj.compiler.ast.NameCategory;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassDeclarationNode;
@@ -25,6 +26,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.TypeDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.util.BsjDefaultNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.util.BsjTypedNodeNoOpVisitor;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.operations.AncestryExecutingNodeOperation;
+import edu.jhu.cs.bsj.compiler.impl.tool.compiler.operations.TypeDeclarationLocatingNodeOperation;
 
 /**
  * This visitor categorizes <i>PackageOrTypeName</i>s as specified by &#xA7;6.5.3 of the JLS v3. To do so, it must have
@@ -37,32 +39,96 @@ public class PackageOrTypeNameCategorizationVisitor extends BsjTypedNodeNoOpVisi
 {
 	/** The logger for this object. */
 	private Logger LOGGER = Logger.getLogger(this.getClass());
+	
+	/** A factory for node duplication. */
+	private BsjNodeFactory factory;
+	
+	public PackageOrTypeNameCategorizationVisitor(BsjNodeFactory factory)
+	{
+		super();
+		this.factory = factory;
+	}
 
 	@Override
-	public void visitNameNodeStop(NameNode node)
+	public void visitNameNodeStop(NameNode name)
 	{
-		if (node.getCategory() != NameCategory.PACKAGE_OR_TYPE)
+		if (name.getCategory() != NameCategory.PACKAGE_OR_TYPE)
 			return;
-		
+
 		if (LOGGER.isTraceEnabled())
 		{
-			LOGGER.trace("Deciding package or type for " + node.getNameString() + " at " + node.getStartLocation());
+			LOGGER.trace("Deciding package or type for " + name.getNameString() + " at " + name.getStartLocation());
 		}
-		
-		if (node instanceof SimpleNameNode)
+
+		NameCategory category;
+		if (name instanceof SimpleNameNode)
 		{
 			// If a type is in scope which has the same name as this node, the node refers to a type. Otherwise, this
 			// node refers to a package.
-			// TODO
-		} else if (node instanceof QualifiedNameNode)
+			TypeDeclarationNode typeDeclarationNode = name.executeOperation(new TypeDeclarationLocatingNodeOperation(
+					factory.makeSimpleNameNode(name.getIdentifier().deepCopy(factory), NameCategory.TYPE)), null);
+			if (typeDeclarationNode == null)
+			{
+				category = NameCategory.PACKAGE;
+			} else
+			{
+				category = NameCategory.TYPE;
+			}
+		} else if (name instanceof QualifiedNameNode)
 		{
 			// If the base name of this node refers to a package or type containing a member type matching the name of
 			// this node's identifier, then this node refers to a type. Otherwise, it refers to a package.
-			// TODO
+			QualifiedNameNode qualifiedNameNode = (QualifiedNameNode) name;
+			if (qualifiedNameNode.getBase().getCategory() == NameCategory.PACKAGE)
+			{
+				category = NameCategory.PACKAGE;
+				PackageNode rootPackage = name.getRootPackage();
+				if (rootPackage != null)
+				{
+					PackageNode packageNode = rootPackage.getSubpackageByQualifiedName(qualifiedNameNode.getBase());
+					if (packageNode != null)
+					{
+						if (packageNode.getTopLevelTypeDeclaration(name.getIdentifier().getIdentifier()) != null)
+						{
+							category = NameCategory.TYPE;
+						}
+					}
+				}
+			} else if (qualifiedNameNode.getBase().getCategory() == NameCategory.TYPE)
+			{
+				NamedTypeDeclarationNode<?> namedTypeDeclarationNode = name.executeOperation(
+						new TypeDeclarationLocatingNodeOperation(name), null);
+				if (namedTypeDeclarationNode == null)
+				{
+					// TODO: this means that this is a type declaration which should contain another type declaration
+					// but does not. This will cause problems; should we produce a diagnostic?
+					category = NameCategory.PACKAGE;
+				} else
+				{
+					if (namedTypeDeclarationNode.getTypeDeclaration(qualifiedNameNode.getIdentifier().getIdentifier()) == null)
+					{
+						category = NameCategory.PACKAGE;
+					} else
+					{
+						category = NameCategory.TYPE;
+					}
+				}
+			} else
+			{
+				throw new IllegalStateException(
+						"Typing to disambiguate PACKAGE_OR_TYPE category for name with base of " + name.getCategory());
+			}
 		} else
 		{
-			throw new IllegalStateException("Unrecognized node type: " + node.getClass().getName());
+			throw new IllegalStateException("Unrecognized node type: " + name.getClass().getName());
 		}
+
+		if (LOGGER.isTraceEnabled())
+		{
+			LOGGER.trace("Categorized name " + name.getNameString() + " at " + name.getStartLocation() + " as "
+					+ category);
+		}
+		name.assertCategory(category);
 	}
 
 	/**
@@ -73,7 +139,7 @@ public class PackageOrTypeNameCategorizationVisitor extends BsjTypedNodeNoOpVisi
 	 * 
 	 * @author Zachary Palmer
 	 */
-	static class TypeScopeCheckingOperation extends BsjDefaultNodeOperation<List<Node>, Node>
+	static class TypeScopeCheckingOperation extends BsjDefaultNodeOperation<List<Node>, NamedTypeDeclarationNode<?>>
 	{
 		/** The name for which we are looking. */
 		private String name;
@@ -99,36 +165,36 @@ public class PackageOrTypeNameCategorizationVisitor extends BsjTypedNodeNoOpVisi
 		 * By default, we assume we haven't found anything.
 		 */
 		@Override
-		public Node executeDefault(Node node, List<Node> p)
+		public NamedTypeDeclarationNode<?> executeDefault(Node node, List<Node> p)
 		{
 			return null;
 		}
 
 		@Override
-		public Node executeAnnotationDeclarationNode(AnnotationDeclarationNode node, List<Node> p)
+		public NamedTypeDeclarationNode<?> executeAnnotationDeclarationNode(AnnotationDeclarationNode node, List<Node> p)
 		{
 			return evaluateNamedTypeDeclarationNode(node);
 		}
 
 		@Override
-		public Node executeClassDeclarationNode(ClassDeclarationNode node, List<Node> p)
+		public NamedTypeDeclarationNode<?> executeClassDeclarationNode(ClassDeclarationNode node, List<Node> p)
 		{
 			return evaluateNamedTypeDeclarationNode(node);
 		}
 
 		@Override
-		public Node executeEnumDeclarationNode(EnumDeclarationNode node, List<Node> p)
+		public NamedTypeDeclarationNode<?> executeEnumDeclarationNode(EnumDeclarationNode node, List<Node> p)
 		{
 			return evaluateNamedTypeDeclarationNode(node);
 		}
 
 		@Override
-		public Node executeInterfaceDeclarationNode(InterfaceDeclarationNode node, List<Node> p)
+		public NamedTypeDeclarationNode<?> executeInterfaceDeclarationNode(InterfaceDeclarationNode node, List<Node> p)
 		{
 			return evaluateNamedTypeDeclarationNode(node);
 		}
 
-		protected Node evaluateNamedTypeDeclarationNode(NamedTypeDeclarationNode<?> node)
+		protected NamedTypeDeclarationNode<?> evaluateNamedTypeDeclarationNode(NamedTypeDeclarationNode<?> node)
 		{
 			if (node.getIdentifier().equals(name))
 				return node;
@@ -137,8 +203,36 @@ public class PackageOrTypeNameCategorizationVisitor extends BsjTypedNodeNoOpVisi
 			return null;
 		}
 
+		/**
+		 * Ensures that the provided name is comprised entirely of PACKAGE or TYPE category names.
+		 * 
+		 * @param nameNode The name to check.
+		 * @return <code>true</code> if it is; <code>false</code> if it is not.
+		 */
+		protected boolean checkImportName(NameNode nameNode)
+		{
+			while (nameNode != null)
+			{
+				if (nameNode.getCategory() == NameCategory.PACKAGE || nameNode.getCategory() == NameCategory.TYPE)
+				{
+					if (nameNode instanceof QualifiedNameNode)
+					{
+						nameNode = ((QualifiedNameNode) nameNode).getBase();
+					} else
+					{
+						nameNode = null;
+					}
+				} else
+				{
+					break;
+				}
+			}
+
+			return nameNode == null;
+		}
+
 		@Override
-		public Node executeCompilationUnitNode(CompilationUnitNode node, List<Node> p)
+		public NamedTypeDeclarationNode<?> executeCompilationUnitNode(CompilationUnitNode node, List<Node> p)
 		{
 			if (!this.nodeContainedWithinTypeDeclaration)
 			{
@@ -150,30 +244,20 @@ public class PackageOrTypeNameCategorizationVisitor extends BsjTypedNodeNoOpVisi
 			// declarations and imports do not affect other imports.
 			for (ImportNode importNode : node.getImports())
 			{
-				NameNode nameNode = importNode.getName();
-				while (nameNode != null)
+				checkImportName(importNode.getName());
+				NamedTypeDeclarationNode<?> ret = importNode.executeOperation(
+						new ExplicitImportNodeExaminationOperation(), null);
+				if (ret != null)
 				{
-					if (nameNode.getCategory() == NameCategory.PACKAGE || nameNode.getCategory() == NameCategory.TYPE)
-					{
-						if (nameNode instanceof QualifiedNameNode)
-						{
-							nameNode = ((QualifiedNameNode) nameNode).getBase();
-						} else
-						{
-							nameNode = null;
-						}
-					} else
-					{
-						break;
-					}
+					return ret;
 				}
-				if (nameNode != null)
-				{
-					// We found an import with a name that does not yet apply
-					continue;
-				}
-
-				Node ret = importNode.executeOperation(new ImportNodeExaminationOperation(), null);
+			}
+			// Check on-demand imports after explicit imports because explicit imports shadow on-demand imports.
+			for (ImportNode importNode : node.getImports())
+			{
+				checkImportName(importNode.getName());
+				NamedTypeDeclarationNode<?> ret = importNode.executeOperation(
+						new OnDemandImportNodeExaminationOperation(), null);
 				if (ret != null)
 				{
 					return ret;
@@ -184,128 +268,98 @@ public class PackageOrTypeNameCategorizationVisitor extends BsjTypedNodeNoOpVisi
 		}
 
 		/**
-		 * This node operation evaluates imports on behalf of the
+		 * This node operation evaluates explicit imports on behalf of the
 		 * {@link #executeCompilationUnitNode(CompilationUnitNode, List)} method.
 		 * 
 		 * @author Zachary Palmer
 		 */
-		class ImportNodeExaminationOperation extends BsjDefaultNodeOperation<Void, Node>
+		class ExplicitImportNodeExaminationOperation extends BsjDefaultNodeOperation<Void, NamedTypeDeclarationNode<?>>
 		{
 			@Override
-			public Node executeDefault(Node node, Void p)
+			public NamedTypeDeclarationNode<?> executeDefault(Node node, Void p)
 			{
 				return null;
 			}
 
-			private PackageNode getPackageForNameNode(NameNode name)
+			@Override
+			public NamedTypeDeclarationNode<?> executeImportSingleTypeNode(ImportSingleTypeNode node, Void p)
 			{
-				if (name.getCategory() != NameCategory.PACKAGE)
-				{
+				if (!node.getName().getIdentifier().getIdentifier().equals(name))
 					return null;
-				}
-				// Get the root package from the name
-				Node node = name;
-				while (node.getParent() != null)
-				{
-					node = node.getParent();
-				}
-				if (!(node instanceof PackageNode) || (((PackageNode) node).getName() != null))
-				{
-					return null;
-				} else
-				{
-					return ((PackageNode) node).getSubpackageByQualifiedName(name.getNameString());
-				}
+
+				return node.executeOperation(new TypeDeclarationLocatingNodeOperation(node.getName()), null);
 			}
 
-			private NamedTypeDeclarationNode<?> getTypeDeclForNameNode(NameNode name)
+			@Override
+			public NamedTypeDeclarationNode<?> executeSingleStaticImportNode(SingleStaticImportNode node, Void p)
 			{
-				if (name.getCategory() != NameCategory.TYPE)
+				if (!node.getIdentifier().getIdentifier().equals(name))
+					return null;
+
+				NamedTypeDeclarationNode<?> namedTypeDeclarationNode = node.executeOperation(
+						new TypeDeclarationLocatingNodeOperation(node.getName()), null);
+				if (namedTypeDeclarationNode == null)
 				{
 					return null;
 				}
 
-				if (name instanceof SimpleNameNode)
+				return namedTypeDeclarationNode.getTypeDeclaration(node.getIdentifier().getIdentifier());
+			}
+		}
+
+		/**
+		 * This node operation evaluates explicit imports on behalf of the
+		 * {@link #executeCompilationUnitNode(CompilationUnitNode, List)} method.
+		 * 
+		 * @author Zachary Palmer
+		 */
+		class OnDemandImportNodeExaminationOperation extends BsjDefaultNodeOperation<Void, NamedTypeDeclarationNode<?>>
+		{
+			@Override
+			public NamedTypeDeclarationNode<?> executeDefault(Node node, Void p)
+			{
+				return null;
+			}
+
+			@Override
+			public NamedTypeDeclarationNode<?> executeImportOnDemandNode(ImportOnDemandNode node, Void p)
+			{
+				if (node.getName().getCategory() == NameCategory.PACKAGE)
 				{
-					SimpleNameNode simpleNameNode = (SimpleNameNode) name;
-					// Find the first package above our name
-					Node node = name;
-					while (node != null && !(node instanceof PackageNode))
+					PackageNode rootPackage = node.getRootPackage();
+					if (rootPackage != null)
 					{
-						node = node.getParent();
-					}
-					if (node == null)
-					{
-						// If there is no common package, the name doesn't refer to anything
-						return null;
-					}
-					PackageNode packageNode = (PackageNode) node;
-					// Get the compilation unit for that type
-					CompilationUnitNode compilationUnitNode = packageNode.getCompilationUnit(simpleNameNode.getIdentifier().getIdentifier());
-					for (TypeDeclarationNode typeDeclarationNode : compilationUnitNode.getTypeDecls())
-					{
-						if (typeDeclarationNode instanceof NamedTypeDeclarationNode<?>)
+						PackageNode packageNode = rootPackage.getSubpackageByQualifiedName(node.getName());
+						if (packageNode != null)
 						{
-							NamedTypeDeclarationNode<?> namedTypeDeclarationNode = (NamedTypeDeclarationNode<?>) typeDeclarationNode;
-							if (namedTypeDeclarationNode.getIdentifier().getIdentifier().equals(
-									simpleNameNode.getIdentifier().getIdentifier()))
-							{
-								return namedTypeDeclarationNode;
-							}
+							return packageNode.getTopLevelTypeDeclaration(name);
 						}
 					}
 					return null;
-				} else if (name instanceof QualifiedNameNode)
+				} else
 				{
-					QualifiedNameNode qualifiedNameNode = (QualifiedNameNode) name;
-					NamedTypeDeclarationNode<?> namedTypeDeclarationNode = getTypeDeclForNameNode(qualifiedNameNode.getBase());
+					NamedTypeDeclarationNode<?> namedTypeDeclarationNode = node.executeOperation(
+							new TypeDeclarationLocatingNodeOperation(node.getName()), null);
 					if (namedTypeDeclarationNode == null)
-						return null;
-					// Now qualify that type declaration (such as Map.Entry)
-					for (Node member : namedTypeDeclarationNode.getBody().getMembers())
 					{
-						if (member instanceof NamedTypeDeclarationNode<?>)
-						{
-							NamedTypeDeclarationNode<?> memberDecl = (NamedTypeDeclarationNode<?>) member;
-							if (memberDecl.getIdentifier().getIdentifier().equals(
-									qualifiedNameNode.getIdentifier().getIdentifier()))
-							{
-								return memberDecl;
-							}
-						}
+						return null;
 					}
-					return null;
-				} else
-				{
-					throw new IllegalArgumentException("Unknown name node type: " + name.getClass());
+
+					return namedTypeDeclarationNode.getTypeDeclaration(name);
 				}
 			}
 
 			@Override
-			public Node executeImportOnDemandNode(ImportOnDemandNode node, Void p)
+			public NamedTypeDeclarationNode<?> executeStaticImportOnDemandNode(StaticImportOnDemandNode node, Void p)
 			{
-				// TODO Auto-generated method stub
-				return super.executeImportOnDemandNode(node, p);
-			}
+				NamedTypeDeclarationNode<?> namedTypeDeclarationNode = node.executeOperation(
+						new TypeDeclarationLocatingNodeOperation(node.getName()), null);
+				if (namedTypeDeclarationNode == null)
+				{
+					return null;
+				}
 
-			@Override
-			public Node executeImportSingleTypeNode(ImportSingleTypeNode node, Void p)
-			{
-				return getTypeDeclForNameNode(node.getName());
-			}
-
-			@Override
-			public Node executeSingleStaticImportNode(SingleStaticImportNode node, Void p)
-			{
-				// TODO Auto-generated method stub
-				return super.executeSingleStaticImportNode(node, p);
-			}
-
-			@Override
-			public Node executeStaticImportOnDemandNode(StaticImportOnDemandNode node, Void p)
-			{
-				// TODO Auto-generated method stub
-				return super.executeStaticImportOnDemandNode(node, p);
+				return namedTypeDeclarationNode.getTypeDeclaration(name);
 			}
 		}
 	}

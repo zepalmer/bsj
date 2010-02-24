@@ -177,19 +177,6 @@ public class SourceGenerator
 		return Character.toUpperCase(s.charAt(0)) + s.substring(1);
 	}
 
-	static class StringGroup
-	{
-		String name;
-		List<String> strings;
-
-		public StringGroup(String name, List<String> strings)
-		{
-			super();
-			this.name = name;
-			this.strings = strings;
-		}
-	}
-
 	/**
 	 * Performs a generic source file inclusion.
 	 * 
@@ -802,7 +789,12 @@ public class SourceGenerator
 			ps.println("");
 
 			printImports(ps, true);
-			includeAllImports(ps, def.getIncludes(), "nodes" + File.separator + "implementation");
+			String includesDir = "nodes" + File.separator + "implementation";
+			includeAllImports(ps, def.getIncludes(), includesDir);
+			for (TagReferenceDefinition tag : def.getTags())
+			{
+				includeAllImports(ps, def.getNamespaceMap().get(tag.getName()).getIncludes(), includesDir);
+			}
 
 			printGeneratedClause(ps);
 			ps.println("public " + (def.getMode() == TypeDefinition.Mode.CONCRETE ? "" : "abstract ") + "class "
@@ -1287,7 +1279,11 @@ public class SourceGenerator
 			ps.decPrependCount();
 
 			// add supplements
-			includeAllBodies(ps, def.getIncludes(), "nodes" + File.separator + "implementation");
+			includeAllBodies(ps, def.getIncludes(), includesDir);
+			for (TagReferenceDefinition tag : def.getTags())
+			{
+				includeAllBodies(ps, def.getNamespaceMap().get(tag.getName()).getIncludes(), includesDir);
+			}
 
 			ps.println("}");
 		}

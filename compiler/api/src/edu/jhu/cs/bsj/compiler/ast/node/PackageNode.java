@@ -89,6 +89,13 @@ public interface PackageNode extends Node
 	public PackageNode getSubpackageByQualifiedName(NameNode name);
 	
 	/**
+	 * Retrieves a type declaration for a top level type in this package.
+	 * @param name The simple name of the top level type.
+	 * @return The type's declaration or <code>null</code> if no such declaration exists.
+	 */
+	public NamedTypeDeclarationNode<?> getTopLevelTypeDeclaration(String name);
+	
+	/**
 	 * Retrieves the full name of this package node.  This method only returns a valid result if the package is attached
 	 * to the root package.
 	 * @return The fully-qualified name of this package node or <code>null</code> if the name could not be determined.

@@ -15,6 +15,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.InterfaceBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.InterfaceDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.InterfaceModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.JavadocNode;
+import edu.jhu.cs.bsj.compiler.ast.node.NamedTypeDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeParameterListNode;
 
@@ -416,4 +417,25 @@ public class InterfaceDeclarationNodeImpl extends NodeImpl implements InterfaceD
         return false;
     }
     
+	/**
+	 * Retrieves the specified member type declaration from this node.
+	 * @param name The simple name of the member type declaration to retrieve.
+	 * @return The declaration of that type or <code>null</code> if no such declaration exists.
+	 */
+	public NamedTypeDeclarationNode<?> getTypeDeclaration(String name)
+	{
+		for (Node node : getBody().getMembers())
+		{
+			if (node instanceof NamedTypeDeclarationNode<?>)
+			{
+				NamedTypeDeclarationNode<?> namedTypeDeclarationNode = (NamedTypeDeclarationNode<?>)node;
+				if (namedTypeDeclarationNode.getIdentifier().getIdentifier().equals(name))
+				{
+					return namedTypeDeclarationNode;
+				}
+			}
+		}
+		return null;
+	}
+
 }

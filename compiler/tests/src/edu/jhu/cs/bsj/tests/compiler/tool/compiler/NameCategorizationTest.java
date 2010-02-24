@@ -85,7 +85,7 @@ public class NameCategorizationTest extends AbstractPerFileTest
 		// unit test make assertions about the log4j output.
 
 		// Identify packages and types
-		PackageOrTypeNameCategorizationVisitor packageOrTypeNameCategorizationVisitor = new PackageOrTypeNameCategorizationVisitor();
+		PackageOrTypeNameCategorizationVisitor packageOrTypeNameCategorizationVisitor = new PackageOrTypeNameCategorizationVisitor(null);
 		node.receiveTyped(packageOrTypeNameCategorizationVisitor);
 		// TODO: confirm that there are no PackageOrTypeNames left
 

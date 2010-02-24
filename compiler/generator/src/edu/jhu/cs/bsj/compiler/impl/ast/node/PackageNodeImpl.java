@@ -17,10 +17,12 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.NameNode;
+import edu.jhu.cs.bsj.compiler.ast.node.NamedTypeDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.PackageNode;
 import edu.jhu.cs.bsj.compiler.ast.node.QualifiedNameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.SimpleNameNode;
+import edu.jhu.cs.bsj.compiler.ast.node.TypeDeclarationNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.PackageNodeCallback;
 import edu.jhu.cs.bsj.compiler.impl.utils.CompoundIterator;
 
@@ -294,6 +296,62 @@ public class PackageNodeImpl extends NodeImpl implements PackageNode
 		{
 			throw new IllegalStateException("Unrecognized name node type " + name.getClass().getName());
 		}
+	}
+	
+	/**
+	 * Retrieves a type declaration for a top level type in this package.
+	 * @param name The simple name of the top level type.
+	 * @return The type's declaration or <code>null</code> if no such declaration exists.
+	 */
+	public NamedTypeDeclarationNode<?> getTopLevelTypeDeclaration(String name)
+	{
+		CompilationUnitNode compilationUnitNode = getCompilationUnit(name);
+		if (compilationUnitNode != null)
+		{
+			NamedTypeDeclarationNode<?> namedTypeDeclarationNode = tryCompilationUnitNode(compilationUnitNode,
+					name);
+			if (namedTypeDeclarationNode != null)
+			{
+				return namedTypeDeclarationNode;
+			}
+		}
+
+		// If we couldn't find it in its own compilation unit node, let's go find it by searching the package
+		Iterator<CompilationUnitNode> it = getCompilationUnitIterator();
+		while (it.hasNext())
+		{
+			NamedTypeDeclarationNode<?> namedTypeDeclarationNode = tryCompilationUnitNode(it.next(), name);
+			if (namedTypeDeclarationNode != null)
+			{
+				return namedTypeDeclarationNode;
+			}
+		}
+
+		return null;
+	}
+	
+	// TODO: consider generalizing this to a public function of CompilationUnitNode
+	/**
+	 * Searches the specified child for a top-level type declaration of the specified name.
+	 * @param compilationUnitNode The child in question.
+	 * @param name The name of the type declaration.
+	 * @return The resulting top-level type declaration.
+	 */
+	private static NamedTypeDeclarationNode<?> tryCompilationUnitNode(CompilationUnitNode compilationUnitNode,
+			String name)
+	{
+		for (TypeDeclarationNode typeDeclarationNode : compilationUnitNode.getTypeDecls())
+		{
+			if (typeDeclarationNode instanceof NamedTypeDeclarationNode<?>)
+			{
+				NamedTypeDeclarationNode<?> namedTypeDeclarationNode = (NamedTypeDeclarationNode<?>) typeDeclarationNode;
+				if (namedTypeDeclarationNode.getIdentifier().getIdentifier().equals(name))
+				{
+					return namedTypeDeclarationNode;
+				}
+			}
+		}
+		return null;
 	}
 	
 	/**

@@ -48,11 +48,13 @@ public class TypeDeclarationLocatingNodeOperation extends BsjDefaultNodeOperatio
 		super();
 		if (name == null)
 			throw new IllegalArgumentException("Cannot handle null name");
-		if (name.getCategory() != NameCategory.TYPE)
+		/*
+		if (name.getCategory() != NameCategory.TYPE && name.getCategory() != NameCategory.PACKAGE)
 			throw new IllegalArgumentException("Must be a type name (category = " + name.getCategory() + ")");
+		*/
 
-		List<String> components = new LinkedList<String>();
-		List<NameCategory> categories = new LinkedList<NameCategory>();
+		this.components = new LinkedList<String>();
+		this.categories = new LinkedList<NameCategory>();
 
 		NameNode node = name;
 		while (node != null)
@@ -348,6 +350,12 @@ public class TypeDeclarationLocatingNodeOperation extends BsjDefaultNodeOperatio
 					// Figure out to which type declaration this import node refers
 					NamedTypeDeclarationNode<?> result = node.executeOperation(
 							new TypeDeclarationLocatingNodeOperation(node.getName()), null);
+					if (result == null)
+					{
+						return null;
+					}
+					// Try to find a member type named by the identifier on that import
+					result = result.getTypeDeclaration(node.getIdentifier().getIdentifier());
 					// Use that type
 					return result;
 				}
