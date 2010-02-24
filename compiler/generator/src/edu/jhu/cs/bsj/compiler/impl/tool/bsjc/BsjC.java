@@ -15,6 +15,9 @@ import javax.tools.JavaFileObject.Kind;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.Option;
+import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.PosixParser;
@@ -42,8 +45,14 @@ public class BsjC
 	 */
 	public static final String VERSION = "0.1";
 	
+	/**
+	 * A normal exit return code.
+	 */
 	public static final int NORMAL_EXIT = 0;
 	
+	/**
+     * An erroneous exit return code.
+     */
 	public static final int ERROR_EXIT = 1;
 	
 	/**
@@ -88,6 +97,14 @@ public class BsjC
 		{
 			System.out.println("Invalid command line arguments: " + e.getMessage());
 			System.exit(ERROR_EXIT);
+		}
+		
+		// display help page if requested or no args are supplied
+		if (args.length == 0 || cmd.hasOption("help"))
+		{
+		    HelpFormatter formatter = new HelpFormatter();
+		    formatter.printHelp("bsjc", BsjC.initOptions());
+		    System.exit(NORMAL_EXIT);
 		}
 		
 		// display version info and exit if requested
@@ -221,7 +238,7 @@ public class BsjC
 		
 		// set the metaprogram classpath
 		// the metaprogram will always have a classpath equal to what the 
-		// user specifies unioned with the classpath of the running JVM.
+		// user specifies unioned with the classpath of the running JVM
 		if (cmd.hasOption("mcp"))
 		{
 			metaProgramClasspath = metaProgramClasspath + File.pathSeparator + cmd.getOptionValue("mcp");
@@ -257,25 +274,37 @@ public class BsjC
 	{
 		Options options = new Options();
 		
-		//TODO switch to optionBuilders...
-		options.addOption("ocp", true, 
-				"Specify where to find user class files and annotation processors");
+		// options with arguments:
+        Option objectClasspath = new Option("ocp", true, 
+                "Specify where to find user class files and annotation processors");
+        objectClasspath.setArgName("path");
+        options.addOption(objectClasspath);
+        
+        Option metaClasspath = new Option("mcp", true, 
+                "Specify where to find metaprogram class files and annotation processors");
+        metaClasspath.setArgName("path");
+        options.addOption(metaClasspath);
+        
+        Option destination = new Option("d", true, 
+                "Specify where to place generated class files");
+        destination.setArgName("path");
+        options.addOption(destination);
 		
-		options.addOption("mcp", true, 
-				"Specify where to find metaprogram class files and annotation processors");
+        Option sourcepath = new Option("sourcepath", true,
+                "Specify the source code path to search for class or interface definitions");
+        sourcepath.setArgName("path");
+        options.addOption(sourcepath);
 		
-		options.addOption("d", true, "Specify where to place generated class files");
+        Option genSourcepath = new Option("gsp", true,
+                "Specify where to place BSJ generated files");
+        genSourcepath.setArgName("path");
+        options.addOption(genSourcepath);
 		
-		options.addOption("sourcepath", true, "Specify where to place generated class files");
-		
-		options.addOption("version", false, "Version information");
-		
-		options.addOption("gsp", "gensourcepath", true, 
-			"Specify where to place BSJ generated files");
-		
-		options.addOption("debug", false, "Turns on debug logging");
-		
-		options.addOption("trace", false, "Turns on trace logging");
+        // options without arguments:
+        options.addOption("version", false, "Version information");        
+		options.addOption("debug", false, "Turns on debug logging");		
+		options.addOption("trace", false, "Turns on trace logging");		
+		options.addOption("help", false, "Print a synopsis of standard options");
 		
 		return options;
 	}
@@ -332,6 +361,5 @@ public class BsjC
 	public void setCompileObjects(List<BsjFileObject> compileObjects)
 	{
 		this.compileObjects = compileObjects;
-	}
-	
+	}	
 }
