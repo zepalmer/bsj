@@ -128,4 +128,11 @@ public interface Node
 	 * @return The furthest ancestor of this node (or this node if it has no parent).
 	 */
 	public Node getFurthestAncestor();
+	
+	/**
+	 * Retrieves the root package associated with this node.
+	 * @return This node's root package (or <code>null</code> if this node is not part of a tree connected to the root
+	 * package).
+	 */
+	public PackageNode getRootPackage();
 }

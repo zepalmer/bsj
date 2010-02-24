@@ -130,5 +130,24 @@ public abstract class NodeImpl
 		}
 		return node;
 	}
+	
+	/**
+	 * Retrieves the root package associated with this node.
+	 * @return This node's root package (or <code>null</code> if this node is not part of a tree connected to the root
+	 * package).
+	 */
+	public PackageNode getRootPackage()
+	{
+		Node node = getFurthestAncestor();
+		if (node instanceof PackageNode)
+		{
+			PackageNode packageNode = (PackageNode)node;
+			if (packageNode.getName() == null)
+			{
+				return packageNode;
+			}
+		}
+		return null;
+	}
 	/* GEN:stop */
 }

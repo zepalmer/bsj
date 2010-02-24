@@ -21,9 +21,6 @@ public class QualifiedNameNodeImpl extends NameNodeImpl implements QualifiedName
     /** The name being qualified. */
     private NameNode base;
 
-    /** The identifier used to qualify the base name. */
-    private IdentifierNode identifier;
-
     /** General constructor. */
     public QualifiedNameNodeImpl(
             NameNode base,
@@ -32,9 +29,8 @@ public class QualifiedNameNodeImpl extends NameNodeImpl implements QualifiedName
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        super(category, startLocation, stopLocation);
+        super(identifier, category, startLocation, stopLocation);
         setBase(base);
-        setIdentifier(identifier);
     }
 
     /**
@@ -64,32 +60,6 @@ public class QualifiedNameNodeImpl extends NameNodeImpl implements QualifiedName
     }
 
     /**
-     * Gets the identifier used to qualify the base name.
-     * @return The identifier used to qualify the base name.
-     */
-    public IdentifierNode getIdentifier()
-    {
-        return this.identifier;
-    }
-
-    /**
-     * Changes the identifier used to qualify the base name.
-     * @param identifier The identifier used to qualify the base name.
-     */
-    public void setIdentifier(IdentifierNode identifier)
-    {
-        if (this.identifier instanceof NodeImpl)
-        {
-            ((NodeImpl)this.identifier).setParent(null);
-        }
-        this.identifier = identifier;
-        if (this.identifier instanceof NodeImpl)
-        {
-            ((NodeImpl)this.identifier).setParent(this);
-        }
-    }
-
-    /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
      * method first and then visit its subclass-specific children.
@@ -103,10 +73,6 @@ public class QualifiedNameNodeImpl extends NameNodeImpl implements QualifiedName
         if (this.base != null)
         {
             this.base.receive(visitor);
-        }
-        if (this.identifier != null)
-        {
-            this.identifier.receive(visitor);
         }
     }
 
@@ -124,10 +90,6 @@ public class QualifiedNameNodeImpl extends NameNodeImpl implements QualifiedName
         if (this.base != null)
         {
             this.base.receiveTyped(visitor);
-        }
-        if (this.identifier != null)
-        {
-            this.identifier.receiveTyped(visitor);
         }
     }
 
@@ -157,7 +119,6 @@ public class QualifiedNameNodeImpl extends NameNodeImpl implements QualifiedName
     {
         List<Object> list = super.getChildObjects();
         list.add(getBase());
-        list.add(getIdentifier());
         return list;
     }
 
@@ -170,21 +131,21 @@ public class QualifiedNameNodeImpl extends NameNodeImpl implements QualifiedName
         StringBuilder sb = new StringBuilder();
         if (base == null)
         {
-        sb.append("[null]");
+            sb.append("[null]");
         } else
         {
-        sb.append(this.base.toString());
+            sb.append(this.base.toString());
         }
         sb.append('.');
-        if (identifier == null)
+        if (getIdentifier() == null)
         {
-        sb.append("[null]");
+            sb.append("[null]");
         } else
         {
-        sb.append(identifier.getIdentifier());
-        sb.append('[');
-        sb.append(this.getCategory());
-        sb.append(']');
+            sb.append(getIdentifier().getIdentifier());
+            sb.append('[');
+            sb.append(this.getCategory());
+            sb.append(']');
         }
         return sb.toString();
     }

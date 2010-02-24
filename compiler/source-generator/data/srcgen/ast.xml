@@ -200,6 +200,7 @@
         </type>
 
         <type name="NameNode" super="Node" mode="abstract">
+            <prop name="identifier" type="IdentifierNode" desc="the identifier used in this name" />
             <prop name="category" type="NameCategory" mode="readOnly" desc="the category for this name" />
             <include file="NameNode.java" />
             <doc><![CDATA[
@@ -218,7 +219,6 @@
         <!-- TODO: is the QNN vs. SNN distinction buying us anything useful or just a bunch of instanceof checks? -->
         <type name="QualifiedNameNode" super="NameNode">
             <prop name="base" type="NameNode" desc="the name being qualified" />
-            <prop name="identifier" type="IdentifierNode" desc="the identifier used to qualify the base name" />
             <include file="QualifiedNameNode.java" />
             <doc><![CDATA[
                 Represents a qualified name, as in
@@ -229,27 +229,26 @@
             <toString><![CDATA[
                 if (base == null)
                 {
-                sb.append("[null]");
+                    sb.append("[null]");
                 } else
                 {
-                sb.append(this.base.toString());
+                    sb.append(this.base.toString());
                 }
                 sb.append('.');
-                if (identifier == null)
+                if (getIdentifier() == null)
                 {
-                sb.append("[null]");
+                    sb.append("[null]");
                 } else
                 {
-                sb.append(identifier.getIdentifier());
-                sb.append('[');
-                sb.append(this.getCategory());
-                sb.append(']');
+                    sb.append(getIdentifier().getIdentifier());
+                    sb.append('[');
+                    sb.append(this.getCategory());
+                    sb.append(']');
                 }
             ]]></toString>
         </type>
 
         <type name="SimpleNameNode" super="NameNode">
-            <prop name="identifier" type="IdentifierNode" desc="the identifier used as a simple name" />
             <include file="SimpleNameNode.java" />
             <doc><![CDATA[
                 Represents a simple name, as in
@@ -258,15 +257,15 @@
                 </pre>
             ]]></doc>
             <toString><![CDATA[
-                if (identifier == null)
+                if (getIdentifier() == null)
                 {
-                sb.append("[null]");
+                    sb.append("[null]");
                 } else
                 {
-                sb.append(identifier.getIdentifier());
-                sb.append('[');
-                sb.append(this.getCategory());
-                sb.append(']');
+                    sb.append(getIdentifier().getIdentifier());
+                    sb.append('[');
+                    sb.append(this.getCategory());
+                    sb.append(']');
                 }
             ]]></toString>
         </type>

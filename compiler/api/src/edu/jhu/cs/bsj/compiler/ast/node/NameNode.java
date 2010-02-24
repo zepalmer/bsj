@@ -20,6 +20,18 @@ import edu.jhu.cs.bsj.compiler.ast.NameCategory;
 public interface NameNode extends Node
 {
     /**
+     * Gets the identifier used in this name.
+     * @return The identifier used in this name.
+     */
+    public IdentifierNode getIdentifier();
+
+    /**
+     * Changes the identifier used in this name.
+     * @param identifier The identifier used in this name.
+     */
+    public void setIdentifier(IdentifierNode identifier);
+
+    /**
      * Gets the category for this name.
      * @return The category for this name.
      */

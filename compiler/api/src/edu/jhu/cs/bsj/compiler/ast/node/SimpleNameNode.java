@@ -14,18 +14,6 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 public interface SimpleNameNode extends NameNode
 {
     /**
-     * Gets the identifier used as a simple name.
-     * @return The identifier used as a simple name.
-     */
-    public IdentifierNode getIdentifier();
-
-    /**
-     * Changes the identifier used as a simple name.
-     * @param identifier The identifier used as a simple name.
-     */
-    public void setIdentifier(IdentifierNode identifier);
-
-    /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.
      * @return The resulting deep copy node.

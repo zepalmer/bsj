@@ -17,9 +17,6 @@ import edu.jhu.cs.bsj.compiler.ast.node.SimpleNameNode;
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class SimpleNameNodeImpl extends NameNodeImpl implements SimpleNameNode
 {
-    /** The identifier used as a simple name. */
-    private IdentifierNode identifier;
-
     /** General constructor. */
     public SimpleNameNodeImpl(
             IdentifierNode identifier,
@@ -27,34 +24,7 @@ public class SimpleNameNodeImpl extends NameNodeImpl implements SimpleNameNode
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        super(category, startLocation, stopLocation);
-        setIdentifier(identifier);
-    }
-
-    /**
-     * Gets the identifier used as a simple name.
-     * @return The identifier used as a simple name.
-     */
-    public IdentifierNode getIdentifier()
-    {
-        return this.identifier;
-    }
-
-    /**
-     * Changes the identifier used as a simple name.
-     * @param identifier The identifier used as a simple name.
-     */
-    public void setIdentifier(IdentifierNode identifier)
-    {
-        if (this.identifier instanceof NodeImpl)
-        {
-            ((NodeImpl)this.identifier).setParent(null);
-        }
-        this.identifier = identifier;
-        if (this.identifier instanceof NodeImpl)
-        {
-            ((NodeImpl)this.identifier).setParent(this);
-        }
+        super(identifier, category, startLocation, stopLocation);
     }
 
     /**
@@ -68,10 +38,6 @@ public class SimpleNameNodeImpl extends NameNodeImpl implements SimpleNameNode
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.identifier != null)
-        {
-            this.identifier.receive(visitor);
-        }
     }
 
     /**
@@ -85,10 +51,6 @@ public class SimpleNameNodeImpl extends NameNodeImpl implements SimpleNameNode
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.identifier != null)
-        {
-            this.identifier.receiveTyped(visitor);
-        }
     }
 
     @Override
@@ -116,7 +78,6 @@ public class SimpleNameNodeImpl extends NameNodeImpl implements SimpleNameNode
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(getIdentifier());
         return list;
     }
 
@@ -127,15 +88,15 @@ public class SimpleNameNodeImpl extends NameNodeImpl implements SimpleNameNode
     public String toString()
     {
         StringBuilder sb = new StringBuilder();
-        if (identifier == null)
+        if (getIdentifier() == null)
         {
-        sb.append("[null]");
+            sb.append("[null]");
         } else
         {
-        sb.append(identifier.getIdentifier());
-        sb.append('[');
-        sb.append(this.getCategory());
-        sb.append(']');
+            sb.append(getIdentifier().getIdentifier());
+            sb.append('[');
+            sb.append(this.getCategory());
+            sb.append(']');
         }
         return sb.toString();
     }

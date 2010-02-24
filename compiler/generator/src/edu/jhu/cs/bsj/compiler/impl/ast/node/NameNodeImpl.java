@@ -8,21 +8,53 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.NameCategory;
+import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.NameNode;
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public abstract class NameNodeImpl extends NodeImpl implements NameNode
 {
+    /** The identifier used in this name. */
+    private IdentifierNode identifier;
+
     /** The category for this name. */
     private NameCategory category;
 
     /** General constructor. */
     protected NameNodeImpl(
+            IdentifierNode identifier,
             NameCategory category,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
         super(startLocation, stopLocation);
+        setIdentifier(identifier);
         this.category = category;
+    }
+
+    /**
+     * Gets the identifier used in this name.
+     * @return The identifier used in this name.
+     */
+    public IdentifierNode getIdentifier()
+    {
+        return this.identifier;
+    }
+
+    /**
+     * Changes the identifier used in this name.
+     * @param identifier The identifier used in this name.
+     */
+    public void setIdentifier(IdentifierNode identifier)
+    {
+        if (this.identifier instanceof NodeImpl)
+        {
+            ((NodeImpl)this.identifier).setParent(null);
+        }
+        this.identifier = identifier;
+        if (this.identifier instanceof NodeImpl)
+        {
+            ((NodeImpl)this.identifier).setParent(this);
+        }
     }
 
     /**
@@ -45,6 +77,10 @@ public abstract class NameNodeImpl extends NodeImpl implements NameNode
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
+        if (this.identifier != null)
+        {
+            this.identifier.receive(visitor);
+        }
     }
 
     /**
@@ -58,6 +94,10 @@ public abstract class NameNodeImpl extends NodeImpl implements NameNode
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
+        if (this.identifier != null)
+        {
+            this.identifier.receiveTyped(visitor);
+        }
     }
 
     @Override
@@ -83,6 +123,7 @@ public abstract class NameNodeImpl extends NodeImpl implements NameNode
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
+        list.add(getIdentifier());
         list.add(getCategory());
         return list;
     }
@@ -96,6 +137,9 @@ public abstract class NameNodeImpl extends NodeImpl implements NameNode
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
+        sb.append("identifier=");
+        sb.append(this.getIdentifier() == null? "null" : this.getIdentifier().getClass().getSimpleName());
+        sb.append(',');
         sb.append("category=");
         sb.append(String.valueOf(this.getCategory()) + ":" + (this.getCategory() != null ? this.getCategory().getClass().getSimpleName() : "null"));
         sb.append(',');

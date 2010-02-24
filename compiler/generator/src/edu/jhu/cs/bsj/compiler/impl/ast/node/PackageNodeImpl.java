@@ -16,8 +16,11 @@ import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
+import edu.jhu.cs.bsj.compiler.ast.node.NameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.PackageNode;
+import edu.jhu.cs.bsj.compiler.ast.node.QualifiedNameNode;
+import edu.jhu.cs.bsj.compiler.ast.node.SimpleNameNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.PackageNodeCallback;
 import edu.jhu.cs.bsj.compiler.impl.utils.CompoundIterator;
 
@@ -270,6 +273,29 @@ public class PackageNodeImpl extends NodeImpl implements PackageNode
 		return p;
 	}
 
+	/**
+	 * Retrieves a subpackage of this package by qualified name. This method is provided for convenience and is
+	 * equivalent to calling {@link #getSubpackage} compositionally.
+	 * 
+	 * @param name The qualified name of the subpackage to retrieve.
+	 * @return The resulting package node or <code>null</code> if no such node exists.
+	 */
+	public PackageNode getSubpackageByQualifiedName(NameNode name)
+	{
+		if (name instanceof QualifiedNameNode)
+		{
+			QualifiedNameNode qualifiedNameNode = (QualifiedNameNode)name;
+			PackageNode packageNode = getSubpackageByQualifiedName(qualifiedNameNode.getBase());
+			return packageNode.getSubpackage(name.getIdentifier().getIdentifier());
+		} else if (name instanceof SimpleNameNode)
+		{
+			return getSubpackage(name.getIdentifier().getIdentifier());
+		} else
+		{
+			throw new IllegalStateException("Unrecognized name node type " + name.getClass().getName());
+		}
+	}
+	
 	/**
 	 * Retrieves the full name of this package node. This method only returns a valid result if the package is attached
 	 * to the root package.

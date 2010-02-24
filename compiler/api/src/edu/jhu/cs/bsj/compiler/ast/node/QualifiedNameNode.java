@@ -26,18 +26,6 @@ public interface QualifiedNameNode extends NameNode
     public void setBase(NameNode base);
 
     /**
-     * Gets the identifier used to qualify the base name.
-     * @return The identifier used to qualify the base name.
-     */
-    public IdentifierNode getIdentifier();
-
-    /**
-     * Changes the identifier used to qualify the base name.
-     * @param identifier The identifier used to qualify the base name.
-     */
-    public void setIdentifier(IdentifierNode identifier);
-
-    /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.
      * @return The resulting deep copy node.
