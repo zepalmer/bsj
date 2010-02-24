@@ -70,7 +70,7 @@ public class BsjC
 	 * @throws IOException 
 	 * @throws FileNotFoundException 
 	 */
-	public static void main(String[] args) throws FileNotFoundException, IOException
+	public static void main(String[] args)
 	{
 		// parse the command line arguments
 		CommandLineParser parser = new PosixParser();
@@ -91,6 +91,69 @@ public class BsjC
 			System.exit(0);
 		}
 		
+		// build the file manager using the supplied arguments
+		BsjFileManager bfm = null;
+        try
+        {
+            bfm = createFileManagerFromArgs(cmd);
+        }
+        catch (FileNotFoundException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        catch (IOException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+		
+		// get files for compilation, any left over arguments are source files
+		List<BsjFileObject> sourceFiles = new ArrayList<BsjFileObject>();		
+		for (String sourceFile : cmd.getArgs())
+		{
+			//TODO parse absolute pathnames
+			try
+            {
+                sourceFiles.add(
+                		bfm.getJavaFileForInput(
+                				BsjCompilerLocation.SOURCE_PATH, 
+                				sourceFile.replaceFirst(".java", "").replace(File.separatorChar, '.'), 
+                				Kind.SOURCE));
+            }
+            catch (IOException e)
+            {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+		}
+		
+		// compile the source files using the file manager
+		BsjC bsjc = new BsjC();
+		bsjc.setBsjFileManager(bfm);
+		bsjc.setCompileObjects(sourceFiles);
+		try
+        {
+            bsjc.compile();
+        }
+        catch (IOException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+	}
+	
+	/**
+	 * Takes a parsed set of command line arguments and uses them to
+	 * create a location mapped file manager.
+	 * @param cmd the parsed set of command line arguments.
+	 * @return a location mapped file manager.
+	 * @throws FileNotFoundException If canonicalization of a pathname fails.
+	 * @throws IOException If one of the specified pathnames does not exist.
+	 */
+	public static BsjFileManager createFileManagerFromArgs(CommandLine cmd) 
+		throws FileNotFoundException, IOException 
+	{
 		// map the locations for the file manager
 		Map<BsjCompilerLocation, LocationManager> map = new HashMap<BsjCompilerLocation, LocationManager>();
 		
@@ -98,60 +161,58 @@ public class BsjC
 		File sourcePath = new File(".");
 		File classOutput = new File(".");
 		File bsjSourcePath = new File("." + File.separator + "bsjgensrc");
+		String metaProgramClasspath = System.getProperty("java.class.path");
+		String objectProgramClasspath = System.getProperty("java.class.path");
 		
-		// apply the command line options that are present
+		// set the sourcepath
 		if (cmd.hasOption("sourcepath"))
 		{
 			sourcePath = new File(cmd.getOptionValue("sourcepath"));
 		}
 		map.put(BsjCompilerLocation.SOURCE_PATH, new RegularFileLocationManager(null, sourcePath));
 		
+		// set the generated sourcepath for BSJ files
 		if (cmd.hasOption("gsp"))
 		{
 			sourcePath = new File(cmd.getOptionValue("gsp"));
 		}
 		map.put(BsjCompilerLocation.GENERATED_SOURCE_PATH, new RegularFileLocationManager(null, bsjSourcePath));
 		
+		// set the destination directory for finished class files
 		if (cmd.hasOption("d"))
 		{
 			classOutput = new File(cmd.getOptionValue("d"));
 		}
 		map.put(BsjCompilerLocation.CLASS_OUTPUT, new RegularFileLocationManager(null, classOutput));
 		
-		//TODO
-		map.put(BsjCompilerLocation.METAPROGRAM_SYSTEM_CLASSPATH, new UnionLocationManager(null,
-				System.getProperty("sun.boot.class.path")));
-		map.put(BsjCompilerLocation.METAPROGRAM_CLASSPATH, new UnionLocationManager(null,
-				System.getProperty("java.class.path")));
+		// set the metaprogram classpath
+		if (cmd.hasOption("mcp"))
+		{
+			metaProgramClasspath = cmd.getOptionValue("mcp");
+		}
+		map.put(BsjCompilerLocation.METAPROGRAM_CLASSPATH, 
+				new UnionLocationManager(null, metaProgramClasspath));		
+		
+		// set the object program classpath
+		if (cmd.hasOption("ocp"))
+		{
+			objectProgramClasspath = cmd.getOptionValue("ocp");
+		}
+		map.put(BsjCompilerLocation.OBJECT_PROGRAM_CLASSPATH, 
+				new UnionLocationManager(null, objectProgramClasspath));
 		
 		//TODO
 		map.put(BsjCompilerLocation.OBJECT_PROGRAM_SYSTEM_CLASSPATH, new UnionLocationManager(null,
 				System.getProperty("sun.boot.class.path")));
-		map.put(BsjCompilerLocation.OBJECT_PROGRAM_CLASSPATH, new UnionLocationManager(null,
-				System.getProperty("java.class.path")));
+		
+		//TODO
+		map.put(BsjCompilerLocation.METAPROGRAM_SYSTEM_CLASSPATH, new UnionLocationManager(null,
+				System.getProperty("sun.boot.class.path")));
 		
 		// create a new file manager from the options selected
-		BsjFileManager bfm = new LocationMappedFileManager(map);
-		
-		// get files for compilation, any left over arguments are source files
-		List<BsjFileObject> sourceFiles = new ArrayList<BsjFileObject>();		
-		for (String sourceFile : cmd.getArgs())
-		{
-			//TODO parse absolute pathnames
-			sourceFiles.add(
-					bfm.getJavaFileForInput(
-							BsjCompilerLocation.SOURCE_PATH, 
-							sourceFile.replaceFirst(".java", ""), 
-							Kind.SOURCE));
-		}
-		
-		// compile the source files using the file manager
-		BsjC bsjc = new BsjC();
-		bsjc.setBsjFileManager(bfm);
-		bsjc.setCompileObjects(sourceFiles);
-		bsjc.compile();
+		return(new LocationMappedFileManager(map));
 	}
-	
+
 	/**
 	 * Creates the set of valid Options for the bsjc.
 	 * @return the set of valid Options.
@@ -161,8 +222,11 @@ public class BsjC
 		Options options = new Options();
 		
 		//TODO switch to optionBuilders...
-		options.addOption("cp", "classpath", true, 
+		options.addOption("ocp", true, 
 				"Specify where to find user class files and annotation processors");
+		
+		options.addOption("mcp", true, 
+				"Specify where to find metaprogram class files and annotation processors");
 		
 		options.addOption("d", true, "Specify where to place generated class files");
 		
