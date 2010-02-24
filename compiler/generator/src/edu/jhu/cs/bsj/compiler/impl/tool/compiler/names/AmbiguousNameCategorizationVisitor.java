@@ -117,6 +117,8 @@ public class AmbiguousNameCategorizationVisitor extends BsjTypedNodeNoOpVisitor
 	 */
 	private boolean inExpressionNameScope(Node node, String name)
 	{
+		// TODO: now that the node tree has access to package info, the rest of the expression checking should be done
+		// here as well - perhaps inside of the same node operation
 		Node result = node.executeOperation(new AncestryExecutingNodeOperation<Node>(
 				new ExpressionNameScopeCheckingOperation(name)), null);
 
