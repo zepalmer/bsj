@@ -57,8 +57,8 @@ public class ParseCompilationUnitTask extends AbstractBsjCompilerTask
 			packageNode = packageNode.getSubpackage(componentName);
 		}
 
-		// Add the compilation unit and enqueue it for extraction
+		// Add the compilation unit and enqueue it for name analysis
 		packageNode.addCompilationUnitNode(node);
-		context.registerTask(new ExtractMetaprogramsTask(node));
+		context.registerTask(new CategorizeNamesTask(node));
 	}
 }

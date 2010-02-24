@@ -21,8 +21,11 @@ import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ImportNode;
 import edu.jhu.cs.bsj.compiler.ast.node.MethodDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.NameNode;
+import edu.jhu.cs.bsj.compiler.ast.node.NamedTypeDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.PackageDeclarationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.QualifiedNameNode;
+import edu.jhu.cs.bsj.compiler.ast.node.SimpleNameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportNode;
@@ -34,6 +37,7 @@ import edu.jhu.cs.bsj.compiler.impl.tool.compiler.MetacompilationContext;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.MetaprogramProfile;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.StandardBsjCompiler;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.operations.EnclosingTypeNamingNodeOperation;
+import edu.jhu.cs.bsj.compiler.impl.tool.compiler.operations.TypeDeclarationLocatingNodeOperation;
 import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.BsjCompilerLocation;
 import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.BsjFileManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.BsjFileObject;
@@ -145,13 +149,44 @@ public class CompileMetaprogramTask extends AbstractBsjCompilerTask
 			{
 				for (NameNode dependsName : metaprogramPreambleNode.getDepends().getTargetNames().getChildren())
 				{
-					// TODO: what if the dependency name isn't fully qualified? (need type info)
+					// We need a fully-qualified name
+					String qualifiedDependsName;
+					if (dependsName instanceof SimpleNameNode)
+					{
+						// Then the base name is that of the enclosing type
+						NameNode fullyQualifiedName = metaprogramNode.executeOperation(
+								new EnclosingTypeNamingNodeOperation(factory), null);
+						qualifiedDependsName = fullyQualifiedName.getNameString() + "."
+								+ dependsName.getIdentifier().getIdentifier();
+					} else if (dependsName instanceof QualifiedNameNode)
+					{
+						// Then the base name is the fully qualified form of the specified base name
+						QualifiedNameNode qualifiedNameNode = (QualifiedNameNode) dependsName;
+						NamedTypeDeclarationNode<?> namedTypeDeclarationNode = dependsName.executeOperation(
+								new TypeDeclarationLocatingNodeOperation(qualifiedNameNode.getBase()), null);
+						if (namedTypeDeclarationNode == null)
+						{
+							// TODO: this is an error - produce a diagnostic
+							continue;
+						} else
+						{
+							NameNode fullyQualifiedName = namedTypeDeclarationNode.executeOperation(
+									new EnclosingTypeNamingNodeOperation(factory), null);
+							qualifiedDependsName = fullyQualifiedName.getNameString() + "."
+									+ dependsName.getIdentifier().getIdentifier();
+						}
+					} else
+					{
+						throw new IllegalStateException("Unrecognized name node type "
+								+ dependsName.getClass().getName());
+					}
+
 					if (LOGGER.isTraceEnabled())
 					{
 						LOGGER.trace("Metaprogram for anchor " + anchor.getUid() + " has dependency "
-								+ dependsName.getNameString());
+								+ qualifiedDependsName);
 					}
-					dependencyNames.add(dependsName.getNameString());
+					dependencyNames.add(qualifiedDependsName);
 				}
 			}
 		}

@@ -8,9 +8,10 @@ package edu.jhu.cs.bsj.compiler.impl.tool.compiler.task;
 public enum TaskPriority
 {
 	PARSE(100),
-	EXTRACT(300),
-	COMPILE(400),
-	EXECUTE(500),
+	CATEGORIZE(300),
+	EXTRACT(400),
+	COMPILE(500),
+	EXECUTE(700),
 	SERIALIZE(1000),
 	
 	;

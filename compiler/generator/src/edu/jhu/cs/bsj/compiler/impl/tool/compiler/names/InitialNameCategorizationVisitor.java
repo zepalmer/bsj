@@ -10,6 +10,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.FieldAccessByNameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ImportOnDemandNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ImportSingleTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.MethodInvocationByNameNode;
+import edu.jhu.cs.bsj.compiler.ast.node.NameListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.NameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.PackageDeclarationNode;
@@ -187,7 +188,7 @@ public class InitialNameCategorizationVisitor extends BsjTypedNodeNoOpVisitor
         
         // ***** A name is syntactically qualified as a MetaprogramTargetName in these contexts:
         // *** In a metaprogram dependency declaration.
-        if (hasAncestry(node, MetaprogramDependsNode.class))
+        if (hasAncestry(node, NameListNode.class, MetaprogramDependsNode.class))
         {
         	return NameCategory.METAPROGRAM_TARGET;
         }
@@ -237,6 +238,7 @@ public class InitialNameCategorizationVisitor extends BsjTypedNodeNoOpVisitor
 			{
 				index = 0;
 			}
+			node = node.getParent();
 		}
 		return false;
 	}

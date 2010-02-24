@@ -5,15 +5,21 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import edu.jhu.cs.bsj.compiler.ast.NameCategory;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationBodyNode;
+import edu.jhu.cs.bsj.compiler.ast.node.AnnotationDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassBodyNode;
+import edu.jhu.cs.bsj.compiler.ast.node.ClassDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
 import edu.jhu.cs.bsj.compiler.ast.node.EnumBodyNode;
+import edu.jhu.cs.bsj.compiler.ast.node.EnumDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ImportNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ImportOnDemandNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ImportSingleTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.InterfaceBodyNode;
+import edu.jhu.cs.bsj.compiler.ast.node.InterfaceDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.NameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.NamedTypeDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
@@ -33,6 +39,9 @@ import edu.jhu.cs.bsj.compiler.ast.util.BsjDefaultNodeOperation;
  */
 public class TypeDeclarationLocatingNodeOperation extends BsjDefaultNodeOperation<Void, NamedTypeDeclarationNode<?>>
 {
+	/** The logger for this object. */
+	private Logger LOGGER = Logger.getLogger(this.getClass());
+
 	/** The name components of the name to find. */
 	private List<String> components;
 	/** The categories of the name to find. */
@@ -49,9 +58,9 @@ public class TypeDeclarationLocatingNodeOperation extends BsjDefaultNodeOperatio
 		if (name == null)
 			throw new IllegalArgumentException("Cannot handle null name");
 		/*
-		if (name.getCategory() != NameCategory.TYPE && name.getCategory() != NameCategory.PACKAGE)
-			throw new IllegalArgumentException("Must be a type name (category = " + name.getCategory() + ")");
-		*/
+		 * if (name.getCategory() != NameCategory.TYPE && name.getCategory() != NameCategory.PACKAGE) throw new
+		 * IllegalArgumentException("Must be a type name (category = " + name.getCategory() + ")");
+		 */
 
 		this.components = new LinkedList<String>();
 		this.categories = new LinkedList<NameCategory>();
@@ -78,6 +87,11 @@ public class TypeDeclarationLocatingNodeOperation extends BsjDefaultNodeOperatio
 	@Override
 	public NamedTypeDeclarationNode<?> executeDefault(Node node, Void p)
 	{
+		if (LOGGER.isTraceEnabled())
+		{
+			LOGGER.trace("Attempting to find type declaration for " + this.components + " categorized as "
+					+ this.categories + " from " + node.getStartLocation());
+		}
 		if (this.categories.get(0) == NameCategory.TYPE)
 		{
 			// If the category is TYPE, the type is qualified.
@@ -208,6 +222,11 @@ public class TypeDeclarationLocatingNodeOperation extends BsjDefaultNodeOperatio
 			BsjDefaultNodeOperation<List<Node>, NamedTypeDeclarationNode<?>>
 	{
 		private String name;
+		/**
+		 * Used to prevent this visitor from examining its own imports if the original node was not inside of a type
+		 * declaration.
+		 */
+		private boolean seenTypeDeclaration = false;
 
 		public TopLevelTypeDeclarationLocatingAncestorOperation(String name)
 		{
@@ -220,6 +239,34 @@ public class TypeDeclarationLocatingNodeOperation extends BsjDefaultNodeOperatio
 		// TODO: handle type parameters
 		// TODO: handle local class declarations
 		// TODO: handle default package classes
+
+		@Override
+		public NamedTypeDeclarationNode<?> executeAnnotationDeclarationNode(AnnotationDeclarationNode node, List<Node> p)
+		{
+			this.seenTypeDeclaration = true;
+			return null;
+		}
+
+		@Override
+		public NamedTypeDeclarationNode<?> executeClassDeclarationNode(ClassDeclarationNode node, List<Node> p)
+		{
+			this.seenTypeDeclaration = true;
+			return null;
+		}
+
+		@Override
+		public NamedTypeDeclarationNode<?> executeEnumDeclarationNode(EnumDeclarationNode node, List<Node> p)
+		{
+			this.seenTypeDeclaration = true;
+			return null;
+		}
+
+		@Override
+		public NamedTypeDeclarationNode<?> executeInterfaceDeclarationNode(InterfaceDeclarationNode node, List<Node> p)
+		{
+			this.seenTypeDeclaration = true;
+			return null;
+		}
 
 		@Override
 		public NamedTypeDeclarationNode<?> executeDefault(Node node, List<Node> p)
@@ -270,13 +317,16 @@ public class TypeDeclarationLocatingNodeOperation extends BsjDefaultNodeOperatio
 		@Override
 		public NamedTypeDeclarationNode<?> executeCompilationUnitNode(CompilationUnitNode node, List<Node> p)
 		{
-			for (ImportNode importNode : node.getImports())
+			if (seenTypeDeclaration)
 			{
-				NamedTypeDeclarationNode<?> namedTypeDeclarationNode = importNode.executeOperation(
-						new ImportHandlingNodeOperation(), null);
-				if (namedTypeDeclarationNode != null)
+				for (ImportNode importNode : node.getImports())
 				{
-					return namedTypeDeclarationNode;
+					NamedTypeDeclarationNode<?> namedTypeDeclarationNode = importNode.executeOperation(
+							new ImportHandlingNodeOperation(), null);
+					if (namedTypeDeclarationNode != null)
+					{
+						return namedTypeDeclarationNode;
+					}
 				}
 			}
 			return null;
@@ -366,8 +416,8 @@ public class TypeDeclarationLocatingNodeOperation extends BsjDefaultNodeOperatio
 			public NamedTypeDeclarationNode<?> executeStaticImportOnDemandNode(StaticImportOnDemandNode node, Void p)
 			{
 				// Find the mentioned type
-				NamedTypeDeclarationNode<?> result = node.executeOperation(
-						new TypeDeclarationLocatingNodeOperation(node.getName()), null);
+				NamedTypeDeclarationNode<?> result = node.executeOperation(new TypeDeclarationLocatingNodeOperation(
+						node.getName()), null);
 				if (result == null)
 				{
 					return null;

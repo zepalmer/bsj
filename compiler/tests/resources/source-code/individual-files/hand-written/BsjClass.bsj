@@ -1,0 +1,18 @@
+[:
+	#depends a;
+	System.out.println("BETA");
+:]
+
+[:
+	#target a;
+	System.out.println("ALPHA");
+	getContext().getAnchor().setReplacement((getFactory()).makeEnumDeclarationNode((getFactory()).makeEnumModifiersNode(AccessModifier.PACKAGE, false, (getFactory()).makeAnnotationListNode(java.util.Arrays.<AnnotationNode>asList(), new BsjSourceLocation("<unknown>", 1, 1), new BsjSourceLocation("<unknown>", 1, 1)), new BsjSourceLocation("<unknown>", 1, 1), new BsjSourceLocation("<unknown>", 1, 1)), (getFactory()).makeDeclaredTypeListNode(java.util.Arrays.<DeclaredTypeNode>asList(), new BsjSourceLocation("<unknown>", 1, 1), new BsjSourceLocation("<unknown>", 1, 1)), (getFactory()).makeEnumBodyNode((getFactory()).makeEnumConstantDeclarationListNode(java.util.Arrays.<EnumConstantDeclarationNode>asList((getFactory()).makeEnumConstantDeclarationNode((getFactory()).makeAnnotationListNode(java.util.Arrays.<AnnotationNode>asList(), new BsjSourceLocation("<unknown>", 1, 10), new BsjSourceLocation("<unknown>", 1, 10)), (getFactory()).makeIdentifierNode("A", new BsjSourceLocation("<unknown>", 1, 10), new BsjSourceLocation("<unknown>", 1, 11)), (getFactory()).makeExpressionListNode(java.util.Arrays.<ExpressionNode>asList(), new BsjSourceLocation("<unknown>", 1, 10), new BsjSourceLocation("<unknown>", 1, 10)), null, null, new BsjSourceLocation("<unknown>", 1, 10), new BsjSourceLocation("<unknown>", 1, 11)), (getFactory()).makeEnumConstantDeclarationNode((getFactory()).makeAnnotationListNode(java.util.Arrays.<AnnotationNode>asList(), new BsjSourceLocation("<unknown>", 1, 13), new BsjSourceLocation("<unknown>", 1, 13)), (getFactory()).makeIdentifierNode("B", new BsjSourceLocation("<unknown>", 1, 13), new BsjSourceLocation("<unknown>", 1, 14)), (getFactory()).makeExpressionListNode(java.util.Arrays.<ExpressionNode>asList(), new BsjSourceLocation("<unknown>", 1, 13), new BsjSourceLocation("<unknown>", 1, 13)), null, null, new BsjSourceLocation("<unknown>", 1, 13), new BsjSourceLocation("<unknown>", 1, 14))), new BsjSourceLocation("<unknown>", 1, 10), new BsjSourceLocation("<unknown>", 1, 14)), (getFactory()).makeClassMemberListNode(java.util.Arrays.<ClassMemberNode>asList(), new BsjSourceLocation("<unknown>", 1, 8), new BsjSourceLocation("<unknown>", 1, 8)), new BsjSourceLocation("<unknown>", 1, 8), new BsjSourceLocation("<unknown>", 1, 16)), (getFactory()).makeIdentifierNode("E", new BsjSourceLocation("<unknown>", 1, 6), new BsjSourceLocation("<unknown>", 1, 7)), null, new BsjSourceLocation("<unknown>", 1, 1), new BsjSourceLocation("<unknown>", 1, 16)));
+:]
+
+public class BsjClass
+{
+	public String toString()
+	{
+		return("Hello, metaworld!");
+	}
+}
