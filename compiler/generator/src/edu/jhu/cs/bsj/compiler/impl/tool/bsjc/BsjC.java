@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import javax.tools.DiagnosticListener;
 import javax.tools.JavaFileObject;
@@ -17,6 +18,7 @@ import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.PosixParser;
+import org.apache.log4j.PropertyConfigurator;
 
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.StandardBsjCompiler;
 import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.BsjCompilerLocation;
@@ -131,8 +133,20 @@ public class BsjC
             }
 		}
 		
+		// set the logging level to use for the StandardBsjCompiler
+		String loggingLevel = "info";
+		if (cmd.hasOption("trace"))
+		{
+		    loggingLevel = "trace";
+		}
+		else if (cmd.hasOption("debug"))
+		{
+		    loggingLevel = "debug";
+		}
+		
 		// compile the source files using the file manager
 		BsjC bsjc = new BsjC();
+		bsjc.configureLog4j(loggingLevel);
 		bsjc.setBsjFileManager(bfm);
 		bsjc.setCompileObjects(sourceFiles);
 		try
@@ -147,6 +161,23 @@ public class BsjC
 	}
 	
 	/**
+	 * Configure the log4j properties.
+	 * @param level the desired logging level to display.
+	 */
+	public void configureLog4j(String level)
+    {
+        Properties loggingProperties = new Properties();
+        loggingProperties.setProperty("log4j.rootLogger", level + ", stdout");
+        loggingProperties.setProperty("log4j.appender.stdout", "org.apache.log4j.ConsoleAppender");
+        loggingProperties.setProperty("log4j.appender.stdout.layout", "org.apache.log4j.PatternLayout");
+        loggingProperties.setProperty("log4j.appender.stdout.layout.ConversionPattern", "%5p [%t] (%F:%L) - %m%n");
+        loggingProperties.setProperty("log4j.logger." + StandardBsjCompiler.class, level + ", stdout");
+        loggingProperties.setProperty("log4j.additivity.logger." + StandardBsjCompiler.class, "false");
+
+        PropertyConfigurator.configure(loggingProperties);
+    }
+
+    /**
 	 * Takes a parsed set of command line arguments and uses them to
 	 * create a location mapped file manager.
 	 * @param cmd the parsed set of command line arguments.
@@ -241,6 +272,10 @@ public class BsjC
 		
 		options.addOption("gsp", "gensourcepath", true, 
 			"Specify where to place BSJ generated files");
+		
+		options.addOption("debug", false, "Turns on debug logging");
+		
+		options.addOption("trace", false, "Turns on trace logging");
 		
 		return options;
 	}
