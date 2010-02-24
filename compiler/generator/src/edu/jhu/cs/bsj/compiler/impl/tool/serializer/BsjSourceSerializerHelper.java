@@ -1322,6 +1322,8 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	{
 		p.print("import static ");
 		node.getName().executeOperation(this, p);
+		p.print(".");
+		node.getIdentifier().executeOperation(this, p);
 		p.print(";");
 		return null;
 	}
