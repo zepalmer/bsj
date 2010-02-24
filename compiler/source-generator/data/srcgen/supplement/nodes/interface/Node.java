@@ -89,5 +89,11 @@ public interface Node
 	 *         the provided list is unmodified.
 	 */
 	public <N> N getNearestAncestorOfType(Class<N> nodeClass, List<? super Node> list);
+	
+	/**
+	 * Retrieves the top of the tree in which this node exists.
+	 * @return The furthest ancestor of this node (or this node if it has no parent).
+	 */
+	public Node getFurthestAncestor();
 	/* GEN:stop */
 }

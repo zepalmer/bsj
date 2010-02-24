@@ -223,4 +223,18 @@ public abstract class NodeImpl implements Node
 		}
 		return null;
 	}
+
+	/**
+	 * Retrieves the top of the tree in which this node exists.
+	 * @return The furthest ancestor of this node (or this node if it has no parent).
+	 */
+	public Node getFurthestAncestor()
+	{
+		Node node = this;
+		while (node != null)
+		{
+			node = node.getParent();
+		}
+		return node;
+	}
 }
