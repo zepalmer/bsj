@@ -225,7 +225,7 @@ public class BsjC
 		// set the generated sourcepath for BSJ files
 		if (cmd.hasOption("gsp"))
 		{
-			sourcePath = new File(cmd.getOptionValue("gsp"));
+		    bsjSourcePath = new File(cmd.getOptionValue("gsp"));
 		}
 		map.put(BsjCompilerLocation.GENERATED_SOURCE_PATH, new RegularFileLocationManager(null, bsjSourcePath));
 		
