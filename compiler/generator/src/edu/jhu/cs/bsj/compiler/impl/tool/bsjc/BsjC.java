@@ -40,6 +40,10 @@ public class BsjC
 	 */
 	public static final String VERSION = "0.1";
 	
+	public static final int NORMAL_EXIT = 0;
+	
+	public static final int ERROR_EXIT = 1;
+	
 	/**
 	 * The {@link BsjFileManager} used for the filesystem abstraction.
 	 */
@@ -81,14 +85,14 @@ public class BsjC
 		} catch (ParseException e)
 		{
 			System.out.println("Invalid command line arguments: " + e.getMessage());
-			System.exit(1);
+			System.exit(ERROR_EXIT);
 		}
 		
 		// display version info and exit if requested
 		if (cmd.hasOption("version"))
 		{
 			System.out.println("bsjc " + VERSION);
-			System.exit(0);
+			System.exit(NORMAL_EXIT);
 		}
 		
 		// build the file manager using the supplied arguments
@@ -99,32 +103,31 @@ public class BsjC
         }
         catch (FileNotFoundException e)
         {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            System.out.println("File not found: " + e.getMessage());
+            System.exit(ERROR_EXIT);
         }
         catch (IOException e)
         {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            System.out.println("Specified pathname does not exist: " + e.getMessage());
+            System.exit(ERROR_EXIT);
         }
 		
 		// get files for compilation, any left over arguments are source files
 		List<BsjFileObject> sourceFiles = new ArrayList<BsjFileObject>();		
 		for (String sourceFile : cmd.getArgs())
 		{
-			//TODO parse absolute pathnames
-			try
+            try
             {
-                sourceFiles.add(
-                		bfm.getJavaFileForInput(
-                				BsjCompilerLocation.SOURCE_PATH, 
-                				sourceFile.replaceFirst(".java", "").replace(File.separatorChar, '.'), 
-                				Kind.SOURCE));
+                sourceFiles.add(bfm.getJavaFileForInput(
+                        BsjCompilerLocation.SOURCE_PATH, 
+                                sourceFile.replaceFirst(".java", "")
+                                .replace(File.separatorChar, '.'),
+                        Kind.SOURCE));
             }
             catch (IOException e)
             {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+                System.out.println("Error on source file \"" +sourceFile + "\": " + e.getMessage());
+                System.exit(ERROR_EXIT);
             }
 		}
 		
@@ -138,8 +141,8 @@ public class BsjC
         }
         catch (IOException e)
         {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            System.out.println("Error during compilation: " + e.getMessage());
+            System.exit(ERROR_EXIT);
         }
 	}
 	
@@ -186,9 +189,11 @@ public class BsjC
 		map.put(BsjCompilerLocation.CLASS_OUTPUT, new RegularFileLocationManager(null, classOutput));
 		
 		// set the metaprogram classpath
+		// the metaprogram will always have a classpath equal to what the 
+		// user specifies unioned with the classpath of the running JVM.
 		if (cmd.hasOption("mcp"))
 		{
-			metaProgramClasspath = cmd.getOptionValue("mcp");
+			metaProgramClasspath = metaProgramClasspath + File.pathSeparator + cmd.getOptionValue("mcp");
 		}
 		map.put(BsjCompilerLocation.METAPROGRAM_CLASSPATH, 
 				new UnionLocationManager(null, metaProgramClasspath));		
