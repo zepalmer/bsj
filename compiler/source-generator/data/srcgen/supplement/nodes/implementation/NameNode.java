@@ -16,6 +16,13 @@ public abstract class NameNodeImpl
 		// TODO: make this cleaner and more descriptive
 		if (this.category == category)
 			return;
+		
+		if (this.category == null)
+		{
+			this.category = category;
+			return;
+		}
+		
 		if (this.category == NameCategory.AMBIGUOUS)
 		{
 			if (category == NameCategory.PACKAGE || category == NameCategory.TYPE ||

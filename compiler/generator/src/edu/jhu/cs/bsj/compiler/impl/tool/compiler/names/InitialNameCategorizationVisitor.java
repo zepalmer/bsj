@@ -3,6 +3,9 @@ package edu.jhu.cs.bsj.compiler.impl.tool.compiler.names;
 import org.apache.log4j.Logger;
 
 import edu.jhu.cs.bsj.compiler.ast.NameCategory;
+import edu.jhu.cs.bsj.compiler.ast.node.AnnotationElementNode;
+import edu.jhu.cs.bsj.compiler.ast.node.AnnotationMethodDeclarationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.AnnotationValueNode;
 import edu.jhu.cs.bsj.compiler.ast.node.FieldAccessByNameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ImportOnDemandNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ImportSingleTypeNode;
@@ -13,6 +16,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.PackageDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.SingleStaticImportNode;
 import edu.jhu.cs.bsj.compiler.ast.node.StaticImportOnDemandNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependsNode;
 import edu.jhu.cs.bsj.compiler.ast.util.BsjTypedNodeNoOpVisitor;
 
 /**
@@ -27,30 +31,30 @@ public class InitialNameCategorizationVisitor extends BsjTypedNodeNoOpVisitor
 {
 	/** The logger for this object. */
 	private Logger LOGGER = Logger.getLogger(this.getClass());
-	
-    @Override
-    public void visitNameNodeStart(NameNode node)
-    {
-        if (LOGGER.isTraceEnabled())
-        {
-        	LOGGER.trace("Assigning name " + node.getNameString() + " to a category...");
-        }
-        NameCategory category = selectCategory(node);
-        if (LOGGER.isTraceEnabled())
-        {
-        	LOGGER.trace("Assigned name " + node.getNameString() + " to category " + category);
-        }
-        node.assertCategory(category);
-        // TODO: category assignment by restricted data
-    }
 
-    /**
-     * Assigns a category to the specified name node.
-     * 
-     * @param node The node to categorize.
-     * @param category The category to assign to that node.
-     */
-    private NameCategory selectCategory(NameNode node)
+	@Override
+	public void visitNameNodeStart(NameNode node)
+	{
+		if (LOGGER.isTraceEnabled())
+		{
+			LOGGER.trace("Assigning name " + node.getNameString() + " to a category...");
+		}
+		NameCategory category = selectCategory(node);
+		if (LOGGER.isTraceEnabled())
+		{
+			LOGGER.trace("Assigned name " + node.getNameString() + " to category " + category);
+		}
+		node.assertCategory(category);
+		// TODO: category assignment by restricted data
+	}
+
+	/**
+	 * Assigns a category to the specified name node.
+	 * 
+	 * @param node The node to categorize.
+	 * @param category The category to assign to that node.
+	 */
+	private NameCategory selectCategory(NameNode node)
     {
         // ***** A name is syntactically classified as a PackageName in these contexts:
         // *** In a package declaration (§7.4)
@@ -169,9 +173,31 @@ public class InitialNameCategorizationVisitor extends BsjTypedNodeNoOpVisitor
         	return NameCategory.AMBIGUOUS;
         }
         // *** In the default value clause of an annotation type element declaration (§9.6)
-        // TODO
+        if (hasAncestrySequence(node, AnnotationValueNode.class, AnnotationMethodDeclarationNode.class))
+        {
+        	return NameCategory.AMBIGUOUS;
+        }
         // *** To the right of an "=" in an an element value pair (§9.7)
-        // TODO
+        if (hasAncestrySequence(node, AnnotationValueNode.class, AnnotationElementNode.class))
+        {
+        	return NameCategory.AMBIGUOUS;
+        }
+        
+        // ===== Begin BSJ naming rules =====
+        
+        // ***** A name is syntactically qualified as a MetaprogramTargetName in these contexts:
+        // *** In a metaprogram dependency declaration.
+        if (hasAncestry(node, MetaprogramDependsNode.class))
+        {
+        	return NameCategory.METAPROGRAM_TARGET;
+        }
+        
+        // ***** A name is syntactically classified as a TypeName in these contexts:
+        // *** To the left of a '.' in a MetaprogramTargetName.
+        if (hasParentName(node, NameCategory.METAPROGRAM_TARGET))
+        {
+        	return NameCategory.TYPE;
+        }
         
         // TODO: assign more categories
 
@@ -179,35 +205,60 @@ public class InitialNameCategorizationVisitor extends BsjTypedNodeNoOpVisitor
                 + (node.getStartLocation() == null ? "" : " at " + node.getStartLocation()));
     }
 
-    /**
-     * Determines whether or not the parent of the specified node is a name node of the given category.
-     * @param node The node in question.
-     * @param category The category of the parent node.
-     * @return <code>true</code> if this is the case; <code>false</code> otherwise.
-     */
-    private boolean hasParentName(NameNode node, NameCategory category)
+	/**
+	 * Determines whether or not the parent of the specified node is a name node of the given category.
+	 * 
+	 * @param node The node in question.
+	 * @param category The category of the parent node.
+	 * @return <code>true</code> if this is the case; <code>false</code> otherwise.
+	 */
+	private boolean hasParentName(NameNode node, NameCategory category)
 	{
-		return (node.getParent() instanceof NameNode && ((NameNode)node.getParent()).getCategory() == category);
+		return (node.getParent() instanceof NameNode && ((NameNode) node.getParent()).getCategory() == category);
+	}
+	
+	/**
+	 * Determines whether or not the specified pattern appears in the types of the ancestors of the specified node.
+	 * @param node The node whose ancestry is to be checked.
+	 * @param classes The expected type sequence for the ancestry.
+	 * @return <code>true</code> if the node has that ancestry; <code>false</code> if it does not.
+	 */
+	private boolean hasAncestrySequence(Node node, Class<?>... classes)
+	{
+		int index = 0;
+		while (node != null)
+		{
+			if (classes[index].isAssignableFrom(node.getClass()))
+			{
+				index++;
+				if (index >= classes.length)
+					return true;
+			} else
+			{
+				index = 0;
+			}
+		}
+		return false;
 	}
 
 	/**
-     * Determines whether or not the ancestry of the specified node is consistent with the provided expectation. The
-     * expectation is given as an array of classes. The first element in the array indicates a type to which the parent
-     * of the node must conform, the next element indicates a type which must be compatible with that node's parent, and
-     * so on.
-     * 
-     * @param node The node whose ancestry is to be checked.
-     * @param classes The expected types for the ancestry.
-     * @return <code>true</code> if the node has that ancestry; <code>false</code> if not.
-     */
-    private boolean hasAncestry(Node node, Class<?>... classes)
-    {
-        for (Class<?> c : classes)
-        {
-            node = node.getParent();
-            if (!c.isAssignableFrom(node.getClass()))
-                return false;
-        }
-        return true;
-    }
+	 * Determines whether or not the ancestry of the specified node is consistent with the provided expectation. The
+	 * expectation is given as an array of classes. The first element in the array indicates a type to which the parent
+	 * of the node must conform, the next element indicates a type which must be compatible with that node's parent, and
+	 * so on.
+	 * 
+	 * @param node The node whose ancestry is to be checked.
+	 * @param classes The expected types for the ancestry.
+	 * @return <code>true</code> if the node has that ancestry; <code>false</code> if not.
+	 */
+	private boolean hasAncestry(Node node, Class<?>... classes)
+	{
+		for (Class<?> c : classes)
+		{
+			node = node.getParent();
+			if (!c.isAssignableFrom(node.getClass()))
+				return false;
+		}
+		return true;
+	}
 }

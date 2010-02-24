@@ -730,9 +730,9 @@ metaprogramTargetName returns [NameNode ret]
             ruleStop();
         }
     :
-        categorizedName[NameCategory.PACKAGE_OR_TYPE, NameCategory.TYPE, NameCategory.METAPROGRAM_TARGET]
+        name
         {
-            $ret = $categorizedName.ret;
+            $ret = $name.ret;
         }
     ;
     
@@ -895,10 +895,10 @@ packageDeclaration returns [PackageDeclarationNode ret]
                 annotationsNode = $annotations.ret;
             }
         )?
-        'package' packageName ';'
+        'package' name ';'
         {
             $ret = factory.makePackageDeclarationNode(
-                    $packageName.ret,
+                    $name.ret,
                     annotationsNode);
         }
     ;
@@ -938,32 +938,32 @@ importBody returns [boolean staticImport, boolean onDemand, NameNode name]
             ruleStop();
         }
     :
-        'static' typeName '.' '*'
+        'static' name '.' '*'
         {
             $staticImport = true;
             $onDemand = true;
-            $name = $typeName.ret;
+            $name = $name.ret;
         }
     |
-        'static' categorizedName[NameCategory.PACKAGE_OR_TYPE, NameCategory.TYPE, NameCategory.AMBIGUOUS]
+        'static' name
         {
             $staticImport = true;
             $onDemand = false;
-            $name = $categorizedName.ret;
+            $name = $name.ret;
         }
     |
-        packageOrTypeName '.' '*'
+        name '.' '*'
         {
             $staticImport = false;
             $onDemand = true;
-            $name = $packageOrTypeName.ret;
+            $name = $name.ret;
         }
     |
-        typeName
+        name
         {
             $staticImport = false;
             $onDemand = false;
-            $name = $typeName.ret;
+            $name = $name.ret;
         }
     ;
 
@@ -2271,12 +2271,12 @@ throwsClause returns [UnparameterizedTypeListNode ret]
         }
     :
         THROWS
-        a=typeName
+        a=name
         {
             list.add(factory.makeUnparameterizedTypeNode($a.ret));
         }
         (
-            ',' b=typeName
+            ',' b=name
             {
                 list.add(factory.makeUnparameterizedTypeNode($b.ret));
             }
@@ -2363,9 +2363,9 @@ classOrInterfaceType returns [DeclaredTypeNode ret]
             ruleStop();
         }
     :
-        typeName
+        name
         {
-            unparameterizedTypeNode = factory.makeUnparameterizedTypeNode($typeName.ret);
+            unparameterizedTypeNode = factory.makeUnparameterizedTypeNode($name.ret);
             $ret = unparameterizedTypeNode;
         }
         (
@@ -2724,11 +2724,11 @@ annotation returns [AnnotationNode ret]
             ruleStop();
         }
     :   
-        '@' typeName
+        '@' name
         {
             $ret = factory.makeNormalAnnotationNode(
                     factory.makeAnnotationElementListNode(new ArrayList<AnnotationElementNode>()),
-                    factory.makeUnparameterizedTypeNode($typeName.ret));
+                    factory.makeUnparameterizedTypeNode($name.ret));
         }
         (
             '('   
@@ -2737,14 +2737,14 @@ annotation returns [AnnotationNode ret]
                 {
                     $ret = factory.makeNormalAnnotationNode(
                             $elementValuePairs.ret,
-                            factory.makeUnparameterizedTypeNode($typeName.ret));
+                            factory.makeUnparameterizedTypeNode($name.ret));
                 }
             |
                 elementValue
                 {
                     $ret = factory.makeSingleElementAnnotationNode(
                             $elementValue.ret,
-                            factory.makeUnparameterizedTypeNode($typeName.ret));
+                            factory.makeUnparameterizedTypeNode($name.ret));
                 }
             )? 
             ')' 
@@ -4324,9 +4324,9 @@ restrictedPrimary returns [RestrictedPrimaryExpressionNode ret]
             }
         |
             // field access by expression name (such as "x" or "x.y")
-            expressionName
+            name
             {
-                $ret = factory.makeFieldAccessByNameNode($expressionName.ret);
+                $ret = factory.makeFieldAccessByNameNode($name.ret);
             }
         )
         (
@@ -4388,7 +4388,7 @@ thisClause returns [ThisNode ret]
         }
     :
         (
-            thisQualifierName=typeName '.'
+            thisQualifierName=name '.'
             {
                 qualifyingType = factory.makeUnparameterizedTypeNode($thisQualifierName.ret);
             }
@@ -4448,9 +4448,9 @@ superFieldAccess returns [SuperFieldAccessNode ret]
         }
     :
         (
-            typeName '.'
+            name '.'
             {
-                qualifyingTypeNode = factory.makeUnparameterizedTypeNode($typeName.ret);
+                qualifyingTypeNode = factory.makeUnparameterizedTypeNode($name.ret);
             }
         )?
         SUPER '.' identifier
@@ -4474,10 +4474,10 @@ methodInvocationByName returns [MethodInvocationByNameNode ret]
             ruleStop();
         }
     :
-        methodName arguments
+        name arguments
         {
             $ret = factory.makeMethodInvocationByNameNode(
-                    $methodName.ret,
+                    $name.ret,
                     $arguments.ret,
                     factory.makeReferenceTypeListNode());
         }
@@ -4501,9 +4501,9 @@ superMethodInvocation returns [SuperMethodInvocationNode ret]
         }
     :
         (
-            typeName '.'
+            name '.'
             {
-                qualifyingTypeNode = factory.makeUnparameterizedTypeNode($typeName.ret);
+                qualifyingTypeNode = factory.makeUnparameterizedTypeNode($name.ret);
             }
         )?
         SUPER '.'
@@ -4534,14 +4534,14 @@ typeQualifiedTypeArgumentMethodInvocation returns [MethodInvocationByNameNode re
             ruleStop();
         }
     :
-        typeName '.' nonWildcardTypeArguments identifier arguments
+        name '.' nonWildcardTypeArguments identifier arguments
         {
-            NameNode methodName = factory.makeQualifiedNameNode(
-                    $typeName.ret,
+            NameNode name = factory.makeQualifiedNameNode(
+                    $name.ret,
                     $identifier.ret,
                     NameCategory.METHOD);
             $ret = factory.makeMethodInvocationByNameNode(
-                    methodName,
+                    name,
                     $arguments.ret,
                     $nonWildcardTypeArguments.ret);
         }
@@ -4659,9 +4659,9 @@ declaredClassLiteral returns [ClassLiteralNode ret]
             ruleStop();
         }
     :
-        typeName
+        name
         {
-            typeNode = factory.makeUnparameterizedTypeNode($typeName.ret);
+            typeNode = factory.makeUnparameterizedTypeNode($name.ret);
         }
         (
             arrayTypeIndicator[typeNode]
@@ -4876,126 +4876,27 @@ arguments returns [ExpressionListNode ret]
         )? ')'
     ;
 
-// Parses a package name chain.
-packageName returns [NameNode ret]
+// Parses a name chain.
+name returns [NameNode ret]
         scope Rule;
         @init {
-            ruleStart("packageName");
-        }
-        @after {
-            ruleStop();
-        }
-    :
-        categorizedName[NameCategory.PACKAGE, NameCategory.PACKAGE]
-        {
-            $ret = $categorizedName.ret;
-        }
-    ;
-
-// Parses a type name chain.  The last node is of the category TYPE; the rest are PACKAGE_OR_TYPE.
-typeName returns [NameNode ret]
-        scope Rule;
-        @init {
-            ruleStart("typeName");
-        }
-        @after {
-            ruleStop();
-        }
-    :
-        categorizedName[NameCategory.PACKAGE_OR_TYPE, NameCategory.TYPE]
-        {
-            $ret = $categorizedName.ret;
-        }
-    ;
-
-// Parses an expression name chain.  The last node is of the category EXPRESSION; the rest are AMBIGUOUS.
-expressionName returns [NameNode ret]
-        scope Rule;
-        @init {
-            ruleStart("expressionName");
-        }
-        @after {
-            ruleStop();
-        }
-    :
-        categorizedName[NameCategory.AMBIGUOUS, NameCategory.EXPRESSION]
-        {
-            $ret = $categorizedName.ret;
-        }
-    ;
-
-// Parses a method name chain.  The last node is of the category METHOD; the rest are AMBIGUOUS.
-methodName returns [NameNode ret]
-        scope Rule;
-        @init {
-            ruleStart("methodName");
-        }
-        @after {
-            ruleStop();
-        }
-    :
-        categorizedName[NameCategory.AMBIGUOUS, NameCategory.METHOD]
-        {
-            $ret = $categorizedName.ret;
-        }
-    ;
-    
-// Parses a package-or-type name chain.
-packageOrTypeName returns [NameNode ret]
-        scope Rule;
-        @init {
-            ruleStart("packageOrTypeName");
-        }
-        @after {
-            ruleStop();
-        }
-    :
-        categorizedName[NameCategory.PACKAGE_OR_TYPE, NameCategory.PACKAGE_OR_TYPE]
-        {
-            $ret = $categorizedName.ret;
-        }
-    ;
-
-// Parses an ambiguous name.
-ambiguousName returns [NameNode ret]
-        scope Rule;
-        @init {
-            ruleStart("ambiguousName");
-        }
-        @after {
-            ruleStop();
-        }
-    :
-        categorizedName[NameCategory.AMBIGUOUS, NameCategory.AMBIGUOUS]
-        {
-            $ret = $categorizedName.ret;
-        }
-    ;
-
-// Parses a name (a dot-separated sequence of identifiers) and assigns each of them the specified category.  The top
-// name node is assigned another category.  This rule does not correspond directly to anything in the JLS; it is used as
-// a parsing subroutine.
-categorizedName[NameCategory... category] returns [NameNode ret]
-        scope Rule;
-        @init {
-            ruleStart("categorizedName");
+            ruleStart("name");
             List<IdentifierNode> identifierNodes = new ArrayList<IdentifierNode>();
         }
         @after {
             $ret = null;
             for (int i=0;i<identifierNodes.size();i++)
             {
-                NameCategory currentCategory = category[Math.max(0, category.length - identifierNodes.size() + i)];
                 if (i==0)
                 {
-                    $ret = factory.makeSimpleNameNode(identifierNodes.get(0), currentCategory);
+                    $ret = factory.makeSimpleNameNode(identifierNodes.get(0), null);
                 } else
                 {
 	                $ret = factory.makeQualifiedNameNode(
 	                        $ret,
 	                        identifierNodes.get(i),
-	                        currentCategory);
-            ruleStop();
+	                        null);
+                    ruleStop();
                 }
             }
             if (logger.isTraceEnabled())

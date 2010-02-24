@@ -12,6 +12,8 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
+import edu.jhu.cs.bsj.compiler.ast.node.NameNode;
+import edu.jhu.cs.bsj.compiler.ast.util.BsjTypedNodeNoOpVisitor;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeFactoryImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.names.AmbiguousNameCategorizationVisitor;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.names.InitialNameCategorizationVisitor;
@@ -63,12 +65,23 @@ public class NameCategorizationTest extends AbstractPerFileTest
 		// Perform initial categorization
 		InitialNameCategorizationVisitor initialNameCategorizationVisitor = new InitialNameCategorizationVisitor();
 		node.receiveTyped(initialNameCategorizationVisitor);
-		// TODO: assert that all nodes got a category (requires removing default category and stopping parser from
-		// assigning categories)
-		
+		// Confirm that every name got a category
+		node.receiveTyped(new BsjTypedNodeNoOpVisitor()
+		{
+			@Override
+			public void visitNameNodeStart(NameNode node)
+			{
+				if (node.getCategory() == null)
+				{
+					throw new IllegalStateException("Did not assign a category to name" + node.toString() + " at "
+							+ node.getStartLocation());
+				}
+			}
+		});
+
 		// TODO: ****** Can we actually do this unit test?
 		// The problem is that much of the following categorization depends on a compilation environment to function
-		// correctly.  Our best bet seems to run compilation while trapping the output of log4j and then have the
+		// correctly. Our best bet seems to run compilation while trapping the output of log4j and then have the
 		// unit test make assertions about the log4j output.
 
 		// Identify packages and types
