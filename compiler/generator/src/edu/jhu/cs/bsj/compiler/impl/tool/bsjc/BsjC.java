@@ -140,26 +140,25 @@ public class BsjC
             {
                 sourceFiles.add(bfm.getJavaFileForInput(
                         BsjCompilerLocation.SOURCE_PATH, 
-                                sourceFile.replaceFirst(".java", "")
-                                .replace(File.separatorChar, '.'),
+                        sourceFile.replaceFirst(".java", "").replace(File.separatorChar, '.'),
                         Kind.SOURCE));
             }
             catch (IOException e)
             {
-                System.out.println("Error on source file \"" +sourceFile + "\": " + e.getMessage());
+                System.out.println("Error on source file \"" + sourceFile + "\": " + e.getMessage());
                 System.exit(ERROR_EXIT);
             }
 		}
 		
-		// set the logging level to use for the StandardBsjCompiler
+		// set the logging level to use for the StandardBsjCompiler, trace overrides debug
 		String loggingLevel = "info";
 		if (cmd.hasOption(TRACE_ARG))
 		{
-		    loggingLevel = TRACE_ARG;
+		    loggingLevel = "trace";
 		}
 		else if (cmd.hasOption(DEBUG_ARG))
 		{
-		    loggingLevel = DEBUG_ARG;
+		    loggingLevel = "debug";
 		}
 		
 		// compile the source files using the file manager
@@ -207,7 +206,8 @@ public class BsjC
 		throws FileNotFoundException, IOException 
 	{
 		// map the locations for the file manager
-		Map<BsjCompilerLocation, LocationManager> map = new HashMap<BsjCompilerLocation, LocationManager>();
+		Map<BsjCompilerLocation, LocationManager> map = 
+		    new HashMap<BsjCompilerLocation, LocationManager>();
 		
 		// set the default values for the locations
 		File sourcePath = new File(".");
