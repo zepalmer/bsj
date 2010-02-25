@@ -1,11 +1,10 @@
 package edu.jhu.cs.bsj.tests.compiler.tool.compiler;
 
 import java.io.File;
+import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
-
-import org.junit.Test;
 
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.StandardBsjCompiler;
 import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.BsjCompilerLocation;
@@ -17,7 +16,7 @@ import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.RegularFileLocationManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.UnionLocationManager;
 import edu.jhu.cs.bsj.tests.AbstractTest;
 
-public class BsjCompilerTest extends AbstractTest
+public abstract class AbstractBsjCompilerTest extends AbstractTest
 {
 	private static File getTestDir(String suffix)
 	{
@@ -31,8 +30,14 @@ public class BsjCompilerTest extends AbstractTest
 		return new RegularFileLocationManager(null, dir);
 	}
 
-	@Test
-	public void testBsjCompiler() throws Exception
+	/**
+	 * Performs a BSJ compilation operation test.  This method compiles and runs a BSJ program.
+	 * 
+	 * @param sourcePath The root directory containing the sources.
+	 * @param paths The paths of the source files to compile.  The first file is assumed to be the main class.
+	 * @throws Exception If anything goes wrong.
+	 */
+	protected void performTest(File sourcePath, String... paths) throws Exception
 	{
 		log4jConfigure("trace", "edu.jhu.cs.bsj.compiler.impl.tool.filemanager/debug",
 				"edu.jhu.cs.bsj.compiler.tool.parser.antlr/debug");
@@ -42,8 +47,7 @@ public class BsjCompilerTest extends AbstractTest
 		File test = new File("." + File.separator + "local");
 		test.mkdir();
 
-		map.put(BsjCompilerLocation.SOURCE_PATH, new RegularFileLocationManager(null, new File(
-				EXAMPLES + File.separator + "individual-files" + File.separator + "hand-written")));
+		map.put(BsjCompilerLocation.SOURCE_PATH, new RegularFileLocationManager(null, sourcePath));
 		map.put(BsjCompilerLocation.GENERATED_SOURCE_PATH, getTestLocationManager("gensrc"));
 		map.put(BsjCompilerLocation.CLASS_OUTPUT, getTestLocationManager("bin"));
 
@@ -65,7 +69,7 @@ public class BsjCompilerTest extends AbstractTest
 		compiler.compile(Arrays.asList(bfo), null);
 
 		Object o = bfm.getClassLoader(BsjCompilerLocation.CLASS_OUTPUT).loadClass("BsjClass").newInstance();
-		System.out.println(o);
+		Method mainMethod = o.getClass().getMethod("main", String[].class);
+		mainMethod.invoke(null, new Object[]{new String[0]});
 	}
-
 }

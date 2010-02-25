@@ -11,6 +11,11 @@
 
 public class BsjClass
 {
+	public static void main(String[] arg)
+	{
+		System.out.println(new BsjClass());
+	}
+	
 	public String toString()
 	{
 		return("Hello, metaworld!");
