@@ -6,7 +6,6 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 import edu.jhu.cs.bsj.compiler.ast.NameCategory;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassDeclarationNode;
-import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
 import edu.jhu.cs.bsj.compiler.ast.node.EnumDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.InterfaceDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.NameNode;
@@ -15,12 +14,12 @@ import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.PackageNode;
 import edu.jhu.cs.bsj.compiler.ast.util.BsjDefaultNodeOperation;
 
-public class EnclosingTypeNamingNodeOperation extends BsjDefaultNodeOperation<Void, NameNode>
+public class EnclosingNameNodeOperation extends BsjDefaultNodeOperation<Void, NameNode>
 {
 	/** The node factory to use when creating the name. */
 	private BsjNodeFactory factory;
 	
-	public EnclosingTypeNamingNodeOperation(BsjNodeFactory factory)
+	public EnclosingNameNodeOperation(BsjNodeFactory factory)
 	{
 		super();
 		this.factory = factory;
@@ -34,11 +33,14 @@ public class EnclosingTypeNamingNodeOperation extends BsjDefaultNodeOperation<Vo
 		return op.getNode();
 	}
 
+	/**
+	 * Iteratively builds the node in question.
+	 * @author Zachary Palmer
+	 */
 	private final class EnclosingTypeNameBuildingAncestorOperation extends BsjDefaultNodeOperation<List<Node>, Void>
 	{
-		// TODO: handle anonymous inner classes correctly
+		// TODO: handle anonymous inner classes correctly (and their inner classes as well)
 		private NameNode node = null;
-		private boolean seenTypeDeclarationYet = false;
 
 		@Override
 		public Void executeDefault(Node node, List<Node> p)
@@ -92,16 +94,7 @@ public class EnclosingTypeNamingNodeOperation extends BsjDefaultNodeOperation<Vo
 
 		private void handleNamedTypeDeclarationNode(NamedTypeDeclarationNode<?> node)
 		{
-			seenTypeDeclarationYet = true;
 			addComponent(node.getIdentifier().getIdentifier(), NameCategory.TYPE);
-		}
-
-		@Override
-		public Void executeCompilationUnitNode(CompilationUnitNode node, List<Node> p)
-		{
-			if (!seenTypeDeclarationYet)
-				addComponent(node.getName(), NameCategory.TYPE);
-			return null;
 		}
 
 		@Override

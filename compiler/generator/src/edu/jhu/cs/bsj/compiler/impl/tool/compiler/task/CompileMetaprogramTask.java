@@ -36,7 +36,7 @@ import edu.jhu.cs.bsj.compiler.impl.metaprogram.ContextImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.MetacompilationContext;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.MetaprogramProfile;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.StandardBsjCompiler;
-import edu.jhu.cs.bsj.compiler.impl.tool.compiler.operations.EnclosingTypeNamingNodeOperation;
+import edu.jhu.cs.bsj.compiler.impl.tool.compiler.operations.EnclosingNameNodeOperation;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.operations.TypeDeclarationLocatingNodeOperation;
 import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.BsjCompilerLocation;
 import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.BsjFileManager;
@@ -118,6 +118,23 @@ public class CompileMetaprogramTask extends AbstractBsjCompilerTask
 		metacompilationContext.getDependencyManager().registerMetaprogramProfile(profile);
 	}
 
+	private String getMetaprogramTypeName(MetaprogramAnchorNode<? extends Node> anchor)
+	{
+		NameNode nameNode = anchor.executeOperation(new EnclosingNameNodeOperation(factory), null);
+		if (nameNode == null)
+		{
+			// TODO: handle anonymous inner classes correctly
+			nameNode = factory.makeSimpleNameNode(factory.makeIdentifierNode(anchor.getNearestAncestorOfType(
+					CompilationUnitNode.class).getName()), NameCategory.TYPE);
+		} else if (nameNode.getCategory() == NameCategory.PACKAGE)
+		{
+			nameNode = factory.makeQualifiedNameNode(nameNode,
+					factory.makeIdentifierNode(anchor.getNearestAncestorOfType(CompilationUnitNode.class).getName()),
+					NameCategory.TYPE);
+		}
+		return nameNode.getNameString();
+	}
+
 	private <A extends MetaprogramAnchorNode<? extends Node>> MetaprogramProfile buildProfile(A anchor)
 			throws IOException
 	{
@@ -132,11 +149,11 @@ public class CompileMetaprogramTask extends AbstractBsjCompilerTask
 			if (metaprogramPreambleNode.getTarget() != null)
 			{
 				// determine qualifying prefix
-				NameNode nameNode = anchor.executeOperation(new EnclosingTypeNamingNodeOperation(factory), null);
+				String prefix = getMetaprogramTypeName(anchor);
 
 				for (IdentifierNode id : metaprogramPreambleNode.getTarget().getTargets().getChildren())
 				{
-					String targetName = nameNode.getNameString() + "." + id.getIdentifier();
+					String targetName = prefix + "." + id.getIdentifier();
 					if (LOGGER.isTraceEnabled())
 					{
 						LOGGER.trace("Metaprogram for anchor " + anchor.getUid() + " has target " + targetName);
@@ -154,10 +171,8 @@ public class CompileMetaprogramTask extends AbstractBsjCompilerTask
 					if (dependsName instanceof SimpleNameNode)
 					{
 						// Then the base name is that of the enclosing type
-						NameNode fullyQualifiedName = metaprogramNode.executeOperation(
-								new EnclosingTypeNamingNodeOperation(factory), null);
-						qualifiedDependsName = fullyQualifiedName.getNameString() + "."
-								+ dependsName.getIdentifier().getIdentifier();
+						String prefix = getMetaprogramTypeName(anchor);
+						qualifiedDependsName = prefix + "." + dependsName.getIdentifier().getIdentifier();
 					} else if (dependsName instanceof QualifiedNameNode)
 					{
 						// Then the base name is the fully qualified form of the specified base name
@@ -170,10 +185,8 @@ public class CompileMetaprogramTask extends AbstractBsjCompilerTask
 							continue;
 						} else
 						{
-							NameNode fullyQualifiedName = namedTypeDeclarationNode.executeOperation(
-									new EnclosingTypeNamingNodeOperation(factory), null);
-							qualifiedDependsName = fullyQualifiedName.getNameString() + "."
-									+ dependsName.getIdentifier().getIdentifier();
+							String prefix = getMetaprogramTypeName(anchor);
+							qualifiedDependsName = prefix + "." + dependsName.getIdentifier().getIdentifier();
 						}
 					} else
 					{
