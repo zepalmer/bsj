@@ -293,7 +293,7 @@ public class BsjC
         
         Option destination = new Option(DESTINATION_ARG, true, 
                 "Specify where to place generated class files");
-        destination.setArgName("path");
+        destination.setArgName("directory");
         options.addOption(destination);
 		
         Option sourcepath = new Option(SOURCEPATH_ARG, true,
