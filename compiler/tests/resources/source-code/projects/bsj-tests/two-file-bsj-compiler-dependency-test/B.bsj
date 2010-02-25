@@ -1,0 +1,7 @@
+public class B
+{
+    [:
+        #target x;
+        System.out.println("Hello from B!");
+    :]
+}

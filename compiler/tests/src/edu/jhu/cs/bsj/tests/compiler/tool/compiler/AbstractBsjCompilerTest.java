@@ -2,8 +2,9 @@ package edu.jhu.cs.bsj.tests.compiler.tool.compiler;
 
 import java.io.File;
 import java.lang.reflect.Method;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.StandardBsjCompiler;
@@ -63,12 +64,29 @@ public abstract class AbstractBsjCompilerTest extends AbstractTest
 
 		BsjFileManager bfm = new LocationMappedFileManager(map);
 
-		BsjFileObject bfo = bfm.getFileForInput(BsjCompilerLocation.SOURCE_PATH, "", "BsjClass.bsj");
+		List<BsjFileObject> files = new ArrayList<BsjFileObject>();
+		for (String path : paths)
+		{
+			String packageString;
+			String filename;
+			if (path.indexOf('/') != -1)
+			{
+				packageString = path.substring(0, path.lastIndexOf('/')).replaceAll("/", ".");
+				filename = path.substring(path.lastIndexOf('/')+1);
+			} else
+			{
+				packageString = "";
+				filename = path;
+			}
+			filename = filename + ".bsj";
+			BsjFileObject bfo = bfm.getFileForInput(BsjCompilerLocation.SOURCE_PATH, packageString, filename);
+			files.add(bfo);
+		}
 
 		StandardBsjCompiler compiler = new StandardBsjCompiler(bfm);
-		compiler.compile(Arrays.asList(bfo), null);
+		compiler.compile(files, null);
 
-		Object o = bfm.getClassLoader(BsjCompilerLocation.CLASS_OUTPUT).loadClass("BsjClass").newInstance();
+		Object o = bfm.getClassLoader(BsjCompilerLocation.CLASS_OUTPUT).loadClass(paths[0].replaceAll("/",".")).newInstance();
 		Method mainMethod = o.getClass().getMethod("main", String[].class);
 		mainMethod.invoke(null, new Object[]{new String[0]});
 	}
