@@ -31,6 +31,7 @@ import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.LocationMappedFileManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.RegularFileLocationManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.UnionLocationManager;
 import edu.jhu.cs.bsj.compiler.impl.utils.diagnostic.DiagnosticPrintingListener;
+import static edu.jhu.cs.bsj.compiler.impl.tool.bsjc.BsjcCmdLineArgs.*;
 
 /**
  * This class functions as the BSJ version of javac.
@@ -88,26 +89,27 @@ public class BsjC
 	{
 		// parse the command line arguments
 		CommandLineParser parser = new PosixParser();
+		Options options = BsjC.initOptions();
 		CommandLine cmd = null;
 		try
 		{
-			cmd = parser.parse(BsjC.initOptions(), args);
+			cmd = parser.parse(options, args);
 		} catch (ParseException e)
 		{
 			System.out.println("Invalid command line arguments: " + e.getMessage());
 			System.exit(ERROR_EXIT);
 		}
 		
-		// display help page if requested or no args are supplied
-		if (args.length == 0 || cmd.hasOption("help"))
+		// display help page and exit if requested or if no args are supplied
+		if (args.length == 0 || cmd.hasOption(HELP_ARG))
 		{
 		    HelpFormatter formatter = new HelpFormatter();
-		    formatter.printHelp("bsjc", BsjC.initOptions());
+		    formatter.printHelp("bsjc", options);
 		    System.exit(NORMAL_EXIT);
 		}
 		
 		// display version info and exit if requested
-		if (cmd.hasOption("version"))
+		if (cmd.hasOption(VERSION_ARG))
 		{
 			System.out.println("bsjc " + VERSION);
 			System.exit(NORMAL_EXIT);
@@ -151,13 +153,13 @@ public class BsjC
 		
 		// set the logging level to use for the StandardBsjCompiler
 		String loggingLevel = "info";
-		if (cmd.hasOption("trace"))
+		if (cmd.hasOption(TRACE_ARG))
 		{
-		    loggingLevel = "trace";
+		    loggingLevel = TRACE_ARG;
 		}
-		else if (cmd.hasOption("debug"))
+		else if (cmd.hasOption(DEBUG_ARG))
 		{
-		    loggingLevel = "debug";
+		    loggingLevel = DEBUG_ARG;
 		}
 		
 		// compile the source files using the file manager
@@ -215,51 +217,56 @@ public class BsjC
 		String objectProgramClasspath = System.getProperty("java.class.path");
 		
 		// set the sourcepath
-		if (cmd.hasOption("sourcepath"))
+		if (cmd.hasOption(SOURCEPATH_ARG))
 		{
-			sourcePath = new File(cmd.getOptionValue("sourcepath"));
+			sourcePath = new File(cmd.getOptionValue(SOURCEPATH_ARG));
 		}
-		map.put(BsjCompilerLocation.SOURCE_PATH, new RegularFileLocationManager(null, sourcePath));
+		map.put(BsjCompilerLocation.SOURCE_PATH, 
+		        new RegularFileLocationManager(null, sourcePath));
 		
 		// set the generated sourcepath for BSJ files
-		if (cmd.hasOption("gsp"))
+		if (cmd.hasOption(GEN_SOURCEPATH_ARG))
 		{
-		    bsjSourcePath = new File(cmd.getOptionValue("gsp"));
+		    bsjSourcePath = new File(cmd.getOptionValue(GEN_SOURCEPATH_ARG));
 		}
-		map.put(BsjCompilerLocation.GENERATED_SOURCE_PATH, new RegularFileLocationManager(null, bsjSourcePath));
+		map.put(BsjCompilerLocation.GENERATED_SOURCE_PATH, 
+		        new RegularFileLocationManager(null, bsjSourcePath));
 		
 		// set the destination directory for finished class files
-		if (cmd.hasOption("d"))
+		if (cmd.hasOption(DESTINATION_ARG))
 		{
-			classOutput = new File(cmd.getOptionValue("d"));
+			classOutput = new File(cmd.getOptionValue(DESTINATION_ARG));
 		}
-		map.put(BsjCompilerLocation.CLASS_OUTPUT, new RegularFileLocationManager(null, classOutput));
+		map.put(BsjCompilerLocation.CLASS_OUTPUT, 
+		        new RegularFileLocationManager(null, classOutput));
 		
 		// set the metaprogram classpath
 		// the metaprogram will always have a classpath equal to what the 
 		// user specifies unioned with the classpath of the running JVM
-		if (cmd.hasOption("mcp"))
+		if (cmd.hasOption(META_CLASSPATH_ARG))
 		{
-			metaProgramClasspath = metaProgramClasspath + File.pathSeparator + cmd.getOptionValue("mcp");
+			metaProgramClasspath = metaProgramClasspath 
+			        + File.pathSeparator 
+			        + cmd.getOptionValue(META_CLASSPATH_ARG);
 		}
 		map.put(BsjCompilerLocation.METAPROGRAM_CLASSPATH, 
 				new UnionLocationManager(null, metaProgramClasspath));		
 		
 		// set the object program classpath
-		if (cmd.hasOption("ocp"))
+		if (cmd.hasOption(OBJECT_CLASSPATH_ARG))
 		{
-			objectProgramClasspath = cmd.getOptionValue("ocp");
+			objectProgramClasspath = cmd.getOptionValue(OBJECT_CLASSPATH_ARG);
 		}
 		map.put(BsjCompilerLocation.OBJECT_PROGRAM_CLASSPATH, 
 				new UnionLocationManager(null, objectProgramClasspath));
 		
 		//TODO
-		map.put(BsjCompilerLocation.OBJECT_PROGRAM_SYSTEM_CLASSPATH, new UnionLocationManager(null,
-				System.getProperty("sun.boot.class.path")));
+		map.put(BsjCompilerLocation.OBJECT_PROGRAM_SYSTEM_CLASSPATH, 
+		        new UnionLocationManager(null, System.getProperty("sun.boot.class.path")));
 		
 		//TODO
-		map.put(BsjCompilerLocation.METAPROGRAM_SYSTEM_CLASSPATH, new UnionLocationManager(null,
-				System.getProperty("sun.boot.class.path")));
+		map.put(BsjCompilerLocation.METAPROGRAM_SYSTEM_CLASSPATH, 
+		        new UnionLocationManager(null, System.getProperty("sun.boot.class.path")));
 		
 		// create a new file manager from the options selected
 		return(new LocationMappedFileManager(map));
@@ -274,40 +281,44 @@ public class BsjC
 		Options options = new Options();
 		
 		// options with arguments:
-        Option objectClasspath = new Option("ocp", true, 
+        Option objectClasspath = new Option(OBJECT_CLASSPATH_ARG, true, 
                 "Specify where to find user class files and annotation processors");
         objectClasspath.setArgName("path");
         options.addOption(objectClasspath);
         
-        Option metaClasspath = new Option("mcp", true, 
+        Option metaClasspath = new Option(META_CLASSPATH_ARG, true, 
                 "Specify where to find metaprogram class files and annotation processors");
         metaClasspath.setArgName("path");
         options.addOption(metaClasspath);
         
-        Option destination = new Option("d", true, 
+        Option destination = new Option(DESTINATION_ARG, true, 
                 "Specify where to place generated class files");
         destination.setArgName("path");
         options.addOption(destination);
 		
-        Option sourcepath = new Option("sourcepath", true,
+        Option sourcepath = new Option(SOURCEPATH_ARG, true,
                 "Specify the source code path to search for class or interface definitions");
         sourcepath.setArgName("path");
         options.addOption(sourcepath);
 		
-        Option genSourcepath = new Option("gsp", true,
+        Option genSourcepath = new Option(GEN_SOURCEPATH_ARG, true,
                 "Specify where to place BSJ generated files");
         genSourcepath.setArgName("path");
         options.addOption(genSourcepath);
 		
         // options without arguments:
-        options.addOption("version", false, "Version information");        
-		options.addOption("debug", false, "Turns on debug logging");		
-		options.addOption("trace", false, "Turns on trace logging");		
-		options.addOption("help", false, "Print a synopsis of standard options");
+        options.addOption(VERSION_ARG, false, "Version information");        
+		options.addOption(DEBUG_ARG, false, "Turns on debug logging");		
+		options.addOption(TRACE_ARG, false, "Turns on trace logging");		
+		options.addOption(HELP_ARG, false, "Print a synopsis of standard options");
 		
 		return options;
 	}
 
+	/**
+	 * Compiles object files after parameters have been set.
+	 * @throws IOException if an I/O error occurs.
+	 */
 	public void compile() throws IOException
 	{
 		StandardBsjCompiler compiler = new StandardBsjCompiler(bsjFileManager);
