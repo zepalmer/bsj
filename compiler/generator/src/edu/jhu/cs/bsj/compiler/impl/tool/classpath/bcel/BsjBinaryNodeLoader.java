@@ -25,8 +25,8 @@ import edu.jhu.cs.bsj.compiler.ast.node.NameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.PackageDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeParameterListNode;
-import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.BsjFileObject;
-import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.LocationManager;
+import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjFileObject;
+import edu.jhu.cs.bsj.compiler.tool.filemanager.LocationManager;
 
 /**
  * Dynamically loads binary class files along with their references and
