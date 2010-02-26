@@ -14,6 +14,9 @@ import javax.tools.JavaFileObject.Kind;
 import org.apache.log4j.Logger;
 
 import edu.jhu.cs.bsj.compiler.impl.utils.TypeTranslatingIterable;
+import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjFileManager;
+import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjFileObject;
+import edu.jhu.cs.bsj.compiler.tool.filemanager.LocationManager;
 
 /**
  * Allows a set of {@link LocationManager} objects to be provided which dictate the behavior of this file manager.

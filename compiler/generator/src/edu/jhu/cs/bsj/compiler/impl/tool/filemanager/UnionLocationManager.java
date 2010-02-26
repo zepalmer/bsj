@@ -10,6 +10,8 @@ import java.util.List;
 import javax.tools.JavaFileObject.Kind;
 
 import edu.jhu.cs.bsj.compiler.impl.utils.CompoundIterable;
+import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjFileObject;
+import edu.jhu.cs.bsj.compiler.tool.filemanager.LocationManager;
 
 /**
  * This implementation of {@link LocationManager} acts as a unioning system which is backed by multiple other location

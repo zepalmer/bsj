@@ -31,14 +31,15 @@ import edu.jhu.cs.bsj.compiler.ast.node.MethodDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeFactoryImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.BsjTreeLifter;
-import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.BsjFileManager;
-import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.BsjFileObject;
 import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.InMemoryLocationManager;
-import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.LocationManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.LocationMappedFileManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.UnionLocationManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.serializer.BsjSourceSerializerImpl;
 import edu.jhu.cs.bsj.compiler.impl.utils.StringUtilities;
+import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjFileManager;
+import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjFileObject;
+import edu.jhu.cs.bsj.compiler.tool.filemanager.LocationManager;
+import edu.jhu.cs.bsj.compiler.tool.parser.BsjParser;
 import edu.jhu.cs.bsj.compiler.tool.parser.BsjParserImpl;
 import edu.jhu.cs.bsj.tests.AbstractPerFileTest;
 
@@ -58,7 +59,7 @@ public class BsjTreeLifterTest extends AbstractPerFileTest
 			"edu.jhu.cs.bsj.compiler.ast.node.meta.*", "java.util.*" };
 	private BsjNodeFactory factory = new BsjNodeFactoryImpl(null);
 	private BsjTreeLifter treeLifter = new BsjTreeLifter(factory);
-	private BsjParserImpl parser = new BsjParserImpl(factory);
+	private BsjParser parser = new BsjParserImpl(factory);
 	private String factoryName = "factory";
 	private BsjSourceSerializer serializer = new BsjSourceSerializerImpl();
 

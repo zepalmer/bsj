@@ -12,13 +12,14 @@ import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeFactoryImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.serializer.BsjSourceSerializerImpl;
 import edu.jhu.cs.bsj.compiler.impl.utils.StringUtilities;
+import edu.jhu.cs.bsj.compiler.tool.parser.BsjParser;
 import edu.jhu.cs.bsj.compiler.tool.parser.BsjParserImpl;
 import edu.jhu.cs.bsj.tests.AbstractPerFileTest;
 
 public class RegeneratorTest extends AbstractPerFileTest
 {
 	// private variables used in testing
-	private BsjParserImpl parser = new BsjParserImpl(new BsjNodeFactoryImpl(null));
+	private BsjParser parser = new BsjParserImpl(new BsjNodeFactoryImpl(null));
 	private BsjSourceSerializer serializer = new BsjSourceSerializerImpl();
 
 	@Test

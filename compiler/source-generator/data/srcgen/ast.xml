@@ -1249,6 +1249,8 @@
             <doc><![CDATA[
                 A node representing a null literal.
             ]]></doc>
+            <factory-override prop="value" expr="null"/>
+            <factory-method/>
         </type>
 
         <type name="StringLiteralNode" super="LiteralNode" superTypeArg="String">

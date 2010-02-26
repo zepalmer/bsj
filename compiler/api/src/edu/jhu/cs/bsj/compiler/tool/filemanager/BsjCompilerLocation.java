@@ -1,4 +1,4 @@
-package edu.jhu.cs.bsj.compiler.impl.tool.filemanager;
+package edu.jhu.cs.bsj.compiler.tool.filemanager;
 
 import javax.tools.JavaFileManager;
 import javax.tools.StandardLocation;

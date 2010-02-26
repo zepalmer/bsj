@@ -19,6 +19,7 @@ import javax.lang.model.element.NestingKind;
 
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.JavaFileManagerUtilities;
 import edu.jhu.cs.bsj.compiler.impl.utils.IOUtilities;
+import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjFileObject;
 
 /**
  * Acts as a base class for file objects, containing the most common functionality.

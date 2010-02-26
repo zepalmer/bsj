@@ -33,7 +33,7 @@ public class CategorizeNamesTask extends AbstractBsjCompilerTask
 
 		// Disambiguate PACKAGE_OR_TYPE names (JLS v3 §6.5.3)
 		PackageOrTypeNameCategorizationVisitor packageOrTypeNameCategorizationVisitor = new PackageOrTypeNameCategorizationVisitor(
-				context.getFactory());
+				context.getToolkit().getNodeFactory());
 		this.compilationUnitNode.receiveTyped(packageOrTypeNameCategorizationVisitor);
 
 		// TODO: now disambiguate AMBIGUOUS names (JLS v3 §6.5.2)

@@ -12,6 +12,7 @@ import javax.tools.JavaFileManager;
 import javax.tools.JavaFileObject.Kind;
 
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.JavaFileManagerUtilities;
+import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjFileObject;
 
 /**
  * Provides a memory-based file system wrapper for a specific location.

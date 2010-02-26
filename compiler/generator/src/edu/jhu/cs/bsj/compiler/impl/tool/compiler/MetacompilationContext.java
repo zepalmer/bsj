@@ -3,11 +3,10 @@ package edu.jhu.cs.bsj.compiler.impl.tool.compiler;
 import javax.tools.DiagnosticListener;
 import javax.tools.JavaFileObject;
 
-import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 import edu.jhu.cs.bsj.compiler.ast.node.PackageNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.dependency.DependencyManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.task.BsjCompilerTask;
-import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.BsjFileManager;
+import edu.jhu.cs.bsj.compiler.tool.BsjToolkit;
 
 public interface MetacompilationContext
 {
@@ -17,16 +16,10 @@ public interface MetacompilationContext
 	public PackageNode getRootPackage();
 	
 	/**
-	 * Retrieves the factory which should be used to create new nodes.
-	 * @return A node factory.
+	 * Retrieves the toolkit which should be used to satisfy tool requirements.
+	 * @return The toolkit to use.
 	 */
-	public BsjNodeFactory getFactory();
-	
-	/**
-	 * Retrieves the file manager that the task should use to find files.
-	 * @return The file manager.
-	 */
-	public BsjFileManager getFileManager();
+	public BsjToolkit getToolkit();
 	
 	/**
 	 * Retrieves a diagnostic listener to which diagnostics can be reported.

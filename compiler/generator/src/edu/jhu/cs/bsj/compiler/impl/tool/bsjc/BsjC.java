@@ -1,5 +1,15 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.bsjc;
 
+import static edu.jhu.cs.bsj.compiler.impl.tool.bsjc.BsjcCmdLineArgs.DEBUG_ARG;
+import static edu.jhu.cs.bsj.compiler.impl.tool.bsjc.BsjcCmdLineArgs.DESTINATION_ARG;
+import static edu.jhu.cs.bsj.compiler.impl.tool.bsjc.BsjcCmdLineArgs.GEN_SOURCEPATH_ARG;
+import static edu.jhu.cs.bsj.compiler.impl.tool.bsjc.BsjcCmdLineArgs.HELP_ARG;
+import static edu.jhu.cs.bsj.compiler.impl.tool.bsjc.BsjcCmdLineArgs.META_CLASSPATH_ARG;
+import static edu.jhu.cs.bsj.compiler.impl.tool.bsjc.BsjcCmdLineArgs.OBJECT_CLASSPATH_ARG;
+import static edu.jhu.cs.bsj.compiler.impl.tool.bsjc.BsjcCmdLineArgs.SOURCEPATH_ARG;
+import static edu.jhu.cs.bsj.compiler.impl.tool.bsjc.BsjcCmdLineArgs.TRACE_ARG;
+import static edu.jhu.cs.bsj.compiler.impl.tool.bsjc.BsjcCmdLineArgs.VERSION_ARG;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -22,16 +32,19 @@ import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.PosixParser;
 import org.apache.log4j.PropertyConfigurator;
 
+import edu.jhu.cs.bsj.compiler.BsjServiceRegistry;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.StandardBsjCompiler;
-import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.BsjCompilerLocation;
-import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.BsjFileManager;
-import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.BsjFileObject;
-import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.LocationManager;
-import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.LocationMappedFileManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.RegularFileLocationManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.UnionLocationManager;
 import edu.jhu.cs.bsj.compiler.impl.utils.diagnostic.DiagnosticPrintingListener;
-import static edu.jhu.cs.bsj.compiler.impl.tool.bsjc.BsjcCmdLineArgs.*;
+import edu.jhu.cs.bsj.compiler.tool.BsjCompiler;
+import edu.jhu.cs.bsj.compiler.tool.BsjToolkit;
+import edu.jhu.cs.bsj.compiler.tool.BsjToolkitFactory;
+import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjCompilerLocation;
+import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjFileManager;
+import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjFileManagerFactory;
+import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjFileObject;
+import edu.jhu.cs.bsj.compiler.tool.filemanager.LocationManager;
 
 /**
  * This class functions as the BSJ version of javac.
@@ -268,8 +281,12 @@ public class BsjC
 		map.put(BsjCompilerLocation.METAPROGRAM_SYSTEM_CLASSPATH, 
 		        new UnionLocationManager(null, System.getProperty("sun.boot.class.path")));
 		
+		// create file manager from registry service
+		BsjFileManagerFactory factory = BsjServiceRegistry.newFileManagerFactory();
+		factory.setLocationManagerMappingsByManager(map);
+		
 		// create a new file manager from the options selected
-		return(new LocationMappedFileManager(map));
+		return factory.newFileManager();
 	}
 
 	/**
@@ -321,7 +338,11 @@ public class BsjC
 	 */
 	public void compile() throws IOException
 	{
-		StandardBsjCompiler compiler = new StandardBsjCompiler(bsjFileManager);
+		BsjToolkitFactory toolkitFactory = BsjServiceRegistry.newToolkitFactory();
+		toolkitFactory.setFileManager(bsjFileManager);
+		BsjToolkit toolkit = toolkitFactory.newToolkit();
+		
+		BsjCompiler compiler = toolkit.getCompiler();
 		compiler.compile(compileObjects, listener);
 	}
 

@@ -20,13 +20,13 @@ import junit.framework.Assert;
 import org.apache.log4j.PropertyConfigurator;
 import org.junit.Test;
 
-import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.BsjFileManager;
-import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.BsjFileObject;
 import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.InMemoryLocationManager;
-import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.LocationManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.LocationMappedFileManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.RegularFileLocationManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.UnionLocationManager;
+import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjFileManager;
+import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjFileObject;
+import edu.jhu.cs.bsj.compiler.tool.filemanager.LocationManager;
 
 public class BsjJavaCompilerTest
 {

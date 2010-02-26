@@ -7,14 +7,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import edu.jhu.cs.bsj.compiler.impl.tool.compiler.StandardBsjCompiler;
-import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.BsjCompilerLocation;
-import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.BsjFileManager;
-import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.BsjFileObject;
-import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.LocationManager;
-import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.LocationMappedFileManager;
+import edu.jhu.cs.bsj.compiler.BsjServiceRegistry;
 import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.RegularFileLocationManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.UnionLocationManager;
+import edu.jhu.cs.bsj.compiler.tool.BsjCompiler;
+import edu.jhu.cs.bsj.compiler.tool.BsjToolkit;
+import edu.jhu.cs.bsj.compiler.tool.BsjToolkitFactory;
+import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjCompilerLocation;
+import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjFileManager;
+import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjFileManagerFactory;
+import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjFileObject;
+import edu.jhu.cs.bsj.compiler.tool.filemanager.LocationManager;
 import edu.jhu.cs.bsj.tests.AbstractTest;
 
 public abstract class AbstractBsjCompilerTest extends AbstractTest
@@ -43,6 +46,8 @@ public abstract class AbstractBsjCompilerTest extends AbstractTest
 		log4jConfigure("trace", "edu.jhu.cs.bsj.compiler.impl.tool.filemanager/debug",
 				"edu.jhu.cs.bsj.compiler.tool.parser.antlr/debug");
 
+		BsjFileManagerFactory fileManagerFactory = BsjServiceRegistry.newFileManagerFactory();
+		
 		Map<BsjCompilerLocation, LocationManager> map = new HashMap<BsjCompilerLocation, LocationManager>();
 
 		File test = new File("." + File.separator + "local");
@@ -62,7 +67,8 @@ public abstract class AbstractBsjCompilerTest extends AbstractTest
 		map.put(BsjCompilerLocation.OBJECT_PROGRAM_CLASSPATH, new UnionLocationManager(null,
 				System.getProperty("java.class.path")));
 
-		BsjFileManager bfm = new LocationMappedFileManager(map);
+		fileManagerFactory.setLocationManagerMappingsByManager(map);
+		BsjFileManager bfm = fileManagerFactory.newFileManager();
 
 		List<BsjFileObject> files = new ArrayList<BsjFileObject>();
 		for (String path : paths)
@@ -82,8 +88,12 @@ public abstract class AbstractBsjCompilerTest extends AbstractTest
 			BsjFileObject bfo = bfm.getFileForInput(BsjCompilerLocation.SOURCE_PATH, packageString, filename);
 			files.add(bfo);
 		}
+		
+		BsjToolkitFactory toolkitFactory = BsjServiceRegistry.newToolkitFactory();
+		toolkitFactory.setFileManager(bfm);
+		BsjToolkit toolkit = toolkitFactory.newToolkit();
 
-		StandardBsjCompiler compiler = new StandardBsjCompiler(bfm);
+		BsjCompiler compiler = toolkit.getCompiler();
 		compiler.compile(files, null);
 
 		Object o = bfm.getClassLoader(BsjCompilerLocation.CLASS_OUTPUT).loadClass(paths[0].replaceAll("/",".")).newInstance();

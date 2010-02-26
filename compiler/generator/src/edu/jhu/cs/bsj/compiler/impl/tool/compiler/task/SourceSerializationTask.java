@@ -8,9 +8,9 @@ import edu.jhu.cs.bsj.compiler.ast.BsjSourceSerializer;
 import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
 import edu.jhu.cs.bsj.compiler.ast.node.PackageNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.MetacompilationContext;
-import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.BsjCompilerLocation;
-import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.BsjFileObject;
 import edu.jhu.cs.bsj.compiler.impl.tool.serializer.BsjSourceSerializerImpl;
+import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjCompilerLocation;
+import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjFileObject;
 
 /**
  * The final step of BSJ meta-compilation. This task generates source code from the package hierarchy.
@@ -53,7 +53,7 @@ public class SourceSerializationTask extends AbstractBsjCompilerTask
 			className = compilationUnitNode.getName();
 		}
 		
-		BsjFileObject bsjFileObject = context.getFileManager().getJavaFileForOutput(
+		BsjFileObject bsjFileObject = context.getToolkit().getFileManager().getJavaFileForOutput(
 				BsjCompilerLocation.GENERATED_SOURCE_PATH, compilationUnitNode.getName(), Kind.SOURCE, null);
 		bsjFileObject.setCharContent(source);
 		

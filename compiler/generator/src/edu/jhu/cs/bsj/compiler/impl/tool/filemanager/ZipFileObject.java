@@ -5,6 +5,8 @@ import java.io.InputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
+import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjFileObject;
+
 /**
  * This implementation of {@link AbstractFileObject} represents a file inside of a ZIP file.
  * @author Zachary Palmer

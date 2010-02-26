@@ -9,6 +9,7 @@ import java.io.OutputStream;
 import java.net.URI;
 
 import edu.jhu.cs.bsj.compiler.impl.utils.StringUtilities;
+import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjFileObject;
 
 /**
  * This implementation of {@link AbstractFileObject} represents a file which is stored in a physical location on the

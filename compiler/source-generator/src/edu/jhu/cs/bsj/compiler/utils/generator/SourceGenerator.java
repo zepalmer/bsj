@@ -1891,13 +1891,25 @@ public class SourceGenerator
 			{
 				ps.println("protected ExpressionNode expressionize" + etype + "(" + etype + " x)");
 				ps.println("{");
-				ps.println("    return factory.makeFieldAccessByNameNode(factory.makeQualifiedNameNode(");
-				ps.println("            factory.makeSimpleNameNode(");
-				ps.println("                    factory.makeIdentifierNode(\"" + etype + "\"),");
-				ps.println("                    NameCategory.EXPRESSION");
-				ps.println("                    ),");
-				ps.println("            factory.makeIdentifierNode(x.name()),");
-				ps.println("            NameCategory.EXPRESSION));");
+				ps.incPrependCount();
+				ps.println("if (x == null)");
+				ps.println("{");
+				ps.incPrependCount();
+				ps.println("return factory.makeNullLiteralNode();");
+				ps.decPrependCount();
+				ps.println("} else");
+				ps.println("{");
+				ps.incPrependCount();
+				ps.println("return factory.makeFieldAccessByNameNode(factory.makeQualifiedNameNode(");
+				ps.println("        factory.makeSimpleNameNode(");
+				ps.println("                factory.makeIdentifierNode(\"" + etype + "\"),");
+				ps.println("                NameCategory.EXPRESSION");
+				ps.println("                ),");
+				ps.println("        factory.makeIdentifierNode(x.name()),");
+				ps.println("        NameCategory.EXPRESSION));");
+				ps.decPrependCount();
+				ps.println("}");
+				ps.decPrependCount();
 				ps.println("}");
 				ps.println();
 			}

@@ -3883,7 +3883,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public NullLiteralNode makeNullLiteralNode(
             Void value)
     {
-        NullLiteralNode ret = new NullLiteralNodeImpl(value, startLocation, stopLocation);
+        NullLiteralNode ret = new NullLiteralNodeImpl(null, startLocation, stopLocation);
         return ret;
     }
 
@@ -3897,7 +3897,31 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        NullLiteralNode ret = new NullLiteralNodeImpl(value, startLocation, stopLocation);
+        NullLiteralNode ret = new NullLiteralNodeImpl(null, startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
+     * Creates a NullLiteralNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public NullLiteralNode makeNullLiteralNode()
+    {
+        NullLiteralNode ret = new NullLiteralNodeImpl(null, startLocation, stopLocation);
+        return ret;
+    }
+
+    /**
+     * Creates a NullLiteralNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public NullLiteralNode makeNullLiteralNode(
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        NullLiteralNode ret = new NullLiteralNodeImpl(null, startLocation, stopLocation);
         return ret;
     }
 

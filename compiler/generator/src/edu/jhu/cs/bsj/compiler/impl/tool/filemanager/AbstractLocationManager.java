@@ -9,6 +9,8 @@ import javax.tools.JavaFileObject.Kind;
 
 import edu.jhu.cs.bsj.compiler.impl.utils.IOUtilities;
 import edu.jhu.cs.bsj.compiler.impl.utils.StringUtilities;
+import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjFileObject;
+import edu.jhu.cs.bsj.compiler.tool.filemanager.LocationManager;
 
 /**
  * This location manager provides an abstract base class implementing the most common location management functionality.

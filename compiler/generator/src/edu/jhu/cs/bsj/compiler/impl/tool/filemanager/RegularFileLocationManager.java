@@ -12,6 +12,8 @@ import java.util.Queue;
 
 import javax.tools.JavaFileObject.Kind;
 
+import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjFileObject;
+
 /**
  * This location manager is used to manage a subdirectory of the host filesystem.
  * 

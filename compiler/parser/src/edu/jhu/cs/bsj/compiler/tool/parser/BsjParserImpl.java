@@ -23,7 +23,7 @@ import edu.jhu.cs.bsj.compiler.tool.parser.antlr.BsjAntlrParser;
  * 
  * @author Zachary Palmer
  */
-public class BsjParserImpl
+public class BsjParserImpl implements BsjParser
 {
 	/**
 	 * The factory that this parser will use to construct AST nodes.

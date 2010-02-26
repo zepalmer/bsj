@@ -11,7 +11,6 @@ import javax.tools.JavaFileObject;
 
 import org.apache.log4j.Logger;
 
-import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
 import edu.jhu.cs.bsj.compiler.ast.node.PackageNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.dependency.DependencyManager;
@@ -19,8 +18,8 @@ import edu.jhu.cs.bsj.compiler.impl.tool.compiler.task.BsjCompilerTask;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.task.ExecuteMetaprogramTask;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.task.ParseCompilationUnitTask;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.task.TaskPriority;
-import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.BsjFileManager;
-import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.BsjFileObject;
+import edu.jhu.cs.bsj.compiler.tool.BsjToolkit;
+import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjFileObject;
 
 /**
  * This class represents the data structure which manages metacompilation. It tracks the progress which has been made on
@@ -46,13 +45,9 @@ public class MetacompilationManager implements MetacompilationContext
 	 */
 	private Queue<BsjCompilerTask> priorityQueue;
 	/**
-	 * The node factory which tasks should use.
+	 * The toolkit to use to satisfy tool requirements.
 	 */
-	private BsjNodeFactory factory;
-	/**
-	 * The file management abstraction to use.
-	 */
-	private BsjFileManager fileManager;
+	private BsjToolkit toolkit;
 	/**
 	 * The listener to which we will report events.
 	 */
@@ -70,23 +65,22 @@ public class MetacompilationManager implements MetacompilationContext
 	/**
 	 * Creates a new compilation unit manager.
 	 * 
-	 * @param factory The node factory to use.
-	 * @param fileManager The file management abstraction to use.
+	 * @param toolkit The toolkit to use.
 	 * @param diagnosticListener The listener to which diagnostics will be reported. Must not be <code>null</code>.
 	 */
-	public MetacompilationManager(BsjNodeFactory factory, BsjFileManager fileManager,
+	public MetacompilationManager(BsjToolkit toolkit,
 			DiagnosticListener<? super JavaFileObject> diagnosticListener)
 	{
 		this.observedBinaryNames = new HashSet<String>();
 		this.priorityQueue = new PriorityQueue<BsjCompilerTask>();
-		this.factory = factory;
-		this.fileManager = fileManager;
+		this.dependencyManager = new DependencyManager();
+		
+		this.toolkit = toolkit;
 		this.diagnosticListener = diagnosticListener;
 
-		this.dependencyManager = new DependencyManager();
-		this.priorityQueue.offer(new ExecuteMetaprogramTask());
+		this.rootPackage = toolkit.getNodeFactory().makePackageNode(null);
 
-		this.rootPackage = factory.makePackageNode(null);
+		this.priorityQueue.offer(new ExecuteMetaprogramTask());
 	}
 
 	/**
@@ -180,19 +174,13 @@ public class MetacompilationManager implements MetacompilationContext
 			{
 				return MetacompilationManager.this.getRootPackage();
 			}
-			
+
 			@Override
-			public BsjFileManager getFileManager()
+			public BsjToolkit getToolkit()
 			{
-				return MetacompilationManager.this.getFileManager();
+				return MetacompilationManager.this.getToolkit();
 			}
-			
-			@Override
-			public BsjNodeFactory getFactory()
-			{
-				return MetacompilationManager.this.getFactory();
-			}
-			
+
 			@Override
 			public DiagnosticListener<? super JavaFileObject> getDiagnosticListener()
 			{
@@ -295,14 +283,9 @@ public class MetacompilationManager implements MetacompilationContext
 		task.execute(this);
 	}
 
-	public BsjNodeFactory getFactory()
+	public BsjToolkit getToolkit()
 	{
-		return factory;
-	}
-
-	public BsjFileManager getFileManager()
-	{
-		return fileManager;
+		return toolkit;
 	}
 
 	public DiagnosticListener<? super JavaFileObject> getDiagnosticListener()

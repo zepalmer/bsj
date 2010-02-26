@@ -47,6 +47,7 @@ import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeFactoryImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.serializer.BsjSourceSerializerImpl;
 import edu.jhu.cs.bsj.compiler.impl.utils.PrependablePrintStream;
 import edu.jhu.cs.bsj.compiler.impl.utils.diagnostic.DiagnosticPrintingListener;
+import edu.jhu.cs.bsj.compiler.tool.parser.BsjParser;
 import edu.jhu.cs.bsj.compiler.tool.parser.BsjParserImpl;
 
 public class AntlrAstViewer
@@ -182,7 +183,7 @@ public class AntlrAstViewer
 
 	public static Node stringToAst(String s, PrintStream ps) throws Exception
 	{
-		BsjParserImpl parser = new BsjParserImpl(new BsjNodeFactoryImpl(null));
+		BsjParser parser = new BsjParserImpl(new BsjNodeFactoryImpl(null));
 		return parser.parse(null, new InputStreamReader(new ByteArrayInputStream(s.getBytes())),
 				new DiagnosticPrintingListener<JavaFileObject>(ps));
 	}

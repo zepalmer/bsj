@@ -2492,6 +2492,20 @@ public interface BsjNodeFactory
             BsjSourceLocation stopLocation);
 
     /**
+     * Creates a NullLiteralNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public NullLiteralNode makeNullLiteralNode();
+
+    /**
+     * Creates a NullLiteralNode.
+     * The specified start and stop locations are used.
+     */
+    public NullLiteralNode makeNullLiteralNode(
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+
+    /**
      * Creates a PackageDeclarationNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */

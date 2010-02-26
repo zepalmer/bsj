@@ -14,6 +14,7 @@ import java.util.zip.ZipFile;
 import javax.tools.JavaFileObject.Kind;
 
 import edu.jhu.cs.bsj.compiler.impl.utils.EnumerationIterator;
+import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjFileObject;
 
 /**
  * This file manager allows access to files inside of a ZIP-formatted archive. The returned file objects do not allow

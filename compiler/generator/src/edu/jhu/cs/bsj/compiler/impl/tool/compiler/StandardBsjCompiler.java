@@ -16,17 +16,16 @@ import javax.tools.JavaFileObject.Kind;
 
 import org.apache.log4j.Logger;
 
-import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
-import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeFactoryImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.PackageNodeCallback;
-import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.BsjCompilerLocation;
-import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.BsjFileManager;
-import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.BsjFileObject;
 import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.InMemoryLocationManager;
-import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.LocationManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.LocationMappedFileManager;
 import edu.jhu.cs.bsj.compiler.impl.utils.diagnostic.DiagnosticPrintingListener;
 import edu.jhu.cs.bsj.compiler.tool.BsjCompiler;
+import edu.jhu.cs.bsj.compiler.tool.BsjToolkit;
+import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjCompilerLocation;
+import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjFileManager;
+import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjFileObject;
+import edu.jhu.cs.bsj.compiler.tool.filemanager.LocationManager;
 
 /**
  * This class is a standard implementation of the BSJ compiler.
@@ -36,17 +35,21 @@ import edu.jhu.cs.bsj.compiler.tool.BsjCompiler;
 public class StandardBsjCompiler implements BsjCompiler
 {
 	// TODO: export some of these functions to the BsjCompiler interface.
-	// TODO: consider factory for construction
-	/**
-	 * The {@link BsjFileManager} used for the filesystem abstraction.
-	 */
-	private BsjFileManager bsjFileManager;
 
 	/**
 	 * The logging for this compiler.
 	 */
 	private Logger LOGGER = Logger.getLogger(this.getClass());
 
+	/**
+	 * The toolkit used to satisfy tool requirements.
+	 */
+	private BsjToolkit toolkit;
+	/**
+	 * The package callback module used in package nodes.
+	 */
+	private PackageNodeCallback packageNodeCallback;
+	
 	/* *** The following fields are used in compilation. They are not valid unless compilation is in progress. */
 
 	/**
@@ -54,29 +57,18 @@ public class StandardBsjCompiler implements BsjCompiler
 	 * accounting of source files and source file-specific data structures.
 	 */
 	private MetacompilationManager metacompilationManager;
-	/**
-	 * The package callback module used in package nodes.
-	 */
-	private PackageNodeCallback packageNodeCallback;
-
-	// TODO: allow factory to be specified by user?
-	/**
-	 * The factory used to create AST nodes.
-	 */
-	private BsjNodeFactory factory;
 
 	/**
 	 * Creates a new standard BSJ compiler.
 	 * 
-	 * @param bsjFileManager The file management abstraction to use during compilation. This file manager must be able
-	 *            to handle all locations in {@link BsjCompilerLocation}.
+	 * @param toolkit The toolkit used to satisfy resource requirements.
+	 * @param packageNodeCallback The {@link PackageNodeCallback} to manipulate when compilation starts.
 	 */
-	public StandardBsjCompiler(BsjFileManager bsjFileManager)
+	public StandardBsjCompiler(BsjToolkit toolkit, PackageNodeCallback packageNodeCallback)
 	{
 		super();
-		this.bsjFileManager = bsjFileManager;
+		this.toolkit = toolkit;
 		this.packageNodeCallback = new PackageNodeCallback();
-		this.factory = new BsjNodeFactoryImpl(this.packageNodeCallback); // TODO: get default factory through SPI
 	}
 
 	// TODO: allow the caller to specify a listener to receive exceptions in real time (as opposed to in batch)
@@ -147,25 +139,26 @@ public class StandardBsjCompiler implements BsjCompiler
 
 	private void compileGeneratedSources() throws IOException
 	{
+		BsjFileManager bsjFileManager = this.toolkit.getFileManager();
 		// Build file manager for the compiler
 		Map<StandardLocation, LocationManager> objectProgramLocationMap = new HashMap<StandardLocation, LocationManager>();
 		objectProgramLocationMap.put(StandardLocation.SOURCE_PATH,
-				this.bsjFileManager.getLocationManager(BsjCompilerLocation.GENERATED_SOURCE_PATH));
+				bsjFileManager.getLocationManager(BsjCompilerLocation.GENERATED_SOURCE_PATH));
 		// TODO: add annotation processing support
 		objectProgramLocationMap.put(StandardLocation.SOURCE_OUTPUT, new InMemoryLocationManager(null));
 		// TODO: add annotation processing support
 		objectProgramLocationMap.put(StandardLocation.ANNOTATION_PROCESSOR_PATH, new InMemoryLocationManager(null));
 		objectProgramLocationMap.put(StandardLocation.CLASS_OUTPUT,
-				this.bsjFileManager.getLocationManager(BsjCompilerLocation.CLASS_OUTPUT));
+				bsjFileManager.getLocationManager(BsjCompilerLocation.CLASS_OUTPUT));
 		objectProgramLocationMap.put(StandardLocation.CLASS_PATH,
-				this.bsjFileManager.getLocationManager(BsjCompilerLocation.OBJECT_PROGRAM_CLASSPATH));
+				bsjFileManager.getLocationManager(BsjCompilerLocation.OBJECT_PROGRAM_CLASSPATH));
 		objectProgramLocationMap.put(StandardLocation.PLATFORM_CLASS_PATH,
-				this.bsjFileManager.getLocationManager(BsjCompilerLocation.OBJECT_PROGRAM_SYSTEM_CLASSPATH));
+				bsjFileManager.getLocationManager(BsjCompilerLocation.OBJECT_PROGRAM_SYSTEM_CLASSPATH));
 
 		JavaFileManager objectProgramFileManager = new LocationMappedFileManager(objectProgramLocationMap);
 
 		// Retrieve generated source files
-		Iterable<? extends BsjFileObject> files = this.bsjFileManager.listFiles(
+		Iterable<? extends BsjFileObject> files = bsjFileManager.listFiles(
 				BsjCompilerLocation.GENERATED_SOURCE_PATH, "", Arrays.asList(Kind.SOURCE), true);
 
 		// Perform compilation
@@ -189,8 +182,7 @@ public class StandardBsjCompiler implements BsjCompiler
 		{
 			LOGGER.trace("Initializing compiler data structures.");
 		}
-		this.metacompilationManager = new MetacompilationManager(this.factory, this.bsjFileManager, listener);
-		this.packageNodeCallback.setFileManager(bsjFileManager);
+		this.metacompilationManager = new MetacompilationManager(this.toolkit, listener);
 		this.packageNodeCallback.setMetacompilationManager(metacompilationManager);
 	}
 
@@ -200,5 +192,6 @@ public class StandardBsjCompiler implements BsjCompiler
 	private void terminate()
 	{
 		this.metacompilationManager = null;
+		this.packageNodeCallback.setMetacompilationManager(null);
 	}
 }

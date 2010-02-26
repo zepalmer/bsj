@@ -142,79 +142,121 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
     
     protected ExpressionNode expressionizePrimitiveType(PrimitiveType x)
     {
-        return factory.makeFieldAccessByNameNode(factory.makeQualifiedNameNode(
-                factory.makeSimpleNameNode(
-                        factory.makeIdentifierNode("PrimitiveType"),
-                        NameCategory.EXPRESSION
-                        ),
-                factory.makeIdentifierNode(x.name()),
-                NameCategory.EXPRESSION));
+        if (x == null)
+        {
+            return factory.makeNullLiteralNode();
+        } else
+        {
+            return factory.makeFieldAccessByNameNode(factory.makeQualifiedNameNode(
+                    factory.makeSimpleNameNode(
+                            factory.makeIdentifierNode("PrimitiveType"),
+                            NameCategory.EXPRESSION
+                            ),
+                    factory.makeIdentifierNode(x.name()),
+                    NameCategory.EXPRESSION));
+        }
     }
     
     protected ExpressionNode expressionizeUnaryStatementOperator(UnaryStatementOperator x)
     {
-        return factory.makeFieldAccessByNameNode(factory.makeQualifiedNameNode(
-                factory.makeSimpleNameNode(
-                        factory.makeIdentifierNode("UnaryStatementOperator"),
-                        NameCategory.EXPRESSION
-                        ),
-                factory.makeIdentifierNode(x.name()),
-                NameCategory.EXPRESSION));
+        if (x == null)
+        {
+            return factory.makeNullLiteralNode();
+        } else
+        {
+            return factory.makeFieldAccessByNameNode(factory.makeQualifiedNameNode(
+                    factory.makeSimpleNameNode(
+                            factory.makeIdentifierNode("UnaryStatementOperator"),
+                            NameCategory.EXPRESSION
+                            ),
+                    factory.makeIdentifierNode(x.name()),
+                    NameCategory.EXPRESSION));
+        }
     }
     
     protected ExpressionNode expressionizeAssignmentOperator(AssignmentOperator x)
     {
-        return factory.makeFieldAccessByNameNode(factory.makeQualifiedNameNode(
-                factory.makeSimpleNameNode(
-                        factory.makeIdentifierNode("AssignmentOperator"),
-                        NameCategory.EXPRESSION
-                        ),
-                factory.makeIdentifierNode(x.name()),
-                NameCategory.EXPRESSION));
+        if (x == null)
+        {
+            return factory.makeNullLiteralNode();
+        } else
+        {
+            return factory.makeFieldAccessByNameNode(factory.makeQualifiedNameNode(
+                    factory.makeSimpleNameNode(
+                            factory.makeIdentifierNode("AssignmentOperator"),
+                            NameCategory.EXPRESSION
+                            ),
+                    factory.makeIdentifierNode(x.name()),
+                    NameCategory.EXPRESSION));
+        }
     }
     
     protected ExpressionNode expressionizeBinaryOperator(BinaryOperator x)
     {
-        return factory.makeFieldAccessByNameNode(factory.makeQualifiedNameNode(
-                factory.makeSimpleNameNode(
-                        factory.makeIdentifierNode("BinaryOperator"),
-                        NameCategory.EXPRESSION
-                        ),
-                factory.makeIdentifierNode(x.name()),
-                NameCategory.EXPRESSION));
+        if (x == null)
+        {
+            return factory.makeNullLiteralNode();
+        } else
+        {
+            return factory.makeFieldAccessByNameNode(factory.makeQualifiedNameNode(
+                    factory.makeSimpleNameNode(
+                            factory.makeIdentifierNode("BinaryOperator"),
+                            NameCategory.EXPRESSION
+                            ),
+                    factory.makeIdentifierNode(x.name()),
+                    NameCategory.EXPRESSION));
+        }
     }
     
     protected ExpressionNode expressionizeNameCategory(NameCategory x)
     {
-        return factory.makeFieldAccessByNameNode(factory.makeQualifiedNameNode(
-                factory.makeSimpleNameNode(
-                        factory.makeIdentifierNode("NameCategory"),
-                        NameCategory.EXPRESSION
-                        ),
-                factory.makeIdentifierNode(x.name()),
-                NameCategory.EXPRESSION));
+        if (x == null)
+        {
+            return factory.makeNullLiteralNode();
+        } else
+        {
+            return factory.makeFieldAccessByNameNode(factory.makeQualifiedNameNode(
+                    factory.makeSimpleNameNode(
+                            factory.makeIdentifierNode("NameCategory"),
+                            NameCategory.EXPRESSION
+                            ),
+                    factory.makeIdentifierNode(x.name()),
+                    NameCategory.EXPRESSION));
+        }
     }
     
     protected ExpressionNode expressionizeUnaryOperator(UnaryOperator x)
     {
-        return factory.makeFieldAccessByNameNode(factory.makeQualifiedNameNode(
-                factory.makeSimpleNameNode(
-                        factory.makeIdentifierNode("UnaryOperator"),
-                        NameCategory.EXPRESSION
-                        ),
-                factory.makeIdentifierNode(x.name()),
-                NameCategory.EXPRESSION));
+        if (x == null)
+        {
+            return factory.makeNullLiteralNode();
+        } else
+        {
+            return factory.makeFieldAccessByNameNode(factory.makeQualifiedNameNode(
+                    factory.makeSimpleNameNode(
+                            factory.makeIdentifierNode("UnaryOperator"),
+                            NameCategory.EXPRESSION
+                            ),
+                    factory.makeIdentifierNode(x.name()),
+                    NameCategory.EXPRESSION));
+        }
     }
     
     protected ExpressionNode expressionizeAccessModifier(AccessModifier x)
     {
-        return factory.makeFieldAccessByNameNode(factory.makeQualifiedNameNode(
-                factory.makeSimpleNameNode(
-                        factory.makeIdentifierNode("AccessModifier"),
-                        NameCategory.EXPRESSION
-                        ),
-                factory.makeIdentifierNode(x.name()),
-                NameCategory.EXPRESSION));
+        if (x == null)
+        {
+            return factory.makeNullLiteralNode();
+        } else
+        {
+            return factory.makeFieldAccessByNameNode(factory.makeQualifiedNameNode(
+                    factory.makeSimpleNameNode(
+                            factory.makeIdentifierNode("AccessModifier"),
+                            NameCategory.EXPRESSION
+                            ),
+                    factory.makeIdentifierNode(x.name()),
+                    NameCategory.EXPRESSION));
+        }
     }
     
     @Override

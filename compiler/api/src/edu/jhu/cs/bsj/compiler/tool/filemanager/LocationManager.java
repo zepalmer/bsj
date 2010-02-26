@@ -1,4 +1,4 @@
-package edu.jhu.cs.bsj.compiler.impl.tool.filemanager;
+package edu.jhu.cs.bsj.compiler.tool.filemanager;
 
 import java.io.Closeable;
 import java.io.Flushable;
@@ -11,8 +11,7 @@ import javax.tools.JavaFileObject.Kind;
 
 /**
  * This interface acts as an abstraction for the BSJ implementation of the {@link JavaFileManager}. This manager
- * represents a single location and serves its requests. This abstraction is useful to allow the BSJ compiler to juggle
- * these locations by constructing different {@link LocationMappedFileManager} objects.
+ * represents a single location and serves its requests.
  * 
  * @author Zachary Palmer
  */

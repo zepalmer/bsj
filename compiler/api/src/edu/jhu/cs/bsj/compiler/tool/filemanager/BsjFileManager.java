@@ -1,4 +1,4 @@
-package edu.jhu.cs.bsj.compiler.impl.tool.filemanager;
+package edu.jhu.cs.bsj.compiler.tool.filemanager;
 
 import java.io.IOException;
 import java.util.Collection;

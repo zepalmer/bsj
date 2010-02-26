@@ -4432,6 +4432,34 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     }
 
     /**
+     * Creates a NullLiteralNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public NullLiteralNode makeNullLiteralNode()
+    {
+        this.before();
+        NullLiteralNode node = factory.makeNullLiteralNode();
+        this.after(node);
+        return node;
+    }
+
+    /**
+     * Creates a NullLiteralNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public NullLiteralNode makeNullLiteralNode(
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        NullLiteralNode node = factory.makeNullLiteralNode(startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+
+    /**
      * Creates a PackageDeclarationNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */

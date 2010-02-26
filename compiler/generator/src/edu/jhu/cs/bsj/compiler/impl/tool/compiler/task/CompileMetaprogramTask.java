@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import edu.jhu.cs.bsj.compiler.BsjServiceRegistry;
 import edu.jhu.cs.bsj.compiler.ast.AccessModifier;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceSerializer;
@@ -35,17 +36,19 @@ import edu.jhu.cs.bsj.compiler.impl.metaprogram.BsjMetaprogram;
 import edu.jhu.cs.bsj.compiler.impl.metaprogram.ContextImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.MetacompilationContext;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.MetaprogramProfile;
-import edu.jhu.cs.bsj.compiler.impl.tool.compiler.StandardBsjCompiler;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.operations.EnclosingNameNodeOperation;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.operations.TypeDeclarationLocatingNodeOperation;
-import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.BsjCompilerLocation;
-import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.BsjFileManager;
-import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.BsjFileObject;
 import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.InMemoryLocationManager;
-import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.LocationManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.LocationMappedFileManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.serializer.BsjSourceSerializerImpl;
 import edu.jhu.cs.bsj.compiler.metaprogram.Context;
+import edu.jhu.cs.bsj.compiler.tool.BsjCompiler;
+import edu.jhu.cs.bsj.compiler.tool.BsjToolkit;
+import edu.jhu.cs.bsj.compiler.tool.BsjToolkitFactory;
+import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjCompilerLocation;
+import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjFileManager;
+import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjFileObject;
+import edu.jhu.cs.bsj.compiler.tool.filemanager.LocationManager;
 
 /**
  * This compilation task compiles a metaprogram using its anchor node.
@@ -75,7 +78,7 @@ public class CompileMetaprogramTask extends AbstractBsjCompilerTask
 	@Override
 	public void execute(MetacompilationContext context) throws IOException
 	{
-		this.factory = context.getFactory();
+		this.factory = context.getToolkit().getNodeFactory();
 		this.metacompilationContext = context;
 		handleAnchor(anchor);
 	}
@@ -330,30 +333,29 @@ public class CompileMetaprogramTask extends AbstractBsjCompilerTask
 		locationMap.put(BsjCompilerLocation.GENERATED_SOURCE_PATH, new InMemoryLocationManager(null));
 		locationMap.put(BsjCompilerLocation.CLASS_OUTPUT, new InMemoryLocationManager(null));
 		// use current metaprogram classpath for metaprogram's meta- and object classpaths
+		BsjFileManager bsjFileManager = metacompilationContext.getToolkit().getFileManager();
 		locationMap.put(BsjCompilerLocation.METAPROGRAM_CLASSPATH,
-				metacompilationContext.getFileManager().getLocationManager(BsjCompilerLocation.METAPROGRAM_CLASSPATH));
+				bsjFileManager.getLocationManager(BsjCompilerLocation.METAPROGRAM_CLASSPATH));
 		locationMap.put(BsjCompilerLocation.METAPROGRAM_SYSTEM_CLASSPATH,
-				metacompilationContext.getFileManager().getLocationManager(
-						BsjCompilerLocation.METAPROGRAM_SYSTEM_CLASSPATH));
+				bsjFileManager.getLocationManager(BsjCompilerLocation.METAPROGRAM_SYSTEM_CLASSPATH));
 		locationMap.put(BsjCompilerLocation.OBJECT_PROGRAM_CLASSPATH,
-				metacompilationContext.getFileManager().getLocationManager(BsjCompilerLocation.METAPROGRAM_CLASSPATH));
+				bsjFileManager.getLocationManager(BsjCompilerLocation.METAPROGRAM_CLASSPATH));
 		locationMap.put(BsjCompilerLocation.OBJECT_PROGRAM_SYSTEM_CLASSPATH,
-				metacompilationContext.getFileManager().getLocationManager(
-						BsjCompilerLocation.METAPROGRAM_SYSTEM_CLASSPATH));
+				bsjFileManager.getLocationManager(BsjCompilerLocation.METAPROGRAM_SYSTEM_CLASSPATH));
 		// TODO: annotation processors should be set to in-memory locations
 
 		BsjFileManager fileManager = new LocationMappedFileManager(locationMap);
 		BsjFileObject metaprogramSourceFile = fileManager.getFileForOutput(BsjCompilerLocation.SOURCE_PATH,
 				metaprogramPackageName, metaprogramClassName + ".bsj", null);
-		// TODO: get from SPI or toolkit or similar
-		// TODO: we shouldn't need to reserialize just to parse again - add compile to API that takes trees
-		BsjSourceSerializer serializer = new BsjSourceSerializerImpl();
+		BsjSourceSerializer serializer = metacompilationContext.getToolkit().getSerializer();
 		String source = serializer.executeCompilationUnitNode(metaprogramCompilationUnitNode, null);
 		metaprogramSourceFile.setCharContent(source);
+	
+		BsjToolkitFactory toolkitFactory = BsjServiceRegistry.newToolkitFactory();
+		toolkitFactory.setFileManager(fileManager);
+		BsjToolkit toolkit = toolkitFactory.newToolkit();
 
-		// TODO: get from SPI or something
-		// TODO: use BsjCompiler interface
-		StandardBsjCompiler compiler = new StandardBsjCompiler(fileManager);
+		BsjCompiler compiler = toolkit.getCompiler();
 		// TODO: if this compilation fails, the resulting exception won't make much sense; we need to translate it back
 		// to the file from which it originated
 		// TODO: perhaps we want to surround the diagnostics that this compilation subprocess produces in a wrapper?
@@ -366,7 +368,7 @@ public class CompileMetaprogramTask extends AbstractBsjCompilerTask
 			metaprogramClass = metaprogramClassCast(metaprogramClassLoader.loadClass(fullyQualifiedMetaprogramClassName));
 		} catch (ClassNotFoundException e)
 		{
-			throw new IllegalStateException("Class we just compiled is not found!", e);
+			throw new IllegalStateException("Class " + fullyQualifiedMetaprogramClassName + " that we just compiled is not found!", e);
 		}
 		Constructor<? extends BsjMetaprogram<A>> constructor;
 		try

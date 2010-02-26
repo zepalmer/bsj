@@ -15,10 +15,9 @@ import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
 import edu.jhu.cs.bsj.compiler.ast.node.NameNode;
 import edu.jhu.cs.bsj.compiler.ast.util.BsjTypedNodeNoOpVisitor;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeFactoryImpl;
-import edu.jhu.cs.bsj.compiler.impl.tool.compiler.names.AmbiguousNameCategorizationVisitor;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.names.InitialNameCategorizationVisitor;
-import edu.jhu.cs.bsj.compiler.impl.tool.compiler.names.PackageOrTypeNameCategorizationVisitor;
 import edu.jhu.cs.bsj.compiler.impl.utils.StringUtilities;
+import edu.jhu.cs.bsj.compiler.tool.parser.BsjParser;
 import edu.jhu.cs.bsj.compiler.tool.parser.BsjParserImpl;
 import edu.jhu.cs.bsj.tests.AbstractPerFileTest;
 
@@ -41,7 +40,7 @@ public class NameCategorizationTest extends AbstractPerFileTest
 	protected boolean doFileTest(File file) throws Exception
 	{
 		// TODO: get from SPI
-		BsjParserImpl parser = new BsjParserImpl(new BsjNodeFactoryImpl(null));
+		BsjParser parser = new BsjParserImpl(new BsjNodeFactoryImpl(null));
 		CompilationUnitNode node = parser.parse(StringUtilities.removeSuffix(file.getName(), '.'),
 				new InputStreamReader(new FileInputStream(file)), new DiagnosticListener<JavaFileObject>()
 				{
@@ -85,13 +84,13 @@ public class NameCategorizationTest extends AbstractPerFileTest
 		// unit test make assertions about the log4j output.
 
 		// Identify packages and types
-		PackageOrTypeNameCategorizationVisitor packageOrTypeNameCategorizationVisitor = new PackageOrTypeNameCategorizationVisitor(null);
-		node.receiveTyped(packageOrTypeNameCategorizationVisitor);
+		//PackageOrTypeNameCategorizationVisitor packageOrTypeNameCategorizationVisitor = new PackageOrTypeNameCategorizationVisitor(null);
+		//node.receiveTyped(packageOrTypeNameCategorizationVisitor);
 		// TODO: confirm that there are no PackageOrTypeNames left
 
 		// Disambiguate
-		AmbiguousNameCategorizationVisitor ambiguousNameCategorizationVisitor = new AmbiguousNameCategorizationVisitor();
-		node.receiveTyped(ambiguousNameCategorizationVisitor);
+		//AmbiguousNameCategorizationVisitor ambiguousNameCategorizationVisitor = new AmbiguousNameCategorizationVisitor();
+		//node.receiveTyped(ambiguousNameCategorizationVisitor);
 		// TODO: confirm that either the visit failed to completely disambiguate or that no names are ambiguous
 
 		// TODO: rest of categorization

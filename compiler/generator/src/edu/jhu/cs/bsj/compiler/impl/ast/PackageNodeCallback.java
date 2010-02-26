@@ -13,10 +13,10 @@ import javax.tools.JavaFileObject.Kind;
 import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
 import edu.jhu.cs.bsj.compiler.ast.node.PackageNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.MetacompilationManager;
-import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.BsjCompilerLocation;
-import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.BsjFileManager;
-import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.BsjFileObject;
 import edu.jhu.cs.bsj.compiler.impl.utils.StringUtilities;
+import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjCompilerLocation;
+import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjFileManager;
+import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjFileObject;
 
 /**
  * A callback module for package nodes. This allows package nodes to request the load of specific compilation units into
@@ -131,9 +131,15 @@ public class PackageNodeCallback
 	 * @param packageNode The package node making the request.
 	 * @param name The name of the compilation unit.
 	 * @return The {@link CompilationUnitNode} which was found or <code>null</code> if no such compilation unit exists.
+	 * @throws IllegalStateException If no compilation is currently under way.
 	 */
 	public CompilationUnitNode load(PackageNode packageNode, String name)
 	{
+		// TODO: is this really the right behavior?
+		// Examine runtime non-compilation use cases of the factory and see if this makes sense
+		if (this.metacompilationManager == null)
+			throw new IllegalStateException("Request to load source when no compilation is under way.");
+		
 		String pname = packageNode.getFullyQualifiedName();
 		if (pname == null)
 		{

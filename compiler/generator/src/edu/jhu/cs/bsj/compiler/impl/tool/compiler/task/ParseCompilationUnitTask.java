@@ -7,9 +7,9 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
 import edu.jhu.cs.bsj.compiler.ast.node.PackageNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.MetacompilationContext;
-import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.BsjFileObject;
 import edu.jhu.cs.bsj.compiler.impl.utils.StringUtilities;
-import edu.jhu.cs.bsj.compiler.tool.parser.BsjParserImpl;
+import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjFileObject;
+import edu.jhu.cs.bsj.compiler.tool.parser.BsjParser;
 
 /**
  * Parses a compilation unit contained in a source file.
@@ -35,13 +35,12 @@ public class ParseCompilationUnitTask extends AbstractBsjCompilerTask
 	@Override
 	public void execute(MetacompilationContext context) throws IOException
 	{
-		BsjNodeFactory factory = context.getFactory();
+		BsjNodeFactory factory = context.getToolkit().getNodeFactory();
 		PackageNode rootPackage = context.getRootPackage();
 
 		// Parse the file into a compilation unit
 		Reader reader = file.openReader(true); // TODO: parameterize ignoring of encoding errors?
-		// TODO: get a standard BsjParser once that interface exists
-		BsjParserImpl parser = new BsjParserImpl(context.getFactory());
+		BsjParser parser = context.getToolkit().getParser();
 		String compilationUnitName = StringUtilities.getSuffix(file.inferBinaryName(), '.');
 		CompilationUnitNode node = parser.parse(compilationUnitName, reader, context.getDiagnosticListener());
 
