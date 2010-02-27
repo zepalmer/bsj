@@ -2170,7 +2170,6 @@ public class SourceGenerator
 			dps.println("{");
 			dps.incPrependCount();
 			dps.print("super");
-			// TODO: override map
 			Map<String, String> overrideMap = new HashMap<String, String>();
 			for (PropertyDefinition prop : superParams)
 			{
