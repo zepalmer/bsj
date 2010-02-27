@@ -8,7 +8,6 @@ import edu.jhu.cs.bsj.compiler.ast.BsjSourceSerializer;
 import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
 import edu.jhu.cs.bsj.compiler.ast.node.PackageNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.MetacompilationContext;
-import edu.jhu.cs.bsj.compiler.impl.tool.serializer.BsjSourceSerializerImpl;
 import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjCompilerLocation;
 import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjFileObject;
 
@@ -33,8 +32,7 @@ public class SourceSerializationTask extends AbstractBsjCompilerTask
 	public void execute(MetacompilationContext context) throws IOException
 	{
 		// TODO: don't try to serialize code for read-only compilation units
-		// TODO: is there a better way to fetch a source serializer? SPI? Toolkit?
-		BsjSourceSerializer serializer = new BsjSourceSerializerImpl();
+		BsjSourceSerializer serializer = context.getToolkit().getSerializer();
 		String source = serializer.executeCompilationUnitNode(compilationUnitNode, null);
 		
 		String className;
