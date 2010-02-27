@@ -710,12 +710,6 @@ public class SourceGenerator
 			return defInstanceOf(map.get(propType), classname);
 		}
 
-		// TODO: deprecate this method
-		protected List<PropertyDefinition> getRecursiveProps(TypeDefinition def)
-		{
-			return def.getRecursiveProperties();
-		}
-
 		public abstract void useDefinition(TypeDefinition def) throws IOException;
 
 		protected void propAbstract(PropertyTypeAbstractor abstractor, PropertyDefinition p, PrependablePrintStream ps,
@@ -816,7 +810,7 @@ public class SourceGenerator
 				ps.println("/* (not generating constructor)"); // nogen logic
 			ps.print("    " + (def.getMode() == TypeDefinition.Mode.CONCRETE ? "public" : "protected") + " "
 					+ rawclassname);
-			List<PropertyDefinition> recProps = getRecursiveProps(def);
+			List<PropertyDefinition> recProps = def.getRecursiveProperties();
 			printParameterList(ps, recProps);
 			ps.println();
 			ps.println("    {");
@@ -1480,7 +1474,7 @@ public class SourceGenerator
 
 			if (def.getMode() == TypeDefinition.Mode.CONCRETE)
 			{
-				List<PropertyDefinition> recProps = getRecursiveProps(def);
+				List<PropertyDefinition> recProps = def.getRecursiveProperties();
 
 				// Write normal factory method
 				List<FactoryMethodPropertyDefinition> standardFactoryMethodProperties = new ArrayList<FactoryMethodPropertyDefinition>();
@@ -1552,7 +1546,7 @@ public class SourceGenerator
 			String typeParamS = typeParam == null ? "" : ("<" + typeParam + "> ");
 
 			// Property analysis: what is required as input?
-			List<PropertyDefinition> recProps = getRecursiveProps(def);
+			List<PropertyDefinition> recProps = def.getRecursiveProperties();
 			List<PropertyDefinition> argProps = new ArrayList<PropertyDefinition>();
 			for (PropertyDefinition recProp : recProps)
 			{
@@ -1918,7 +1912,7 @@ public class SourceGenerator
 		@Override
 		public void useDefinition(TypeDefinition def) throws IOException
 		{
-			List<PropertyDefinition> recProp = this.getRecursiveProps(def);
+			List<PropertyDefinition> recProp = def.getRecursiveProperties();
 			if (def.getMode() != TypeDefinition.Mode.CONCRETE)
 				return;
 
