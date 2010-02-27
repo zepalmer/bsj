@@ -95,6 +95,7 @@ public class PackageNodeCallback
 		} catch (IOException ioe)
 		{
 			// TODO: how do we handle this?
+			throw new IllegalStateException(ioe);
 		}
 		
 		return files;
