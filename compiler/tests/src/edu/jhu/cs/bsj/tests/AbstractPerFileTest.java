@@ -26,7 +26,7 @@ public abstract class AbstractPerFileTest extends AbstractTest
 				findAndTestJavaFiles(file);
 			} else if (file.getName().endsWith(".java"))
 			{
-				System.out.println("Testing " + file.getAbsolutePath());
+				LOGGER.info("Testing " + file.getAbsolutePath());
 				try
 				{
 					assertTrue(doFileTest(file));

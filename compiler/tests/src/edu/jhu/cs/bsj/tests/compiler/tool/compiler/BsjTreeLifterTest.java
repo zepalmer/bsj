@@ -8,20 +8,18 @@ import java.io.InputStreamReader;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import javax.tools.JavaCompiler;
+import javax.tools.Diagnostic;
+import javax.tools.DiagnosticListener;
 import javax.tools.JavaFileObject;
-import javax.tools.StandardLocation;
-import javax.tools.ToolProvider;
 import javax.tools.JavaFileObject.Kind;
 
 import junit.framework.Assert;
 
 import org.junit.Test;
 
+import edu.jhu.cs.bsj.compiler.BsjServiceRegistry;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceSerializer;
 import edu.jhu.cs.bsj.compiler.ast.NameCategory;
@@ -31,14 +29,13 @@ import edu.jhu.cs.bsj.compiler.ast.node.MethodDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeFactoryImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.BsjTreeLifter;
-import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.InMemoryLocationManager;
-import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.LocationMappedFileManager;
-import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.UnionLocationManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.serializer.BsjSourceSerializerImpl;
 import edu.jhu.cs.bsj.compiler.impl.utils.StringUtilities;
+import edu.jhu.cs.bsj.compiler.tool.BsjToolkit;
+import edu.jhu.cs.bsj.compiler.tool.BsjToolkitFactory;
+import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjCompilerLocation;
 import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjFileManager;
 import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjFileObject;
-import edu.jhu.cs.bsj.compiler.tool.filemanager.LocationManager;
 import edu.jhu.cs.bsj.compiler.tool.parser.BsjParser;
 import edu.jhu.cs.bsj.compiler.tool.parser.BsjParserImpl;
 import edu.jhu.cs.bsj.tests.AbstractPerFileTest;
@@ -150,8 +147,9 @@ public class BsjTreeLifterTest extends AbstractPerFileTest
 	public CompilationUnitNode compileMeta(ExpressionNode code, String factoryName, List<MethodDeclarationNode> methods)
 			throws Exception
 	{
-		BsjSourceSerializer serializer = new BsjSourceSerializerImpl();
-
+		log4jConfigure("debug", "edu.jhu.cs.bsj.compiler.impl.tool.filemanager/debug",
+		"edu.jhu.cs.bsj.compiler.tool.parser.antlr/debug");
+		
 		// build the source for the wrapper that runs the lifted code
 		StringBuilder sb = new StringBuilder();
 		for (String s : META_IMPORTS)
@@ -159,7 +157,11 @@ public class BsjTreeLifterTest extends AbstractPerFileTest
 			sb.append("import ").append(s).append(";\n");
 		}
 		sb.append("public class WrapperClass\n{\n");
-		sb.append("static BsjNodeFactory " + factoryName + " = new BsjNodeFactoryImpl();\n");
+		sb.append("private BsjNodeFactory " + factoryName + ";\n");
+		sb.append("public WrapperClass(BsjNodeFactory " + factoryName + ")\n");
+		sb.append("{\n");
+		sb.append("    this." + factoryName + " = " + factoryName + ";\n");
+		sb.append("}\n");
 		sb.append("public Node runLiftedCode()\n{\n\nreturn ");
 		sb.append(code.executeOperation(serializer, null));
 		sb.append(";\n}\n");
@@ -172,33 +174,46 @@ public class BsjTreeLifterTest extends AbstractPerFileTest
 		String wrapperCode = sb.toString();
 
 		// setup the compilation environment
-		JavaCompiler jc = ToolProvider.getSystemJavaCompiler();
-		Map<StandardLocation, LocationManager> map = new HashMap<StandardLocation, LocationManager>();
-		map.put(StandardLocation.SOURCE_PATH, new InMemoryLocationManager(null));
-		map.put(StandardLocation.SOURCE_OUTPUT, new InMemoryLocationManager(null));
-		map.put(StandardLocation.PLATFORM_CLASS_PATH, new UnionLocationManager(null,
-				System.getProperty("sun.boot.class.path")));
-		map.put(StandardLocation.CLASS_PATH, new UnionLocationManager(null, System.getProperty("java.class.path")));
-		map.put(StandardLocation.CLASS_OUTPUT, new InMemoryLocationManager(null));
-		map.put(StandardLocation.ANNOTATION_PROCESSOR_PATH, new InMemoryLocationManager(null));
-		BsjFileManager bfm = new LocationMappedFileManager(map);
+		BsjFileManager bfm = getFileManager(null);
 
 		// get our wrapper source file
-		BsjFileObject bfo = bfm.getJavaFileForOutput(StandardLocation.SOURCE_PATH, "WrapperClass", Kind.SOURCE, null);
+		if (LOGGER.isTraceEnabled())
+		{
+			LOGGER.trace("Generated wrapper code: " + wrapperCode);
+		}
+		BsjFileObject bfo = bfm.getJavaFileForOutput(BsjCompilerLocation.SOURCE_PATH, "WrapperClass", Kind.SOURCE, null);
 		bfo.setCharContent(wrapperCode);
-		List<JavaFileObject> fileObjects = Arrays.<JavaFileObject> asList(bfo);
+		List<BsjFileObject> fileObjects = Arrays.asList(bfo);
+
+		// create a toolkit
+		BsjToolkitFactory toolkitFactory = BsjServiceRegistry.newToolkitFactory();
+		toolkitFactory.setFileManager(bfm);
+		BsjToolkit toolkit = toolkitFactory.newToolkit();
 
 		// compile
-		if (!(jc.getTask(null, bfm, null, null, null, fileObjects).call()))
+		final boolean[] success = new boolean[] { true };
+		toolkit.getCompiler().compile(fileObjects, new DiagnosticListener<JavaFileObject>()
 		{
-			Assert.fail("Compilation failure.");
-		}
-		bfm.close();
+			@Override
+			public void report(Diagnostic<? extends JavaFileObject> diagnostic)
+			{
+				if (diagnostic.getKind() == Diagnostic.Kind.ERROR)
+				{
+					success[0] = false;
+					System.err.println(diagnostic.getMessage(null));
+				} else
+				{
+					System.out.println(diagnostic.getMessage(null));
+				}
+			}
+		});
+		Assert.assertTrue(success[0]);
 
 		// run the compiled wrapper and return the node created by the lifted code
-		Class<?> wrapper = bfm.getClassLoader(StandardLocation.CLASS_OUTPUT).loadClass("WrapperClass");
+		Class<?> wrapper = bfm.getClassLoader(BsjCompilerLocation.CLASS_OUTPUT).loadClass("WrapperClass");
 		Method method = wrapper.getDeclaredMethod("runLiftedCode", (Class<?>[]) null);
-		Object object = wrapper.newInstance();
+		Object object = wrapper.getConstructor(BsjNodeFactory.class).newInstance(toolkit.getNodeFactory());
+		bfm.close();
 		return (CompilationUnitNode) method.invoke(object, (Object[]) null);
 	}
 }
