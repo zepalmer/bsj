@@ -266,7 +266,6 @@ public class CompileMetaprogramTask extends AbstractBsjCompilerTask
 		}
 
 		// Get metaprogram class name
-		// TODO: get a unique identifier
 		String metaprogramClassName = "BsjMetaprogram" + metaprogramNode.getUid();
 		String fullyQualifiedMetaprogramClassName = metaprogramPackageName + "." + metaprogramClassName;
 
