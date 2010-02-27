@@ -34,8 +34,6 @@ import edu.jhu.cs.bsj.compiler.tool.filemanager.LocationManager;
  */
 public class StandardBsjCompiler implements BsjCompiler
 {
-	// TODO: export some of these functions to the BsjCompiler interface.
-
 	/**
 	 * The logging for this compiler.
 	 */
