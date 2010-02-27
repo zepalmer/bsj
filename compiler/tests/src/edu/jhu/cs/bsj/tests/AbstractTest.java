@@ -11,6 +11,8 @@ import org.apache.log4j.PropertyConfigurator;
 import edu.jhu.cs.bsj.compiler.BsjServiceRegistry;
 import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.RegularFileLocationManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.UnionLocationManager;
+import edu.jhu.cs.bsj.compiler.tool.BsjToolkit;
+import edu.jhu.cs.bsj.compiler.tool.BsjToolkitFactory;
 import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjCompilerLocation;
 import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjFileManager;
 import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjFileManagerFactory;
@@ -60,7 +62,7 @@ public abstract class AbstractTest
 		}
 		PropertyConfigurator.configure(loggingProperties);
 	}
-	
+
 	private static File getTestDir(String suffix)
 	{
 		return new File("." + File.separator + "local" + File.separator + suffix);
@@ -76,7 +78,7 @@ public abstract class AbstractTest
 	protected BsjFileManager getFileManager(File sourcePath) throws Exception
 	{
 		BsjFileManagerFactory fileManagerFactory = BsjServiceRegistry.newFileManagerFactory();
-		
+
 		Map<BsjCompilerLocation, LocationManager> map = new HashMap<BsjCompilerLocation, LocationManager>();
 
 		File test = new File("." + File.separator + "local");
@@ -106,5 +108,12 @@ public abstract class AbstractTest
 
 		fileManagerFactory.setLocationManagerMappingsByManager(map);
 		return fileManagerFactory.newFileManager();
+	}
+
+	protected BsjToolkit getToolkit(File sourcePath) throws Exception
+	{
+		BsjToolkitFactory bsjToolkitFactory = BsjServiceRegistry.newToolkitFactory();
+		bsjToolkitFactory.setFileManager(getFileManager(sourcePath));
+		return bsjToolkitFactory.newToolkit();
 	}
 }

@@ -40,7 +40,6 @@ import edu.jhu.cs.bsj.compiler.impl.tool.compiler.operations.EnclosingNameNodeOp
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.operations.TypeDeclarationLocatingNodeOperation;
 import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.InMemoryLocationManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.LocationMappedFileManager;
-import edu.jhu.cs.bsj.compiler.impl.tool.serializer.BsjSourceSerializerImpl;
 import edu.jhu.cs.bsj.compiler.metaprogram.Context;
 import edu.jhu.cs.bsj.compiler.tool.BsjCompiler;
 import edu.jhu.cs.bsj.compiler.tool.BsjToolkit;
@@ -313,8 +312,7 @@ public class CompileMetaprogramTask extends AbstractBsjCompilerTask
 
 		if (LOGGER.isTraceEnabled())
 		{
-			// TODO: get from SPI or toolkit
-			BsjSourceSerializer serializer = new BsjSourceSerializerImpl();
+			BsjSourceSerializer serializer = metacompilationContext.getToolkit().getSerializer();
 			String source = serializer.executeCompilationUnitNode(metaprogramCompilationUnitNode, null);
 			LOGGER.trace("Generated metaprogram class " + fullyQualifiedMetaprogramClassName + " for "
 					+ metaprogramDescription + "; source looks like this: \n" + source);
