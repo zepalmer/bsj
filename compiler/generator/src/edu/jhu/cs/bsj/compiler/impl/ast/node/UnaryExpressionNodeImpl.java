@@ -52,14 +52,14 @@ public class UnaryExpressionNodeImpl extends NodeImpl implements UnaryExpression
      */
     public void setExpression(ExpressionNode expression)
     {
-        if (this.expression instanceof NodeImpl)
+        if (this.expression != null)
         {
-            ((NodeImpl)this.expression).setParent(null);
+            getManager().removeParent(this, this.expression);
         }
         this.expression = expression;
-        if (this.expression instanceof NodeImpl)
+        if (this.expression != null)
         {
-            ((NodeImpl)this.expression).setParent(this);
+            getManager().addParent(this, this.expression);
         }
     }
 

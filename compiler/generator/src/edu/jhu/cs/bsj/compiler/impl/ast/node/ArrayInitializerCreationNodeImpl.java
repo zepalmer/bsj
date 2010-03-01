@@ -49,14 +49,14 @@ public class ArrayInitializerCreationNodeImpl extends ArrayCreationNodeImpl impl
      */
     public void setInitializer(ArrayInitializerNode initializer)
     {
-        if (this.initializer instanceof NodeImpl)
+        if (this.initializer != null)
         {
-            ((NodeImpl)this.initializer).setParent(null);
+            getManager().removeParent(this, this.initializer);
         }
         this.initializer = initializer;
-        if (this.initializer instanceof NodeImpl)
+        if (this.initializer != null)
         {
-            ((NodeImpl)this.initializer).setParent(this);
+            getManager().addParent(this, this.initializer);
         }
     }
 

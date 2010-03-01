@@ -46,14 +46,14 @@ public class ExpressionStatementNodeImpl extends NodeImpl implements ExpressionS
      */
     public void setExpression(StatementExpressionNode expression)
     {
-        if (this.expression instanceof NodeImpl)
+        if (this.expression != null)
         {
-            ((NodeImpl)this.expression).setParent(null);
+            getManager().removeParent(this, this.expression);
         }
         this.expression = expression;
-        if (this.expression instanceof NodeImpl)
+        if (this.expression != null)
         {
-            ((NodeImpl)this.expression).setParent(this);
+            getManager().addParent(this, this.expression);
         }
     }
 

@@ -78,14 +78,14 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
      */
     public void setPackageDeclaration(PackageDeclarationNode packageDeclaration)
     {
-        if (this.packageDeclaration instanceof NodeImpl)
+        if (this.packageDeclaration != null)
         {
-            ((NodeImpl)this.packageDeclaration).setParent(null);
+            getManager().removeParent(this, this.packageDeclaration);
         }
         this.packageDeclaration = packageDeclaration;
-        if (this.packageDeclaration instanceof NodeImpl)
+        if (this.packageDeclaration != null)
         {
-            ((NodeImpl)this.packageDeclaration).setParent(this);
+            getManager().addParent(this, this.packageDeclaration);
         }
     }
 
@@ -104,14 +104,14 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
      */
     public void setMetaimports(MetaprogramImportListNode metaimports)
     {
-        if (this.metaimports instanceof NodeImpl)
+        if (this.metaimports != null)
         {
-            ((NodeImpl)this.metaimports).setParent(null);
+            getManager().removeParent(this, this.metaimports);
         }
         this.metaimports = metaimports;
-        if (this.metaimports instanceof NodeImpl)
+        if (this.metaimports != null)
         {
-            ((NodeImpl)this.metaimports).setParent(this);
+            getManager().addParent(this, this.metaimports);
         }
     }
 
@@ -130,14 +130,14 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
      */
     public void setImports(ImportListNode imports)
     {
-        if (this.imports instanceof NodeImpl)
+        if (this.imports != null)
         {
-            ((NodeImpl)this.imports).setParent(null);
+            getManager().removeParent(this, this.imports);
         }
         this.imports = imports;
-        if (this.imports instanceof NodeImpl)
+        if (this.imports != null)
         {
-            ((NodeImpl)this.imports).setParent(this);
+            getManager().addParent(this, this.imports);
         }
     }
 
@@ -156,14 +156,14 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
      */
     public void setTypeDecls(TypeDeclarationListNode typeDecls)
     {
-        if (this.typeDecls instanceof NodeImpl)
+        if (this.typeDecls != null)
         {
-            ((NodeImpl)this.typeDecls).setParent(null);
+            getManager().removeParent(this, this.typeDecls);
         }
         this.typeDecls = typeDecls;
-        if (this.typeDecls instanceof NodeImpl)
+        if (this.typeDecls != null)
         {
-            ((NodeImpl)this.typeDecls).setParent(this);
+            getManager().addParent(this, this.typeDecls);
         }
     }
 

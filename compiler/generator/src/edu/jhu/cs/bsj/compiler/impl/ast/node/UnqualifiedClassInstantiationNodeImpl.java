@@ -52,14 +52,14 @@ public class UnqualifiedClassInstantiationNodeImpl extends ClassInstantiationNod
      */
     public void setType(DeclaredTypeNode type)
     {
-        if (this.type instanceof NodeImpl)
+        if (this.type != null)
         {
-            ((NodeImpl)this.type).setParent(null);
+            getManager().removeParent(this, this.type);
         }
         this.type = type;
-        if (this.type instanceof NodeImpl)
+        if (this.type != null)
         {
-            ((NodeImpl)this.type).setParent(this);
+            getManager().addParent(this, this.type);
         }
     }
 

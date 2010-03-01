@@ -52,14 +52,14 @@ public class SwitchNodeImpl extends NodeImpl implements SwitchNode
      */
     public void setExpression(ExpressionNode expression)
     {
-        if (this.expression instanceof NodeImpl)
+        if (this.expression != null)
         {
-            ((NodeImpl)this.expression).setParent(null);
+            getManager().removeParent(this, this.expression);
         }
         this.expression = expression;
-        if (this.expression instanceof NodeImpl)
+        if (this.expression != null)
         {
-            ((NodeImpl)this.expression).setParent(this);
+            getManager().addParent(this, this.expression);
         }
     }
 
@@ -78,14 +78,14 @@ public class SwitchNodeImpl extends NodeImpl implements SwitchNode
      */
     public void setCases(CaseListNode cases)
     {
-        if (this.cases instanceof NodeImpl)
+        if (this.cases != null)
         {
-            ((NodeImpl)this.cases).setParent(null);
+            getManager().removeParent(this, this.cases);
         }
         this.cases = cases;
-        if (this.cases instanceof NodeImpl)
+        if (this.cases != null)
         {
-            ((NodeImpl)this.cases).setParent(this);
+            getManager().addParent(this, this.cases);
         }
     }
 

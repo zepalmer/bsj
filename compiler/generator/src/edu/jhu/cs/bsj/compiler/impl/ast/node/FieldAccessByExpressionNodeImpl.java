@@ -52,14 +52,14 @@ public class FieldAccessByExpressionNodeImpl extends NodeImpl implements FieldAc
      */
     public void setExpression(PrimaryExpressionNode expression)
     {
-        if (this.expression instanceof NodeImpl)
+        if (this.expression != null)
         {
-            ((NodeImpl)this.expression).setParent(null);
+            getManager().removeParent(this, this.expression);
         }
         this.expression = expression;
-        if (this.expression instanceof NodeImpl)
+        if (this.expression != null)
         {
-            ((NodeImpl)this.expression).setParent(this);
+            getManager().addParent(this, this.expression);
         }
     }
 
@@ -78,14 +78,14 @@ public class FieldAccessByExpressionNodeImpl extends NodeImpl implements FieldAc
      */
     public void setIdentifier(IdentifierNode identifier)
     {
-        if (this.identifier instanceof NodeImpl)
+        if (this.identifier != null)
         {
-            ((NodeImpl)this.identifier).setParent(null);
+            getManager().removeParent(this, this.identifier);
         }
         this.identifier = identifier;
-        if (this.identifier instanceof NodeImpl)
+        if (this.identifier != null)
         {
-            ((NodeImpl)this.identifier).setParent(this);
+            getManager().addParent(this, this.identifier);
         }
     }
 

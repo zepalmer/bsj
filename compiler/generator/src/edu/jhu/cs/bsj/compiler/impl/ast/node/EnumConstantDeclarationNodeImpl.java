@@ -70,14 +70,14 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
      */
     public void setAnnotations(AnnotationListNode annotations)
     {
-        if (this.annotations instanceof NodeImpl)
+        if (this.annotations != null)
         {
-            ((NodeImpl)this.annotations).setParent(null);
+            getManager().removeParent(this, this.annotations);
         }
         this.annotations = annotations;
-        if (this.annotations instanceof NodeImpl)
+        if (this.annotations != null)
         {
-            ((NodeImpl)this.annotations).setParent(this);
+            getManager().addParent(this, this.annotations);
         }
     }
 
@@ -96,14 +96,14 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
      */
     public void setIdentifier(IdentifierNode identifier)
     {
-        if (this.identifier instanceof NodeImpl)
+        if (this.identifier != null)
         {
-            ((NodeImpl)this.identifier).setParent(null);
+            getManager().removeParent(this, this.identifier);
         }
         this.identifier = identifier;
-        if (this.identifier instanceof NodeImpl)
+        if (this.identifier != null)
         {
-            ((NodeImpl)this.identifier).setParent(this);
+            getManager().addParent(this, this.identifier);
         }
     }
 
@@ -122,14 +122,14 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
      */
     public void setArguments(ExpressionListNode arguments)
     {
-        if (this.arguments instanceof NodeImpl)
+        if (this.arguments != null)
         {
-            ((NodeImpl)this.arguments).setParent(null);
+            getManager().removeParent(this, this.arguments);
         }
         this.arguments = arguments;
-        if (this.arguments instanceof NodeImpl)
+        if (this.arguments != null)
         {
-            ((NodeImpl)this.arguments).setParent(this);
+            getManager().addParent(this, this.arguments);
         }
     }
 
@@ -148,14 +148,14 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
      */
     public void setBody(AnonymousClassBodyNode body)
     {
-        if (this.body instanceof NodeImpl)
+        if (this.body != null)
         {
-            ((NodeImpl)this.body).setParent(null);
+            getManager().removeParent(this, this.body);
         }
         this.body = body;
-        if (this.body instanceof NodeImpl)
+        if (this.body != null)
         {
-            ((NodeImpl)this.body).setParent(this);
+            getManager().addParent(this, this.body);
         }
     }
 
@@ -174,14 +174,14 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
      */
     public void setJavadoc(JavadocNode javadoc)
     {
-        if (this.javadoc instanceof NodeImpl)
+        if (this.javadoc != null)
         {
-            ((NodeImpl)this.javadoc).setParent(null);
+            getManager().removeParent(this, this.javadoc);
         }
         this.javadoc = javadoc;
-        if (this.javadoc instanceof NodeImpl)
+        if (this.javadoc != null)
         {
-            ((NodeImpl)this.javadoc).setParent(this);
+            getManager().addParent(this, this.javadoc);
         }
     }
 

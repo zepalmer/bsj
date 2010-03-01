@@ -48,14 +48,14 @@ public abstract class ArrayCreationNodeImpl extends NodeImpl implements ArrayCre
      */
     public void setBaseType(BaseTypeNode baseType)
     {
-        if (this.baseType instanceof NodeImpl)
+        if (this.baseType != null)
         {
-            ((NodeImpl)this.baseType).setParent(null);
+            getManager().removeParent(this, this.baseType);
         }
         this.baseType = baseType;
-        if (this.baseType instanceof NodeImpl)
+        if (this.baseType != null)
         {
-            ((NodeImpl)this.baseType).setParent(this);
+            getManager().addParent(this, this.baseType);
         }
     }
 

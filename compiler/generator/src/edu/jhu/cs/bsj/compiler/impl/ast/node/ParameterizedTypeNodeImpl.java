@@ -52,14 +52,14 @@ public class ParameterizedTypeNodeImpl extends NodeImpl implements Parameterized
      */
     public void setBaseType(UnparameterizedTypeNode baseType)
     {
-        if (this.baseType instanceof NodeImpl)
+        if (this.baseType != null)
         {
-            ((NodeImpl)this.baseType).setParent(null);
+            getManager().removeParent(this, this.baseType);
         }
         this.baseType = baseType;
-        if (this.baseType instanceof NodeImpl)
+        if (this.baseType != null)
         {
-            ((NodeImpl)this.baseType).setParent(this);
+            getManager().addParent(this, this.baseType);
         }
     }
 
@@ -78,14 +78,14 @@ public class ParameterizedTypeNodeImpl extends NodeImpl implements Parameterized
      */
     public void setTypeArguments(TypeArgumentListNode typeArguments)
     {
-        if (this.typeArguments instanceof NodeImpl)
+        if (this.typeArguments != null)
         {
-            ((NodeImpl)this.typeArguments).setParent(null);
+            getManager().removeParent(this, this.typeArguments);
         }
         this.typeArguments = typeArguments;
-        if (this.typeArguments instanceof NodeImpl)
+        if (this.typeArguments != null)
         {
-            ((NodeImpl)this.typeArguments).setParent(this);
+            getManager().addParent(this, this.typeArguments);
         }
     }
 

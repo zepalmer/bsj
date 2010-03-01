@@ -71,14 +71,14 @@ public class EnumDeclarationNodeImpl extends NodeImpl implements EnumDeclaration
      */
     public void setModifiers(EnumModifiersNode modifiers)
     {
-        if (this.modifiers instanceof NodeImpl)
+        if (this.modifiers != null)
         {
-            ((NodeImpl)this.modifiers).setParent(null);
+            getManager().removeParent(this, this.modifiers);
         }
         this.modifiers = modifiers;
-        if (this.modifiers instanceof NodeImpl)
+        if (this.modifiers != null)
         {
-            ((NodeImpl)this.modifiers).setParent(this);
+            getManager().addParent(this, this.modifiers);
         }
     }
 
@@ -97,14 +97,14 @@ public class EnumDeclarationNodeImpl extends NodeImpl implements EnumDeclaration
      */
     public void setImplementsClause(DeclaredTypeListNode implementsClause)
     {
-        if (this.implementsClause instanceof NodeImpl)
+        if (this.implementsClause != null)
         {
-            ((NodeImpl)this.implementsClause).setParent(null);
+            getManager().removeParent(this, this.implementsClause);
         }
         this.implementsClause = implementsClause;
-        if (this.implementsClause instanceof NodeImpl)
+        if (this.implementsClause != null)
         {
-            ((NodeImpl)this.implementsClause).setParent(this);
+            getManager().addParent(this, this.implementsClause);
         }
     }
 
@@ -123,14 +123,14 @@ public class EnumDeclarationNodeImpl extends NodeImpl implements EnumDeclaration
      */
     public void setBody(EnumBodyNode body)
     {
-        if (this.body instanceof NodeImpl)
+        if (this.body != null)
         {
-            ((NodeImpl)this.body).setParent(null);
+            getManager().removeParent(this, this.body);
         }
         this.body = body;
-        if (this.body instanceof NodeImpl)
+        if (this.body != null)
         {
-            ((NodeImpl)this.body).setParent(this);
+            getManager().addParent(this, this.body);
         }
     }
 
@@ -149,14 +149,14 @@ public class EnumDeclarationNodeImpl extends NodeImpl implements EnumDeclaration
      */
     public void setIdentifier(IdentifierNode identifier)
     {
-        if (this.identifier instanceof NodeImpl)
+        if (this.identifier != null)
         {
-            ((NodeImpl)this.identifier).setParent(null);
+            getManager().removeParent(this, this.identifier);
         }
         this.identifier = identifier;
-        if (this.identifier instanceof NodeImpl)
+        if (this.identifier != null)
         {
-            ((NodeImpl)this.identifier).setParent(this);
+            getManager().addParent(this, this.identifier);
         }
     }
 
@@ -175,14 +175,14 @@ public class EnumDeclarationNodeImpl extends NodeImpl implements EnumDeclaration
      */
     public void setJavadoc(JavadocNode javadoc)
     {
-        if (this.javadoc instanceof NodeImpl)
+        if (this.javadoc != null)
         {
-            ((NodeImpl)this.javadoc).setParent(null);
+            getManager().removeParent(this, this.javadoc);
         }
         this.javadoc = javadoc;
-        if (this.javadoc instanceof NodeImpl)
+        if (this.javadoc != null)
         {
-            ((NodeImpl)this.javadoc).setParent(this);
+            getManager().addParent(this, this.javadoc);
         }
     }
 

@@ -52,14 +52,14 @@ public class ConstructorBodyNodeImpl extends NodeImpl implements ConstructorBody
      */
     public void setConstructorInvocation(ConstructorInvocationNode constructorInvocation)
     {
-        if (this.constructorInvocation instanceof NodeImpl)
+        if (this.constructorInvocation != null)
         {
-            ((NodeImpl)this.constructorInvocation).setParent(null);
+            getManager().removeParent(this, this.constructorInvocation);
         }
         this.constructorInvocation = constructorInvocation;
-        if (this.constructorInvocation instanceof NodeImpl)
+        if (this.constructorInvocation != null)
         {
-            ((NodeImpl)this.constructorInvocation).setParent(this);
+            getManager().addParent(this, this.constructorInvocation);
         }
     }
 
@@ -78,14 +78,14 @@ public class ConstructorBodyNodeImpl extends NodeImpl implements ConstructorBody
      */
     public void setStatements(BlockStatementListNode statements)
     {
-        if (this.statements instanceof NodeImpl)
+        if (this.statements != null)
         {
-            ((NodeImpl)this.statements).setParent(null);
+            getManager().removeParent(this, this.statements);
         }
         this.statements = statements;
-        if (this.statements instanceof NodeImpl)
+        if (this.statements != null)
         {
-            ((NodeImpl)this.statements).setParent(this);
+            getManager().addParent(this, this.statements);
         }
     }
 

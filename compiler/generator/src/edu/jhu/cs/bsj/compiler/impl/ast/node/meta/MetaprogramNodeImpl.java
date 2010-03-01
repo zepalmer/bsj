@@ -53,14 +53,14 @@ public class MetaprogramNodeImpl extends NodeImpl implements MetaprogramNode
      */
     public void setPreamble(MetaprogramPreambleNode preamble)
     {
-        if (this.preamble instanceof NodeImpl)
+        if (this.preamble != null)
         {
-            ((NodeImpl)this.preamble).setParent(null);
+            getManager().removeParent(this, this.preamble);
         }
         this.preamble = preamble;
-        if (this.preamble instanceof NodeImpl)
+        if (this.preamble != null)
         {
-            ((NodeImpl)this.preamble).setParent(this);
+            getManager().addParent(this, this.preamble);
         }
     }
 
@@ -79,14 +79,14 @@ public class MetaprogramNodeImpl extends NodeImpl implements MetaprogramNode
      */
     public void setBody(BlockStatementListNode body)
     {
-        if (this.body instanceof NodeImpl)
+        if (this.body != null)
         {
-            ((NodeImpl)this.body).setParent(null);
+            getManager().removeParent(this, this.body);
         }
         this.body = body;
-        if (this.body instanceof NodeImpl)
+        if (this.body != null)
         {
-            ((NodeImpl)this.body).setParent(this);
+            getManager().addParent(this, this.body);
         }
     }
 

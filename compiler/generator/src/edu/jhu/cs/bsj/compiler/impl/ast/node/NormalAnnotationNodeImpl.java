@@ -48,14 +48,14 @@ public class NormalAnnotationNodeImpl extends AnnotationNodeImpl implements Norm
      */
     public void setArguments(AnnotationElementListNode arguments)
     {
-        if (this.arguments instanceof NodeImpl)
+        if (this.arguments != null)
         {
-            ((NodeImpl)this.arguments).setParent(null);
+            getManager().removeParent(this, this.arguments);
         }
         this.arguments = arguments;
-        if (this.arguments instanceof NodeImpl)
+        if (this.arguments != null)
         {
-            ((NodeImpl)this.arguments).setParent(this);
+            getManager().addParent(this, this.arguments);
         }
     }
 

@@ -52,14 +52,14 @@ public class ArrayAccessNodeImpl extends NodeImpl implements ArrayAccessNode
      */
     public void setArrayExpression(RestrictedPrimaryExpressionNode arrayExpression)
     {
-        if (this.arrayExpression instanceof NodeImpl)
+        if (this.arrayExpression != null)
         {
-            ((NodeImpl)this.arrayExpression).setParent(null);
+            getManager().removeParent(this, this.arrayExpression);
         }
         this.arrayExpression = arrayExpression;
-        if (this.arrayExpression instanceof NodeImpl)
+        if (this.arrayExpression != null)
         {
-            ((NodeImpl)this.arrayExpression).setParent(this);
+            getManager().addParent(this, this.arrayExpression);
         }
     }
 
@@ -78,14 +78,14 @@ public class ArrayAccessNodeImpl extends NodeImpl implements ArrayAccessNode
      */
     public void setIndexExpression(ExpressionNode indexExpression)
     {
-        if (this.indexExpression instanceof NodeImpl)
+        if (this.indexExpression != null)
         {
-            ((NodeImpl)this.indexExpression).setParent(null);
+            getManager().removeParent(this, this.indexExpression);
         }
         this.indexExpression = indexExpression;
-        if (this.indexExpression instanceof NodeImpl)
+        if (this.indexExpression != null)
         {
-            ((NodeImpl)this.indexExpression).setParent(this);
+            getManager().addParent(this, this.indexExpression);
         }
     }
 

@@ -51,14 +51,14 @@ public class AssertStatementNodeImpl extends NodeImpl implements AssertStatement
      */
     public void setTestExpression(ExpressionNode testExpression)
     {
-        if (this.testExpression instanceof NodeImpl)
+        if (this.testExpression != null)
         {
-            ((NodeImpl)this.testExpression).setParent(null);
+            getManager().removeParent(this, this.testExpression);
         }
         this.testExpression = testExpression;
-        if (this.testExpression instanceof NodeImpl)
+        if (this.testExpression != null)
         {
-            ((NodeImpl)this.testExpression).setParent(this);
+            getManager().addParent(this, this.testExpression);
         }
     }
 
@@ -77,14 +77,14 @@ public class AssertStatementNodeImpl extends NodeImpl implements AssertStatement
      */
     public void setMessageExpression(ExpressionNode messageExpression)
     {
-        if (this.messageExpression instanceof NodeImpl)
+        if (this.messageExpression != null)
         {
-            ((NodeImpl)this.messageExpression).setParent(null);
+            getManager().removeParent(this, this.messageExpression);
         }
         this.messageExpression = messageExpression;
-        if (this.messageExpression instanceof NodeImpl)
+        if (this.messageExpression != null)
         {
-            ((NodeImpl)this.messageExpression).setParent(this);
+            getManager().addParent(this, this.messageExpression);
         }
     }
 

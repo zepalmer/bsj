@@ -46,14 +46,14 @@ public class AnonymousClassBodyNodeImpl extends NodeImpl implements AnonymousCla
      */
     public void setMembers(AnonymousClassMemberListNode members)
     {
-        if (this.members instanceof NodeImpl)
+        if (this.members != null)
         {
-            ((NodeImpl)this.members).setParent(null);
+            getManager().removeParent(this, this.members);
         }
         this.members = members;
-        if (this.members instanceof NodeImpl)
+        if (this.members != null)
         {
-            ((NodeImpl)this.members).setParent(this);
+            getManager().addParent(this, this.members);
         }
     }
 

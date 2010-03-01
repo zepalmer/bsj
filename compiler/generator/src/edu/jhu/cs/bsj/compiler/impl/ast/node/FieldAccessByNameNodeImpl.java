@@ -46,14 +46,14 @@ public class FieldAccessByNameNodeImpl extends NodeImpl implements FieldAccessBy
      */
     public void setName(NameNode name)
     {
-        if (this.name instanceof NodeImpl)
+        if (this.name != null)
         {
-            ((NodeImpl)this.name).setParent(null);
+            getManager().removeParent(this, this.name);
         }
         this.name = name;
-        if (this.name instanceof NodeImpl)
+        if (this.name != null)
         {
-            ((NodeImpl)this.name).setParent(this);
+            getManager().addParent(this, this.name);
         }
     }
 

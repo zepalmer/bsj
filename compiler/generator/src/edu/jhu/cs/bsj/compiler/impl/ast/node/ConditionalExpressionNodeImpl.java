@@ -56,14 +56,14 @@ public class ConditionalExpressionNodeImpl extends NodeImpl implements Condition
      */
     public void setCondition(ExpressionNode condition)
     {
-        if (this.condition instanceof NodeImpl)
+        if (this.condition != null)
         {
-            ((NodeImpl)this.condition).setParent(null);
+            getManager().removeParent(this, this.condition);
         }
         this.condition = condition;
-        if (this.condition instanceof NodeImpl)
+        if (this.condition != null)
         {
-            ((NodeImpl)this.condition).setParent(this);
+            getManager().addParent(this, this.condition);
         }
     }
 
@@ -82,14 +82,14 @@ public class ConditionalExpressionNodeImpl extends NodeImpl implements Condition
      */
     public void setTrueExpression(ExpressionNode trueExpression)
     {
-        if (this.trueExpression instanceof NodeImpl)
+        if (this.trueExpression != null)
         {
-            ((NodeImpl)this.trueExpression).setParent(null);
+            getManager().removeParent(this, this.trueExpression);
         }
         this.trueExpression = trueExpression;
-        if (this.trueExpression instanceof NodeImpl)
+        if (this.trueExpression != null)
         {
-            ((NodeImpl)this.trueExpression).setParent(this);
+            getManager().addParent(this, this.trueExpression);
         }
     }
 
@@ -108,14 +108,14 @@ public class ConditionalExpressionNodeImpl extends NodeImpl implements Condition
      */
     public void setFalseExpression(ExpressionNode falseExpression)
     {
-        if (this.falseExpression instanceof NodeImpl)
+        if (this.falseExpression != null)
         {
-            ((NodeImpl)this.falseExpression).setParent(null);
+            getManager().removeParent(this, this.falseExpression);
         }
         this.falseExpression = falseExpression;
-        if (this.falseExpression instanceof NodeImpl)
+        if (this.falseExpression != null)
         {
-            ((NodeImpl)this.falseExpression).setParent(this);
+            getManager().addParent(this, this.falseExpression);
         }
     }
 

@@ -50,14 +50,14 @@ public abstract class MetaprogramAnchorNodeImpl<T extends Node> extends NodeImpl
      */
     public void setMetaprogram(MetaprogramNode metaprogram)
     {
-        if (this.metaprogram instanceof NodeImpl)
+        if (this.metaprogram != null)
         {
-            ((NodeImpl)this.metaprogram).setParent(null);
+            getManager().removeParent(this, this.metaprogram);
         }
         this.metaprogram = metaprogram;
-        if (this.metaprogram instanceof NodeImpl)
+        if (this.metaprogram != null)
         {
-            ((NodeImpl)this.metaprogram).setParent(this);
+            getManager().addParent(this, this.metaprogram);
         }
     }
 
@@ -160,14 +160,14 @@ public abstract class MetaprogramAnchorNodeImpl<T extends Node> extends NodeImpl
 	public void setReplacement(T replacement)
 	{
 		// TODO: some kind of control on this; setReplacement should probably only be called one time?
-		if (this.replacement instanceof NodeImpl)
+		if (this.replacement instanceof Node)
 		{
-			((NodeImpl)this.replacement).setParent(null);
+			getManager().removeParent(this, this.replacement);
 		}
 		this.replacement = replacement;
-		if (this.replacement instanceof NodeImpl)
+		if (this.replacement instanceof Node)
 		{
-			((NodeImpl)this.replacement).setParent(this);
+			getManager().addParent(this, this.replacement);
 		}
 	}
 }

@@ -52,14 +52,14 @@ public class EnumBodyNodeImpl extends NodeImpl implements EnumBodyNode
      */
     public void setConstants(EnumConstantDeclarationListNode constants)
     {
-        if (this.constants instanceof NodeImpl)
+        if (this.constants != null)
         {
-            ((NodeImpl)this.constants).setParent(null);
+            getManager().removeParent(this, this.constants);
         }
         this.constants = constants;
-        if (this.constants instanceof NodeImpl)
+        if (this.constants != null)
         {
-            ((NodeImpl)this.constants).setParent(this);
+            getManager().addParent(this, this.constants);
         }
     }
 
@@ -78,14 +78,14 @@ public class EnumBodyNodeImpl extends NodeImpl implements EnumBodyNode
      */
     public void setMembers(ClassMemberListNode members)
     {
-        if (this.members instanceof NodeImpl)
+        if (this.members != null)
         {
-            ((NodeImpl)this.members).setParent(null);
+            getManager().removeParent(this, this.members);
         }
         this.members = members;
-        if (this.members instanceof NodeImpl)
+        if (this.members != null)
         {
-            ((NodeImpl)this.members).setParent(this);
+            getManager().addParent(this, this.members);
         }
     }
 

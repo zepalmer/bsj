@@ -50,14 +50,14 @@ public class QualifiedNameNodeImpl extends NameNodeImpl implements QualifiedName
      */
     public void setBase(NameNode base)
     {
-        if (this.base instanceof NodeImpl)
+        if (this.base != null)
         {
-            ((NodeImpl)this.base).setParent(null);
+            getManager().removeParent(this, this.base);
         }
         this.base = base;
-        if (this.base instanceof NodeImpl)
+        if (this.base != null)
         {
-            ((NodeImpl)this.base).setParent(this);
+            getManager().addParent(this, this.base);
         }
     }
 

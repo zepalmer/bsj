@@ -52,14 +52,14 @@ public class TypeParameterNodeImpl extends NodeImpl implements TypeParameterNode
      */
     public void setIdentifier(IdentifierNode identifier)
     {
-        if (this.identifier instanceof NodeImpl)
+        if (this.identifier != null)
         {
-            ((NodeImpl)this.identifier).setParent(null);
+            getManager().removeParent(this, this.identifier);
         }
         this.identifier = identifier;
-        if (this.identifier instanceof NodeImpl)
+        if (this.identifier != null)
         {
-            ((NodeImpl)this.identifier).setParent(this);
+            getManager().addParent(this, this.identifier);
         }
     }
 
@@ -78,14 +78,14 @@ public class TypeParameterNodeImpl extends NodeImpl implements TypeParameterNode
      */
     public void setBounds(DeclaredTypeListNode bounds)
     {
-        if (this.bounds instanceof NodeImpl)
+        if (this.bounds != null)
         {
-            ((NodeImpl)this.bounds).setParent(null);
+            getManager().removeParent(this, this.bounds);
         }
         this.bounds = bounds;
-        if (this.bounds instanceof NodeImpl)
+        if (this.bounds != null)
         {
-            ((NodeImpl)this.bounds).setParent(this);
+            getManager().addParent(this, this.bounds);
         }
     }
 

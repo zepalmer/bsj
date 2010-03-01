@@ -51,14 +51,14 @@ public class WildcardTypeNodeImpl extends NodeImpl implements WildcardTypeNode
      */
     public void setBound(ReferenceTypeNode bound)
     {
-        if (this.bound instanceof NodeImpl)
+        if (this.bound != null)
         {
-            ((NodeImpl)this.bound).setParent(null);
+            getManager().removeParent(this, this.bound);
         }
         this.bound = bound;
-        if (this.bound instanceof NodeImpl)
+        if (this.bound != null)
         {
-            ((NodeImpl)this.bound).setParent(this);
+            getManager().addParent(this, this.bound);
         }
     }
 

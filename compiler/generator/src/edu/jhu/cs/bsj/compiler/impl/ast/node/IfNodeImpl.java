@@ -57,14 +57,14 @@ public class IfNodeImpl extends NodeImpl implements IfNode
      */
     public void setCondition(ExpressionNode condition)
     {
-        if (this.condition instanceof NodeImpl)
+        if (this.condition != null)
         {
-            ((NodeImpl)this.condition).setParent(null);
+            getManager().removeParent(this, this.condition);
         }
         this.condition = condition;
-        if (this.condition instanceof NodeImpl)
+        if (this.condition != null)
         {
-            ((NodeImpl)this.condition).setParent(this);
+            getManager().addParent(this, this.condition);
         }
     }
 
@@ -83,14 +83,14 @@ public class IfNodeImpl extends NodeImpl implements IfNode
      */
     public void setThenStatement(StatementNode thenStatement)
     {
-        if (this.thenStatement instanceof NodeImpl)
+        if (this.thenStatement != null)
         {
-            ((NodeImpl)this.thenStatement).setParent(null);
+            getManager().removeParent(this, this.thenStatement);
         }
         this.thenStatement = thenStatement;
-        if (this.thenStatement instanceof NodeImpl)
+        if (this.thenStatement != null)
         {
-            ((NodeImpl)this.thenStatement).setParent(this);
+            getManager().addParent(this, this.thenStatement);
         }
     }
 
@@ -109,14 +109,14 @@ public class IfNodeImpl extends NodeImpl implements IfNode
      */
     public void setElseStatement(StatementNode elseStatement)
     {
-        if (this.elseStatement instanceof NodeImpl)
+        if (this.elseStatement != null)
         {
-            ((NodeImpl)this.elseStatement).setParent(null);
+            getManager().removeParent(this, this.elseStatement);
         }
         this.elseStatement = elseStatement;
-        if (this.elseStatement instanceof NodeImpl)
+        if (this.elseStatement != null)
         {
-            ((NodeImpl)this.elseStatement).setParent(this);
+            getManager().addParent(this, this.elseStatement);
         }
     }
 

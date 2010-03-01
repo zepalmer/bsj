@@ -57,14 +57,14 @@ public class BinaryExpressionNodeImpl extends NodeImpl implements BinaryExpressi
      */
     public void setLeftOperand(ExpressionNode leftOperand)
     {
-        if (this.leftOperand instanceof NodeImpl)
+        if (this.leftOperand != null)
         {
-            ((NodeImpl)this.leftOperand).setParent(null);
+            getManager().removeParent(this, this.leftOperand);
         }
         this.leftOperand = leftOperand;
-        if (this.leftOperand instanceof NodeImpl)
+        if (this.leftOperand != null)
         {
-            ((NodeImpl)this.leftOperand).setParent(this);
+            getManager().addParent(this, this.leftOperand);
         }
     }
 
@@ -83,14 +83,14 @@ public class BinaryExpressionNodeImpl extends NodeImpl implements BinaryExpressi
      */
     public void setRightOperand(ExpressionNode rightOperand)
     {
-        if (this.rightOperand instanceof NodeImpl)
+        if (this.rightOperand != null)
         {
-            ((NodeImpl)this.rightOperand).setParent(null);
+            getManager().removeParent(this, this.rightOperand);
         }
         this.rightOperand = rightOperand;
-        if (this.rightOperand instanceof NodeImpl)
+        if (this.rightOperand != null)
         {
-            ((NodeImpl)this.rightOperand).setParent(this);
+            getManager().addParent(this, this.rightOperand);
         }
     }
 

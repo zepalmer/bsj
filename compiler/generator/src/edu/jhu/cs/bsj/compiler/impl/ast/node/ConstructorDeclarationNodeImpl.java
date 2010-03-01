@@ -88,14 +88,14 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
      */
     public void setIdentifier(IdentifierNode identifier)
     {
-        if (this.identifier instanceof NodeImpl)
+        if (this.identifier != null)
         {
-            ((NodeImpl)this.identifier).setParent(null);
+            getManager().removeParent(this, this.identifier);
         }
         this.identifier = identifier;
-        if (this.identifier instanceof NodeImpl)
+        if (this.identifier != null)
         {
-            ((NodeImpl)this.identifier).setParent(this);
+            getManager().addParent(this, this.identifier);
         }
     }
 
@@ -114,14 +114,14 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
      */
     public void setBody(ConstructorBodyNode body)
     {
-        if (this.body instanceof NodeImpl)
+        if (this.body != null)
         {
-            ((NodeImpl)this.body).setParent(null);
+            getManager().removeParent(this, this.body);
         }
         this.body = body;
-        if (this.body instanceof NodeImpl)
+        if (this.body != null)
         {
-            ((NodeImpl)this.body).setParent(this);
+            getManager().addParent(this, this.body);
         }
     }
 
@@ -140,14 +140,14 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
      */
     public void setModifiers(ConstructorModifiersNode modifiers)
     {
-        if (this.modifiers instanceof NodeImpl)
+        if (this.modifiers != null)
         {
-            ((NodeImpl)this.modifiers).setParent(null);
+            getManager().removeParent(this, this.modifiers);
         }
         this.modifiers = modifiers;
-        if (this.modifiers instanceof NodeImpl)
+        if (this.modifiers != null)
         {
-            ((NodeImpl)this.modifiers).setParent(this);
+            getManager().addParent(this, this.modifiers);
         }
     }
 
@@ -166,14 +166,14 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
      */
     public void setParameters(VariableListNode parameters)
     {
-        if (this.parameters instanceof NodeImpl)
+        if (this.parameters != null)
         {
-            ((NodeImpl)this.parameters).setParent(null);
+            getManager().removeParent(this, this.parameters);
         }
         this.parameters = parameters;
-        if (this.parameters instanceof NodeImpl)
+        if (this.parameters != null)
         {
-            ((NodeImpl)this.parameters).setParent(this);
+            getManager().addParent(this, this.parameters);
         }
     }
 
@@ -192,14 +192,14 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
      */
     public void setVarargParameter(VariableNode varargParameter)
     {
-        if (this.varargParameter instanceof NodeImpl)
+        if (this.varargParameter != null)
         {
-            ((NodeImpl)this.varargParameter).setParent(null);
+            getManager().removeParent(this, this.varargParameter);
         }
         this.varargParameter = varargParameter;
-        if (this.varargParameter instanceof NodeImpl)
+        if (this.varargParameter != null)
         {
-            ((NodeImpl)this.varargParameter).setParent(this);
+            getManager().addParent(this, this.varargParameter);
         }
     }
 
@@ -218,14 +218,14 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
      */
     public void setThrowTypes(UnparameterizedTypeListNode throwTypes)
     {
-        if (this.throwTypes instanceof NodeImpl)
+        if (this.throwTypes != null)
         {
-            ((NodeImpl)this.throwTypes).setParent(null);
+            getManager().removeParent(this, this.throwTypes);
         }
         this.throwTypes = throwTypes;
-        if (this.throwTypes instanceof NodeImpl)
+        if (this.throwTypes != null)
         {
-            ((NodeImpl)this.throwTypes).setParent(this);
+            getManager().addParent(this, this.throwTypes);
         }
     }
 
@@ -244,14 +244,14 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
      */
     public void setTypeParameters(TypeParameterListNode typeParameters)
     {
-        if (this.typeParameters instanceof NodeImpl)
+        if (this.typeParameters != null)
         {
-            ((NodeImpl)this.typeParameters).setParent(null);
+            getManager().removeParent(this, this.typeParameters);
         }
         this.typeParameters = typeParameters;
-        if (this.typeParameters instanceof NodeImpl)
+        if (this.typeParameters != null)
         {
-            ((NodeImpl)this.typeParameters).setParent(this);
+            getManager().addParent(this, this.typeParameters);
         }
     }
 
@@ -270,14 +270,14 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
      */
     public void setJavadoc(JavadocNode javadoc)
     {
-        if (this.javadoc instanceof NodeImpl)
+        if (this.javadoc != null)
         {
-            ((NodeImpl)this.javadoc).setParent(null);
+            getManager().removeParent(this, this.javadoc);
         }
         this.javadoc = javadoc;
-        if (this.javadoc instanceof NodeImpl)
+        if (this.javadoc != null)
         {
-            ((NodeImpl)this.javadoc).setParent(this);
+            getManager().addParent(this, this.javadoc);
         }
     }
 

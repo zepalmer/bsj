@@ -57,14 +57,14 @@ public class TryNodeImpl extends NodeImpl implements TryNode
      */
     public void setBlock(BlockNode block)
     {
-        if (this.block instanceof NodeImpl)
+        if (this.block != null)
         {
-            ((NodeImpl)this.block).setParent(null);
+            getManager().removeParent(this, this.block);
         }
         this.block = block;
-        if (this.block instanceof NodeImpl)
+        if (this.block != null)
         {
-            ((NodeImpl)this.block).setParent(this);
+            getManager().addParent(this, this.block);
         }
     }
 
@@ -83,14 +83,14 @@ public class TryNodeImpl extends NodeImpl implements TryNode
      */
     public void setCatches(CatchListNode catches)
     {
-        if (this.catches instanceof NodeImpl)
+        if (this.catches != null)
         {
-            ((NodeImpl)this.catches).setParent(null);
+            getManager().removeParent(this, this.catches);
         }
         this.catches = catches;
-        if (this.catches instanceof NodeImpl)
+        if (this.catches != null)
         {
-            ((NodeImpl)this.catches).setParent(this);
+            getManager().addParent(this, this.catches);
         }
     }
 
@@ -109,14 +109,14 @@ public class TryNodeImpl extends NodeImpl implements TryNode
      */
     public void setFinallyBlock(BlockNode finallyBlock)
     {
-        if (this.finallyBlock instanceof NodeImpl)
+        if (this.finallyBlock != null)
         {
-            ((NodeImpl)this.finallyBlock).setParent(null);
+            getManager().removeParent(this, this.finallyBlock);
         }
         this.finallyBlock = finallyBlock;
-        if (this.finallyBlock instanceof NodeImpl)
+        if (this.finallyBlock != null)
         {
-            ((NodeImpl)this.finallyBlock).setParent(this);
+            getManager().addParent(this, this.finallyBlock);
         }
     }
 

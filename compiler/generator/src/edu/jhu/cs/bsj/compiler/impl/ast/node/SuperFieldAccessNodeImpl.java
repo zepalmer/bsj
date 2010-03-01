@@ -52,14 +52,14 @@ public class SuperFieldAccessNodeImpl extends NodeImpl implements SuperFieldAcce
      */
     public void setType(UnparameterizedTypeNode type)
     {
-        if (this.type instanceof NodeImpl)
+        if (this.type != null)
         {
-            ((NodeImpl)this.type).setParent(null);
+            getManager().removeParent(this, this.type);
         }
         this.type = type;
-        if (this.type instanceof NodeImpl)
+        if (this.type != null)
         {
-            ((NodeImpl)this.type).setParent(this);
+            getManager().addParent(this, this.type);
         }
     }
 
@@ -78,14 +78,14 @@ public class SuperFieldAccessNodeImpl extends NodeImpl implements SuperFieldAcce
      */
     public void setIdentifier(IdentifierNode identifier)
     {
-        if (this.identifier instanceof NodeImpl)
+        if (this.identifier != null)
         {
-            ((NodeImpl)this.identifier).setParent(null);
+            getManager().removeParent(this, this.identifier);
         }
         this.identifier = identifier;
-        if (this.identifier instanceof NodeImpl)
+        if (this.identifier != null)
         {
-            ((NodeImpl)this.identifier).setParent(this);
+            getManager().addParent(this, this.identifier);
         }
     }
 

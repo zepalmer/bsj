@@ -46,14 +46,14 @@ public class AnnotationAnnotationValueNodeImpl extends NodeImpl implements Annot
      */
     public void setAnnotation(AnnotationNode annotation)
     {
-        if (this.annotation instanceof NodeImpl)
+        if (this.annotation != null)
         {
-            ((NodeImpl)this.annotation).setParent(null);
+            getManager().removeParent(this, this.annotation);
         }
         this.annotation = annotation;
-        if (this.annotation instanceof NodeImpl)
+        if (this.annotation != null)
         {
-            ((NodeImpl)this.annotation).setParent(this);
+            getManager().addParent(this, this.annotation);
         }
     }
 

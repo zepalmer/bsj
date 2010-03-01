@@ -52,14 +52,14 @@ public class ParameterizedTypeSelectNodeImpl extends NodeImpl implements Paramet
      */
     public void setBase(ParameterizedTypeNode base)
     {
-        if (this.base instanceof NodeImpl)
+        if (this.base != null)
         {
-            ((NodeImpl)this.base).setParent(null);
+            getManager().removeParent(this, this.base);
         }
         this.base = base;
-        if (this.base instanceof NodeImpl)
+        if (this.base != null)
         {
-            ((NodeImpl)this.base).setParent(this);
+            getManager().addParent(this, this.base);
         }
     }
 
@@ -78,14 +78,14 @@ public class ParameterizedTypeSelectNodeImpl extends NodeImpl implements Paramet
      */
     public void setSelect(DeclaredTypeNode select)
     {
-        if (this.select instanceof NodeImpl)
+        if (this.select != null)
         {
-            ((NodeImpl)this.select).setParent(null);
+            getManager().removeParent(this, this.select);
         }
         this.select = select;
-        if (this.select instanceof NodeImpl)
+        if (this.select != null)
         {
-            ((NodeImpl)this.select).setParent(this);
+            getManager().addParent(this, this.select);
         }
     }
 

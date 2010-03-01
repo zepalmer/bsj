@@ -157,16 +157,16 @@ public abstract class ListNodeImpl<T extends Node> extends NodeImpl implements L
 		}
 		protected void elementAdded(int index, T element)
 		{
-			if (element instanceof NodeImpl)
+			if (element instanceof Node)
 			{
-				((NodeImpl)element).setParent(ListNodeImpl.this);
+				getManager().removeParent(ListNodeImpl.this, (Node)element);
 			}
 		}
 		protected void elementRemoved(int index, T element)
 		{
-			if (element instanceof NodeImpl)
+			if (element instanceof Node)
 			{
-				((NodeImpl)element).setParent(null);
+				getManager().addParent(ListNodeImpl.this, (Node)element);
 			}
 		}
 	}

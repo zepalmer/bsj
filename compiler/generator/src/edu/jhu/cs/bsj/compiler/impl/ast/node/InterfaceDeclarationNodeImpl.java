@@ -77,14 +77,14 @@ public class InterfaceDeclarationNodeImpl extends NodeImpl implements InterfaceD
      */
     public void setModifiers(InterfaceModifiersNode modifiers)
     {
-        if (this.modifiers instanceof NodeImpl)
+        if (this.modifiers != null)
         {
-            ((NodeImpl)this.modifiers).setParent(null);
+            getManager().removeParent(this, this.modifiers);
         }
         this.modifiers = modifiers;
-        if (this.modifiers instanceof NodeImpl)
+        if (this.modifiers != null)
         {
-            ((NodeImpl)this.modifiers).setParent(this);
+            getManager().addParent(this, this.modifiers);
         }
     }
 
@@ -103,14 +103,14 @@ public class InterfaceDeclarationNodeImpl extends NodeImpl implements InterfaceD
      */
     public void setExtendsClause(DeclaredTypeListNode extendsClause)
     {
-        if (this.extendsClause instanceof NodeImpl)
+        if (this.extendsClause != null)
         {
-            ((NodeImpl)this.extendsClause).setParent(null);
+            getManager().removeParent(this, this.extendsClause);
         }
         this.extendsClause = extendsClause;
-        if (this.extendsClause instanceof NodeImpl)
+        if (this.extendsClause != null)
         {
-            ((NodeImpl)this.extendsClause).setParent(this);
+            getManager().addParent(this, this.extendsClause);
         }
     }
 
@@ -129,14 +129,14 @@ public class InterfaceDeclarationNodeImpl extends NodeImpl implements InterfaceD
      */
     public void setBody(InterfaceBodyNode body)
     {
-        if (this.body instanceof NodeImpl)
+        if (this.body != null)
         {
-            ((NodeImpl)this.body).setParent(null);
+            getManager().removeParent(this, this.body);
         }
         this.body = body;
-        if (this.body instanceof NodeImpl)
+        if (this.body != null)
         {
-            ((NodeImpl)this.body).setParent(this);
+            getManager().addParent(this, this.body);
         }
     }
 
@@ -155,14 +155,14 @@ public class InterfaceDeclarationNodeImpl extends NodeImpl implements InterfaceD
      */
     public void setTypeParameters(TypeParameterListNode typeParameters)
     {
-        if (this.typeParameters instanceof NodeImpl)
+        if (this.typeParameters != null)
         {
-            ((NodeImpl)this.typeParameters).setParent(null);
+            getManager().removeParent(this, this.typeParameters);
         }
         this.typeParameters = typeParameters;
-        if (this.typeParameters instanceof NodeImpl)
+        if (this.typeParameters != null)
         {
-            ((NodeImpl)this.typeParameters).setParent(this);
+            getManager().addParent(this, this.typeParameters);
         }
     }
 
@@ -181,14 +181,14 @@ public class InterfaceDeclarationNodeImpl extends NodeImpl implements InterfaceD
      */
     public void setIdentifier(IdentifierNode identifier)
     {
-        if (this.identifier instanceof NodeImpl)
+        if (this.identifier != null)
         {
-            ((NodeImpl)this.identifier).setParent(null);
+            getManager().removeParent(this, this.identifier);
         }
         this.identifier = identifier;
-        if (this.identifier instanceof NodeImpl)
+        if (this.identifier != null)
         {
-            ((NodeImpl)this.identifier).setParent(this);
+            getManager().addParent(this, this.identifier);
         }
     }
 
@@ -207,14 +207,14 @@ public class InterfaceDeclarationNodeImpl extends NodeImpl implements InterfaceD
      */
     public void setJavadoc(JavadocNode javadoc)
     {
-        if (this.javadoc instanceof NodeImpl)
+        if (this.javadoc != null)
         {
-            ((NodeImpl)this.javadoc).setParent(null);
+            getManager().removeParent(this, this.javadoc);
         }
         this.javadoc = javadoc;
-        if (this.javadoc instanceof NodeImpl)
+        if (this.javadoc != null)
         {
-            ((NodeImpl)this.javadoc).setParent(this);
+            getManager().addParent(this, this.javadoc);
         }
     }
 

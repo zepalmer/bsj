@@ -58,14 +58,14 @@ public class EnhancedForLoopNodeImpl extends NodeImpl implements EnhancedForLoop
      */
     public void setVariable(VariableNode variable)
     {
-        if (this.variable instanceof NodeImpl)
+        if (this.variable != null)
         {
-            ((NodeImpl)this.variable).setParent(null);
+            getManager().removeParent(this, this.variable);
         }
         this.variable = variable;
-        if (this.variable instanceof NodeImpl)
+        if (this.variable != null)
         {
-            ((NodeImpl)this.variable).setParent(this);
+            getManager().addParent(this, this.variable);
         }
     }
 
@@ -84,14 +84,14 @@ public class EnhancedForLoopNodeImpl extends NodeImpl implements EnhancedForLoop
      */
     public void setExpression(ExpressionNode expression)
     {
-        if (this.expression instanceof NodeImpl)
+        if (this.expression != null)
         {
-            ((NodeImpl)this.expression).setParent(null);
+            getManager().removeParent(this, this.expression);
         }
         this.expression = expression;
-        if (this.expression instanceof NodeImpl)
+        if (this.expression != null)
         {
-            ((NodeImpl)this.expression).setParent(this);
+            getManager().addParent(this, this.expression);
         }
     }
 
@@ -110,14 +110,14 @@ public class EnhancedForLoopNodeImpl extends NodeImpl implements EnhancedForLoop
      */
     public void setStatement(StatementNode statement)
     {
-        if (this.statement instanceof NodeImpl)
+        if (this.statement != null)
         {
-            ((NodeImpl)this.statement).setParent(null);
+            getManager().removeParent(this, this.statement);
         }
         this.statement = statement;
-        if (this.statement instanceof NodeImpl)
+        if (this.statement != null)
         {
-            ((NodeImpl)this.statement).setParent(this);
+            getManager().addParent(this, this.statement);
         }
     }
 

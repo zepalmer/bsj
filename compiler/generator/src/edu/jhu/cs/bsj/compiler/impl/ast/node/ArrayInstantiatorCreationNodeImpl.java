@@ -49,14 +49,14 @@ public class ArrayInstantiatorCreationNodeImpl extends ArrayCreationNodeImpl imp
      */
     public void setDimExpressions(ExpressionListNode dimExpressions)
     {
-        if (this.dimExpressions instanceof NodeImpl)
+        if (this.dimExpressions != null)
         {
-            ((NodeImpl)this.dimExpressions).setParent(null);
+            getManager().removeParent(this, this.dimExpressions);
         }
         this.dimExpressions = dimExpressions;
-        if (this.dimExpressions instanceof NodeImpl)
+        if (this.dimExpressions != null)
         {
-            ((NodeImpl)this.dimExpressions).setParent(this);
+            getManager().addParent(this, this.dimExpressions);
         }
     }
 

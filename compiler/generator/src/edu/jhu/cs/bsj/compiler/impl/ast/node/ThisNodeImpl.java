@@ -46,14 +46,14 @@ public class ThisNodeImpl extends NodeImpl implements ThisNode
      */
     public void setType(UnparameterizedTypeNode type)
     {
-        if (this.type instanceof NodeImpl)
+        if (this.type != null)
         {
-            ((NodeImpl)this.type).setParent(null);
+            getManager().removeParent(this, this.type);
         }
         this.type = type;
-        if (this.type instanceof NodeImpl)
+        if (this.type != null)
         {
-            ((NodeImpl)this.type).setParent(this);
+            getManager().addParent(this, this.type);
         }
     }
 

@@ -46,14 +46,14 @@ public class AnnotationArrayValueNodeImpl extends NodeImpl implements Annotation
      */
     public void setValues(AnnotationValueListNode values)
     {
-        if (this.values instanceof NodeImpl)
+        if (this.values != null)
         {
-            ((NodeImpl)this.values).setParent(null);
+            getManager().removeParent(this, this.values);
         }
         this.values = values;
-        if (this.values instanceof NodeImpl)
+        if (this.values != null)
         {
-            ((NodeImpl)this.values).setParent(this);
+            getManager().addParent(this, this.values);
         }
     }
 

@@ -52,14 +52,14 @@ public class CaseNodeImpl extends NodeImpl implements CaseNode
      */
     public void setExpression(ExpressionNode expression)
     {
-        if (this.expression instanceof NodeImpl)
+        if (this.expression != null)
         {
-            ((NodeImpl)this.expression).setParent(null);
+            getManager().removeParent(this, this.expression);
         }
         this.expression = expression;
-        if (this.expression instanceof NodeImpl)
+        if (this.expression != null)
         {
-            ((NodeImpl)this.expression).setParent(this);
+            getManager().addParent(this, this.expression);
         }
     }
 
@@ -78,14 +78,14 @@ public class CaseNodeImpl extends NodeImpl implements CaseNode
      */
     public void setStatements(BlockStatementListNode statements)
     {
-        if (this.statements instanceof NodeImpl)
+        if (this.statements != null)
         {
-            ((NodeImpl)this.statements).setParent(null);
+            getManager().removeParent(this, this.statements);
         }
         this.statements = statements;
-        if (this.statements instanceof NodeImpl)
+        if (this.statements != null)
         {
-            ((NodeImpl)this.statements).setParent(this);
+            getManager().addParent(this, this.statements);
         }
     }
 

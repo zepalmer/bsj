@@ -867,17 +867,17 @@ public class SourceGenerator
 						ps.println("    {");
 						if (propInstanceOf(p.getBaseType(), "Node"))
 						{
-							ps.println("        if (this." + p.getName() + " instanceof NodeImpl)");
+							ps.println("        if (this." + p.getName() + " != null)");
 							ps.println("        {");
-							ps.println("            ((NodeImpl)this." + p.getName() + ").setParent(null);");
+							ps.println("            getManager().removeParent(this, this." + p.getName() + ");");
 							ps.println("        }");
 						}
 						ps.println("        this." + p.getName() + " = " + p.getName() + ";");
 						if (propInstanceOf(p.getBaseType(), "Node"))
 						{
-							ps.println("        if (this." + p.getName() + " instanceof NodeImpl)");
+							ps.println("        if (this." + p.getName() + " != null)");
 							ps.println("        {");
-							ps.println("            ((NodeImpl)this." + p.getName() + ").setParent(this);");
+							ps.println("            getManager().addParent(this, this." + p.getName() + ");");
 							ps.println("        }");
 						}
 						ps.println("    }");

@@ -50,14 +50,14 @@ public class SuperclassConstructorInvocationNodeImpl extends ConstructorInvocati
      */
     public void setQualifyingExpression(PrimaryExpressionNode qualifyingExpression)
     {
-        if (this.qualifyingExpression instanceof NodeImpl)
+        if (this.qualifyingExpression != null)
         {
-            ((NodeImpl)this.qualifyingExpression).setParent(null);
+            getManager().removeParent(this, this.qualifyingExpression);
         }
         this.qualifyingExpression = qualifyingExpression;
-        if (this.qualifyingExpression instanceof NodeImpl)
+        if (this.qualifyingExpression != null)
         {
-            ((NodeImpl)this.qualifyingExpression).setParent(this);
+            getManager().addParent(this, this.qualifyingExpression);
         }
     }
 

@@ -16,15 +16,19 @@ public abstract class NodeImpl
 	private long uid;
 	
 	/**
-	 * The parent for this node.
-	 */
-	private Node parent = null;
-	
-	/**
 	 * Assigns this node a UID.
 	 */
 	{
 		this.uid = sUid.getAndIncrement();
+	}
+	
+	/**
+	 * Retrieves the node's manager.
+	 * @return This node's manager.
+	 */
+	protected BsjNodeManager getManager()
+	{
+		return this.manager;
 	}
 	
 	/**
@@ -58,20 +62,7 @@ public abstract class NodeImpl
 	 */
 	public Node getParent()
 	{
-		return this.parent;
-	}
-	
-	/**
-	 * Retrieves the parent node reference object for this node.
-	 * @param node The parent node for this node.
-	 */
-	public void setParent(Node node)
-	{
-		// TODO: some way of validating the argument (so a rogue metaprogrammer doesn't make the tree inconsistent)
-		// currently, we're using instanceof in every Node subclass setter - this is not cool
-		// Perhaps a central registry based on node ID number?  That way the relationship isn't duplicated; the
-		// getParent method can just perform a registry lookup
-		this.parent = node;
+		return this.manager.getParent(this);
 	}
 	
 	/**

@@ -52,14 +52,14 @@ public class SingleStaticImportNodeImpl extends NodeImpl implements SingleStatic
      */
     public void setName(NameNode name)
     {
-        if (this.name instanceof NodeImpl)
+        if (this.name != null)
         {
-            ((NodeImpl)this.name).setParent(null);
+            getManager().removeParent(this, this.name);
         }
         this.name = name;
-        if (this.name instanceof NodeImpl)
+        if (this.name != null)
         {
-            ((NodeImpl)this.name).setParent(this);
+            getManager().addParent(this, this.name);
         }
     }
 
@@ -78,14 +78,14 @@ public class SingleStaticImportNodeImpl extends NodeImpl implements SingleStatic
      */
     public void setIdentifier(IdentifierNode identifier)
     {
-        if (this.identifier instanceof NodeImpl)
+        if (this.identifier != null)
         {
-            ((NodeImpl)this.identifier).setParent(null);
+            getManager().removeParent(this, this.identifier);
         }
         this.identifier = identifier;
-        if (this.identifier instanceof NodeImpl)
+        if (this.identifier != null)
         {
-            ((NodeImpl)this.identifier).setParent(this);
+            getManager().addParent(this, this.identifier);
         }
     }
 

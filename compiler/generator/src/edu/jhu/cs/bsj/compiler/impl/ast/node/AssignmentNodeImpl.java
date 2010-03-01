@@ -57,14 +57,14 @@ public class AssignmentNodeImpl extends NodeImpl implements AssignmentNode
      */
     public void setVariable(ExpressionNode variable)
     {
-        if (this.variable instanceof NodeImpl)
+        if (this.variable != null)
         {
-            ((NodeImpl)this.variable).setParent(null);
+            getManager().removeParent(this, this.variable);
         }
         this.variable = variable;
-        if (this.variable instanceof NodeImpl)
+        if (this.variable != null)
         {
-            ((NodeImpl)this.variable).setParent(this);
+            getManager().addParent(this, this.variable);
         }
     }
 
@@ -101,14 +101,14 @@ public class AssignmentNodeImpl extends NodeImpl implements AssignmentNode
      */
     public void setExpression(ExpressionNode expression)
     {
-        if (this.expression instanceof NodeImpl)
+        if (this.expression != null)
         {
-            ((NodeImpl)this.expression).setParent(null);
+            getManager().removeParent(this, this.expression);
         }
         this.expression = expression;
-        if (this.expression instanceof NodeImpl)
+        if (this.expression != null)
         {
-            ((NodeImpl)this.expression).setParent(this);
+            getManager().addParent(this, this.expression);
         }
     }
 

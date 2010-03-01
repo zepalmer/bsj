@@ -47,14 +47,14 @@ public class MetaprogramDependsNodeImpl extends NodeImpl implements MetaprogramD
      */
     public void setTargetNames(NameListNode targetNames)
     {
-        if (this.targetNames instanceof NodeImpl)
+        if (this.targetNames != null)
         {
-            ((NodeImpl)this.targetNames).setParent(null);
+            getManager().removeParent(this, this.targetNames);
         }
         this.targetNames = targetNames;
-        if (this.targetNames instanceof NodeImpl)
+        if (this.targetNames != null)
         {
-            ((NodeImpl)this.targetNames).setParent(this);
+            getManager().addParent(this, this.targetNames);
         }
     }
 
