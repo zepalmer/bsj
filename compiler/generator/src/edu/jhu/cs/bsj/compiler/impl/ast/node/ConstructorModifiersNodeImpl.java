@@ -13,6 +13,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ConstructorModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class ConstructorModifiersNodeImpl extends ModifiersNodeImpl implements ConstructorModifiersNode
@@ -25,9 +26,10 @@ public class ConstructorModifiersNodeImpl extends ModifiersNodeImpl implements C
             AccessModifier access,
             AnnotationListNode annotations,
             BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
+            BsjSourceLocation stopLocation,
+            BsjNodeManager manager)
     {
-        super(annotations, startLocation, stopLocation);
+        super(annotations, startLocation, stopLocation, manager);
         this.access = access;
     }
 

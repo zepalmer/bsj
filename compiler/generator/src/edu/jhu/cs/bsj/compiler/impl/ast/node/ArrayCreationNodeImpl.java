@@ -9,6 +9,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.ArrayCreationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.BaseTypeNode;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public abstract class ArrayCreationNodeImpl extends NodeImpl implements ArrayCreationNode
@@ -24,9 +25,10 @@ public abstract class ArrayCreationNodeImpl extends NodeImpl implements ArrayCre
             BaseTypeNode baseType,
             int arrayLevels,
             BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
+            BsjSourceLocation stopLocation,
+            BsjNodeManager manager)
     {
-        super(startLocation, stopLocation);
+        super(startLocation, stopLocation, manager);
         setBaseType(baseType);
         this.arrayLevels = arrayLevels;
     }

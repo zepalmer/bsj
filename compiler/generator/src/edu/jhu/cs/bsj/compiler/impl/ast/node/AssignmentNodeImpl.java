@@ -13,6 +13,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.AssignmentNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class AssignmentNodeImpl extends NodeImpl implements AssignmentNode
@@ -32,9 +33,10 @@ public class AssignmentNodeImpl extends NodeImpl implements AssignmentNode
             AssignmentOperator operator,
             ExpressionNode expression,
             BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
+            BsjSourceLocation stopLocation,
+            BsjNodeManager manager)
     {
-        super(startLocation, stopLocation);
+        super(startLocation, stopLocation, manager);
         setVariable(variable);
         this.operator = operator;
         setExpression(expression);

@@ -13,6 +13,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.BlockNode;
 import edu.jhu.cs.bsj.compiler.ast.node.CatchListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.TryNode;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class TryNodeImpl extends NodeImpl implements TryNode
@@ -32,9 +33,10 @@ public class TryNodeImpl extends NodeImpl implements TryNode
             CatchListNode catches,
             BlockNode finallyBlock,
             BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
+            BsjSourceLocation stopLocation,
+            BsjNodeManager manager)
     {
-        super(startLocation, stopLocation);
+        super(startLocation, stopLocation, manager);
         setBlock(block);
         setCatches(catches);
         setFinallyBlock(finallyBlock);

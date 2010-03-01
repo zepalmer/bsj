@@ -14,6 +14,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableNode;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class VariableNodeImpl extends NodeImpl implements VariableNode
@@ -33,9 +34,10 @@ public class VariableNodeImpl extends NodeImpl implements VariableNode
             TypeNode type,
             IdentifierNode identifier,
             BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
+            BsjSourceLocation stopLocation,
+            BsjNodeManager manager)
     {
-        super(startLocation, stopLocation);
+        super(startLocation, stopLocation, manager);
         setModifiers(modifiers);
         setType(type);
         setIdentifier(identifier);

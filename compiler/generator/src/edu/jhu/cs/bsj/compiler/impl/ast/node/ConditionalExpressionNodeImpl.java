@@ -12,6 +12,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.ConditionalExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class ConditionalExpressionNodeImpl extends NodeImpl implements ConditionalExpressionNode
@@ -31,9 +32,10 @@ public class ConditionalExpressionNodeImpl extends NodeImpl implements Condition
             ExpressionNode trueExpression,
             ExpressionNode falseExpression,
             BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
+            BsjSourceLocation stopLocation,
+            BsjNodeManager manager)
     {
-        super(startLocation, stopLocation);
+        super(startLocation, stopLocation, manager);
         setCondition(condition);
         setTrueExpression(trueExpression);
         setFalseExpression(falseExpression);

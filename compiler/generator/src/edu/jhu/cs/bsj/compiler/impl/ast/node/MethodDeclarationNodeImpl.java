@@ -20,6 +20,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.TypeParameterListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.UnparameterizedTypeListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableNode;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclarationNode
@@ -63,9 +64,10 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
             TypeParameterListNode typeParameters,
             JavadocNode javadoc,
             BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
+            BsjSourceLocation stopLocation,
+            BsjNodeManager manager)
     {
-        super(startLocation, stopLocation);
+        super(startLocation, stopLocation, manager);
         setBody(body);
         setModifiers(modifiers);
         setIdentifier(identifier);

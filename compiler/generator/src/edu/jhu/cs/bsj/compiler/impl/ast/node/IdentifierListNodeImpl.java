@@ -13,6 +13,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class IdentifierListNodeImpl extends ListNodeImpl<IdentifierNode> implements IdentifierListNode
@@ -21,9 +22,10 @@ public class IdentifierListNodeImpl extends ListNodeImpl<IdentifierNode> impleme
     public IdentifierListNodeImpl(
             List<IdentifierNode> children,
             BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
+            BsjSourceLocation stopLocation,
+            BsjNodeManager manager)
     {
-        super(children, startLocation, stopLocation);
+        super(children, startLocation, stopLocation, manager);
     }
 
     /**

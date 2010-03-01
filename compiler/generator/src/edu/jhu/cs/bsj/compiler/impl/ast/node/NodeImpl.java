@@ -12,6 +12,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.PackageNode;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public abstract class NodeImpl implements Node
 {
@@ -21,14 +22,19 @@ public abstract class NodeImpl implements Node
     /** The location at which this node's text stops (exclusive). */
     private BsjSourceLocation stopLocation;
 
+    /** The BSJ node manager for this node. */
+    private BsjNodeManager manager;
+
     /** General constructor. */
     protected NodeImpl(
             BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
+            BsjSourceLocation stopLocation,
+            BsjNodeManager manager)
     {
         super();
         this.startLocation = startLocation;
         this.stopLocation = stopLocation;
+        this.manager = manager;
     }
 
     /**

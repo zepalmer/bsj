@@ -13,6 +13,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationMemberListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationMemberNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class AnnotationMemberListNodeImpl extends ListNodeImpl<AnnotationMemberNode> implements AnnotationMemberListNode
@@ -21,9 +22,10 @@ public class AnnotationMemberListNodeImpl extends ListNodeImpl<AnnotationMemberN
     public AnnotationMemberListNodeImpl(
             List<AnnotationMemberNode> children,
             BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
+            BsjSourceLocation stopLocation,
+            BsjNodeManager manager)
     {
-        super(children, startLocation, stopLocation);
+        super(children, startLocation, stopLocation, manager);
     }
 
     /**

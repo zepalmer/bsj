@@ -13,6 +13,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.AnnotationMemberNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.AnnotationMemberMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramNode;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class AnnotationMemberMetaprogramAnchorNodeImpl extends MetaprogramAnchorNodeImpl<AnnotationMemberNode> implements AnnotationMemberMetaprogramAnchorNode
@@ -22,9 +23,10 @@ public class AnnotationMemberMetaprogramAnchorNodeImpl extends MetaprogramAnchor
             AnnotationMemberNode replacement,
             MetaprogramNode metaprogram,
             BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
+            BsjSourceLocation stopLocation,
+            BsjNodeManager manager)
     {
-        super(replacement, metaprogram, startLocation, stopLocation);
+        super(replacement, metaprogram, startLocation, stopLocation, manager);
     }
 
     /**

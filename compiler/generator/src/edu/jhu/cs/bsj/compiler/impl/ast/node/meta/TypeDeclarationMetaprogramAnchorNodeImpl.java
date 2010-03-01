@@ -13,6 +13,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.TypeDeclarationMetaprogramAnchorNode;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class TypeDeclarationMetaprogramAnchorNodeImpl extends MetaprogramAnchorNodeImpl<TypeDeclarationNode> implements TypeDeclarationMetaprogramAnchorNode
@@ -22,9 +23,10 @@ public class TypeDeclarationMetaprogramAnchorNodeImpl extends MetaprogramAnchorN
             TypeDeclarationNode replacement,
             MetaprogramNode metaprogram,
             BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
+            BsjSourceLocation stopLocation,
+            BsjNodeManager manager)
     {
-        super(replacement, metaprogram, startLocation, stopLocation);
+        super(replacement, metaprogram, startLocation, stopLocation, manager);
     }
 
     /**

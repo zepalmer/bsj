@@ -16,6 +16,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.QualifiedClassInstantiationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeArgumentListNode;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeImpl implements QualifiedClassInstantiationNode
@@ -38,9 +39,10 @@ public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeI
             ExpressionListNode arguments,
             AnonymousClassBodyNode body,
             BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
+            BsjSourceLocation stopLocation,
+            BsjNodeManager manager)
     {
-        super(constructorTypeArguments, arguments, body, startLocation, stopLocation);
+        super(constructorTypeArguments, arguments, body, startLocation, stopLocation, manager);
         setEnclosingExpression(enclosingExpression);
         setIdentifier(identifier);
         setTypeArguments(typeArguments);

@@ -12,6 +12,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.InlineTypeDeclarableNode;
 import edu.jhu.cs.bsj.compiler.ast.node.InlineTypeDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class InlineTypeDeclarationNodeImpl extends NodeImpl implements InlineTypeDeclarationNode
@@ -23,9 +24,10 @@ public class InlineTypeDeclarationNodeImpl extends NodeImpl implements InlineTyp
     public InlineTypeDeclarationNodeImpl(
             InlineTypeDeclarableNode declaration,
             BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
+            BsjSourceLocation stopLocation,
+            BsjNodeManager manager)
     {
-        super(startLocation, stopLocation);
+        super(startLocation, stopLocation, manager);
         setDeclaration(declaration);
     }
 

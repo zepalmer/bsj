@@ -13,6 +13,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.ClassMemberListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.EnumBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.EnumConstantDeclarationListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class EnumBodyNodeImpl extends NodeImpl implements EnumBodyNode
@@ -28,9 +29,10 @@ public class EnumBodyNodeImpl extends NodeImpl implements EnumBodyNode
             EnumConstantDeclarationListNode constants,
             ClassMemberListNode members,
             BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
+            BsjSourceLocation stopLocation,
+            BsjNodeManager manager)
     {
-        super(startLocation, stopLocation);
+        super(startLocation, stopLocation, manager);
         setConstants(constants);
         setMembers(members);
     }

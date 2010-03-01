@@ -12,6 +12,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassLiteralNode;
 import edu.jhu.cs.bsj.compiler.ast.node.LiteralizableTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class ClassLiteralNodeImpl extends LiteralNodeImpl<LiteralizableTypeNode> implements ClassLiteralNode
@@ -20,9 +21,10 @@ public class ClassLiteralNodeImpl extends LiteralNodeImpl<LiteralizableTypeNode>
     public ClassLiteralNodeImpl(
             LiteralizableTypeNode value,
             BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
+            BsjSourceLocation stopLocation,
+            BsjNodeManager manager)
     {
-        super(value, startLocation, stopLocation);
+        super(value, startLocation, stopLocation, manager);
     }
 
     /**

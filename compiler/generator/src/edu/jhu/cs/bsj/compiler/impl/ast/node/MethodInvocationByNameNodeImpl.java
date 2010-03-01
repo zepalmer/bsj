@@ -14,6 +14,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.MethodInvocationByNameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.NameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.ReferenceTypeListNode;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class MethodInvocationByNameNodeImpl extends MethodInvocationNodeImpl implements MethodInvocationByNameNode
@@ -27,9 +28,10 @@ public class MethodInvocationByNameNodeImpl extends MethodInvocationNodeImpl imp
             ExpressionListNode arguments,
             ReferenceTypeListNode typeArguments,
             BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
+            BsjSourceLocation stopLocation,
+            BsjNodeManager manager)
     {
-        super(arguments, typeArguments, startLocation, stopLocation);
+        super(arguments, typeArguments, startLocation, stopLocation, manager);
         setName(name);
     }
 

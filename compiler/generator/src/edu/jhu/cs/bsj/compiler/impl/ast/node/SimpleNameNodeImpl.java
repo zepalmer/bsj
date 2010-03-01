@@ -13,6 +13,7 @@ import edu.jhu.cs.bsj.compiler.ast.NameCategory;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.SimpleNameNode;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class SimpleNameNodeImpl extends NameNodeImpl implements SimpleNameNode
@@ -22,9 +23,10 @@ public class SimpleNameNodeImpl extends NameNodeImpl implements SimpleNameNode
             IdentifierNode identifier,
             NameCategory category,
             BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
+            BsjSourceLocation stopLocation,
+            BsjNodeManager manager)
     {
-        super(identifier, category, startLocation, stopLocation);
+        super(identifier, category, startLocation, stopLocation, manager);
     }
 
     /**

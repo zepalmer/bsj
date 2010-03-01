@@ -1480,7 +1480,7 @@ public class SourceGenerator
 				List<FactoryMethodPropertyDefinition> standardFactoryMethodProperties = new ArrayList<FactoryMethodPropertyDefinition>();
 				for (PropertyDefinition p : recProps)
 				{
-					standardFactoryMethodProperties.add(new FactoryMethodPropertyDefinition(p.getName(), true));
+					standardFactoryMethodProperties.add(new FactoryMethodPropertyDefinition(p.getName(), !p.isHide()));
 				}
 				FactoryMethodDefinition standardFactoryDefinition = new EnumeratedFactoryMethodDefinition(
 						standardFactoryMethodProperties);
@@ -1632,14 +1632,14 @@ public class SourceGenerator
 				// Create a list to fake the parameter list printer into printing a vararg
 				List<PropertyDefinition> fakeProps = new ArrayList<PropertyDefinition>();
 				PropertyDefinition listDef = null;
-				for (PropertyDefinition recProp : recProps)
+				for (PropertyDefinition propDef : argProps)
 				{
-					if (recProp.getBaseType().equals("List") && listDef == null)
+					if (propDef.getBaseType().equals("List") && listDef == null)
 					{
-						listDef = recProp;
+						listDef = propDef;
 					} else
 					{
-						fakeProps.add(recProp);
+						fakeProps.add(propDef);
 					}
 				}
 				fakeProps.add(new PropertyDefinition(listDef.getName() + "Elements", listDef.getTypeArg() + "...",
@@ -1660,7 +1660,7 @@ public class SourceGenerator
 				cps.println("        List<" + listDef.getTypeArg() + "> " + listDef.getName() + " = Arrays.asList("
 						+ listDef.getName() + "Elements);");
 				cps.print("        return make" + def.getBaseName());
-				printArgumentList(cps, recProps);
+				printArgumentList(cps, argProps);
 				cps.println(";");
 				cps.println("    }");
 				cps.println();

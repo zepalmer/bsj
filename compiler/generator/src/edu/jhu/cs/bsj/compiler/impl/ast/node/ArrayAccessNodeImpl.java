@@ -13,6 +13,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.ArrayAccessNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.RestrictedPrimaryExpressionNode;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class ArrayAccessNodeImpl extends NodeImpl implements ArrayAccessNode
@@ -28,9 +29,10 @@ public class ArrayAccessNodeImpl extends NodeImpl implements ArrayAccessNode
             RestrictedPrimaryExpressionNode arrayExpression,
             ExpressionNode indexExpression,
             BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
+            BsjSourceLocation stopLocation,
+            BsjNodeManager manager)
     {
-        super(startLocation, stopLocation);
+        super(startLocation, stopLocation, manager);
         setArrayExpression(arrayExpression);
         setIndexExpression(indexExpression);
     }

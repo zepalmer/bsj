@@ -13,6 +13,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.ReferenceTypeListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ReferenceTypeNode;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class ReferenceTypeListNodeImpl extends ListNodeImpl<ReferenceTypeNode> implements ReferenceTypeListNode
@@ -21,9 +22,10 @@ public class ReferenceTypeListNodeImpl extends ListNodeImpl<ReferenceTypeNode> i
     public ReferenceTypeListNodeImpl(
             List<ReferenceTypeNode> children,
             BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
+            BsjSourceLocation stopLocation,
+            BsjNodeManager manager)
     {
-        super(children, startLocation, stopLocation);
+        super(children, startLocation, stopLocation, manager);
     }
 
     /**

@@ -11,6 +11,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.NullLiteralNode;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class NullLiteralNodeImpl extends LiteralNodeImpl<Void> implements NullLiteralNode
@@ -19,9 +20,10 @@ public class NullLiteralNodeImpl extends LiteralNodeImpl<Void> implements NullLi
     public NullLiteralNodeImpl(
             Void value,
             BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
+            BsjSourceLocation stopLocation,
+            BsjNodeManager manager)
     {
-        super(value, startLocation, stopLocation);
+        super(value, startLocation, stopLocation, manager);
     }
 
     /**

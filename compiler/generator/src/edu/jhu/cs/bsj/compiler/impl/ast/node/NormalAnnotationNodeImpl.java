@@ -13,6 +13,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.AnnotationElementListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.NormalAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.UnparameterizedTypeNode;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class NormalAnnotationNodeImpl extends AnnotationNodeImpl implements NormalAnnotationNode
@@ -25,9 +26,10 @@ public class NormalAnnotationNodeImpl extends AnnotationNodeImpl implements Norm
             AnnotationElementListNode arguments,
             UnparameterizedTypeNode annotationType,
             BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
+            BsjSourceLocation stopLocation,
+            BsjNodeManager manager)
     {
-        super(annotationType, startLocation, stopLocation);
+        super(annotationType, startLocation, stopLocation, manager);
         setArguments(arguments);
     }
 

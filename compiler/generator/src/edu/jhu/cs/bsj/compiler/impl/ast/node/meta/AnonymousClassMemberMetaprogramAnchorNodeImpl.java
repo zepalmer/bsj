@@ -13,6 +13,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.AnonymousClassMemberNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.AnonymousClassMemberMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramNode;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class AnonymousClassMemberMetaprogramAnchorNodeImpl extends MetaprogramAnchorNodeImpl<AnonymousClassMemberNode> implements AnonymousClassMemberMetaprogramAnchorNode
@@ -22,9 +23,10 @@ public class AnonymousClassMemberMetaprogramAnchorNodeImpl extends MetaprogramAn
             AnonymousClassMemberNode replacement,
             MetaprogramNode metaprogram,
             BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
+            BsjSourceLocation stopLocation,
+            BsjNodeManager manager)
     {
-        super(replacement, metaprogram, startLocation, stopLocation);
+        super(replacement, metaprogram, startLocation, stopLocation, manager);
     }
 
     /**

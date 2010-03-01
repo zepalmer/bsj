@@ -14,6 +14,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.StatementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableNode;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class EnhancedForLoopNodeImpl extends NodeImpl implements EnhancedForLoopNode
@@ -33,9 +34,10 @@ public class EnhancedForLoopNodeImpl extends NodeImpl implements EnhancedForLoop
             ExpressionNode expression,
             StatementNode statement,
             BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
+            BsjSourceLocation stopLocation,
+            BsjNodeManager manager)
     {
-        super(startLocation, stopLocation);
+        super(startLocation, stopLocation, manager);
         setVariable(variable);
         setExpression(expression);
         setStatement(statement);

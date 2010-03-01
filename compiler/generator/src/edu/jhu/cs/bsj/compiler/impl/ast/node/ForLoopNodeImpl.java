@@ -15,6 +15,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.ForLoopNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.StatementExpressionListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.StatementNode;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
@@ -38,9 +39,10 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
             StatementExpressionListNode update,
             StatementNode statement,
             BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
+            BsjSourceLocation stopLocation,
+            BsjNodeManager manager)
     {
-        super(startLocation, stopLocation);
+        super(startLocation, stopLocation, manager);
         setInitializer(initializer);
         setCondition(condition);
         setUpdate(update);

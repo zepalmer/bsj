@@ -13,6 +13,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.ArrayInitializerCreationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ArrayInitializerNode;
 import edu.jhu.cs.bsj.compiler.ast.node.BaseTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class ArrayInitializerCreationNodeImpl extends ArrayCreationNodeImpl implements ArrayInitializerCreationNode
@@ -26,9 +27,10 @@ public class ArrayInitializerCreationNodeImpl extends ArrayCreationNodeImpl impl
             BaseTypeNode baseType,
             int arrayLevels,
             BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
+            BsjSourceLocation stopLocation,
+            BsjNodeManager manager)
     {
-        super(baseType, arrayLevels, startLocation, stopLocation);
+        super(baseType, arrayLevels, startLocation, stopLocation, manager);
         setInitializer(initializer);
     }
 

@@ -1957,6 +1957,8 @@
                 desc="the location at which this node's text starts (inclusive)" />
             <prop name="stopLocation" type="BsjSourceLocation" mode="skip"
                 desc="the location at which this node's text stops (exclusive)" />
+            <prop name="manager" type="BsjNodeManager" mode="hide"
+                desc="the BSJ node manager for this node"/>
             <include file="Node.java" />
             <doc><![CDATA[
                 The parent class for all BSJ AST nodes.

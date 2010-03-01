@@ -13,6 +13,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.AnnotationValueNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.SingleElementAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.UnparameterizedTypeNode;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class SingleElementAnnotationNodeImpl extends AnnotationNodeImpl implements SingleElementAnnotationNode
@@ -25,9 +26,10 @@ public class SingleElementAnnotationNodeImpl extends AnnotationNodeImpl implemen
             AnnotationValueNode value,
             UnparameterizedTypeNode annotationType,
             BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
+            BsjSourceLocation stopLocation,
+            BsjNodeManager manager)
     {
-        super(annotationType, startLocation, stopLocation);
+        super(annotationType, startLocation, stopLocation, manager);
         setValue(value);
     }
 

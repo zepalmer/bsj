@@ -16,6 +16,7 @@ import javax.tools.JavaFileObject.Kind;
 
 import org.apache.log4j.Logger;
 
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 import edu.jhu.cs.bsj.compiler.impl.ast.PackageNodeCallback;
 import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.InMemoryLocationManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.LocationMappedFileManager;
@@ -47,6 +48,10 @@ public class StandardBsjCompiler implements BsjCompiler
 	 * The package callback module used in package nodes.
 	 */
 	private PackageNodeCallback packageNodeCallback;
+	/**
+	 * The node manager which is managing nodes which are passed to this compiler.
+	 */
+	private BsjNodeManager manager;
 	
 	/* *** The following fields are used in compilation. They are not valid unless compilation is in progress. */
 
@@ -61,12 +66,14 @@ public class StandardBsjCompiler implements BsjCompiler
 	 * 
 	 * @param toolkit The toolkit used to satisfy resource requirements.
 	 * @param packageNodeCallback The {@link PackageNodeCallback} to manipulate when compilation starts.
+	 * @param manager The manager which is managing all of the nodes provided to this compiler.
 	 */
-	public StandardBsjCompiler(BsjToolkit toolkit, PackageNodeCallback packageNodeCallback)
+	public StandardBsjCompiler(BsjToolkit toolkit, PackageNodeCallback packageNodeCallback, BsjNodeManager manager)
 	{
 		super();
 		this.toolkit = toolkit;
-		this.packageNodeCallback = new PackageNodeCallback();
+		this.packageNodeCallback = packageNodeCallback;
+		this.manager = manager;
 	}
 
 	// TODO: allow the caller to specify a listener to receive exceptions in real time (as opposed to in batch)

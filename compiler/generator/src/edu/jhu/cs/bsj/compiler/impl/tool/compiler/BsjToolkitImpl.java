@@ -3,6 +3,7 @@ package edu.jhu.cs.bsj.compiler.impl.tool.compiler;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceSerializer;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeFactoryImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 import edu.jhu.cs.bsj.compiler.impl.ast.PackageNodeCallback;
 import edu.jhu.cs.bsj.compiler.impl.tool.serializer.BsjSourceSerializerImpl;
 import edu.jhu.cs.bsj.compiler.tool.BsjCompiler;
@@ -34,9 +35,10 @@ public class BsjToolkitImpl implements BsjToolkit
 		this.fileManager = fileManager;
 		PackageNodeCallback packageNodeCallback = new PackageNodeCallback();
 		packageNodeCallback.setFileManager(fileManager);
-		this.factory = new BsjNodeFactoryImpl(packageNodeCallback);
+		BsjNodeManager manager = new BsjNodeManager();
+		this.factory = new BsjNodeFactoryImpl(packageNodeCallback, manager);
 		this.parser = new BsjParserImpl(this.factory);
-		this.compiler = new StandardBsjCompiler(this, packageNodeCallback);
+		this.compiler = new StandardBsjCompiler(this, packageNodeCallback, manager);
 		this.serializer = new BsjSourceSerializerImpl();
 	}
 

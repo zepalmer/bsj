@@ -13,6 +13,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.NameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.SingleStaticImportNode;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class SingleStaticImportNodeImpl extends NodeImpl implements SingleStaticImportNode
@@ -28,9 +29,10 @@ public class SingleStaticImportNodeImpl extends NodeImpl implements SingleStatic
             NameNode name,
             IdentifierNode identifier,
             BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
+            BsjSourceLocation stopLocation,
+            BsjNodeManager manager)
     {
-        super(startLocation, stopLocation);
+        super(startLocation, stopLocation, manager);
         setName(name);
         setIdentifier(identifier);
     }

@@ -17,15 +17,21 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
 	/** The callback module to provide to package nodes. */
 	private PackageNodeCallback packageNodeCallback;
 
+	/** The node manager to provide to all nodes. */
+	private BsjNodeManager manager;
+
 	/**
 	 * Creates a new node factory.
 	 * 
-	 * @param fileManager The file manager to use when constructing package nodes. If no package nodes will ever be
-	 *            constructed by this node factory, it is safe to provide a <code>null</code> here.
+	 * @param packageNodeCallback The callback module to provide to package nodes to allow them to incite operations
+	 *            such as the loading of other compilation units.
+	 * @param manager The node manager to provide to all nodes to allow them to obtain and report information to a
+	 *            global authority.
 	 */
-	public BsjNodeFactoryImpl(PackageNodeCallback packageNodeCallback)
+	public BsjNodeFactoryImpl(PackageNodeCallback packageNodeCallback, BsjNodeManager manager)
 	{
 		this.packageNodeCallback = packageNodeCallback;
+		this.manager = manager;
 	}
 
 	/**
