@@ -7,21 +7,14 @@ import java.io.InputStreamReader;
 
 import org.junit.Test;
 
-import edu.jhu.cs.bsj.compiler.ast.BsjSourceSerializer;
+import edu.jhu.cs.bsj.compiler.BsjServiceRegistry;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
-import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeFactoryImpl;
-import edu.jhu.cs.bsj.compiler.impl.tool.serializer.BsjSourceSerializerImpl;
 import edu.jhu.cs.bsj.compiler.impl.utils.StringUtilities;
-import edu.jhu.cs.bsj.compiler.tool.parser.BsjParser;
-import edu.jhu.cs.bsj.compiler.tool.parser.BsjParserImpl;
+import edu.jhu.cs.bsj.compiler.tool.BsjToolkit;
 import edu.jhu.cs.bsj.tests.AbstractPerFileTest;
 
 public class RegeneratorTest extends AbstractPerFileTest
 {
-	// private variables used in testing
-	private BsjParser parser = new BsjParserImpl(new BsjNodeFactoryImpl(null));
-	private BsjSourceSerializer serializer = new BsjSourceSerializerImpl();
-
 	@Test
 	public void testRegeneratorOnExamples()
 	{
@@ -44,20 +37,24 @@ public class RegeneratorTest extends AbstractPerFileTest
 	 */
 	private boolean regenerateJavaFile(File file) throws Exception
 	{
+		BsjToolkit toolkit = BsjServiceRegistry.newToolkitFactory().newToolkit();
+
 		// read the java file in
 		FileInputStream input = new FileInputStream(file);
 
 		// parse it to an AST
-		Node ast = parser.parse(StringUtilities.removeSuffix(file.getName(), '.'), new InputStreamReader(input), null);
+		Node ast = toolkit.getParser().parse(StringUtilities.removeSuffix(file.getName(), '.'),
+				new InputStreamReader(input), null);
 
 		// regenerate it once
-		String regen1 = ast.executeOperation(serializer, null);
+		String regen1 = ast.executeOperation(toolkit.getSerializer(), null);
 
 		// use the regenerated version to create another AST
-		Node newAst = parser.parse(StringUtilities.removeSuffix(file.getName(), '.'), new InputStreamReader(new ByteArrayInputStream(regen1.getBytes())), null);
+		Node newAst = toolkit.getParser().parse(StringUtilities.removeSuffix(file.getName(), '.'),
+				new InputStreamReader(new ByteArrayInputStream(regen1.getBytes())), null);
 
 		// regenerate it again from the new AST
-		String regen2 = newAst.executeOperation(serializer, null);
+		String regen2 = newAst.executeOperation(toolkit.getSerializer(), null);
 
 		// the twice regenerated source should equal the once regenerated source
 		return regen1.equals(regen2);

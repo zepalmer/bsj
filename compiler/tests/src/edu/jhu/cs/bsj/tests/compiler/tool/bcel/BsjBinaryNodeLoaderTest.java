@@ -15,8 +15,8 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
-import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeFactoryImpl;
-import edu.jhu.cs.bsj.compiler.impl.ast.PackageNodeCallback;
+import edu.jhu.cs.bsj.compiler.BsjServiceRegistry;
+import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 import edu.jhu.cs.bsj.compiler.impl.tool.classpath.bcel.BsjBinaryNodeLoader;
 import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.InMemoryLocationManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.LocationMappedFileManager;
@@ -72,7 +72,9 @@ public class BsjBinaryNodeLoaderTest extends AbstractTest
         }
         bfm.close();
 
-        BsjBinaryNodeLoader loader = new BsjBinaryNodeLoader(new BsjNodeFactoryImpl(new PackageNodeCallback()));
+        BsjNodeFactory factory = BsjServiceRegistry.newToolkitFactory().newToolkit().getNodeFactory();
+
+        BsjBinaryNodeLoader loader = new BsjBinaryNodeLoader(factory);
         loader.loadNodesFromBinary("JoeClass", map.get(StandardLocation.CLASS_OUTPUT));
         
         

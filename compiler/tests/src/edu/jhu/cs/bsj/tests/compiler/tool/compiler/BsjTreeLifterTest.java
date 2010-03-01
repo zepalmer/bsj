@@ -27,7 +27,6 @@ import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.MethodDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
-import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeFactoryImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.BsjTreeLifter;
 import edu.jhu.cs.bsj.compiler.impl.tool.serializer.BsjSourceSerializerImpl;
 import edu.jhu.cs.bsj.compiler.impl.utils.StringUtilities;
@@ -36,8 +35,6 @@ import edu.jhu.cs.bsj.compiler.tool.BsjToolkitFactory;
 import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjCompilerLocation;
 import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjFileManager;
 import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjFileObject;
-import edu.jhu.cs.bsj.compiler.tool.parser.BsjParser;
-import edu.jhu.cs.bsj.compiler.tool.parser.BsjParserImpl;
 import edu.jhu.cs.bsj.tests.AbstractPerFileTest;
 
 /**
@@ -54,9 +51,7 @@ public class BsjTreeLifterTest extends AbstractPerFileTest
 	private static final String[] META_IMPORTS = { "edu.jhu.cs.bsj.compiler.ast.*",
 			"edu.jhu.cs.bsj.compiler.ast.node.*", "edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeFactoryImpl",
 			"edu.jhu.cs.bsj.compiler.ast.node.meta.*", "java.util.*" };
-	private BsjNodeFactory factory = new BsjNodeFactoryImpl(null);
-	private BsjTreeLifter treeLifter = new BsjTreeLifter(factory);
-	private BsjParser parser = new BsjParserImpl(factory);
+	private BsjToolkit toolkit = BsjServiceRegistry.newToolkitFactory().newToolkit();
 	private String factoryName = "factory";
 	private BsjSourceSerializer serializer = new BsjSourceSerializerImpl();
 
@@ -83,11 +78,13 @@ public class BsjTreeLifterTest extends AbstractPerFileTest
 	 */
 	public boolean liftJavaFile(File file)
 	{
+		BsjNodeFactory factory = this.toolkit.getNodeFactory();
+		
 		// parse the original source
 		Node ast = null;
 		try
 		{
-			ast = parser.parse(StringUtilities.removeSuffix(file.getName(), '.'), new InputStreamReader(
+			ast = toolkit.getParser().parse(StringUtilities.removeSuffix(file.getName(), '.'), new InputStreamReader(
 					new FileInputStream(file)), null);
 		} catch (Exception e)
 		{
@@ -103,10 +100,10 @@ public class BsjTreeLifterTest extends AbstractPerFileTest
 				factory.makeIdentifierNode(factoryName), NameCategory.TYPE));
 
 		// get the lifted code
-		ExpressionNode metaAst = ast.executeOperation(treeLifter, metaFactory);
+		ExpressionNode metaAst = ast.executeOperation(new BsjTreeLifter(factory), metaFactory);
 
 		// replace expressions w/ methods
-		List<MethodDeclarationNode> methods = divideLiftIntoMethods(metaAst);
+		List<MethodDeclarationNode> methods = divideLiftIntoMethods(metaAst, factory);
 
 		// compile the lifted code and get the result
 		String liftedProgram = null;
@@ -129,10 +126,10 @@ public class BsjTreeLifterTest extends AbstractPerFileTest
 	 * @param metaAst the lifted AST to be divided.
 	 * @return the list of method declarations corresponding to the mutated AST.
 	 */
-	private List<MethodDeclarationNode> divideLiftIntoMethods(ExpressionNode metaAst)
+	private List<MethodDeclarationNode> divideLiftIntoMethods(ExpressionNode metaAst, BsjNodeFactory factory)
 	{
 		List<MethodDeclarationNode> methods = new ArrayList<MethodDeclarationNode>();
-		metaAst.receiveTyped(new BsjLiftedCodeVisitor(methods));
+		metaAst.receiveTyped(new BsjLiftedCodeVisitor(methods, factory));
 		return methods;
 	}
 

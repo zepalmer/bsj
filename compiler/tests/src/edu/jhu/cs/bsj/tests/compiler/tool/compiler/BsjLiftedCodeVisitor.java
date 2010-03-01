@@ -19,7 +19,6 @@ import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.UnqualifiedClassInstantiationNode;
 import edu.jhu.cs.bsj.compiler.ast.util.BsjTypedNodeNoOpVisitor;
-import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeFactoryImpl;
 
 public class BsjLiftedCodeVisitor extends BsjTypedNodeNoOpVisitor
 {
@@ -27,11 +26,11 @@ public class BsjLiftedCodeVisitor extends BsjTypedNodeNoOpVisitor
     private int methodId;
     private BsjNodeFactory factory;
     
-    public BsjLiftedCodeVisitor(List<MethodDeclarationNode> methods)
+    public BsjLiftedCodeVisitor(List<MethodDeclarationNode> methods, BsjNodeFactory factory)
     {
         this.methods = methods;
-        methodId = 0;
-        factory = new BsjNodeFactoryImpl(null);
+        this.methodId = 0;
+        this.factory = factory; 
     }
 
     /**
