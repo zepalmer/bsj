@@ -144,9 +144,6 @@ public class BsjTreeLifterTest extends AbstractPerFileTest
 	public CompilationUnitNode compileMeta(ExpressionNode code, String factoryName, List<MethodDeclarationNode> methods)
 			throws Exception
 	{
-		log4jConfigure("debug", "edu.jhu.cs.bsj.compiler.impl.tool.filemanager/debug",
-		"edu.jhu.cs.bsj.compiler.tool.parser.antlr/debug");
-		
 		// build the source for the wrapper that runs the lifted code
 		StringBuilder sb = new StringBuilder();
 		for (String s : META_IMPORTS)
