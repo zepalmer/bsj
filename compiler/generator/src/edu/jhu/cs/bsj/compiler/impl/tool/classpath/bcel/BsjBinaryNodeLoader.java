@@ -7,13 +7,18 @@ import java.util.List;
 
 import javax.tools.JavaFileObject.Kind;
 
+import org.apache.bcel.classfile.AccessFlags;
 import org.apache.bcel.classfile.ClassParser;
+import org.apache.bcel.classfile.ExceptionTable;
 import org.apache.bcel.classfile.Field;
 import org.apache.bcel.classfile.JavaClass;
 import org.apache.bcel.classfile.Method;
+import org.apache.bcel.generic.Type;
 import org.apache.log4j.Logger;
 
+import edu.jhu.cs.bsj.compiler.ast.AccessModifier;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
+import edu.jhu.cs.bsj.compiler.ast.node.BlockNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassMemberNode;
@@ -21,10 +26,17 @@ import edu.jhu.cs.bsj.compiler.ast.node.ClassModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
 import edu.jhu.cs.bsj.compiler.ast.node.DeclaredTypeListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.DeclaredTypeNode;
+import edu.jhu.cs.bsj.compiler.ast.node.FieldDeclarationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.FieldModifiersNode;
+import edu.jhu.cs.bsj.compiler.ast.node.MethodDeclarationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.MethodModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.NameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.PackageDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeDeclarationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeParameterListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.UnparameterizedTypeListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclaratorListNode;
 import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjFileObject;
 import edu.jhu.cs.bsj.compiler.tool.filemanager.LocationManager;
 
@@ -99,14 +111,14 @@ public class BsjBinaryNodeLoader
         }
         
         return factory.makePackageDeclarationNode(
-                buildQualifiedNameNode(clazz.getPackageName()));
+                buildNameName(clazz.getPackageName()));
     }
 
     private TypeDeclarationNode buildClassDeclarationNode(JavaClass clazz)
     {
         // TODO interfaces
         ClassDeclarationNode retNode = factory.makeClassDeclarationNode(
-                buildModifiersNode(clazz.getModifiers()), 
+                buildClassModifiersNode(clazz), 
                 buildExtendsNode(clazz), 
                 buildImplementsClause(clazz), 
                 buildClassBodyNode(clazz), 
@@ -125,7 +137,7 @@ public class BsjBinaryNodeLoader
         
         for (String iface : clazz.getInterfaceNames())
         {
-            list.add(factory.makeUnparameterizedTypeNode(buildQualifiedNameNode(iface)));
+            list.add(factory.makeUnparameterizedTypeNode(buildNameName(iface)));
         }
 
         return factory.makeDeclaredTypeListNode(list);
@@ -144,43 +156,151 @@ public class BsjBinaryNodeLoader
         if (clazz.getSuperclassName() != null && !clazz.getSuperclassName().equals("java.lang.Object"))
         {
             retNode = factory.makeUnparameterizedTypeNode(
-                    buildQualifiedNameNode(clazz.getSuperclassName()));
+                    buildNameName(clazz.getSuperclassName()));
         }
         return retNode;
     }
 
     private ClassBodyNode buildClassBodyNode(JavaClass clazz)
     {
-        // TODO Auto-generated method stub
         List<ClassMemberNode> list = new ArrayList<ClassMemberNode>();
         
         for (Method method : clazz.getMethods())
         {
-            
+            list.add(buildMethodDeclarationNode(method));
         }
         
         for (Field field : clazz.getFields())
         {
-            
+            list.add(buildFieldDeclarationNode(field));
         }
         
         return factory.makeClassBodyNode(factory.makeClassMemberListNode(list));
     }
 
-    private ClassModifiersNode buildModifiersNode(int modifiers)
+    private FieldDeclarationNode buildFieldDeclarationNode(Field field)
+    {
+        // TODO Auto-generated method stub
+        FieldDeclarationNode retNode =
+            factory.makeFieldDeclarationNode(
+                    buildFieldModifiersNode(field), 
+                    buildVariableDeclarators(field), 
+                    null);
+        
+        return retNode;
+    }
+
+    private VariableDeclaratorListNode buildVariableDeclarators(Field field)
     {
         // TODO Auto-generated method stub
         return null;
     }
 
-    private NameNode buildQualifiedNameNode(String name)
+    private FieldModifiersNode buildFieldModifiersNode(Field field)
     {
+        return factory.makeFieldModifiersNode(
+                buildAccessModifier(field), 
+                field.isStatic(), 
+                field.isFinal(), 
+                field.isTransient(), 
+                field.isVolatile(), 
+                factory.makeAnnotationListNode());
+    }
+
+    private MethodDeclarationNode buildMethodDeclarationNode(Method method)
+    {
+        // TODO finish argument parsing
+        MethodDeclarationNode retNode = 
+            factory.makeMethodDeclarationNode(
+                buildEmptyBlockNode(), 
+                buildMethodModifiersNode(method), 
+                factory.makeIdentifierNode(method.getName()), 
+                null, 
+                null, 
+                buildTypeNode(method.getReturnType()), 
+                buildThrowTypes(method.getExceptionTable()), 
+                buildTypeParamsListNode(method), 
+                null);
+        
+        return retNode;
+    }
+
+    private TypeParameterListNode buildTypeParamsListNode(Method method)
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    private UnparameterizedTypeListNode buildThrowTypes(
+            ExceptionTable exceptionTable)
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    private MethodModifiersNode buildMethodModifiersNode(Method method)
+    {
+        return factory.makeMethodModifiersNode(
+                buildAccessModifier(method), 
+                method.isAbstract(), 
+                method.isStatic(), 
+                method.isFinal(), 
+                method.isSynchronized(), 
+                method.isNative(), 
+                method.isStrictfp(), 
+                factory.makeAnnotationListNode());
+    }
+
+    private AccessModifier buildAccessModifier(AccessFlags flags)
+    {
+        AccessModifier access = AccessModifier.PACKAGE;
+        if (flags.isPublic())
+        {
+            access = AccessModifier.PUBLIC;
+        }
+        else if (flags.isProtected())
+        {
+            access = AccessModifier.PROTECTED;
+        }
+        else if (flags.isPrivate())
+        {
+            access = AccessModifier.PRIVATE;
+        }
+        return access;
+    }
+
+    private TypeNode buildTypeNode(Type type)
+    {
+        // TODO Auto-generated method stub
+
+        return null;
+    }
+
+    private BlockNode buildEmptyBlockNode()
+    {
+        return factory.makeBlockNode(factory.makeBlockStatementListNode());
+    }
+
+    private ClassModifiersNode buildClassModifiersNode(JavaClass clazz)
+    {
+        return factory.makeClassModifiersNode(
+                buildAccessModifier(clazz), 
+                clazz.isAbstract(), 
+                clazz.isStatic(), 
+                clazz.isFinal(), 
+                clazz.isStrictfp(), 
+                factory.makeAnnotationListNode());
+    }
+
+    private NameNode buildNameName(String name)
+    {
+        // if the name is not qualified, just return a simple name node
         if (!name.contains("\\."))
         {
             return factory.makeSimpleNameNode(factory.makeIdentifierNode(name), null);            
         }
         
-        // TODO Auto-generated method stub
+        
         String[] tokens = name.split("\\.");
         
         if (tokens.length == 1)
@@ -188,7 +308,7 @@ public class BsjBinaryNodeLoader
             
         }
         
-        
+     // TODO Auto-generated method stub
         
         NameNode retNode = null;//factory.makeQualifiedNameNode(base, identifier, null);
         
