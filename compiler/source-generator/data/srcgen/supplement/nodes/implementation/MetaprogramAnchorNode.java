@@ -17,14 +17,14 @@ public interface MetaprogramAnchorNode
 	public void setReplacement(T replacement)
 	{
 		// TODO: some kind of control on this; setReplacement should probably only be called one time?
-		if (this.replacement instanceof Node)
+		if (this.replacement instanceof NodeImpl)
 		{
-			getManager().removeParent(this, this.replacement);
+			((NodeImpl)this.replacement).setParent(null);
 		}
 		this.replacement = replacement;
-		if (this.replacement instanceof Node)
+		if (this.replacement instanceof NodeImpl)
 		{
-			getManager().addParent(this, this.replacement);
+			((NodeImpl)this.replacement).setParent(this);
 		}
 	}
 	/* GEN:stop */

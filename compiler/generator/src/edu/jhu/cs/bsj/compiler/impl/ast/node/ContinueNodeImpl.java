@@ -46,14 +46,14 @@ public class ContinueNodeImpl extends NodeImpl implements ContinueNode
      */
     public void setLabel(IdentifierNode label)
     {
-        if (this.label != null)
+        if (this.label instanceof NodeImpl)
         {
-            getManager().removeParent(this, this.label);
+            ((NodeImpl)this.label).setParent(null);
         }
         this.label = label;
-        if (this.label != null)
+        if (this.label instanceof NodeImpl)
         {
-            getManager().addParent(this, this.label);
+            ((NodeImpl)this.label).setParent(this);
         }
     }
 

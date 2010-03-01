@@ -48,14 +48,14 @@ public abstract class NameNodeImpl extends NodeImpl implements NameNode
      */
     public void setIdentifier(IdentifierNode identifier)
     {
-        if (this.identifier != null)
+        if (this.identifier instanceof NodeImpl)
         {
-            getManager().removeParent(this, this.identifier);
+            ((NodeImpl)this.identifier).setParent(null);
         }
         this.identifier = identifier;
-        if (this.identifier != null)
+        if (this.identifier instanceof NodeImpl)
         {
-            getManager().addParent(this, this.identifier);
+            ((NodeImpl)this.identifier).setParent(this);
         }
     }
 

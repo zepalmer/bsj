@@ -46,14 +46,14 @@ public class BlockNodeImpl extends NodeImpl implements BlockNode
      */
     public void setStatements(BlockStatementListNode statements)
     {
-        if (this.statements != null)
+        if (this.statements instanceof NodeImpl)
         {
-            getManager().removeParent(this, this.statements);
+            ((NodeImpl)this.statements).setParent(null);
         }
         this.statements = statements;
-        if (this.statements != null)
+        if (this.statements instanceof NodeImpl)
         {
-            getManager().addParent(this, this.statements);
+            ((NodeImpl)this.statements).setParent(this);
         }
     }
 

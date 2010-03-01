@@ -46,14 +46,14 @@ public class AnnotationBodyNodeImpl extends NodeImpl implements AnnotationBodyNo
      */
     public void setMembers(AnnotationMemberListNode members)
     {
-        if (this.members != null)
+        if (this.members instanceof NodeImpl)
         {
-            getManager().removeParent(this, this.members);
+            ((NodeImpl)this.members).setParent(null);
         }
         this.members = members;
-        if (this.members != null)
+        if (this.members instanceof NodeImpl)
         {
-            getManager().addParent(this, this.members);
+            ((NodeImpl)this.members).setParent(this);
         }
     }
 

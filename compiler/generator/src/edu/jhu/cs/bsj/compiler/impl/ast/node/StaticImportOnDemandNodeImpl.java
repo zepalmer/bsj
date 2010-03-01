@@ -46,14 +46,14 @@ public class StaticImportOnDemandNodeImpl extends NodeImpl implements StaticImpo
      */
     public void setName(NameNode name)
     {
-        if (this.name != null)
+        if (this.name instanceof NodeImpl)
         {
-            getManager().removeParent(this, this.name);
+            ((NodeImpl)this.name).setParent(null);
         }
         this.name = name;
-        if (this.name != null)
+        if (this.name instanceof NodeImpl)
         {
-            getManager().addParent(this, this.name);
+            ((NodeImpl)this.name).setParent(this);
         }
     }
 

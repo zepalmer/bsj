@@ -29,16 +29,16 @@ public class ListNodeImpl<T extends Node> extends Node implements ListNode<T>
 		}
 		protected void elementAdded(int index, T element)
 		{
-			if (element instanceof Node)
+			if (element instanceof NodeImpl)
 			{
-				getManager().removeParent(ListNodeImpl.this, (Node)element);
+				((NodeImpl)element).setParent(ListNodeImpl.this);
 			}
 		}
 		protected void elementRemoved(int index, T element)
 		{
-			if (element instanceof Node)
+			if (element instanceof NodeImpl)
 			{
-				getManager().addParent(ListNodeImpl.this, (Node)element);
+				((NodeImpl)element).setParent(null);
 			}
 		}
 	}

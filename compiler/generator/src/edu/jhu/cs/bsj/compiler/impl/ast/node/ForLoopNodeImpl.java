@@ -64,14 +64,14 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
      */
     public void setInitializer(ForInitializerNode initializer)
     {
-        if (this.initializer != null)
+        if (this.initializer instanceof NodeImpl)
         {
-            getManager().removeParent(this, this.initializer);
+            ((NodeImpl)this.initializer).setParent(null);
         }
         this.initializer = initializer;
-        if (this.initializer != null)
+        if (this.initializer instanceof NodeImpl)
         {
-            getManager().addParent(this, this.initializer);
+            ((NodeImpl)this.initializer).setParent(this);
         }
     }
 
@@ -90,14 +90,14 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
      */
     public void setCondition(ExpressionNode condition)
     {
-        if (this.condition != null)
+        if (this.condition instanceof NodeImpl)
         {
-            getManager().removeParent(this, this.condition);
+            ((NodeImpl)this.condition).setParent(null);
         }
         this.condition = condition;
-        if (this.condition != null)
+        if (this.condition instanceof NodeImpl)
         {
-            getManager().addParent(this, this.condition);
+            ((NodeImpl)this.condition).setParent(this);
         }
     }
 
@@ -116,14 +116,14 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
      */
     public void setUpdate(StatementExpressionListNode update)
     {
-        if (this.update != null)
+        if (this.update instanceof NodeImpl)
         {
-            getManager().removeParent(this, this.update);
+            ((NodeImpl)this.update).setParent(null);
         }
         this.update = update;
-        if (this.update != null)
+        if (this.update instanceof NodeImpl)
         {
-            getManager().addParent(this, this.update);
+            ((NodeImpl)this.update).setParent(this);
         }
     }
 
@@ -142,14 +142,14 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
      */
     public void setStatement(StatementNode statement)
     {
-        if (this.statement != null)
+        if (this.statement instanceof NodeImpl)
         {
-            getManager().removeParent(this, this.statement);
+            ((NodeImpl)this.statement).setParent(null);
         }
         this.statement = statement;
-        if (this.statement != null)
+        if (this.statement instanceof NodeImpl)
         {
-            getManager().addParent(this, this.statement);
+            ((NodeImpl)this.statement).setParent(this);
         }
     }
 

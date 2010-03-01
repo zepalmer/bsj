@@ -59,14 +59,14 @@ public class MetaprogramPreambleNodeImpl extends NodeImpl implements Metaprogram
      */
     public void setImports(MetaprogramImportListNode imports)
     {
-        if (this.imports != null)
+        if (this.imports instanceof NodeImpl)
         {
-            getManager().removeParent(this, this.imports);
+            ((NodeImpl)this.imports).setParent(null);
         }
         this.imports = imports;
-        if (this.imports != null)
+        if (this.imports instanceof NodeImpl)
         {
-            getManager().addParent(this, this.imports);
+            ((NodeImpl)this.imports).setParent(this);
         }
     }
 
@@ -85,14 +85,14 @@ public class MetaprogramPreambleNodeImpl extends NodeImpl implements Metaprogram
      */
     public void setTarget(MetaprogramTargetNode target)
     {
-        if (this.target != null)
+        if (this.target instanceof NodeImpl)
         {
-            getManager().removeParent(this, this.target);
+            ((NodeImpl)this.target).setParent(null);
         }
         this.target = target;
-        if (this.target != null)
+        if (this.target instanceof NodeImpl)
         {
-            getManager().addParent(this, this.target);
+            ((NodeImpl)this.target).setParent(this);
         }
     }
 
@@ -111,14 +111,14 @@ public class MetaprogramPreambleNodeImpl extends NodeImpl implements Metaprogram
      */
     public void setDepends(MetaprogramDependsNode depends)
     {
-        if (this.depends != null)
+        if (this.depends instanceof NodeImpl)
         {
-            getManager().removeParent(this, this.depends);
+            ((NodeImpl)this.depends).setParent(null);
         }
         this.depends = depends;
-        if (this.depends != null)
+        if (this.depends instanceof NodeImpl)
         {
-            getManager().addParent(this, this.depends);
+            ((NodeImpl)this.depends).setParent(this);
         }
     }
 

@@ -58,14 +58,14 @@ public class VariableNodeImpl extends NodeImpl implements VariableNode
      */
     public void setModifiers(VariableModifiersNode modifiers)
     {
-        if (this.modifiers != null)
+        if (this.modifiers instanceof NodeImpl)
         {
-            getManager().removeParent(this, this.modifiers);
+            ((NodeImpl)this.modifiers).setParent(null);
         }
         this.modifiers = modifiers;
-        if (this.modifiers != null)
+        if (this.modifiers instanceof NodeImpl)
         {
-            getManager().addParent(this, this.modifiers);
+            ((NodeImpl)this.modifiers).setParent(this);
         }
     }
 
@@ -84,14 +84,14 @@ public class VariableNodeImpl extends NodeImpl implements VariableNode
      */
     public void setType(TypeNode type)
     {
-        if (this.type != null)
+        if (this.type instanceof NodeImpl)
         {
-            getManager().removeParent(this, this.type);
+            ((NodeImpl)this.type).setParent(null);
         }
         this.type = type;
-        if (this.type != null)
+        if (this.type instanceof NodeImpl)
         {
-            getManager().addParent(this, this.type);
+            ((NodeImpl)this.type).setParent(this);
         }
     }
 
@@ -110,14 +110,14 @@ public class VariableNodeImpl extends NodeImpl implements VariableNode
      */
     public void setIdentifier(IdentifierNode identifier)
     {
-        if (this.identifier != null)
+        if (this.identifier instanceof NodeImpl)
         {
-            getManager().removeParent(this, this.identifier);
+            ((NodeImpl)this.identifier).setParent(null);
         }
         this.identifier = identifier;
-        if (this.identifier != null)
+        if (this.identifier instanceof NodeImpl)
         {
-            getManager().addParent(this, this.identifier);
+            ((NodeImpl)this.identifier).setParent(this);
         }
     }
 

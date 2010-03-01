@@ -64,14 +64,14 @@ public class SuperMethodInvocationNodeImpl extends NodeImpl implements SuperMeth
      */
     public void setType(UnparameterizedTypeNode type)
     {
-        if (this.type != null)
+        if (this.type instanceof NodeImpl)
         {
-            getManager().removeParent(this, this.type);
+            ((NodeImpl)this.type).setParent(null);
         }
         this.type = type;
-        if (this.type != null)
+        if (this.type instanceof NodeImpl)
         {
-            getManager().addParent(this, this.type);
+            ((NodeImpl)this.type).setParent(this);
         }
     }
 
@@ -90,14 +90,14 @@ public class SuperMethodInvocationNodeImpl extends NodeImpl implements SuperMeth
      */
     public void setIdentifier(IdentifierNode identifier)
     {
-        if (this.identifier != null)
+        if (this.identifier instanceof NodeImpl)
         {
-            getManager().removeParent(this, this.identifier);
+            ((NodeImpl)this.identifier).setParent(null);
         }
         this.identifier = identifier;
-        if (this.identifier != null)
+        if (this.identifier instanceof NodeImpl)
         {
-            getManager().addParent(this, this.identifier);
+            ((NodeImpl)this.identifier).setParent(this);
         }
     }
 
@@ -116,14 +116,14 @@ public class SuperMethodInvocationNodeImpl extends NodeImpl implements SuperMeth
      */
     public void setArguments(ExpressionListNode arguments)
     {
-        if (this.arguments != null)
+        if (this.arguments instanceof NodeImpl)
         {
-            getManager().removeParent(this, this.arguments);
+            ((NodeImpl)this.arguments).setParent(null);
         }
         this.arguments = arguments;
-        if (this.arguments != null)
+        if (this.arguments instanceof NodeImpl)
         {
-            getManager().addParent(this, this.arguments);
+            ((NodeImpl)this.arguments).setParent(this);
         }
     }
 
@@ -142,14 +142,14 @@ public class SuperMethodInvocationNodeImpl extends NodeImpl implements SuperMeth
      */
     public void setTypeArguments(ReferenceTypeListNode typeArguments)
     {
-        if (this.typeArguments != null)
+        if (this.typeArguments instanceof NodeImpl)
         {
-            getManager().removeParent(this, this.typeArguments);
+            ((NodeImpl)this.typeArguments).setParent(null);
         }
         this.typeArguments = typeArguments;
-        if (this.typeArguments != null)
+        if (this.typeArguments instanceof NodeImpl)
         {
-            getManager().addParent(this, this.typeArguments);
+            ((NodeImpl)this.typeArguments).setParent(this);
         }
     }
 

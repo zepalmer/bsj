@@ -46,14 +46,14 @@ public class ArrayTypeNodeImpl extends NodeImpl implements ArrayTypeNode
      */
     public void setType(TypeNode type)
     {
-        if (this.type != null)
+        if (this.type instanceof NodeImpl)
         {
-            getManager().removeParent(this, this.type);
+            ((NodeImpl)this.type).setParent(null);
         }
         this.type = type;
-        if (this.type != null)
+        if (this.type instanceof NodeImpl)
         {
-            getManager().addParent(this, this.type);
+            ((NodeImpl)this.type).setParent(this);
         }
     }
 

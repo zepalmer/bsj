@@ -56,14 +56,14 @@ public class MethodInvocationByExpressionNodeImpl extends MethodInvocationNodeIm
      */
     public void setExpression(PrimaryExpressionNode expression)
     {
-        if (this.expression != null)
+        if (this.expression instanceof NodeImpl)
         {
-            getManager().removeParent(this, this.expression);
+            ((NodeImpl)this.expression).setParent(null);
         }
         this.expression = expression;
-        if (this.expression != null)
+        if (this.expression instanceof NodeImpl)
         {
-            getManager().addParent(this, this.expression);
+            ((NodeImpl)this.expression).setParent(this);
         }
     }
 
@@ -82,14 +82,14 @@ public class MethodInvocationByExpressionNodeImpl extends MethodInvocationNodeIm
      */
     public void setIdentifier(IdentifierNode identifier)
     {
-        if (this.identifier != null)
+        if (this.identifier instanceof NodeImpl)
         {
-            getManager().removeParent(this, this.identifier);
+            ((NodeImpl)this.identifier).setParent(null);
         }
         this.identifier = identifier;
-        if (this.identifier != null)
+        if (this.identifier instanceof NodeImpl)
         {
-            getManager().addParent(this, this.identifier);
+            ((NodeImpl)this.identifier).setParent(this);
         }
     }
 

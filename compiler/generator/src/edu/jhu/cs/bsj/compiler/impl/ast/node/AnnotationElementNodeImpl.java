@@ -52,14 +52,14 @@ public class AnnotationElementNodeImpl extends NodeImpl implements AnnotationEle
      */
     public void setIdentifier(IdentifierNode identifier)
     {
-        if (this.identifier != null)
+        if (this.identifier instanceof NodeImpl)
         {
-            getManager().removeParent(this, this.identifier);
+            ((NodeImpl)this.identifier).setParent(null);
         }
         this.identifier = identifier;
-        if (this.identifier != null)
+        if (this.identifier instanceof NodeImpl)
         {
-            getManager().addParent(this, this.identifier);
+            ((NodeImpl)this.identifier).setParent(this);
         }
     }
 
@@ -78,14 +78,14 @@ public class AnnotationElementNodeImpl extends NodeImpl implements AnnotationEle
      */
     public void setValue(AnnotationValueNode value)
     {
-        if (this.value != null)
+        if (this.value instanceof NodeImpl)
         {
-            getManager().removeParent(this, this.value);
+            ((NodeImpl)this.value).setParent(null);
         }
         this.value = value;
-        if (this.value != null)
+        if (this.value instanceof NodeImpl)
         {
-            getManager().addParent(this, this.value);
+            ((NodeImpl)this.value).setParent(this);
         }
     }
 

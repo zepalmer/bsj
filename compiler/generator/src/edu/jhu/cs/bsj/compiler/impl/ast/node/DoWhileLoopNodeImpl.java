@@ -52,14 +52,14 @@ public class DoWhileLoopNodeImpl extends NodeImpl implements DoWhileLoopNode
      */
     public void setCondition(ExpressionNode condition)
     {
-        if (this.condition != null)
+        if (this.condition instanceof NodeImpl)
         {
-            getManager().removeParent(this, this.condition);
+            ((NodeImpl)this.condition).setParent(null);
         }
         this.condition = condition;
-        if (this.condition != null)
+        if (this.condition instanceof NodeImpl)
         {
-            getManager().addParent(this, this.condition);
+            ((NodeImpl)this.condition).setParent(this);
         }
     }
 
@@ -78,14 +78,14 @@ public class DoWhileLoopNodeImpl extends NodeImpl implements DoWhileLoopNode
      */
     public void setStatement(StatementNode statement)
     {
-        if (this.statement != null)
+        if (this.statement instanceof NodeImpl)
         {
-            getManager().removeParent(this, this.statement);
+            ((NodeImpl)this.statement).setParent(null);
         }
         this.statement = statement;
-        if (this.statement != null)
+        if (this.statement instanceof NodeImpl)
         {
-            getManager().addParent(this, this.statement);
+            ((NodeImpl)this.statement).setParent(this);
         }
     }
 

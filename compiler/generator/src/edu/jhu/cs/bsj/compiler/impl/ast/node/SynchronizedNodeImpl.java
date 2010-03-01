@@ -52,14 +52,14 @@ public class SynchronizedNodeImpl extends NodeImpl implements SynchronizedNode
      */
     public void setExpression(ExpressionNode expression)
     {
-        if (this.expression != null)
+        if (this.expression instanceof NodeImpl)
         {
-            getManager().removeParent(this, this.expression);
+            ((NodeImpl)this.expression).setParent(null);
         }
         this.expression = expression;
-        if (this.expression != null)
+        if (this.expression instanceof NodeImpl)
         {
-            getManager().addParent(this, this.expression);
+            ((NodeImpl)this.expression).setParent(this);
         }
     }
 
@@ -78,14 +78,14 @@ public class SynchronizedNodeImpl extends NodeImpl implements SynchronizedNode
      */
     public void setBlock(BlockNode block)
     {
-        if (this.block != null)
+        if (this.block instanceof NodeImpl)
         {
-            getManager().removeParent(this, this.block);
+            ((NodeImpl)this.block).setParent(null);
         }
         this.block = block;
-        if (this.block != null)
+        if (this.block instanceof NodeImpl)
         {
-            getManager().addParent(this, this.block);
+            ((NodeImpl)this.block).setParent(this);
         }
     }
 

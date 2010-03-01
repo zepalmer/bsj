@@ -52,14 +52,14 @@ public class InstanceOfNodeImpl extends NodeImpl implements InstanceOfNode
      */
     public void setExpression(ExpressionNode expression)
     {
-        if (this.expression != null)
+        if (this.expression instanceof NodeImpl)
         {
-            getManager().removeParent(this, this.expression);
+            ((NodeImpl)this.expression).setParent(null);
         }
         this.expression = expression;
-        if (this.expression != null)
+        if (this.expression instanceof NodeImpl)
         {
-            getManager().addParent(this, this.expression);
+            ((NodeImpl)this.expression).setParent(this);
         }
     }
 
@@ -78,14 +78,14 @@ public class InstanceOfNodeImpl extends NodeImpl implements InstanceOfNode
      */
     public void setType(TypeNode type)
     {
-        if (this.type != null)
+        if (this.type instanceof NodeImpl)
         {
-            getManager().removeParent(this, this.type);
+            ((NodeImpl)this.type).setParent(null);
         }
         this.type = type;
-        if (this.type != null)
+        if (this.type instanceof NodeImpl)
         {
-            getManager().addParent(this, this.type);
+            ((NodeImpl)this.type).setParent(this);
         }
     }
 

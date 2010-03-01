@@ -52,14 +52,14 @@ public class LabeledStatementNodeImpl extends NodeImpl implements LabeledStateme
      */
     public void setLabel(IdentifierNode label)
     {
-        if (this.label != null)
+        if (this.label instanceof NodeImpl)
         {
-            getManager().removeParent(this, this.label);
+            ((NodeImpl)this.label).setParent(null);
         }
         this.label = label;
-        if (this.label != null)
+        if (this.label instanceof NodeImpl)
         {
-            getManager().addParent(this, this.label);
+            ((NodeImpl)this.label).setParent(this);
         }
     }
 
@@ -78,14 +78,14 @@ public class LabeledStatementNodeImpl extends NodeImpl implements LabeledStateme
      */
     public void setStatement(StatementNode statement)
     {
-        if (this.statement != null)
+        if (this.statement instanceof NodeImpl)
         {
-            getManager().removeParent(this, this.statement);
+            ((NodeImpl)this.statement).setParent(null);
         }
         this.statement = statement;
-        if (this.statement != null)
+        if (this.statement instanceof NodeImpl)
         {
-            getManager().addParent(this, this.statement);
+            ((NodeImpl)this.statement).setParent(this);
         }
     }
 

@@ -63,14 +63,14 @@ public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeI
      */
     public void setEnclosingExpression(ExpressionNode enclosingExpression)
     {
-        if (this.enclosingExpression != null)
+        if (this.enclosingExpression instanceof NodeImpl)
         {
-            getManager().removeParent(this, this.enclosingExpression);
+            ((NodeImpl)this.enclosingExpression).setParent(null);
         }
         this.enclosingExpression = enclosingExpression;
-        if (this.enclosingExpression != null)
+        if (this.enclosingExpression instanceof NodeImpl)
         {
-            getManager().addParent(this, this.enclosingExpression);
+            ((NodeImpl)this.enclosingExpression).setParent(this);
         }
     }
 
@@ -89,14 +89,14 @@ public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeI
      */
     public void setIdentifier(IdentifierNode identifier)
     {
-        if (this.identifier != null)
+        if (this.identifier instanceof NodeImpl)
         {
-            getManager().removeParent(this, this.identifier);
+            ((NodeImpl)this.identifier).setParent(null);
         }
         this.identifier = identifier;
-        if (this.identifier != null)
+        if (this.identifier instanceof NodeImpl)
         {
-            getManager().addParent(this, this.identifier);
+            ((NodeImpl)this.identifier).setParent(this);
         }
     }
 
@@ -115,14 +115,14 @@ public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeI
      */
     public void setTypeArguments(TypeArgumentListNode typeArguments)
     {
-        if (this.typeArguments != null)
+        if (this.typeArguments instanceof NodeImpl)
         {
-            getManager().removeParent(this, this.typeArguments);
+            ((NodeImpl)this.typeArguments).setParent(null);
         }
         this.typeArguments = typeArguments;
-        if (this.typeArguments != null)
+        if (this.typeArguments instanceof NodeImpl)
         {
-            getManager().addParent(this, this.typeArguments);
+            ((NodeImpl)this.typeArguments).setParent(this);
         }
     }
 

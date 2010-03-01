@@ -21,14 +21,12 @@ import org.junit.Test;
 
 import edu.jhu.cs.bsj.compiler.BsjServiceRegistry;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
-import edu.jhu.cs.bsj.compiler.ast.BsjSourceSerializer;
 import edu.jhu.cs.bsj.compiler.ast.NameCategory;
 import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.MethodDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.BsjTreeLifter;
-import edu.jhu.cs.bsj.compiler.impl.tool.serializer.BsjSourceSerializerImpl;
 import edu.jhu.cs.bsj.compiler.impl.utils.StringUtilities;
 import edu.jhu.cs.bsj.compiler.tool.BsjToolkit;
 import edu.jhu.cs.bsj.compiler.tool.BsjToolkitFactory;
@@ -53,7 +51,6 @@ public class BsjTreeLifterTest extends AbstractPerFileTest
 			"edu.jhu.cs.bsj.compiler.ast.node.meta.*", "java.util.*" };
 	private BsjToolkit toolkit = BsjServiceRegistry.newToolkitFactory().newToolkit();
 	private String factoryName = "factory";
-	private BsjSourceSerializer serializer = new BsjSourceSerializerImpl();
 
 	/**
 	 * Test the BsjTreeLifter on files in the examples directory.
@@ -95,7 +92,7 @@ public class BsjTreeLifterTest extends AbstractPerFileTest
 		}
 
 		// regenerate and save the original source
-		String originalProgram = ast.executeOperation(serializer, null);
+		String originalProgram = ast.executeOperation(toolkit.getSerializer(), null);
 
 		// create a metaFactory for use in the lifted code
 		ExpressionNode metaFactory = factory.makeFieldAccessByNameNode(factory.makeSimpleNameNode(
@@ -111,7 +108,7 @@ public class BsjTreeLifterTest extends AbstractPerFileTest
 		String liftedProgram = null;
 		try
 		{
-			liftedProgram = compileMeta(metaAst, factoryName, methods).executeOperation(serializer, null);
+			liftedProgram = compileMeta(metaAst, factoryName, methods).executeOperation(toolkit.getSerializer(), null);
 		} catch (Exception e)
 		{
 			e.printStackTrace();
@@ -119,7 +116,14 @@ public class BsjTreeLifterTest extends AbstractPerFileTest
 		}
 
 		// compare the original (regenerated) to the lifted, recompiled and regenerated
-		return originalProgram.equals(liftedProgram);
+		if (!originalProgram.equals(liftedProgram))
+		{
+			LOGGER.error("Original program does not match lifted program!\n" + originalProgram + "\n\n" + liftedProgram);
+			return false;
+		} else
+		{
+			return true;
+		}
 	}
 
 	/**
@@ -159,11 +163,11 @@ public class BsjTreeLifterTest extends AbstractPerFileTest
 		sb.append("    this." + factoryName + " = " + factoryName + ";\n");
 		sb.append("}\n");
 		sb.append("public Node runLiftedCode()\n{\n\nreturn ");
-		sb.append(code.executeOperation(serializer, null));
+		sb.append(code.executeOperation(toolkit.getSerializer(), null));
 		sb.append(";\n}\n");
 		for (MethodDeclarationNode method : methods)
 		{
-			sb.append(method.executeOperation(serializer, null));
+			sb.append(method.executeOperation(toolkit.getSerializer(), null));
 			sb.append("\n");
 		}
 		sb.append("\n}");

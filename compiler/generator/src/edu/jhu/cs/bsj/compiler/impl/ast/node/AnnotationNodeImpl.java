@@ -43,14 +43,14 @@ public abstract class AnnotationNodeImpl extends NodeImpl implements AnnotationN
      */
     public void setAnnotationType(UnparameterizedTypeNode annotationType)
     {
-        if (this.annotationType != null)
+        if (this.annotationType instanceof NodeImpl)
         {
-            getManager().removeParent(this, this.annotationType);
+            ((NodeImpl)this.annotationType).setParent(null);
         }
         this.annotationType = annotationType;
-        if (this.annotationType != null)
+        if (this.annotationType instanceof NodeImpl)
         {
-            getManager().addParent(this, this.annotationType);
+            ((NodeImpl)this.annotationType).setParent(this);
         }
     }
 

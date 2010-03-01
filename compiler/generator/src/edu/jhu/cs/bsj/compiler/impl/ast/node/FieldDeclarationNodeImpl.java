@@ -58,14 +58,14 @@ public class FieldDeclarationNodeImpl extends NodeImpl implements FieldDeclarati
      */
     public void setModifiers(FieldModifiersNode modifiers)
     {
-        if (this.modifiers != null)
+        if (this.modifiers instanceof NodeImpl)
         {
-            getManager().removeParent(this, this.modifiers);
+            ((NodeImpl)this.modifiers).setParent(null);
         }
         this.modifiers = modifiers;
-        if (this.modifiers != null)
+        if (this.modifiers instanceof NodeImpl)
         {
-            getManager().addParent(this, this.modifiers);
+            ((NodeImpl)this.modifiers).setParent(this);
         }
     }
 
@@ -84,14 +84,14 @@ public class FieldDeclarationNodeImpl extends NodeImpl implements FieldDeclarati
      */
     public void setDeclarators(VariableDeclaratorListNode declarators)
     {
-        if (this.declarators != null)
+        if (this.declarators instanceof NodeImpl)
         {
-            getManager().removeParent(this, this.declarators);
+            ((NodeImpl)this.declarators).setParent(null);
         }
         this.declarators = declarators;
-        if (this.declarators != null)
+        if (this.declarators instanceof NodeImpl)
         {
-            getManager().addParent(this, this.declarators);
+            ((NodeImpl)this.declarators).setParent(this);
         }
     }
 
@@ -110,14 +110,14 @@ public class FieldDeclarationNodeImpl extends NodeImpl implements FieldDeclarati
      */
     public void setJavadoc(JavadocNode javadoc)
     {
-        if (this.javadoc != null)
+        if (this.javadoc instanceof NodeImpl)
         {
-            getManager().removeParent(this, this.javadoc);
+            ((NodeImpl)this.javadoc).setParent(null);
         }
         this.javadoc = javadoc;
-        if (this.javadoc != null)
+        if (this.javadoc instanceof NodeImpl)
         {
-            getManager().addParent(this, this.javadoc);
+            ((NodeImpl)this.javadoc).setParent(this);
         }
     }
 

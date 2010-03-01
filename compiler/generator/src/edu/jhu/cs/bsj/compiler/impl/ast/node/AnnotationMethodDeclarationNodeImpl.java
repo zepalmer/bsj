@@ -70,14 +70,14 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
      */
     public void setModifiers(AnnotationMethodModifiersNode modifiers)
     {
-        if (this.modifiers != null)
+        if (this.modifiers instanceof NodeImpl)
         {
-            getManager().removeParent(this, this.modifiers);
+            ((NodeImpl)this.modifiers).setParent(null);
         }
         this.modifiers = modifiers;
-        if (this.modifiers != null)
+        if (this.modifiers instanceof NodeImpl)
         {
-            getManager().addParent(this, this.modifiers);
+            ((NodeImpl)this.modifiers).setParent(this);
         }
     }
 
@@ -96,14 +96,14 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
      */
     public void setType(TypeNode type)
     {
-        if (this.type != null)
+        if (this.type instanceof NodeImpl)
         {
-            getManager().removeParent(this, this.type);
+            ((NodeImpl)this.type).setParent(null);
         }
         this.type = type;
-        if (this.type != null)
+        if (this.type instanceof NodeImpl)
         {
-            getManager().addParent(this, this.type);
+            ((NodeImpl)this.type).setParent(this);
         }
     }
 
@@ -122,14 +122,14 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
      */
     public void setIdentifier(IdentifierNode identifier)
     {
-        if (this.identifier != null)
+        if (this.identifier instanceof NodeImpl)
         {
-            getManager().removeParent(this, this.identifier);
+            ((NodeImpl)this.identifier).setParent(null);
         }
         this.identifier = identifier;
-        if (this.identifier != null)
+        if (this.identifier instanceof NodeImpl)
         {
-            getManager().addParent(this, this.identifier);
+            ((NodeImpl)this.identifier).setParent(this);
         }
     }
 
@@ -148,14 +148,14 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
      */
     public void setDefaultValue(AnnotationValueNode defaultValue)
     {
-        if (this.defaultValue != null)
+        if (this.defaultValue instanceof NodeImpl)
         {
-            getManager().removeParent(this, this.defaultValue);
+            ((NodeImpl)this.defaultValue).setParent(null);
         }
         this.defaultValue = defaultValue;
-        if (this.defaultValue != null)
+        if (this.defaultValue instanceof NodeImpl)
         {
-            getManager().addParent(this, this.defaultValue);
+            ((NodeImpl)this.defaultValue).setParent(this);
         }
     }
 
@@ -174,14 +174,14 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
      */
     public void setJavadoc(JavadocNode javadoc)
     {
-        if (this.javadoc != null)
+        if (this.javadoc instanceof NodeImpl)
         {
-            getManager().removeParent(this, this.javadoc);
+            ((NodeImpl)this.javadoc).setParent(null);
         }
         this.javadoc = javadoc;
-        if (this.javadoc != null)
+        if (this.javadoc instanceof NodeImpl)
         {
-            getManager().addParent(this, this.javadoc);
+            ((NodeImpl)this.javadoc).setParent(this);
         }
     }
 

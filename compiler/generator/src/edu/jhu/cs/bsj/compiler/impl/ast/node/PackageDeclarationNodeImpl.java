@@ -52,14 +52,14 @@ public class PackageDeclarationNodeImpl extends NodeImpl implements PackageDecla
      */
     public void setName(NameNode name)
     {
-        if (this.name != null)
+        if (this.name instanceof NodeImpl)
         {
-            getManager().removeParent(this, this.name);
+            ((NodeImpl)this.name).setParent(null);
         }
         this.name = name;
-        if (this.name != null)
+        if (this.name instanceof NodeImpl)
         {
-            getManager().addParent(this, this.name);
+            ((NodeImpl)this.name).setParent(this);
         }
     }
 
@@ -78,14 +78,14 @@ public class PackageDeclarationNodeImpl extends NodeImpl implements PackageDecla
      */
     public void setAnnotations(AnnotationListNode annotations)
     {
-        if (this.annotations != null)
+        if (this.annotations instanceof NodeImpl)
         {
-            getManager().removeParent(this, this.annotations);
+            ((NodeImpl)this.annotations).setParent(null);
         }
         this.annotations = annotations;
-        if (this.annotations != null)
+        if (this.annotations instanceof NodeImpl)
         {
-            getManager().addParent(this, this.annotations);
+            ((NodeImpl)this.annotations).setParent(this);
         }
     }
 

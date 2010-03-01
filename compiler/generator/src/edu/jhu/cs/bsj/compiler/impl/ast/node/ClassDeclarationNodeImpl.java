@@ -83,14 +83,14 @@ public class ClassDeclarationNodeImpl extends NodeImpl implements ClassDeclarati
      */
     public void setModifiers(ClassModifiersNode modifiers)
     {
-        if (this.modifiers != null)
+        if (this.modifiers instanceof NodeImpl)
         {
-            getManager().removeParent(this, this.modifiers);
+            ((NodeImpl)this.modifiers).setParent(null);
         }
         this.modifiers = modifiers;
-        if (this.modifiers != null)
+        if (this.modifiers instanceof NodeImpl)
         {
-            getManager().addParent(this, this.modifiers);
+            ((NodeImpl)this.modifiers).setParent(this);
         }
     }
 
@@ -109,14 +109,14 @@ public class ClassDeclarationNodeImpl extends NodeImpl implements ClassDeclarati
      */
     public void setExtendsClause(DeclaredTypeNode extendsClause)
     {
-        if (this.extendsClause != null)
+        if (this.extendsClause instanceof NodeImpl)
         {
-            getManager().removeParent(this, this.extendsClause);
+            ((NodeImpl)this.extendsClause).setParent(null);
         }
         this.extendsClause = extendsClause;
-        if (this.extendsClause != null)
+        if (this.extendsClause instanceof NodeImpl)
         {
-            getManager().addParent(this, this.extendsClause);
+            ((NodeImpl)this.extendsClause).setParent(this);
         }
     }
 
@@ -135,14 +135,14 @@ public class ClassDeclarationNodeImpl extends NodeImpl implements ClassDeclarati
      */
     public void setImplementsClause(DeclaredTypeListNode implementsClause)
     {
-        if (this.implementsClause != null)
+        if (this.implementsClause instanceof NodeImpl)
         {
-            getManager().removeParent(this, this.implementsClause);
+            ((NodeImpl)this.implementsClause).setParent(null);
         }
         this.implementsClause = implementsClause;
-        if (this.implementsClause != null)
+        if (this.implementsClause instanceof NodeImpl)
         {
-            getManager().addParent(this, this.implementsClause);
+            ((NodeImpl)this.implementsClause).setParent(this);
         }
     }
 
@@ -161,14 +161,14 @@ public class ClassDeclarationNodeImpl extends NodeImpl implements ClassDeclarati
      */
     public void setBody(ClassBodyNode body)
     {
-        if (this.body != null)
+        if (this.body instanceof NodeImpl)
         {
-            getManager().removeParent(this, this.body);
+            ((NodeImpl)this.body).setParent(null);
         }
         this.body = body;
-        if (this.body != null)
+        if (this.body instanceof NodeImpl)
         {
-            getManager().addParent(this, this.body);
+            ((NodeImpl)this.body).setParent(this);
         }
     }
 
@@ -187,14 +187,14 @@ public class ClassDeclarationNodeImpl extends NodeImpl implements ClassDeclarati
      */
     public void setTypeParameters(TypeParameterListNode typeParameters)
     {
-        if (this.typeParameters != null)
+        if (this.typeParameters instanceof NodeImpl)
         {
-            getManager().removeParent(this, this.typeParameters);
+            ((NodeImpl)this.typeParameters).setParent(null);
         }
         this.typeParameters = typeParameters;
-        if (this.typeParameters != null)
+        if (this.typeParameters instanceof NodeImpl)
         {
-            getManager().addParent(this, this.typeParameters);
+            ((NodeImpl)this.typeParameters).setParent(this);
         }
     }
 
@@ -213,14 +213,14 @@ public class ClassDeclarationNodeImpl extends NodeImpl implements ClassDeclarati
      */
     public void setIdentifier(IdentifierNode identifier)
     {
-        if (this.identifier != null)
+        if (this.identifier instanceof NodeImpl)
         {
-            getManager().removeParent(this, this.identifier);
+            ((NodeImpl)this.identifier).setParent(null);
         }
         this.identifier = identifier;
-        if (this.identifier != null)
+        if (this.identifier instanceof NodeImpl)
         {
-            getManager().addParent(this, this.identifier);
+            ((NodeImpl)this.identifier).setParent(this);
         }
     }
 
@@ -239,14 +239,14 @@ public class ClassDeclarationNodeImpl extends NodeImpl implements ClassDeclarati
      */
     public void setJavadoc(JavadocNode javadoc)
     {
-        if (this.javadoc != null)
+        if (this.javadoc instanceof NodeImpl)
         {
-            getManager().removeParent(this, this.javadoc);
+            ((NodeImpl)this.javadoc).setParent(null);
         }
         this.javadoc = javadoc;
-        if (this.javadoc != null)
+        if (this.javadoc instanceof NodeImpl)
         {
-            getManager().addParent(this, this.javadoc);
+            ((NodeImpl)this.javadoc).setParent(this);
         }
     }
 

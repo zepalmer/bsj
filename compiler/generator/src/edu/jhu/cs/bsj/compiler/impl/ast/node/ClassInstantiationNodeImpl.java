@@ -55,14 +55,14 @@ public abstract class ClassInstantiationNodeImpl extends NodeImpl implements Cla
      */
     public void setConstructorTypeArguments(TypeArgumentListNode constructorTypeArguments)
     {
-        if (this.constructorTypeArguments != null)
+        if (this.constructorTypeArguments instanceof NodeImpl)
         {
-            getManager().removeParent(this, this.constructorTypeArguments);
+            ((NodeImpl)this.constructorTypeArguments).setParent(null);
         }
         this.constructorTypeArguments = constructorTypeArguments;
-        if (this.constructorTypeArguments != null)
+        if (this.constructorTypeArguments instanceof NodeImpl)
         {
-            getManager().addParent(this, this.constructorTypeArguments);
+            ((NodeImpl)this.constructorTypeArguments).setParent(this);
         }
     }
 
@@ -81,14 +81,14 @@ public abstract class ClassInstantiationNodeImpl extends NodeImpl implements Cla
      */
     public void setArguments(ExpressionListNode arguments)
     {
-        if (this.arguments != null)
+        if (this.arguments instanceof NodeImpl)
         {
-            getManager().removeParent(this, this.arguments);
+            ((NodeImpl)this.arguments).setParent(null);
         }
         this.arguments = arguments;
-        if (this.arguments != null)
+        if (this.arguments instanceof NodeImpl)
         {
-            getManager().addParent(this, this.arguments);
+            ((NodeImpl)this.arguments).setParent(this);
         }
     }
 
@@ -107,14 +107,14 @@ public abstract class ClassInstantiationNodeImpl extends NodeImpl implements Cla
      */
     public void setBody(AnonymousClassBodyNode body)
     {
-        if (this.body != null)
+        if (this.body instanceof NodeImpl)
         {
-            getManager().removeParent(this, this.body);
+            ((NodeImpl)this.body).setParent(null);
         }
         this.body = body;
-        if (this.body != null)
+        if (this.body instanceof NodeImpl)
         {
-            getManager().addParent(this, this.body);
+            ((NodeImpl)this.body).setParent(this);
         }
     }
 

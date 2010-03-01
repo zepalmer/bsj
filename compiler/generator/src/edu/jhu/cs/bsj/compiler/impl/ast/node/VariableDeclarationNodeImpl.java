@@ -52,14 +52,14 @@ public class VariableDeclarationNodeImpl extends NodeImpl implements VariableDec
      */
     public void setModifiers(VariableModifiersNode modifiers)
     {
-        if (this.modifiers != null)
+        if (this.modifiers instanceof NodeImpl)
         {
-            getManager().removeParent(this, this.modifiers);
+            ((NodeImpl)this.modifiers).setParent(null);
         }
         this.modifiers = modifiers;
-        if (this.modifiers != null)
+        if (this.modifiers instanceof NodeImpl)
         {
-            getManager().addParent(this, this.modifiers);
+            ((NodeImpl)this.modifiers).setParent(this);
         }
     }
 
@@ -78,14 +78,14 @@ public class VariableDeclarationNodeImpl extends NodeImpl implements VariableDec
      */
     public void setDeclarators(VariableDeclaratorListNode declarators)
     {
-        if (this.declarators != null)
+        if (this.declarators instanceof NodeImpl)
         {
-            getManager().removeParent(this, this.declarators);
+            ((NodeImpl)this.declarators).setParent(null);
         }
         this.declarators = declarators;
-        if (this.declarators != null)
+        if (this.declarators instanceof NodeImpl)
         {
-            getManager().addParent(this, this.declarators);
+            ((NodeImpl)this.declarators).setParent(this);
         }
     }
 

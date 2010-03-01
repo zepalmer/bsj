@@ -47,14 +47,14 @@ public class MetaprogramTargetNodeImpl extends NodeImpl implements MetaprogramTa
      */
     public void setTargets(IdentifierListNode targets)
     {
-        if (this.targets != null)
+        if (this.targets instanceof NodeImpl)
         {
-            getManager().removeParent(this, this.targets);
+            ((NodeImpl)this.targets).setParent(null);
         }
         this.targets = targets;
-        if (this.targets != null)
+        if (this.targets instanceof NodeImpl)
         {
-            getManager().addParent(this, this.targets);
+            ((NodeImpl)this.targets).setParent(this);
         }
     }
 

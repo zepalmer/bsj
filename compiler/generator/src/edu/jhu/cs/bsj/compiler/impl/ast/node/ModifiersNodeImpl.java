@@ -43,14 +43,14 @@ public abstract class ModifiersNodeImpl extends NodeImpl implements ModifiersNod
      */
     public void setAnnotations(AnnotationListNode annotations)
     {
-        if (this.annotations != null)
+        if (this.annotations instanceof NodeImpl)
         {
-            getManager().removeParent(this, this.annotations);
+            ((NodeImpl)this.annotations).setParent(null);
         }
         this.annotations = annotations;
-        if (this.annotations != null)
+        if (this.annotations instanceof NodeImpl)
         {
-            getManager().addParent(this, this.annotations);
+            ((NodeImpl)this.annotations).setParent(this);
         }
     }
 

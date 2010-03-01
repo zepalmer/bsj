@@ -46,14 +46,14 @@ public class InlineTypeDeclarationNodeImpl extends NodeImpl implements InlineTyp
      */
     public void setDeclaration(InlineTypeDeclarableNode declaration)
     {
-        if (this.declaration != null)
+        if (this.declaration instanceof NodeImpl)
         {
-            getManager().removeParent(this, this.declaration);
+            ((NodeImpl)this.declaration).setParent(null);
         }
         this.declaration = declaration;
-        if (this.declaration != null)
+        if (this.declaration instanceof NodeImpl)
         {
-            getManager().addParent(this, this.declaration);
+            ((NodeImpl)this.declaration).setParent(this);
         }
     }
 

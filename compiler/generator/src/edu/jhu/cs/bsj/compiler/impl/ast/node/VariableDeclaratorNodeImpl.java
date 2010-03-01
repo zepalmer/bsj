@@ -58,14 +58,14 @@ public class VariableDeclaratorNodeImpl extends NodeImpl implements VariableDecl
      */
     public void setType(TypeNode type)
     {
-        if (this.type != null)
+        if (this.type instanceof NodeImpl)
         {
-            getManager().removeParent(this, this.type);
+            ((NodeImpl)this.type).setParent(null);
         }
         this.type = type;
-        if (this.type != null)
+        if (this.type instanceof NodeImpl)
         {
-            getManager().addParent(this, this.type);
+            ((NodeImpl)this.type).setParent(this);
         }
     }
 
@@ -84,14 +84,14 @@ public class VariableDeclaratorNodeImpl extends NodeImpl implements VariableDecl
      */
     public void setName(IdentifierNode name)
     {
-        if (this.name != null)
+        if (this.name instanceof NodeImpl)
         {
-            getManager().removeParent(this, this.name);
+            ((NodeImpl)this.name).setParent(null);
         }
         this.name = name;
-        if (this.name != null)
+        if (this.name instanceof NodeImpl)
         {
-            getManager().addParent(this, this.name);
+            ((NodeImpl)this.name).setParent(this);
         }
     }
 
@@ -110,14 +110,14 @@ public class VariableDeclaratorNodeImpl extends NodeImpl implements VariableDecl
      */
     public void setInitializer(VariableInitializerNode initializer)
     {
-        if (this.initializer != null)
+        if (this.initializer instanceof NodeImpl)
         {
-            getManager().removeParent(this, this.initializer);
+            ((NodeImpl)this.initializer).setParent(null);
         }
         this.initializer = initializer;
-        if (this.initializer != null)
+        if (this.initializer instanceof NodeImpl)
         {
-            getManager().addParent(this, this.initializer);
+            ((NodeImpl)this.initializer).setParent(this);
         }
     }
 

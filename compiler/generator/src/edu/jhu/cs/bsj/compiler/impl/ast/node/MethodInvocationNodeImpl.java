@@ -49,14 +49,14 @@ public abstract class MethodInvocationNodeImpl extends NodeImpl implements Metho
      */
     public void setArguments(ExpressionListNode arguments)
     {
-        if (this.arguments != null)
+        if (this.arguments instanceof NodeImpl)
         {
-            getManager().removeParent(this, this.arguments);
+            ((NodeImpl)this.arguments).setParent(null);
         }
         this.arguments = arguments;
-        if (this.arguments != null)
+        if (this.arguments instanceof NodeImpl)
         {
-            getManager().addParent(this, this.arguments);
+            ((NodeImpl)this.arguments).setParent(this);
         }
     }
 
@@ -75,14 +75,14 @@ public abstract class MethodInvocationNodeImpl extends NodeImpl implements Metho
      */
     public void setTypeArguments(ReferenceTypeListNode typeArguments)
     {
-        if (this.typeArguments != null)
+        if (this.typeArguments instanceof NodeImpl)
         {
-            getManager().removeParent(this, this.typeArguments);
+            ((NodeImpl)this.typeArguments).setParent(null);
         }
         this.typeArguments = typeArguments;
-        if (this.typeArguments != null)
+        if (this.typeArguments instanceof NodeImpl)
         {
-            getManager().addParent(this, this.typeArguments);
+            ((NodeImpl)this.typeArguments).setParent(this);
         }
     }
 

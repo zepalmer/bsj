@@ -48,14 +48,14 @@ public class SingleElementAnnotationNodeImpl extends AnnotationNodeImpl implemen
      */
     public void setValue(AnnotationValueNode value)
     {
-        if (this.value != null)
+        if (this.value instanceof NodeImpl)
         {
-            getManager().removeParent(this, this.value);
+            ((NodeImpl)this.value).setParent(null);
         }
         this.value = value;
-        if (this.value != null)
+        if (this.value instanceof NodeImpl)
         {
-            getManager().addParent(this, this.value);
+            ((NodeImpl)this.value).setParent(this);
         }
     }
 

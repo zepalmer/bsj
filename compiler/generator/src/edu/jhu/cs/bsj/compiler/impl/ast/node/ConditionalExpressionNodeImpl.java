@@ -56,14 +56,14 @@ public class ConditionalExpressionNodeImpl extends NodeImpl implements Condition
      */
     public void setCondition(ExpressionNode condition)
     {
-        if (this.condition != null)
+        if (this.condition instanceof NodeImpl)
         {
-            getManager().removeParent(this, this.condition);
+            ((NodeImpl)this.condition).setParent(null);
         }
         this.condition = condition;
-        if (this.condition != null)
+        if (this.condition instanceof NodeImpl)
         {
-            getManager().addParent(this, this.condition);
+            ((NodeImpl)this.condition).setParent(this);
         }
     }
 
@@ -82,14 +82,14 @@ public class ConditionalExpressionNodeImpl extends NodeImpl implements Condition
      */
     public void setTrueExpression(ExpressionNode trueExpression)
     {
-        if (this.trueExpression != null)
+        if (this.trueExpression instanceof NodeImpl)
         {
-            getManager().removeParent(this, this.trueExpression);
+            ((NodeImpl)this.trueExpression).setParent(null);
         }
         this.trueExpression = trueExpression;
-        if (this.trueExpression != null)
+        if (this.trueExpression instanceof NodeImpl)
         {
-            getManager().addParent(this, this.trueExpression);
+            ((NodeImpl)this.trueExpression).setParent(this);
         }
     }
 
@@ -108,14 +108,14 @@ public class ConditionalExpressionNodeImpl extends NodeImpl implements Condition
      */
     public void setFalseExpression(ExpressionNode falseExpression)
     {
-        if (this.falseExpression != null)
+        if (this.falseExpression instanceof NodeImpl)
         {
-            getManager().removeParent(this, this.falseExpression);
+            ((NodeImpl)this.falseExpression).setParent(null);
         }
         this.falseExpression = falseExpression;
-        if (this.falseExpression != null)
+        if (this.falseExpression instanceof NodeImpl)
         {
-            getManager().addParent(this, this.falseExpression);
+            ((NodeImpl)this.falseExpression).setParent(this);
         }
     }
 
