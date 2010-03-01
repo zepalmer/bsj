@@ -61,6 +61,8 @@ public class BsjTreeLifterTest extends AbstractPerFileTest
 	@Test
 	public void testLifterOnExamples()
 	{
+		log4jConfigure("debug", "edu.jhu.cs.bsj.compiler.impl.tool.filemanager/debug",
+				"edu.jhu.cs.bsj.compiler.tool.parser.antlr/debug");
 		findAndTestJavaFiles(EXAMPLES);
 	}
 
@@ -79,13 +81,13 @@ public class BsjTreeLifterTest extends AbstractPerFileTest
 	public boolean liftJavaFile(File file)
 	{
 		BsjNodeFactory factory = this.toolkit.getNodeFactory();
-		
+
 		// parse the original source
 		Node ast = null;
 		try
 		{
-			ast = toolkit.getParser().parse(StringUtilities.removeSuffix(file.getName(), '.'), new InputStreamReader(
-					new FileInputStream(file)), null);
+			ast = toolkit.getParser().parse(StringUtilities.removeSuffix(file.getName(), '.'),
+					new InputStreamReader(new FileInputStream(file)), null);
 		} catch (Exception e)
 		{
 			e.printStackTrace();
