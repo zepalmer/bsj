@@ -13,11 +13,14 @@ import org.apache.bcel.classfile.ExceptionTable;
 import org.apache.bcel.classfile.Field;
 import org.apache.bcel.classfile.JavaClass;
 import org.apache.bcel.classfile.Method;
+import org.apache.bcel.generic.BasicType;
+import org.apache.bcel.generic.ReferenceType;
 import org.apache.bcel.generic.Type;
 import org.apache.log4j.Logger;
 
 import edu.jhu.cs.bsj.compiler.ast.AccessModifier;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
+import edu.jhu.cs.bsj.compiler.ast.PrimitiveType;
 import edu.jhu.cs.bsj.compiler.ast.node.BlockNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassDeclarationNode;
@@ -40,6 +43,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeParameterListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.UnparameterizedTypeListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclaratorListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclaratorNode;
 import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjFileObject;
 import edu.jhu.cs.bsj.compiler.tool.filemanager.LocationManager;
 
@@ -252,8 +256,14 @@ public class BsjBinaryNodeLoader
 
     private VariableDeclaratorListNode buildVariableDeclarators(Field field)
     {
-        // TODO Auto-generated method stub
-        return null;
+        // TODO initializer - leave as null?
+        VariableDeclaratorNode retNode = 
+            factory.makeVariableDeclaratorNode(
+                buildTypeNode(field.getType()), 
+                factory.makeIdentifierNode(field.getName()), 
+                null);
+        
+        return factory.makeVariableDeclaratorListNode(retNode);
     }
 
     private FieldModifiersNode buildFieldModifiersNode(Field field)
@@ -331,9 +341,61 @@ public class BsjBinaryNodeLoader
 
     private TypeNode buildTypeNode(Type type)
     {
-        // TODO Auto-generated method stub
-        return null;
-    }
+        TypeNode retNode = null;
+        if (type instanceof BasicType)
+        {
+            PrimitiveType primitiveType = null;
+            
+            if (BasicType.getType(type.getType()).equals(BasicType.BOOLEAN))
+            {
+                primitiveType = PrimitiveType.BOOLEAN;
+            }
+            else if (BasicType.getType(type.getType()).equals(BasicType.BYTE))
+            {
+                primitiveType = PrimitiveType.BYTE;
+            }
+            else if (BasicType.getType(type.getType()).equals(BasicType.CHAR))
+            {
+                primitiveType = PrimitiveType.CHAR;
+            }
+            else if (BasicType.getType(type.getType()).equals(BasicType.DOUBLE))
+            {
+                primitiveType = PrimitiveType.DOUBLE;
+            }
+            else if (BasicType.getType(type.getType()).equals(BasicType.FLOAT))
+            {
+                primitiveType = PrimitiveType.FLOAT;
+            }
+            else if (BasicType.getType(type.getType()).equals(BasicType.INT))
+            {
+                primitiveType = PrimitiveType.INT;
+            }
+            else if (BasicType.getType(type.getType()).equals(BasicType.LONG))
+            {
+                primitiveType = PrimitiveType.LONG;
+            }
+            else if (BasicType.getType(type.getType()).equals(BasicType.SHORT))
+            {
+                primitiveType = PrimitiveType.SHORT;
+            }
+            else if (BasicType.getType(type.getType()).equals(BasicType.VOID))
+            {
+                primitiveType = PrimitiveType.VOID;
+            }
+            
+            retNode = factory.makePrimitiveTypeNode(primitiveType);
+        }
+        else if (type instanceof ReferenceType)
+        {
+            //TODO
+        }
+        else
+        {
+            throw new IllegalStateException("Unknown type: " + type.toString());
+        }
+        
+        return retNode;
+   }
 
     private BlockNode buildEmptyBlockNode()
     {

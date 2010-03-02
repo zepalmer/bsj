@@ -47,10 +47,11 @@ public class BsjBinaryNodeLoaderTest extends AbstractTest
         map.put(StandardLocation.ANNOTATION_PROCESSOR_PATH, new InMemoryLocationManager(null));
         BsjFileManager bfm = new LocationMappedFileManager(map);
 
-        String codeStr = "public class JoeClass {" + "public String toString(){"
-                + "SmallClass sc = new SmallClass(); return(\"Hello Joe!\");" + "}" + "}";
+        String codeStr = "public class JoeClass {" + "private boolean x = true;"
+            + "public String toString(){"
+            + "SmallClass sc = new SmallClass(); return(\"Hello Joe!\");" + "}" + "}";
         String codeStr2 = "public class SmallClass {" + "public String toString(){" + "return(\"SmallClass!\");" + "}"
-                + "}";
+            + "}";
 
         BsjFileObject bfo = bfm.getJavaFileForOutput(StandardLocation.SOURCE_PATH, "SmallClass", Kind.SOURCE, null);
         bfo.setCharContent(codeStr2);
