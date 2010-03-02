@@ -28,6 +28,9 @@ import edu.jhu.cs.bsj.compiler.ast.node.DeclaredTypeListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.DeclaredTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.FieldDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.FieldModifiersNode;
+import edu.jhu.cs.bsj.compiler.ast.node.InterfaceBodyNode;
+import edu.jhu.cs.bsj.compiler.ast.node.InterfaceDeclarationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.InterfaceModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.MethodDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.MethodModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.NameNode;
@@ -89,12 +92,14 @@ public class BsjBinaryNodeLoader
         ClassParser parser = new ClassParser(inputStream, className + Kind.CLASS.extension);
         JavaClass clazz = parser.parse();
 
+        // TODO add isBinary field to nodes
+        
         CompilationUnitNode retNode = factory.makeCompilationUnitNode(
                 className, 
                 buildPackageDeclarationNode(clazz), 
                 factory.makeImportListNode(), 
                 factory.makeTypeDeclarationListNode(
-                        buildClassDeclarationNode(clazz)));
+                        buildTypeDeclarationNode(clazz)));
 
         return retNode;
     }
@@ -114,9 +119,30 @@ public class BsjBinaryNodeLoader
                 buildNameName(clazz.getPackageName()));
     }
 
-    private TypeDeclarationNode buildClassDeclarationNode(JavaClass clazz)
+    private TypeDeclarationNode buildTypeDeclarationNode(JavaClass clazz)
     {
-        // TODO interfaces
+        if (clazz.isClass())
+        {
+            return buildClassDeclarationNode(clazz);
+        }
+        else if (clazz.isInterface())
+        {
+            return buildInterfaceDeclarationNode(clazz);
+        }
+        else if (clazz.isEnum())
+        {
+            return buildEnumDeclarationNode(clazz);
+        }
+        else
+        {
+            throw new IllegalStateException(
+                    "Java file " + clazz.getSourceFileName() 
+                    + " is an invalid type");
+        }
+    }
+    
+    private ClassDeclarationNode buildClassDeclarationNode(JavaClass clazz)
+    {
         ClassDeclarationNode retNode = factory.makeClassDeclarationNode(
                 buildClassModifiersNode(clazz), 
                 buildExtendsNode(clazz), 
@@ -126,9 +152,44 @@ public class BsjBinaryNodeLoader
                 factory.makeIdentifierNode(clazz.getClassName()), 
                 null);
         
-        // TODO add isBinary field to nodes
-        
         return retNode;
+    }
+    
+    private TypeDeclarationNode buildInterfaceDeclarationNode(JavaClass clazz)
+    {
+        InterfaceDeclarationNode retNode = 
+            factory.makeInterfaceDeclarationNode(
+                    buildInterfaceModifiersNode(clazz), 
+                    buildExtendsListNode(clazz), 
+                    buildInterfaceBodyNode(clazz), 
+                    buildTypeParamsListNode(clazz), 
+                    factory.makeIdentifierNode(clazz.getClassName()),
+                    null);
+        return retNode;
+    }
+    
+    private TypeDeclarationNode buildEnumDeclarationNode(JavaClass clazz)
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    private DeclaredTypeListNode buildExtendsListNode(JavaClass clazz)
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    private InterfaceBodyNode buildInterfaceBodyNode(JavaClass clazz)
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    private InterfaceModifiersNode buildInterfaceModifiersNode(JavaClass clazz)
+    {
+        // TODO Auto-generated method stub
+        return null;
     }
 
     private DeclaredTypeListNode buildImplementsClause(JavaClass clazz)
@@ -180,7 +241,6 @@ public class BsjBinaryNodeLoader
 
     private FieldDeclarationNode buildFieldDeclarationNode(Field field)
     {
-        // TODO Auto-generated method stub
         FieldDeclarationNode retNode =
             factory.makeFieldDeclarationNode(
                     buildFieldModifiersNode(field), 
@@ -272,7 +332,6 @@ public class BsjBinaryNodeLoader
     private TypeNode buildTypeNode(Type type)
     {
         // TODO Auto-generated method stub
-
         return null;
     }
 
