@@ -29,10 +29,13 @@ import edu.jhu.cs.bsj.compiler.ast.node.ClassModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
 import edu.jhu.cs.bsj.compiler.ast.node.DeclaredTypeListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.DeclaredTypeNode;
+import edu.jhu.cs.bsj.compiler.ast.node.EnumBodyNode;
+import edu.jhu.cs.bsj.compiler.ast.node.EnumModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.FieldDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.FieldModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.InterfaceBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.InterfaceDeclarationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.InterfaceMemberNode;
 import edu.jhu.cs.bsj.compiler.ast.node.InterfaceModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.MethodDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.MethodModifiersNode;
@@ -42,6 +45,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.TypeDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeParameterListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.UnparameterizedTypeListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.UnparameterizedTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclaratorListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclaratorNode;
 import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjFileObject;
@@ -120,7 +124,7 @@ public class BsjBinaryNodeLoader
         }
         
         return factory.makePackageDeclarationNode(
-                buildNameName(clazz.getPackageName()));
+                buildNameNode(clazz.getPackageName()));
     }
 
     private TypeDeclarationNode buildTypeDeclarationNode(JavaClass clazz)
@@ -174,6 +178,24 @@ public class BsjBinaryNodeLoader
     
     private TypeDeclarationNode buildEnumDeclarationNode(JavaClass clazz)
     {
+        return factory.makeEnumDeclarationNode(
+                buildEnumModifiersNode(clazz), 
+                buildImplementsClause(clazz), 
+                buildEnumBody(clazz), 
+                factory.makeIdentifierNode(clazz.getClassName()), 
+                null);
+    }
+
+    private EnumModifiersNode buildEnumModifiersNode(JavaClass clazz)
+    {
+        return factory.makeEnumModifiersNode(
+                buildAccessModifier(clazz), 
+                clazz.isStrictfp(), 
+                factory.makeAnnotationListNode());
+    }
+
+    private EnumBodyNode buildEnumBody(JavaClass clazz)
+    {
         // TODO Auto-generated method stub
         return null;
     }
@@ -186,14 +208,28 @@ public class BsjBinaryNodeLoader
 
     private InterfaceBodyNode buildInterfaceBodyNode(JavaClass clazz)
     {
-        // TODO Auto-generated method stub
-        return null;
+        List<InterfaceMemberNode> list = new ArrayList<InterfaceMemberNode>();
+        
+        for (Method method : clazz.getMethods())
+        {
+            list.add(buildMethodDeclarationNode(method));
+        }
+        
+        for (Field field : clazz.getFields())
+        {
+            list.add(buildFieldDeclarationNode(field));
+        }
+        
+        return factory.makeInterfaceBodyNode(factory.makeInterfaceMemberListNode(list));
     }
 
     private InterfaceModifiersNode buildInterfaceModifiersNode(JavaClass clazz)
     {
-        // TODO Auto-generated method stub
-        return null;
+        return factory.makeInterfaceModifiersNode(
+                buildAccessModifier(clazz), 
+                clazz.isStatic(), 
+                clazz.isStrictfp(), 
+                factory.makeAnnotationListNode());
     }
 
     private DeclaredTypeListNode buildImplementsClause(JavaClass clazz)
@@ -202,7 +238,7 @@ public class BsjBinaryNodeLoader
         
         for (String iface : clazz.getInterfaceNames())
         {
-            list.add(factory.makeUnparameterizedTypeNode(buildNameName(iface)));
+            list.add(factory.makeUnparameterizedTypeNode(buildNameNode(iface)));
         }
 
         return factory.makeDeclaredTypeListNode(list);
@@ -221,7 +257,7 @@ public class BsjBinaryNodeLoader
         if (clazz.getSuperclassName() != null && !clazz.getSuperclassName().equals("java.lang.Object"))
         {
             retNode = factory.makeUnparameterizedTypeNode(
-                    buildNameName(clazz.getSuperclassName()));
+                    buildNameNode(clazz.getSuperclassName()));
         }
         return retNode;
     }
@@ -279,7 +315,7 @@ public class BsjBinaryNodeLoader
 
     private MethodDeclarationNode buildMethodDeclarationNode(Method method)
     {
-        // TODO finish argument parsing
+        // TODO finish argument parsing, handle constructors (<init>)
         MethodDeclarationNode retNode = 
             factory.makeMethodDeclarationNode(
                 buildEmptyBlockNode(), 
@@ -304,8 +340,14 @@ public class BsjBinaryNodeLoader
     private UnparameterizedTypeListNode buildThrowTypes(
             ExceptionTable exceptionTable)
     {
-        // TODO Auto-generated method stub
-        return null;
+        List<UnparameterizedTypeNode> list = new ArrayList<UnparameterizedTypeNode>();
+
+        for (String exception : exceptionTable.getExceptionNames())
+        {
+            list.add(factory.makeUnparameterizedTypeNode(buildNameNode(exception)));
+        }
+        
+        return factory.makeUnparameterizedTypeListNode(list);
     }
 
     private MethodModifiersNode buildMethodModifiersNode(Method method)
@@ -342,52 +384,14 @@ public class BsjBinaryNodeLoader
     private TypeNode buildTypeNode(Type type)
     {
         TypeNode retNode = null;
+        
         if (type instanceof BasicType)
         {
-            PrimitiveType primitiveType = null;
-            
-            if (BasicType.getType(type.getType()).equals(BasicType.BOOLEAN))
-            {
-                primitiveType = PrimitiveType.BOOLEAN;
-            }
-            else if (BasicType.getType(type.getType()).equals(BasicType.BYTE))
-            {
-                primitiveType = PrimitiveType.BYTE;
-            }
-            else if (BasicType.getType(type.getType()).equals(BasicType.CHAR))
-            {
-                primitiveType = PrimitiveType.CHAR;
-            }
-            else if (BasicType.getType(type.getType()).equals(BasicType.DOUBLE))
-            {
-                primitiveType = PrimitiveType.DOUBLE;
-            }
-            else if (BasicType.getType(type.getType()).equals(BasicType.FLOAT))
-            {
-                primitiveType = PrimitiveType.FLOAT;
-            }
-            else if (BasicType.getType(type.getType()).equals(BasicType.INT))
-            {
-                primitiveType = PrimitiveType.INT;
-            }
-            else if (BasicType.getType(type.getType()).equals(BasicType.LONG))
-            {
-                primitiveType = PrimitiveType.LONG;
-            }
-            else if (BasicType.getType(type.getType()).equals(BasicType.SHORT))
-            {
-                primitiveType = PrimitiveType.SHORT;
-            }
-            else if (BasicType.getType(type.getType()).equals(BasicType.VOID))
-            {
-                primitiveType = PrimitiveType.VOID;
-            }
-            
-            retNode = factory.makePrimitiveTypeNode(primitiveType);
+            retNode = buildPrimitiveTypeNode(BasicType.getType(type.getType()));
         }
         else if (type instanceof ReferenceType)
         {
-            //TODO
+            retNode = buildReferenceTypeNode(type);
         }
         else
         {
@@ -396,6 +400,61 @@ public class BsjBinaryNodeLoader
         
         return retNode;
    }
+
+    private TypeNode buildReferenceTypeNode(Type type)
+    {
+        // TODO Auto-generated method stub
+
+        return null;
+    }
+
+    private TypeNode buildPrimitiveTypeNode(BasicType type)
+    {
+        PrimitiveType primitiveType = null;
+        
+        if (type.equals(BasicType.BOOLEAN))
+        {
+            primitiveType = PrimitiveType.BOOLEAN;
+        }
+        else if (type.equals(BasicType.BYTE))
+        {
+            primitiveType = PrimitiveType.BYTE;
+        }
+        else if (type.equals(BasicType.CHAR))
+        {
+            primitiveType = PrimitiveType.CHAR;
+        }
+        else if (type.equals(BasicType.DOUBLE))
+        {
+            primitiveType = PrimitiveType.DOUBLE;
+        }
+        else if (type.equals(BasicType.FLOAT))
+        {
+            primitiveType = PrimitiveType.FLOAT;
+        }
+        else if (type.equals(BasicType.INT))
+        {
+            primitiveType = PrimitiveType.INT;
+        }
+        else if (type.equals(BasicType.LONG))
+        {
+            primitiveType = PrimitiveType.LONG;
+        }
+        else if (type.equals(BasicType.SHORT))
+        {
+            primitiveType = PrimitiveType.SHORT;
+        }
+        else if (type.equals(BasicType.VOID))
+        {
+            primitiveType = PrimitiveType.VOID;
+        }
+        else
+        {
+            throw new IllegalStateException("Invalid type: " + type.toString());
+        }
+        
+        return factory.makePrimitiveTypeNode(primitiveType);
+    }
 
     private BlockNode buildEmptyBlockNode()
     {
@@ -413,7 +472,7 @@ public class BsjBinaryNodeLoader
                 factory.makeAnnotationListNode());
     }
 
-    private NameNode buildNameName(String name)
+    private NameNode buildNameNode(String name)
     {
         // if the name is not qualified, just return a simple name node
         if (!name.contains("\\."))
