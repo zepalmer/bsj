@@ -15,7 +15,9 @@ import org.apache.bcel.classfile.Field;
 import org.apache.bcel.classfile.JavaClass;
 import org.apache.bcel.classfile.Method;
 import org.apache.bcel.classfile.Signature;
+import org.apache.bcel.generic.ArrayType;
 import org.apache.bcel.generic.BasicType;
+import org.apache.bcel.generic.ObjectType;
 import org.apache.bcel.generic.ReferenceType;
 import org.apache.bcel.generic.Type;
 import org.apache.log4j.Logger;
@@ -110,7 +112,7 @@ public class BsjBinaryNodeLoader
         CompilationUnitNode retNode = factory.makeCompilationUnitNode(
                 className, 
                 buildPackageDeclarationNode(clazz), 
-                factory.makeImportListNode(), 
+                factory.makeImportListNode(), //TODO imports?
                 factory.makeTypeDeclarationListNode(
                         buildTypeDeclarationNode(clazz)));
 
@@ -316,7 +318,6 @@ public class BsjBinaryNodeLoader
         System.out.println(typeParams[1]);
         System.out.println(typeParams.length);
         
-        //<T:Ljava/lang/Object;V:Ljava/lang/Object;>
         return factory.makeTypeParameterListNode(list);
     }
 
@@ -476,9 +477,21 @@ public class BsjBinaryNodeLoader
 
     private TypeNode buildReferenceTypeNode(Type type)
     {
-        // TODO Auto-generated method stub
-
-        return null;
+        // TODO handle type parameters/arrays
+        
+        TypeNode retNode = null;
+        
+        if (type instanceof ArrayType)
+        {
+            //retNode = factory.makeArrayTypeNode(type)
+        }
+        else if (type instanceof ObjectType)
+        {
+            retNode = factory.makeUnparameterizedTypeNode(
+                    buildNameNode(((ObjectType)type).getClassName()));
+        }
+        
+        return retNode;
     }
 
     private TypeNode buildPrimitiveTypeNode(BasicType type)

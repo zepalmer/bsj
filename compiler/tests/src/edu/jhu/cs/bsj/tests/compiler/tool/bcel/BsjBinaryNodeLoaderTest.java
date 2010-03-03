@@ -48,7 +48,10 @@ public class BsjBinaryNodeLoaderTest extends AbstractTest
         map.put(StandardLocation.ANNOTATION_PROCESSOR_PATH, new InMemoryLocationManager(null));
         BsjFileManager bfm = new LocationMappedFileManager(map);
 
-        String codeStr = "package joe.foo.bar; public class JoeClass <T extends SmallClass & Iface,V> {" + "private boolean x = true;"
+        String codeStr = "package joe.foo.bar;\nimport java.util.List;" 
+            + "public class JoeClass <T extends SmallClass & Iface,V> {" 
+            + "private boolean x = true;\n"
+            + "private List<String> list;\n"
             + "public String toString(){"
             + "return(\"Hello Joe!\");" + "}" + "}";
         String codeStr2 = "package joe.foo.bar; public interface SmallClass extends Iface{}";
