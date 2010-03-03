@@ -8,11 +8,13 @@ import java.util.List;
 import javax.tools.JavaFileObject.Kind;
 
 import org.apache.bcel.classfile.AccessFlags;
+import org.apache.bcel.classfile.Attribute;
 import org.apache.bcel.classfile.ClassParser;
 import org.apache.bcel.classfile.ExceptionTable;
 import org.apache.bcel.classfile.Field;
 import org.apache.bcel.classfile.JavaClass;
 import org.apache.bcel.classfile.Method;
+import org.apache.bcel.classfile.Signature;
 import org.apache.bcel.generic.BasicType;
 import org.apache.bcel.generic.ReferenceType;
 import org.apache.bcel.generic.Type;
@@ -24,12 +26,14 @@ import edu.jhu.cs.bsj.compiler.ast.PrimitiveType;
 import edu.jhu.cs.bsj.compiler.ast.node.BlockNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassDeclarationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.ClassMemberListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassMemberNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
 import edu.jhu.cs.bsj.compiler.ast.node.DeclaredTypeListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.DeclaredTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.EnumBodyNode;
+import edu.jhu.cs.bsj.compiler.ast.node.EnumConstantDeclarationListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.EnumModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.FieldDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.FieldModifiersNode;
@@ -44,6 +48,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.PackageDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeParameterListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.TypeParameterNode;
 import edu.jhu.cs.bsj.compiler.ast.node.UnparameterizedTypeListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.UnparameterizedTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclaratorListNode;
@@ -196,14 +201,34 @@ public class BsjBinaryNodeLoader
 
     private EnumBodyNode buildEnumBody(JavaClass clazz)
     {
+        return factory.makeEnumBodyNode(
+                buildEnumConstants(clazz), 
+                buildEnumMembers(clazz));
+    }
+
+    private ClassMemberListNode buildEnumMembers(JavaClass clazz)
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    private EnumConstantDeclarationListNode buildEnumConstants(JavaClass clazz)
+    {
         // TODO Auto-generated method stub
         return null;
     }
 
     private DeclaredTypeListNode buildExtendsListNode(JavaClass clazz)
     {
-        // TODO Auto-generated method stub
-        return null;
+        if (!clazz.isInterface())
+        {
+            throw new IllegalStateException(
+                    "Multiple extends on a noninterface: " + clazz.toString());
+        }
+        
+        // implements clauses for classes are the same as extends 
+        // clauses for interfaces, so just reuse that method
+        return buildImplementsClause(clazz);
     }
 
     private InterfaceBodyNode buildInterfaceBodyNode(JavaClass clazz)
@@ -246,8 +271,53 @@ public class BsjBinaryNodeLoader
 
     private TypeParameterListNode buildTypeParamsListNode(JavaClass clazz)
     {
-        // TODO Auto-generated method stub
-        return null;
+        // get the attributes for this class if present
+        Attribute[] attributes = clazz.getAttributes();        
+        if (attributes == null)
+        {
+            return factory.makeTypeParameterListNode();
+        }
+        
+        // find the class signature in the attributes if present
+        Signature signature = null;
+        for (Attribute attribute : attributes)
+        {
+            if (attribute instanceof Signature)
+            {
+                signature = (Signature)attribute;
+                break;
+            }
+        }        
+        if (signature == null)
+        {
+            return factory.makeTypeParameterListNode();
+        }
+        
+        List<TypeParameterNode> list = new ArrayList<TypeParameterNode>();
+        
+        // signatures are of the following form:
+        // <T:Ljava/lang/Object;V:Ljava/lang/Object;>
+        // this regex parses them into bit sized pieces
+        String typeParams[] = signature.getSignature()
+            .replaceAll(">.*", "")
+            .replaceFirst(".*<", "")
+            .split(";");
+        
+        for (String typeParam : typeParams)
+        {
+            String identifier = typeParam.split(":")[0];
+            factory.makeTypeParameterNode(
+                    factory.makeIdentifierNode(identifier), 
+                    null); //TODO finish
+            System.out.println(identifier);
+        }
+        
+        System.out.println(typeParams[0]);
+        System.out.println(typeParams[1]);
+        System.out.println(typeParams.length);
+        
+        //<T:Ljava/lang/Object;V:Ljava/lang/Object;>
+        return factory.makeTypeParameterListNode(list);
     }
 
     private DeclaredTypeNode buildExtendsNode(JavaClass clazz)
@@ -342,9 +412,12 @@ public class BsjBinaryNodeLoader
     {
         List<UnparameterizedTypeNode> list = new ArrayList<UnparameterizedTypeNode>();
 
-        for (String exception : exceptionTable.getExceptionNames())
+        if (exceptionTable != null)
         {
-            list.add(factory.makeUnparameterizedTypeNode(buildNameNode(exception)));
+            for (String exception : exceptionTable.getExceptionNames())
+            {
+                list.add(factory.makeUnparameterizedTypeNode(buildNameNode(exception)));
+            }
         }
         
         return factory.makeUnparameterizedTypeListNode(list);
@@ -475,27 +548,18 @@ public class BsjBinaryNodeLoader
     private NameNode buildNameNode(String name)
     {
         // if the name is not qualified, just return a simple name node
-        if (!name.contains("\\."))
+        if (!name.contains("."))
         {
             return factory.makeSimpleNameNode(factory.makeIdentifierNode(name), null);            
         }
         
-        
+        // recursively build qualified names
         String[] tokens = name.split("\\.");
-        
-        if (tokens.length == 1)
-        {
-            
-        }
-        
-     // TODO Auto-generated method stub
-        
-        NameNode retNode = null;//factory.makeQualifiedNameNode(base, identifier, null);
-        
-        
-        
+        NameNode retNode = factory.makeQualifiedNameNode(
+                buildNameNode(name.substring(0, name.lastIndexOf('.'))), 
+                factory.makeIdentifierNode(tokens[tokens.length-1]), 
+                null);
 
-        return factory.makeSimpleNameNode(factory.makeIdentifierNode(name), null);
+        return retNode;
     }
-
 }

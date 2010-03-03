@@ -17,6 +17,7 @@ import org.junit.Test;
 
 import edu.jhu.cs.bsj.compiler.BsjServiceRegistry;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
+import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.classpath.bcel.BsjBinaryNodeLoader;
 import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.InMemoryLocationManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.LocationMappedFileManager;
@@ -47,23 +48,22 @@ public class BsjBinaryNodeLoaderTest extends AbstractTest
         map.put(StandardLocation.ANNOTATION_PROCESSOR_PATH, new InMemoryLocationManager(null));
         BsjFileManager bfm = new LocationMappedFileManager(map);
 
-        String codeStr = "public class JoeClass {" + "private boolean x = true;"
+        String codeStr = "package joe.foo.bar; public class JoeClass <T extends SmallClass & Iface,V> {" + "private boolean x = true;"
             + "public String toString(){"
-            + "SmallClass sc = new SmallClass(); return(\"Hello Joe!\");" + "}" + "}";
-        String codeStr2 = "public class SmallClass {" + "public String toString(){" + "return(\"SmallClass!\");" + "}"
-            + "}";
+            + "return(\"Hello Joe!\");" + "}" + "}";
+        String codeStr2 = "package joe.foo.bar; public interface SmallClass extends Iface{}";
+        String codeStr3 = "package joe.foo.bar; public interface Iface {}";
 
-        BsjFileObject bfo = bfm.getJavaFileForOutput(StandardLocation.SOURCE_PATH, "SmallClass", Kind.SOURCE, null);
-        bfo.setCharContent(codeStr2);
-
-        BsjFileObject bfo2 = bfm.getJavaFileForOutput(StandardLocation.SOURCE_PATH, "JoeClass", Kind.SOURCE, null);
+        BsjFileObject bfo2 = bfm.getJavaFileForOutput(StandardLocation.SOURCE_PATH, "joe.foo.bar.JoeClass", Kind.SOURCE, null);
         bfo2.setCharContent(codeStr);
+        
+        BsjFileObject bfo = bfm.getJavaFileForOutput(StandardLocation.SOURCE_PATH, "joe.foo.bar.SmallClass", Kind.SOURCE, null);
+        bfo.setCharContent(codeStr2);
+        
+        BsjFileObject bfo3 = bfm.getJavaFileForOutput(StandardLocation.SOURCE_PATH, "joe.foo.bar.Iface", Kind.SOURCE, null);
+        bfo3.setCharContent(codeStr3);
 
-        System.out.println(bfo.getName());
-        System.out.println(bfo2.getName());
-        System.out.println(bfo.inferBinaryName());
-
-        List<JavaFileObject> fileObjects = Arrays.<JavaFileObject> asList(bfo, bfo2);
+        List<JavaFileObject> fileObjects = Arrays.<JavaFileObject> asList(bfo, bfo2, bfo3);
 
         // The next step is to compile Iterable collection of java files and close file manager:
 
@@ -76,8 +76,10 @@ public class BsjBinaryNodeLoaderTest extends AbstractTest
         BsjNodeFactory factory = BsjServiceRegistry.newToolkitFactory().newToolkit().getNodeFactory();
 
         BsjBinaryNodeLoader loader = new BsjBinaryNodeLoader(factory);
-        loader.loadNodesFromBinary("JoeClass", map.get(StandardLocation.CLASS_OUTPUT));
+        CompilationUnitNode joe = loader.loadNodesFromBinary("joe.foo.bar.JoeClass", map.get(StandardLocation.CLASS_OUTPUT));
+        loader.loadNodesFromBinary("joe.foo.bar.SmallClass", map.get(StandardLocation.CLASS_OUTPUT));
         
+        System.out.println(joe);
         
         //TODO assert the proper form of the loaded AST
         
