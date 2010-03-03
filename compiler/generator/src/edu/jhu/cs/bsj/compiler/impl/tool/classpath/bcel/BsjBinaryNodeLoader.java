@@ -163,7 +163,7 @@ public class BsjBinaryNodeLoader
                 buildExtendsNode(clazz), 
                 buildImplementsClause(clazz), 
                 buildClassBodyNode(clazz), 
-                buildTypeParamsListNode(clazz), 
+                buildTypeParamsListNode(clazz.getAttributes()), 
                 factory.makeIdentifierNode(clazz.getClassName()), 
                 null);
         
@@ -177,7 +177,7 @@ public class BsjBinaryNodeLoader
                     buildInterfaceModifiersNode(clazz), 
                     buildExtendsListNode(clazz), 
                     buildInterfaceBodyNode(clazz), 
-                    buildTypeParamsListNode(clazz), 
+                    buildTypeParamsListNode(clazz.getAttributes()), 
                     factory.makeIdentifierNode(clazz.getClassName()),
                     null);
         return retNode;
@@ -271,10 +271,8 @@ public class BsjBinaryNodeLoader
         return factory.makeDeclaredTypeListNode(list);
     }
 
-    private TypeParameterListNode buildTypeParamsListNode(JavaClass clazz)
+    private TypeParameterListNode buildTypeParamsListNode(Attribute[] attributes)
     {
-        // get the attributes for this class if present
-        Attribute[] attributes = clazz.getAttributes();        
         if (attributes == null)
         {
             return factory.makeTypeParameterListNode();
@@ -310,13 +308,8 @@ public class BsjBinaryNodeLoader
             String identifier = typeParam.split(":")[0];
             factory.makeTypeParameterNode(
                     factory.makeIdentifierNode(identifier), 
-                    null); //TODO finish
-            System.out.println(identifier);
+                    null); //TODO finish type bounds
         }
-        
-        System.out.println(typeParams[0]);
-        System.out.println(typeParams[1]);
-        System.out.println(typeParams.length);
         
         return factory.makeTypeParameterListNode(list);
     }
@@ -324,7 +317,7 @@ public class BsjBinaryNodeLoader
     private DeclaredTypeNode buildExtendsNode(JavaClass clazz)
     {
         DeclaredTypeNode retNode = null;
-        
+        //TODO done?
         if (clazz.getSuperclassName() != null && !clazz.getSuperclassName().equals("java.lang.Object"))
         {
             retNode = factory.makeUnparameterizedTypeNode(
@@ -396,16 +389,10 @@ public class BsjBinaryNodeLoader
                 null, 
                 buildTypeNode(method.getReturnType()), 
                 buildThrowTypes(method.getExceptionTable()), 
-                buildTypeParamsListNode(method), 
+                buildTypeParamsListNode(method.getAttributes()), 
                 null);
         
         return retNode;
-    }
-
-    private TypeParameterListNode buildTypeParamsListNode(Method method)
-    {
-        // TODO Auto-generated method stub
-        return null;
     }
 
     private UnparameterizedTypeListNode buildThrowTypes(
