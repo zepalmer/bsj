@@ -52,7 +52,7 @@ public class BsjBinaryNodeLoaderTest extends AbstractTest
             + "public class JoeClass <T extends SmallClass & Iface,V> {" 
             + "private boolean x = true;\n"
             + "public JoeClass(int a){}\n"
-            + "public JoeClass(int a, int b){}\n"
+            + "public JoeClass(int a, String[][][] b){}\n"
             + "private List<String> list;\n"
             + "public String toString(int x, String s, int y){"
             + "return(\"Hello Joe!\");" + "}" + "}";

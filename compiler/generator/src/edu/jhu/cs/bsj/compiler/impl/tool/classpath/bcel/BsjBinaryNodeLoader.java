@@ -389,7 +389,7 @@ public class BsjBinaryNodeLoader
                     buildFieldModifiersNode(field), 
                     buildVariableDeclarators(field), 
                     null);
-        
+
         return retNode;
     }
 
@@ -517,13 +517,18 @@ public class BsjBinaryNodeLoader
 
     private TypeNode buildReferenceTypeNode(Type type)
     {
-        // TODO handle type parameters/arrays
+        // TODO handle type parameters (extract from fields)
         
         TypeNode retNode = null;
         
         if (type instanceof ArrayType)
         {
-            //retNode = factory.makeArrayTypeNode(type)
+            // get the basic type then wrap it in the proper number of levels of array types
+            retNode = buildTypeNode(((ArrayType)type).getBasicType());            
+            for (int i = 0; i < ((ArrayType)type).getDimensions(); i++)
+            {
+                retNode = factory.makeArrayTypeNode(retNode);
+            }
         }
         else if (type instanceof ObjectType)
         {
