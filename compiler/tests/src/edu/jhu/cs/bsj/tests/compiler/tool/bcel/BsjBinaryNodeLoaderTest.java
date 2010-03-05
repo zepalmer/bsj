@@ -82,7 +82,8 @@ public class BsjBinaryNodeLoaderTest extends AbstractTest
         CompilationUnitNode joe = loader.loadNodesFromBinary("joe.foo.bar.JoeClass", map.get(StandardLocation.CLASS_OUTPUT));
         loader.loadNodesFromBinary("joe.foo.bar.SmallClass", map.get(StandardLocation.CLASS_OUTPUT));
         
-        System.out.println(joe);
+        System.out.println(joe.executeOperation(
+                BsjServiceRegistry.newToolkitFactory().newToolkit().getSerializer(), null));
         
         //TODO assert the proper form of the loaded AST
         

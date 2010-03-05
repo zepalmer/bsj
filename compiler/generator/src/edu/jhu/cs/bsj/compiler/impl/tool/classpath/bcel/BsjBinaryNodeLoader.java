@@ -336,7 +336,9 @@ public class BsjBinaryNodeLoader
         {
             if (method.getName().equals("<init>"))
             {
-                list.add(buildConstructorDeclarationNode(method, clazz.getClassName()));
+                String className = clazz.getClassName();
+                className = className.substring(className.lastIndexOf('.')+1);
+                list.add(buildConstructorDeclarationNode(method, className));
             }
             else
             {
@@ -367,7 +369,7 @@ public class BsjBinaryNodeLoader
                     buildTypeParamsListNode(method.getAttributes()), 
                     null);
         
-        return null;
+        return retNode;
     }
 
     private ConstructorModifiersNode buildConstructorModifiers(Method method)
