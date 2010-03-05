@@ -32,6 +32,8 @@ import edu.jhu.cs.bsj.compiler.ast.node.ClassMemberListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassMemberNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
+import edu.jhu.cs.bsj.compiler.ast.node.ConstructorDeclarationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.ConstructorModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.DeclaredTypeListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.DeclaredTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.EnumBodyNode;
@@ -332,7 +334,14 @@ public class BsjBinaryNodeLoader
         
         for (Method method : clazz.getMethods())
         {
-            list.add(buildMethodDeclarationNode(method));
+            if (method.getName().equals("<init>"))
+            {
+                list.add(buildConstructorDeclarationNode(method, clazz.getClassName()));
+            }
+            else
+            {
+                list.add(buildMethodDeclarationNode(method));
+            }
         }
         
         for (Field field : clazz.getFields())
@@ -341,6 +350,29 @@ public class BsjBinaryNodeLoader
         }
         
         return factory.makeClassBodyNode(factory.makeClassMemberListNode(list));
+    }
+
+    private ConstructorDeclarationNode buildConstructorDeclarationNode(Method method, String name)
+    {
+        //TODO args
+        ConstructorDeclarationNode retNode =
+            factory.makeConstructorDeclarationNode(
+                    factory.makeIdentifierNode(name), 
+                    factory.makeConstructorBodyNode(
+                            null, factory.makeBlockStatementListNode()), 
+                    buildConstructorModifiers(method), 
+                    null, 
+                    null, 
+                    buildThrowTypes(method.getExceptionTable()), 
+                    buildTypeParamsListNode(method.getAttributes()), 
+                    null);
+        
+        return null;
+    }
+
+    private ConstructorModifiersNode buildConstructorModifiers(Method method)
+    {
+        return factory.makeConstructorModifiersNode(buildAccessModifier(method));
     }
 
     private FieldDeclarationNode buildFieldDeclarationNode(Field field)
@@ -379,7 +411,7 @@ public class BsjBinaryNodeLoader
 
     private MethodDeclarationNode buildMethodDeclarationNode(Method method)
     {
-        // TODO finish argument parsing, handle constructors (<init>)
+        //TODO variable list/varargs
         MethodDeclarationNode retNode = 
             factory.makeMethodDeclarationNode(
                 buildEmptyBlockNode(), 
