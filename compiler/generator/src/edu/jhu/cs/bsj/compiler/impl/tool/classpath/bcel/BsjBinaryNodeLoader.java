@@ -57,6 +57,8 @@ import edu.jhu.cs.bsj.compiler.ast.node.UnparameterizedTypeListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.UnparameterizedTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclaratorListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclaratorNode;
+import edu.jhu.cs.bsj.compiler.ast.node.VariableListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.VariableNode;
 import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjFileObject;
 import edu.jhu.cs.bsj.compiler.tool.filemanager.LocationManager;
 
@@ -166,12 +168,17 @@ public class BsjBinaryNodeLoader
                 buildImplementsClause(clazz), 
                 buildClassBodyNode(clazz), 
                 buildTypeParamsListNode(clazz.getAttributes()), 
-                factory.makeIdentifierNode(clazz.getClassName()), 
+                factory.makeIdentifierNode(getUnqualifiedName(clazz.getClassName())), 
                 null);
         
         return retNode;
     }
     
+    private String getUnqualifiedName(String className)
+    {
+        return className.substring(className.lastIndexOf('.')+1);
+    }
+
     private TypeDeclarationNode buildInterfaceDeclarationNode(JavaClass clazz)
     {
         InterfaceDeclarationNode retNode = 
@@ -180,7 +187,7 @@ public class BsjBinaryNodeLoader
                     buildExtendsListNode(clazz), 
                     buildInterfaceBodyNode(clazz), 
                     buildTypeParamsListNode(clazz.getAttributes()), 
-                    factory.makeIdentifierNode(clazz.getClassName()),
+                    factory.makeIdentifierNode(getUnqualifiedName(clazz.getClassName())),
                     null);
         return retNode;
     }
@@ -191,7 +198,7 @@ public class BsjBinaryNodeLoader
                 buildEnumModifiersNode(clazz), 
                 buildImplementsClause(clazz), 
                 buildEnumBody(clazz), 
-                factory.makeIdentifierNode(clazz.getClassName()), 
+                factory.makeIdentifierNode(getUnqualifiedName(clazz.getClassName())), 
                 null);
     }
 
@@ -336,9 +343,8 @@ public class BsjBinaryNodeLoader
         {
             if (method.getName().equals("<init>"))
             {
-                String className = clazz.getClassName();
-                className = className.substring(className.lastIndexOf('.')+1);
-                list.add(buildConstructorDeclarationNode(method, className));
+                list.add(buildConstructorDeclarationNode(
+                        method, getUnqualifiedName(clazz.getClassName())));
             }
             else
             {
@@ -356,15 +362,14 @@ public class BsjBinaryNodeLoader
 
     private ConstructorDeclarationNode buildConstructorDeclarationNode(Method method, String name)
     {
-        //TODO args
         ConstructorDeclarationNode retNode =
             factory.makeConstructorDeclarationNode(
                     factory.makeIdentifierNode(name), 
                     factory.makeConstructorBodyNode(
                             null, factory.makeBlockStatementListNode()), 
                     buildConstructorModifiers(method), 
-                    null, 
-                    null, 
+                    buildVariableListNode(method), 
+                    null, // varargs not needed because BCEL does not distinguish them from arrays
                     buildThrowTypes(method.getExceptionTable()), 
                     buildTypeParamsListNode(method.getAttributes()), 
                     null);
@@ -413,20 +418,34 @@ public class BsjBinaryNodeLoader
 
     private MethodDeclarationNode buildMethodDeclarationNode(Method method)
     {
-        //TODO variable list/varargs
         MethodDeclarationNode retNode = 
             factory.makeMethodDeclarationNode(
                 buildEmptyBlockNode(), 
                 buildMethodModifiersNode(method), 
                 factory.makeIdentifierNode(method.getName()), 
-                null, 
-                null, 
+                buildVariableListNode(method), 
+                null, // varargs not needed because BCEL does not distinguish them from arrays
                 buildTypeNode(method.getReturnType()), 
                 buildThrowTypes(method.getExceptionTable()), 
                 buildTypeParamsListNode(method.getAttributes()), 
                 null);
         
         return retNode;
+    }
+
+    private VariableListNode buildVariableListNode(Method method)
+    {
+        List<VariableNode> list = new ArrayList<VariableNode>();
+        int argCount = 0;
+        for (Type arg : method.getArgumentTypes())
+        {
+            list.add(factory.makeVariableNode(
+                    factory.makeVariableModifiersNode(), 
+                    buildTypeNode(arg), 
+                    factory.makeIdentifierNode("arg" + argCount)));
+            argCount++;
+        }
+        return factory.makeVariableListNode(list);
     }
 
     private UnparameterizedTypeListNode buildThrowTypes(
