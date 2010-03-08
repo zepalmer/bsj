@@ -18,13 +18,13 @@ public interface ThrowNode extends Node, StatementNode
      * @return The Throwable to throw.
      */
     public ExpressionNode getExpression();
-
+    
     /**
      * Changes the Throwable to throw.
      * @param expression The Throwable to throw.
      */
     public void setExpression(ExpressionNode expression);
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

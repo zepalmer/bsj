@@ -17,12 +17,12 @@ public abstract class BsjParserDiagnostic<T extends javax.tools.JavaFileObject> 
     private String ruleName;
     
     public BsjParserDiagnostic(
-                long lineNumber,
-                long columnNumber,
-                T source,
-                String code,
-                javax.tools.Diagnostic.Kind kind,
-                String ruleName)
+            long lineNumber,
+            long columnNumber,
+            T source,
+            String code,
+            javax.tools.Diagnostic.Kind kind,
+            String ruleName)
     {
         super(lineNumber, columnNumber, source, code, kind);
         this.ruleName = ruleName;

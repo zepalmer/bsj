@@ -17,11 +17,11 @@ public class InvalidIntegerLiteralDiagnostic<T extends javax.tools.JavaFileObjec
     private String literalText;
     
     public InvalidIntegerLiteralDiagnostic(
-                long lineNumber,
-                long columnNumber,
-                T source,
-                String ruleName,
-                String literalText)
+            long lineNumber,
+            long columnNumber,
+            T source,
+            String ruleName,
+            String literalText)
     {
         super(lineNumber, columnNumber, source, CODE, Kind.ERROR, ruleName);
         this.literalText = literalText;

@@ -15,7 +15,7 @@ public abstract class LiteralNodeImpl<T> extends NodeImpl implements LiteralNode
 {
     /** The literal value for this node. */
     private T value;
-
+    
     /** General constructor. */
     protected LiteralNodeImpl(
             T value,
@@ -26,7 +26,7 @@ public abstract class LiteralNodeImpl<T> extends NodeImpl implements LiteralNode
         super(startLocation, stopLocation, manager);
         this.value = value;
     }
-
+    
     /**
      * Gets the literal value for this node.
      * @return The literal value for this node.
@@ -35,7 +35,7 @@ public abstract class LiteralNodeImpl<T> extends NodeImpl implements LiteralNode
     {
         return this.value;
     }
-
+    
     /**
      * Changes the literal value for this node.
      * @param value The literal value for this node.
@@ -44,7 +44,7 @@ public abstract class LiteralNodeImpl<T> extends NodeImpl implements LiteralNode
     {
         this.value = value;
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -57,7 +57,7 @@ public abstract class LiteralNodeImpl<T> extends NodeImpl implements LiteralNode
     {
         super.receiveToChildren(visitor);
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided typed visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -70,7 +70,7 @@ public abstract class LiteralNodeImpl<T> extends NodeImpl implements LiteralNode
     {
         super.receiveTypedToChildren(visitor);
     }
-
+    
     @Override
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
@@ -86,7 +86,7 @@ public abstract class LiteralNodeImpl<T> extends NodeImpl implements LiteralNode
         visitor.visitLiteralNodeStop(this);
         visitor.visitStopEnd(this);
     }
-
+    
     /**
      * Produces a mutable list of this node's children.  Modifying this list will have no
      * effect on this node.
@@ -99,7 +99,7 @@ public abstract class LiteralNodeImpl<T> extends NodeImpl implements LiteralNode
         list.add(getValue());
         return list;
     }
-
+    
     /**
      * Obtains a human-readable description of this node.
      * @return A human-readable description of this node.
@@ -120,6 +120,6 @@ public abstract class LiteralNodeImpl<T> extends NodeImpl implements LiteralNode
         sb.append(']');
         return sb.toString();
     }
-
-
+    
+    
 }

@@ -25,7 +25,7 @@ public class FloatLiteralNodeImpl extends LiteralNodeImpl<Float> implements Floa
     {
         super(value, startLocation, stopLocation, manager);
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -38,7 +38,7 @@ public class FloatLiteralNodeImpl extends LiteralNodeImpl<Float> implements Floa
     {
         super.receiveToChildren(visitor);
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided typed visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -51,7 +51,7 @@ public class FloatLiteralNodeImpl extends LiteralNodeImpl<Float> implements Floa
     {
         super.receiveTypedToChildren(visitor);
     }
-
+    
     @Override
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
@@ -67,7 +67,7 @@ public class FloatLiteralNodeImpl extends LiteralNodeImpl<Float> implements Floa
         visitor.visitFloatLiteralNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
-
+    
     /**
      * Produces a mutable list of this node's children.  Modifying this list will have no
      * effect on this node.
@@ -79,7 +79,7 @@ public class FloatLiteralNodeImpl extends LiteralNodeImpl<Float> implements Floa
         List<Object> list = super.getChildObjects();
         return list;
     }
-
+    
     /**
      * Obtains a human-readable description of this node.
      * @return A human-readable description of this node.
@@ -100,7 +100,7 @@ public class FloatLiteralNodeImpl extends LiteralNodeImpl<Float> implements Floa
         sb.append(']');
         return sb.toString();
     }
-
+    
     /**
      * Executes an operation on this node.
      * @param operation The operation to perform.
@@ -112,7 +112,7 @@ public class FloatLiteralNodeImpl extends LiteralNodeImpl<Float> implements Floa
     {
         return operation.executeFloatLiteralNode(this, p);
     }
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

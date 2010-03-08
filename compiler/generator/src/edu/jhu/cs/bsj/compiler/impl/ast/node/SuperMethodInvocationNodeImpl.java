@@ -22,16 +22,16 @@ public class SuperMethodInvocationNodeImpl extends NodeImpl implements SuperMeth
 {
     /** The qualifying type. */
     private UnparameterizedTypeNode type;
-
+    
     /** The identifier of the method being invoked. */
     private IdentifierNode identifier;
-
+    
     /** The arguments to pass to the method. */
     private ExpressionListNode arguments;
-
+    
     /** The type arguments for the method. */
     private ReferenceTypeListNode typeArguments;
-
+    
     /** General constructor. */
     public SuperMethodInvocationNodeImpl(
             UnparameterizedTypeNode type,
@@ -48,7 +48,7 @@ public class SuperMethodInvocationNodeImpl extends NodeImpl implements SuperMeth
         setArguments(arguments);
         setTypeArguments(typeArguments);
     }
-
+    
     /**
      * Gets the qualifying type.
      * @return The qualifying type.
@@ -57,7 +57,7 @@ public class SuperMethodInvocationNodeImpl extends NodeImpl implements SuperMeth
     {
         return this.type;
     }
-
+    
     /**
      * Changes the qualifying type.
      * @param type The qualifying type.
@@ -74,7 +74,7 @@ public class SuperMethodInvocationNodeImpl extends NodeImpl implements SuperMeth
             ((NodeImpl)this.type).setParent(this);
         }
     }
-
+    
     /**
      * Gets the identifier of the method being invoked.
      * @return The identifier of the method being invoked.
@@ -83,7 +83,7 @@ public class SuperMethodInvocationNodeImpl extends NodeImpl implements SuperMeth
     {
         return this.identifier;
     }
-
+    
     /**
      * Changes the identifier of the method being invoked.
      * @param identifier The identifier of the method being invoked.
@@ -100,7 +100,7 @@ public class SuperMethodInvocationNodeImpl extends NodeImpl implements SuperMeth
             ((NodeImpl)this.identifier).setParent(this);
         }
     }
-
+    
     /**
      * Gets the arguments to pass to the method.
      * @return The arguments to pass to the method.
@@ -109,7 +109,7 @@ public class SuperMethodInvocationNodeImpl extends NodeImpl implements SuperMeth
     {
         return this.arguments;
     }
-
+    
     /**
      * Changes the arguments to pass to the method.
      * @param arguments The arguments to pass to the method.
@@ -126,7 +126,7 @@ public class SuperMethodInvocationNodeImpl extends NodeImpl implements SuperMeth
             ((NodeImpl)this.arguments).setParent(this);
         }
     }
-
+    
     /**
      * Gets the type arguments for the method.
      * @return The type arguments for the method.
@@ -135,7 +135,7 @@ public class SuperMethodInvocationNodeImpl extends NodeImpl implements SuperMeth
     {
         return this.typeArguments;
     }
-
+    
     /**
      * Changes the type arguments for the method.
      * @param typeArguments The type arguments for the method.
@@ -152,7 +152,7 @@ public class SuperMethodInvocationNodeImpl extends NodeImpl implements SuperMeth
             ((NodeImpl)this.typeArguments).setParent(this);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -181,7 +181,7 @@ public class SuperMethodInvocationNodeImpl extends NodeImpl implements SuperMeth
             this.typeArguments.receive(visitor);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided typed visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -210,7 +210,7 @@ public class SuperMethodInvocationNodeImpl extends NodeImpl implements SuperMeth
             this.typeArguments.receiveTyped(visitor);
         }
     }
-
+    
     @Override
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
@@ -228,7 +228,7 @@ public class SuperMethodInvocationNodeImpl extends NodeImpl implements SuperMeth
         visitor.visitSuperMethodInvocationNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
-
+    
     /**
      * Produces a mutable list of this node's children.  Modifying this list will have no
      * effect on this node.
@@ -244,7 +244,7 @@ public class SuperMethodInvocationNodeImpl extends NodeImpl implements SuperMeth
         list.add(getTypeArguments());
         return list;
     }
-
+    
     /**
      * Obtains a human-readable description of this node.
      * @return A human-readable description of this node.
@@ -274,7 +274,7 @@ public class SuperMethodInvocationNodeImpl extends NodeImpl implements SuperMeth
         sb.append(']');
         return sb.toString();
     }
-
+    
     /**
      * Executes an operation on this node.
      * @param operation The operation to perform.
@@ -286,7 +286,7 @@ public class SuperMethodInvocationNodeImpl extends NodeImpl implements SuperMeth
     {
         return operation.executeSuperMethodInvocationNode(this, p);
     }
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

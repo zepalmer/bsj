@@ -15,13 +15,13 @@ public interface InterfaceBodyNode extends Node, TypeBodyNode<InterfaceMemberNod
      * @return The members of this interface body.
      */
     public InterfaceMemberListNode getMembers();
-
+    
     /**
      * Changes the members of this interface body.
      * @param members The members of this interface body.
      */
     public void setMembers(InterfaceMemberListNode members);
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

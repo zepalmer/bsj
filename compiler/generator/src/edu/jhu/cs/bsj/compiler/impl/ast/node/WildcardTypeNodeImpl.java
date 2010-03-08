@@ -19,10 +19,10 @@ public class WildcardTypeNodeImpl extends NodeImpl implements WildcardTypeNode
 {
     /** The wildcard's bound. */
     private ReferenceTypeNode bound;
-
+    
     /** Whether or not the wildcard's bound is an upper (<tt>extends</tt>) bound. */
     private boolean upperBound;
-
+    
     /** General constructor. */
     public WildcardTypeNodeImpl(
             ReferenceTypeNode bound,
@@ -35,7 +35,7 @@ public class WildcardTypeNodeImpl extends NodeImpl implements WildcardTypeNode
         setBound(bound);
         this.upperBound = upperBound;
     }
-
+    
     /**
      * Gets the wildcard's bound.
      * @return The wildcard's bound.
@@ -44,7 +44,7 @@ public class WildcardTypeNodeImpl extends NodeImpl implements WildcardTypeNode
     {
         return this.bound;
     }
-
+    
     /**
      * Changes the wildcard's bound.
      * @param bound The wildcard's bound.
@@ -61,7 +61,7 @@ public class WildcardTypeNodeImpl extends NodeImpl implements WildcardTypeNode
             ((NodeImpl)this.bound).setParent(this);
         }
     }
-
+    
     /**
      * Gets whether or not the wildcard's bound is an upper (<tt>extends</tt>) bound.
      * @return Whether or not the wildcard's bound is an upper (<tt>extends</tt>) bound.
@@ -70,7 +70,7 @@ public class WildcardTypeNodeImpl extends NodeImpl implements WildcardTypeNode
     {
         return this.upperBound;
     }
-
+    
     /**
      * Changes whether or not the wildcard's bound is an upper (<tt>extends</tt>) bound.
      * @param upperBound Whether or not the wildcard's bound is an upper (<tt>extends</tt>) bound.
@@ -79,7 +79,7 @@ public class WildcardTypeNodeImpl extends NodeImpl implements WildcardTypeNode
     {
         this.upperBound = upperBound;
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -96,7 +96,7 @@ public class WildcardTypeNodeImpl extends NodeImpl implements WildcardTypeNode
             this.bound.receive(visitor);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided typed visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -113,7 +113,7 @@ public class WildcardTypeNodeImpl extends NodeImpl implements WildcardTypeNode
             this.bound.receiveTyped(visitor);
         }
     }
-
+    
     @Override
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
@@ -129,7 +129,7 @@ public class WildcardTypeNodeImpl extends NodeImpl implements WildcardTypeNode
         visitor.visitWildcardTypeNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
-
+    
     /**
      * Produces a mutable list of this node's children.  Modifying this list will have no
      * effect on this node.
@@ -143,7 +143,7 @@ public class WildcardTypeNodeImpl extends NodeImpl implements WildcardTypeNode
         list.add(getUpperBound());
         return list;
     }
-
+    
     /**
      * Obtains a human-readable description of this node.
      * @return A human-readable description of this node.
@@ -167,7 +167,7 @@ public class WildcardTypeNodeImpl extends NodeImpl implements WildcardTypeNode
         sb.append(']');
         return sb.toString();
     }
-
+    
     /**
      * Executes an operation on this node.
      * @param operation The operation to perform.
@@ -179,7 +179,7 @@ public class WildcardTypeNodeImpl extends NodeImpl implements WildcardTypeNode
     {
         return operation.executeWildcardTypeNode(this, p);
     }
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

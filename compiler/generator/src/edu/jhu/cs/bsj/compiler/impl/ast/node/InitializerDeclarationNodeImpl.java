@@ -19,10 +19,10 @@ public class InitializerDeclarationNodeImpl extends NodeImpl implements Initiali
 {
     /** Whether or not the initializer is static. */
     private boolean staticInitializer;
-
+    
     /** The body of the initializer. */
     private BlockNode body;
-
+    
     /** General constructor. */
     public InitializerDeclarationNodeImpl(
             boolean staticInitializer,
@@ -35,7 +35,7 @@ public class InitializerDeclarationNodeImpl extends NodeImpl implements Initiali
         this.staticInitializer = staticInitializer;
         setBody(body);
     }
-
+    
     /**
      * Gets whether or not the initializer is static.
      * @return Whether or not the initializer is static.
@@ -44,7 +44,7 @@ public class InitializerDeclarationNodeImpl extends NodeImpl implements Initiali
     {
         return this.staticInitializer;
     }
-
+    
     /**
      * Changes whether or not the initializer is static.
      * @param staticInitializer Whether or not the initializer is static.
@@ -53,7 +53,7 @@ public class InitializerDeclarationNodeImpl extends NodeImpl implements Initiali
     {
         this.staticInitializer = staticInitializer;
     }
-
+    
     /**
      * Gets the body of the initializer.
      * @return The body of the initializer.
@@ -62,7 +62,7 @@ public class InitializerDeclarationNodeImpl extends NodeImpl implements Initiali
     {
         return this.body;
     }
-
+    
     /**
      * Changes the body of the initializer.
      * @param body The body of the initializer.
@@ -79,7 +79,7 @@ public class InitializerDeclarationNodeImpl extends NodeImpl implements Initiali
             ((NodeImpl)this.body).setParent(this);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -96,7 +96,7 @@ public class InitializerDeclarationNodeImpl extends NodeImpl implements Initiali
             this.body.receive(visitor);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided typed visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -113,7 +113,7 @@ public class InitializerDeclarationNodeImpl extends NodeImpl implements Initiali
             this.body.receiveTyped(visitor);
         }
     }
-
+    
     @Override
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
@@ -131,7 +131,7 @@ public class InitializerDeclarationNodeImpl extends NodeImpl implements Initiali
         visitor.visitInitializerDeclarationNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
-
+    
     /**
      * Produces a mutable list of this node's children.  Modifying this list will have no
      * effect on this node.
@@ -145,7 +145,7 @@ public class InitializerDeclarationNodeImpl extends NodeImpl implements Initiali
         list.add(getBody());
         return list;
     }
-
+    
     /**
      * Obtains a human-readable description of this node.
      * @return A human-readable description of this node.
@@ -169,7 +169,7 @@ public class InitializerDeclarationNodeImpl extends NodeImpl implements Initiali
         sb.append(']');
         return sb.toString();
     }
-
+    
     /**
      * Executes an operation on this node.
      * @param operation The operation to perform.
@@ -181,7 +181,7 @@ public class InitializerDeclarationNodeImpl extends NodeImpl implements Initiali
     {
         return operation.executeInitializerDeclarationNode(this, p);
     }
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

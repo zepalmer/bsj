@@ -19,7 +19,7 @@ public class UnparameterizedTypeNodeImpl extends NodeImpl implements Unparameter
 {
     /** The name of the type. */
     private NameNode name;
-
+    
     /** General constructor. */
     public UnparameterizedTypeNodeImpl(
             NameNode name,
@@ -30,7 +30,7 @@ public class UnparameterizedTypeNodeImpl extends NodeImpl implements Unparameter
         super(startLocation, stopLocation, manager);
         setName(name);
     }
-
+    
     /**
      * Gets the name of the type.
      * @return The name of the type.
@@ -39,7 +39,7 @@ public class UnparameterizedTypeNodeImpl extends NodeImpl implements Unparameter
     {
         return this.name;
     }
-
+    
     /**
      * Changes the name of the type.
      * @param name The name of the type.
@@ -56,7 +56,7 @@ public class UnparameterizedTypeNodeImpl extends NodeImpl implements Unparameter
             ((NodeImpl)this.name).setParent(this);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -73,7 +73,7 @@ public class UnparameterizedTypeNodeImpl extends NodeImpl implements Unparameter
             this.name.receive(visitor);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided typed visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -90,7 +90,7 @@ public class UnparameterizedTypeNodeImpl extends NodeImpl implements Unparameter
             this.name.receiveTyped(visitor);
         }
     }
-
+    
     @Override
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
@@ -108,7 +108,7 @@ public class UnparameterizedTypeNodeImpl extends NodeImpl implements Unparameter
         visitor.visitUnparameterizedTypeNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
-
+    
     /**
      * Produces a mutable list of this node's children.  Modifying this list will have no
      * effect on this node.
@@ -121,7 +121,7 @@ public class UnparameterizedTypeNodeImpl extends NodeImpl implements Unparameter
         list.add(getName());
         return list;
     }
-
+    
     /**
      * Obtains a human-readable description of this node.
      * @return A human-readable description of this node.
@@ -142,7 +142,7 @@ public class UnparameterizedTypeNodeImpl extends NodeImpl implements Unparameter
         sb.append(']');
         return sb.toString();
     }
-
+    
     /**
      * Executes an operation on this node.
      * @param operation The operation to perform.
@@ -154,7 +154,7 @@ public class UnparameterizedTypeNodeImpl extends NodeImpl implements Unparameter
     {
         return operation.executeUnparameterizedTypeNode(this, p);
     }
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

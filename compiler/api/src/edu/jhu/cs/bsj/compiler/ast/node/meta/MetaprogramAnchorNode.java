@@ -17,13 +17,13 @@ public interface MetaprogramAnchorNode<T extends Node> extends Node
      * @return The metaprogram on this node.
      */
     public MetaprogramNode getMetaprogram();
-
+    
     /**
      * Changes the metaprogram on this node.
      * @param metaprogram The metaprogram on this node.
      */
     public void setMetaprogram(MetaprogramNode metaprogram);
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

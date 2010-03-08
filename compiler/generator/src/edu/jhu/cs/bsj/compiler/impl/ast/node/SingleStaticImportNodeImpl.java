@@ -20,10 +20,10 @@ public class SingleStaticImportNodeImpl extends NodeImpl implements SingleStatic
 {
     /** The name of the type from which to import. */
     private NameNode name;
-
+    
     /** The identifier to import from that type. */
     private IdentifierNode identifier;
-
+    
     /** General constructor. */
     public SingleStaticImportNodeImpl(
             NameNode name,
@@ -36,7 +36,7 @@ public class SingleStaticImportNodeImpl extends NodeImpl implements SingleStatic
         setName(name);
         setIdentifier(identifier);
     }
-
+    
     /**
      * Gets the name of the type from which to import.
      * @return The name of the type from which to import.
@@ -45,7 +45,7 @@ public class SingleStaticImportNodeImpl extends NodeImpl implements SingleStatic
     {
         return this.name;
     }
-
+    
     /**
      * Changes the name of the type from which to import.
      * @param name The name of the type from which to import.
@@ -62,7 +62,7 @@ public class SingleStaticImportNodeImpl extends NodeImpl implements SingleStatic
             ((NodeImpl)this.name).setParent(this);
         }
     }
-
+    
     /**
      * Gets the identifier to import from that type.
      * @return The identifier to import from that type.
@@ -71,7 +71,7 @@ public class SingleStaticImportNodeImpl extends NodeImpl implements SingleStatic
     {
         return this.identifier;
     }
-
+    
     /**
      * Changes the identifier to import from that type.
      * @param identifier The identifier to import from that type.
@@ -88,7 +88,7 @@ public class SingleStaticImportNodeImpl extends NodeImpl implements SingleStatic
             ((NodeImpl)this.identifier).setParent(this);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -109,7 +109,7 @@ public class SingleStaticImportNodeImpl extends NodeImpl implements SingleStatic
             this.identifier.receive(visitor);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided typed visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -130,7 +130,7 @@ public class SingleStaticImportNodeImpl extends NodeImpl implements SingleStatic
             this.identifier.receiveTyped(visitor);
         }
     }
-
+    
     @Override
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
@@ -146,7 +146,7 @@ public class SingleStaticImportNodeImpl extends NodeImpl implements SingleStatic
         visitor.visitSingleStaticImportNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
-
+    
     /**
      * Produces a mutable list of this node's children.  Modifying this list will have no
      * effect on this node.
@@ -160,7 +160,7 @@ public class SingleStaticImportNodeImpl extends NodeImpl implements SingleStatic
         list.add(getIdentifier());
         return list;
     }
-
+    
     /**
      * Obtains a human-readable description of this node.
      * @return A human-readable description of this node.
@@ -184,7 +184,7 @@ public class SingleStaticImportNodeImpl extends NodeImpl implements SingleStatic
         sb.append(']');
         return sb.toString();
     }
-
+    
     /**
      * Executes an operation on this node.
      * @param operation The operation to perform.
@@ -196,7 +196,7 @@ public class SingleStaticImportNodeImpl extends NodeImpl implements SingleStatic
     {
         return operation.executeSingleStaticImportNode(this, p);
     }
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

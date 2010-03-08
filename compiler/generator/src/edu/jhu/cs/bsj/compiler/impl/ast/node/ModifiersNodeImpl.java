@@ -16,7 +16,7 @@ public abstract class ModifiersNodeImpl extends NodeImpl implements ModifiersNod
 {
     /** The annotations modifying the subject. */
     private AnnotationListNode annotations;
-
+    
     /** General constructor. */
     protected ModifiersNodeImpl(
             AnnotationListNode annotations,
@@ -27,7 +27,7 @@ public abstract class ModifiersNodeImpl extends NodeImpl implements ModifiersNod
         super(startLocation, stopLocation, manager);
         setAnnotations(annotations);
     }
-
+    
     /**
      * Gets the annotations modifying the subject.
      * @return The annotations modifying the subject.
@@ -36,7 +36,7 @@ public abstract class ModifiersNodeImpl extends NodeImpl implements ModifiersNod
     {
         return this.annotations;
     }
-
+    
     /**
      * Changes the annotations modifying the subject.
      * @param annotations The annotations modifying the subject.
@@ -53,7 +53,7 @@ public abstract class ModifiersNodeImpl extends NodeImpl implements ModifiersNod
             ((NodeImpl)this.annotations).setParent(this);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -70,7 +70,7 @@ public abstract class ModifiersNodeImpl extends NodeImpl implements ModifiersNod
             this.annotations.receive(visitor);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided typed visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -87,7 +87,7 @@ public abstract class ModifiersNodeImpl extends NodeImpl implements ModifiersNod
             this.annotations.receiveTyped(visitor);
         }
     }
-
+    
     @Override
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
@@ -101,7 +101,7 @@ public abstract class ModifiersNodeImpl extends NodeImpl implements ModifiersNod
         visitor.visitModifiersNodeStop(this);
         visitor.visitStopEnd(this);
     }
-
+    
     /**
      * Produces a mutable list of this node's children.  Modifying this list will have no
      * effect on this node.
@@ -114,7 +114,7 @@ public abstract class ModifiersNodeImpl extends NodeImpl implements ModifiersNod
         list.add(getAnnotations());
         return list;
     }
-
+    
     /**
      * Obtains a human-readable description of this node.
      * @return A human-readable description of this node.
@@ -135,6 +135,6 @@ public abstract class ModifiersNodeImpl extends NodeImpl implements ModifiersNod
         sb.append(']');
         return sb.toString();
     }
-
-
+    
+    
 }

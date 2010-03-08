@@ -24,13 +24,13 @@ public interface SuperclassConstructorInvocationNode extends ConstructorInvocati
      * @return The qualifying expression for the enclosing object.
      */
     public PrimaryExpressionNode getQualifyingExpression();
-
+    
     /**
      * Changes the qualifying expression for the enclosing object.
      * @param qualifyingExpression The qualifying expression for the enclosing object.
      */
     public void setQualifyingExpression(PrimaryExpressionNode qualifyingExpression);
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

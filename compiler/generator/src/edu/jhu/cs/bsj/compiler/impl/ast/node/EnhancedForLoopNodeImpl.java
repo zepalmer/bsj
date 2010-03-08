@@ -21,13 +21,13 @@ public class EnhancedForLoopNodeImpl extends NodeImpl implements EnhancedForLoop
 {
     /** The iterator variable. */
     private VariableNode variable;
-
+    
     /** The loop's iterable expression. */
     private ExpressionNode expression;
-
+    
     /** The loop's statement. */
     private StatementNode statement;
-
+    
     /** General constructor. */
     public EnhancedForLoopNodeImpl(
             VariableNode variable,
@@ -42,7 +42,7 @@ public class EnhancedForLoopNodeImpl extends NodeImpl implements EnhancedForLoop
         setExpression(expression);
         setStatement(statement);
     }
-
+    
     /**
      * Gets the iterator variable.
      * @return The iterator variable.
@@ -51,7 +51,7 @@ public class EnhancedForLoopNodeImpl extends NodeImpl implements EnhancedForLoop
     {
         return this.variable;
     }
-
+    
     /**
      * Changes the iterator variable.
      * @param variable The iterator variable.
@@ -68,7 +68,7 @@ public class EnhancedForLoopNodeImpl extends NodeImpl implements EnhancedForLoop
             ((NodeImpl)this.variable).setParent(this);
         }
     }
-
+    
     /**
      * Gets the loop's iterable expression.
      * @return The loop's iterable expression.
@@ -77,7 +77,7 @@ public class EnhancedForLoopNodeImpl extends NodeImpl implements EnhancedForLoop
     {
         return this.expression;
     }
-
+    
     /**
      * Changes the loop's iterable expression.
      * @param expression The loop's iterable expression.
@@ -94,7 +94,7 @@ public class EnhancedForLoopNodeImpl extends NodeImpl implements EnhancedForLoop
             ((NodeImpl)this.expression).setParent(this);
         }
     }
-
+    
     /**
      * Gets the loop's statement.
      * @return The loop's statement.
@@ -103,7 +103,7 @@ public class EnhancedForLoopNodeImpl extends NodeImpl implements EnhancedForLoop
     {
         return this.statement;
     }
-
+    
     /**
      * Changes the loop's statement.
      * @param statement The loop's statement.
@@ -120,7 +120,7 @@ public class EnhancedForLoopNodeImpl extends NodeImpl implements EnhancedForLoop
             ((NodeImpl)this.statement).setParent(this);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -145,7 +145,7 @@ public class EnhancedForLoopNodeImpl extends NodeImpl implements EnhancedForLoop
             this.statement.receive(visitor);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided typed visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -170,7 +170,7 @@ public class EnhancedForLoopNodeImpl extends NodeImpl implements EnhancedForLoop
             this.statement.receiveTyped(visitor);
         }
     }
-
+    
     @Override
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
@@ -186,7 +186,7 @@ public class EnhancedForLoopNodeImpl extends NodeImpl implements EnhancedForLoop
         visitor.visitEnhancedForLoopNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
-
+    
     /**
      * Produces a mutable list of this node's children.  Modifying this list will have no
      * effect on this node.
@@ -201,7 +201,7 @@ public class EnhancedForLoopNodeImpl extends NodeImpl implements EnhancedForLoop
         list.add(getStatement());
         return list;
     }
-
+    
     /**
      * Obtains a human-readable description of this node.
      * @return A human-readable description of this node.
@@ -228,7 +228,7 @@ public class EnhancedForLoopNodeImpl extends NodeImpl implements EnhancedForLoop
         sb.append(']');
         return sb.toString();
     }
-
+    
     /**
      * Executes an operation on this node.
      * @param operation The operation to perform.
@@ -240,7 +240,7 @@ public class EnhancedForLoopNodeImpl extends NodeImpl implements EnhancedForLoop
     {
         return operation.executeEnhancedForLoopNode(this, p);
     }
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

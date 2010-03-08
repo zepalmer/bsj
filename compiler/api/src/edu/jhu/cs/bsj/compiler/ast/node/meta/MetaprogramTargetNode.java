@@ -20,13 +20,13 @@ public interface MetaprogramTargetNode extends Node
      * @return The names of the metaprogram targets in which to participate.
      */
     public IdentifierListNode getTargets();
-
+    
     /**
      * Changes the names of the metaprogram targets in which to participate.
      * @param targets The names of the metaprogram targets in which to participate.
      */
     public void setTargets(IdentifierListNode targets);
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

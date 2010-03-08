@@ -27,25 +27,25 @@ public interface WildcardTypeNode extends Node, TypeArgumentNode
      * @return The wildcard's bound.
      */
     public ReferenceTypeNode getBound();
-
+    
     /**
      * Changes the wildcard's bound.
      * @param bound The wildcard's bound.
      */
     public void setBound(ReferenceTypeNode bound);
-
+    
     /**
      * Gets whether or not the wildcard's bound is an upper (<tt>extends</tt>) bound.
      * @return Whether or not the wildcard's bound is an upper (<tt>extends</tt>) bound.
      */
     public boolean getUpperBound();
-
+    
     /**
      * Changes whether or not the wildcard's bound is an upper (<tt>extends</tt>) bound.
      * @param upperBound Whether or not the wildcard's bound is an upper (<tt>extends</tt>) bound.
      */
     public void setUpperBound(boolean upperBound);
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

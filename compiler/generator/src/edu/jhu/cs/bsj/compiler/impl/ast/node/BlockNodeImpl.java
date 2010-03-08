@@ -19,7 +19,7 @@ public class BlockNodeImpl extends NodeImpl implements BlockNode
 {
     /** The statements contained in this block statement. */
     private BlockStatementListNode statements;
-
+    
     /** General constructor. */
     public BlockNodeImpl(
             BlockStatementListNode statements,
@@ -30,7 +30,7 @@ public class BlockNodeImpl extends NodeImpl implements BlockNode
         super(startLocation, stopLocation, manager);
         setStatements(statements);
     }
-
+    
     /**
      * Gets the statements contained in this block statement.
      * @return The statements contained in this block statement.
@@ -39,7 +39,7 @@ public class BlockNodeImpl extends NodeImpl implements BlockNode
     {
         return this.statements;
     }
-
+    
     /**
      * Changes the statements contained in this block statement.
      * @param statements The statements contained in this block statement.
@@ -56,7 +56,7 @@ public class BlockNodeImpl extends NodeImpl implements BlockNode
             ((NodeImpl)this.statements).setParent(this);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -73,7 +73,7 @@ public class BlockNodeImpl extends NodeImpl implements BlockNode
             this.statements.receive(visitor);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided typed visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -90,7 +90,7 @@ public class BlockNodeImpl extends NodeImpl implements BlockNode
             this.statements.receiveTyped(visitor);
         }
     }
-
+    
     @Override
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
@@ -106,7 +106,7 @@ public class BlockNodeImpl extends NodeImpl implements BlockNode
         visitor.visitBlockNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
-
+    
     /**
      * Produces a mutable list of this node's children.  Modifying this list will have no
      * effect on this node.
@@ -119,7 +119,7 @@ public class BlockNodeImpl extends NodeImpl implements BlockNode
         list.add(getStatements());
         return list;
     }
-
+    
     /**
      * Obtains a human-readable description of this node.
      * @return A human-readable description of this node.
@@ -140,7 +140,7 @@ public class BlockNodeImpl extends NodeImpl implements BlockNode
         sb.append(']');
         return sb.toString();
     }
-
+    
     /**
      * Executes an operation on this node.
      * @param operation The operation to perform.
@@ -152,7 +152,7 @@ public class BlockNodeImpl extends NodeImpl implements BlockNode
     {
         return operation.executeBlockNode(this, p);
     }
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

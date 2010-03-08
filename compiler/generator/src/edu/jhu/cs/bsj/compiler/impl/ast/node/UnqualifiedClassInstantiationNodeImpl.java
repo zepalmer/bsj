@@ -22,7 +22,7 @@ public class UnqualifiedClassInstantiationNodeImpl extends ClassInstantiationNod
 {
     /** The type being instantiated. */
     private DeclaredTypeNode type;
-
+    
     /** General constructor. */
     public UnqualifiedClassInstantiationNodeImpl(
             DeclaredTypeNode type,
@@ -36,7 +36,7 @@ public class UnqualifiedClassInstantiationNodeImpl extends ClassInstantiationNod
         super(constructorTypeArguments, arguments, body, startLocation, stopLocation, manager);
         setType(type);
     }
-
+    
     /**
      * Gets the type being instantiated.
      * @return The type being instantiated.
@@ -45,7 +45,7 @@ public class UnqualifiedClassInstantiationNodeImpl extends ClassInstantiationNod
     {
         return this.type;
     }
-
+    
     /**
      * Changes the type being instantiated.
      * @param type The type being instantiated.
@@ -62,7 +62,7 @@ public class UnqualifiedClassInstantiationNodeImpl extends ClassInstantiationNod
             ((NodeImpl)this.type).setParent(this);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -79,7 +79,7 @@ public class UnqualifiedClassInstantiationNodeImpl extends ClassInstantiationNod
             this.type.receive(visitor);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided typed visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -96,7 +96,7 @@ public class UnqualifiedClassInstantiationNodeImpl extends ClassInstantiationNod
             this.type.receiveTyped(visitor);
         }
     }
-
+    
     @Override
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
@@ -112,7 +112,7 @@ public class UnqualifiedClassInstantiationNodeImpl extends ClassInstantiationNod
         visitor.visitUnqualifiedClassInstantiationNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
-
+    
     /**
      * Produces a mutable list of this node's children.  Modifying this list will have no
      * effect on this node.
@@ -125,7 +125,7 @@ public class UnqualifiedClassInstantiationNodeImpl extends ClassInstantiationNod
         list.add(getType());
         return list;
     }
-
+    
     /**
      * Obtains a human-readable description of this node.
      * @return A human-readable description of this node.
@@ -155,7 +155,7 @@ public class UnqualifiedClassInstantiationNodeImpl extends ClassInstantiationNod
         sb.append(']');
         return sb.toString();
     }
-
+    
     /**
      * Executes an operation on this node.
      * @param operation The operation to perform.
@@ -167,7 +167,7 @@ public class UnqualifiedClassInstantiationNodeImpl extends ClassInstantiationNod
     {
         return operation.executeUnqualifiedClassInstantiationNode(this, p);
     }
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

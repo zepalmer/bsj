@@ -21,13 +21,13 @@ public class VariableDeclaratorNodeImpl extends NodeImpl implements VariableDecl
 {
     /** The type of this variable. */
     private TypeNode type;
-
+    
     /** The name of this variable. */
     private IdentifierNode name;
-
+    
     /** The initializer to use. */
     private VariableInitializerNode initializer;
-
+    
     /** General constructor. */
     public VariableDeclaratorNodeImpl(
             TypeNode type,
@@ -42,7 +42,7 @@ public class VariableDeclaratorNodeImpl extends NodeImpl implements VariableDecl
         setName(name);
         setInitializer(initializer);
     }
-
+    
     /**
      * Gets the type of this variable.
      * @return The type of this variable.
@@ -51,7 +51,7 @@ public class VariableDeclaratorNodeImpl extends NodeImpl implements VariableDecl
     {
         return this.type;
     }
-
+    
     /**
      * Changes the type of this variable.
      * @param type The type of this variable.
@@ -68,7 +68,7 @@ public class VariableDeclaratorNodeImpl extends NodeImpl implements VariableDecl
             ((NodeImpl)this.type).setParent(this);
         }
     }
-
+    
     /**
      * Gets the name of this variable.
      * @return The name of this variable.
@@ -77,7 +77,7 @@ public class VariableDeclaratorNodeImpl extends NodeImpl implements VariableDecl
     {
         return this.name;
     }
-
+    
     /**
      * Changes the name of this variable.
      * @param name The name of this variable.
@@ -94,7 +94,7 @@ public class VariableDeclaratorNodeImpl extends NodeImpl implements VariableDecl
             ((NodeImpl)this.name).setParent(this);
         }
     }
-
+    
     /**
      * Gets the initializer to use.
      * @return The initializer to use.
@@ -103,7 +103,7 @@ public class VariableDeclaratorNodeImpl extends NodeImpl implements VariableDecl
     {
         return this.initializer;
     }
-
+    
     /**
      * Changes the initializer to use.
      * @param initializer The initializer to use.
@@ -120,7 +120,7 @@ public class VariableDeclaratorNodeImpl extends NodeImpl implements VariableDecl
             ((NodeImpl)this.initializer).setParent(this);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -145,7 +145,7 @@ public class VariableDeclaratorNodeImpl extends NodeImpl implements VariableDecl
             this.initializer.receive(visitor);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided typed visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -170,7 +170,7 @@ public class VariableDeclaratorNodeImpl extends NodeImpl implements VariableDecl
             this.initializer.receiveTyped(visitor);
         }
     }
-
+    
     @Override
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
@@ -186,7 +186,7 @@ public class VariableDeclaratorNodeImpl extends NodeImpl implements VariableDecl
         visitor.visitVariableDeclaratorNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
-
+    
     /**
      * Produces a mutable list of this node's children.  Modifying this list will have no
      * effect on this node.
@@ -201,7 +201,7 @@ public class VariableDeclaratorNodeImpl extends NodeImpl implements VariableDecl
         list.add(getInitializer());
         return list;
     }
-
+    
     /**
      * Obtains a human-readable description of this node.
      * @return A human-readable description of this node.
@@ -228,7 +228,7 @@ public class VariableDeclaratorNodeImpl extends NodeImpl implements VariableDecl
         sb.append(']');
         return sb.toString();
     }
-
+    
     /**
      * Executes an operation on this node.
      * @param operation The operation to perform.
@@ -240,7 +240,7 @@ public class VariableDeclaratorNodeImpl extends NodeImpl implements VariableDecl
     {
         return operation.executeVariableDeclaratorNode(this, p);
     }
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

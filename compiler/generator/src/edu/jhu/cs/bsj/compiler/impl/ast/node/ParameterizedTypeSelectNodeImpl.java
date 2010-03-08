@@ -20,10 +20,10 @@ public class ParameterizedTypeSelectNodeImpl extends NodeImpl implements Paramet
 {
     /** The parameterized type from which a type is selected. */
     private ParameterizedTypeNode base;
-
+    
     /** The type which is selected from the base. */
     private DeclaredTypeNode select;
-
+    
     /** General constructor. */
     public ParameterizedTypeSelectNodeImpl(
             ParameterizedTypeNode base,
@@ -36,7 +36,7 @@ public class ParameterizedTypeSelectNodeImpl extends NodeImpl implements Paramet
         setBase(base);
         setSelect(select);
     }
-
+    
     /**
      * Gets the parameterized type from which a type is selected.
      * @return The parameterized type from which a type is selected.
@@ -45,7 +45,7 @@ public class ParameterizedTypeSelectNodeImpl extends NodeImpl implements Paramet
     {
         return this.base;
     }
-
+    
     /**
      * Changes the parameterized type from which a type is selected.
      * @param base The parameterized type from which a type is selected.
@@ -62,7 +62,7 @@ public class ParameterizedTypeSelectNodeImpl extends NodeImpl implements Paramet
             ((NodeImpl)this.base).setParent(this);
         }
     }
-
+    
     /**
      * Gets the type which is selected from the base.
      * @return The type which is selected from the base.
@@ -71,7 +71,7 @@ public class ParameterizedTypeSelectNodeImpl extends NodeImpl implements Paramet
     {
         return this.select;
     }
-
+    
     /**
      * Changes the type which is selected from the base.
      * @param select The type which is selected from the base.
@@ -88,7 +88,7 @@ public class ParameterizedTypeSelectNodeImpl extends NodeImpl implements Paramet
             ((NodeImpl)this.select).setParent(this);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -109,7 +109,7 @@ public class ParameterizedTypeSelectNodeImpl extends NodeImpl implements Paramet
             this.select.receive(visitor);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided typed visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -130,7 +130,7 @@ public class ParameterizedTypeSelectNodeImpl extends NodeImpl implements Paramet
             this.select.receiveTyped(visitor);
         }
     }
-
+    
     @Override
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
@@ -146,7 +146,7 @@ public class ParameterizedTypeSelectNodeImpl extends NodeImpl implements Paramet
         visitor.visitParameterizedTypeSelectNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
-
+    
     /**
      * Produces a mutable list of this node's children.  Modifying this list will have no
      * effect on this node.
@@ -160,7 +160,7 @@ public class ParameterizedTypeSelectNodeImpl extends NodeImpl implements Paramet
         list.add(getSelect());
         return list;
     }
-
+    
     /**
      * Obtains a human-readable description of this node.
      * @return A human-readable description of this node.
@@ -184,7 +184,7 @@ public class ParameterizedTypeSelectNodeImpl extends NodeImpl implements Paramet
         sb.append(']');
         return sb.toString();
     }
-
+    
     /**
      * Executes an operation on this node.
      * @param operation The operation to perform.
@@ -196,7 +196,7 @@ public class ParameterizedTypeSelectNodeImpl extends NodeImpl implements Paramet
     {
         return operation.executeParameterizedTypeSelectNode(this, p);
     }
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

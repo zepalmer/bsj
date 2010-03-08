@@ -19,25 +19,25 @@ public interface ConstructorInvocationNode extends Node
      * @return The arguments to pass to the method.
      */
     public ExpressionListNode getArguments();
-
+    
     /**
      * Changes the arguments to pass to the method.
      * @param arguments The arguments to pass to the method.
      */
     public void setArguments(ExpressionListNode arguments);
-
+    
     /**
      * Gets the type arguments for the method.
      * @return The type arguments for the method.
      */
     public ReferenceTypeListNode getTypeArguments();
-
+    
     /**
      * Changes the type arguments for the method.
      * @param typeArguments The type arguments for the method.
      */
     public void setTypeArguments(ReferenceTypeListNode typeArguments);
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

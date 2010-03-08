@@ -23,16 +23,16 @@ public class AnnotationDeclarationNodeImpl extends NodeImpl implements Annotatio
 {
     /** The modifiers for this type. */
     private AnnotationModifiersNode modifiers;
-
+    
     /** This annotation's body. */
     private AnnotationBodyNode body;
-
+    
     /** The name of this declared type. */
     private IdentifierNode identifier;
-
+    
     /** The associated javadoc comment for this node. */
     private JavadocNode javadoc;
-
+    
     /** General constructor. */
     public AnnotationDeclarationNodeImpl(
             AnnotationModifiersNode modifiers,
@@ -49,7 +49,7 @@ public class AnnotationDeclarationNodeImpl extends NodeImpl implements Annotatio
         setIdentifier(identifier);
         setJavadoc(javadoc);
     }
-
+    
     /**
      * Gets the modifiers for this type.
      * @return The modifiers for this type.
@@ -58,7 +58,7 @@ public class AnnotationDeclarationNodeImpl extends NodeImpl implements Annotatio
     {
         return this.modifiers;
     }
-
+    
     /**
      * Changes the modifiers for this type.
      * @param modifiers The modifiers for this type.
@@ -75,7 +75,7 @@ public class AnnotationDeclarationNodeImpl extends NodeImpl implements Annotatio
             ((NodeImpl)this.modifiers).setParent(this);
         }
     }
-
+    
     /**
      * Gets this annotation's body.
      * @return This annotation's body.
@@ -84,7 +84,7 @@ public class AnnotationDeclarationNodeImpl extends NodeImpl implements Annotatio
     {
         return this.body;
     }
-
+    
     /**
      * Changes this annotation's body.
      * @param body This annotation's body.
@@ -101,7 +101,7 @@ public class AnnotationDeclarationNodeImpl extends NodeImpl implements Annotatio
             ((NodeImpl)this.body).setParent(this);
         }
     }
-
+    
     /**
      * Gets the name of this declared type.
      * @return The name of this declared type.
@@ -110,7 +110,7 @@ public class AnnotationDeclarationNodeImpl extends NodeImpl implements Annotatio
     {
         return this.identifier;
     }
-
+    
     /**
      * Changes the name of this declared type.
      * @param identifier The name of this declared type.
@@ -127,7 +127,7 @@ public class AnnotationDeclarationNodeImpl extends NodeImpl implements Annotatio
             ((NodeImpl)this.identifier).setParent(this);
         }
     }
-
+    
     /**
      * Gets the associated javadoc comment for this node.
      * @return The associated javadoc comment for this node.
@@ -136,7 +136,7 @@ public class AnnotationDeclarationNodeImpl extends NodeImpl implements Annotatio
     {
         return this.javadoc;
     }
-
+    
     /**
      * Changes the associated javadoc comment for this node.
      * @param javadoc The associated javadoc comment for this node.
@@ -153,7 +153,7 @@ public class AnnotationDeclarationNodeImpl extends NodeImpl implements Annotatio
             ((NodeImpl)this.javadoc).setParent(this);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -174,7 +174,7 @@ public class AnnotationDeclarationNodeImpl extends NodeImpl implements Annotatio
             this.body.receive(visitor);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided typed visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -195,7 +195,7 @@ public class AnnotationDeclarationNodeImpl extends NodeImpl implements Annotatio
             this.body.receiveTyped(visitor);
         }
     }
-
+    
     @Override
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
@@ -211,7 +211,7 @@ public class AnnotationDeclarationNodeImpl extends NodeImpl implements Annotatio
         visitor.visitAnnotationDeclarationNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
-
+    
     /**
      * Produces a mutable list of this node's children.  Modifying this list will have no
      * effect on this node.
@@ -225,7 +225,7 @@ public class AnnotationDeclarationNodeImpl extends NodeImpl implements Annotatio
         list.add(getBody());
         return list;
     }
-
+    
     /**
      * Obtains a human-readable description of this node.
      * @return A human-readable description of this node.
@@ -255,7 +255,7 @@ public class AnnotationDeclarationNodeImpl extends NodeImpl implements Annotatio
         sb.append(']');
         return sb.toString();
     }
-
+    
     /**
      * Executes an operation on this node.
      * @param operation The operation to perform.
@@ -267,7 +267,7 @@ public class AnnotationDeclarationNodeImpl extends NodeImpl implements Annotatio
     {
         return operation.executeAnnotationDeclarationNode(this, p);
     }
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

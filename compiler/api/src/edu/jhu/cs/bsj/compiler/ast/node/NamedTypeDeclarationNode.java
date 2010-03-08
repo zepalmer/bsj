@@ -15,31 +15,31 @@ public interface NamedTypeDeclarationNode<T extends Node> extends Node, TypeDecl
      * @return The name of this declared type.
      */
     public IdentifierNode getIdentifier();
-
+    
     /**
      * Changes the name of this declared type.
      * @param identifier The name of this declared type.
      */
     public void setIdentifier(IdentifierNode identifier);
-
+    
     /**
      * Gets the associated javadoc comment for this node.
      * @return The associated javadoc comment for this node.
      */
     public JavadocNode getJavadoc();
-
+    
     /**
      * Changes the associated javadoc comment for this node.
      * @param javadoc The associated javadoc comment for this node.
      */
     public void setJavadoc(JavadocNode javadoc);
-
+    
     /**
      * Gets this type's body.
      * @return This type's body.
      */
     public TypeBodyNode<? extends T> getBody();
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

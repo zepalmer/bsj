@@ -22,25 +22,25 @@ public interface AnnotationDeclarationNode extends Node, NamedTypeDeclarationNod
      * @return The modifiers for this type.
      */
     public AnnotationModifiersNode getModifiers();
-
+    
     /**
      * Changes the modifiers for this type.
      * @param modifiers The modifiers for this type.
      */
     public void setModifiers(AnnotationModifiersNode modifiers);
-
+    
     /**
      * Gets this annotation's body.
      * @return This annotation's body.
      */
     public AnnotationBodyNode getBody();
-
+    
     /**
      * Changes this annotation's body.
      * @param body This annotation's body.
      */
     public void setBody(AnnotationBodyNode body);
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

@@ -32,7 +32,7 @@ public interface ListNode<T extends Node> extends Node, List<T>
      * @return The list of children.
      */
     public List<T> getChildren();
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

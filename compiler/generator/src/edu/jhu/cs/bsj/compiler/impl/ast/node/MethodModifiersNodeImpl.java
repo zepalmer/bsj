@@ -20,25 +20,25 @@ public class MethodModifiersNodeImpl extends ModifiersNodeImpl implements Method
 {
     /** The access for the associated method. */
     private AccessModifier access;
-
+    
     /** Whether or not the associated method is abstract. */
     private boolean abstractFlag;
-
+    
     /** Whether or not the associated method is static. */
     private boolean staticFlag;
-
+    
     /** Whether or not the associated method is final. */
     private boolean finalFlag;
-
+    
     /** Whether or not the associated method is synchronized. */
     private boolean synchronizedFlag;
-
+    
     /** Whether or not the associated method is native. */
     private boolean nativeFlag;
-
+    
     /** Whether or not the associated method uses strict floating-point. */
     private boolean strictfpFlag;
-
+    
     /** General constructor. */
     public MethodModifiersNodeImpl(
             AccessModifier access,
@@ -62,7 +62,7 @@ public class MethodModifiersNodeImpl extends ModifiersNodeImpl implements Method
         this.nativeFlag = nativeFlag;
         this.strictfpFlag = strictfpFlag;
     }
-
+    
     /**
      * Gets the access for the associated method.
      * @return The access for the associated method.
@@ -71,7 +71,7 @@ public class MethodModifiersNodeImpl extends ModifiersNodeImpl implements Method
     {
         return this.access;
     }
-
+    
     /**
      * Changes the access for the associated method.
      * @param access The access for the associated method.
@@ -80,7 +80,7 @@ public class MethodModifiersNodeImpl extends ModifiersNodeImpl implements Method
     {
         this.access = access;
     }
-
+    
     /**
      * Gets whether or not the associated method is abstract.
      * @return Whether or not the associated method is abstract.
@@ -89,7 +89,7 @@ public class MethodModifiersNodeImpl extends ModifiersNodeImpl implements Method
     {
         return this.abstractFlag;
     }
-
+    
     /**
      * Changes whether or not the associated method is abstract.
      * @param abstractFlag Whether or not the associated method is abstract.
@@ -98,7 +98,7 @@ public class MethodModifiersNodeImpl extends ModifiersNodeImpl implements Method
     {
         this.abstractFlag = abstractFlag;
     }
-
+    
     /**
      * Gets whether or not the associated method is static.
      * @return Whether or not the associated method is static.
@@ -107,7 +107,7 @@ public class MethodModifiersNodeImpl extends ModifiersNodeImpl implements Method
     {
         return this.staticFlag;
     }
-
+    
     /**
      * Changes whether or not the associated method is static.
      * @param staticFlag Whether or not the associated method is static.
@@ -116,7 +116,7 @@ public class MethodModifiersNodeImpl extends ModifiersNodeImpl implements Method
     {
         this.staticFlag = staticFlag;
     }
-
+    
     /**
      * Gets whether or not the associated method is final.
      * @return Whether or not the associated method is final.
@@ -125,7 +125,7 @@ public class MethodModifiersNodeImpl extends ModifiersNodeImpl implements Method
     {
         return this.finalFlag;
     }
-
+    
     /**
      * Changes whether or not the associated method is final.
      * @param finalFlag Whether or not the associated method is final.
@@ -134,7 +134,7 @@ public class MethodModifiersNodeImpl extends ModifiersNodeImpl implements Method
     {
         this.finalFlag = finalFlag;
     }
-
+    
     /**
      * Gets whether or not the associated method is synchronized.
      * @return Whether or not the associated method is synchronized.
@@ -143,7 +143,7 @@ public class MethodModifiersNodeImpl extends ModifiersNodeImpl implements Method
     {
         return this.synchronizedFlag;
     }
-
+    
     /**
      * Changes whether or not the associated method is synchronized.
      * @param synchronizedFlag Whether or not the associated method is synchronized.
@@ -152,7 +152,7 @@ public class MethodModifiersNodeImpl extends ModifiersNodeImpl implements Method
     {
         this.synchronizedFlag = synchronizedFlag;
     }
-
+    
     /**
      * Gets whether or not the associated method is native.
      * @return Whether or not the associated method is native.
@@ -161,7 +161,7 @@ public class MethodModifiersNodeImpl extends ModifiersNodeImpl implements Method
     {
         return this.nativeFlag;
     }
-
+    
     /**
      * Changes whether or not the associated method is native.
      * @param nativeFlag Whether or not the associated method is native.
@@ -170,7 +170,7 @@ public class MethodModifiersNodeImpl extends ModifiersNodeImpl implements Method
     {
         this.nativeFlag = nativeFlag;
     }
-
+    
     /**
      * Gets whether or not the associated method uses strict floating-point.
      * @return Whether or not the associated method uses strict floating-point.
@@ -179,7 +179,7 @@ public class MethodModifiersNodeImpl extends ModifiersNodeImpl implements Method
     {
         return this.strictfpFlag;
     }
-
+    
     /**
      * Changes whether or not the associated method uses strict floating-point.
      * @param strictfpFlag Whether or not the associated method uses strict floating-point.
@@ -188,7 +188,7 @@ public class MethodModifiersNodeImpl extends ModifiersNodeImpl implements Method
     {
         this.strictfpFlag = strictfpFlag;
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -201,7 +201,7 @@ public class MethodModifiersNodeImpl extends ModifiersNodeImpl implements Method
     {
         super.receiveToChildren(visitor);
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided typed visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -214,7 +214,7 @@ public class MethodModifiersNodeImpl extends ModifiersNodeImpl implements Method
     {
         super.receiveTypedToChildren(visitor);
     }
-
+    
     @Override
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
@@ -230,7 +230,7 @@ public class MethodModifiersNodeImpl extends ModifiersNodeImpl implements Method
         visitor.visitMethodModifiersNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
-
+    
     /**
      * Produces a mutable list of this node's children.  Modifying this list will have no
      * effect on this node.
@@ -249,7 +249,7 @@ public class MethodModifiersNodeImpl extends ModifiersNodeImpl implements Method
         list.add(getStrictfpFlag());
         return list;
     }
-
+    
     /**
      * Obtains a human-readable description of this node.
      * @return A human-readable description of this node.
@@ -291,7 +291,7 @@ public class MethodModifiersNodeImpl extends ModifiersNodeImpl implements Method
         sb.append(']');
         return sb.toString();
     }
-
+    
     /**
      * Executes an operation on this node.
      * @param operation The operation to perform.
@@ -303,7 +303,7 @@ public class MethodModifiersNodeImpl extends ModifiersNodeImpl implements Method
     {
         return operation.executeMethodModifiersNode(this, p);
     }
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

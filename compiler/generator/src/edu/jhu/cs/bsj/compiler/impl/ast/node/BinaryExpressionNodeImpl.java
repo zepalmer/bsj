@@ -20,13 +20,13 @@ public class BinaryExpressionNodeImpl extends NodeImpl implements BinaryExpressi
 {
     /** The left operand of the expression. */
     private ExpressionNode leftOperand;
-
+    
     /** The right operand of the expression. */
     private ExpressionNode rightOperand;
-
+    
     /** The binary operator to apply. */
     private BinaryOperator operator;
-
+    
     /** General constructor. */
     public BinaryExpressionNodeImpl(
             ExpressionNode leftOperand,
@@ -41,7 +41,7 @@ public class BinaryExpressionNodeImpl extends NodeImpl implements BinaryExpressi
         setRightOperand(rightOperand);
         this.operator = operator;
     }
-
+    
     /**
      * Gets the left operand of the expression.
      * @return The left operand of the expression.
@@ -50,7 +50,7 @@ public class BinaryExpressionNodeImpl extends NodeImpl implements BinaryExpressi
     {
         return this.leftOperand;
     }
-
+    
     /**
      * Changes the left operand of the expression.
      * @param leftOperand The left operand of the expression.
@@ -67,7 +67,7 @@ public class BinaryExpressionNodeImpl extends NodeImpl implements BinaryExpressi
             ((NodeImpl)this.leftOperand).setParent(this);
         }
     }
-
+    
     /**
      * Gets the right operand of the expression.
      * @return The right operand of the expression.
@@ -76,7 +76,7 @@ public class BinaryExpressionNodeImpl extends NodeImpl implements BinaryExpressi
     {
         return this.rightOperand;
     }
-
+    
     /**
      * Changes the right operand of the expression.
      * @param rightOperand The right operand of the expression.
@@ -93,7 +93,7 @@ public class BinaryExpressionNodeImpl extends NodeImpl implements BinaryExpressi
             ((NodeImpl)this.rightOperand).setParent(this);
         }
     }
-
+    
     /**
      * Gets the binary operator to apply.
      * @return The binary operator to apply.
@@ -102,7 +102,7 @@ public class BinaryExpressionNodeImpl extends NodeImpl implements BinaryExpressi
     {
         return this.operator;
     }
-
+    
     /**
      * Changes the binary operator to apply.
      * @param operator The binary operator to apply.
@@ -111,7 +111,7 @@ public class BinaryExpressionNodeImpl extends NodeImpl implements BinaryExpressi
     {
         this.operator = operator;
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -132,7 +132,7 @@ public class BinaryExpressionNodeImpl extends NodeImpl implements BinaryExpressi
             this.rightOperand.receive(visitor);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided typed visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -153,7 +153,7 @@ public class BinaryExpressionNodeImpl extends NodeImpl implements BinaryExpressi
             this.rightOperand.receiveTyped(visitor);
         }
     }
-
+    
     @Override
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
@@ -169,7 +169,7 @@ public class BinaryExpressionNodeImpl extends NodeImpl implements BinaryExpressi
         visitor.visitBinaryExpressionNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
-
+    
     /**
      * Produces a mutable list of this node's children.  Modifying this list will have no
      * effect on this node.
@@ -184,7 +184,7 @@ public class BinaryExpressionNodeImpl extends NodeImpl implements BinaryExpressi
         list.add(getOperator());
         return list;
     }
-
+    
     /**
      * Obtains a human-readable description of this node.
      * @return A human-readable description of this node.
@@ -211,7 +211,7 @@ public class BinaryExpressionNodeImpl extends NodeImpl implements BinaryExpressi
         sb.append(']');
         return sb.toString();
     }
-
+    
     /**
      * Executes an operation on this node.
      * @param operation The operation to perform.
@@ -223,7 +223,7 @@ public class BinaryExpressionNodeImpl extends NodeImpl implements BinaryExpressi
     {
         return operation.executeBinaryExpressionNode(this, p);
     }
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

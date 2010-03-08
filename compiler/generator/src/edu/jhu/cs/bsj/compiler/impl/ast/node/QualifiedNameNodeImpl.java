@@ -21,7 +21,7 @@ public class QualifiedNameNodeImpl extends NameNodeImpl implements QualifiedName
 {
     /** The name being qualified. */
     private NameNode base;
-
+    
     /** General constructor. */
     public QualifiedNameNodeImpl(
             NameNode base,
@@ -34,7 +34,7 @@ public class QualifiedNameNodeImpl extends NameNodeImpl implements QualifiedName
         super(identifier, category, startLocation, stopLocation, manager);
         setBase(base);
     }
-
+    
     /**
      * Gets the name being qualified.
      * @return The name being qualified.
@@ -43,7 +43,7 @@ public class QualifiedNameNodeImpl extends NameNodeImpl implements QualifiedName
     {
         return this.base;
     }
-
+    
     /**
      * Changes the name being qualified.
      * @param base The name being qualified.
@@ -60,7 +60,7 @@ public class QualifiedNameNodeImpl extends NameNodeImpl implements QualifiedName
             ((NodeImpl)this.base).setParent(this);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -77,7 +77,7 @@ public class QualifiedNameNodeImpl extends NameNodeImpl implements QualifiedName
             this.base.receive(visitor);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided typed visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -94,7 +94,7 @@ public class QualifiedNameNodeImpl extends NameNodeImpl implements QualifiedName
             this.base.receiveTyped(visitor);
         }
     }
-
+    
     @Override
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
@@ -110,7 +110,7 @@ public class QualifiedNameNodeImpl extends NameNodeImpl implements QualifiedName
         visitor.visitQualifiedNameNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
-
+    
     /**
      * Produces a mutable list of this node's children.  Modifying this list will have no
      * effect on this node.
@@ -123,7 +123,7 @@ public class QualifiedNameNodeImpl extends NameNodeImpl implements QualifiedName
         list.add(getBase());
         return list;
     }
-
+    
     /**
      * Obtains a human-readable description of this node.
      * @return A human-readable description of this node.
@@ -151,7 +151,7 @@ public class QualifiedNameNodeImpl extends NameNodeImpl implements QualifiedName
         }
         return sb.toString();
     }
-
+    
     /**
      * Executes an operation on this node.
      * @param operation The operation to perform.
@@ -163,7 +163,7 @@ public class QualifiedNameNodeImpl extends NameNodeImpl implements QualifiedName
     {
         return operation.executeQualifiedNameNode(this, p);
     }
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

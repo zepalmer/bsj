@@ -20,13 +20,13 @@ public class AssignmentNodeImpl extends NodeImpl implements AssignmentNode
 {
     /** The variable to which to assign a value. */
     private ExpressionNode variable;
-
+    
     /** The assignment operator indicating the operation to perform. */
     private AssignmentOperator operator;
-
+    
     /** The expression to use. */
     private ExpressionNode expression;
-
+    
     /** General constructor. */
     public AssignmentNodeImpl(
             ExpressionNode variable,
@@ -41,7 +41,7 @@ public class AssignmentNodeImpl extends NodeImpl implements AssignmentNode
         this.operator = operator;
         setExpression(expression);
     }
-
+    
     /**
      * Gets the variable to which to assign a value.
      * @return The variable to which to assign a value.
@@ -50,7 +50,7 @@ public class AssignmentNodeImpl extends NodeImpl implements AssignmentNode
     {
         return this.variable;
     }
-
+    
     /**
      * Changes the variable to which to assign a value.
      * @param variable The variable to which to assign a value.
@@ -67,7 +67,7 @@ public class AssignmentNodeImpl extends NodeImpl implements AssignmentNode
             ((NodeImpl)this.variable).setParent(this);
         }
     }
-
+    
     /**
      * Gets the assignment operator indicating the operation to perform.
      * @return The assignment operator indicating the operation to perform.
@@ -76,7 +76,7 @@ public class AssignmentNodeImpl extends NodeImpl implements AssignmentNode
     {
         return this.operator;
     }
-
+    
     /**
      * Changes the assignment operator indicating the operation to perform.
      * @param operator The assignment operator indicating the operation to perform.
@@ -85,7 +85,7 @@ public class AssignmentNodeImpl extends NodeImpl implements AssignmentNode
     {
         this.operator = operator;
     }
-
+    
     /**
      * Gets the expression to use.
      * @return The expression to use.
@@ -94,7 +94,7 @@ public class AssignmentNodeImpl extends NodeImpl implements AssignmentNode
     {
         return this.expression;
     }
-
+    
     /**
      * Changes the expression to use.
      * @param expression The expression to use.
@@ -111,7 +111,7 @@ public class AssignmentNodeImpl extends NodeImpl implements AssignmentNode
             ((NodeImpl)this.expression).setParent(this);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -132,7 +132,7 @@ public class AssignmentNodeImpl extends NodeImpl implements AssignmentNode
             this.expression.receive(visitor);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided typed visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -153,7 +153,7 @@ public class AssignmentNodeImpl extends NodeImpl implements AssignmentNode
             this.expression.receiveTyped(visitor);
         }
     }
-
+    
     @Override
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
@@ -169,7 +169,7 @@ public class AssignmentNodeImpl extends NodeImpl implements AssignmentNode
         visitor.visitAssignmentNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
-
+    
     /**
      * Produces a mutable list of this node's children.  Modifying this list will have no
      * effect on this node.
@@ -184,7 +184,7 @@ public class AssignmentNodeImpl extends NodeImpl implements AssignmentNode
         list.add(getExpression());
         return list;
     }
-
+    
     /**
      * Obtains a human-readable description of this node.
      * @return A human-readable description of this node.
@@ -211,7 +211,7 @@ public class AssignmentNodeImpl extends NodeImpl implements AssignmentNode
         sb.append(']');
         return sb.toString();
     }
-
+    
     /**
      * Executes an operation on this node.
      * @param operation The operation to perform.
@@ -223,7 +223,7 @@ public class AssignmentNodeImpl extends NodeImpl implements AssignmentNode
     {
         return operation.executeAssignmentNode(this, p);
     }
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

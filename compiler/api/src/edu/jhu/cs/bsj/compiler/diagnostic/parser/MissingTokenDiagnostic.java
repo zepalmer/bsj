@@ -17,11 +17,11 @@ public class MissingTokenDiagnostic<T extends javax.tools.JavaFileObject> extend
     private String tokenType;
     
     public MissingTokenDiagnostic(
-                long lineNumber,
-                long columnNumber,
-                T source,
-                String ruleName,
-                String tokenType)
+            long lineNumber,
+            long columnNumber,
+            T source,
+            String ruleName,
+            String tokenType)
     {
         super(lineNumber, columnNumber, source, CODE, Kind.ERROR, ruleName);
         this.tokenType = tokenType;

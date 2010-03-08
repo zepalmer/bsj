@@ -19,13 +19,13 @@ public class ConditionalExpressionNodeImpl extends NodeImpl implements Condition
 {
     /** The condition of the expression. */
     private ExpressionNode condition;
-
+    
     /** The value of this expression when the condition is true. */
     private ExpressionNode trueExpression;
-
+    
     /** The value of this expression when the condition is false. */
     private ExpressionNode falseExpression;
-
+    
     /** General constructor. */
     public ConditionalExpressionNodeImpl(
             ExpressionNode condition,
@@ -40,7 +40,7 @@ public class ConditionalExpressionNodeImpl extends NodeImpl implements Condition
         setTrueExpression(trueExpression);
         setFalseExpression(falseExpression);
     }
-
+    
     /**
      * Gets the condition of the expression.
      * @return The condition of the expression.
@@ -49,7 +49,7 @@ public class ConditionalExpressionNodeImpl extends NodeImpl implements Condition
     {
         return this.condition;
     }
-
+    
     /**
      * Changes the condition of the expression.
      * @param condition The condition of the expression.
@@ -66,7 +66,7 @@ public class ConditionalExpressionNodeImpl extends NodeImpl implements Condition
             ((NodeImpl)this.condition).setParent(this);
         }
     }
-
+    
     /**
      * Gets the value of this expression when the condition is true.
      * @return The value of this expression when the condition is true.
@@ -75,7 +75,7 @@ public class ConditionalExpressionNodeImpl extends NodeImpl implements Condition
     {
         return this.trueExpression;
     }
-
+    
     /**
      * Changes the value of this expression when the condition is true.
      * @param trueExpression The value of this expression when the condition is true.
@@ -92,7 +92,7 @@ public class ConditionalExpressionNodeImpl extends NodeImpl implements Condition
             ((NodeImpl)this.trueExpression).setParent(this);
         }
     }
-
+    
     /**
      * Gets the value of this expression when the condition is false.
      * @return The value of this expression when the condition is false.
@@ -101,7 +101,7 @@ public class ConditionalExpressionNodeImpl extends NodeImpl implements Condition
     {
         return this.falseExpression;
     }
-
+    
     /**
      * Changes the value of this expression when the condition is false.
      * @param falseExpression The value of this expression when the condition is false.
@@ -118,7 +118,7 @@ public class ConditionalExpressionNodeImpl extends NodeImpl implements Condition
             ((NodeImpl)this.falseExpression).setParent(this);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -143,7 +143,7 @@ public class ConditionalExpressionNodeImpl extends NodeImpl implements Condition
             this.falseExpression.receive(visitor);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided typed visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -168,7 +168,7 @@ public class ConditionalExpressionNodeImpl extends NodeImpl implements Condition
             this.falseExpression.receiveTyped(visitor);
         }
     }
-
+    
     @Override
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
@@ -184,7 +184,7 @@ public class ConditionalExpressionNodeImpl extends NodeImpl implements Condition
         visitor.visitConditionalExpressionNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
-
+    
     /**
      * Produces a mutable list of this node's children.  Modifying this list will have no
      * effect on this node.
@@ -199,7 +199,7 @@ public class ConditionalExpressionNodeImpl extends NodeImpl implements Condition
         list.add(getFalseExpression());
         return list;
     }
-
+    
     /**
      * Obtains a human-readable description of this node.
      * @return A human-readable description of this node.
@@ -226,7 +226,7 @@ public class ConditionalExpressionNodeImpl extends NodeImpl implements Condition
         sb.append(']');
         return sb.toString();
     }
-
+    
     /**
      * Executes an operation on this node.
      * @param operation The operation to perform.
@@ -238,7 +238,7 @@ public class ConditionalExpressionNodeImpl extends NodeImpl implements Condition
     {
         return operation.executeConditionalExpressionNode(this, p);
     }
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

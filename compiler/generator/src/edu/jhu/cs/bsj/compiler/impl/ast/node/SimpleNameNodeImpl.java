@@ -28,7 +28,7 @@ public class SimpleNameNodeImpl extends NameNodeImpl implements SimpleNameNode
     {
         super(identifier, category, startLocation, stopLocation, manager);
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -41,7 +41,7 @@ public class SimpleNameNodeImpl extends NameNodeImpl implements SimpleNameNode
     {
         super.receiveToChildren(visitor);
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided typed visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -54,7 +54,7 @@ public class SimpleNameNodeImpl extends NameNodeImpl implements SimpleNameNode
     {
         super.receiveTypedToChildren(visitor);
     }
-
+    
     @Override
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
@@ -70,7 +70,7 @@ public class SimpleNameNodeImpl extends NameNodeImpl implements SimpleNameNode
         visitor.visitSimpleNameNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
-
+    
     /**
      * Produces a mutable list of this node's children.  Modifying this list will have no
      * effect on this node.
@@ -82,7 +82,7 @@ public class SimpleNameNodeImpl extends NameNodeImpl implements SimpleNameNode
         List<Object> list = super.getChildObjects();
         return list;
     }
-
+    
     /**
      * Obtains a human-readable description of this node.
      * @return A human-readable description of this node.
@@ -102,7 +102,7 @@ public class SimpleNameNodeImpl extends NameNodeImpl implements SimpleNameNode
         }
         return sb.toString();
     }
-
+    
     /**
      * Executes an operation on this node.
      * @param operation The operation to perform.
@@ -114,7 +114,7 @@ public class SimpleNameNodeImpl extends NameNodeImpl implements SimpleNameNode
     {
         return operation.executeSimpleNameNode(this, p);
     }
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

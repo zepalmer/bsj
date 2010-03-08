@@ -17,10 +17,10 @@ public abstract class MethodInvocationNodeImpl extends NodeImpl implements Metho
 {
     /** The arguments to pass to the method. */
     private ExpressionListNode arguments;
-
+    
     /** The type arguments for the method. */
     private ReferenceTypeListNode typeArguments;
-
+    
     /** General constructor. */
     protected MethodInvocationNodeImpl(
             ExpressionListNode arguments,
@@ -33,7 +33,7 @@ public abstract class MethodInvocationNodeImpl extends NodeImpl implements Metho
         setArguments(arguments);
         setTypeArguments(typeArguments);
     }
-
+    
     /**
      * Gets the arguments to pass to the method.
      * @return The arguments to pass to the method.
@@ -42,7 +42,7 @@ public abstract class MethodInvocationNodeImpl extends NodeImpl implements Metho
     {
         return this.arguments;
     }
-
+    
     /**
      * Changes the arguments to pass to the method.
      * @param arguments The arguments to pass to the method.
@@ -59,7 +59,7 @@ public abstract class MethodInvocationNodeImpl extends NodeImpl implements Metho
             ((NodeImpl)this.arguments).setParent(this);
         }
     }
-
+    
     /**
      * Gets the type arguments for the method.
      * @return The type arguments for the method.
@@ -68,7 +68,7 @@ public abstract class MethodInvocationNodeImpl extends NodeImpl implements Metho
     {
         return this.typeArguments;
     }
-
+    
     /**
      * Changes the type arguments for the method.
      * @param typeArguments The type arguments for the method.
@@ -85,7 +85,7 @@ public abstract class MethodInvocationNodeImpl extends NodeImpl implements Metho
             ((NodeImpl)this.typeArguments).setParent(this);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -106,7 +106,7 @@ public abstract class MethodInvocationNodeImpl extends NodeImpl implements Metho
             this.typeArguments.receive(visitor);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided typed visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -127,7 +127,7 @@ public abstract class MethodInvocationNodeImpl extends NodeImpl implements Metho
             this.typeArguments.receiveTyped(visitor);
         }
     }
-
+    
     @Override
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
@@ -145,7 +145,7 @@ public abstract class MethodInvocationNodeImpl extends NodeImpl implements Metho
         visitor.visitMethodInvocationNodeStop(this);
         visitor.visitStopEnd(this);
     }
-
+    
     /**
      * Produces a mutable list of this node's children.  Modifying this list will have no
      * effect on this node.
@@ -159,7 +159,7 @@ public abstract class MethodInvocationNodeImpl extends NodeImpl implements Metho
         list.add(getTypeArguments());
         return list;
     }
-
+    
     /**
      * Obtains a human-readable description of this node.
      * @return A human-readable description of this node.
@@ -183,6 +183,6 @@ public abstract class MethodInvocationNodeImpl extends NodeImpl implements Metho
         sb.append(']');
         return sb.toString();
     }
-
-
+    
+    
 }

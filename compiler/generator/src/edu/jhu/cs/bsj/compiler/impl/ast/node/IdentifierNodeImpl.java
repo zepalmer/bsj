@@ -18,7 +18,7 @@ public class IdentifierNodeImpl extends NodeImpl implements IdentifierNode
 {
     /** The identifier contained in this node. */
     private String identifier;
-
+    
     /** General constructor. */
     public IdentifierNodeImpl(
             String identifier,
@@ -29,7 +29,7 @@ public class IdentifierNodeImpl extends NodeImpl implements IdentifierNode
         super(startLocation, stopLocation, manager);
         this.identifier = identifier;
     }
-
+    
     /**
      * Gets the identifier contained in this node.
      * @return The identifier contained in this node.
@@ -38,7 +38,7 @@ public class IdentifierNodeImpl extends NodeImpl implements IdentifierNode
     {
         return this.identifier;
     }
-
+    
     /**
      * Changes the identifier contained in this node.
      * @param identifier The identifier contained in this node.
@@ -47,7 +47,7 @@ public class IdentifierNodeImpl extends NodeImpl implements IdentifierNode
     {
         this.identifier = identifier;
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -60,7 +60,7 @@ public class IdentifierNodeImpl extends NodeImpl implements IdentifierNode
     {
         super.receiveToChildren(visitor);
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided typed visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -73,7 +73,7 @@ public class IdentifierNodeImpl extends NodeImpl implements IdentifierNode
     {
         super.receiveTypedToChildren(visitor);
     }
-
+    
     @Override
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
@@ -87,7 +87,7 @@ public class IdentifierNodeImpl extends NodeImpl implements IdentifierNode
         visitor.visitIdentifierNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
-
+    
     /**
      * Produces a mutable list of this node's children.  Modifying this list will have no
      * effect on this node.
@@ -100,7 +100,7 @@ public class IdentifierNodeImpl extends NodeImpl implements IdentifierNode
         list.add(getIdentifier());
         return list;
     }
-
+    
     /**
      * Obtains a human-readable description of this node.
      * @return A human-readable description of this node.
@@ -111,7 +111,7 @@ public class IdentifierNodeImpl extends NodeImpl implements IdentifierNode
         sb.append("Identifier[" + this.identifier + "]");
         return sb.toString();
     }
-
+    
     /**
      * Executes an operation on this node.
      * @param operation The operation to perform.
@@ -123,7 +123,7 @@ public class IdentifierNodeImpl extends NodeImpl implements IdentifierNode
     {
         return operation.executeIdentifierNode(this, p);
     }
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

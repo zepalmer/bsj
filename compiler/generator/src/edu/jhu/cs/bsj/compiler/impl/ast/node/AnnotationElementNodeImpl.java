@@ -20,10 +20,10 @@ public class AnnotationElementNodeImpl extends NodeImpl implements AnnotationEle
 {
     /** The identifier. */
     private IdentifierNode identifier;
-
+    
     /** The element's value. */
     private AnnotationValueNode value;
-
+    
     /** General constructor. */
     public AnnotationElementNodeImpl(
             IdentifierNode identifier,
@@ -36,7 +36,7 @@ public class AnnotationElementNodeImpl extends NodeImpl implements AnnotationEle
         setIdentifier(identifier);
         setValue(value);
     }
-
+    
     /**
      * Gets the identifier.
      * @return The identifier.
@@ -45,7 +45,7 @@ public class AnnotationElementNodeImpl extends NodeImpl implements AnnotationEle
     {
         return this.identifier;
     }
-
+    
     /**
      * Changes the identifier.
      * @param identifier The identifier.
@@ -62,7 +62,7 @@ public class AnnotationElementNodeImpl extends NodeImpl implements AnnotationEle
             ((NodeImpl)this.identifier).setParent(this);
         }
     }
-
+    
     /**
      * Gets the element's value.
      * @return The element's value.
@@ -71,7 +71,7 @@ public class AnnotationElementNodeImpl extends NodeImpl implements AnnotationEle
     {
         return this.value;
     }
-
+    
     /**
      * Changes the element's value.
      * @param value The element's value.
@@ -88,7 +88,7 @@ public class AnnotationElementNodeImpl extends NodeImpl implements AnnotationEle
             ((NodeImpl)this.value).setParent(this);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -109,7 +109,7 @@ public class AnnotationElementNodeImpl extends NodeImpl implements AnnotationEle
             this.value.receive(visitor);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided typed visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -130,7 +130,7 @@ public class AnnotationElementNodeImpl extends NodeImpl implements AnnotationEle
             this.value.receiveTyped(visitor);
         }
     }
-
+    
     @Override
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
@@ -144,7 +144,7 @@ public class AnnotationElementNodeImpl extends NodeImpl implements AnnotationEle
         visitor.visitAnnotationElementNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
-
+    
     /**
      * Produces a mutable list of this node's children.  Modifying this list will have no
      * effect on this node.
@@ -158,7 +158,7 @@ public class AnnotationElementNodeImpl extends NodeImpl implements AnnotationEle
         list.add(getValue());
         return list;
     }
-
+    
     /**
      * Obtains a human-readable description of this node.
      * @return A human-readable description of this node.
@@ -182,7 +182,7 @@ public class AnnotationElementNodeImpl extends NodeImpl implements AnnotationEle
         sb.append(']');
         return sb.toString();
     }
-
+    
     /**
      * Executes an operation on this node.
      * @param operation The operation to perform.
@@ -194,7 +194,7 @@ public class AnnotationElementNodeImpl extends NodeImpl implements AnnotationEle
     {
         return operation.executeAnnotationElementNode(this, p);
     }
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

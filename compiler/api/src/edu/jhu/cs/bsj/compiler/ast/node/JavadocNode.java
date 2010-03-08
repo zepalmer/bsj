@@ -22,13 +22,13 @@ public interface JavadocNode extends Node
      * @return The parsed text of this Javadoc comment.
      */
     public String getText();
-
+    
     /**
      * Changes the parsed text of this Javadoc comment.
      * @param text The parsed text of this Javadoc comment.
      */
     public void setText(String text);
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

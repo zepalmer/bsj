@@ -16,13 +16,13 @@ public interface AnnotationNode extends Node
      * @return The annotation type.
      */
     public UnparameterizedTypeNode getAnnotationType();
-
+    
     /**
      * Changes the annotation type.
      * @param annotationType The annotation type.
      */
     public void setAnnotationType(UnparameterizedTypeNode annotationType);
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

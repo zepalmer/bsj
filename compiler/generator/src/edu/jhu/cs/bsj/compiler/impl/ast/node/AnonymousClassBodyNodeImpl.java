@@ -19,7 +19,7 @@ public class AnonymousClassBodyNodeImpl extends NodeImpl implements AnonymousCla
 {
     /** The members of this anonymous class body. */
     private AnonymousClassMemberListNode members;
-
+    
     /** General constructor. */
     public AnonymousClassBodyNodeImpl(
             AnonymousClassMemberListNode members,
@@ -30,7 +30,7 @@ public class AnonymousClassBodyNodeImpl extends NodeImpl implements AnonymousCla
         super(startLocation, stopLocation, manager);
         setMembers(members);
     }
-
+    
     /**
      * Gets the members of this anonymous class body.
      * @return The members of this anonymous class body.
@@ -39,7 +39,7 @@ public class AnonymousClassBodyNodeImpl extends NodeImpl implements AnonymousCla
     {
         return this.members;
     }
-
+    
     /**
      * Changes the members of this anonymous class body.
      * @param members The members of this anonymous class body.
@@ -56,7 +56,7 @@ public class AnonymousClassBodyNodeImpl extends NodeImpl implements AnonymousCla
             ((NodeImpl)this.members).setParent(this);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -73,7 +73,7 @@ public class AnonymousClassBodyNodeImpl extends NodeImpl implements AnonymousCla
             this.members.receive(visitor);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided typed visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -90,7 +90,7 @@ public class AnonymousClassBodyNodeImpl extends NodeImpl implements AnonymousCla
             this.members.receiveTyped(visitor);
         }
     }
-
+    
     @Override
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
@@ -106,7 +106,7 @@ public class AnonymousClassBodyNodeImpl extends NodeImpl implements AnonymousCla
         visitor.visitAnonymousClassBodyNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
-
+    
     /**
      * Produces a mutable list of this node's children.  Modifying this list will have no
      * effect on this node.
@@ -119,7 +119,7 @@ public class AnonymousClassBodyNodeImpl extends NodeImpl implements AnonymousCla
         list.add(getMembers());
         return list;
     }
-
+    
     /**
      * Obtains a human-readable description of this node.
      * @return A human-readable description of this node.
@@ -140,7 +140,7 @@ public class AnonymousClassBodyNodeImpl extends NodeImpl implements AnonymousCla
         sb.append(']');
         return sb.toString();
     }
-
+    
     /**
      * Executes an operation on this node.
      * @param operation The operation to perform.
@@ -152,7 +152,7 @@ public class AnonymousClassBodyNodeImpl extends NodeImpl implements AnonymousCla
     {
         return operation.executeAnonymousClassBodyNode(this, p);
     }
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

@@ -20,19 +20,19 @@ public class ClassModifiersNodeImpl extends ModifiersNodeImpl implements ClassMo
 {
     /** The access for the associated class. */
     private AccessModifier access;
-
+    
     /** Whether or not the associated class is abstract. */
     private boolean abstractFlag;
-
+    
     /** Whether or not the associated class is static. */
     private boolean staticFlag;
-
+    
     /** Whether or not the associated class is final. */
     private boolean finalFlag;
-
+    
     /** Whether or not the associated class uses strict floating-point. */
     private boolean strictfpFlag;
-
+    
     /** General constructor. */
     public ClassModifiersNodeImpl(
             AccessModifier access,
@@ -52,7 +52,7 @@ public class ClassModifiersNodeImpl extends ModifiersNodeImpl implements ClassMo
         this.finalFlag = finalFlag;
         this.strictfpFlag = strictfpFlag;
     }
-
+    
     /**
      * Gets the access for the associated class.
      * @return The access for the associated class.
@@ -61,7 +61,7 @@ public class ClassModifiersNodeImpl extends ModifiersNodeImpl implements ClassMo
     {
         return this.access;
     }
-
+    
     /**
      * Changes the access for the associated class.
      * @param access The access for the associated class.
@@ -70,7 +70,7 @@ public class ClassModifiersNodeImpl extends ModifiersNodeImpl implements ClassMo
     {
         this.access = access;
     }
-
+    
     /**
      * Gets whether or not the associated class is abstract.
      * @return Whether or not the associated class is abstract.
@@ -79,7 +79,7 @@ public class ClassModifiersNodeImpl extends ModifiersNodeImpl implements ClassMo
     {
         return this.abstractFlag;
     }
-
+    
     /**
      * Changes whether or not the associated class is abstract.
      * @param abstractFlag Whether or not the associated class is abstract.
@@ -88,7 +88,7 @@ public class ClassModifiersNodeImpl extends ModifiersNodeImpl implements ClassMo
     {
         this.abstractFlag = abstractFlag;
     }
-
+    
     /**
      * Gets whether or not the associated class is static.
      * @return Whether or not the associated class is static.
@@ -97,7 +97,7 @@ public class ClassModifiersNodeImpl extends ModifiersNodeImpl implements ClassMo
     {
         return this.staticFlag;
     }
-
+    
     /**
      * Changes whether or not the associated class is static.
      * @param staticFlag Whether or not the associated class is static.
@@ -106,7 +106,7 @@ public class ClassModifiersNodeImpl extends ModifiersNodeImpl implements ClassMo
     {
         this.staticFlag = staticFlag;
     }
-
+    
     /**
      * Gets whether or not the associated class is final.
      * @return Whether or not the associated class is final.
@@ -115,7 +115,7 @@ public class ClassModifiersNodeImpl extends ModifiersNodeImpl implements ClassMo
     {
         return this.finalFlag;
     }
-
+    
     /**
      * Changes whether or not the associated class is final.
      * @param finalFlag Whether or not the associated class is final.
@@ -124,7 +124,7 @@ public class ClassModifiersNodeImpl extends ModifiersNodeImpl implements ClassMo
     {
         this.finalFlag = finalFlag;
     }
-
+    
     /**
      * Gets whether or not the associated class uses strict floating-point.
      * @return Whether or not the associated class uses strict floating-point.
@@ -133,7 +133,7 @@ public class ClassModifiersNodeImpl extends ModifiersNodeImpl implements ClassMo
     {
         return this.strictfpFlag;
     }
-
+    
     /**
      * Changes whether or not the associated class uses strict floating-point.
      * @param strictfpFlag Whether or not the associated class uses strict floating-point.
@@ -142,7 +142,7 @@ public class ClassModifiersNodeImpl extends ModifiersNodeImpl implements ClassMo
     {
         this.strictfpFlag = strictfpFlag;
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -155,7 +155,7 @@ public class ClassModifiersNodeImpl extends ModifiersNodeImpl implements ClassMo
     {
         super.receiveToChildren(visitor);
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided typed visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -168,7 +168,7 @@ public class ClassModifiersNodeImpl extends ModifiersNodeImpl implements ClassMo
     {
         super.receiveTypedToChildren(visitor);
     }
-
+    
     @Override
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
@@ -184,7 +184,7 @@ public class ClassModifiersNodeImpl extends ModifiersNodeImpl implements ClassMo
         visitor.visitClassModifiersNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
-
+    
     /**
      * Produces a mutable list of this node's children.  Modifying this list will have no
      * effect on this node.
@@ -201,7 +201,7 @@ public class ClassModifiersNodeImpl extends ModifiersNodeImpl implements ClassMo
         list.add(getStrictfpFlag());
         return list;
     }
-
+    
     /**
      * Obtains a human-readable description of this node.
      * @return A human-readable description of this node.
@@ -237,7 +237,7 @@ public class ClassModifiersNodeImpl extends ModifiersNodeImpl implements ClassMo
         sb.append(']');
         return sb.toString();
     }
-
+    
     /**
      * Executes an operation on this node.
      * @param operation The operation to perform.
@@ -249,7 +249,7 @@ public class ClassModifiersNodeImpl extends ModifiersNodeImpl implements ClassMo
     {
         return operation.executeClassModifiersNode(this, p);
     }
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

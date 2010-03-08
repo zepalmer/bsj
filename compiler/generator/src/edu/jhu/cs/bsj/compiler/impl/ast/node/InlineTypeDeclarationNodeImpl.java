@@ -19,7 +19,7 @@ public class InlineTypeDeclarationNodeImpl extends NodeImpl implements InlineTyp
 {
     /** The type declaration. */
     private InlineTypeDeclarableNode declaration;
-
+    
     /** General constructor. */
     public InlineTypeDeclarationNodeImpl(
             InlineTypeDeclarableNode declaration,
@@ -30,7 +30,7 @@ public class InlineTypeDeclarationNodeImpl extends NodeImpl implements InlineTyp
         super(startLocation, stopLocation, manager);
         setDeclaration(declaration);
     }
-
+    
     /**
      * Gets the type declaration.
      * @return The type declaration.
@@ -39,7 +39,7 @@ public class InlineTypeDeclarationNodeImpl extends NodeImpl implements InlineTyp
     {
         return this.declaration;
     }
-
+    
     /**
      * Changes the type declaration.
      * @param declaration The type declaration.
@@ -56,7 +56,7 @@ public class InlineTypeDeclarationNodeImpl extends NodeImpl implements InlineTyp
             ((NodeImpl)this.declaration).setParent(this);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -73,7 +73,7 @@ public class InlineTypeDeclarationNodeImpl extends NodeImpl implements InlineTyp
             this.declaration.receive(visitor);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided typed visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -90,7 +90,7 @@ public class InlineTypeDeclarationNodeImpl extends NodeImpl implements InlineTyp
             this.declaration.receiveTyped(visitor);
         }
     }
-
+    
     @Override
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
@@ -106,7 +106,7 @@ public class InlineTypeDeclarationNodeImpl extends NodeImpl implements InlineTyp
         visitor.visitInlineTypeDeclarationNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
-
+    
     /**
      * Produces a mutable list of this node's children.  Modifying this list will have no
      * effect on this node.
@@ -119,7 +119,7 @@ public class InlineTypeDeclarationNodeImpl extends NodeImpl implements InlineTyp
         list.add(getDeclaration());
         return list;
     }
-
+    
     /**
      * Obtains a human-readable description of this node.
      * @return A human-readable description of this node.
@@ -140,7 +140,7 @@ public class InlineTypeDeclarationNodeImpl extends NodeImpl implements InlineTyp
         sb.append(']');
         return sb.toString();
     }
-
+    
     /**
      * Executes an operation on this node.
      * @param operation The operation to perform.
@@ -152,7 +152,7 @@ public class InlineTypeDeclarationNodeImpl extends NodeImpl implements InlineTyp
     {
         return operation.executeInlineTypeDeclarationNode(this, p);
     }
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

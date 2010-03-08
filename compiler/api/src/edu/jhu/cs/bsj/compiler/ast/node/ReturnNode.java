@@ -19,13 +19,13 @@ public interface ReturnNode extends Node, StatementNode
      * @return The expression to return.
      */
     public ExpressionNode getExpression();
-
+    
     /**
      * Changes the expression to return.
      * @param expression The expression to return.
      */
     public void setExpression(ExpressionNode expression);
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

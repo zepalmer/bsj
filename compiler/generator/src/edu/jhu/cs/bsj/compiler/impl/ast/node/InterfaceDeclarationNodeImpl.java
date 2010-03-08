@@ -25,22 +25,22 @@ public class InterfaceDeclarationNodeImpl extends NodeImpl implements InterfaceD
 {
     /** The modifiers for this type. */
     private InterfaceModifiersNode modifiers;
-
+    
     /** The extends clause. */
     private DeclaredTypeListNode extendsClause;
-
+    
     /** This interface's body. */
     private InterfaceBodyNode body;
-
+    
     /** This class's type parameters. */
     private TypeParameterListNode typeParameters;
-
+    
     /** The name of this declared type. */
     private IdentifierNode identifier;
-
+    
     /** The associated javadoc comment for this node. */
     private JavadocNode javadoc;
-
+    
     /** General constructor. */
     public InterfaceDeclarationNodeImpl(
             InterfaceModifiersNode modifiers,
@@ -61,7 +61,7 @@ public class InterfaceDeclarationNodeImpl extends NodeImpl implements InterfaceD
         setIdentifier(identifier);
         setJavadoc(javadoc);
     }
-
+    
     /**
      * Gets the modifiers for this type.
      * @return The modifiers for this type.
@@ -70,7 +70,7 @@ public class InterfaceDeclarationNodeImpl extends NodeImpl implements InterfaceD
     {
         return this.modifiers;
     }
-
+    
     /**
      * Changes the modifiers for this type.
      * @param modifiers The modifiers for this type.
@@ -87,7 +87,7 @@ public class InterfaceDeclarationNodeImpl extends NodeImpl implements InterfaceD
             ((NodeImpl)this.modifiers).setParent(this);
         }
     }
-
+    
     /**
      * Gets the extends clause.
      * @return The extends clause.
@@ -96,7 +96,7 @@ public class InterfaceDeclarationNodeImpl extends NodeImpl implements InterfaceD
     {
         return this.extendsClause;
     }
-
+    
     /**
      * Changes the extends clause.
      * @param extendsClause The extends clause.
@@ -113,7 +113,7 @@ public class InterfaceDeclarationNodeImpl extends NodeImpl implements InterfaceD
             ((NodeImpl)this.extendsClause).setParent(this);
         }
     }
-
+    
     /**
      * Gets this interface's body.
      * @return This interface's body.
@@ -122,7 +122,7 @@ public class InterfaceDeclarationNodeImpl extends NodeImpl implements InterfaceD
     {
         return this.body;
     }
-
+    
     /**
      * Changes this interface's body.
      * @param body This interface's body.
@@ -139,7 +139,7 @@ public class InterfaceDeclarationNodeImpl extends NodeImpl implements InterfaceD
             ((NodeImpl)this.body).setParent(this);
         }
     }
-
+    
     /**
      * Gets this class's type parameters.
      * @return This class's type parameters.
@@ -148,7 +148,7 @@ public class InterfaceDeclarationNodeImpl extends NodeImpl implements InterfaceD
     {
         return this.typeParameters;
     }
-
+    
     /**
      * Changes this class's type parameters.
      * @param typeParameters This class's type parameters.
@@ -165,7 +165,7 @@ public class InterfaceDeclarationNodeImpl extends NodeImpl implements InterfaceD
             ((NodeImpl)this.typeParameters).setParent(this);
         }
     }
-
+    
     /**
      * Gets the name of this declared type.
      * @return The name of this declared type.
@@ -174,7 +174,7 @@ public class InterfaceDeclarationNodeImpl extends NodeImpl implements InterfaceD
     {
         return this.identifier;
     }
-
+    
     /**
      * Changes the name of this declared type.
      * @param identifier The name of this declared type.
@@ -191,7 +191,7 @@ public class InterfaceDeclarationNodeImpl extends NodeImpl implements InterfaceD
             ((NodeImpl)this.identifier).setParent(this);
         }
     }
-
+    
     /**
      * Gets the associated javadoc comment for this node.
      * @return The associated javadoc comment for this node.
@@ -200,7 +200,7 @@ public class InterfaceDeclarationNodeImpl extends NodeImpl implements InterfaceD
     {
         return this.javadoc;
     }
-
+    
     /**
      * Changes the associated javadoc comment for this node.
      * @param javadoc The associated javadoc comment for this node.
@@ -217,7 +217,7 @@ public class InterfaceDeclarationNodeImpl extends NodeImpl implements InterfaceD
             ((NodeImpl)this.javadoc).setParent(this);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -246,7 +246,7 @@ public class InterfaceDeclarationNodeImpl extends NodeImpl implements InterfaceD
             this.typeParameters.receive(visitor);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided typed visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -275,7 +275,7 @@ public class InterfaceDeclarationNodeImpl extends NodeImpl implements InterfaceD
             this.typeParameters.receiveTyped(visitor);
         }
     }
-
+    
     @Override
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
@@ -291,7 +291,7 @@ public class InterfaceDeclarationNodeImpl extends NodeImpl implements InterfaceD
         visitor.visitInterfaceDeclarationNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
-
+    
     /**
      * Produces a mutable list of this node's children.  Modifying this list will have no
      * effect on this node.
@@ -307,7 +307,7 @@ public class InterfaceDeclarationNodeImpl extends NodeImpl implements InterfaceD
         list.add(getTypeParameters());
         return list;
     }
-
+    
     /**
      * Obtains a human-readable description of this node.
      * @return A human-readable description of this node.
@@ -343,7 +343,7 @@ public class InterfaceDeclarationNodeImpl extends NodeImpl implements InterfaceD
         sb.append(']');
         return sb.toString();
     }
-
+    
     /**
      * Executes an operation on this node.
      * @param operation The operation to perform.
@@ -355,7 +355,7 @@ public class InterfaceDeclarationNodeImpl extends NodeImpl implements InterfaceD
     {
         return operation.executeInterfaceDeclarationNode(this, p);
     }
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

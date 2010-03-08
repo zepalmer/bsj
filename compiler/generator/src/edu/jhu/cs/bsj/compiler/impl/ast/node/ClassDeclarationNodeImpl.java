@@ -26,25 +26,25 @@ public class ClassDeclarationNodeImpl extends NodeImpl implements ClassDeclarati
 {
     /** The modifiers for this type. */
     private ClassModifiersNode modifiers;
-
+    
     /** The extends clause. */
     private DeclaredTypeNode extendsClause;
-
+    
     /** The implements clause. */
     private DeclaredTypeListNode implementsClause;
-
+    
     /** The body of this class. */
     private ClassBodyNode body;
-
+    
     /** This class's type parameters. */
     private TypeParameterListNode typeParameters;
-
+    
     /** The name of this declared type. */
     private IdentifierNode identifier;
-
+    
     /** The associated javadoc comment for this node. */
     private JavadocNode javadoc;
-
+    
     /** General constructor. */
     public ClassDeclarationNodeImpl(
             ClassModifiersNode modifiers,
@@ -67,7 +67,7 @@ public class ClassDeclarationNodeImpl extends NodeImpl implements ClassDeclarati
         setIdentifier(identifier);
         setJavadoc(javadoc);
     }
-
+    
     /**
      * Gets the modifiers for this type.
      * @return The modifiers for this type.
@@ -76,7 +76,7 @@ public class ClassDeclarationNodeImpl extends NodeImpl implements ClassDeclarati
     {
         return this.modifiers;
     }
-
+    
     /**
      * Changes the modifiers for this type.
      * @param modifiers The modifiers for this type.
@@ -93,7 +93,7 @@ public class ClassDeclarationNodeImpl extends NodeImpl implements ClassDeclarati
             ((NodeImpl)this.modifiers).setParent(this);
         }
     }
-
+    
     /**
      * Gets the extends clause.
      * @return The extends clause.
@@ -102,7 +102,7 @@ public class ClassDeclarationNodeImpl extends NodeImpl implements ClassDeclarati
     {
         return this.extendsClause;
     }
-
+    
     /**
      * Changes the extends clause.
      * @param extendsClause The extends clause.
@@ -119,7 +119,7 @@ public class ClassDeclarationNodeImpl extends NodeImpl implements ClassDeclarati
             ((NodeImpl)this.extendsClause).setParent(this);
         }
     }
-
+    
     /**
      * Gets the implements clause.
      * @return The implements clause.
@@ -128,7 +128,7 @@ public class ClassDeclarationNodeImpl extends NodeImpl implements ClassDeclarati
     {
         return this.implementsClause;
     }
-
+    
     /**
      * Changes the implements clause.
      * @param implementsClause The implements clause.
@@ -145,7 +145,7 @@ public class ClassDeclarationNodeImpl extends NodeImpl implements ClassDeclarati
             ((NodeImpl)this.implementsClause).setParent(this);
         }
     }
-
+    
     /**
      * Gets the body of this class.
      * @return The body of this class.
@@ -154,7 +154,7 @@ public class ClassDeclarationNodeImpl extends NodeImpl implements ClassDeclarati
     {
         return this.body;
     }
-
+    
     /**
      * Changes the body of this class.
      * @param body The body of this class.
@@ -171,7 +171,7 @@ public class ClassDeclarationNodeImpl extends NodeImpl implements ClassDeclarati
             ((NodeImpl)this.body).setParent(this);
         }
     }
-
+    
     /**
      * Gets this class's type parameters.
      * @return This class's type parameters.
@@ -180,7 +180,7 @@ public class ClassDeclarationNodeImpl extends NodeImpl implements ClassDeclarati
     {
         return this.typeParameters;
     }
-
+    
     /**
      * Changes this class's type parameters.
      * @param typeParameters This class's type parameters.
@@ -197,7 +197,7 @@ public class ClassDeclarationNodeImpl extends NodeImpl implements ClassDeclarati
             ((NodeImpl)this.typeParameters).setParent(this);
         }
     }
-
+    
     /**
      * Gets the name of this declared type.
      * @return The name of this declared type.
@@ -206,7 +206,7 @@ public class ClassDeclarationNodeImpl extends NodeImpl implements ClassDeclarati
     {
         return this.identifier;
     }
-
+    
     /**
      * Changes the name of this declared type.
      * @param identifier The name of this declared type.
@@ -223,7 +223,7 @@ public class ClassDeclarationNodeImpl extends NodeImpl implements ClassDeclarati
             ((NodeImpl)this.identifier).setParent(this);
         }
     }
-
+    
     /**
      * Gets the associated javadoc comment for this node.
      * @return The associated javadoc comment for this node.
@@ -232,7 +232,7 @@ public class ClassDeclarationNodeImpl extends NodeImpl implements ClassDeclarati
     {
         return this.javadoc;
     }
-
+    
     /**
      * Changes the associated javadoc comment for this node.
      * @param javadoc The associated javadoc comment for this node.
@@ -249,7 +249,7 @@ public class ClassDeclarationNodeImpl extends NodeImpl implements ClassDeclarati
             ((NodeImpl)this.javadoc).setParent(this);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -282,7 +282,7 @@ public class ClassDeclarationNodeImpl extends NodeImpl implements ClassDeclarati
             this.typeParameters.receive(visitor);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided typed visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -315,7 +315,7 @@ public class ClassDeclarationNodeImpl extends NodeImpl implements ClassDeclarati
             this.typeParameters.receiveTyped(visitor);
         }
     }
-
+    
     @Override
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
@@ -333,7 +333,7 @@ public class ClassDeclarationNodeImpl extends NodeImpl implements ClassDeclarati
         visitor.visitClassDeclarationNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
-
+    
     /**
      * Produces a mutable list of this node's children.  Modifying this list will have no
      * effect on this node.
@@ -350,7 +350,7 @@ public class ClassDeclarationNodeImpl extends NodeImpl implements ClassDeclarati
         list.add(getTypeParameters());
         return list;
     }
-
+    
     /**
      * Obtains a human-readable description of this node.
      * @return A human-readable description of this node.
@@ -389,7 +389,7 @@ public class ClassDeclarationNodeImpl extends NodeImpl implements ClassDeclarati
         sb.append(']');
         return sb.toString();
     }
-
+    
     /**
      * Executes an operation on this node.
      * @param operation The operation to perform.
@@ -401,7 +401,7 @@ public class ClassDeclarationNodeImpl extends NodeImpl implements ClassDeclarati
     {
         return operation.executeClassDeclarationNode(this, p);
     }
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

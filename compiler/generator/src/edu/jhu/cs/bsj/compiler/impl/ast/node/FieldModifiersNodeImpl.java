@@ -20,19 +20,19 @@ public class FieldModifiersNodeImpl extends ModifiersNodeImpl implements FieldMo
 {
     /** The access for the associated fields. */
     private AccessModifier access;
-
+    
     /** Whether or not the associated field is static. */
     private boolean staticFlag;
-
+    
     /** Whether or not the associated field is final. */
     private boolean finalFlag;
-
+    
     /** Whether or not the associated field is transient. */
     private boolean transientFlag;
-
+    
     /** Whether or not the associated field is volatile. */
     private boolean volatileFlag;
-
+    
     /** General constructor. */
     public FieldModifiersNodeImpl(
             AccessModifier access,
@@ -52,7 +52,7 @@ public class FieldModifiersNodeImpl extends ModifiersNodeImpl implements FieldMo
         this.transientFlag = transientFlag;
         this.volatileFlag = volatileFlag;
     }
-
+    
     /**
      * Gets the access for the associated fields.
      * @return The access for the associated fields.
@@ -61,7 +61,7 @@ public class FieldModifiersNodeImpl extends ModifiersNodeImpl implements FieldMo
     {
         return this.access;
     }
-
+    
     /**
      * Changes the access for the associated fields.
      * @param access The access for the associated fields.
@@ -70,7 +70,7 @@ public class FieldModifiersNodeImpl extends ModifiersNodeImpl implements FieldMo
     {
         this.access = access;
     }
-
+    
     /**
      * Gets whether or not the associated field is static.
      * @return Whether or not the associated field is static.
@@ -79,7 +79,7 @@ public class FieldModifiersNodeImpl extends ModifiersNodeImpl implements FieldMo
     {
         return this.staticFlag;
     }
-
+    
     /**
      * Changes whether or not the associated field is static.
      * @param staticFlag Whether or not the associated field is static.
@@ -88,7 +88,7 @@ public class FieldModifiersNodeImpl extends ModifiersNodeImpl implements FieldMo
     {
         this.staticFlag = staticFlag;
     }
-
+    
     /**
      * Gets whether or not the associated field is final.
      * @return Whether or not the associated field is final.
@@ -97,7 +97,7 @@ public class FieldModifiersNodeImpl extends ModifiersNodeImpl implements FieldMo
     {
         return this.finalFlag;
     }
-
+    
     /**
      * Changes whether or not the associated field is final.
      * @param finalFlag Whether or not the associated field is final.
@@ -106,7 +106,7 @@ public class FieldModifiersNodeImpl extends ModifiersNodeImpl implements FieldMo
     {
         this.finalFlag = finalFlag;
     }
-
+    
     /**
      * Gets whether or not the associated field is transient.
      * @return Whether or not the associated field is transient.
@@ -115,7 +115,7 @@ public class FieldModifiersNodeImpl extends ModifiersNodeImpl implements FieldMo
     {
         return this.transientFlag;
     }
-
+    
     /**
      * Changes whether or not the associated field is transient.
      * @param transientFlag Whether or not the associated field is transient.
@@ -124,7 +124,7 @@ public class FieldModifiersNodeImpl extends ModifiersNodeImpl implements FieldMo
     {
         this.transientFlag = transientFlag;
     }
-
+    
     /**
      * Gets whether or not the associated field is volatile.
      * @return Whether or not the associated field is volatile.
@@ -133,7 +133,7 @@ public class FieldModifiersNodeImpl extends ModifiersNodeImpl implements FieldMo
     {
         return this.volatileFlag;
     }
-
+    
     /**
      * Changes whether or not the associated field is volatile.
      * @param volatileFlag Whether or not the associated field is volatile.
@@ -142,7 +142,7 @@ public class FieldModifiersNodeImpl extends ModifiersNodeImpl implements FieldMo
     {
         this.volatileFlag = volatileFlag;
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -155,7 +155,7 @@ public class FieldModifiersNodeImpl extends ModifiersNodeImpl implements FieldMo
     {
         super.receiveToChildren(visitor);
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided typed visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -168,7 +168,7 @@ public class FieldModifiersNodeImpl extends ModifiersNodeImpl implements FieldMo
     {
         super.receiveTypedToChildren(visitor);
     }
-
+    
     @Override
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
@@ -184,7 +184,7 @@ public class FieldModifiersNodeImpl extends ModifiersNodeImpl implements FieldMo
         visitor.visitFieldModifiersNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
-
+    
     /**
      * Produces a mutable list of this node's children.  Modifying this list will have no
      * effect on this node.
@@ -201,7 +201,7 @@ public class FieldModifiersNodeImpl extends ModifiersNodeImpl implements FieldMo
         list.add(getVolatileFlag());
         return list;
     }
-
+    
     /**
      * Obtains a human-readable description of this node.
      * @return A human-readable description of this node.
@@ -237,7 +237,7 @@ public class FieldModifiersNodeImpl extends ModifiersNodeImpl implements FieldMo
         sb.append(']');
         return sb.toString();
     }
-
+    
     /**
      * Executes an operation on this node.
      * @param operation The operation to perform.
@@ -249,7 +249,7 @@ public class FieldModifiersNodeImpl extends ModifiersNodeImpl implements FieldMo
     {
         return operation.executeFieldModifiersNode(this, p);
     }
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

@@ -23,19 +23,19 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
 {
     /** The annotations on this constant. */
     private AnnotationListNode annotations;
-
+    
     /** The name of this constant. */
     private IdentifierNode identifier;
-
+    
     /** The arguments to the enum constructor. */
     private ExpressionListNode arguments;
-
+    
     /** The body used to anonymously subclass the constant. */
     private AnonymousClassBodyNode body;
-
+    
     /** The associated javadoc comment for this node. */
     private JavadocNode javadoc;
-
+    
     /** General constructor. */
     public EnumConstantDeclarationNodeImpl(
             AnnotationListNode annotations,
@@ -54,7 +54,7 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
         setBody(body);
         setJavadoc(javadoc);
     }
-
+    
     /**
      * Gets the annotations on this constant.
      * @return The annotations on this constant.
@@ -63,7 +63,7 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
     {
         return this.annotations;
     }
-
+    
     /**
      * Changes the annotations on this constant.
      * @param annotations The annotations on this constant.
@@ -80,7 +80,7 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
             ((NodeImpl)this.annotations).setParent(this);
         }
     }
-
+    
     /**
      * Gets the name of this constant.
      * @return The name of this constant.
@@ -89,7 +89,7 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
     {
         return this.identifier;
     }
-
+    
     /**
      * Changes the name of this constant.
      * @param identifier The name of this constant.
@@ -106,7 +106,7 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
             ((NodeImpl)this.identifier).setParent(this);
         }
     }
-
+    
     /**
      * Gets the arguments to the enum constructor.
      * @return The arguments to the enum constructor.
@@ -115,7 +115,7 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
     {
         return this.arguments;
     }
-
+    
     /**
      * Changes the arguments to the enum constructor.
      * @param arguments The arguments to the enum constructor.
@@ -132,7 +132,7 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
             ((NodeImpl)this.arguments).setParent(this);
         }
     }
-
+    
     /**
      * Gets the body used to anonymously subclass the constant.
      * @return The body used to anonymously subclass the constant.
@@ -141,7 +141,7 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
     {
         return this.body;
     }
-
+    
     /**
      * Changes the body used to anonymously subclass the constant.
      * @param body The body used to anonymously subclass the constant.
@@ -158,7 +158,7 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
             ((NodeImpl)this.body).setParent(this);
         }
     }
-
+    
     /**
      * Gets the associated javadoc comment for this node.
      * @return The associated javadoc comment for this node.
@@ -167,7 +167,7 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
     {
         return this.javadoc;
     }
-
+    
     /**
      * Changes the associated javadoc comment for this node.
      * @param javadoc The associated javadoc comment for this node.
@@ -184,7 +184,7 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
             ((NodeImpl)this.javadoc).setParent(this);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -217,7 +217,7 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
             this.javadoc.receive(visitor);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided typed visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -250,7 +250,7 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
             this.javadoc.receiveTyped(visitor);
         }
     }
-
+    
     @Override
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
@@ -264,7 +264,7 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
         visitor.visitEnumConstantDeclarationNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
-
+    
     /**
      * Produces a mutable list of this node's children.  Modifying this list will have no
      * effect on this node.
@@ -281,7 +281,7 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
         list.add(getJavadoc());
         return list;
     }
-
+    
     /**
      * Obtains a human-readable description of this node.
      * @return A human-readable description of this node.
@@ -314,7 +314,7 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
         sb.append(']');
         return sb.toString();
     }
-
+    
     /**
      * Executes an operation on this node.
      * @param operation The operation to perform.
@@ -326,7 +326,7 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
     {
         return operation.executeEnumConstantDeclarationNode(this, p);
     }
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

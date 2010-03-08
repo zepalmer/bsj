@@ -26,7 +26,7 @@ public class AnnotationMethodModifiersNodeImpl extends ModifiersNodeImpl impleme
     {
         super(annotations, startLocation, stopLocation, manager);
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -39,7 +39,7 @@ public class AnnotationMethodModifiersNodeImpl extends ModifiersNodeImpl impleme
     {
         super.receiveToChildren(visitor);
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided typed visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -52,7 +52,7 @@ public class AnnotationMethodModifiersNodeImpl extends ModifiersNodeImpl impleme
     {
         super.receiveTypedToChildren(visitor);
     }
-
+    
     @Override
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
@@ -68,7 +68,7 @@ public class AnnotationMethodModifiersNodeImpl extends ModifiersNodeImpl impleme
         visitor.visitAnnotationMethodModifiersNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
-
+    
     /**
      * Produces a mutable list of this node's children.  Modifying this list will have no
      * effect on this node.
@@ -80,7 +80,7 @@ public class AnnotationMethodModifiersNodeImpl extends ModifiersNodeImpl impleme
         List<Object> list = super.getChildObjects();
         return list;
     }
-
+    
     /**
      * Obtains a human-readable description of this node.
      * @return A human-readable description of this node.
@@ -101,7 +101,7 @@ public class AnnotationMethodModifiersNodeImpl extends ModifiersNodeImpl impleme
         sb.append(']');
         return sb.toString();
     }
-
+    
     /**
      * Executes an operation on this node.
      * @param operation The operation to perform.
@@ -113,7 +113,7 @@ public class AnnotationMethodModifiersNodeImpl extends ModifiersNodeImpl impleme
     {
         return operation.executeAnnotationMethodModifiersNode(this, p);
     }
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

@@ -20,13 +20,13 @@ public class IfNodeImpl extends NodeImpl implements IfNode
 {
     /** The condition. */
     private ExpressionNode condition;
-
+    
     /** The then branch's statement. */
     private StatementNode thenStatement;
-
+    
     /** The else branch's statement. */
     private StatementNode elseStatement;
-
+    
     /** General constructor. */
     public IfNodeImpl(
             ExpressionNode condition,
@@ -41,7 +41,7 @@ public class IfNodeImpl extends NodeImpl implements IfNode
         setThenStatement(thenStatement);
         setElseStatement(elseStatement);
     }
-
+    
     /**
      * Gets the condition.
      * @return The condition.
@@ -50,7 +50,7 @@ public class IfNodeImpl extends NodeImpl implements IfNode
     {
         return this.condition;
     }
-
+    
     /**
      * Changes the condition.
      * @param condition The condition.
@@ -67,7 +67,7 @@ public class IfNodeImpl extends NodeImpl implements IfNode
             ((NodeImpl)this.condition).setParent(this);
         }
     }
-
+    
     /**
      * Gets the then branch's statement.
      * @return The then branch's statement.
@@ -76,7 +76,7 @@ public class IfNodeImpl extends NodeImpl implements IfNode
     {
         return this.thenStatement;
     }
-
+    
     /**
      * Changes the then branch's statement.
      * @param thenStatement The then branch's statement.
@@ -93,7 +93,7 @@ public class IfNodeImpl extends NodeImpl implements IfNode
             ((NodeImpl)this.thenStatement).setParent(this);
         }
     }
-
+    
     /**
      * Gets the else branch's statement.
      * @return The else branch's statement.
@@ -102,7 +102,7 @@ public class IfNodeImpl extends NodeImpl implements IfNode
     {
         return this.elseStatement;
     }
-
+    
     /**
      * Changes the else branch's statement.
      * @param elseStatement The else branch's statement.
@@ -119,7 +119,7 @@ public class IfNodeImpl extends NodeImpl implements IfNode
             ((NodeImpl)this.elseStatement).setParent(this);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -144,7 +144,7 @@ public class IfNodeImpl extends NodeImpl implements IfNode
             this.elseStatement.receive(visitor);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided typed visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -169,7 +169,7 @@ public class IfNodeImpl extends NodeImpl implements IfNode
             this.elseStatement.receiveTyped(visitor);
         }
     }
-
+    
     @Override
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
@@ -185,7 +185,7 @@ public class IfNodeImpl extends NodeImpl implements IfNode
         visitor.visitIfNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
-
+    
     /**
      * Produces a mutable list of this node's children.  Modifying this list will have no
      * effect on this node.
@@ -200,7 +200,7 @@ public class IfNodeImpl extends NodeImpl implements IfNode
         list.add(getElseStatement());
         return list;
     }
-
+    
     /**
      * Obtains a human-readable description of this node.
      * @return A human-readable description of this node.
@@ -227,7 +227,7 @@ public class IfNodeImpl extends NodeImpl implements IfNode
         sb.append(']');
         return sb.toString();
     }
-
+    
     /**
      * Executes an operation on this node.
      * @param operation The operation to perform.
@@ -239,7 +239,7 @@ public class IfNodeImpl extends NodeImpl implements IfNode
     {
         return operation.executeIfNode(this, p);
     }
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

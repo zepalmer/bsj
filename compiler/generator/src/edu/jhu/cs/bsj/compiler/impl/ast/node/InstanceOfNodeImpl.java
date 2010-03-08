@@ -20,10 +20,10 @@ public class InstanceOfNodeImpl extends NodeImpl implements InstanceOfNode
 {
     /** The expression being evaluated. */
     private ExpressionNode expression;
-
+    
     /** The type being checked. */
     private TypeNode type;
-
+    
     /** General constructor. */
     public InstanceOfNodeImpl(
             ExpressionNode expression,
@@ -36,7 +36,7 @@ public class InstanceOfNodeImpl extends NodeImpl implements InstanceOfNode
         setExpression(expression);
         setType(type);
     }
-
+    
     /**
      * Gets the expression being evaluated.
      * @return The expression being evaluated.
@@ -45,7 +45,7 @@ public class InstanceOfNodeImpl extends NodeImpl implements InstanceOfNode
     {
         return this.expression;
     }
-
+    
     /**
      * Changes the expression being evaluated.
      * @param expression The expression being evaluated.
@@ -62,7 +62,7 @@ public class InstanceOfNodeImpl extends NodeImpl implements InstanceOfNode
             ((NodeImpl)this.expression).setParent(this);
         }
     }
-
+    
     /**
      * Gets the type being checked.
      * @return The type being checked.
@@ -71,7 +71,7 @@ public class InstanceOfNodeImpl extends NodeImpl implements InstanceOfNode
     {
         return this.type;
     }
-
+    
     /**
      * Changes the type being checked.
      * @param type The type being checked.
@@ -88,7 +88,7 @@ public class InstanceOfNodeImpl extends NodeImpl implements InstanceOfNode
             ((NodeImpl)this.type).setParent(this);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -109,7 +109,7 @@ public class InstanceOfNodeImpl extends NodeImpl implements InstanceOfNode
             this.type.receive(visitor);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided typed visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -130,7 +130,7 @@ public class InstanceOfNodeImpl extends NodeImpl implements InstanceOfNode
             this.type.receiveTyped(visitor);
         }
     }
-
+    
     @Override
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
@@ -146,7 +146,7 @@ public class InstanceOfNodeImpl extends NodeImpl implements InstanceOfNode
         visitor.visitInstanceOfNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
-
+    
     /**
      * Produces a mutable list of this node's children.  Modifying this list will have no
      * effect on this node.
@@ -160,7 +160,7 @@ public class InstanceOfNodeImpl extends NodeImpl implements InstanceOfNode
         list.add(getType());
         return list;
     }
-
+    
     /**
      * Obtains a human-readable description of this node.
      * @return A human-readable description of this node.
@@ -184,7 +184,7 @@ public class InstanceOfNodeImpl extends NodeImpl implements InstanceOfNode
         sb.append(']');
         return sb.toString();
     }
-
+    
     /**
      * Executes an operation on this node.
      * @param operation The operation to perform.
@@ -196,7 +196,7 @@ public class InstanceOfNodeImpl extends NodeImpl implements InstanceOfNode
     {
         return operation.executeInstanceOfNode(this, p);
     }
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

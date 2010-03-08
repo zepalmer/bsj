@@ -22,10 +22,10 @@ public class MethodInvocationByExpressionNodeImpl extends MethodInvocationNodeIm
 {
     /** The expression against which to invoke the method. */
     private PrimaryExpressionNode expression;
-
+    
     /** The name of the method to invoke. */
     private IdentifierNode identifier;
-
+    
     /** General constructor. */
     public MethodInvocationByExpressionNodeImpl(
             PrimaryExpressionNode expression,
@@ -40,7 +40,7 @@ public class MethodInvocationByExpressionNodeImpl extends MethodInvocationNodeIm
         setExpression(expression);
         setIdentifier(identifier);
     }
-
+    
     /**
      * Gets the expression against which to invoke the method.
      * @return The expression against which to invoke the method.
@@ -49,7 +49,7 @@ public class MethodInvocationByExpressionNodeImpl extends MethodInvocationNodeIm
     {
         return this.expression;
     }
-
+    
     /**
      * Changes the expression against which to invoke the method.
      * @param expression The expression against which to invoke the method.
@@ -66,7 +66,7 @@ public class MethodInvocationByExpressionNodeImpl extends MethodInvocationNodeIm
             ((NodeImpl)this.expression).setParent(this);
         }
     }
-
+    
     /**
      * Gets the name of the method to invoke.
      * @return The name of the method to invoke.
@@ -75,7 +75,7 @@ public class MethodInvocationByExpressionNodeImpl extends MethodInvocationNodeIm
     {
         return this.identifier;
     }
-
+    
     /**
      * Changes the name of the method to invoke.
      * @param identifier The name of the method to invoke.
@@ -92,7 +92,7 @@ public class MethodInvocationByExpressionNodeImpl extends MethodInvocationNodeIm
             ((NodeImpl)this.identifier).setParent(this);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -113,7 +113,7 @@ public class MethodInvocationByExpressionNodeImpl extends MethodInvocationNodeIm
             this.identifier.receive(visitor);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided typed visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -134,7 +134,7 @@ public class MethodInvocationByExpressionNodeImpl extends MethodInvocationNodeIm
             this.identifier.receiveTyped(visitor);
         }
     }
-
+    
     @Override
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
@@ -150,7 +150,7 @@ public class MethodInvocationByExpressionNodeImpl extends MethodInvocationNodeIm
         visitor.visitMethodInvocationByExpressionNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
-
+    
     /**
      * Produces a mutable list of this node's children.  Modifying this list will have no
      * effect on this node.
@@ -164,7 +164,7 @@ public class MethodInvocationByExpressionNodeImpl extends MethodInvocationNodeIm
         list.add(getIdentifier());
         return list;
     }
-
+    
     /**
      * Obtains a human-readable description of this node.
      * @return A human-readable description of this node.
@@ -194,7 +194,7 @@ public class MethodInvocationByExpressionNodeImpl extends MethodInvocationNodeIm
         sb.append(']');
         return sb.toString();
     }
-
+    
     /**
      * Executes an operation on this node.
      * @param operation The operation to perform.
@@ -206,7 +206,7 @@ public class MethodInvocationByExpressionNodeImpl extends MethodInvocationNodeIm
     {
         return operation.executeMethodInvocationByExpressionNode(this, p);
     }
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

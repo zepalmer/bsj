@@ -20,7 +20,7 @@ public class ArrayInstantiatorCreationNodeImpl extends ArrayCreationNodeImpl imp
 {
     /** The dimension expressions for this array. */
     private ExpressionListNode dimExpressions;
-
+    
     /** General constructor. */
     public ArrayInstantiatorCreationNodeImpl(
             ExpressionListNode dimExpressions,
@@ -33,7 +33,7 @@ public class ArrayInstantiatorCreationNodeImpl extends ArrayCreationNodeImpl imp
         super(baseType, arrayLevels, startLocation, stopLocation, manager);
         setDimExpressions(dimExpressions);
     }
-
+    
     /**
      * Gets the dimension expressions for this array.
      * @return The dimension expressions for this array.
@@ -42,7 +42,7 @@ public class ArrayInstantiatorCreationNodeImpl extends ArrayCreationNodeImpl imp
     {
         return this.dimExpressions;
     }
-
+    
     /**
      * Changes the dimension expressions for this array.
      * @param dimExpressions The dimension expressions for this array.
@@ -59,7 +59,7 @@ public class ArrayInstantiatorCreationNodeImpl extends ArrayCreationNodeImpl imp
             ((NodeImpl)this.dimExpressions).setParent(this);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -76,7 +76,7 @@ public class ArrayInstantiatorCreationNodeImpl extends ArrayCreationNodeImpl imp
             this.dimExpressions.receive(visitor);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided typed visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -93,7 +93,7 @@ public class ArrayInstantiatorCreationNodeImpl extends ArrayCreationNodeImpl imp
             this.dimExpressions.receiveTyped(visitor);
         }
     }
-
+    
     @Override
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
@@ -109,7 +109,7 @@ public class ArrayInstantiatorCreationNodeImpl extends ArrayCreationNodeImpl imp
         visitor.visitArrayInstantiatorCreationNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
-
+    
     /**
      * Produces a mutable list of this node's children.  Modifying this list will have no
      * effect on this node.
@@ -122,7 +122,7 @@ public class ArrayInstantiatorCreationNodeImpl extends ArrayCreationNodeImpl imp
         list.add(getDimExpressions());
         return list;
     }
-
+    
     /**
      * Obtains a human-readable description of this node.
      * @return A human-readable description of this node.
@@ -149,7 +149,7 @@ public class ArrayInstantiatorCreationNodeImpl extends ArrayCreationNodeImpl imp
         sb.append(']');
         return sb.toString();
     }
-
+    
     /**
      * Executes an operation on this node.
      * @param operation The operation to perform.
@@ -161,7 +161,7 @@ public class ArrayInstantiatorCreationNodeImpl extends ArrayCreationNodeImpl imp
     {
         return operation.executeArrayInstantiatorCreationNode(this, p);
     }
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

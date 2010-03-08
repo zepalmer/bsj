@@ -19,7 +19,7 @@ public class AnnotationArrayValueNodeImpl extends NodeImpl implements Annotation
 {
     /** The array values. */
     private AnnotationValueListNode values;
-
+    
     /** General constructor. */
     public AnnotationArrayValueNodeImpl(
             AnnotationValueListNode values,
@@ -30,7 +30,7 @@ public class AnnotationArrayValueNodeImpl extends NodeImpl implements Annotation
         super(startLocation, stopLocation, manager);
         setValues(values);
     }
-
+    
     /**
      * Gets the array values.
      * @return The array values.
@@ -39,7 +39,7 @@ public class AnnotationArrayValueNodeImpl extends NodeImpl implements Annotation
     {
         return this.values;
     }
-
+    
     /**
      * Changes the array values.
      * @param values The array values.
@@ -56,7 +56,7 @@ public class AnnotationArrayValueNodeImpl extends NodeImpl implements Annotation
             ((NodeImpl)this.values).setParent(this);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -73,7 +73,7 @@ public class AnnotationArrayValueNodeImpl extends NodeImpl implements Annotation
             this.values.receive(visitor);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided typed visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -90,7 +90,7 @@ public class AnnotationArrayValueNodeImpl extends NodeImpl implements Annotation
             this.values.receiveTyped(visitor);
         }
     }
-
+    
     @Override
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
@@ -106,7 +106,7 @@ public class AnnotationArrayValueNodeImpl extends NodeImpl implements Annotation
         visitor.visitAnnotationArrayValueNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
-
+    
     /**
      * Produces a mutable list of this node's children.  Modifying this list will have no
      * effect on this node.
@@ -119,7 +119,7 @@ public class AnnotationArrayValueNodeImpl extends NodeImpl implements Annotation
         list.add(getValues());
         return list;
     }
-
+    
     /**
      * Obtains a human-readable description of this node.
      * @return A human-readable description of this node.
@@ -140,7 +140,7 @@ public class AnnotationArrayValueNodeImpl extends NodeImpl implements Annotation
         sb.append(']');
         return sb.toString();
     }
-
+    
     /**
      * Executes an operation on this node.
      * @param operation The operation to perform.
@@ -152,7 +152,7 @@ public class AnnotationArrayValueNodeImpl extends NodeImpl implements Annotation
     {
         return operation.executeAnnotationArrayValueNode(this, p);
     }
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

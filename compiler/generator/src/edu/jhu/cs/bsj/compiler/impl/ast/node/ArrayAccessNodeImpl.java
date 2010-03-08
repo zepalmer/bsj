@@ -20,10 +20,10 @@ public class ArrayAccessNodeImpl extends NodeImpl implements ArrayAccessNode
 {
     /** The expression identifying the array. */
     private RestrictedPrimaryExpressionNode arrayExpression;
-
+    
     /** The index into the array. */
     private ExpressionNode indexExpression;
-
+    
     /** General constructor. */
     public ArrayAccessNodeImpl(
             RestrictedPrimaryExpressionNode arrayExpression,
@@ -36,7 +36,7 @@ public class ArrayAccessNodeImpl extends NodeImpl implements ArrayAccessNode
         setArrayExpression(arrayExpression);
         setIndexExpression(indexExpression);
     }
-
+    
     /**
      * Gets the expression identifying the array.
      * @return The expression identifying the array.
@@ -45,7 +45,7 @@ public class ArrayAccessNodeImpl extends NodeImpl implements ArrayAccessNode
     {
         return this.arrayExpression;
     }
-
+    
     /**
      * Changes the expression identifying the array.
      * @param arrayExpression The expression identifying the array.
@@ -62,7 +62,7 @@ public class ArrayAccessNodeImpl extends NodeImpl implements ArrayAccessNode
             ((NodeImpl)this.arrayExpression).setParent(this);
         }
     }
-
+    
     /**
      * Gets the index into the array.
      * @return The index into the array.
@@ -71,7 +71,7 @@ public class ArrayAccessNodeImpl extends NodeImpl implements ArrayAccessNode
     {
         return this.indexExpression;
     }
-
+    
     /**
      * Changes the index into the array.
      * @param indexExpression The index into the array.
@@ -88,7 +88,7 @@ public class ArrayAccessNodeImpl extends NodeImpl implements ArrayAccessNode
             ((NodeImpl)this.indexExpression).setParent(this);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -109,7 +109,7 @@ public class ArrayAccessNodeImpl extends NodeImpl implements ArrayAccessNode
             this.indexExpression.receive(visitor);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided typed visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -130,7 +130,7 @@ public class ArrayAccessNodeImpl extends NodeImpl implements ArrayAccessNode
             this.indexExpression.receiveTyped(visitor);
         }
     }
-
+    
     @Override
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
@@ -146,7 +146,7 @@ public class ArrayAccessNodeImpl extends NodeImpl implements ArrayAccessNode
         visitor.visitArrayAccessNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
-
+    
     /**
      * Produces a mutable list of this node's children.  Modifying this list will have no
      * effect on this node.
@@ -160,7 +160,7 @@ public class ArrayAccessNodeImpl extends NodeImpl implements ArrayAccessNode
         list.add(getIndexExpression());
         return list;
     }
-
+    
     /**
      * Obtains a human-readable description of this node.
      * @return A human-readable description of this node.
@@ -184,7 +184,7 @@ public class ArrayAccessNodeImpl extends NodeImpl implements ArrayAccessNode
         sb.append(']');
         return sb.toString();
     }
-
+    
     /**
      * Executes an operation on this node.
      * @param operation The operation to perform.
@@ -196,7 +196,7 @@ public class ArrayAccessNodeImpl extends NodeImpl implements ArrayAccessNode
     {
         return operation.executeArrayAccessNode(this, p);
     }
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

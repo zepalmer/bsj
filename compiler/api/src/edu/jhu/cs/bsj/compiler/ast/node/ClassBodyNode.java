@@ -15,13 +15,13 @@ public interface ClassBodyNode extends Node, TypeBodyNode<ClassMemberNode>
      * @return The members of this class body.
      */
     public ClassMemberListNode getMembers();
-
+    
     /**
      * Changes the members of this class body.
      * @param members The members of this class body.
      */
     public void setMembers(ClassMemberListNode members);
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

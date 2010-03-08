@@ -20,7 +20,7 @@ public class MetaprogramImportNodeImpl extends NodeImpl implements MetaprogramIm
 {
     /** The import for the metaprogram. */
     private ImportNode importNode;
-
+    
     /** General constructor. */
     public MetaprogramImportNodeImpl(
             ImportNode importNode,
@@ -31,7 +31,7 @@ public class MetaprogramImportNodeImpl extends NodeImpl implements MetaprogramIm
         super(startLocation, stopLocation, manager);
         setImportNode(importNode);
     }
-
+    
     /**
      * Gets the import for the metaprogram.
      * @return The import for the metaprogram.
@@ -40,7 +40,7 @@ public class MetaprogramImportNodeImpl extends NodeImpl implements MetaprogramIm
     {
         return this.importNode;
     }
-
+    
     /**
      * Changes the import for the metaprogram.
      * @param importNode The import for the metaprogram.
@@ -57,7 +57,7 @@ public class MetaprogramImportNodeImpl extends NodeImpl implements MetaprogramIm
             ((NodeImpl)this.importNode).setParent(this);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -74,7 +74,7 @@ public class MetaprogramImportNodeImpl extends NodeImpl implements MetaprogramIm
             this.importNode.receive(visitor);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided typed visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -91,7 +91,7 @@ public class MetaprogramImportNodeImpl extends NodeImpl implements MetaprogramIm
             this.importNode.receiveTyped(visitor);
         }
     }
-
+    
     @Override
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
@@ -105,7 +105,7 @@ public class MetaprogramImportNodeImpl extends NodeImpl implements MetaprogramIm
         visitor.visitMetaprogramImportNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
-
+    
     /**
      * Produces a mutable list of this node's children.  Modifying this list will have no
      * effect on this node.
@@ -118,7 +118,7 @@ public class MetaprogramImportNodeImpl extends NodeImpl implements MetaprogramIm
         list.add(getImportNode());
         return list;
     }
-
+    
     /**
      * Obtains a human-readable description of this node.
      * @return A human-readable description of this node.
@@ -139,7 +139,7 @@ public class MetaprogramImportNodeImpl extends NodeImpl implements MetaprogramIm
         sb.append(']');
         return sb.toString();
     }
-
+    
     /**
      * Executes an operation on this node.
      * @param operation The operation to perform.
@@ -151,7 +151,7 @@ public class MetaprogramImportNodeImpl extends NodeImpl implements MetaprogramIm
     {
         return operation.executeMetaprogramImportNode(this, p);
     }
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

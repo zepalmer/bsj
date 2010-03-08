@@ -28,13 +28,13 @@ public interface FieldAccessByNameNode extends Node, FieldAccessNode
      * @return The name of the field to access.
      */
     public NameNode getName();
-
+    
     /**
      * Changes the name of the field to access.
      * @param name The name of the field to access.
      */
     public void setName(NameNode name);
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

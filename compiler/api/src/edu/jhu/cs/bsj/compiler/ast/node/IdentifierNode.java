@@ -18,13 +18,13 @@ public interface IdentifierNode extends Node
      * @return The identifier contained in this node.
      */
     public String getIdentifier();
-
+    
     /**
      * Changes the identifier contained in this node.
      * @param identifier The identifier contained in this node.
      */
     public void setIdentifier(String identifier);
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

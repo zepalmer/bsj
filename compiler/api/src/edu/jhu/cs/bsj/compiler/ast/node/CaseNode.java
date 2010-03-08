@@ -27,25 +27,25 @@ public interface CaseNode extends Node
      * @return The expression used in this case label.
      */
     public ExpressionNode getExpression();
-
+    
     /**
      * Changes the expression used in this case label.
      * @param expression The expression used in this case label.
      */
     public void setExpression(ExpressionNode expression);
-
+    
     /**
      * Gets the statements to execute in this case node.
      * @return The statements to execute in this case node.
      */
     public BlockStatementListNode getStatements();
-
+    
     /**
      * Changes the statements to execute in this case node.
      * @param statements The statements to execute in this case node.
      */
     public void setStatements(BlockStatementListNode statements);
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

@@ -24,13 +24,13 @@ public interface ExpressionStatementNode extends Node, StatementNode
      * @return This statement's expression.
      */
     public StatementExpressionNode getExpression();
-
+    
     /**
      * Changes this statement's expression.
      * @param expression This statement's expression.
      */
     public void setExpression(StatementExpressionNode expression);
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

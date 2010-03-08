@@ -19,7 +19,7 @@ public class ThrowNodeImpl extends NodeImpl implements ThrowNode
 {
     /** The Throwable to throw. */
     private ExpressionNode expression;
-
+    
     /** General constructor. */
     public ThrowNodeImpl(
             ExpressionNode expression,
@@ -30,7 +30,7 @@ public class ThrowNodeImpl extends NodeImpl implements ThrowNode
         super(startLocation, stopLocation, manager);
         setExpression(expression);
     }
-
+    
     /**
      * Gets the Throwable to throw.
      * @return The Throwable to throw.
@@ -39,7 +39,7 @@ public class ThrowNodeImpl extends NodeImpl implements ThrowNode
     {
         return this.expression;
     }
-
+    
     /**
      * Changes the Throwable to throw.
      * @param expression The Throwable to throw.
@@ -56,7 +56,7 @@ public class ThrowNodeImpl extends NodeImpl implements ThrowNode
             ((NodeImpl)this.expression).setParent(this);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -73,7 +73,7 @@ public class ThrowNodeImpl extends NodeImpl implements ThrowNode
             this.expression.receive(visitor);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided typed visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -90,7 +90,7 @@ public class ThrowNodeImpl extends NodeImpl implements ThrowNode
             this.expression.receiveTyped(visitor);
         }
     }
-
+    
     @Override
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
@@ -106,7 +106,7 @@ public class ThrowNodeImpl extends NodeImpl implements ThrowNode
         visitor.visitThrowNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
-
+    
     /**
      * Produces a mutable list of this node's children.  Modifying this list will have no
      * effect on this node.
@@ -119,7 +119,7 @@ public class ThrowNodeImpl extends NodeImpl implements ThrowNode
         list.add(getExpression());
         return list;
     }
-
+    
     /**
      * Obtains a human-readable description of this node.
      * @return A human-readable description of this node.
@@ -140,7 +140,7 @@ public class ThrowNodeImpl extends NodeImpl implements ThrowNode
         sb.append(']');
         return sb.toString();
     }
-
+    
     /**
      * Executes an operation on this node.
      * @param operation The operation to perform.
@@ -152,7 +152,7 @@ public class ThrowNodeImpl extends NodeImpl implements ThrowNode
     {
         return operation.executeThrowNode(this, p);
     }
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

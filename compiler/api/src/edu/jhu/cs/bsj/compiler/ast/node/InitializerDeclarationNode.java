@@ -20,25 +20,25 @@ public interface InitializerDeclarationNode extends Node, ClassMemberNode, Anony
      * @return Whether or not the initializer is static.
      */
     public boolean getStaticInitializer();
-
+    
     /**
      * Changes whether or not the initializer is static.
      * @param staticInitializer Whether or not the initializer is static.
      */
     public void setStaticInitializer(boolean staticInitializer);
-
+    
     /**
      * Gets the body of the initializer.
      * @return The body of the initializer.
      */
     public BlockNode getBody();
-
+    
     /**
      * Changes the body of the initializer.
      * @param body The body of the initializer.
      */
     public void setBody(BlockNode body);
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

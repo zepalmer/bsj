@@ -20,12 +20,12 @@ public class GeneralParseFailureDiagnostic<T extends javax.tools.JavaFileObject>
     private String tokenText;
     
     public GeneralParseFailureDiagnostic(
-                long lineNumber,
-                long columnNumber,
-                T source,
-                String ruleName,
-                String tokenType,
-                String tokenText)
+            long lineNumber,
+            long columnNumber,
+            T source,
+            String ruleName,
+            String tokenType,
+            String tokenText)
     {
         super(lineNumber, columnNumber, source, CODE, Kind.ERROR, ruleName);
         this.tokenType = tokenType;

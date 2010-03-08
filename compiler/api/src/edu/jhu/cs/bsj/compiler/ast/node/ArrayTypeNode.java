@@ -15,13 +15,13 @@ public interface ArrayTypeNode extends Node, ReferenceTypeNode, LiteralizableTyp
      * @return The element type of the array.
      */
     public TypeNode getType();
-
+    
     /**
      * Changes the element type of the array.
      * @param type The element type of the array.
      */
     public void setType(TypeNode type);
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

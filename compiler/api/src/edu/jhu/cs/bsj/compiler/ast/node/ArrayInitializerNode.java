@@ -19,13 +19,13 @@ public interface ArrayInitializerNode extends Node, VariableInitializerNode
      * @return The initializers for the array.
      */
     public VariableInitializerListNode getInitializers();
-
+    
     /**
      * Changes the initializers for the array.
      * @param initializers The initializers for the array.
      */
     public void setInitializers(VariableInitializerListNode initializers);
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

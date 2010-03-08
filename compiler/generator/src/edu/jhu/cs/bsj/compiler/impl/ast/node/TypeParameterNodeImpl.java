@@ -20,10 +20,10 @@ public class TypeParameterNodeImpl extends NodeImpl implements TypeParameterNode
 {
     /** The base type name for the parameter. */
     private IdentifierNode identifier;
-
+    
     /** The bounds over the base type. */
     private DeclaredTypeListNode bounds;
-
+    
     /** General constructor. */
     public TypeParameterNodeImpl(
             IdentifierNode identifier,
@@ -36,7 +36,7 @@ public class TypeParameterNodeImpl extends NodeImpl implements TypeParameterNode
         setIdentifier(identifier);
         setBounds(bounds);
     }
-
+    
     /**
      * Gets the base type name for the parameter.
      * @return The base type name for the parameter.
@@ -45,7 +45,7 @@ public class TypeParameterNodeImpl extends NodeImpl implements TypeParameterNode
     {
         return this.identifier;
     }
-
+    
     /**
      * Changes the base type name for the parameter.
      * @param identifier The base type name for the parameter.
@@ -62,7 +62,7 @@ public class TypeParameterNodeImpl extends NodeImpl implements TypeParameterNode
             ((NodeImpl)this.identifier).setParent(this);
         }
     }
-
+    
     /**
      * Gets the bounds over the base type.
      * @return The bounds over the base type.
@@ -71,7 +71,7 @@ public class TypeParameterNodeImpl extends NodeImpl implements TypeParameterNode
     {
         return this.bounds;
     }
-
+    
     /**
      * Changes the bounds over the base type.
      * @param bounds The bounds over the base type.
@@ -88,7 +88,7 @@ public class TypeParameterNodeImpl extends NodeImpl implements TypeParameterNode
             ((NodeImpl)this.bounds).setParent(this);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -109,7 +109,7 @@ public class TypeParameterNodeImpl extends NodeImpl implements TypeParameterNode
             this.bounds.receive(visitor);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided typed visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -130,7 +130,7 @@ public class TypeParameterNodeImpl extends NodeImpl implements TypeParameterNode
             this.bounds.receiveTyped(visitor);
         }
     }
-
+    
     @Override
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
@@ -144,7 +144,7 @@ public class TypeParameterNodeImpl extends NodeImpl implements TypeParameterNode
         visitor.visitTypeParameterNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
-
+    
     /**
      * Produces a mutable list of this node's children.  Modifying this list will have no
      * effect on this node.
@@ -158,7 +158,7 @@ public class TypeParameterNodeImpl extends NodeImpl implements TypeParameterNode
         list.add(getBounds());
         return list;
     }
-
+    
     /**
      * Obtains a human-readable description of this node.
      * @return A human-readable description of this node.
@@ -182,7 +182,7 @@ public class TypeParameterNodeImpl extends NodeImpl implements TypeParameterNode
         sb.append(']');
         return sb.toString();
     }
-
+    
     /**
      * Executes an operation on this node.
      * @param operation The operation to perform.
@@ -194,7 +194,7 @@ public class TypeParameterNodeImpl extends NodeImpl implements TypeParameterNode
     {
         return operation.executeTypeParameterNode(this, p);
     }
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

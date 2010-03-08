@@ -15,37 +15,37 @@ public interface ClassInstantiationNode extends Node, RestrictedPrimaryExpressio
      * @return The type arguments for the constructor.
      */
     public TypeArgumentListNode getConstructorTypeArguments();
-
+    
     /**
      * Changes the type arguments for the constructor.
      * @param constructorTypeArguments The type arguments for the constructor.
      */
     public void setConstructorTypeArguments(TypeArgumentListNode constructorTypeArguments);
-
+    
     /**
      * Gets the arguments to the constructor.
      * @return The arguments to the constructor.
      */
     public ExpressionListNode getArguments();
-
+    
     /**
      * Changes the arguments to the constructor.
      * @param arguments The arguments to the constructor.
      */
     public void setArguments(ExpressionListNode arguments);
-
+    
     /**
      * Gets the body of the anonymous class.
      * @return The body of the anonymous class.
      */
     public AnonymousClassBodyNode getBody();
-
+    
     /**
      * Changes the body of the anonymous class.
      * @param body The body of the anonymous class.
      */
     public void setBody(AnonymousClassBodyNode body);
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

@@ -32,13 +32,13 @@ public interface ThisNode extends Node, RestrictedPrimaryExpressionNode
      * @return The qualifying type.
      */
     public UnparameterizedTypeNode getType();
-
+    
     /**
      * Changes the qualifying type.
      * @param type The qualifying type.
      */
     public void setType(UnparameterizedTypeNode type);
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

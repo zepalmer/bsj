@@ -16,13 +16,13 @@ public interface PrimitiveTypeNode extends Node, TypeNode, BaseTypeNode, Literal
      * @return The primitive type being represented.
      */
     public PrimitiveType getPrimitiveType();
-
+    
     /**
      * Changes the primitive type being represented.
      * @param primitiveType The primitive type being represented.
      */
     public void setPrimitiveType(PrimitiveType primitiveType);
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

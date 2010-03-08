@@ -17,11 +17,11 @@ public class DuplicateModifierDiagnostic<T extends javax.tools.JavaFileObject> e
     private String modifier;
     
     public DuplicateModifierDiagnostic(
-                long lineNumber,
-                long columnNumber,
-                T source,
-                String ruleName,
-                String modifier)
+            long lineNumber,
+            long columnNumber,
+            T source,
+            String ruleName,
+            String modifier)
     {
         super(lineNumber, columnNumber, source, CODE, Kind.ERROR, ruleName);
         this.modifier = modifier;

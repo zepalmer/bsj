@@ -15,13 +15,13 @@ public interface VariableModifiersNode extends ModifiersNode
      * @return Whether or not the associated variable is final.
      */
     public boolean getFinalFlag();
-
+    
     /**
      * Changes whether or not the associated variable is final.
      * @param finalFlag Whether or not the associated variable is final.
      */
     public void setFinalFlag(boolean finalFlag);
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

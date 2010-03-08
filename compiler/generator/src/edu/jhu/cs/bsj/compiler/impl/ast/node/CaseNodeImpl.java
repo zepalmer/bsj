@@ -20,10 +20,10 @@ public class CaseNodeImpl extends NodeImpl implements CaseNode
 {
     /** The expression used in this case label. */
     private ExpressionNode expression;
-
+    
     /** The statements to execute in this case node. */
     private BlockStatementListNode statements;
-
+    
     /** General constructor. */
     public CaseNodeImpl(
             ExpressionNode expression,
@@ -36,7 +36,7 @@ public class CaseNodeImpl extends NodeImpl implements CaseNode
         setExpression(expression);
         setStatements(statements);
     }
-
+    
     /**
      * Gets the expression used in this case label.
      * @return The expression used in this case label.
@@ -45,7 +45,7 @@ public class CaseNodeImpl extends NodeImpl implements CaseNode
     {
         return this.expression;
     }
-
+    
     /**
      * Changes the expression used in this case label.
      * @param expression The expression used in this case label.
@@ -62,7 +62,7 @@ public class CaseNodeImpl extends NodeImpl implements CaseNode
             ((NodeImpl)this.expression).setParent(this);
         }
     }
-
+    
     /**
      * Gets the statements to execute in this case node.
      * @return The statements to execute in this case node.
@@ -71,7 +71,7 @@ public class CaseNodeImpl extends NodeImpl implements CaseNode
     {
         return this.statements;
     }
-
+    
     /**
      * Changes the statements to execute in this case node.
      * @param statements The statements to execute in this case node.
@@ -88,7 +88,7 @@ public class CaseNodeImpl extends NodeImpl implements CaseNode
             ((NodeImpl)this.statements).setParent(this);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -109,7 +109,7 @@ public class CaseNodeImpl extends NodeImpl implements CaseNode
             this.statements.receive(visitor);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided typed visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -130,7 +130,7 @@ public class CaseNodeImpl extends NodeImpl implements CaseNode
             this.statements.receiveTyped(visitor);
         }
     }
-
+    
     @Override
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
@@ -144,7 +144,7 @@ public class CaseNodeImpl extends NodeImpl implements CaseNode
         visitor.visitCaseNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
-
+    
     /**
      * Produces a mutable list of this node's children.  Modifying this list will have no
      * effect on this node.
@@ -158,7 +158,7 @@ public class CaseNodeImpl extends NodeImpl implements CaseNode
         list.add(getStatements());
         return list;
     }
-
+    
     /**
      * Obtains a human-readable description of this node.
      * @return A human-readable description of this node.
@@ -182,7 +182,7 @@ public class CaseNodeImpl extends NodeImpl implements CaseNode
         sb.append(']');
         return sb.toString();
     }
-
+    
     /**
      * Executes an operation on this node.
      * @param operation The operation to perform.
@@ -194,7 +194,7 @@ public class CaseNodeImpl extends NodeImpl implements CaseNode
     {
         return operation.executeCaseNode(this, p);
     }
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

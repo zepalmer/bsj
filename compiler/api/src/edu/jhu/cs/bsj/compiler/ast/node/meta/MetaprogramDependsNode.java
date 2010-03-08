@@ -20,13 +20,13 @@ public interface MetaprogramDependsNode extends Node
      * @return The names of the metaprogram targets on which to depend.
      */
     public NameListNode getTargetNames();
-
+    
     /**
      * Changes the names of the metaprogram targets on which to depend.
      * @param targetNames The names of the metaprogram targets on which to depend.
      */
     public void setTargetNames(NameListNode targetNames);
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

@@ -16,13 +16,13 @@ public interface InlineTypeDeclarationNode extends Node, BlockStatementNode
      * @return The type declaration.
      */
     public InlineTypeDeclarableNode getDeclaration();
-
+    
     /**
      * Changes the type declaration.
      * @param declaration The type declaration.
      */
     public void setDeclaration(InlineTypeDeclarableNode declaration);
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

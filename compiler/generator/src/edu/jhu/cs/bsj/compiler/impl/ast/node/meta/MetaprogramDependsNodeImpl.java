@@ -20,7 +20,7 @@ public class MetaprogramDependsNodeImpl extends NodeImpl implements MetaprogramD
 {
     /** The names of the metaprogram targets on which to depend. */
     private NameListNode targetNames;
-
+    
     /** General constructor. */
     public MetaprogramDependsNodeImpl(
             NameListNode targetNames,
@@ -31,7 +31,7 @@ public class MetaprogramDependsNodeImpl extends NodeImpl implements MetaprogramD
         super(startLocation, stopLocation, manager);
         setTargetNames(targetNames);
     }
-
+    
     /**
      * Gets the names of the metaprogram targets on which to depend.
      * @return The names of the metaprogram targets on which to depend.
@@ -40,7 +40,7 @@ public class MetaprogramDependsNodeImpl extends NodeImpl implements MetaprogramD
     {
         return this.targetNames;
     }
-
+    
     /**
      * Changes the names of the metaprogram targets on which to depend.
      * @param targetNames The names of the metaprogram targets on which to depend.
@@ -57,7 +57,7 @@ public class MetaprogramDependsNodeImpl extends NodeImpl implements MetaprogramD
             ((NodeImpl)this.targetNames).setParent(this);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -74,7 +74,7 @@ public class MetaprogramDependsNodeImpl extends NodeImpl implements MetaprogramD
             this.targetNames.receive(visitor);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided typed visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -91,7 +91,7 @@ public class MetaprogramDependsNodeImpl extends NodeImpl implements MetaprogramD
             this.targetNames.receiveTyped(visitor);
         }
     }
-
+    
     @Override
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
@@ -105,7 +105,7 @@ public class MetaprogramDependsNodeImpl extends NodeImpl implements MetaprogramD
         visitor.visitMetaprogramDependsNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
-
+    
     /**
      * Produces a mutable list of this node's children.  Modifying this list will have no
      * effect on this node.
@@ -118,7 +118,7 @@ public class MetaprogramDependsNodeImpl extends NodeImpl implements MetaprogramD
         list.add(getTargetNames());
         return list;
     }
-
+    
     /**
      * Obtains a human-readable description of this node.
      * @return A human-readable description of this node.
@@ -139,7 +139,7 @@ public class MetaprogramDependsNodeImpl extends NodeImpl implements MetaprogramD
         sb.append(']');
         return sb.toString();
     }
-
+    
     /**
      * Executes an operation on this node.
      * @param operation The operation to perform.
@@ -151,7 +151,7 @@ public class MetaprogramDependsNodeImpl extends NodeImpl implements MetaprogramD
     {
         return operation.executeMetaprogramDependsNode(this, p);
     }
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

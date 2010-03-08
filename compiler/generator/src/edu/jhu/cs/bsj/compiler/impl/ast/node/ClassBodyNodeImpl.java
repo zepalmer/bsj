@@ -19,7 +19,7 @@ public class ClassBodyNodeImpl extends NodeImpl implements ClassBodyNode
 {
     /** The members of this class body. */
     private ClassMemberListNode members;
-
+    
     /** General constructor. */
     public ClassBodyNodeImpl(
             ClassMemberListNode members,
@@ -30,7 +30,7 @@ public class ClassBodyNodeImpl extends NodeImpl implements ClassBodyNode
         super(startLocation, stopLocation, manager);
         setMembers(members);
     }
-
+    
     /**
      * Gets the members of this class body.
      * @return The members of this class body.
@@ -39,7 +39,7 @@ public class ClassBodyNodeImpl extends NodeImpl implements ClassBodyNode
     {
         return this.members;
     }
-
+    
     /**
      * Changes the members of this class body.
      * @param members The members of this class body.
@@ -56,7 +56,7 @@ public class ClassBodyNodeImpl extends NodeImpl implements ClassBodyNode
             ((NodeImpl)this.members).setParent(this);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -73,7 +73,7 @@ public class ClassBodyNodeImpl extends NodeImpl implements ClassBodyNode
             this.members.receive(visitor);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided typed visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -90,7 +90,7 @@ public class ClassBodyNodeImpl extends NodeImpl implements ClassBodyNode
             this.members.receiveTyped(visitor);
         }
     }
-
+    
     @Override
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
@@ -106,7 +106,7 @@ public class ClassBodyNodeImpl extends NodeImpl implements ClassBodyNode
         visitor.visitClassBodyNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
-
+    
     /**
      * Produces a mutable list of this node's children.  Modifying this list will have no
      * effect on this node.
@@ -119,7 +119,7 @@ public class ClassBodyNodeImpl extends NodeImpl implements ClassBodyNode
         list.add(getMembers());
         return list;
     }
-
+    
     /**
      * Obtains a human-readable description of this node.
      * @return A human-readable description of this node.
@@ -140,7 +140,7 @@ public class ClassBodyNodeImpl extends NodeImpl implements ClassBodyNode
         sb.append(']');
         return sb.toString();
     }
-
+    
     /**
      * Executes an operation on this node.
      * @param operation The operation to perform.
@@ -152,7 +152,7 @@ public class ClassBodyNodeImpl extends NodeImpl implements ClassBodyNode
     {
         return operation.executeClassBodyNode(this, p);
     }
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

@@ -21,13 +21,13 @@ public interface Node
      * @return The location at which this node's text starts (inclusive).
      */
     public BsjSourceLocation getStartLocation();
-
+    
     /**
      * Gets the location at which this node's text stops (exclusive).
      * @return The location at which this node's text stops (exclusive).
      */
     public BsjSourceLocation getStopLocation();
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

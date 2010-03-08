@@ -20,10 +20,10 @@ public class ConstructorBodyNodeImpl extends NodeImpl implements ConstructorBody
 {
     /** The (nullable) constructor invocation. */
     private ConstructorInvocationNode constructorInvocation;
-
+    
     /** The statements contained in this constructor. */
     private BlockStatementListNode statements;
-
+    
     /** General constructor. */
     public ConstructorBodyNodeImpl(
             ConstructorInvocationNode constructorInvocation,
@@ -36,7 +36,7 @@ public class ConstructorBodyNodeImpl extends NodeImpl implements ConstructorBody
         setConstructorInvocation(constructorInvocation);
         setStatements(statements);
     }
-
+    
     /**
      * Gets the (nullable) constructor invocation.
      * @return The (nullable) constructor invocation.
@@ -45,7 +45,7 @@ public class ConstructorBodyNodeImpl extends NodeImpl implements ConstructorBody
     {
         return this.constructorInvocation;
     }
-
+    
     /**
      * Changes the (nullable) constructor invocation.
      * @param constructorInvocation The (nullable) constructor invocation.
@@ -62,7 +62,7 @@ public class ConstructorBodyNodeImpl extends NodeImpl implements ConstructorBody
             ((NodeImpl)this.constructorInvocation).setParent(this);
         }
     }
-
+    
     /**
      * Gets the statements contained in this constructor.
      * @return The statements contained in this constructor.
@@ -71,7 +71,7 @@ public class ConstructorBodyNodeImpl extends NodeImpl implements ConstructorBody
     {
         return this.statements;
     }
-
+    
     /**
      * Changes the statements contained in this constructor.
      * @param statements The statements contained in this constructor.
@@ -88,7 +88,7 @@ public class ConstructorBodyNodeImpl extends NodeImpl implements ConstructorBody
             ((NodeImpl)this.statements).setParent(this);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -109,7 +109,7 @@ public class ConstructorBodyNodeImpl extends NodeImpl implements ConstructorBody
             this.statements.receive(visitor);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided typed visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -130,7 +130,7 @@ public class ConstructorBodyNodeImpl extends NodeImpl implements ConstructorBody
             this.statements.receiveTyped(visitor);
         }
     }
-
+    
     @Override
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
@@ -144,7 +144,7 @@ public class ConstructorBodyNodeImpl extends NodeImpl implements ConstructorBody
         visitor.visitConstructorBodyNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
-
+    
     /**
      * Produces a mutable list of this node's children.  Modifying this list will have no
      * effect on this node.
@@ -158,7 +158,7 @@ public class ConstructorBodyNodeImpl extends NodeImpl implements ConstructorBody
         list.add(getStatements());
         return list;
     }
-
+    
     /**
      * Obtains a human-readable description of this node.
      * @return A human-readable description of this node.
@@ -182,7 +182,7 @@ public class ConstructorBodyNodeImpl extends NodeImpl implements ConstructorBody
         sb.append(']');
         return sb.toString();
     }
-
+    
     /**
      * Executes an operation on this node.
      * @param operation The operation to perform.
@@ -194,7 +194,7 @@ public class ConstructorBodyNodeImpl extends NodeImpl implements ConstructorBody
     {
         return operation.executeConstructorBodyNode(this, p);
     }
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

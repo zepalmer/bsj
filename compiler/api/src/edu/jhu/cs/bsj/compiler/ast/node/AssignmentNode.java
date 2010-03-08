@@ -20,37 +20,37 @@ public interface AssignmentNode extends Node, StatementExpressionNode
      * @return The variable to which to assign a value.
      */
     public ExpressionNode getVariable();
-
+    
     /**
      * Changes the variable to which to assign a value.
      * @param variable The variable to which to assign a value.
      */
     public void setVariable(ExpressionNode variable);
-
+    
     /**
      * Gets the assignment operator indicating the operation to perform.
      * @return The assignment operator indicating the operation to perform.
      */
     public AssignmentOperator getOperator();
-
+    
     /**
      * Changes the assignment operator indicating the operation to perform.
      * @param operator The assignment operator indicating the operation to perform.
      */
     public void setOperator(AssignmentOperator operator);
-
+    
     /**
      * Gets the expression to use.
      * @return The expression to use.
      */
     public ExpressionNode getExpression();
-
+    
     /**
      * Changes the expression to use.
      * @param expression The expression to use.
      */
     public void setExpression(ExpressionNode expression);
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

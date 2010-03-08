@@ -16,10 +16,10 @@ public abstract class ArrayCreationNodeImpl extends NodeImpl implements ArrayCre
 {
     /** The base type for this array. */
     private BaseTypeNode baseType;
-
+    
     /** The number of uninitialized levels for this array. */
     private int arrayLevels;
-
+    
     /** General constructor. */
     protected ArrayCreationNodeImpl(
             BaseTypeNode baseType,
@@ -32,7 +32,7 @@ public abstract class ArrayCreationNodeImpl extends NodeImpl implements ArrayCre
         setBaseType(baseType);
         this.arrayLevels = arrayLevels;
     }
-
+    
     /**
      * Gets the base type for this array.
      * @return The base type for this array.
@@ -41,7 +41,7 @@ public abstract class ArrayCreationNodeImpl extends NodeImpl implements ArrayCre
     {
         return this.baseType;
     }
-
+    
     /**
      * Changes the base type for this array.
      * @param baseType The base type for this array.
@@ -58,7 +58,7 @@ public abstract class ArrayCreationNodeImpl extends NodeImpl implements ArrayCre
             ((NodeImpl)this.baseType).setParent(this);
         }
     }
-
+    
     /**
      * Gets the number of uninitialized levels for this array.
      * @return The number of uninitialized levels for this array.
@@ -67,7 +67,7 @@ public abstract class ArrayCreationNodeImpl extends NodeImpl implements ArrayCre
     {
         return this.arrayLevels;
     }
-
+    
     /**
      * Changes the number of uninitialized levels for this array.
      * @param arrayLevels The number of uninitialized levels for this array.
@@ -76,7 +76,7 @@ public abstract class ArrayCreationNodeImpl extends NodeImpl implements ArrayCre
     {
         this.arrayLevels = arrayLevels;
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -93,7 +93,7 @@ public abstract class ArrayCreationNodeImpl extends NodeImpl implements ArrayCre
             this.baseType.receive(visitor);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided typed visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -110,7 +110,7 @@ public abstract class ArrayCreationNodeImpl extends NodeImpl implements ArrayCre
             this.baseType.receiveTyped(visitor);
         }
     }
-
+    
     @Override
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
@@ -126,7 +126,7 @@ public abstract class ArrayCreationNodeImpl extends NodeImpl implements ArrayCre
         visitor.visitArrayCreationNodeStop(this);
         visitor.visitStopEnd(this);
     }
-
+    
     /**
      * Produces a mutable list of this node's children.  Modifying this list will have no
      * effect on this node.
@@ -140,7 +140,7 @@ public abstract class ArrayCreationNodeImpl extends NodeImpl implements ArrayCre
         list.add(getArrayLevels());
         return list;
     }
-
+    
     /**
      * Obtains a human-readable description of this node.
      * @return A human-readable description of this node.
@@ -164,6 +164,6 @@ public abstract class ArrayCreationNodeImpl extends NodeImpl implements ArrayCre
         sb.append(']');
         return sb.toString();
     }
-
-
+    
+    
 }

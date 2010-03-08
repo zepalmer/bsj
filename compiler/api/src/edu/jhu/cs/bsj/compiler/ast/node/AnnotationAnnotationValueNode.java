@@ -19,13 +19,13 @@ public interface AnnotationAnnotationValueNode extends Node, AnnotationValueNode
      * @return The annotation.
      */
     public AnnotationNode getAnnotation();
-
+    
     /**
      * Changes the annotation.
      * @param annotation The annotation.
      */
     public void setAnnotation(AnnotationNode annotation);
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

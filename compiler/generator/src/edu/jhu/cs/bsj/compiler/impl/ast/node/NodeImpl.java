@@ -18,13 +18,13 @@ public abstract class NodeImpl implements Node
 {
     /** The location at which this node's text starts (inclusive). */
     private BsjSourceLocation startLocation;
-
+    
     /** The location at which this node's text stops (exclusive). */
     private BsjSourceLocation stopLocation;
-
+    
     /** The BSJ node manager for this node. */
     private BsjNodeManager manager;
-
+    
     /** General constructor. */
     protected NodeImpl(
             BsjSourceLocation startLocation,
@@ -36,7 +36,7 @@ public abstract class NodeImpl implements Node
         this.stopLocation = stopLocation;
         this.manager = manager;
     }
-
+    
     /**
      * Gets the location at which this node's text starts (inclusive).
      * @return The location at which this node's text starts (inclusive).
@@ -45,7 +45,7 @@ public abstract class NodeImpl implements Node
     {
         return this.startLocation;
     }
-
+    
     /**
      * Gets the location at which this node's text stops (exclusive).
      * @return The location at which this node's text stops (exclusive).
@@ -54,7 +54,7 @@ public abstract class NodeImpl implements Node
     {
         return this.stopLocation;
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -65,7 +65,7 @@ public abstract class NodeImpl implements Node
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided typed visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -76,7 +76,7 @@ public abstract class NodeImpl implements Node
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
     }
-
+    
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
         visitor.visitStartBegin(this);
@@ -87,7 +87,7 @@ public abstract class NodeImpl implements Node
         visitor.visitNodeStop(this);
         visitor.visitStopEnd(this);
     }
-
+    
     /**
      * Produces a mutable list of this node's children.  Modifying this list will have no
      * effect on this node.
@@ -99,7 +99,7 @@ public abstract class NodeImpl implements Node
         list.add(getStartLocation().toString() + " - " + getStopLocation().toString());
         return list;
     }
-
+    
     /**
      * Obtains a human-readable description of this node.
      * @return A human-readable description of this node.
@@ -117,8 +117,8 @@ public abstract class NodeImpl implements Node
         sb.append(']');
         return sb.toString();
     }
-
-
+    
+    
 	/**
 	 * The next globally unique UID to assign.
 	 */

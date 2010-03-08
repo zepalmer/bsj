@@ -21,13 +21,13 @@ public class FieldDeclarationNodeImpl extends NodeImpl implements FieldDeclarati
 {
     /** The modifiers for this field. */
     private FieldModifiersNode modifiers;
-
+    
     /** The variable declarators for this node. */
     private VariableDeclaratorListNode declarators;
-
+    
     /** The associated javadoc comment for this node. */
     private JavadocNode javadoc;
-
+    
     /** General constructor. */
     public FieldDeclarationNodeImpl(
             FieldModifiersNode modifiers,
@@ -42,7 +42,7 @@ public class FieldDeclarationNodeImpl extends NodeImpl implements FieldDeclarati
         setDeclarators(declarators);
         setJavadoc(javadoc);
     }
-
+    
     /**
      * Gets the modifiers for this field.
      * @return The modifiers for this field.
@@ -51,7 +51,7 @@ public class FieldDeclarationNodeImpl extends NodeImpl implements FieldDeclarati
     {
         return this.modifiers;
     }
-
+    
     /**
      * Changes the modifiers for this field.
      * @param modifiers The modifiers for this field.
@@ -68,7 +68,7 @@ public class FieldDeclarationNodeImpl extends NodeImpl implements FieldDeclarati
             ((NodeImpl)this.modifiers).setParent(this);
         }
     }
-
+    
     /**
      * Gets the variable declarators for this node.
      * @return The variable declarators for this node.
@@ -77,7 +77,7 @@ public class FieldDeclarationNodeImpl extends NodeImpl implements FieldDeclarati
     {
         return this.declarators;
     }
-
+    
     /**
      * Changes the variable declarators for this node.
      * @param declarators The variable declarators for this node.
@@ -94,7 +94,7 @@ public class FieldDeclarationNodeImpl extends NodeImpl implements FieldDeclarati
             ((NodeImpl)this.declarators).setParent(this);
         }
     }
-
+    
     /**
      * Gets the associated javadoc comment for this node.
      * @return The associated javadoc comment for this node.
@@ -103,7 +103,7 @@ public class FieldDeclarationNodeImpl extends NodeImpl implements FieldDeclarati
     {
         return this.javadoc;
     }
-
+    
     /**
      * Changes the associated javadoc comment for this node.
      * @param javadoc The associated javadoc comment for this node.
@@ -120,7 +120,7 @@ public class FieldDeclarationNodeImpl extends NodeImpl implements FieldDeclarati
             ((NodeImpl)this.javadoc).setParent(this);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -145,7 +145,7 @@ public class FieldDeclarationNodeImpl extends NodeImpl implements FieldDeclarati
             this.javadoc.receive(visitor);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided typed visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -170,7 +170,7 @@ public class FieldDeclarationNodeImpl extends NodeImpl implements FieldDeclarati
             this.javadoc.receiveTyped(visitor);
         }
     }
-
+    
     @Override
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
@@ -192,7 +192,7 @@ public class FieldDeclarationNodeImpl extends NodeImpl implements FieldDeclarati
         visitor.visitFieldDeclarationNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
-
+    
     /**
      * Produces a mutable list of this node's children.  Modifying this list will have no
      * effect on this node.
@@ -207,7 +207,7 @@ public class FieldDeclarationNodeImpl extends NodeImpl implements FieldDeclarati
         list.add(getJavadoc());
         return list;
     }
-
+    
     /**
      * Obtains a human-readable description of this node.
      * @return A human-readable description of this node.
@@ -234,7 +234,7 @@ public class FieldDeclarationNodeImpl extends NodeImpl implements FieldDeclarati
         sb.append(']');
         return sb.toString();
     }
-
+    
     /**
      * Executes an operation on this node.
      * @param operation The operation to perform.
@@ -246,7 +246,7 @@ public class FieldDeclarationNodeImpl extends NodeImpl implements FieldDeclarati
     {
         return operation.executeFieldDeclarationNode(this, p);
     }
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

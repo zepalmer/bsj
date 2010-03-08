@@ -16,10 +16,10 @@ public abstract class NameNodeImpl extends NodeImpl implements NameNode
 {
     /** The identifier used in this name. */
     private IdentifierNode identifier;
-
+    
     /** The category for this name. */
     private NameCategory category;
-
+    
     /** General constructor. */
     protected NameNodeImpl(
             IdentifierNode identifier,
@@ -32,7 +32,7 @@ public abstract class NameNodeImpl extends NodeImpl implements NameNode
         setIdentifier(identifier);
         this.category = category;
     }
-
+    
     /**
      * Gets the identifier used in this name.
      * @return The identifier used in this name.
@@ -41,7 +41,7 @@ public abstract class NameNodeImpl extends NodeImpl implements NameNode
     {
         return this.identifier;
     }
-
+    
     /**
      * Changes the identifier used in this name.
      * @param identifier The identifier used in this name.
@@ -58,7 +58,7 @@ public abstract class NameNodeImpl extends NodeImpl implements NameNode
             ((NodeImpl)this.identifier).setParent(this);
         }
     }
-
+    
     /**
      * Gets the category for this name.
      * @return The category for this name.
@@ -67,7 +67,7 @@ public abstract class NameNodeImpl extends NodeImpl implements NameNode
     {
         return this.category;
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -84,7 +84,7 @@ public abstract class NameNodeImpl extends NodeImpl implements NameNode
             this.identifier.receive(visitor);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided typed visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -101,7 +101,7 @@ public abstract class NameNodeImpl extends NodeImpl implements NameNode
             this.identifier.receiveTyped(visitor);
         }
     }
-
+    
     @Override
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
@@ -115,7 +115,7 @@ public abstract class NameNodeImpl extends NodeImpl implements NameNode
         visitor.visitNameNodeStop(this);
         visitor.visitStopEnd(this);
     }
-
+    
     /**
      * Produces a mutable list of this node's children.  Modifying this list will have no
      * effect on this node.
@@ -129,7 +129,7 @@ public abstract class NameNodeImpl extends NodeImpl implements NameNode
         list.add(getCategory());
         return list;
     }
-
+    
     /**
      * Obtains a human-readable description of this node.
      * @return A human-readable description of this node.
@@ -153,8 +153,8 @@ public abstract class NameNodeImpl extends NodeImpl implements NameNode
         sb.append(']');
         return sb.toString();
     }
-
-
+    
+    
 	/**
 	 * Asserts that this node should fall into the specified category.
 	 * @param category The category into which this node should fall.

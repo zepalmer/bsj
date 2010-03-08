@@ -17,25 +17,25 @@ public interface ParameterizedTypeNode extends Node, DeclaredTypeNode
      * @return The base type being parameterized.
      */
     public UnparameterizedTypeNode getBaseType();
-
+    
     /**
      * Changes the base type being parameterized.
      * @param baseType The base type being parameterized.
      */
     public void setBaseType(UnparameterizedTypeNode baseType);
-
+    
     /**
      * Gets the type arguments for this node.
      * @return The type arguments for this node.
      */
     public TypeArgumentListNode getTypeArguments();
-
+    
     /**
      * Changes the type arguments for this node.
      * @param typeArguments The type arguments for this node.
      */
     public void setTypeArguments(TypeArgumentListNode typeArguments);
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

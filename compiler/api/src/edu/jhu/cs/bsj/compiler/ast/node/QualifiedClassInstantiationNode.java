@@ -36,37 +36,37 @@ public interface QualifiedClassInstantiationNode extends ClassInstantiationNode
      * @return The expression enclosing the non-static inner class.
      */
     public ExpressionNode getEnclosingExpression();
-
+    
     /**
      * Changes the expression enclosing the non-static inner class.
      * @param enclosingExpression The expression enclosing the non-static inner class.
      */
     public void setEnclosingExpression(ExpressionNode enclosingExpression);
-
+    
     /**
      * Gets the name of the class being instantiated.
      * @return The name of the class being instantiated.
      */
     public IdentifierNode getIdentifier();
-
+    
     /**
      * Changes the name of the class being instantiated.
      * @param identifier The name of the class being instantiated.
      */
     public void setIdentifier(IdentifierNode identifier);
-
+    
     /**
      * Gets the type arguments to apply to the class being instantiated.
      * @return The type arguments to apply to the class being instantiated.
      */
     public TypeArgumentListNode getTypeArguments();
-
+    
     /**
      * Changes the type arguments to apply to the class being instantiated.
      * @param typeArguments The type arguments to apply to the class being instantiated.
      */
     public void setTypeArguments(TypeArgumentListNode typeArguments);
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

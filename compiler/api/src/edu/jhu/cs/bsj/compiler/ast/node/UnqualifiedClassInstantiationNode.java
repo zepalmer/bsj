@@ -19,13 +19,13 @@ public interface UnqualifiedClassInstantiationNode extends ClassInstantiationNod
      * @return The type being instantiated.
      */
     public DeclaredTypeNode getType();
-
+    
     /**
      * Changes the type being instantiated.
      * @param type The type being instantiated.
      */
     public void setType(DeclaredTypeNode type);
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

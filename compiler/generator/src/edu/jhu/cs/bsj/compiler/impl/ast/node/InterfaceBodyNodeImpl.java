@@ -19,7 +19,7 @@ public class InterfaceBodyNodeImpl extends NodeImpl implements InterfaceBodyNode
 {
     /** The members of this interface body. */
     private InterfaceMemberListNode members;
-
+    
     /** General constructor. */
     public InterfaceBodyNodeImpl(
             InterfaceMemberListNode members,
@@ -30,7 +30,7 @@ public class InterfaceBodyNodeImpl extends NodeImpl implements InterfaceBodyNode
         super(startLocation, stopLocation, manager);
         setMembers(members);
     }
-
+    
     /**
      * Gets the members of this interface body.
      * @return The members of this interface body.
@@ -39,7 +39,7 @@ public class InterfaceBodyNodeImpl extends NodeImpl implements InterfaceBodyNode
     {
         return this.members;
     }
-
+    
     /**
      * Changes the members of this interface body.
      * @param members The members of this interface body.
@@ -56,7 +56,7 @@ public class InterfaceBodyNodeImpl extends NodeImpl implements InterfaceBodyNode
             ((NodeImpl)this.members).setParent(this);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -73,7 +73,7 @@ public class InterfaceBodyNodeImpl extends NodeImpl implements InterfaceBodyNode
             this.members.receive(visitor);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided typed visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -90,7 +90,7 @@ public class InterfaceBodyNodeImpl extends NodeImpl implements InterfaceBodyNode
             this.members.receiveTyped(visitor);
         }
     }
-
+    
     @Override
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
@@ -106,7 +106,7 @@ public class InterfaceBodyNodeImpl extends NodeImpl implements InterfaceBodyNode
         visitor.visitInterfaceBodyNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
-
+    
     /**
      * Produces a mutable list of this node's children.  Modifying this list will have no
      * effect on this node.
@@ -119,7 +119,7 @@ public class InterfaceBodyNodeImpl extends NodeImpl implements InterfaceBodyNode
         list.add(getMembers());
         return list;
     }
-
+    
     /**
      * Obtains a human-readable description of this node.
      * @return A human-readable description of this node.
@@ -140,7 +140,7 @@ public class InterfaceBodyNodeImpl extends NodeImpl implements InterfaceBodyNode
         sb.append(']');
         return sb.toString();
     }
-
+    
     /**
      * Executes an operation on this node.
      * @param operation The operation to perform.
@@ -152,7 +152,7 @@ public class InterfaceBodyNodeImpl extends NodeImpl implements InterfaceBodyNode
     {
         return operation.executeInterfaceBodyNode(this, p);
     }
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

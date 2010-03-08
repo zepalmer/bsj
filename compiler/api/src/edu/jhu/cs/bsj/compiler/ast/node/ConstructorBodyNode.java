@@ -25,25 +25,25 @@ public interface ConstructorBodyNode extends Node
      * @return The (nullable) constructor invocation.
      */
     public ConstructorInvocationNode getConstructorInvocation();
-
+    
     /**
      * Changes the (nullable) constructor invocation.
      * @param constructorInvocation The (nullable) constructor invocation.
      */
     public void setConstructorInvocation(ConstructorInvocationNode constructorInvocation);
-
+    
     /**
      * Gets the statements contained in this constructor.
      * @return The statements contained in this constructor.
      */
     public BlockStatementListNode getStatements();
-
+    
     /**
      * Changes the statements contained in this constructor.
      * @param statements The statements contained in this constructor.
      */
     public void setStatements(BlockStatementListNode statements);
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

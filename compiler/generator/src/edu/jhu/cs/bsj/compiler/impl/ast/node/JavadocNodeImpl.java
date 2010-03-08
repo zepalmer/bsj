@@ -18,7 +18,7 @@ public class JavadocNodeImpl extends NodeImpl implements JavadocNode
 {
     /** The parsed text of this Javadoc comment. */
     private String text;
-
+    
     /** General constructor. */
     public JavadocNodeImpl(
             String text,
@@ -29,7 +29,7 @@ public class JavadocNodeImpl extends NodeImpl implements JavadocNode
         super(startLocation, stopLocation, manager);
         this.text = text;
     }
-
+    
     /**
      * Gets the parsed text of this Javadoc comment.
      * @return The parsed text of this Javadoc comment.
@@ -38,7 +38,7 @@ public class JavadocNodeImpl extends NodeImpl implements JavadocNode
     {
         return this.text;
     }
-
+    
     /**
      * Changes the parsed text of this Javadoc comment.
      * @param text The parsed text of this Javadoc comment.
@@ -47,7 +47,7 @@ public class JavadocNodeImpl extends NodeImpl implements JavadocNode
     {
         this.text = text;
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -60,7 +60,7 @@ public class JavadocNodeImpl extends NodeImpl implements JavadocNode
     {
         super.receiveToChildren(visitor);
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided typed visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -73,7 +73,7 @@ public class JavadocNodeImpl extends NodeImpl implements JavadocNode
     {
         super.receiveTypedToChildren(visitor);
     }
-
+    
     @Override
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
@@ -87,7 +87,7 @@ public class JavadocNodeImpl extends NodeImpl implements JavadocNode
         visitor.visitJavadocNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
-
+    
     /**
      * Produces a mutable list of this node's children.  Modifying this list will have no
      * effect on this node.
@@ -100,7 +100,7 @@ public class JavadocNodeImpl extends NodeImpl implements JavadocNode
         list.add(getText());
         return list;
     }
-
+    
     /**
      * Obtains a human-readable description of this node.
      * @return A human-readable description of this node.
@@ -121,7 +121,7 @@ public class JavadocNodeImpl extends NodeImpl implements JavadocNode
         sb.append(']');
         return sb.toString();
     }
-
+    
     /**
      * Executes an operation on this node.
      * @param operation The operation to perform.
@@ -133,7 +133,7 @@ public class JavadocNodeImpl extends NodeImpl implements JavadocNode
     {
         return operation.executeJavadocNode(this, p);
     }
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

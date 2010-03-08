@@ -23,13 +23,13 @@ public interface ParenthesizedExpressionNode extends Node, RestrictedPrimaryExpr
      * @return The expression contained in this node.
      */
     public ExpressionNode getExpression();
-
+    
     /**
      * Changes the expression contained in this node.
      * @param expression The expression contained in this node.
      */
     public void setExpression(ExpressionNode expression);
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

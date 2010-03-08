@@ -33,10 +33,10 @@ public class PackageNodeImpl extends NodeImpl implements PackageNode
 {
     /** The simple name of this package. */
     private IdentifierNode name;
-
+    
     /** The callback module for this package node. */
     private PackageNodeCallback packageNodeCallback;
-
+    
     /** General constructor. */
     public PackageNodeImpl(
             IdentifierNode name,
@@ -49,7 +49,7 @@ public class PackageNodeImpl extends NodeImpl implements PackageNode
         this.name = name;
         this.packageNodeCallback = packageNodeCallback;
     }
-
+    
     /**
      * Gets the simple name of this package.
      * @return The simple name of this package.
@@ -58,7 +58,7 @@ public class PackageNodeImpl extends NodeImpl implements PackageNode
     {
         return this.name;
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -75,7 +75,7 @@ public class PackageNodeImpl extends NodeImpl implements PackageNode
             this.name.receive(visitor);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided typed visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -92,7 +92,7 @@ public class PackageNodeImpl extends NodeImpl implements PackageNode
             this.name.receiveTyped(visitor);
         }
     }
-
+    
     @Override
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
@@ -106,7 +106,7 @@ public class PackageNodeImpl extends NodeImpl implements PackageNode
         visitor.visitPackageNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
-
+    
     /**
      * Produces a mutable list of this node's children.  Modifying this list will have no
      * effect on this node.
@@ -119,7 +119,7 @@ public class PackageNodeImpl extends NodeImpl implements PackageNode
         list.add(getName());
         return list;
     }
-
+    
     /**
      * Obtains a human-readable description of this node.
      * @return A human-readable description of this node.
@@ -140,7 +140,7 @@ public class PackageNodeImpl extends NodeImpl implements PackageNode
         sb.append(']');
         return sb.toString();
     }
-
+    
     /**
      * Executes an operation on this node.
      * @param operation The operation to perform.
@@ -152,7 +152,7 @@ public class PackageNodeImpl extends NodeImpl implements PackageNode
     {
         return operation.executePackageNode(this, p);
     }
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

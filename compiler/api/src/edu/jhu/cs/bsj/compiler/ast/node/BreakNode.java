@@ -18,13 +18,13 @@ public interface BreakNode extends Node, StatementNode
      * @return The break label.
      */
     public IdentifierNode getLabel();
-
+    
     /**
      * Changes the break label.
      * @param label The break label.
      */
     public void setLabel(IdentifierNode label);
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

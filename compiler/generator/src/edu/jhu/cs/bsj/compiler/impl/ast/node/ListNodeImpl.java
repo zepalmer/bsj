@@ -21,7 +21,7 @@ public abstract class ListNodeImpl<T extends Node> extends NodeImpl implements L
 {
     /** The list of children. */
     private List<T> children;
-
+    
     /** General constructor. */
     protected ListNodeImpl(
             List<T> children,
@@ -32,7 +32,7 @@ public abstract class ListNodeImpl<T extends Node> extends NodeImpl implements L
         super(startLocation, stopLocation, manager);
         this.children = new ListNodeProxyList(new ArrayList<T>(children));
     }
-
+    
     /**
      * Gets the list of children.
      * @return The list of children.
@@ -41,7 +41,7 @@ public abstract class ListNodeImpl<T extends Node> extends NodeImpl implements L
     {
         return this.children;
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -61,7 +61,7 @@ public abstract class ListNodeImpl<T extends Node> extends NodeImpl implements L
             }
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided typed visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -81,7 +81,7 @@ public abstract class ListNodeImpl<T extends Node> extends NodeImpl implements L
             }
         }
     }
-
+    
     @Override
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
@@ -95,13 +95,13 @@ public abstract class ListNodeImpl<T extends Node> extends NodeImpl implements L
         visitor.visitListNodeStop(this);
         visitor.visitStopEnd(this);
     }
-
+    
     /**
      * Produces a mutable list of this node's children.  Modifying this list will have no
      * effect on this node.
      * @return A list of this node's children.
      */
-/* // (not generating children)
+    /* // (not generating children)
     @Override
     public List<Object> getChildObjects()
     {
@@ -109,7 +109,7 @@ public abstract class ListNodeImpl<T extends Node> extends NodeImpl implements L
         list.add(getChildren());
         return list;
     }
-*/
+    */
     /**
      * Obtains a human-readable description of this node.
      * @return A human-readable description of this node.
@@ -130,8 +130,8 @@ public abstract class ListNodeImpl<T extends Node> extends NodeImpl implements L
         sb.append(']');
         return sb.toString();
     }
-
-
+    
+    
 
 	/**
 	 * Creates a list of this node's child objects. Modifying the list has no effect on this node.

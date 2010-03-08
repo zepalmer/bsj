@@ -18,13 +18,13 @@ public interface ForInitializerExpressionNode extends Node, ForInitializerNode
      * @return The expressions used in this initializer.
      */
     public StatementExpressionListNode getExpressions();
-
+    
     /**
      * Changes the expressions used in this initializer.
      * @param expressions The expressions used in this initializer.
      */
     public void setExpressions(StatementExpressionListNode expressions);
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

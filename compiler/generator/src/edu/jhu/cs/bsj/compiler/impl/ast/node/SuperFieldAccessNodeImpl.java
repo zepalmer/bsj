@@ -20,10 +20,10 @@ public class SuperFieldAccessNodeImpl extends NodeImpl implements SuperFieldAcce
 {
     /** The qualifying type. */
     private UnparameterizedTypeNode type;
-
+    
     /** The identifier of the field being accessed. */
     private IdentifierNode identifier;
-
+    
     /** General constructor. */
     public SuperFieldAccessNodeImpl(
             UnparameterizedTypeNode type,
@@ -36,7 +36,7 @@ public class SuperFieldAccessNodeImpl extends NodeImpl implements SuperFieldAcce
         setType(type);
         setIdentifier(identifier);
     }
-
+    
     /**
      * Gets the qualifying type.
      * @return The qualifying type.
@@ -45,7 +45,7 @@ public class SuperFieldAccessNodeImpl extends NodeImpl implements SuperFieldAcce
     {
         return this.type;
     }
-
+    
     /**
      * Changes the qualifying type.
      * @param type The qualifying type.
@@ -62,7 +62,7 @@ public class SuperFieldAccessNodeImpl extends NodeImpl implements SuperFieldAcce
             ((NodeImpl)this.type).setParent(this);
         }
     }
-
+    
     /**
      * Gets the identifier of the field being accessed.
      * @return The identifier of the field being accessed.
@@ -71,7 +71,7 @@ public class SuperFieldAccessNodeImpl extends NodeImpl implements SuperFieldAcce
     {
         return this.identifier;
     }
-
+    
     /**
      * Changes the identifier of the field being accessed.
      * @param identifier The identifier of the field being accessed.
@@ -88,7 +88,7 @@ public class SuperFieldAccessNodeImpl extends NodeImpl implements SuperFieldAcce
             ((NodeImpl)this.identifier).setParent(this);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -109,7 +109,7 @@ public class SuperFieldAccessNodeImpl extends NodeImpl implements SuperFieldAcce
             this.identifier.receive(visitor);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided typed visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -130,7 +130,7 @@ public class SuperFieldAccessNodeImpl extends NodeImpl implements SuperFieldAcce
             this.identifier.receiveTyped(visitor);
         }
     }
-
+    
     @Override
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
@@ -146,7 +146,7 @@ public class SuperFieldAccessNodeImpl extends NodeImpl implements SuperFieldAcce
         visitor.visitSuperFieldAccessNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
-
+    
     /**
      * Produces a mutable list of this node's children.  Modifying this list will have no
      * effect on this node.
@@ -160,7 +160,7 @@ public class SuperFieldAccessNodeImpl extends NodeImpl implements SuperFieldAcce
         list.add(getIdentifier());
         return list;
     }
-
+    
     /**
      * Obtains a human-readable description of this node.
      * @return A human-readable description of this node.
@@ -184,7 +184,7 @@ public class SuperFieldAccessNodeImpl extends NodeImpl implements SuperFieldAcce
         sb.append(']');
         return sb.toString();
     }
-
+    
     /**
      * Executes an operation on this node.
      * @param operation The operation to perform.
@@ -196,7 +196,7 @@ public class SuperFieldAccessNodeImpl extends NodeImpl implements SuperFieldAcce
     {
         return operation.executeSuperFieldAccessNode(this, p);
     }
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

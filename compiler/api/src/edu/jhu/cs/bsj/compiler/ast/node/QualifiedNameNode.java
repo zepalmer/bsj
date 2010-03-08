@@ -18,13 +18,13 @@ public interface QualifiedNameNode extends NameNode
      * @return The name being qualified.
      */
     public NameNode getBase();
-
+    
     /**
      * Changes the name being qualified.
      * @param base The name being qualified.
      */
     public void setBase(NameNode base);
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

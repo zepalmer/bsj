@@ -16,13 +16,13 @@ public interface ConstructorModifiersNode extends ModifiersNode
      * @return The access for the associated constructor.
      */
     public AccessModifier getAccess();
-
+    
     /**
      * Changes the access for the associated constructor.
      * @param access The access for the associated constructor.
      */
     public void setAccess(AccessModifier access);
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

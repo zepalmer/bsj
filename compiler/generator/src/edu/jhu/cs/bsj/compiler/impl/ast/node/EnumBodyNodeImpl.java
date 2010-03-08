@@ -20,10 +20,10 @@ public class EnumBodyNodeImpl extends NodeImpl implements EnumBodyNode
 {
     /** The enumeration constants. */
     private EnumConstantDeclarationListNode constants;
-
+    
     /** The members of the class body part. */
     private ClassMemberListNode members;
-
+    
     /** General constructor. */
     public EnumBodyNodeImpl(
             EnumConstantDeclarationListNode constants,
@@ -36,7 +36,7 @@ public class EnumBodyNodeImpl extends NodeImpl implements EnumBodyNode
         setConstants(constants);
         setMembers(members);
     }
-
+    
     /**
      * Gets the enumeration constants.
      * @return The enumeration constants.
@@ -45,7 +45,7 @@ public class EnumBodyNodeImpl extends NodeImpl implements EnumBodyNode
     {
         return this.constants;
     }
-
+    
     /**
      * Changes the enumeration constants.
      * @param constants The enumeration constants.
@@ -62,7 +62,7 @@ public class EnumBodyNodeImpl extends NodeImpl implements EnumBodyNode
             ((NodeImpl)this.constants).setParent(this);
         }
     }
-
+    
     /**
      * Gets the members of the class body part.
      * @return The members of the class body part.
@@ -71,7 +71,7 @@ public class EnumBodyNodeImpl extends NodeImpl implements EnumBodyNode
     {
         return this.members;
     }
-
+    
     /**
      * Changes the members of the class body part.
      * @param members The members of the class body part.
@@ -88,7 +88,7 @@ public class EnumBodyNodeImpl extends NodeImpl implements EnumBodyNode
             ((NodeImpl)this.members).setParent(this);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -109,7 +109,7 @@ public class EnumBodyNodeImpl extends NodeImpl implements EnumBodyNode
             this.members.receive(visitor);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided typed visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -130,7 +130,7 @@ public class EnumBodyNodeImpl extends NodeImpl implements EnumBodyNode
             this.members.receiveTyped(visitor);
         }
     }
-
+    
     @Override
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
@@ -146,7 +146,7 @@ public class EnumBodyNodeImpl extends NodeImpl implements EnumBodyNode
         visitor.visitEnumBodyNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
-
+    
     /**
      * Produces a mutable list of this node's children.  Modifying this list will have no
      * effect on this node.
@@ -160,7 +160,7 @@ public class EnumBodyNodeImpl extends NodeImpl implements EnumBodyNode
         list.add(getMembers());
         return list;
     }
-
+    
     /**
      * Obtains a human-readable description of this node.
      * @return A human-readable description of this node.
@@ -184,7 +184,7 @@ public class EnumBodyNodeImpl extends NodeImpl implements EnumBodyNode
         sb.append(']');
         return sb.toString();
     }
-
+    
     /**
      * Executes an operation on this node.
      * @param operation The operation to perform.
@@ -196,7 +196,7 @@ public class EnumBodyNodeImpl extends NodeImpl implements EnumBodyNode
     {
         return operation.executeEnumBodyNode(this, p);
     }
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

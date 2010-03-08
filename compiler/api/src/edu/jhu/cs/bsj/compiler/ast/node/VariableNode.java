@@ -18,37 +18,37 @@ public interface VariableNode extends Node
      * @return The modifiers of this parameter.
      */
     public VariableModifiersNode getModifiers();
-
+    
     /**
      * Changes the modifiers of this parameter.
      * @param modifiers The modifiers of this parameter.
      */
     public void setModifiers(VariableModifiersNode modifiers);
-
+    
     /**
      * Gets the type of the variable.
      * @return The type of the variable.
      */
     public TypeNode getType();
-
+    
     /**
      * Changes the type of the variable.
      * @param type The type of the variable.
      */
     public void setType(TypeNode type);
-
+    
     /**
      * Gets the name of the variable.
      * @return The name of the variable.
      */
     public IdentifierNode getIdentifier();
-
+    
     /**
      * Changes the name of the variable.
      * @param identifier The name of the variable.
      */
     public void setIdentifier(IdentifierNode identifier);
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

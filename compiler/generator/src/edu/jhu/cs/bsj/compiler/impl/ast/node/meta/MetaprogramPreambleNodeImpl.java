@@ -22,13 +22,13 @@ public class MetaprogramPreambleNodeImpl extends NodeImpl implements Metaprogram
 {
     /** The imports for this metaprogram. */
     private MetaprogramImportListNode imports;
-
+    
     /** The targets for this metaprogram. */
     private MetaprogramTargetNode target;
-
+    
     /** The dependencies for this metaprogram. */
     private MetaprogramDependsNode depends;
-
+    
     /** General constructor. */
     public MetaprogramPreambleNodeImpl(
             MetaprogramImportListNode imports,
@@ -43,7 +43,7 @@ public class MetaprogramPreambleNodeImpl extends NodeImpl implements Metaprogram
         setTarget(target);
         setDepends(depends);
     }
-
+    
     /**
      * Gets the imports for this metaprogram.
      * @return The imports for this metaprogram.
@@ -52,7 +52,7 @@ public class MetaprogramPreambleNodeImpl extends NodeImpl implements Metaprogram
     {
         return this.imports;
     }
-
+    
     /**
      * Changes the imports for this metaprogram.
      * @param imports The imports for this metaprogram.
@@ -69,7 +69,7 @@ public class MetaprogramPreambleNodeImpl extends NodeImpl implements Metaprogram
             ((NodeImpl)this.imports).setParent(this);
         }
     }
-
+    
     /**
      * Gets the targets for this metaprogram.
      * @return The targets for this metaprogram.
@@ -78,7 +78,7 @@ public class MetaprogramPreambleNodeImpl extends NodeImpl implements Metaprogram
     {
         return this.target;
     }
-
+    
     /**
      * Changes the targets for this metaprogram.
      * @param target The targets for this metaprogram.
@@ -95,7 +95,7 @@ public class MetaprogramPreambleNodeImpl extends NodeImpl implements Metaprogram
             ((NodeImpl)this.target).setParent(this);
         }
     }
-
+    
     /**
      * Gets the dependencies for this metaprogram.
      * @return The dependencies for this metaprogram.
@@ -104,7 +104,7 @@ public class MetaprogramPreambleNodeImpl extends NodeImpl implements Metaprogram
     {
         return this.depends;
     }
-
+    
     /**
      * Changes the dependencies for this metaprogram.
      * @param depends The dependencies for this metaprogram.
@@ -121,7 +121,7 @@ public class MetaprogramPreambleNodeImpl extends NodeImpl implements Metaprogram
             ((NodeImpl)this.depends).setParent(this);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -146,7 +146,7 @@ public class MetaprogramPreambleNodeImpl extends NodeImpl implements Metaprogram
             this.depends.receive(visitor);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided typed visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -171,7 +171,7 @@ public class MetaprogramPreambleNodeImpl extends NodeImpl implements Metaprogram
             this.depends.receiveTyped(visitor);
         }
     }
-
+    
     @Override
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
@@ -185,7 +185,7 @@ public class MetaprogramPreambleNodeImpl extends NodeImpl implements Metaprogram
         visitor.visitMetaprogramPreambleNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
-
+    
     /**
      * Produces a mutable list of this node's children.  Modifying this list will have no
      * effect on this node.
@@ -200,7 +200,7 @@ public class MetaprogramPreambleNodeImpl extends NodeImpl implements Metaprogram
         list.add(getDepends());
         return list;
     }
-
+    
     /**
      * Obtains a human-readable description of this node.
      * @return A human-readable description of this node.
@@ -227,7 +227,7 @@ public class MetaprogramPreambleNodeImpl extends NodeImpl implements Metaprogram
         sb.append(']');
         return sb.toString();
     }
-
+    
     /**
      * Executes an operation on this node.
      * @param operation The operation to perform.
@@ -239,7 +239,7 @@ public class MetaprogramPreambleNodeImpl extends NodeImpl implements Metaprogram
     {
         return operation.executeMetaprogramPreambleNode(this, p);
     }
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

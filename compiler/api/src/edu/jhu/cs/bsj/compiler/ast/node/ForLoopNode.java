@@ -23,49 +23,49 @@ public interface ForLoopNode extends Node, StatementNode
      * @return The initializer used for this for loop.
      */
     public ForInitializerNode getInitializer();
-
+    
     /**
      * Changes the initializer used for this for loop.
      * @param initializer The initializer used for this for loop.
      */
     public void setInitializer(ForInitializerNode initializer);
-
+    
     /**
      * Gets the loop's termination condition.
      * @return The loop's termination condition.
      */
     public ExpressionNode getCondition();
-
+    
     /**
      * Changes the loop's termination condition.
      * @param condition The loop's termination condition.
      */
     public void setCondition(ExpressionNode condition);
-
+    
     /**
      * Gets the loop's update operation.
      * @return The loop's update operation.
      */
     public StatementExpressionListNode getUpdate();
-
+    
     /**
      * Changes the loop's update operation.
      * @param update The loop's update operation.
      */
     public void setUpdate(StatementExpressionListNode update);
-
+    
     /**
      * Gets the loop's statement.
      * @return The loop's statement.
      */
     public StatementNode getStatement();
-
+    
     /**
      * Changes the loop's statement.
      * @param statement The loop's statement.
      */
     public void setStatement(StatementNode statement);
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

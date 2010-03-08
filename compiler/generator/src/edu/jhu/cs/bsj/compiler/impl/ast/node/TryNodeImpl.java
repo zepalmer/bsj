@@ -20,13 +20,13 @@ public class TryNodeImpl extends NodeImpl implements TryNode
 {
     /** The block in which to try. */
     private BlockNode block;
-
+    
     /** The catch conditions. */
     private CatchListNode catches;
-
+    
     /** The finally block. */
     private BlockNode finallyBlock;
-
+    
     /** General constructor. */
     public TryNodeImpl(
             BlockNode block,
@@ -41,7 +41,7 @@ public class TryNodeImpl extends NodeImpl implements TryNode
         setCatches(catches);
         setFinallyBlock(finallyBlock);
     }
-
+    
     /**
      * Gets the block in which to try.
      * @return The block in which to try.
@@ -50,7 +50,7 @@ public class TryNodeImpl extends NodeImpl implements TryNode
     {
         return this.block;
     }
-
+    
     /**
      * Changes the block in which to try.
      * @param block The block in which to try.
@@ -67,7 +67,7 @@ public class TryNodeImpl extends NodeImpl implements TryNode
             ((NodeImpl)this.block).setParent(this);
         }
     }
-
+    
     /**
      * Gets the catch conditions.
      * @return The catch conditions.
@@ -76,7 +76,7 @@ public class TryNodeImpl extends NodeImpl implements TryNode
     {
         return this.catches;
     }
-
+    
     /**
      * Changes the catch conditions.
      * @param catches The catch conditions.
@@ -93,7 +93,7 @@ public class TryNodeImpl extends NodeImpl implements TryNode
             ((NodeImpl)this.catches).setParent(this);
         }
     }
-
+    
     /**
      * Gets the finally block.
      * @return The finally block.
@@ -102,7 +102,7 @@ public class TryNodeImpl extends NodeImpl implements TryNode
     {
         return this.finallyBlock;
     }
-
+    
     /**
      * Changes the finally block.
      * @param finallyBlock The finally block.
@@ -119,7 +119,7 @@ public class TryNodeImpl extends NodeImpl implements TryNode
             ((NodeImpl)this.finallyBlock).setParent(this);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -144,7 +144,7 @@ public class TryNodeImpl extends NodeImpl implements TryNode
             this.finallyBlock.receive(visitor);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided typed visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -169,7 +169,7 @@ public class TryNodeImpl extends NodeImpl implements TryNode
             this.finallyBlock.receiveTyped(visitor);
         }
     }
-
+    
     @Override
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
@@ -185,7 +185,7 @@ public class TryNodeImpl extends NodeImpl implements TryNode
         visitor.visitTryNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
-
+    
     /**
      * Produces a mutable list of this node's children.  Modifying this list will have no
      * effect on this node.
@@ -200,7 +200,7 @@ public class TryNodeImpl extends NodeImpl implements TryNode
         list.add(getFinallyBlock());
         return list;
     }
-
+    
     /**
      * Obtains a human-readable description of this node.
      * @return A human-readable description of this node.
@@ -227,7 +227,7 @@ public class TryNodeImpl extends NodeImpl implements TryNode
         sb.append(']');
         return sb.toString();
     }
-
+    
     /**
      * Executes an operation on this node.
      * @param operation The operation to perform.
@@ -239,7 +239,7 @@ public class TryNodeImpl extends NodeImpl implements TryNode
     {
         return operation.executeTryNode(this, p);
     }
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

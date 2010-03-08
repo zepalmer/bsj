@@ -21,7 +21,7 @@ public class SuperclassConstructorInvocationNodeImpl extends ConstructorInvocati
 {
     /** The qualifying expression for the enclosing object. */
     private PrimaryExpressionNode qualifyingExpression;
-
+    
     /** General constructor. */
     public SuperclassConstructorInvocationNodeImpl(
             PrimaryExpressionNode qualifyingExpression,
@@ -34,7 +34,7 @@ public class SuperclassConstructorInvocationNodeImpl extends ConstructorInvocati
         super(arguments, typeArguments, startLocation, stopLocation, manager);
         setQualifyingExpression(qualifyingExpression);
     }
-
+    
     /**
      * Gets the qualifying expression for the enclosing object.
      * @return The qualifying expression for the enclosing object.
@@ -43,7 +43,7 @@ public class SuperclassConstructorInvocationNodeImpl extends ConstructorInvocati
     {
         return this.qualifyingExpression;
     }
-
+    
     /**
      * Changes the qualifying expression for the enclosing object.
      * @param qualifyingExpression The qualifying expression for the enclosing object.
@@ -60,7 +60,7 @@ public class SuperclassConstructorInvocationNodeImpl extends ConstructorInvocati
             ((NodeImpl)this.qualifyingExpression).setParent(this);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -77,7 +77,7 @@ public class SuperclassConstructorInvocationNodeImpl extends ConstructorInvocati
             this.qualifyingExpression.receive(visitor);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided typed visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -94,7 +94,7 @@ public class SuperclassConstructorInvocationNodeImpl extends ConstructorInvocati
             this.qualifyingExpression.receiveTyped(visitor);
         }
     }
-
+    
     @Override
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
@@ -110,7 +110,7 @@ public class SuperclassConstructorInvocationNodeImpl extends ConstructorInvocati
         visitor.visitSuperclassConstructorInvocationNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
-
+    
     /**
      * Produces a mutable list of this node's children.  Modifying this list will have no
      * effect on this node.
@@ -123,7 +123,7 @@ public class SuperclassConstructorInvocationNodeImpl extends ConstructorInvocati
         list.add(getQualifyingExpression());
         return list;
     }
-
+    
     /**
      * Obtains a human-readable description of this node.
      * @return A human-readable description of this node.
@@ -150,7 +150,7 @@ public class SuperclassConstructorInvocationNodeImpl extends ConstructorInvocati
         sb.append(']');
         return sb.toString();
     }
-
+    
     /**
      * Executes an operation on this node.
      * @param operation The operation to perform.
@@ -162,7 +162,7 @@ public class SuperclassConstructorInvocationNodeImpl extends ConstructorInvocati
     {
         return operation.executeSuperclassConstructorInvocationNode(this, p);
     }
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

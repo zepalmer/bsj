@@ -18,25 +18,25 @@ public interface AnnotationElementNode extends Node
      * @return The identifier.
      */
     public IdentifierNode getIdentifier();
-
+    
     /**
      * Changes the identifier.
      * @param identifier The identifier.
      */
     public void setIdentifier(IdentifierNode identifier);
-
+    
     /**
      * Gets the element's value.
      * @return The element's value.
      */
     public AnnotationValueNode getValue();
-
+    
     /**
      * Changes the element's value.
      * @param value The element's value.
      */
     public void setValue(AnnotationValueNode value);
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

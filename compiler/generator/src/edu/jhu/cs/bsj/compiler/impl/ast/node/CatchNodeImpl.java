@@ -20,10 +20,10 @@ public class CatchNodeImpl extends NodeImpl implements CatchNode
 {
     /** The block to execute when this catch occurs. */
     private BlockNode block;
-
+    
     /** This catch block's exception variable. */
     private VariableNode parameter;
-
+    
     /** General constructor. */
     public CatchNodeImpl(
             BlockNode block,
@@ -36,7 +36,7 @@ public class CatchNodeImpl extends NodeImpl implements CatchNode
         setBlock(block);
         setParameter(parameter);
     }
-
+    
     /**
      * Gets the block to execute when this catch occurs.
      * @return The block to execute when this catch occurs.
@@ -45,7 +45,7 @@ public class CatchNodeImpl extends NodeImpl implements CatchNode
     {
         return this.block;
     }
-
+    
     /**
      * Changes the block to execute when this catch occurs.
      * @param block The block to execute when this catch occurs.
@@ -62,7 +62,7 @@ public class CatchNodeImpl extends NodeImpl implements CatchNode
             ((NodeImpl)this.block).setParent(this);
         }
     }
-
+    
     /**
      * Gets this catch block's exception variable.
      * @return This catch block's exception variable.
@@ -71,7 +71,7 @@ public class CatchNodeImpl extends NodeImpl implements CatchNode
     {
         return this.parameter;
     }
-
+    
     /**
      * Changes this catch block's exception variable.
      * @param parameter This catch block's exception variable.
@@ -88,7 +88,7 @@ public class CatchNodeImpl extends NodeImpl implements CatchNode
             ((NodeImpl)this.parameter).setParent(this);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -109,7 +109,7 @@ public class CatchNodeImpl extends NodeImpl implements CatchNode
             this.parameter.receive(visitor);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided typed visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -130,7 +130,7 @@ public class CatchNodeImpl extends NodeImpl implements CatchNode
             this.parameter.receiveTyped(visitor);
         }
     }
-
+    
     @Override
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
@@ -144,7 +144,7 @@ public class CatchNodeImpl extends NodeImpl implements CatchNode
         visitor.visitCatchNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
-
+    
     /**
      * Produces a mutable list of this node's children.  Modifying this list will have no
      * effect on this node.
@@ -158,7 +158,7 @@ public class CatchNodeImpl extends NodeImpl implements CatchNode
         list.add(getParameter());
         return list;
     }
-
+    
     /**
      * Obtains a human-readable description of this node.
      * @return A human-readable description of this node.
@@ -182,7 +182,7 @@ public class CatchNodeImpl extends NodeImpl implements CatchNode
         sb.append(']');
         return sb.toString();
     }
-
+    
     /**
      * Executes an operation on this node.
      * @param operation The operation to perform.
@@ -194,7 +194,7 @@ public class CatchNodeImpl extends NodeImpl implements CatchNode
     {
         return operation.executeCatchNode(this, p);
     }
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

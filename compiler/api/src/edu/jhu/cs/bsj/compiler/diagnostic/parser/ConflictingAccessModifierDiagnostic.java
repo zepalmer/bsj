@@ -20,12 +20,12 @@ public class ConflictingAccessModifierDiagnostic<T extends javax.tools.JavaFileO
     private String secondModifier;
     
     public ConflictingAccessModifierDiagnostic(
-                long lineNumber,
-                long columnNumber,
-                T source,
-                String ruleName,
-                String firstModifier,
-                String secondModifier)
+            long lineNumber,
+            long columnNumber,
+            T source,
+            String ruleName,
+            String firstModifier,
+            String secondModifier)
     {
         super(lineNumber, columnNumber, source, CODE, Kind.ERROR, ruleName);
         this.firstModifier = firstModifier;

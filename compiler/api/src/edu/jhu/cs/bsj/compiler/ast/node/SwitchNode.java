@@ -21,25 +21,25 @@ public interface SwitchNode extends Node, StatementNode
      * @return The expression over which to switch.
      */
     public ExpressionNode getExpression();
-
+    
     /**
      * Changes the expression over which to switch.
      * @param expression The expression over which to switch.
      */
     public void setExpression(ExpressionNode expression);
-
+    
     /**
      * Gets the cases in this switch.
      * @return The cases in this switch.
      */
     public CaseListNode getCases();
-
+    
     /**
      * Changes the cases in this switch.
      * @param cases The cases in this switch.
      */
     public void setCases(CaseListNode cases);
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

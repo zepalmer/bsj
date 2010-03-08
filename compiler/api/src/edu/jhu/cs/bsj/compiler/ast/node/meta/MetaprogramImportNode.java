@@ -24,13 +24,13 @@ public interface MetaprogramImportNode extends Node
      * @return The import for the metaprogram.
      */
     public ImportNode getImportNode();
-
+    
     /**
      * Changes the import for the metaprogram.
      * @param importNode The import for the metaprogram.
      */
     public void setImportNode(ImportNode importNode);
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

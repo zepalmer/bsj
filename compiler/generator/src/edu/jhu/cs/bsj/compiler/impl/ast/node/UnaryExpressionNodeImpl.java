@@ -20,10 +20,10 @@ public class UnaryExpressionNodeImpl extends NodeImpl implements UnaryExpression
 {
     /** The expression on which to operate. */
     private ExpressionNode expression;
-
+    
     /** The operator to apply. */
     private UnaryOperator operator;
-
+    
     /** General constructor. */
     public UnaryExpressionNodeImpl(
             ExpressionNode expression,
@@ -36,7 +36,7 @@ public class UnaryExpressionNodeImpl extends NodeImpl implements UnaryExpression
         setExpression(expression);
         this.operator = operator;
     }
-
+    
     /**
      * Gets the expression on which to operate.
      * @return The expression on which to operate.
@@ -45,7 +45,7 @@ public class UnaryExpressionNodeImpl extends NodeImpl implements UnaryExpression
     {
         return this.expression;
     }
-
+    
     /**
      * Changes the expression on which to operate.
      * @param expression The expression on which to operate.
@@ -62,7 +62,7 @@ public class UnaryExpressionNodeImpl extends NodeImpl implements UnaryExpression
             ((NodeImpl)this.expression).setParent(this);
         }
     }
-
+    
     /**
      * Gets the operator to apply.
      * @return The operator to apply.
@@ -71,7 +71,7 @@ public class UnaryExpressionNodeImpl extends NodeImpl implements UnaryExpression
     {
         return this.operator;
     }
-
+    
     /**
      * Changes the operator to apply.
      * @param operator The operator to apply.
@@ -80,7 +80,7 @@ public class UnaryExpressionNodeImpl extends NodeImpl implements UnaryExpression
     {
         this.operator = operator;
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -97,7 +97,7 @@ public class UnaryExpressionNodeImpl extends NodeImpl implements UnaryExpression
             this.expression.receive(visitor);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided typed visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -114,7 +114,7 @@ public class UnaryExpressionNodeImpl extends NodeImpl implements UnaryExpression
             this.expression.receiveTyped(visitor);
         }
     }
-
+    
     @Override
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
@@ -130,7 +130,7 @@ public class UnaryExpressionNodeImpl extends NodeImpl implements UnaryExpression
         visitor.visitUnaryExpressionNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
-
+    
     /**
      * Produces a mutable list of this node's children.  Modifying this list will have no
      * effect on this node.
@@ -144,7 +144,7 @@ public class UnaryExpressionNodeImpl extends NodeImpl implements UnaryExpression
         list.add(getOperator());
         return list;
     }
-
+    
     /**
      * Obtains a human-readable description of this node.
      * @return A human-readable description of this node.
@@ -168,7 +168,7 @@ public class UnaryExpressionNodeImpl extends NodeImpl implements UnaryExpression
         sb.append(']');
         return sb.toString();
     }
-
+    
     /**
      * Executes an operation on this node.
      * @param operation The operation to perform.
@@ -180,7 +180,7 @@ public class UnaryExpressionNodeImpl extends NodeImpl implements UnaryExpression
     {
         return operation.executeUnaryExpressionNode(this, p);
     }
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

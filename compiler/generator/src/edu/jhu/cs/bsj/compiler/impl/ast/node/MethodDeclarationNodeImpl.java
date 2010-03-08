@@ -27,31 +27,31 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
 {
     /** The body of this method. */
     private BlockNode body;
-
+    
     /** The modifiers for this method. */
     private MethodModifiersNode modifiers;
-
+    
     /** This method's name. */
     private IdentifierNode identifier;
-
+    
     /** The parameters declared by this method. */
     private VariableListNode parameters;
-
+    
     /** The vararg parameter declared by this method. */
     private VariableNode varargParameter;
-
+    
     /** The type of value returned. */
     private TypeNode returnType;
-
+    
     /** The types of exceptions thrown by this method. */
     private UnparameterizedTypeListNode throwTypes;
-
+    
     /** This method's applicable type parameters. */
     private TypeParameterListNode typeParameters;
-
+    
     /** The associated javadoc comment for this node. */
     private JavadocNode javadoc;
-
+    
     /** General constructor. */
     public MethodDeclarationNodeImpl(
             BlockNode body,
@@ -78,7 +78,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
         setTypeParameters(typeParameters);
         setJavadoc(javadoc);
     }
-
+    
     /**
      * Gets the body of this method.
      * @return The body of this method.
@@ -87,7 +87,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
     {
         return this.body;
     }
-
+    
     /**
      * Changes the body of this method.
      * @param body The body of this method.
@@ -104,7 +104,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
             ((NodeImpl)this.body).setParent(this);
         }
     }
-
+    
     /**
      * Gets the modifiers for this method.
      * @return The modifiers for this method.
@@ -113,7 +113,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
     {
         return this.modifiers;
     }
-
+    
     /**
      * Changes the modifiers for this method.
      * @param modifiers The modifiers for this method.
@@ -130,7 +130,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
             ((NodeImpl)this.modifiers).setParent(this);
         }
     }
-
+    
     /**
      * Gets this method's name.
      * @return This method's name.
@@ -139,7 +139,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
     {
         return this.identifier;
     }
-
+    
     /**
      * Changes this method's name.
      * @param identifier This method's name.
@@ -156,7 +156,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
             ((NodeImpl)this.identifier).setParent(this);
         }
     }
-
+    
     /**
      * Gets the parameters declared by this method.
      * @return The parameters declared by this method.
@@ -165,7 +165,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
     {
         return this.parameters;
     }
-
+    
     /**
      * Changes the parameters declared by this method.
      * @param parameters The parameters declared by this method.
@@ -182,7 +182,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
             ((NodeImpl)this.parameters).setParent(this);
         }
     }
-
+    
     /**
      * Gets the vararg parameter declared by this method.
      * @return The vararg parameter declared by this method.
@@ -191,7 +191,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
     {
         return this.varargParameter;
     }
-
+    
     /**
      * Changes the vararg parameter declared by this method.
      * @param varargParameter The vararg parameter declared by this method.
@@ -208,7 +208,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
             ((NodeImpl)this.varargParameter).setParent(this);
         }
     }
-
+    
     /**
      * Gets the type of value returned.
      * @return The type of value returned.
@@ -217,7 +217,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
     {
         return this.returnType;
     }
-
+    
     /**
      * Changes the type of value returned.
      * @param returnType The type of value returned.
@@ -234,7 +234,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
             ((NodeImpl)this.returnType).setParent(this);
         }
     }
-
+    
     /**
      * Gets the types of exceptions thrown by this method.
      * @return The types of exceptions thrown by this method.
@@ -243,7 +243,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
     {
         return this.throwTypes;
     }
-
+    
     /**
      * Changes the types of exceptions thrown by this method.
      * @param throwTypes The types of exceptions thrown by this method.
@@ -260,7 +260,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
             ((NodeImpl)this.throwTypes).setParent(this);
         }
     }
-
+    
     /**
      * Gets this method's applicable type parameters.
      * @return This method's applicable type parameters.
@@ -269,7 +269,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
     {
         return this.typeParameters;
     }
-
+    
     /**
      * Changes this method's applicable type parameters.
      * @param typeParameters This method's applicable type parameters.
@@ -286,7 +286,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
             ((NodeImpl)this.typeParameters).setParent(this);
         }
     }
-
+    
     /**
      * Gets the associated javadoc comment for this node.
      * @return The associated javadoc comment for this node.
@@ -295,7 +295,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
     {
         return this.javadoc;
     }
-
+    
     /**
      * Changes the associated javadoc comment for this node.
      * @param javadoc The associated javadoc comment for this node.
@@ -312,7 +312,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
             ((NodeImpl)this.javadoc).setParent(this);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -361,7 +361,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
             this.javadoc.receive(visitor);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided typed visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -410,7 +410,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
             this.javadoc.receiveTyped(visitor);
         }
     }
-
+    
     @Override
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
@@ -430,7 +430,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
         visitor.visitMethodDeclarationNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
-
+    
     /**
      * Produces a mutable list of this node's children.  Modifying this list will have no
      * effect on this node.
@@ -451,7 +451,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
         list.add(getJavadoc());
         return list;
     }
-
+    
     /**
      * Obtains a human-readable description of this node.
      * @return A human-readable description of this node.
@@ -496,7 +496,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
         sb.append(']');
         return sb.toString();
     }
-
+    
     /**
      * Executes an operation on this node.
      * @param operation The operation to perform.
@@ -508,7 +508,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
     {
         return operation.executeMethodDeclarationNode(this, p);
     }
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

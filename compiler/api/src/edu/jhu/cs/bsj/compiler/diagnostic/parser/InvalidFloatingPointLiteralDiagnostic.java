@@ -14,13 +14,13 @@ public abstract class InvalidFloatingPointLiteralDiagnostic<T extends javax.tool
     private String literalText;
     
     public InvalidFloatingPointLiteralDiagnostic(
-                long lineNumber,
-                long columnNumber,
-                T source,
-                String code,
-                javax.tools.Diagnostic.Kind kind,
-                String ruleName,
-                String literalText)
+            long lineNumber,
+            long columnNumber,
+            T source,
+            String code,
+            javax.tools.Diagnostic.Kind kind,
+            String ruleName,
+            String literalText)
     {
         super(lineNumber, columnNumber, source, code, kind, ruleName);
         this.literalText = literalText;

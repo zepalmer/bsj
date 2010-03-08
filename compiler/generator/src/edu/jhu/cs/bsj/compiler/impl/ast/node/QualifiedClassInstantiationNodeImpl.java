@@ -23,13 +23,13 @@ public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeI
 {
     /** The expression enclosing the non-static inner class. */
     private ExpressionNode enclosingExpression;
-
+    
     /** The name of the class being instantiated. */
     private IdentifierNode identifier;
-
+    
     /** The type arguments to apply to the class being instantiated. */
     private TypeArgumentListNode typeArguments;
-
+    
     /** General constructor. */
     public QualifiedClassInstantiationNodeImpl(
             ExpressionNode enclosingExpression,
@@ -47,7 +47,7 @@ public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeI
         setIdentifier(identifier);
         setTypeArguments(typeArguments);
     }
-
+    
     /**
      * Gets the expression enclosing the non-static inner class.
      * @return The expression enclosing the non-static inner class.
@@ -56,7 +56,7 @@ public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeI
     {
         return this.enclosingExpression;
     }
-
+    
     /**
      * Changes the expression enclosing the non-static inner class.
      * @param enclosingExpression The expression enclosing the non-static inner class.
@@ -73,7 +73,7 @@ public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeI
             ((NodeImpl)this.enclosingExpression).setParent(this);
         }
     }
-
+    
     /**
      * Gets the name of the class being instantiated.
      * @return The name of the class being instantiated.
@@ -82,7 +82,7 @@ public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeI
     {
         return this.identifier;
     }
-
+    
     /**
      * Changes the name of the class being instantiated.
      * @param identifier The name of the class being instantiated.
@@ -99,7 +99,7 @@ public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeI
             ((NodeImpl)this.identifier).setParent(this);
         }
     }
-
+    
     /**
      * Gets the type arguments to apply to the class being instantiated.
      * @return The type arguments to apply to the class being instantiated.
@@ -108,7 +108,7 @@ public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeI
     {
         return this.typeArguments;
     }
-
+    
     /**
      * Changes the type arguments to apply to the class being instantiated.
      * @param typeArguments The type arguments to apply to the class being instantiated.
@@ -125,7 +125,7 @@ public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeI
             ((NodeImpl)this.typeArguments).setParent(this);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -150,7 +150,7 @@ public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeI
             this.typeArguments.receive(visitor);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided typed visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -175,7 +175,7 @@ public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeI
             this.typeArguments.receiveTyped(visitor);
         }
     }
-
+    
     @Override
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
@@ -191,7 +191,7 @@ public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeI
         visitor.visitQualifiedClassInstantiationNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
-
+    
     /**
      * Produces a mutable list of this node's children.  Modifying this list will have no
      * effect on this node.
@@ -206,7 +206,7 @@ public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeI
         list.add(getTypeArguments());
         return list;
     }
-
+    
     /**
      * Obtains a human-readable description of this node.
      * @return A human-readable description of this node.
@@ -242,7 +242,7 @@ public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeI
         sb.append(']');
         return sb.toString();
     }
-
+    
     /**
      * Executes an operation on this node.
      * @param operation The operation to perform.
@@ -254,7 +254,7 @@ public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeI
     {
         return operation.executeQualifiedClassInstantiationNode(this, p);
     }
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

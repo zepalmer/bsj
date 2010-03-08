@@ -26,28 +26,28 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
 {
     /** The identifier for the name of this constructor. */
     private IdentifierNode identifier;
-
+    
     /** The body of this constructor. */
     private ConstructorBodyNode body;
-
+    
     /** The modifiers for this constructor. */
     private ConstructorModifiersNode modifiers;
-
+    
     /** The parameters declared by this constructor. */
     private VariableListNode parameters;
-
+    
     /** The vararg parameter declared by this method. */
     private VariableNode varargParameter;
-
+    
     /** The types of exceptions thrown by this constructor. */
     private UnparameterizedTypeListNode throwTypes;
-
+    
     /** This constructor's applicable type parameters. */
     private TypeParameterListNode typeParameters;
-
+    
     /** The associated javadoc comment for this node. */
     private JavadocNode javadoc;
-
+    
     /** General constructor. */
     public ConstructorDeclarationNodeImpl(
             IdentifierNode identifier,
@@ -72,7 +72,7 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
         setTypeParameters(typeParameters);
         setJavadoc(javadoc);
     }
-
+    
     /**
      * Gets the identifier for the name of this constructor.
      * @return The identifier for the name of this constructor.
@@ -81,7 +81,7 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
     {
         return this.identifier;
     }
-
+    
     /**
      * Changes the identifier for the name of this constructor.
      * @param identifier The identifier for the name of this constructor.
@@ -98,7 +98,7 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
             ((NodeImpl)this.identifier).setParent(this);
         }
     }
-
+    
     /**
      * Gets the body of this constructor.
      * @return The body of this constructor.
@@ -107,7 +107,7 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
     {
         return this.body;
     }
-
+    
     /**
      * Changes the body of this constructor.
      * @param body The body of this constructor.
@@ -124,7 +124,7 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
             ((NodeImpl)this.body).setParent(this);
         }
     }
-
+    
     /**
      * Gets the modifiers for this constructor.
      * @return The modifiers for this constructor.
@@ -133,7 +133,7 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
     {
         return this.modifiers;
     }
-
+    
     /**
      * Changes the modifiers for this constructor.
      * @param modifiers The modifiers for this constructor.
@@ -150,7 +150,7 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
             ((NodeImpl)this.modifiers).setParent(this);
         }
     }
-
+    
     /**
      * Gets the parameters declared by this constructor.
      * @return The parameters declared by this constructor.
@@ -159,7 +159,7 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
     {
         return this.parameters;
     }
-
+    
     /**
      * Changes the parameters declared by this constructor.
      * @param parameters The parameters declared by this constructor.
@@ -176,7 +176,7 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
             ((NodeImpl)this.parameters).setParent(this);
         }
     }
-
+    
     /**
      * Gets the vararg parameter declared by this method.
      * @return The vararg parameter declared by this method.
@@ -185,7 +185,7 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
     {
         return this.varargParameter;
     }
-
+    
     /**
      * Changes the vararg parameter declared by this method.
      * @param varargParameter The vararg parameter declared by this method.
@@ -202,7 +202,7 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
             ((NodeImpl)this.varargParameter).setParent(this);
         }
     }
-
+    
     /**
      * Gets the types of exceptions thrown by this constructor.
      * @return The types of exceptions thrown by this constructor.
@@ -211,7 +211,7 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
     {
         return this.throwTypes;
     }
-
+    
     /**
      * Changes the types of exceptions thrown by this constructor.
      * @param throwTypes The types of exceptions thrown by this constructor.
@@ -228,7 +228,7 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
             ((NodeImpl)this.throwTypes).setParent(this);
         }
     }
-
+    
     /**
      * Gets this constructor's applicable type parameters.
      * @return This constructor's applicable type parameters.
@@ -237,7 +237,7 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
     {
         return this.typeParameters;
     }
-
+    
     /**
      * Changes this constructor's applicable type parameters.
      * @param typeParameters This constructor's applicable type parameters.
@@ -254,7 +254,7 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
             ((NodeImpl)this.typeParameters).setParent(this);
         }
     }
-
+    
     /**
      * Gets the associated javadoc comment for this node.
      * @return The associated javadoc comment for this node.
@@ -263,7 +263,7 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
     {
         return this.javadoc;
     }
-
+    
     /**
      * Changes the associated javadoc comment for this node.
      * @param javadoc The associated javadoc comment for this node.
@@ -280,7 +280,7 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
             ((NodeImpl)this.javadoc).setParent(this);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -325,7 +325,7 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
             this.javadoc.receive(visitor);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided typed visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -370,7 +370,7 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
             this.javadoc.receiveTyped(visitor);
         }
     }
-
+    
     @Override
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
@@ -386,7 +386,7 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
         visitor.visitConstructorDeclarationNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
-
+    
     /**
      * Produces a mutable list of this node's children.  Modifying this list will have no
      * effect on this node.
@@ -406,7 +406,7 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
         list.add(getJavadoc());
         return list;
     }
-
+    
     /**
      * Obtains a human-readable description of this node.
      * @return A human-readable description of this node.
@@ -448,7 +448,7 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
         sb.append(']');
         return sb.toString();
     }
-
+    
     /**
      * Executes an operation on this node.
      * @param operation The operation to perform.
@@ -460,7 +460,7 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
     {
         return operation.executeConstructorDeclarationNode(this, p);
     }
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

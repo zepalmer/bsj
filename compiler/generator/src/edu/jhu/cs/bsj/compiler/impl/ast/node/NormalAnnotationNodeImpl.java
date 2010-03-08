@@ -20,7 +20,7 @@ public class NormalAnnotationNodeImpl extends AnnotationNodeImpl implements Norm
 {
     /** The arguments. */
     private AnnotationElementListNode arguments;
-
+    
     /** General constructor. */
     public NormalAnnotationNodeImpl(
             AnnotationElementListNode arguments,
@@ -32,7 +32,7 @@ public class NormalAnnotationNodeImpl extends AnnotationNodeImpl implements Norm
         super(annotationType, startLocation, stopLocation, manager);
         setArguments(arguments);
     }
-
+    
     /**
      * Gets the arguments.
      * @return The arguments.
@@ -41,7 +41,7 @@ public class NormalAnnotationNodeImpl extends AnnotationNodeImpl implements Norm
     {
         return this.arguments;
     }
-
+    
     /**
      * Changes the arguments.
      * @param arguments The arguments.
@@ -58,7 +58,7 @@ public class NormalAnnotationNodeImpl extends AnnotationNodeImpl implements Norm
             ((NodeImpl)this.arguments).setParent(this);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -75,7 +75,7 @@ public class NormalAnnotationNodeImpl extends AnnotationNodeImpl implements Norm
             this.arguments.receive(visitor);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided typed visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -92,7 +92,7 @@ public class NormalAnnotationNodeImpl extends AnnotationNodeImpl implements Norm
             this.arguments.receiveTyped(visitor);
         }
     }
-
+    
     @Override
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
@@ -108,7 +108,7 @@ public class NormalAnnotationNodeImpl extends AnnotationNodeImpl implements Norm
         visitor.visitNormalAnnotationNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
-
+    
     /**
      * Produces a mutable list of this node's children.  Modifying this list will have no
      * effect on this node.
@@ -121,7 +121,7 @@ public class NormalAnnotationNodeImpl extends AnnotationNodeImpl implements Norm
         list.add(getArguments());
         return list;
     }
-
+    
     /**
      * Obtains a human-readable description of this node.
      * @return A human-readable description of this node.
@@ -145,7 +145,7 @@ public class NormalAnnotationNodeImpl extends AnnotationNodeImpl implements Norm
         sb.append(']');
         return sb.toString();
     }
-
+    
     /**
      * Executes an operation on this node.
      * @param operation The operation to perform.
@@ -157,7 +157,7 @@ public class NormalAnnotationNodeImpl extends AnnotationNodeImpl implements Norm
     {
         return operation.executeNormalAnnotationNode(this, p);
     }
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

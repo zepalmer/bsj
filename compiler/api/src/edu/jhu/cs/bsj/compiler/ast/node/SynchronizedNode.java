@@ -20,25 +20,25 @@ public interface SynchronizedNode extends Node, StatementNode
      * @return The synchronization expression.
      */
     public ExpressionNode getExpression();
-
+    
     /**
      * Changes the synchronization expression.
      * @param expression The synchronization expression.
      */
     public void setExpression(ExpressionNode expression);
-
+    
     /**
      * Gets the block of statements to synchronize.
      * @return The block of statements to synchronize.
      */
     public BlockNode getBlock();
-
+    
     /**
      * Changes the block of statements to synchronize.
      * @param block The block of statements to synchronize.
      */
     public void setBlock(BlockNode block);
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

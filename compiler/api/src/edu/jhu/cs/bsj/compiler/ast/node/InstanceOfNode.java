@@ -18,25 +18,25 @@ public interface InstanceOfNode extends Node, NonAssignmentExpressionNode
      * @return The expression being evaluated.
      */
     public ExpressionNode getExpression();
-
+    
     /**
      * Changes the expression being evaluated.
      * @param expression The expression being evaluated.
      */
     public void setExpression(ExpressionNode expression);
-
+    
     /**
      * Gets the type being checked.
      * @return The type being checked.
      */
     public TypeNode getType();
-
+    
     /**
      * Changes the type being checked.
      * @param type The type being checked.
      */
     public void setType(TypeNode type);
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

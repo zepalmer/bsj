@@ -20,10 +20,10 @@ public class ParameterizedTypeNodeImpl extends NodeImpl implements Parameterized
 {
     /** The base type being parameterized. */
     private UnparameterizedTypeNode baseType;
-
+    
     /** The type arguments for this node. */
     private TypeArgumentListNode typeArguments;
-
+    
     /** General constructor. */
     public ParameterizedTypeNodeImpl(
             UnparameterizedTypeNode baseType,
@@ -36,7 +36,7 @@ public class ParameterizedTypeNodeImpl extends NodeImpl implements Parameterized
         setBaseType(baseType);
         setTypeArguments(typeArguments);
     }
-
+    
     /**
      * Gets the base type being parameterized.
      * @return The base type being parameterized.
@@ -45,7 +45,7 @@ public class ParameterizedTypeNodeImpl extends NodeImpl implements Parameterized
     {
         return this.baseType;
     }
-
+    
     /**
      * Changes the base type being parameterized.
      * @param baseType The base type being parameterized.
@@ -62,7 +62,7 @@ public class ParameterizedTypeNodeImpl extends NodeImpl implements Parameterized
             ((NodeImpl)this.baseType).setParent(this);
         }
     }
-
+    
     /**
      * Gets the type arguments for this node.
      * @return The type arguments for this node.
@@ -71,7 +71,7 @@ public class ParameterizedTypeNodeImpl extends NodeImpl implements Parameterized
     {
         return this.typeArguments;
     }
-
+    
     /**
      * Changes the type arguments for this node.
      * @param typeArguments The type arguments for this node.
@@ -88,7 +88,7 @@ public class ParameterizedTypeNodeImpl extends NodeImpl implements Parameterized
             ((NodeImpl)this.typeArguments).setParent(this);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -109,7 +109,7 @@ public class ParameterizedTypeNodeImpl extends NodeImpl implements Parameterized
             this.typeArguments.receive(visitor);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided typed visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -130,7 +130,7 @@ public class ParameterizedTypeNodeImpl extends NodeImpl implements Parameterized
             this.typeArguments.receiveTyped(visitor);
         }
     }
-
+    
     @Override
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
@@ -146,7 +146,7 @@ public class ParameterizedTypeNodeImpl extends NodeImpl implements Parameterized
         visitor.visitParameterizedTypeNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
-
+    
     /**
      * Produces a mutable list of this node's children.  Modifying this list will have no
      * effect on this node.
@@ -160,7 +160,7 @@ public class ParameterizedTypeNodeImpl extends NodeImpl implements Parameterized
         list.add(getTypeArguments());
         return list;
     }
-
+    
     /**
      * Obtains a human-readable description of this node.
      * @return A human-readable description of this node.
@@ -184,7 +184,7 @@ public class ParameterizedTypeNodeImpl extends NodeImpl implements Parameterized
         sb.append(']');
         return sb.toString();
     }
-
+    
     /**
      * Executes an operation on this node.
      * @param operation The operation to perform.
@@ -196,7 +196,7 @@ public class ParameterizedTypeNodeImpl extends NodeImpl implements Parameterized
     {
         return operation.executeParameterizedTypeNode(this, p);
     }
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

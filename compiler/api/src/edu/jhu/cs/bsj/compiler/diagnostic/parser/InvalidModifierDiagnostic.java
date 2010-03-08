@@ -17,11 +17,11 @@ public class InvalidModifierDiagnostic<T extends javax.tools.JavaFileObject> ext
     private String modifier;
     
     public InvalidModifierDiagnostic(
-                long lineNumber,
-                long columnNumber,
-                T source,
-                String ruleName,
-                String modifier)
+            long lineNumber,
+            long columnNumber,
+            T source,
+            String ruleName,
+            String modifier)
     {
         super(lineNumber, columnNumber, source, CODE, Kind.ERROR, ruleName);
         this.modifier = modifier;

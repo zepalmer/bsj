@@ -19,25 +19,25 @@ public interface CatchNode extends Node
      * @return The block to execute when this catch occurs.
      */
     public BlockNode getBlock();
-
+    
     /**
      * Changes the block to execute when this catch occurs.
      * @param block The block to execute when this catch occurs.
      */
     public void setBlock(BlockNode block);
-
+    
     /**
      * Gets this catch block's exception variable.
      * @return This catch block's exception variable.
      */
     public VariableNode getParameter();
-
+    
     /**
      * Changes this catch block's exception variable.
      * @param parameter This catch block's exception variable.
      */
     public void setParameter(VariableNode parameter);
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

@@ -19,7 +19,7 @@ public class FieldAccessByNameNodeImpl extends NodeImpl implements FieldAccessBy
 {
     /** The name of the field to access. */
     private NameNode name;
-
+    
     /** General constructor. */
     public FieldAccessByNameNodeImpl(
             NameNode name,
@@ -30,7 +30,7 @@ public class FieldAccessByNameNodeImpl extends NodeImpl implements FieldAccessBy
         super(startLocation, stopLocation, manager);
         setName(name);
     }
-
+    
     /**
      * Gets the name of the field to access.
      * @return The name of the field to access.
@@ -39,7 +39,7 @@ public class FieldAccessByNameNodeImpl extends NodeImpl implements FieldAccessBy
     {
         return this.name;
     }
-
+    
     /**
      * Changes the name of the field to access.
      * @param name The name of the field to access.
@@ -56,7 +56,7 @@ public class FieldAccessByNameNodeImpl extends NodeImpl implements FieldAccessBy
             ((NodeImpl)this.name).setParent(this);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -73,7 +73,7 @@ public class FieldAccessByNameNodeImpl extends NodeImpl implements FieldAccessBy
             this.name.receive(visitor);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided typed visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -90,7 +90,7 @@ public class FieldAccessByNameNodeImpl extends NodeImpl implements FieldAccessBy
             this.name.receiveTyped(visitor);
         }
     }
-
+    
     @Override
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
@@ -106,7 +106,7 @@ public class FieldAccessByNameNodeImpl extends NodeImpl implements FieldAccessBy
         visitor.visitFieldAccessByNameNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
-
+    
     /**
      * Produces a mutable list of this node's children.  Modifying this list will have no
      * effect on this node.
@@ -119,7 +119,7 @@ public class FieldAccessByNameNodeImpl extends NodeImpl implements FieldAccessBy
         list.add(getName());
         return list;
     }
-
+    
     /**
      * Obtains a human-readable description of this node.
      * @return A human-readable description of this node.
@@ -140,7 +140,7 @@ public class FieldAccessByNameNodeImpl extends NodeImpl implements FieldAccessBy
         sb.append(']');
         return sb.toString();
     }
-
+    
     /**
      * Executes an operation on this node.
      * @param operation The operation to perform.
@@ -152,7 +152,7 @@ public class FieldAccessByNameNodeImpl extends NodeImpl implements FieldAccessBy
     {
         return operation.executeFieldAccessByNameNode(this, p);
     }
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

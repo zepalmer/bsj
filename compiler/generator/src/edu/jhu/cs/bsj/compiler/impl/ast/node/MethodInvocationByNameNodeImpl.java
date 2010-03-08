@@ -21,7 +21,7 @@ public class MethodInvocationByNameNodeImpl extends MethodInvocationNodeImpl imp
 {
     /** The name of the method to invoke. */
     private NameNode name;
-
+    
     /** General constructor. */
     public MethodInvocationByNameNodeImpl(
             NameNode name,
@@ -34,7 +34,7 @@ public class MethodInvocationByNameNodeImpl extends MethodInvocationNodeImpl imp
         super(arguments, typeArguments, startLocation, stopLocation, manager);
         setName(name);
     }
-
+    
     /**
      * Gets the name of the method to invoke.
      * @return The name of the method to invoke.
@@ -43,7 +43,7 @@ public class MethodInvocationByNameNodeImpl extends MethodInvocationNodeImpl imp
     {
         return this.name;
     }
-
+    
     /**
      * Changes the name of the method to invoke.
      * @param name The name of the method to invoke.
@@ -60,7 +60,7 @@ public class MethodInvocationByNameNodeImpl extends MethodInvocationNodeImpl imp
             ((NodeImpl)this.name).setParent(this);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -77,7 +77,7 @@ public class MethodInvocationByNameNodeImpl extends MethodInvocationNodeImpl imp
             this.name.receive(visitor);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided typed visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -94,7 +94,7 @@ public class MethodInvocationByNameNodeImpl extends MethodInvocationNodeImpl imp
             this.name.receiveTyped(visitor);
         }
     }
-
+    
     @Override
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
@@ -110,7 +110,7 @@ public class MethodInvocationByNameNodeImpl extends MethodInvocationNodeImpl imp
         visitor.visitMethodInvocationByNameNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
-
+    
     /**
      * Produces a mutable list of this node's children.  Modifying this list will have no
      * effect on this node.
@@ -123,7 +123,7 @@ public class MethodInvocationByNameNodeImpl extends MethodInvocationNodeImpl imp
         list.add(getName());
         return list;
     }
-
+    
     /**
      * Obtains a human-readable description of this node.
      * @return A human-readable description of this node.
@@ -150,7 +150,7 @@ public class MethodInvocationByNameNodeImpl extends MethodInvocationNodeImpl imp
         sb.append(']');
         return sb.toString();
     }
-
+    
     /**
      * Executes an operation on this node.
      * @param operation The operation to perform.
@@ -162,7 +162,7 @@ public class MethodInvocationByNameNodeImpl extends MethodInvocationNodeImpl imp
     {
         return operation.executeMethodInvocationByNameNode(this, p);
     }
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

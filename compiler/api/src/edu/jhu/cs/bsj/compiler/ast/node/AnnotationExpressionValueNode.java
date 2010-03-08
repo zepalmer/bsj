@@ -15,13 +15,13 @@ public interface AnnotationExpressionValueNode extends Node, AnnotationValueNode
      * @return The expression.
      */
     public NonAssignmentExpressionNode getExpression();
-
+    
     /**
      * Changes the expression.
      * @param expression The expression.
      */
     public void setExpression(NonAssignmentExpressionNode expression);
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

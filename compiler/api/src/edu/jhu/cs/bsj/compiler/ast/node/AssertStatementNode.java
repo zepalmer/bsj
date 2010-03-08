@@ -22,25 +22,25 @@ public interface AssertStatementNode extends Node, StatementNode
      * @return The assertion's test expression.
      */
     public ExpressionNode getTestExpression();
-
+    
     /**
      * Changes the assertion's test expression.
      * @param testExpression The assertion's test expression.
      */
     public void setTestExpression(ExpressionNode testExpression);
-
+    
     /**
      * Gets the assertion's message expression.
      * @return The assertion's message expression.
      */
     public ExpressionNode getMessageExpression();
-
+    
     /**
      * Changes the assertion's message expression.
      * @param messageExpression The assertion's message expression.
      */
     public void setMessageExpression(ExpressionNode messageExpression);
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

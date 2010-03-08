@@ -19,7 +19,7 @@ public class ExpressionStatementNodeImpl extends NodeImpl implements ExpressionS
 {
     /** This statement's expression. */
     private StatementExpressionNode expression;
-
+    
     /** General constructor. */
     public ExpressionStatementNodeImpl(
             StatementExpressionNode expression,
@@ -30,7 +30,7 @@ public class ExpressionStatementNodeImpl extends NodeImpl implements ExpressionS
         super(startLocation, stopLocation, manager);
         setExpression(expression);
     }
-
+    
     /**
      * Gets this statement's expression.
      * @return This statement's expression.
@@ -39,7 +39,7 @@ public class ExpressionStatementNodeImpl extends NodeImpl implements ExpressionS
     {
         return this.expression;
     }
-
+    
     /**
      * Changes this statement's expression.
      * @param expression This statement's expression.
@@ -56,7 +56,7 @@ public class ExpressionStatementNodeImpl extends NodeImpl implements ExpressionS
             ((NodeImpl)this.expression).setParent(this);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -73,7 +73,7 @@ public class ExpressionStatementNodeImpl extends NodeImpl implements ExpressionS
             this.expression.receive(visitor);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided typed visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -90,7 +90,7 @@ public class ExpressionStatementNodeImpl extends NodeImpl implements ExpressionS
             this.expression.receiveTyped(visitor);
         }
     }
-
+    
     @Override
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
@@ -106,7 +106,7 @@ public class ExpressionStatementNodeImpl extends NodeImpl implements ExpressionS
         visitor.visitExpressionStatementNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
-
+    
     /**
      * Produces a mutable list of this node's children.  Modifying this list will have no
      * effect on this node.
@@ -119,7 +119,7 @@ public class ExpressionStatementNodeImpl extends NodeImpl implements ExpressionS
         list.add(getExpression());
         return list;
     }
-
+    
     /**
      * Obtains a human-readable description of this node.
      * @return A human-readable description of this node.
@@ -140,7 +140,7 @@ public class ExpressionStatementNodeImpl extends NodeImpl implements ExpressionS
         sb.append(']');
         return sb.toString();
     }
-
+    
     /**
      * Executes an operation on this node.
      * @param operation The operation to perform.
@@ -152,7 +152,7 @@ public class ExpressionStatementNodeImpl extends NodeImpl implements ExpressionS
     {
         return operation.executeExpressionStatementNode(this, p);
     }
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

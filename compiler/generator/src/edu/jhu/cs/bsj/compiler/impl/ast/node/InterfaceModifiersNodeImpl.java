@@ -20,13 +20,13 @@ public class InterfaceModifiersNodeImpl extends ModifiersNodeImpl implements Int
 {
     /** The access for the associated interface. */
     private AccessModifier access;
-
+    
     /** Whether or not the associated interface is static. */
     private boolean staticFlag;
-
+    
     /** Whether or not the associated interface uses strict floating-point. */
     private boolean strictfpFlag;
-
+    
     /** General constructor. */
     public InterfaceModifiersNodeImpl(
             AccessModifier access,
@@ -42,7 +42,7 @@ public class InterfaceModifiersNodeImpl extends ModifiersNodeImpl implements Int
         this.staticFlag = staticFlag;
         this.strictfpFlag = strictfpFlag;
     }
-
+    
     /**
      * Gets the access for the associated interface.
      * @return The access for the associated interface.
@@ -51,7 +51,7 @@ public class InterfaceModifiersNodeImpl extends ModifiersNodeImpl implements Int
     {
         return this.access;
     }
-
+    
     /**
      * Changes the access for the associated interface.
      * @param access The access for the associated interface.
@@ -60,7 +60,7 @@ public class InterfaceModifiersNodeImpl extends ModifiersNodeImpl implements Int
     {
         this.access = access;
     }
-
+    
     /**
      * Gets whether or not the associated interface is static.
      * @return Whether or not the associated interface is static.
@@ -69,7 +69,7 @@ public class InterfaceModifiersNodeImpl extends ModifiersNodeImpl implements Int
     {
         return this.staticFlag;
     }
-
+    
     /**
      * Changes whether or not the associated interface is static.
      * @param staticFlag Whether or not the associated interface is static.
@@ -78,7 +78,7 @@ public class InterfaceModifiersNodeImpl extends ModifiersNodeImpl implements Int
     {
         this.staticFlag = staticFlag;
     }
-
+    
     /**
      * Gets whether or not the associated interface uses strict floating-point.
      * @return Whether or not the associated interface uses strict floating-point.
@@ -87,7 +87,7 @@ public class InterfaceModifiersNodeImpl extends ModifiersNodeImpl implements Int
     {
         return this.strictfpFlag;
     }
-
+    
     /**
      * Changes whether or not the associated interface uses strict floating-point.
      * @param strictfpFlag Whether or not the associated interface uses strict floating-point.
@@ -96,7 +96,7 @@ public class InterfaceModifiersNodeImpl extends ModifiersNodeImpl implements Int
     {
         this.strictfpFlag = strictfpFlag;
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -109,7 +109,7 @@ public class InterfaceModifiersNodeImpl extends ModifiersNodeImpl implements Int
     {
         super.receiveToChildren(visitor);
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided typed visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -122,7 +122,7 @@ public class InterfaceModifiersNodeImpl extends ModifiersNodeImpl implements Int
     {
         super.receiveTypedToChildren(visitor);
     }
-
+    
     @Override
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
@@ -138,7 +138,7 @@ public class InterfaceModifiersNodeImpl extends ModifiersNodeImpl implements Int
         visitor.visitInterfaceModifiersNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
-
+    
     /**
      * Produces a mutable list of this node's children.  Modifying this list will have no
      * effect on this node.
@@ -153,7 +153,7 @@ public class InterfaceModifiersNodeImpl extends ModifiersNodeImpl implements Int
         list.add(getStrictfpFlag());
         return list;
     }
-
+    
     /**
      * Obtains a human-readable description of this node.
      * @return A human-readable description of this node.
@@ -183,7 +183,7 @@ public class InterfaceModifiersNodeImpl extends ModifiersNodeImpl implements Int
         sb.append(']');
         return sb.toString();
     }
-
+    
     /**
      * Executes an operation on this node.
      * @param operation The operation to perform.
@@ -195,7 +195,7 @@ public class InterfaceModifiersNodeImpl extends ModifiersNodeImpl implements Int
     {
         return operation.executeInterfaceModifiersNode(this, p);
     }
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

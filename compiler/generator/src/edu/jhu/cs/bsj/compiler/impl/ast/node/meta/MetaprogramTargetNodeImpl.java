@@ -20,7 +20,7 @@ public class MetaprogramTargetNodeImpl extends NodeImpl implements MetaprogramTa
 {
     /** The names of the metaprogram targets in which to participate. */
     private IdentifierListNode targets;
-
+    
     /** General constructor. */
     public MetaprogramTargetNodeImpl(
             IdentifierListNode targets,
@@ -31,7 +31,7 @@ public class MetaprogramTargetNodeImpl extends NodeImpl implements MetaprogramTa
         super(startLocation, stopLocation, manager);
         setTargets(targets);
     }
-
+    
     /**
      * Gets the names of the metaprogram targets in which to participate.
      * @return The names of the metaprogram targets in which to participate.
@@ -40,7 +40,7 @@ public class MetaprogramTargetNodeImpl extends NodeImpl implements MetaprogramTa
     {
         return this.targets;
     }
-
+    
     /**
      * Changes the names of the metaprogram targets in which to participate.
      * @param targets The names of the metaprogram targets in which to participate.
@@ -57,7 +57,7 @@ public class MetaprogramTargetNodeImpl extends NodeImpl implements MetaprogramTa
             ((NodeImpl)this.targets).setParent(this);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -74,7 +74,7 @@ public class MetaprogramTargetNodeImpl extends NodeImpl implements MetaprogramTa
             this.targets.receive(visitor);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided typed visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -91,7 +91,7 @@ public class MetaprogramTargetNodeImpl extends NodeImpl implements MetaprogramTa
             this.targets.receiveTyped(visitor);
         }
     }
-
+    
     @Override
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
@@ -105,7 +105,7 @@ public class MetaprogramTargetNodeImpl extends NodeImpl implements MetaprogramTa
         visitor.visitMetaprogramTargetNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
-
+    
     /**
      * Produces a mutable list of this node's children.  Modifying this list will have no
      * effect on this node.
@@ -118,7 +118,7 @@ public class MetaprogramTargetNodeImpl extends NodeImpl implements MetaprogramTa
         list.add(getTargets());
         return list;
     }
-
+    
     /**
      * Obtains a human-readable description of this node.
      * @return A human-readable description of this node.
@@ -139,7 +139,7 @@ public class MetaprogramTargetNodeImpl extends NodeImpl implements MetaprogramTa
         sb.append(']');
         return sb.toString();
     }
-
+    
     /**
      * Executes an operation on this node.
      * @param operation The operation to perform.
@@ -151,7 +151,7 @@ public class MetaprogramTargetNodeImpl extends NodeImpl implements MetaprogramTa
     {
         return operation.executeMetaprogramTargetNode(this, p);
     }
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

@@ -278,7 +278,7 @@ public class SourceGenerator
 	 * @param ps The stream to which to write the text.
 	 * @param props The properties to use as parameters.
 	 */
-	private static void printParameterList(PrintStream ps, List<PropertyDefinition> props)
+	private static void printParameterList(PrependablePrintStream ps, List<PropertyDefinition> props)
 	{
 		printParameterList(ps, props, false);
 	}
@@ -291,13 +291,14 @@ public class SourceGenerator
 	 * @param skipMake <code>true</code> to skip properties which are excluded from the factory's make call;
 	 *            <code>false</code> otherwise.
 	 */
-	private static void printParameterList(PrintStream ps, List<PropertyDefinition> props, boolean skipMake)
+	private static void printParameterList(PrependablePrintStream ps, List<PropertyDefinition> props, boolean skipMake)
 	{
 		boolean first = true;
 		ps.print("(");
 		if (props.size() > 0)
 		{
 			ps.println();
+			ps.incPrependCount(2);
 			for (PropertyDefinition p : props)
 			{
 				if (p.getMode() != PropertyDefinition.Mode.SKIP || !skipMake)
@@ -308,9 +309,10 @@ public class SourceGenerator
 					}
 					first = false;
 
-					ps.print("            " + p.getFullType() + " " + p.getName());
+					ps.print(p.getFullType() + " " + p.getName());
 				}
 			}
+			ps.decPrependCount(2);
 		}
 		ps.print(")");
 	}
@@ -448,7 +450,7 @@ public class SourceGenerator
 					+ pkg.replaceAll("\\.", File.separator) + File.separator + def.getBaseName() + ".java");
 			classFile.getParentFile().mkdirs();
 			FileOutputStream fos = new FileOutputStream(classFile);
-			PrintStream ps = new PrintStream(fos);
+			PrependablePrintStream ps = new PrependablePrintStream(fos, "    ", 0);
 			if (pkg.length() > 0)
 				ps.println("package " + pkg + ";");
 			ps.println("");
@@ -488,24 +490,26 @@ public class SourceGenerator
 			printGeneratedClause(ps);
 			ps.println("public interface " + def.getFullName() + extendsClause.toString());
 			ps.println("{");
+			ps.incPrependCount();
+
 			// gen getters and setters
 			for (PropertyDefinition p : def.getProperties())
 			{
 				if (!p.isHide())
 				{
-					ps.println("    /**");
-					ps.println("     * Gets " + p.getDescription() + ".");
-					ps.println("     * @return " + capFirst(p.getDescription()) + ".");
-					ps.println("     */");
-					ps.println("    public " + p.getFullType() + " get" + capFirst(p.getName()) + "();");
+					ps.println("/**");
+					ps.println(" * Gets " + p.getDescription() + ".");
+					ps.println(" * @return " + capFirst(p.getDescription()) + ".");
+					ps.println(" */");
+					ps.println("public " + p.getFullType() + " get" + capFirst(p.getName()) + "();");
 					ps.println();
 					if (!p.isReadOnly())
 					{
-						ps.println("    /**");
-						ps.println("     * Changes " + p.getDescription() + ".");
-						ps.println("     * @param " + p.getName() + " " + capFirst(p.getDescription()) + ".");
-						ps.println("     */");
-						ps.println("    public void set" + capFirst(p.getName()) + "(" + p.getFullType() + " "
+						ps.println("/**");
+						ps.println(" * Changes " + p.getDescription() + ".");
+						ps.println(" * @param " + p.getName() + " " + capFirst(p.getDescription()) + ".");
+						ps.println(" */");
+						ps.println("public void set" + capFirst(p.getName()) + "(" + p.getFullType() + " "
 								+ p.getName() + ");");
 						ps.println();
 					}
@@ -513,16 +517,17 @@ public class SourceGenerator
 			}
 
 			// write deep copy interface
-			ps.println("    /**");
-			ps.println("     * Generates a deep copy of this node.");
-			ps.println("     * @param factory The node factory to use to create the deep copy.");
-			ps.println("     * @return The resulting deep copy node.");
-			ps.println("     */");
+			ps.println("/**");
+			ps.println(" * Generates a deep copy of this node.");
+			ps.println(" * @param factory The node factory to use to create the deep copy.");
+			ps.println(" * @return The resulting deep copy node.");
+			ps.println(" */");
 			if (def.getBaseSuperName() != null)
-				ps.println("    @Override");
-			ps.println("    public " + def.getNameWithTypeParameters() + " deepCopy(BsjNodeFactory factory);");
+				ps.println("@Override");
+			ps.println("public " + def.getNameWithTypeParameters() + " deepCopy(BsjNodeFactory factory);");
 
 			// write bodies
+			ps.decPrependCount();
 			includeAllBodies(ps, def.getIncludes(), "nodes" + File.separator + "interface");
 			ps.println("}");
 		}
@@ -795,26 +800,27 @@ public class SourceGenerator
 					+ classname + (def.getBaseSuperName() == null ? "" : " extends " + superclassname) + " implements "
 					+ def.getNameWithTypeParameters());
 			ps.println("{");
+			ps.incPrependCount();
 
 			// gen properties
 			for (PropertyDefinition p : def.getResponsibleProperties(false))
 			{
-				ps.println("    /** " + capFirst(p.getDescription()) + ". */");
-				ps.println("    private " + p.getFullType() + " " + p.getName() + ";");
+				ps.println("/** " + capFirst(p.getDescription()) + ". */");
+				ps.println("private " + p.getFullType() + " " + p.getName() + ";");
 				ps.println();
 			}
 
 			// gen constructor
-			ps.println("    /** General constructor. */");
+			ps.println("/** General constructor. */");
 			if (!def.isGenConstructor())
 				ps.println("/* (not generating constructor)"); // nogen logic
-			ps.print("    " + (def.getMode() == TypeDefinition.Mode.CONCRETE ? "public" : "protected") + " "
-					+ rawclassname);
+			ps.print((def.getMode() == TypeDefinition.Mode.CONCRETE ? "public" : "protected") + " " + rawclassname);
 			List<PropertyDefinition> recProps = def.getRecursiveProperties();
 			printParameterList(ps, recProps);
 			ps.println();
-			ps.println("    {");
-			ps.print("        super");
+			ps.println("{");
+			ps.incPrependCount();
+			ps.print("super");
 			List<PropertyDefinition> superProps = new ArrayList<PropertyDefinition>(recProps);
 			superProps.removeAll(def.getResponsibleProperties(false));
 			printArgumentList(ps, superProps, def.getConstructorOverrideMap());
@@ -831,13 +837,14 @@ public class SourceGenerator
 				}
 				if (propInstanceOf(p.getBaseType(), "Node") && !p.isReadOnly())
 				{
-					ps.println("        set" + capFirst(p.getName()) + "(" + expr + ");");
+					ps.println("set" + capFirst(p.getName()) + "(" + expr + ");");
 				} else
 				{
-					ps.println("        this." + p.getName() + " = " + expr + ";");
+					ps.println("this." + p.getName() + " = " + expr + ";");
 				}
 			}
-			ps.println("    }");
+			ps.decPrependCount();
+			ps.println("}");
 			if (!def.isGenConstructor())
 				ps.print("*/"); // nogen logic
 			ps.println();
@@ -847,140 +854,145 @@ public class SourceGenerator
 			{
 				if (!p.isHide())
 				{
-					ps.println("    /**");
-					ps.println("     * Gets " + p.getDescription() + ".");
-					ps.println("     * @return " + capFirst(p.getDescription()) + ".");
-					ps.println("     */");
-					ps.println("    public " + p.getFullType() + " get" + capFirst(p.getName()) + "()");
-					ps.println("    {");
-					ps.println("        return this." + p.getName() + ";");
-					ps.println("    }");
+					ps.println("/**");
+					ps.println(" * Gets " + p.getDescription() + ".");
+					ps.println(" * @return " + capFirst(p.getDescription()) + ".");
+					ps.println(" */");
+					ps.println("public " + p.getFullType() + " get" + capFirst(p.getName()) + "()");
+					ps.println("{");
+					ps.println("    return this." + p.getName() + ";");
+					ps.println("}");
 					ps.println();
 					if (!p.isReadOnly())
 					{
-						ps.println("    /**");
-						ps.println("     * Changes " + p.getDescription() + ".");
-						ps.println("     * @param " + p.getName() + " " + capFirst(p.getDescription()) + ".");
-						ps.println("     */");
-						ps.println("    public void set" + capFirst(p.getName()) + "(" + p.getFullType() + " "
+						ps.println("/**");
+						ps.println(" * Changes " + p.getDescription() + ".");
+						ps.println(" * @param " + p.getName() + " " + capFirst(p.getDescription()) + ".");
+						ps.println(" */");
+						ps.println("public void set" + capFirst(p.getName()) + "(" + p.getFullType() + " "
 								+ p.getName() + ")");
-						ps.println("    {");
+						ps.println("{");
+						ps.incPrependCount();
 						if (propInstanceOf(p.getBaseType(), "Node"))
 						{
-							ps.println("        if (this." + p.getName() + " instanceof NodeImpl)");
-							ps.println("        {");
-							ps.println("            ((NodeImpl)this." + p.getName() + ").setParent(null);");
-							ps.println("        }");
+							ps.println("if (this." + p.getName() + " instanceof NodeImpl)");
+							ps.println("{");
+							ps.println("    ((NodeImpl)this." + p.getName() + ").setParent(null);");
+							ps.println("}");
 						}
-						ps.println("        this." + p.getName() + " = " + p.getName() + ";");
+						ps.println("this." + p.getName() + " = " + p.getName() + ";");
 						if (propInstanceOf(p.getBaseType(), "Node"))
 						{
-							ps.println("        if (this." + p.getName() + " instanceof NodeImpl)");
-							ps.println("        {");
-							ps.println("            ((NodeImpl)this." + p.getName() + ").setParent(this);");
-							ps.println("        }");
+							ps.println("if (this." + p.getName() + " instanceof NodeImpl)");
+							ps.println("{");
+							ps.println("    ((NodeImpl)this." + p.getName() + ").setParent(this);");
+							ps.println("}");
 						}
-						ps.println("    }");
+						ps.decPrependCount();
+						ps.println("}");
 						ps.println();
 					}
 				}
 			}
 
 			// add simple visitor implementation
-			ps.println("    /**");
-			ps.println("     * Handles the visitation of this node's children for the provided visitor.  Each");
-			ps.println("     * subclass should override this method, having the subclass implementation call this");
-			ps.println("     * method first and then visit its subclass-specific children.");
-			ps.println("     *");
-			ps.println("     * @param visitor The visitor to visit this node's children.");
-			ps.println("     */");
+			ps.println("/**");
+			ps.println(" * Handles the visitation of this node's children for the provided visitor.  Each");
+			ps.println(" * subclass should override this method, having the subclass implementation call this");
+			ps.println(" * method first and then visit its subclass-specific children.");
+			ps.println(" *");
+			ps.println(" * @param visitor The visitor to visit this node's children.");
+			ps.println(" */");
 			if (def.getBaseSuperName() != null)
 			{
-				ps.println("    @Override");
+				ps.println("@Override");
 			}
-			ps.println("    protected void receiveToChildren(BsjNodeVisitor visitor)");
-			ps.println("    {");
+			ps.println("protected void receiveToChildren(BsjNodeVisitor visitor)");
+			ps.println("{");
+			ps.incPrependCount();
 			if (def.getBaseSuperName() != null)
 			{
-				ps.println("        super.receiveToChildren(visitor);");
+				ps.println("super.receiveToChildren(visitor);");
 			}
 			for (PropertyDefinition p : def.getProperties())
 			{
 				if (propInstanceOf(p.getBaseType(), "Node"))
 				{
-					ps.println("        if (this." + p.getName() + " != null)");
-					ps.println("        {");
-					ps.println("            this." + p.getName() + ".receive(visitor);");
-					ps.println("        }");
+					ps.println("if (this." + p.getName() + " != null)");
+					ps.println("{");
+					ps.println("    this." + p.getName() + ".receive(visitor);");
+					ps.println("}");
 				} else if (p.getBaseType().equals("List"))
 				{
 					// Let's assume that the list contains node objects!
 					// TODO: this is pretty shoddy - can we improve on this?
-					ps.println("        if (this." + p.getName() + " != null)");
-					ps.println("        {");
-					ps.println("            for (Node node : this." + p.getName() + ")");
-					ps.println("            {");
-					ps.println("                node.receive(visitor);");
-					ps.println("            }");
-					ps.println("        }");
+					ps.println("if (this." + p.getName() + " != null)");
+					ps.println("{");
+					ps.println("    for (Node node : this." + p.getName() + ")");
+					ps.println("    {");
+					ps.println("        node.receive(visitor);");
+					ps.println("    }");
+					ps.println("}");
 				}
 			}
-			ps.println("    }");
+			ps.decPrependCount();
+			ps.println("}");
 			ps.println();
 
 			// add typed visitor implementation
-			ps.println("    /**");
-			ps.println("     * Handles the visitation of this node's children for the provided typed visitor.  Each");
-			ps.println("     * subclass should override this method, having the subclass implementation call this");
-			ps.println("     * method first and then visit its subclass-specific children.");
-			ps.println("     *");
-			ps.println("     * @param visitor The visitor to visit this node's children.");
-			ps.println("     */");
+			ps.println("/**");
+			ps.println(" * Handles the visitation of this node's children for the provided typed visitor.  Each");
+			ps.println(" * subclass should override this method, having the subclass implementation call this");
+			ps.println(" * method first and then visit its subclass-specific children.");
+			ps.println(" *");
+			ps.println(" * @param visitor The visitor to visit this node's children.");
+			ps.println(" */");
 			if (def.getBaseSuperName() != null)
 			{
-				ps.println("    @Override");
+				ps.println("@Override");
 			}
-			ps.println("    protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)");
-			ps.println("    {");
+			ps.println("protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)");
+			ps.println("{");
 			if (def.getBaseSuperName() != null)
 			{
-				ps.println("        super.receiveTypedToChildren(visitor);");
+				ps.println("    super.receiveTypedToChildren(visitor);");
 			}
 			for (PropertyDefinition p : def.getProperties())
 			{
 				if (propInstanceOf(p.getBaseType(), "Node"))
 				{
-					ps.println("        if (this." + p.getName() + " != null)");
-					ps.println("        {");
-					ps.println("            this." + p.getName() + ".receiveTyped(visitor);");
-					ps.println("        }");
+					ps.println("    if (this." + p.getName() + " != null)");
+					ps.println("    {");
+					ps.println("        this." + p.getName() + ".receiveTyped(visitor);");
+					ps.println("    }");
 				} else if (p.getBaseType().equals("List"))
 				{
 					// Let's assume that the list contains node objects!
 					// TODO: this is pretty shoddy - can we improve on this?
-					ps.println("        if (this." + p.getName() + " != null)");
+					ps.println("    if (this." + p.getName() + " != null)");
+					ps.println("    {");
+					ps.println("        for (Node node : this." + p.getName() + ")");
 					ps.println("        {");
-					ps.println("            for (Node node : this." + p.getName() + ")");
-					ps.println("            {");
-					ps.println("                node.receiveTyped(visitor);");
-					ps.println("            }");
+					ps.println("            node.receiveTyped(visitor);");
 					ps.println("        }");
+					ps.println("    }");
 				}
 			}
-			ps.println("    }");
+			ps.println("}");
 			ps.println();
 			if (def.getBaseSuperName() != null)
 			{
-				ps.println("    @Override");
+				ps.println("@Override");
 			}
-			ps.println("    public void receiveTyped(BsjTypedNodeVisitor visitor)");
-			ps.println("    {");
-			ps.println("        visitor.visitStartBegin(this);");
+			ps.println("public void receiveTyped(BsjTypedNodeVisitor visitor)");
+			ps.println("{");
+			ps.incPrependCount();
+			ps.println("visitor.visitStartBegin(this);");
 			TypeDefinition cur = def;
 			List<TypeDefinition> backtrack = new LinkedList<TypeDefinition>();
 			while (cur != null)
 			{
-				ps.print("        visitor.visit" + cur.getBaseName() + "Start(this");
+				ps.print("visitor.visit" + cur.getBaseName() + "Start(this");
 				if (cur.getMode() == TypeDefinition.Mode.CONCRETE)
 				{
 					ps.print(", ");
@@ -992,18 +1004,18 @@ public class SourceGenerator
 			}
 			for (TagReferenceDefinition tag : def.getTags())
 			{
-				ps.println("        visitor.visit" + tag.getName() + "Start(this);");
+				ps.println("visitor.visit" + tag.getName() + "Start(this);");
 			}
-			ps.println("        visitor.visitStartEnd(this);");
-			ps.println("        receiveTypedToChildren(visitor);");
-			ps.println("        visitor.visitStopBegin(this);");
+			ps.println("visitor.visitStartEnd(this);");
+			ps.println("receiveTypedToChildren(visitor);");
+			ps.println("visitor.visitStopBegin(this);");
 			for (TagReferenceDefinition tag : def.getTags())
 			{
-				ps.println("        visitor.visit" + tag.getName() + "Stop(this);");
+				ps.println("visitor.visit" + tag.getName() + "Stop(this);");
 			}
 			for (TypeDefinition edef : backtrack)
 			{
-				ps.print("        visitor.visit" + edef.getBaseName() + "Stop(this");
+				ps.print("visitor.visit" + edef.getBaseName() + "Stop(this");
 				if (edef.getMode() == TypeDefinition.Mode.CONCRETE)
 				{
 					ps.print(", ");
@@ -1011,59 +1023,60 @@ public class SourceGenerator
 				}
 				ps.println(");");
 			}
-			ps.println("        visitor.visitStopEnd(this);");
-			ps.println("    }");
+			ps.println("visitor.visitStopEnd(this);");
+			ps.decPrependCount();
+			ps.println("}");
 			ps.println();
 
 			// add logic for getting list of children
-			ps.println("    /**");
-			ps.println("     * Produces a mutable list of this node's children.  Modifying this list will have no");
-			ps.println("     * effect on this node.");
-			ps.println("     * @return A list of this node's children.");
-			ps.println("     */");
+			ps.println("/**");
+			ps.println(" * Produces a mutable list of this node's children.  Modifying this list will have no");
+			ps.println(" * effect on this node.");
+			ps.println(" * @return A list of this node's children.");
+			ps.println(" */");
 			if (!def.isGenChildren())
 				ps.println("/* // (not generating children)"); // nogen logic
 			if (def.getBaseSuperName() != null)
 			{
-				ps.println("    @Override");
+				ps.println("@Override");
 			}
-			ps.println("    public List<Object> getChildObjects()");
-			ps.println("    {");
-			ps.println("        List<Object> list = "
+			ps.println("public List<Object> getChildObjects()");
+			ps.println("{");
+			ps.println("    List<Object> list = "
 					+ (def.getBaseSuperName() == null ? "new ArrayList<Object>();" : "super.getChildObjects();"));
 			for (PropertyDefinition p : def.getProperties())
 			{
 				// special handling for startLocation and stopLocation
 				if (p.getName().equals("startLocation"))
 				{
-					ps.println("        list.add(getStartLocation().toString() + \" - \" + getStopLocation().toString());");
+					ps.println("    list.add(getStartLocation().toString() + \" - \" + getStopLocation().toString());");
 				} else if (p.getName().equals("stopLocation"))
 				{
 					// intentionally doing nothing - handling for startLocation covers this one as well
 				} else if (!p.isHide())
 				{
-					ps.println("        list.add(get" + Character.toUpperCase(p.getName().charAt(0))
+					ps.println("    list.add(get" + Character.toUpperCase(p.getName().charAt(0))
 							+ p.getName().substring(1) + "());");
 				}
 			}
-			ps.println("        return list;");
-			ps.println("    }");
+			ps.println("    return list;");
+			ps.println("}");
 			if (!def.isGenChildren())
 				ps.print("*/"); // nogen logic
 			ps.println();
 
 			// add logic for toString
-			ps.println("    /**");
-			ps.println("     * Obtains a human-readable description of this node.");
-			ps.println("     * @return A human-readable description of this node.");
-			ps.println("     */");
-			ps.println("    public String toString()");
-			ps.println("    {");
-			ps.println("        StringBuilder sb = new StringBuilder();");
+			ps.println("/**");
+			ps.println(" * Obtains a human-readable description of this node.");
+			ps.println(" * @return A human-readable description of this node.");
+			ps.println(" */");
+			ps.println("public String toString()");
+			ps.println("{");
+			ps.println("    StringBuilder sb = new StringBuilder();");
 			if (def.getToStringLines() == null || def.getToStringLines().size() == 0)
 			{
-				ps.println("        sb.append(this.getClass().getSimpleName());");
-				ps.println("        sb.append('[');");
+				ps.println("    sb.append(this.getClass().getSimpleName());");
+				ps.println("    sb.append('[');");
 				boolean firstProp = true;
 				for (PropertyDefinition p : recProps)
 				{
@@ -1074,13 +1087,13 @@ public class SourceGenerator
 						firstProp = false;
 					} else
 					{
-						ps.println("        sb.append(',');");
+						ps.println("    sb.append(',');");
 					}
 					String capName = Character.toUpperCase(p.getName().charAt(0)) + p.getName().substring(1);
-					ps.println("        sb.append(\"" + p.getName() + "=\");");
+					ps.println("    sb.append(\"" + p.getName() + "=\");");
 					if (propInstanceOf(p.getBaseType(), "Node"))
 					{
-						ps.println("        sb.append(this.get" + capName + "() == null? \"null\" : this.get" + capName
+						ps.println("    sb.append(this.get" + capName + "() == null? \"null\" : this.get" + capName
 								+ "().getClass().getSimpleName());");
 					} else
 					{
@@ -1093,36 +1106,36 @@ public class SourceGenerator
 							typeString = "this.get" + capName + "() != null ? this.get" + capName
 									+ "().getClass().getSimpleName() : \"null\"";
 						}
-						ps.println("        sb.append(String.valueOf(this.get" + capName + "()) + \":\" + ("
-								+ typeString + "));");
+						ps.println("    sb.append(String.valueOf(this.get" + capName + "()) + \":\" + (" + typeString
+								+ "));");
 					}
 				}
-				ps.println("        sb.append(']');");
+				ps.println("    sb.append(']');");
 			} else
 			{
 				for (String toStringLine : def.getToStringLines())
 				{
-					ps.println("        " + toStringLine);
+					ps.println("    " + toStringLine);
 				}
 			}
-			ps.println("        return sb.toString();");
-			ps.println("    }");
+			ps.println("    return sb.toString();");
+			ps.println("}");
 			ps.println();
 
 			// add node operation implementation
 			if (def.getMode() == TypeDefinition.Mode.CONCRETE)
 			{
-				ps.println("    /**");
-				ps.println("     * Executes an operation on this node.");
-				ps.println("     * @param operation The operation to perform.");
-				ps.println("     * @param p The parameter to pass to the operation.");
-				ps.println("     * @return The result of the operation.");
-				ps.println("     */");
-				ps.println("    @Override");
-				ps.println("    public <P,R> R executeOperation(BsjNodeOperation<P,R> operation, P p)");
-				ps.println("    {");
-				ps.println("        return operation.execute" + def.getBaseName() + "(this, p);");
-				ps.println("    }");
+				ps.println("/**");
+				ps.println(" * Executes an operation on this node.");
+				ps.println(" * @param operation The operation to perform.");
+				ps.println(" * @param p The parameter to pass to the operation.");
+				ps.println(" * @return The result of the operation.");
+				ps.println(" */");
+				ps.println("@Override");
+				ps.println("public <P,R> R executeOperation(BsjNodeOperation<P,R> operation, P p)");
+				ps.println("{");
+				ps.println("    return operation.execute" + def.getBaseName() + "(this, p);");
+				ps.println("}");
 			}
 			ps.println();
 
@@ -1131,16 +1144,18 @@ public class SourceGenerator
 			// how do we deal with that?
 			if (def.getMode() == TypeDefinition.Mode.CONCRETE)
 			{
-				ps.println("    /**");
-				ps.println("     * Generates a deep copy of this node.");
-				ps.println("     * @param factory The node factory to use to create the deep copy.");
-				ps.println("     * @return The resulting deep copy node.");
-				ps.println("     */");
+				ps.println("/**");
+				ps.println(" * Generates a deep copy of this node.");
+				ps.println(" * @param factory The node factory to use to create the deep copy.");
+				ps.println(" * @return The resulting deep copy node.");
+				ps.println(" */");
 				if (def.getBaseSuperName() != null)
-					ps.println("    @Override");
-				ps.println("    public " + def.getNameWithTypeParameters() + " deepCopy(BsjNodeFactory factory)");
-				ps.println("    {");
-				ps.println("        return factory.make" + def.getBaseName() + "(");
+					ps.println("@Override");
+				ps.println("public " + def.getNameWithTypeParameters() + " deepCopy(BsjNodeFactory factory)");
+				ps.println("{");
+				ps.incPrependCount();
+				ps.println("return factory.make" + def.getBaseName() + "(");
+				ps.incPrependCount(2);
 				boolean first = true;
 				for (PropertyDefinition p : recProps)
 				{
@@ -1153,8 +1168,6 @@ public class SourceGenerator
 					{
 						ps.println(",");
 					}
-					ps.print("                ");
-
 					propAbstract(new PropertyTypeAbstractor()
 					{
 						public void directCopy(PrependablePrintStream ps, PropertyDefinition p)
@@ -1185,10 +1198,9 @@ public class SourceGenerator
 					}, p, ps, def);
 				}
 				ps.println(");");
-				ps.println("    }");
+				ps.decPrependCount(3);
+				ps.println("}");
 			}
-
-			ps.incPrependCount();
 
 			// add logic for node replacement
 			if (def.getMode() == TypeDefinition.Mode.CONCRETE)
@@ -1512,8 +1524,9 @@ public class SourceGenerator
 			}
 		}
 
-		private void writeFactoryMethod(PrintStream ips, PrintStream cps, PrintStream dps, TypeDefinition def,
-				FactoryMethodDefinition methodDefinition, boolean skipMake)
+		private void writeFactoryMethod(PrependablePrintStream ips, PrependablePrintStream cps,
+				PrependablePrintStream dps, TypeDefinition def, FactoryMethodDefinition methodDefinition,
+				boolean skipMake)
 		{
 			String typeParam;
 			String typeName;
@@ -1556,59 +1569,69 @@ public class SourceGenerator
 					argProps.add(recProp);
 				}
 			}
-
-			// Write documentation
-			for (PrintStream ps : new PrintStream[] { ips, cps, dps })
+			
+			// Increase prepends
+			for (PrependablePrintStream ps : new PrependablePrintStream[] { ips, cps, dps })
 			{
-				ps.println("    /**");
-				ps.println("     * Creates a " + def.getBaseName() + ".");
+				ps.incPrependCount();
+			}
+			
+			// Write documentation
+			for (PrependablePrintStream ps : new PrependablePrintStream[] { ips, cps, dps })
+			{
+				ps.println("/**");
+				ps.println(" * Creates a " + def.getBaseName() + ".");
 				if (!skipMake)
 				{
-					ps.println("     * The specified start and stop locations are used.");
+					ps.println(" * The specified start and stop locations are used.");
 				} else
 				{
-					ps.println("     * The start and stop locations which have been set as properties of this factory are used.");
+					ps.println(" * The start and stop locations which have been set as properties of this factory are used.");
 				}
-				ps.println("     */");
+				ps.println(" */");
 			}
 
 			// Write interface method description
-			ips.print("    public " + typeParamS + typeName + " make" + def.getBaseName());
+			ips.print("public " + typeParamS + typeName + " make" + def.getBaseName());
 			printParameterList(ips, argProps, skipMake);
 			ips.println(";");
 			ips.println();
 
 			// Write backing class implementation
-			cps.println("    @Override");
-			cps.print("    public " + typeParamS + typeName + " make" + def.getBaseName());
+			cps.println("@Override");
+			cps.print("public " + typeParamS + typeName + " make" + def.getBaseName());
 			printParameterList(cps, argProps, skipMake);
 			cps.println();
-			cps.println("    {");
+			cps.println("{");
+			cps.incPrependCount();
 			String classname = def.getBaseName() + "Impl" + typeArg;
-			cps.print("        " + typeName + " ret = new " + classname);
+			cps.print(typeName + " ret = new " + classname);
 
 			printFactoryArgumentList(cps, recProps, def.getFactoryOverrideMap(), methodDefinition, def);
 
 			cps.println(";");
 			// TODO: later, this is where we register created nodes with the central dependency validation
 			// authority
-			cps.println("        return ret;");
-			cps.println("    }");
+			cps.println("return ret;");
+			cps.decPrependCount();
+			cps.println("}");
 			cps.println();
 
 			// Write decorator implementation
-			dps.println("    @Override");
-			dps.print("    public " + typeParamS + typeName + " make" + def.getBaseName());
+			dps.println("@Override");
+			dps.print("public " + typeParamS + typeName + " make" + def.getBaseName());
 			printParameterList(dps, argProps, skipMake);
 			dps.println();
-			dps.println("    {");
-			dps.println("        this.before();");
-			dps.print("        " + typeName + " node = factory.make" + def.getBaseName());
+			dps.println("{");
+			dps.incPrependCount();
+			dps.println("this.before();");
+			dps.print(typeName + " node = factory.make" + def.getBaseName());
 			printArgumentList(dps, argProps, skipMake);
 			dps.println(";");
-			dps.println("        this.after(node);");
-			dps.println("        return node;");
-			dps.println("    }");
+			dps.println("this.after(node);");
+			dps.println("return node;");
+			dps.decPrependCount();
+			dps.println("}");
 			dps.println();
 
 			// Special ListNode constructor
@@ -1617,16 +1640,16 @@ public class SourceGenerator
 				// Write documentation
 				for (PrintStream ps : new PrintStream[] { ips, cps, dps })
 				{
-					ps.println("    /**");
-					ps.println("     * Creates a " + def.getBaseName() + ".");
+					ps.println("/**");
+					ps.println(" * Creates a " + def.getBaseName() + ".");
 					if (!skipMake)
 					{
-						ps.println("     * The specified start and stop locations are used.");
+						ps.println(" * The specified start and stop locations are used.");
 					} else
 					{
-						ps.println("     * The start and stop locations which have been set as properties of this factory are used.");
+						ps.println(" * The start and stop locations which have been set as properties of this factory are used.");
 					}
-					ps.println("     */");
+					ps.println(" */");
 				}
 
 				// Create a list to fake the parameter list printer into printing a vararg
@@ -1646,39 +1669,47 @@ public class SourceGenerator
 						null, PropertyDefinition.Mode.NORMAL, "", listDef.getDefaultExpression()));
 
 				// Write interface method description
-				ips.print("    public " + typeName + " make" + def.getBaseName());
+				ips.print("public " + typeName + " make" + def.getBaseName());
 				printParameterList(ips, fakeProps, skipMake);
 				ips.println(";");
 				ips.println();
 
 				// Write backing class implementation
-				cps.println("    @Override");
-				cps.print("    public " + typeName + " make" + def.getBaseName());
+				cps.println("@Override");
+				cps.print("public " + typeName + " make" + def.getBaseName());
 				printParameterList(cps, fakeProps, skipMake);
 				cps.println();
-				cps.println("    {");
-				cps.println("        List<" + listDef.getTypeArg() + "> " + listDef.getName() + " = Arrays.asList("
+				cps.println("{");
+				cps.incPrependCount();
+				cps.println("List<" + listDef.getTypeArg() + "> " + listDef.getName() + " = Arrays.asList("
 						+ listDef.getName() + "Elements);");
-				cps.print("        return make" + def.getBaseName());
+				cps.print("return make" + def.getBaseName());
 				printArgumentList(cps, argProps);
 				cps.println(";");
-				cps.println("    }");
+				cps.decPrependCount();
+				cps.println("}");
 				cps.println();
 
 				// Write decorator implementation
-				dps.println("    @Override");
-				dps.print("    public " + typeName + " make" + def.getBaseName());
+				dps.println("@Override");
+				dps.print("public " + typeName + " make" + def.getBaseName());
 				printParameterList(dps, fakeProps, skipMake);
 				dps.println();
-				dps.println("    {");
-				dps.println("        this.before();");
-				dps.print("        " + typeName + " node = factory.make" + def.getBaseName());
+				dps.println("{");
+				dps.println("    this.before();");
+				dps.print("    " + typeName + " node = factory.make" + def.getBaseName());
 				printArgumentList(dps, fakeProps, skipMake);
 				dps.println(";");
-				dps.println("        this.after(node);");
-				dps.println("        return node;");
-				dps.println("    }");
+				dps.println("    this.after(node);");
+				dps.println("    return node;");
+				dps.println("}");
 				dps.println();
+			}
+			
+			// Decrease prepends
+			for (PrependablePrintStream ps : new PrependablePrintStream[] { ips, cps, dps })
+			{
+				ps.decPrependCount();
 			}
 		}
 

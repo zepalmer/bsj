@@ -18,7 +18,7 @@ public interface PackageNode extends Node
      * @return The simple name of this package.
      */
     public IdentifierNode getName();
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

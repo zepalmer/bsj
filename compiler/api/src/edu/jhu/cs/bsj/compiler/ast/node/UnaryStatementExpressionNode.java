@@ -25,25 +25,25 @@ public interface UnaryStatementExpressionNode extends Node, NonAssignmentExpress
      * @return The expression on which to operate.
      */
     public ExpressionNode getExpression();
-
+    
     /**
      * Changes the expression on which to operate.
      * @param expression The expression on which to operate.
      */
     public void setExpression(ExpressionNode expression);
-
+    
     /**
      * Gets the operator to apply.
      * @return The operator to apply.
      */
     public UnaryStatementOperator getOperator();
-
+    
     /**
      * Changes the operator to apply.
      * @param operator The operator to apply.
      */
     public void setOperator(UnaryStatementOperator operator);
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

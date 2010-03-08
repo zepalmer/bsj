@@ -17,13 +17,13 @@ public interface AnonymousClassBodyNode extends Node, TypeBodyNode<AnonymousClas
      * @return The members of this anonymous class body.
      */
     public AnonymousClassMemberListNode getMembers();
-
+    
     /**
      * Changes the members of this anonymous class body.
      * @param members The members of this anonymous class body.
      */
     public void setMembers(AnonymousClassMemberListNode members);
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

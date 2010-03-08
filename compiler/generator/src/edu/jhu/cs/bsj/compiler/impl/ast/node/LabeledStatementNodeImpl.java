@@ -20,10 +20,10 @@ public class LabeledStatementNodeImpl extends NodeImpl implements LabeledStateme
 {
     /** The statement's label. */
     private IdentifierNode label;
-
+    
     /** The statement being labeled. */
     private StatementNode statement;
-
+    
     /** General constructor. */
     public LabeledStatementNodeImpl(
             IdentifierNode label,
@@ -36,7 +36,7 @@ public class LabeledStatementNodeImpl extends NodeImpl implements LabeledStateme
         setLabel(label);
         setStatement(statement);
     }
-
+    
     /**
      * Gets the statement's label.
      * @return The statement's label.
@@ -45,7 +45,7 @@ public class LabeledStatementNodeImpl extends NodeImpl implements LabeledStateme
     {
         return this.label;
     }
-
+    
     /**
      * Changes the statement's label.
      * @param label The statement's label.
@@ -62,7 +62,7 @@ public class LabeledStatementNodeImpl extends NodeImpl implements LabeledStateme
             ((NodeImpl)this.label).setParent(this);
         }
     }
-
+    
     /**
      * Gets the statement being labeled.
      * @return The statement being labeled.
@@ -71,7 +71,7 @@ public class LabeledStatementNodeImpl extends NodeImpl implements LabeledStateme
     {
         return this.statement;
     }
-
+    
     /**
      * Changes the statement being labeled.
      * @param statement The statement being labeled.
@@ -88,7 +88,7 @@ public class LabeledStatementNodeImpl extends NodeImpl implements LabeledStateme
             ((NodeImpl)this.statement).setParent(this);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -109,7 +109,7 @@ public class LabeledStatementNodeImpl extends NodeImpl implements LabeledStateme
             this.statement.receive(visitor);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided typed visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -130,7 +130,7 @@ public class LabeledStatementNodeImpl extends NodeImpl implements LabeledStateme
             this.statement.receiveTyped(visitor);
         }
     }
-
+    
     @Override
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
@@ -146,7 +146,7 @@ public class LabeledStatementNodeImpl extends NodeImpl implements LabeledStateme
         visitor.visitLabeledStatementNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
-
+    
     /**
      * Produces a mutable list of this node's children.  Modifying this list will have no
      * effect on this node.
@@ -160,7 +160,7 @@ public class LabeledStatementNodeImpl extends NodeImpl implements LabeledStateme
         list.add(getStatement());
         return list;
     }
-
+    
     /**
      * Obtains a human-readable description of this node.
      * @return A human-readable description of this node.
@@ -184,7 +184,7 @@ public class LabeledStatementNodeImpl extends NodeImpl implements LabeledStateme
         sb.append(']');
         return sb.toString();
     }
-
+    
     /**
      * Executes an operation on this node.
      * @param operation The operation to perform.
@@ -196,7 +196,7 @@ public class LabeledStatementNodeImpl extends NodeImpl implements LabeledStateme
     {
         return operation.executeLabeledStatementNode(this, p);
     }
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

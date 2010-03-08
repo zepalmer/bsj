@@ -24,25 +24,25 @@ public interface FieldAccessByExpressionNode extends Node, FieldAccessNode
      * @return The expression from which the field is being selected.
      */
     public PrimaryExpressionNode getExpression();
-
+    
     /**
      * Changes the expression from which the field is being selected.
      * @param expression The expression from which the field is being selected.
      */
     public void setExpression(PrimaryExpressionNode expression);
-
+    
     /**
      * Gets the name of the field.
      * @return The name of the field.
      */
     public IdentifierNode getIdentifier();
-
+    
     /**
      * Changes the name of the field.
      * @param identifier The name of the field.
      */
     public void setIdentifier(IdentifierNode identifier);
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

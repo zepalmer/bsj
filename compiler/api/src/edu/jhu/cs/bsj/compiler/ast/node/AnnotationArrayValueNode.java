@@ -16,13 +16,13 @@ public interface AnnotationArrayValueNode extends Node, AnnotationValueNode
      * @return The array values.
      */
     public AnnotationValueListNode getValues();
-
+    
     /**
      * Changes the array values.
      * @param values The array values.
      */
     public void setValues(AnnotationValueListNode values);
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

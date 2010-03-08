@@ -20,13 +20,13 @@ public interface ArrayInitializerCreationNode extends ArrayCreationNode
      * @return The initializer for this array.
      */
     public ArrayInitializerNode getInitializer();
-
+    
     /**
      * Changes the initializer for this array.
      * @param initializer The initializer for this array.
      */
     public void setInitializer(ArrayInitializerNode initializer);
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

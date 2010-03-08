@@ -18,37 +18,37 @@ public interface AnnotationModifiersNode extends ModifiersNode
      * @return The access for the associated annotation.
      */
     public AccessModifier getAccess();
-
+    
     /**
      * Changes the access for the associated annotation.
      * @param access The access for the associated annotation.
      */
     public void setAccess(AccessModifier access);
-
+    
     /**
      * Gets whether or not the associated annotation is static.
      * @return Whether or not the associated annotation is static.
      */
     public boolean getStaticFlag();
-
+    
     /**
      * Changes whether or not the associated annotation is static.
      * @param staticFlag Whether or not the associated annotation is static.
      */
     public void setStaticFlag(boolean staticFlag);
-
+    
     /**
      * Gets whether or not the associated annotation uses strict floating-point.
      * @return Whether or not the associated annotation uses strict floating-point.
      */
     public boolean getStrictfpFlag();
-
+    
     /**
      * Changes whether or not the associated annotation uses strict floating-point.
      * @param strictfpFlag Whether or not the associated annotation uses strict floating-point.
      */
     public void setStrictfpFlag(boolean strictfpFlag);
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

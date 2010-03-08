@@ -23,13 +23,13 @@ public class UnexpectedTokenDiagnostic<T extends javax.tools.JavaFileObject> ext
     private String expectedType;
     
     public UnexpectedTokenDiagnostic(
-                long lineNumber,
-                long columnNumber,
-                T source,
-                String ruleName,
-                String tokenType,
-                String tokenText,
-                String expectedType)
+            long lineNumber,
+            long columnNumber,
+            T source,
+            String ruleName,
+            String tokenType,
+            String tokenText,
+            String expectedType)
     {
         super(lineNumber, columnNumber, source, CODE, Kind.ERROR, ruleName);
         this.tokenType = tokenType;

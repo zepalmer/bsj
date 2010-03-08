@@ -20,10 +20,10 @@ public class EnumModifiersNodeImpl extends ModifiersNodeImpl implements EnumModi
 {
     /** The access for the associated enum. */
     private AccessModifier access;
-
+    
     /** Whether or not the associated enum uses strict floating-point. */
     private boolean strictfpFlag;
-
+    
     /** General constructor. */
     public EnumModifiersNodeImpl(
             AccessModifier access,
@@ -37,7 +37,7 @@ public class EnumModifiersNodeImpl extends ModifiersNodeImpl implements EnumModi
         this.access = access;
         this.strictfpFlag = strictfpFlag;
     }
-
+    
     /**
      * Gets the access for the associated enum.
      * @return The access for the associated enum.
@@ -46,7 +46,7 @@ public class EnumModifiersNodeImpl extends ModifiersNodeImpl implements EnumModi
     {
         return this.access;
     }
-
+    
     /**
      * Changes the access for the associated enum.
      * @param access The access for the associated enum.
@@ -55,7 +55,7 @@ public class EnumModifiersNodeImpl extends ModifiersNodeImpl implements EnumModi
     {
         this.access = access;
     }
-
+    
     /**
      * Gets whether or not the associated enum uses strict floating-point.
      * @return Whether or not the associated enum uses strict floating-point.
@@ -64,7 +64,7 @@ public class EnumModifiersNodeImpl extends ModifiersNodeImpl implements EnumModi
     {
         return this.strictfpFlag;
     }
-
+    
     /**
      * Changes whether or not the associated enum uses strict floating-point.
      * @param strictfpFlag Whether or not the associated enum uses strict floating-point.
@@ -73,7 +73,7 @@ public class EnumModifiersNodeImpl extends ModifiersNodeImpl implements EnumModi
     {
         this.strictfpFlag = strictfpFlag;
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -86,7 +86,7 @@ public class EnumModifiersNodeImpl extends ModifiersNodeImpl implements EnumModi
     {
         super.receiveToChildren(visitor);
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided typed visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -99,7 +99,7 @@ public class EnumModifiersNodeImpl extends ModifiersNodeImpl implements EnumModi
     {
         super.receiveTypedToChildren(visitor);
     }
-
+    
     @Override
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
@@ -115,7 +115,7 @@ public class EnumModifiersNodeImpl extends ModifiersNodeImpl implements EnumModi
         visitor.visitEnumModifiersNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
-
+    
     /**
      * Produces a mutable list of this node's children.  Modifying this list will have no
      * effect on this node.
@@ -129,7 +129,7 @@ public class EnumModifiersNodeImpl extends ModifiersNodeImpl implements EnumModi
         list.add(getStrictfpFlag());
         return list;
     }
-
+    
     /**
      * Obtains a human-readable description of this node.
      * @return A human-readable description of this node.
@@ -156,7 +156,7 @@ public class EnumModifiersNodeImpl extends ModifiersNodeImpl implements EnumModi
         sb.append(']');
         return sb.toString();
     }
-
+    
     /**
      * Executes an operation on this node.
      * @param operation The operation to perform.
@@ -168,7 +168,7 @@ public class EnumModifiersNodeImpl extends ModifiersNodeImpl implements EnumModi
     {
         return operation.executeEnumModifiersNode(this, p);
     }
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

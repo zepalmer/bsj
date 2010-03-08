@@ -19,7 +19,7 @@ public class ArrayInitializerNodeImpl extends NodeImpl implements ArrayInitializ
 {
     /** The initializers for the array. */
     private VariableInitializerListNode initializers;
-
+    
     /** General constructor. */
     public ArrayInitializerNodeImpl(
             VariableInitializerListNode initializers,
@@ -30,7 +30,7 @@ public class ArrayInitializerNodeImpl extends NodeImpl implements ArrayInitializ
         super(startLocation, stopLocation, manager);
         setInitializers(initializers);
     }
-
+    
     /**
      * Gets the initializers for the array.
      * @return The initializers for the array.
@@ -39,7 +39,7 @@ public class ArrayInitializerNodeImpl extends NodeImpl implements ArrayInitializ
     {
         return this.initializers;
     }
-
+    
     /**
      * Changes the initializers for the array.
      * @param initializers The initializers for the array.
@@ -56,7 +56,7 @@ public class ArrayInitializerNodeImpl extends NodeImpl implements ArrayInitializ
             ((NodeImpl)this.initializers).setParent(this);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -73,7 +73,7 @@ public class ArrayInitializerNodeImpl extends NodeImpl implements ArrayInitializ
             this.initializers.receive(visitor);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided typed visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -90,7 +90,7 @@ public class ArrayInitializerNodeImpl extends NodeImpl implements ArrayInitializ
             this.initializers.receiveTyped(visitor);
         }
     }
-
+    
     @Override
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
@@ -106,7 +106,7 @@ public class ArrayInitializerNodeImpl extends NodeImpl implements ArrayInitializ
         visitor.visitArrayInitializerNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
-
+    
     /**
      * Produces a mutable list of this node's children.  Modifying this list will have no
      * effect on this node.
@@ -119,7 +119,7 @@ public class ArrayInitializerNodeImpl extends NodeImpl implements ArrayInitializ
         list.add(getInitializers());
         return list;
     }
-
+    
     /**
      * Obtains a human-readable description of this node.
      * @return A human-readable description of this node.
@@ -140,7 +140,7 @@ public class ArrayInitializerNodeImpl extends NodeImpl implements ArrayInitializ
         sb.append(']');
         return sb.toString();
     }
-
+    
     /**
      * Executes an operation on this node.
      * @param operation The operation to perform.
@@ -152,7 +152,7 @@ public class ArrayInitializerNodeImpl extends NodeImpl implements ArrayInitializ
     {
         return operation.executeArrayInitializerNode(this, p);
     }
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

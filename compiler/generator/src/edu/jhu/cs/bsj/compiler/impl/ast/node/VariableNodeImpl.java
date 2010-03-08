@@ -21,13 +21,13 @@ public class VariableNodeImpl extends NodeImpl implements VariableNode
 {
     /** The modifiers of this parameter. */
     private VariableModifiersNode modifiers;
-
+    
     /** The type of the variable. */
     private TypeNode type;
-
+    
     /** The name of the variable. */
     private IdentifierNode identifier;
-
+    
     /** General constructor. */
     public VariableNodeImpl(
             VariableModifiersNode modifiers,
@@ -42,7 +42,7 @@ public class VariableNodeImpl extends NodeImpl implements VariableNode
         setType(type);
         setIdentifier(identifier);
     }
-
+    
     /**
      * Gets the modifiers of this parameter.
      * @return The modifiers of this parameter.
@@ -51,7 +51,7 @@ public class VariableNodeImpl extends NodeImpl implements VariableNode
     {
         return this.modifiers;
     }
-
+    
     /**
      * Changes the modifiers of this parameter.
      * @param modifiers The modifiers of this parameter.
@@ -68,7 +68,7 @@ public class VariableNodeImpl extends NodeImpl implements VariableNode
             ((NodeImpl)this.modifiers).setParent(this);
         }
     }
-
+    
     /**
      * Gets the type of the variable.
      * @return The type of the variable.
@@ -77,7 +77,7 @@ public class VariableNodeImpl extends NodeImpl implements VariableNode
     {
         return this.type;
     }
-
+    
     /**
      * Changes the type of the variable.
      * @param type The type of the variable.
@@ -94,7 +94,7 @@ public class VariableNodeImpl extends NodeImpl implements VariableNode
             ((NodeImpl)this.type).setParent(this);
         }
     }
-
+    
     /**
      * Gets the name of the variable.
      * @return The name of the variable.
@@ -103,7 +103,7 @@ public class VariableNodeImpl extends NodeImpl implements VariableNode
     {
         return this.identifier;
     }
-
+    
     /**
      * Changes the name of the variable.
      * @param identifier The name of the variable.
@@ -120,7 +120,7 @@ public class VariableNodeImpl extends NodeImpl implements VariableNode
             ((NodeImpl)this.identifier).setParent(this);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -145,7 +145,7 @@ public class VariableNodeImpl extends NodeImpl implements VariableNode
             this.identifier.receive(visitor);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided typed visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -170,7 +170,7 @@ public class VariableNodeImpl extends NodeImpl implements VariableNode
             this.identifier.receiveTyped(visitor);
         }
     }
-
+    
     @Override
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
@@ -184,7 +184,7 @@ public class VariableNodeImpl extends NodeImpl implements VariableNode
         visitor.visitVariableNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
-
+    
     /**
      * Produces a mutable list of this node's children.  Modifying this list will have no
      * effect on this node.
@@ -199,7 +199,7 @@ public class VariableNodeImpl extends NodeImpl implements VariableNode
         list.add(getIdentifier());
         return list;
     }
-
+    
     /**
      * Obtains a human-readable description of this node.
      * @return A human-readable description of this node.
@@ -226,7 +226,7 @@ public class VariableNodeImpl extends NodeImpl implements VariableNode
         sb.append(']');
         return sb.toString();
     }
-
+    
     /**
      * Executes an operation on this node.
      * @param operation The operation to perform.
@@ -238,7 +238,7 @@ public class VariableNodeImpl extends NodeImpl implements VariableNode
     {
         return operation.executeVariableNode(this, p);
     }
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

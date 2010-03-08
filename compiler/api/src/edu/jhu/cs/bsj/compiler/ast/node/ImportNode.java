@@ -15,13 +15,13 @@ public interface ImportNode extends Node
      * @return The name of the entity to be imported.
      */
     public NameNode getName();
-
+    
     /**
      * Changes the name of the entity to be imported.
      * @param name The name of the entity to be imported.
      */
     public void setName(NameNode name);
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

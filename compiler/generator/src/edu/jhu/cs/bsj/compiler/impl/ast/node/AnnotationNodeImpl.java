@@ -16,7 +16,7 @@ public abstract class AnnotationNodeImpl extends NodeImpl implements AnnotationN
 {
     /** The annotation type. */
     private UnparameterizedTypeNode annotationType;
-
+    
     /** General constructor. */
     protected AnnotationNodeImpl(
             UnparameterizedTypeNode annotationType,
@@ -27,7 +27,7 @@ public abstract class AnnotationNodeImpl extends NodeImpl implements AnnotationN
         super(startLocation, stopLocation, manager);
         setAnnotationType(annotationType);
     }
-
+    
     /**
      * Gets the annotation type.
      * @return The annotation type.
@@ -36,7 +36,7 @@ public abstract class AnnotationNodeImpl extends NodeImpl implements AnnotationN
     {
         return this.annotationType;
     }
-
+    
     /**
      * Changes the annotation type.
      * @param annotationType The annotation type.
@@ -53,7 +53,7 @@ public abstract class AnnotationNodeImpl extends NodeImpl implements AnnotationN
             ((NodeImpl)this.annotationType).setParent(this);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -70,7 +70,7 @@ public abstract class AnnotationNodeImpl extends NodeImpl implements AnnotationN
             this.annotationType.receive(visitor);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided typed visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -87,7 +87,7 @@ public abstract class AnnotationNodeImpl extends NodeImpl implements AnnotationN
             this.annotationType.receiveTyped(visitor);
         }
     }
-
+    
     @Override
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
@@ -101,7 +101,7 @@ public abstract class AnnotationNodeImpl extends NodeImpl implements AnnotationN
         visitor.visitAnnotationNodeStop(this);
         visitor.visitStopEnd(this);
     }
-
+    
     /**
      * Produces a mutable list of this node's children.  Modifying this list will have no
      * effect on this node.
@@ -114,7 +114,7 @@ public abstract class AnnotationNodeImpl extends NodeImpl implements AnnotationN
         list.add(getAnnotationType());
         return list;
     }
-
+    
     /**
      * Obtains a human-readable description of this node.
      * @return A human-readable description of this node.
@@ -135,6 +135,6 @@ public abstract class AnnotationNodeImpl extends NodeImpl implements AnnotationN
         sb.append(']');
         return sb.toString();
     }
-
-
+    
+    
 }

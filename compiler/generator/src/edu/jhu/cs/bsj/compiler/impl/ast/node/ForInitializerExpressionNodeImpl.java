@@ -19,7 +19,7 @@ public class ForInitializerExpressionNodeImpl extends NodeImpl implements ForIni
 {
     /** The expressions used in this initializer. */
     private StatementExpressionListNode expressions;
-
+    
     /** General constructor. */
     public ForInitializerExpressionNodeImpl(
             StatementExpressionListNode expressions,
@@ -30,7 +30,7 @@ public class ForInitializerExpressionNodeImpl extends NodeImpl implements ForIni
         super(startLocation, stopLocation, manager);
         setExpressions(expressions);
     }
-
+    
     /**
      * Gets the expressions used in this initializer.
      * @return The expressions used in this initializer.
@@ -39,7 +39,7 @@ public class ForInitializerExpressionNodeImpl extends NodeImpl implements ForIni
     {
         return this.expressions;
     }
-
+    
     /**
      * Changes the expressions used in this initializer.
      * @param expressions The expressions used in this initializer.
@@ -56,7 +56,7 @@ public class ForInitializerExpressionNodeImpl extends NodeImpl implements ForIni
             ((NodeImpl)this.expressions).setParent(this);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -73,7 +73,7 @@ public class ForInitializerExpressionNodeImpl extends NodeImpl implements ForIni
             this.expressions.receive(visitor);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided typed visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -90,7 +90,7 @@ public class ForInitializerExpressionNodeImpl extends NodeImpl implements ForIni
             this.expressions.receiveTyped(visitor);
         }
     }
-
+    
     @Override
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
@@ -106,7 +106,7 @@ public class ForInitializerExpressionNodeImpl extends NodeImpl implements ForIni
         visitor.visitForInitializerExpressionNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
-
+    
     /**
      * Produces a mutable list of this node's children.  Modifying this list will have no
      * effect on this node.
@@ -119,7 +119,7 @@ public class ForInitializerExpressionNodeImpl extends NodeImpl implements ForIni
         list.add(getExpressions());
         return list;
     }
-
+    
     /**
      * Obtains a human-readable description of this node.
      * @return A human-readable description of this node.
@@ -140,7 +140,7 @@ public class ForInitializerExpressionNodeImpl extends NodeImpl implements ForIni
         sb.append(']');
         return sb.toString();
     }
-
+    
     /**
      * Executes an operation on this node.
      * @param operation The operation to perform.
@@ -152,7 +152,7 @@ public class ForInitializerExpressionNodeImpl extends NodeImpl implements ForIni
     {
         return operation.executeForInitializerExpressionNode(this, p);
     }
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

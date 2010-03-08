@@ -20,7 +20,7 @@ public class ConstructorModifiersNodeImpl extends ModifiersNodeImpl implements C
 {
     /** The access for the associated constructor. */
     private AccessModifier access;
-
+    
     /** General constructor. */
     public ConstructorModifiersNodeImpl(
             AccessModifier access,
@@ -32,7 +32,7 @@ public class ConstructorModifiersNodeImpl extends ModifiersNodeImpl implements C
         super(annotations, startLocation, stopLocation, manager);
         this.access = access;
     }
-
+    
     /**
      * Gets the access for the associated constructor.
      * @return The access for the associated constructor.
@@ -41,7 +41,7 @@ public class ConstructorModifiersNodeImpl extends ModifiersNodeImpl implements C
     {
         return this.access;
     }
-
+    
     /**
      * Changes the access for the associated constructor.
      * @param access The access for the associated constructor.
@@ -50,7 +50,7 @@ public class ConstructorModifiersNodeImpl extends ModifiersNodeImpl implements C
     {
         this.access = access;
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -63,7 +63,7 @@ public class ConstructorModifiersNodeImpl extends ModifiersNodeImpl implements C
     {
         super.receiveToChildren(visitor);
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided typed visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -76,7 +76,7 @@ public class ConstructorModifiersNodeImpl extends ModifiersNodeImpl implements C
     {
         super.receiveTypedToChildren(visitor);
     }
-
+    
     @Override
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
@@ -92,7 +92,7 @@ public class ConstructorModifiersNodeImpl extends ModifiersNodeImpl implements C
         visitor.visitConstructorModifiersNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
-
+    
     /**
      * Produces a mutable list of this node's children.  Modifying this list will have no
      * effect on this node.
@@ -105,7 +105,7 @@ public class ConstructorModifiersNodeImpl extends ModifiersNodeImpl implements C
         list.add(getAccess());
         return list;
     }
-
+    
     /**
      * Obtains a human-readable description of this node.
      * @return A human-readable description of this node.
@@ -129,7 +129,7 @@ public class ConstructorModifiersNodeImpl extends ModifiersNodeImpl implements C
         sb.append(']');
         return sb.toString();
     }
-
+    
     /**
      * Executes an operation on this node.
      * @param operation The operation to perform.
@@ -141,7 +141,7 @@ public class ConstructorModifiersNodeImpl extends ModifiersNodeImpl implements C
     {
         return operation.executeConstructorModifiersNode(this, p);
     }
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

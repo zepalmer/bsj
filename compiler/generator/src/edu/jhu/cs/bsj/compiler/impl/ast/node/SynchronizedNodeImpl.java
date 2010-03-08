@@ -20,10 +20,10 @@ public class SynchronizedNodeImpl extends NodeImpl implements SynchronizedNode
 {
     /** The synchronization expression. */
     private ExpressionNode expression;
-
+    
     /** The block of statements to synchronize. */
     private BlockNode block;
-
+    
     /** General constructor. */
     public SynchronizedNodeImpl(
             ExpressionNode expression,
@@ -36,7 +36,7 @@ public class SynchronizedNodeImpl extends NodeImpl implements SynchronizedNode
         setExpression(expression);
         setBlock(block);
     }
-
+    
     /**
      * Gets the synchronization expression.
      * @return The synchronization expression.
@@ -45,7 +45,7 @@ public class SynchronizedNodeImpl extends NodeImpl implements SynchronizedNode
     {
         return this.expression;
     }
-
+    
     /**
      * Changes the synchronization expression.
      * @param expression The synchronization expression.
@@ -62,7 +62,7 @@ public class SynchronizedNodeImpl extends NodeImpl implements SynchronizedNode
             ((NodeImpl)this.expression).setParent(this);
         }
     }
-
+    
     /**
      * Gets the block of statements to synchronize.
      * @return The block of statements to synchronize.
@@ -71,7 +71,7 @@ public class SynchronizedNodeImpl extends NodeImpl implements SynchronizedNode
     {
         return this.block;
     }
-
+    
     /**
      * Changes the block of statements to synchronize.
      * @param block The block of statements to synchronize.
@@ -88,7 +88,7 @@ public class SynchronizedNodeImpl extends NodeImpl implements SynchronizedNode
             ((NodeImpl)this.block).setParent(this);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -109,7 +109,7 @@ public class SynchronizedNodeImpl extends NodeImpl implements SynchronizedNode
             this.block.receive(visitor);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided typed visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -130,7 +130,7 @@ public class SynchronizedNodeImpl extends NodeImpl implements SynchronizedNode
             this.block.receiveTyped(visitor);
         }
     }
-
+    
     @Override
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
@@ -146,7 +146,7 @@ public class SynchronizedNodeImpl extends NodeImpl implements SynchronizedNode
         visitor.visitSynchronizedNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
-
+    
     /**
      * Produces a mutable list of this node's children.  Modifying this list will have no
      * effect on this node.
@@ -160,7 +160,7 @@ public class SynchronizedNodeImpl extends NodeImpl implements SynchronizedNode
         list.add(getBlock());
         return list;
     }
-
+    
     /**
      * Obtains a human-readable description of this node.
      * @return A human-readable description of this node.
@@ -184,7 +184,7 @@ public class SynchronizedNodeImpl extends NodeImpl implements SynchronizedNode
         sb.append(']');
         return sb.toString();
     }
-
+    
     /**
      * Executes an operation on this node.
      * @param operation The operation to perform.
@@ -196,7 +196,7 @@ public class SynchronizedNodeImpl extends NodeImpl implements SynchronizedNode
     {
         return operation.executeSynchronizedNode(this, p);
     }
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

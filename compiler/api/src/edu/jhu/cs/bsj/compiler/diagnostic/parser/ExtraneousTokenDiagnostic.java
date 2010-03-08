@@ -20,12 +20,12 @@ public class ExtraneousTokenDiagnostic<T extends javax.tools.JavaFileObject> ext
     private String extraneousToken;
     
     public ExtraneousTokenDiagnostic(
-                long lineNumber,
-                long columnNumber,
-                T source,
-                String ruleName,
-                String extraneousType,
-                String extraneousToken)
+            long lineNumber,
+            long columnNumber,
+            T source,
+            String ruleName,
+            String extraneousType,
+            String extraneousToken)
     {
         super(lineNumber, columnNumber, source, CODE, Kind.ERROR, ruleName);
         this.extraneousType = extraneousType;

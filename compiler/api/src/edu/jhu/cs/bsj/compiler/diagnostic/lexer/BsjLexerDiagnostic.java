@@ -17,12 +17,12 @@ public abstract class BsjLexerDiagnostic<T extends javax.tools.JavaFileObject> e
     private int character;
     
     public BsjLexerDiagnostic(
-                long lineNumber,
-                long columnNumber,
-                T source,
-                String code,
-                javax.tools.Diagnostic.Kind kind,
-                int character)
+            long lineNumber,
+            long columnNumber,
+            T source,
+            String code,
+            javax.tools.Diagnostic.Kind kind,
+            int character)
     {
         super(lineNumber, columnNumber, source, code, kind);
         this.character = character;

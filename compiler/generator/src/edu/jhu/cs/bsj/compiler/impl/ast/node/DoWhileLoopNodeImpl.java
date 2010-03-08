@@ -20,10 +20,10 @@ public class DoWhileLoopNodeImpl extends NodeImpl implements DoWhileLoopNode
 {
     /** The loop's condition. */
     private ExpressionNode condition;
-
+    
     /** The loop's statement. */
     private StatementNode statement;
-
+    
     /** General constructor. */
     public DoWhileLoopNodeImpl(
             ExpressionNode condition,
@@ -36,7 +36,7 @@ public class DoWhileLoopNodeImpl extends NodeImpl implements DoWhileLoopNode
         setCondition(condition);
         setStatement(statement);
     }
-
+    
     /**
      * Gets the loop's condition.
      * @return The loop's condition.
@@ -45,7 +45,7 @@ public class DoWhileLoopNodeImpl extends NodeImpl implements DoWhileLoopNode
     {
         return this.condition;
     }
-
+    
     /**
      * Changes the loop's condition.
      * @param condition The loop's condition.
@@ -62,7 +62,7 @@ public class DoWhileLoopNodeImpl extends NodeImpl implements DoWhileLoopNode
             ((NodeImpl)this.condition).setParent(this);
         }
     }
-
+    
     /**
      * Gets the loop's statement.
      * @return The loop's statement.
@@ -71,7 +71,7 @@ public class DoWhileLoopNodeImpl extends NodeImpl implements DoWhileLoopNode
     {
         return this.statement;
     }
-
+    
     /**
      * Changes the loop's statement.
      * @param statement The loop's statement.
@@ -88,7 +88,7 @@ public class DoWhileLoopNodeImpl extends NodeImpl implements DoWhileLoopNode
             ((NodeImpl)this.statement).setParent(this);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -109,7 +109,7 @@ public class DoWhileLoopNodeImpl extends NodeImpl implements DoWhileLoopNode
             this.statement.receive(visitor);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided typed visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -130,7 +130,7 @@ public class DoWhileLoopNodeImpl extends NodeImpl implements DoWhileLoopNode
             this.statement.receiveTyped(visitor);
         }
     }
-
+    
     @Override
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
@@ -146,7 +146,7 @@ public class DoWhileLoopNodeImpl extends NodeImpl implements DoWhileLoopNode
         visitor.visitDoWhileLoopNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
-
+    
     /**
      * Produces a mutable list of this node's children.  Modifying this list will have no
      * effect on this node.
@@ -160,7 +160,7 @@ public class DoWhileLoopNodeImpl extends NodeImpl implements DoWhileLoopNode
         list.add(getStatement());
         return list;
     }
-
+    
     /**
      * Obtains a human-readable description of this node.
      * @return A human-readable description of this node.
@@ -184,7 +184,7 @@ public class DoWhileLoopNodeImpl extends NodeImpl implements DoWhileLoopNode
         sb.append(']');
         return sb.toString();
     }
-
+    
     /**
      * Executes an operation on this node.
      * @param operation The operation to perform.
@@ -196,7 +196,7 @@ public class DoWhileLoopNodeImpl extends NodeImpl implements DoWhileLoopNode
     {
         return operation.executeDoWhileLoopNode(this, p);
     }
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

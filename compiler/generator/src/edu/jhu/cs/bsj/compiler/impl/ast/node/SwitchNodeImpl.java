@@ -20,10 +20,10 @@ public class SwitchNodeImpl extends NodeImpl implements SwitchNode
 {
     /** The expression over which to switch. */
     private ExpressionNode expression;
-
+    
     /** The cases in this switch. */
     private CaseListNode cases;
-
+    
     /** General constructor. */
     public SwitchNodeImpl(
             ExpressionNode expression,
@@ -36,7 +36,7 @@ public class SwitchNodeImpl extends NodeImpl implements SwitchNode
         setExpression(expression);
         setCases(cases);
     }
-
+    
     /**
      * Gets the expression over which to switch.
      * @return The expression over which to switch.
@@ -45,7 +45,7 @@ public class SwitchNodeImpl extends NodeImpl implements SwitchNode
     {
         return this.expression;
     }
-
+    
     /**
      * Changes the expression over which to switch.
      * @param expression The expression over which to switch.
@@ -62,7 +62,7 @@ public class SwitchNodeImpl extends NodeImpl implements SwitchNode
             ((NodeImpl)this.expression).setParent(this);
         }
     }
-
+    
     /**
      * Gets the cases in this switch.
      * @return The cases in this switch.
@@ -71,7 +71,7 @@ public class SwitchNodeImpl extends NodeImpl implements SwitchNode
     {
         return this.cases;
     }
-
+    
     /**
      * Changes the cases in this switch.
      * @param cases The cases in this switch.
@@ -88,7 +88,7 @@ public class SwitchNodeImpl extends NodeImpl implements SwitchNode
             ((NodeImpl)this.cases).setParent(this);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -109,7 +109,7 @@ public class SwitchNodeImpl extends NodeImpl implements SwitchNode
             this.cases.receive(visitor);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided typed visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -130,7 +130,7 @@ public class SwitchNodeImpl extends NodeImpl implements SwitchNode
             this.cases.receiveTyped(visitor);
         }
     }
-
+    
     @Override
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
@@ -146,7 +146,7 @@ public class SwitchNodeImpl extends NodeImpl implements SwitchNode
         visitor.visitSwitchNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
-
+    
     /**
      * Produces a mutable list of this node's children.  Modifying this list will have no
      * effect on this node.
@@ -160,7 +160,7 @@ public class SwitchNodeImpl extends NodeImpl implements SwitchNode
         list.add(getCases());
         return list;
     }
-
+    
     /**
      * Obtains a human-readable description of this node.
      * @return A human-readable description of this node.
@@ -184,7 +184,7 @@ public class SwitchNodeImpl extends NodeImpl implements SwitchNode
         sb.append(']');
         return sb.toString();
     }
-
+    
     /**
      * Executes an operation on this node.
      * @param operation The operation to perform.
@@ -196,7 +196,7 @@ public class SwitchNodeImpl extends NodeImpl implements SwitchNode
     {
         return operation.executeSwitchNode(this, p);
     }
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

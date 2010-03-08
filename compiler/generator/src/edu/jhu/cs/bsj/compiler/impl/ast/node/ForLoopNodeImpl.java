@@ -22,16 +22,16 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
 {
     /** The initializer used for this for loop. */
     private ForInitializerNode initializer;
-
+    
     /** The loop's termination condition. */
     private ExpressionNode condition;
-
+    
     /** The loop's update operation. */
     private StatementExpressionListNode update;
-
+    
     /** The loop's statement. */
     private StatementNode statement;
-
+    
     /** General constructor. */
     public ForLoopNodeImpl(
             ForInitializerNode initializer,
@@ -48,7 +48,7 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
         setUpdate(update);
         setStatement(statement);
     }
-
+    
     /**
      * Gets the initializer used for this for loop.
      * @return The initializer used for this for loop.
@@ -57,7 +57,7 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
     {
         return this.initializer;
     }
-
+    
     /**
      * Changes the initializer used for this for loop.
      * @param initializer The initializer used for this for loop.
@@ -74,7 +74,7 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
             ((NodeImpl)this.initializer).setParent(this);
         }
     }
-
+    
     /**
      * Gets the loop's termination condition.
      * @return The loop's termination condition.
@@ -83,7 +83,7 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
     {
         return this.condition;
     }
-
+    
     /**
      * Changes the loop's termination condition.
      * @param condition The loop's termination condition.
@@ -100,7 +100,7 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
             ((NodeImpl)this.condition).setParent(this);
         }
     }
-
+    
     /**
      * Gets the loop's update operation.
      * @return The loop's update operation.
@@ -109,7 +109,7 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
     {
         return this.update;
     }
-
+    
     /**
      * Changes the loop's update operation.
      * @param update The loop's update operation.
@@ -126,7 +126,7 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
             ((NodeImpl)this.update).setParent(this);
         }
     }
-
+    
     /**
      * Gets the loop's statement.
      * @return The loop's statement.
@@ -135,7 +135,7 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
     {
         return this.statement;
     }
-
+    
     /**
      * Changes the loop's statement.
      * @param statement The loop's statement.
@@ -152,7 +152,7 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
             ((NodeImpl)this.statement).setParent(this);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -181,7 +181,7 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
             this.statement.receive(visitor);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided typed visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -210,7 +210,7 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
             this.statement.receiveTyped(visitor);
         }
     }
-
+    
     @Override
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
@@ -226,7 +226,7 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
         visitor.visitForLoopNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
-
+    
     /**
      * Produces a mutable list of this node's children.  Modifying this list will have no
      * effect on this node.
@@ -242,7 +242,7 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
         list.add(getStatement());
         return list;
     }
-
+    
     /**
      * Obtains a human-readable description of this node.
      * @return A human-readable description of this node.
@@ -272,7 +272,7 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
         sb.append(']');
         return sb.toString();
     }
-
+    
     /**
      * Executes an operation on this node.
      * @param operation The operation to perform.
@@ -284,7 +284,7 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
     {
         return operation.executeForLoopNode(this, p);
     }
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

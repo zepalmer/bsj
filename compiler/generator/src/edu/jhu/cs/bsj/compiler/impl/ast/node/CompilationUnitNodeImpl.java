@@ -22,19 +22,19 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
 {
     /** The name of the compilation unit. */
     private String name;
-
+    
     /** The package declaration for this unit. */
     private PackageDeclarationNode packageDeclaration;
-
+    
     /** The global metaprogram imports used in this unit. */
     private MetaprogramImportListNode metaimports;
-
+    
     /** The imports used in this unit. */
     private ImportListNode imports;
-
+    
     /** The type declarations of this unit. */
     private TypeDeclarationListNode typeDecls;
-
+    
     /** General constructor. */
     public CompilationUnitNodeImpl(
             String name,
@@ -53,7 +53,7 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
         setImports(imports);
         setTypeDecls(typeDecls);
     }
-
+    
     /**
      * Gets the name of the compilation unit.
      * @return The name of the compilation unit.
@@ -62,7 +62,7 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
     {
         return this.name;
     }
-
+    
     /**
      * Gets the package declaration for this unit.
      * @return The package declaration for this unit.
@@ -71,7 +71,7 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
     {
         return this.packageDeclaration;
     }
-
+    
     /**
      * Changes the package declaration for this unit.
      * @param packageDeclaration The package declaration for this unit.
@@ -88,7 +88,7 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
             ((NodeImpl)this.packageDeclaration).setParent(this);
         }
     }
-
+    
     /**
      * Gets the global metaprogram imports used in this unit.
      * @return The global metaprogram imports used in this unit.
@@ -97,7 +97,7 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
     {
         return this.metaimports;
     }
-
+    
     /**
      * Changes the global metaprogram imports used in this unit.
      * @param metaimports The global metaprogram imports used in this unit.
@@ -114,7 +114,7 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
             ((NodeImpl)this.metaimports).setParent(this);
         }
     }
-
+    
     /**
      * Gets the imports used in this unit.
      * @return The imports used in this unit.
@@ -123,7 +123,7 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
     {
         return this.imports;
     }
-
+    
     /**
      * Changes the imports used in this unit.
      * @param imports The imports used in this unit.
@@ -140,7 +140,7 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
             ((NodeImpl)this.imports).setParent(this);
         }
     }
-
+    
     /**
      * Gets the type declarations of this unit.
      * @return The type declarations of this unit.
@@ -149,7 +149,7 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
     {
         return this.typeDecls;
     }
-
+    
     /**
      * Changes the type declarations of this unit.
      * @param typeDecls The type declarations of this unit.
@@ -166,7 +166,7 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
             ((NodeImpl)this.typeDecls).setParent(this);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -195,7 +195,7 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
             this.typeDecls.receive(visitor);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided typed visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -224,7 +224,7 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
             this.typeDecls.receiveTyped(visitor);
         }
     }
-
+    
     @Override
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
@@ -238,7 +238,7 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
         visitor.visitCompilationUnitNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
-
+    
     /**
      * Produces a mutable list of this node's children.  Modifying this list will have no
      * effect on this node.
@@ -255,7 +255,7 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
         list.add(getTypeDecls());
         return list;
     }
-
+    
     /**
      * Obtains a human-readable description of this node.
      * @return A human-readable description of this node.
@@ -288,7 +288,7 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
         sb.append(']');
         return sb.toString();
     }
-
+    
     /**
      * Executes an operation on this node.
      * @param operation The operation to perform.
@@ -300,7 +300,7 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
     {
         return operation.executeCompilationUnitNode(this, p);
     }
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

@@ -20,10 +20,10 @@ public class FieldAccessByExpressionNodeImpl extends NodeImpl implements FieldAc
 {
     /** The expression from which the field is being selected. */
     private PrimaryExpressionNode expression;
-
+    
     /** The name of the field. */
     private IdentifierNode identifier;
-
+    
     /** General constructor. */
     public FieldAccessByExpressionNodeImpl(
             PrimaryExpressionNode expression,
@@ -36,7 +36,7 @@ public class FieldAccessByExpressionNodeImpl extends NodeImpl implements FieldAc
         setExpression(expression);
         setIdentifier(identifier);
     }
-
+    
     /**
      * Gets the expression from which the field is being selected.
      * @return The expression from which the field is being selected.
@@ -45,7 +45,7 @@ public class FieldAccessByExpressionNodeImpl extends NodeImpl implements FieldAc
     {
         return this.expression;
     }
-
+    
     /**
      * Changes the expression from which the field is being selected.
      * @param expression The expression from which the field is being selected.
@@ -62,7 +62,7 @@ public class FieldAccessByExpressionNodeImpl extends NodeImpl implements FieldAc
             ((NodeImpl)this.expression).setParent(this);
         }
     }
-
+    
     /**
      * Gets the name of the field.
      * @return The name of the field.
@@ -71,7 +71,7 @@ public class FieldAccessByExpressionNodeImpl extends NodeImpl implements FieldAc
     {
         return this.identifier;
     }
-
+    
     /**
      * Changes the name of the field.
      * @param identifier The name of the field.
@@ -88,7 +88,7 @@ public class FieldAccessByExpressionNodeImpl extends NodeImpl implements FieldAc
             ((NodeImpl)this.identifier).setParent(this);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -109,7 +109,7 @@ public class FieldAccessByExpressionNodeImpl extends NodeImpl implements FieldAc
             this.identifier.receive(visitor);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided typed visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -130,7 +130,7 @@ public class FieldAccessByExpressionNodeImpl extends NodeImpl implements FieldAc
             this.identifier.receiveTyped(visitor);
         }
     }
-
+    
     @Override
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
@@ -146,7 +146,7 @@ public class FieldAccessByExpressionNodeImpl extends NodeImpl implements FieldAc
         visitor.visitFieldAccessByExpressionNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
-
+    
     /**
      * Produces a mutable list of this node's children.  Modifying this list will have no
      * effect on this node.
@@ -160,7 +160,7 @@ public class FieldAccessByExpressionNodeImpl extends NodeImpl implements FieldAc
         list.add(getIdentifier());
         return list;
     }
-
+    
     /**
      * Obtains a human-readable description of this node.
      * @return A human-readable description of this node.
@@ -184,7 +184,7 @@ public class FieldAccessByExpressionNodeImpl extends NodeImpl implements FieldAc
         sb.append(']');
         return sb.toString();
     }
-
+    
     /**
      * Executes an operation on this node.
      * @param operation The operation to perform.
@@ -196,7 +196,7 @@ public class FieldAccessByExpressionNodeImpl extends NodeImpl implements FieldAc
     {
         return operation.executeFieldAccessByExpressionNode(this, p);
     }
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

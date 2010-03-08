@@ -20,10 +20,10 @@ public class TypeCastNodeImpl extends NodeImpl implements TypeCastNode
 {
     /** The expression to cast. */
     private ExpressionNode expression;
-
+    
     /** The type to which to cast. */
     private TypeNode type;
-
+    
     /** General constructor. */
     public TypeCastNodeImpl(
             ExpressionNode expression,
@@ -36,7 +36,7 @@ public class TypeCastNodeImpl extends NodeImpl implements TypeCastNode
         setExpression(expression);
         setType(type);
     }
-
+    
     /**
      * Gets the expression to cast.
      * @return The expression to cast.
@@ -45,7 +45,7 @@ public class TypeCastNodeImpl extends NodeImpl implements TypeCastNode
     {
         return this.expression;
     }
-
+    
     /**
      * Changes the expression to cast.
      * @param expression The expression to cast.
@@ -62,7 +62,7 @@ public class TypeCastNodeImpl extends NodeImpl implements TypeCastNode
             ((NodeImpl)this.expression).setParent(this);
         }
     }
-
+    
     /**
      * Gets the type to which to cast.
      * @return The type to which to cast.
@@ -71,7 +71,7 @@ public class TypeCastNodeImpl extends NodeImpl implements TypeCastNode
     {
         return this.type;
     }
-
+    
     /**
      * Changes the type to which to cast.
      * @param type The type to which to cast.
@@ -88,7 +88,7 @@ public class TypeCastNodeImpl extends NodeImpl implements TypeCastNode
             ((NodeImpl)this.type).setParent(this);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -109,7 +109,7 @@ public class TypeCastNodeImpl extends NodeImpl implements TypeCastNode
             this.type.receive(visitor);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided typed visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -130,7 +130,7 @@ public class TypeCastNodeImpl extends NodeImpl implements TypeCastNode
             this.type.receiveTyped(visitor);
         }
     }
-
+    
     @Override
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
@@ -146,7 +146,7 @@ public class TypeCastNodeImpl extends NodeImpl implements TypeCastNode
         visitor.visitTypeCastNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
-
+    
     /**
      * Produces a mutable list of this node's children.  Modifying this list will have no
      * effect on this node.
@@ -160,7 +160,7 @@ public class TypeCastNodeImpl extends NodeImpl implements TypeCastNode
         list.add(getType());
         return list;
     }
-
+    
     /**
      * Obtains a human-readable description of this node.
      * @return A human-readable description of this node.
@@ -184,7 +184,7 @@ public class TypeCastNodeImpl extends NodeImpl implements TypeCastNode
         sb.append(']');
         return sb.toString();
     }
-
+    
     /**
      * Executes an operation on this node.
      * @param operation The operation to perform.
@@ -196,7 +196,7 @@ public class TypeCastNodeImpl extends NodeImpl implements TypeCastNode
     {
         return operation.executeTypeCastNode(this, p);
     }
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

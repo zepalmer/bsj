@@ -144,7 +144,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a AlternateConstructorInvocationNode.
      * The specified start and stop locations are used.
@@ -161,7 +161,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a AlternateConstructorInvocationNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -175,7 +175,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a AlternateConstructorInvocationNode.
      * The specified start and stop locations are used.
@@ -191,7 +191,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a AnnotationAnnotationValueNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -205,7 +205,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a AnnotationAnnotationValueNode.
      * The specified start and stop locations are used.
@@ -221,7 +221,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a AnnotationArrayValueNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -235,7 +235,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a AnnotationArrayValueNode.
      * The specified start and stop locations are used.
@@ -251,7 +251,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a AnnotationBodyNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -265,7 +265,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a AnnotationBodyNode.
      * The specified start and stop locations are used.
@@ -281,7 +281,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a AnnotationDeclarationNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -298,7 +298,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a AnnotationDeclarationNode.
      * The specified start and stop locations are used.
@@ -317,7 +317,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a AnnotationElementListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -331,7 +331,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a AnnotationElementListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -345,7 +345,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a AnnotationElementListNode.
      * The specified start and stop locations are used.
@@ -361,7 +361,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a AnnotationElementListNode.
      * The specified start and stop locations are used.
@@ -377,7 +377,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a AnnotationElementNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -392,7 +392,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a AnnotationElementNode.
      * The specified start and stop locations are used.
@@ -409,7 +409,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a AnnotationExpressionValueNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -423,7 +423,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a AnnotationExpressionValueNode.
      * The specified start and stop locations are used.
@@ -439,7 +439,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a AnnotationListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -453,7 +453,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a AnnotationListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -467,7 +467,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a AnnotationListNode.
      * The specified start and stop locations are used.
@@ -483,7 +483,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a AnnotationListNode.
      * The specified start and stop locations are used.
@@ -499,7 +499,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a AnnotationMemberListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -513,7 +513,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a AnnotationMemberListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -527,7 +527,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a AnnotationMemberListNode.
      * The specified start and stop locations are used.
@@ -543,7 +543,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a AnnotationMemberListNode.
      * The specified start and stop locations are used.
@@ -559,7 +559,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a AnnotationMemberMetaprogramAnchorNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -573,7 +573,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a AnnotationMemberMetaprogramAnchorNode.
      * The specified start and stop locations are used.
@@ -589,7 +589,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a AnnotationMethodDeclarationNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -607,7 +607,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a AnnotationMethodDeclarationNode.
      * The specified start and stop locations are used.
@@ -627,7 +627,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a AnnotationMethodModifiersNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -641,7 +641,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a AnnotationMethodModifiersNode.
      * The specified start and stop locations are used.
@@ -657,7 +657,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a AnnotationModifiersNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -674,7 +674,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a AnnotationModifiersNode.
      * The specified start and stop locations are used.
@@ -693,7 +693,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a AnnotationModifiersNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -707,7 +707,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a AnnotationModifiersNode.
      * The specified start and stop locations are used.
@@ -723,7 +723,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a AnnotationValueListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -737,7 +737,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a AnnotationValueListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -751,7 +751,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a AnnotationValueListNode.
      * The specified start and stop locations are used.
@@ -767,7 +767,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a AnnotationValueListNode.
      * The specified start and stop locations are used.
@@ -783,7 +783,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a AnonymousClassBodyNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -797,7 +797,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a AnonymousClassBodyNode.
      * The specified start and stop locations are used.
@@ -813,7 +813,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a AnonymousClassMemberListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -827,7 +827,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a AnonymousClassMemberListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -841,7 +841,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a AnonymousClassMemberListNode.
      * The specified start and stop locations are used.
@@ -857,7 +857,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a AnonymousClassMemberListNode.
      * The specified start and stop locations are used.
@@ -873,7 +873,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a AnonymousClassMemberMetaprogramAnchorNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -887,7 +887,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a AnonymousClassMemberMetaprogramAnchorNode.
      * The specified start and stop locations are used.
@@ -903,7 +903,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a ArrayAccessNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -918,7 +918,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a ArrayAccessNode.
      * The specified start and stop locations are used.
@@ -935,7 +935,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a ArrayInitializerCreationNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -951,7 +951,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a ArrayInitializerCreationNode.
      * The specified start and stop locations are used.
@@ -969,7 +969,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a ArrayInitializerNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -983,7 +983,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a ArrayInitializerNode.
      * The specified start and stop locations are used.
@@ -999,7 +999,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a ArrayInstantiatorCreationNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -1015,7 +1015,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a ArrayInstantiatorCreationNode.
      * The specified start and stop locations are used.
@@ -1033,7 +1033,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a ArrayTypeNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -1047,7 +1047,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a ArrayTypeNode.
      * The specified start and stop locations are used.
@@ -1063,7 +1063,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a AssertStatementNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -1078,7 +1078,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a AssertStatementNode.
      * The specified start and stop locations are used.
@@ -1095,7 +1095,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a AssertStatementNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -1109,7 +1109,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a AssertStatementNode.
      * The specified start and stop locations are used.
@@ -1125,7 +1125,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a AssignmentNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -1141,7 +1141,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a AssignmentNode.
      * The specified start and stop locations are used.
@@ -1159,7 +1159,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a BinaryExpressionNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -1175,7 +1175,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a BinaryExpressionNode.
      * The specified start and stop locations are used.
@@ -1193,7 +1193,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a BlockNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -1207,7 +1207,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a BlockNode.
      * The specified start and stop locations are used.
@@ -1223,7 +1223,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a BlockStatementListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -1237,7 +1237,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a BlockStatementListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -1251,7 +1251,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a BlockStatementListNode.
      * The specified start and stop locations are used.
@@ -1267,7 +1267,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a BlockStatementListNode.
      * The specified start and stop locations are used.
@@ -1283,7 +1283,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a BlockStatementMetaprogramAnchorNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -1297,7 +1297,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a BlockStatementMetaprogramAnchorNode.
      * The specified start and stop locations are used.
@@ -1313,7 +1313,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a BooleanLiteralNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -1327,7 +1327,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a BooleanLiteralNode.
      * The specified start and stop locations are used.
@@ -1343,7 +1343,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a BreakNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -1357,7 +1357,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a BreakNode.
      * The specified start and stop locations are used.
@@ -1373,7 +1373,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a BreakNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -1386,7 +1386,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a BreakNode.
      * The specified start and stop locations are used.
@@ -1401,7 +1401,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a CaseListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -1415,7 +1415,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a CaseListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -1429,7 +1429,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a CaseListNode.
      * The specified start and stop locations are used.
@@ -1445,7 +1445,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a CaseListNode.
      * The specified start and stop locations are used.
@@ -1461,7 +1461,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a CaseNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -1476,7 +1476,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a CaseNode.
      * The specified start and stop locations are used.
@@ -1493,7 +1493,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a CatchListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -1507,7 +1507,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a CatchListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -1521,7 +1521,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a CatchListNode.
      * The specified start and stop locations are used.
@@ -1537,7 +1537,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a CatchListNode.
      * The specified start and stop locations are used.
@@ -1553,7 +1553,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a CatchNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -1568,7 +1568,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a CatchNode.
      * The specified start and stop locations are used.
@@ -1585,7 +1585,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a CharLiteralNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -1599,7 +1599,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a CharLiteralNode.
      * The specified start and stop locations are used.
@@ -1615,7 +1615,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a ClassBodyNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -1629,7 +1629,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a ClassBodyNode.
      * The specified start and stop locations are used.
@@ -1645,7 +1645,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a ClassDeclarationNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -1665,7 +1665,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a ClassDeclarationNode.
      * The specified start and stop locations are used.
@@ -1687,7 +1687,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a ClassLiteralNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -1701,7 +1701,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a ClassLiteralNode.
      * The specified start and stop locations are used.
@@ -1717,7 +1717,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a ClassMemberListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -1731,7 +1731,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a ClassMemberListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -1745,7 +1745,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a ClassMemberListNode.
      * The specified start and stop locations are used.
@@ -1761,7 +1761,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a ClassMemberListNode.
      * The specified start and stop locations are used.
@@ -1777,7 +1777,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a ClassMemberMetaprogramAnchorNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -1791,7 +1791,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a ClassMemberMetaprogramAnchorNode.
      * The specified start and stop locations are used.
@@ -1807,7 +1807,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a ClassModifiersNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -1826,7 +1826,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a ClassModifiersNode.
      * The specified start and stop locations are used.
@@ -1847,7 +1847,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a ClassModifiersNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -1861,7 +1861,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a ClassModifiersNode.
      * The specified start and stop locations are used.
@@ -1877,7 +1877,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a CodeLiteralNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -1891,7 +1891,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a CodeLiteralNode.
      * The specified start and stop locations are used.
@@ -1907,7 +1907,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a CompilationUnitListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -1921,7 +1921,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a CompilationUnitListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -1935,7 +1935,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a CompilationUnitListNode.
      * The specified start and stop locations are used.
@@ -1951,7 +1951,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a CompilationUnitListNode.
      * The specified start and stop locations are used.
@@ -1967,7 +1967,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a CompilationUnitNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -1985,7 +1985,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a CompilationUnitNode.
      * The specified start and stop locations are used.
@@ -2005,7 +2005,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a CompilationUnitNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -2022,7 +2022,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a CompilationUnitNode.
      * The specified start and stop locations are used.
@@ -2041,7 +2041,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a ConditionalExpressionNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -2057,7 +2057,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a ConditionalExpressionNode.
      * The specified start and stop locations are used.
@@ -2075,7 +2075,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a ConstructorBodyNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -2090,7 +2090,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a ConstructorBodyNode.
      * The specified start and stop locations are used.
@@ -2107,7 +2107,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a ConstructorDeclarationNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -2128,7 +2128,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a ConstructorDeclarationNode.
      * The specified start and stop locations are used.
@@ -2151,7 +2151,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a ConstructorDeclarationNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -2169,7 +2169,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a ConstructorDeclarationNode.
      * The specified start and stop locations are used.
@@ -2189,7 +2189,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a ConstructorModifiersNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -2204,7 +2204,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a ConstructorModifiersNode.
      * The specified start and stop locations are used.
@@ -2221,7 +2221,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a ConstructorModifiersNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -2235,7 +2235,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a ConstructorModifiersNode.
      * The specified start and stop locations are used.
@@ -2251,7 +2251,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a ContinueNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -2265,7 +2265,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a ContinueNode.
      * The specified start and stop locations are used.
@@ -2281,7 +2281,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a ContinueNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -2294,7 +2294,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a ContinueNode.
      * The specified start and stop locations are used.
@@ -2309,7 +2309,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a DeclaredTypeListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -2323,7 +2323,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a DeclaredTypeListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -2337,7 +2337,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a DeclaredTypeListNode.
      * The specified start and stop locations are used.
@@ -2353,7 +2353,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a DeclaredTypeListNode.
      * The specified start and stop locations are used.
@@ -2369,7 +2369,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a DoWhileLoopNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -2384,7 +2384,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a DoWhileLoopNode.
      * The specified start and stop locations are used.
@@ -2401,7 +2401,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a DoubleLiteralNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -2415,7 +2415,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a DoubleLiteralNode.
      * The specified start and stop locations are used.
@@ -2431,7 +2431,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a EnhancedForLoopNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -2447,7 +2447,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a EnhancedForLoopNode.
      * The specified start and stop locations are used.
@@ -2465,7 +2465,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a EnumBodyNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -2480,7 +2480,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a EnumBodyNode.
      * The specified start and stop locations are used.
@@ -2497,7 +2497,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a EnumConstantDeclarationListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -2511,7 +2511,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a EnumConstantDeclarationListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -2525,7 +2525,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a EnumConstantDeclarationListNode.
      * The specified start and stop locations are used.
@@ -2541,7 +2541,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a EnumConstantDeclarationListNode.
      * The specified start and stop locations are used.
@@ -2557,7 +2557,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a EnumConstantDeclarationNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -2575,7 +2575,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a EnumConstantDeclarationNode.
      * The specified start and stop locations are used.
@@ -2595,7 +2595,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a EnumConstantDeclarationNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -2612,7 +2612,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a EnumConstantDeclarationNode.
      * The specified start and stop locations are used.
@@ -2631,7 +2631,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a EnumDeclarationNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -2649,7 +2649,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a EnumDeclarationNode.
      * The specified start and stop locations are used.
@@ -2669,7 +2669,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a EnumModifiersNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -2685,7 +2685,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a EnumModifiersNode.
      * The specified start and stop locations are used.
@@ -2703,7 +2703,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a EnumModifiersNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -2717,7 +2717,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a EnumModifiersNode.
      * The specified start and stop locations are used.
@@ -2733,7 +2733,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a ExpressionListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -2747,7 +2747,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a ExpressionListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -2761,7 +2761,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a ExpressionListNode.
      * The specified start and stop locations are used.
@@ -2777,7 +2777,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a ExpressionListNode.
      * The specified start and stop locations are used.
@@ -2793,7 +2793,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a ExpressionStatementNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -2807,7 +2807,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a ExpressionStatementNode.
      * The specified start and stop locations are used.
@@ -2823,7 +2823,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a FieldAccessByExpressionNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -2838,7 +2838,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a FieldAccessByExpressionNode.
      * The specified start and stop locations are used.
@@ -2855,7 +2855,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a FieldAccessByNameNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -2869,7 +2869,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a FieldAccessByNameNode.
      * The specified start and stop locations are used.
@@ -2885,7 +2885,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a FieldDeclarationNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -2901,7 +2901,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a FieldDeclarationNode.
      * The specified start and stop locations are used.
@@ -2919,7 +2919,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a FieldModifiersNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -2938,7 +2938,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a FieldModifiersNode.
      * The specified start and stop locations are used.
@@ -2959,7 +2959,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a FieldModifiersNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -2973,7 +2973,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a FieldModifiersNode.
      * The specified start and stop locations are used.
@@ -2989,7 +2989,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a FloatLiteralNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -3003,7 +3003,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a FloatLiteralNode.
      * The specified start and stop locations are used.
@@ -3019,7 +3019,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a ForInitializerDeclarationNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -3033,7 +3033,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a ForInitializerDeclarationNode.
      * The specified start and stop locations are used.
@@ -3049,7 +3049,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a ForInitializerExpressionNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -3063,7 +3063,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a ForInitializerExpressionNode.
      * The specified start and stop locations are used.
@@ -3079,7 +3079,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a ForLoopNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -3096,7 +3096,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a ForLoopNode.
      * The specified start and stop locations are used.
@@ -3115,7 +3115,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a IdentifierListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -3129,7 +3129,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a IdentifierListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -3143,7 +3143,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a IdentifierListNode.
      * The specified start and stop locations are used.
@@ -3159,7 +3159,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a IdentifierListNode.
      * The specified start and stop locations are used.
@@ -3175,7 +3175,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a IdentifierNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -3189,7 +3189,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a IdentifierNode.
      * The specified start and stop locations are used.
@@ -3205,7 +3205,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a IfNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -3221,7 +3221,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a IfNode.
      * The specified start and stop locations are used.
@@ -3239,7 +3239,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a IfNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -3254,7 +3254,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a IfNode.
      * The specified start and stop locations are used.
@@ -3271,7 +3271,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a ImportListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -3285,7 +3285,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a ImportListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -3299,7 +3299,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a ImportListNode.
      * The specified start and stop locations are used.
@@ -3315,7 +3315,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a ImportListNode.
      * The specified start and stop locations are used.
@@ -3331,7 +3331,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a ImportOnDemandNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -3345,7 +3345,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a ImportOnDemandNode.
      * The specified start and stop locations are used.
@@ -3361,7 +3361,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a ImportSingleTypeNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -3375,7 +3375,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a ImportSingleTypeNode.
      * The specified start and stop locations are used.
@@ -3391,7 +3391,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a InitializerDeclarationNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -3406,7 +3406,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a InitializerDeclarationNode.
      * The specified start and stop locations are used.
@@ -3423,7 +3423,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a InlineTypeDeclarationNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -3437,7 +3437,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a InlineTypeDeclarationNode.
      * The specified start and stop locations are used.
@@ -3453,7 +3453,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a InstanceOfNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -3468,7 +3468,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a InstanceOfNode.
      * The specified start and stop locations are used.
@@ -3485,7 +3485,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a IntLiteralNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -3499,7 +3499,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a IntLiteralNode.
      * The specified start and stop locations are used.
@@ -3515,7 +3515,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a InterfaceBodyNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -3529,7 +3529,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a InterfaceBodyNode.
      * The specified start and stop locations are used.
@@ -3545,7 +3545,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a InterfaceDeclarationNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -3564,7 +3564,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a InterfaceDeclarationNode.
      * The specified start and stop locations are used.
@@ -3585,7 +3585,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a InterfaceMemberListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -3599,7 +3599,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a InterfaceMemberListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -3613,7 +3613,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a InterfaceMemberListNode.
      * The specified start and stop locations are used.
@@ -3629,7 +3629,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a InterfaceMemberListNode.
      * The specified start and stop locations are used.
@@ -3645,7 +3645,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a InterfaceMemberMetaprogramAnchorNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -3659,7 +3659,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a InterfaceMemberMetaprogramAnchorNode.
      * The specified start and stop locations are used.
@@ -3675,7 +3675,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a InterfaceModifiersNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -3692,7 +3692,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a InterfaceModifiersNode.
      * The specified start and stop locations are used.
@@ -3711,7 +3711,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a InterfaceModifiersNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -3725,7 +3725,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a InterfaceModifiersNode.
      * The specified start and stop locations are used.
@@ -3741,7 +3741,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a JavadocNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -3755,7 +3755,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a JavadocNode.
      * The specified start and stop locations are used.
@@ -3771,7 +3771,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a LabeledStatementNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -3786,7 +3786,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a LabeledStatementNode.
      * The specified start and stop locations are used.
@@ -3803,7 +3803,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a LongLiteralNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -3817,7 +3817,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a LongLiteralNode.
      * The specified start and stop locations are used.
@@ -3833,7 +3833,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a MetaprogramDependsNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -3847,7 +3847,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a MetaprogramDependsNode.
      * The specified start and stop locations are used.
@@ -3863,7 +3863,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a MetaprogramImportListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -3877,7 +3877,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a MetaprogramImportListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -3891,7 +3891,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a MetaprogramImportListNode.
      * The specified start and stop locations are used.
@@ -3907,7 +3907,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a MetaprogramImportListNode.
      * The specified start and stop locations are used.
@@ -3923,7 +3923,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a MetaprogramImportNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -3937,7 +3937,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a MetaprogramImportNode.
      * The specified start and stop locations are used.
@@ -3953,7 +3953,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a MetaprogramNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -3968,7 +3968,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a MetaprogramNode.
      * The specified start and stop locations are used.
@@ -3985,7 +3985,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a MetaprogramPreambleNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -4001,7 +4001,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a MetaprogramPreambleNode.
      * The specified start and stop locations are used.
@@ -4019,7 +4019,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a MetaprogramTargetNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -4033,7 +4033,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a MetaprogramTargetNode.
      * The specified start and stop locations are used.
@@ -4049,7 +4049,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a MethodDeclarationNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -4071,7 +4071,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a MethodDeclarationNode.
      * The specified start and stop locations are used.
@@ -4095,7 +4095,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a MethodDeclarationNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -4114,7 +4114,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a MethodDeclarationNode.
      * The specified start and stop locations are used.
@@ -4135,7 +4135,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a MethodInvocationByExpressionNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -4152,7 +4152,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a MethodInvocationByExpressionNode.
      * The specified start and stop locations are used.
@@ -4171,7 +4171,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a MethodInvocationByNameNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -4187,7 +4187,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a MethodInvocationByNameNode.
      * The specified start and stop locations are used.
@@ -4205,7 +4205,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a MethodModifiersNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -4226,7 +4226,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a MethodModifiersNode.
      * The specified start and stop locations are used.
@@ -4249,7 +4249,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a MethodModifiersNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -4263,7 +4263,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a MethodModifiersNode.
      * The specified start and stop locations are used.
@@ -4279,7 +4279,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a NameListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -4293,7 +4293,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a NameListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -4307,7 +4307,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a NameListNode.
      * The specified start and stop locations are used.
@@ -4323,7 +4323,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a NameListNode.
      * The specified start and stop locations are used.
@@ -4339,21 +4339,21 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a NoOperationNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
     @Override
     public NoOperationNode makeNoOperationNode(
-)
+    )
     {
         this.before();
         NoOperationNode node = factory.makeNoOperationNode();
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a NoOperationNode.
      * The specified start and stop locations are used.
@@ -4368,7 +4368,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a NormalAnnotationNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -4383,7 +4383,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a NormalAnnotationNode.
      * The specified start and stop locations are used.
@@ -4400,7 +4400,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a NullLiteralNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -4414,7 +4414,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a NullLiteralNode.
      * The specified start and stop locations are used.
@@ -4430,7 +4430,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a NullLiteralNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -4443,7 +4443,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a NullLiteralNode.
      * The specified start and stop locations are used.
@@ -4458,7 +4458,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a PackageDeclarationNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -4473,7 +4473,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a PackageDeclarationNode.
      * The specified start and stop locations are used.
@@ -4490,7 +4490,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a PackageDeclarationNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -4504,7 +4504,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a PackageDeclarationNode.
      * The specified start and stop locations are used.
@@ -4520,7 +4520,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a PackageListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -4534,7 +4534,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a PackageListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -4548,7 +4548,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a PackageListNode.
      * The specified start and stop locations are used.
@@ -4564,7 +4564,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a PackageListNode.
      * The specified start and stop locations are used.
@@ -4580,7 +4580,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a PackageNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -4594,7 +4594,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a PackageNode.
      * The specified start and stop locations are used.
@@ -4610,7 +4610,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a ParameterizedTypeNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -4625,7 +4625,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a ParameterizedTypeNode.
      * The specified start and stop locations are used.
@@ -4642,7 +4642,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a ParameterizedTypeSelectNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -4657,7 +4657,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a ParameterizedTypeSelectNode.
      * The specified start and stop locations are used.
@@ -4674,7 +4674,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a ParenthesizedExpressionNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -4688,7 +4688,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a ParenthesizedExpressionNode.
      * The specified start and stop locations are used.
@@ -4704,7 +4704,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a PrimitiveTypeNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -4718,7 +4718,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a PrimitiveTypeNode.
      * The specified start and stop locations are used.
@@ -4734,7 +4734,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a QualifiedClassInstantiationNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -4753,7 +4753,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a QualifiedClassInstantiationNode.
      * The specified start and stop locations are used.
@@ -4774,7 +4774,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a QualifiedNameNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -4790,7 +4790,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a QualifiedNameNode.
      * The specified start and stop locations are used.
@@ -4808,7 +4808,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a ReferenceTypeListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -4822,7 +4822,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a ReferenceTypeListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -4836,7 +4836,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a ReferenceTypeListNode.
      * The specified start and stop locations are used.
@@ -4852,7 +4852,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a ReferenceTypeListNode.
      * The specified start and stop locations are used.
@@ -4868,7 +4868,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a ReturnNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -4882,7 +4882,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a ReturnNode.
      * The specified start and stop locations are used.
@@ -4898,7 +4898,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a SimpleNameNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -4913,7 +4913,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a SimpleNameNode.
      * The specified start and stop locations are used.
@@ -4930,7 +4930,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a SingleElementAnnotationNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -4945,7 +4945,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a SingleElementAnnotationNode.
      * The specified start and stop locations are used.
@@ -4962,7 +4962,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a SingleStaticImportNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -4977,7 +4977,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a SingleStaticImportNode.
      * The specified start and stop locations are used.
@@ -4994,7 +4994,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a StatementExpressionListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -5008,7 +5008,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a StatementExpressionListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -5022,7 +5022,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a StatementExpressionListNode.
      * The specified start and stop locations are used.
@@ -5038,7 +5038,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a StatementExpressionListNode.
      * The specified start and stop locations are used.
@@ -5054,7 +5054,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a StaticImportOnDemandNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -5068,7 +5068,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a StaticImportOnDemandNode.
      * The specified start and stop locations are used.
@@ -5084,7 +5084,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a StringLiteralNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -5098,7 +5098,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a StringLiteralNode.
      * The specified start and stop locations are used.
@@ -5114,7 +5114,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a SuperFieldAccessNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -5129,7 +5129,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a SuperFieldAccessNode.
      * The specified start and stop locations are used.
@@ -5146,7 +5146,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a SuperFieldAccessNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -5160,7 +5160,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a SuperFieldAccessNode.
      * The specified start and stop locations are used.
@@ -5176,7 +5176,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a SuperMethodInvocationNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -5193,7 +5193,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a SuperMethodInvocationNode.
      * The specified start and stop locations are used.
@@ -5212,7 +5212,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a SuperMethodInvocationNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -5227,7 +5227,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a SuperMethodInvocationNode.
      * The specified start and stop locations are used.
@@ -5244,7 +5244,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a SuperMethodInvocationNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -5260,7 +5260,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a SuperMethodInvocationNode.
      * The specified start and stop locations are used.
@@ -5278,7 +5278,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a SuperclassConstructorInvocationNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -5294,7 +5294,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a SuperclassConstructorInvocationNode.
      * The specified start and stop locations are used.
@@ -5312,7 +5312,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a SuperclassConstructorInvocationNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -5326,7 +5326,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a SuperclassConstructorInvocationNode.
      * The specified start and stop locations are used.
@@ -5342,7 +5342,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a SwitchNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -5357,7 +5357,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a SwitchNode.
      * The specified start and stop locations are used.
@@ -5374,7 +5374,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a SynchronizedNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -5389,7 +5389,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a SynchronizedNode.
      * The specified start and stop locations are used.
@@ -5406,7 +5406,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a ThisNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -5420,7 +5420,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a ThisNode.
      * The specified start and stop locations are used.
@@ -5436,7 +5436,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a ThisNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -5449,7 +5449,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a ThisNode.
      * The specified start and stop locations are used.
@@ -5464,7 +5464,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a ThrowNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -5478,7 +5478,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a ThrowNode.
      * The specified start and stop locations are used.
@@ -5494,7 +5494,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a TryNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -5510,7 +5510,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a TryNode.
      * The specified start and stop locations are used.
@@ -5528,7 +5528,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a TryNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -5543,7 +5543,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a TryNode.
      * The specified start and stop locations are used.
@@ -5560,7 +5560,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a TryNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -5575,7 +5575,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a TryNode.
      * The specified start and stop locations are used.
@@ -5592,7 +5592,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a TypeArgumentListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -5606,7 +5606,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a TypeArgumentListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -5620,7 +5620,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a TypeArgumentListNode.
      * The specified start and stop locations are used.
@@ -5636,7 +5636,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a TypeArgumentListNode.
      * The specified start and stop locations are used.
@@ -5652,7 +5652,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a TypeCastNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -5667,7 +5667,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a TypeCastNode.
      * The specified start and stop locations are used.
@@ -5684,7 +5684,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a TypeDeclarationListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -5698,7 +5698,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a TypeDeclarationListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -5712,7 +5712,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a TypeDeclarationListNode.
      * The specified start and stop locations are used.
@@ -5728,7 +5728,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a TypeDeclarationListNode.
      * The specified start and stop locations are used.
@@ -5744,7 +5744,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a TypeDeclarationMetaprogramAnchorNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -5758,7 +5758,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a TypeDeclarationMetaprogramAnchorNode.
      * The specified start and stop locations are used.
@@ -5774,7 +5774,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a TypeListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -5788,7 +5788,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a TypeListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -5802,7 +5802,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a TypeListNode.
      * The specified start and stop locations are used.
@@ -5818,7 +5818,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a TypeListNode.
      * The specified start and stop locations are used.
@@ -5834,7 +5834,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a TypeParameterListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -5848,7 +5848,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a TypeParameterListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -5862,7 +5862,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a TypeParameterListNode.
      * The specified start and stop locations are used.
@@ -5878,7 +5878,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a TypeParameterListNode.
      * The specified start and stop locations are used.
@@ -5894,7 +5894,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a TypeParameterNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -5909,7 +5909,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a TypeParameterNode.
      * The specified start and stop locations are used.
@@ -5926,7 +5926,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a UnaryExpressionNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -5941,7 +5941,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a UnaryExpressionNode.
      * The specified start and stop locations are used.
@@ -5958,7 +5958,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a UnaryStatementExpressionNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -5973,7 +5973,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a UnaryStatementExpressionNode.
      * The specified start and stop locations are used.
@@ -5990,7 +5990,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a UnparameterizedTypeListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -6004,7 +6004,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a UnparameterizedTypeListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -6018,7 +6018,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a UnparameterizedTypeListNode.
      * The specified start and stop locations are used.
@@ -6034,7 +6034,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a UnparameterizedTypeListNode.
      * The specified start and stop locations are used.
@@ -6050,7 +6050,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a UnparameterizedTypeNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -6064,7 +6064,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a UnparameterizedTypeNode.
      * The specified start and stop locations are used.
@@ -6080,7 +6080,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a UnqualifiedClassInstantiationNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -6097,7 +6097,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a UnqualifiedClassInstantiationNode.
      * The specified start and stop locations are used.
@@ -6116,7 +6116,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a UnqualifiedClassInstantiationNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -6130,7 +6130,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a UnqualifiedClassInstantiationNode.
      * The specified start and stop locations are used.
@@ -6146,7 +6146,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a UnqualifiedClassInstantiationNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -6161,7 +6161,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a UnqualifiedClassInstantiationNode.
      * The specified start and stop locations are used.
@@ -6178,7 +6178,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a VariableDeclarationNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -6193,7 +6193,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a VariableDeclarationNode.
      * The specified start and stop locations are used.
@@ -6210,7 +6210,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a VariableDeclaratorListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -6224,7 +6224,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a VariableDeclaratorListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -6238,7 +6238,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a VariableDeclaratorListNode.
      * The specified start and stop locations are used.
@@ -6254,7 +6254,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a VariableDeclaratorListNode.
      * The specified start and stop locations are used.
@@ -6270,7 +6270,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a VariableDeclaratorNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -6286,7 +6286,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a VariableDeclaratorNode.
      * The specified start and stop locations are used.
@@ -6304,7 +6304,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a VariableInitializerListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -6318,7 +6318,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a VariableInitializerListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -6332,7 +6332,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a VariableInitializerListNode.
      * The specified start and stop locations are used.
@@ -6348,7 +6348,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a VariableInitializerListNode.
      * The specified start and stop locations are used.
@@ -6364,7 +6364,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a VariableListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -6378,7 +6378,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a VariableListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -6392,7 +6392,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a VariableListNode.
      * The specified start and stop locations are used.
@@ -6408,7 +6408,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a VariableListNode.
      * The specified start and stop locations are used.
@@ -6424,7 +6424,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a VariableModifiersNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -6439,7 +6439,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a VariableModifiersNode.
      * The specified start and stop locations are used.
@@ -6456,7 +6456,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a VariableModifiersNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -6469,7 +6469,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a VariableModifiersNode.
      * The specified start and stop locations are used.
@@ -6484,7 +6484,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a VariableNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -6500,7 +6500,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a VariableNode.
      * The specified start and stop locations are used.
@@ -6518,21 +6518,21 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a VoidTypeNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
     @Override
     public VoidTypeNode makeVoidTypeNode(
-)
+    )
     {
         this.before();
         VoidTypeNode node = factory.makeVoidTypeNode();
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a VoidTypeNode.
      * The specified start and stop locations are used.
@@ -6547,7 +6547,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a WhileLoopNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -6562,7 +6562,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a WhileLoopNode.
      * The specified start and stop locations are used.
@@ -6579,7 +6579,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a WildcardTypeNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -6594,7 +6594,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
     /**
      * Creates a WildcardTypeNode.
      * The specified start and stop locations are used.
@@ -6611,5 +6611,5 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
         this.after(node);
         return node;
     }
-
+    
 }

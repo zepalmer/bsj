@@ -14,10 +14,10 @@ public class GeneralLexerFailureDiagnostic<T extends javax.tools.JavaFileObject>
     public static final String CODE = "lexer.error.generalFailure";
     
     public GeneralLexerFailureDiagnostic(
-                long lineNumber,
-                long columnNumber,
-                T source,
-                int character)
+            long lineNumber,
+            long columnNumber,
+            T source,
+            int character)
     {
         super(lineNumber, columnNumber, source, CODE, Kind.ERROR, character);
     }

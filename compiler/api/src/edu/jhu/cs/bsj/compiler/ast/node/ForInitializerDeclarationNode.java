@@ -19,13 +19,13 @@ public interface ForInitializerDeclarationNode extends Node, ForInitializerNode
      * @return The variables declared in this initializer.
      */
     public VariableDeclarationNode getDeclaration();
-
+    
     /**
      * Changes the variables declared in this initializer.
      * @param declaration The variables declared in this initializer.
      */
     public void setDeclaration(VariableDeclarationNode declaration);
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

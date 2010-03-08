@@ -19,10 +19,10 @@ public class AssertStatementNodeImpl extends NodeImpl implements AssertStatement
 {
     /** The assertion's test expression. */
     private ExpressionNode testExpression;
-
+    
     /** The assertion's message expression. */
     private ExpressionNode messageExpression;
-
+    
     /** General constructor. */
     public AssertStatementNodeImpl(
             ExpressionNode testExpression,
@@ -35,7 +35,7 @@ public class AssertStatementNodeImpl extends NodeImpl implements AssertStatement
         setTestExpression(testExpression);
         setMessageExpression(messageExpression);
     }
-
+    
     /**
      * Gets the assertion's test expression.
      * @return The assertion's test expression.
@@ -44,7 +44,7 @@ public class AssertStatementNodeImpl extends NodeImpl implements AssertStatement
     {
         return this.testExpression;
     }
-
+    
     /**
      * Changes the assertion's test expression.
      * @param testExpression The assertion's test expression.
@@ -61,7 +61,7 @@ public class AssertStatementNodeImpl extends NodeImpl implements AssertStatement
             ((NodeImpl)this.testExpression).setParent(this);
         }
     }
-
+    
     /**
      * Gets the assertion's message expression.
      * @return The assertion's message expression.
@@ -70,7 +70,7 @@ public class AssertStatementNodeImpl extends NodeImpl implements AssertStatement
     {
         return this.messageExpression;
     }
-
+    
     /**
      * Changes the assertion's message expression.
      * @param messageExpression The assertion's message expression.
@@ -87,7 +87,7 @@ public class AssertStatementNodeImpl extends NodeImpl implements AssertStatement
             ((NodeImpl)this.messageExpression).setParent(this);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -108,7 +108,7 @@ public class AssertStatementNodeImpl extends NodeImpl implements AssertStatement
             this.messageExpression.receive(visitor);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided typed visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -129,7 +129,7 @@ public class AssertStatementNodeImpl extends NodeImpl implements AssertStatement
             this.messageExpression.receiveTyped(visitor);
         }
     }
-
+    
     @Override
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
@@ -145,7 +145,7 @@ public class AssertStatementNodeImpl extends NodeImpl implements AssertStatement
         visitor.visitAssertStatementNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
-
+    
     /**
      * Produces a mutable list of this node's children.  Modifying this list will have no
      * effect on this node.
@@ -159,7 +159,7 @@ public class AssertStatementNodeImpl extends NodeImpl implements AssertStatement
         list.add(getMessageExpression());
         return list;
     }
-
+    
     /**
      * Obtains a human-readable description of this node.
      * @return A human-readable description of this node.
@@ -183,7 +183,7 @@ public class AssertStatementNodeImpl extends NodeImpl implements AssertStatement
         sb.append(']');
         return sb.toString();
     }
-
+    
     /**
      * Executes an operation on this node.
      * @param operation The operation to perform.
@@ -195,7 +195,7 @@ public class AssertStatementNodeImpl extends NodeImpl implements AssertStatement
     {
         return operation.executeAssertStatementNode(this, p);
     }
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

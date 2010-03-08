@@ -19,7 +19,7 @@ public class BreakNodeImpl extends NodeImpl implements BreakNode
 {
     /** The break label. */
     private IdentifierNode label;
-
+    
     /** General constructor. */
     public BreakNodeImpl(
             IdentifierNode label,
@@ -30,7 +30,7 @@ public class BreakNodeImpl extends NodeImpl implements BreakNode
         super(startLocation, stopLocation, manager);
         setLabel(label);
     }
-
+    
     /**
      * Gets the break label.
      * @return The break label.
@@ -39,7 +39,7 @@ public class BreakNodeImpl extends NodeImpl implements BreakNode
     {
         return this.label;
     }
-
+    
     /**
      * Changes the break label.
      * @param label The break label.
@@ -56,7 +56,7 @@ public class BreakNodeImpl extends NodeImpl implements BreakNode
             ((NodeImpl)this.label).setParent(this);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -73,7 +73,7 @@ public class BreakNodeImpl extends NodeImpl implements BreakNode
             this.label.receive(visitor);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided typed visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -90,7 +90,7 @@ public class BreakNodeImpl extends NodeImpl implements BreakNode
             this.label.receiveTyped(visitor);
         }
     }
-
+    
     @Override
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
@@ -106,7 +106,7 @@ public class BreakNodeImpl extends NodeImpl implements BreakNode
         visitor.visitBreakNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
-
+    
     /**
      * Produces a mutable list of this node's children.  Modifying this list will have no
      * effect on this node.
@@ -119,7 +119,7 @@ public class BreakNodeImpl extends NodeImpl implements BreakNode
         list.add(getLabel());
         return list;
     }
-
+    
     /**
      * Obtains a human-readable description of this node.
      * @return A human-readable description of this node.
@@ -140,7 +140,7 @@ public class BreakNodeImpl extends NodeImpl implements BreakNode
         sb.append(']');
         return sb.toString();
     }
-
+    
     /**
      * Executes an operation on this node.
      * @param operation The operation to perform.
@@ -152,7 +152,7 @@ public class BreakNodeImpl extends NodeImpl implements BreakNode
     {
         return operation.executeBreakNode(this, p);
     }
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

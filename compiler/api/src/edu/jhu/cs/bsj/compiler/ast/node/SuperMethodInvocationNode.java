@@ -41,49 +41,49 @@ public interface SuperMethodInvocationNode extends Node, RestrictedPrimaryExpres
      * @return The qualifying type.
      */
     public UnparameterizedTypeNode getType();
-
+    
     /**
      * Changes the qualifying type.
      * @param type The qualifying type.
      */
     public void setType(UnparameterizedTypeNode type);
-
+    
     /**
      * Gets the identifier of the method being invoked.
      * @return The identifier of the method being invoked.
      */
     public IdentifierNode getIdentifier();
-
+    
     /**
      * Changes the identifier of the method being invoked.
      * @param identifier The identifier of the method being invoked.
      */
     public void setIdentifier(IdentifierNode identifier);
-
+    
     /**
      * Gets the arguments to pass to the method.
      * @return The arguments to pass to the method.
      */
     public ExpressionListNode getArguments();
-
+    
     /**
      * Changes the arguments to pass to the method.
      * @param arguments The arguments to pass to the method.
      */
     public void setArguments(ExpressionListNode arguments);
-
+    
     /**
      * Gets the type arguments for the method.
      * @return The type arguments for the method.
      */
     public ReferenceTypeListNode getTypeArguments();
-
+    
     /**
      * Changes the type arguments for the method.
      * @param typeArguments The type arguments for the method.
      */
     public void setTypeArguments(ReferenceTypeListNode typeArguments);
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

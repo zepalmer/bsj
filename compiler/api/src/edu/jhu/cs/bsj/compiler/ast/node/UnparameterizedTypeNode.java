@@ -17,13 +17,13 @@ public interface UnparameterizedTypeNode extends Node, DeclaredTypeNode, Literal
      * @return The name of the type.
      */
     public NameNode getName();
-
+    
     /**
      * Changes the name of the type.
      * @param name The name of the type.
      */
     public void setName(NameNode name);
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

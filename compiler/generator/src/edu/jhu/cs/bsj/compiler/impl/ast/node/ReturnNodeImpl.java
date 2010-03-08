@@ -19,7 +19,7 @@ public class ReturnNodeImpl extends NodeImpl implements ReturnNode
 {
     /** The expression to return. */
     private ExpressionNode expression;
-
+    
     /** General constructor. */
     public ReturnNodeImpl(
             ExpressionNode expression,
@@ -30,7 +30,7 @@ public class ReturnNodeImpl extends NodeImpl implements ReturnNode
         super(startLocation, stopLocation, manager);
         setExpression(expression);
     }
-
+    
     /**
      * Gets the expression to return.
      * @return The expression to return.
@@ -39,7 +39,7 @@ public class ReturnNodeImpl extends NodeImpl implements ReturnNode
     {
         return this.expression;
     }
-
+    
     /**
      * Changes the expression to return.
      * @param expression The expression to return.
@@ -56,7 +56,7 @@ public class ReturnNodeImpl extends NodeImpl implements ReturnNode
             ((NodeImpl)this.expression).setParent(this);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -73,7 +73,7 @@ public class ReturnNodeImpl extends NodeImpl implements ReturnNode
             this.expression.receive(visitor);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided typed visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -90,7 +90,7 @@ public class ReturnNodeImpl extends NodeImpl implements ReturnNode
             this.expression.receiveTyped(visitor);
         }
     }
-
+    
     @Override
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
@@ -106,7 +106,7 @@ public class ReturnNodeImpl extends NodeImpl implements ReturnNode
         visitor.visitReturnNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
-
+    
     /**
      * Produces a mutable list of this node's children.  Modifying this list will have no
      * effect on this node.
@@ -119,7 +119,7 @@ public class ReturnNodeImpl extends NodeImpl implements ReturnNode
         list.add(getExpression());
         return list;
     }
-
+    
     /**
      * Obtains a human-readable description of this node.
      * @return A human-readable description of this node.
@@ -140,7 +140,7 @@ public class ReturnNodeImpl extends NodeImpl implements ReturnNode
         sb.append(']');
         return sb.toString();
     }
-
+    
     /**
      * Executes an operation on this node.
      * @param operation The operation to perform.
@@ -152,7 +152,7 @@ public class ReturnNodeImpl extends NodeImpl implements ReturnNode
     {
         return operation.executeReturnNode(this, p);
     }
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

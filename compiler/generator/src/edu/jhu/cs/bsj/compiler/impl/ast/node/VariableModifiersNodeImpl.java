@@ -19,7 +19,7 @@ public class VariableModifiersNodeImpl extends ModifiersNodeImpl implements Vari
 {
     /** Whether or not the associated variable is final. */
     private boolean finalFlag;
-
+    
     /** General constructor. */
     public VariableModifiersNodeImpl(
             boolean finalFlag,
@@ -31,7 +31,7 @@ public class VariableModifiersNodeImpl extends ModifiersNodeImpl implements Vari
         super(annotations, startLocation, stopLocation, manager);
         this.finalFlag = finalFlag;
     }
-
+    
     /**
      * Gets whether or not the associated variable is final.
      * @return Whether or not the associated variable is final.
@@ -40,7 +40,7 @@ public class VariableModifiersNodeImpl extends ModifiersNodeImpl implements Vari
     {
         return this.finalFlag;
     }
-
+    
     /**
      * Changes whether or not the associated variable is final.
      * @param finalFlag Whether or not the associated variable is final.
@@ -49,7 +49,7 @@ public class VariableModifiersNodeImpl extends ModifiersNodeImpl implements Vari
     {
         this.finalFlag = finalFlag;
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -62,7 +62,7 @@ public class VariableModifiersNodeImpl extends ModifiersNodeImpl implements Vari
     {
         super.receiveToChildren(visitor);
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided typed visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -75,7 +75,7 @@ public class VariableModifiersNodeImpl extends ModifiersNodeImpl implements Vari
     {
         super.receiveTypedToChildren(visitor);
     }
-
+    
     @Override
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
@@ -91,7 +91,7 @@ public class VariableModifiersNodeImpl extends ModifiersNodeImpl implements Vari
         visitor.visitVariableModifiersNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
-
+    
     /**
      * Produces a mutable list of this node's children.  Modifying this list will have no
      * effect on this node.
@@ -104,7 +104,7 @@ public class VariableModifiersNodeImpl extends ModifiersNodeImpl implements Vari
         list.add(getFinalFlag());
         return list;
     }
-
+    
     /**
      * Obtains a human-readable description of this node.
      * @return A human-readable description of this node.
@@ -128,7 +128,7 @@ public class VariableModifiersNodeImpl extends ModifiersNodeImpl implements Vari
         sb.append(']');
         return sb.toString();
     }
-
+    
     /**
      * Executes an operation on this node.
      * @param operation The operation to perform.
@@ -140,7 +140,7 @@ public class VariableModifiersNodeImpl extends ModifiersNodeImpl implements Vari
     {
         return operation.executeVariableModifiersNode(this, p);
     }
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

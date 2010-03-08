@@ -37,25 +37,25 @@ public interface SuperFieldAccessNode extends Node, RestrictedPrimaryExpressionN
      * @return The qualifying type.
      */
     public UnparameterizedTypeNode getType();
-
+    
     /**
      * Changes the qualifying type.
      * @param type The qualifying type.
      */
     public void setType(UnparameterizedTypeNode type);
-
+    
     /**
      * Gets the identifier of the field being accessed.
      * @return The identifier of the field being accessed.
      */
     public IdentifierNode getIdentifier();
-
+    
     /**
      * Changes the identifier of the field being accessed.
      * @param identifier The identifier of the field being accessed.
      */
     public void setIdentifier(IdentifierNode identifier);
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

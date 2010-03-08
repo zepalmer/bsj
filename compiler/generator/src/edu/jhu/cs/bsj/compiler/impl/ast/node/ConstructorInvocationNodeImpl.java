@@ -17,10 +17,10 @@ public abstract class ConstructorInvocationNodeImpl extends NodeImpl implements 
 {
     /** The arguments to pass to the method. */
     private ExpressionListNode arguments;
-
+    
     /** The type arguments for the method. */
     private ReferenceTypeListNode typeArguments;
-
+    
     /** General constructor. */
     protected ConstructorInvocationNodeImpl(
             ExpressionListNode arguments,
@@ -33,7 +33,7 @@ public abstract class ConstructorInvocationNodeImpl extends NodeImpl implements 
         setArguments(arguments);
         setTypeArguments(typeArguments);
     }
-
+    
     /**
      * Gets the arguments to pass to the method.
      * @return The arguments to pass to the method.
@@ -42,7 +42,7 @@ public abstract class ConstructorInvocationNodeImpl extends NodeImpl implements 
     {
         return this.arguments;
     }
-
+    
     /**
      * Changes the arguments to pass to the method.
      * @param arguments The arguments to pass to the method.
@@ -59,7 +59,7 @@ public abstract class ConstructorInvocationNodeImpl extends NodeImpl implements 
             ((NodeImpl)this.arguments).setParent(this);
         }
     }
-
+    
     /**
      * Gets the type arguments for the method.
      * @return The type arguments for the method.
@@ -68,7 +68,7 @@ public abstract class ConstructorInvocationNodeImpl extends NodeImpl implements 
     {
         return this.typeArguments;
     }
-
+    
     /**
      * Changes the type arguments for the method.
      * @param typeArguments The type arguments for the method.
@@ -85,7 +85,7 @@ public abstract class ConstructorInvocationNodeImpl extends NodeImpl implements 
             ((NodeImpl)this.typeArguments).setParent(this);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -106,7 +106,7 @@ public abstract class ConstructorInvocationNodeImpl extends NodeImpl implements 
             this.typeArguments.receive(visitor);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided typed visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -127,7 +127,7 @@ public abstract class ConstructorInvocationNodeImpl extends NodeImpl implements 
             this.typeArguments.receiveTyped(visitor);
         }
     }
-
+    
     @Override
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
@@ -141,7 +141,7 @@ public abstract class ConstructorInvocationNodeImpl extends NodeImpl implements 
         visitor.visitConstructorInvocationNodeStop(this);
         visitor.visitStopEnd(this);
     }
-
+    
     /**
      * Produces a mutable list of this node's children.  Modifying this list will have no
      * effect on this node.
@@ -155,7 +155,7 @@ public abstract class ConstructorInvocationNodeImpl extends NodeImpl implements 
         list.add(getTypeArguments());
         return list;
     }
-
+    
     /**
      * Obtains a human-readable description of this node.
      * @return A human-readable description of this node.
@@ -179,6 +179,6 @@ public abstract class ConstructorInvocationNodeImpl extends NodeImpl implements 
         sb.append(']');
         return sb.toString();
     }
-
-
+    
+    
 }

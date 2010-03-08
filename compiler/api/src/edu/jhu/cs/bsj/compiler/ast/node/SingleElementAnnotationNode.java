@@ -16,13 +16,13 @@ public interface SingleElementAnnotationNode extends AnnotationNode
      * @return The value of the "value" element.
      */
     public AnnotationValueNode getValue();
-
+    
     /**
      * Changes the value of the "value" element.
      * @param value The value of the "value" element.
      */
     public void setValue(AnnotationValueNode value);
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

@@ -20,10 +20,10 @@ public class VariableDeclarationNodeImpl extends NodeImpl implements VariableDec
 {
     /** The modifiers for this variable. */
     private VariableModifiersNode modifiers;
-
+    
     /** The variable declarators for this node. */
     private VariableDeclaratorListNode declarators;
-
+    
     /** General constructor. */
     public VariableDeclarationNodeImpl(
             VariableModifiersNode modifiers,
@@ -36,7 +36,7 @@ public class VariableDeclarationNodeImpl extends NodeImpl implements VariableDec
         setModifiers(modifiers);
         setDeclarators(declarators);
     }
-
+    
     /**
      * Gets the modifiers for this variable.
      * @return The modifiers for this variable.
@@ -45,7 +45,7 @@ public class VariableDeclarationNodeImpl extends NodeImpl implements VariableDec
     {
         return this.modifiers;
     }
-
+    
     /**
      * Changes the modifiers for this variable.
      * @param modifiers The modifiers for this variable.
@@ -62,7 +62,7 @@ public class VariableDeclarationNodeImpl extends NodeImpl implements VariableDec
             ((NodeImpl)this.modifiers).setParent(this);
         }
     }
-
+    
     /**
      * Gets the variable declarators for this node.
      * @return The variable declarators for this node.
@@ -71,7 +71,7 @@ public class VariableDeclarationNodeImpl extends NodeImpl implements VariableDec
     {
         return this.declarators;
     }
-
+    
     /**
      * Changes the variable declarators for this node.
      * @param declarators The variable declarators for this node.
@@ -88,7 +88,7 @@ public class VariableDeclarationNodeImpl extends NodeImpl implements VariableDec
             ((NodeImpl)this.declarators).setParent(this);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -109,7 +109,7 @@ public class VariableDeclarationNodeImpl extends NodeImpl implements VariableDec
             this.declarators.receive(visitor);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided typed visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -130,7 +130,7 @@ public class VariableDeclarationNodeImpl extends NodeImpl implements VariableDec
             this.declarators.receiveTyped(visitor);
         }
     }
-
+    
     @Override
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
@@ -146,7 +146,7 @@ public class VariableDeclarationNodeImpl extends NodeImpl implements VariableDec
         visitor.visitVariableDeclarationNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
-
+    
     /**
      * Produces a mutable list of this node's children.  Modifying this list will have no
      * effect on this node.
@@ -160,7 +160,7 @@ public class VariableDeclarationNodeImpl extends NodeImpl implements VariableDec
         list.add(getDeclarators());
         return list;
     }
-
+    
     /**
      * Obtains a human-readable description of this node.
      * @return A human-readable description of this node.
@@ -184,7 +184,7 @@ public class VariableDeclarationNodeImpl extends NodeImpl implements VariableDec
         sb.append(']');
         return sb.toString();
     }
-
+    
     /**
      * Executes an operation on this node.
      * @param operation The operation to perform.
@@ -196,7 +196,7 @@ public class VariableDeclarationNodeImpl extends NodeImpl implements VariableDec
     {
         return operation.executeVariableDeclarationNode(this, p);
     }
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

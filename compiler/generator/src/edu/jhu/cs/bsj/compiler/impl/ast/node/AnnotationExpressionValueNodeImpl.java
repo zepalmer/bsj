@@ -19,7 +19,7 @@ public class AnnotationExpressionValueNodeImpl extends NodeImpl implements Annot
 {
     /** The expression. */
     private NonAssignmentExpressionNode expression;
-
+    
     /** General constructor. */
     public AnnotationExpressionValueNodeImpl(
             NonAssignmentExpressionNode expression,
@@ -30,7 +30,7 @@ public class AnnotationExpressionValueNodeImpl extends NodeImpl implements Annot
         super(startLocation, stopLocation, manager);
         setExpression(expression);
     }
-
+    
     /**
      * Gets the expression.
      * @return The expression.
@@ -39,7 +39,7 @@ public class AnnotationExpressionValueNodeImpl extends NodeImpl implements Annot
     {
         return this.expression;
     }
-
+    
     /**
      * Changes the expression.
      * @param expression The expression.
@@ -56,7 +56,7 @@ public class AnnotationExpressionValueNodeImpl extends NodeImpl implements Annot
             ((NodeImpl)this.expression).setParent(this);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -73,7 +73,7 @@ public class AnnotationExpressionValueNodeImpl extends NodeImpl implements Annot
             this.expression.receive(visitor);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided typed visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -90,7 +90,7 @@ public class AnnotationExpressionValueNodeImpl extends NodeImpl implements Annot
             this.expression.receiveTyped(visitor);
         }
     }
-
+    
     @Override
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
@@ -106,7 +106,7 @@ public class AnnotationExpressionValueNodeImpl extends NodeImpl implements Annot
         visitor.visitAnnotationExpressionValueNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
-
+    
     /**
      * Produces a mutable list of this node's children.  Modifying this list will have no
      * effect on this node.
@@ -119,7 +119,7 @@ public class AnnotationExpressionValueNodeImpl extends NodeImpl implements Annot
         list.add(getExpression());
         return list;
     }
-
+    
     /**
      * Obtains a human-readable description of this node.
      * @return A human-readable description of this node.
@@ -140,7 +140,7 @@ public class AnnotationExpressionValueNodeImpl extends NodeImpl implements Annot
         sb.append(']');
         return sb.toString();
     }
-
+    
     /**
      * Executes an operation on this node.
      * @param operation The operation to perform.
@@ -152,7 +152,7 @@ public class AnnotationExpressionValueNodeImpl extends NodeImpl implements Annot
     {
         return operation.executeAnnotationExpressionValueNode(this, p);
     }
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

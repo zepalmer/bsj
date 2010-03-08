@@ -23,19 +23,19 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
 {
     /** The modifiers for this annotation method. */
     private AnnotationMethodModifiersNode modifiers;
-
+    
     /** The return type of this annotation method. */
     private TypeNode type;
-
+    
     /** This annotation method's name. */
     private IdentifierNode identifier;
-
+    
     /** The default value for this method. */
     private AnnotationValueNode defaultValue;
-
+    
     /** The associated javadoc comment for this node. */
     private JavadocNode javadoc;
-
+    
     /** General constructor. */
     public AnnotationMethodDeclarationNodeImpl(
             AnnotationMethodModifiersNode modifiers,
@@ -54,7 +54,7 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
         setDefaultValue(defaultValue);
         setJavadoc(javadoc);
     }
-
+    
     /**
      * Gets the modifiers for this annotation method.
      * @return The modifiers for this annotation method.
@@ -63,7 +63,7 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
     {
         return this.modifiers;
     }
-
+    
     /**
      * Changes the modifiers for this annotation method.
      * @param modifiers The modifiers for this annotation method.
@@ -80,7 +80,7 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
             ((NodeImpl)this.modifiers).setParent(this);
         }
     }
-
+    
     /**
      * Gets the return type of this annotation method.
      * @return The return type of this annotation method.
@@ -89,7 +89,7 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
     {
         return this.type;
     }
-
+    
     /**
      * Changes the return type of this annotation method.
      * @param type The return type of this annotation method.
@@ -106,7 +106,7 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
             ((NodeImpl)this.type).setParent(this);
         }
     }
-
+    
     /**
      * Gets this annotation method's name.
      * @return This annotation method's name.
@@ -115,7 +115,7 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
     {
         return this.identifier;
     }
-
+    
     /**
      * Changes this annotation method's name.
      * @param identifier This annotation method's name.
@@ -132,7 +132,7 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
             ((NodeImpl)this.identifier).setParent(this);
         }
     }
-
+    
     /**
      * Gets the default value for this method.
      * @return The default value for this method.
@@ -141,7 +141,7 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
     {
         return this.defaultValue;
     }
-
+    
     /**
      * Changes the default value for this method.
      * @param defaultValue The default value for this method.
@@ -158,7 +158,7 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
             ((NodeImpl)this.defaultValue).setParent(this);
         }
     }
-
+    
     /**
      * Gets the associated javadoc comment for this node.
      * @return The associated javadoc comment for this node.
@@ -167,7 +167,7 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
     {
         return this.javadoc;
     }
-
+    
     /**
      * Changes the associated javadoc comment for this node.
      * @param javadoc The associated javadoc comment for this node.
@@ -184,7 +184,7 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
             ((NodeImpl)this.javadoc).setParent(this);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -217,7 +217,7 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
             this.javadoc.receive(visitor);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided typed visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -250,7 +250,7 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
             this.javadoc.receiveTyped(visitor);
         }
     }
-
+    
     @Override
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
@@ -266,7 +266,7 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
         visitor.visitAnnotationMethodDeclarationNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
-
+    
     /**
      * Produces a mutable list of this node's children.  Modifying this list will have no
      * effect on this node.
@@ -283,7 +283,7 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
         list.add(getJavadoc());
         return list;
     }
-
+    
     /**
      * Obtains a human-readable description of this node.
      * @return A human-readable description of this node.
@@ -316,7 +316,7 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
         sb.append(']');
         return sb.toString();
     }
-
+    
     /**
      * Executes an operation on this node.
      * @param operation The operation to perform.
@@ -328,7 +328,7 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
     {
         return operation.executeAnnotationMethodDeclarationNode(this, p);
     }
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

@@ -158,7 +158,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         AlternateConstructorInvocationNode ret = new AlternateConstructorInvocationNodeImpl(arguments, typeArguments, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a AlternateConstructorInvocationNode.
      * The specified start and stop locations are used.
@@ -173,7 +173,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         AlternateConstructorInvocationNode ret = new AlternateConstructorInvocationNodeImpl(arguments, typeArguments, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a AlternateConstructorInvocationNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -185,7 +185,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         AlternateConstructorInvocationNode ret = new AlternateConstructorInvocationNodeImpl(arguments, makeReferenceTypeListNode(), startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a AlternateConstructorInvocationNode.
      * The specified start and stop locations are used.
@@ -199,7 +199,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         AlternateConstructorInvocationNode ret = new AlternateConstructorInvocationNodeImpl(arguments, makeReferenceTypeListNode(), startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a AnnotationAnnotationValueNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -211,7 +211,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         AnnotationAnnotationValueNode ret = new AnnotationAnnotationValueNodeImpl(annotation, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a AnnotationAnnotationValueNode.
      * The specified start and stop locations are used.
@@ -225,7 +225,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         AnnotationAnnotationValueNode ret = new AnnotationAnnotationValueNodeImpl(annotation, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a AnnotationArrayValueNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -237,7 +237,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         AnnotationArrayValueNode ret = new AnnotationArrayValueNodeImpl(values, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a AnnotationArrayValueNode.
      * The specified start and stop locations are used.
@@ -251,7 +251,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         AnnotationArrayValueNode ret = new AnnotationArrayValueNodeImpl(values, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a AnnotationBodyNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -263,7 +263,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         AnnotationBodyNode ret = new AnnotationBodyNodeImpl(members, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a AnnotationBodyNode.
      * The specified start and stop locations are used.
@@ -277,7 +277,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         AnnotationBodyNode ret = new AnnotationBodyNodeImpl(members, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a AnnotationDeclarationNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -292,7 +292,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         AnnotationDeclarationNode ret = new AnnotationDeclarationNodeImpl(modifiers, body, identifier, javadoc, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a AnnotationDeclarationNode.
      * The specified start and stop locations are used.
@@ -309,7 +309,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         AnnotationDeclarationNode ret = new AnnotationDeclarationNodeImpl(modifiers, body, identifier, javadoc, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a AnnotationElementListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -321,7 +321,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         AnnotationElementListNode ret = new AnnotationElementListNodeImpl(children, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a AnnotationElementListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -333,7 +333,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         List<AnnotationElementNode> children = Arrays.asList(childrenElements);
         return makeAnnotationElementListNode(children, startLocation, stopLocation);
     }
-
+    
     /**
      * Creates a AnnotationElementListNode.
      * The specified start and stop locations are used.
@@ -347,7 +347,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         AnnotationElementListNode ret = new AnnotationElementListNodeImpl(children, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a AnnotationElementListNode.
      * The specified start and stop locations are used.
@@ -361,7 +361,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         List<AnnotationElementNode> children = Arrays.asList(childrenElements);
         return makeAnnotationElementListNode(children, startLocation, stopLocation);
     }
-
+    
     /**
      * Creates a AnnotationElementNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -374,7 +374,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         AnnotationElementNode ret = new AnnotationElementNodeImpl(identifier, value, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a AnnotationElementNode.
      * The specified start and stop locations are used.
@@ -389,7 +389,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         AnnotationElementNode ret = new AnnotationElementNodeImpl(identifier, value, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a AnnotationExpressionValueNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -401,7 +401,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         AnnotationExpressionValueNode ret = new AnnotationExpressionValueNodeImpl(expression, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a AnnotationExpressionValueNode.
      * The specified start and stop locations are used.
@@ -415,7 +415,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         AnnotationExpressionValueNode ret = new AnnotationExpressionValueNodeImpl(expression, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a AnnotationListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -427,7 +427,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         AnnotationListNode ret = new AnnotationListNodeImpl(children, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a AnnotationListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -439,7 +439,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         List<AnnotationNode> children = Arrays.asList(childrenElements);
         return makeAnnotationListNode(children, startLocation, stopLocation);
     }
-
+    
     /**
      * Creates a AnnotationListNode.
      * The specified start and stop locations are used.
@@ -453,7 +453,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         AnnotationListNode ret = new AnnotationListNodeImpl(children, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a AnnotationListNode.
      * The specified start and stop locations are used.
@@ -467,7 +467,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         List<AnnotationNode> children = Arrays.asList(childrenElements);
         return makeAnnotationListNode(children, startLocation, stopLocation);
     }
-
+    
     /**
      * Creates a AnnotationMemberListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -479,7 +479,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         AnnotationMemberListNode ret = new AnnotationMemberListNodeImpl(children, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a AnnotationMemberListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -491,7 +491,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         List<AnnotationMemberNode> children = Arrays.asList(childrenElements);
         return makeAnnotationMemberListNode(children, startLocation, stopLocation);
     }
-
+    
     /**
      * Creates a AnnotationMemberListNode.
      * The specified start and stop locations are used.
@@ -505,7 +505,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         AnnotationMemberListNode ret = new AnnotationMemberListNodeImpl(children, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a AnnotationMemberListNode.
      * The specified start and stop locations are used.
@@ -519,7 +519,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         List<AnnotationMemberNode> children = Arrays.asList(childrenElements);
         return makeAnnotationMemberListNode(children, startLocation, stopLocation);
     }
-
+    
     /**
      * Creates a AnnotationMemberMetaprogramAnchorNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -531,7 +531,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         AnnotationMemberMetaprogramAnchorNode ret = new AnnotationMemberMetaprogramAnchorNodeImpl(makeNoOperationNode(), metaprogram, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a AnnotationMemberMetaprogramAnchorNode.
      * The specified start and stop locations are used.
@@ -545,7 +545,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         AnnotationMemberMetaprogramAnchorNode ret = new AnnotationMemberMetaprogramAnchorNodeImpl(makeNoOperationNode(), metaprogram, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a AnnotationMethodDeclarationNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -561,7 +561,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         AnnotationMethodDeclarationNode ret = new AnnotationMethodDeclarationNodeImpl(modifiers, type, identifier, defaultValue, javadoc, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a AnnotationMethodDeclarationNode.
      * The specified start and stop locations are used.
@@ -579,7 +579,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         AnnotationMethodDeclarationNode ret = new AnnotationMethodDeclarationNodeImpl(modifiers, type, identifier, defaultValue, javadoc, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a AnnotationMethodModifiersNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -591,7 +591,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         AnnotationMethodModifiersNode ret = new AnnotationMethodModifiersNodeImpl(annotations, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a AnnotationMethodModifiersNode.
      * The specified start and stop locations are used.
@@ -605,7 +605,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         AnnotationMethodModifiersNode ret = new AnnotationMethodModifiersNodeImpl(annotations, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a AnnotationModifiersNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -620,7 +620,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         AnnotationModifiersNode ret = new AnnotationModifiersNodeImpl(access, staticFlag, strictfpFlag, annotations, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a AnnotationModifiersNode.
      * The specified start and stop locations are used.
@@ -637,7 +637,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         AnnotationModifiersNode ret = new AnnotationModifiersNodeImpl(access, staticFlag, strictfpFlag, annotations, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a AnnotationModifiersNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -649,7 +649,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         AnnotationModifiersNode ret = new AnnotationModifiersNodeImpl(access, false, false, makeAnnotationListNode(), startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a AnnotationModifiersNode.
      * The specified start and stop locations are used.
@@ -663,7 +663,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         AnnotationModifiersNode ret = new AnnotationModifiersNodeImpl(access, false, false, makeAnnotationListNode(), startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a AnnotationValueListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -675,7 +675,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         AnnotationValueListNode ret = new AnnotationValueListNodeImpl(children, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a AnnotationValueListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -687,7 +687,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         List<AnnotationValueNode> children = Arrays.asList(childrenElements);
         return makeAnnotationValueListNode(children, startLocation, stopLocation);
     }
-
+    
     /**
      * Creates a AnnotationValueListNode.
      * The specified start and stop locations are used.
@@ -701,7 +701,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         AnnotationValueListNode ret = new AnnotationValueListNodeImpl(children, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a AnnotationValueListNode.
      * The specified start and stop locations are used.
@@ -715,7 +715,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         List<AnnotationValueNode> children = Arrays.asList(childrenElements);
         return makeAnnotationValueListNode(children, startLocation, stopLocation);
     }
-
+    
     /**
      * Creates a AnonymousClassBodyNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -727,7 +727,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         AnonymousClassBodyNode ret = new AnonymousClassBodyNodeImpl(members, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a AnonymousClassBodyNode.
      * The specified start and stop locations are used.
@@ -741,7 +741,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         AnonymousClassBodyNode ret = new AnonymousClassBodyNodeImpl(members, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a AnonymousClassMemberListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -753,7 +753,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         AnonymousClassMemberListNode ret = new AnonymousClassMemberListNodeImpl(children, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a AnonymousClassMemberListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -765,7 +765,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         List<AnonymousClassMemberNode> children = Arrays.asList(childrenElements);
         return makeAnonymousClassMemberListNode(children, startLocation, stopLocation);
     }
-
+    
     /**
      * Creates a AnonymousClassMemberListNode.
      * The specified start and stop locations are used.
@@ -779,7 +779,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         AnonymousClassMemberListNode ret = new AnonymousClassMemberListNodeImpl(children, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a AnonymousClassMemberListNode.
      * The specified start and stop locations are used.
@@ -793,7 +793,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         List<AnonymousClassMemberNode> children = Arrays.asList(childrenElements);
         return makeAnonymousClassMemberListNode(children, startLocation, stopLocation);
     }
-
+    
     /**
      * Creates a AnonymousClassMemberMetaprogramAnchorNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -805,7 +805,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         AnonymousClassMemberMetaprogramAnchorNode ret = new AnonymousClassMemberMetaprogramAnchorNodeImpl(makeNoOperationNode(), metaprogram, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a AnonymousClassMemberMetaprogramAnchorNode.
      * The specified start and stop locations are used.
@@ -819,7 +819,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         AnonymousClassMemberMetaprogramAnchorNode ret = new AnonymousClassMemberMetaprogramAnchorNodeImpl(makeNoOperationNode(), metaprogram, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a ArrayAccessNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -832,7 +832,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         ArrayAccessNode ret = new ArrayAccessNodeImpl(arrayExpression, indexExpression, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a ArrayAccessNode.
      * The specified start and stop locations are used.
@@ -847,7 +847,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         ArrayAccessNode ret = new ArrayAccessNodeImpl(arrayExpression, indexExpression, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a ArrayInitializerCreationNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -861,7 +861,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         ArrayInitializerCreationNode ret = new ArrayInitializerCreationNodeImpl(initializer, baseType, arrayLevels, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a ArrayInitializerCreationNode.
      * The specified start and stop locations are used.
@@ -877,7 +877,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         ArrayInitializerCreationNode ret = new ArrayInitializerCreationNodeImpl(initializer, baseType, arrayLevels, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a ArrayInitializerNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -889,7 +889,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         ArrayInitializerNode ret = new ArrayInitializerNodeImpl(initializers, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a ArrayInitializerNode.
      * The specified start and stop locations are used.
@@ -903,7 +903,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         ArrayInitializerNode ret = new ArrayInitializerNodeImpl(initializers, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a ArrayInstantiatorCreationNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -917,7 +917,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         ArrayInstantiatorCreationNode ret = new ArrayInstantiatorCreationNodeImpl(dimExpressions, baseType, arrayLevels, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a ArrayInstantiatorCreationNode.
      * The specified start and stop locations are used.
@@ -933,7 +933,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         ArrayInstantiatorCreationNode ret = new ArrayInstantiatorCreationNodeImpl(dimExpressions, baseType, arrayLevels, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a ArrayTypeNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -945,7 +945,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         ArrayTypeNode ret = new ArrayTypeNodeImpl(type, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a ArrayTypeNode.
      * The specified start and stop locations are used.
@@ -959,7 +959,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         ArrayTypeNode ret = new ArrayTypeNodeImpl(type, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a AssertStatementNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -972,7 +972,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         AssertStatementNode ret = new AssertStatementNodeImpl(testExpression, messageExpression, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a AssertStatementNode.
      * The specified start and stop locations are used.
@@ -987,7 +987,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         AssertStatementNode ret = new AssertStatementNodeImpl(testExpression, messageExpression, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a AssertStatementNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -999,7 +999,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         AssertStatementNode ret = new AssertStatementNodeImpl(testExpression, null, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a AssertStatementNode.
      * The specified start and stop locations are used.
@@ -1013,7 +1013,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         AssertStatementNode ret = new AssertStatementNodeImpl(testExpression, null, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a AssignmentNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -1027,7 +1027,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         AssignmentNode ret = new AssignmentNodeImpl(variable, operator, expression, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a AssignmentNode.
      * The specified start and stop locations are used.
@@ -1043,7 +1043,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         AssignmentNode ret = new AssignmentNodeImpl(variable, operator, expression, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a BinaryExpressionNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -1057,7 +1057,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         BinaryExpressionNode ret = new BinaryExpressionNodeImpl(leftOperand, rightOperand, operator, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a BinaryExpressionNode.
      * The specified start and stop locations are used.
@@ -1073,7 +1073,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         BinaryExpressionNode ret = new BinaryExpressionNodeImpl(leftOperand, rightOperand, operator, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a BlockNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -1085,7 +1085,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         BlockNode ret = new BlockNodeImpl(statements, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a BlockNode.
      * The specified start and stop locations are used.
@@ -1099,7 +1099,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         BlockNode ret = new BlockNodeImpl(statements, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a BlockStatementListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -1111,7 +1111,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         BlockStatementListNode ret = new BlockStatementListNodeImpl(children, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a BlockStatementListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -1123,7 +1123,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         List<BlockStatementNode> children = Arrays.asList(childrenElements);
         return makeBlockStatementListNode(children, startLocation, stopLocation);
     }
-
+    
     /**
      * Creates a BlockStatementListNode.
      * The specified start and stop locations are used.
@@ -1137,7 +1137,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         BlockStatementListNode ret = new BlockStatementListNodeImpl(children, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a BlockStatementListNode.
      * The specified start and stop locations are used.
@@ -1151,7 +1151,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         List<BlockStatementNode> children = Arrays.asList(childrenElements);
         return makeBlockStatementListNode(children, startLocation, stopLocation);
     }
-
+    
     /**
      * Creates a BlockStatementMetaprogramAnchorNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -1163,7 +1163,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         BlockStatementMetaprogramAnchorNode ret = new BlockStatementMetaprogramAnchorNodeImpl(makeNoOperationNode(), metaprogram, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a BlockStatementMetaprogramAnchorNode.
      * The specified start and stop locations are used.
@@ -1177,7 +1177,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         BlockStatementMetaprogramAnchorNode ret = new BlockStatementMetaprogramAnchorNodeImpl(makeNoOperationNode(), metaprogram, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a BooleanLiteralNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -1189,7 +1189,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         BooleanLiteralNode ret = new BooleanLiteralNodeImpl(value, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a BooleanLiteralNode.
      * The specified start and stop locations are used.
@@ -1203,7 +1203,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         BooleanLiteralNode ret = new BooleanLiteralNodeImpl(value, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a BreakNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -1215,7 +1215,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         BreakNode ret = new BreakNodeImpl(label, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a BreakNode.
      * The specified start and stop locations are used.
@@ -1229,7 +1229,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         BreakNode ret = new BreakNodeImpl(label, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a BreakNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -1240,7 +1240,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         BreakNode ret = new BreakNodeImpl(null, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a BreakNode.
      * The specified start and stop locations are used.
@@ -1253,7 +1253,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         BreakNode ret = new BreakNodeImpl(null, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a CaseListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -1265,7 +1265,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         CaseListNode ret = new CaseListNodeImpl(children, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a CaseListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -1277,7 +1277,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         List<CaseNode> children = Arrays.asList(childrenElements);
         return makeCaseListNode(children, startLocation, stopLocation);
     }
-
+    
     /**
      * Creates a CaseListNode.
      * The specified start and stop locations are used.
@@ -1291,7 +1291,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         CaseListNode ret = new CaseListNodeImpl(children, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a CaseListNode.
      * The specified start and stop locations are used.
@@ -1305,7 +1305,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         List<CaseNode> children = Arrays.asList(childrenElements);
         return makeCaseListNode(children, startLocation, stopLocation);
     }
-
+    
     /**
      * Creates a CaseNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -1318,7 +1318,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         CaseNode ret = new CaseNodeImpl(expression, statements, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a CaseNode.
      * The specified start and stop locations are used.
@@ -1333,7 +1333,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         CaseNode ret = new CaseNodeImpl(expression, statements, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a CatchListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -1345,7 +1345,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         CatchListNode ret = new CatchListNodeImpl(children, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a CatchListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -1357,7 +1357,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         List<CatchNode> children = Arrays.asList(childrenElements);
         return makeCatchListNode(children, startLocation, stopLocation);
     }
-
+    
     /**
      * Creates a CatchListNode.
      * The specified start and stop locations are used.
@@ -1371,7 +1371,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         CatchListNode ret = new CatchListNodeImpl(children, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a CatchListNode.
      * The specified start and stop locations are used.
@@ -1385,7 +1385,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         List<CatchNode> children = Arrays.asList(childrenElements);
         return makeCatchListNode(children, startLocation, stopLocation);
     }
-
+    
     /**
      * Creates a CatchNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -1398,7 +1398,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         CatchNode ret = new CatchNodeImpl(block, parameter, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a CatchNode.
      * The specified start and stop locations are used.
@@ -1413,7 +1413,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         CatchNode ret = new CatchNodeImpl(block, parameter, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a CharLiteralNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -1425,7 +1425,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         CharLiteralNode ret = new CharLiteralNodeImpl(value, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a CharLiteralNode.
      * The specified start and stop locations are used.
@@ -1439,7 +1439,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         CharLiteralNode ret = new CharLiteralNodeImpl(value, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a ClassBodyNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -1451,7 +1451,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         ClassBodyNode ret = new ClassBodyNodeImpl(members, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a ClassBodyNode.
      * The specified start and stop locations are used.
@@ -1465,7 +1465,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         ClassBodyNode ret = new ClassBodyNodeImpl(members, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a ClassDeclarationNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -1483,7 +1483,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         ClassDeclarationNode ret = new ClassDeclarationNodeImpl(modifiers, extendsClause, implementsClause, body, typeParameters, identifier, javadoc, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a ClassDeclarationNode.
      * The specified start and stop locations are used.
@@ -1503,7 +1503,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         ClassDeclarationNode ret = new ClassDeclarationNodeImpl(modifiers, extendsClause, implementsClause, body, typeParameters, identifier, javadoc, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a ClassLiteralNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -1515,7 +1515,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         ClassLiteralNode ret = new ClassLiteralNodeImpl(value, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a ClassLiteralNode.
      * The specified start and stop locations are used.
@@ -1529,7 +1529,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         ClassLiteralNode ret = new ClassLiteralNodeImpl(value, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a ClassMemberListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -1541,7 +1541,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         ClassMemberListNode ret = new ClassMemberListNodeImpl(children, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a ClassMemberListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -1553,7 +1553,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         List<ClassMemberNode> children = Arrays.asList(childrenElements);
         return makeClassMemberListNode(children, startLocation, stopLocation);
     }
-
+    
     /**
      * Creates a ClassMemberListNode.
      * The specified start and stop locations are used.
@@ -1567,7 +1567,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         ClassMemberListNode ret = new ClassMemberListNodeImpl(children, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a ClassMemberListNode.
      * The specified start and stop locations are used.
@@ -1581,7 +1581,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         List<ClassMemberNode> children = Arrays.asList(childrenElements);
         return makeClassMemberListNode(children, startLocation, stopLocation);
     }
-
+    
     /**
      * Creates a ClassMemberMetaprogramAnchorNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -1593,7 +1593,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         ClassMemberMetaprogramAnchorNode ret = new ClassMemberMetaprogramAnchorNodeImpl(makeNoOperationNode(), metaprogram, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a ClassMemberMetaprogramAnchorNode.
      * The specified start and stop locations are used.
@@ -1607,7 +1607,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         ClassMemberMetaprogramAnchorNode ret = new ClassMemberMetaprogramAnchorNodeImpl(makeNoOperationNode(), metaprogram, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a ClassModifiersNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -1624,7 +1624,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         ClassModifiersNode ret = new ClassModifiersNodeImpl(access, abstractFlag, staticFlag, finalFlag, strictfpFlag, annotations, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a ClassModifiersNode.
      * The specified start and stop locations are used.
@@ -1643,7 +1643,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         ClassModifiersNode ret = new ClassModifiersNodeImpl(access, abstractFlag, staticFlag, finalFlag, strictfpFlag, annotations, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a ClassModifiersNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -1655,7 +1655,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         ClassModifiersNode ret = new ClassModifiersNodeImpl(access, false, false, false, false, makeAnnotationListNode(), startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a ClassModifiersNode.
      * The specified start and stop locations are used.
@@ -1669,7 +1669,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         ClassModifiersNode ret = new ClassModifiersNodeImpl(access, false, false, false, false, makeAnnotationListNode(), startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a CodeLiteralNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -1681,7 +1681,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         CodeLiteralNode ret = new CodeLiteralNodeImpl(value, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a CodeLiteralNode.
      * The specified start and stop locations are used.
@@ -1695,7 +1695,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         CodeLiteralNode ret = new CodeLiteralNodeImpl(value, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a CompilationUnitListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -1707,7 +1707,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         CompilationUnitListNode ret = new CompilationUnitListNodeImpl(children, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a CompilationUnitListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -1719,7 +1719,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         List<CompilationUnitNode> children = Arrays.asList(childrenElements);
         return makeCompilationUnitListNode(children, startLocation, stopLocation);
     }
-
+    
     /**
      * Creates a CompilationUnitListNode.
      * The specified start and stop locations are used.
@@ -1733,7 +1733,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         CompilationUnitListNode ret = new CompilationUnitListNodeImpl(children, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a CompilationUnitListNode.
      * The specified start and stop locations are used.
@@ -1747,7 +1747,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         List<CompilationUnitNode> children = Arrays.asList(childrenElements);
         return makeCompilationUnitListNode(children, startLocation, stopLocation);
     }
-
+    
     /**
      * Creates a CompilationUnitNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -1763,7 +1763,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         CompilationUnitNode ret = new CompilationUnitNodeImpl(name, packageDeclaration, metaimports, imports, typeDecls, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a CompilationUnitNode.
      * The specified start and stop locations are used.
@@ -1781,7 +1781,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         CompilationUnitNode ret = new CompilationUnitNodeImpl(name, packageDeclaration, metaimports, imports, typeDecls, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a CompilationUnitNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -1796,7 +1796,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         CompilationUnitNode ret = new CompilationUnitNodeImpl(name, packageDeclaration, makeMetaprogramImportListNode(), imports, typeDecls, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a CompilationUnitNode.
      * The specified start and stop locations are used.
@@ -1813,7 +1813,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         CompilationUnitNode ret = new CompilationUnitNodeImpl(name, packageDeclaration, makeMetaprogramImportListNode(), imports, typeDecls, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a ConditionalExpressionNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -1827,7 +1827,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         ConditionalExpressionNode ret = new ConditionalExpressionNodeImpl(condition, trueExpression, falseExpression, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a ConditionalExpressionNode.
      * The specified start and stop locations are used.
@@ -1843,7 +1843,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         ConditionalExpressionNode ret = new ConditionalExpressionNodeImpl(condition, trueExpression, falseExpression, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a ConstructorBodyNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -1856,7 +1856,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         ConstructorBodyNode ret = new ConstructorBodyNodeImpl(constructorInvocation, statements, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a ConstructorBodyNode.
      * The specified start and stop locations are used.
@@ -1871,7 +1871,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         ConstructorBodyNode ret = new ConstructorBodyNodeImpl(constructorInvocation, statements, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a ConstructorDeclarationNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -1890,7 +1890,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         ConstructorDeclarationNode ret = new ConstructorDeclarationNodeImpl(identifier, body, modifiers, parameters, varargParameter, throwTypes, typeParameters, javadoc, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a ConstructorDeclarationNode.
      * The specified start and stop locations are used.
@@ -1911,7 +1911,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         ConstructorDeclarationNode ret = new ConstructorDeclarationNodeImpl(identifier, body, modifiers, parameters, varargParameter, throwTypes, typeParameters, javadoc, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a ConstructorDeclarationNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -1927,7 +1927,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         ConstructorDeclarationNode ret = new ConstructorDeclarationNodeImpl(identifier, body, modifiers, parameters, null, makeUnparameterizedTypeListNode(), makeTypeParameterListNode(), javadoc, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a ConstructorDeclarationNode.
      * The specified start and stop locations are used.
@@ -1945,7 +1945,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         ConstructorDeclarationNode ret = new ConstructorDeclarationNodeImpl(identifier, body, modifiers, parameters, null, makeUnparameterizedTypeListNode(), makeTypeParameterListNode(), javadoc, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a ConstructorModifiersNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -1958,7 +1958,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         ConstructorModifiersNode ret = new ConstructorModifiersNodeImpl(access, annotations, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a ConstructorModifiersNode.
      * The specified start and stop locations are used.
@@ -1973,7 +1973,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         ConstructorModifiersNode ret = new ConstructorModifiersNodeImpl(access, annotations, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a ConstructorModifiersNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -1985,7 +1985,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         ConstructorModifiersNode ret = new ConstructorModifiersNodeImpl(access, makeAnnotationListNode(), startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a ConstructorModifiersNode.
      * The specified start and stop locations are used.
@@ -1999,7 +1999,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         ConstructorModifiersNode ret = new ConstructorModifiersNodeImpl(access, makeAnnotationListNode(), startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a ContinueNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -2011,7 +2011,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         ContinueNode ret = new ContinueNodeImpl(label, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a ContinueNode.
      * The specified start and stop locations are used.
@@ -2025,7 +2025,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         ContinueNode ret = new ContinueNodeImpl(label, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a ContinueNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -2036,7 +2036,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         ContinueNode ret = new ContinueNodeImpl(null, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a ContinueNode.
      * The specified start and stop locations are used.
@@ -2049,7 +2049,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         ContinueNode ret = new ContinueNodeImpl(null, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a DeclaredTypeListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -2061,7 +2061,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         DeclaredTypeListNode ret = new DeclaredTypeListNodeImpl(children, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a DeclaredTypeListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -2073,7 +2073,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         List<DeclaredTypeNode> children = Arrays.asList(childrenElements);
         return makeDeclaredTypeListNode(children, startLocation, stopLocation);
     }
-
+    
     /**
      * Creates a DeclaredTypeListNode.
      * The specified start and stop locations are used.
@@ -2087,7 +2087,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         DeclaredTypeListNode ret = new DeclaredTypeListNodeImpl(children, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a DeclaredTypeListNode.
      * The specified start and stop locations are used.
@@ -2101,7 +2101,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         List<DeclaredTypeNode> children = Arrays.asList(childrenElements);
         return makeDeclaredTypeListNode(children, startLocation, stopLocation);
     }
-
+    
     /**
      * Creates a DoWhileLoopNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -2114,7 +2114,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         DoWhileLoopNode ret = new DoWhileLoopNodeImpl(condition, statement, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a DoWhileLoopNode.
      * The specified start and stop locations are used.
@@ -2129,7 +2129,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         DoWhileLoopNode ret = new DoWhileLoopNodeImpl(condition, statement, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a DoubleLiteralNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -2141,7 +2141,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         DoubleLiteralNode ret = new DoubleLiteralNodeImpl(value, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a DoubleLiteralNode.
      * The specified start and stop locations are used.
@@ -2155,7 +2155,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         DoubleLiteralNode ret = new DoubleLiteralNodeImpl(value, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a EnhancedForLoopNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -2169,7 +2169,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         EnhancedForLoopNode ret = new EnhancedForLoopNodeImpl(variable, expression, statement, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a EnhancedForLoopNode.
      * The specified start and stop locations are used.
@@ -2185,7 +2185,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         EnhancedForLoopNode ret = new EnhancedForLoopNodeImpl(variable, expression, statement, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a EnumBodyNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -2198,7 +2198,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         EnumBodyNode ret = new EnumBodyNodeImpl(constants, members, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a EnumBodyNode.
      * The specified start and stop locations are used.
@@ -2213,7 +2213,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         EnumBodyNode ret = new EnumBodyNodeImpl(constants, members, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a EnumConstantDeclarationListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -2225,7 +2225,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         EnumConstantDeclarationListNode ret = new EnumConstantDeclarationListNodeImpl(children, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a EnumConstantDeclarationListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -2237,7 +2237,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         List<EnumConstantDeclarationNode> children = Arrays.asList(childrenElements);
         return makeEnumConstantDeclarationListNode(children, startLocation, stopLocation);
     }
-
+    
     /**
      * Creates a EnumConstantDeclarationListNode.
      * The specified start and stop locations are used.
@@ -2251,7 +2251,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         EnumConstantDeclarationListNode ret = new EnumConstantDeclarationListNodeImpl(children, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a EnumConstantDeclarationListNode.
      * The specified start and stop locations are used.
@@ -2265,7 +2265,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         List<EnumConstantDeclarationNode> children = Arrays.asList(childrenElements);
         return makeEnumConstantDeclarationListNode(children, startLocation, stopLocation);
     }
-
+    
     /**
      * Creates a EnumConstantDeclarationNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -2281,7 +2281,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         EnumConstantDeclarationNode ret = new EnumConstantDeclarationNodeImpl(annotations, identifier, arguments, body, javadoc, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a EnumConstantDeclarationNode.
      * The specified start and stop locations are used.
@@ -2299,7 +2299,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         EnumConstantDeclarationNode ret = new EnumConstantDeclarationNodeImpl(annotations, identifier, arguments, body, javadoc, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a EnumConstantDeclarationNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -2314,7 +2314,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         EnumConstantDeclarationNode ret = new EnumConstantDeclarationNodeImpl(annotations, identifier, arguments, null, javadoc, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a EnumConstantDeclarationNode.
      * The specified start and stop locations are used.
@@ -2331,7 +2331,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         EnumConstantDeclarationNode ret = new EnumConstantDeclarationNodeImpl(annotations, identifier, arguments, null, javadoc, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a EnumDeclarationNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -2347,7 +2347,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         EnumDeclarationNode ret = new EnumDeclarationNodeImpl(modifiers, implementsClause, body, identifier, javadoc, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a EnumDeclarationNode.
      * The specified start and stop locations are used.
@@ -2365,7 +2365,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         EnumDeclarationNode ret = new EnumDeclarationNodeImpl(modifiers, implementsClause, body, identifier, javadoc, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a EnumModifiersNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -2379,7 +2379,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         EnumModifiersNode ret = new EnumModifiersNodeImpl(access, strictfpFlag, annotations, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a EnumModifiersNode.
      * The specified start and stop locations are used.
@@ -2395,7 +2395,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         EnumModifiersNode ret = new EnumModifiersNodeImpl(access, strictfpFlag, annotations, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a EnumModifiersNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -2407,7 +2407,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         EnumModifiersNode ret = new EnumModifiersNodeImpl(access, false, makeAnnotationListNode(), startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a EnumModifiersNode.
      * The specified start and stop locations are used.
@@ -2421,7 +2421,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         EnumModifiersNode ret = new EnumModifiersNodeImpl(access, false, makeAnnotationListNode(), startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a ExpressionListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -2433,7 +2433,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         ExpressionListNode ret = new ExpressionListNodeImpl(children, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a ExpressionListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -2445,7 +2445,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         List<ExpressionNode> children = Arrays.asList(childrenElements);
         return makeExpressionListNode(children, startLocation, stopLocation);
     }
-
+    
     /**
      * Creates a ExpressionListNode.
      * The specified start and stop locations are used.
@@ -2459,7 +2459,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         ExpressionListNode ret = new ExpressionListNodeImpl(children, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a ExpressionListNode.
      * The specified start and stop locations are used.
@@ -2473,7 +2473,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         List<ExpressionNode> children = Arrays.asList(childrenElements);
         return makeExpressionListNode(children, startLocation, stopLocation);
     }
-
+    
     /**
      * Creates a ExpressionStatementNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -2485,7 +2485,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         ExpressionStatementNode ret = new ExpressionStatementNodeImpl(expression, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a ExpressionStatementNode.
      * The specified start and stop locations are used.
@@ -2499,7 +2499,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         ExpressionStatementNode ret = new ExpressionStatementNodeImpl(expression, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a FieldAccessByExpressionNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -2512,7 +2512,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         FieldAccessByExpressionNode ret = new FieldAccessByExpressionNodeImpl(expression, identifier, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a FieldAccessByExpressionNode.
      * The specified start and stop locations are used.
@@ -2527,7 +2527,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         FieldAccessByExpressionNode ret = new FieldAccessByExpressionNodeImpl(expression, identifier, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a FieldAccessByNameNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -2539,7 +2539,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         FieldAccessByNameNode ret = new FieldAccessByNameNodeImpl(name, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a FieldAccessByNameNode.
      * The specified start and stop locations are used.
@@ -2553,7 +2553,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         FieldAccessByNameNode ret = new FieldAccessByNameNodeImpl(name, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a FieldDeclarationNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -2567,7 +2567,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         FieldDeclarationNode ret = new FieldDeclarationNodeImpl(modifiers, declarators, javadoc, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a FieldDeclarationNode.
      * The specified start and stop locations are used.
@@ -2583,7 +2583,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         FieldDeclarationNode ret = new FieldDeclarationNodeImpl(modifiers, declarators, javadoc, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a FieldModifiersNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -2600,7 +2600,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         FieldModifiersNode ret = new FieldModifiersNodeImpl(access, staticFlag, finalFlag, transientFlag, volatileFlag, annotations, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a FieldModifiersNode.
      * The specified start and stop locations are used.
@@ -2619,7 +2619,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         FieldModifiersNode ret = new FieldModifiersNodeImpl(access, staticFlag, finalFlag, transientFlag, volatileFlag, annotations, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a FieldModifiersNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -2631,7 +2631,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         FieldModifiersNode ret = new FieldModifiersNodeImpl(access, false, false, false, false, makeAnnotationListNode(), startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a FieldModifiersNode.
      * The specified start and stop locations are used.
@@ -2645,7 +2645,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         FieldModifiersNode ret = new FieldModifiersNodeImpl(access, false, false, false, false, makeAnnotationListNode(), startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a FloatLiteralNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -2657,7 +2657,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         FloatLiteralNode ret = new FloatLiteralNodeImpl(value, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a FloatLiteralNode.
      * The specified start and stop locations are used.
@@ -2671,7 +2671,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         FloatLiteralNode ret = new FloatLiteralNodeImpl(value, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a ForInitializerDeclarationNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -2683,7 +2683,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         ForInitializerDeclarationNode ret = new ForInitializerDeclarationNodeImpl(declaration, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a ForInitializerDeclarationNode.
      * The specified start and stop locations are used.
@@ -2697,7 +2697,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         ForInitializerDeclarationNode ret = new ForInitializerDeclarationNodeImpl(declaration, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a ForInitializerExpressionNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -2709,7 +2709,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         ForInitializerExpressionNode ret = new ForInitializerExpressionNodeImpl(expressions, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a ForInitializerExpressionNode.
      * The specified start and stop locations are used.
@@ -2723,7 +2723,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         ForInitializerExpressionNode ret = new ForInitializerExpressionNodeImpl(expressions, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a ForLoopNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -2738,7 +2738,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         ForLoopNode ret = new ForLoopNodeImpl(initializer, condition, update, statement, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a ForLoopNode.
      * The specified start and stop locations are used.
@@ -2755,7 +2755,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         ForLoopNode ret = new ForLoopNodeImpl(initializer, condition, update, statement, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a IdentifierListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -2767,7 +2767,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         IdentifierListNode ret = new IdentifierListNodeImpl(children, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a IdentifierListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -2779,7 +2779,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         List<IdentifierNode> children = Arrays.asList(childrenElements);
         return makeIdentifierListNode(children, startLocation, stopLocation);
     }
-
+    
     /**
      * Creates a IdentifierListNode.
      * The specified start and stop locations are used.
@@ -2793,7 +2793,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         IdentifierListNode ret = new IdentifierListNodeImpl(children, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a IdentifierListNode.
      * The specified start and stop locations are used.
@@ -2807,7 +2807,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         List<IdentifierNode> children = Arrays.asList(childrenElements);
         return makeIdentifierListNode(children, startLocation, stopLocation);
     }
-
+    
     /**
      * Creates a IdentifierNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -2819,7 +2819,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         IdentifierNode ret = new IdentifierNodeImpl(identifier, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a IdentifierNode.
      * The specified start and stop locations are used.
@@ -2833,7 +2833,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         IdentifierNode ret = new IdentifierNodeImpl(identifier, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a IfNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -2847,7 +2847,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         IfNode ret = new IfNodeImpl(condition, thenStatement, elseStatement, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a IfNode.
      * The specified start and stop locations are used.
@@ -2863,7 +2863,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         IfNode ret = new IfNodeImpl(condition, thenStatement, elseStatement, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a IfNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -2876,7 +2876,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         IfNode ret = new IfNodeImpl(condition, thenStatement, null, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a IfNode.
      * The specified start and stop locations are used.
@@ -2891,7 +2891,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         IfNode ret = new IfNodeImpl(condition, thenStatement, null, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a ImportListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -2903,7 +2903,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         ImportListNode ret = new ImportListNodeImpl(children, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a ImportListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -2915,7 +2915,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         List<ImportNode> children = Arrays.asList(childrenElements);
         return makeImportListNode(children, startLocation, stopLocation);
     }
-
+    
     /**
      * Creates a ImportListNode.
      * The specified start and stop locations are used.
@@ -2929,7 +2929,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         ImportListNode ret = new ImportListNodeImpl(children, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a ImportListNode.
      * The specified start and stop locations are used.
@@ -2943,7 +2943,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         List<ImportNode> children = Arrays.asList(childrenElements);
         return makeImportListNode(children, startLocation, stopLocation);
     }
-
+    
     /**
      * Creates a ImportOnDemandNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -2955,7 +2955,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         ImportOnDemandNode ret = new ImportOnDemandNodeImpl(name, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a ImportOnDemandNode.
      * The specified start and stop locations are used.
@@ -2969,7 +2969,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         ImportOnDemandNode ret = new ImportOnDemandNodeImpl(name, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a ImportSingleTypeNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -2981,7 +2981,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         ImportSingleTypeNode ret = new ImportSingleTypeNodeImpl(name, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a ImportSingleTypeNode.
      * The specified start and stop locations are used.
@@ -2995,7 +2995,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         ImportSingleTypeNode ret = new ImportSingleTypeNodeImpl(name, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a InitializerDeclarationNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -3008,7 +3008,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         InitializerDeclarationNode ret = new InitializerDeclarationNodeImpl(staticInitializer, body, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a InitializerDeclarationNode.
      * The specified start and stop locations are used.
@@ -3023,7 +3023,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         InitializerDeclarationNode ret = new InitializerDeclarationNodeImpl(staticInitializer, body, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a InlineTypeDeclarationNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -3035,7 +3035,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         InlineTypeDeclarationNode ret = new InlineTypeDeclarationNodeImpl(declaration, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a InlineTypeDeclarationNode.
      * The specified start and stop locations are used.
@@ -3049,7 +3049,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         InlineTypeDeclarationNode ret = new InlineTypeDeclarationNodeImpl(declaration, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a InstanceOfNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -3062,7 +3062,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         InstanceOfNode ret = new InstanceOfNodeImpl(expression, type, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a InstanceOfNode.
      * The specified start and stop locations are used.
@@ -3077,7 +3077,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         InstanceOfNode ret = new InstanceOfNodeImpl(expression, type, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a IntLiteralNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -3089,7 +3089,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         IntLiteralNode ret = new IntLiteralNodeImpl(value, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a IntLiteralNode.
      * The specified start and stop locations are used.
@@ -3103,7 +3103,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         IntLiteralNode ret = new IntLiteralNodeImpl(value, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a InterfaceBodyNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -3115,7 +3115,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         InterfaceBodyNode ret = new InterfaceBodyNodeImpl(members, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a InterfaceBodyNode.
      * The specified start and stop locations are used.
@@ -3129,7 +3129,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         InterfaceBodyNode ret = new InterfaceBodyNodeImpl(members, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a InterfaceDeclarationNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -3146,7 +3146,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         InterfaceDeclarationNode ret = new InterfaceDeclarationNodeImpl(modifiers, extendsClause, body, typeParameters, identifier, javadoc, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a InterfaceDeclarationNode.
      * The specified start and stop locations are used.
@@ -3165,7 +3165,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         InterfaceDeclarationNode ret = new InterfaceDeclarationNodeImpl(modifiers, extendsClause, body, typeParameters, identifier, javadoc, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a InterfaceMemberListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -3177,7 +3177,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         InterfaceMemberListNode ret = new InterfaceMemberListNodeImpl(children, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a InterfaceMemberListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -3189,7 +3189,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         List<InterfaceMemberNode> children = Arrays.asList(childrenElements);
         return makeInterfaceMemberListNode(children, startLocation, stopLocation);
     }
-
+    
     /**
      * Creates a InterfaceMemberListNode.
      * The specified start and stop locations are used.
@@ -3203,7 +3203,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         InterfaceMemberListNode ret = new InterfaceMemberListNodeImpl(children, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a InterfaceMemberListNode.
      * The specified start and stop locations are used.
@@ -3217,7 +3217,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         List<InterfaceMemberNode> children = Arrays.asList(childrenElements);
         return makeInterfaceMemberListNode(children, startLocation, stopLocation);
     }
-
+    
     /**
      * Creates a InterfaceMemberMetaprogramAnchorNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -3229,7 +3229,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         InterfaceMemberMetaprogramAnchorNode ret = new InterfaceMemberMetaprogramAnchorNodeImpl(makeNoOperationNode(), metaprogram, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a InterfaceMemberMetaprogramAnchorNode.
      * The specified start and stop locations are used.
@@ -3243,7 +3243,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         InterfaceMemberMetaprogramAnchorNode ret = new InterfaceMemberMetaprogramAnchorNodeImpl(makeNoOperationNode(), metaprogram, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a InterfaceModifiersNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -3258,7 +3258,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         InterfaceModifiersNode ret = new InterfaceModifiersNodeImpl(access, staticFlag, strictfpFlag, annotations, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a InterfaceModifiersNode.
      * The specified start and stop locations are used.
@@ -3275,7 +3275,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         InterfaceModifiersNode ret = new InterfaceModifiersNodeImpl(access, staticFlag, strictfpFlag, annotations, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a InterfaceModifiersNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -3287,7 +3287,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         InterfaceModifiersNode ret = new InterfaceModifiersNodeImpl(access, false, false, makeAnnotationListNode(), startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a InterfaceModifiersNode.
      * The specified start and stop locations are used.
@@ -3301,7 +3301,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         InterfaceModifiersNode ret = new InterfaceModifiersNodeImpl(access, false, false, makeAnnotationListNode(), startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a JavadocNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -3313,7 +3313,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         JavadocNode ret = new JavadocNodeImpl(text, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a JavadocNode.
      * The specified start and stop locations are used.
@@ -3327,7 +3327,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         JavadocNode ret = new JavadocNodeImpl(text, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a LabeledStatementNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -3340,7 +3340,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         LabeledStatementNode ret = new LabeledStatementNodeImpl(label, statement, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a LabeledStatementNode.
      * The specified start and stop locations are used.
@@ -3355,7 +3355,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         LabeledStatementNode ret = new LabeledStatementNodeImpl(label, statement, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a LongLiteralNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -3367,7 +3367,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         LongLiteralNode ret = new LongLiteralNodeImpl(value, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a LongLiteralNode.
      * The specified start and stop locations are used.
@@ -3381,7 +3381,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         LongLiteralNode ret = new LongLiteralNodeImpl(value, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a MetaprogramDependsNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -3393,7 +3393,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         MetaprogramDependsNode ret = new MetaprogramDependsNodeImpl(targetNames, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a MetaprogramDependsNode.
      * The specified start and stop locations are used.
@@ -3407,7 +3407,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         MetaprogramDependsNode ret = new MetaprogramDependsNodeImpl(targetNames, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a MetaprogramImportListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -3419,7 +3419,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         MetaprogramImportListNode ret = new MetaprogramImportListNodeImpl(children, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a MetaprogramImportListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -3431,7 +3431,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         List<MetaprogramImportNode> children = Arrays.asList(childrenElements);
         return makeMetaprogramImportListNode(children, startLocation, stopLocation);
     }
-
+    
     /**
      * Creates a MetaprogramImportListNode.
      * The specified start and stop locations are used.
@@ -3445,7 +3445,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         MetaprogramImportListNode ret = new MetaprogramImportListNodeImpl(children, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a MetaprogramImportListNode.
      * The specified start and stop locations are used.
@@ -3459,7 +3459,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         List<MetaprogramImportNode> children = Arrays.asList(childrenElements);
         return makeMetaprogramImportListNode(children, startLocation, stopLocation);
     }
-
+    
     /**
      * Creates a MetaprogramImportNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -3471,7 +3471,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         MetaprogramImportNode ret = new MetaprogramImportNodeImpl(importNode, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a MetaprogramImportNode.
      * The specified start and stop locations are used.
@@ -3485,7 +3485,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         MetaprogramImportNode ret = new MetaprogramImportNodeImpl(importNode, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a MetaprogramNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -3498,7 +3498,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         MetaprogramNode ret = new MetaprogramNodeImpl(preamble, body, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a MetaprogramNode.
      * The specified start and stop locations are used.
@@ -3513,7 +3513,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         MetaprogramNode ret = new MetaprogramNodeImpl(preamble, body, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a MetaprogramPreambleNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -3527,7 +3527,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         MetaprogramPreambleNode ret = new MetaprogramPreambleNodeImpl(imports, target, depends, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a MetaprogramPreambleNode.
      * The specified start and stop locations are used.
@@ -3543,7 +3543,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         MetaprogramPreambleNode ret = new MetaprogramPreambleNodeImpl(imports, target, depends, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a MetaprogramTargetNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -3555,7 +3555,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         MetaprogramTargetNode ret = new MetaprogramTargetNodeImpl(targets, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a MetaprogramTargetNode.
      * The specified start and stop locations are used.
@@ -3569,7 +3569,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         MetaprogramTargetNode ret = new MetaprogramTargetNodeImpl(targets, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a MethodDeclarationNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -3589,7 +3589,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         MethodDeclarationNode ret = new MethodDeclarationNodeImpl(body, modifiers, identifier, parameters, varargParameter, returnType, throwTypes, typeParameters, javadoc, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a MethodDeclarationNode.
      * The specified start and stop locations are used.
@@ -3611,7 +3611,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         MethodDeclarationNode ret = new MethodDeclarationNodeImpl(body, modifiers, identifier, parameters, varargParameter, returnType, throwTypes, typeParameters, javadoc, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a MethodDeclarationNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -3628,7 +3628,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         MethodDeclarationNode ret = new MethodDeclarationNodeImpl(body, modifiers, identifier, parameters, null, returnType, makeUnparameterizedTypeListNode(), makeTypeParameterListNode(), javadoc, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a MethodDeclarationNode.
      * The specified start and stop locations are used.
@@ -3647,7 +3647,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         MethodDeclarationNode ret = new MethodDeclarationNodeImpl(body, modifiers, identifier, parameters, null, returnType, makeUnparameterizedTypeListNode(), makeTypeParameterListNode(), javadoc, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a MethodInvocationByExpressionNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -3662,7 +3662,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         MethodInvocationByExpressionNode ret = new MethodInvocationByExpressionNodeImpl(expression, identifier, arguments, typeArguments, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a MethodInvocationByExpressionNode.
      * The specified start and stop locations are used.
@@ -3679,7 +3679,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         MethodInvocationByExpressionNode ret = new MethodInvocationByExpressionNodeImpl(expression, identifier, arguments, typeArguments, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a MethodInvocationByNameNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -3693,7 +3693,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         MethodInvocationByNameNode ret = new MethodInvocationByNameNodeImpl(name, arguments, typeArguments, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a MethodInvocationByNameNode.
      * The specified start and stop locations are used.
@@ -3709,7 +3709,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         MethodInvocationByNameNode ret = new MethodInvocationByNameNodeImpl(name, arguments, typeArguments, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a MethodModifiersNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -3728,7 +3728,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         MethodModifiersNode ret = new MethodModifiersNodeImpl(access, abstractFlag, staticFlag, finalFlag, synchronizedFlag, nativeFlag, strictfpFlag, annotations, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a MethodModifiersNode.
      * The specified start and stop locations are used.
@@ -3749,7 +3749,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         MethodModifiersNode ret = new MethodModifiersNodeImpl(access, abstractFlag, staticFlag, finalFlag, synchronizedFlag, nativeFlag, strictfpFlag, annotations, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a MethodModifiersNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -3761,7 +3761,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         MethodModifiersNode ret = new MethodModifiersNodeImpl(access, false, false, false, false, false, false, makeAnnotationListNode(), startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a MethodModifiersNode.
      * The specified start and stop locations are used.
@@ -3775,7 +3775,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         MethodModifiersNode ret = new MethodModifiersNodeImpl(access, false, false, false, false, false, false, makeAnnotationListNode(), startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a NameListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -3787,7 +3787,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         NameListNode ret = new NameListNodeImpl(children, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a NameListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -3799,7 +3799,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         List<NameNode> children = Arrays.asList(childrenElements);
         return makeNameListNode(children, startLocation, stopLocation);
     }
-
+    
     /**
      * Creates a NameListNode.
      * The specified start and stop locations are used.
@@ -3813,7 +3813,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         NameListNode ret = new NameListNodeImpl(children, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a NameListNode.
      * The specified start and stop locations are used.
@@ -3827,19 +3827,19 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         List<NameNode> children = Arrays.asList(childrenElements);
         return makeNameListNode(children, startLocation, stopLocation);
     }
-
+    
     /**
      * Creates a NoOperationNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
     @Override
     public NoOperationNode makeNoOperationNode(
-)
+    )
     {
         NoOperationNode ret = new NoOperationNodeImpl(startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a NoOperationNode.
      * The specified start and stop locations are used.
@@ -3852,7 +3852,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         NoOperationNode ret = new NoOperationNodeImpl(startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a NormalAnnotationNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -3865,7 +3865,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         NormalAnnotationNode ret = new NormalAnnotationNodeImpl(arguments, annotationType, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a NormalAnnotationNode.
      * The specified start and stop locations are used.
@@ -3880,7 +3880,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         NormalAnnotationNode ret = new NormalAnnotationNodeImpl(arguments, annotationType, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a NullLiteralNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -3892,7 +3892,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         NullLiteralNode ret = new NullLiteralNodeImpl(null, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a NullLiteralNode.
      * The specified start and stop locations are used.
@@ -3906,7 +3906,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         NullLiteralNode ret = new NullLiteralNodeImpl(null, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a NullLiteralNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -3917,7 +3917,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         NullLiteralNode ret = new NullLiteralNodeImpl(null, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a NullLiteralNode.
      * The specified start and stop locations are used.
@@ -3930,7 +3930,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         NullLiteralNode ret = new NullLiteralNodeImpl(null, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a PackageDeclarationNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -3943,7 +3943,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         PackageDeclarationNode ret = new PackageDeclarationNodeImpl(name, annotations, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a PackageDeclarationNode.
      * The specified start and stop locations are used.
@@ -3958,7 +3958,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         PackageDeclarationNode ret = new PackageDeclarationNodeImpl(name, annotations, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a PackageDeclarationNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -3970,7 +3970,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         PackageDeclarationNode ret = new PackageDeclarationNodeImpl(name, makeAnnotationListNode(), startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a PackageDeclarationNode.
      * The specified start and stop locations are used.
@@ -3984,7 +3984,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         PackageDeclarationNode ret = new PackageDeclarationNodeImpl(name, makeAnnotationListNode(), startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a PackageListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -3996,7 +3996,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         PackageListNode ret = new PackageListNodeImpl(children, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a PackageListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -4008,7 +4008,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         List<PackageNode> children = Arrays.asList(childrenElements);
         return makePackageListNode(children, startLocation, stopLocation);
     }
-
+    
     /**
      * Creates a PackageListNode.
      * The specified start and stop locations are used.
@@ -4022,7 +4022,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         PackageListNode ret = new PackageListNodeImpl(children, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a PackageListNode.
      * The specified start and stop locations are used.
@@ -4036,7 +4036,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         List<PackageNode> children = Arrays.asList(childrenElements);
         return makePackageListNode(children, startLocation, stopLocation);
     }
-
+    
     /**
      * Creates a PackageNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -4048,7 +4048,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         PackageNode ret = new PackageNodeImpl(name, packageNodeCallback, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a PackageNode.
      * The specified start and stop locations are used.
@@ -4062,7 +4062,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         PackageNode ret = new PackageNodeImpl(name, packageNodeCallback, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a ParameterizedTypeNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -4075,7 +4075,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         ParameterizedTypeNode ret = new ParameterizedTypeNodeImpl(baseType, typeArguments, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a ParameterizedTypeNode.
      * The specified start and stop locations are used.
@@ -4090,7 +4090,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         ParameterizedTypeNode ret = new ParameterizedTypeNodeImpl(baseType, typeArguments, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a ParameterizedTypeSelectNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -4103,7 +4103,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         ParameterizedTypeSelectNode ret = new ParameterizedTypeSelectNodeImpl(base, select, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a ParameterizedTypeSelectNode.
      * The specified start and stop locations are used.
@@ -4118,7 +4118,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         ParameterizedTypeSelectNode ret = new ParameterizedTypeSelectNodeImpl(base, select, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a ParenthesizedExpressionNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -4130,7 +4130,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         ParenthesizedExpressionNode ret = new ParenthesizedExpressionNodeImpl(expression, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a ParenthesizedExpressionNode.
      * The specified start and stop locations are used.
@@ -4144,7 +4144,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         ParenthesizedExpressionNode ret = new ParenthesizedExpressionNodeImpl(expression, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a PrimitiveTypeNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -4156,7 +4156,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         PrimitiveTypeNode ret = new PrimitiveTypeNodeImpl(primitiveType, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a PrimitiveTypeNode.
      * The specified start and stop locations are used.
@@ -4170,7 +4170,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         PrimitiveTypeNode ret = new PrimitiveTypeNodeImpl(primitiveType, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a QualifiedClassInstantiationNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -4187,7 +4187,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         QualifiedClassInstantiationNode ret = new QualifiedClassInstantiationNodeImpl(enclosingExpression, identifier, typeArguments, constructorTypeArguments, arguments, body, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a QualifiedClassInstantiationNode.
      * The specified start and stop locations are used.
@@ -4206,7 +4206,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         QualifiedClassInstantiationNode ret = new QualifiedClassInstantiationNodeImpl(enclosingExpression, identifier, typeArguments, constructorTypeArguments, arguments, body, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a QualifiedNameNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -4220,7 +4220,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         QualifiedNameNode ret = new QualifiedNameNodeImpl(base, identifier, category, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a QualifiedNameNode.
      * The specified start and stop locations are used.
@@ -4236,7 +4236,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         QualifiedNameNode ret = new QualifiedNameNodeImpl(base, identifier, category, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a ReferenceTypeListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -4248,7 +4248,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         ReferenceTypeListNode ret = new ReferenceTypeListNodeImpl(children, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a ReferenceTypeListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -4260,7 +4260,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         List<ReferenceTypeNode> children = Arrays.asList(childrenElements);
         return makeReferenceTypeListNode(children, startLocation, stopLocation);
     }
-
+    
     /**
      * Creates a ReferenceTypeListNode.
      * The specified start and stop locations are used.
@@ -4274,7 +4274,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         ReferenceTypeListNode ret = new ReferenceTypeListNodeImpl(children, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a ReferenceTypeListNode.
      * The specified start and stop locations are used.
@@ -4288,7 +4288,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         List<ReferenceTypeNode> children = Arrays.asList(childrenElements);
         return makeReferenceTypeListNode(children, startLocation, stopLocation);
     }
-
+    
     /**
      * Creates a ReturnNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -4300,7 +4300,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         ReturnNode ret = new ReturnNodeImpl(expression, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a ReturnNode.
      * The specified start and stop locations are used.
@@ -4314,7 +4314,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         ReturnNode ret = new ReturnNodeImpl(expression, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a SimpleNameNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -4327,7 +4327,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         SimpleNameNode ret = new SimpleNameNodeImpl(identifier, category, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a SimpleNameNode.
      * The specified start and stop locations are used.
@@ -4342,7 +4342,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         SimpleNameNode ret = new SimpleNameNodeImpl(identifier, category, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a SingleElementAnnotationNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -4355,7 +4355,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         SingleElementAnnotationNode ret = new SingleElementAnnotationNodeImpl(value, annotationType, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a SingleElementAnnotationNode.
      * The specified start and stop locations are used.
@@ -4370,7 +4370,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         SingleElementAnnotationNode ret = new SingleElementAnnotationNodeImpl(value, annotationType, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a SingleStaticImportNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -4383,7 +4383,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         SingleStaticImportNode ret = new SingleStaticImportNodeImpl(name, identifier, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a SingleStaticImportNode.
      * The specified start and stop locations are used.
@@ -4398,7 +4398,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         SingleStaticImportNode ret = new SingleStaticImportNodeImpl(name, identifier, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a StatementExpressionListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -4410,7 +4410,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         StatementExpressionListNode ret = new StatementExpressionListNodeImpl(children, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a StatementExpressionListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -4422,7 +4422,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         List<StatementExpressionNode> children = Arrays.asList(childrenElements);
         return makeStatementExpressionListNode(children, startLocation, stopLocation);
     }
-
+    
     /**
      * Creates a StatementExpressionListNode.
      * The specified start and stop locations are used.
@@ -4436,7 +4436,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         StatementExpressionListNode ret = new StatementExpressionListNodeImpl(children, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a StatementExpressionListNode.
      * The specified start and stop locations are used.
@@ -4450,7 +4450,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         List<StatementExpressionNode> children = Arrays.asList(childrenElements);
         return makeStatementExpressionListNode(children, startLocation, stopLocation);
     }
-
+    
     /**
      * Creates a StaticImportOnDemandNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -4462,7 +4462,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         StaticImportOnDemandNode ret = new StaticImportOnDemandNodeImpl(name, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a StaticImportOnDemandNode.
      * The specified start and stop locations are used.
@@ -4476,7 +4476,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         StaticImportOnDemandNode ret = new StaticImportOnDemandNodeImpl(name, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a StringLiteralNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -4488,7 +4488,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         StringLiteralNode ret = new StringLiteralNodeImpl(value, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a StringLiteralNode.
      * The specified start and stop locations are used.
@@ -4502,7 +4502,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         StringLiteralNode ret = new StringLiteralNodeImpl(value, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a SuperFieldAccessNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -4515,7 +4515,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         SuperFieldAccessNode ret = new SuperFieldAccessNodeImpl(type, identifier, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a SuperFieldAccessNode.
      * The specified start and stop locations are used.
@@ -4530,7 +4530,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         SuperFieldAccessNode ret = new SuperFieldAccessNodeImpl(type, identifier, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a SuperFieldAccessNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -4542,7 +4542,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         SuperFieldAccessNode ret = new SuperFieldAccessNodeImpl(null, identifier, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a SuperFieldAccessNode.
      * The specified start and stop locations are used.
@@ -4556,7 +4556,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         SuperFieldAccessNode ret = new SuperFieldAccessNodeImpl(null, identifier, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a SuperMethodInvocationNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -4571,7 +4571,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         SuperMethodInvocationNode ret = new SuperMethodInvocationNodeImpl(type, identifier, arguments, typeArguments, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a SuperMethodInvocationNode.
      * The specified start and stop locations are used.
@@ -4588,7 +4588,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         SuperMethodInvocationNode ret = new SuperMethodInvocationNodeImpl(type, identifier, arguments, typeArguments, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a SuperMethodInvocationNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -4601,7 +4601,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         SuperMethodInvocationNode ret = new SuperMethodInvocationNodeImpl(null, identifier, arguments, makeReferenceTypeListNode(), startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a SuperMethodInvocationNode.
      * The specified start and stop locations are used.
@@ -4616,7 +4616,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         SuperMethodInvocationNode ret = new SuperMethodInvocationNodeImpl(null, identifier, arguments, makeReferenceTypeListNode(), startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a SuperMethodInvocationNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -4630,7 +4630,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         SuperMethodInvocationNode ret = new SuperMethodInvocationNodeImpl(null, identifier, arguments, typeArguments, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a SuperMethodInvocationNode.
      * The specified start and stop locations are used.
@@ -4646,7 +4646,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         SuperMethodInvocationNode ret = new SuperMethodInvocationNodeImpl(null, identifier, arguments, typeArguments, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a SuperclassConstructorInvocationNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -4660,7 +4660,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         SuperclassConstructorInvocationNode ret = new SuperclassConstructorInvocationNodeImpl(qualifyingExpression, arguments, typeArguments, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a SuperclassConstructorInvocationNode.
      * The specified start and stop locations are used.
@@ -4676,7 +4676,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         SuperclassConstructorInvocationNode ret = new SuperclassConstructorInvocationNodeImpl(qualifyingExpression, arguments, typeArguments, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a SuperclassConstructorInvocationNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -4688,7 +4688,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         SuperclassConstructorInvocationNode ret = new SuperclassConstructorInvocationNodeImpl(null, arguments, makeReferenceTypeListNode(), startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a SuperclassConstructorInvocationNode.
      * The specified start and stop locations are used.
@@ -4702,7 +4702,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         SuperclassConstructorInvocationNode ret = new SuperclassConstructorInvocationNodeImpl(null, arguments, makeReferenceTypeListNode(), startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a SwitchNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -4715,7 +4715,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         SwitchNode ret = new SwitchNodeImpl(expression, cases, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a SwitchNode.
      * The specified start and stop locations are used.
@@ -4730,7 +4730,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         SwitchNode ret = new SwitchNodeImpl(expression, cases, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a SynchronizedNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -4743,7 +4743,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         SynchronizedNode ret = new SynchronizedNodeImpl(expression, block, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a SynchronizedNode.
      * The specified start and stop locations are used.
@@ -4758,7 +4758,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         SynchronizedNode ret = new SynchronizedNodeImpl(expression, block, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a ThisNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -4770,7 +4770,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         ThisNode ret = new ThisNodeImpl(type, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a ThisNode.
      * The specified start and stop locations are used.
@@ -4784,7 +4784,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         ThisNode ret = new ThisNodeImpl(type, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a ThisNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -4795,7 +4795,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         ThisNode ret = new ThisNodeImpl(null, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a ThisNode.
      * The specified start and stop locations are used.
@@ -4808,7 +4808,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         ThisNode ret = new ThisNodeImpl(null, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a ThrowNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -4820,7 +4820,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         ThrowNode ret = new ThrowNodeImpl(expression, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a ThrowNode.
      * The specified start and stop locations are used.
@@ -4834,7 +4834,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         ThrowNode ret = new ThrowNodeImpl(expression, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a TryNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -4848,7 +4848,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         TryNode ret = new TryNodeImpl(block, catches, finallyBlock, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a TryNode.
      * The specified start and stop locations are used.
@@ -4864,7 +4864,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         TryNode ret = new TryNodeImpl(block, catches, finallyBlock, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a TryNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -4877,7 +4877,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         TryNode ret = new TryNodeImpl(block, makeCatchListNode(), finallyBlock, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a TryNode.
      * The specified start and stop locations are used.
@@ -4892,7 +4892,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         TryNode ret = new TryNodeImpl(block, makeCatchListNode(), finallyBlock, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a TryNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -4905,7 +4905,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         TryNode ret = new TryNodeImpl(block, catches, null, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a TryNode.
      * The specified start and stop locations are used.
@@ -4920,7 +4920,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         TryNode ret = new TryNodeImpl(block, catches, null, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a TypeArgumentListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -4932,7 +4932,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         TypeArgumentListNode ret = new TypeArgumentListNodeImpl(children, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a TypeArgumentListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -4944,7 +4944,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         List<TypeArgumentNode> children = Arrays.asList(childrenElements);
         return makeTypeArgumentListNode(children, startLocation, stopLocation);
     }
-
+    
     /**
      * Creates a TypeArgumentListNode.
      * The specified start and stop locations are used.
@@ -4958,7 +4958,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         TypeArgumentListNode ret = new TypeArgumentListNodeImpl(children, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a TypeArgumentListNode.
      * The specified start and stop locations are used.
@@ -4972,7 +4972,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         List<TypeArgumentNode> children = Arrays.asList(childrenElements);
         return makeTypeArgumentListNode(children, startLocation, stopLocation);
     }
-
+    
     /**
      * Creates a TypeCastNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -4985,7 +4985,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         TypeCastNode ret = new TypeCastNodeImpl(expression, type, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a TypeCastNode.
      * The specified start and stop locations are used.
@@ -5000,7 +5000,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         TypeCastNode ret = new TypeCastNodeImpl(expression, type, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a TypeDeclarationListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -5012,7 +5012,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         TypeDeclarationListNode ret = new TypeDeclarationListNodeImpl(children, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a TypeDeclarationListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -5024,7 +5024,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         List<TypeDeclarationNode> children = Arrays.asList(childrenElements);
         return makeTypeDeclarationListNode(children, startLocation, stopLocation);
     }
-
+    
     /**
      * Creates a TypeDeclarationListNode.
      * The specified start and stop locations are used.
@@ -5038,7 +5038,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         TypeDeclarationListNode ret = new TypeDeclarationListNodeImpl(children, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a TypeDeclarationListNode.
      * The specified start and stop locations are used.
@@ -5052,7 +5052,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         List<TypeDeclarationNode> children = Arrays.asList(childrenElements);
         return makeTypeDeclarationListNode(children, startLocation, stopLocation);
     }
-
+    
     /**
      * Creates a TypeDeclarationMetaprogramAnchorNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -5064,7 +5064,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         TypeDeclarationMetaprogramAnchorNode ret = new TypeDeclarationMetaprogramAnchorNodeImpl(makeNoOperationNode(), metaprogram, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a TypeDeclarationMetaprogramAnchorNode.
      * The specified start and stop locations are used.
@@ -5078,7 +5078,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         TypeDeclarationMetaprogramAnchorNode ret = new TypeDeclarationMetaprogramAnchorNodeImpl(makeNoOperationNode(), metaprogram, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a TypeListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -5090,7 +5090,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         TypeListNode ret = new TypeListNodeImpl(children, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a TypeListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -5102,7 +5102,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         List<TypeNode> children = Arrays.asList(childrenElements);
         return makeTypeListNode(children, startLocation, stopLocation);
     }
-
+    
     /**
      * Creates a TypeListNode.
      * The specified start and stop locations are used.
@@ -5116,7 +5116,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         TypeListNode ret = new TypeListNodeImpl(children, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a TypeListNode.
      * The specified start and stop locations are used.
@@ -5130,7 +5130,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         List<TypeNode> children = Arrays.asList(childrenElements);
         return makeTypeListNode(children, startLocation, stopLocation);
     }
-
+    
     /**
      * Creates a TypeParameterListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -5142,7 +5142,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         TypeParameterListNode ret = new TypeParameterListNodeImpl(children, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a TypeParameterListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -5154,7 +5154,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         List<TypeParameterNode> children = Arrays.asList(childrenElements);
         return makeTypeParameterListNode(children, startLocation, stopLocation);
     }
-
+    
     /**
      * Creates a TypeParameterListNode.
      * The specified start and stop locations are used.
@@ -5168,7 +5168,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         TypeParameterListNode ret = new TypeParameterListNodeImpl(children, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a TypeParameterListNode.
      * The specified start and stop locations are used.
@@ -5182,7 +5182,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         List<TypeParameterNode> children = Arrays.asList(childrenElements);
         return makeTypeParameterListNode(children, startLocation, stopLocation);
     }
-
+    
     /**
      * Creates a TypeParameterNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -5195,7 +5195,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         TypeParameterNode ret = new TypeParameterNodeImpl(identifier, bounds, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a TypeParameterNode.
      * The specified start and stop locations are used.
@@ -5210,7 +5210,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         TypeParameterNode ret = new TypeParameterNodeImpl(identifier, bounds, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a UnaryExpressionNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -5223,7 +5223,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         UnaryExpressionNode ret = new UnaryExpressionNodeImpl(expression, operator, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a UnaryExpressionNode.
      * The specified start and stop locations are used.
@@ -5238,7 +5238,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         UnaryExpressionNode ret = new UnaryExpressionNodeImpl(expression, operator, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a UnaryStatementExpressionNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -5251,7 +5251,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         UnaryStatementExpressionNode ret = new UnaryStatementExpressionNodeImpl(expression, operator, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a UnaryStatementExpressionNode.
      * The specified start and stop locations are used.
@@ -5266,7 +5266,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         UnaryStatementExpressionNode ret = new UnaryStatementExpressionNodeImpl(expression, operator, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a UnparameterizedTypeListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -5278,7 +5278,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         UnparameterizedTypeListNode ret = new UnparameterizedTypeListNodeImpl(children, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a UnparameterizedTypeListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -5290,7 +5290,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         List<UnparameterizedTypeNode> children = Arrays.asList(childrenElements);
         return makeUnparameterizedTypeListNode(children, startLocation, stopLocation);
     }
-
+    
     /**
      * Creates a UnparameterizedTypeListNode.
      * The specified start and stop locations are used.
@@ -5304,7 +5304,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         UnparameterizedTypeListNode ret = new UnparameterizedTypeListNodeImpl(children, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a UnparameterizedTypeListNode.
      * The specified start and stop locations are used.
@@ -5318,7 +5318,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         List<UnparameterizedTypeNode> children = Arrays.asList(childrenElements);
         return makeUnparameterizedTypeListNode(children, startLocation, stopLocation);
     }
-
+    
     /**
      * Creates a UnparameterizedTypeNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -5330,7 +5330,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         UnparameterizedTypeNode ret = new UnparameterizedTypeNodeImpl(name, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a UnparameterizedTypeNode.
      * The specified start and stop locations are used.
@@ -5344,7 +5344,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         UnparameterizedTypeNode ret = new UnparameterizedTypeNodeImpl(name, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a UnqualifiedClassInstantiationNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -5359,7 +5359,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         UnqualifiedClassInstantiationNode ret = new UnqualifiedClassInstantiationNodeImpl(type, constructorTypeArguments, arguments, body, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a UnqualifiedClassInstantiationNode.
      * The specified start and stop locations are used.
@@ -5376,7 +5376,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         UnqualifiedClassInstantiationNode ret = new UnqualifiedClassInstantiationNodeImpl(type, constructorTypeArguments, arguments, body, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a UnqualifiedClassInstantiationNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -5388,7 +5388,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         UnqualifiedClassInstantiationNode ret = new UnqualifiedClassInstantiationNodeImpl(type, makeTypeArgumentListNode(), makeExpressionListNode(), null, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a UnqualifiedClassInstantiationNode.
      * The specified start and stop locations are used.
@@ -5402,7 +5402,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         UnqualifiedClassInstantiationNode ret = new UnqualifiedClassInstantiationNodeImpl(type, makeTypeArgumentListNode(), makeExpressionListNode(), null, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a UnqualifiedClassInstantiationNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -5415,7 +5415,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         UnqualifiedClassInstantiationNode ret = new UnqualifiedClassInstantiationNodeImpl(type, makeTypeArgumentListNode(), arguments, null, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a UnqualifiedClassInstantiationNode.
      * The specified start and stop locations are used.
@@ -5430,7 +5430,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         UnqualifiedClassInstantiationNode ret = new UnqualifiedClassInstantiationNodeImpl(type, makeTypeArgumentListNode(), arguments, null, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a VariableDeclarationNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -5443,7 +5443,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         VariableDeclarationNode ret = new VariableDeclarationNodeImpl(modifiers, declarators, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a VariableDeclarationNode.
      * The specified start and stop locations are used.
@@ -5458,7 +5458,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         VariableDeclarationNode ret = new VariableDeclarationNodeImpl(modifiers, declarators, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a VariableDeclaratorListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -5470,7 +5470,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         VariableDeclaratorListNode ret = new VariableDeclaratorListNodeImpl(children, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a VariableDeclaratorListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -5482,7 +5482,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         List<VariableDeclaratorNode> children = Arrays.asList(childrenElements);
         return makeVariableDeclaratorListNode(children, startLocation, stopLocation);
     }
-
+    
     /**
      * Creates a VariableDeclaratorListNode.
      * The specified start and stop locations are used.
@@ -5496,7 +5496,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         VariableDeclaratorListNode ret = new VariableDeclaratorListNodeImpl(children, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a VariableDeclaratorListNode.
      * The specified start and stop locations are used.
@@ -5510,7 +5510,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         List<VariableDeclaratorNode> children = Arrays.asList(childrenElements);
         return makeVariableDeclaratorListNode(children, startLocation, stopLocation);
     }
-
+    
     /**
      * Creates a VariableDeclaratorNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -5524,7 +5524,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         VariableDeclaratorNode ret = new VariableDeclaratorNodeImpl(type, name, initializer, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a VariableDeclaratorNode.
      * The specified start and stop locations are used.
@@ -5540,7 +5540,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         VariableDeclaratorNode ret = new VariableDeclaratorNodeImpl(type, name, initializer, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a VariableInitializerListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -5552,7 +5552,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         VariableInitializerListNode ret = new VariableInitializerListNodeImpl(children, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a VariableInitializerListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -5564,7 +5564,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         List<VariableInitializerNode> children = Arrays.asList(childrenElements);
         return makeVariableInitializerListNode(children, startLocation, stopLocation);
     }
-
+    
     /**
      * Creates a VariableInitializerListNode.
      * The specified start and stop locations are used.
@@ -5578,7 +5578,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         VariableInitializerListNode ret = new VariableInitializerListNodeImpl(children, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a VariableInitializerListNode.
      * The specified start and stop locations are used.
@@ -5592,7 +5592,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         List<VariableInitializerNode> children = Arrays.asList(childrenElements);
         return makeVariableInitializerListNode(children, startLocation, stopLocation);
     }
-
+    
     /**
      * Creates a VariableListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -5604,7 +5604,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         VariableListNode ret = new VariableListNodeImpl(children, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a VariableListNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -5616,7 +5616,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         List<VariableNode> children = Arrays.asList(childrenElements);
         return makeVariableListNode(children, startLocation, stopLocation);
     }
-
+    
     /**
      * Creates a VariableListNode.
      * The specified start and stop locations are used.
@@ -5630,7 +5630,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         VariableListNode ret = new VariableListNodeImpl(children, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a VariableListNode.
      * The specified start and stop locations are used.
@@ -5644,7 +5644,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         List<VariableNode> children = Arrays.asList(childrenElements);
         return makeVariableListNode(children, startLocation, stopLocation);
     }
-
+    
     /**
      * Creates a VariableModifiersNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -5657,7 +5657,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         VariableModifiersNode ret = new VariableModifiersNodeImpl(finalFlag, annotations, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a VariableModifiersNode.
      * The specified start and stop locations are used.
@@ -5672,7 +5672,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         VariableModifiersNode ret = new VariableModifiersNodeImpl(finalFlag, annotations, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a VariableModifiersNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -5683,7 +5683,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         VariableModifiersNode ret = new VariableModifiersNodeImpl(false, makeAnnotationListNode(), startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a VariableModifiersNode.
      * The specified start and stop locations are used.
@@ -5696,7 +5696,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         VariableModifiersNode ret = new VariableModifiersNodeImpl(false, makeAnnotationListNode(), startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a VariableNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -5710,7 +5710,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         VariableNode ret = new VariableNodeImpl(modifiers, type, identifier, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a VariableNode.
      * The specified start and stop locations are used.
@@ -5726,19 +5726,19 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         VariableNode ret = new VariableNodeImpl(modifiers, type, identifier, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a VoidTypeNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
     @Override
     public VoidTypeNode makeVoidTypeNode(
-)
+    )
     {
         VoidTypeNode ret = new VoidTypeNodeImpl(startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a VoidTypeNode.
      * The specified start and stop locations are used.
@@ -5751,7 +5751,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         VoidTypeNode ret = new VoidTypeNodeImpl(startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a WhileLoopNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -5764,7 +5764,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         WhileLoopNode ret = new WhileLoopNodeImpl(condition, statement, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a WhileLoopNode.
      * The specified start and stop locations are used.
@@ -5779,7 +5779,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         WhileLoopNode ret = new WhileLoopNodeImpl(condition, statement, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a WildcardTypeNode.
      * The start and stop locations which have been set as properties of this factory are used.
@@ -5792,7 +5792,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         WildcardTypeNode ret = new WildcardTypeNodeImpl(bound, upperBound, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
     /**
      * Creates a WildcardTypeNode.
      * The specified start and stop locations are used.
@@ -5807,5 +5807,5 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
         WildcardTypeNode ret = new WildcardTypeNodeImpl(bound, upperBound, startLocation, stopLocation, manager);
         return ret;
     }
-
+    
 }

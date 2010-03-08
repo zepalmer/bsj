@@ -18,10 +18,10 @@ public abstract class MetaprogramAnchorNodeImpl<T extends Node> extends NodeImpl
 {
     /** The replacement node for this metaprogram. */
     private T replacement;
-
+    
     /** The metaprogram on this node. */
     private MetaprogramNode metaprogram;
-
+    
     /** General constructor. */
     protected MetaprogramAnchorNodeImpl(
             T replacement,
@@ -34,7 +34,7 @@ public abstract class MetaprogramAnchorNodeImpl<T extends Node> extends NodeImpl
         this.replacement = replacement;
         setMetaprogram(metaprogram);
     }
-
+    
     /**
      * Gets the metaprogram on this node.
      * @return The metaprogram on this node.
@@ -43,7 +43,7 @@ public abstract class MetaprogramAnchorNodeImpl<T extends Node> extends NodeImpl
     {
         return this.metaprogram;
     }
-
+    
     /**
      * Changes the metaprogram on this node.
      * @param metaprogram The metaprogram on this node.
@@ -60,7 +60,7 @@ public abstract class MetaprogramAnchorNodeImpl<T extends Node> extends NodeImpl
             ((NodeImpl)this.metaprogram).setParent(this);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -77,7 +77,7 @@ public abstract class MetaprogramAnchorNodeImpl<T extends Node> extends NodeImpl
             this.metaprogram.receive(visitor);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided typed visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -94,7 +94,7 @@ public abstract class MetaprogramAnchorNodeImpl<T extends Node> extends NodeImpl
             this.metaprogram.receiveTyped(visitor);
         }
     }
-
+    
     @Override
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
@@ -108,7 +108,7 @@ public abstract class MetaprogramAnchorNodeImpl<T extends Node> extends NodeImpl
         visitor.visitMetaprogramAnchorNodeStop(this);
         visitor.visitStopEnd(this);
     }
-
+    
     /**
      * Produces a mutable list of this node's children.  Modifying this list will have no
      * effect on this node.
@@ -121,7 +121,7 @@ public abstract class MetaprogramAnchorNodeImpl<T extends Node> extends NodeImpl
         list.add(getMetaprogram());
         return list;
     }
-
+    
     /**
      * Obtains a human-readable description of this node.
      * @return A human-readable description of this node.
@@ -142,8 +142,8 @@ public abstract class MetaprogramAnchorNodeImpl<T extends Node> extends NodeImpl
         sb.append(']');
         return sb.toString();
     }
-
-
+    
+    
 	/**
 	 * Retrieves the node with which this anchor will be replaced once its metaprogram executes.
 	 * @return The replacement node to use.

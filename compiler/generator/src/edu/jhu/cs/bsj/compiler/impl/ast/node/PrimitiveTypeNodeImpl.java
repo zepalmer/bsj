@@ -19,7 +19,7 @@ public class PrimitiveTypeNodeImpl extends NodeImpl implements PrimitiveTypeNode
 {
     /** The primitive type being represented. */
     private PrimitiveType primitiveType;
-
+    
     /** General constructor. */
     public PrimitiveTypeNodeImpl(
             PrimitiveType primitiveType,
@@ -30,7 +30,7 @@ public class PrimitiveTypeNodeImpl extends NodeImpl implements PrimitiveTypeNode
         super(startLocation, stopLocation, manager);
         this.primitiveType = primitiveType;
     }
-
+    
     /**
      * Gets the primitive type being represented.
      * @return The primitive type being represented.
@@ -39,7 +39,7 @@ public class PrimitiveTypeNodeImpl extends NodeImpl implements PrimitiveTypeNode
     {
         return this.primitiveType;
     }
-
+    
     /**
      * Changes the primitive type being represented.
      * @param primitiveType The primitive type being represented.
@@ -48,7 +48,7 @@ public class PrimitiveTypeNodeImpl extends NodeImpl implements PrimitiveTypeNode
     {
         this.primitiveType = primitiveType;
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -61,7 +61,7 @@ public class PrimitiveTypeNodeImpl extends NodeImpl implements PrimitiveTypeNode
     {
         super.receiveToChildren(visitor);
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided typed visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -74,7 +74,7 @@ public class PrimitiveTypeNodeImpl extends NodeImpl implements PrimitiveTypeNode
     {
         super.receiveTypedToChildren(visitor);
     }
-
+    
     @Override
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
@@ -94,7 +94,7 @@ public class PrimitiveTypeNodeImpl extends NodeImpl implements PrimitiveTypeNode
         visitor.visitPrimitiveTypeNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
-
+    
     /**
      * Produces a mutable list of this node's children.  Modifying this list will have no
      * effect on this node.
@@ -107,7 +107,7 @@ public class PrimitiveTypeNodeImpl extends NodeImpl implements PrimitiveTypeNode
         list.add(getPrimitiveType());
         return list;
     }
-
+    
     /**
      * Obtains a human-readable description of this node.
      * @return A human-readable description of this node.
@@ -128,7 +128,7 @@ public class PrimitiveTypeNodeImpl extends NodeImpl implements PrimitiveTypeNode
         sb.append(']');
         return sb.toString();
     }
-
+    
     /**
      * Executes an operation on this node.
      * @param operation The operation to perform.
@@ -140,7 +140,7 @@ public class PrimitiveTypeNodeImpl extends NodeImpl implements PrimitiveTypeNode
     {
         return operation.executePrimitiveTypeNode(this, p);
     }
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

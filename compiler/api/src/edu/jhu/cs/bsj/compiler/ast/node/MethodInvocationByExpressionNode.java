@@ -29,25 +29,25 @@ public interface MethodInvocationByExpressionNode extends MethodInvocationNode
      * @return The expression against which to invoke the method.
      */
     public PrimaryExpressionNode getExpression();
-
+    
     /**
      * Changes the expression against which to invoke the method.
      * @param expression The expression against which to invoke the method.
      */
     public void setExpression(PrimaryExpressionNode expression);
-
+    
     /**
      * Gets the name of the method to invoke.
      * @return The name of the method to invoke.
      */
     public IdentifierNode getIdentifier();
-
+    
     /**
      * Changes the name of the method to invoke.
      * @param identifier The name of the method to invoke.
      */
     public void setIdentifier(IdentifierNode identifier);
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

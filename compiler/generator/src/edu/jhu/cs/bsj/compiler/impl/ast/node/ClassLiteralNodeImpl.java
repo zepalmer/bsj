@@ -26,7 +26,7 @@ public class ClassLiteralNodeImpl extends LiteralNodeImpl<LiteralizableTypeNode>
     {
         super(value, startLocation, stopLocation, manager);
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -39,7 +39,7 @@ public class ClassLiteralNodeImpl extends LiteralNodeImpl<LiteralizableTypeNode>
     {
         super.receiveToChildren(visitor);
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided typed visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -52,7 +52,7 @@ public class ClassLiteralNodeImpl extends LiteralNodeImpl<LiteralizableTypeNode>
     {
         super.receiveTypedToChildren(visitor);
     }
-
+    
     @Override
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
@@ -68,7 +68,7 @@ public class ClassLiteralNodeImpl extends LiteralNodeImpl<LiteralizableTypeNode>
         visitor.visitClassLiteralNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
-
+    
     /**
      * Produces a mutable list of this node's children.  Modifying this list will have no
      * effect on this node.
@@ -80,7 +80,7 @@ public class ClassLiteralNodeImpl extends LiteralNodeImpl<LiteralizableTypeNode>
         List<Object> list = super.getChildObjects();
         return list;
     }
-
+    
     /**
      * Obtains a human-readable description of this node.
      * @return A human-readable description of this node.
@@ -101,7 +101,7 @@ public class ClassLiteralNodeImpl extends LiteralNodeImpl<LiteralizableTypeNode>
         sb.append(']');
         return sb.toString();
     }
-
+    
     /**
      * Executes an operation on this node.
      * @param operation The operation to perform.
@@ -113,7 +113,7 @@ public class ClassLiteralNodeImpl extends LiteralNodeImpl<LiteralizableTypeNode>
     {
         return operation.executeClassLiteralNode(this, p);
     }
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

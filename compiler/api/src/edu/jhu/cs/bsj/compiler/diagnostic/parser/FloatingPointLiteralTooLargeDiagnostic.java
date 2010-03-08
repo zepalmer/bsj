@@ -14,11 +14,11 @@ public class FloatingPointLiteralTooLargeDiagnostic<T extends javax.tools.JavaFi
     public static final String CODE = "bsj.parser.error.invalidFloatingPointLiteral.tooLarge";
     
     public FloatingPointLiteralTooLargeDiagnostic(
-                long lineNumber,
-                long columnNumber,
-                T source,
-                String ruleName,
-                String literalText)
+            long lineNumber,
+            long columnNumber,
+            T source,
+            String ruleName,
+            String literalText)
     {
         super(lineNumber, columnNumber, source, CODE, Kind.ERROR, ruleName, literalText);
     }

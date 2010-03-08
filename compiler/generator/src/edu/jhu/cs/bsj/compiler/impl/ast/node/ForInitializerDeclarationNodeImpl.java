@@ -19,7 +19,7 @@ public class ForInitializerDeclarationNodeImpl extends NodeImpl implements ForIn
 {
     /** The variables declared in this initializer. */
     private VariableDeclarationNode declaration;
-
+    
     /** General constructor. */
     public ForInitializerDeclarationNodeImpl(
             VariableDeclarationNode declaration,
@@ -30,7 +30,7 @@ public class ForInitializerDeclarationNodeImpl extends NodeImpl implements ForIn
         super(startLocation, stopLocation, manager);
         setDeclaration(declaration);
     }
-
+    
     /**
      * Gets the variables declared in this initializer.
      * @return The variables declared in this initializer.
@@ -39,7 +39,7 @@ public class ForInitializerDeclarationNodeImpl extends NodeImpl implements ForIn
     {
         return this.declaration;
     }
-
+    
     /**
      * Changes the variables declared in this initializer.
      * @param declaration The variables declared in this initializer.
@@ -56,7 +56,7 @@ public class ForInitializerDeclarationNodeImpl extends NodeImpl implements ForIn
             ((NodeImpl)this.declaration).setParent(this);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -73,7 +73,7 @@ public class ForInitializerDeclarationNodeImpl extends NodeImpl implements ForIn
             this.declaration.receive(visitor);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided typed visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -90,7 +90,7 @@ public class ForInitializerDeclarationNodeImpl extends NodeImpl implements ForIn
             this.declaration.receiveTyped(visitor);
         }
     }
-
+    
     @Override
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
@@ -106,7 +106,7 @@ public class ForInitializerDeclarationNodeImpl extends NodeImpl implements ForIn
         visitor.visitForInitializerDeclarationNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
-
+    
     /**
      * Produces a mutable list of this node's children.  Modifying this list will have no
      * effect on this node.
@@ -119,7 +119,7 @@ public class ForInitializerDeclarationNodeImpl extends NodeImpl implements ForIn
         list.add(getDeclaration());
         return list;
     }
-
+    
     /**
      * Obtains a human-readable description of this node.
      * @return A human-readable description of this node.
@@ -140,7 +140,7 @@ public class ForInitializerDeclarationNodeImpl extends NodeImpl implements ForIn
         sb.append(']');
         return sb.toString();
     }
-
+    
     /**
      * Executes an operation on this node.
      * @param operation The operation to perform.
@@ -152,7 +152,7 @@ public class ForInitializerDeclarationNodeImpl extends NodeImpl implements ForIn
     {
         return operation.executeForInitializerDeclarationNode(this, p);
     }
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

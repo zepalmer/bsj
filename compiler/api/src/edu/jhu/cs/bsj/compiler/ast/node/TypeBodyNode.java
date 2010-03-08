@@ -15,7 +15,7 @@ public interface TypeBodyNode<T extends Node> extends Node
      * @return The members of this type declaration body.
      */
     public ListNode<? extends T> getMembers();
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

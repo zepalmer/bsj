@@ -21,10 +21,10 @@ public class MetaprogramNodeImpl extends NodeImpl implements MetaprogramNode
 {
     /** The preamble for this metaprogram. */
     private MetaprogramPreambleNode preamble;
-
+    
     /** The list of statements in the metaprogram's body. */
     private BlockStatementListNode body;
-
+    
     /** General constructor. */
     public MetaprogramNodeImpl(
             MetaprogramPreambleNode preamble,
@@ -37,7 +37,7 @@ public class MetaprogramNodeImpl extends NodeImpl implements MetaprogramNode
         setPreamble(preamble);
         setBody(body);
     }
-
+    
     /**
      * Gets the preamble for this metaprogram.
      * @return The preamble for this metaprogram.
@@ -46,7 +46,7 @@ public class MetaprogramNodeImpl extends NodeImpl implements MetaprogramNode
     {
         return this.preamble;
     }
-
+    
     /**
      * Changes the preamble for this metaprogram.
      * @param preamble The preamble for this metaprogram.
@@ -63,7 +63,7 @@ public class MetaprogramNodeImpl extends NodeImpl implements MetaprogramNode
             ((NodeImpl)this.preamble).setParent(this);
         }
     }
-
+    
     /**
      * Gets the list of statements in the metaprogram's body.
      * @return The list of statements in the metaprogram's body.
@@ -72,7 +72,7 @@ public class MetaprogramNodeImpl extends NodeImpl implements MetaprogramNode
     {
         return this.body;
     }
-
+    
     /**
      * Changes the list of statements in the metaprogram's body.
      * @param body The list of statements in the metaprogram's body.
@@ -89,7 +89,7 @@ public class MetaprogramNodeImpl extends NodeImpl implements MetaprogramNode
             ((NodeImpl)this.body).setParent(this);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -110,7 +110,7 @@ public class MetaprogramNodeImpl extends NodeImpl implements MetaprogramNode
             this.body.receive(visitor);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided typed visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -131,7 +131,7 @@ public class MetaprogramNodeImpl extends NodeImpl implements MetaprogramNode
             this.body.receiveTyped(visitor);
         }
     }
-
+    
     @Override
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
@@ -145,7 +145,7 @@ public class MetaprogramNodeImpl extends NodeImpl implements MetaprogramNode
         visitor.visitMetaprogramNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
-
+    
     /**
      * Produces a mutable list of this node's children.  Modifying this list will have no
      * effect on this node.
@@ -159,7 +159,7 @@ public class MetaprogramNodeImpl extends NodeImpl implements MetaprogramNode
         list.add(getBody());
         return list;
     }
-
+    
     /**
      * Obtains a human-readable description of this node.
      * @return A human-readable description of this node.
@@ -183,7 +183,7 @@ public class MetaprogramNodeImpl extends NodeImpl implements MetaprogramNode
         sb.append(']');
         return sb.toString();
     }
-
+    
     /**
      * Executes an operation on this node.
      * @param operation The operation to perform.
@@ -195,7 +195,7 @@ public class MetaprogramNodeImpl extends NodeImpl implements MetaprogramNode
     {
         return operation.executeMetaprogramNode(this, p);
     }
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

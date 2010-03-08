@@ -18,13 +18,13 @@ public abstract class ClassInstantiationNodeImpl extends NodeImpl implements Cla
 {
     /** The type arguments for the constructor. */
     private TypeArgumentListNode constructorTypeArguments;
-
+    
     /** The arguments to the constructor. */
     private ExpressionListNode arguments;
-
+    
     /** The body of the anonymous class. */
     private AnonymousClassBodyNode body;
-
+    
     /** General constructor. */
     protected ClassInstantiationNodeImpl(
             TypeArgumentListNode constructorTypeArguments,
@@ -39,7 +39,7 @@ public abstract class ClassInstantiationNodeImpl extends NodeImpl implements Cla
         setArguments(arguments);
         setBody(body);
     }
-
+    
     /**
      * Gets the type arguments for the constructor.
      * @return The type arguments for the constructor.
@@ -48,7 +48,7 @@ public abstract class ClassInstantiationNodeImpl extends NodeImpl implements Cla
     {
         return this.constructorTypeArguments;
     }
-
+    
     /**
      * Changes the type arguments for the constructor.
      * @param constructorTypeArguments The type arguments for the constructor.
@@ -65,7 +65,7 @@ public abstract class ClassInstantiationNodeImpl extends NodeImpl implements Cla
             ((NodeImpl)this.constructorTypeArguments).setParent(this);
         }
     }
-
+    
     /**
      * Gets the arguments to the constructor.
      * @return The arguments to the constructor.
@@ -74,7 +74,7 @@ public abstract class ClassInstantiationNodeImpl extends NodeImpl implements Cla
     {
         return this.arguments;
     }
-
+    
     /**
      * Changes the arguments to the constructor.
      * @param arguments The arguments to the constructor.
@@ -91,7 +91,7 @@ public abstract class ClassInstantiationNodeImpl extends NodeImpl implements Cla
             ((NodeImpl)this.arguments).setParent(this);
         }
     }
-
+    
     /**
      * Gets the body of the anonymous class.
      * @return The body of the anonymous class.
@@ -100,7 +100,7 @@ public abstract class ClassInstantiationNodeImpl extends NodeImpl implements Cla
     {
         return this.body;
     }
-
+    
     /**
      * Changes the body of the anonymous class.
      * @param body The body of the anonymous class.
@@ -117,7 +117,7 @@ public abstract class ClassInstantiationNodeImpl extends NodeImpl implements Cla
             ((NodeImpl)this.body).setParent(this);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -142,7 +142,7 @@ public abstract class ClassInstantiationNodeImpl extends NodeImpl implements Cla
             this.body.receive(visitor);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided typed visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -167,7 +167,7 @@ public abstract class ClassInstantiationNodeImpl extends NodeImpl implements Cla
             this.body.receiveTyped(visitor);
         }
     }
-
+    
     @Override
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
@@ -185,7 +185,7 @@ public abstract class ClassInstantiationNodeImpl extends NodeImpl implements Cla
         visitor.visitClassInstantiationNodeStop(this);
         visitor.visitStopEnd(this);
     }
-
+    
     /**
      * Produces a mutable list of this node's children.  Modifying this list will have no
      * effect on this node.
@@ -200,7 +200,7 @@ public abstract class ClassInstantiationNodeImpl extends NodeImpl implements Cla
         list.add(getBody());
         return list;
     }
-
+    
     /**
      * Obtains a human-readable description of this node.
      * @return A human-readable description of this node.
@@ -227,6 +227,6 @@ public abstract class ClassInstantiationNodeImpl extends NodeImpl implements Cla
         sb.append(']');
         return sb.toString();
     }
-
-
+    
+    
 }

@@ -19,7 +19,7 @@ public class ArrayTypeNodeImpl extends NodeImpl implements ArrayTypeNode
 {
     /** The element type of the array. */
     private TypeNode type;
-
+    
     /** General constructor. */
     public ArrayTypeNodeImpl(
             TypeNode type,
@@ -30,7 +30,7 @@ public class ArrayTypeNodeImpl extends NodeImpl implements ArrayTypeNode
         super(startLocation, stopLocation, manager);
         setType(type);
     }
-
+    
     /**
      * Gets the element type of the array.
      * @return The element type of the array.
@@ -39,7 +39,7 @@ public class ArrayTypeNodeImpl extends NodeImpl implements ArrayTypeNode
     {
         return this.type;
     }
-
+    
     /**
      * Changes the element type of the array.
      * @param type The element type of the array.
@@ -56,7 +56,7 @@ public class ArrayTypeNodeImpl extends NodeImpl implements ArrayTypeNode
             ((NodeImpl)this.type).setParent(this);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -73,7 +73,7 @@ public class ArrayTypeNodeImpl extends NodeImpl implements ArrayTypeNode
             this.type.receive(visitor);
         }
     }
-
+    
     /**
      * Handles the visitation of this node's children for the provided typed visitor.  Each
      * subclass should override this method, having the subclass implementation call this
@@ -90,7 +90,7 @@ public class ArrayTypeNodeImpl extends NodeImpl implements ArrayTypeNode
             this.type.receiveTyped(visitor);
         }
     }
-
+    
     @Override
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
@@ -108,7 +108,7 @@ public class ArrayTypeNodeImpl extends NodeImpl implements ArrayTypeNode
         visitor.visitArrayTypeNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
-
+    
     /**
      * Produces a mutable list of this node's children.  Modifying this list will have no
      * effect on this node.
@@ -121,7 +121,7 @@ public class ArrayTypeNodeImpl extends NodeImpl implements ArrayTypeNode
         list.add(getType());
         return list;
     }
-
+    
     /**
      * Obtains a human-readable description of this node.
      * @return A human-readable description of this node.
@@ -142,7 +142,7 @@ public class ArrayTypeNodeImpl extends NodeImpl implements ArrayTypeNode
         sb.append(']');
         return sb.toString();
     }
-
+    
     /**
      * Executes an operation on this node.
      * @param operation The operation to perform.
@@ -154,7 +154,7 @@ public class ArrayTypeNodeImpl extends NodeImpl implements ArrayTypeNode
     {
         return operation.executeArrayTypeNode(this, p);
     }
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

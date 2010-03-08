@@ -17,11 +17,11 @@ public class UnqualifiedSingleStaticImportNameDiagnostic<T extends javax.tools.J
     private String name;
     
     public UnqualifiedSingleStaticImportNameDiagnostic(
-                long lineNumber,
-                long columnNumber,
-                T source,
-                String ruleName,
-                String name)
+            long lineNumber,
+            long columnNumber,
+            T source,
+            String ruleName,
+            String name)
     {
         super(lineNumber, columnNumber, source, CODE, Kind.ERROR, ruleName);
         this.name = name;

@@ -23,25 +23,25 @@ public interface PackageDeclarationNode extends Node
      * @return The name of the package.
      */
     public NameNode getName();
-
+    
     /**
      * Changes the name of the package.
      * @param name The name of the package.
      */
     public void setName(NameNode name);
-
+    
     /**
      * Gets the annotations on the package declaration.
      * @return The annotations on the package declaration.
      */
     public AnnotationListNode getAnnotations();
-
+    
     /**
      * Changes the annotations on the package declaration.
      * @param annotations The annotations on the package declaration.
      */
     public void setAnnotations(AnnotationListNode annotations);
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

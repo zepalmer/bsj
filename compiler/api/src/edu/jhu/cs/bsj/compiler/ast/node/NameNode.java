@@ -24,19 +24,19 @@ public interface NameNode extends Node
      * @return The identifier used in this name.
      */
     public IdentifierNode getIdentifier();
-
+    
     /**
      * Changes the identifier used in this name.
      * @param identifier The identifier used in this name.
      */
     public void setIdentifier(IdentifierNode identifier);
-
+    
     /**
      * Gets the category for this name.
      * @return The category for this name.
      */
     public NameCategory getCategory();
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

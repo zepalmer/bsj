@@ -20,25 +20,25 @@ public interface ParameterizedTypeSelectNode extends Node, DeclaredTypeNode
      * @return The parameterized type from which a type is selected.
      */
     public ParameterizedTypeNode getBase();
-
+    
     /**
      * Changes the parameterized type from which a type is selected.
      * @param base The parameterized type from which a type is selected.
      */
     public void setBase(ParameterizedTypeNode base);
-
+    
     /**
      * Gets the type which is selected from the base.
      * @return The type which is selected from the base.
      */
     public DeclaredTypeNode getSelect();
-
+    
     /**
      * Changes the type which is selected from the base.
      * @param select The type which is selected from the base.
      */
     public void setSelect(DeclaredTypeNode select);
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

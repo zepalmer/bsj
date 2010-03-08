@@ -15,25 +15,25 @@ public interface EnumBodyNode extends Node, TypeBodyNode<ClassMemberNode>
      * @return The enumeration constants.
      */
     public EnumConstantDeclarationListNode getConstants();
-
+    
     /**
      * Changes the enumeration constants.
      * @param constants The enumeration constants.
      */
     public void setConstants(EnumConstantDeclarationListNode constants);
-
+    
     /**
      * Gets the members of the class body part.
      * @return The members of the class body part.
      */
     public ClassMemberListNode getMembers();
-
+    
     /**
      * Changes the members of the class body part.
      * @param members The members of the class body part.
      */
     public void setMembers(ClassMemberListNode members);
-
+    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.
