@@ -51,8 +51,8 @@ public class SourceGenerator
 	private static final Set<String> PRIMITIVE_CONTAINER_TYPES = new HashSet<String>(Arrays.asList("Long", "Integer",
 			"Short", "Byte", "Double", "Float", "Boolean", "String", "Character"));
 	private static final Set<String> ENUM_TYPES = new HashSet<String>(Arrays.asList("AccessModifier",
-			"AssignmentOperator", "BinaryOperator", "NameCategory", "PrimitiveType", "UnaryOperator",
-			"UnaryStatementOperator"));
+			"AssignmentOperator", "BinaryOperator", "MetaprogramLocalMode", "MetaprogramPackageMode", "NameCategory",
+			"PrimitiveType", "UnaryOperator", "UnaryStatementOperator"));
 	/** Types which can be "deep copied" by reference copy because the instance is global to a compilation operation. */
 	private static final Set<String> COMPILE_GLOBAL_TYPES = new HashSet<String>(Arrays.asList("PackageNodeCallback"));
 
@@ -1570,13 +1570,13 @@ public class SourceGenerator
 					argProps.add(recProp);
 				}
 			}
-			
+
 			// Increase prepends
 			for (PrependablePrintStream ps : new PrependablePrintStream[] { ips, cps, dps })
 			{
 				ps.incPrependCount();
 			}
-			
+
 			// Write documentation
 			for (PrependablePrintStream ps : new PrependablePrintStream[] { ips, cps, dps })
 			{
@@ -1706,7 +1706,7 @@ public class SourceGenerator
 				dps.println("}");
 				dps.println();
 			}
-			
+
 			// Decrease prepends
 			for (PrependablePrintStream ps : new PrependablePrintStream[] { ips, cps, dps })
 			{

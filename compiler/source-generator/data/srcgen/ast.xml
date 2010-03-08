@@ -1249,8 +1249,8 @@
             <doc><![CDATA[
                 A node representing a null literal.
             ]]></doc>
-            <factory-override prop="value" expr="null"/>
-            <factory-method/>
+            <factory-override prop="value" expr="null" />
+            <factory-method />
         </type>
 
         <type name="StringLiteralNode" super="LiteralNode" superTypeArg="String">
@@ -1439,7 +1439,7 @@
         <!-- ================== TYPE DECLARATION NODES ================== -->
 
         <type name="AnnotationDeclarationNode" super="Node">
-            <tag name="NamedTypeDeclarationNode" typeArg="AnnotationMemberNode"/>
+            <tag name="NamedTypeDeclarationNode" typeArg="AnnotationMemberNode" />
             <prop name="modifiers" type="AnnotationModifiersNode" desc="the modifiers for this type" />
             <prop name="body" type="AnnotationBodyNode" desc="this annotation's body" />
             <doc><![CDATA[
@@ -1455,7 +1455,7 @@
         </type>
 
         <type name="ClassDeclarationNode" super="Node">
-            <tag name="NamedTypeDeclarationNode" typeArg="ClassMemberNode"/>
+            <tag name="NamedTypeDeclarationNode" typeArg="ClassMemberNode" />
             <tag name="InlineTypeDeclarableNode" />
             <prop name="modifiers" type="ClassModifiersNode" desc="the modifiers for this type" />
             <prop name="extendsClause" type="DeclaredTypeNode" desc="the extends clause" />
@@ -1475,7 +1475,7 @@
         </type>
 
         <type name="EnumDeclarationNode" super="Node">
-            <tag name="NamedTypeDeclarationNode" typeArg="ClassMemberNode"/>
+            <tag name="NamedTypeDeclarationNode" typeArg="ClassMemberNode" />
             <tag name="InlineTypeDeclarableNode" />
             <prop name="modifiers" type="EnumModifiersNode" desc="the modifiers for this type" />
             <prop name="implementsClause" type="DeclaredTypeListNode" desc="the implements clause" />
@@ -1493,7 +1493,7 @@
         </type>
 
         <type name="InterfaceDeclarationNode" super="Node">
-            <tag name="NamedTypeDeclarationNode" typeArg="InterfaceMemberNode"/>
+            <tag name="NamedTypeDeclarationNode" typeArg="InterfaceMemberNode" />
             <prop name="modifiers" type="InterfaceModifiersNode" desc="the modifiers for this type" />
             <prop name="extendsClause" type="DeclaredTypeListNode" desc="the extends clause" />
             <prop name="body" type="InterfaceBodyNode" desc="this interface's body" />
@@ -1957,8 +1957,7 @@
                 desc="the location at which this node's text starts (inclusive)" />
             <prop name="stopLocation" type="BsjSourceLocation" mode="skip"
                 desc="the location at which this node's text stops (exclusive)" />
-            <prop name="manager" type="BsjNodeManager" mode="hide"
-                desc="the BSJ node manager for this node"/>
+            <prop name="manager" type="BsjNodeManager" mode="hide" desc="the BSJ node manager for this node" />
             <include file="Node.java" />
             <doc><![CDATA[
                 The parent class for all BSJ AST nodes.
@@ -2134,11 +2133,18 @@
 
         <type name="MetaprogramPreambleNode" super="Node">
             <prop name="imports" type="MetaprogramImportListNode" desc="the imports for this metaprogram" />
+            <prop name="localMode" type="MetaprogramLocalMode" default="MetaprogramLocalMode.INSERT"
+                desc="the metaprogram local mode" />
+            <prop name="packageMode" type="MetaprogramPackageMode" default="MetaprogramPackageMode.READ_ONLY"
+                desc="the metaprogram package mode" />
             <prop name="target" type="MetaprogramTargetNode" desc="the targets for this metaprogram" />
             <prop name="depends" type="MetaprogramDependsNode" desc="the dependencies for this metaprogram" />
             <doc><![CDATA[
                 This node represents a metaprogram's preamble.
             ]]></doc>
+            <factory-method>
+                <use-defaults/>
+            </factory-method>
         </type>
 
         <type name="MetaprogramTargetNode" super="Node">

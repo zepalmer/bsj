@@ -339,7 +339,7 @@ scope Rule {
         };
     }
     
-    // *** DATA STRUCTURE FOR MODIFIER PARSING ********************************
+    // *** SUPPORT FOR MODIFIER PARSING ***************************************
     enum Modifier // does not cover access modifiers
     {
 	    ABSTRACT, 
@@ -401,6 +401,104 @@ scope Rule {
                             $Rule::name,
                             mod.toString().toLowerCase()));
                     break;
+            }
+        }
+    }
+    
+    // *** SUPPORT FOR MODE PARSING *******************************************
+    class ModeValues
+    {
+        private MetaprogramLocalMode localMode = null;
+        private MetaprogramPackageMode packageMode = null;
+        
+        private boolean checkDuplicateOrConflicting(Object oldObj, Object newObj, BsjSourceLocation location)
+        {
+            if (oldObj == null)
+                return false;
+            
+            if (oldObj == newObj)
+            {
+                reportDiagnostic(new DuplicateModeDiagnostic<JavaFileObject>(
+                        location.getLine(),
+                        location.getColumn(),
+                        resource,
+                        $Rule::name,
+                        newObj.toString()));
+            } else
+            {
+                reportDiagnostic(new ConflictingModeDiagnostic<JavaFileObject>(
+                        location.getLine(),
+                        location.getColumn(),
+                        resource,
+                        $Rule::name,
+                        oldObj.toString(),
+                        newObj.toString()));
+            }
+            return true;
+        }
+        
+        public void setLocalMode(MetaprogramLocalMode localMode, BsjSourceLocation location)
+        {
+            if (!checkDuplicateOrConflicting(this.localMode, localMode, location))
+            {
+                this.localMode = localMode;
+            }
+        }
+        
+        public void setPackageMode(MetaprogramPackageMode packageMode, BsjSourceLocation location)
+        {
+            if (!checkDuplicateOrConflicting(this.packageMode, packageMode, location))
+            {
+                this.packageMode = packageMode;
+            }
+        }
+        
+        public MetaprogramLocalMode getLocalMode()
+        {
+            if (this.localMode == null)
+                return MetaprogramLocalMode.INSERT;
+            else
+                return this.localMode;
+        }
+        
+        public MetaprogramPackageMode getPackageMode()
+        {
+            if (this.packageMode == null)
+                return MetaprogramPackageMode.READ_ONLY;
+            else
+                return this.packageMode;
+        }
+        
+        public void parse(IdentifierNode identifierNode)
+        {
+            String id = identifierNode.getIdentifier();
+            BsjSourceLocation location = identifierNode.getStartLocation();
+            if (id.equals("readOnly"))
+            {
+                setLocalMode(MetaprogramLocalMode.READ_ONLY, location);
+            } else if (id.equals("insert"))
+            {
+                setLocalMode(MetaprogramLocalMode.INSERT, location);
+            } else if (id.equals("mutate"))
+            {
+                setLocalMode(MetaprogramLocalMode.MUTATE, location);
+            } else if (id.equals("fullMutate"))
+            {
+                setLocalMode(MetaprogramLocalMode.FULL_MUTATE, location);
+            } else if (id.equals("packageRead"))
+            {
+                setPackageMode(MetaprogramPackageMode.READ_ONLY, location);
+            } else if (id.equals("packageInsert"))
+            {
+                setPackageMode(MetaprogramPackageMode.INSERT, location);
+            } else 
+            {
+                reportDiagnostic(new InvalidModeDiagnostic<JavaFileObject>(
+                        location.getLine(),
+                        location.getColumn(),
+                        resource,
+                        $Rule::name,
+                        id));
             }
         }
     }
@@ -617,11 +715,14 @@ preamble returns [MetaprogramPreambleNode ret]
         @init {
             ruleStart("preamble");
             List<MetaprogramImportNode> list = new ArrayList<MetaprogramImportNode>();
+            MetaprogramPackageMode packageMode = MetaprogramPackageMode.READ_ONLY;
+            MetaprogramLocalMode localMode = MetaprogramLocalMode.INSERT;
             MetaprogramTargetNode target = null;
             MetaprogramDependsNode depends = null;
         }
         @after {
-            $ret = factory.makeMetaprogramPreambleNode(factory.makeMetaprogramImportListNode(list), target,depends);
+            $ret = factory.makeMetaprogramPreambleNode(factory.makeMetaprogramImportListNode(list),
+                    localMode, packageMode, target, depends);
             ruleStop();
         }
     :
@@ -631,6 +732,13 @@ preamble returns [MetaprogramPreambleNode ret]
                 list.add($metaprogramImport.ret);
             }
         )*
+        (
+            metaprogramMode
+            {
+                packageMode = $metaprogramMode.packageMode;
+                localMode = $metaprogramMode.localMode;
+            }
+        )?
         (
             metaprogramTarget
             {
@@ -661,6 +769,36 @@ metaprogramImport returns [MetaprogramImportNode ret]
             ImportNode node = createImport($importBody.onDemand, $importBody.staticImport, $importBody.name);
             $ret = factory.makeMetaprogramImportNode(node);
         }
+    ;
+    
+metaprogramMode returns [MetaprogramPackageMode packageMode, MetaprogramLocalMode localMode]
+        scope Rule;
+        @init {
+            ruleStart("metaprogramMode");
+            ModeValues modeValues = new ModeValues();
+        }
+        @after {
+            $packageMode = modeValues.getPackageMode();
+            $localMode = modeValues.getLocalMode();
+            ruleStop();
+        }
+    :
+        '#mode'
+        (
+            a=identifier
+            {
+                modeValues.parse($a.ret);
+            }
+            (
+                ','
+                b=identifier
+                {
+                    modeValues.parse($b.ret);
+                }
+            )*
+            ','?
+        )?
+        ';'
     ;
 
 metaprogramDependency returns [MetaprogramDependsNode ret]

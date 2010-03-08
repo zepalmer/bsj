@@ -9,6 +9,8 @@ import edu.jhu.cs.bsj.compiler.ast.AssignmentOperator;
 import edu.jhu.cs.bsj.compiler.ast.BinaryOperator;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
+import edu.jhu.cs.bsj.compiler.ast.MetaprogramLocalMode;
+import edu.jhu.cs.bsj.compiler.ast.MetaprogramPackageMode;
 import edu.jhu.cs.bsj.compiler.ast.NameCategory;
 import edu.jhu.cs.bsj.compiler.ast.PrimitiveType;
 import edu.jhu.cs.bsj.compiler.ast.UnaryOperator;
@@ -3982,6 +3984,44 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     {
         this.before();
         MetaprogramNode node = factory.makeMetaprogramNode(preamble, body, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a MetaprogramPreambleNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public MetaprogramPreambleNode makeMetaprogramPreambleNode(
+            MetaprogramImportListNode imports,
+            MetaprogramLocalMode localMode,
+            MetaprogramPackageMode packageMode,
+            MetaprogramTargetNode target,
+            MetaprogramDependsNode depends)
+    {
+        this.before();
+        MetaprogramPreambleNode node = factory.makeMetaprogramPreambleNode(imports, localMode, packageMode, target, depends);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a MetaprogramPreambleNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public MetaprogramPreambleNode makeMetaprogramPreambleNode(
+            MetaprogramImportListNode imports,
+            MetaprogramLocalMode localMode,
+            MetaprogramPackageMode packageMode,
+            MetaprogramTargetNode target,
+            MetaprogramDependsNode depends,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        MetaprogramPreambleNode node = factory.makeMetaprogramPreambleNode(imports, localMode, packageMode, target, depends, startLocation, stopLocation);
         this.after(node);
         return node;
     }

@@ -2,8 +2,8 @@ package edu.jhu.cs.bsj.compiler.impl.tool.compiler;
 
 import java.util.Collection;
 
-import edu.jhu.cs.bsj.compiler.MetaprogramLocalMode;
-import edu.jhu.cs.bsj.compiler.MetaprogramPackageMode;
+import edu.jhu.cs.bsj.compiler.ast.MetaprogramLocalMode;
+import edu.jhu.cs.bsj.compiler.ast.MetaprogramPackageMode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.impl.metaprogram.BsjMetaprogram;
 

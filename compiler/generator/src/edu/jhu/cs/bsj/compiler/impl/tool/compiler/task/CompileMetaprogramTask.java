@@ -10,11 +10,11 @@ import java.util.List;
 import java.util.Map;
 
 import edu.jhu.cs.bsj.compiler.BsjServiceRegistry;
-import edu.jhu.cs.bsj.compiler.MetaprogramLocalMode;
-import edu.jhu.cs.bsj.compiler.MetaprogramPackageMode;
 import edu.jhu.cs.bsj.compiler.ast.AccessModifier;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceSerializer;
+import edu.jhu.cs.bsj.compiler.ast.MetaprogramLocalMode;
+import edu.jhu.cs.bsj.compiler.ast.MetaprogramPackageMode;
 import edu.jhu.cs.bsj.compiler.ast.NameCategory;
 import edu.jhu.cs.bsj.compiler.ast.node.BlockNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassBodyNode;
@@ -143,6 +143,8 @@ public class CompileMetaprogramTask extends AbstractBsjCompilerTask
 			throws IOException
 	{
 		MetaprogramNode metaprogramNode = anchor.getMetaprogram();
+		MetaprogramLocalMode localMode = MetaprogramLocalMode.INSERT;
+		MetaprogramPackageMode packageMode = MetaprogramPackageMode.READ_ONLY;
 		List<String> qualifiedTargetNames = new ArrayList<String>();
 		List<String> dependencyNames = new ArrayList<String>();
 
@@ -150,6 +152,10 @@ public class CompileMetaprogramTask extends AbstractBsjCompilerTask
 		if (metaprogramNode.getPreamble() != null)
 		{
 			MetaprogramPreambleNode metaprogramPreambleNode = metaprogramNode.getPreamble();
+
+			localMode = metaprogramPreambleNode.getLocalMode();
+			packageMode = metaprogramPreambleNode.getPackageMode();
+
 			if (metaprogramPreambleNode.getTarget() != null)
 			{
 				// determine qualifying prefix
@@ -212,9 +218,8 @@ public class CompileMetaprogramTask extends AbstractBsjCompilerTask
 		Context<A> context = new ContextImpl<A>(anchor);
 		BsjMetaprogram<A> metaprogram = compileMetaprogram(metaprogramNode, context, anchor.getClass().getName());
 
-		// TODO: parse and use the local and package modes of the metaprogram
-		return new MetaprogramProfile(metaprogram, anchor, dependencyNames, qualifiedTargetNames,
-				MetaprogramLocalMode.INSERT, MetaprogramPackageMode.READ_ONLY);
+		return new MetaprogramProfile(metaprogram, anchor, dependencyNames, qualifiedTargetNames, localMode,
+				packageMode);
 	}
 
 	private <A extends MetaprogramAnchorNode<? extends Node>> BsjMetaprogram<A> compileMetaprogram(
@@ -351,7 +356,7 @@ public class CompileMetaprogramTask extends AbstractBsjCompilerTask
 		BsjSourceSerializer serializer = metacompilationContext.getToolkit().getSerializer();
 		String source = serializer.executeCompilationUnitNode(metaprogramCompilationUnitNode, null);
 		metaprogramSourceFile.setCharContent(source);
-	
+
 		BsjToolkitFactory toolkitFactory = BsjServiceRegistry.newToolkitFactory();
 		toolkitFactory.setFileManager(fileManager);
 		BsjToolkit toolkit = toolkitFactory.newToolkit();
@@ -369,7 +374,8 @@ public class CompileMetaprogramTask extends AbstractBsjCompilerTask
 			metaprogramClass = metaprogramClassCast(metaprogramClassLoader.loadClass(fullyQualifiedMetaprogramClassName));
 		} catch (ClassNotFoundException e)
 		{
-			throw new IllegalStateException("Class " + fullyQualifiedMetaprogramClassName + " that we just compiled is not found!", e);
+			throw new IllegalStateException("Class " + fullyQualifiedMetaprogramClassName
+					+ " that we just compiled is not found!", e);
 		}
 		Constructor<? extends BsjMetaprogram<A>> constructor;
 		try

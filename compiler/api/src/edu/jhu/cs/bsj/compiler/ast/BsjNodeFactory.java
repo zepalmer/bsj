@@ -2234,6 +2234,30 @@ public interface BsjNodeFactory
      */
     public MetaprogramPreambleNode makeMetaprogramPreambleNode(
             MetaprogramImportListNode imports,
+            MetaprogramLocalMode localMode,
+            MetaprogramPackageMode packageMode,
+            MetaprogramTargetNode target,
+            MetaprogramDependsNode depends);
+    
+    /**
+     * Creates a MetaprogramPreambleNode.
+     * The specified start and stop locations are used.
+     */
+    public MetaprogramPreambleNode makeMetaprogramPreambleNode(
+            MetaprogramImportListNode imports,
+            MetaprogramLocalMode localMode,
+            MetaprogramPackageMode packageMode,
+            MetaprogramTargetNode target,
+            MetaprogramDependsNode depends,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+    
+    /**
+     * Creates a MetaprogramPreambleNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public MetaprogramPreambleNode makeMetaprogramPreambleNode(
+            MetaprogramImportListNode imports,
             MetaprogramTargetNode target,
             MetaprogramDependsNode depends);
     

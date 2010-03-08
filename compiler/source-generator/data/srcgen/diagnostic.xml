@@ -33,6 +33,23 @@
                     A diagnostic which represents a conflicting access modifier.
                 ]]></doc>
             </diagnostic>
+            
+            <diagnostic name="ConflictingModeDiagnostic" code="bsj.parser.error.conflictingMode"
+                super="BsjParserDiagnostic">
+                <prop name="firstMode" type="String" desc="the first mode which conflicts" />
+                <prop name="secondMode" type="String" desc="the second mode which conflicts" />
+                <doc><![CDATA[
+                    A diagnostic which represents a conflicting metaprogram mode.
+                ]]></doc>
+            </diagnostic>
+            
+            <diagnostic name="DuplicateModeDiagnostic" code="bsj.parser.error.duplicateMode"
+                super="BsjParserDiagnostic">
+                <prop name="mode" type="String" desc="the mode which was duplicated" />
+                <doc><![CDATA[
+                    A diagnostic representing a duplicated metaprogram mode.
+                ]]></doc>
+            </diagnostic>
 
             <diagnostic name="DuplicateModifierDiagnostic" code="bsj.parser.error.duplicateModifier"
                 super="BsjParserDiagnostic">
@@ -94,6 +111,16 @@
                 <prop name="modifier" type="String" desc="the modifier which was used incorrectly" />
                 <doc><![CDATA[
                     A diagnostic representing an invalid modifier (a modifier which appeared in an incorrect context).
+                ]]></doc>
+            </diagnostic>
+
+            <diagnostic name="InvalidModeDiagnostic" code="bsj.parser.error.invalidMode"
+                super="BsjParserDiagnostic">
+                <prop name="mode" type="String" desc="the invalid mode" />
+                <doc><![CDATA[
+                    A diagnostic representing an invalid metaprogram mode.  Because metaprogram modes are identifiers
+                    and not keywords, use of an incorrect mode (one which is parseable as a keyword but has no BSJ
+                    meaning) is reported through this type of diagnostic rather than a typical parse failure.
                 ]]></doc>
             </diagnostic>
 

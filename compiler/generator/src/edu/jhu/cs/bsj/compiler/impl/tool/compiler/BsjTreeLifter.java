@@ -11,6 +11,8 @@ import edu.jhu.cs.bsj.compiler.ast.BinaryOperator;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
+import edu.jhu.cs.bsj.compiler.ast.MetaprogramLocalMode;
+import edu.jhu.cs.bsj.compiler.ast.MetaprogramPackageMode;
 import edu.jhu.cs.bsj.compiler.ast.NameCategory;
 import edu.jhu.cs.bsj.compiler.ast.PrimitiveType;
 import edu.jhu.cs.bsj.compiler.ast.UnaryOperator;
@@ -235,6 +237,40 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
             return factory.makeFieldAccessByNameNode(factory.makeQualifiedNameNode(
                     factory.makeSimpleNameNode(
                             factory.makeIdentifierNode("UnaryOperator"),
+                            NameCategory.EXPRESSION
+                            ),
+                    factory.makeIdentifierNode(x.name()),
+                    NameCategory.EXPRESSION));
+        }
+    }
+    
+    protected ExpressionNode expressionizeMetaprogramPackageMode(MetaprogramPackageMode x)
+    {
+        if (x == null)
+        {
+            return factory.makeNullLiteralNode();
+        } else
+        {
+            return factory.makeFieldAccessByNameNode(factory.makeQualifiedNameNode(
+                    factory.makeSimpleNameNode(
+                            factory.makeIdentifierNode("MetaprogramPackageMode"),
+                            NameCategory.EXPRESSION
+                            ),
+                    factory.makeIdentifierNode(x.name()),
+                    NameCategory.EXPRESSION));
+        }
+    }
+    
+    protected ExpressionNode expressionizeMetaprogramLocalMode(MetaprogramLocalMode x)
+    {
+        if (x == null)
+        {
+            return factory.makeNullLiteralNode();
+        } else
+        {
+            return factory.makeFieldAccessByNameNode(factory.makeQualifiedNameNode(
+                    factory.makeSimpleNameNode(
+                            factory.makeIdentifierNode("MetaprogramLocalMode"),
                             NameCategory.EXPRESSION
                             ),
                     factory.makeIdentifierNode(x.name()),
@@ -3294,6 +3330,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getImports() != null ?
                         node.getImports().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode(null);
+        MetaprogramLocalMode liftLocalModeValue = 
+                node.getLocalMode();
+        MetaprogramPackageMode liftPackageModeValue = 
+                node.getPackageMode();
         ExpressionNode liftTarget = 
                 node.getTarget() != null ?
                         node.getTarget().executeOperation(this,factoryNode) :
@@ -3313,6 +3353,8 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeIdentifierNode("makeMetaprogramPreambleNode"),
                         factory.makeExpressionListNode(
                                 liftImports,
+                                expressionizeMetaprogramLocalMode(liftLocalModeValue),
+                                expressionizeMetaprogramPackageMode(liftPackageModeValue),
                                 liftTarget,
                                 liftDepends,
                                 liftStartLocationMetaClone,

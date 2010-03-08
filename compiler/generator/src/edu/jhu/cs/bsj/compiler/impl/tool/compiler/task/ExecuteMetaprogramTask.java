@@ -3,8 +3,8 @@ package edu.jhu.cs.bsj.compiler.impl.tool.compiler.task;
 import java.io.IOException;
 import java.util.Iterator;
 
-import edu.jhu.cs.bsj.compiler.MetaprogramLocalMode;
-import edu.jhu.cs.bsj.compiler.MetaprogramPackageMode;
+import edu.jhu.cs.bsj.compiler.ast.MetaprogramLocalMode;
+import edu.jhu.cs.bsj.compiler.ast.MetaprogramPackageMode;
 import edu.jhu.cs.bsj.compiler.ast.NodePermission;
 import edu.jhu.cs.bsj.compiler.ast.node.BlockNode;
 import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;

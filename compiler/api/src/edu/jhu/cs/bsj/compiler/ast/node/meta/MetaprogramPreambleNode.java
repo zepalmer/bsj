@@ -3,6 +3,8 @@ package edu.jhu.cs.bsj.compiler.ast.node.meta;
 import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
+import edu.jhu.cs.bsj.compiler.ast.MetaprogramLocalMode;
+import edu.jhu.cs.bsj.compiler.ast.MetaprogramPackageMode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 
 /**
@@ -22,6 +24,30 @@ public interface MetaprogramPreambleNode extends Node
      * @param imports The imports for this metaprogram.
      */
     public void setImports(MetaprogramImportListNode imports);
+    
+    /**
+     * Gets the metaprogram local mode.
+     * @return The metaprogram local mode.
+     */
+    public MetaprogramLocalMode getLocalMode();
+    
+    /**
+     * Changes the metaprogram local mode.
+     * @param localMode The metaprogram local mode.
+     */
+    public void setLocalMode(MetaprogramLocalMode localMode);
+    
+    /**
+     * Gets the metaprogram package mode.
+     * @return The metaprogram package mode.
+     */
+    public MetaprogramPackageMode getPackageMode();
+    
+    /**
+     * Changes the metaprogram package mode.
+     * @param packageMode The metaprogram package mode.
+     */
+    public void setPackageMode(MetaprogramPackageMode packageMode);
     
     /**
      * Gets the targets for this metaprogram.

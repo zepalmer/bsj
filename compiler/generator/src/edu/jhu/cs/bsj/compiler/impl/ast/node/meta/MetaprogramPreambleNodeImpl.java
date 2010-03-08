@@ -9,6 +9,8 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.MetaprogramLocalMode;
+import edu.jhu.cs.bsj.compiler.ast.MetaprogramPackageMode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependsNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportListNode;
@@ -23,6 +25,12 @@ public class MetaprogramPreambleNodeImpl extends NodeImpl implements Metaprogram
     /** The imports for this metaprogram. */
     private MetaprogramImportListNode imports;
     
+    /** The metaprogram local mode. */
+    private MetaprogramLocalMode localMode;
+    
+    /** The metaprogram package mode. */
+    private MetaprogramPackageMode packageMode;
+    
     /** The targets for this metaprogram. */
     private MetaprogramTargetNode target;
     
@@ -32,6 +40,8 @@ public class MetaprogramPreambleNodeImpl extends NodeImpl implements Metaprogram
     /** General constructor. */
     public MetaprogramPreambleNodeImpl(
             MetaprogramImportListNode imports,
+            MetaprogramLocalMode localMode,
+            MetaprogramPackageMode packageMode,
             MetaprogramTargetNode target,
             MetaprogramDependsNode depends,
             BsjSourceLocation startLocation,
@@ -40,6 +50,8 @@ public class MetaprogramPreambleNodeImpl extends NodeImpl implements Metaprogram
     {
         super(startLocation, stopLocation, manager);
         setImports(imports);
+        this.localMode = localMode;
+        this.packageMode = packageMode;
         setTarget(target);
         setDepends(depends);
     }
@@ -69,6 +81,44 @@ public class MetaprogramPreambleNodeImpl extends NodeImpl implements Metaprogram
         {
             ((NodeImpl)this.imports).setParent(this);
         }
+    }
+    
+    /**
+     * Gets the metaprogram local mode.
+     * @return The metaprogram local mode.
+     */
+    public MetaprogramLocalMode getLocalMode()
+    {
+        return this.localMode;
+    }
+    
+    /**
+     * Changes the metaprogram local mode.
+     * @param localMode The metaprogram local mode.
+     */
+    public void setLocalMode(MetaprogramLocalMode localMode)
+    {
+        getManager().assertMutatable(this);
+        this.localMode = localMode;
+    }
+    
+    /**
+     * Gets the metaprogram package mode.
+     * @return The metaprogram package mode.
+     */
+    public MetaprogramPackageMode getPackageMode()
+    {
+        return this.packageMode;
+    }
+    
+    /**
+     * Changes the metaprogram package mode.
+     * @param packageMode The metaprogram package mode.
+     */
+    public void setPackageMode(MetaprogramPackageMode packageMode)
+    {
+        getManager().assertMutatable(this);
+        this.packageMode = packageMode;
     }
     
     /**
@@ -199,6 +249,8 @@ public class MetaprogramPreambleNodeImpl extends NodeImpl implements Metaprogram
     {
         List<Object> list = super.getChildObjects();
         list.add(getImports());
+        list.add(getLocalMode());
+        list.add(getPackageMode());
         list.add(getTarget());
         list.add(getDepends());
         return list;
@@ -215,6 +267,12 @@ public class MetaprogramPreambleNodeImpl extends NodeImpl implements Metaprogram
         sb.append('[');
         sb.append("imports=");
         sb.append(this.getImports() == null? "null" : this.getImports().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("localMode=");
+        sb.append(String.valueOf(this.getLocalMode()) + ":" + (this.getLocalMode() != null ? this.getLocalMode().getClass().getSimpleName() : "null"));
+        sb.append(',');
+        sb.append("packageMode=");
+        sb.append(String.valueOf(this.getPackageMode()) + ":" + (this.getPackageMode() != null ? this.getPackageMode().getClass().getSimpleName() : "null"));
         sb.append(',');
         sb.append("target=");
         sb.append(this.getTarget() == null? "null" : this.getTarget().getClass().getSimpleName());
@@ -253,6 +311,8 @@ public class MetaprogramPreambleNodeImpl extends NodeImpl implements Metaprogram
     {
         return factory.makeMetaprogramPreambleNode(
                 getImports().deepCopy(factory),
+                getLocalMode(),
+                getPackageMode(),
                 getTarget().deepCopy(factory),
                 getDepends().deepCopy(factory),
                 getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
