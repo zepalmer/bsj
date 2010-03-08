@@ -58,7 +58,7 @@ public class BsjBinaryNodeLoaderTest extends AbstractTest
             + "return(\"Hello Joe!\");" + "}" + "}";
         String codeStr2 = "package joe.foo.bar; public interface SmallClass extends Iface{}";
         String codeStr3 = "package joe.foo.bar; public interface Iface {}";
-        String codeStr4 = "package joe.foo.bar; public enum E {ONE, TWO,THREE; private int y; private int x; public void foo(){}}";
+        String codeStr4 = "package joe.foo.bar; public enum E {ONE(1), TWO(2),THREE(3); private int x; public void foo(){} E(int x) {this.x = x;}}";
 
         BsjFileObject bfo2 = bfm.getJavaFileForOutput(StandardLocation.SOURCE_PATH, "joe.foo.bar.JoeClass", Kind.SOURCE, null);
         bfo2.setCharContent(codeStr);

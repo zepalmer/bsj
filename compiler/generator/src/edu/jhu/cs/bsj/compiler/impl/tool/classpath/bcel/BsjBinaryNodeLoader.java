@@ -229,10 +229,9 @@ public class BsjBinaryNodeLoader
         
         for (Field field : clazz.getFields())
         {
-            // we only care about real fields, not synthetic ones (added by compiler),
-            // and here we want fields which are NOT enum constants
-            if (!field.isSynthetic()
-                    && !(field.isPublic() && field.isStatic() && field.isFinal()))
+            // we only care about non-enum fields here, and also want to avoid
+            // synthetic (compiler-generated) fields
+            if (!field.isEnum() && !field.isSynthetic())
             {
                 list.add(buildFieldDeclarationNode(field));
             }
@@ -247,10 +246,9 @@ public class BsjBinaryNodeLoader
         
         for (Field field : clazz.getFields())
         {
-            // we only care about real fields, not synthetic ones (added by compiler),
-            // and only 'public static final' fields are enum constants
-            if (!field.isSynthetic()
-                    && field.isPublic() && field.isStatic() && field.isFinal())
+            // we only care about enum fields here, and also want to avoid
+            // synthetic (compiler-generated) fields
+            if (field.isEnum() && !field.isSynthetic())
             {
                 list.add(factory.makeEnumConstantDeclarationNode(
                         factory.makeAnnotationListNode(), 
