@@ -4,6 +4,7 @@ import javax.tools.DiagnosticListener;
 import javax.tools.JavaFileObject;
 
 import edu.jhu.cs.bsj.compiler.ast.node.PackageNode;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.dependency.DependencyManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.task.BsjCompilerTask;
 import edu.jhu.cs.bsj.compiler.tool.BsjToolkit;
@@ -20,6 +21,12 @@ public interface MetacompilationContext
 	 * @return The toolkit to use.
 	 */
 	public BsjToolkit getToolkit();
+	
+	/**
+	 * Retrieves the node manager used during metacompilation to control metaprogram execution.
+	 * @return The node manager to use.
+	 */
+	public BsjNodeManager getNodeManager();
 	
 	/**
 	 * Retrieves a diagnostic listener to which diagnostics can be reported.

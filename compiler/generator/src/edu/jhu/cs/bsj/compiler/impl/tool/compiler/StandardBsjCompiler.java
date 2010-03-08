@@ -187,7 +187,7 @@ public class StandardBsjCompiler implements BsjCompiler
 		{
 			LOGGER.trace("Initializing compiler data structures.");
 		}
-		this.metacompilationManager = new MetacompilationManager(this.toolkit, listener);
+		this.metacompilationManager = new MetacompilationManager(this.toolkit, this.manager, listener);
 		this.packageNodeCallback.setMetacompilationManager(metacompilationManager);
 	}
 

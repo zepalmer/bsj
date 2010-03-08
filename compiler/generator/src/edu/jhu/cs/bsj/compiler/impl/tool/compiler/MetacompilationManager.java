@@ -13,6 +13,7 @@ import org.apache.log4j.Logger;
 
 import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
 import edu.jhu.cs.bsj.compiler.ast.node.PackageNode;
+import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.dependency.DependencyManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.task.BsjCompilerTask;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.task.ExecuteMetaprogramTask;
@@ -49,6 +50,10 @@ public class MetacompilationManager implements MetacompilationContext
 	 */
 	private BsjToolkit toolkit;
 	/**
+	 * The node manager to use.
+	 */
+	private BsjNodeManager nodeManager;
+	/**
 	 * The listener to which we will report events.
 	 */
 	private DiagnosticListener<? super JavaFileObject> diagnosticListener;
@@ -66,9 +71,10 @@ public class MetacompilationManager implements MetacompilationContext
 	 * Creates a new compilation unit manager.
 	 * 
 	 * @param toolkit The toolkit to use.
+	 * @param nodeManager The node manager to use.
 	 * @param diagnosticListener The listener to which diagnostics will be reported. Must not be <code>null</code>.
 	 */
-	public MetacompilationManager(BsjToolkit toolkit,
+	public MetacompilationManager(BsjToolkit toolkit, BsjNodeManager nodeManager,
 			DiagnosticListener<? super JavaFileObject> diagnosticListener)
 	{
 		this.observedBinaryNames = new HashSet<String>();
@@ -76,6 +82,7 @@ public class MetacompilationManager implements MetacompilationContext
 		this.dependencyManager = new DependencyManager();
 		
 		this.toolkit = toolkit;
+		this.nodeManager = nodeManager;
 		this.diagnosticListener = diagnosticListener;
 
 		this.rootPackage = toolkit.getNodeFactory().makePackageNode(null);
@@ -179,6 +186,12 @@ public class MetacompilationManager implements MetacompilationContext
 			public BsjToolkit getToolkit()
 			{
 				return MetacompilationManager.this.getToolkit();
+			}
+
+			@Override
+			public BsjNodeManager getNodeManager()
+			{
+				return MetacompilationManager.this.getNodeManager();
 			}
 
 			@Override
@@ -286,6 +299,11 @@ public class MetacompilationManager implements MetacompilationContext
 	public BsjToolkit getToolkit()
 	{
 		return toolkit;
+	}
+	
+	public BsjNodeManager getNodeManager()
+	{
+		return nodeManager;
 	}
 
 	public DiagnosticListener<? super JavaFileObject> getDiagnosticListener()

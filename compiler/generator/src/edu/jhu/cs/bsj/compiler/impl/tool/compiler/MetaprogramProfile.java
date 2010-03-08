@@ -2,6 +2,8 @@ package edu.jhu.cs.bsj.compiler.impl.tool.compiler;
 
 import java.util.Collection;
 
+import edu.jhu.cs.bsj.compiler.MetaprogramLocalMode;
+import edu.jhu.cs.bsj.compiler.MetaprogramPackageMode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.impl.metaprogram.BsjMetaprogram;
 
@@ -23,16 +25,23 @@ public class MetaprogramProfile
 	private Collection<String> dependencyNames;
 	/** The fully-qualified names of the targets in which the metaprogram in this profile participates. */
 	private Collection<String> targetNames;
+	/** The local mode of this metaprogram. */
+	private MetaprogramLocalMode localMode;
+	/** The package mode of this metaprogram. */
+	private MetaprogramPackageMode packageMode;
 	
 	// TODO: dependency analysis metadata?
 	public MetaprogramProfile(BsjMetaprogram<?> metaprogram, MetaprogramAnchorNode<?> anchor,
-			Collection<String> dependencyNames, Collection<String> targetNames)
+			Collection<String> dependencyNames, Collection<String> targetNames, MetaprogramLocalMode localMode,
+			MetaprogramPackageMode packageMode)
 	{
 		super();
 		this.metaprogram = metaprogram;
 		this.anchor = anchor;
 		this.dependencyNames = dependencyNames;
 		this.targetNames = targetNames;
+		this.localMode = localMode;
+		this.packageMode = packageMode;
 	}
 
 	public BsjMetaprogram<?> getMetaprogram()
@@ -53,5 +62,15 @@ public class MetaprogramProfile
 	public Collection<String> getTargetNames()
 	{
 		return targetNames;
+	}
+
+	public MetaprogramLocalMode getLocalMode()
+	{
+		return localMode;
+	}
+
+	public MetaprogramPackageMode getPackageMode()
+	{
+		return packageMode;
 	}
 }

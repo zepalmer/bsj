@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Map;
 
 import edu.jhu.cs.bsj.compiler.BsjServiceRegistry;
+import edu.jhu.cs.bsj.compiler.MetaprogramLocalMode;
+import edu.jhu.cs.bsj.compiler.MetaprogramPackageMode;
 import edu.jhu.cs.bsj.compiler.ast.AccessModifier;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceSerializer;
@@ -210,7 +212,9 @@ public class CompileMetaprogramTask extends AbstractBsjCompilerTask
 		Context<A> context = new ContextImpl<A>(anchor);
 		BsjMetaprogram<A> metaprogram = compileMetaprogram(metaprogramNode, context, anchor.getClass().getName());
 
-		return new MetaprogramProfile(metaprogram, anchor, dependencyNames, qualifiedTargetNames);
+		// TODO: parse and use the local and package modes of the metaprogram
+		return new MetaprogramProfile(metaprogram, anchor, dependencyNames, qualifiedTargetNames,
+				MetaprogramLocalMode.INSERT, MetaprogramPackageMode.READ_ONLY);
 	}
 
 	private <A extends MetaprogramAnchorNode<? extends Node>> BsjMetaprogram<A> compileMetaprogram(
