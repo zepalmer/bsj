@@ -664,7 +664,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 		p.print("{\n");
 		p.incPrependCount();
 		handleListNode(node.getConstants(), "", ",\n", ";\n", p, true);
-		handleListNode(node.getMembers(), "", "", "", p, true);
+		handleListNode(node.getMembers(), "\n", "\n", "\n", p, true);
 		p.decPrependCount();
 		p.print("}\n");
 		return null;
@@ -857,10 +857,6 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	@Override
 	public Void executeForLoopNode(ForLoopNode node, PrependablePrintStream p)
 	{
-//        for (int i = 0, x = 0; i < 798; i++)
-//        {
-//
-//        }
 		p.print("for (");
 		if (node.getInitializer() != null)
 		{

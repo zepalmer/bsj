@@ -58,6 +58,7 @@ public class BsjBinaryNodeLoaderTest extends AbstractTest
             + "return(\"Hello Joe!\");" + "}" + "}";
         String codeStr2 = "package joe.foo.bar; public interface SmallClass extends Iface{}";
         String codeStr3 = "package joe.foo.bar; public interface Iface {}";
+        String codeStr4 = "package joe.foo.bar; public enum E {ONE, TWO,THREE; private int y; private int x; public void foo(){}}";
 
         BsjFileObject bfo2 = bfm.getJavaFileForOutput(StandardLocation.SOURCE_PATH, "joe.foo.bar.JoeClass", Kind.SOURCE, null);
         bfo2.setCharContent(codeStr);
@@ -67,8 +68,11 @@ public class BsjBinaryNodeLoaderTest extends AbstractTest
         
         BsjFileObject bfo3 = bfm.getJavaFileForOutput(StandardLocation.SOURCE_PATH, "joe.foo.bar.Iface", Kind.SOURCE, null);
         bfo3.setCharContent(codeStr3);
+        
+        BsjFileObject bfo4 = bfm.getJavaFileForOutput(StandardLocation.SOURCE_PATH, "joe.foo.bar.E", Kind.SOURCE, null);
+        bfo4.setCharContent(codeStr4);
 
-        List<JavaFileObject> fileObjects = Arrays.<JavaFileObject> asList(bfo, bfo2, bfo3);
+        List<JavaFileObject> fileObjects = Arrays.<JavaFileObject> asList(bfo, bfo2, bfo3, bfo4);
 
         // The next step is to compile Iterable collection of java files and close file manager:
 
@@ -83,10 +87,12 @@ public class BsjBinaryNodeLoaderTest extends AbstractTest
         BsjBinaryNodeLoader loader = new BsjBinaryNodeLoader(factory);
         CompilationUnitNode joe = loader.loadNodesFromBinary("joe.foo.bar.JoeClass", map.get(StandardLocation.CLASS_OUTPUT));
         loader.loadNodesFromBinary("joe.foo.bar.SmallClass", map.get(StandardLocation.CLASS_OUTPUT));
+        CompilationUnitNode e = loader.loadNodesFromBinary("joe.foo.bar.E", map.get(StandardLocation.CLASS_OUTPUT));
         
         System.out.println(joe.executeOperation(
                 BsjServiceRegistry.newToolkitFactory().newToolkit().getSerializer(), null));
-        
+        System.out.println(e.executeOperation(
+                BsjServiceRegistry.newToolkitFactory().newToolkit().getSerializer(), null));
         //TODO assert the proper form of the loaded AST
         
 //        Object o = bfm.getClassLoader(StandardLocation.CLASS_OUTPUT).loadClass("JoeClass").newInstance();

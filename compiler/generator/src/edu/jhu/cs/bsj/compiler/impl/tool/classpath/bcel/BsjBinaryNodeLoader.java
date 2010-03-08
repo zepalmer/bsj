@@ -38,6 +38,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.DeclaredTypeListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.DeclaredTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.EnumBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.EnumConstantDeclarationListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.EnumConstantDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.EnumModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.FieldDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.FieldModifiersNode;
@@ -140,17 +141,17 @@ public class BsjBinaryNodeLoader
 
     private TypeDeclarationNode buildTypeDeclarationNode(JavaClass clazz)
     {
-        if (clazz.isClass())
-        {
-            return buildClassDeclarationNode(clazz);
-        }
-        else if (clazz.isInterface())
+        if (clazz.isInterface())
         {
             return buildInterfaceDeclarationNode(clazz);
         }
         else if (clazz.isEnum())
         {
             return buildEnumDeclarationNode(clazz);
+        }
+        else if (clazz.isClass())
+        {
+            return buildClassDeclarationNode(clazz);
         }
         else
         {
@@ -219,14 +220,51 @@ public class BsjBinaryNodeLoader
 
     private ClassMemberListNode buildEnumMembers(JavaClass clazz)
     {
-        // TODO Auto-generated method stub
-        return null;
+        List<ClassMemberNode> list = new ArrayList<ClassMemberNode>();
+
+        for (Method method : clazz.getMethods())
+        {
+            list.add(buildMethodDeclarationNode(method));//TODO finish
+        }
+        
+        for (Field field : clazz.getFields())
+        {
+            // we only care about real fields, not synthetic ones (added by compiler),
+            // and here we want fields which are NOT enum constants
+            if (!field.isSynthetic()
+                    && !(field.isPublic() && field.isStatic() && field.isFinal()))
+            {
+                list.add(buildFieldDeclarationNode(field));
+            }
+        }
+        
+        return factory.makeClassMemberListNode(list );
     }
 
     private EnumConstantDeclarationListNode buildEnumConstants(JavaClass clazz)
     {
-        // TODO Auto-generated method stub
-        return null;
+        List<EnumConstantDeclarationNode> list = new ArrayList<EnumConstantDeclarationNode>();
+        
+        for (Field field : clazz.getFields())
+        {
+            // we only care about real fields, not synthetic ones (added by compiler),
+            // and only 'public static final' fields are enum constants
+            if (!field.isSynthetic()
+                    && field.isPublic() && field.isStatic() && field.isFinal())
+            {
+                list.add(factory.makeEnumConstantDeclarationNode(
+                        factory.makeAnnotationListNode(), 
+                        factory.makeIdentifierNode(field.getName()), 
+                        factory.makeExpressionListNode(),//TODO arguments 
+                        factory.makeAnonymousClassBodyNode(
+                                factory.makeAnonymousClassMemberListNode()), //TODO body if needed
+                        null));
+            }
+        }
+        
+        
+        
+        return factory.makeEnumConstantDeclarationListNode(list);
     }
 
     private DeclaredTypeListNode buildExtendsListNode(JavaClass clazz)
