@@ -224,7 +224,11 @@ public class BsjBinaryNodeLoader
 
         for (Method method : clazz.getMethods())
         {
-            list.add(buildMethodDeclarationNode(method));//TODO finish
+            // enum constructors don't appear to be needed as they are always private
+            if (!method.getName().startsWith("<"))
+            {
+                list.add(buildMethodDeclarationNode(method));
+            }
         }
         
         for (Field field : clazz.getFields())
@@ -244,23 +248,23 @@ public class BsjBinaryNodeLoader
     {
         List<EnumConstantDeclarationNode> list = new ArrayList<EnumConstantDeclarationNode>();
         
+        // enum constant bodies are not needed for the same reason method bodies are not needed,
+        // but we have also left off enum constant arguments because they are not accessible
+        // from outside the enum
         for (Field field : clazz.getFields())
         {
             // we only care about enum fields here, and also want to avoid
             // synthetic (compiler-generated) fields
             if (field.isEnum() && !field.isSynthetic())
-            {
+            {System.out.println(field.getSignature());
                 list.add(factory.makeEnumConstantDeclarationNode(
                         factory.makeAnnotationListNode(), 
                         factory.makeIdentifierNode(field.getName()), 
-                        factory.makeExpressionListNode(),//TODO arguments 
-                        factory.makeAnonymousClassBodyNode(
-                                factory.makeAnonymousClassMemberListNode()), //TODO body if needed
+                        factory.makeExpressionListNode(),
+                        null,
                         null));
             }
         }
-        
-        
         
         return factory.makeEnumConstantDeclarationListNode(list);
     }
@@ -362,8 +366,10 @@ public class BsjBinaryNodeLoader
     private DeclaredTypeNode buildExtendsNode(JavaClass clazz)
     {
         DeclaredTypeNode retNode = null;
-        //TODO done?
-        if (clazz.getSuperclassName() != null && !clazz.getSuperclassName().equals("java.lang.Object"))
+
+        // ignore extending from Object, as it is implied
+        if (clazz.getSuperclassName() != null 
+                && !clazz.getSuperclassName().equals("java.lang.Object"))
         {
             retNode = factory.makeUnparameterizedTypeNode(
                     buildNameNode(clazz.getSuperclassName()));
