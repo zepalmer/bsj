@@ -191,9 +191,16 @@ public class PackageNodeImpl extends NodeImpl implements PackageNode
 	 * 
 	 * @param packageNode The package node to add.
 	 */
+	// TODO: exception if the package already exists
 	public void addPackageNode(PackageNode packageNode)
 	{
+		getManager().assertInsertable(this);
 		this.packageNodes.put(packageNode.getName().getIdentifier(), packageNode);
+		if (packageNode instanceof PackageNodeImpl)
+		{
+			// TODO: exception if the node in question already has a parent
+			((PackageNodeImpl)packageNode).setParent(this);
+		}
 	}
 
 	/**
@@ -215,7 +222,13 @@ public class PackageNodeImpl extends NodeImpl implements PackageNode
 	// TODO: exception if the compilation unit already exists
 	public void addCompilationUnitNode(CompilationUnitNode compilationUnit)
 	{
+		getManager().assertInsertable(this);
 		this.compilationUnitNodes.put(compilationUnit.getName(), compilationUnit);
+		if (compilationUnit instanceof CompilationUnitNodeImpl)
+		{
+			// TODO: exception if the node in question already has a parent
+			((CompilationUnitNodeImpl)compilationUnit).setParent(this);
+		}
 	}
 
 	/**
@@ -415,28 +428,9 @@ public class PackageNodeImpl extends NodeImpl implements PackageNode
 	 * different file or when a type reference is found in an on-demand import). It is possible for metaprograms to
 	 * explicitly load compilation units which are not possible to infer, such as when the name of a compilation unit is
 	 * mentioned in metaprogram code but no object program code causes a direct reference.
-	 * <p/>
-	 * It should be noted that this method will return without completing the compilation unit loading operation. Due to
-	 * the fact that parsing, name analysis, and other such steps are required before the compilation unit becomes
-	 * visible in the tree, the compilation unit will not become available until the next metaprogram starts. For that
-	 * reason, an asynchronous programming approach to loading compilation units is recommended. Consider the following
-	 * example:
-	 * 
-	 * <pre>
-	 * [:
-	 *     #target load;
-	 *     ...
-	 *     packageNode.load(compilationUnitName);
-	 * :]
-	 * [:
-	 *     #depends load;
-	 *     // operations which depend on the loaded compilation unit
-	 *     ...
-	 * :]
-	 * </pre>
 	 * 
 	 * @param name The simple name of the compilation unit to load. No file extension should be provided.
-	 * @return The loaded compilation unit or <code>null</code> if it does not exist.
+	 * @return The loaded compilation unit.
 	 */
 	public CompilationUnitNode load(String name)
 	{
@@ -452,9 +446,6 @@ public class PackageNodeImpl extends NodeImpl implements PackageNode
 
 	/**
 	 * Performs the load of every compilation unit available in this package.
-	 * 
-	 * @return <code>true</code> if at least one new compilation unit will be loaded; <code>false</code> if the entire
-	 *         package has already been loaded.
 	 */
 	public void loadAll()
 	{

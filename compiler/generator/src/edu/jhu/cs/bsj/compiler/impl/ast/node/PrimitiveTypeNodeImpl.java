@@ -46,6 +46,7 @@ public class PrimitiveTypeNodeImpl extends NodeImpl implements PrimitiveTypeNode
      */
     public void setPrimitiveType(PrimitiveType primitiveType)
     {
+        getManager().assertMutatable(this);
         this.primitiveType = primitiveType;
     }
     

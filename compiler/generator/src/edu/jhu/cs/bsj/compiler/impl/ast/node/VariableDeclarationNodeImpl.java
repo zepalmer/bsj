@@ -52,6 +52,7 @@ public class VariableDeclarationNodeImpl extends NodeImpl implements VariableDec
      */
     public void setModifiers(VariableModifiersNode modifiers)
     {
+        getManager().assertMutatable(this);
         if (this.modifiers instanceof NodeImpl)
         {
             ((NodeImpl)this.modifiers).setParent(null);
@@ -78,6 +79,7 @@ public class VariableDeclarationNodeImpl extends NodeImpl implements VariableDec
      */
     public void setDeclarators(VariableDeclaratorListNode declarators)
     {
+        getManager().assertMutatable(this);
         if (this.declarators instanceof NodeImpl)
         {
             ((NodeImpl)this.declarators).setParent(null);

@@ -52,6 +52,7 @@ public class AnnotationElementNodeImpl extends NodeImpl implements AnnotationEle
      */
     public void setIdentifier(IdentifierNode identifier)
     {
+        getManager().assertMutatable(this);
         if (this.identifier instanceof NodeImpl)
         {
             ((NodeImpl)this.identifier).setParent(null);
@@ -78,6 +79,7 @@ public class AnnotationElementNodeImpl extends NodeImpl implements AnnotationEle
      */
     public void setValue(AnnotationValueNode value)
     {
+        getManager().assertMutatable(this);
         if (this.value instanceof NodeImpl)
         {
             ((NodeImpl)this.value).setParent(null);

@@ -46,6 +46,7 @@ public class AnnotationArrayValueNodeImpl extends NodeImpl implements Annotation
      */
     public void setValues(AnnotationValueListNode values)
     {
+        getManager().assertMutatable(this);
         if (this.values instanceof NodeImpl)
         {
             ((NodeImpl)this.values).setParent(null);

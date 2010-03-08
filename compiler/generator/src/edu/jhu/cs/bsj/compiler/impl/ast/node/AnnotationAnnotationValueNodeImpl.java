@@ -46,6 +46,7 @@ public class AnnotationAnnotationValueNodeImpl extends NodeImpl implements Annot
      */
     public void setAnnotation(AnnotationNode annotation)
     {
+        getManager().assertMutatable(this);
         if (this.annotation instanceof NodeImpl)
         {
             ((NodeImpl)this.annotation).setParent(null);

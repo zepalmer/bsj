@@ -57,6 +57,7 @@ public class AssignmentNodeImpl extends NodeImpl implements AssignmentNode
      */
     public void setVariable(ExpressionNode variable)
     {
+        getManager().assertMutatable(this);
         if (this.variable instanceof NodeImpl)
         {
             ((NodeImpl)this.variable).setParent(null);
@@ -83,6 +84,7 @@ public class AssignmentNodeImpl extends NodeImpl implements AssignmentNode
      */
     public void setOperator(AssignmentOperator operator)
     {
+        getManager().assertMutatable(this);
         this.operator = operator;
     }
     
@@ -101,6 +103,7 @@ public class AssignmentNodeImpl extends NodeImpl implements AssignmentNode
      */
     public void setExpression(ExpressionNode expression)
     {
+        getManager().assertMutatable(this);
         if (this.expression instanceof NodeImpl)
         {
             ((NodeImpl)this.expression).setParent(null);

@@ -53,6 +53,7 @@ public class MetaprogramNodeImpl extends NodeImpl implements MetaprogramNode
      */
     public void setPreamble(MetaprogramPreambleNode preamble)
     {
+        getManager().assertMutatable(this);
         if (this.preamble instanceof NodeImpl)
         {
             ((NodeImpl)this.preamble).setParent(null);
@@ -79,6 +80,7 @@ public class MetaprogramNodeImpl extends NodeImpl implements MetaprogramNode
      */
     public void setBody(BlockStatementListNode body)
     {
+        getManager().assertMutatable(this);
         if (this.body instanceof NodeImpl)
         {
             ((NodeImpl)this.body).setParent(null);

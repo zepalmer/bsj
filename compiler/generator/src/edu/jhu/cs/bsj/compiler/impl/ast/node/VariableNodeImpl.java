@@ -58,6 +58,7 @@ public class VariableNodeImpl extends NodeImpl implements VariableNode
      */
     public void setModifiers(VariableModifiersNode modifiers)
     {
+        getManager().assertMutatable(this);
         if (this.modifiers instanceof NodeImpl)
         {
             ((NodeImpl)this.modifiers).setParent(null);
@@ -84,6 +85,7 @@ public class VariableNodeImpl extends NodeImpl implements VariableNode
      */
     public void setType(TypeNode type)
     {
+        getManager().assertMutatable(this);
         if (this.type instanceof NodeImpl)
         {
             ((NodeImpl)this.type).setParent(null);
@@ -110,6 +112,7 @@ public class VariableNodeImpl extends NodeImpl implements VariableNode
      */
     public void setIdentifier(IdentifierNode identifier)
     {
+        getManager().assertMutatable(this);
         if (this.identifier instanceof NodeImpl)
         {
             ((NodeImpl)this.identifier).setParent(null);

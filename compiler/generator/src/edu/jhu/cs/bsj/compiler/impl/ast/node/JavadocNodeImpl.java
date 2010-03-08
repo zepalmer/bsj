@@ -45,6 +45,7 @@ public class JavadocNodeImpl extends NodeImpl implements JavadocNode
      */
     public void setText(String text)
     {
+        getManager().assertMutatable(this);
         this.text = text;
     }
     

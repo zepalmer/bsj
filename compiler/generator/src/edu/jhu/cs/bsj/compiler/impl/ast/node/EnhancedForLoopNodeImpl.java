@@ -58,6 +58,7 @@ public class EnhancedForLoopNodeImpl extends NodeImpl implements EnhancedForLoop
      */
     public void setVariable(VariableNode variable)
     {
+        getManager().assertMutatable(this);
         if (this.variable instanceof NodeImpl)
         {
             ((NodeImpl)this.variable).setParent(null);
@@ -84,6 +85,7 @@ public class EnhancedForLoopNodeImpl extends NodeImpl implements EnhancedForLoop
      */
     public void setExpression(ExpressionNode expression)
     {
+        getManager().assertMutatable(this);
         if (this.expression instanceof NodeImpl)
         {
             ((NodeImpl)this.expression).setParent(null);
@@ -110,6 +112,7 @@ public class EnhancedForLoopNodeImpl extends NodeImpl implements EnhancedForLoop
      */
     public void setStatement(StatementNode statement)
     {
+        getManager().assertMutatable(this);
         if (this.statement instanceof NodeImpl)
         {
             ((NodeImpl)this.statement).setParent(null);

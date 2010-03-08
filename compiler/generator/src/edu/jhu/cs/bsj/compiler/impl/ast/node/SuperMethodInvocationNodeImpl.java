@@ -64,6 +64,7 @@ public class SuperMethodInvocationNodeImpl extends NodeImpl implements SuperMeth
      */
     public void setType(UnparameterizedTypeNode type)
     {
+        getManager().assertMutatable(this);
         if (this.type instanceof NodeImpl)
         {
             ((NodeImpl)this.type).setParent(null);
@@ -90,6 +91,7 @@ public class SuperMethodInvocationNodeImpl extends NodeImpl implements SuperMeth
      */
     public void setIdentifier(IdentifierNode identifier)
     {
+        getManager().assertMutatable(this);
         if (this.identifier instanceof NodeImpl)
         {
             ((NodeImpl)this.identifier).setParent(null);
@@ -116,6 +118,7 @@ public class SuperMethodInvocationNodeImpl extends NodeImpl implements SuperMeth
      */
     public void setArguments(ExpressionListNode arguments)
     {
+        getManager().assertMutatable(this);
         if (this.arguments instanceof NodeImpl)
         {
             ((NodeImpl)this.arguments).setParent(null);
@@ -142,6 +145,7 @@ public class SuperMethodInvocationNodeImpl extends NodeImpl implements SuperMeth
      */
     public void setTypeArguments(ReferenceTypeListNode typeArguments)
     {
+        getManager().assertMutatable(this);
         if (this.typeArguments instanceof NodeImpl)
         {
             ((NodeImpl)this.typeArguments).setParent(null);

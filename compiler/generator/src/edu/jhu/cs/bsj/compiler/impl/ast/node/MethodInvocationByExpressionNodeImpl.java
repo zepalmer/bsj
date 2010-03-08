@@ -56,6 +56,7 @@ public class MethodInvocationByExpressionNodeImpl extends MethodInvocationNodeIm
      */
     public void setExpression(PrimaryExpressionNode expression)
     {
+        getManager().assertMutatable(this);
         if (this.expression instanceof NodeImpl)
         {
             ((NodeImpl)this.expression).setParent(null);
@@ -82,6 +83,7 @@ public class MethodInvocationByExpressionNodeImpl extends MethodInvocationNodeIm
      */
     public void setIdentifier(IdentifierNode identifier)
     {
+        getManager().assertMutatable(this);
         if (this.identifier instanceof NodeImpl)
         {
             ((NodeImpl)this.identifier).setParent(null);

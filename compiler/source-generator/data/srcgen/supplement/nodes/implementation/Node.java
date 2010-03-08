@@ -148,5 +148,14 @@ public abstract class NodeImpl
 		}
 		return null;
 	}
+	
+	/**
+	 * Retrieves the manager for this node.
+	 * @return The manager for this node.
+	 */
+	protected BsjNodeManager getManager()
+	{
+		return this.manager;
+	}
 	/* GEN:stop */
 }

@@ -50,6 +50,7 @@ public class SuperclassConstructorInvocationNodeImpl extends ConstructorInvocati
      */
     public void setQualifyingExpression(PrimaryExpressionNode qualifyingExpression)
     {
+        getManager().assertMutatable(this);
         if (this.qualifyingExpression instanceof NodeImpl)
         {
             ((NodeImpl)this.qualifyingExpression).setParent(null);

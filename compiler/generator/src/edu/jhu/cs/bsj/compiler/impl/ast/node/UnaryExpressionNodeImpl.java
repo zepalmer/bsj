@@ -52,6 +52,7 @@ public class UnaryExpressionNodeImpl extends NodeImpl implements UnaryExpression
      */
     public void setExpression(ExpressionNode expression)
     {
+        getManager().assertMutatable(this);
         if (this.expression instanceof NodeImpl)
         {
             ((NodeImpl)this.expression).setParent(null);
@@ -78,6 +79,7 @@ public class UnaryExpressionNodeImpl extends NodeImpl implements UnaryExpression
      */
     public void setOperator(UnaryOperator operator)
     {
+        getManager().assertMutatable(this);
         this.operator = operator;
     }
     

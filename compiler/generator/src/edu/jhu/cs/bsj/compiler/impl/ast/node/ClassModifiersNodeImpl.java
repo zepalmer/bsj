@@ -68,6 +68,7 @@ public class ClassModifiersNodeImpl extends ModifiersNodeImpl implements ClassMo
      */
     public void setAccess(AccessModifier access)
     {
+        getManager().assertMutatable(this);
         this.access = access;
     }
     
@@ -86,6 +87,7 @@ public class ClassModifiersNodeImpl extends ModifiersNodeImpl implements ClassMo
      */
     public void setAbstractFlag(boolean abstractFlag)
     {
+        getManager().assertMutatable(this);
         this.abstractFlag = abstractFlag;
     }
     
@@ -104,6 +106,7 @@ public class ClassModifiersNodeImpl extends ModifiersNodeImpl implements ClassMo
      */
     public void setStaticFlag(boolean staticFlag)
     {
+        getManager().assertMutatable(this);
         this.staticFlag = staticFlag;
     }
     
@@ -122,6 +125,7 @@ public class ClassModifiersNodeImpl extends ModifiersNodeImpl implements ClassMo
      */
     public void setFinalFlag(boolean finalFlag)
     {
+        getManager().assertMutatable(this);
         this.finalFlag = finalFlag;
     }
     
@@ -140,6 +144,7 @@ public class ClassModifiersNodeImpl extends ModifiersNodeImpl implements ClassMo
      */
     public void setStrictfpFlag(boolean strictfpFlag)
     {
+        getManager().assertMutatable(this);
         this.strictfpFlag = strictfpFlag;
     }
     

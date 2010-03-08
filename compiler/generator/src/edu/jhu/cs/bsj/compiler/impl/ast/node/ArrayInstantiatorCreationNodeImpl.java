@@ -49,6 +49,7 @@ public class ArrayInstantiatorCreationNodeImpl extends ArrayCreationNodeImpl imp
      */
     public void setDimExpressions(ExpressionListNode dimExpressions)
     {
+        getManager().assertMutatable(this);
         if (this.dimExpressions instanceof NodeImpl)
         {
             ((NodeImpl)this.dimExpressions).setParent(null);

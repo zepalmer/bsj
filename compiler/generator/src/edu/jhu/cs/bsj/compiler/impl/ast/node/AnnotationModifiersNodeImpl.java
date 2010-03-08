@@ -58,6 +58,7 @@ public class AnnotationModifiersNodeImpl extends ModifiersNodeImpl implements An
      */
     public void setAccess(AccessModifier access)
     {
+        getManager().assertMutatable(this);
         this.access = access;
     }
     
@@ -76,6 +77,7 @@ public class AnnotationModifiersNodeImpl extends ModifiersNodeImpl implements An
      */
     public void setStaticFlag(boolean staticFlag)
     {
+        getManager().assertMutatable(this);
         this.staticFlag = staticFlag;
     }
     
@@ -94,6 +96,7 @@ public class AnnotationModifiersNodeImpl extends ModifiersNodeImpl implements An
      */
     public void setStrictfpFlag(boolean strictfpFlag)
     {
+        getManager().assertMutatable(this);
         this.strictfpFlag = strictfpFlag;
     }
     

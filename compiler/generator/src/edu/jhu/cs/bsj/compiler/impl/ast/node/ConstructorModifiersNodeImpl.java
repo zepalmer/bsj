@@ -48,6 +48,7 @@ public class ConstructorModifiersNodeImpl extends ModifiersNodeImpl implements C
      */
     public void setAccess(AccessModifier access)
     {
+        getManager().assertMutatable(this);
         this.access = access;
     }
     

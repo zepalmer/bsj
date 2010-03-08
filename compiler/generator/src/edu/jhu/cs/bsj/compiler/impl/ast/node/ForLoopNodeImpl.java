@@ -64,6 +64,7 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
      */
     public void setInitializer(ForInitializerNode initializer)
     {
+        getManager().assertMutatable(this);
         if (this.initializer instanceof NodeImpl)
         {
             ((NodeImpl)this.initializer).setParent(null);
@@ -90,6 +91,7 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
      */
     public void setCondition(ExpressionNode condition)
     {
+        getManager().assertMutatable(this);
         if (this.condition instanceof NodeImpl)
         {
             ((NodeImpl)this.condition).setParent(null);
@@ -116,6 +118,7 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
      */
     public void setUpdate(StatementExpressionListNode update)
     {
+        getManager().assertMutatable(this);
         if (this.update instanceof NodeImpl)
         {
             ((NodeImpl)this.update).setParent(null);
@@ -142,6 +145,7 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
      */
     public void setStatement(StatementNode statement)
     {
+        getManager().assertMutatable(this);
         if (this.statement instanceof NodeImpl)
         {
             ((NodeImpl)this.statement).setParent(null);

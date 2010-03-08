@@ -57,6 +57,7 @@ public class TryNodeImpl extends NodeImpl implements TryNode
      */
     public void setBlock(BlockNode block)
     {
+        getManager().assertMutatable(this);
         if (this.block instanceof NodeImpl)
         {
             ((NodeImpl)this.block).setParent(null);
@@ -83,6 +84,7 @@ public class TryNodeImpl extends NodeImpl implements TryNode
      */
     public void setCatches(CatchListNode catches)
     {
+        getManager().assertMutatable(this);
         if (this.catches instanceof NodeImpl)
         {
             ((NodeImpl)this.catches).setParent(null);
@@ -109,6 +111,7 @@ public class TryNodeImpl extends NodeImpl implements TryNode
      */
     public void setFinallyBlock(BlockNode finallyBlock)
     {
+        getManager().assertMutatable(this);
         if (this.finallyBlock instanceof NodeImpl)
         {
             ((NodeImpl)this.finallyBlock).setParent(null);

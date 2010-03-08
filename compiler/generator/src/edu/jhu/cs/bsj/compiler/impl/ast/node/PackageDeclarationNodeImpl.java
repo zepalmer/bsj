@@ -52,6 +52,7 @@ public class PackageDeclarationNodeImpl extends NodeImpl implements PackageDecla
      */
     public void setName(NameNode name)
     {
+        getManager().assertMutatable(this);
         if (this.name instanceof NodeImpl)
         {
             ((NodeImpl)this.name).setParent(null);
@@ -78,6 +79,7 @@ public class PackageDeclarationNodeImpl extends NodeImpl implements PackageDecla
      */
     public void setAnnotations(AnnotationListNode annotations)
     {
+        getManager().assertMutatable(this);
         if (this.annotations instanceof NodeImpl)
         {
             ((NodeImpl)this.annotations).setParent(null);

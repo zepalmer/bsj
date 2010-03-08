@@ -50,6 +50,7 @@ public class MethodInvocationByNameNodeImpl extends MethodInvocationNodeImpl imp
      */
     public void setName(NameNode name)
     {
+        getManager().assertMutatable(this);
         if (this.name instanceof NodeImpl)
         {
             ((NodeImpl)this.name).setParent(null);

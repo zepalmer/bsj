@@ -52,6 +52,7 @@ public class EnumBodyNodeImpl extends NodeImpl implements EnumBodyNode
      */
     public void setConstants(EnumConstantDeclarationListNode constants)
     {
+        getManager().assertMutatable(this);
         if (this.constants instanceof NodeImpl)
         {
             ((NodeImpl)this.constants).setParent(null);
@@ -78,6 +79,7 @@ public class EnumBodyNodeImpl extends NodeImpl implements EnumBodyNode
      */
     public void setMembers(ClassMemberListNode members)
     {
+        getManager().assertMutatable(this);
         if (this.members instanceof NodeImpl)
         {
             ((NodeImpl)this.members).setParent(null);

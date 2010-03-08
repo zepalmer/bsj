@@ -51,6 +51,7 @@ public class InitializerDeclarationNodeImpl extends NodeImpl implements Initiali
      */
     public void setStaticInitializer(boolean staticInitializer)
     {
+        getManager().assertMutatable(this);
         this.staticInitializer = staticInitializer;
     }
     
@@ -69,6 +70,7 @@ public class InitializerDeclarationNodeImpl extends NodeImpl implements Initiali
      */
     public void setBody(BlockNode body)
     {
+        getManager().assertMutatable(this);
         if (this.body instanceof NodeImpl)
         {
             ((NodeImpl)this.body).setParent(null);

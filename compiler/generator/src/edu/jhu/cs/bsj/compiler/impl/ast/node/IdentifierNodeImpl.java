@@ -45,6 +45,7 @@ public class IdentifierNodeImpl extends NodeImpl implements IdentifierNode
      */
     public void setIdentifier(String identifier)
     {
+        getManager().assertMutatable(this);
         this.identifier = identifier;
     }
     

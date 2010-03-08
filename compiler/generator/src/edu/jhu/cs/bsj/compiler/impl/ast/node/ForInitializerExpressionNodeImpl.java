@@ -46,6 +46,7 @@ public class ForInitializerExpressionNodeImpl extends NodeImpl implements ForIni
      */
     public void setExpressions(StatementExpressionListNode expressions)
     {
+        getManager().assertMutatable(this);
         if (this.expressions instanceof NodeImpl)
         {
             ((NodeImpl)this.expressions).setParent(null);

@@ -52,6 +52,7 @@ public class WhileLoopNodeImpl extends NodeImpl implements WhileLoopNode
      */
     public void setCondition(ExpressionNode condition)
     {
+        getManager().assertMutatable(this);
         if (this.condition instanceof NodeImpl)
         {
             ((NodeImpl)this.condition).setParent(null);
@@ -78,6 +79,7 @@ public class WhileLoopNodeImpl extends NodeImpl implements WhileLoopNode
      */
     public void setStatement(StatementNode statement)
     {
+        getManager().assertMutatable(this);
         if (this.statement instanceof NodeImpl)
         {
             ((NodeImpl)this.statement).setParent(null);

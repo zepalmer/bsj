@@ -52,6 +52,7 @@ public class TypeParameterNodeImpl extends NodeImpl implements TypeParameterNode
      */
     public void setIdentifier(IdentifierNode identifier)
     {
+        getManager().assertMutatable(this);
         if (this.identifier instanceof NodeImpl)
         {
             ((NodeImpl)this.identifier).setParent(null);
@@ -78,6 +79,7 @@ public class TypeParameterNodeImpl extends NodeImpl implements TypeParameterNode
      */
     public void setBounds(DeclaredTypeListNode bounds)
     {
+        getManager().assertMutatable(this);
         if (this.bounds instanceof NodeImpl)
         {
             ((NodeImpl)this.bounds).setParent(null);

@@ -52,6 +52,7 @@ public class LabeledStatementNodeImpl extends NodeImpl implements LabeledStateme
      */
     public void setLabel(IdentifierNode label)
     {
+        getManager().assertMutatable(this);
         if (this.label instanceof NodeImpl)
         {
             ((NodeImpl)this.label).setParent(null);
@@ -78,6 +79,7 @@ public class LabeledStatementNodeImpl extends NodeImpl implements LabeledStateme
      */
     public void setStatement(StatementNode statement)
     {
+        getManager().assertMutatable(this);
         if (this.statement instanceof NodeImpl)
         {
             ((NodeImpl)this.statement).setParent(null);

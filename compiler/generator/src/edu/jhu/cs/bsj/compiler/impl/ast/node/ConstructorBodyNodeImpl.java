@@ -52,6 +52,7 @@ public class ConstructorBodyNodeImpl extends NodeImpl implements ConstructorBody
      */
     public void setConstructorInvocation(ConstructorInvocationNode constructorInvocation)
     {
+        getManager().assertMutatable(this);
         if (this.constructorInvocation instanceof NodeImpl)
         {
             ((NodeImpl)this.constructorInvocation).setParent(null);
@@ -78,6 +79,7 @@ public class ConstructorBodyNodeImpl extends NodeImpl implements ConstructorBody
      */
     public void setStatements(BlockStatementListNode statements)
     {
+        getManager().assertMutatable(this);
         if (this.statements instanceof NodeImpl)
         {
             ((NodeImpl)this.statements).setParent(null);

@@ -157,6 +157,7 @@ public abstract class ListNodeImpl<T extends Node> extends NodeImpl implements L
 		}
 		protected void elementAdded(int index, T element)
 		{
+			ListNodeImpl.this.getManager().assertInsertable(ListNodeImpl.this);
 			if (element instanceof NodeImpl)
 			{
 				((NodeImpl)element).setParent(ListNodeImpl.this);
@@ -164,6 +165,7 @@ public abstract class ListNodeImpl<T extends Node> extends NodeImpl implements L
 		}
 		protected void elementRemoved(int index, T element)
 		{
+			ListNodeImpl.this.getManager().assertMutatable(ListNodeImpl.this);
 			if (element instanceof NodeImpl)
 			{
 				((NodeImpl)element).setParent(null);

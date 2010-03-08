@@ -71,6 +71,7 @@ public class EnumDeclarationNodeImpl extends NodeImpl implements EnumDeclaration
      */
     public void setModifiers(EnumModifiersNode modifiers)
     {
+        getManager().assertMutatable(this);
         if (this.modifiers instanceof NodeImpl)
         {
             ((NodeImpl)this.modifiers).setParent(null);
@@ -97,6 +98,7 @@ public class EnumDeclarationNodeImpl extends NodeImpl implements EnumDeclaration
      */
     public void setImplementsClause(DeclaredTypeListNode implementsClause)
     {
+        getManager().assertMutatable(this);
         if (this.implementsClause instanceof NodeImpl)
         {
             ((NodeImpl)this.implementsClause).setParent(null);
@@ -123,6 +125,7 @@ public class EnumDeclarationNodeImpl extends NodeImpl implements EnumDeclaration
      */
     public void setBody(EnumBodyNode body)
     {
+        getManager().assertMutatable(this);
         if (this.body instanceof NodeImpl)
         {
             ((NodeImpl)this.body).setParent(null);
@@ -149,6 +152,7 @@ public class EnumDeclarationNodeImpl extends NodeImpl implements EnumDeclaration
      */
     public void setIdentifier(IdentifierNode identifier)
     {
+        getManager().assertMutatable(this);
         if (this.identifier instanceof NodeImpl)
         {
             ((NodeImpl)this.identifier).setParent(null);
@@ -175,6 +179,7 @@ public class EnumDeclarationNodeImpl extends NodeImpl implements EnumDeclaration
      */
     public void setJavadoc(JavadocNode javadoc)
     {
+        getManager().assertMutatable(this);
         if (this.javadoc instanceof NodeImpl)
         {
             ((NodeImpl)this.javadoc).setParent(null);

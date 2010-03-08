@@ -47,6 +47,7 @@ public class MetaprogramImportNodeImpl extends NodeImpl implements MetaprogramIm
      */
     public void setImportNode(ImportNode importNode)
     {
+        getManager().assertMutatable(this);
         if (this.importNode instanceof NodeImpl)
         {
             ((NodeImpl)this.importNode).setParent(null);

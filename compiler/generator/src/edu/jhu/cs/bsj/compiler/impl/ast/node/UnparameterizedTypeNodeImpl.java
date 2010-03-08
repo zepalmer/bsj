@@ -46,6 +46,7 @@ public class UnparameterizedTypeNodeImpl extends NodeImpl implements Unparameter
      */
     public void setName(NameNode name)
     {
+        getManager().assertMutatable(this);
         if (this.name instanceof NodeImpl)
         {
             ((NodeImpl)this.name).setParent(null);

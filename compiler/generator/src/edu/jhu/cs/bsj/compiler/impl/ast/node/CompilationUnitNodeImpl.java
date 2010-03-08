@@ -78,6 +78,7 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
      */
     public void setPackageDeclaration(PackageDeclarationNode packageDeclaration)
     {
+        getManager().assertMutatable(this);
         if (this.packageDeclaration instanceof NodeImpl)
         {
             ((NodeImpl)this.packageDeclaration).setParent(null);
@@ -104,6 +105,7 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
      */
     public void setMetaimports(MetaprogramImportListNode metaimports)
     {
+        getManager().assertMutatable(this);
         if (this.metaimports instanceof NodeImpl)
         {
             ((NodeImpl)this.metaimports).setParent(null);
@@ -130,6 +132,7 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
      */
     public void setImports(ImportListNode imports)
     {
+        getManager().assertMutatable(this);
         if (this.imports instanceof NodeImpl)
         {
             ((NodeImpl)this.imports).setParent(null);
@@ -156,6 +159,7 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
      */
     public void setTypeDecls(TypeDeclarationListNode typeDecls)
     {
+        getManager().assertMutatable(this);
         if (this.typeDecls instanceof NodeImpl)
         {
             ((NodeImpl)this.typeDecls).setParent(null);

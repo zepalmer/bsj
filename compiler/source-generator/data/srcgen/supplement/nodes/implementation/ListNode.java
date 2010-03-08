@@ -29,6 +29,7 @@ public class ListNodeImpl<T extends Node> extends Node implements ListNode<T>
 		}
 		protected void elementAdded(int index, T element)
 		{
+			ListNodeImpl.this.getManager().assertInsertable(ListNodeImpl.this);
 			if (element instanceof NodeImpl)
 			{
 				((NodeImpl)element).setParent(ListNodeImpl.this);
@@ -36,6 +37,7 @@ public class ListNodeImpl<T extends Node> extends Node implements ListNode<T>
 		}
 		protected void elementRemoved(int index, T element)
 		{
+			ListNodeImpl.this.getManager().assertMutatable(ListNodeImpl.this);
 			if (element instanceof NodeImpl)
 			{
 				((NodeImpl)element).setParent(null);

@@ -49,6 +49,7 @@ public abstract class ConstructorInvocationNodeImpl extends NodeImpl implements 
      */
     public void setArguments(ExpressionListNode arguments)
     {
+        getManager().assertMutatable(this);
         if (this.arguments instanceof NodeImpl)
         {
             ((NodeImpl)this.arguments).setParent(null);
@@ -75,6 +76,7 @@ public abstract class ConstructorInvocationNodeImpl extends NodeImpl implements 
      */
     public void setTypeArguments(ReferenceTypeListNode typeArguments)
     {
+        getManager().assertMutatable(this);
         if (this.typeArguments instanceof NodeImpl)
         {
             ((NodeImpl)this.typeArguments).setParent(null);

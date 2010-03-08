@@ -77,6 +77,7 @@ public class InterfaceDeclarationNodeImpl extends NodeImpl implements InterfaceD
      */
     public void setModifiers(InterfaceModifiersNode modifiers)
     {
+        getManager().assertMutatable(this);
         if (this.modifiers instanceof NodeImpl)
         {
             ((NodeImpl)this.modifiers).setParent(null);
@@ -103,6 +104,7 @@ public class InterfaceDeclarationNodeImpl extends NodeImpl implements InterfaceD
      */
     public void setExtendsClause(DeclaredTypeListNode extendsClause)
     {
+        getManager().assertMutatable(this);
         if (this.extendsClause instanceof NodeImpl)
         {
             ((NodeImpl)this.extendsClause).setParent(null);
@@ -129,6 +131,7 @@ public class InterfaceDeclarationNodeImpl extends NodeImpl implements InterfaceD
      */
     public void setBody(InterfaceBodyNode body)
     {
+        getManager().assertMutatable(this);
         if (this.body instanceof NodeImpl)
         {
             ((NodeImpl)this.body).setParent(null);
@@ -155,6 +158,7 @@ public class InterfaceDeclarationNodeImpl extends NodeImpl implements InterfaceD
      */
     public void setTypeParameters(TypeParameterListNode typeParameters)
     {
+        getManager().assertMutatable(this);
         if (this.typeParameters instanceof NodeImpl)
         {
             ((NodeImpl)this.typeParameters).setParent(null);
@@ -181,6 +185,7 @@ public class InterfaceDeclarationNodeImpl extends NodeImpl implements InterfaceD
      */
     public void setIdentifier(IdentifierNode identifier)
     {
+        getManager().assertMutatable(this);
         if (this.identifier instanceof NodeImpl)
         {
             ((NodeImpl)this.identifier).setParent(null);
@@ -207,6 +212,7 @@ public class InterfaceDeclarationNodeImpl extends NodeImpl implements InterfaceD
      */
     public void setJavadoc(JavadocNode javadoc)
     {
+        getManager().assertMutatable(this);
         if (this.javadoc instanceof NodeImpl)
         {
             ((NodeImpl)this.javadoc).setParent(null);

@@ -48,6 +48,7 @@ public abstract class ArrayCreationNodeImpl extends NodeImpl implements ArrayCre
      */
     public void setBaseType(BaseTypeNode baseType)
     {
+        getManager().assertMutatable(this);
         if (this.baseType instanceof NodeImpl)
         {
             ((NodeImpl)this.baseType).setParent(null);
@@ -74,6 +75,7 @@ public abstract class ArrayCreationNodeImpl extends NodeImpl implements ArrayCre
      */
     public void setArrayLevels(int arrayLevels)
     {
+        getManager().assertMutatable(this);
         this.arrayLevels = arrayLevels;
     }
     

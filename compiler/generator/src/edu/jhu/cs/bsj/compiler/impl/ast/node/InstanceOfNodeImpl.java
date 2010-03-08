@@ -52,6 +52,7 @@ public class InstanceOfNodeImpl extends NodeImpl implements InstanceOfNode
      */
     public void setExpression(ExpressionNode expression)
     {
+        getManager().assertMutatable(this);
         if (this.expression instanceof NodeImpl)
         {
             ((NodeImpl)this.expression).setParent(null);
@@ -78,6 +79,7 @@ public class InstanceOfNodeImpl extends NodeImpl implements InstanceOfNode
      */
     public void setType(TypeNode type)
     {
+        getManager().assertMutatable(this);
         if (this.type instanceof NodeImpl)
         {
             ((NodeImpl)this.type).setParent(null);

@@ -55,6 +55,7 @@ public abstract class ClassInstantiationNodeImpl extends NodeImpl implements Cla
      */
     public void setConstructorTypeArguments(TypeArgumentListNode constructorTypeArguments)
     {
+        getManager().assertMutatable(this);
         if (this.constructorTypeArguments instanceof NodeImpl)
         {
             ((NodeImpl)this.constructorTypeArguments).setParent(null);
@@ -81,6 +82,7 @@ public abstract class ClassInstantiationNodeImpl extends NodeImpl implements Cla
      */
     public void setArguments(ExpressionListNode arguments)
     {
+        getManager().assertMutatable(this);
         if (this.arguments instanceof NodeImpl)
         {
             ((NodeImpl)this.arguments).setParent(null);
@@ -107,6 +109,7 @@ public abstract class ClassInstantiationNodeImpl extends NodeImpl implements Cla
      */
     public void setBody(AnonymousClassBodyNode body)
     {
+        getManager().assertMutatable(this);
         if (this.body instanceof NodeImpl)
         {
             ((NodeImpl)this.body).setParent(null);

@@ -46,6 +46,7 @@ public class ExpressionStatementNodeImpl extends NodeImpl implements ExpressionS
      */
     public void setExpression(StatementExpressionNode expression)
     {
+        getManager().assertMutatable(this);
         if (this.expression instanceof NodeImpl)
         {
             ((NodeImpl)this.expression).setParent(null);

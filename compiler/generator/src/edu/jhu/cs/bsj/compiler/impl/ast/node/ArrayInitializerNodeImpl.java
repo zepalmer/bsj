@@ -46,6 +46,7 @@ public class ArrayInitializerNodeImpl extends NodeImpl implements ArrayInitializ
      */
     public void setInitializers(VariableInitializerListNode initializers)
     {
+        getManager().assertMutatable(this);
         if (this.initializers instanceof NodeImpl)
         {
             ((NodeImpl)this.initializers).setParent(null);

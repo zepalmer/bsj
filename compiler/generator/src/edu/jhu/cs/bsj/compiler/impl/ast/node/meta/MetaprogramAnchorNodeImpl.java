@@ -50,6 +50,7 @@ public abstract class MetaprogramAnchorNodeImpl<T extends Node> extends NodeImpl
      */
     public void setMetaprogram(MetaprogramNode metaprogram)
     {
+        getManager().assertMutatable(this);
         if (this.metaprogram instanceof NodeImpl)
         {
             ((NodeImpl)this.metaprogram).setParent(null);

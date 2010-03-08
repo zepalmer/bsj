@@ -46,6 +46,7 @@ public class ForInitializerDeclarationNodeImpl extends NodeImpl implements ForIn
      */
     public void setDeclaration(VariableDeclarationNode declaration)
     {
+        getManager().assertMutatable(this);
         if (this.declaration instanceof NodeImpl)
         {
             ((NodeImpl)this.declaration).setParent(null);

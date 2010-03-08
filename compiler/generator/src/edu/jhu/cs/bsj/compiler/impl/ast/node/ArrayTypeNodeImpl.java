@@ -46,6 +46,7 @@ public class ArrayTypeNodeImpl extends NodeImpl implements ArrayTypeNode
      */
     public void setType(TypeNode type)
     {
+        getManager().assertMutatable(this);
         if (this.type instanceof NodeImpl)
         {
             ((NodeImpl)this.type).setParent(null);

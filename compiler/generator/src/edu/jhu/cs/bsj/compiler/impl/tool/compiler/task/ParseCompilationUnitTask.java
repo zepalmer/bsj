@@ -45,15 +45,19 @@ public class ParseCompilationUnitTask extends AbstractBsjCompilerTask
 		CompilationUnitNode node = parser.parse(compilationUnitName, reader, context.getDiagnosticListener());
 
 		// Find/create the package we're trying to use
-		String packageName = StringUtilities.removeSuffix(this.file.inferBinaryName(), '.');
 		PackageNode packageNode = rootPackage;
-		for (String componentName : packageName.split("\\."))
+		String compilationUnitBinaryName = this.file.inferBinaryName();
+		if (compilationUnitBinaryName.contains("."))
 		{
-			if (packageNode.getSubpackage(componentName) == null)
+			String packageName = StringUtilities.removeSuffix(compilationUnitBinaryName, '.');
+			for (String componentName : packageName.split("\\."))
 			{
-				packageNode.addPackageNode(factory.makePackageNode(factory.makeIdentifierNode(componentName)));
+				if (packageNode.getSubpackage(componentName) == null)
+				{
+					packageNode.addPackageNode(factory.makePackageNode(factory.makeIdentifierNode(componentName)));
+				}
+				packageNode = packageNode.getSubpackage(componentName);
 			}
-			packageNode = packageNode.getSubpackage(componentName);
 		}
 
 		// Add the compilation unit and enqueue it for name analysis

@@ -53,6 +53,7 @@ public class EnumModifiersNodeImpl extends ModifiersNodeImpl implements EnumModi
      */
     public void setAccess(AccessModifier access)
     {
+        getManager().assertMutatable(this);
         this.access = access;
     }
     
@@ -71,6 +72,7 @@ public class EnumModifiersNodeImpl extends ModifiersNodeImpl implements EnumModi
      */
     public void setStrictfpFlag(boolean strictfpFlag)
     {
+        getManager().assertMutatable(this);
         this.strictfpFlag = strictfpFlag;
     }
     

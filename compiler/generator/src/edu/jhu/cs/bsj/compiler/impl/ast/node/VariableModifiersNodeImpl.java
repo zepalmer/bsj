@@ -47,6 +47,7 @@ public class VariableModifiersNodeImpl extends ModifiersNodeImpl implements Vari
      */
     public void setFinalFlag(boolean finalFlag)
     {
+        getManager().assertMutatable(this);
         this.finalFlag = finalFlag;
     }
     

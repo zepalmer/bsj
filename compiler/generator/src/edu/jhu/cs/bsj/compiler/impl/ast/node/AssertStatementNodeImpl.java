@@ -51,6 +51,7 @@ public class AssertStatementNodeImpl extends NodeImpl implements AssertStatement
      */
     public void setTestExpression(ExpressionNode testExpression)
     {
+        getManager().assertMutatable(this);
         if (this.testExpression instanceof NodeImpl)
         {
             ((NodeImpl)this.testExpression).setParent(null);
@@ -77,6 +78,7 @@ public class AssertStatementNodeImpl extends NodeImpl implements AssertStatement
      */
     public void setMessageExpression(ExpressionNode messageExpression)
     {
+        getManager().assertMutatable(this);
         if (this.messageExpression instanceof NodeImpl)
         {
             ((NodeImpl)this.messageExpression).setParent(null);

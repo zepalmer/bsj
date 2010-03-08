@@ -52,6 +52,7 @@ public class SynchronizedNodeImpl extends NodeImpl implements SynchronizedNode
      */
     public void setExpression(ExpressionNode expression)
     {
+        getManager().assertMutatable(this);
         if (this.expression instanceof NodeImpl)
         {
             ((NodeImpl)this.expression).setParent(null);
@@ -78,6 +79,7 @@ public class SynchronizedNodeImpl extends NodeImpl implements SynchronizedNode
      */
     public void setBlock(BlockNode block)
     {
+        getManager().assertMutatable(this);
         if (this.block instanceof NodeImpl)
         {
             ((NodeImpl)this.block).setParent(null);

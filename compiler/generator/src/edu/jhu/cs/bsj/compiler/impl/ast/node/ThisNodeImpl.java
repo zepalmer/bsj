@@ -46,6 +46,7 @@ public class ThisNodeImpl extends NodeImpl implements ThisNode
      */
     public void setType(UnparameterizedTypeNode type)
     {
+        getManager().assertMutatable(this);
         if (this.type instanceof NodeImpl)
         {
             ((NodeImpl)this.type).setParent(null);

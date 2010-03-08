@@ -63,6 +63,7 @@ public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeI
      */
     public void setEnclosingExpression(ExpressionNode enclosingExpression)
     {
+        getManager().assertMutatable(this);
         if (this.enclosingExpression instanceof NodeImpl)
         {
             ((NodeImpl)this.enclosingExpression).setParent(null);
@@ -89,6 +90,7 @@ public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeI
      */
     public void setIdentifier(IdentifierNode identifier)
     {
+        getManager().assertMutatable(this);
         if (this.identifier instanceof NodeImpl)
         {
             ((NodeImpl)this.identifier).setParent(null);
@@ -115,6 +117,7 @@ public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeI
      */
     public void setTypeArguments(TypeArgumentListNode typeArguments)
     {
+        getManager().assertMutatable(this);
         if (this.typeArguments instanceof NodeImpl)
         {
             ((NodeImpl)this.typeArguments).setParent(null);

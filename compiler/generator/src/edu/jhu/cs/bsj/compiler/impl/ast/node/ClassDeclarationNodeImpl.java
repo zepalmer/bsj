@@ -83,6 +83,7 @@ public class ClassDeclarationNodeImpl extends NodeImpl implements ClassDeclarati
      */
     public void setModifiers(ClassModifiersNode modifiers)
     {
+        getManager().assertMutatable(this);
         if (this.modifiers instanceof NodeImpl)
         {
             ((NodeImpl)this.modifiers).setParent(null);
@@ -109,6 +110,7 @@ public class ClassDeclarationNodeImpl extends NodeImpl implements ClassDeclarati
      */
     public void setExtendsClause(DeclaredTypeNode extendsClause)
     {
+        getManager().assertMutatable(this);
         if (this.extendsClause instanceof NodeImpl)
         {
             ((NodeImpl)this.extendsClause).setParent(null);
@@ -135,6 +137,7 @@ public class ClassDeclarationNodeImpl extends NodeImpl implements ClassDeclarati
      */
     public void setImplementsClause(DeclaredTypeListNode implementsClause)
     {
+        getManager().assertMutatable(this);
         if (this.implementsClause instanceof NodeImpl)
         {
             ((NodeImpl)this.implementsClause).setParent(null);
@@ -161,6 +164,7 @@ public class ClassDeclarationNodeImpl extends NodeImpl implements ClassDeclarati
      */
     public void setBody(ClassBodyNode body)
     {
+        getManager().assertMutatable(this);
         if (this.body instanceof NodeImpl)
         {
             ((NodeImpl)this.body).setParent(null);
@@ -187,6 +191,7 @@ public class ClassDeclarationNodeImpl extends NodeImpl implements ClassDeclarati
      */
     public void setTypeParameters(TypeParameterListNode typeParameters)
     {
+        getManager().assertMutatable(this);
         if (this.typeParameters instanceof NodeImpl)
         {
             ((NodeImpl)this.typeParameters).setParent(null);
@@ -213,6 +218,7 @@ public class ClassDeclarationNodeImpl extends NodeImpl implements ClassDeclarati
      */
     public void setIdentifier(IdentifierNode identifier)
     {
+        getManager().assertMutatable(this);
         if (this.identifier instanceof NodeImpl)
         {
             ((NodeImpl)this.identifier).setParent(null);
@@ -239,6 +245,7 @@ public class ClassDeclarationNodeImpl extends NodeImpl implements ClassDeclarati
      */
     public void setJavadoc(JavadocNode javadoc)
     {
+        getManager().assertMutatable(this);
         if (this.javadoc instanceof NodeImpl)
         {
             ((NodeImpl)this.javadoc).setParent(null);

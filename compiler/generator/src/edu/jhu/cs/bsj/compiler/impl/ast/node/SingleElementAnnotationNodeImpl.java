@@ -48,6 +48,7 @@ public class SingleElementAnnotationNodeImpl extends AnnotationNodeImpl implemen
      */
     public void setValue(AnnotationValueNode value)
     {
+        getManager().assertMutatable(this);
         if (this.value instanceof NodeImpl)
         {
             ((NodeImpl)this.value).setParent(null);

@@ -49,6 +49,7 @@ public class ArrayInitializerCreationNodeImpl extends ArrayCreationNodeImpl impl
      */
     public void setInitializer(ArrayInitializerNode initializer)
     {
+        getManager().assertMutatable(this);
         if (this.initializer instanceof NodeImpl)
         {
             ((NodeImpl)this.initializer).setParent(null);

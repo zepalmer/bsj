@@ -46,6 +46,7 @@ public class ClassBodyNodeImpl extends NodeImpl implements ClassBodyNode
      */
     public void setMembers(ClassMemberListNode members)
     {
+        getManager().assertMutatable(this);
         if (this.members instanceof NodeImpl)
         {
             ((NodeImpl)this.members).setParent(null);

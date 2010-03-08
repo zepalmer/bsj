@@ -46,6 +46,7 @@ public class AnnotationExpressionValueNodeImpl extends NodeImpl implements Annot
      */
     public void setExpression(NonAssignmentExpressionNode expression)
     {
+        getManager().assertMutatable(this);
         if (this.expression instanceof NodeImpl)
         {
             ((NodeImpl)this.expression).setParent(null);

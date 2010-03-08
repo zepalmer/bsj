@@ -46,6 +46,7 @@ public class BlockNodeImpl extends NodeImpl implements BlockNode
      */
     public void setStatements(BlockStatementListNode statements)
     {
+        getManager().assertMutatable(this);
         if (this.statements instanceof NodeImpl)
         {
             ((NodeImpl)this.statements).setParent(null);

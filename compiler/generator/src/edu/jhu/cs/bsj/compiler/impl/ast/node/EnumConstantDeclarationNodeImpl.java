@@ -70,6 +70,7 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
      */
     public void setAnnotations(AnnotationListNode annotations)
     {
+        getManager().assertMutatable(this);
         if (this.annotations instanceof NodeImpl)
         {
             ((NodeImpl)this.annotations).setParent(null);
@@ -96,6 +97,7 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
      */
     public void setIdentifier(IdentifierNode identifier)
     {
+        getManager().assertMutatable(this);
         if (this.identifier instanceof NodeImpl)
         {
             ((NodeImpl)this.identifier).setParent(null);
@@ -122,6 +124,7 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
      */
     public void setArguments(ExpressionListNode arguments)
     {
+        getManager().assertMutatable(this);
         if (this.arguments instanceof NodeImpl)
         {
             ((NodeImpl)this.arguments).setParent(null);
@@ -148,6 +151,7 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
      */
     public void setBody(AnonymousClassBodyNode body)
     {
+        getManager().assertMutatable(this);
         if (this.body instanceof NodeImpl)
         {
             ((NodeImpl)this.body).setParent(null);
@@ -174,6 +178,7 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
      */
     public void setJavadoc(JavadocNode javadoc)
     {
+        getManager().assertMutatable(this);
         if (this.javadoc instanceof NodeImpl)
         {
             ((NodeImpl)this.javadoc).setParent(null);

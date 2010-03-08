@@ -52,6 +52,7 @@ public class SuperFieldAccessNodeImpl extends NodeImpl implements SuperFieldAcce
      */
     public void setType(UnparameterizedTypeNode type)
     {
+        getManager().assertMutatable(this);
         if (this.type instanceof NodeImpl)
         {
             ((NodeImpl)this.type).setParent(null);
@@ -78,6 +79,7 @@ public class SuperFieldAccessNodeImpl extends NodeImpl implements SuperFieldAcce
      */
     public void setIdentifier(IdentifierNode identifier)
     {
+        getManager().assertMutatable(this);
         if (this.identifier instanceof NodeImpl)
         {
             ((NodeImpl)this.identifier).setParent(null);

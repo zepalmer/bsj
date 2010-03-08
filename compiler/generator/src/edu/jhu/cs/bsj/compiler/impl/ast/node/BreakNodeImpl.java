@@ -46,6 +46,7 @@ public class BreakNodeImpl extends NodeImpl implements BreakNode
      */
     public void setLabel(IdentifierNode label)
     {
+        getManager().assertMutatable(this);
         if (this.label instanceof NodeImpl)
         {
             ((NodeImpl)this.label).setParent(null);

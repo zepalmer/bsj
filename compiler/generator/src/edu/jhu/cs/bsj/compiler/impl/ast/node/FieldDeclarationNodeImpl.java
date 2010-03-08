@@ -58,6 +58,7 @@ public class FieldDeclarationNodeImpl extends NodeImpl implements FieldDeclarati
      */
     public void setModifiers(FieldModifiersNode modifiers)
     {
+        getManager().assertMutatable(this);
         if (this.modifiers instanceof NodeImpl)
         {
             ((NodeImpl)this.modifiers).setParent(null);
@@ -84,6 +85,7 @@ public class FieldDeclarationNodeImpl extends NodeImpl implements FieldDeclarati
      */
     public void setDeclarators(VariableDeclaratorListNode declarators)
     {
+        getManager().assertMutatable(this);
         if (this.declarators instanceof NodeImpl)
         {
             ((NodeImpl)this.declarators).setParent(null);
@@ -110,6 +112,7 @@ public class FieldDeclarationNodeImpl extends NodeImpl implements FieldDeclarati
      */
     public void setJavadoc(JavadocNode javadoc)
     {
+        getManager().assertMutatable(this);
         if (this.javadoc instanceof NodeImpl)
         {
             ((NodeImpl)this.javadoc).setParent(null);

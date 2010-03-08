@@ -65,6 +65,7 @@ public class AnnotationDeclarationNodeImpl extends NodeImpl implements Annotatio
      */
     public void setModifiers(AnnotationModifiersNode modifiers)
     {
+        getManager().assertMutatable(this);
         if (this.modifiers instanceof NodeImpl)
         {
             ((NodeImpl)this.modifiers).setParent(null);
@@ -91,6 +92,7 @@ public class AnnotationDeclarationNodeImpl extends NodeImpl implements Annotatio
      */
     public void setBody(AnnotationBodyNode body)
     {
+        getManager().assertMutatable(this);
         if (this.body instanceof NodeImpl)
         {
             ((NodeImpl)this.body).setParent(null);
@@ -117,6 +119,7 @@ public class AnnotationDeclarationNodeImpl extends NodeImpl implements Annotatio
      */
     public void setIdentifier(IdentifierNode identifier)
     {
+        getManager().assertMutatable(this);
         if (this.identifier instanceof NodeImpl)
         {
             ((NodeImpl)this.identifier).setParent(null);
@@ -143,6 +146,7 @@ public class AnnotationDeclarationNodeImpl extends NodeImpl implements Annotatio
      */
     public void setJavadoc(JavadocNode javadoc)
     {
+        getManager().assertMutatable(this);
         if (this.javadoc instanceof NodeImpl)
         {
             ((NodeImpl)this.javadoc).setParent(null);

@@ -59,6 +59,7 @@ public class MetaprogramPreambleNodeImpl extends NodeImpl implements Metaprogram
      */
     public void setImports(MetaprogramImportListNode imports)
     {
+        getManager().assertMutatable(this);
         if (this.imports instanceof NodeImpl)
         {
             ((NodeImpl)this.imports).setParent(null);
@@ -85,6 +86,7 @@ public class MetaprogramPreambleNodeImpl extends NodeImpl implements Metaprogram
      */
     public void setTarget(MetaprogramTargetNode target)
     {
+        getManager().assertMutatable(this);
         if (this.target instanceof NodeImpl)
         {
             ((NodeImpl)this.target).setParent(null);
@@ -111,6 +113,7 @@ public class MetaprogramPreambleNodeImpl extends NodeImpl implements Metaprogram
      */
     public void setDepends(MetaprogramDependsNode depends)
     {
+        getManager().assertMutatable(this);
         if (this.depends instanceof NodeImpl)
         {
             ((NodeImpl)this.depends).setParent(null);

@@ -68,6 +68,7 @@ public class FieldModifiersNodeImpl extends ModifiersNodeImpl implements FieldMo
      */
     public void setAccess(AccessModifier access)
     {
+        getManager().assertMutatable(this);
         this.access = access;
     }
     
@@ -86,6 +87,7 @@ public class FieldModifiersNodeImpl extends ModifiersNodeImpl implements FieldMo
      */
     public void setStaticFlag(boolean staticFlag)
     {
+        getManager().assertMutatable(this);
         this.staticFlag = staticFlag;
     }
     
@@ -104,6 +106,7 @@ public class FieldModifiersNodeImpl extends ModifiersNodeImpl implements FieldMo
      */
     public void setFinalFlag(boolean finalFlag)
     {
+        getManager().assertMutatable(this);
         this.finalFlag = finalFlag;
     }
     
@@ -122,6 +125,7 @@ public class FieldModifiersNodeImpl extends ModifiersNodeImpl implements FieldMo
      */
     public void setTransientFlag(boolean transientFlag)
     {
+        getManager().assertMutatable(this);
         this.transientFlag = transientFlag;
     }
     
@@ -140,6 +144,7 @@ public class FieldModifiersNodeImpl extends ModifiersNodeImpl implements FieldMo
      */
     public void setVolatileFlag(boolean volatileFlag)
     {
+        getManager().assertMutatable(this);
         this.volatileFlag = volatileFlag;
     }
     

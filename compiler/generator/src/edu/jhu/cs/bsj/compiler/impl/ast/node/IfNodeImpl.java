@@ -57,6 +57,7 @@ public class IfNodeImpl extends NodeImpl implements IfNode
      */
     public void setCondition(ExpressionNode condition)
     {
+        getManager().assertMutatable(this);
         if (this.condition instanceof NodeImpl)
         {
             ((NodeImpl)this.condition).setParent(null);
@@ -83,6 +84,7 @@ public class IfNodeImpl extends NodeImpl implements IfNode
      */
     public void setThenStatement(StatementNode thenStatement)
     {
+        getManager().assertMutatable(this);
         if (this.thenStatement instanceof NodeImpl)
         {
             ((NodeImpl)this.thenStatement).setParent(null);
@@ -109,6 +111,7 @@ public class IfNodeImpl extends NodeImpl implements IfNode
      */
     public void setElseStatement(StatementNode elseStatement)
     {
+        getManager().assertMutatable(this);
         if (this.elseStatement instanceof NodeImpl)
         {
             ((NodeImpl)this.elseStatement).setParent(null);

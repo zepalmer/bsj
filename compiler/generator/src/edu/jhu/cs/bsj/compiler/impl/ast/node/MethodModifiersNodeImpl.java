@@ -78,6 +78,7 @@ public class MethodModifiersNodeImpl extends ModifiersNodeImpl implements Method
      */
     public void setAccess(AccessModifier access)
     {
+        getManager().assertMutatable(this);
         this.access = access;
     }
     
@@ -96,6 +97,7 @@ public class MethodModifiersNodeImpl extends ModifiersNodeImpl implements Method
      */
     public void setAbstractFlag(boolean abstractFlag)
     {
+        getManager().assertMutatable(this);
         this.abstractFlag = abstractFlag;
     }
     
@@ -114,6 +116,7 @@ public class MethodModifiersNodeImpl extends ModifiersNodeImpl implements Method
      */
     public void setStaticFlag(boolean staticFlag)
     {
+        getManager().assertMutatable(this);
         this.staticFlag = staticFlag;
     }
     
@@ -132,6 +135,7 @@ public class MethodModifiersNodeImpl extends ModifiersNodeImpl implements Method
      */
     public void setFinalFlag(boolean finalFlag)
     {
+        getManager().assertMutatable(this);
         this.finalFlag = finalFlag;
     }
     
@@ -150,6 +154,7 @@ public class MethodModifiersNodeImpl extends ModifiersNodeImpl implements Method
      */
     public void setSynchronizedFlag(boolean synchronizedFlag)
     {
+        getManager().assertMutatable(this);
         this.synchronizedFlag = synchronizedFlag;
     }
     
@@ -168,6 +173,7 @@ public class MethodModifiersNodeImpl extends ModifiersNodeImpl implements Method
      */
     public void setNativeFlag(boolean nativeFlag)
     {
+        getManager().assertMutatable(this);
         this.nativeFlag = nativeFlag;
     }
     
@@ -186,6 +192,7 @@ public class MethodModifiersNodeImpl extends ModifiersNodeImpl implements Method
      */
     public void setStrictfpFlag(boolean strictfpFlag)
     {
+        getManager().assertMutatable(this);
         this.strictfpFlag = strictfpFlag;
     }
     

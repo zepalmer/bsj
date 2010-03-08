@@ -46,6 +46,7 @@ public class ReturnNodeImpl extends NodeImpl implements ReturnNode
      */
     public void setExpression(ExpressionNode expression)
     {
+        getManager().assertMutatable(this);
         if (this.expression instanceof NodeImpl)
         {
             ((NodeImpl)this.expression).setParent(null);

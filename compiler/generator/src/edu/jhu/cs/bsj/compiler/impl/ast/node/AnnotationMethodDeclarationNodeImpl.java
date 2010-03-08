@@ -70,6 +70,7 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
      */
     public void setModifiers(AnnotationMethodModifiersNode modifiers)
     {
+        getManager().assertMutatable(this);
         if (this.modifiers instanceof NodeImpl)
         {
             ((NodeImpl)this.modifiers).setParent(null);
@@ -96,6 +97,7 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
      */
     public void setType(TypeNode type)
     {
+        getManager().assertMutatable(this);
         if (this.type instanceof NodeImpl)
         {
             ((NodeImpl)this.type).setParent(null);
@@ -122,6 +124,7 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
      */
     public void setIdentifier(IdentifierNode identifier)
     {
+        getManager().assertMutatable(this);
         if (this.identifier instanceof NodeImpl)
         {
             ((NodeImpl)this.identifier).setParent(null);
@@ -148,6 +151,7 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
      */
     public void setDefaultValue(AnnotationValueNode defaultValue)
     {
+        getManager().assertMutatable(this);
         if (this.defaultValue instanceof NodeImpl)
         {
             ((NodeImpl)this.defaultValue).setParent(null);
@@ -174,6 +178,7 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
      */
     public void setJavadoc(JavadocNode javadoc)
     {
+        getManager().assertMutatable(this);
         if (this.javadoc instanceof NodeImpl)
         {
             ((NodeImpl)this.javadoc).setParent(null);

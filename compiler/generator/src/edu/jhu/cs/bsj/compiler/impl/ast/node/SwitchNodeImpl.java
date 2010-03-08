@@ -52,6 +52,7 @@ public class SwitchNodeImpl extends NodeImpl implements SwitchNode
      */
     public void setExpression(ExpressionNode expression)
     {
+        getManager().assertMutatable(this);
         if (this.expression instanceof NodeImpl)
         {
             ((NodeImpl)this.expression).setParent(null);
@@ -78,6 +79,7 @@ public class SwitchNodeImpl extends NodeImpl implements SwitchNode
      */
     public void setCases(CaseListNode cases)
     {
+        getManager().assertMutatable(this);
         if (this.cases instanceof NodeImpl)
         {
             ((NodeImpl)this.cases).setParent(null);

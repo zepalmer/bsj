@@ -52,6 +52,7 @@ public class UnqualifiedClassInstantiationNodeImpl extends ClassInstantiationNod
      */
     public void setType(DeclaredTypeNode type)
     {
+        getManager().assertMutatable(this);
         if (this.type instanceof NodeImpl)
         {
             ((NodeImpl)this.type).setParent(null);

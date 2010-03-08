@@ -57,6 +57,7 @@ public class BinaryExpressionNodeImpl extends NodeImpl implements BinaryExpressi
      */
     public void setLeftOperand(ExpressionNode leftOperand)
     {
+        getManager().assertMutatable(this);
         if (this.leftOperand instanceof NodeImpl)
         {
             ((NodeImpl)this.leftOperand).setParent(null);
@@ -83,6 +84,7 @@ public class BinaryExpressionNodeImpl extends NodeImpl implements BinaryExpressi
      */
     public void setRightOperand(ExpressionNode rightOperand)
     {
+        getManager().assertMutatable(this);
         if (this.rightOperand instanceof NodeImpl)
         {
             ((NodeImpl)this.rightOperand).setParent(null);
@@ -109,6 +111,7 @@ public class BinaryExpressionNodeImpl extends NodeImpl implements BinaryExpressi
      */
     public void setOperator(BinaryOperator operator)
     {
+        getManager().assertMutatable(this);
         this.operator = operator;
     }
     

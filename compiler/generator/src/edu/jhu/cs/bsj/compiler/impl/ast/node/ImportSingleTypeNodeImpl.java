@@ -46,6 +46,7 @@ public class ImportSingleTypeNodeImpl extends NodeImpl implements ImportSingleTy
      */
     public void setName(NameNode name)
     {
+        getManager().assertMutatable(this);
         if (this.name instanceof NodeImpl)
         {
             ((NodeImpl)this.name).setParent(null);

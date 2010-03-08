@@ -48,6 +48,7 @@ public abstract class NameNodeImpl extends NodeImpl implements NameNode
      */
     public void setIdentifier(IdentifierNode identifier)
     {
+        getManager().assertMutatable(this);
         if (this.identifier instanceof NodeImpl)
         {
             ((NodeImpl)this.identifier).setParent(null);

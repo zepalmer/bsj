@@ -52,6 +52,7 @@ public class ParameterizedTypeSelectNodeImpl extends NodeImpl implements Paramet
      */
     public void setBase(ParameterizedTypeNode base)
     {
+        getManager().assertMutatable(this);
         if (this.base instanceof NodeImpl)
         {
             ((NodeImpl)this.base).setParent(null);
@@ -78,6 +79,7 @@ public class ParameterizedTypeSelectNodeImpl extends NodeImpl implements Paramet
      */
     public void setSelect(DeclaredTypeNode select)
     {
+        getManager().assertMutatable(this);
         if (this.select instanceof NodeImpl)
         {
             ((NodeImpl)this.select).setParent(null);

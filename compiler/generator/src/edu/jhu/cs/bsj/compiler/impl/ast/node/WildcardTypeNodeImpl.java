@@ -51,6 +51,7 @@ public class WildcardTypeNodeImpl extends NodeImpl implements WildcardTypeNode
      */
     public void setBound(ReferenceTypeNode bound)
     {
+        getManager().assertMutatable(this);
         if (this.bound instanceof NodeImpl)
         {
             ((NodeImpl)this.bound).setParent(null);
@@ -77,6 +78,7 @@ public class WildcardTypeNodeImpl extends NodeImpl implements WildcardTypeNode
      */
     public void setUpperBound(boolean upperBound)
     {
+        getManager().assertMutatable(this);
         this.upperBound = upperBound;
     }
     

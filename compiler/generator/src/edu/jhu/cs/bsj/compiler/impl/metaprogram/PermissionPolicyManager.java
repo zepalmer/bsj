@@ -55,6 +55,7 @@ public class PermissionPolicyManager
 			{
 				return permission;
 			}
+			node = node.getParent();
 		}
 		// Allow any operations on a node not connected to the root package.
 		return NodePermission.MUTATE;

@@ -56,6 +56,7 @@ public class ConditionalExpressionNodeImpl extends NodeImpl implements Condition
      */
     public void setCondition(ExpressionNode condition)
     {
+        getManager().assertMutatable(this);
         if (this.condition instanceof NodeImpl)
         {
             ((NodeImpl)this.condition).setParent(null);
@@ -82,6 +83,7 @@ public class ConditionalExpressionNodeImpl extends NodeImpl implements Condition
      */
     public void setTrueExpression(ExpressionNode trueExpression)
     {
+        getManager().assertMutatable(this);
         if (this.trueExpression instanceof NodeImpl)
         {
             ((NodeImpl)this.trueExpression).setParent(null);
@@ -108,6 +110,7 @@ public class ConditionalExpressionNodeImpl extends NodeImpl implements Condition
      */
     public void setFalseExpression(ExpressionNode falseExpression)
     {
+        getManager().assertMutatable(this);
         if (this.falseExpression instanceof NodeImpl)
         {
             ((NodeImpl)this.falseExpression).setParent(null);

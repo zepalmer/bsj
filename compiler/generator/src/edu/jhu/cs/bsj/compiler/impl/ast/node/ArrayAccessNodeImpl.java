@@ -52,6 +52,7 @@ public class ArrayAccessNodeImpl extends NodeImpl implements ArrayAccessNode
      */
     public void setArrayExpression(RestrictedPrimaryExpressionNode arrayExpression)
     {
+        getManager().assertMutatable(this);
         if (this.arrayExpression instanceof NodeImpl)
         {
             ((NodeImpl)this.arrayExpression).setParent(null);
@@ -78,6 +79,7 @@ public class ArrayAccessNodeImpl extends NodeImpl implements ArrayAccessNode
      */
     public void setIndexExpression(ExpressionNode indexExpression)
     {
+        getManager().assertMutatable(this);
         if (this.indexExpression instanceof NodeImpl)
         {
             ((NodeImpl)this.indexExpression).setParent(null);

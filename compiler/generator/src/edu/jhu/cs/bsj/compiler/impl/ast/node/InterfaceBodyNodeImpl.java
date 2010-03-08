@@ -46,6 +46,7 @@ public class InterfaceBodyNodeImpl extends NodeImpl implements InterfaceBodyNode
      */
     public void setMembers(InterfaceMemberListNode members)
     {
+        getManager().assertMutatable(this);
         if (this.members instanceof NodeImpl)
         {
             ((NodeImpl)this.members).setParent(null);

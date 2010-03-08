@@ -873,6 +873,7 @@ public class SourceGenerator
 								+ p.getName() + ")");
 						ps.println("{");
 						ps.incPrependCount();
+						ps.println("getManager().assertMutatable(this);");
 						if (propInstanceOf(p.getBaseType(), "Node"))
 						{
 							ps.println("if (this." + p.getName() + " instanceof NodeImpl)");
