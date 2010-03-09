@@ -256,7 +256,7 @@ public class BsjBinaryNodeLoader
             // we only care about enum fields here, and also want to avoid
             // synthetic (compiler-generated) fields
             if (field.isEnum() && !field.isSynthetic())
-            {System.out.println(field.getSignature());
+            {
                 list.add(factory.makeEnumConstantDeclarationNode(
                         factory.makeAnnotationListNode(), 
                         factory.makeIdentifierNode(field.getName()), 
@@ -345,19 +345,36 @@ public class BsjBinaryNodeLoader
         List<TypeParameterNode> list = new ArrayList<TypeParameterNode>();
         
         // signatures are of the following form:
-        // <T:Ljava/lang/Object;V:Ljava/lang/Object;>
-        // this regex parses them into bit sized pieces
+        // <T:Ljava/lang/Object;V:Ljava/lang/Object;> (<T,V>) or
+        // <T::Ljoe/foo/bar/SmallClass;:Ljoe/foo/bar/Iface;V:Ljava/lang/Object;> (<T extends SmallClass & Iface, V>)
+        // this regex parses them into bite sized pieces
         String typeParams[] = signature.getSignature()
-            .replaceAll(">.*", "")
-            .replaceFirst(".*<", "")
-            .split(";");
+            .replaceAll(">.*", "") // remove trailing >
+            .replaceFirst(".*<", "") // remove leading >
+            .replaceAll(";:", ":") // eliminates confusing '&' params with other type params
+            .split(";"); // split tokens of type params
         
         for (String typeParam : typeParams)
         {
-            String identifier = typeParam.split(":")[0];
-            factory.makeTypeParameterNode(
-                    factory.makeIdentifierNode(identifier), 
-                    null); //TODO finish type bounds
+            // split the type param from its type bounds (if any)
+            String tokens[] = typeParam.split(":+L");
+
+            // parse the type bounds (if any)
+            List<DeclaredTypeNode> typeBounds = new ArrayList<DeclaredTypeNode>();
+            for (int i = 1; i < tokens.length; i++)
+            {
+                // ignore java.lang.Object extension, as it is implied
+                if (!tokens[i].equals("java/lang/Object"))
+                {
+                    typeBounds.add(factory.makeUnparameterizedTypeNode(
+                        buildNameNode(tokens[i].replace("/", "."))));
+                }
+            }
+            
+            // make the actual type param node
+            list.add(factory.makeTypeParameterNode(
+                    factory.makeIdentifierNode(tokens[0]), 
+                    factory.makeDeclaredTypeListNode(typeBounds)));
         }
         
         return factory.makeTypeParameterListNode(list);

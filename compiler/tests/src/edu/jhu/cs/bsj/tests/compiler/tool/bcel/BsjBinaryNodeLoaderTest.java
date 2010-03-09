@@ -49,7 +49,7 @@ public class BsjBinaryNodeLoaderTest extends AbstractTest
         BsjFileManager bfm = new LocationMappedFileManager(map);
 
         String codeStr = "package joe.foo.bar;\nimport java.util.List;" 
-            + "public class JoeClass <T extends SmallClass & Iface,V> {" 
+            + "public class JoeClass <T extends SmallClass & Iface,V extends Iface> {" 
             + "private boolean x = true;\n"
             + "public JoeClass(int a){}\n"
             + "public JoeClass(int a, String[][][] b){}\n"
@@ -60,11 +60,11 @@ public class BsjBinaryNodeLoaderTest extends AbstractTest
         String codeStr3 = "package joe.foo.bar; public interface Iface {}";
         String codeStr4 = "package joe.foo.bar; public enum E {ONE(1), TWO(2),THREE(3); private int x; public void foo(){} E(int x) {this.x = x;}}";
 
-        BsjFileObject bfo2 = bfm.getJavaFileForOutput(StandardLocation.SOURCE_PATH, "joe.foo.bar.JoeClass", Kind.SOURCE, null);
-        bfo2.setCharContent(codeStr);
+        BsjFileObject bfo = bfm.getJavaFileForOutput(StandardLocation.SOURCE_PATH, "joe.foo.bar.JoeClass", Kind.SOURCE, null);
+        bfo.setCharContent(codeStr);
         
-        BsjFileObject bfo = bfm.getJavaFileForOutput(StandardLocation.SOURCE_PATH, "joe.foo.bar.SmallClass", Kind.SOURCE, null);
-        bfo.setCharContent(codeStr2);
+        BsjFileObject bfo2 = bfm.getJavaFileForOutput(StandardLocation.SOURCE_PATH, "joe.foo.bar.SmallClass", Kind.SOURCE, null);
+        bfo2.setCharContent(codeStr2);
         
         BsjFileObject bfo3 = bfm.getJavaFileForOutput(StandardLocation.SOURCE_PATH, "joe.foo.bar.Iface", Kind.SOURCE, null);
         bfo3.setCharContent(codeStr3);
@@ -86,10 +86,12 @@ public class BsjBinaryNodeLoaderTest extends AbstractTest
 
         BsjBinaryNodeLoader loader = new BsjBinaryNodeLoader(factory);
         CompilationUnitNode joe = loader.loadNodesFromBinary("joe.foo.bar.JoeClass", map.get(StandardLocation.CLASS_OUTPUT));
-        loader.loadNodesFromBinary("joe.foo.bar.SmallClass", map.get(StandardLocation.CLASS_OUTPUT));
+        CompilationUnitNode sc = loader.loadNodesFromBinary("joe.foo.bar.SmallClass", map.get(StandardLocation.CLASS_OUTPUT));
         CompilationUnitNode e = loader.loadNodesFromBinary("joe.foo.bar.E", map.get(StandardLocation.CLASS_OUTPUT));
         
         System.out.println(joe.executeOperation(
+                BsjServiceRegistry.newToolkitFactory().newToolkit().getSerializer(), null));
+        System.out.println(sc.executeOperation(
                 BsjServiceRegistry.newToolkitFactory().newToolkit().getSerializer(), null));
         System.out.println(e.executeOperation(
                 BsjServiceRegistry.newToolkitFactory().newToolkit().getSerializer(), null));
