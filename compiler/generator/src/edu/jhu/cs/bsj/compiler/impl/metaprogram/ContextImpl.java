@@ -1,5 +1,6 @@
 package edu.jhu.cs.bsj.compiler.impl.metaprogram;
 
+import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.metaprogram.Context;
 
@@ -13,20 +14,30 @@ public class ContextImpl<T extends MetaprogramAnchorNode<?>> implements Context<
 {
 	/** The anchor for this context. */
 	private T anchor;
+	/** The factory for this context. */
+	private BsjNodeFactory factory;
 	
 	/**
 	 * Creates a standard context implementation.
 	 * @param anchor The anchor to use.
+	 * @param factory The node factory to use.
 	 */
-	public ContextImpl(T anchor)
+	public ContextImpl(T anchor, BsjNodeFactory factory)
 	{
 		super();
 		this.anchor = anchor;
+		this.factory = factory;
 	}
 
 	@Override
 	public T getAnchor()
 	{
 		return this.anchor;
+	}
+
+	@Override
+	public BsjNodeFactory getFactory()
+	{
+		return factory;
 	}
 }

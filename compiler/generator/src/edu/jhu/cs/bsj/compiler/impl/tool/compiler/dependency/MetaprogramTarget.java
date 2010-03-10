@@ -14,7 +14,7 @@ public class MetaprogramTarget
 	/** The fully-qualified name of this target. */
 	private String name;
 	/** The nodes which are included in this target. */
-	private Collection<MetaprogramProfile> members;
+	private Collection<MetaprogramProfile<?>> members;
 	
 	/**
 	 * Creates a new metaprogram target.
@@ -24,7 +24,7 @@ public class MetaprogramTarget
 	{
 		super();
 		this.name = name;
-		this.members = new HashSet<MetaprogramProfile>();
+		this.members = new HashSet<MetaprogramProfile<?>>();
 	}
 
 	/**
@@ -40,7 +40,7 @@ public class MetaprogramTarget
 	 * The collection of members in this target.
 	 * @return The members in this target.
 	 */
-	public Collection<MetaprogramProfile> getMembers()
+	public Collection<MetaprogramProfile<?>> getMembers()
 	{
 		return members;
 	}

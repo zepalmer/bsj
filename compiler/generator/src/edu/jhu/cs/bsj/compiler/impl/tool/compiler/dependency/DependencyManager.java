@@ -18,7 +18,7 @@ public class DependencyManager
 	/** A mapping from fully qualified target names to the nodes which are included in the targets. */
 	private Map<String,MetaprogramTarget> targetMap;
 	/** A collection indicating the nodes containing metaprograms which have yet to be executed. */
-	private Collection<MetaprogramProfile> waitingMetaprograms;
+	private Collection<MetaprogramProfile<?>> waitingMetaprograms;
 	
 	/**
 	 * Creates a new dependency manager.
@@ -26,7 +26,7 @@ public class DependencyManager
 	public DependencyManager()
 	{
 		this.targetMap = new HashMap<String, MetaprogramTarget>();
-		this.waitingMetaprograms = new HashSet<MetaprogramProfile>();
+		this.waitingMetaprograms = new HashSet<MetaprogramProfile<?>>();
 	}
 	
 	/**
@@ -34,7 +34,7 @@ public class DependencyManager
 	 * registered with this manager for the manager's dependency operations to function correctly.
 	 * @param profile The metaprogram profile to register.
 	 */
-	public void registerMetaprogramProfile(MetaprogramProfile profile)
+	public void registerMetaprogramProfile(MetaprogramProfile<?> profile)
 	{
 		for (String targetName : profile.getTargetNames())
 		{
@@ -55,7 +55,7 @@ public class DependencyManager
 	 * @param targetName The name of the fully-qualified target.
 	 * @return The profiles of the metaprograms in that target.
 	 */
-	public Collection<MetaprogramProfile> getTargetMembers(String targetName)
+	public Collection<MetaprogramProfile<?>> getTargetMembers(String targetName)
 	{
 		return this.targetMap.get(targetName).getMembers();
 	}
@@ -64,7 +64,7 @@ public class DependencyManager
 	 * Indicates to this dependency manager that the metaprogram for a profile has been executed.
 	 * @param profile The profile of the metaprogram which was executed.
 	 */
-	public void notifyExecuted(MetaprogramProfile profile)
+	public void notifyExecuted(MetaprogramProfile<?> profile)
 	{
 		this.waitingMetaprograms.remove(profile);
 	}
@@ -74,14 +74,14 @@ public class DependencyManager
 	 * are outstanding; it will be safe to execute immediately.
 	 * @return The next metaprogram to execute or <code>null</code> if no metaprograms remain.
 	 */
-	public MetaprogramProfile getNextMetaprogram()
+	public MetaprogramProfile<?> getNextMetaprogram()
 	{
 		if (this.waitingMetaprograms.size() == 0)
 			return null;
 		
 		// TODO: this could be more efficient if we were a bit more clever
 		// the tricky part is that the graph is not static
-		MetaprogramProfile profile = this.waitingMetaprograms.iterator().next();
+		MetaprogramProfile<?> profile = this.waitingMetaprograms.iterator().next();
 		boolean found;
 		do
 		{
@@ -95,7 +95,7 @@ public class DependencyManager
 					// TODO: what if there are no members in this target?  target will be null... this is a compile error?
 					continue;
 				}
-				for (MetaprogramProfile dependency : target.getMembers())
+				for (MetaprogramProfile<?> dependency : target.getMembers())
 				{
 					if (this.waitingMetaprograms.contains(dependency))
 					{

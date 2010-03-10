@@ -12,16 +12,11 @@ import edu.jhu.cs.bsj.compiler.metaprogram.Context;
 public interface BsjMetaprogram<T extends MetaprogramAnchorNode<?>>
 {
 	/**
-	 * Retrieves the context for this metaprogram.
-	 * @return The metaprogram context.
-	 */
-	public Context<T> getContext();
-
-	/**
 	 * Executes this metaprogram.  This method should be overridden with an implementation that contains the
 	 * metaprogrammer's code.
+	 * @param context The context in which to execute.
 	 */
-	public void execute();
+	public void execute(Context<T> context);
 
 	/**
 	 * Retrieves the ID number of this metaprogram.  Metaprogram IDs must be unique for any given compilation pass.

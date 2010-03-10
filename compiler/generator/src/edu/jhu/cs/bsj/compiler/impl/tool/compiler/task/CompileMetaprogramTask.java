@@ -19,7 +19,6 @@ import edu.jhu.cs.bsj.compiler.ast.NameCategory;
 import edu.jhu.cs.bsj.compiler.ast.node.BlockNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ConstructorDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ImportNode;
 import edu.jhu.cs.bsj.compiler.ast.node.MethodDeclarationNode;
@@ -107,7 +106,7 @@ public class CompileMetaprogramTask extends AbstractBsjCompilerTask
 	private <A extends MetaprogramAnchorNode<? extends Node>> void handleAnchor(A anchor) throws IOException
 	{
 		// Build a metaprogram profile for this anchor
-		MetaprogramProfile profile = buildProfile(anchor);
+		MetaprogramProfile<A> profile = buildProfile(anchor);
 		if (LOGGER.isTraceEnabled())
 		{
 			LOGGER.trace("Metaprogram " + profile.getMetaprogram().getID() + " created with deps "
@@ -139,7 +138,7 @@ public class CompileMetaprogramTask extends AbstractBsjCompilerTask
 		return nameNode.getNameString();
 	}
 
-	private <A extends MetaprogramAnchorNode<? extends Node>> MetaprogramProfile buildProfile(A anchor)
+	private <A extends MetaprogramAnchorNode<? extends Node>> MetaprogramProfile<A> buildProfile(A anchor)
 			throws IOException
 	{
 		MetaprogramNode metaprogramNode = anchor.getMetaprogram();
@@ -215,15 +214,15 @@ public class CompileMetaprogramTask extends AbstractBsjCompilerTask
 		}
 
 		// now build the metaprogram itself
-		Context<A> context = new ContextImpl<A>(anchor);
-		BsjMetaprogram<A> metaprogram = compileMetaprogram(metaprogramNode, context, anchor.getClass().getName());
+		Context<A> context = new ContextImpl<A>(anchor, factory);
+		BsjMetaprogram<A> metaprogram = compileMetaprogram(metaprogramNode, anchor.getClass().getName());
 
-		return new MetaprogramProfile(metaprogram, anchor, dependencyNames, qualifiedTargetNames, localMode,
-				packageMode);
+		return new MetaprogramProfile<A>(metaprogram, anchor, dependencyNames, qualifiedTargetNames, localMode,
+				packageMode, context);
 	}
 
 	private <A extends MetaprogramAnchorNode<? extends Node>> BsjMetaprogram<A> compileMetaprogram(
-			MetaprogramNode metaprogramNode, Context<A> context, String anchorClassName) throws IOException
+			MetaprogramNode metaprogramNode, String anchorClassName) throws IOException
 	{
 		String metaprogramDescription = null;
 		if (LOGGER.isTraceEnabled())
@@ -286,26 +285,21 @@ public class CompileMetaprogramTask extends AbstractBsjCompilerTask
 
 		MethodDeclarationNode executeMethodImplementation = factory.makeMethodDeclarationNode(methodBlock,
 				factory.makeMethodModifiersNode(AccessModifier.PUBLIC), factory.makeIdentifierNode("execute"),
-				factory.makeVariableListNode(), factory.makeVoidTypeNode(), null);
-
-		ConstructorDeclarationNode constructorImplementation = factory.makeConstructorDeclarationNode(
-				factory.makeIdentifierNode(metaprogramClassName), factory.makeConstructorBodyNode(
-						factory.makeSuperclassConstructorInvocationNode(factory.makeExpressionListNode(
-								factory.makeFieldAccessByNameNode(parseNameNode("context", NameCategory.EXPRESSION)),
-								factory.makeFieldAccessByNameNode(parseNameNode("factory", NameCategory.EXPRESSION)))),
-						factory.makeBlockStatementListNode()),
-				factory.makeConstructorModifiersNode(AccessModifier.PUBLIC), factory.makeVariableListNode(
+				factory.makeVariableListNode(
 						factory.makeVariableNode(factory.makeVariableModifiersNode(),
-								factory.makeParameterizedTypeNode(factory.makeUnparameterizedTypeNode(parseNameNode(
-										"Context", NameCategory.TYPE)), factory.makeTypeArgumentListNode()),
-								factory.makeIdentifierNode("context")), factory.makeVariableNode(
-								factory.makeVariableModifiersNode(), factory.makeParameterizedTypeNode(
-										factory.makeUnparameterizedTypeNode(parseNameNode("BsjNodeFactory",
-												NameCategory.TYPE)), factory.makeTypeArgumentListNode()),
-								factory.makeIdentifierNode("factory"))), null);
+								factory.makeParameterizedTypeNode(
+										factory.makeUnparameterizedTypeNode(
+												factory.makeSimpleNameNode(
+														factory.makeIdentifierNode("Context"),
+														NameCategory.TYPE)),
+										factory.makeTypeArgumentListNode(
+												factory.makeUnparameterizedTypeNode(parseNameNode(
+														anchorClassName, NameCategory.AMBIGUOUS))
+												)),
+										factory.makeIdentifierNode("context"))
+						), factory.makeVoidTypeNode(), null);
 
-		ClassBodyNode body = factory.makeClassBodyNode(factory.makeClassMemberListNode(executeMethodImplementation,
-				constructorImplementation));
+		ClassBodyNode body = factory.makeClassBodyNode(factory.makeClassMemberListNode(executeMethodImplementation));
 
 		TypeDeclarationNode metaprogramClassNode = factory.makeClassDeclarationNode(
 				factory.makeClassModifiersNode(AccessModifier.PUBLIC),
@@ -380,14 +374,14 @@ public class CompileMetaprogramTask extends AbstractBsjCompilerTask
 		Constructor<? extends BsjMetaprogram<A>> constructor;
 		try
 		{
-			constructor = metaprogramClass.getConstructor(Context.class, BsjNodeFactory.class);
+			constructor = metaprogramClass.getConstructor();
 		} catch (NoSuchMethodException e)
 		{
 			throw new IllegalStateException("Class we just compiled does not have the right constructor!", e);
 		}
 		try
 		{
-			return constructor.newInstance(context, factory);
+			return constructor.newInstance();
 		} catch (IllegalArgumentException e)
 		{
 			throw new IllegalStateException("Instantiation of BSJ metaprogram class failed!", e);

@@ -6,6 +6,7 @@ import edu.jhu.cs.bsj.compiler.ast.MetaprogramLocalMode;
 import edu.jhu.cs.bsj.compiler.ast.MetaprogramPackageMode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.impl.metaprogram.BsjMetaprogram;
+import edu.jhu.cs.bsj.compiler.metaprogram.Context;
 
 /**
  * Represents a metaprogram which has been extracted and is prepared to execute.
@@ -14,12 +15,12 @@ import edu.jhu.cs.bsj.compiler.impl.metaprogram.BsjMetaprogram;
  * 
  * @param <T> The type of the metaprogram's anchor node.
  */
-public class MetaprogramProfile
+public class MetaprogramProfile<T extends MetaprogramAnchorNode<?>>
 {
 	/** The metaprogram object which will be executed. */
-	private BsjMetaprogram<?> metaprogram;
+	private BsjMetaprogram<T> metaprogram;
 	/** The anchor for this metaprogram. */
-	private MetaprogramAnchorNode<?> anchor;
+	private T anchor;
 	
 	/** The fully-qualified names of the targets on which the metaprogram in this profile depends. */
 	private Collection<String> dependencyNames;
@@ -29,11 +30,12 @@ public class MetaprogramProfile
 	private MetaprogramLocalMode localMode;
 	/** The package mode of this metaprogram. */
 	private MetaprogramPackageMode packageMode;
+	/** The context in which to execute the metaprogram. */
+	private Context<T> context;
 	
-	// TODO: dependency analysis metadata?
-	public MetaprogramProfile(BsjMetaprogram<?> metaprogram, MetaprogramAnchorNode<?> anchor,
-			Collection<String> dependencyNames, Collection<String> targetNames, MetaprogramLocalMode localMode,
-			MetaprogramPackageMode packageMode)
+	public MetaprogramProfile(BsjMetaprogram<T> metaprogram, T anchor, Collection<String> dependencyNames,
+			Collection<String> targetNames, MetaprogramLocalMode localMode, MetaprogramPackageMode packageMode,
+			Context<T> context)
 	{
 		super();
 		this.metaprogram = metaprogram;
@@ -42,14 +44,15 @@ public class MetaprogramProfile
 		this.targetNames = targetNames;
 		this.localMode = localMode;
 		this.packageMode = packageMode;
+		this.context = context;
 	}
 
-	public BsjMetaprogram<?> getMetaprogram()
+	public BsjMetaprogram<T> getMetaprogram()
 	{
 		return metaprogram;
 	}
-	
-	public MetaprogramAnchorNode<?> getAnchor()
+
+	public T getAnchor()
 	{
 		return anchor;
 	}
@@ -72,5 +75,10 @@ public class MetaprogramProfile
 	public MetaprogramPackageMode getPackageMode()
 	{
 		return packageMode;
+	}
+
+	public Context<T> getContext()
+	{
+		return context;
 	}
 }

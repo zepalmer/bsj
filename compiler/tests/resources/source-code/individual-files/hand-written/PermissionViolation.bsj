@@ -3,7 +3,7 @@ import java.io.*;
 public class PermissionViolation
 {
 	[:
-		CompilationUnitNode node = getContext().getAnchor().getNearestAncestorOfType(CompilationUnitNode.class);
+		CompilationUnitNode node = context.getAnchor().getNearestAncestorOfType(CompilationUnitNode.class);
 		ImportListNode importsNode = node.getImports();
 		importsNode.clear();
 	:]

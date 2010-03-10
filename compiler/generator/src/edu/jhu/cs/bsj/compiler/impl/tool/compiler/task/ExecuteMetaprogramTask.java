@@ -11,6 +11,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.PackageNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeDeclarationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.impl.metaprogram.PermissionPolicyManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.MetacompilationContext;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.MetaprogramProfile;
@@ -32,7 +33,7 @@ public class ExecuteMetaprogramTask extends AbstractBsjCompilerTask
 	@Override
 	public void execute(MetacompilationContext context) throws IOException
 	{
-		MetaprogramProfile profile = context.getDependencyManager().getNextMetaprogram();
+		MetaprogramProfile<?> profile = context.getDependencyManager().getNextMetaprogram();
 		if (profile == null)
 		{
 			finishMetaprogramExecutionPhase(context);
@@ -53,21 +54,22 @@ public class ExecuteMetaprogramTask extends AbstractBsjCompilerTask
 		}
 	}
 
-	private void execute(MetaprogramProfile profile, MetacompilationContext context)
+	private <A extends MetaprogramAnchorNode<?>> void execute(MetaprogramProfile<A> profile,
+			MetacompilationContext context)
 	{
 		// Set up the permission policy manager for this metaprogram
 		PermissionPolicyManager policyManager = createPermissionPolicyManager(profile, context.getRootPackage());
 		context.getNodeManager().setPermissionPolicyManager(policyManager);
 
 		// Run the metaprogram
-		profile.getMetaprogram().execute();
+		profile.getMetaprogram().execute(profile.getContext());
 		context.getDependencyManager().notifyExecuted(profile);
 
 		// Release the policy manager
 		context.getNodeManager().setPermissionPolicyManager(null);
 
 		// Have the metaprogram replace itself with its replacement node
-		// TODO: what kind of policy should we put into place for this?  can a read-only metaprogram replace itself?
+		// TODO: what kind of policy should we put into place for this? can a read-only metaprogram replace itself?
 		Node replacement = profile.getAnchor().getReplacement();
 		profile.getAnchor().getParent().replace(profile.getAnchor(), replacement);
 
@@ -85,7 +87,7 @@ public class ExecuteMetaprogramTask extends AbstractBsjCompilerTask
 	 * @param rootPackage The root package for the policy manager.
 	 * @return The policy manager for that metaprogram.
 	 */
-	private PermissionPolicyManager createPermissionPolicyManager(MetaprogramProfile profile, PackageNode rootPackage)
+	private PermissionPolicyManager createPermissionPolicyManager(MetaprogramProfile<?> profile, PackageNode rootPackage)
 	{
 		PermissionPolicyManager policyManager = new PermissionPolicyManager(rootPackage);
 
@@ -104,13 +106,13 @@ public class ExecuteMetaprogramTask extends AbstractBsjCompilerTask
 				throw new IllegalStateException("Inconsistent code structure - unknown local mode "
 						+ profile.getLocalMode());
 			}
-			
+
 			boolean found = false;
 			Node node = profile.getAnchor();
 			while (node != null)
 			{
-				if (node instanceof CompilationUnitNode || node instanceof TypeDeclarationNode ||
-						node instanceof BlockNode)
+				if (node instanceof CompilationUnitNode || node instanceof TypeDeclarationNode
+						|| node instanceof BlockNode)
 				{
 					policyManager.addThreshold(node, permission);
 					found = true;
@@ -120,7 +122,7 @@ public class ExecuteMetaprogramTask extends AbstractBsjCompilerTask
 			}
 			if (!found)
 			{
-				// Then we never found a suitable parent.  Assume that we're detached from the root package.
+				// Then we never found a suitable parent. Assume that we're detached from the root package.
 				policyManager.addThreshold(profile.getAnchor().getFurthestAncestor(), NodePermission.MUTATE);
 			}
 		} else if (profile.getLocalMode() == MetaprogramLocalMode.FULL_MUTATE)
@@ -142,7 +144,7 @@ public class ExecuteMetaprogramTask extends AbstractBsjCompilerTask
 		{
 			policyManager.addThreshold(rootPackage, NodePermission.INSERT);
 		}
-		
+
 		return policyManager;
 	}
 }

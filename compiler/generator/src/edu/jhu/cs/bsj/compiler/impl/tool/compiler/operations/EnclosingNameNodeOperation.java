@@ -18,7 +18,7 @@ public class EnclosingNameNodeOperation extends BsjDefaultNodeOperation<Void, Na
 {
 	/** The node factory to use when creating the name. */
 	private BsjNodeFactory factory;
-	
+
 	public EnclosingNameNodeOperation(BsjNodeFactory factory)
 	{
 		super();
@@ -35,6 +35,7 @@ public class EnclosingNameNodeOperation extends BsjDefaultNodeOperation<Void, Na
 
 	/**
 	 * Iteratively builds the node in question.
+	 * 
 	 * @author Zachary Palmer
 	 */
 	private final class EnclosingTypeNameBuildingAncestorOperation extends BsjDefaultNodeOperation<List<Node>, Void>
@@ -100,7 +101,10 @@ public class EnclosingNameNodeOperation extends BsjDefaultNodeOperation<Void, Na
 		@Override
 		public Void executePackageNode(PackageNode node, List<Node> p)
 		{
-			addComponent(node.getName().getIdentifier(), NameCategory.PACKAGE);
+			if (node.getName() != null)
+			{
+				addComponent(node.getName().getIdentifier(), NameCategory.PACKAGE);
+			}
 			return null;
 		}
 	}

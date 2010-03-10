@@ -1,5 +1,6 @@
 package edu.jhu.cs.bsj.compiler.metaprogram;
 
+import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramAnchorNode;
 
 /**
@@ -19,4 +20,10 @@ public interface Context<T extends MetaprogramAnchorNode<?>>
 	 * @return The anchor node for this metaprogram context.
 	 */
 	public T getAnchor();
+	
+	/**
+	 * Retrieves a factory to be used to create nodes in this context.
+	 * @return The node factory to use.
+	 */
+	public BsjNodeFactory getFactory();
 }

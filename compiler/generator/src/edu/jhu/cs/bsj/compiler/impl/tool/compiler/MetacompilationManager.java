@@ -239,7 +239,7 @@ public class MetacompilationManager implements MetacompilationContext
 	 * 
 	 * @param profile The profile of the metaprogram which will be executed.
 	 */
-	public void registerMetaprogramProfile(MetaprogramProfile profile)
+	public void registerMetaprogramProfile(MetaprogramProfile<?> profile)
 	{
 		this.dependencyManager.registerMetaprogramProfile(profile);
 	}
@@ -250,7 +250,7 @@ public class MetacompilationManager implements MetacompilationContext
 	 * 
 	 * @return The next metaprogram to execute or <code>null</code> if no metaprograms remain.
 	 */
-	public MetaprogramProfile getNextMetaprogramProfile()
+	public MetaprogramProfile<?> getNextMetaprogramProfile()
 	{
 		return this.dependencyManager.getNextMetaprogram();
 	}
@@ -260,7 +260,7 @@ public class MetacompilationManager implements MetacompilationContext
 	 * 
 	 * @param profile The profile of the metaprogram which was executed.
 	 */
-	public void notifyExecuted(MetaprogramProfile profile)
+	public void notifyExecuted(MetaprogramProfile<?> profile)
 	{
 		this.dependencyManager.notifyExecuted(profile);
 	}
