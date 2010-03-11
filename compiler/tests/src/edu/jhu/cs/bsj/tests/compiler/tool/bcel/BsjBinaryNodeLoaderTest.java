@@ -51,12 +51,12 @@ public class BsjBinaryNodeLoaderTest extends AbstractTest
         String codeStr = "package joe.foo.bar;\nimport java.util.List;" 
             + "public class JoeClass <T extends SmallClass & Iface,V extends Iface> {" 
             + "private boolean x = true;\n"
-            + "public JoeClass(int a){}\n"
+            + "public <X> JoeClass(int a, java.util.List<String> list){}\n"
             + "public JoeClass(int a, String[][][] b){}\n"
             + "private List<String> list;\n"
-            + "public String toString(int x, String s, int y){"
-            + "return(\"Hello Joe!\");" + "}" + "}";
-        String codeStr2 = "package joe.foo.bar; public interface SmallClass extends Iface{}";
+            + "public <J> java.util.List<String> foo(int x, String s, java.util.List<String> list){"
+            + "return null;" + "}" + "}";
+        String codeStr2 = "package joe.foo.bar; public interface SmallClass <T> extends Iface{}";
         String codeStr3 = "package joe.foo.bar; public interface Iface {}";
         String codeStr4 = "package joe.foo.bar; public enum E {ONE(1), TWO(2),THREE(3); private int x; public void foo(){} E(int x) {this.x = x;}}";
 

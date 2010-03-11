@@ -59,6 +59,11 @@ public class BsjC
 	public static final String VERSION = "0.1";
 	
 	/**
+     * The bsj file extension.
+     */
+    public static final String BSJ_EXTENSION = ".bsj";
+	
+	/**
 	 * A normal exit return code.
 	 */
 	public static final int NORMAL_EXIT = 0;
@@ -151,10 +156,23 @@ public class BsjC
 		{
             try
             {
-                sourceFiles.add(bfm.getJavaFileForInput(
+                // check for valid file extension ('.java' or '.bsj')
+                if (!(sourceFile.endsWith(Kind.SOURCE.extension) 
+                        || sourceFile.endsWith(BSJ_EXTENSION)))
+                {
+                    throw new IOException("Invalid file extension");
+                }
+                
+                // extract package and relative name from full sourcefile name
+                int separatorIndex = sourceFile.lastIndexOf(File.separator);
+                String packageName = separatorIndex == -1 ? "" : sourceFile.substring(0, separatorIndex);
+                String relativeName = sourceFile.substring(separatorIndex + 1);
+
+                // add to our sourcefile list using our file manager
+                sourceFiles.add(bfm.getFileForInput(
                         BsjCompilerLocation.SOURCE_PATH, 
-                        sourceFile.replaceFirst(".java", "").replace(File.separatorChar, '.'),
-                        Kind.SOURCE));
+                        packageName, 
+                        relativeName));
             }
             catch (IOException e)
             {
