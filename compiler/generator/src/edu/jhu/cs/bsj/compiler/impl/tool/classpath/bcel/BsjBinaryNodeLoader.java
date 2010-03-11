@@ -117,7 +117,7 @@ public class BsjBinaryNodeLoader
         CompilationUnitNode retNode = factory.makeCompilationUnitNode(
                 className, 
                 buildPackageDeclarationNode(clazz), 
-                factory.makeImportListNode(), //TODO imports?
+                factory.makeImportListNode(),
                 factory.makeTypeDeclarationListNode(
                         buildTypeDeclarationNode(clazz)));
 
@@ -576,7 +576,7 @@ public class BsjBinaryNodeLoader
 
     private TypeNode buildReferenceTypeNode(Type type)
     {
-        // TODO handle type parameters (extract from fields)
+        // TODO handle type parameters? (extract from fields, methods, parse signatures using regexes, etc )
         
         TypeNode retNode = null;
         
