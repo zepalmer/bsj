@@ -77,8 +77,8 @@ public class BsjBinaryNodeLoaderTest extends AbstractTest
     {
         log4jConfigure("trace");
 
+        // prepare a Java compiler and location map
         JavaCompiler jc = ToolProvider.getSystemJavaCompiler();
-
         Map<StandardLocation, LocationManager> map = new HashMap<StandardLocation, LocationManager>();
         map.put(StandardLocation.SOURCE_PATH, new InMemoryLocationManager(null));
         map.put(StandardLocation.SOURCE_OUTPUT, new InMemoryLocationManager(null));
@@ -90,6 +90,7 @@ public class BsjBinaryNodeLoaderTest extends AbstractTest
         map.put(StandardLocation.ANNOTATION_PROCESSOR_PATH, new InMemoryLocationManager(null));
         BsjFileManager bfm = new LocationMappedFileManager(map);
 
+        // build some code strings to compile and test
         String codeStr = "package joe.foo.bar;\nimport java.util.*;" 
             + "public class JoeClass <T extends SmallClass & Iface,V extends Iface> extends ArrayList<String>{" 
             + "private boolean x = true;\n"
@@ -100,24 +101,24 @@ public class BsjBinaryNodeLoaderTest extends AbstractTest
             + "return null;" + "}" + "}";
         String codeStr2 = "package joe.foo.bar; public interface SmallClass <T> extends Iface{}";
         String codeStr3 = "package joe.foo.bar; public interface Iface {}";
-        String codeStr4 = "package joe.foo.bar; public enum E {ONE(1), TWO(2),THREE(3); private int x; public void foo(){} E(int x) {this.x = x;}}";
+        String codeStr4 = "package joe.foo.bar; public enum E {ONE(1), TWO(2),THREE(3); " 
+            + "private int x; public void foo(){} E(int x) {this.x = x;}}";
 
+        // turn the strings into file objects
         BsjFileObject bfo = bfm.getJavaFileForOutput(
                 StandardLocation.SOURCE_PATH, "joe.foo.bar.JoeClass", Kind.SOURCE, null);
-        bfo.setCharContent(codeStr);
-        
+        bfo.setCharContent(codeStr);        
         BsjFileObject bfo2 = bfm.getJavaFileForOutput(
                 StandardLocation.SOURCE_PATH, "joe.foo.bar.SmallClass", Kind.SOURCE, null);
-        bfo2.setCharContent(codeStr2);
-        
+        bfo2.setCharContent(codeStr2);        
         BsjFileObject bfo3 = bfm.getJavaFileForOutput(
                 StandardLocation.SOURCE_PATH, "joe.foo.bar.Iface", Kind.SOURCE, null);
-        bfo3.setCharContent(codeStr3);
-        
+        bfo3.setCharContent(codeStr3);        
         BsjFileObject bfo4 = bfm.getJavaFileForOutput(
                 StandardLocation.SOURCE_PATH, "joe.foo.bar.E", Kind.SOURCE, null);
         bfo4.setCharContent(codeStr4);
 
+        // get a list of objects to compile
         List<JavaFileObject> fileObjects = Arrays.<JavaFileObject> asList(bfo, bfo2, bfo3, bfo4);
 
         // The next step is to compile Iterable collection of java files and close file manager:
@@ -127,13 +128,24 @@ public class BsjBinaryNodeLoaderTest extends AbstractTest
         }
         bfm.close();
 
+        // initialize a factory and BCEL node loader
         BsjNodeFactory factory = BsjServiceRegistry.newToolkitFactory().newToolkit().getNodeFactory();
         BsjBinaryNodeLoader loader = new BsjBinaryNodeLoader(factory);
         
-        CompilationUnitNode joe = loader.loadNodesFromBinary("joe.foo.bar.JoeClass", map.get(StandardLocation.CLASS_OUTPUT));
-        CompilationUnitNode sc = loader.loadNodesFromBinary("joe.foo.bar.SmallClass", map.get(StandardLocation.CLASS_OUTPUT));
-        CompilationUnitNode e = loader.loadNodesFromBinary("joe.foo.bar.E", map.get(StandardLocation.CLASS_OUTPUT));
+        // load the ASTs from the binaries
+        CompilationUnitNode joe = loader.loadNodesFromBinary(
+                "joe.foo.bar.JoeClass", map.get(StandardLocation.CLASS_OUTPUT));
+        CompilationUnitNode sc = loader.loadNodesFromBinary(
+                "joe.foo.bar.SmallClass", map.get(StandardLocation.CLASS_OUTPUT));
+        CompilationUnitNode e = loader.loadNodesFromBinary(
+                "joe.foo.bar.E", map.get(StandardLocation.CLASS_OUTPUT));
         
+        // make sure we got something back
+        assertNotNull(joe);
+        assertNotNull(sc);
+        assertNotNull(e);
+        
+        // print out the ASTs (for debugging)
         System.out.println(joe.executeOperation(
                 BsjServiceRegistry.newToolkitFactory().newToolkit().getSerializer(), null));
         System.out.println(sc.executeOperation(
