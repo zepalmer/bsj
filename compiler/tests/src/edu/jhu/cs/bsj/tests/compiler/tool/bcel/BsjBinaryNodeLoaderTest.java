@@ -48,8 +48,8 @@ public class BsjBinaryNodeLoaderTest extends AbstractTest
         map.put(StandardLocation.ANNOTATION_PROCESSOR_PATH, new InMemoryLocationManager(null));
         BsjFileManager bfm = new LocationMappedFileManager(map);
 
-        String codeStr = "package joe.foo.bar;\nimport java.util.List;" 
-            + "public class JoeClass <T extends SmallClass & Iface,V extends Iface> {" 
+        String codeStr = "package joe.foo.bar;\nimport java.util.*;" 
+            + "public class JoeClass <T extends SmallClass & Iface,V extends Iface> extends ArrayList<String>{" 
             + "private boolean x = true;\n"
             + "public <X> JoeClass(int a, java.util.List<String> list){}\n"
             + "public JoeClass(int a, String[][][] b){}\n"
@@ -95,9 +95,10 @@ public class BsjBinaryNodeLoaderTest extends AbstractTest
                 BsjServiceRegistry.newToolkitFactory().newToolkit().getSerializer(), null));
         System.out.println(e.executeOperation(
                 BsjServiceRegistry.newToolkitFactory().newToolkit().getSerializer(), null));
-        //TODO assert the proper form of the loaded AST
         
-//        Object o = bfm.getClassLoader(StandardLocation.CLASS_OUTPUT).loadClass("JoeClass").newInstance();
-//        Assert.assertEquals("Hello Joe!", o.toString());
+        
+        //TODO use java.util.List binaries, etc...
+        
+        //TODO assert the proper form of the loaded AST
     }
 }

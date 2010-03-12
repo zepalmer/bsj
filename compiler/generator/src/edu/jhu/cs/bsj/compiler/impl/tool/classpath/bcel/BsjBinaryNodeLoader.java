@@ -454,7 +454,7 @@ public class BsjBinaryNodeLoader
 
     private VariableDeclaratorListNode buildVariableDeclarators(Field field)
     {
-        // initializer left as null
+        //TODO fix: initializer left as null
         VariableDeclaratorNode retNode = 
             factory.makeVariableDeclaratorNode(
                 buildTypeNode(field.getType()), 
@@ -576,7 +576,7 @@ public class BsjBinaryNodeLoader
 
     private TypeNode buildReferenceTypeNode(Type type)
     {
-        // TODO handle type parameters? (extract from fields, methods, parse signatures using regexes, etc )
+        // TODO handle type arguments? (extract from fields, methods, parse signatures using regexes, etc )
         
         TypeNode retNode = null;
         
