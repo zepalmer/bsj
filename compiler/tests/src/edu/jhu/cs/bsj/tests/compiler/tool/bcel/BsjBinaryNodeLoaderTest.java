@@ -1,7 +1,10 @@
 package edu.jhu.cs.bsj.tests.compiler.tool.bcel;
 
+import static org.junit.Assert.assertNotNull;
+
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -30,8 +33,47 @@ import edu.jhu.cs.bsj.tests.AbstractTest;
 
 public class BsjBinaryNodeLoaderTest extends AbstractTest
 {
+    /**
+     * Iterates over all the precompiled binaries that Java offers
+     * and loads them using the binary node loader.
+     * @throws Exception on error.
+     */
     @Test
-    public void testJavaCompilerWithInMemoryLocationManager() throws Exception
+    public void testBinaryLoaderWithJavaClasses() throws Exception
+    {
+        log4jConfigure("trace");
+        
+        // setup factory, loader, and location (Java's own class path)
+        BsjNodeFactory factory = BsjServiceRegistry.newToolkitFactory().newToolkit().getNodeFactory();
+        BsjBinaryNodeLoader loader = new BsjBinaryNodeLoader(factory);
+        LocationManager javaLocation = new UnionLocationManager(null, System.getProperty("sun.boot.class.path"));
+
+        // get an iterator over all Java language binaries we can
+        Iterator<? extends BsjFileObject> iter = 
+            javaLocation.listFiles("java",  Arrays.<Kind> asList(Kind.CLASS), true).iterator();
+        
+        // load and test every binary        
+        BsjFileObject file;
+        int i = 1;
+        while (iter.hasNext())
+        {   
+            file = iter.next();
+            LOGGER.info("Now testing file " + i + ", " + file.inferBinaryName());
+            assertNotNull(loader.loadNodesFromBinary(file.inferBinaryName(), javaLocation));
+            
+          //TODO assert the proper form of the loaded AST
+            
+            i++;
+        }        
+    }
+        
+    /**
+     * Compiles handmade test code and loads it using the binary node loader,
+     * then verifies that the structure is correct.
+     * @throws Exception on error.
+     */
+    @Test
+    public void testBinaryLoaderWithCustomClasses() throws Exception
     {
         log4jConfigure("trace");
 
@@ -60,22 +102,25 @@ public class BsjBinaryNodeLoaderTest extends AbstractTest
         String codeStr3 = "package joe.foo.bar; public interface Iface {}";
         String codeStr4 = "package joe.foo.bar; public enum E {ONE(1), TWO(2),THREE(3); private int x; public void foo(){} E(int x) {this.x = x;}}";
 
-        BsjFileObject bfo = bfm.getJavaFileForOutput(StandardLocation.SOURCE_PATH, "joe.foo.bar.JoeClass", Kind.SOURCE, null);
+        BsjFileObject bfo = bfm.getJavaFileForOutput(
+                StandardLocation.SOURCE_PATH, "joe.foo.bar.JoeClass", Kind.SOURCE, null);
         bfo.setCharContent(codeStr);
         
-        BsjFileObject bfo2 = bfm.getJavaFileForOutput(StandardLocation.SOURCE_PATH, "joe.foo.bar.SmallClass", Kind.SOURCE, null);
+        BsjFileObject bfo2 = bfm.getJavaFileForOutput(
+                StandardLocation.SOURCE_PATH, "joe.foo.bar.SmallClass", Kind.SOURCE, null);
         bfo2.setCharContent(codeStr2);
         
-        BsjFileObject bfo3 = bfm.getJavaFileForOutput(StandardLocation.SOURCE_PATH, "joe.foo.bar.Iface", Kind.SOURCE, null);
+        BsjFileObject bfo3 = bfm.getJavaFileForOutput(
+                StandardLocation.SOURCE_PATH, "joe.foo.bar.Iface", Kind.SOURCE, null);
         bfo3.setCharContent(codeStr3);
         
-        BsjFileObject bfo4 = bfm.getJavaFileForOutput(StandardLocation.SOURCE_PATH, "joe.foo.bar.E", Kind.SOURCE, null);
+        BsjFileObject bfo4 = bfm.getJavaFileForOutput(
+                StandardLocation.SOURCE_PATH, "joe.foo.bar.E", Kind.SOURCE, null);
         bfo4.setCharContent(codeStr4);
 
         List<JavaFileObject> fileObjects = Arrays.<JavaFileObject> asList(bfo, bfo2, bfo3, bfo4);
 
         // The next step is to compile Iterable collection of java files and close file manager:
-
         if (!(jc.getTask(null, bfm, null, null, null, fileObjects).call()))
         {
             Assert.fail("Compilation failure.");
@@ -83,8 +128,8 @@ public class BsjBinaryNodeLoaderTest extends AbstractTest
         bfm.close();
 
         BsjNodeFactory factory = BsjServiceRegistry.newToolkitFactory().newToolkit().getNodeFactory();
-
         BsjBinaryNodeLoader loader = new BsjBinaryNodeLoader(factory);
+        
         CompilationUnitNode joe = loader.loadNodesFromBinary("joe.foo.bar.JoeClass", map.get(StandardLocation.CLASS_OUTPUT));
         CompilationUnitNode sc = loader.loadNodesFromBinary("joe.foo.bar.SmallClass", map.get(StandardLocation.CLASS_OUTPUT));
         CompilationUnitNode e = loader.loadNodesFromBinary("joe.foo.bar.E", map.get(StandardLocation.CLASS_OUTPUT));
@@ -95,9 +140,7 @@ public class BsjBinaryNodeLoaderTest extends AbstractTest
                 BsjServiceRegistry.newToolkitFactory().newToolkit().getSerializer(), null));
         System.out.println(e.executeOperation(
                 BsjServiceRegistry.newToolkitFactory().newToolkit().getSerializer(), null));
-        
-        
-        //TODO use java.util.List binaries, etc...
+
         
         //TODO assert the proper form of the loaded AST
     }

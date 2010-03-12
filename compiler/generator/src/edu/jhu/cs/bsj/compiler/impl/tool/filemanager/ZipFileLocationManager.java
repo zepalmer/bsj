@@ -27,7 +27,9 @@ public class ZipFileLocationManager extends AbstractLocationManager
 	/** The file which backs this location manager. */
 	private File file;
 	/** The zip file which backs this location manager. */
-	private ZipMetaCache zip;
+	private ZipMetaCache zip;	
+	/** The separator used in zip file paths. */
+	public static final char ZIP_FILE_SEPARATOR = '/';
 
 	/**
 	 * Creates a file location manager.
@@ -69,14 +71,14 @@ public class ZipFileLocationManager extends AbstractLocationManager
 	@Override
 	public BsjFileObject getFile(String packageName, String relativeName, boolean writable) throws IOException
 	{
-		String name = packageName.replace('.', '/') + '/' + relativeName;
+		String name = packageName.replace('.', ZIP_FILE_SEPARATOR) + ZIP_FILE_SEPARATOR + relativeName;
 		return getFileFromEntryName(name);
 	}
 
 	@Override
 	public BsjFileObject getJavaFile(String className, Kind kind, boolean writable) throws IOException
 	{
-		String name = className.replace('.', '/') + '/' + kind.extension;
+		String name = className.replace('.', ZIP_FILE_SEPARATOR) + kind.extension;
 		return getFileFromEntryName(name);
 	}
 
@@ -93,7 +95,7 @@ public class ZipFileLocationManager extends AbstractLocationManager
 	@Override
 	public Iterable<? extends BsjFileObject> listFiles(String packageName, Collection<Kind> kinds, boolean recurse) throws IOException
 	{
-		String prefix = packageName.replace('.', '/');
+		String prefix = packageName.replace('.', ZIP_FILE_SEPARATOR);
 		List<BsjFileObject> ret = new ArrayList<BsjFileObject>();
 		for (ZipEntry entry : this.zip.getEntryMap().values())
 		{
@@ -104,7 +106,7 @@ public class ZipFileLocationManager extends AbstractLocationManager
 			if (entry.getName().startsWith(prefix))
 			{
 				// If we're not recursing, make sure we skip subdirectory entries
-				if (!recurse && entry.getName().substring(prefix.length() + 1).indexOf('/') != -1)
+				if (!recurse && entry.getName().substring(prefix.length() + 1).indexOf(ZIP_FILE_SEPARATOR) != -1)
 				{
 					continue;
 				}
