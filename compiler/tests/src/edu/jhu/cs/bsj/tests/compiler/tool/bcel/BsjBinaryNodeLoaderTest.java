@@ -1,6 +1,8 @@
 package edu.jhu.cs.bsj.tests.compiler.tool.bcel;
 
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -20,7 +22,13 @@ import org.junit.Test;
 
 import edu.jhu.cs.bsj.compiler.BsjServiceRegistry;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
+import edu.jhu.cs.bsj.compiler.ast.node.ClassDeclarationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.ClassMemberNode;
 import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
+import edu.jhu.cs.bsj.compiler.ast.node.EnumDeclarationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.InterfaceDeclarationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.MethodDeclarationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.TypeDeclarationNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.classpath.bcel.BsjBinaryNodeLoader;
 import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.InMemoryLocationManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.LocationMappedFileManager;
@@ -30,7 +38,10 @@ import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjFileObject;
 import edu.jhu.cs.bsj.compiler.tool.filemanager.LocationManager;
 import edu.jhu.cs.bsj.tests.AbstractTest;
 
-
+/**
+ * Tests the BCEL based binary node loader.
+ * @author Joseph Riley
+ */
 public class BsjBinaryNodeLoaderTest extends AbstractTest
 {
     /**
@@ -55,13 +66,78 @@ public class BsjBinaryNodeLoaderTest extends AbstractTest
         // load and test every binary        
         BsjFileObject file;
         int i = 1;
+        CompilationUnitNode node;
+        String fileName;
+        TypeDeclarationNode typeDecl;
         while (iter.hasNext())
         {   
+            // get the next binary and load it
             file = iter.next();
-            LOGGER.info("Now testing file " + i + ", " + file.inferBinaryName());
-            assertNotNull(loader.loadNodesFromBinary(file.inferBinaryName(), javaLocation));
+            fileName = file.inferBinaryName();
+            LOGGER.info("Now testing file " + i + ", " + fileName);
+            node = loader.loadNodesFromBinary(fileName, javaLocation);
             
-          //TODO assert the proper form of the loaded AST
+            // verify the correct form
+            assertNotNull(node);
+            
+            // verify name is correct
+            assertTrue(node.getName().equals(fileName));
+            
+            // should have no imports
+            assertTrue(node.getImports().getChildren().isEmpty());
+            
+            // verify package name was formed correctly
+            assertTrue(node.getPackageDeclaration().getName().getNameString()
+                    .equals(fileName.subSequence(0, fileName.lastIndexOf('.'))));
+            
+            // verify only 1 type per file
+            assertTrue(node.getTypeDecls().getChildren().size() == 1);
+            
+            // conduct assertions based on the type (class/interface/enum)
+            typeDecl = node.getTypeDecls().getChildren().get(0);  
+            if (typeDecl instanceof ClassDeclarationNode)
+            {
+                ClassDeclarationNode classDecl = (ClassDeclarationNode)typeDecl;
+                assertNull(classDecl.getJavadoc());
+                assertNotNull(classDecl.getImplementsClause());
+                assertNotNull(classDecl.getModifiers());
+                assertNotNull(classDecl.getTypeParameters());
+                for (ClassMemberNode cmn : classDecl.getBody().getMembers())
+                {
+                   if (cmn instanceof MethodDeclarationNode)
+                   {
+                       // verify methods have no bodies
+                       assertTrue(((MethodDeclarationNode)cmn).getBody().getStatements().isEmpty());
+                   }
+                }
+            }
+            else if (typeDecl instanceof InterfaceDeclarationNode)
+            {
+                InterfaceDeclarationNode ifaceDecl = (InterfaceDeclarationNode)typeDecl;
+                assertNull(ifaceDecl.getJavadoc());
+                assertNotNull(ifaceDecl.getExtendsClause());
+                assertNotNull(ifaceDecl.getModifiers());
+                assertNotNull(ifaceDecl.getTypeParameters());
+            }
+            else if (typeDecl instanceof EnumDeclarationNode)
+            {
+                EnumDeclarationNode enumDecl = (EnumDeclarationNode)typeDecl;
+                assertNull(enumDecl.getJavadoc());
+                assertNotNull(enumDecl.getImplementsClause());
+                assertNotNull(enumDecl.getModifiers());
+                for (ClassMemberNode cmn : enumDecl.getBody().getMembers())
+                {
+                   if (cmn instanceof MethodDeclarationNode)
+                   {
+                       // verify methods have no bodies
+                       assertTrue(((MethodDeclarationNode)cmn).getBody().getStatements().isEmpty());
+                   }
+                }
+            }
+            else
+            {
+                throw new IllegalStateException("Unknown type declaration: " + typeDecl);
+            }
             
             i++;
         }        
@@ -152,8 +228,5 @@ public class BsjBinaryNodeLoaderTest extends AbstractTest
                 BsjServiceRegistry.newToolkitFactory().newToolkit().getSerializer(), null));
         System.out.println(e.executeOperation(
                 BsjServiceRegistry.newToolkitFactory().newToolkit().getSerializer(), null));
-
-        
-        //TODO assert the proper form of the loaded AST
     }
 }
