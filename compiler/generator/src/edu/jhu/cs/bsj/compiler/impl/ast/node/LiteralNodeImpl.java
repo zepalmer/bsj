@@ -8,6 +8,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.LiteralNode;
+import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
@@ -15,6 +16,12 @@ public abstract class LiteralNodeImpl<T> extends NodeImpl implements LiteralNode
 {
     /** The literal value for this node. */
     private T value;
+    
+    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    {
+        /** Attribute for the value property. */
+        VALUE,
+    }
     
     /** General constructor. */
     protected LiteralNodeImpl(
@@ -33,6 +40,7 @@ public abstract class LiteralNodeImpl<T> extends NodeImpl implements LiteralNode
      */
     public T getValue()
     {
+        recordAccess(LocalAttribute.VALUE, Attribute.AccessType.READ);
         return this.value;
     }
     
@@ -43,6 +51,7 @@ public abstract class LiteralNodeImpl<T> extends NodeImpl implements LiteralNode
     public void setValue(T value)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.VALUE, Attribute.AccessType.WRITE);
         this.value = value;
     }
     

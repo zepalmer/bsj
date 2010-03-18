@@ -13,6 +13,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeCastNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
+import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
@@ -23,6 +24,14 @@ public class TypeCastNodeImpl extends NodeImpl implements TypeCastNode
     
     /** The type to which to cast. */
     private TypeNode type;
+    
+    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    {
+        /** Attribute for the expression property. */
+        EXPRESSION,
+        /** Attribute for the type property. */
+        TYPE,
+    }
     
     /** General constructor. */
     public TypeCastNodeImpl(
@@ -43,6 +52,7 @@ public class TypeCastNodeImpl extends NodeImpl implements TypeCastNode
      */
     public ExpressionNode getExpression()
     {
+        recordAccess(LocalAttribute.EXPRESSION, Attribute.AccessType.READ);
         return this.expression;
     }
     
@@ -53,6 +63,7 @@ public class TypeCastNodeImpl extends NodeImpl implements TypeCastNode
     public void setExpression(ExpressionNode expression)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.EXPRESSION, Attribute.AccessType.WRITE);
         if (this.expression instanceof NodeImpl)
         {
             ((NodeImpl)this.expression).setParent(null);
@@ -70,6 +81,7 @@ public class TypeCastNodeImpl extends NodeImpl implements TypeCastNode
      */
     public TypeNode getType()
     {
+        recordAccess(LocalAttribute.TYPE, Attribute.AccessType.READ);
         return this.type;
     }
     
@@ -80,6 +92,7 @@ public class TypeCastNodeImpl extends NodeImpl implements TypeCastNode
     public void setType(TypeNode type)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.TYPE, Attribute.AccessType.WRITE);
         if (this.type instanceof NodeImpl)
         {
             ((NodeImpl)this.type).setParent(null);

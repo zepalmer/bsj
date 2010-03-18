@@ -12,6 +12,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.ReturnNode;
+import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
@@ -19,6 +20,12 @@ public class ReturnNodeImpl extends NodeImpl implements ReturnNode
 {
     /** The expression to return. */
     private ExpressionNode expression;
+    
+    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    {
+        /** Attribute for the expression property. */
+        EXPRESSION,
+    }
     
     /** General constructor. */
     public ReturnNodeImpl(
@@ -37,6 +44,7 @@ public class ReturnNodeImpl extends NodeImpl implements ReturnNode
      */
     public ExpressionNode getExpression()
     {
+        recordAccess(LocalAttribute.EXPRESSION, Attribute.AccessType.READ);
         return this.expression;
     }
     
@@ -47,6 +55,7 @@ public class ReturnNodeImpl extends NodeImpl implements ReturnNode
     public void setExpression(ExpressionNode expression)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.EXPRESSION, Attribute.AccessType.WRITE);
         if (this.expression instanceof NodeImpl)
         {
             ((NodeImpl)this.expression).setParent(null);

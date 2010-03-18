@@ -12,6 +12,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.ConditionalExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
+import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
@@ -25,6 +26,16 @@ public class ConditionalExpressionNodeImpl extends NodeImpl implements Condition
     
     /** The value of this expression when the condition is false. */
     private ExpressionNode falseExpression;
+    
+    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    {
+        /** Attribute for the condition property. */
+        CONDITION,
+        /** Attribute for the trueExpression property. */
+        TRUE_EXPRESSION,
+        /** Attribute for the falseExpression property. */
+        FALSE_EXPRESSION,
+    }
     
     /** General constructor. */
     public ConditionalExpressionNodeImpl(
@@ -47,6 +58,7 @@ public class ConditionalExpressionNodeImpl extends NodeImpl implements Condition
      */
     public ExpressionNode getCondition()
     {
+        recordAccess(LocalAttribute.CONDITION, Attribute.AccessType.READ);
         return this.condition;
     }
     
@@ -57,6 +69,7 @@ public class ConditionalExpressionNodeImpl extends NodeImpl implements Condition
     public void setCondition(ExpressionNode condition)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.CONDITION, Attribute.AccessType.WRITE);
         if (this.condition instanceof NodeImpl)
         {
             ((NodeImpl)this.condition).setParent(null);
@@ -74,6 +87,7 @@ public class ConditionalExpressionNodeImpl extends NodeImpl implements Condition
      */
     public ExpressionNode getTrueExpression()
     {
+        recordAccess(LocalAttribute.TRUE_EXPRESSION, Attribute.AccessType.READ);
         return this.trueExpression;
     }
     
@@ -84,6 +98,7 @@ public class ConditionalExpressionNodeImpl extends NodeImpl implements Condition
     public void setTrueExpression(ExpressionNode trueExpression)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.TRUE_EXPRESSION, Attribute.AccessType.WRITE);
         if (this.trueExpression instanceof NodeImpl)
         {
             ((NodeImpl)this.trueExpression).setParent(null);
@@ -101,6 +116,7 @@ public class ConditionalExpressionNodeImpl extends NodeImpl implements Condition
      */
     public ExpressionNode getFalseExpression()
     {
+        recordAccess(LocalAttribute.FALSE_EXPRESSION, Attribute.AccessType.READ);
         return this.falseExpression;
     }
     
@@ -111,6 +127,7 @@ public class ConditionalExpressionNodeImpl extends NodeImpl implements Condition
     public void setFalseExpression(ExpressionNode falseExpression)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.FALSE_EXPRESSION, Attribute.AccessType.WRITE);
         if (this.falseExpression instanceof NodeImpl)
         {
             ((NodeImpl)this.falseExpression).setParent(null);

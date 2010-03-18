@@ -10,6 +10,7 @@ import edu.jhu.cs.bsj.compiler.ast.MetaprogramPackageMode;
  * 
  * @author Zachary Palmer
  */
+// TODO: finish
 public interface BsjAnnotationalMetaprogram
 {
 	/**

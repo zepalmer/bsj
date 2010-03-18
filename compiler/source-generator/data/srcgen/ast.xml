@@ -1688,6 +1688,7 @@
             ]]></doc>
         </type>
 
+        <!-- TODO: remove? -->
         <type name="CompilationUnitListNode" super="ListNode" superTypeArg="CompilationUnitNode">
             <doc><![CDATA[
                 Represents a list of {@link CompilationUnitListNode}s.
@@ -1767,6 +1768,7 @@
             ]]></doc>
         </type>
 
+        <!-- TODO: remove? -->
         <type name="TypeListNode" super="ListNode" superTypeArg="TypeNode">
             <doc><![CDATA[
                 Represents a list of {@link TypeNode}s.

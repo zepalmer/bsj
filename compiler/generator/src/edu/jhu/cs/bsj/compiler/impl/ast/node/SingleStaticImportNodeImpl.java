@@ -13,6 +13,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.NameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.SingleStaticImportNode;
+import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
@@ -23,6 +24,14 @@ public class SingleStaticImportNodeImpl extends NodeImpl implements SingleStatic
     
     /** The identifier to import from that type. */
     private IdentifierNode identifier;
+    
+    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    {
+        /** Attribute for the name property. */
+        NAME,
+        /** Attribute for the identifier property. */
+        IDENTIFIER,
+    }
     
     /** General constructor. */
     public SingleStaticImportNodeImpl(
@@ -43,6 +52,7 @@ public class SingleStaticImportNodeImpl extends NodeImpl implements SingleStatic
      */
     public NameNode getName()
     {
+        recordAccess(LocalAttribute.NAME, Attribute.AccessType.READ);
         return this.name;
     }
     
@@ -53,6 +63,7 @@ public class SingleStaticImportNodeImpl extends NodeImpl implements SingleStatic
     public void setName(NameNode name)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.NAME, Attribute.AccessType.WRITE);
         if (this.name instanceof NodeImpl)
         {
             ((NodeImpl)this.name).setParent(null);
@@ -70,6 +81,7 @@ public class SingleStaticImportNodeImpl extends NodeImpl implements SingleStatic
      */
     public IdentifierNode getIdentifier()
     {
+        recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.READ);
         return this.identifier;
     }
     
@@ -80,6 +92,7 @@ public class SingleStaticImportNodeImpl extends NodeImpl implements SingleStatic
     public void setIdentifier(IdentifierNode identifier)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.WRITE);
         if (this.identifier instanceof NodeImpl)
         {
             ((NodeImpl)this.identifier).setParent(null);

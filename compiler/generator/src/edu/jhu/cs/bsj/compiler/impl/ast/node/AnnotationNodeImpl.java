@@ -9,6 +9,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.UnparameterizedTypeNode;
+import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
@@ -16,6 +17,12 @@ public abstract class AnnotationNodeImpl extends NodeImpl implements AnnotationN
 {
     /** The annotation type. */
     private UnparameterizedTypeNode annotationType;
+    
+    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    {
+        /** Attribute for the annotationType property. */
+        ANNOTATION_TYPE,
+    }
     
     /** General constructor. */
     protected AnnotationNodeImpl(
@@ -34,6 +41,7 @@ public abstract class AnnotationNodeImpl extends NodeImpl implements AnnotationN
      */
     public UnparameterizedTypeNode getAnnotationType()
     {
+        recordAccess(LocalAttribute.ANNOTATION_TYPE, Attribute.AccessType.READ);
         return this.annotationType;
     }
     
@@ -44,6 +52,7 @@ public abstract class AnnotationNodeImpl extends NodeImpl implements AnnotationN
     public void setAnnotationType(UnparameterizedTypeNode annotationType)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.ANNOTATION_TYPE, Attribute.AccessType.WRITE);
         if (this.annotationType instanceof NodeImpl)
         {
             ((NodeImpl)this.annotationType).setParent(null);

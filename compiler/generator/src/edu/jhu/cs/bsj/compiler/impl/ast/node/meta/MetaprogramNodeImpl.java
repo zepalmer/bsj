@@ -13,6 +13,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.BlockStatementListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramPreambleNode;
+import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.NodeImpl;
 
@@ -24,6 +25,14 @@ public class MetaprogramNodeImpl extends NodeImpl implements MetaprogramNode
     
     /** The list of statements in the metaprogram's body. */
     private BlockStatementListNode body;
+    
+    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    {
+        /** Attribute for the preamble property. */
+        PREAMBLE,
+        /** Attribute for the body property. */
+        BODY,
+    }
     
     /** General constructor. */
     public MetaprogramNodeImpl(
@@ -44,6 +53,7 @@ public class MetaprogramNodeImpl extends NodeImpl implements MetaprogramNode
      */
     public MetaprogramPreambleNode getPreamble()
     {
+        recordAccess(LocalAttribute.PREAMBLE, Attribute.AccessType.READ);
         return this.preamble;
     }
     
@@ -54,6 +64,7 @@ public class MetaprogramNodeImpl extends NodeImpl implements MetaprogramNode
     public void setPreamble(MetaprogramPreambleNode preamble)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.PREAMBLE, Attribute.AccessType.WRITE);
         if (this.preamble instanceof NodeImpl)
         {
             ((NodeImpl)this.preamble).setParent(null);
@@ -71,6 +82,7 @@ public class MetaprogramNodeImpl extends NodeImpl implements MetaprogramNode
      */
     public BlockStatementListNode getBody()
     {
+        recordAccess(LocalAttribute.BODY, Attribute.AccessType.READ);
         return this.body;
     }
     
@@ -81,6 +93,7 @@ public class MetaprogramNodeImpl extends NodeImpl implements MetaprogramNode
     public void setBody(BlockStatementListNode body)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.BODY, Attribute.AccessType.WRITE);
         if (this.body instanceof NodeImpl)
         {
             ((NodeImpl)this.body).setParent(null);

@@ -2,6 +2,7 @@ package edu.jhu.cs.bsj.compiler.impl.ast.node;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicLong;
 
 import javax.annotation.Generated;
@@ -9,10 +10,15 @@ import javax.annotation.Generated;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.exception.MetaprogramConflictException;
 import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.PackageNode;
+import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.utils.HashMultiMap;
+import edu.jhu.cs.bsj.compiler.impl.utils.MultiMap;
+import edu.jhu.cs.bsj.compiler.impl.utils.Pair;
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public abstract class NodeImpl implements Node
 {
@@ -24,6 +30,16 @@ public abstract class NodeImpl implements Node
     
     /** The BSJ node manager for this node. */
     private BsjNodeManager manager;
+    
+    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    {
+        /** Attribute for the startLocation property. */
+        START_LOCATION,
+        /** Attribute for the stopLocation property. */
+        STOP_LOCATION,
+        /** Attribute for the manager property. */
+        MANAGER,
+    }
     
     /** General constructor. */
     protected NodeImpl(
@@ -43,6 +59,7 @@ public abstract class NodeImpl implements Node
      */
     public BsjSourceLocation getStartLocation()
     {
+        recordAccess(LocalAttribute.START_LOCATION, Attribute.AccessType.READ);
         return this.startLocation;
     }
     
@@ -52,6 +69,7 @@ public abstract class NodeImpl implements Node
      */
     public BsjSourceLocation getStopLocation()
     {
+        recordAccess(LocalAttribute.STOP_LOCATION, Attribute.AccessType.READ);
         return this.stopLocation;
     }
     
@@ -141,6 +159,36 @@ public abstract class NodeImpl implements Node
 		this.uid = sUid.getAndIncrement();
 	}
 	
+	/**
+	 * A data structure containing information about attribute access.
+	 */
+	static class AccessRecord extends Pair<Attribute.AccessType, Integer>
+	{
+		public AccessRecord(Attribute.AccessType accessType, Integer id)
+		{
+			super(accessType, id);
+		}
+		
+		/**
+		 * Gets the type of access from this access record.
+		 */
+		public Attribute.AccessType getAccessType()
+		{
+			return this.getFirst();
+		}
+		 
+		/**
+		 * Gets the metaprogram ID from this access record.
+		 */
+		public Integer getMetaprogramID()
+		{
+			return this.getSecond();
+		}
+	}
+	
+    /** The current set of access record for this node's attributes. */
+    private MultiMap<Attribute, AccessRecord> accessRecordMap = new HashMultiMap<Attribute, AccessRecord>();
+    
 	/**
 	 * Causes this node to receive a visitor.  Visitors are received by nodes in a depth-first fashion.  The order of
 	 * the children receiving the visitor is dependent upon the type of node; however, a superclass's child nodes are
@@ -270,5 +318,32 @@ public abstract class NodeImpl implements Node
 	protected BsjNodeManager getManager()
 	{
 		return this.manager;
+	}
+	
+	/**
+	 * Records an attribute access for this node.  If this access is in conflict with other accesses which have already
+	 * occurred on this node, an approprite exception is thrown.
+	 * @param attribute The attribute that was accessed.
+	 * @param accessType The type of access that was involved.
+	 * @throws MetaprogramConflictException If a conflict exists between this access and one which has already occurred.
+	 */
+	protected void recordAccess(Attribute attribute, Attribute.AccessType accessType)
+			throws MetaprogramConflictException
+	{
+		if (this.manager.getCurrentMetaprogramId() == null)
+		{
+			return;
+		}
+		
+		Set<AccessRecord> previousAccesses = this.accessRecordMap.getAll(attribute);
+		for (AccessRecord record : previousAccesses)
+		{
+			if (accessType == Attribute.AccessType.WRITE || record.getAccessType() == Attribute.AccessType.WRITE)
+			{
+				this.manager.assertCooperation(record.getMetaprogramID());
+			}
+		}
+		
+		this.accessRecordMap.put(attribute, new AccessRecord(accessType, this.manager.getCurrentMetaprogramId()));
 	}
 }

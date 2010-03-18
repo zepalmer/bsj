@@ -12,6 +12,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.NameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.StaticImportOnDemandNode;
+import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
@@ -19,6 +20,12 @@ public class StaticImportOnDemandNodeImpl extends NodeImpl implements StaticImpo
 {
     /** The name of the package to import. */
     private NameNode name;
+    
+    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    {
+        /** Attribute for the name property. */
+        NAME,
+    }
     
     /** General constructor. */
     public StaticImportOnDemandNodeImpl(
@@ -37,6 +44,7 @@ public class StaticImportOnDemandNodeImpl extends NodeImpl implements StaticImpo
      */
     public NameNode getName()
     {
+        recordAccess(LocalAttribute.NAME, Attribute.AccessType.READ);
         return this.name;
     }
     
@@ -47,6 +55,7 @@ public class StaticImportOnDemandNodeImpl extends NodeImpl implements StaticImpo
     public void setName(NameNode name)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.NAME, Attribute.AccessType.WRITE);
         if (this.name instanceof NodeImpl)
         {
             ((NodeImpl)this.name).setParent(null);

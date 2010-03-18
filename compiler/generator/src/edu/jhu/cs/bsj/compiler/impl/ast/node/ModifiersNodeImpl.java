@@ -9,6 +9,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ModifiersNode;
+import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
@@ -16,6 +17,12 @@ public abstract class ModifiersNodeImpl extends NodeImpl implements ModifiersNod
 {
     /** The annotations modifying the subject. */
     private AnnotationListNode annotations;
+    
+    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    {
+        /** Attribute for the annotations property. */
+        ANNOTATIONS,
+    }
     
     /** General constructor. */
     protected ModifiersNodeImpl(
@@ -34,6 +41,7 @@ public abstract class ModifiersNodeImpl extends NodeImpl implements ModifiersNod
      */
     public AnnotationListNode getAnnotations()
     {
+        recordAccess(LocalAttribute.ANNOTATIONS, Attribute.AccessType.READ);
         return this.annotations;
     }
     
@@ -44,6 +52,7 @@ public abstract class ModifiersNodeImpl extends NodeImpl implements ModifiersNod
     public void setAnnotations(AnnotationListNode annotations)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.ANNOTATIONS, Attribute.AccessType.WRITE);
         if (this.annotations instanceof NodeImpl)
         {
             ((NodeImpl)this.annotations).setParent(null);

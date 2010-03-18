@@ -13,6 +13,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.BlockNode;
 import edu.jhu.cs.bsj.compiler.ast.node.CatchListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.TryNode;
+import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
@@ -26,6 +27,16 @@ public class TryNodeImpl extends NodeImpl implements TryNode
     
     /** The finally block. */
     private BlockNode finallyBlock;
+    
+    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    {
+        /** Attribute for the block property. */
+        BLOCK,
+        /** Attribute for the catches property. */
+        CATCHES,
+        /** Attribute for the finallyBlock property. */
+        FINALLY_BLOCK,
+    }
     
     /** General constructor. */
     public TryNodeImpl(
@@ -48,6 +59,7 @@ public class TryNodeImpl extends NodeImpl implements TryNode
      */
     public BlockNode getBlock()
     {
+        recordAccess(LocalAttribute.BLOCK, Attribute.AccessType.READ);
         return this.block;
     }
     
@@ -58,6 +70,7 @@ public class TryNodeImpl extends NodeImpl implements TryNode
     public void setBlock(BlockNode block)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.BLOCK, Attribute.AccessType.WRITE);
         if (this.block instanceof NodeImpl)
         {
             ((NodeImpl)this.block).setParent(null);
@@ -75,6 +88,7 @@ public class TryNodeImpl extends NodeImpl implements TryNode
      */
     public CatchListNode getCatches()
     {
+        recordAccess(LocalAttribute.CATCHES, Attribute.AccessType.READ);
         return this.catches;
     }
     
@@ -85,6 +99,7 @@ public class TryNodeImpl extends NodeImpl implements TryNode
     public void setCatches(CatchListNode catches)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.CATCHES, Attribute.AccessType.WRITE);
         if (this.catches instanceof NodeImpl)
         {
             ((NodeImpl)this.catches).setParent(null);
@@ -102,6 +117,7 @@ public class TryNodeImpl extends NodeImpl implements TryNode
      */
     public BlockNode getFinallyBlock()
     {
+        recordAccess(LocalAttribute.FINALLY_BLOCK, Attribute.AccessType.READ);
         return this.finallyBlock;
     }
     
@@ -112,6 +128,7 @@ public class TryNodeImpl extends NodeImpl implements TryNode
     public void setFinallyBlock(BlockNode finallyBlock)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.FINALLY_BLOCK, Attribute.AccessType.WRITE);
         if (this.finallyBlock instanceof NodeImpl)
         {
             ((NodeImpl)this.finallyBlock).setParent(null);

@@ -16,6 +16,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.JavadocNode;
 import edu.jhu.cs.bsj.compiler.ast.node.NamedTypeDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
+import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
@@ -32,6 +33,18 @@ public class AnnotationDeclarationNodeImpl extends NodeImpl implements Annotatio
     
     /** The associated javadoc comment for this node. */
     private JavadocNode javadoc;
+    
+    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    {
+        /** Attribute for the modifiers property. */
+        MODIFIERS,
+        /** Attribute for the body property. */
+        BODY,
+        /** Attribute for the identifier property. */
+        IDENTIFIER,
+        /** Attribute for the javadoc property. */
+        JAVADOC,
+    }
     
     /** General constructor. */
     public AnnotationDeclarationNodeImpl(
@@ -56,6 +69,7 @@ public class AnnotationDeclarationNodeImpl extends NodeImpl implements Annotatio
      */
     public AnnotationModifiersNode getModifiers()
     {
+        recordAccess(LocalAttribute.MODIFIERS, Attribute.AccessType.READ);
         return this.modifiers;
     }
     
@@ -66,6 +80,7 @@ public class AnnotationDeclarationNodeImpl extends NodeImpl implements Annotatio
     public void setModifiers(AnnotationModifiersNode modifiers)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.MODIFIERS, Attribute.AccessType.WRITE);
         if (this.modifiers instanceof NodeImpl)
         {
             ((NodeImpl)this.modifiers).setParent(null);
@@ -83,6 +98,7 @@ public class AnnotationDeclarationNodeImpl extends NodeImpl implements Annotatio
      */
     public AnnotationBodyNode getBody()
     {
+        recordAccess(LocalAttribute.BODY, Attribute.AccessType.READ);
         return this.body;
     }
     
@@ -93,6 +109,7 @@ public class AnnotationDeclarationNodeImpl extends NodeImpl implements Annotatio
     public void setBody(AnnotationBodyNode body)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.BODY, Attribute.AccessType.WRITE);
         if (this.body instanceof NodeImpl)
         {
             ((NodeImpl)this.body).setParent(null);
@@ -110,6 +127,7 @@ public class AnnotationDeclarationNodeImpl extends NodeImpl implements Annotatio
      */
     public IdentifierNode getIdentifier()
     {
+        recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.READ);
         return this.identifier;
     }
     
@@ -120,6 +138,7 @@ public class AnnotationDeclarationNodeImpl extends NodeImpl implements Annotatio
     public void setIdentifier(IdentifierNode identifier)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.WRITE);
         if (this.identifier instanceof NodeImpl)
         {
             ((NodeImpl)this.identifier).setParent(null);
@@ -137,6 +156,7 @@ public class AnnotationDeclarationNodeImpl extends NodeImpl implements Annotatio
      */
     public JavadocNode getJavadoc()
     {
+        recordAccess(LocalAttribute.JAVADOC, Attribute.AccessType.READ);
         return this.javadoc;
     }
     
@@ -147,6 +167,7 @@ public class AnnotationDeclarationNodeImpl extends NodeImpl implements Annotatio
     public void setJavadoc(JavadocNode javadoc)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.JAVADOC, Attribute.AccessType.WRITE);
         if (this.javadoc instanceof NodeImpl)
         {
             ((NodeImpl)this.javadoc).setParent(null);

@@ -13,6 +13,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.FieldModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
+import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
@@ -32,6 +33,20 @@ public class FieldModifiersNodeImpl extends ModifiersNodeImpl implements FieldMo
     
     /** Whether or not the associated field is volatile. */
     private boolean volatileFlag;
+    
+    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    {
+        /** Attribute for the access property. */
+        ACCESS,
+        /** Attribute for the staticFlag property. */
+        STATIC_FLAG,
+        /** Attribute for the finalFlag property. */
+        FINAL_FLAG,
+        /** Attribute for the transientFlag property. */
+        TRANSIENT_FLAG,
+        /** Attribute for the volatileFlag property. */
+        VOLATILE_FLAG,
+    }
     
     /** General constructor. */
     public FieldModifiersNodeImpl(
@@ -59,6 +74,7 @@ public class FieldModifiersNodeImpl extends ModifiersNodeImpl implements FieldMo
      */
     public AccessModifier getAccess()
     {
+        recordAccess(LocalAttribute.ACCESS, Attribute.AccessType.READ);
         return this.access;
     }
     
@@ -69,6 +85,7 @@ public class FieldModifiersNodeImpl extends ModifiersNodeImpl implements FieldMo
     public void setAccess(AccessModifier access)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.ACCESS, Attribute.AccessType.WRITE);
         this.access = access;
     }
     
@@ -78,6 +95,7 @@ public class FieldModifiersNodeImpl extends ModifiersNodeImpl implements FieldMo
      */
     public boolean getStaticFlag()
     {
+        recordAccess(LocalAttribute.STATIC_FLAG, Attribute.AccessType.READ);
         return this.staticFlag;
     }
     
@@ -88,6 +106,7 @@ public class FieldModifiersNodeImpl extends ModifiersNodeImpl implements FieldMo
     public void setStaticFlag(boolean staticFlag)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.STATIC_FLAG, Attribute.AccessType.WRITE);
         this.staticFlag = staticFlag;
     }
     
@@ -97,6 +116,7 @@ public class FieldModifiersNodeImpl extends ModifiersNodeImpl implements FieldMo
      */
     public boolean getFinalFlag()
     {
+        recordAccess(LocalAttribute.FINAL_FLAG, Attribute.AccessType.READ);
         return this.finalFlag;
     }
     
@@ -107,6 +127,7 @@ public class FieldModifiersNodeImpl extends ModifiersNodeImpl implements FieldMo
     public void setFinalFlag(boolean finalFlag)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.FINAL_FLAG, Attribute.AccessType.WRITE);
         this.finalFlag = finalFlag;
     }
     
@@ -116,6 +137,7 @@ public class FieldModifiersNodeImpl extends ModifiersNodeImpl implements FieldMo
      */
     public boolean getTransientFlag()
     {
+        recordAccess(LocalAttribute.TRANSIENT_FLAG, Attribute.AccessType.READ);
         return this.transientFlag;
     }
     
@@ -126,6 +148,7 @@ public class FieldModifiersNodeImpl extends ModifiersNodeImpl implements FieldMo
     public void setTransientFlag(boolean transientFlag)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.TRANSIENT_FLAG, Attribute.AccessType.WRITE);
         this.transientFlag = transientFlag;
     }
     
@@ -135,6 +158,7 @@ public class FieldModifiersNodeImpl extends ModifiersNodeImpl implements FieldMo
      */
     public boolean getVolatileFlag()
     {
+        recordAccess(LocalAttribute.VOLATILE_FLAG, Attribute.AccessType.READ);
         return this.volatileFlag;
     }
     
@@ -145,6 +169,7 @@ public class FieldModifiersNodeImpl extends ModifiersNodeImpl implements FieldMo
     public void setVolatileFlag(boolean volatileFlag)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.VOLATILE_FLAG, Attribute.AccessType.WRITE);
         this.volatileFlag = volatileFlag;
     }
     

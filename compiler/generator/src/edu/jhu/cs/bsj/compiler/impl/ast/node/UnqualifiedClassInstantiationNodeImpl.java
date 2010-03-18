@@ -15,6 +15,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.ExpressionListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeArgumentListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.UnqualifiedClassInstantiationNode;
+import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
@@ -22,6 +23,12 @@ public class UnqualifiedClassInstantiationNodeImpl extends ClassInstantiationNod
 {
     /** The type being instantiated. */
     private DeclaredTypeNode type;
+    
+    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    {
+        /** Attribute for the type property. */
+        TYPE,
+    }
     
     /** General constructor. */
     public UnqualifiedClassInstantiationNodeImpl(
@@ -43,6 +50,7 @@ public class UnqualifiedClassInstantiationNodeImpl extends ClassInstantiationNod
      */
     public DeclaredTypeNode getType()
     {
+        recordAccess(LocalAttribute.TYPE, Attribute.AccessType.READ);
         return this.type;
     }
     
@@ -53,6 +61,7 @@ public class UnqualifiedClassInstantiationNodeImpl extends ClassInstantiationNod
     public void setType(DeclaredTypeNode type)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.TYPE, Attribute.AccessType.WRITE);
         if (this.type instanceof NodeImpl)
         {
             ((NodeImpl)this.type).setParent(null);

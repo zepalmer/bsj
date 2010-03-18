@@ -15,6 +15,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.PackageDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeDeclarationListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportListNode;
+import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
@@ -34,6 +35,20 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
     
     /** The type declarations of this unit. */
     private TypeDeclarationListNode typeDecls;
+    
+    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    {
+        /** Attribute for the name property. */
+        NAME,
+        /** Attribute for the packageDeclaration property. */
+        PACKAGE_DECLARATION,
+        /** Attribute for the metaimports property. */
+        METAIMPORTS,
+        /** Attribute for the imports property. */
+        IMPORTS,
+        /** Attribute for the typeDecls property. */
+        TYPE_DECLS,
+    }
     
     /** General constructor. */
     public CompilationUnitNodeImpl(
@@ -60,6 +75,7 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
      */
     public String getName()
     {
+        recordAccess(LocalAttribute.NAME, Attribute.AccessType.READ);
         return this.name;
     }
     
@@ -69,6 +85,7 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
      */
     public PackageDeclarationNode getPackageDeclaration()
     {
+        recordAccess(LocalAttribute.PACKAGE_DECLARATION, Attribute.AccessType.READ);
         return this.packageDeclaration;
     }
     
@@ -79,6 +96,7 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
     public void setPackageDeclaration(PackageDeclarationNode packageDeclaration)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.PACKAGE_DECLARATION, Attribute.AccessType.WRITE);
         if (this.packageDeclaration instanceof NodeImpl)
         {
             ((NodeImpl)this.packageDeclaration).setParent(null);
@@ -96,6 +114,7 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
      */
     public MetaprogramImportListNode getMetaimports()
     {
+        recordAccess(LocalAttribute.METAIMPORTS, Attribute.AccessType.READ);
         return this.metaimports;
     }
     
@@ -106,6 +125,7 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
     public void setMetaimports(MetaprogramImportListNode metaimports)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.METAIMPORTS, Attribute.AccessType.WRITE);
         if (this.metaimports instanceof NodeImpl)
         {
             ((NodeImpl)this.metaimports).setParent(null);
@@ -123,6 +143,7 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
      */
     public ImportListNode getImports()
     {
+        recordAccess(LocalAttribute.IMPORTS, Attribute.AccessType.READ);
         return this.imports;
     }
     
@@ -133,6 +154,7 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
     public void setImports(ImportListNode imports)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.IMPORTS, Attribute.AccessType.WRITE);
         if (this.imports instanceof NodeImpl)
         {
             ((NodeImpl)this.imports).setParent(null);
@@ -150,6 +172,7 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
      */
     public TypeDeclarationListNode getTypeDecls()
     {
+        recordAccess(LocalAttribute.TYPE_DECLS, Attribute.AccessType.READ);
         return this.typeDecls;
     }
     
@@ -160,6 +183,7 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
     public void setTypeDecls(TypeDeclarationListNode typeDecls)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.TYPE_DECLS, Attribute.AccessType.WRITE);
         if (this.typeDecls instanceof NodeImpl)
         {
             ((NodeImpl)this.typeDecls).setParent(null);

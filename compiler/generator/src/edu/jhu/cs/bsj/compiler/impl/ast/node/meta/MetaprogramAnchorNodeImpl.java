@@ -10,6 +10,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramNode;
+import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.NodeImpl;
 
@@ -21,6 +22,14 @@ public abstract class MetaprogramAnchorNodeImpl<T extends Node> extends NodeImpl
     
     /** The metaprogram on this node. */
     private MetaprogramNode metaprogram;
+    
+    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    {
+        /** Attribute for the replacement property. */
+        REPLACEMENT,
+        /** Attribute for the metaprogram property. */
+        METAPROGRAM,
+    }
     
     /** General constructor. */
     protected MetaprogramAnchorNodeImpl(
@@ -41,6 +50,7 @@ public abstract class MetaprogramAnchorNodeImpl<T extends Node> extends NodeImpl
      */
     public MetaprogramNode getMetaprogram()
     {
+        recordAccess(LocalAttribute.METAPROGRAM, Attribute.AccessType.READ);
         return this.metaprogram;
     }
     
@@ -51,6 +61,7 @@ public abstract class MetaprogramAnchorNodeImpl<T extends Node> extends NodeImpl
     public void setMetaprogram(MetaprogramNode metaprogram)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.METAPROGRAM, Attribute.AccessType.WRITE);
         if (this.metaprogram instanceof NodeImpl)
         {
             ((NodeImpl)this.metaprogram).setParent(null);

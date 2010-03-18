@@ -13,6 +13,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.DeclaredTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.ParameterizedTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ParameterizedTypeSelectNode;
+import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
@@ -23,6 +24,14 @@ public class ParameterizedTypeSelectNodeImpl extends NodeImpl implements Paramet
     
     /** The type which is selected from the base. */
     private DeclaredTypeNode select;
+    
+    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    {
+        /** Attribute for the base property. */
+        BASE,
+        /** Attribute for the select property. */
+        SELECT,
+    }
     
     /** General constructor. */
     public ParameterizedTypeSelectNodeImpl(
@@ -43,6 +52,7 @@ public class ParameterizedTypeSelectNodeImpl extends NodeImpl implements Paramet
      */
     public ParameterizedTypeNode getBase()
     {
+        recordAccess(LocalAttribute.BASE, Attribute.AccessType.READ);
         return this.base;
     }
     
@@ -53,6 +63,7 @@ public class ParameterizedTypeSelectNodeImpl extends NodeImpl implements Paramet
     public void setBase(ParameterizedTypeNode base)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.BASE, Attribute.AccessType.WRITE);
         if (this.base instanceof NodeImpl)
         {
             ((NodeImpl)this.base).setParent(null);
@@ -70,6 +81,7 @@ public class ParameterizedTypeSelectNodeImpl extends NodeImpl implements Paramet
      */
     public DeclaredTypeNode getSelect()
     {
+        recordAccess(LocalAttribute.SELECT, Attribute.AccessType.READ);
         return this.select;
     }
     
@@ -80,6 +92,7 @@ public class ParameterizedTypeSelectNodeImpl extends NodeImpl implements Paramet
     public void setSelect(DeclaredTypeNode select)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.SELECT, Attribute.AccessType.WRITE);
         if (this.select instanceof NodeImpl)
         {
             ((NodeImpl)this.select).setParent(null);

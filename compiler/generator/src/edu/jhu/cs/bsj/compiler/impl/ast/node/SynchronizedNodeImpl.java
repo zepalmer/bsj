@@ -13,6 +13,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.BlockNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.SynchronizedNode;
+import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
@@ -23,6 +24,14 @@ public class SynchronizedNodeImpl extends NodeImpl implements SynchronizedNode
     
     /** The block of statements to synchronize. */
     private BlockNode block;
+    
+    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    {
+        /** Attribute for the expression property. */
+        EXPRESSION,
+        /** Attribute for the block property. */
+        BLOCK,
+    }
     
     /** General constructor. */
     public SynchronizedNodeImpl(
@@ -43,6 +52,7 @@ public class SynchronizedNodeImpl extends NodeImpl implements SynchronizedNode
      */
     public ExpressionNode getExpression()
     {
+        recordAccess(LocalAttribute.EXPRESSION, Attribute.AccessType.READ);
         return this.expression;
     }
     
@@ -53,6 +63,7 @@ public class SynchronizedNodeImpl extends NodeImpl implements SynchronizedNode
     public void setExpression(ExpressionNode expression)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.EXPRESSION, Attribute.AccessType.WRITE);
         if (this.expression instanceof NodeImpl)
         {
             ((NodeImpl)this.expression).setParent(null);
@@ -70,6 +81,7 @@ public class SynchronizedNodeImpl extends NodeImpl implements SynchronizedNode
      */
     public BlockNode getBlock()
     {
+        recordAccess(LocalAttribute.BLOCK, Attribute.AccessType.READ);
         return this.block;
     }
     
@@ -80,6 +92,7 @@ public class SynchronizedNodeImpl extends NodeImpl implements SynchronizedNode
     public void setBlock(BlockNode block)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.BLOCK, Attribute.AccessType.WRITE);
         if (this.block instanceof NodeImpl)
         {
             ((NodeImpl)this.block).setParent(null);

@@ -12,6 +12,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.ForInitializerExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.StatementExpressionListNode;
+import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
@@ -19,6 +20,12 @@ public class ForInitializerExpressionNodeImpl extends NodeImpl implements ForIni
 {
     /** The expressions used in this initializer. */
     private StatementExpressionListNode expressions;
+    
+    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    {
+        /** Attribute for the expressions property. */
+        EXPRESSIONS,
+    }
     
     /** General constructor. */
     public ForInitializerExpressionNodeImpl(
@@ -37,6 +44,7 @@ public class ForInitializerExpressionNodeImpl extends NodeImpl implements ForIni
      */
     public StatementExpressionListNode getExpressions()
     {
+        recordAccess(LocalAttribute.EXPRESSIONS, Attribute.AccessType.READ);
         return this.expressions;
     }
     
@@ -47,6 +55,7 @@ public class ForInitializerExpressionNodeImpl extends NodeImpl implements ForIni
     public void setExpressions(StatementExpressionListNode expressions)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.EXPRESSIONS, Attribute.AccessType.WRITE);
         if (this.expressions instanceof NodeImpl)
         {
             ((NodeImpl)this.expressions).setParent(null);

@@ -11,6 +11,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.JavadocNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
+import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
@@ -18,6 +19,12 @@ public class JavadocNodeImpl extends NodeImpl implements JavadocNode
 {
     /** The parsed text of this Javadoc comment. */
     private String text;
+    
+    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    {
+        /** Attribute for the text property. */
+        TEXT,
+    }
     
     /** General constructor. */
     public JavadocNodeImpl(
@@ -36,6 +43,7 @@ public class JavadocNodeImpl extends NodeImpl implements JavadocNode
      */
     public String getText()
     {
+        recordAccess(LocalAttribute.TEXT, Attribute.AccessType.READ);
         return this.text;
     }
     
@@ -46,6 +54,7 @@ public class JavadocNodeImpl extends NodeImpl implements JavadocNode
     public void setText(String text)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.TEXT, Attribute.AccessType.WRITE);
         this.text = text;
     }
     

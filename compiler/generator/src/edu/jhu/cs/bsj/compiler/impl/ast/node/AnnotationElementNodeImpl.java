@@ -13,6 +13,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.AnnotationElementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationValueNode;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
+import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
@@ -23,6 +24,14 @@ public class AnnotationElementNodeImpl extends NodeImpl implements AnnotationEle
     
     /** The element's value. */
     private AnnotationValueNode value;
+    
+    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    {
+        /** Attribute for the identifier property. */
+        IDENTIFIER,
+        /** Attribute for the value property. */
+        VALUE,
+    }
     
     /** General constructor. */
     public AnnotationElementNodeImpl(
@@ -43,6 +52,7 @@ public class AnnotationElementNodeImpl extends NodeImpl implements AnnotationEle
      */
     public IdentifierNode getIdentifier()
     {
+        recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.READ);
         return this.identifier;
     }
     
@@ -53,6 +63,7 @@ public class AnnotationElementNodeImpl extends NodeImpl implements AnnotationEle
     public void setIdentifier(IdentifierNode identifier)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.WRITE);
         if (this.identifier instanceof NodeImpl)
         {
             ((NodeImpl)this.identifier).setParent(null);
@@ -70,6 +81,7 @@ public class AnnotationElementNodeImpl extends NodeImpl implements AnnotationEle
      */
     public AnnotationValueNode getValue()
     {
+        recordAccess(LocalAttribute.VALUE, Attribute.AccessType.READ);
         return this.value;
     }
     
@@ -80,6 +92,7 @@ public class AnnotationElementNodeImpl extends NodeImpl implements AnnotationEle
     public void setValue(AnnotationValueNode value)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.VALUE, Attribute.AccessType.WRITE);
         if (this.value instanceof NodeImpl)
         {
             ((NodeImpl)this.value).setParent(null);

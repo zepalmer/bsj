@@ -13,6 +13,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.EnumModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
+import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
@@ -23,6 +24,14 @@ public class EnumModifiersNodeImpl extends ModifiersNodeImpl implements EnumModi
     
     /** Whether or not the associated enum uses strict floating-point. */
     private boolean strictfpFlag;
+    
+    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    {
+        /** Attribute for the access property. */
+        ACCESS,
+        /** Attribute for the strictfpFlag property. */
+        STRICTFP_FLAG,
+    }
     
     /** General constructor. */
     public EnumModifiersNodeImpl(
@@ -44,6 +53,7 @@ public class EnumModifiersNodeImpl extends ModifiersNodeImpl implements EnumModi
      */
     public AccessModifier getAccess()
     {
+        recordAccess(LocalAttribute.ACCESS, Attribute.AccessType.READ);
         return this.access;
     }
     
@@ -54,6 +64,7 @@ public class EnumModifiersNodeImpl extends ModifiersNodeImpl implements EnumModi
     public void setAccess(AccessModifier access)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.ACCESS, Attribute.AccessType.WRITE);
         this.access = access;
     }
     
@@ -63,6 +74,7 @@ public class EnumModifiersNodeImpl extends ModifiersNodeImpl implements EnumModi
      */
     public boolean getStrictfpFlag()
     {
+        recordAccess(LocalAttribute.STRICTFP_FLAG, Attribute.AccessType.READ);
         return this.strictfpFlag;
     }
     
@@ -73,6 +85,7 @@ public class EnumModifiersNodeImpl extends ModifiersNodeImpl implements EnumModi
     public void setStrictfpFlag(boolean strictfpFlag)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.STRICTFP_FLAG, Attribute.AccessType.WRITE);
         this.strictfpFlag = strictfpFlag;
     }
     

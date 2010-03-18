@@ -13,6 +13,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ConstructorModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
+import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
@@ -20,6 +21,12 @@ public class ConstructorModifiersNodeImpl extends ModifiersNodeImpl implements C
 {
     /** The access for the associated constructor. */
     private AccessModifier access;
+    
+    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    {
+        /** Attribute for the access property. */
+        ACCESS,
+    }
     
     /** General constructor. */
     public ConstructorModifiersNodeImpl(
@@ -39,6 +46,7 @@ public class ConstructorModifiersNodeImpl extends ModifiersNodeImpl implements C
      */
     public AccessModifier getAccess()
     {
+        recordAccess(LocalAttribute.ACCESS, Attribute.AccessType.READ);
         return this.access;
     }
     
@@ -49,6 +57,7 @@ public class ConstructorModifiersNodeImpl extends ModifiersNodeImpl implements C
     public void setAccess(AccessModifier access)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.ACCESS, Attribute.AccessType.WRITE);
         this.access = access;
     }
     

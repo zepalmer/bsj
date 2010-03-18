@@ -12,6 +12,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.AssertStatementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
+import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
@@ -22,6 +23,14 @@ public class AssertStatementNodeImpl extends NodeImpl implements AssertStatement
     
     /** The assertion's message expression. */
     private ExpressionNode messageExpression;
+    
+    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    {
+        /** Attribute for the testExpression property. */
+        TEST_EXPRESSION,
+        /** Attribute for the messageExpression property. */
+        MESSAGE_EXPRESSION,
+    }
     
     /** General constructor. */
     public AssertStatementNodeImpl(
@@ -42,6 +51,7 @@ public class AssertStatementNodeImpl extends NodeImpl implements AssertStatement
      */
     public ExpressionNode getTestExpression()
     {
+        recordAccess(LocalAttribute.TEST_EXPRESSION, Attribute.AccessType.READ);
         return this.testExpression;
     }
     
@@ -52,6 +62,7 @@ public class AssertStatementNodeImpl extends NodeImpl implements AssertStatement
     public void setTestExpression(ExpressionNode testExpression)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.TEST_EXPRESSION, Attribute.AccessType.WRITE);
         if (this.testExpression instanceof NodeImpl)
         {
             ((NodeImpl)this.testExpression).setParent(null);
@@ -69,6 +80,7 @@ public class AssertStatementNodeImpl extends NodeImpl implements AssertStatement
      */
     public ExpressionNode getMessageExpression()
     {
+        recordAccess(LocalAttribute.MESSAGE_EXPRESSION, Attribute.AccessType.READ);
         return this.messageExpression;
     }
     
@@ -79,6 +91,7 @@ public class AssertStatementNodeImpl extends NodeImpl implements AssertStatement
     public void setMessageExpression(ExpressionNode messageExpression)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.MESSAGE_EXPRESSION, Attribute.AccessType.WRITE);
         if (this.messageExpression instanceof NodeImpl)
         {
             ((NodeImpl)this.messageExpression).setParent(null);

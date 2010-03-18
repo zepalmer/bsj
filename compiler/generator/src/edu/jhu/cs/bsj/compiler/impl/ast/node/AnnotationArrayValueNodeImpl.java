@@ -12,6 +12,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationArrayValueNode;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationValueListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
+import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
@@ -19,6 +20,12 @@ public class AnnotationArrayValueNodeImpl extends NodeImpl implements Annotation
 {
     /** The array values. */
     private AnnotationValueListNode values;
+    
+    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    {
+        /** Attribute for the values property. */
+        VALUES,
+    }
     
     /** General constructor. */
     public AnnotationArrayValueNodeImpl(
@@ -37,6 +44,7 @@ public class AnnotationArrayValueNodeImpl extends NodeImpl implements Annotation
      */
     public AnnotationValueListNode getValues()
     {
+        recordAccess(LocalAttribute.VALUES, Attribute.AccessType.READ);
         return this.values;
     }
     
@@ -47,6 +55,7 @@ public class AnnotationArrayValueNodeImpl extends NodeImpl implements Annotation
     public void setValues(AnnotationValueListNode values)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.VALUES, Attribute.AccessType.WRITE);
         if (this.values instanceof NodeImpl)
         {
             ((NodeImpl)this.values).setParent(null);

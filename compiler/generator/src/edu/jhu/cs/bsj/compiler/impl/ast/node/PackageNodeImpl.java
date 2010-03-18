@@ -23,6 +23,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.PackageNode;
 import edu.jhu.cs.bsj.compiler.ast.node.QualifiedNameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.SimpleNameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeDeclarationNode;
+import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 import edu.jhu.cs.bsj.compiler.impl.ast.PackageNodeCallback;
 import edu.jhu.cs.bsj.compiler.impl.utils.CompoundIterator;
@@ -36,6 +37,14 @@ public class PackageNodeImpl extends NodeImpl implements PackageNode
     
     /** The callback module for this package node. */
     private PackageNodeCallback packageNodeCallback;
+    
+    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    {
+        /** Attribute for the name property. */
+        NAME,
+        /** Attribute for the packageNodeCallback property. */
+        PACKAGE_NODE_CALLBACK,
+    }
     
     /** General constructor. */
     public PackageNodeImpl(
@@ -56,6 +65,7 @@ public class PackageNodeImpl extends NodeImpl implements PackageNode
      */
     public IdentifierNode getName()
     {
+        recordAccess(LocalAttribute.NAME, Attribute.AccessType.READ);
         return this.name;
     }
     

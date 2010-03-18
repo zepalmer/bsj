@@ -20,6 +20,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.TypeParameterListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.UnparameterizedTypeListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableNode;
+import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
@@ -51,6 +52,28 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
     
     /** The associated javadoc comment for this node. */
     private JavadocNode javadoc;
+    
+    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    {
+        /** Attribute for the body property. */
+        BODY,
+        /** Attribute for the modifiers property. */
+        MODIFIERS,
+        /** Attribute for the identifier property. */
+        IDENTIFIER,
+        /** Attribute for the parameters property. */
+        PARAMETERS,
+        /** Attribute for the varargParameter property. */
+        VARARG_PARAMETER,
+        /** Attribute for the returnType property. */
+        RETURN_TYPE,
+        /** Attribute for the throwTypes property. */
+        THROW_TYPES,
+        /** Attribute for the typeParameters property. */
+        TYPE_PARAMETERS,
+        /** Attribute for the javadoc property. */
+        JAVADOC,
+    }
     
     /** General constructor. */
     public MethodDeclarationNodeImpl(
@@ -85,6 +108,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
      */
     public BlockNode getBody()
     {
+        recordAccess(LocalAttribute.BODY, Attribute.AccessType.READ);
         return this.body;
     }
     
@@ -95,6 +119,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
     public void setBody(BlockNode body)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.BODY, Attribute.AccessType.WRITE);
         if (this.body instanceof NodeImpl)
         {
             ((NodeImpl)this.body).setParent(null);
@@ -112,6 +137,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
      */
     public MethodModifiersNode getModifiers()
     {
+        recordAccess(LocalAttribute.MODIFIERS, Attribute.AccessType.READ);
         return this.modifiers;
     }
     
@@ -122,6 +148,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
     public void setModifiers(MethodModifiersNode modifiers)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.MODIFIERS, Attribute.AccessType.WRITE);
         if (this.modifiers instanceof NodeImpl)
         {
             ((NodeImpl)this.modifiers).setParent(null);
@@ -139,6 +166,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
      */
     public IdentifierNode getIdentifier()
     {
+        recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.READ);
         return this.identifier;
     }
     
@@ -149,6 +177,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
     public void setIdentifier(IdentifierNode identifier)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.WRITE);
         if (this.identifier instanceof NodeImpl)
         {
             ((NodeImpl)this.identifier).setParent(null);
@@ -166,6 +195,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
      */
     public VariableListNode getParameters()
     {
+        recordAccess(LocalAttribute.PARAMETERS, Attribute.AccessType.READ);
         return this.parameters;
     }
     
@@ -176,6 +206,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
     public void setParameters(VariableListNode parameters)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.PARAMETERS, Attribute.AccessType.WRITE);
         if (this.parameters instanceof NodeImpl)
         {
             ((NodeImpl)this.parameters).setParent(null);
@@ -193,6 +224,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
      */
     public VariableNode getVarargParameter()
     {
+        recordAccess(LocalAttribute.VARARG_PARAMETER, Attribute.AccessType.READ);
         return this.varargParameter;
     }
     
@@ -203,6 +235,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
     public void setVarargParameter(VariableNode varargParameter)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.VARARG_PARAMETER, Attribute.AccessType.WRITE);
         if (this.varargParameter instanceof NodeImpl)
         {
             ((NodeImpl)this.varargParameter).setParent(null);
@@ -220,6 +253,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
      */
     public TypeNode getReturnType()
     {
+        recordAccess(LocalAttribute.RETURN_TYPE, Attribute.AccessType.READ);
         return this.returnType;
     }
     
@@ -230,6 +264,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
     public void setReturnType(TypeNode returnType)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.RETURN_TYPE, Attribute.AccessType.WRITE);
         if (this.returnType instanceof NodeImpl)
         {
             ((NodeImpl)this.returnType).setParent(null);
@@ -247,6 +282,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
      */
     public UnparameterizedTypeListNode getThrowTypes()
     {
+        recordAccess(LocalAttribute.THROW_TYPES, Attribute.AccessType.READ);
         return this.throwTypes;
     }
     
@@ -257,6 +293,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
     public void setThrowTypes(UnparameterizedTypeListNode throwTypes)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.THROW_TYPES, Attribute.AccessType.WRITE);
         if (this.throwTypes instanceof NodeImpl)
         {
             ((NodeImpl)this.throwTypes).setParent(null);
@@ -274,6 +311,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
      */
     public TypeParameterListNode getTypeParameters()
     {
+        recordAccess(LocalAttribute.TYPE_PARAMETERS, Attribute.AccessType.READ);
         return this.typeParameters;
     }
     
@@ -284,6 +322,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
     public void setTypeParameters(TypeParameterListNode typeParameters)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.TYPE_PARAMETERS, Attribute.AccessType.WRITE);
         if (this.typeParameters instanceof NodeImpl)
         {
             ((NodeImpl)this.typeParameters).setParent(null);
@@ -301,6 +340,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
      */
     public JavadocNode getJavadoc()
     {
+        recordAccess(LocalAttribute.JAVADOC, Attribute.AccessType.READ);
         return this.javadoc;
     }
     
@@ -311,6 +351,7 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
     public void setJavadoc(JavadocNode javadoc)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.JAVADOC, Attribute.AccessType.WRITE);
         if (this.javadoc instanceof NodeImpl)
         {
             ((NodeImpl)this.javadoc).setParent(null);

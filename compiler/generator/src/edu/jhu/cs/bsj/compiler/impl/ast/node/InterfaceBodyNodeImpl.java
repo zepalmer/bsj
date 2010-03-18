@@ -12,6 +12,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.InterfaceBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.InterfaceMemberListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
+import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
@@ -19,6 +20,12 @@ public class InterfaceBodyNodeImpl extends NodeImpl implements InterfaceBodyNode
 {
     /** The members of this interface body. */
     private InterfaceMemberListNode members;
+    
+    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    {
+        /** Attribute for the members property. */
+        MEMBERS,
+    }
     
     /** General constructor. */
     public InterfaceBodyNodeImpl(
@@ -37,6 +44,7 @@ public class InterfaceBodyNodeImpl extends NodeImpl implements InterfaceBodyNode
      */
     public InterfaceMemberListNode getMembers()
     {
+        recordAccess(LocalAttribute.MEMBERS, Attribute.AccessType.READ);
         return this.members;
     }
     
@@ -47,6 +55,7 @@ public class InterfaceBodyNodeImpl extends NodeImpl implements InterfaceBodyNode
     public void setMembers(InterfaceMemberListNode members)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.MEMBERS, Attribute.AccessType.WRITE);
         if (this.members instanceof NodeImpl)
         {
             ((NodeImpl)this.members).setParent(null);

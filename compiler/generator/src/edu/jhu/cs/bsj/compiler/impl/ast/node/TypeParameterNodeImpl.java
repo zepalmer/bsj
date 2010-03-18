@@ -13,6 +13,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.DeclaredTypeListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeParameterNode;
+import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
@@ -23,6 +24,14 @@ public class TypeParameterNodeImpl extends NodeImpl implements TypeParameterNode
     
     /** The bounds over the base type. */
     private DeclaredTypeListNode bounds;
+    
+    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    {
+        /** Attribute for the identifier property. */
+        IDENTIFIER,
+        /** Attribute for the bounds property. */
+        BOUNDS,
+    }
     
     /** General constructor. */
     public TypeParameterNodeImpl(
@@ -43,6 +52,7 @@ public class TypeParameterNodeImpl extends NodeImpl implements TypeParameterNode
      */
     public IdentifierNode getIdentifier()
     {
+        recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.READ);
         return this.identifier;
     }
     
@@ -53,6 +63,7 @@ public class TypeParameterNodeImpl extends NodeImpl implements TypeParameterNode
     public void setIdentifier(IdentifierNode identifier)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.WRITE);
         if (this.identifier instanceof NodeImpl)
         {
             ((NodeImpl)this.identifier).setParent(null);
@@ -70,6 +81,7 @@ public class TypeParameterNodeImpl extends NodeImpl implements TypeParameterNode
      */
     public DeclaredTypeListNode getBounds()
     {
+        recordAccess(LocalAttribute.BOUNDS, Attribute.AccessType.READ);
         return this.bounds;
     }
     
@@ -80,6 +92,7 @@ public class TypeParameterNodeImpl extends NodeImpl implements TypeParameterNode
     public void setBounds(DeclaredTypeListNode bounds)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.BOUNDS, Attribute.AccessType.WRITE);
         if (this.bounds instanceof NodeImpl)
         {
             ((NodeImpl)this.bounds).setParent(null);

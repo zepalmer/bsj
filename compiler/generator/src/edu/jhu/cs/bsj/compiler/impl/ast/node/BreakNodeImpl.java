@@ -12,6 +12,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.BreakNode;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
+import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
@@ -19,6 +20,12 @@ public class BreakNodeImpl extends NodeImpl implements BreakNode
 {
     /** The break label. */
     private IdentifierNode label;
+    
+    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    {
+        /** Attribute for the label property. */
+        LABEL,
+    }
     
     /** General constructor. */
     public BreakNodeImpl(
@@ -37,6 +44,7 @@ public class BreakNodeImpl extends NodeImpl implements BreakNode
      */
     public IdentifierNode getLabel()
     {
+        recordAccess(LocalAttribute.LABEL, Attribute.AccessType.READ);
         return this.label;
     }
     
@@ -47,6 +55,7 @@ public class BreakNodeImpl extends NodeImpl implements BreakNode
     public void setLabel(IdentifierNode label)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.LABEL, Attribute.AccessType.WRITE);
         if (this.label instanceof NodeImpl)
         {
             ((NodeImpl)this.label).setParent(null);

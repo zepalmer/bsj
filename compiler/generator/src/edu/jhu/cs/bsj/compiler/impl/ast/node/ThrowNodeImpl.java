@@ -12,6 +12,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.ThrowNode;
+import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
@@ -19,6 +20,12 @@ public class ThrowNodeImpl extends NodeImpl implements ThrowNode
 {
     /** The Throwable to throw. */
     private ExpressionNode expression;
+    
+    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    {
+        /** Attribute for the expression property. */
+        EXPRESSION,
+    }
     
     /** General constructor. */
     public ThrowNodeImpl(
@@ -37,6 +44,7 @@ public class ThrowNodeImpl extends NodeImpl implements ThrowNode
      */
     public ExpressionNode getExpression()
     {
+        recordAccess(LocalAttribute.EXPRESSION, Attribute.AccessType.READ);
         return this.expression;
     }
     
@@ -47,6 +55,7 @@ public class ThrowNodeImpl extends NodeImpl implements ThrowNode
     public void setExpression(ExpressionNode expression)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.EXPRESSION, Attribute.AccessType.WRITE);
         if (this.expression instanceof NodeImpl)
         {
             ((NodeImpl)this.expression).setParent(null);

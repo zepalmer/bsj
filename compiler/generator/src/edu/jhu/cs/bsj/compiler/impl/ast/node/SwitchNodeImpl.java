@@ -13,6 +13,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.CaseListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.SwitchNode;
+import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
@@ -23,6 +24,14 @@ public class SwitchNodeImpl extends NodeImpl implements SwitchNode
     
     /** The cases in this switch. */
     private CaseListNode cases;
+    
+    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    {
+        /** Attribute for the expression property. */
+        EXPRESSION,
+        /** Attribute for the cases property. */
+        CASES,
+    }
     
     /** General constructor. */
     public SwitchNodeImpl(
@@ -43,6 +52,7 @@ public class SwitchNodeImpl extends NodeImpl implements SwitchNode
      */
     public ExpressionNode getExpression()
     {
+        recordAccess(LocalAttribute.EXPRESSION, Attribute.AccessType.READ);
         return this.expression;
     }
     
@@ -53,6 +63,7 @@ public class SwitchNodeImpl extends NodeImpl implements SwitchNode
     public void setExpression(ExpressionNode expression)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.EXPRESSION, Attribute.AccessType.WRITE);
         if (this.expression instanceof NodeImpl)
         {
             ((NodeImpl)this.expression).setParent(null);
@@ -70,6 +81,7 @@ public class SwitchNodeImpl extends NodeImpl implements SwitchNode
      */
     public CaseListNode getCases()
     {
+        recordAccess(LocalAttribute.CASES, Attribute.AccessType.READ);
         return this.cases;
     }
     
@@ -80,6 +92,7 @@ public class SwitchNodeImpl extends NodeImpl implements SwitchNode
     public void setCases(CaseListNode cases)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.CASES, Attribute.AccessType.WRITE);
         if (this.cases instanceof NodeImpl)
         {
             ((NodeImpl)this.cases).setParent(null);

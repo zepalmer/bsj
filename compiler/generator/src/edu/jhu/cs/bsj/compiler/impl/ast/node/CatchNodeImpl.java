@@ -13,6 +13,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.BlockNode;
 import edu.jhu.cs.bsj.compiler.ast.node.CatchNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableNode;
+import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
@@ -23,6 +24,14 @@ public class CatchNodeImpl extends NodeImpl implements CatchNode
     
     /** This catch block's exception variable. */
     private VariableNode parameter;
+    
+    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    {
+        /** Attribute for the block property. */
+        BLOCK,
+        /** Attribute for the parameter property. */
+        PARAMETER,
+    }
     
     /** General constructor. */
     public CatchNodeImpl(
@@ -43,6 +52,7 @@ public class CatchNodeImpl extends NodeImpl implements CatchNode
      */
     public BlockNode getBlock()
     {
+        recordAccess(LocalAttribute.BLOCK, Attribute.AccessType.READ);
         return this.block;
     }
     
@@ -53,6 +63,7 @@ public class CatchNodeImpl extends NodeImpl implements CatchNode
     public void setBlock(BlockNode block)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.BLOCK, Attribute.AccessType.WRITE);
         if (this.block instanceof NodeImpl)
         {
             ((NodeImpl)this.block).setParent(null);
@@ -70,6 +81,7 @@ public class CatchNodeImpl extends NodeImpl implements CatchNode
      */
     public VariableNode getParameter()
     {
+        recordAccess(LocalAttribute.PARAMETER, Attribute.AccessType.READ);
         return this.parameter;
     }
     
@@ -80,6 +92,7 @@ public class CatchNodeImpl extends NodeImpl implements CatchNode
     public void setParameter(VariableNode parameter)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.PARAMETER, Attribute.AccessType.WRITE);
         if (this.parameter instanceof NodeImpl)
         {
             ((NodeImpl)this.parameter).setParent(null);

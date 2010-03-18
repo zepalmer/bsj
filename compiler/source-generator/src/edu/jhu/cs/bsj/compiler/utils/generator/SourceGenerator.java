@@ -40,8 +40,8 @@ public class SourceGenerator
 			+ "implementation");
 	private static final File TARGET_IFACE_DIR = new File(TARGET_DIR.getAbsolutePath() + File.separator + "interface");
 	private static final String[] IFACE_IMPORTS = { "edu.jhu.cs.bsj.compiler.ast.*",
-			"edu.jhu.cs.bsj.compiler.ast.node.*", "edu.jhu.cs.bsj.compiler.ast.node.meta.*", "java.util.*",
-			"java.io.*", "javax.annotation.Generated" };
+			"edu.jhu.cs.bsj.compiler.ast.node.*", "edu.jhu.cs.bsj.compiler.ast.node.meta.*",
+			"edu.jhu.cs.bsj.compiler.ast.exception.*", "java.util.*", "java.io.*", "javax.annotation.Generated" };
 	private static final String[] CLASS_IMPORTS = { "edu.jhu.cs.bsj.compiler.impl.ast.*",
 			"edu.jhu.cs.bsj.compiler.impl.ast.node.*", "edu.jhu.cs.bsj.compiler.impl.ast.node.meta.*",
 			"edu.jhu.cs.bsj.compiler.impl.utils.*", "javax.annotation.Generated",
@@ -810,6 +810,22 @@ public class SourceGenerator
 				ps.println();
 			}
 
+			// gen attributes enum
+			if (def.getResponsibleProperties(false).size() > 0)
+			{
+				ps.println("private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute");
+				ps.println("{");
+				ps.incPrependCount();
+				for (PropertyDefinition p : def.getResponsibleProperties(false))
+				{
+					ps.println("/** Attribute for the " + p.getName() + " property. */");
+					ps.println(StringUtilities.convertCamelCaseToUpperCase(p.getName()) + ",");
+				}
+				ps.decPrependCount();
+				ps.println("}");
+				ps.println();
+			}
+
 			// gen constructor
 			ps.println("/** General constructor. */");
 			if (!def.isGenConstructor())
@@ -860,6 +876,9 @@ public class SourceGenerator
 					ps.println(" */");
 					ps.println("public " + p.getFullType() + " get" + capFirst(p.getName()) + "()");
 					ps.println("{");
+					ps.println("    recordAccess(LocalAttribute."
+							+ StringUtilities.convertCamelCaseToUpperCase(p.getName())
+							+ ", Attribute.AccessType.READ);");
 					ps.println("    return this." + p.getName() + ";");
 					ps.println("}");
 					ps.println();
@@ -874,6 +893,9 @@ public class SourceGenerator
 						ps.println("{");
 						ps.incPrependCount();
 						ps.println("getManager().assertMutatable(this);");
+						ps.println("recordAccess(LocalAttribute."
+								+ StringUtilities.convertCamelCaseToUpperCase(p.getName())
+								+ ", Attribute.AccessType.WRITE);");
 						if (propInstanceOf(p.getBaseType(), "Node"))
 						{
 							ps.println("if (this." + p.getName() + " instanceof NodeImpl)");

@@ -12,6 +12,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.ReferenceTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.WildcardTypeNode;
+import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
@@ -22,6 +23,14 @@ public class WildcardTypeNodeImpl extends NodeImpl implements WildcardTypeNode
     
     /** Whether or not the wildcard's bound is an upper (<tt>extends</tt>) bound. */
     private boolean upperBound;
+    
+    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    {
+        /** Attribute for the bound property. */
+        BOUND,
+        /** Attribute for the upperBound property. */
+        UPPER_BOUND,
+    }
     
     /** General constructor. */
     public WildcardTypeNodeImpl(
@@ -42,6 +51,7 @@ public class WildcardTypeNodeImpl extends NodeImpl implements WildcardTypeNode
      */
     public ReferenceTypeNode getBound()
     {
+        recordAccess(LocalAttribute.BOUND, Attribute.AccessType.READ);
         return this.bound;
     }
     
@@ -52,6 +62,7 @@ public class WildcardTypeNodeImpl extends NodeImpl implements WildcardTypeNode
     public void setBound(ReferenceTypeNode bound)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.BOUND, Attribute.AccessType.WRITE);
         if (this.bound instanceof NodeImpl)
         {
             ((NodeImpl)this.bound).setParent(null);
@@ -69,6 +80,7 @@ public class WildcardTypeNodeImpl extends NodeImpl implements WildcardTypeNode
      */
     public boolean getUpperBound()
     {
+        recordAccess(LocalAttribute.UPPER_BOUND, Attribute.AccessType.READ);
         return this.upperBound;
     }
     
@@ -79,6 +91,7 @@ public class WildcardTypeNodeImpl extends NodeImpl implements WildcardTypeNode
     public void setUpperBound(boolean upperBound)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.UPPER_BOUND, Attribute.AccessType.WRITE);
         this.upperBound = upperBound;
     }
     

@@ -13,6 +13,7 @@ import edu.jhu.cs.bsj.compiler.ast.UnaryOperator;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.UnaryExpressionNode;
+import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
@@ -23,6 +24,14 @@ public class UnaryExpressionNodeImpl extends NodeImpl implements UnaryExpression
     
     /** The operator to apply. */
     private UnaryOperator operator;
+    
+    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    {
+        /** Attribute for the expression property. */
+        EXPRESSION,
+        /** Attribute for the operator property. */
+        OPERATOR,
+    }
     
     /** General constructor. */
     public UnaryExpressionNodeImpl(
@@ -43,6 +52,7 @@ public class UnaryExpressionNodeImpl extends NodeImpl implements UnaryExpression
      */
     public ExpressionNode getExpression()
     {
+        recordAccess(LocalAttribute.EXPRESSION, Attribute.AccessType.READ);
         return this.expression;
     }
     
@@ -53,6 +63,7 @@ public class UnaryExpressionNodeImpl extends NodeImpl implements UnaryExpression
     public void setExpression(ExpressionNode expression)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.EXPRESSION, Attribute.AccessType.WRITE);
         if (this.expression instanceof NodeImpl)
         {
             ((NodeImpl)this.expression).setParent(null);
@@ -70,6 +81,7 @@ public class UnaryExpressionNodeImpl extends NodeImpl implements UnaryExpression
      */
     public UnaryOperator getOperator()
     {
+        recordAccess(LocalAttribute.OPERATOR, Attribute.AccessType.READ);
         return this.operator;
     }
     
@@ -80,6 +92,7 @@ public class UnaryExpressionNodeImpl extends NodeImpl implements UnaryExpression
     public void setOperator(UnaryOperator operator)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.OPERATOR, Attribute.AccessType.WRITE);
         this.operator = operator;
     }
     

@@ -15,6 +15,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.MethodInvocationByExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.PrimaryExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ReferenceTypeListNode;
+import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
@@ -25,6 +26,14 @@ public class MethodInvocationByExpressionNodeImpl extends MethodInvocationNodeIm
     
     /** The name of the method to invoke. */
     private IdentifierNode identifier;
+    
+    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    {
+        /** Attribute for the expression property. */
+        EXPRESSION,
+        /** Attribute for the identifier property. */
+        IDENTIFIER,
+    }
     
     /** General constructor. */
     public MethodInvocationByExpressionNodeImpl(
@@ -47,6 +56,7 @@ public class MethodInvocationByExpressionNodeImpl extends MethodInvocationNodeIm
      */
     public PrimaryExpressionNode getExpression()
     {
+        recordAccess(LocalAttribute.EXPRESSION, Attribute.AccessType.READ);
         return this.expression;
     }
     
@@ -57,6 +67,7 @@ public class MethodInvocationByExpressionNodeImpl extends MethodInvocationNodeIm
     public void setExpression(PrimaryExpressionNode expression)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.EXPRESSION, Attribute.AccessType.WRITE);
         if (this.expression instanceof NodeImpl)
         {
             ((NodeImpl)this.expression).setParent(null);
@@ -74,6 +85,7 @@ public class MethodInvocationByExpressionNodeImpl extends MethodInvocationNodeIm
      */
     public IdentifierNode getIdentifier()
     {
+        recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.READ);
         return this.identifier;
     }
     
@@ -84,6 +96,7 @@ public class MethodInvocationByExpressionNodeImpl extends MethodInvocationNodeIm
     public void setIdentifier(IdentifierNode identifier)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.WRITE);
         if (this.identifier instanceof NodeImpl)
         {
             ((NodeImpl)this.identifier).setParent(null);

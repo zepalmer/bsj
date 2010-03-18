@@ -12,6 +12,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.ForInitializerDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclarationNode;
+import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
@@ -19,6 +20,12 @@ public class ForInitializerDeclarationNodeImpl extends NodeImpl implements ForIn
 {
     /** The variables declared in this initializer. */
     private VariableDeclarationNode declaration;
+    
+    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    {
+        /** Attribute for the declaration property. */
+        DECLARATION,
+    }
     
     /** General constructor. */
     public ForInitializerDeclarationNodeImpl(
@@ -37,6 +44,7 @@ public class ForInitializerDeclarationNodeImpl extends NodeImpl implements ForIn
      */
     public VariableDeclarationNode getDeclaration()
     {
+        recordAccess(LocalAttribute.DECLARATION, Attribute.AccessType.READ);
         return this.declaration;
     }
     
@@ -47,6 +55,7 @@ public class ForInitializerDeclarationNodeImpl extends NodeImpl implements ForIn
     public void setDeclaration(VariableDeclarationNode declaration)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.DECLARATION, Attribute.AccessType.WRITE);
         if (this.declaration instanceof NodeImpl)
         {
             ((NodeImpl)this.declaration).setParent(null);

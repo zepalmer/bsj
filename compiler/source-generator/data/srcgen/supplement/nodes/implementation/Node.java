@@ -2,6 +2,9 @@
 import java.util.concurrent.atomic.AtomicLong;
 /* GEN:headerstop */
 
+import edu.jhu.cs.bsj.compiler.impl.utils.MultiMap;
+import edu.jhu.cs.bsj.compiler.impl.Attribute;
+
 public abstract class NodeImpl
 {
 	/* GEN:start */
@@ -27,6 +30,36 @@ public abstract class NodeImpl
 		this.uid = sUid.getAndIncrement();
 	}
 	
+	/**
+	 * A data structure containing information about attribute access.
+	 */
+	static class AccessRecord extends Pair<Attribute.AccessType, Integer>
+	{
+		public AccessRecord(Attribute.AccessType accessType, Integer id)
+		{
+			super(accessType, id);
+		}
+		
+		/**
+		 * Gets the type of access from this access record.
+		 */
+		public Attribute.AccessType getAccessType()
+		{
+			return this.getFirst();
+		}
+		 
+		/**
+		 * Gets the metaprogram ID from this access record.
+		 */
+		public Integer getMetaprogramID()
+		{
+			return this.getSecond();
+		}
+	}
+	
+    /** The current set of access record for this node's attributes. */
+    private MultiMap<Attribute, AccessRecord> accessRecordMap = new HashMultiMap<Attribute, AccessRecord>();
+    
 	/**
 	 * Causes this node to receive a visitor.  Visitors are received by nodes in a depth-first fashion.  The order of
 	 * the children receiving the visitor is dependent upon the type of node; however, a superclass's child nodes are
@@ -156,6 +189,33 @@ public abstract class NodeImpl
 	protected BsjNodeManager getManager()
 	{
 		return this.manager;
+	}
+	
+	/**
+	 * Records an attribute access for this node.  If this access is in conflict with other accesses which have already
+	 * occurred on this node, an approprite exception is thrown.
+	 * @param attribute The attribute that was accessed.
+	 * @param accessType The type of access that was involved.
+	 * @throws MetaprogramConflictException If a conflict exists between this access and one which has already occurred.
+	 */
+	protected void recordAccess(Attribute attribute, Attribute.AccessType accessType)
+			throws MetaprogramConflictException
+	{
+		if (this.manager.getCurrentMetaprogramId() == null)
+		{
+			return;
+		}
+		
+		Set<AccessRecord> previousAccesses = this.accessRecordMap.getAll(attribute);
+		for (AccessRecord record : previousAccesses)
+		{
+			if (accessType == Attribute.AccessType.WRITE || record.getAccessType() == Attribute.AccessType.WRITE)
+			{
+				this.manager.assertCooperation(record.getMetaprogramID());
+			}
+		}
+		
+		this.accessRecordMap.put(attribute, new AccessRecord(accessType, this.manager.getCurrentMetaprogramId()));
 	}
 	/* GEN:stop */
 }

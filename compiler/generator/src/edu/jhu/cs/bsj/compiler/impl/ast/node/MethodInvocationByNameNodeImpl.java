@@ -14,6 +14,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.MethodInvocationByNameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.NameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.ReferenceTypeListNode;
+import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
@@ -21,6 +22,12 @@ public class MethodInvocationByNameNodeImpl extends MethodInvocationNodeImpl imp
 {
     /** The name of the method to invoke. */
     private NameNode name;
+    
+    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    {
+        /** Attribute for the name property. */
+        NAME,
+    }
     
     /** General constructor. */
     public MethodInvocationByNameNodeImpl(
@@ -41,6 +48,7 @@ public class MethodInvocationByNameNodeImpl extends MethodInvocationNodeImpl imp
      */
     public NameNode getName()
     {
+        recordAccess(LocalAttribute.NAME, Attribute.AccessType.READ);
         return this.name;
     }
     
@@ -51,6 +59,7 @@ public class MethodInvocationByNameNodeImpl extends MethodInvocationNodeImpl imp
     public void setName(NameNode name)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.NAME, Attribute.AccessType.WRITE);
         if (this.name instanceof NodeImpl)
         {
             ((NodeImpl)this.name).setParent(null);

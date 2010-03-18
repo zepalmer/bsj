@@ -13,6 +13,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.IfNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.StatementNode;
+import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
@@ -26,6 +27,16 @@ public class IfNodeImpl extends NodeImpl implements IfNode
     
     /** The else branch's statement. */
     private StatementNode elseStatement;
+    
+    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    {
+        /** Attribute for the condition property. */
+        CONDITION,
+        /** Attribute for the thenStatement property. */
+        THEN_STATEMENT,
+        /** Attribute for the elseStatement property. */
+        ELSE_STATEMENT,
+    }
     
     /** General constructor. */
     public IfNodeImpl(
@@ -48,6 +59,7 @@ public class IfNodeImpl extends NodeImpl implements IfNode
      */
     public ExpressionNode getCondition()
     {
+        recordAccess(LocalAttribute.CONDITION, Attribute.AccessType.READ);
         return this.condition;
     }
     
@@ -58,6 +70,7 @@ public class IfNodeImpl extends NodeImpl implements IfNode
     public void setCondition(ExpressionNode condition)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.CONDITION, Attribute.AccessType.WRITE);
         if (this.condition instanceof NodeImpl)
         {
             ((NodeImpl)this.condition).setParent(null);
@@ -75,6 +88,7 @@ public class IfNodeImpl extends NodeImpl implements IfNode
      */
     public StatementNode getThenStatement()
     {
+        recordAccess(LocalAttribute.THEN_STATEMENT, Attribute.AccessType.READ);
         return this.thenStatement;
     }
     
@@ -85,6 +99,7 @@ public class IfNodeImpl extends NodeImpl implements IfNode
     public void setThenStatement(StatementNode thenStatement)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.THEN_STATEMENT, Attribute.AccessType.WRITE);
         if (this.thenStatement instanceof NodeImpl)
         {
             ((NodeImpl)this.thenStatement).setParent(null);
@@ -102,6 +117,7 @@ public class IfNodeImpl extends NodeImpl implements IfNode
      */
     public StatementNode getElseStatement()
     {
+        recordAccess(LocalAttribute.ELSE_STATEMENT, Attribute.AccessType.READ);
         return this.elseStatement;
     }
     
@@ -112,6 +128,7 @@ public class IfNodeImpl extends NodeImpl implements IfNode
     public void setElseStatement(StatementNode elseStatement)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.ELSE_STATEMENT, Attribute.AccessType.WRITE);
         if (this.elseStatement instanceof NodeImpl)
         {
             ((NodeImpl)this.elseStatement).setParent(null);

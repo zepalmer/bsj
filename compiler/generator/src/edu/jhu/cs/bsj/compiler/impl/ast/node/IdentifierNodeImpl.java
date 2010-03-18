@@ -11,6 +11,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
+import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
@@ -18,6 +19,12 @@ public class IdentifierNodeImpl extends NodeImpl implements IdentifierNode
 {
     /** The identifier contained in this node. */
     private String identifier;
+    
+    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    {
+        /** Attribute for the identifier property. */
+        IDENTIFIER,
+    }
     
     /** General constructor. */
     public IdentifierNodeImpl(
@@ -36,6 +43,7 @@ public class IdentifierNodeImpl extends NodeImpl implements IdentifierNode
      */
     public String getIdentifier()
     {
+        recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.READ);
         return this.identifier;
     }
     
@@ -46,6 +54,7 @@ public class IdentifierNodeImpl extends NodeImpl implements IdentifierNode
     public void setIdentifier(String identifier)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.WRITE);
         this.identifier = identifier;
     }
     

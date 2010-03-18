@@ -81,4 +81,22 @@ public class MetaprogramProfile<T extends MetaprogramAnchorNode<?>>
 	{
 		return context;
 	}
+
+	@Override
+	public boolean equals(Object obj)
+	{
+		if (obj instanceof MetaprogramProfile<?>)
+		{
+			return getMetaprogram().getID() == ((MetaprogramProfile<?>)obj).getMetaprogram().getID();
+		} else
+		{
+			return false;
+		}
+	}
+
+	@Override
+	public int hashCode()
+	{
+		return getMetaprogram().getID();
+	}
 }

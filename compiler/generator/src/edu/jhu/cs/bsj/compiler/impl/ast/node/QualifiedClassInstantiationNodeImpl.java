@@ -16,6 +16,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.QualifiedClassInstantiationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeArgumentListNode;
+import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
@@ -29,6 +30,16 @@ public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeI
     
     /** The type arguments to apply to the class being instantiated. */
     private TypeArgumentListNode typeArguments;
+    
+    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    {
+        /** Attribute for the enclosingExpression property. */
+        ENCLOSING_EXPRESSION,
+        /** Attribute for the identifier property. */
+        IDENTIFIER,
+        /** Attribute for the typeArguments property. */
+        TYPE_ARGUMENTS,
+    }
     
     /** General constructor. */
     public QualifiedClassInstantiationNodeImpl(
@@ -54,6 +65,7 @@ public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeI
      */
     public ExpressionNode getEnclosingExpression()
     {
+        recordAccess(LocalAttribute.ENCLOSING_EXPRESSION, Attribute.AccessType.READ);
         return this.enclosingExpression;
     }
     
@@ -64,6 +76,7 @@ public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeI
     public void setEnclosingExpression(ExpressionNode enclosingExpression)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.ENCLOSING_EXPRESSION, Attribute.AccessType.WRITE);
         if (this.enclosingExpression instanceof NodeImpl)
         {
             ((NodeImpl)this.enclosingExpression).setParent(null);
@@ -81,6 +94,7 @@ public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeI
      */
     public IdentifierNode getIdentifier()
     {
+        recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.READ);
         return this.identifier;
     }
     
@@ -91,6 +105,7 @@ public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeI
     public void setIdentifier(IdentifierNode identifier)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.WRITE);
         if (this.identifier instanceof NodeImpl)
         {
             ((NodeImpl)this.identifier).setParent(null);
@@ -108,6 +123,7 @@ public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeI
      */
     public TypeArgumentListNode getTypeArguments()
     {
+        recordAccess(LocalAttribute.TYPE_ARGUMENTS, Attribute.AccessType.READ);
         return this.typeArguments;
     }
     
@@ -118,6 +134,7 @@ public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeI
     public void setTypeArguments(TypeArgumentListNode typeArguments)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.TYPE_ARGUMENTS, Attribute.AccessType.WRITE);
         if (this.typeArguments instanceof NodeImpl)
         {
             ((NodeImpl)this.typeArguments).setParent(null);

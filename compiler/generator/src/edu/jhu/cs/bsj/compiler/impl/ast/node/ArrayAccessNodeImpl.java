@@ -13,6 +13,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.ArrayAccessNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.RestrictedPrimaryExpressionNode;
+import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
@@ -23,6 +24,14 @@ public class ArrayAccessNodeImpl extends NodeImpl implements ArrayAccessNode
     
     /** The index into the array. */
     private ExpressionNode indexExpression;
+    
+    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    {
+        /** Attribute for the arrayExpression property. */
+        ARRAY_EXPRESSION,
+        /** Attribute for the indexExpression property. */
+        INDEX_EXPRESSION,
+    }
     
     /** General constructor. */
     public ArrayAccessNodeImpl(
@@ -43,6 +52,7 @@ public class ArrayAccessNodeImpl extends NodeImpl implements ArrayAccessNode
      */
     public RestrictedPrimaryExpressionNode getArrayExpression()
     {
+        recordAccess(LocalAttribute.ARRAY_EXPRESSION, Attribute.AccessType.READ);
         return this.arrayExpression;
     }
     
@@ -53,6 +63,7 @@ public class ArrayAccessNodeImpl extends NodeImpl implements ArrayAccessNode
     public void setArrayExpression(RestrictedPrimaryExpressionNode arrayExpression)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.ARRAY_EXPRESSION, Attribute.AccessType.WRITE);
         if (this.arrayExpression instanceof NodeImpl)
         {
             ((NodeImpl)this.arrayExpression).setParent(null);
@@ -70,6 +81,7 @@ public class ArrayAccessNodeImpl extends NodeImpl implements ArrayAccessNode
      */
     public ExpressionNode getIndexExpression()
     {
+        recordAccess(LocalAttribute.INDEX_EXPRESSION, Attribute.AccessType.READ);
         return this.indexExpression;
     }
     
@@ -80,6 +92,7 @@ public class ArrayAccessNodeImpl extends NodeImpl implements ArrayAccessNode
     public void setIndexExpression(ExpressionNode indexExpression)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.INDEX_EXPRESSION, Attribute.AccessType.WRITE);
         if (this.indexExpression instanceof NodeImpl)
         {
             ((NodeImpl)this.indexExpression).setParent(null);

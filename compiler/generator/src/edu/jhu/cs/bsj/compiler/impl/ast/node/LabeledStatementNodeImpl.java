@@ -13,6 +13,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.LabeledStatementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.StatementNode;
+import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
@@ -23,6 +24,14 @@ public class LabeledStatementNodeImpl extends NodeImpl implements LabeledStateme
     
     /** The statement being labeled. */
     private StatementNode statement;
+    
+    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    {
+        /** Attribute for the label property. */
+        LABEL,
+        /** Attribute for the statement property. */
+        STATEMENT,
+    }
     
     /** General constructor. */
     public LabeledStatementNodeImpl(
@@ -43,6 +52,7 @@ public class LabeledStatementNodeImpl extends NodeImpl implements LabeledStateme
      */
     public IdentifierNode getLabel()
     {
+        recordAccess(LocalAttribute.LABEL, Attribute.AccessType.READ);
         return this.label;
     }
     
@@ -53,6 +63,7 @@ public class LabeledStatementNodeImpl extends NodeImpl implements LabeledStateme
     public void setLabel(IdentifierNode label)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.LABEL, Attribute.AccessType.WRITE);
         if (this.label instanceof NodeImpl)
         {
             ((NodeImpl)this.label).setParent(null);
@@ -70,6 +81,7 @@ public class LabeledStatementNodeImpl extends NodeImpl implements LabeledStateme
      */
     public StatementNode getStatement()
     {
+        recordAccess(LocalAttribute.STATEMENT, Attribute.AccessType.READ);
         return this.statement;
     }
     
@@ -80,6 +92,7 @@ public class LabeledStatementNodeImpl extends NodeImpl implements LabeledStateme
     public void setStatement(StatementNode statement)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.STATEMENT, Attribute.AccessType.WRITE);
         if (this.statement instanceof NodeImpl)
         {
             ((NodeImpl)this.statement).setParent(null);

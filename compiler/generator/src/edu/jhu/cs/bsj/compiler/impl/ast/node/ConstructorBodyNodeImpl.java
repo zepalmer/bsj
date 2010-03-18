@@ -13,6 +13,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.BlockStatementListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ConstructorBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ConstructorInvocationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
+import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
@@ -23,6 +24,14 @@ public class ConstructorBodyNodeImpl extends NodeImpl implements ConstructorBody
     
     /** The statements contained in this constructor. */
     private BlockStatementListNode statements;
+    
+    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    {
+        /** Attribute for the constructorInvocation property. */
+        CONSTRUCTOR_INVOCATION,
+        /** Attribute for the statements property. */
+        STATEMENTS,
+    }
     
     /** General constructor. */
     public ConstructorBodyNodeImpl(
@@ -43,6 +52,7 @@ public class ConstructorBodyNodeImpl extends NodeImpl implements ConstructorBody
      */
     public ConstructorInvocationNode getConstructorInvocation()
     {
+        recordAccess(LocalAttribute.CONSTRUCTOR_INVOCATION, Attribute.AccessType.READ);
         return this.constructorInvocation;
     }
     
@@ -53,6 +63,7 @@ public class ConstructorBodyNodeImpl extends NodeImpl implements ConstructorBody
     public void setConstructorInvocation(ConstructorInvocationNode constructorInvocation)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.CONSTRUCTOR_INVOCATION, Attribute.AccessType.WRITE);
         if (this.constructorInvocation instanceof NodeImpl)
         {
             ((NodeImpl)this.constructorInvocation).setParent(null);
@@ -70,6 +81,7 @@ public class ConstructorBodyNodeImpl extends NodeImpl implements ConstructorBody
      */
     public BlockStatementListNode getStatements()
     {
+        recordAccess(LocalAttribute.STATEMENTS, Attribute.AccessType.READ);
         return this.statements;
     }
     
@@ -80,6 +92,7 @@ public class ConstructorBodyNodeImpl extends NodeImpl implements ConstructorBody
     public void setStatements(BlockStatementListNode statements)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.STATEMENTS, Attribute.AccessType.WRITE);
         if (this.statements instanceof NodeImpl)
         {
             ((NodeImpl)this.statements).setParent(null);

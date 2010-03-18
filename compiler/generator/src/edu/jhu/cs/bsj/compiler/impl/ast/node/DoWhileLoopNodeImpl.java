@@ -13,6 +13,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.DoWhileLoopNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.StatementNode;
+import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
@@ -23,6 +24,14 @@ public class DoWhileLoopNodeImpl extends NodeImpl implements DoWhileLoopNode
     
     /** The loop's statement. */
     private StatementNode statement;
+    
+    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    {
+        /** Attribute for the condition property. */
+        CONDITION,
+        /** Attribute for the statement property. */
+        STATEMENT,
+    }
     
     /** General constructor. */
     public DoWhileLoopNodeImpl(
@@ -43,6 +52,7 @@ public class DoWhileLoopNodeImpl extends NodeImpl implements DoWhileLoopNode
      */
     public ExpressionNode getCondition()
     {
+        recordAccess(LocalAttribute.CONDITION, Attribute.AccessType.READ);
         return this.condition;
     }
     
@@ -53,6 +63,7 @@ public class DoWhileLoopNodeImpl extends NodeImpl implements DoWhileLoopNode
     public void setCondition(ExpressionNode condition)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.CONDITION, Attribute.AccessType.WRITE);
         if (this.condition instanceof NodeImpl)
         {
             ((NodeImpl)this.condition).setParent(null);
@@ -70,6 +81,7 @@ public class DoWhileLoopNodeImpl extends NodeImpl implements DoWhileLoopNode
      */
     public StatementNode getStatement()
     {
+        recordAccess(LocalAttribute.STATEMENT, Attribute.AccessType.READ);
         return this.statement;
     }
     
@@ -80,6 +92,7 @@ public class DoWhileLoopNodeImpl extends NodeImpl implements DoWhileLoopNode
     public void setStatement(StatementNode statement)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.STATEMENT, Attribute.AccessType.WRITE);
         if (this.statement instanceof NodeImpl)
         {
             ((NodeImpl)this.statement).setParent(null);

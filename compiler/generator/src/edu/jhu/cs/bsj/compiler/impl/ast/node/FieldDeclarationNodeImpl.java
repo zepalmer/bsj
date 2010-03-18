@@ -14,6 +14,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.FieldModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.JavadocNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclaratorListNode;
+import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
@@ -27,6 +28,16 @@ public class FieldDeclarationNodeImpl extends NodeImpl implements FieldDeclarati
     
     /** The associated javadoc comment for this node. */
     private JavadocNode javadoc;
+    
+    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    {
+        /** Attribute for the modifiers property. */
+        MODIFIERS,
+        /** Attribute for the declarators property. */
+        DECLARATORS,
+        /** Attribute for the javadoc property. */
+        JAVADOC,
+    }
     
     /** General constructor. */
     public FieldDeclarationNodeImpl(
@@ -49,6 +60,7 @@ public class FieldDeclarationNodeImpl extends NodeImpl implements FieldDeclarati
      */
     public FieldModifiersNode getModifiers()
     {
+        recordAccess(LocalAttribute.MODIFIERS, Attribute.AccessType.READ);
         return this.modifiers;
     }
     
@@ -59,6 +71,7 @@ public class FieldDeclarationNodeImpl extends NodeImpl implements FieldDeclarati
     public void setModifiers(FieldModifiersNode modifiers)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.MODIFIERS, Attribute.AccessType.WRITE);
         if (this.modifiers instanceof NodeImpl)
         {
             ((NodeImpl)this.modifiers).setParent(null);
@@ -76,6 +89,7 @@ public class FieldDeclarationNodeImpl extends NodeImpl implements FieldDeclarati
      */
     public VariableDeclaratorListNode getDeclarators()
     {
+        recordAccess(LocalAttribute.DECLARATORS, Attribute.AccessType.READ);
         return this.declarators;
     }
     
@@ -86,6 +100,7 @@ public class FieldDeclarationNodeImpl extends NodeImpl implements FieldDeclarati
     public void setDeclarators(VariableDeclaratorListNode declarators)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.DECLARATORS, Attribute.AccessType.WRITE);
         if (this.declarators instanceof NodeImpl)
         {
             ((NodeImpl)this.declarators).setParent(null);
@@ -103,6 +118,7 @@ public class FieldDeclarationNodeImpl extends NodeImpl implements FieldDeclarati
      */
     public JavadocNode getJavadoc()
     {
+        recordAccess(LocalAttribute.JAVADOC, Attribute.AccessType.READ);
         return this.javadoc;
     }
     
@@ -113,6 +129,7 @@ public class FieldDeclarationNodeImpl extends NodeImpl implements FieldDeclarati
     public void setJavadoc(JavadocNode javadoc)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.JAVADOC, Attribute.AccessType.WRITE);
         if (this.javadoc instanceof NodeImpl)
         {
             ((NodeImpl)this.javadoc).setParent(null);

@@ -13,6 +13,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.ClassMemberListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.EnumBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.EnumConstantDeclarationListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
+import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
@@ -23,6 +24,14 @@ public class EnumBodyNodeImpl extends NodeImpl implements EnumBodyNode
     
     /** The members of the class body part. */
     private ClassMemberListNode members;
+    
+    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    {
+        /** Attribute for the constants property. */
+        CONSTANTS,
+        /** Attribute for the members property. */
+        MEMBERS,
+    }
     
     /** General constructor. */
     public EnumBodyNodeImpl(
@@ -43,6 +52,7 @@ public class EnumBodyNodeImpl extends NodeImpl implements EnumBodyNode
      */
     public EnumConstantDeclarationListNode getConstants()
     {
+        recordAccess(LocalAttribute.CONSTANTS, Attribute.AccessType.READ);
         return this.constants;
     }
     
@@ -53,6 +63,7 @@ public class EnumBodyNodeImpl extends NodeImpl implements EnumBodyNode
     public void setConstants(EnumConstantDeclarationListNode constants)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.CONSTANTS, Attribute.AccessType.WRITE);
         if (this.constants instanceof NodeImpl)
         {
             ((NodeImpl)this.constants).setParent(null);
@@ -70,6 +81,7 @@ public class EnumBodyNodeImpl extends NodeImpl implements EnumBodyNode
      */
     public ClassMemberListNode getMembers()
     {
+        recordAccess(LocalAttribute.MEMBERS, Attribute.AccessType.READ);
         return this.members;
     }
     
@@ -80,6 +92,7 @@ public class EnumBodyNodeImpl extends NodeImpl implements EnumBodyNode
     public void setMembers(ClassMemberListNode members)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.MEMBERS, Attribute.AccessType.WRITE);
         if (this.members instanceof NodeImpl)
         {
             ((NodeImpl)this.members).setParent(null);

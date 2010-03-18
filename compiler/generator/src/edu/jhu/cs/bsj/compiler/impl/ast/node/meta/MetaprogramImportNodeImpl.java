@@ -12,6 +12,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.ImportNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportNode;
+import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.NodeImpl;
 
@@ -20,6 +21,12 @@ public class MetaprogramImportNodeImpl extends NodeImpl implements MetaprogramIm
 {
     /** The import for the metaprogram. */
     private ImportNode importNode;
+    
+    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    {
+        /** Attribute for the importNode property. */
+        IMPORT_NODE,
+    }
     
     /** General constructor. */
     public MetaprogramImportNodeImpl(
@@ -38,6 +45,7 @@ public class MetaprogramImportNodeImpl extends NodeImpl implements MetaprogramIm
      */
     public ImportNode getImportNode()
     {
+        recordAccess(LocalAttribute.IMPORT_NODE, Attribute.AccessType.READ);
         return this.importNode;
     }
     
@@ -48,6 +56,7 @@ public class MetaprogramImportNodeImpl extends NodeImpl implements MetaprogramIm
     public void setImportNode(ImportNode importNode)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.IMPORT_NODE, Attribute.AccessType.WRITE);
         if (this.importNode instanceof NodeImpl)
         {
             ((NodeImpl)this.importNode).setParent(null);

@@ -9,6 +9,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.ArrayCreationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.BaseTypeNode;
+import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
@@ -19,6 +20,14 @@ public abstract class ArrayCreationNodeImpl extends NodeImpl implements ArrayCre
     
     /** The number of uninitialized levels for this array. */
     private int arrayLevels;
+    
+    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    {
+        /** Attribute for the baseType property. */
+        BASE_TYPE,
+        /** Attribute for the arrayLevels property. */
+        ARRAY_LEVELS,
+    }
     
     /** General constructor. */
     protected ArrayCreationNodeImpl(
@@ -39,6 +48,7 @@ public abstract class ArrayCreationNodeImpl extends NodeImpl implements ArrayCre
      */
     public BaseTypeNode getBaseType()
     {
+        recordAccess(LocalAttribute.BASE_TYPE, Attribute.AccessType.READ);
         return this.baseType;
     }
     
@@ -49,6 +59,7 @@ public abstract class ArrayCreationNodeImpl extends NodeImpl implements ArrayCre
     public void setBaseType(BaseTypeNode baseType)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.BASE_TYPE, Attribute.AccessType.WRITE);
         if (this.baseType instanceof NodeImpl)
         {
             ((NodeImpl)this.baseType).setParent(null);
@@ -66,6 +77,7 @@ public abstract class ArrayCreationNodeImpl extends NodeImpl implements ArrayCre
      */
     public int getArrayLevels()
     {
+        recordAccess(LocalAttribute.ARRAY_LEVELS, Attribute.AccessType.READ);
         return this.arrayLevels;
     }
     
@@ -76,6 +88,7 @@ public abstract class ArrayCreationNodeImpl extends NodeImpl implements ArrayCre
     public void setArrayLevels(int arrayLevels)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.ARRAY_LEVELS, Attribute.AccessType.WRITE);
         this.arrayLevels = arrayLevels;
     }
     

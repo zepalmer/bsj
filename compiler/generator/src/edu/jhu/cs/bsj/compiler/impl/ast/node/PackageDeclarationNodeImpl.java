@@ -13,6 +13,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.AnnotationListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.NameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.PackageDeclarationNode;
+import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
@@ -23,6 +24,14 @@ public class PackageDeclarationNodeImpl extends NodeImpl implements PackageDecla
     
     /** The annotations on the package declaration. */
     private AnnotationListNode annotations;
+    
+    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    {
+        /** Attribute for the name property. */
+        NAME,
+        /** Attribute for the annotations property. */
+        ANNOTATIONS,
+    }
     
     /** General constructor. */
     public PackageDeclarationNodeImpl(
@@ -43,6 +52,7 @@ public class PackageDeclarationNodeImpl extends NodeImpl implements PackageDecla
      */
     public NameNode getName()
     {
+        recordAccess(LocalAttribute.NAME, Attribute.AccessType.READ);
         return this.name;
     }
     
@@ -53,6 +63,7 @@ public class PackageDeclarationNodeImpl extends NodeImpl implements PackageDecla
     public void setName(NameNode name)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.NAME, Attribute.AccessType.WRITE);
         if (this.name instanceof NodeImpl)
         {
             ((NodeImpl)this.name).setParent(null);
@@ -70,6 +81,7 @@ public class PackageDeclarationNodeImpl extends NodeImpl implements PackageDecla
      */
     public AnnotationListNode getAnnotations()
     {
+        recordAccess(LocalAttribute.ANNOTATIONS, Attribute.AccessType.READ);
         return this.annotations;
     }
     
@@ -80,6 +92,7 @@ public class PackageDeclarationNodeImpl extends NodeImpl implements PackageDecla
     public void setAnnotations(AnnotationListNode annotations)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.ANNOTATIONS, Attribute.AccessType.WRITE);
         if (this.annotations instanceof NodeImpl)
         {
             ((NodeImpl)this.annotations).setParent(null);

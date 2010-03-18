@@ -13,6 +13,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.FieldAccessByExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.PrimaryExpressionNode;
+import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
@@ -23,6 +24,14 @@ public class FieldAccessByExpressionNodeImpl extends NodeImpl implements FieldAc
     
     /** The name of the field. */
     private IdentifierNode identifier;
+    
+    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    {
+        /** Attribute for the expression property. */
+        EXPRESSION,
+        /** Attribute for the identifier property. */
+        IDENTIFIER,
+    }
     
     /** General constructor. */
     public FieldAccessByExpressionNodeImpl(
@@ -43,6 +52,7 @@ public class FieldAccessByExpressionNodeImpl extends NodeImpl implements FieldAc
      */
     public PrimaryExpressionNode getExpression()
     {
+        recordAccess(LocalAttribute.EXPRESSION, Attribute.AccessType.READ);
         return this.expression;
     }
     
@@ -53,6 +63,7 @@ public class FieldAccessByExpressionNodeImpl extends NodeImpl implements FieldAc
     public void setExpression(PrimaryExpressionNode expression)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.EXPRESSION, Attribute.AccessType.WRITE);
         if (this.expression instanceof NodeImpl)
         {
             ((NodeImpl)this.expression).setParent(null);
@@ -70,6 +81,7 @@ public class FieldAccessByExpressionNodeImpl extends NodeImpl implements FieldAc
      */
     public IdentifierNode getIdentifier()
     {
+        recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.READ);
         return this.identifier;
     }
     
@@ -80,6 +92,7 @@ public class FieldAccessByExpressionNodeImpl extends NodeImpl implements FieldAc
     public void setIdentifier(IdentifierNode identifier)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.WRITE);
         if (this.identifier instanceof NodeImpl)
         {
             ((NodeImpl)this.identifier).setParent(null);

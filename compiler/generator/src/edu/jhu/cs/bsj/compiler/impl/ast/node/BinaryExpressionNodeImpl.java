@@ -13,6 +13,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.BinaryExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
+import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
@@ -26,6 +27,16 @@ public class BinaryExpressionNodeImpl extends NodeImpl implements BinaryExpressi
     
     /** The binary operator to apply. */
     private BinaryOperator operator;
+    
+    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    {
+        /** Attribute for the leftOperand property. */
+        LEFT_OPERAND,
+        /** Attribute for the rightOperand property. */
+        RIGHT_OPERAND,
+        /** Attribute for the operator property. */
+        OPERATOR,
+    }
     
     /** General constructor. */
     public BinaryExpressionNodeImpl(
@@ -48,6 +59,7 @@ public class BinaryExpressionNodeImpl extends NodeImpl implements BinaryExpressi
      */
     public ExpressionNode getLeftOperand()
     {
+        recordAccess(LocalAttribute.LEFT_OPERAND, Attribute.AccessType.READ);
         return this.leftOperand;
     }
     
@@ -58,6 +70,7 @@ public class BinaryExpressionNodeImpl extends NodeImpl implements BinaryExpressi
     public void setLeftOperand(ExpressionNode leftOperand)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.LEFT_OPERAND, Attribute.AccessType.WRITE);
         if (this.leftOperand instanceof NodeImpl)
         {
             ((NodeImpl)this.leftOperand).setParent(null);
@@ -75,6 +88,7 @@ public class BinaryExpressionNodeImpl extends NodeImpl implements BinaryExpressi
      */
     public ExpressionNode getRightOperand()
     {
+        recordAccess(LocalAttribute.RIGHT_OPERAND, Attribute.AccessType.READ);
         return this.rightOperand;
     }
     
@@ -85,6 +99,7 @@ public class BinaryExpressionNodeImpl extends NodeImpl implements BinaryExpressi
     public void setRightOperand(ExpressionNode rightOperand)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.RIGHT_OPERAND, Attribute.AccessType.WRITE);
         if (this.rightOperand instanceof NodeImpl)
         {
             ((NodeImpl)this.rightOperand).setParent(null);
@@ -102,6 +117,7 @@ public class BinaryExpressionNodeImpl extends NodeImpl implements BinaryExpressi
      */
     public BinaryOperator getOperator()
     {
+        recordAccess(LocalAttribute.OPERATOR, Attribute.AccessType.READ);
         return this.operator;
     }
     
@@ -112,6 +128,7 @@ public class BinaryExpressionNodeImpl extends NodeImpl implements BinaryExpressi
     public void setOperator(BinaryOperator operator)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.OPERATOR, Attribute.AccessType.WRITE);
         this.operator = operator;
     }
     

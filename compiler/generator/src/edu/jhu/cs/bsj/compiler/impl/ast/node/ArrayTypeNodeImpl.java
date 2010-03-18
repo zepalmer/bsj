@@ -12,6 +12,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.ArrayTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
+import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
@@ -19,6 +20,12 @@ public class ArrayTypeNodeImpl extends NodeImpl implements ArrayTypeNode
 {
     /** The element type of the array. */
     private TypeNode type;
+    
+    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    {
+        /** Attribute for the type property. */
+        TYPE,
+    }
     
     /** General constructor. */
     public ArrayTypeNodeImpl(
@@ -37,6 +44,7 @@ public class ArrayTypeNodeImpl extends NodeImpl implements ArrayTypeNode
      */
     public TypeNode getType()
     {
+        recordAccess(LocalAttribute.TYPE, Attribute.AccessType.READ);
         return this.type;
     }
     
@@ -47,6 +55,7 @@ public class ArrayTypeNodeImpl extends NodeImpl implements ArrayTypeNode
     public void setType(TypeNode type)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.TYPE, Attribute.AccessType.WRITE);
         if (this.type instanceof NodeImpl)
         {
             ((NodeImpl)this.type).setParent(null);

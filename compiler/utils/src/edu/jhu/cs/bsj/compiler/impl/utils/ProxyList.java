@@ -26,10 +26,10 @@ public abstract class ProxyList<T> implements List<T>
 	{
 		super();
 		this.backingList = backingList;
-		
-		for (int i=0;i<backingList.size();i++)
+
+		for (int i = 0; i < backingList.size(); i++)
 		{
-			elementAdded(i, backingList.get(i));
+			elementAdded(i, backingList.get(i), false);
 		}
 	}
 
@@ -39,8 +39,10 @@ public abstract class ProxyList<T> implements List<T>
 	 * 
 	 * @param index The index of the new element.
 	 * @param element The new element.
+	 * @param replaced <code>true</code> if the element which was added is replacing a previously removed element;
+	 *            <code>false</code> otherwise.
 	 */
-	protected abstract void elementAdded(int index, T element);
+	protected abstract void elementAdded(int index, T element, boolean replaced);
 
 	/**
 	 * This method is invoked whenever an element is removed from this list. This method's invocation occurs after the
@@ -48,21 +50,38 @@ public abstract class ProxyList<T> implements List<T>
 	 * 
 	 * @param index The index previously held by the element.
 	 * @param element The element which was removed.
+	 * @param replaced <code>true</code> if the element which was removed is being replaced by another element;
+	 *            <code>false</code> otherwise.
 	 */
-	protected abstract void elementRemoved(int index, T element);
+	protected abstract void elementRemoved(int index, T element, boolean replaced);
+	
+	/**
+	 * This method is invoked whenever a caller retrieves an element from the list.  This method's invocation occurs
+	 * before the element is provided to the caller.
+	 * @param index The index held by the element.
+	 * @param element The element being retrieved.
+	 */
+	protected abstract void elementRetrieved(int index, T element);
+	
+	/**
+	 * This method is invoked whenever a caller obtains information dependent upon the size of this list.  This is
+	 * called only when the size directly affects the return value of a call.  It is invoked before the size information
+	 * is returned to the caller.
+	 */
+	protected abstract void sizeChecked();
 
 	@Override
 	public void add(int index, T element)
 	{
 		this.backingList.add(index, element);
-		this.elementAdded(index, element);
+		this.elementAdded(index, element, false);
 	}
 
 	@Override
 	public boolean add(T e)
 	{
 		this.backingList.add(e);
-		this.elementAdded(this.backingList.size() - 1, e);
+		this.elementAdded(this.backingList.size() - 1, e, false);
 		return true;
 	}
 
@@ -96,37 +115,67 @@ public abstract class ProxyList<T> implements List<T>
 		while (this.backingList.size() > 0)
 		{
 			T t = this.backingList.remove(0);
-			this.elementRemoved(0, t);
+			this.elementRemoved(0, t,false);
 		}
 	}
 
 	@Override
 	public boolean contains(Object o)
 	{
-		return this.backingList.contains(o);
+		ListIterator<T> backing = this.backingList.listIterator();
+		while (backing.hasNext())
+		{
+			T t = backing.next();
+			if ((o==null && t==null) || (o!=null && o.equals(t)))
+			{
+				elementRetrieved(backing.previousIndex(), t);
+				return true;
+			}
+		}
+		return false;
 	}
 
 	@Override
 	public boolean containsAll(Collection<?> c)
 	{
-		return this.backingList.containsAll(c);
+		for (Object o : c)
+		{
+			if (!contains(o))
+			{
+				return false;
+			}
+		}
+		return true;
 	}
 
 	@Override
 	public T get(int index)
 	{
-		return this.backingList.get(index);
+		T t = this.backingList.get(index);
+		elementRetrieved(index, t);
+		return t;
 	}
 
 	@Override
 	public int indexOf(Object o)
 	{
-		return this.backingList.indexOf(o);
+		ListIterator<T> backing = this.backingList.listIterator();
+		while (backing.hasNext())
+		{
+			T t = backing.next();
+			if ((o==null && t==null) || (o!=null && o.equals(t)))
+			{
+				elementRetrieved(backing.previousIndex(), t);
+				return backing.previousIndex();
+			}
+		}
+		return -1;
 	}
 
 	@Override
 	public boolean isEmpty()
 	{
+		sizeChecked();
 		return this.backingList.isEmpty();
 	}
 
@@ -150,6 +199,7 @@ public abstract class ProxyList<T> implements List<T>
 			{
 				this.index++;
 				this.lastValue = this.backingIterator.next();
+				elementRetrieved(this.index, this.lastValue);
 				return this.lastValue;
 			}
 
@@ -157,7 +207,7 @@ public abstract class ProxyList<T> implements List<T>
 			public void remove()
 			{
 				this.backingIterator.remove();
-				elementRemoved(this.index, this.lastValue);
+				elementRemoved(this.index, this.lastValue,false);
 				this.index--;
 			}
 		};
@@ -166,7 +216,17 @@ public abstract class ProxyList<T> implements List<T>
 	@Override
 	public int lastIndexOf(Object o)
 	{
-		return this.backingList.lastIndexOf(o);
+		ListIterator<T> backing = this.backingList.listIterator(this.backingList.size());
+		while (backing.hasPrevious())
+		{
+			T t = backing.previous();
+			if ((o==null && t==null) || (o!=null && o.equals(t)))
+			{
+				elementRetrieved(backing.nextIndex(), t);
+				return backing.nextIndex();
+			}
+		}
+		return -1;
 	}
 
 	@Override
@@ -191,7 +251,7 @@ public abstract class ProxyList<T> implements List<T>
 			public void add(T e)
 			{
 				this.backingIterator.add(e);
-				elementAdded(this.backingIterator.previousIndex(), e);
+				elementAdded(this.backingIterator.previousIndex(), e, false);
 			}
 
 			@Override
@@ -211,12 +271,14 @@ public abstract class ProxyList<T> implements List<T>
 			{
 				this.lastIndex = this.backingIterator.nextIndex();
 				this.lastValue = this.backingIterator.next();
+				elementRetrieved(this.lastIndex, this.lastValue);
 				return this.lastValue;
 			}
 
 			@Override
 			public int nextIndex()
 			{
+				sizeChecked();
 				return this.backingIterator.nextIndex();
 			}
 
@@ -225,12 +287,14 @@ public abstract class ProxyList<T> implements List<T>
 			{
 				this.lastIndex = this.backingIterator.previousIndex();
 				this.lastValue = this.backingIterator.previous();
+				elementRetrieved(this.lastIndex, this.lastValue);
 				return this.lastValue;
 			}
 
 			@Override
 			public int previousIndex()
 			{
+				sizeChecked();
 				return this.backingIterator.previousIndex();
 			}
 
@@ -238,15 +302,15 @@ public abstract class ProxyList<T> implements List<T>
 			public void remove()
 			{
 				this.backingIterator.remove();
-				ProxyList.this.elementRemoved(this.lastIndex, this.lastValue);
+				ProxyList.this.elementRemoved(this.lastIndex, this.lastValue, false);
 			}
 
 			@Override
 			public void set(T e)
 			{
 				this.backingIterator.set(e);
-				ProxyList.this.elementRemoved(this.lastIndex, e);
-				ProxyList.this.elementAdded(this.lastIndex, e);
+				ProxyList.this.elementRemoved(this.lastIndex, e, true);
+				ProxyList.this.elementAdded(this.lastIndex, e, true);
 			}
 		};
 	}
@@ -255,7 +319,7 @@ public abstract class ProxyList<T> implements List<T>
 	public T remove(int index)
 	{
 		T t = this.backingList.remove(index);
-		elementRemoved(index, t);
+		elementRemoved(index, t, false);
 		return t;
 	}
 
@@ -299,7 +363,7 @@ public abstract class ProxyList<T> implements List<T>
 			} else
 			{
 				T t = this.backingList.remove(i);
-				elementRemoved(i, t);
+				elementRemoved(i, t, false);
 				change = true;
 			}
 		}
@@ -310,14 +374,15 @@ public abstract class ProxyList<T> implements List<T>
 	public T set(int index, T element)
 	{
 		T t = this.backingList.set(index, element);
-		elementRemoved(index, element);
-		elementAdded(index, element);
+		elementRemoved(index, element, true);
+		elementAdded(index, element, true);
 		return t;
 	}
 
 	@Override
 	public int size()
 	{
+		sizeChecked();
 		return this.backingList.size();
 	}
 
@@ -328,15 +393,27 @@ public abstract class ProxyList<T> implements List<T>
 		return new ProxyList<T>(this.backingList.subList(fromIndex, toIndex))
 		{
 			@Override
-			protected void elementAdded(int index, T element)
+			protected void elementAdded(int index, T element, boolean replaced)
 			{
-				parent.elementAdded(fromIndex + index, element);
+				parent.elementAdded(fromIndex + index, element, replaced);
 			}
 
 			@Override
-			protected void elementRemoved(int index, T element)
+			protected void elementRemoved(int index, T element, boolean replaced)
 			{
-				parent.elementRemoved(fromIndex + index, element);
+				parent.elementRemoved(fromIndex + index, element, replaced);
+			}
+
+			@Override
+			protected void elementRetrieved(int index, T element)
+			{
+				parent.elementRetrieved(fromIndex + index, element);
+			}
+
+			@Override
+			protected void sizeChecked()
+			{
+				parent.sizeChecked();				
 			}
 		};
 	}
@@ -344,12 +421,24 @@ public abstract class ProxyList<T> implements List<T>
 	@Override
 	public Object[] toArray()
 	{
+		ListIterator<T> it = this.backingList.listIterator();
+		while (it.hasNext())
+		{
+			elementRetrieved(it.nextIndex(), it.next());
+		}
+		sizeChecked();
 		return this.backingList.toArray();
 	}
 
 	@Override
 	public <E> E[] toArray(E[] a)
 	{
+		ListIterator<T> it = this.backingList.listIterator();
+		while (it.hasNext())
+		{
+			elementRetrieved(it.nextIndex(), it.next());
+		}
+		sizeChecked();
 		return this.backingList.toArray(a);
 	}
 }

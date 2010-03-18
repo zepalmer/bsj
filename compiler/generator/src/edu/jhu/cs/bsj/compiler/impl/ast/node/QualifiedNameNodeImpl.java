@@ -14,6 +14,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.NameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.QualifiedNameNode;
+import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
@@ -21,6 +22,12 @@ public class QualifiedNameNodeImpl extends NameNodeImpl implements QualifiedName
 {
     /** The name being qualified. */
     private NameNode base;
+    
+    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    {
+        /** Attribute for the base property. */
+        BASE,
+    }
     
     /** General constructor. */
     public QualifiedNameNodeImpl(
@@ -41,6 +48,7 @@ public class QualifiedNameNodeImpl extends NameNodeImpl implements QualifiedName
      */
     public NameNode getBase()
     {
+        recordAccess(LocalAttribute.BASE, Attribute.AccessType.READ);
         return this.base;
     }
     
@@ -51,6 +59,7 @@ public class QualifiedNameNodeImpl extends NameNodeImpl implements QualifiedName
     public void setBase(NameNode base)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.BASE, Attribute.AccessType.WRITE);
         if (this.base instanceof NodeImpl)
         {
             ((NodeImpl)this.base).setParent(null);

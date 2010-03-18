@@ -13,6 +13,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.ArrayInstantiatorCreationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.BaseTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
+import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
@@ -20,6 +21,12 @@ public class ArrayInstantiatorCreationNodeImpl extends ArrayCreationNodeImpl imp
 {
     /** The dimension expressions for this array. */
     private ExpressionListNode dimExpressions;
+    
+    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    {
+        /** Attribute for the dimExpressions property. */
+        DIM_EXPRESSIONS,
+    }
     
     /** General constructor. */
     public ArrayInstantiatorCreationNodeImpl(
@@ -40,6 +47,7 @@ public class ArrayInstantiatorCreationNodeImpl extends ArrayCreationNodeImpl imp
      */
     public ExpressionListNode getDimExpressions()
     {
+        recordAccess(LocalAttribute.DIM_EXPRESSIONS, Attribute.AccessType.READ);
         return this.dimExpressions;
     }
     
@@ -50,6 +58,7 @@ public class ArrayInstantiatorCreationNodeImpl extends ArrayCreationNodeImpl imp
     public void setDimExpressions(ExpressionListNode dimExpressions)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.DIM_EXPRESSIONS, Attribute.AccessType.WRITE);
         if (this.dimExpressions instanceof NodeImpl)
         {
             ((NodeImpl)this.dimExpressions).setParent(null);

@@ -11,6 +11,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.AnonymousClassBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassInstantiationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeArgumentListNode;
+import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
@@ -24,6 +25,16 @@ public abstract class ClassInstantiationNodeImpl extends NodeImpl implements Cla
     
     /** The body of the anonymous class. */
     private AnonymousClassBodyNode body;
+    
+    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    {
+        /** Attribute for the constructorTypeArguments property. */
+        CONSTRUCTOR_TYPE_ARGUMENTS,
+        /** Attribute for the arguments property. */
+        ARGUMENTS,
+        /** Attribute for the body property. */
+        BODY,
+    }
     
     /** General constructor. */
     protected ClassInstantiationNodeImpl(
@@ -46,6 +57,7 @@ public abstract class ClassInstantiationNodeImpl extends NodeImpl implements Cla
      */
     public TypeArgumentListNode getConstructorTypeArguments()
     {
+        recordAccess(LocalAttribute.CONSTRUCTOR_TYPE_ARGUMENTS, Attribute.AccessType.READ);
         return this.constructorTypeArguments;
     }
     
@@ -56,6 +68,7 @@ public abstract class ClassInstantiationNodeImpl extends NodeImpl implements Cla
     public void setConstructorTypeArguments(TypeArgumentListNode constructorTypeArguments)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.CONSTRUCTOR_TYPE_ARGUMENTS, Attribute.AccessType.WRITE);
         if (this.constructorTypeArguments instanceof NodeImpl)
         {
             ((NodeImpl)this.constructorTypeArguments).setParent(null);
@@ -73,6 +86,7 @@ public abstract class ClassInstantiationNodeImpl extends NodeImpl implements Cla
      */
     public ExpressionListNode getArguments()
     {
+        recordAccess(LocalAttribute.ARGUMENTS, Attribute.AccessType.READ);
         return this.arguments;
     }
     
@@ -83,6 +97,7 @@ public abstract class ClassInstantiationNodeImpl extends NodeImpl implements Cla
     public void setArguments(ExpressionListNode arguments)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.ARGUMENTS, Attribute.AccessType.WRITE);
         if (this.arguments instanceof NodeImpl)
         {
             ((NodeImpl)this.arguments).setParent(null);
@@ -100,6 +115,7 @@ public abstract class ClassInstantiationNodeImpl extends NodeImpl implements Cla
      */
     public AnonymousClassBodyNode getBody()
     {
+        recordAccess(LocalAttribute.BODY, Attribute.AccessType.READ);
         return this.body;
     }
     
@@ -110,6 +126,7 @@ public abstract class ClassInstantiationNodeImpl extends NodeImpl implements Cla
     public void setBody(AnonymousClassBodyNode body)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.BODY, Attribute.AccessType.WRITE);
         if (this.body instanceof NodeImpl)
         {
             ((NodeImpl)this.body).setParent(null);

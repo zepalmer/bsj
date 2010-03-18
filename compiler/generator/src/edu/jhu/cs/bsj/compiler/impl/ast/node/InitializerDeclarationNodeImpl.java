@@ -12,6 +12,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.BlockNode;
 import edu.jhu.cs.bsj.compiler.ast.node.InitializerDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
+import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
@@ -22,6 +23,14 @@ public class InitializerDeclarationNodeImpl extends NodeImpl implements Initiali
     
     /** The body of the initializer. */
     private BlockNode body;
+    
+    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    {
+        /** Attribute for the staticInitializer property. */
+        STATIC_INITIALIZER,
+        /** Attribute for the body property. */
+        BODY,
+    }
     
     /** General constructor. */
     public InitializerDeclarationNodeImpl(
@@ -42,6 +51,7 @@ public class InitializerDeclarationNodeImpl extends NodeImpl implements Initiali
      */
     public boolean getStaticInitializer()
     {
+        recordAccess(LocalAttribute.STATIC_INITIALIZER, Attribute.AccessType.READ);
         return this.staticInitializer;
     }
     
@@ -52,6 +62,7 @@ public class InitializerDeclarationNodeImpl extends NodeImpl implements Initiali
     public void setStaticInitializer(boolean staticInitializer)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.STATIC_INITIALIZER, Attribute.AccessType.WRITE);
         this.staticInitializer = staticInitializer;
     }
     
@@ -61,6 +72,7 @@ public class InitializerDeclarationNodeImpl extends NodeImpl implements Initiali
      */
     public BlockNode getBody()
     {
+        recordAccess(LocalAttribute.BODY, Attribute.AccessType.READ);
         return this.body;
     }
     
@@ -71,6 +83,7 @@ public class InitializerDeclarationNodeImpl extends NodeImpl implements Initiali
     public void setBody(BlockNode body)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.BODY, Attribute.AccessType.WRITE);
         if (this.body instanceof NodeImpl)
         {
             ((NodeImpl)this.body).setParent(null);

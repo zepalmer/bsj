@@ -12,6 +12,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.InlineTypeDeclarableNode;
 import edu.jhu.cs.bsj.compiler.ast.node.InlineTypeDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
+import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
@@ -19,6 +20,12 @@ public class InlineTypeDeclarationNodeImpl extends NodeImpl implements InlineTyp
 {
     /** The type declaration. */
     private InlineTypeDeclarableNode declaration;
+    
+    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    {
+        /** Attribute for the declaration property. */
+        DECLARATION,
+    }
     
     /** General constructor. */
     public InlineTypeDeclarationNodeImpl(
@@ -37,6 +44,7 @@ public class InlineTypeDeclarationNodeImpl extends NodeImpl implements InlineTyp
      */
     public InlineTypeDeclarableNode getDeclaration()
     {
+        recordAccess(LocalAttribute.DECLARATION, Attribute.AccessType.READ);
         return this.declaration;
     }
     
@@ -47,6 +55,7 @@ public class InlineTypeDeclarationNodeImpl extends NodeImpl implements InlineTyp
     public void setDeclaration(InlineTypeDeclarableNode declaration)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.DECLARATION, Attribute.AccessType.WRITE);
         if (this.declaration instanceof NodeImpl)
         {
             ((NodeImpl)this.declaration).setParent(null);

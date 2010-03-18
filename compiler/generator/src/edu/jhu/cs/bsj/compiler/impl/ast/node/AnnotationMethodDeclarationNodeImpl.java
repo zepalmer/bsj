@@ -16,6 +16,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.JavadocNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
+import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
@@ -35,6 +36,20 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
     
     /** The associated javadoc comment for this node. */
     private JavadocNode javadoc;
+    
+    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    {
+        /** Attribute for the modifiers property. */
+        MODIFIERS,
+        /** Attribute for the type property. */
+        TYPE,
+        /** Attribute for the identifier property. */
+        IDENTIFIER,
+        /** Attribute for the defaultValue property. */
+        DEFAULT_VALUE,
+        /** Attribute for the javadoc property. */
+        JAVADOC,
+    }
     
     /** General constructor. */
     public AnnotationMethodDeclarationNodeImpl(
@@ -61,6 +76,7 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
      */
     public AnnotationMethodModifiersNode getModifiers()
     {
+        recordAccess(LocalAttribute.MODIFIERS, Attribute.AccessType.READ);
         return this.modifiers;
     }
     
@@ -71,6 +87,7 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
     public void setModifiers(AnnotationMethodModifiersNode modifiers)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.MODIFIERS, Attribute.AccessType.WRITE);
         if (this.modifiers instanceof NodeImpl)
         {
             ((NodeImpl)this.modifiers).setParent(null);
@@ -88,6 +105,7 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
      */
     public TypeNode getType()
     {
+        recordAccess(LocalAttribute.TYPE, Attribute.AccessType.READ);
         return this.type;
     }
     
@@ -98,6 +116,7 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
     public void setType(TypeNode type)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.TYPE, Attribute.AccessType.WRITE);
         if (this.type instanceof NodeImpl)
         {
             ((NodeImpl)this.type).setParent(null);
@@ -115,6 +134,7 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
      */
     public IdentifierNode getIdentifier()
     {
+        recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.READ);
         return this.identifier;
     }
     
@@ -125,6 +145,7 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
     public void setIdentifier(IdentifierNode identifier)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.WRITE);
         if (this.identifier instanceof NodeImpl)
         {
             ((NodeImpl)this.identifier).setParent(null);
@@ -142,6 +163,7 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
      */
     public AnnotationValueNode getDefaultValue()
     {
+        recordAccess(LocalAttribute.DEFAULT_VALUE, Attribute.AccessType.READ);
         return this.defaultValue;
     }
     
@@ -152,6 +174,7 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
     public void setDefaultValue(AnnotationValueNode defaultValue)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.DEFAULT_VALUE, Attribute.AccessType.WRITE);
         if (this.defaultValue instanceof NodeImpl)
         {
             ((NodeImpl)this.defaultValue).setParent(null);
@@ -169,6 +192,7 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
      */
     public JavadocNode getJavadoc()
     {
+        recordAccess(LocalAttribute.JAVADOC, Attribute.AccessType.READ);
         return this.javadoc;
     }
     
@@ -179,6 +203,7 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
     public void setJavadoc(JavadocNode javadoc)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.JAVADOC, Attribute.AccessType.WRITE);
         if (this.javadoc instanceof NodeImpl)
         {
             ((NodeImpl)this.javadoc).setParent(null);

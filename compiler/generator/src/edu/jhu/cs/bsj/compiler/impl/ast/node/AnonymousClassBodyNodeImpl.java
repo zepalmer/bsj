@@ -12,6 +12,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.AnonymousClassBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.AnonymousClassMemberListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
+import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
@@ -19,6 +20,12 @@ public class AnonymousClassBodyNodeImpl extends NodeImpl implements AnonymousCla
 {
     /** The members of this anonymous class body. */
     private AnonymousClassMemberListNode members;
+    
+    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    {
+        /** Attribute for the members property. */
+        MEMBERS,
+    }
     
     /** General constructor. */
     public AnonymousClassBodyNodeImpl(
@@ -37,6 +44,7 @@ public class AnonymousClassBodyNodeImpl extends NodeImpl implements AnonymousCla
      */
     public AnonymousClassMemberListNode getMembers()
     {
+        recordAccess(LocalAttribute.MEMBERS, Attribute.AccessType.READ);
         return this.members;
     }
     
@@ -47,6 +55,7 @@ public class AnonymousClassBodyNodeImpl extends NodeImpl implements AnonymousCla
     public void setMembers(AnonymousClassMemberListNode members)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.MEMBERS, Attribute.AccessType.WRITE);
         if (this.members instanceof NodeImpl)
         {
             ((NodeImpl)this.members).setParent(null);

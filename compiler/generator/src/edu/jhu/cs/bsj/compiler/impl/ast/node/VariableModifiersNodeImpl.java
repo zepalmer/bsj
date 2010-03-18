@@ -12,6 +12,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableModifiersNode;
+import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
@@ -19,6 +20,12 @@ public class VariableModifiersNodeImpl extends ModifiersNodeImpl implements Vari
 {
     /** Whether or not the associated variable is final. */
     private boolean finalFlag;
+    
+    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    {
+        /** Attribute for the finalFlag property. */
+        FINAL_FLAG,
+    }
     
     /** General constructor. */
     public VariableModifiersNodeImpl(
@@ -38,6 +45,7 @@ public class VariableModifiersNodeImpl extends ModifiersNodeImpl implements Vari
      */
     public boolean getFinalFlag()
     {
+        recordAccess(LocalAttribute.FINAL_FLAG, Attribute.AccessType.READ);
         return this.finalFlag;
     }
     
@@ -48,6 +56,7 @@ public class VariableModifiersNodeImpl extends ModifiersNodeImpl implements Vari
     public void setFinalFlag(boolean finalFlag)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.FINAL_FLAG, Attribute.AccessType.WRITE);
         this.finalFlag = finalFlag;
     }
     

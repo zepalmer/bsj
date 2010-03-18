@@ -12,6 +12,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.BlockNode;
 import edu.jhu.cs.bsj.compiler.ast.node.BlockStatementListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
+import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
@@ -19,6 +20,12 @@ public class BlockNodeImpl extends NodeImpl implements BlockNode
 {
     /** The statements contained in this block statement. */
     private BlockStatementListNode statements;
+    
+    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    {
+        /** Attribute for the statements property. */
+        STATEMENTS,
+    }
     
     /** General constructor. */
     public BlockNodeImpl(
@@ -37,6 +44,7 @@ public class BlockNodeImpl extends NodeImpl implements BlockNode
      */
     public BlockStatementListNode getStatements()
     {
+        recordAccess(LocalAttribute.STATEMENTS, Attribute.AccessType.READ);
         return this.statements;
     }
     
@@ -47,6 +55,7 @@ public class BlockNodeImpl extends NodeImpl implements BlockNode
     public void setStatements(BlockStatementListNode statements)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.STATEMENTS, Attribute.AccessType.WRITE);
         if (this.statements instanceof NodeImpl)
         {
             ((NodeImpl)this.statements).setParent(null);

@@ -12,6 +12,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassMemberListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
+import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
@@ -19,6 +20,12 @@ public class ClassBodyNodeImpl extends NodeImpl implements ClassBodyNode
 {
     /** The members of this class body. */
     private ClassMemberListNode members;
+    
+    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    {
+        /** Attribute for the members property. */
+        MEMBERS,
+    }
     
     /** General constructor. */
     public ClassBodyNodeImpl(
@@ -37,6 +44,7 @@ public class ClassBodyNodeImpl extends NodeImpl implements ClassBodyNode
      */
     public ClassMemberListNode getMembers()
     {
+        recordAccess(LocalAttribute.MEMBERS, Attribute.AccessType.READ);
         return this.members;
     }
     
@@ -47,6 +55,7 @@ public class ClassBodyNodeImpl extends NodeImpl implements ClassBodyNode
     public void setMembers(ClassMemberListNode members)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.MEMBERS, Attribute.AccessType.WRITE);
         if (this.members instanceof NodeImpl)
         {
             ((NodeImpl)this.members).setParent(null);

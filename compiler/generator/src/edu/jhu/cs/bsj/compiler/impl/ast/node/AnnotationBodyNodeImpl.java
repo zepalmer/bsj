@@ -12,6 +12,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationMemberListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
+import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
@@ -19,6 +20,12 @@ public class AnnotationBodyNodeImpl extends NodeImpl implements AnnotationBodyNo
 {
     /** The members of this annotation body. */
     private AnnotationMemberListNode members;
+    
+    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    {
+        /** Attribute for the members property. */
+        MEMBERS,
+    }
     
     /** General constructor. */
     public AnnotationBodyNodeImpl(
@@ -37,6 +44,7 @@ public class AnnotationBodyNodeImpl extends NodeImpl implements AnnotationBodyNo
      */
     public AnnotationMemberListNode getMembers()
     {
+        recordAccess(LocalAttribute.MEMBERS, Attribute.AccessType.READ);
         return this.members;
     }
     
@@ -47,6 +55,7 @@ public class AnnotationBodyNodeImpl extends NodeImpl implements AnnotationBodyNo
     public void setMembers(AnnotationMemberListNode members)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.MEMBERS, Attribute.AccessType.WRITE);
         if (this.members instanceof NodeImpl)
         {
             ((NodeImpl)this.members).setParent(null);

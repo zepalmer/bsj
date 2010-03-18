@@ -12,6 +12,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramTargetNode;
+import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.NodeImpl;
 
@@ -20,6 +21,12 @@ public class MetaprogramTargetNodeImpl extends NodeImpl implements MetaprogramTa
 {
     /** The names of the metaprogram targets in which to participate. */
     private IdentifierListNode targets;
+    
+    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    {
+        /** Attribute for the targets property. */
+        TARGETS,
+    }
     
     /** General constructor. */
     public MetaprogramTargetNodeImpl(
@@ -38,6 +45,7 @@ public class MetaprogramTargetNodeImpl extends NodeImpl implements MetaprogramTa
      */
     public IdentifierListNode getTargets()
     {
+        recordAccess(LocalAttribute.TARGETS, Attribute.AccessType.READ);
         return this.targets;
     }
     
@@ -48,6 +56,7 @@ public class MetaprogramTargetNodeImpl extends NodeImpl implements MetaprogramTa
     public void setTargets(IdentifierListNode targets)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.TARGETS, Attribute.AccessType.WRITE);
         if (this.targets instanceof NodeImpl)
         {
             ((NodeImpl)this.targets).setParent(null);

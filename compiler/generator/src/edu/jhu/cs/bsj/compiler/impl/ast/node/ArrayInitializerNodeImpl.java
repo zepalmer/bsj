@@ -12,6 +12,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.ArrayInitializerNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableInitializerListNode;
+import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
@@ -19,6 +20,12 @@ public class ArrayInitializerNodeImpl extends NodeImpl implements ArrayInitializ
 {
     /** The initializers for the array. */
     private VariableInitializerListNode initializers;
+    
+    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    {
+        /** Attribute for the initializers property. */
+        INITIALIZERS,
+    }
     
     /** General constructor. */
     public ArrayInitializerNodeImpl(
@@ -37,6 +44,7 @@ public class ArrayInitializerNodeImpl extends NodeImpl implements ArrayInitializ
      */
     public VariableInitializerListNode getInitializers()
     {
+        recordAccess(LocalAttribute.INITIALIZERS, Attribute.AccessType.READ);
         return this.initializers;
     }
     
@@ -47,6 +55,7 @@ public class ArrayInitializerNodeImpl extends NodeImpl implements ArrayInitializ
     public void setInitializers(VariableInitializerListNode initializers)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.INITIALIZERS, Attribute.AccessType.WRITE);
         if (this.initializers instanceof NodeImpl)
         {
             ((NodeImpl)this.initializers).setParent(null);

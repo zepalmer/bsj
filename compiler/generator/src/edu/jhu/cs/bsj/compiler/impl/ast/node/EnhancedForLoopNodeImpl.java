@@ -14,6 +14,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.StatementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableNode;
+import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
@@ -27,6 +28,16 @@ public class EnhancedForLoopNodeImpl extends NodeImpl implements EnhancedForLoop
     
     /** The loop's statement. */
     private StatementNode statement;
+    
+    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    {
+        /** Attribute for the variable property. */
+        VARIABLE,
+        /** Attribute for the expression property. */
+        EXPRESSION,
+        /** Attribute for the statement property. */
+        STATEMENT,
+    }
     
     /** General constructor. */
     public EnhancedForLoopNodeImpl(
@@ -49,6 +60,7 @@ public class EnhancedForLoopNodeImpl extends NodeImpl implements EnhancedForLoop
      */
     public VariableNode getVariable()
     {
+        recordAccess(LocalAttribute.VARIABLE, Attribute.AccessType.READ);
         return this.variable;
     }
     
@@ -59,6 +71,7 @@ public class EnhancedForLoopNodeImpl extends NodeImpl implements EnhancedForLoop
     public void setVariable(VariableNode variable)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.VARIABLE, Attribute.AccessType.WRITE);
         if (this.variable instanceof NodeImpl)
         {
             ((NodeImpl)this.variable).setParent(null);
@@ -76,6 +89,7 @@ public class EnhancedForLoopNodeImpl extends NodeImpl implements EnhancedForLoop
      */
     public ExpressionNode getExpression()
     {
+        recordAccess(LocalAttribute.EXPRESSION, Attribute.AccessType.READ);
         return this.expression;
     }
     
@@ -86,6 +100,7 @@ public class EnhancedForLoopNodeImpl extends NodeImpl implements EnhancedForLoop
     public void setExpression(ExpressionNode expression)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.EXPRESSION, Attribute.AccessType.WRITE);
         if (this.expression instanceof NodeImpl)
         {
             ((NodeImpl)this.expression).setParent(null);
@@ -103,6 +118,7 @@ public class EnhancedForLoopNodeImpl extends NodeImpl implements EnhancedForLoop
      */
     public StatementNode getStatement()
     {
+        recordAccess(LocalAttribute.STATEMENT, Attribute.AccessType.READ);
         return this.statement;
     }
     
@@ -113,6 +129,7 @@ public class EnhancedForLoopNodeImpl extends NodeImpl implements EnhancedForLoop
     public void setStatement(StatementNode statement)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.STATEMENT, Attribute.AccessType.WRITE);
         if (this.statement instanceof NodeImpl)
         {
             ((NodeImpl)this.statement).setParent(null);

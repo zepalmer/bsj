@@ -13,6 +13,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.AnnotationElementListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.NormalAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.UnparameterizedTypeNode;
+import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
@@ -20,6 +21,12 @@ public class NormalAnnotationNodeImpl extends AnnotationNodeImpl implements Norm
 {
     /** The arguments. */
     private AnnotationElementListNode arguments;
+    
+    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    {
+        /** Attribute for the arguments property. */
+        ARGUMENTS,
+    }
     
     /** General constructor. */
     public NormalAnnotationNodeImpl(
@@ -39,6 +46,7 @@ public class NormalAnnotationNodeImpl extends AnnotationNodeImpl implements Norm
      */
     public AnnotationElementListNode getArguments()
     {
+        recordAccess(LocalAttribute.ARGUMENTS, Attribute.AccessType.READ);
         return this.arguments;
     }
     
@@ -49,6 +57,7 @@ public class NormalAnnotationNodeImpl extends AnnotationNodeImpl implements Norm
     public void setArguments(AnnotationElementListNode arguments)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.ARGUMENTS, Attribute.AccessType.WRITE);
         if (this.arguments instanceof NodeImpl)
         {
             ((NodeImpl)this.arguments).setParent(null);

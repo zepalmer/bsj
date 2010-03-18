@@ -14,6 +14,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclaratorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableInitializerNode;
+import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
@@ -27,6 +28,16 @@ public class VariableDeclaratorNodeImpl extends NodeImpl implements VariableDecl
     
     /** The initializer to use. */
     private VariableInitializerNode initializer;
+    
+    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    {
+        /** Attribute for the type property. */
+        TYPE,
+        /** Attribute for the name property. */
+        NAME,
+        /** Attribute for the initializer property. */
+        INITIALIZER,
+    }
     
     /** General constructor. */
     public VariableDeclaratorNodeImpl(
@@ -49,6 +60,7 @@ public class VariableDeclaratorNodeImpl extends NodeImpl implements VariableDecl
      */
     public TypeNode getType()
     {
+        recordAccess(LocalAttribute.TYPE, Attribute.AccessType.READ);
         return this.type;
     }
     
@@ -59,6 +71,7 @@ public class VariableDeclaratorNodeImpl extends NodeImpl implements VariableDecl
     public void setType(TypeNode type)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.TYPE, Attribute.AccessType.WRITE);
         if (this.type instanceof NodeImpl)
         {
             ((NodeImpl)this.type).setParent(null);
@@ -76,6 +89,7 @@ public class VariableDeclaratorNodeImpl extends NodeImpl implements VariableDecl
      */
     public IdentifierNode getName()
     {
+        recordAccess(LocalAttribute.NAME, Attribute.AccessType.READ);
         return this.name;
     }
     
@@ -86,6 +100,7 @@ public class VariableDeclaratorNodeImpl extends NodeImpl implements VariableDecl
     public void setName(IdentifierNode name)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.NAME, Attribute.AccessType.WRITE);
         if (this.name instanceof NodeImpl)
         {
             ((NodeImpl)this.name).setParent(null);
@@ -103,6 +118,7 @@ public class VariableDeclaratorNodeImpl extends NodeImpl implements VariableDecl
      */
     public VariableInitializerNode getInitializer()
     {
+        recordAccess(LocalAttribute.INITIALIZER, Attribute.AccessType.READ);
         return this.initializer;
     }
     
@@ -113,6 +129,7 @@ public class VariableDeclaratorNodeImpl extends NodeImpl implements VariableDecl
     public void setInitializer(VariableInitializerNode initializer)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.INITIALIZER, Attribute.AccessType.WRITE);
         if (this.initializer instanceof NodeImpl)
         {
             ((NodeImpl)this.initializer).setParent(null);

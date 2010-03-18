@@ -10,6 +10,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.ConstructorInvocationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ReferenceTypeListNode;
+import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
@@ -20,6 +21,14 @@ public abstract class ConstructorInvocationNodeImpl extends NodeImpl implements 
     
     /** The type arguments for the method. */
     private ReferenceTypeListNode typeArguments;
+    
+    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    {
+        /** Attribute for the arguments property. */
+        ARGUMENTS,
+        /** Attribute for the typeArguments property. */
+        TYPE_ARGUMENTS,
+    }
     
     /** General constructor. */
     protected ConstructorInvocationNodeImpl(
@@ -40,6 +49,7 @@ public abstract class ConstructorInvocationNodeImpl extends NodeImpl implements 
      */
     public ExpressionListNode getArguments()
     {
+        recordAccess(LocalAttribute.ARGUMENTS, Attribute.AccessType.READ);
         return this.arguments;
     }
     
@@ -50,6 +60,7 @@ public abstract class ConstructorInvocationNodeImpl extends NodeImpl implements 
     public void setArguments(ExpressionListNode arguments)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.ARGUMENTS, Attribute.AccessType.WRITE);
         if (this.arguments instanceof NodeImpl)
         {
             ((NodeImpl)this.arguments).setParent(null);
@@ -67,6 +78,7 @@ public abstract class ConstructorInvocationNodeImpl extends NodeImpl implements 
      */
     public ReferenceTypeListNode getTypeArguments()
     {
+        recordAccess(LocalAttribute.TYPE_ARGUMENTS, Attribute.AccessType.READ);
         return this.typeArguments;
     }
     
@@ -77,6 +89,7 @@ public abstract class ConstructorInvocationNodeImpl extends NodeImpl implements 
     public void setTypeArguments(ReferenceTypeListNode typeArguments)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.TYPE_ARGUMENTS, Attribute.AccessType.WRITE);
         if (this.typeArguments instanceof NodeImpl)
         {
             ((NodeImpl)this.typeArguments).setParent(null);

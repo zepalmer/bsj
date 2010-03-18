@@ -13,6 +13,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.SuperFieldAccessNode;
 import edu.jhu.cs.bsj.compiler.ast.node.UnparameterizedTypeNode;
+import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
@@ -23,6 +24,14 @@ public class SuperFieldAccessNodeImpl extends NodeImpl implements SuperFieldAcce
     
     /** The identifier of the field being accessed. */
     private IdentifierNode identifier;
+    
+    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    {
+        /** Attribute for the type property. */
+        TYPE,
+        /** Attribute for the identifier property. */
+        IDENTIFIER,
+    }
     
     /** General constructor. */
     public SuperFieldAccessNodeImpl(
@@ -43,6 +52,7 @@ public class SuperFieldAccessNodeImpl extends NodeImpl implements SuperFieldAcce
      */
     public UnparameterizedTypeNode getType()
     {
+        recordAccess(LocalAttribute.TYPE, Attribute.AccessType.READ);
         return this.type;
     }
     
@@ -53,6 +63,7 @@ public class SuperFieldAccessNodeImpl extends NodeImpl implements SuperFieldAcce
     public void setType(UnparameterizedTypeNode type)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.TYPE, Attribute.AccessType.WRITE);
         if (this.type instanceof NodeImpl)
         {
             ((NodeImpl)this.type).setParent(null);
@@ -70,6 +81,7 @@ public class SuperFieldAccessNodeImpl extends NodeImpl implements SuperFieldAcce
      */
     public IdentifierNode getIdentifier()
     {
+        recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.READ);
         return this.identifier;
     }
     
@@ -80,6 +92,7 @@ public class SuperFieldAccessNodeImpl extends NodeImpl implements SuperFieldAcce
     public void setIdentifier(IdentifierNode identifier)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.WRITE);
         if (this.identifier instanceof NodeImpl)
         {
             ((NodeImpl)this.identifier).setParent(null);

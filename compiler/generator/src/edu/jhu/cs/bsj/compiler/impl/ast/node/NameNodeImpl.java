@@ -10,6 +10,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.NameCategory;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.NameNode;
+import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public abstract class NameNodeImpl extends NodeImpl implements NameNode
@@ -19,6 +20,14 @@ public abstract class NameNodeImpl extends NodeImpl implements NameNode
     
     /** The category for this name. */
     private NameCategory category;
+    
+    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    {
+        /** Attribute for the identifier property. */
+        IDENTIFIER,
+        /** Attribute for the category property. */
+        CATEGORY,
+    }
     
     /** General constructor. */
     protected NameNodeImpl(
@@ -39,6 +48,7 @@ public abstract class NameNodeImpl extends NodeImpl implements NameNode
      */
     public IdentifierNode getIdentifier()
     {
+        recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.READ);
         return this.identifier;
     }
     
@@ -49,6 +59,7 @@ public abstract class NameNodeImpl extends NodeImpl implements NameNode
     public void setIdentifier(IdentifierNode identifier)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.WRITE);
         if (this.identifier instanceof NodeImpl)
         {
             ((NodeImpl)this.identifier).setParent(null);
@@ -66,6 +77,7 @@ public abstract class NameNodeImpl extends NodeImpl implements NameNode
      */
     public NameCategory getCategory()
     {
+        recordAccess(LocalAttribute.CATEGORY, Attribute.AccessType.READ);
         return this.category;
     }
     

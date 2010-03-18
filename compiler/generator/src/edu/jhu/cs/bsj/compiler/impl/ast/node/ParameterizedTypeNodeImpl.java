@@ -13,6 +13,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.ParameterizedTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeArgumentListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.UnparameterizedTypeNode;
+import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
@@ -23,6 +24,14 @@ public class ParameterizedTypeNodeImpl extends NodeImpl implements Parameterized
     
     /** The type arguments for this node. */
     private TypeArgumentListNode typeArguments;
+    
+    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    {
+        /** Attribute for the baseType property. */
+        BASE_TYPE,
+        /** Attribute for the typeArguments property. */
+        TYPE_ARGUMENTS,
+    }
     
     /** General constructor. */
     public ParameterizedTypeNodeImpl(
@@ -43,6 +52,7 @@ public class ParameterizedTypeNodeImpl extends NodeImpl implements Parameterized
      */
     public UnparameterizedTypeNode getBaseType()
     {
+        recordAccess(LocalAttribute.BASE_TYPE, Attribute.AccessType.READ);
         return this.baseType;
     }
     
@@ -53,6 +63,7 @@ public class ParameterizedTypeNodeImpl extends NodeImpl implements Parameterized
     public void setBaseType(UnparameterizedTypeNode baseType)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.BASE_TYPE, Attribute.AccessType.WRITE);
         if (this.baseType instanceof NodeImpl)
         {
             ((NodeImpl)this.baseType).setParent(null);
@@ -70,6 +81,7 @@ public class ParameterizedTypeNodeImpl extends NodeImpl implements Parameterized
      */
     public TypeArgumentListNode getTypeArguments()
     {
+        recordAccess(LocalAttribute.TYPE_ARGUMENTS, Attribute.AccessType.READ);
         return this.typeArguments;
     }
     
@@ -80,6 +92,7 @@ public class ParameterizedTypeNodeImpl extends NodeImpl implements Parameterized
     public void setTypeArguments(TypeArgumentListNode typeArguments)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.TYPE_ARGUMENTS, Attribute.AccessType.WRITE);
         if (this.typeArguments instanceof NodeImpl)
         {
             ((NodeImpl)this.typeArguments).setParent(null);

@@ -12,6 +12,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.NameListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependsNode;
+import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.NodeImpl;
 
@@ -20,6 +21,12 @@ public class MetaprogramDependsNodeImpl extends NodeImpl implements MetaprogramD
 {
     /** The names of the metaprogram targets on which to depend. */
     private NameListNode targetNames;
+    
+    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    {
+        /** Attribute for the targetNames property. */
+        TARGET_NAMES,
+    }
     
     /** General constructor. */
     public MetaprogramDependsNodeImpl(
@@ -38,6 +45,7 @@ public class MetaprogramDependsNodeImpl extends NodeImpl implements MetaprogramD
      */
     public NameListNode getTargetNames()
     {
+        recordAccess(LocalAttribute.TARGET_NAMES, Attribute.AccessType.READ);
         return this.targetNames;
     }
     
@@ -48,6 +56,7 @@ public class MetaprogramDependsNodeImpl extends NodeImpl implements MetaprogramD
     public void setTargetNames(NameListNode targetNames)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.TARGET_NAMES, Attribute.AccessType.WRITE);
         if (this.targetNames instanceof NodeImpl)
         {
             ((NodeImpl)this.targetNames).setParent(null);

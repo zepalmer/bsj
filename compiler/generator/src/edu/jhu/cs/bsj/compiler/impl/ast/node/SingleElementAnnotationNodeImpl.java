@@ -13,6 +13,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.AnnotationValueNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.SingleElementAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.UnparameterizedTypeNode;
+import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
@@ -20,6 +21,12 @@ public class SingleElementAnnotationNodeImpl extends AnnotationNodeImpl implemen
 {
     /** The value of the "value" element. */
     private AnnotationValueNode value;
+    
+    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    {
+        /** Attribute for the value property. */
+        VALUE,
+    }
     
     /** General constructor. */
     public SingleElementAnnotationNodeImpl(
@@ -39,6 +46,7 @@ public class SingleElementAnnotationNodeImpl extends AnnotationNodeImpl implemen
      */
     public AnnotationValueNode getValue()
     {
+        recordAccess(LocalAttribute.VALUE, Attribute.AccessType.READ);
         return this.value;
     }
     
@@ -49,6 +57,7 @@ public class SingleElementAnnotationNodeImpl extends AnnotationNodeImpl implemen
     public void setValue(AnnotationValueNode value)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.VALUE, Attribute.AccessType.WRITE);
         if (this.value instanceof NodeImpl)
         {
             ((NodeImpl)this.value).setParent(null);

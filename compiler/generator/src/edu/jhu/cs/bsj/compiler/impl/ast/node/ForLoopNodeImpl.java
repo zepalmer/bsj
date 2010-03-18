@@ -15,6 +15,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.ForLoopNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.StatementExpressionListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.StatementNode;
+import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
@@ -31,6 +32,18 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
     
     /** The loop's statement. */
     private StatementNode statement;
+    
+    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    {
+        /** Attribute for the initializer property. */
+        INITIALIZER,
+        /** Attribute for the condition property. */
+        CONDITION,
+        /** Attribute for the update property. */
+        UPDATE,
+        /** Attribute for the statement property. */
+        STATEMENT,
+    }
     
     /** General constructor. */
     public ForLoopNodeImpl(
@@ -55,6 +68,7 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
      */
     public ForInitializerNode getInitializer()
     {
+        recordAccess(LocalAttribute.INITIALIZER, Attribute.AccessType.READ);
         return this.initializer;
     }
     
@@ -65,6 +79,7 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
     public void setInitializer(ForInitializerNode initializer)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.INITIALIZER, Attribute.AccessType.WRITE);
         if (this.initializer instanceof NodeImpl)
         {
             ((NodeImpl)this.initializer).setParent(null);
@@ -82,6 +97,7 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
      */
     public ExpressionNode getCondition()
     {
+        recordAccess(LocalAttribute.CONDITION, Attribute.AccessType.READ);
         return this.condition;
     }
     
@@ -92,6 +108,7 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
     public void setCondition(ExpressionNode condition)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.CONDITION, Attribute.AccessType.WRITE);
         if (this.condition instanceof NodeImpl)
         {
             ((NodeImpl)this.condition).setParent(null);
@@ -109,6 +126,7 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
      */
     public StatementExpressionListNode getUpdate()
     {
+        recordAccess(LocalAttribute.UPDATE, Attribute.AccessType.READ);
         return this.update;
     }
     
@@ -119,6 +137,7 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
     public void setUpdate(StatementExpressionListNode update)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.UPDATE, Attribute.AccessType.WRITE);
         if (this.update instanceof NodeImpl)
         {
             ((NodeImpl)this.update).setParent(null);
@@ -136,6 +155,7 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
      */
     public StatementNode getStatement()
     {
+        recordAccess(LocalAttribute.STATEMENT, Attribute.AccessType.READ);
         return this.statement;
     }
     
@@ -146,6 +166,7 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
     public void setStatement(StatementNode statement)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.STATEMENT, Attribute.AccessType.WRITE);
         if (this.statement instanceof NodeImpl)
         {
             ((NodeImpl)this.statement).setParent(null);

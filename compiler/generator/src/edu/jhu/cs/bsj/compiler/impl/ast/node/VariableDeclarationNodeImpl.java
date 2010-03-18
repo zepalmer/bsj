@@ -13,6 +13,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclaratorListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableModifiersNode;
+import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
@@ -23,6 +24,14 @@ public class VariableDeclarationNodeImpl extends NodeImpl implements VariableDec
     
     /** The variable declarators for this node. */
     private VariableDeclaratorListNode declarators;
+    
+    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    {
+        /** Attribute for the modifiers property. */
+        MODIFIERS,
+        /** Attribute for the declarators property. */
+        DECLARATORS,
+    }
     
     /** General constructor. */
     public VariableDeclarationNodeImpl(
@@ -43,6 +52,7 @@ public class VariableDeclarationNodeImpl extends NodeImpl implements VariableDec
      */
     public VariableModifiersNode getModifiers()
     {
+        recordAccess(LocalAttribute.MODIFIERS, Attribute.AccessType.READ);
         return this.modifiers;
     }
     
@@ -53,6 +63,7 @@ public class VariableDeclarationNodeImpl extends NodeImpl implements VariableDec
     public void setModifiers(VariableModifiersNode modifiers)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.MODIFIERS, Attribute.AccessType.WRITE);
         if (this.modifiers instanceof NodeImpl)
         {
             ((NodeImpl)this.modifiers).setParent(null);
@@ -70,6 +81,7 @@ public class VariableDeclarationNodeImpl extends NodeImpl implements VariableDec
      */
     public VariableDeclaratorListNode getDeclarators()
     {
+        recordAccess(LocalAttribute.DECLARATORS, Attribute.AccessType.READ);
         return this.declarators;
     }
     
@@ -80,6 +92,7 @@ public class VariableDeclarationNodeImpl extends NodeImpl implements VariableDec
     public void setDeclarators(VariableDeclaratorListNode declarators)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.DECLARATORS, Attribute.AccessType.WRITE);
         if (this.declarators instanceof NodeImpl)
         {
             ((NodeImpl)this.declarators).setParent(null);

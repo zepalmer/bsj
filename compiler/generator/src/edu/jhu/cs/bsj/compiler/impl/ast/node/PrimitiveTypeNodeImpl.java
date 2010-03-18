@@ -12,6 +12,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.PrimitiveType;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.PrimitiveTypeNode;
+import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
@@ -19,6 +20,12 @@ public class PrimitiveTypeNodeImpl extends NodeImpl implements PrimitiveTypeNode
 {
     /** The primitive type being represented. */
     private PrimitiveType primitiveType;
+    
+    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    {
+        /** Attribute for the primitiveType property. */
+        PRIMITIVE_TYPE,
+    }
     
     /** General constructor. */
     public PrimitiveTypeNodeImpl(
@@ -37,6 +44,7 @@ public class PrimitiveTypeNodeImpl extends NodeImpl implements PrimitiveTypeNode
      */
     public PrimitiveType getPrimitiveType()
     {
+        recordAccess(LocalAttribute.PRIMITIVE_TYPE, Attribute.AccessType.READ);
         return this.primitiveType;
     }
     
@@ -47,6 +55,7 @@ public class PrimitiveTypeNodeImpl extends NodeImpl implements PrimitiveTypeNode
     public void setPrimitiveType(PrimitiveType primitiveType)
     {
         getManager().assertMutatable(this);
+        recordAccess(LocalAttribute.PRIMITIVE_TYPE, Attribute.AccessType.WRITE);
         this.primitiveType = primitiveType;
     }
     
