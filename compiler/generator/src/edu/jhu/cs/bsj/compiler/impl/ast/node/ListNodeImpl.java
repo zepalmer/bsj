@@ -11,7 +11,6 @@ import javax.annotation.Generated;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
-import edu.jhu.cs.bsj.compiler.ast.node.InitializerDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
@@ -175,9 +174,9 @@ public abstract class ListNodeImpl<T extends Node> extends NodeImpl implements L
 		/** The list of present attributes corresponding to the proxy list. */
 		private List<ListAttribute> presentAttributes = new ArrayList<ListAttribute>();
 		/** The tailing after attribute which always appears after the end of the list. */
-		private ListAttribute afterAttribute = new ListAttribute(false);
+		private ListAttribute afterAttribute = new ListAttribute();
 		/** The size attribute of this list. */
-		private ListAttribute sizeAttribute = new ListAttribute(true);
+		private ListAttribute sizeAttribute = new ListAttribute();
 		/** The list containing the actual data. */
 		private List<T> backingList = new ArrayList<T>();
 
@@ -211,7 +210,7 @@ public abstract class ListNodeImpl<T extends Node> extends NodeImpl implements L
 		{
 			return this.presentAttributes.get(index);
 		}
-
+		
 		/**
 		 * Called to set the parent on nodes which are removed from this node.
 		 */
@@ -219,7 +218,7 @@ public abstract class ListNodeImpl<T extends Node> extends NodeImpl implements L
 		{
 			if (t instanceof NodeImpl)
 			{
-				((NodeImpl) t).setParent(ListNodeImpl.this);
+				((NodeImpl)t).setParent(ListNodeImpl.this);
 			}
 		}
 
@@ -230,19 +229,8 @@ public abstract class ListNodeImpl<T extends Node> extends NodeImpl implements L
 		{
 			if (t instanceof NodeImpl)
 			{
-				((NodeImpl) t).setParent(null);
+				((NodeImpl)t).setParent(null);
 			}
-		}
-
-		/**
-		 * Determines if the specified element should be treated as order-dependent in this list.
-		 * 
-		 * @param element The element in question.
-		 * @return <code>true</code> to treat the element as order-dependent; <code>false</code> otherwise.
-		 */
-		protected boolean isOrderDependent(T element)
-		{
-			return (ListNodeImpl.this.getAlwaysOrdered() || (element instanceof InitializerDeclarationNode));
 		}
 
 		/**
@@ -264,20 +252,21 @@ public abstract class ListNodeImpl<T extends Node> extends NodeImpl implements L
 		@Override
 		public void add(int index, T element)
 		{
-			this.beforeAttributes.add(index, new ListAttribute(false));
-			this.presentAttributes.add(index, new ListAttribute(true));
+			this.beforeAttributes.add(index, new ListAttribute());
+			this.presentAttributes.add(index, new ListAttribute());
 			this.backingList.add(index, element);
 			elementAdded(element);
 
-			getBetweenAttribute(index).recordAccess(AccessType.WRITE, element);
-			getPresentAttribute(index).recordAccess(AccessType.WRITE, element);
-			getBetweenAttribute(index + 1).recordAccess(AccessType.WRITE, element);
-			this.sizeAttribute.recordAccess(AccessType.WRITE, element);
+			getBetweenAttribute(index).recordAccess(AccessType.WRITE);
+			getPresentAttribute(index).recordAccess(AccessType.WRITE);
+			getBetweenAttribute(index+1).recordAccess(AccessType.WRITE);
+			this.sizeAttribute.recordAccess(AccessType.WRITE);
 		}
 
 		@Override
 		public boolean add(T e)
 		{
+			// TODO: behave differently for order-independent values?
 			this.add(this.backingList.size(), e);
 			return true;
 		}
@@ -321,7 +310,7 @@ public abstract class ListNodeImpl<T extends Node> extends NodeImpl implements L
 				T t = it.next();
 				if ((o == null && t == null) || (o != null && o.equals(t)))
 				{
-					getPresentAttribute(it.previousIndex()).recordAccess(AccessType.READ, t);
+					getPresentAttribute(it.previousIndex()).recordAccess(AccessType.READ);
 					return true;
 				}
 			}
@@ -342,11 +331,10 @@ public abstract class ListNodeImpl<T extends Node> extends NodeImpl implements L
 		@Override
 		public T get(int index)
 		{
-			T ret = this.backingList.get(index);
-			getBetweenAttribute(index).recordAccess(AccessType.READ, ret);
-			getPresentAttribute(index).recordAccess(AccessType.READ, ret);
-			getBetweenAttribute(index + 1).recordAccess(AccessType.READ, ret);
-			return ret;
+			getBetweenAttribute(index).recordAccess(AccessType.READ);
+			getPresentAttribute(index).recordAccess(AccessType.READ);
+			getBetweenAttribute(index + 1).recordAccess(AccessType.READ);
+			return this.backingList.get(index);
 		}
 
 		@Override
@@ -356,7 +344,7 @@ public abstract class ListNodeImpl<T extends Node> extends NodeImpl implements L
 			while (it.hasNext())
 			{
 				T t = it.next();
-				if ((t == null && o == null) || (t != null && t.equals(o)))
+				if ((t==null && o==null) || (t!=null && t.equals(o)))
 				{
 					return it.previousIndex();
 				}
@@ -383,7 +371,7 @@ public abstract class ListNodeImpl<T extends Node> extends NodeImpl implements L
 			while (it.hasPrevious())
 			{
 				T t = it.previous();
-				if ((t == null && o == null) || (t != null && t.equals(o)))
+				if ((t==null && o==null) || (t!=null && t.equals(o)))
 				{
 					return it.nextIndex();
 				}
@@ -412,31 +400,29 @@ public abstract class ListNodeImpl<T extends Node> extends NodeImpl implements L
 				{
 					this.lastValid = false;
 					int index = this.iterator.nextIndex();
-					ListNodeList.this.beforeAttributes.add(index, new ListAttribute(false));
-					ListNodeList.this.presentAttributes.add(index, new ListAttribute(true));
-
+					ListNodeList.this.beforeAttributes.add(index, new ListAttribute());
+					ListNodeList.this.presentAttributes.add(index, new ListAttribute());
+					
 					this.iterator.add(e);
 					elementAdded(e);
-
-					getBetweenAttribute(index).recordAccess(AccessType.WRITE, e);
-					getPresentAttribute(index).recordAccess(AccessType.WRITE, e);
-					getBetweenAttribute(index + 1).recordAccess(AccessType.WRITE, e);
-					ListNodeList.this.sizeAttribute.recordAccess(AccessType.WRITE, e);
+					
+					getBetweenAttribute(index).recordAccess(AccessType.WRITE);
+					getPresentAttribute(index).recordAccess(AccessType.WRITE);
+					getBetweenAttribute(index+1).recordAccess(AccessType.WRITE);
+					ListNodeList.this.sizeAttribute.recordAccess(AccessType.WRITE);
 				}
 
 				@Override
 				public boolean hasNext()
 				{
-					getBetweenAttribute(iterator.nextIndex()).recordAccess(AccessType.READ,
-							ListNodeList.this.backingList.get(iterator.nextIndex()));
+					getBetweenAttribute(iterator.nextIndex()).recordAccess(AccessType.READ);
 					return iterator.hasNext();
 				}
 
 				@Override
 				public boolean hasPrevious()
 				{
-					getBetweenAttribute(iterator.previousIndex()).recordAccess(AccessType.READ,
-							ListNodeList.this.backingList.get(iterator.previousIndex()));
+					getBetweenAttribute(iterator.previousIndex()).recordAccess(AccessType.READ);
 					return iterator.hasPrevious();
 				}
 
@@ -444,10 +430,10 @@ public abstract class ListNodeImpl<T extends Node> extends NodeImpl implements L
 				public T next()
 				{
 					this.lastIndex = iterator.nextIndex();
-					this.lastValue = iterator.next();
-					getBetweenAttribute(this.lastIndex).recordAccess(AccessType.READ, this.lastValue);
-					getPresentAttribute(this.lastIndex).recordAccess(AccessType.READ, this.lastValue);
+					getBetweenAttribute(this.lastIndex).recordAccess(AccessType.READ);
+					getPresentAttribute(this.lastIndex).recordAccess(AccessType.READ);
 					this.lastValid = true;
+					this.lastValue = iterator.next();
 					return this.lastValue;
 				}
 
@@ -461,10 +447,10 @@ public abstract class ListNodeImpl<T extends Node> extends NodeImpl implements L
 				public T previous()
 				{
 					this.lastIndex = iterator.previousIndex();
-					this.lastValue = iterator.previous();
-					getBetweenAttribute(this.lastIndex).recordAccess(AccessType.READ, this.lastValue);
-					getPresentAttribute(this.lastIndex).recordAccess(AccessType.READ, this.lastValue);
+					getBetweenAttribute(this.lastIndex).recordAccess(AccessType.READ);
+					getPresentAttribute(this.lastIndex).recordAccess(AccessType.READ);
 					this.lastValid = true;
+					this.lastValue = iterator.previous();
 					return this.lastValue;
 				}
 
@@ -482,10 +468,10 @@ public abstract class ListNodeImpl<T extends Node> extends NodeImpl implements L
 						throw new IllegalStateException("Iterator cannot remove - no valid element");
 					}
 					this.lastValid = false;
-					getBetweenAttribute(this.lastIndex).recordAccess(AccessType.WRITE, this.lastValue);
-					getPresentAttribute(this.lastIndex).recordAccess(AccessType.WRITE, this.lastValue);
-					getBetweenAttribute(this.lastIndex + 1).recordAccess(AccessType.WRITE, this.lastValue);
-					ListNodeList.this.sizeAttribute.recordAccess(AccessType.WRITE, this.lastValue);
+					getBetweenAttribute(this.lastIndex).recordAccess(AccessType.WRITE);
+					getPresentAttribute(this.lastIndex).recordAccess(AccessType.WRITE);
+					getBetweenAttribute(this.lastIndex+1).recordAccess(AccessType.WRITE);
+					ListNodeList.this.sizeAttribute.recordAccess(AccessType.WRITE);
 					ListNodeList.this.beforeAttributes.remove(this.lastIndex);
 					ListNodeList.this.presentAttributes.remove(this.lastIndex);
 					iterator.remove();
@@ -500,8 +486,7 @@ public abstract class ListNodeImpl<T extends Node> extends NodeImpl implements L
 					{
 						throw new IllegalStateException("Iterator cannot remove - no valid element");
 					}
-					getPresentAttribute(this.lastIndex).recordAccess(AccessType.WRITE, this.lastValue);
-					getPresentAttribute(this.lastIndex).recordAccess(AccessType.WRITE, e);
+					getPresentAttribute(this.lastIndex).recordAccess(AccessType.WRITE);
 					iterator.set(e);
 					elementRemoved(this.lastValue);
 					elementAdded(e);
@@ -513,11 +498,10 @@ public abstract class ListNodeImpl<T extends Node> extends NodeImpl implements L
 		@Override
 		public T remove(int index)
 		{
-			T t = this.backingList.get(index);
-			getBetweenAttribute(index).recordAccess(AccessType.WRITE, t);
-			getPresentAttribute(index).recordAccess(AccessType.WRITE, t);
-			getBetweenAttribute(index + 1).recordAccess(AccessType.WRITE, t);
-			this.sizeAttribute.recordAccess(AccessType.WRITE, t);
+			getBetweenAttribute(index).recordAccess(AccessType.WRITE);
+			getPresentAttribute(index).recordAccess(AccessType.WRITE);
+			getBetweenAttribute(index + 1).recordAccess(AccessType.WRITE);
+			this.sizeAttribute.recordAccess(AccessType.WRITE);
 			return removeElementByIndex(index);
 		}
 
@@ -527,9 +511,8 @@ public abstract class ListNodeImpl<T extends Node> extends NodeImpl implements L
 			int index = indexOf(o);
 			if (index != -1)
 			{
-				T t = this.backingList.get(index);
-				getPresentAttribute(index).recordAccess(AccessType.WRITE, t);
-				this.sizeAttribute.recordAccess(AccessType.WRITE, t);
+				getPresentAttribute(index).recordAccess(AccessType.WRITE);
+				this.sizeAttribute.recordAccess(AccessType.WRITE);
 				removeElementByIndex(index);
 				return true;
 			} else
@@ -559,9 +542,8 @@ public abstract class ListNodeImpl<T extends Node> extends NodeImpl implements L
 				if (!c.contains(it.next()))
 				{
 					int index = it.previousIndex();
-					T t = this.backingList.get(index);
-					getPresentAttribute(index).recordAccess(AccessType.WRITE, t);
-					this.sizeAttribute.recordAccess(AccessType.WRITE, t);
+					getPresentAttribute(index).recordAccess(AccessType.WRITE);
+					this.sizeAttribute.recordAccess(AccessType.WRITE);
 					removeElementByIndex(index);
 					ret = true;
 				}
@@ -572,14 +554,10 @@ public abstract class ListNodeImpl<T extends Node> extends NodeImpl implements L
 		@Override
 		public T set(int index, T element)
 		{
-			T ret = this.backingList.get(index);
-			getBetweenAttribute(index).recordAccess(AccessType.WRITE, ret);
-			getPresentAttribute(index).recordAccess(AccessType.WRITE, ret);
-			getBetweenAttribute(index + 1).recordAccess(AccessType.WRITE, ret);
-			this.backingList.set(index, element);
-			getBetweenAttribute(index).recordAccess(AccessType.WRITE, element);
-			getPresentAttribute(index).recordAccess(AccessType.WRITE, element);
-			getBetweenAttribute(index + 1).recordAccess(AccessType.WRITE, element);
+			getBetweenAttribute(index).recordAccess(AccessType.WRITE);
+			getPresentAttribute(index).recordAccess(AccessType.WRITE);
+			getBetweenAttribute(index + 1).recordAccess(AccessType.WRITE);
+			T ret = this.backingList.set(index, element);
 			elementRemoved(ret);
 			elementAdded(element);
 			return ret;
@@ -588,7 +566,7 @@ public abstract class ListNodeImpl<T extends Node> extends NodeImpl implements L
 		@Override
 		public int size()
 		{
-			this.sizeAttribute.recordAccess(AccessType.READ, null);
+			this.sizeAttribute.recordAccess(AccessType.READ);
 			return this.backingList.size();
 		}
 
@@ -613,17 +591,15 @@ public abstract class ListNodeImpl<T extends Node> extends NodeImpl implements L
 			recordAllAccesses(AccessType.READ);
 			return ret;
 		}
-
+		
 		private void recordAllAccesses(AccessType accessType)
 		{
-			for (int i=0;i<this.backingList.size();i++)
-			{
-				T t = this.backingList.get(i);
-				getBetweenAttribute(i).recordAccess(accessType, t);
-				getPresentAttribute(i).recordAccess(accessType, t);
-				getBetweenAttribute(i + 1).recordAccess(accessType, t);
-			}
-			this.sizeAttribute.recordAccess(accessType, null);
+			for (ListAttribute att : this.beforeAttributes)
+				att.recordAccess(accessType);
+			for (ListAttribute att : this.presentAttributes)
+				att.recordAccess(accessType);
+			this.afterAttribute.recordAccess(accessType);
+			this.sizeAttribute.recordAccess(accessType);
 		}
 
 		/**
@@ -633,22 +609,15 @@ public abstract class ListNodeImpl<T extends Node> extends NodeImpl implements L
 		{
 			/** The ID number for this attribute. */
 			private int id;
-			/**
-			 * Whether or not to respect requests for order-independent access recordings. Presence attributes always do
-			 * so; between attributes do not.
-			 */
-			private boolean respectsOrderIndependentRecords;
 
 			/**
 			 * Creates a new attribute.
 			 * 
-			 * @param respectsOrderIndependentRecords <code>true</code> to respect order-independent access recordings;
-			 *            <code>false</code> otherwise.
+			 * @param id The ID number for this attribute.
 			 */
-			public ListAttribute(boolean respectsOrderIndependentRecords)
+			public ListAttribute()
 			{
 				this.id = nextAttributeID++;
-				this.respectsOrderIndependentRecords = respectsOrderIndependentRecords;
 			}
 
 			/**
@@ -676,16 +645,10 @@ public abstract class ListNodeImpl<T extends Node> extends NodeImpl implements L
 
 			/**
 			 * Records an access to this attribute. (Convenience method.)
-			 * 
-			 * @param accessType The type of access to record.
-			 * @param element The element corresponding to this recording.
 			 */
-			public void recordAccess(Attribute.AccessType accessType, T element)
+			public void recordAccess(Attribute.AccessType accessType)
 			{
-				if (this.respectsOrderIndependentRecords || ListNodeList.this.isOrderDependent(element))
-				{
-					ListNodeImpl.this.recordAccess(this, accessType);
-				}
+				ListNodeImpl.this.recordAccess(this, accessType);
 			}
 		}
 	}
