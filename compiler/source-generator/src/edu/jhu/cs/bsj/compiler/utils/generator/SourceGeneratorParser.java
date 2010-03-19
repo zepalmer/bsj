@@ -192,7 +192,7 @@ public class SourceGeneratorParser
 		}
 		return mode;
 	}
-	
+
 	static interface ElementHandler<T>
 	{
 		public T handle(Element e);
@@ -325,6 +325,7 @@ public class SourceGeneratorParser
 
 			List<String> interfaces = new ArrayList<String>();
 			List<TagReferenceDefinition> tags = new ArrayList<TagReferenceDefinition>();
+			List<ConstantDefinition> constants = new ArrayList<ConstantDefinition>();
 			List<PropertyDefinition> props = new ArrayList<PropertyDefinition>();
 			List<String> includes = new ArrayList<String>();
 			String docString = null;
@@ -349,9 +350,13 @@ public class SourceGeneratorParser
 						interfaces.add(childElement.getAttribute("name"));
 					} else if (childTag.equals("tag"))
 					{
-						String tagName =  childElement.getAttribute("name");
+						String tagName = childElement.getAttribute("name");
 						String tagTypeArg = getAttributeValue(childElement, "typeArg");
 						tags.add(new TagReferenceDefinition(tagName, tagTypeArg));
+					} else if (childTag.equals("constant"))
+					{
+						ConstantHandler handler = new ConstantHandler(this.profile);
+						constants.add(handler.handle(childElement));
 					} else if (childTag.equals("prop"))
 					{
 						PropertyHandler handler = new PropertyHandler(this.profile);
@@ -399,7 +404,7 @@ public class SourceGeneratorParser
 			}
 
 			TypeDefinition typeDefinition = new TypeDefinition(name, typeParam, superName, superTypeArg, profile,
-					interfaces, tags, props, includes, docString, toStringLines, factoryOverrideMap,
+					interfaces, tags, constants, props, includes, docString, toStringLines, factoryOverrideMap,
 					constructorOverrideMap, genConstructor, genChildren, genReplace, factoryMethodDefinitions, mode);
 			for (FactoryMethodDefinition factoryMethodDefinition : factoryMethodDefinitions)
 			{
@@ -409,25 +414,44 @@ public class SourceGeneratorParser
 		}
 	}
 
-	static class PropertyHandler implements ElementHandler<PropertyDefinition>
+	static abstract class AbstractPropertyHandler<T extends AbstractPropertyDefinition> implements ElementHandler<T>
 	{
-		private GenerationProfile profile;
+		protected GenerationProfile profile;
 
-		public PropertyHandler(GenerationProfile profile)
+		public AbstractPropertyHandler(GenerationProfile profile)
 		{
 			super();
 			this.profile = profile;
 		}
 
+		protected abstract T create(Element e, String name, String baseType, String typeArg, String description,
+				String defaultExpression);
+
 		@Override
-		public PropertyDefinition handle(Element e)
+		public T handle(Element e)
 		{
 			String name = e.getAttribute("name");
 			String baseType = getAttributeValue(e, "type");
 			String typeArg = getAttributeValue(e, "typeArg");
-			PropertyDefinition.Mode mode;
 			String description = getAttributeValue(e, "desc");
 			String defaultExpression = getAttributeValue(e, "default");
+
+			return create(e, name, baseType, typeArg, description, defaultExpression);
+		}
+	}
+
+	static class PropertyHandler extends AbstractPropertyHandler<PropertyDefinition>
+	{
+		public PropertyHandler(GenerationProfile profile)
+		{
+			super(profile);
+		}
+		
+		@Override
+		protected PropertyDefinition create(Element e, String name, String baseType, String typeArg,
+				String description, String defaultExpression)
+		{
+			PropertyDefinition.Mode mode;
 
 			String modeString = getAttributeValue(e, "mode");
 			if (modeString == null)
@@ -451,6 +475,21 @@ public class SourceGeneratorParser
 			}
 
 			return new PropertyDefinition(name, baseType, typeArg, mode, description, defaultExpression);
+		}
+	}
+	
+	static class ConstantHandler extends AbstractPropertyHandler<ConstantDefinition>
+	{
+		public ConstantHandler(GenerationProfile profile)
+		{
+			super(profile);
+		}
+
+		@Override
+		protected ConstantDefinition create(Element e, String name, String baseType, String typeArg,
+				String description, String defaultExpression)
+		{
+			return new ConstantDefinition(name, baseType, typeArg, description, defaultExpression);
 		}
 	}
 

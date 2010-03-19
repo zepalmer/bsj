@@ -34,6 +34,14 @@
         <xs:attribute name="typeArg" type="xs:string" use="optional" />
     </xs:complexType>
 
+    <xs:complexType name="constant_T">
+        <xs:attribute name="name" type="xs:string" use="required" />
+        <xs:attribute name="type" type="xs:string" use="required" />
+        <xs:attribute name="typeArg" type="xs:string" use="optional" />
+        <xs:attribute name="desc" type="xs:string" use="required" />
+        <xs:attribute name="default" type="xs:string" use="optional" />
+    </xs:complexType>
+
     <xs:complexType name="prop_T">
         <xs:attribute name="name" type="xs:string" use="required" />
         <xs:attribute name="type" type="xs:string" use="required" />
@@ -104,6 +112,7 @@
         <xs:sequence>
             <xs:element name="interface" type="interface_T" minOccurs="0" maxOccurs="unbounded" />
             <xs:element name="tag" type="tag_T" minOccurs="0" maxOccurs="unbounded" />
+            <xs:element name="constant" type="constant_T" minOccurs="0" maxOccurs="unbounded" />
             <xs:element name="prop" type="prop_T" minOccurs="0" maxOccurs="unbounded" />
             <xs:element name="include" type="include_T" minOccurs="0" maxOccurs="unbounded" />
             <xs:element name="doc" type="doc_T" />

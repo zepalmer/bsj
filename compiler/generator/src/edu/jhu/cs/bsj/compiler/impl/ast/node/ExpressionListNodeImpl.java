@@ -29,6 +29,15 @@ public class ExpressionListNodeImpl extends ListNodeImpl<ExpressionNode> impleme
     }
     
     /**
+     * Gets whether or not this list's contents are always order-dependent.
+     * @return Whether or not this list's contents are always order-dependent.
+     */
+    public boolean getAlwaysOrdered()
+    {
+        return true;
+    }
+    
+    /**
      * Handles the visitation of this node's children for the provided visitor.  Each
      * subclass should override this method, having the subclass implementation call this
      * method first and then visit its subclass-specific children.

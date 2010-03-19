@@ -809,7 +809,7 @@ public class SourceGenerator
 				ps.println("private " + p.getFullType() + " " + p.getName() + ";");
 				ps.println();
 			}
-
+			
 			// gen attributes enum
 			if (def.getResponsibleProperties(false).size() > 0)
 			{
@@ -864,6 +864,26 @@ public class SourceGenerator
 			if (!def.isGenConstructor())
 				ps.print("*/"); // nogen logic
 			ps.println();
+
+			// gen constant methods
+			for (ConstantDefinition c : def.getConstants())
+			{
+				ps.println("/**");
+				ps.println(" * Gets " + c.getDescription() + ".");
+				ps.println(" * @return " + capFirst(c.getDescription()) + ".");
+				ps.println(" */");
+				if (c.getDefaultExpression() != null)
+				{
+					ps.println("public " + c.getFullType() + " get" + capFirst(c.getName()) + "()");
+					ps.println("{");
+					ps.println("    return " + c.getDefaultExpression() + ";");
+					ps.println("}");
+				} else
+				{
+					ps.println("public abstract " + c.getFullType() + " get" + capFirst(c.getName()) + "();");
+				}
+				ps.println();
+			}
 
 			// gen getters and setters
 			for (PropertyDefinition p : def.getResponsibleProperties(false))

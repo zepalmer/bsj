@@ -105,6 +105,6 @@ public abstract class PropertyBasedHierarchyDefinition<T extends PropertyBasedHi
 		eliminateDuplicates(props, parentFirst);
 		return props;
 	}
-
+	
 	public abstract List<PropertyDefinition> getProperties();
 }

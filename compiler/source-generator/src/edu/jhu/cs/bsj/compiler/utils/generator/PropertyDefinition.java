@@ -5,7 +5,7 @@ package edu.jhu.cs.bsj.compiler.utils.generator;
  * 
  * @author Zachary Palmer
  */
-public class PropertyDefinition
+public class PropertyDefinition extends AbstractPropertyDefinition
 {
 	public static enum Mode
 	{
@@ -22,23 +22,13 @@ public class PropertyDefinition
 		HIDE;
 	}
 
-	private String name;
-	private String baseType;
-	private String typeArg;
 	private Mode mode;
-	private String description;
-	private String defaultExpression;
 
 	public PropertyDefinition(String name, String baseType, String typeArg, Mode mode, String description,
 			String defaultExpression)
 	{
-		super();
-		this.name = name;
-		this.baseType = baseType;
-		this.typeArg = typeArg;
+		super(name, baseType, typeArg, description, defaultExpression);
 		this.mode = mode;
-		this.description = description;
-		this.defaultExpression = defaultExpression;
 	}
 
 	public boolean isSkipMake()
@@ -56,45 +46,9 @@ public class PropertyDefinition
 		return this.mode == Mode.HIDE;
 	}
 
-	public String getName()
-	{
-		return name;
-	}
-
-	public String getBaseType()
-	{
-		return baseType;
-	}
-
-	public String getTypeArg()
-	{
-		return typeArg;
-	}
-
 	public Mode getMode()
 	{
 		return mode;
-	}
-
-	public String getDescription()
-	{
-		return description;
-	}
-
-	public String getDefaultExpression()
-	{
-		return defaultExpression;
-	}
-
-	public String getFullType()
-	{
-		if (this.typeArg == null)
-		{
-			return getBaseType();
-		} else
-		{
-			return getBaseType() + "<" + getTypeArg() + ">";
-		}
 	}
 
 	public String toString()

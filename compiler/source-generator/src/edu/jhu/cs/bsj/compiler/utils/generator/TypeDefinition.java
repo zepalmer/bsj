@@ -23,6 +23,7 @@ public class TypeDefinition extends PropertyBasedHierarchyDefinition<TypeDefinit
 	private GenerationProfile profile;
 	private List<String> interfaces; // used to denote non-tag interfaces such as List<T>
 	private List<TagReferenceDefinition> tags;
+	private List<ConstantDefinition> constants;
 	private List<PropertyDefinition> properties;
 	private List<String> includes;
 	private String docString;
@@ -40,7 +41,7 @@ public class TypeDefinition extends PropertyBasedHierarchyDefinition<TypeDefinit
 
 	public TypeDefinition(String baseName, String typeParameter, String superName, String superTypeArg,
 			GenerationProfile profile, List<String> interfaces, List<TagReferenceDefinition> tags,
-			List<PropertyDefinition> properties, List<String> includes, String docString, List<String> toStringLines,
+			List<ConstantDefinition> constants, List<PropertyDefinition> properties, List<String> includes, String docString, List<String> toStringLines,
 			Map<String, String> factoryOverrideMap, Map<String, String> constructorOverrideMap, boolean genConstructor,
 			boolean genChildren, boolean genReplace, List<FactoryMethodDefinition> factoryMethods, Mode mode)
 	{
@@ -52,6 +53,7 @@ public class TypeDefinition extends PropertyBasedHierarchyDefinition<TypeDefinit
 		this.profile = profile;
 		this.interfaces = interfaces;
 		this.tags = tags;
+		this.constants = constants;
 		this.properties = properties;
 		this.includes = includes;
 		this.docString = docString;
@@ -238,6 +240,11 @@ public class TypeDefinition extends PropertyBasedHierarchyDefinition<TypeDefinit
 		return mode;
 	}
 
+	public List<ConstantDefinition> getConstants()
+	{
+		return constants;
+	}
+
 	@Override
 	public String getName()
 	{
@@ -260,7 +267,7 @@ public class TypeDefinition extends PropertyBasedHierarchyDefinition<TypeDefinit
 	{
 		return "TypeDef:" + getFullName();
 	}
-
+	
 	@Override
 	public List<PropertyDefinition> getRecursiveProperties(boolean parentFirst)
 	{
@@ -315,5 +322,5 @@ public class TypeDefinition extends PropertyBasedHierarchyDefinition<TypeDefinit
 	public void setNamespaceMap(Map<String, TypeDefinition> namespaceMap)
 	{
 		this.namespaceMap = namespaceMap;
-	}
+	}	
 }
