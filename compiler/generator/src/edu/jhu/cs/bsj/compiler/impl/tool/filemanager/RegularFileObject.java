@@ -150,4 +150,10 @@ public class RegularFileObject extends AbstractFileObject implements BsjFileObje
 	{
 		return "RegularFileObject (" + binaryName + " -> " + file + ")";
 	}
+
+	@Override
+	public String getSimpleName()
+	{
+		return this.file.getName();
+	}
 }

@@ -38,4 +38,10 @@ public interface BsjFileObject extends JavaFileObject
 	 * @throws IOException If an I/O error occurs.
 	 */
 	public void setCharContent(CharSequence charSequence) throws IOException;
+	
+	/**
+	 * Retrieves the simple name of this file.  The simple name contains no path information; it is just the filename.
+	 * @return The simple name of this file object.
+	 */
+	public String getSimpleName();
 }

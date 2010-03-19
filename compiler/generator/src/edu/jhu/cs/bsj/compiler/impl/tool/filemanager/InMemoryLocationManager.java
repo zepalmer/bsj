@@ -1,7 +1,6 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.filemanager;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -12,33 +11,30 @@ import javax.tools.JavaFileManager;
 import javax.tools.JavaFileObject.Kind;
 
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.JavaFileManagerUtilities;
+import edu.jhu.cs.bsj.compiler.impl.utils.StringUtilities;
 import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjFileObject;
 
 /**
  * Provides a memory-based file system wrapper for a specific location.
+ * 
  * @author Joseph Riley
  */
 public class InMemoryLocationManager extends AbstractLocationManager
 {
 	/**
-	 * Contains the in-memory regular files.
+	 * Contains the in-memory files.
 	 */
-    private Map<FileObjectPair, BsjFileObject> fileObjectMap;
+	private Map<String, InMemoryFileObject> fileObjectMap;
 
 	/**
-	 * Contains the in-memory Java files.
+	 * Constructor.
+	 * 
+	 * @param encodingName name of encoding for this location, null if default.
 	 */
-    private Map<JavaFileObjectPair, BsjFileObject> javaFileObjectMap;		
-
-    /**
-     * Constructor.
-     * @param encodingName name of encoding for this location, null if default.
-     */
 	public InMemoryLocationManager(String encodingName)
 	{
 		super(encodingName);
-        fileObjectMap = new HashMap<FileObjectPair, BsjFileObject>();
-        javaFileObjectMap = new HashMap<JavaFileObjectPair, BsjFileObject>();
+		fileObjectMap = new HashMap<String, InMemoryFileObject>();
 	}
 
 	/**
@@ -53,34 +49,29 @@ public class InMemoryLocationManager extends AbstractLocationManager
 	 * @throws IOException If an I/O error occurs.
 	 */
 	@Override
-	public BsjFileObject getFile(String packageName, String relativeName,
-			boolean writable) throws IOException
+	public BsjFileObject getFile(String packageName, String relativeName, boolean writable) throws IOException
 	{
-		FileObjectPair key = new FileObjectPair(packageName, relativeName);
-		
-		// return the file if it already exists
-		if (fileObjectMap.get(key) != null)
+		// construct the filename
+		String filename;
+		if (packageName.length() > 0)
 		{
-			return fileObjectMap.get(key);
+			filename = packageName.replace('.', '/') + '/' + relativeName;
+		} else
+		{
+			filename = relativeName;
 		}
-		
-		// create the file if it does not already exist
-        InMemoryFileObject fileObject = null;
-        try
-        {
-            fileObject = new InMemoryFileObject(
-            		null,
-                    relativeName, 
-                    JavaFileManagerUtilities.getKindFor(relativeName));
-            fileObjectMap.put(key, fileObject);
-        } 
-        catch (URISyntaxException e)
-        {
-            throw new IOException(e.getMessage(), e);
-        }
 
-        // return the newly created file
-        return fileObject;
+		// retrieve object
+		InMemoryFileObject fileObject = fileObjectMap.get(filename);
+		if (fileObject == null)
+		{
+			// create object
+			fileObject = new InMemoryFileObject(null, filename, JavaFileManagerUtilities.getKindFor(relativeName));
+			fileObjectMap.put(filename, fileObject);
+		}
+
+		// return
+		return fileObject;
 	}
 
 	/**
@@ -95,39 +86,27 @@ public class InMemoryLocationManager extends AbstractLocationManager
 	 * @throws IOException If an I/O error occurs.
 	 */
 	@Override
-	public BsjFileObject getJavaFile(String className, Kind kind,
-			boolean writable) throws IOException
+	public BsjFileObject getJavaFile(String className, Kind kind, boolean writable) throws IOException
 	{
-		JavaFileObjectPair key = new JavaFileObjectPair(className, kind);
+		// construct the filename
+		String filename = className.replace('.', '/') + kind.extension;
 		
-		// return the Java file if it already exists
-		if (javaFileObjectMap.get(key) != null)
+		// retrieve the object
+		InMemoryFileObject fileObject = this.fileObjectMap.get(filename);
+		if (fileObject == null)
 		{
-			return javaFileObjectMap.get(key);
+			// create the object
+			fileObject = new InMemoryFileObject(null, filename, kind);
+			this.fileObjectMap.put(filename, fileObject);
 		}
 		
-		// create the Java file if it does not already exist
-        InMemoryFileObject javaFileObject = null;
-        try
-        {
-            javaFileObject = new InMemoryFileObject(
-            		null, 
-            		className + kind.extension, 
-            		kind);
-            javaFileObjectMap.put(key, javaFileObject);
-        } 
-        catch (URISyntaxException e)
-        {
-            throw new IOException(e.getMessage(), e);
-        }
-
-        // return the newly created Java file
-        return javaFileObject;
-
+		// return
+		return fileObject;
 	}
 
 	/**
 	 * Returns a list of BsjFileObjects with the given criteria.
+	 * 
 	 * @param packageName the package name to search for.
 	 * @param kinds the kinds of files to look for.
 	 * @param recurse if true, search subpackages.
@@ -135,30 +114,32 @@ public class InMemoryLocationManager extends AbstractLocationManager
 	 * @throws IOException on error.
 	 */
 	@Override
-	public Iterable<? extends BsjFileObject> listFiles(String packageName,
-			Collection<Kind> kinds, boolean recurse) throws IOException
+	public Iterable<? extends BsjFileObject> listFiles(String packageName, Collection<Kind> kinds, boolean recurse)
+			throws IOException
 	{
-        List<BsjFileObject> list = new ArrayList<BsjFileObject>();        
-        
-        for (JavaFileObjectPair key : javaFileObjectMap.keySet())
-        {
-        	// examine file objects of the proper kind
-			if (kinds.contains(key.getKind()))
+		List<BsjFileObject> list = new ArrayList<BsjFileObject>();
+		String path = packageName.replace('.', '/');
+
+		for (Map.Entry<String,InMemoryFileObject> entry : this.fileObjectMap.entrySet())
+		{
+			// examine file objects of the proper kind
+			for (Kind kind : kinds)
 			{
-				BsjFileObject bfo = javaFileObjectMap.get(key);
-				if (bfo.getName().startsWith(packageName))
+				if (entry.getKey().endsWith(kind.extension))
 				{
-					// if recurse is on we select this file even if it is in a subpackage,
-					// otherwise we only want files in the given package
-					if (recurse || 
-							(!(bfo.getName().replaceFirst(packageName, "").contains("."))))
+					// If recursing, we add this if it starts with our path
+					// If not recursing, it must be exactly in our path
+					if ((recurse && entry.getKey().startsWith(path)) ||
+							((!recurse &&
+									(path.length()==0 || StringUtilities.removeSuffix(entry.getKey(), '/').equals(path)))))
 					{
-						list.add(bfo);
+						list.add(entry.getValue());
 					}
+					break;
 				}
 			}
-        }
-                
-        return list;
+		}
+
+		return list;
 	}
 }

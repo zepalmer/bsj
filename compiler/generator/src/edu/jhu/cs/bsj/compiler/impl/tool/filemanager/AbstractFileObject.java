@@ -152,4 +152,10 @@ public abstract class AbstractFileObject extends IORegistry implements BsjFileOb
 	{
 		return getName().endsWith(simpleName + kind.extension);
 	}
+
+	@Override
+	public String toString()
+	{
+		return getSimpleName();
+	}
 }

@@ -19,7 +19,15 @@ public class InMemoryFileObject extends AbstractFileObject implements BsjFileObj
 	 */
 	private byte[] bytes = null;
 
-	private String fileName;
+	/**
+	 * The pathname of the directory containing this file. If this file is contained in the root directory, this string
+	 * will be the empty string.
+	 */
+	private String path;
+	/**
+	 * The name of the file represented by this object.
+	 */
+	private String name;
 
 	private Kind kind;
 
@@ -27,16 +35,22 @@ public class InMemoryFileObject extends AbstractFileObject implements BsjFileObj
 	 * Constructor.
 	 * 
 	 * @param encodingName the name of the encoding to use.
-	 * @param fileName the name of the class.
+	 * @param filename The filename of the file represented by this object.
 	 * @param bytes the content of the class.
-	 * @throws URISyntaxException on error.
 	 */
-	public InMemoryFileObject(String encodingName, String fileName, Kind kind) throws URISyntaxException
+	public InMemoryFileObject(String encodingName, String filename, Kind kind)
 	{
 		super(encodingName);
-		this.fileName = fileName;
+		if (filename.contains("/"))
+		{
+			this.path = filename.substring(0, filename.lastIndexOf('/'));
+			this.name = filename.substring(filename.lastIndexOf('/') + 1);
+		} else
+		{
+			this.path = "";
+			this.name = filename;
+		}
 		this.kind = kind;
-		// super(new URI("bsjmemfile://bsj/"+fileName), kind);
 	}
 
 	/**
@@ -102,7 +116,14 @@ public class InMemoryFileObject extends AbstractFileObject implements BsjFileObj
 	@Override
 	public String inferBinaryName()
 	{
-		return StringUtilities.removeSuffix(this.fileName, '.').replace('/', '.');
+		String filePart = StringUtilities.removeSuffix(this.name, '.').replace('/', '.');
+		if (this.path.length() > 0)
+		{
+			return this.path.replace('/', '.') + "." + filePart;
+		} else
+		{
+			return filePart;
+		}
 	}
 
 	@Override
@@ -134,7 +155,7 @@ public class InMemoryFileObject extends AbstractFileObject implements BsjFileObj
 	@Override
 	public String getName()
 	{
-		return fileName;
+		return this.path + '/' + this.name;
 	}
 
 	@Override
@@ -142,43 +163,11 @@ public class InMemoryFileObject extends AbstractFileObject implements BsjFileObj
 	{
 		try
 		{
-			return new URI("bsjmemfile://bsj/" + fileName);
+			return new URI("bsjmemfile://bsj/" + getName());
 		} catch (URISyntaxException e)
 		{
 			return null;
 		}
-	}
-
-	/**
-	 * @return the bytes
-	 */
-	public byte[] getBytes()
-	{
-		return bytes;
-	}
-
-	/**
-	 * @param bytes the bytes to set
-	 */
-	public void setBytes(byte[] bytes)
-	{
-		this.bytes = bytes;
-	}
-
-	/**
-	 * @return the fileName
-	 */
-	public String getFileName()
-	{
-		return fileName;
-	}
-
-	/**
-	 * @param fileName the fileName to set
-	 */
-	public void setFileName(String fileName)
-	{
-		this.fileName = fileName;
 	}
 
 	/**
@@ -196,4 +185,11 @@ public class InMemoryFileObject extends AbstractFileObject implements BsjFileObj
 	{
 		this.kind = kind;
 	}
+
+	@Override
+	public String getSimpleName()
+	{
+		return name;
+	}
+
 }
