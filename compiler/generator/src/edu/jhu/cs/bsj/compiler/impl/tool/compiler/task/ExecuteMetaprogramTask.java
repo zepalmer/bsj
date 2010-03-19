@@ -57,16 +57,20 @@ public class ExecuteMetaprogramTask extends AbstractBsjCompilerTask
 	private <A extends MetaprogramAnchorNode<?>> void execute(MetaprogramProfile<A> profile,
 			MetacompilationContext context)
 	{
-		// Set up the permission policy manager for this metaprogram
+		// Set up the permission policy manager and dependency manager for this metaprogram
 		PermissionPolicyManager policyManager = createPermissionPolicyManager(profile, context.getRootPackage());
 		context.getNodeManager().setPermissionPolicyManager(policyManager);
+		context.getNodeManager().setCurrentMetaprogramId(profile.getMetaprogram().getID());
+		context.getNodeManager().setDependencyManager(context.getDependencyManager());
 
 		// Run the metaprogram
 		profile.getMetaprogram().execute(profile.getContext());
 		context.getDependencyManager().notifyExecuted(profile);
 
-		// Release the policy manager
+		// Release the managers
 		context.getNodeManager().setPermissionPolicyManager(null);
+		context.getNodeManager().setCurrentMetaprogramId(null);
+		context.getNodeManager().setDependencyManager(null);
 
 		// Have the metaprogram replace itself with its replacement node
 		// TODO: what kind of policy should we put into place for this? can a read-only metaprogram replace itself?

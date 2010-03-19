@@ -1630,7 +1630,7 @@
                 which is guaranteed to be type checked at runtime.
             ]]></doc>
             <constructor-override prop="children"
-                expr="new ListNodeProxyList(new ArrayList&lt;T&gt;(children))" />
+                expr="new ListNodeList(new ArrayList&lt;T&gt;(children))" />
             <nogen id="children" />
         </type>
 

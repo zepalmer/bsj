@@ -20,7 +20,6 @@ public class PropertyDefinition
 		SKIP,
 		/** A hidden property. No getter is generated. Factory methods never accept this as a parameter. */
 		HIDE;
-		// TODO: restricted properties?  Not stored on the nodes themselves but with some central authority?
 	}
 
 	private String name;

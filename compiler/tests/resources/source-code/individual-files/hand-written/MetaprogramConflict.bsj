@@ -1,0 +1,30 @@
+public class MetaprogramConflict
+{
+	[:
+		// This metaprogram reads all of the children of the type declaration
+		ClassBodyNode body = context.getAnchor().getNearestAncestorOfType(ClassBodyNode.class);
+		for (ClassMemberNode member : body.getMembers())
+		{
+			;
+		}
+	:]
+	
+	[:
+		// This metaprogram inserts a new member to the class
+		ClassBodyNode body = context.getAnchor().getNearestAncestorOfType(ClassBodyNode.class);
+		BsjNodeFactory factory = context.getFactory();
+		body.getMembers().add(
+				factory.makeFieldDeclarationNode(
+						factory.makeFieldModifiersNode(AccessModifier.PUBLIC),
+						factory.makeVariableDeclaratorListNode(
+								factory.makeVariableDeclaratorNode(
+										factory.makePrimitiveTypeNode(PrimitiveType.INT),
+										factory.makeIdentifierNode("x"),
+										null)),
+						null));
+	:]
+	
+    public static void main(String[] arg)
+    {
+    }
+}
