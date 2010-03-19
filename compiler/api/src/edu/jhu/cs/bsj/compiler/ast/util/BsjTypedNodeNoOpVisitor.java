@@ -607,17 +607,6 @@ public class BsjTypedNodeNoOpVisitor implements BsjTypedNodeVisitor
     }
 
     /**
-     * Starts a visit for nodes of type CompilationUnitListNode.
-     * @param node The node being visited.
-     * @param mostSpecific <code>true</code> if this is the most specific call
-     *                     which can be made for this node; <code>false</code>
-     *                     otherwise.
-     */
-    public void visitCompilationUnitListNodeStart(CompilationUnitListNode node, boolean mostSpecific)
-    {
-    }
-
-    /**
      * Starts a visit for nodes of type CompilationUnitNode.
      * @param node The node being visited.
      * @param mostSpecific <code>true</code> if this is the most specific call
@@ -1400,17 +1389,6 @@ public class BsjTypedNodeNoOpVisitor implements BsjTypedNodeVisitor
     }
 
     /**
-     * Starts a visit for nodes of type PackageListNode.
-     * @param node The node being visited.
-     * @param mostSpecific <code>true</code> if this is the most specific call
-     *                     which can be made for this node; <code>false</code>
-     *                     otherwise.
-     */
-    public void visitPackageListNodeStart(PackageListNode node, boolean mostSpecific)
-    {
-    }
-
-    /**
      * Starts a visit for nodes of type PackageNode.
      * @param node The node being visited.
      * @param mostSpecific <code>true</code> if this is the most specific call
@@ -1768,17 +1746,6 @@ public class BsjTypedNodeNoOpVisitor implements BsjTypedNodeVisitor
      * @param node The node being visited.
      */
     public void visitTypeDeclarationNodeStart(TypeDeclarationNode node)
-    {
-    }
-
-    /**
-     * Starts a visit for nodes of type TypeListNode.
-     * @param node The node being visited.
-     * @param mostSpecific <code>true</code> if this is the most specific call
-     *                     which can be made for this node; <code>false</code>
-     *                     otherwise.
-     */
-    public void visitTypeListNodeStart(TypeListNode node, boolean mostSpecific)
     {
     }
 
@@ -2527,17 +2494,6 @@ public class BsjTypedNodeNoOpVisitor implements BsjTypedNodeVisitor
      *                     otherwise.
      */
     public void visitCodeLiteralNodeStop(CodeLiteralNode node, boolean mostSpecific)
-    {
-    }
-
-    /**
-     * Stops a visit for nodes of type CompilationUnitListNode.
-     * @param node The node being visited.
-     * @param mostSpecific <code>true</code> if this is the most specific call
-     *                     which can be made for this node; <code>false</code>
-     *                     otherwise.
-     */
-    public void visitCompilationUnitListNodeStop(CompilationUnitListNode node, boolean mostSpecific)
     {
     }
 
@@ -3324,17 +3280,6 @@ public class BsjTypedNodeNoOpVisitor implements BsjTypedNodeVisitor
     }
 
     /**
-     * Stops a visit for nodes of type PackageListNode.
-     * @param node The node being visited.
-     * @param mostSpecific <code>true</code> if this is the most specific call
-     *                     which can be made for this node; <code>false</code>
-     *                     otherwise.
-     */
-    public void visitPackageListNodeStop(PackageListNode node, boolean mostSpecific)
-    {
-    }
-
-    /**
      * Stops a visit for nodes of type PackageNode.
      * @param node The node being visited.
      * @param mostSpecific <code>true</code> if this is the most specific call
@@ -3692,17 +3637,6 @@ public class BsjTypedNodeNoOpVisitor implements BsjTypedNodeVisitor
      * @param node The node being visited.
      */
     public void visitTypeDeclarationNodeStop(TypeDeclarationNode node)
-    {
-    }
-
-    /**
-     * Stops a visit for nodes of type TypeListNode.
-     * @param node The node being visited.
-     * @param mostSpecific <code>true</code> if this is the most specific call
-     *                     which can be made for this node; <code>false</code>
-     *                     otherwise.
-     */
-    public void visitTypeListNodeStop(TypeListNode node, boolean mostSpecific)
     {
     }
 

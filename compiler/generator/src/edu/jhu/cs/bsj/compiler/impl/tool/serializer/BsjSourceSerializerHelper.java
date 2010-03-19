@@ -484,13 +484,6 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	}
 
 	@Override
-	public Void executeCompilationUnitListNode(CompilationUnitListNode node, PrependablePrintStream p)
-	{
-		// TODO: What to do?
-		return null;
-	}
-
-	@Override
 	public Void executeCompilationUnitNode(CompilationUnitNode node, PrependablePrintStream p)
 	{
 		if (node.getPackageDeclaration() != null)
@@ -1205,13 +1198,6 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	}
 
 	@Override
-	public Void executePackageListNode(PackageListNode node, PrependablePrintStream p)
-	{
-		// TODO: What to do?
-		return null;
-	}
-
-	@Override
 	public Void executePackageNode(PackageNode node, PrependablePrintStream p)
 	{
 		// TODO: What to do?
@@ -1469,13 +1455,6 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 
 	@Override
 	public Void executeTypeDeclarationListNode(TypeDeclarationListNode node, PrependablePrintStream p)
-	{
-		executeListNode(node, p);
-		return null;
-	}
-
-	@Override
-	public Void executeTypeListNode(TypeListNode node, PrependablePrintStream p)
 	{
 		executeListNode(node, p);
 		return null;

@@ -1699,58 +1699,6 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
     
     /**
-     * Creates a CompilationUnitListNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    @Override
-    public CompilationUnitListNode makeCompilationUnitListNode(
-            List<CompilationUnitNode> children)
-    {
-        CompilationUnitListNode ret = new CompilationUnitListNodeImpl(children, startLocation, stopLocation, manager);
-        return ret;
-    }
-    
-    /**
-     * Creates a CompilationUnitListNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    @Override
-    public CompilationUnitListNode makeCompilationUnitListNode(
-            CompilationUnitNode... childrenElements)
-    {
-        List<CompilationUnitNode> children = Arrays.asList(childrenElements);
-        return makeCompilationUnitListNode(children, startLocation, stopLocation);
-    }
-    
-    /**
-     * Creates a CompilationUnitListNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public CompilationUnitListNode makeCompilationUnitListNode(
-            List<CompilationUnitNode> children,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        CompilationUnitListNode ret = new CompilationUnitListNodeImpl(children, startLocation, stopLocation, manager);
-        return ret;
-    }
-    
-    /**
-     * Creates a CompilationUnitListNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public CompilationUnitListNode makeCompilationUnitListNode(
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation,
-            CompilationUnitNode... childrenElements)
-    {
-        List<CompilationUnitNode> children = Arrays.asList(childrenElements);
-        return makeCompilationUnitListNode(children, startLocation, stopLocation);
-    }
-    
-    /**
      * Creates a CompilationUnitNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -4022,58 +3970,6 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
     
     /**
-     * Creates a PackageListNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    @Override
-    public PackageListNode makePackageListNode(
-            List<PackageNode> children)
-    {
-        PackageListNode ret = new PackageListNodeImpl(children, startLocation, stopLocation, manager);
-        return ret;
-    }
-    
-    /**
-     * Creates a PackageListNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    @Override
-    public PackageListNode makePackageListNode(
-            PackageNode... childrenElements)
-    {
-        List<PackageNode> children = Arrays.asList(childrenElements);
-        return makePackageListNode(children, startLocation, stopLocation);
-    }
-    
-    /**
-     * Creates a PackageListNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public PackageListNode makePackageListNode(
-            List<PackageNode> children,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        PackageListNode ret = new PackageListNodeImpl(children, startLocation, stopLocation, manager);
-        return ret;
-    }
-    
-    /**
-     * Creates a PackageListNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public PackageListNode makePackageListNode(
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation,
-            PackageNode... childrenElements)
-    {
-        List<PackageNode> children = Arrays.asList(childrenElements);
-        return makePackageListNode(children, startLocation, stopLocation);
-    }
-    
-    /**
      * Creates a PackageNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -5113,58 +5009,6 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     {
         TypeDeclarationMetaprogramAnchorNode ret = new TypeDeclarationMetaprogramAnchorNodeImpl(makeNoOperationNode(), metaprogram, startLocation, stopLocation, manager);
         return ret;
-    }
-    
-    /**
-     * Creates a TypeListNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    @Override
-    public TypeListNode makeTypeListNode(
-            List<TypeNode> children)
-    {
-        TypeListNode ret = new TypeListNodeImpl(children, startLocation, stopLocation, manager);
-        return ret;
-    }
-    
-    /**
-     * Creates a TypeListNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    @Override
-    public TypeListNode makeTypeListNode(
-            TypeNode... childrenElements)
-    {
-        List<TypeNode> children = Arrays.asList(childrenElements);
-        return makeTypeListNode(children, startLocation, stopLocation);
-    }
-    
-    /**
-     * Creates a TypeListNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public TypeListNode makeTypeListNode(
-            List<TypeNode> children,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        TypeListNode ret = new TypeListNodeImpl(children, startLocation, stopLocation, manager);
-        return ret;
-    }
-    
-    /**
-     * Creates a TypeListNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public TypeListNode makeTypeListNode(
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation,
-            TypeNode... childrenElements)
-    {
-        List<TypeNode> children = Arrays.asList(childrenElements);
-        return makeTypeListNode(children, startLocation, stopLocation);
     }
     
     /**

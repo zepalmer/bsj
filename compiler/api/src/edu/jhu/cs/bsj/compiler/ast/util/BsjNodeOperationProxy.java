@@ -626,19 +626,6 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
      * @param p The value to pass through the proxy filter and into the backing operation.
      * @return The result of this operation (after being passed through the proxy filter).
      */
-    public RNew executeCompilationUnitListNode(CompilationUnitListNode node, PNew p)
-    {
-        POrig porig = before(p);
-        ROrig rorig = this.backingOp.executeCompilationUnitListNode(node, porig);
-        return after(rorig);
-    }
-
-    /**
-     * Decorates this operation, turning it over to the backing operation.
-     * @param node The node to affect.
-     * @param p The value to pass through the proxy filter and into the backing operation.
-     * @return The result of this operation (after being passed through the proxy filter).
-     */
     public RNew executeCompilationUnitNode(CompilationUnitNode node, PNew p)
     {
         POrig porig = before(p);
@@ -1393,19 +1380,6 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
      * @param p The value to pass through the proxy filter and into the backing operation.
      * @return The result of this operation (after being passed through the proxy filter).
      */
-    public RNew executePackageListNode(PackageListNode node, PNew p)
-    {
-        POrig porig = before(p);
-        ROrig rorig = this.backingOp.executePackageListNode(node, porig);
-        return after(rorig);
-    }
-
-    /**
-     * Decorates this operation, turning it over to the backing operation.
-     * @param node The node to affect.
-     * @param p The value to pass through the proxy filter and into the backing operation.
-     * @return The result of this operation (after being passed through the proxy filter).
-     */
     public RNew executePackageNode(PackageNode node, PNew p)
     {
         POrig porig = before(p);
@@ -1748,19 +1722,6 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
     {
         POrig porig = before(p);
         ROrig rorig = this.backingOp.executeTypeDeclarationMetaprogramAnchorNode(node, porig);
-        return after(rorig);
-    }
-
-    /**
-     * Decorates this operation, turning it over to the backing operation.
-     * @param node The node to affect.
-     * @param p The value to pass through the proxy filter and into the backing operation.
-     * @return The result of this operation (after being passed through the proxy filter).
-     */
-    public RNew executeTypeListNode(TypeListNode node, PNew p)
-    {
-        POrig porig = before(p);
-        ROrig rorig = this.backingOp.executeTypeListNode(node, porig);
         return after(rorig);
     }
 

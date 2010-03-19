@@ -1688,13 +1688,6 @@
             ]]></doc>
         </type>
 
-        <!-- TODO: remove? -->
-        <type name="CompilationUnitListNode" super="ListNode" superTypeArg="CompilationUnitNode">
-            <doc><![CDATA[
-                Represents a list of {@link CompilationUnitListNode}s.
-            ]]></doc>
-        </type>
-
         <type name="DeclaredTypeListNode" super="ListNode" superTypeArg="DeclaredTypeNode">
             <doc><![CDATA[
                 Represents a list of {@link DeclaredTypeNode}s.
@@ -1737,13 +1730,6 @@
             ]]></doc>
         </type>
 
-        <!-- TODO: remove? -->
-        <type name="PackageListNode" super="ListNode" superTypeArg="PackageNode">
-            <doc><![CDATA[
-                Represents a list of {@link PackageNode}s.
-            ]]></doc>
-        </type>
-
         <type name="ReferenceTypeListNode" super="ListNode" superTypeArg="ReferenceTypeNode">
             <doc><![CDATA[
                 Represents a list of {@link ReferenceTypeNode}s.
@@ -1765,13 +1751,6 @@
         <type name="TypeDeclarationListNode" super="ListNode" superTypeArg="TypeDeclarationNode">
             <doc><![CDATA[
                 Represents a list of {@link TypeDeclarationNode}s.
-            ]]></doc>
-        </type>
-
-        <!-- TODO: remove? -->
-        <type name="TypeListNode" super="ListNode" superTypeArg="TypeNode">
-            <doc><![CDATA[
-                Represents a list of {@link TypeNode}s.
             ]]></doc>
         </type>
 

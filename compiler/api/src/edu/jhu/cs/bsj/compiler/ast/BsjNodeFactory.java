@@ -1061,38 +1061,6 @@ public interface BsjNodeFactory
             BsjSourceLocation stopLocation);
     
     /**
-     * Creates a CompilationUnitListNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    public CompilationUnitListNode makeCompilationUnitListNode(
-            List<CompilationUnitNode> children);
-    
-    /**
-     * Creates a CompilationUnitListNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    public CompilationUnitListNode makeCompilationUnitListNode(
-            CompilationUnitNode... childrenElements);
-    
-    /**
-     * Creates a CompilationUnitListNode.
-     * The specified start and stop locations are used.
-     */
-    public CompilationUnitListNode makeCompilationUnitListNode(
-            List<CompilationUnitNode> children,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation);
-    
-    /**
-     * Creates a CompilationUnitListNode.
-     * The specified start and stop locations are used.
-     */
-    public CompilationUnitListNode makeCompilationUnitListNode(
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation,
-            CompilationUnitNode... childrenElements);
-    
-    /**
      * Creates a CompilationUnitNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -2564,38 +2532,6 @@ public interface BsjNodeFactory
             BsjSourceLocation stopLocation);
     
     /**
-     * Creates a PackageListNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    public PackageListNode makePackageListNode(
-            List<PackageNode> children);
-    
-    /**
-     * Creates a PackageListNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    public PackageListNode makePackageListNode(
-            PackageNode... childrenElements);
-    
-    /**
-     * Creates a PackageListNode.
-     * The specified start and stop locations are used.
-     */
-    public PackageListNode makePackageListNode(
-            List<PackageNode> children,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation);
-    
-    /**
-     * Creates a PackageListNode.
-     * The specified start and stop locations are used.
-     */
-    public PackageListNode makePackageListNode(
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation,
-            PackageNode... childrenElements);
-    
-    /**
      * Creates a PackageNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -3256,38 +3192,6 @@ public interface BsjNodeFactory
             MetaprogramNode metaprogram,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
-    
-    /**
-     * Creates a TypeListNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    public TypeListNode makeTypeListNode(
-            List<TypeNode> children);
-    
-    /**
-     * Creates a TypeListNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    public TypeListNode makeTypeListNode(
-            TypeNode... childrenElements);
-    
-    /**
-     * Creates a TypeListNode.
-     * The specified start and stop locations are used.
-     */
-    public TypeListNode makeTypeListNode(
-            List<TypeNode> children,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation);
-    
-    /**
-     * Creates a TypeListNode.
-     * The specified start and stop locations are used.
-     */
-    public TypeListNode makeTypeListNode(
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation,
-            TypeNode... childrenElements);
     
     /**
      * Creates a TypeParameterListNode.
