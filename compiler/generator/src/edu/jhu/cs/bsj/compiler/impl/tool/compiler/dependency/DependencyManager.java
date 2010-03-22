@@ -122,6 +122,16 @@ public class DependencyManager
 
 		return profile;
 	}
+	
+	/**
+	 * Retrieves a metaprogram by ID number.
+	 * @param id The ID of the metaprogram to retrieve.
+	 * @return The profile of the metaprogram or <code>null</code> if that metaprogram does not exist.
+	 */
+	public MetaprogramProfile<?> getMetaprogramProfileByID(int id)
+	{
+		return this.idMap.get(id);
+	}
 
 	/**
 	 * Determines whether or not two metaprograms cooperate. Metaprograms cooperate if there exists a path on the

@@ -5,6 +5,8 @@ package edu.jhu.cs.bsj.compiler.ast;
  * 
  * @author Zachary Palmer
  */
+// TODO: create an abstraction.  The sibling to this class would be one that indicates "generated from", such as when
+// a metaprogram generates code and inserts it into the AST.
 public class BsjSourceLocation implements Comparable<BsjSourceLocation>, Cloneable
 {
 	/**

@@ -2,6 +2,7 @@ package edu.jhu.cs.bsj.compiler.impl.tool.compiler;
 
 import java.util.Collection;
 
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.MetaprogramLocalMode;
 import edu.jhu.cs.bsj.compiler.ast.MetaprogramPackageMode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramAnchorNode;
@@ -80,6 +81,14 @@ public class MetaprogramProfile<T extends MetaprogramAnchorNode<?>>
 	public Context<T> getContext()
 	{
 		return context;
+	}
+	
+	/**
+	 * Retrieves the location in source code where the metaprogram indicated by this profile was declared.
+	 */
+	public BsjSourceLocation getLocation()
+	{
+		return this.context.getAnchor().getStartLocation();
 	}
 
 	@Override

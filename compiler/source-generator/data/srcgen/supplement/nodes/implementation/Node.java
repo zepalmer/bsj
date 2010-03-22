@@ -212,7 +212,7 @@ public abstract class NodeImpl
 			Attribute.AccessType recordAccessType = record.getAccessType();
 			if (accessType.canConflict(recordAccessType))
 			{
-				this.manager.assertCooperation(record.getMetaprogramID());
+				this.manager.assertCooperation(record.getMetaprogramID(), this);
 			}
 		}
 		

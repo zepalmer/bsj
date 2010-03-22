@@ -139,18 +139,21 @@ public class BsjNodeManager
 	 * Asserts that the metaprogram with the specified ID cooperates with the current metaprogram.
 	 * 
 	 * @param id The ID of the metaprogram to check.
+	 * @param node The node that the two metaprograms are modifying.
 	 * @throws MetaprogramConflictException If the metaprogram with the specified ID does not cooperate with the current
 	 *             metaprogram.
 	 */
-	public void assertCooperation(int id) throws MetaprogramConflictException
+	public void assertCooperation(int id, Node node) throws MetaprogramConflictException
 	{
 		if (this.dependencyManager == null || this.currentMetaprogramId == null)
 			return;
 		
 		if (this.dependencyManager.checkCooperation(this.currentMetaprogramId, id))
 			return;
-		
-		// TODO: adapt exception to include the profiles, source locations, or some other information about the conflict
-		throw new MetaprogramConflictException();
+	
+		throw new MetaprogramConflictException(
+				this.dependencyManager.getMetaprogramProfileByID(id).getAnchor(),
+				this.dependencyManager.getMetaprogramProfileByID(this.currentMetaprogramId).getAnchor(),
+				node);
 	}
 }

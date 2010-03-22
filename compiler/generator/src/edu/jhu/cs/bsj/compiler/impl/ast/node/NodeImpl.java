@@ -341,7 +341,7 @@ public abstract class NodeImpl implements Node
 			Attribute.AccessType recordAccessType = record.getAccessType();
 			if (accessType.canConflict(recordAccessType))
 			{
-				this.manager.assertCooperation(record.getMetaprogramID());
+				this.manager.assertCooperation(record.getMetaprogramID(), this);
 			}
 		}
 		
