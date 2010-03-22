@@ -74,7 +74,8 @@ public class BsjBinaryNodeLoader
     /**
      * The logging for this class.
      */
-    private Logger LOGGER = Logger.getLogger(this.getClass());
+    @SuppressWarnings("unused")
+	private Logger LOGGER = Logger.getLogger(this.getClass());
     
     /**
      * Factory for creating nodes.
