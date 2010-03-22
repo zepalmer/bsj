@@ -58,7 +58,7 @@ public class ArrayInitializerCreationNodeImpl extends ArrayCreationNodeImpl impl
     public void setInitializer(ArrayInitializerNode initializer)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.INITIALIZER, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.INITIALIZER, Attribute.AccessType.STRONG_WRITE);
         if (this.initializer instanceof NodeImpl)
         {
             ((NodeImpl)this.initializer).setParent(null);

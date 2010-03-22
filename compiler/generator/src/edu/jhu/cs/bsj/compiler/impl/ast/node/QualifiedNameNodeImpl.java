@@ -59,7 +59,7 @@ public class QualifiedNameNodeImpl extends NameNodeImpl implements QualifiedName
     public void setBase(NameNode base)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.BASE, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.BASE, Attribute.AccessType.STRONG_WRITE);
         if (this.base instanceof NodeImpl)
         {
             ((NodeImpl)this.base).setParent(null);

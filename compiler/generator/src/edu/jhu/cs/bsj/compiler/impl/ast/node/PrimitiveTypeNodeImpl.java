@@ -55,7 +55,7 @@ public class PrimitiveTypeNodeImpl extends NodeImpl implements PrimitiveTypeNode
     public void setPrimitiveType(PrimitiveType primitiveType)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.PRIMITIVE_TYPE, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.PRIMITIVE_TYPE, Attribute.AccessType.STRONG_WRITE);
         this.primitiveType = primitiveType;
     }
     

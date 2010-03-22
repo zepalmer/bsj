@@ -55,7 +55,7 @@ public class AnonymousClassBodyNodeImpl extends NodeImpl implements AnonymousCla
     public void setMembers(AnonymousClassMemberListNode members)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.MEMBERS, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.MEMBERS, Attribute.AccessType.STRONG_WRITE);
         if (this.members instanceof NodeImpl)
         {
             ((NodeImpl)this.members).setParent(null);

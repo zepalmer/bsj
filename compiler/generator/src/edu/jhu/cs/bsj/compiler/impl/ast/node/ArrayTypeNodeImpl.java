@@ -55,7 +55,7 @@ public class ArrayTypeNodeImpl extends NodeImpl implements ArrayTypeNode
     public void setType(TypeNode type)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.TYPE, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.TYPE, Attribute.AccessType.STRONG_WRITE);
         if (this.type instanceof NodeImpl)
         {
             ((NodeImpl)this.type).setParent(null);

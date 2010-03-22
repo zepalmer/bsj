@@ -55,7 +55,7 @@ public class ThisNodeImpl extends NodeImpl implements ThisNode
     public void setType(UnparameterizedTypeNode type)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.TYPE, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.TYPE, Attribute.AccessType.STRONG_WRITE);
         if (this.type instanceof NodeImpl)
         {
             ((NodeImpl)this.type).setParent(null);

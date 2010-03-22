@@ -55,7 +55,7 @@ public class ForInitializerDeclarationNodeImpl extends NodeImpl implements ForIn
     public void setDeclaration(VariableDeclarationNode declaration)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.DECLARATION, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.DECLARATION, Attribute.AccessType.STRONG_WRITE);
         if (this.declaration instanceof NodeImpl)
         {
             ((NodeImpl)this.declaration).setParent(null);

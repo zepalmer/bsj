@@ -52,7 +52,7 @@ public abstract class ModifiersNodeImpl extends NodeImpl implements ModifiersNod
     public void setAnnotations(AnnotationListNode annotations)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.ANNOTATIONS, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.ANNOTATIONS, Attribute.AccessType.STRONG_WRITE);
         if (this.annotations instanceof NodeImpl)
         {
             ((NodeImpl)this.annotations).setParent(null);

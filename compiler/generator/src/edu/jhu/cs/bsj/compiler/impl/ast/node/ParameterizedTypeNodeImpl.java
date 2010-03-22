@@ -63,7 +63,7 @@ public class ParameterizedTypeNodeImpl extends NodeImpl implements Parameterized
     public void setBaseType(UnparameterizedTypeNode baseType)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.BASE_TYPE, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.BASE_TYPE, Attribute.AccessType.STRONG_WRITE);
         if (this.baseType instanceof NodeImpl)
         {
             ((NodeImpl)this.baseType).setParent(null);
@@ -92,7 +92,7 @@ public class ParameterizedTypeNodeImpl extends NodeImpl implements Parameterized
     public void setTypeArguments(TypeArgumentListNode typeArguments)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.TYPE_ARGUMENTS, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.TYPE_ARGUMENTS, Attribute.AccessType.STRONG_WRITE);
         if (this.typeArguments instanceof NodeImpl)
         {
             ((NodeImpl)this.typeArguments).setParent(null);

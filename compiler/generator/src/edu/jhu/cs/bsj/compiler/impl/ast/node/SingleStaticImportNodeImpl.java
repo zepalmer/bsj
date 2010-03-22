@@ -63,7 +63,7 @@ public class SingleStaticImportNodeImpl extends NodeImpl implements SingleStatic
     public void setName(NameNode name)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.NAME, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.NAME, Attribute.AccessType.STRONG_WRITE);
         if (this.name instanceof NodeImpl)
         {
             ((NodeImpl)this.name).setParent(null);
@@ -92,7 +92,7 @@ public class SingleStaticImportNodeImpl extends NodeImpl implements SingleStatic
     public void setIdentifier(IdentifierNode identifier)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.STRONG_WRITE);
         if (this.identifier instanceof NodeImpl)
         {
             ((NodeImpl)this.identifier).setParent(null);

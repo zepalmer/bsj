@@ -85,7 +85,7 @@ public class ClassModifiersNodeImpl extends ModifiersNodeImpl implements ClassMo
     public void setAccess(AccessModifier access)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.ACCESS, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.ACCESS, Attribute.AccessType.STRONG_WRITE);
         this.access = access;
     }
     
@@ -106,7 +106,7 @@ public class ClassModifiersNodeImpl extends ModifiersNodeImpl implements ClassMo
     public void setAbstractFlag(boolean abstractFlag)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.ABSTRACT_FLAG, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.ABSTRACT_FLAG, Attribute.AccessType.STRONG_WRITE);
         this.abstractFlag = abstractFlag;
     }
     
@@ -127,7 +127,7 @@ public class ClassModifiersNodeImpl extends ModifiersNodeImpl implements ClassMo
     public void setStaticFlag(boolean staticFlag)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.STATIC_FLAG, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.STATIC_FLAG, Attribute.AccessType.STRONG_WRITE);
         this.staticFlag = staticFlag;
     }
     
@@ -148,7 +148,7 @@ public class ClassModifiersNodeImpl extends ModifiersNodeImpl implements ClassMo
     public void setFinalFlag(boolean finalFlag)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.FINAL_FLAG, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.FINAL_FLAG, Attribute.AccessType.STRONG_WRITE);
         this.finalFlag = finalFlag;
     }
     
@@ -169,7 +169,7 @@ public class ClassModifiersNodeImpl extends ModifiersNodeImpl implements ClassMo
     public void setStrictfpFlag(boolean strictfpFlag)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.STRICTFP_FLAG, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.STRICTFP_FLAG, Attribute.AccessType.STRONG_WRITE);
         this.strictfpFlag = strictfpFlag;
     }
     

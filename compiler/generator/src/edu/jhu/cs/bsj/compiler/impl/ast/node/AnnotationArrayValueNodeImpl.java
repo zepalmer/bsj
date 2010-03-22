@@ -55,7 +55,7 @@ public class AnnotationArrayValueNodeImpl extends NodeImpl implements Annotation
     public void setValues(AnnotationValueListNode values)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.VALUES, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.VALUES, Attribute.AccessType.STRONG_WRITE);
         if (this.values instanceof NodeImpl)
         {
             ((NodeImpl)this.values).setParent(null);

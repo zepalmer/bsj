@@ -63,7 +63,7 @@ public class CatchNodeImpl extends NodeImpl implements CatchNode
     public void setBlock(BlockNode block)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.BLOCK, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.BLOCK, Attribute.AccessType.STRONG_WRITE);
         if (this.block instanceof NodeImpl)
         {
             ((NodeImpl)this.block).setParent(null);
@@ -92,7 +92,7 @@ public class CatchNodeImpl extends NodeImpl implements CatchNode
     public void setParameter(VariableNode parameter)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.PARAMETER, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.PARAMETER, Attribute.AccessType.STRONG_WRITE);
         if (this.parameter instanceof NodeImpl)
         {
             ((NodeImpl)this.parameter).setParent(null);

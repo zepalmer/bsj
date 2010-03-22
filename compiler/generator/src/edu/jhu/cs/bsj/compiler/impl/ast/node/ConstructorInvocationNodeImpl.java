@@ -60,7 +60,7 @@ public abstract class ConstructorInvocationNodeImpl extends NodeImpl implements 
     public void setArguments(ExpressionListNode arguments)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.ARGUMENTS, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.ARGUMENTS, Attribute.AccessType.STRONG_WRITE);
         if (this.arguments instanceof NodeImpl)
         {
             ((NodeImpl)this.arguments).setParent(null);
@@ -89,7 +89,7 @@ public abstract class ConstructorInvocationNodeImpl extends NodeImpl implements 
     public void setTypeArguments(ReferenceTypeListNode typeArguments)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.TYPE_ARGUMENTS, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.TYPE_ARGUMENTS, Attribute.AccessType.STRONG_WRITE);
         if (this.typeArguments instanceof NodeImpl)
         {
             ((NodeImpl)this.typeArguments).setParent(null);

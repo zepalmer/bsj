@@ -55,7 +55,7 @@ public class FieldAccessByNameNodeImpl extends NodeImpl implements FieldAccessBy
     public void setName(NameNode name)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.NAME, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.NAME, Attribute.AccessType.STRONG_WRITE);
         if (this.name instanceof NodeImpl)
         {
             ((NodeImpl)this.name).setParent(null);

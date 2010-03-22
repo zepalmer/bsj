@@ -87,7 +87,7 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
     public void setModifiers(AnnotationMethodModifiersNode modifiers)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.MODIFIERS, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.MODIFIERS, Attribute.AccessType.STRONG_WRITE);
         if (this.modifiers instanceof NodeImpl)
         {
             ((NodeImpl)this.modifiers).setParent(null);
@@ -116,7 +116,7 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
     public void setType(TypeNode type)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.TYPE, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.TYPE, Attribute.AccessType.STRONG_WRITE);
         if (this.type instanceof NodeImpl)
         {
             ((NodeImpl)this.type).setParent(null);
@@ -145,7 +145,7 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
     public void setIdentifier(IdentifierNode identifier)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.STRONG_WRITE);
         if (this.identifier instanceof NodeImpl)
         {
             ((NodeImpl)this.identifier).setParent(null);
@@ -174,7 +174,7 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
     public void setDefaultValue(AnnotationValueNode defaultValue)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.DEFAULT_VALUE, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.DEFAULT_VALUE, Attribute.AccessType.STRONG_WRITE);
         if (this.defaultValue instanceof NodeImpl)
         {
             ((NodeImpl)this.defaultValue).setParent(null);
@@ -203,7 +203,7 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
     public void setJavadoc(JavadocNode javadoc)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.JAVADOC, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.JAVADOC, Attribute.AccessType.STRONG_WRITE);
         if (this.javadoc instanceof NodeImpl)
         {
             ((NodeImpl)this.javadoc).setParent(null);

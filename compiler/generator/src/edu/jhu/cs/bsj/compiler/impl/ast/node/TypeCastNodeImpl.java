@@ -63,7 +63,7 @@ public class TypeCastNodeImpl extends NodeImpl implements TypeCastNode
     public void setExpression(ExpressionNode expression)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.EXPRESSION, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.EXPRESSION, Attribute.AccessType.STRONG_WRITE);
         if (this.expression instanceof NodeImpl)
         {
             ((NodeImpl)this.expression).setParent(null);
@@ -92,7 +92,7 @@ public class TypeCastNodeImpl extends NodeImpl implements TypeCastNode
     public void setType(TypeNode type)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.TYPE, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.TYPE, Attribute.AccessType.STRONG_WRITE);
         if (this.type instanceof NodeImpl)
         {
             ((NodeImpl)this.type).setParent(null);

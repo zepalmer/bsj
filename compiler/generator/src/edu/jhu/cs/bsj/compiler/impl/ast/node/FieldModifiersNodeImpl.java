@@ -85,7 +85,7 @@ public class FieldModifiersNodeImpl extends ModifiersNodeImpl implements FieldMo
     public void setAccess(AccessModifier access)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.ACCESS, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.ACCESS, Attribute.AccessType.STRONG_WRITE);
         this.access = access;
     }
     
@@ -106,7 +106,7 @@ public class FieldModifiersNodeImpl extends ModifiersNodeImpl implements FieldMo
     public void setStaticFlag(boolean staticFlag)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.STATIC_FLAG, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.STATIC_FLAG, Attribute.AccessType.STRONG_WRITE);
         this.staticFlag = staticFlag;
     }
     
@@ -127,7 +127,7 @@ public class FieldModifiersNodeImpl extends ModifiersNodeImpl implements FieldMo
     public void setFinalFlag(boolean finalFlag)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.FINAL_FLAG, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.FINAL_FLAG, Attribute.AccessType.STRONG_WRITE);
         this.finalFlag = finalFlag;
     }
     
@@ -148,7 +148,7 @@ public class FieldModifiersNodeImpl extends ModifiersNodeImpl implements FieldMo
     public void setTransientFlag(boolean transientFlag)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.TRANSIENT_FLAG, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.TRANSIENT_FLAG, Attribute.AccessType.STRONG_WRITE);
         this.transientFlag = transientFlag;
     }
     
@@ -169,7 +169,7 @@ public class FieldModifiersNodeImpl extends ModifiersNodeImpl implements FieldMo
     public void setVolatileFlag(boolean volatileFlag)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.VOLATILE_FLAG, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.VOLATILE_FLAG, Attribute.AccessType.STRONG_WRITE);
         this.volatileFlag = volatileFlag;
     }
     

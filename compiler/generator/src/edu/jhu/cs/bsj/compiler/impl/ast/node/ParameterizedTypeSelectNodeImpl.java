@@ -63,7 +63,7 @@ public class ParameterizedTypeSelectNodeImpl extends NodeImpl implements Paramet
     public void setBase(ParameterizedTypeNode base)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.BASE, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.BASE, Attribute.AccessType.STRONG_WRITE);
         if (this.base instanceof NodeImpl)
         {
             ((NodeImpl)this.base).setParent(null);
@@ -92,7 +92,7 @@ public class ParameterizedTypeSelectNodeImpl extends NodeImpl implements Paramet
     public void setSelect(DeclaredTypeNode select)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.SELECT, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.SELECT, Attribute.AccessType.STRONG_WRITE);
         if (this.select instanceof NodeImpl)
         {
             ((NodeImpl)this.select).setParent(null);

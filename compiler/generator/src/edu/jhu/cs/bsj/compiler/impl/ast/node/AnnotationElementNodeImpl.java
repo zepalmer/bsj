@@ -63,7 +63,7 @@ public class AnnotationElementNodeImpl extends NodeImpl implements AnnotationEle
     public void setIdentifier(IdentifierNode identifier)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.STRONG_WRITE);
         if (this.identifier instanceof NodeImpl)
         {
             ((NodeImpl)this.identifier).setParent(null);
@@ -92,7 +92,7 @@ public class AnnotationElementNodeImpl extends NodeImpl implements AnnotationEle
     public void setValue(AnnotationValueNode value)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.VALUE, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.VALUE, Attribute.AccessType.STRONG_WRITE);
         if (this.value instanceof NodeImpl)
         {
             ((NodeImpl)this.value).setParent(null);

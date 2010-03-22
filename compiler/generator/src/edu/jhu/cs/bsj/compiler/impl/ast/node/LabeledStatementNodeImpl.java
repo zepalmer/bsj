@@ -63,7 +63,7 @@ public class LabeledStatementNodeImpl extends NodeImpl implements LabeledStateme
     public void setLabel(IdentifierNode label)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.LABEL, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.LABEL, Attribute.AccessType.STRONG_WRITE);
         if (this.label instanceof NodeImpl)
         {
             ((NodeImpl)this.label).setParent(null);
@@ -92,7 +92,7 @@ public class LabeledStatementNodeImpl extends NodeImpl implements LabeledStateme
     public void setStatement(StatementNode statement)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.STATEMENT, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.STATEMENT, Attribute.AccessType.STRONG_WRITE);
         if (this.statement instanceof NodeImpl)
         {
             ((NodeImpl)this.statement).setParent(null);

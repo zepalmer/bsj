@@ -55,7 +55,7 @@ public class ThrowNodeImpl extends NodeImpl implements ThrowNode
     public void setExpression(ExpressionNode expression)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.EXPRESSION, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.EXPRESSION, Attribute.AccessType.STRONG_WRITE);
         if (this.expression instanceof NodeImpl)
         {
             ((NodeImpl)this.expression).setParent(null);

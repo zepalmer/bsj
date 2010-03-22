@@ -62,7 +62,7 @@ public class InitializerDeclarationNodeImpl extends NodeImpl implements Initiali
     public void setStaticInitializer(boolean staticInitializer)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.STATIC_INITIALIZER, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.STATIC_INITIALIZER, Attribute.AccessType.STRONG_WRITE);
         this.staticInitializer = staticInitializer;
     }
     
@@ -83,7 +83,7 @@ public class InitializerDeclarationNodeImpl extends NodeImpl implements Initiali
     public void setBody(BlockNode body)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.BODY, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.BODY, Attribute.AccessType.STRONG_WRITE);
         if (this.body instanceof NodeImpl)
         {
             ((NodeImpl)this.body).setParent(null);

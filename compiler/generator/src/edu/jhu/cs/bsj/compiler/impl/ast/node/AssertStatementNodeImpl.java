@@ -62,7 +62,7 @@ public class AssertStatementNodeImpl extends NodeImpl implements AssertStatement
     public void setTestExpression(ExpressionNode testExpression)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.TEST_EXPRESSION, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.TEST_EXPRESSION, Attribute.AccessType.STRONG_WRITE);
         if (this.testExpression instanceof NodeImpl)
         {
             ((NodeImpl)this.testExpression).setParent(null);
@@ -91,7 +91,7 @@ public class AssertStatementNodeImpl extends NodeImpl implements AssertStatement
     public void setMessageExpression(ExpressionNode messageExpression)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.MESSAGE_EXPRESSION, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.MESSAGE_EXPRESSION, Attribute.AccessType.STRONG_WRITE);
         if (this.messageExpression instanceof NodeImpl)
         {
             ((NodeImpl)this.messageExpression).setParent(null);

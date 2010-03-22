@@ -56,7 +56,7 @@ public class MetaprogramDependsNodeImpl extends NodeImpl implements MetaprogramD
     public void setTargetNames(NameListNode targetNames)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.TARGET_NAMES, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.TARGET_NAMES, Attribute.AccessType.STRONG_WRITE);
         if (this.targetNames instanceof NodeImpl)
         {
             ((NodeImpl)this.targetNames).setParent(null);

@@ -79,7 +79,7 @@ public class SuperMethodInvocationNodeImpl extends NodeImpl implements SuperMeth
     public void setType(UnparameterizedTypeNode type)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.TYPE, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.TYPE, Attribute.AccessType.STRONG_WRITE);
         if (this.type instanceof NodeImpl)
         {
             ((NodeImpl)this.type).setParent(null);
@@ -108,7 +108,7 @@ public class SuperMethodInvocationNodeImpl extends NodeImpl implements SuperMeth
     public void setIdentifier(IdentifierNode identifier)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.STRONG_WRITE);
         if (this.identifier instanceof NodeImpl)
         {
             ((NodeImpl)this.identifier).setParent(null);
@@ -137,7 +137,7 @@ public class SuperMethodInvocationNodeImpl extends NodeImpl implements SuperMeth
     public void setArguments(ExpressionListNode arguments)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.ARGUMENTS, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.ARGUMENTS, Attribute.AccessType.STRONG_WRITE);
         if (this.arguments instanceof NodeImpl)
         {
             ((NodeImpl)this.arguments).setParent(null);
@@ -166,7 +166,7 @@ public class SuperMethodInvocationNodeImpl extends NodeImpl implements SuperMeth
     public void setTypeArguments(ReferenceTypeListNode typeArguments)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.TYPE_ARGUMENTS, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.TYPE_ARGUMENTS, Attribute.AccessType.STRONG_WRITE);
         if (this.typeArguments instanceof NodeImpl)
         {
             ((NodeImpl)this.typeArguments).setParent(null);

@@ -79,7 +79,7 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
     public void setInitializer(ForInitializerNode initializer)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.INITIALIZER, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.INITIALIZER, Attribute.AccessType.STRONG_WRITE);
         if (this.initializer instanceof NodeImpl)
         {
             ((NodeImpl)this.initializer).setParent(null);
@@ -108,7 +108,7 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
     public void setCondition(ExpressionNode condition)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.CONDITION, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.CONDITION, Attribute.AccessType.STRONG_WRITE);
         if (this.condition instanceof NodeImpl)
         {
             ((NodeImpl)this.condition).setParent(null);
@@ -137,7 +137,7 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
     public void setUpdate(StatementExpressionListNode update)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.UPDATE, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.UPDATE, Attribute.AccessType.STRONG_WRITE);
         if (this.update instanceof NodeImpl)
         {
             ((NodeImpl)this.update).setParent(null);
@@ -166,7 +166,7 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
     public void setStatement(StatementNode statement)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.STATEMENT, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.STATEMENT, Attribute.AccessType.STRONG_WRITE);
         if (this.statement instanceof NodeImpl)
         {
             ((NodeImpl)this.statement).setParent(null);

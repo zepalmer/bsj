@@ -63,7 +63,7 @@ public class FieldAccessByExpressionNodeImpl extends NodeImpl implements FieldAc
     public void setExpression(PrimaryExpressionNode expression)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.EXPRESSION, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.EXPRESSION, Attribute.AccessType.STRONG_WRITE);
         if (this.expression instanceof NodeImpl)
         {
             ((NodeImpl)this.expression).setParent(null);
@@ -92,7 +92,7 @@ public class FieldAccessByExpressionNodeImpl extends NodeImpl implements FieldAc
     public void setIdentifier(IdentifierNode identifier)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.STRONG_WRITE);
         if (this.identifier instanceof NodeImpl)
         {
             ((NodeImpl)this.identifier).setParent(null);

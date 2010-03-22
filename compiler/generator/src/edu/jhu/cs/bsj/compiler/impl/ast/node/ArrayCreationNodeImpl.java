@@ -59,7 +59,7 @@ public abstract class ArrayCreationNodeImpl extends NodeImpl implements ArrayCre
     public void setBaseType(BaseTypeNode baseType)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.BASE_TYPE, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.BASE_TYPE, Attribute.AccessType.STRONG_WRITE);
         if (this.baseType instanceof NodeImpl)
         {
             ((NodeImpl)this.baseType).setParent(null);
@@ -88,7 +88,7 @@ public abstract class ArrayCreationNodeImpl extends NodeImpl implements ArrayCre
     public void setArrayLevels(int arrayLevels)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.ARRAY_LEVELS, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.ARRAY_LEVELS, Attribute.AccessType.STRONG_WRITE);
         this.arrayLevels = arrayLevels;
     }
     

@@ -63,7 +63,7 @@ public class EnumBodyNodeImpl extends NodeImpl implements EnumBodyNode
     public void setConstants(EnumConstantDeclarationListNode constants)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.CONSTANTS, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.CONSTANTS, Attribute.AccessType.STRONG_WRITE);
         if (this.constants instanceof NodeImpl)
         {
             ((NodeImpl)this.constants).setParent(null);
@@ -92,7 +92,7 @@ public class EnumBodyNodeImpl extends NodeImpl implements EnumBodyNode
     public void setMembers(ClassMemberListNode members)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.MEMBERS, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.MEMBERS, Attribute.AccessType.STRONG_WRITE);
         if (this.members instanceof NodeImpl)
         {
             ((NodeImpl)this.members).setParent(null);

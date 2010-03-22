@@ -99,7 +99,7 @@ public class MethodModifiersNodeImpl extends ModifiersNodeImpl implements Method
     public void setAccess(AccessModifier access)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.ACCESS, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.ACCESS, Attribute.AccessType.STRONG_WRITE);
         this.access = access;
     }
     
@@ -120,7 +120,7 @@ public class MethodModifiersNodeImpl extends ModifiersNodeImpl implements Method
     public void setAbstractFlag(boolean abstractFlag)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.ABSTRACT_FLAG, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.ABSTRACT_FLAG, Attribute.AccessType.STRONG_WRITE);
         this.abstractFlag = abstractFlag;
     }
     
@@ -141,7 +141,7 @@ public class MethodModifiersNodeImpl extends ModifiersNodeImpl implements Method
     public void setStaticFlag(boolean staticFlag)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.STATIC_FLAG, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.STATIC_FLAG, Attribute.AccessType.STRONG_WRITE);
         this.staticFlag = staticFlag;
     }
     
@@ -162,7 +162,7 @@ public class MethodModifiersNodeImpl extends ModifiersNodeImpl implements Method
     public void setFinalFlag(boolean finalFlag)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.FINAL_FLAG, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.FINAL_FLAG, Attribute.AccessType.STRONG_WRITE);
         this.finalFlag = finalFlag;
     }
     
@@ -183,7 +183,7 @@ public class MethodModifiersNodeImpl extends ModifiersNodeImpl implements Method
     public void setSynchronizedFlag(boolean synchronizedFlag)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.SYNCHRONIZED_FLAG, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.SYNCHRONIZED_FLAG, Attribute.AccessType.STRONG_WRITE);
         this.synchronizedFlag = synchronizedFlag;
     }
     
@@ -204,7 +204,7 @@ public class MethodModifiersNodeImpl extends ModifiersNodeImpl implements Method
     public void setNativeFlag(boolean nativeFlag)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.NATIVE_FLAG, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.NATIVE_FLAG, Attribute.AccessType.STRONG_WRITE);
         this.nativeFlag = nativeFlag;
     }
     
@@ -225,7 +225,7 @@ public class MethodModifiersNodeImpl extends ModifiersNodeImpl implements Method
     public void setStrictfpFlag(boolean strictfpFlag)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.STRICTFP_FLAG, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.STRICTFP_FLAG, Attribute.AccessType.STRONG_WRITE);
         this.strictfpFlag = strictfpFlag;
     }
     

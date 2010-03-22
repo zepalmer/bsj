@@ -338,7 +338,8 @@ public abstract class NodeImpl implements Node
 		Set<AccessRecord> previousAccesses = this.accessRecordMap.getAll(attribute);
 		for (AccessRecord record : previousAccesses)
 		{
-			if (accessType == Attribute.AccessType.WRITE || record.getAccessType() == Attribute.AccessType.WRITE)
+			Attribute.AccessType recordAccessType = record.getAccessType();
+			if (accessType.canConflict(recordAccessType))
 			{
 				this.manager.assertCooperation(record.getMetaprogramID());
 			}

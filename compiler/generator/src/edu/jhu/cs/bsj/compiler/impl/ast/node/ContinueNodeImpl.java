@@ -55,7 +55,7 @@ public class ContinueNodeImpl extends NodeImpl implements ContinueNode
     public void setLabel(IdentifierNode label)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.LABEL, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.LABEL, Attribute.AccessType.STRONG_WRITE);
         if (this.label instanceof NodeImpl)
         {
             ((NodeImpl)this.label).setParent(null);

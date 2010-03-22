@@ -63,7 +63,7 @@ public class PackageDeclarationNodeImpl extends NodeImpl implements PackageDecla
     public void setName(NameNode name)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.NAME, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.NAME, Attribute.AccessType.STRONG_WRITE);
         if (this.name instanceof NodeImpl)
         {
             ((NodeImpl)this.name).setParent(null);
@@ -92,7 +92,7 @@ public class PackageDeclarationNodeImpl extends NodeImpl implements PackageDecla
     public void setAnnotations(AnnotationListNode annotations)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.ANNOTATIONS, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.ANNOTATIONS, Attribute.AccessType.STRONG_WRITE);
         if (this.annotations instanceof NodeImpl)
         {
             ((NodeImpl)this.annotations).setParent(null);

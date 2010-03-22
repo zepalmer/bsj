@@ -70,7 +70,7 @@ public class TryNodeImpl extends NodeImpl implements TryNode
     public void setBlock(BlockNode block)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.BLOCK, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.BLOCK, Attribute.AccessType.STRONG_WRITE);
         if (this.block instanceof NodeImpl)
         {
             ((NodeImpl)this.block).setParent(null);
@@ -99,7 +99,7 @@ public class TryNodeImpl extends NodeImpl implements TryNode
     public void setCatches(CatchListNode catches)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.CATCHES, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.CATCHES, Attribute.AccessType.STRONG_WRITE);
         if (this.catches instanceof NodeImpl)
         {
             ((NodeImpl)this.catches).setParent(null);
@@ -128,7 +128,7 @@ public class TryNodeImpl extends NodeImpl implements TryNode
     public void setFinallyBlock(BlockNode finallyBlock)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.FINALLY_BLOCK, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.FINALLY_BLOCK, Attribute.AccessType.STRONG_WRITE);
         if (this.finallyBlock instanceof NodeImpl)
         {
             ((NodeImpl)this.finallyBlock).setParent(null);

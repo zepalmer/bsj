@@ -54,7 +54,7 @@ public class JavadocNodeImpl extends NodeImpl implements JavadocNode
     public void setText(String text)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.TEXT, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.TEXT, Attribute.AccessType.STRONG_WRITE);
         this.text = text;
     }
     

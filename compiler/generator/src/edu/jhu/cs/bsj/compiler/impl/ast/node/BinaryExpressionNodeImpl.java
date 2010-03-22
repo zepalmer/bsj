@@ -70,7 +70,7 @@ public class BinaryExpressionNodeImpl extends NodeImpl implements BinaryExpressi
     public void setLeftOperand(ExpressionNode leftOperand)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.LEFT_OPERAND, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.LEFT_OPERAND, Attribute.AccessType.STRONG_WRITE);
         if (this.leftOperand instanceof NodeImpl)
         {
             ((NodeImpl)this.leftOperand).setParent(null);
@@ -99,7 +99,7 @@ public class BinaryExpressionNodeImpl extends NodeImpl implements BinaryExpressi
     public void setRightOperand(ExpressionNode rightOperand)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.RIGHT_OPERAND, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.RIGHT_OPERAND, Attribute.AccessType.STRONG_WRITE);
         if (this.rightOperand instanceof NodeImpl)
         {
             ((NodeImpl)this.rightOperand).setParent(null);
@@ -128,7 +128,7 @@ public class BinaryExpressionNodeImpl extends NodeImpl implements BinaryExpressi
     public void setOperator(BinaryOperator operator)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.OPERATOR, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.OPERATOR, Attribute.AccessType.STRONG_WRITE);
         this.operator = operator;
     }
     

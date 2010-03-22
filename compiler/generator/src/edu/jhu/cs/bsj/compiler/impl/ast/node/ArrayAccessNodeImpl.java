@@ -63,7 +63,7 @@ public class ArrayAccessNodeImpl extends NodeImpl implements ArrayAccessNode
     public void setArrayExpression(RestrictedPrimaryExpressionNode arrayExpression)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.ARRAY_EXPRESSION, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.ARRAY_EXPRESSION, Attribute.AccessType.STRONG_WRITE);
         if (this.arrayExpression instanceof NodeImpl)
         {
             ((NodeImpl)this.arrayExpression).setParent(null);
@@ -92,7 +92,7 @@ public class ArrayAccessNodeImpl extends NodeImpl implements ArrayAccessNode
     public void setIndexExpression(ExpressionNode indexExpression)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.INDEX_EXPRESSION, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.INDEX_EXPRESSION, Attribute.AccessType.STRONG_WRITE);
         if (this.indexExpression instanceof NodeImpl)
         {
             ((NodeImpl)this.indexExpression).setParent(null);

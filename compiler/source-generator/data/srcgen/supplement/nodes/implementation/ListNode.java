@@ -51,6 +51,71 @@ public class ListNodeImpl<T extends Node> extends Node implements ListNode<T>
 		{
 			addAll(data);
 		}
+		
+		/**
+		 * Determines whether or not the specified element should be treated as order-dependent in this list.
+		 * @param element The element to check.
+		 * @return <code>true</code> if the element is order-dependent; <code>false</code> if it is not.
+		 */
+		private boolean checkOrderDependent(T element)
+		{
+			return getAlwaysOrdered() || (element instanceof InitializerDeclarationNode);
+		}
+		
+		/**
+		 * Performs a read operation on the specified between attribute before the given index.
+		 * @param index The index before which the attribute appears.  Must be within the range of [0,size].
+		 */
+		private void readBetweenAttribute(int index)
+		{
+			getBetweenAttribute(index).recordAccess(AccessType.READ);
+		}
+		
+		/**
+		 * Performs a read operation on the specified presence attribute at the given index.
+		 * @param index The index at which the attribute appears. Must be within the range of [0,size).
+		 */
+		private void readPresentAttribute(int index)
+		{
+			getPresentAttribute(index).recordAccess(AccessType.READ);
+		}
+		
+		/**
+		 * Performs a write operation on the specified between attribute before the given index.
+		 * @param index The index before which the attribute appears.  Must be within the range of [0,size].
+		 * @param element The element for which the write is occurring.  This value is used to determine whether the
+		 *                write is weak or strong.
+		 */
+		private void writeBetweenAttribute(int index, T element)
+		{
+			AccessType writeType = checkOrderDependent(element) ? AccessType.STRONG_WRITE : AccessType.WEAK_WRITE;
+			getBetweenAttribute(index).recordAccess(writeType);
+		}
+		
+		/**
+		 * Performs a write operation on the specified presence attribute at the given index.
+		 * @param index The index at which the attribute appears. Must be within the range of [0,size).
+		 */
+		private void writePresentAttribute(int index)
+		{
+			getPresentAttribute(index).recordAccess(AccessType.STRONG_WRITE);
+		}
+		
+		/**
+		 * Performs a read operation on the size attribute.
+		 */
+		private void readSizeAttribute()
+		{
+			this.sizeAttribute.recordAccess(AccessType.READ);
+		}
+		
+		/**
+		 * Performs a write operation on the size attribute.
+		 */
+		private void writeSizeAttribute()
+		{
+			this.sizeAttribute.recordAccess(AccessType.WEAK_WRITE);
+		}
 
 		/**
 		 * Retrieves the between attribute which appears before the given index.
@@ -124,16 +189,15 @@ public class ListNodeImpl<T extends Node> extends Node implements ListNode<T>
 			this.backingList.add(index, element);
 			elementAdded(element);
 
-			getBetweenAttribute(index).recordAccess(AccessType.WRITE);
-			getPresentAttribute(index).recordAccess(AccessType.WRITE);
-			getBetweenAttribute(index+1).recordAccess(AccessType.WRITE);
-			this.sizeAttribute.recordAccess(AccessType.WRITE);
+			writeBetweenAttribute(index, element);
+			writePresentAttribute(index);
+			writeBetweenAttribute(index+1, element);
+			writeSizeAttribute();
 		}
 
 		@Override
 		public boolean add(T e)
 		{
-			// TODO: behave differently for order-independent values?
 			this.add(this.backingList.size(), e);
 			return true;
 		}
@@ -177,7 +241,7 @@ public class ListNodeImpl<T extends Node> extends Node implements ListNode<T>
 				T t = it.next();
 				if ((o == null && t == null) || (o != null && o.equals(t)))
 				{
-					getPresentAttribute(it.previousIndex()).recordAccess(AccessType.READ);
+					readPresentAttribute(it.previousIndex());
 					return true;
 				}
 			}
@@ -198,9 +262,9 @@ public class ListNodeImpl<T extends Node> extends Node implements ListNode<T>
 		@Override
 		public T get(int index)
 		{
-			getBetweenAttribute(index).recordAccess(AccessType.READ);
-			getPresentAttribute(index).recordAccess(AccessType.READ);
-			getBetweenAttribute(index + 1).recordAccess(AccessType.READ);
+			readBetweenAttribute(index);
+			readPresentAttribute(index);
+			readBetweenAttribute(index+1);
 			return this.backingList.get(index);
 		}
 
@@ -273,23 +337,23 @@ public class ListNodeImpl<T extends Node> extends Node implements ListNode<T>
 					this.iterator.add(e);
 					elementAdded(e);
 					
-					getBetweenAttribute(index).recordAccess(AccessType.WRITE);
-					getPresentAttribute(index).recordAccess(AccessType.WRITE);
-					getBetweenAttribute(index+1).recordAccess(AccessType.WRITE);
-					ListNodeList.this.sizeAttribute.recordAccess(AccessType.WRITE);
+					writeBetweenAttribute(index, e);
+					writePresentAttribute(index);
+					writeBetweenAttribute(index+1, e);
+					writeSizeAttribute();
 				}
 
 				@Override
 				public boolean hasNext()
 				{
-					getBetweenAttribute(iterator.nextIndex()).recordAccess(AccessType.READ);
+					readBetweenAttribute(iterator.nextIndex());
 					return iterator.hasNext();
 				}
 
 				@Override
 				public boolean hasPrevious()
 				{
-					getBetweenAttribute(iterator.previousIndex()).recordAccess(AccessType.READ);
+					readBetweenAttribute(iterator.previousIndex());
 					return iterator.hasPrevious();
 				}
 
@@ -297,8 +361,8 @@ public class ListNodeImpl<T extends Node> extends Node implements ListNode<T>
 				public T next()
 				{
 					this.lastIndex = iterator.nextIndex();
-					getBetweenAttribute(this.lastIndex).recordAccess(AccessType.READ);
-					getPresentAttribute(this.lastIndex).recordAccess(AccessType.READ);
+					readBetweenAttribute(this.lastIndex);
+					readPresentAttribute(this.lastIndex);
 					this.lastValid = true;
 					this.lastValue = iterator.next();
 					return this.lastValue;
@@ -314,8 +378,8 @@ public class ListNodeImpl<T extends Node> extends Node implements ListNode<T>
 				public T previous()
 				{
 					this.lastIndex = iterator.previousIndex();
-					getBetweenAttribute(this.lastIndex).recordAccess(AccessType.READ);
-					getPresentAttribute(this.lastIndex).recordAccess(AccessType.READ);
+					readBetweenAttribute(this.lastIndex);
+					readPresentAttribute(this.lastIndex);
 					this.lastValid = true;
 					this.lastValue = iterator.previous();
 					return this.lastValue;
@@ -335,10 +399,10 @@ public class ListNodeImpl<T extends Node> extends Node implements ListNode<T>
 						throw new IllegalStateException("Iterator cannot remove - no valid element");
 					}
 					this.lastValid = false;
-					getBetweenAttribute(this.lastIndex).recordAccess(AccessType.WRITE);
-					getPresentAttribute(this.lastIndex).recordAccess(AccessType.WRITE);
-					getBetweenAttribute(this.lastIndex+1).recordAccess(AccessType.WRITE);
-					ListNodeList.this.sizeAttribute.recordAccess(AccessType.WRITE);
+					writeBetweenAttribute(this.lastIndex, this.lastValue);
+					writePresentAttribute(this.lastIndex);
+					writeBetweenAttribute(this.lastIndex+1, this.lastValue);
+					writeSizeAttribute();
 					ListNodeList.this.beforeAttributes.remove(this.lastIndex);
 					ListNodeList.this.presentAttributes.remove(this.lastIndex);
 					iterator.remove();
@@ -353,7 +417,7 @@ public class ListNodeImpl<T extends Node> extends Node implements ListNode<T>
 					{
 						throw new IllegalStateException("Iterator cannot remove - no valid element");
 					}
-					getPresentAttribute(this.lastIndex).recordAccess(AccessType.WRITE);
+					writePresentAttribute(this.lastIndex);
 					iterator.set(e);
 					elementRemoved(this.lastValue);
 					elementAdded(e);
@@ -365,11 +429,13 @@ public class ListNodeImpl<T extends Node> extends Node implements ListNode<T>
 		@Override
 		public T remove(int index)
 		{
-			getBetweenAttribute(index).recordAccess(AccessType.WRITE);
-			getPresentAttribute(index).recordAccess(AccessType.WRITE);
-			getBetweenAttribute(index + 1).recordAccess(AccessType.WRITE);
-			this.sizeAttribute.recordAccess(AccessType.WRITE);
-			return removeElementByIndex(index);
+			T element = this.backingList.get(index);
+			writeBetweenAttribute(index, element);
+			writePresentAttribute(index);
+			writeBetweenAttribute(index+1, element);
+			writeSizeAttribute();
+			removeElementByIndex(index);
+			return element;
 		}
 
 		@Override
@@ -378,8 +444,8 @@ public class ListNodeImpl<T extends Node> extends Node implements ListNode<T>
 			int index = indexOf(o);
 			if (index != -1)
 			{
-				getPresentAttribute(index).recordAccess(AccessType.WRITE);
-				this.sizeAttribute.recordAccess(AccessType.WRITE);
+				writePresentAttribute(index);
+				writeSizeAttribute();
 				removeElementByIndex(index);
 				return true;
 			} else
@@ -409,8 +475,8 @@ public class ListNodeImpl<T extends Node> extends Node implements ListNode<T>
 				if (!c.contains(it.next()))
 				{
 					int index = it.previousIndex();
-					getPresentAttribute(index).recordAccess(AccessType.WRITE);
-					this.sizeAttribute.recordAccess(AccessType.WRITE);
+					writePresentAttribute(index);
+					writeSizeAttribute();
 					removeElementByIndex(index);
 					ret = true;
 				}
@@ -421,10 +487,12 @@ public class ListNodeImpl<T extends Node> extends Node implements ListNode<T>
 		@Override
 		public T set(int index, T element)
 		{
-			getBetweenAttribute(index).recordAccess(AccessType.WRITE);
-			getPresentAttribute(index).recordAccess(AccessType.WRITE);
-			getBetweenAttribute(index + 1).recordAccess(AccessType.WRITE);
+			writeBetweenAttribute(index, element);
+			writePresentAttribute(index);
+			writeBetweenAttribute(index+1, element);
 			T ret = this.backingList.set(index, element);
+			writeBetweenAttribute(index, ret);
+			writeBetweenAttribute(index+1, ret);
 			elementRemoved(ret);
 			elementAdded(element);
 			return ret;
@@ -433,7 +501,7 @@ public class ListNodeImpl<T extends Node> extends Node implements ListNode<T>
 		@Override
 		public int size()
 		{
-			this.sizeAttribute.recordAccess(AccessType.READ);
+			readSizeAttribute();
 			return this.backingList.size();
 		}
 

@@ -63,7 +63,7 @@ public class UnaryStatementExpressionNodeImpl extends NodeImpl implements UnaryS
     public void setExpression(ExpressionNode expression)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.EXPRESSION, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.EXPRESSION, Attribute.AccessType.STRONG_WRITE);
         if (this.expression instanceof NodeImpl)
         {
             ((NodeImpl)this.expression).setParent(null);
@@ -92,7 +92,7 @@ public class UnaryStatementExpressionNodeImpl extends NodeImpl implements UnaryS
     public void setOperator(UnaryStatementOperator operator)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.OPERATOR, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.OPERATOR, Attribute.AccessType.STRONG_WRITE);
         this.operator = operator;
     }
     

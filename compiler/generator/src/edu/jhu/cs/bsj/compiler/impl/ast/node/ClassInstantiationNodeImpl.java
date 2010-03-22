@@ -68,7 +68,7 @@ public abstract class ClassInstantiationNodeImpl extends NodeImpl implements Cla
     public void setConstructorTypeArguments(TypeArgumentListNode constructorTypeArguments)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.CONSTRUCTOR_TYPE_ARGUMENTS, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.CONSTRUCTOR_TYPE_ARGUMENTS, Attribute.AccessType.STRONG_WRITE);
         if (this.constructorTypeArguments instanceof NodeImpl)
         {
             ((NodeImpl)this.constructorTypeArguments).setParent(null);
@@ -97,7 +97,7 @@ public abstract class ClassInstantiationNodeImpl extends NodeImpl implements Cla
     public void setArguments(ExpressionListNode arguments)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.ARGUMENTS, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.ARGUMENTS, Attribute.AccessType.STRONG_WRITE);
         if (this.arguments instanceof NodeImpl)
         {
             ((NodeImpl)this.arguments).setParent(null);
@@ -126,7 +126,7 @@ public abstract class ClassInstantiationNodeImpl extends NodeImpl implements Cla
     public void setBody(AnonymousClassBodyNode body)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.BODY, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.BODY, Attribute.AccessType.STRONG_WRITE);
         if (this.body instanceof NodeImpl)
         {
             ((NodeImpl)this.body).setParent(null);

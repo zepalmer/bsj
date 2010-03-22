@@ -87,7 +87,7 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
     public void setAnnotations(AnnotationListNode annotations)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.ANNOTATIONS, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.ANNOTATIONS, Attribute.AccessType.STRONG_WRITE);
         if (this.annotations instanceof NodeImpl)
         {
             ((NodeImpl)this.annotations).setParent(null);
@@ -116,7 +116,7 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
     public void setIdentifier(IdentifierNode identifier)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.STRONG_WRITE);
         if (this.identifier instanceof NodeImpl)
         {
             ((NodeImpl)this.identifier).setParent(null);
@@ -145,7 +145,7 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
     public void setArguments(ExpressionListNode arguments)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.ARGUMENTS, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.ARGUMENTS, Attribute.AccessType.STRONG_WRITE);
         if (this.arguments instanceof NodeImpl)
         {
             ((NodeImpl)this.arguments).setParent(null);
@@ -174,7 +174,7 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
     public void setBody(AnonymousClassBodyNode body)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.BODY, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.BODY, Attribute.AccessType.STRONG_WRITE);
         if (this.body instanceof NodeImpl)
         {
             ((NodeImpl)this.body).setParent(null);
@@ -203,7 +203,7 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
     public void setJavadoc(JavadocNode javadoc)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.JAVADOC, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.JAVADOC, Attribute.AccessType.STRONG_WRITE);
         if (this.javadoc instanceof NodeImpl)
         {
             ((NodeImpl)this.javadoc).setParent(null);

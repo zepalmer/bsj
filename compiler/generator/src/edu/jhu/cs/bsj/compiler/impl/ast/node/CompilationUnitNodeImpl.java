@@ -96,7 +96,7 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
     public void setPackageDeclaration(PackageDeclarationNode packageDeclaration)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.PACKAGE_DECLARATION, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.PACKAGE_DECLARATION, Attribute.AccessType.STRONG_WRITE);
         if (this.packageDeclaration instanceof NodeImpl)
         {
             ((NodeImpl)this.packageDeclaration).setParent(null);
@@ -125,7 +125,7 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
     public void setMetaimports(MetaprogramImportListNode metaimports)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.METAIMPORTS, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.METAIMPORTS, Attribute.AccessType.STRONG_WRITE);
         if (this.metaimports instanceof NodeImpl)
         {
             ((NodeImpl)this.metaimports).setParent(null);
@@ -154,7 +154,7 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
     public void setImports(ImportListNode imports)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.IMPORTS, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.IMPORTS, Attribute.AccessType.STRONG_WRITE);
         if (this.imports instanceof NodeImpl)
         {
             ((NodeImpl)this.imports).setParent(null);
@@ -183,7 +183,7 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
     public void setTypeDecls(TypeDeclarationListNode typeDecls)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.TYPE_DECLS, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.TYPE_DECLS, Attribute.AccessType.STRONG_WRITE);
         if (this.typeDecls instanceof NodeImpl)
         {
             ((NodeImpl)this.typeDecls).setParent(null);

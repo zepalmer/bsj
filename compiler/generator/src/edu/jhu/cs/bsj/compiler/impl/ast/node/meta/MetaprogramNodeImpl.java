@@ -64,7 +64,7 @@ public class MetaprogramNodeImpl extends NodeImpl implements MetaprogramNode
     public void setPreamble(MetaprogramPreambleNode preamble)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.PREAMBLE, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.PREAMBLE, Attribute.AccessType.STRONG_WRITE);
         if (this.preamble instanceof NodeImpl)
         {
             ((NodeImpl)this.preamble).setParent(null);
@@ -93,7 +93,7 @@ public class MetaprogramNodeImpl extends NodeImpl implements MetaprogramNode
     public void setBody(BlockStatementListNode body)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.BODY, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.BODY, Attribute.AccessType.STRONG_WRITE);
         if (this.body instanceof NodeImpl)
         {
             ((NodeImpl)this.body).setParent(null);

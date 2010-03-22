@@ -55,7 +55,7 @@ public class BlockNodeImpl extends NodeImpl implements BlockNode
     public void setStatements(BlockStatementListNode statements)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.STATEMENTS, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.STATEMENTS, Attribute.AccessType.STRONG_WRITE);
         if (this.statements instanceof NodeImpl)
         {
             ((NodeImpl)this.statements).setParent(null);

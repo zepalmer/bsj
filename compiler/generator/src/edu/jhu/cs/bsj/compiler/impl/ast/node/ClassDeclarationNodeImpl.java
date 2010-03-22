@@ -104,7 +104,7 @@ public class ClassDeclarationNodeImpl extends NodeImpl implements ClassDeclarati
     public void setModifiers(ClassModifiersNode modifiers)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.MODIFIERS, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.MODIFIERS, Attribute.AccessType.STRONG_WRITE);
         if (this.modifiers instanceof NodeImpl)
         {
             ((NodeImpl)this.modifiers).setParent(null);
@@ -133,7 +133,7 @@ public class ClassDeclarationNodeImpl extends NodeImpl implements ClassDeclarati
     public void setExtendsClause(DeclaredTypeNode extendsClause)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.EXTENDS_CLAUSE, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.EXTENDS_CLAUSE, Attribute.AccessType.STRONG_WRITE);
         if (this.extendsClause instanceof NodeImpl)
         {
             ((NodeImpl)this.extendsClause).setParent(null);
@@ -162,7 +162,7 @@ public class ClassDeclarationNodeImpl extends NodeImpl implements ClassDeclarati
     public void setImplementsClause(DeclaredTypeListNode implementsClause)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.IMPLEMENTS_CLAUSE, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.IMPLEMENTS_CLAUSE, Attribute.AccessType.STRONG_WRITE);
         if (this.implementsClause instanceof NodeImpl)
         {
             ((NodeImpl)this.implementsClause).setParent(null);
@@ -191,7 +191,7 @@ public class ClassDeclarationNodeImpl extends NodeImpl implements ClassDeclarati
     public void setBody(ClassBodyNode body)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.BODY, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.BODY, Attribute.AccessType.STRONG_WRITE);
         if (this.body instanceof NodeImpl)
         {
             ((NodeImpl)this.body).setParent(null);
@@ -220,7 +220,7 @@ public class ClassDeclarationNodeImpl extends NodeImpl implements ClassDeclarati
     public void setTypeParameters(TypeParameterListNode typeParameters)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.TYPE_PARAMETERS, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.TYPE_PARAMETERS, Attribute.AccessType.STRONG_WRITE);
         if (this.typeParameters instanceof NodeImpl)
         {
             ((NodeImpl)this.typeParameters).setParent(null);
@@ -249,7 +249,7 @@ public class ClassDeclarationNodeImpl extends NodeImpl implements ClassDeclarati
     public void setIdentifier(IdentifierNode identifier)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.STRONG_WRITE);
         if (this.identifier instanceof NodeImpl)
         {
             ((NodeImpl)this.identifier).setParent(null);
@@ -278,7 +278,7 @@ public class ClassDeclarationNodeImpl extends NodeImpl implements ClassDeclarati
     public void setJavadoc(JavadocNode javadoc)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.JAVADOC, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.JAVADOC, Attribute.AccessType.STRONG_WRITE);
         if (this.javadoc instanceof NodeImpl)
         {
             ((NodeImpl)this.javadoc).setParent(null);

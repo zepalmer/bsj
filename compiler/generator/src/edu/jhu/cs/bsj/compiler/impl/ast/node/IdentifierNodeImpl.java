@@ -54,7 +54,7 @@ public class IdentifierNodeImpl extends NodeImpl implements IdentifierNode
     public void setIdentifier(String identifier)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.STRONG_WRITE);
         this.identifier = identifier;
     }
     

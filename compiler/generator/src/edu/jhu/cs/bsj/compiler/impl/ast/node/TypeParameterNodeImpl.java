@@ -63,7 +63,7 @@ public class TypeParameterNodeImpl extends NodeImpl implements TypeParameterNode
     public void setIdentifier(IdentifierNode identifier)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.STRONG_WRITE);
         if (this.identifier instanceof NodeImpl)
         {
             ((NodeImpl)this.identifier).setParent(null);
@@ -92,7 +92,7 @@ public class TypeParameterNodeImpl extends NodeImpl implements TypeParameterNode
     public void setBounds(DeclaredTypeListNode bounds)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.BOUNDS, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.BOUNDS, Attribute.AccessType.STRONG_WRITE);
         if (this.bounds instanceof NodeImpl)
         {
             ((NodeImpl)this.bounds).setParent(null);

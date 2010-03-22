@@ -55,7 +55,7 @@ public class InlineTypeDeclarationNodeImpl extends NodeImpl implements InlineTyp
     public void setDeclaration(InlineTypeDeclarableNode declaration)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.DECLARATION, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.DECLARATION, Attribute.AccessType.STRONG_WRITE);
         if (this.declaration instanceof NodeImpl)
         {
             ((NodeImpl)this.declaration).setParent(null);

@@ -88,7 +88,7 @@ public class MetaprogramPreambleNodeImpl extends NodeImpl implements Metaprogram
     public void setImports(MetaprogramImportListNode imports)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.IMPORTS, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.IMPORTS, Attribute.AccessType.STRONG_WRITE);
         if (this.imports instanceof NodeImpl)
         {
             ((NodeImpl)this.imports).setParent(null);
@@ -117,7 +117,7 @@ public class MetaprogramPreambleNodeImpl extends NodeImpl implements Metaprogram
     public void setLocalMode(MetaprogramLocalMode localMode)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.LOCAL_MODE, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.LOCAL_MODE, Attribute.AccessType.STRONG_WRITE);
         this.localMode = localMode;
     }
     
@@ -138,7 +138,7 @@ public class MetaprogramPreambleNodeImpl extends NodeImpl implements Metaprogram
     public void setPackageMode(MetaprogramPackageMode packageMode)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.PACKAGE_MODE, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.PACKAGE_MODE, Attribute.AccessType.STRONG_WRITE);
         this.packageMode = packageMode;
     }
     
@@ -159,7 +159,7 @@ public class MetaprogramPreambleNodeImpl extends NodeImpl implements Metaprogram
     public void setTarget(MetaprogramTargetNode target)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.TARGET, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.TARGET, Attribute.AccessType.STRONG_WRITE);
         if (this.target instanceof NodeImpl)
         {
             ((NodeImpl)this.target).setParent(null);
@@ -188,7 +188,7 @@ public class MetaprogramPreambleNodeImpl extends NodeImpl implements Metaprogram
     public void setDepends(MetaprogramDependsNode depends)
     {
         getManager().assertMutatable(this);
-        recordAccess(LocalAttribute.DEPENDS, Attribute.AccessType.WRITE);
+        recordAccess(LocalAttribute.DEPENDS, Attribute.AccessType.STRONG_WRITE);
         if (this.depends instanceof NodeImpl)
         {
             ((NodeImpl)this.depends).setParent(null);
