@@ -7,4 +7,7 @@ public class PermissionViolation
 		ImportListNode importsNode = node.getImports();
 		importsNode.clear();
 	:]
+	public static void main(String[] arg)
+	{
+	}
 }

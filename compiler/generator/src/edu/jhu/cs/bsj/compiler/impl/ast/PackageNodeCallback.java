@@ -10,6 +10,7 @@ import java.util.Set;
 
 import javax.tools.JavaFileObject.Kind;
 
+import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
 import edu.jhu.cs.bsj.compiler.ast.node.PackageNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.MetacompilationManager;
@@ -26,6 +27,8 @@ import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjFileObject;
  */
 public class PackageNodeCallback
 {
+	/** The factory to use when creating nodes. */
+	private BsjNodeFactory factory;
 	/** The file manager to use in this callback. */
 	private BsjFileManager fileManager;
 	/** The metacompilation manager to notify of new file additions. */
@@ -39,6 +42,11 @@ public class PackageNodeCallback
 	public void setMetacompilationManager(MetacompilationManager metacompilationManager)
 	{
 		this.metacompilationManager = metacompilationManager;
+	}
+
+	public void setFactory(BsjNodeFactory factory)
+	{
+		this.factory = factory;
 	}
 
 	/**
@@ -56,7 +64,7 @@ public class PackageNodeCallback
 	 * Creates an iterable object which moves over {@link BsjFileObject}s which represent compilation units in the
 	 * current package.
 	 */
-	protected Iterable<BsjFileObject> findCompilationUnits(String pname)
+	protected List<BsjFileObject> findCompilationUnits(String pname)
 	{
 		List<BsjFileObject> files = new ArrayList<BsjFileObject>();
 		Set<String> names = new HashSet<String>();
@@ -97,7 +105,7 @@ public class PackageNodeCallback
 			// TODO: how do we handle this?
 			throw new IllegalStateException(ioe);
 		}
-		
+
 		return files;
 	}
 
@@ -140,7 +148,7 @@ public class PackageNodeCallback
 		// Examine runtime non-compilation use cases of the factory and see if this makes sense
 		if (this.metacompilationManager == null)
 			throw new IllegalStateException("Request to load source when no compilation is under way.");
-		
+
 		String pname = packageNode.getFullyQualifiedName();
 		if (pname == null)
 		{
@@ -164,12 +172,12 @@ public class PackageNodeCallback
 	 * @param packageNode The package node making the request.
 	 * @return An iterator over the names of the compilation units in the package.
 	 */
-	public Iterable<String> listCompilationUnitNames(PackageNode packageNode)
+	public List<String> listCompilationUnitNames(PackageNode packageNode)
 	{
 		String pname = packageNode.getFullyQualifiedName();
 		if (pname == null)
 		{
-			return Collections.<String> emptySet();
+			return Collections.<String> emptyList();
 		}
 
 		List<String> names = new ArrayList<String>();
@@ -178,5 +186,13 @@ public class PackageNodeCallback
 			names.add(getCompilationUnitName(file));
 		}
 		return names;
+	}
+	
+	/**
+	 * Retrieves a factory to use to create nodes.
+	 */
+	public BsjNodeFactory getFactory()
+	{
+		return factory;
 	}
 }

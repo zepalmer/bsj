@@ -156,7 +156,7 @@ public abstract class NodeImpl
 	public Node getFurthestAncestor()
 	{
 		Node node = this;
-		while (node != null)
+		while (node.getParent() != null)
 		{
 			node = node.getParent();
 		}

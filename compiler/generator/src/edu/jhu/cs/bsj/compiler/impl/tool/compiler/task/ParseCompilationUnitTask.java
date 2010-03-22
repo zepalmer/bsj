@@ -3,7 +3,6 @@ package edu.jhu.cs.bsj.compiler.impl.tool.compiler.task;
 import java.io.IOException;
 import java.io.Reader;
 
-import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
 import edu.jhu.cs.bsj.compiler.ast.node.PackageNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.MetacompilationContext;
@@ -35,7 +34,6 @@ public class ParseCompilationUnitTask extends AbstractBsjCompilerTask
 	@Override
 	public void execute(MetacompilationContext context) throws IOException
 	{
-		BsjNodeFactory factory = context.getToolkit().getNodeFactory();
 		PackageNode rootPackage = context.getRootPackage();
 
 		// Parse the file into a compilation unit
@@ -50,14 +48,7 @@ public class ParseCompilationUnitTask extends AbstractBsjCompilerTask
 		if (compilationUnitBinaryName.contains("."))
 		{
 			String packageName = StringUtilities.removeSuffix(compilationUnitBinaryName, '.');
-			for (String componentName : packageName.split("\\."))
-			{
-				if (packageNode.getSubpackage(componentName) == null)
-				{
-					packageNode.addPackageNode(factory.makePackageNode(factory.makeIdentifierNode(componentName)));
-				}
-				packageNode = packageNode.getSubpackage(componentName);
-			}
+			packageNode = packageNode.getSubpackageByQualifiedName(packageName);
 		}
 
 		// Add the compilation unit and enqueue it for name analysis

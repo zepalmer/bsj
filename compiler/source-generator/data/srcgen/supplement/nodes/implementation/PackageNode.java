@@ -9,6 +9,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
 import edu.jhu.cs.bsj.compiler.ast.node.NamedTypeDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeDeclarationNode;
+import edu.jhu.cs.bsj.compiler.impl.utils.StringUtilities;
 
 /* GEN:headerstart */
 
@@ -22,13 +23,14 @@ public class PackageNodeImpl
 	private Map<String, CompilationUnitNode> compilationUnitNodes = new HashMap<String, CompilationUnitNode>();
 
 	/**
-	 * Adds a new subpackage to this node. This subpackage cannot already be a member of another package.
-	 * 
-	 * @param packageNode The package node to add.
+	 * {@inheritDoc}
 	 */
-	// TODO: exception if the package already exists
 	public void addPackageNode(PackageNode packageNode)
 	{
+		if (this.packageNodes.containsKey(packageNode.getName().getIdentifier()))
+		{
+			throw new DuplicatePackageMemberException(this, packageNode, packageNode.getName().getIdentifier());
+		}
 		getManager().assertInsertable(this);
 		this.packageNodes.put(packageNode.getName().getIdentifier(), packageNode);
 		if (packageNode instanceof PackageNodeImpl)
@@ -39,24 +41,33 @@ public class PackageNodeImpl
 	}
 
 	/**
-	 * Retrieves a subpackage of this package.
-	 * 
-	 * @param name The simple name of the subpackage to retrieve.
-	 * @return The subpackage. If it does not exist, <code>null</code> is returned.
+	 * {@inheritDoc}
 	 */
 	public PackageNode getSubpackage(String name)
 	{
-		return packageNodes.get(name);
+		PackageNode packageNode = this.packageNodes.get(name);
+		if (packageNode == null)
+		{
+			BsjNodeFactory factory = packageNodeCallback.getFactory();
+			packageNode = factory.makePackageNode(factory.makeIdentifierNode(name));
+			if (packageNode instanceof PackageNodeImpl)
+			{
+				((PackageNodeImpl)packageNode).setParent(this);
+			}
+			this.packageNodes.put(name, packageNode);
+		}
+		return packageNode;
 	}
 
 	/**
-	 * Adds a new compilation unit to this node. This compilation unit cannot already be a member of another package.
-	 * 
-	 * @param compilationUnit The compilation unit to add.
+	 * {@inheritDoc}
 	 */
-	// TODO: exception if the compilation unit already exists
 	public void addCompilationUnitNode(CompilationUnitNode compilationUnit)
 	{
+		if (this.compilationUnitNodes.containsKey(compilationUnit.getName()))
+		{
+			throw new DuplicatePackageMemberException(this, compilationUnit, compilationUnit.getName());
+		}
 		getManager().assertInsertable(this);
 		this.compilationUnitNodes.put(compilationUnit.getName(), compilationUnit);
 		if (compilationUnit instanceof CompilationUnitNodeImpl)
@@ -67,10 +78,7 @@ public class PackageNodeImpl
 	}
 
 	/**
-	 * Retrieves a compilation unit in this package.
-	 * 
-	 * @param name The simple name of the compilation unit to retrieve.
-	 * @return The compilation unit. If it does not exist or has not yet been loaded, <code>null</code> is returned.
+	 * {@inheritDoc}
 	 */
 	public CompilationUnitNode getCompilationUnit(String name)
 	{
@@ -78,9 +86,7 @@ public class PackageNodeImpl
 	}
 
 	/**
-	 * Retrieves an iterator over all loaded compilation units in this package.
-	 * 
-	 * @return An iterator over all loaded compilation units.
+	 * {@inheritDoc}
 	 */
 	public Iterator<CompilationUnitNode> getCompilationUnitIterator()
 	{
@@ -88,9 +94,7 @@ public class PackageNodeImpl
 	}
 
 	/**
-	 * Retrieves an iterator over all loaded compilation units in this package and its known subpackages.
-	 * 
-	 * @return A recursive iterator over all loaded compilation units.
+	 * {@inheritDoc}
 	 */
 	public Iterator<CompilationUnitNode> getRecursiveCompilationUnitIterator()
 	{
@@ -104,11 +108,7 @@ public class PackageNodeImpl
 	}
 
 	/**
-	 * Retrieves a subpackage of this package by qualified name. This method is provided for convenience and is
-	 * equivalent to calling {@link #getSubpackage} compositionally.
-	 * 
-	 * @param name The qualified name of the subpackage to retrieve. The name components are separated by '.'
-	 *            characters.
+	 * {@inheritDoc}
 	 */
 	public PackageNode getSubpackageByQualifiedName(String name)
 	{
@@ -126,11 +126,7 @@ public class PackageNodeImpl
 	}
 
 	/**
-	 * Retrieves a subpackage of this package by qualified name. This method is provided for convenience and is
-	 * equivalent to calling {@link #getSubpackage} compositionally.
-	 * 
-	 * @param name The qualified name of the subpackage to retrieve.
-	 * @return The resulting package node or <code>null</code> if no such node exists.
+	 * {@inheritDoc}
 	 */
 	public PackageNode getSubpackageByQualifiedName(NameNode name)
 	{
@@ -149,9 +145,7 @@ public class PackageNodeImpl
 	}
 	
 	/**
-	 * Retrieves a type declaration for a top level type in this package.
-	 * @param name The simple name of the top level type.
-	 * @return The type's declaration or <code>null</code> if no such declaration exists.
+	 * {@inheritDoc}
 	 */
 	public NamedTypeDeclarationNode<?> getTopLevelTypeDeclaration(String name)
 	{
@@ -205,10 +199,7 @@ public class PackageNodeImpl
 	}
 	
 	/**
-	 * Retrieves the full name of this package node. This method only returns a valid result if the package is attached
-	 * to the root package.
-	 * 
-	 * @return The fully-qualified name of this package node or <code>null</code> if the name could not be determined.
+	 * {@inheritDoc}
 	 */
 	public String getFullyQualifiedName()
 	{
@@ -236,16 +227,7 @@ public class PackageNodeImpl
 	}
 
 	/**
-	 * Determines whether or not this package node contains a compilation unit which has the specified simple name. This
-	 * may be the case under any of the following three circumstances:
-	 * <ul>
-	 * <li>When a precompiled binary exists on the object program's classpath which represents the compilation unit.</li>
-	 * <li>When a source file exists on the source path which defines the compilation unit.</li>
-	 * <li>When a node created by a metaprogram has been explicitly added to this package.</li>
-	 * </ul>
-	 * 
-	 * @param name The name of the compilation unit to check.
-	 * @return <code>true</code> if the compilation unit exists; <code>false</code> otherwise.
+	 * {@inheritDoc}
 	 */
 	public boolean contains(String name)
 	{
@@ -257,15 +239,7 @@ public class PackageNodeImpl
 	}
 
 	/**
-	 * Starts to load the specified compilation unit in this package. A compilation unit must be loaded before it is
-	 * visible in the package hierarchy. Typically, compilation units are loaded by explicit mention when compilation is
-	 * started or by dependency inference (such as when a metaprorgam mentions a dependency on a target which is in a
-	 * different file or when a type reference is found in an on-demand import). It is possible for metaprograms to
-	 * explicitly load compilation units which are not possible to infer, such as when the name of a compilation unit is
-	 * mentioned in metaprogram code but no object program code causes a direct reference.
-	 * 
-	 * @param name The simple name of the compilation unit to load. No file extension should be provided.
-	 * @return The loaded compilation unit.
+	 * {@inheritDoc}
 	 */
 	public CompilationUnitNode load(String name)
 	{
@@ -280,7 +254,7 @@ public class PackageNodeImpl
 	}
 
 	/**
-	 * Performs the load of every compilation unit available in this package.
+	 * {@inheritDoc}
 	 */
 	public void loadAll()
 	{
