@@ -1,3 +1,16 @@
+/*******************************************************************************
+ * Copyright (c) 2000, 2008 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *     
+ * Modified by Zachary Palmer and Joseph Riley for Backstage Java
+ *******************************************************************************/
+
 package edu.jhu.cs.bsj.plugin.scanners;
 
 import java.util.ArrayList;
@@ -15,27 +28,30 @@ import org.eclipse.jface.text.rules.WordRule;
 
 import edu.jhu.cs.bsj.plugin.editor.BsjColorProvider;
 
-
-public class JavadocScanner extends RuleBasedScanner 
+public class JavadocScanner extends RuleBasedScanner
 {
-    private static String[] fgKeywords= { 
-        "@author", "@deprecated", "@exception", "@param", "@return", 
-        "@see", "@serial", "@serialData", "@serialField", "@since", 
-        "@throws", "@version" };
+    private static String[] fgKeywords = { "@author", "@deprecated",
+            "@exception", "@param", "@return", "@see", "@serial",
+            "@serialData", "@serialField", "@since", "@throws", "@version" };
 
     /**
      * Create a new javadoc scanner for the given color provider.
-     *
-     * @param provider the color provider
+     * 
+     * @param provider
+     *            the color provider
      */
-     public JavadocScanner(BsjColorProvider provider) {
+    public JavadocScanner(BsjColorProvider provider)
+    {
         super();
 
-        IToken keyword= new Token(new TextAttribute(provider.getColor(BsjColorProvider.JAVADOC_KEYWORD)));
-        IToken tag= new Token(new TextAttribute(provider.getColor(BsjColorProvider.JAVADOC_TAG)));
-        IToken link= new Token(new TextAttribute(provider.getColor(BsjColorProvider.JAVADOC_LINK)));
+        IToken keyword = new Token(new TextAttribute(provider
+                .getColor(BsjColorProvider.JAVADOC_KEYWORD)));
+        IToken tag = new Token(new TextAttribute(provider
+                .getColor(BsjColorProvider.JAVADOC_TAG)));
+        IToken link = new Token(new TextAttribute(provider
+                .getColor(BsjColorProvider.JAVADOC_LINK)));
 
-        List<IRule> list= new ArrayList<IRule>();
+        List<IRule> list = new ArrayList<IRule>();
 
         // Add rule for tags.
         list.add(new SingleLineRule("<", ">", tag));
@@ -47,35 +63,39 @@ public class JavadocScanner extends RuleBasedScanner
         list.add(new WhitespaceRule(new JavaWhitespaceDetector()));
 
         // Add word rule for keywords.
-        WordRule wordRule= new WordRule(new JavaDocWordDetector());
-        for (int i= 0; i < fgKeywords.length; i++)
+        WordRule wordRule = new WordRule(new JavaDocWordDetector());
+        for (int i = 0; i < fgKeywords.length; i++)
+        {
             wordRule.addWord(fgKeywords[i], keyword);
+        }
         list.add(wordRule);
 
-        IRule[] result= new IRule[list.size()];
+        IRule[] result = new IRule[list.size()];
         list.toArray(result);
         setRules(result);
     }
-     
-     /**
-      * A key word detector.
-      */
-     static class JavaDocWordDetector implements IWordDetector {
 
-     /* (non-Javadoc)
-      * Method declared on IWordDetector
-      */
-         @Override
-         public boolean isWordStart(char c) {
-             return (c == '@');
-         }
-
-         /* (non-Javadoc)
-         * Method declared on IWordDetector
+    /**
+     * A key word detector.
+     */
+    static class JavaDocWordDetector implements IWordDetector
+    {
+        /*
+         * (non-Javadoc) Method declared on IWordDetector
          */
-         @Override
-         public boolean isWordPart(char c) {
-             return Character.isLetter(c);
-         }
-     }
+        @Override
+        public boolean isWordStart(char c)
+        {
+            return (c == '@');
+        }
+
+        /*
+         * (non-Javadoc) Method declared on IWordDetector
+         */
+        @Override
+        public boolean isWordPart(char c)
+        {
+            return Character.isLetter(c);
+        }
+    }
 }

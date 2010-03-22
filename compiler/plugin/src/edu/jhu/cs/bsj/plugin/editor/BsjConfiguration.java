@@ -1,3 +1,16 @@
+/*******************************************************************************
+ * Copyright (c) 2000, 2008 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *     
+ * Modified by Zachary Palmer and Joseph Riley for Backstage Java
+ *******************************************************************************/
+
 package edu.jhu.cs.bsj.plugin.editor;
 
 import org.eclipse.jface.text.IDocument;
@@ -33,7 +46,8 @@ public class BsjConfiguration extends SourceViewerConfiguration
         return new String[] { 
                 IDocument.DEFAULT_CONTENT_TYPE,
                 BsjPartitionScanner.JAVA_DOC, 
-                BsjPartitionScanner.JAVA_MULTILINE_COMMENT };
+                BsjPartitionScanner.JAVA_MULTILINE_COMMENT,
+                BsjPartitionScanner.META_PROGRAM};
     }
 
     public ITextDoubleClickStrategy getDoubleClickStrategy(
@@ -90,13 +104,12 @@ public class BsjConfiguration extends SourceViewerConfiguration
         reconciler.setDamager(dr, BsjPartitionScanner.JAVA_MULTILINE_COMMENT);
         reconciler.setRepairer(dr, BsjPartitionScanner.JAVA_MULTILINE_COMMENT);
         
-        //TODO damageRepairer for metaprograms?  depends on the syntax highlighting style we choose
-        
-//        NonRuleBasedDamagerRepairer ndr = new NonRuleBasedDamagerRepairer(
-//                new TextAttribute(colorManager
-//                        .getColor(JavaColorProvider.MULTI_LINE_COMMENT)));
-//        reconciler.setDamager(ndr, BsjPartitionScanner.JAVA_MULTILINE_COMMENT);
-//        reconciler.setRepairer(ndr, BsjPartitionScanner.JAVA_MULTILINE_COMMENT);
+        //TODO remove
+        dr = new DefaultDamagerRepairer(new SingleTokenScanner(
+                new TextAttribute(
+                        colorProvider.getColor(BsjColorProvider.META_PROGRAM))));
+        reconciler.setDamager(dr, BsjPartitionScanner.META_PROGRAM);
+        reconciler.setRepairer(dr, BsjPartitionScanner.META_PROGRAM);
         
         return reconciler;
     }
@@ -104,7 +117,6 @@ public class BsjConfiguration extends SourceViewerConfiguration
     /**
      * Single token scanner.
      */
-    //TODO
     static class SingleTokenScanner extends BufferedRuleBasedScanner
     {
         public SingleTokenScanner(TextAttribute attribute)

@@ -7,7 +7,10 @@
  *
  * Contributors:
  *     IBM Corporation - initial API and implementation
+ *     
+ * Modified by Zachary Palmer and Joseph Riley for Backstage Java
  *******************************************************************************/
+
 package edu.jhu.cs.bsj.plugin.scanners;
 
 

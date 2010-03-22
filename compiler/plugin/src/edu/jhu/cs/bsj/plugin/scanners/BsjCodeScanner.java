@@ -1,3 +1,16 @@
+/*******************************************************************************
+ * Copyright (c) 2000, 2008 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *     
+ * Modified by Zachary Palmer and Joseph Riley for Backstage Java
+ *******************************************************************************/
+
 package edu.jhu.cs.bsj.plugin.scanners;
 
 import java.util.ArrayList;
@@ -15,7 +28,7 @@ public class BsjCodeScanner extends RuleBasedScanner
         "default", "do", "else", "extends", "final", "finally", 
         "for", "if", "implements", "import", "instanceof", "interface", 
         "native", "new", "package", "private", "protected", "public", 
-        "return", "static", "super", "switch", "synchronized", "this", 
+        "return", "static", "strictfp", "super", "switch", "synchronized", "this", 
         "throw", "throws", "transient", "try", "volatile", "while" };
     
     private static String[] fgTypes= { 
@@ -47,19 +60,29 @@ public class BsjCodeScanner extends RuleBasedScanner
         rules.add(new SingleLineRule("'", "'", string, '\\'));
 
         // Add rule for meta programs
-        rules.add(new MultiLineRule("[:", ":]", meta));
+        //rules.add(new MultiLineRule("[:", ":]", meta));
         
         // Add generic whitespace rule.
         rules.add(new WhitespaceRule(new JavaWhitespaceDetector()));
 
         // Add word rule for keywords, types, and constants.
         WordRule wordRule= new WordRule(new JavaWordDetector(), other);
+        
         for (int i= 0; i < fgKeywords.length; i++)
+        {
             wordRule.addWord(fgKeywords[i], keyword);
+        }
+        
         for (int i= 0; i < fgTypes.length; i++)
+        {
             wordRule.addWord(fgTypes[i], type);
+        }
+        
         for (int i= 0; i < fgConstants.length; i++)
+        {
             wordRule.addWord(fgConstants[i], type);
+        }
+        
         rules.add(wordRule);
 
         IRule[] result= new IRule[rules.size()];

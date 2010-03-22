@@ -1,3 +1,16 @@
+/*******************************************************************************
+ * Copyright (c) 2000, 2008 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Contributors:
+ *     IBM Corporation - initial API and implementation
+ *     
+ * Modified by Zachary Palmer and Joseph Riley for Backstage Java
+ *******************************************************************************/
+
 package edu.jhu.cs.bsj.plugin.scanners;
 
 import java.util.ArrayList;
@@ -9,6 +22,8 @@ public class BsjPartitionScanner extends RuleBasedPartitionScanner
 {
     public final static String JAVA_MULTILINE_COMMENT = "__java_multiline_comment";
     public final static String JAVA_DOC = "__java_javadoc";
+    
+    public final static String META_PROGRAM = "__meta";//TODO remvoe
     
     public BsjPartitionScanner() 
     {
@@ -32,6 +47,9 @@ public class BsjPartitionScanner extends RuleBasedPartitionScanner
         // Add rules for multi-line comments and javadoc.
         rules.add(new MultiLineRule("/**", "*/", javaDoc, (char) 0, true));
         rules.add(new MultiLineRule("/*", "*/", comment, (char) 0, true));
+        
+        IToken meta= new Token(META_PROGRAM);//TODO REMOVE
+        rules.add(new MultiLineRule("[:", ":]", meta, (char) 0, true));
         
         IPredicateRule[] result= new IPredicateRule[rules.size()];
         rules.toArray(result);
