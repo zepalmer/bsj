@@ -20,10 +20,12 @@ import org.eclipse.jface.text.presentation.IPresentationReconciler;
 import org.eclipse.jface.text.presentation.PresentationReconciler;
 import org.eclipse.jface.text.rules.BufferedRuleBasedScanner;
 import org.eclipse.jface.text.rules.DefaultDamagerRepairer;
+import org.eclipse.jface.text.rules.ITokenScanner;
 import org.eclipse.jface.text.rules.Token;
 import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.jface.text.source.SourceViewerConfiguration;
 
+import edu.jhu.cs.bsj.plugin.scanners.BsjMetaScanner;
 import edu.jhu.cs.bsj.plugin.scanners.BsjPartitionScanner;
 import edu.jhu.cs.bsj.plugin.scanners.BsjCodeScanner;
 import edu.jhu.cs.bsj.plugin.scanners.JavadocScanner;
@@ -35,7 +37,8 @@ public class BsjConfiguration extends SourceViewerConfiguration
     private JavadocScanner tagScanner;
     private BsjCodeScanner scanner;
     private BsjColorProvider colorProvider;
-
+    private BsjMetaScanner metaScanner;
+    
     public BsjConfiguration(BsjColorProvider colorManager)
     {
         this.colorProvider = colorManager;
@@ -81,7 +84,18 @@ public class BsjConfiguration extends SourceViewerConfiguration
         }
         return tagScanner;
     }
-
+    
+    protected BsjMetaScanner getBsjMetaScanner()
+    {
+        if (metaScanner == null)
+        {
+            metaScanner = new BsjMetaScanner(colorProvider);
+            metaScanner.setDefaultReturnToken(new Token(new TextAttribute(
+                    colorProvider.getColor(BsjColorProvider.META_PROGRAM))));
+        }
+        return metaScanner;
+    }
+    
     public IPresentationReconciler getPresentationReconciler(
             ISourceViewer sourceViewer)
     {
@@ -104,16 +118,14 @@ public class BsjConfiguration extends SourceViewerConfiguration
         reconciler.setDamager(dr, BsjPartitionScanner.JAVA_MULTILINE_COMMENT);
         reconciler.setRepairer(dr, BsjPartitionScanner.JAVA_MULTILINE_COMMENT);
         
-        //TODO remove
-        dr = new DefaultDamagerRepairer(new SingleTokenScanner(
-                new TextAttribute(
-                        colorProvider.getColor(BsjColorProvider.META_PROGRAM))));
+        // Meta program scanner
+        dr = new DefaultDamagerRepairer(getBsjMetaScanner());
         reconciler.setDamager(dr, BsjPartitionScanner.META_PROGRAM);
         reconciler.setRepairer(dr, BsjPartitionScanner.META_PROGRAM);
         
         return reconciler;
     }
-    
+
     /**
      * Single token scanner.
      */

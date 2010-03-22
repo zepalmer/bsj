@@ -27,18 +27,19 @@ import org.eclipse.swt.widgets.Display;
  */
 public class BsjColorProvider 
 {
-	public static final RGB MULTI_LINE_COMMENT = new RGB(128, 0, 0);
-	public static final RGB SINGLE_LINE_COMMENT = new RGB(128, 128, 0);
-	public static final RGB KEYWORD = new RGB(0, 0, 128);
-	public static final RGB TYPE = new RGB(0, 0, 128);
-	public static final RGB STRING = new RGB(0, 128, 0);
+	public static final RGB MULTI_LINE_COMMENT = new RGB(0, 200, 0);
+	public static final RGB SINGLE_LINE_COMMENT = new RGB(0, 200, 0);
+	public static final RGB KEYWORD = new RGB(255, 128, 128);
+	public static final RGB TYPE = new RGB(255, 128, 128);
+	public static final RGB STRING = new RGB(200, 0, 0);
 	public static final RGB DEFAULT = new RGB(0, 0, 0);
-	public static final RGB JAVADOC_KEYWORD = new RGB(255, 0, 0);
-	public static final RGB JAVADOC_TAG = new RGB(255, 0, 0);
-	public static final RGB JAVADOC_LINK = new RGB(255, 0, 0);
-	public static final RGB JAVADOC_DEFAULT = new RGB(255, 0, 0);
-	public static final RGB META_PROGRAM = new RGB(255, 0, 0);
-	
+	public static final RGB JAVADOC_KEYWORD = new RGB(0, 0, 255);
+	public static final RGB JAVADOC_TAG = new RGB(0, 0, 255);
+	public static final RGB JAVADOC_LINK = new RGB(0, 0, 255);
+	public static final RGB JAVADOC_DEFAULT = new RGB(0, 0, 255);
+	public static final RGB META_PROGRAM = new RGB(0, 0, 255);
+	public static final RGB META_BACKGROUND = new RGB(200, 200, 200);
+
 	protected Map<RGB, Color> fColorTable= new HashMap<RGB, Color>(10);
 
 	/**
