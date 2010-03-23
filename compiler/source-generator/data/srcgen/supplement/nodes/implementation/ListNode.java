@@ -184,6 +184,8 @@ public class ListNodeImpl<T extends Node> extends Node implements ListNode<T>
 		@Override
 		public void add(int index, T element)
 		{
+			getManager().assertInsertable(ListNodeImpl.this);
+			
 			this.beforeAttributes.add(index, new ListAttribute());
 			this.presentAttributes.add(index, new ListAttribute());
 			this.backingList.add(index, element);
@@ -329,6 +331,8 @@ public class ListNodeImpl<T extends Node> extends Node implements ListNode<T>
 				@Override
 				public void add(T e)
 				{
+					getManager().assertInsertable(ListNodeImpl.this);
+					
 					this.lastValid = false;
 					int index = this.iterator.nextIndex();
 					ListNodeList.this.beforeAttributes.add(index, new ListAttribute());
@@ -394,6 +398,8 @@ public class ListNodeImpl<T extends Node> extends Node implements ListNode<T>
 				@Override
 				public void remove()
 				{
+					getManager().assertMutatable(ListNodeImpl.this);
+					
 					if (!this.lastValid)
 					{
 						throw new IllegalStateException("Iterator cannot remove - no valid element");
@@ -413,6 +419,7 @@ public class ListNodeImpl<T extends Node> extends Node implements ListNode<T>
 				@Override
 				public void set(T e)
 				{
+					getManager().assertMutatable(ListNodeImpl.this);
 					if (!this.lastValid)
 					{
 						throw new IllegalStateException("Iterator cannot remove - no valid element");
@@ -429,6 +436,8 @@ public class ListNodeImpl<T extends Node> extends Node implements ListNode<T>
 		@Override
 		public T remove(int index)
 		{
+			getManager().assertMutatable(ListNodeImpl.this);
+			
 			T element = this.backingList.get(index);
 			writeBetweenAttribute(index, element);
 			writePresentAttribute(index);
@@ -441,6 +450,8 @@ public class ListNodeImpl<T extends Node> extends Node implements ListNode<T>
 		@Override
 		public boolean remove(Object o)
 		{
+			getManager().assertMutatable(ListNodeImpl.this);
+			
 			int index = indexOf(o);
 			if (index != -1)
 			{
@@ -457,6 +468,8 @@ public class ListNodeImpl<T extends Node> extends Node implements ListNode<T>
 		@Override
 		public boolean removeAll(Collection<?> c)
 		{
+			getManager().assertMutatable(ListNodeImpl.this);
+			
 			boolean ret = false;
 			for (Object o : c)
 			{
@@ -468,6 +481,8 @@ public class ListNodeImpl<T extends Node> extends Node implements ListNode<T>
 		@Override
 		public boolean retainAll(Collection<?> c)
 		{
+			getManager().assertMutatable(ListNodeImpl.this);
+			
 			boolean ret = false;
 			ListIterator<T> it = this.backingList.listIterator();
 			while (it.hasNext())
@@ -487,6 +502,8 @@ public class ListNodeImpl<T extends Node> extends Node implements ListNode<T>
 		@Override
 		public T set(int index, T element)
 		{
+			getManager().assertMutatable(ListNodeImpl.this);
+			
 			writeBetweenAttribute(index, element);
 			writePresentAttribute(index);
 			writeBetweenAttribute(index+1, element);

@@ -39,7 +39,7 @@ public interface PackageNode extends Node
 	 * Retrieves a subpackage of this package.
 	 * 
 	 * @param name The simple name of the subpackage to retrieve.
-	 * @return The subpackage. If it does not exist, <code>null</code> is returned.
+	 * @return The subpackage. If it does not exist, a package node is created for this subpackage and returned.
 	 */
 	public PackageNode getSubpackage(String name);
 
