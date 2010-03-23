@@ -20,15 +20,17 @@ import org.eclipse.jface.text.rules.*;
 
 public class BsjPartitionScanner extends RuleBasedPartitionScanner 
 {
+    // three partitions for a document: multi-line comments, javadocs, and metaprograms
+    // normal (non-meta) code is the default
     public final static String JAVA_MULTILINE_COMMENT = "__java_multiline_comment";
     public final static String JAVA_DOC = "__java_javadoc";
-    
     public final static String META_PROGRAM = "__meta";
     
     public BsjPartitionScanner() 
     {
         super();
 
+        // define tokens for documen partitions
         IToken javaDoc = new Token(JAVA_DOC);
         IToken comment = new Token(JAVA_MULTILINE_COMMENT);
         IToken meta = new Token(META_PROGRAM);
@@ -49,8 +51,9 @@ public class BsjPartitionScanner extends RuleBasedPartitionScanner
         rules.add(new MultiLineRule("/**", "*/", javaDoc, (char) 0, true));
         rules.add(new MultiLineRule("/*", "*/", comment, (char) 0, true));
         
-        // Add rule for meta programs
+        // Add rules for meta programs
         rules.add(new MultiLineRule("[:", ":]", meta, (char) 0, true));
+        rules.add(new EndOfLineRule("@@", meta));
         
         IPredicateRule[] result= new IPredicateRule[rules.size()];
         rules.toArray(result);
@@ -80,37 +83,39 @@ public class BsjPartitionScanner extends RuleBasedPartitionScanner
             return (c == '*' || c == '/');
         }
     }
-    
+
     /**
-    *
-    */
-   static class WordPredicateRule extends WordRule implements IPredicateRule 
-   {
-       private IToken fSuccessToken;
+     * Rule for special comment case.
+     */
+    static class WordPredicateRule extends WordRule implements IPredicateRule
+    {
+        private IToken fSuccessToken;
 
-       public WordPredicateRule(IToken successToken) 
-       {
-           super(new EmptyCommentDetector());
-           fSuccessToken= successToken;
-           addWord("/**/", fSuccessToken); //$NON-NLS-1$
-       }
+        public WordPredicateRule(IToken successToken)
+        {
+            super(new EmptyCommentDetector());
+            fSuccessToken = successToken;
+            addWord("/**/", fSuccessToken);
+        }
 
-       /*
-        * @see org.eclipse.jface.text.rules.IPredicateRule#evaluate(ICharacterScanner, boolean)
-        */
-       @Override
-       public IToken evaluate(ICharacterScanner scanner, boolean resume) 
-       {
-           return super.evaluate(scanner);
-       }
+        /*
+         * @see
+         * org.eclipse.jface.text.rules.IPredicateRule#evaluate(ICharacterScanner
+         * , boolean)
+         */
+        @Override
+        public IToken evaluate(ICharacterScanner scanner, boolean resume)
+        {
+            return super.evaluate(scanner);
+        }
 
-       /*
-        * @see org.eclipse.jface.text.rules.IPredicateRule#getSuccessToken()
-        */
-       @Override
-       public IToken getSuccessToken() 
-       {
-           return fSuccessToken;
-       }
-   }
+        /*
+         * @see org.eclipse.jface.text.rules.IPredicateRule#getSuccessToken()
+         */
+        @Override
+        public IToken getSuccessToken()
+        {
+            return fSuccessToken;
+        }
+    }
 }

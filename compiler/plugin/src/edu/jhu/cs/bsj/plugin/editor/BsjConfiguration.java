@@ -34,7 +34,7 @@ public class BsjConfiguration extends SourceViewerConfiguration
 {
     private BsjDoubleClickStrategy doubleClickStrategy;
     private JavadocScanner tagScanner;
-    private BsjCodeScanner scanner;
+    private BsjCodeScanner codeScanner;
     private BsjColorProvider colorProvider;
     private BsjMetaScanner metaScanner;
     
@@ -64,13 +64,13 @@ public class BsjConfiguration extends SourceViewerConfiguration
 
     protected BsjCodeScanner getBsjScanner()
     {
-        if (scanner == null)
+        if (codeScanner == null)
         {
-            scanner = new BsjCodeScanner(new BsjColorProvider());
-            scanner.setDefaultReturnToken(new Token(new TextAttribute(
+            codeScanner = new BsjCodeScanner(new BsjColorProvider());
+            codeScanner.setDefaultReturnToken(new Token(new TextAttribute(
                     colorProvider.getColor(BsjColorProvider.DEFAULT))));
         }
-        return scanner;
+        return codeScanner;
     }
 
     protected JavadocScanner getJavadocScanner()
@@ -96,7 +96,7 @@ public class BsjConfiguration extends SourceViewerConfiguration
         }
         return metaScanner;
     }
-    
+
     public IPresentationReconciler getPresentationReconciler(
             ISourceViewer sourceViewer)
     {
@@ -137,5 +137,4 @@ public class BsjConfiguration extends SourceViewerConfiguration
             setDefaultReturnToken(new Token(attribute));
         }
     }
-
 }

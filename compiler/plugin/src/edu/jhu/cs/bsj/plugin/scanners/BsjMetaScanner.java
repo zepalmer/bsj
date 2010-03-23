@@ -31,7 +31,9 @@ import edu.jhu.cs.bsj.plugin.editor.BsjColorProvider;
 
 public class BsjMetaScanner extends RuleBasedScanner 
 {
-    private static String[] fgKeywords= { 
+    private BsjColorProvider provider;
+    
+    private static String[] fgKeywords = { 
         "abstract", "break", "case", "catch", "class", "continue", 
         "default", "do", "else", "extends", "final", "finally", 
         "for", "if", "implements", "import", "instanceof", "interface", 
@@ -39,15 +41,21 @@ public class BsjMetaScanner extends RuleBasedScanner
         "return", "static", "strictfp", "super", "switch", "synchronized", "this", 
         "throw", "throws", "transient", "try", "volatile", "while" };
     
-    private static String[] fgTypes= { 
+    private static String[] fgTypes = { 
         "void", "boolean", "char", "byte", "short", 
-        "int", "long", "float", "double" };
+        "int", "long", "float", "double"};
     
-    private static String[] fgConstants= {"false", "null", "true"};
+    private static String[] fgConstants = {"false", "null", "true"};
     
-    private static String[] metaChars= {"[:", ":]"};
-    
-    private IToken makeToken(RGB color, BsjColorProvider provider)
+    private static String[] metaSymbols = {"[:", ":]", "#target", "#depends", "@@"};
+
+    /**
+     * Create a token with the selected foreground color and
+     * a meta programming environment background color.
+     * @param color the desired foreground color.
+     * @return the new token.
+     */
+    private IToken makeToken(RGB color)
     {
         return new Token(new TextAttribute(
                 provider.getColor(color), 
@@ -62,14 +70,19 @@ public class BsjMetaScanner extends RuleBasedScanner
      */
     public BsjMetaScanner(BsjColorProvider provider) 
     {
-        IToken keyword = makeToken(BsjColorProvider.KEYWORD, provider);
-        IToken type = makeToken(BsjColorProvider.TYPE, provider);
-        IToken string = makeToken(BsjColorProvider.STRING, provider);
-        IToken comment = makeToken(BsjColorProvider.SINGLE_LINE_COMMENT, provider);
-        IToken other = makeToken(BsjColorProvider.DEFAULT, provider);
-        IToken meta = makeToken(BsjColorProvider.META_PROGRAM, provider);
+        this.provider = provider;
+        
+        // make the tokens needed
+        IToken keyword = makeToken(BsjColorProvider.KEYWORD);
+        IToken type = makeToken(BsjColorProvider.TYPE);
+        IToken string = makeToken(BsjColorProvider.STRING);
+        IToken comment = makeToken(BsjColorProvider.SINGLE_LINE_COMMENT);
+        IToken other = makeToken(BsjColorProvider.DEFAULT);
+        IToken meta = makeToken(BsjColorProvider.META_PROGRAM);
+        
+        // create the rules list
         List<IRule> rules = new ArrayList<IRule>();
-
+        
         // Add rule for single line comments.
         rules.add(new EndOfLineRule("//", comment));
 
@@ -80,30 +93,29 @@ public class BsjMetaScanner extends RuleBasedScanner
         // Add generic whitespace rule.
         rules.add(new WhitespaceRule(new JavaWhitespaceDetector(), other));
 
-        // Add word rule for keywords, types, constants, and meta characters.
+        // Add word rule for keywords, types, and constants.
         WordRule wordRule = new WordRule(new JavaWordDetector(), other);
-        
         for (int i = 0; i < fgKeywords.length; i++)
         {
             wordRule.addWord(fgKeywords[i], keyword);
         }
-        
         for (int i = 0; i < fgTypes.length; i++)
         {
             wordRule.addWord(fgTypes[i], type);
         }
-        
         for (int i = 0; i < fgConstants.length; i++)
         {
             wordRule.addWord(fgConstants[i], type);
         }
-        
-        for (int i = 0; i < metaChars.length; i++)
-        {
-            wordRule.addWord(metaChars[i], meta);
-        }
-        
         rules.add(wordRule);
+        
+        // Add word rule for meta characters.
+        WordRule metaRule = new WordRule(new MetaWordDetector(), meta);
+        for (int i = 0; i < metaSymbols.length; i++)
+        {
+            metaRule.addWord(metaSymbols[i], meta);
+        }
+        rules.add(metaRule);
 
         IRule[] result = new IRule[rules.size()];
         rules.toArray(result);

@@ -19,19 +19,21 @@ import org.eclipse.jface.text.rules.IWordDetector;
 /**
  * A Java aware word detector.
  */
-public class JavaWordDetector implements IWordDetector {
-
+public class JavaWordDetector implements IWordDetector 
+{
 	/* (non-Javadoc)
 	 * Method declared on IWordDetector.
 	 */
-	public boolean isWordPart(char character) {
+	public boolean isWordPart(char character) 
+	{
 		return Character.isJavaIdentifierPart(character);
 	}
 
 	/* (non-Javadoc)
 	 * Method declared on IWordDetector.
 	 */
-	public boolean isWordStart(char character) {
+	public boolean isWordStart(char character) 
+	{
 		return Character.isJavaIdentifierStart(character);
 	}
 }

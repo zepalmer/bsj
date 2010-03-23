@@ -23,20 +23,20 @@ import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Display;
 
 /**
- * Manager for colors used in the Java editor
+ * Manager for colors used in the BSJ editor
  */
 public class BsjColorProvider 
 {
 	public static final RGB MULTI_LINE_COMMENT = new RGB(0, 180, 0);
-	public static final RGB SINGLE_LINE_COMMENT = new RGB(0, 180, 0);
+	public static final RGB SINGLE_LINE_COMMENT = new RGB(50, 180, 50);
 	public static final RGB KEYWORD = new RGB(200, 50, 50);
 	public static final RGB TYPE = new RGB(200, 50, 50);
 	public static final RGB STRING = new RGB(0, 0, 200);
 	public static final RGB DEFAULT = new RGB(0, 0, 0);
-	public static final RGB JAVADOC_KEYWORD = new RGB(0, 0, 255);
-	public static final RGB JAVADOC_TAG = new RGB(0, 0, 255);
-	public static final RGB JAVADOC_LINK = new RGB(0, 0, 255);
-	public static final RGB JAVADOC_DEFAULT = new RGB(0, 0, 255);
+	public static final RGB JAVADOC_KEYWORD = new RGB(0, 0, 200);
+	public static final RGB JAVADOC_TAG = new RGB(0, 0, 200);
+	public static final RGB JAVADOC_LINK = new RGB(0, 0, 200);
+	public static final RGB JAVADOC_DEFAULT = new RGB(100, 150, 220);
 	public static final RGB META_PROGRAM = new RGB(0, 0, 255);
 	public static final RGB META_BACKGROUND = new RGB(220, 220, 220);
 
