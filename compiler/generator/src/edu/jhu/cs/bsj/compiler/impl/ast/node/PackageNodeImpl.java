@@ -211,7 +211,7 @@ public class PackageNodeImpl extends NodeImpl implements PackageNode
 		this.packageNodes.put(packageNode.getName().getIdentifier(), packageNode);
 		if (packageNode instanceof PackageNodeImpl)
 		{
-			// TODO: exception if the node in question already has a parent
+			// TODO: exception if the node in question already has a parent?
 			((PackageNodeImpl)packageNode).setParent(this);
 		}
 	}
@@ -249,7 +249,7 @@ public class PackageNodeImpl extends NodeImpl implements PackageNode
 		this.compilationUnitNodes.put(compilationUnit.getName(), compilationUnit);
 		if (compilationUnit instanceof CompilationUnitNodeImpl)
 		{
-			// TODO: exception if the node in question already has a parent
+			// TODO: exception if the node in question already has a parent?
 			((CompilationUnitNodeImpl)compilationUnit).setParent(this);
 		}
 	}
