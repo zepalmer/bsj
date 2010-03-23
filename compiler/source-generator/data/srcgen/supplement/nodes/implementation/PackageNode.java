@@ -64,7 +64,8 @@ public class PackageNodeImpl
 	 */
 	public void addCompilationUnitNode(CompilationUnitNode compilationUnit)
 	{
-		if (this.compilationUnitNodes.containsKey(compilationUnit.getName()))
+		if (this.compilationUnitNodes.containsKey(compilationUnit.getName()) ||
+				this.load(compilationUnit.getName()) != null)
 		{
 			throw new DuplicatePackageMemberException(this, compilationUnit, compilationUnit.getName());
 		}
@@ -243,8 +244,6 @@ public class PackageNodeImpl
 	 */
 	public CompilationUnitNode load(String name)
 	{
-		// TODO: if a compilation unit was explicitly added to this package node and overrides a source file, we should
-		// scream.
 		// If we've already loaded this compilation unit, bail out.
 		if (compilationUnitNodes.get(name) != null)
 		{
