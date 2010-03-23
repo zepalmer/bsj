@@ -6,7 +6,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 
 import javax.tools.JavaCompiler;
 import javax.tools.JavaFileObject;
@@ -17,7 +16,6 @@ import javax.tools.JavaFileObject.Kind;
 
 import junit.framework.Assert;
 
-import org.apache.log4j.PropertyConfigurator;
 import org.junit.Test;
 
 import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.InMemoryLocationManager;
@@ -27,20 +25,10 @@ import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.UnionLocationManager;
 import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjFileManager;
 import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjFileObject;
 import edu.jhu.cs.bsj.compiler.tool.filemanager.LocationManager;
+import edu.jhu.cs.bsj.tests.AbstractTest;
 
-public class BsjJavaCompilerTest
+public class BsjJavaCompilerTest extends AbstractTest
 {
-	public void log4jConfigure(String level)
-	{
-		// TODO: move to utilities method?
-		Properties loggingProperties = new Properties();
-		loggingProperties.setProperty("log4j.rootLogger", level + ", stdout");
-		loggingProperties.setProperty("log4j.appender.stdout", "org.apache.log4j.ConsoleAppender");
-		loggingProperties.setProperty("log4j.appender.stdout.layout", "org.apache.log4j.PatternLayout");
-		loggingProperties.setProperty("log4j.appender.stdout.layout.ConversionPattern", "%5p [%t] (%F:%L) - %m%n");
-		PropertyConfigurator.configure(loggingProperties);
-	}
-
 	@Test
 	public void testJavaCompilerWithBsjFileManager() throws Exception
 	{
