@@ -99,10 +99,6 @@ public abstract class NodeImpl
 	 */
 	public void setParent(Node node)
 	{
-		// TODO: some way of validating the argument (so a rogue metaprogrammer doesn't make the tree inconsistent)
-		// currently, we're using instanceof in every Node subclass setter - this is not cool
-		// Perhaps a central registry based on node ID number?  That way the relationship isn't duplicated; the
-		// getParent method can just perform a registry lookup
 		this.parent = node;
 	}
 	
