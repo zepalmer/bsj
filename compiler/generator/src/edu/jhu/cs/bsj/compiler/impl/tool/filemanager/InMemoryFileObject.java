@@ -28,6 +28,10 @@ public class InMemoryFileObject extends AbstractFileObject implements BsjFileObj
 	 * The name of the file represented by this object.
 	 */
 	private String name;
+	/**
+	 * The last time at which this file was modified.
+	 */
+	private long lastModified;
 
 	private Kind kind;
 
@@ -51,6 +55,7 @@ public class InMemoryFileObject extends AbstractFileObject implements BsjFileObj
 			this.name = filename;
 		}
 		this.kind = kind;
+		this.lastModified = 0;
 	}
 
 	/**
@@ -95,13 +100,15 @@ public class InMemoryFileObject extends AbstractFileObject implements BsjFileObj
 	public OutputStream openOutputStream() throws IOException
 	{
 		// store the output stream in our buffer
-		bytes = new byte[0];
+		this.bytes = new byte[0];
+		this.lastModified = System.currentTimeMillis();
 		ByteArrayOutputStream ret = new ByteArrayOutputStream()
 		{
 			@Override
 			public void close() throws IOException
 			{
-				bytes = this.toByteArray();
+				InMemoryFileObject.this.bytes = this.toByteArray();
+				InMemoryFileObject.this.lastModified = System.currentTimeMillis();
 			}
 		};
 		return ret;
@@ -141,6 +148,7 @@ public class InMemoryFileObject extends AbstractFileObject implements BsjFileObj
 		} else
 		{
 			this.bytes = null;
+			this.lastModified = 0;
 			return true;
 		}
 	}
@@ -148,8 +156,7 @@ public class InMemoryFileObject extends AbstractFileObject implements BsjFileObj
 	@Override
 	public long getLastModified()
 	{
-		// TODO Auto-generated method stub
-		return 0;
+		return this.lastModified;
 	}
 
 	@Override
