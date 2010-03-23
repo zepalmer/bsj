@@ -59,11 +59,13 @@ public class SourceSerializationTask extends AbstractBsjCompilerTask
 		BsjFileObject bsjFileObject = context.getToolkit().getFileManager().getJavaFileForOutput(
 				BsjCompilerLocation.GENERATED_SOURCE_PATH, compilationUnitNode.getName(), Kind.SOURCE, null);
 		bsjFileObject.setCharContent(source);
+		context.addSerializedFile(bsjFileObject);
 		
 		if (LOGGER.isTraceEnabled())
 		{
 			LOGGER.trace("Serializing " + className + " as follows: \n" + source);
 		}
+		
 	}
 
 }

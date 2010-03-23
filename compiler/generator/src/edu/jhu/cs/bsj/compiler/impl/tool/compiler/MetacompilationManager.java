@@ -1,7 +1,9 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.compiler;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Set;
@@ -68,6 +70,11 @@ public class MetacompilationManager implements MetacompilationContext
 	 * The root package used during this compilation process.
 	 */
 	private PackageNode rootPackage;
+	
+	/**
+	 * The list of source files that this metacompilation manager has serialized.
+	 */
+	private List<BsjFileObject> serializedFiles;
 
 	/**
 	 * Creates a new compilation unit manager.
@@ -88,6 +95,7 @@ public class MetacompilationManager implements MetacompilationContext
 		this.diagnosticListener = diagnosticListener;
 
 		this.rootPackage = toolkit.getNodeFactory().makePackageNode(null);
+		this.serializedFiles = new ArrayList<BsjFileObject>();
 
 		this.priorityQueue.offer(new ExecuteMetaprogramTask());
 	}
@@ -170,7 +178,7 @@ public class MetacompilationManager implements MetacompilationContext
 		// Rather than blindly executing tasks, let's proxy out task addition so we can actively execute the ones we
 		// want
 		final PriorityQueue<BsjCompilerTask> queue = new PriorityQueue<BsjCompilerTask>();
-		MetacompilationContext contextProxy = new MetacompilationContext()
+		MetacompilationContext contextProxy = new MetacompilationContextProxy(this)
 		{
 			@Override
 			public void registerTask(BsjCompilerTask task)
@@ -182,36 +190,6 @@ public class MetacompilationManager implements MetacompilationContext
 				{
 					MetacompilationManager.this.registerTask(task);
 				}
-			}
-
-			@Override
-			public PackageNode getRootPackage()
-			{
-				return MetacompilationManager.this.getRootPackage();
-			}
-
-			@Override
-			public BsjToolkit getToolkit()
-			{
-				return MetacompilationManager.this.getToolkit();
-			}
-
-			@Override
-			public BsjNodeManager getNodeManager()
-			{
-				return MetacompilationManager.this.getNodeManager();
-			}
-
-			@Override
-			public DiagnosticListener<? super JavaFileObject> getDiagnosticListener()
-			{
-				return MetacompilationManager.this.getDiagnosticListener();
-			}
-
-			@Override
-			public DependencyManager getDependencyManager()
-			{
-				return MetacompilationManager.this.getDependencyManager();
 			}
 		};
 		
@@ -338,5 +316,16 @@ public class MetacompilationManager implements MetacompilationContext
 	public DependencyManager getDependencyManager()
 	{
 		return this.dependencyManager;
+	}
+
+	public List<BsjFileObject> getSerializedFiles()
+	{
+		return serializedFiles;
+	}
+
+	@Override
+	public void addSerializedFile(BsjFileObject file)
+	{
+		this.serializedFiles.add(file);
 	}
 }

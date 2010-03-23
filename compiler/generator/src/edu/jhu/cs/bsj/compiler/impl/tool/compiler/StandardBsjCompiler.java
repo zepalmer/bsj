@@ -1,7 +1,6 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.compiler;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -12,7 +11,6 @@ import javax.tools.JavaFileManager;
 import javax.tools.JavaFileObject;
 import javax.tools.StandardLocation;
 import javax.tools.ToolProvider;
-import javax.tools.JavaFileObject.Kind;
 
 import org.apache.log4j.Logger;
 
@@ -52,8 +50,8 @@ public class StandardBsjCompiler implements BsjCompiler
 	 * The node manager which is managing nodes which are passed to this compiler.
 	 */
 	private BsjNodeManager manager;
-	
-	/* *** The following fields are used in compilation. They are not valid unless compilation is in progress. */
+
+	/*  *** The following fields are used in compilation. They are not valid unless compilation is in progress. */
 
 	/**
 	 * Tracks the progress of compilation units through the compilation process. This data structure performs the
@@ -76,9 +74,6 @@ public class StandardBsjCompiler implements BsjCompiler
 		this.manager = manager;
 	}
 
-	// TODO: allow the caller to specify a listener to receive exceptions in real time (as opposed to in batch)
-	// The Java Compiler API provides DiagnosticListener, for instance.
-
 	// TODO: add annotation processing classes and annotation processor objects
 	// see JSR-199's JavaCompiler.getTask for more info
 
@@ -87,8 +82,8 @@ public class StandardBsjCompiler implements BsjCompiler
 	 * compiler at construction. If this method terminates normally, compilation was successful.
 	 * 
 	 * @param units The compilation units to compile.
-	 * @param listener The diagnostic listener to which events should be reported.  If <code>null</code>, a default
-	 * listener is used which reports diagnostic messages to standard error.
+	 * @param listener The diagnostic listener to which events should be reported. If <code>null</code>, a default
+	 *            listener is used which reports diagnostic messages to standard error.
 	 * @throws IOException If an I/O error occurs.
 	 */
 	public void compile(Iterable<BsjFileObject> units, DiagnosticListener<? super JavaFileObject> listener)
@@ -112,7 +107,7 @@ public class StandardBsjCompiler implements BsjCompiler
 			}
 			LOGGER.debug(sb.toString());
 		}
-		
+
 		// Ensure listener is sane
 		if (listener == null)
 		{
@@ -140,10 +135,19 @@ public class StandardBsjCompiler implements BsjCompiler
 		// Clean up
 		// TODO: should we ensure that terminate is called even when an exception is thrown?
 		terminate();
+		
+		if (LOGGER.isDebugEnabled())
+		{
+			LOGGER.debug("Compilation finished.");
+		}
 	}
 
 	private void compileGeneratedSources() throws IOException
 	{
+		if (LOGGER.isDebugEnabled())
+		{
+			LOGGER.debug("Started compilation of generated sources");
+		}
 		BsjFileManager bsjFileManager = this.toolkit.getFileManager();
 		// Build file manager for the compiler
 		Map<StandardLocation, LocationManager> objectProgramLocationMap = new HashMap<StandardLocation, LocationManager>();
@@ -163,9 +167,15 @@ public class StandardBsjCompiler implements BsjCompiler
 		JavaFileManager objectProgramFileManager = new LocationMappedFileManager(objectProgramLocationMap);
 
 		// Retrieve generated source files
-		// TODO: rather than doing this, get a list of the files which were serialized from the metacompiler
-		Iterable<? extends BsjFileObject> files = bsjFileManager.listFiles(
-				BsjCompilerLocation.GENERATED_SOURCE_PATH, "", Arrays.asList(Kind.SOURCE), true);
+		Iterable<? extends BsjFileObject> files = this.metacompilationManager.getSerializedFiles();
+		if (LOGGER.isTraceEnabled())
+		{
+			LOGGER.trace("Generated sources are the following: ");
+			for (BsjFileObject file : files)
+			{
+				LOGGER.trace(" - " + file.getName());
+			}
+		}
 
 		// Perform compilation
 		JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
@@ -174,8 +184,13 @@ public class StandardBsjCompiler implements BsjCompiler
 				Collections.<String> emptyList(), Collections.<String> emptyList(), files);
 		if (!task.call())
 		{
+			LOGGER.error("Compilation of generated sources failed!");
 			// TODO: something a teensy bit more elegant
 			throw new IllegalStateException("Error during compilation!");
+		}
+		if (LOGGER.isDebugEnabled())
+		{
+			LOGGER.debug("Finished compilation of generated sources");
 		}
 	}
 

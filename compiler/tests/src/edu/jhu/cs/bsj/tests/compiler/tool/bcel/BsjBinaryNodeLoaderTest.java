@@ -33,6 +33,7 @@ import edu.jhu.cs.bsj.compiler.impl.tool.classpath.bcel.BsjBinaryNodeLoader;
 import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.InMemoryLocationManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.LocationMappedFileManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.UnionLocationManager;
+import edu.jhu.cs.bsj.compiler.impl.utils.StringUtilities;
 import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjFileManager;
 import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjFileObject;
 import edu.jhu.cs.bsj.compiler.tool.filemanager.LocationManager;
@@ -81,7 +82,7 @@ public class BsjBinaryNodeLoaderTest extends AbstractTest
             assertNotNull(node);
             
             // verify name is correct
-            assertTrue(node.getName().equals(fileName));
+            assertTrue(node.getName().equals(StringUtilities.removeSuffix(file.getSimpleName(), '.')));
             
             // should have no imports
             assertTrue(node.getImports().getChildren().isEmpty());
@@ -107,7 +108,7 @@ public class BsjBinaryNodeLoaderTest extends AbstractTest
                    if (cmn instanceof MethodDeclarationNode)
                    {
                        // verify methods have no bodies
-                       assertTrue(((MethodDeclarationNode)cmn).getBody().getStatements().isEmpty());
+                       assertTrue(((MethodDeclarationNode)cmn).getBody()==null);
                    }
                 }
             }
@@ -130,7 +131,7 @@ public class BsjBinaryNodeLoaderTest extends AbstractTest
                    if (cmn instanceof MethodDeclarationNode)
                    {
                        // verify methods have no bodies
-                       assertTrue(((MethodDeclarationNode)cmn).getBody().getStatements().isEmpty());
+                       assertTrue(((MethodDeclarationNode)cmn).getBody()==null);
                    }
                 }
             }

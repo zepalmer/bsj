@@ -8,6 +8,7 @@ import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.dependency.DependencyManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.task.BsjCompilerTask;
 import edu.jhu.cs.bsj.compiler.tool.BsjToolkit;
+import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjFileObject;
 
 public interface MetacompilationContext
 {
@@ -45,4 +46,10 @@ public interface MetacompilationContext
 	 * @param task The task to execute.
 	 */
 	public void registerTask(BsjCompilerTask task);
+	
+	/**
+	 * Adds a source file to the list of serialized files.
+	 * @param file The file to add.
+	 */
+	public void addSerializedFile(BsjFileObject file);
 }
