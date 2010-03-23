@@ -51,7 +51,7 @@ public class StandardBsjCompiler implements BsjCompiler
 	 */
 	private BsjNodeManager manager;
 
-	/*  *** The following fields are used in compilation. They are not valid unless compilation is in progress. */
+	/*   *** The following fields are used in compilation. They are not valid unless compilation is in progress. */
 
 	/**
 	 * Tracks the progress of compilation units through the compilation process. This data structure performs the
@@ -117,25 +117,28 @@ public class StandardBsjCompiler implements BsjCompiler
 		// Start compilation
 		initialize(listener);
 
-		// Initialize the compilation unit manager with the names of the files it must compile
-		for (BsjFileObject file : units)
+		try
 		{
-			this.metacompilationManager.addCompilationUnit(file);
+			// Initialize the compilation unit manager with the names of the files it must compile
+			for (BsjFileObject file : units)
+			{
+				this.metacompilationManager.addCompilationUnit(file);
+			}
+
+			// Allow the compilation unit manager to handle the work in the sense of a work queue
+			while (!this.metacompilationManager.isFinished())
+			{
+				this.metacompilationManager.doWork();
+			}
+
+			// Now compile everything in the generated source directory
+			compileGeneratedSources();
+		} finally
+		{
+			// Clean up
+			terminate();
 		}
 
-		// Allow the compilation unit manager to handle the work in the sense of a work queue
-		while (!this.metacompilationManager.isFinished())
-		{
-			this.metacompilationManager.doWork();
-		}
-
-		// Now compile everything in the generated source directory
-		compileGeneratedSources();
-
-		// Clean up
-		// TODO: should we ensure that terminate is called even when an exception is thrown?
-		terminate();
-		
 		if (LOGGER.isDebugEnabled())
 		{
 			LOGGER.debug("Compilation finished.");
