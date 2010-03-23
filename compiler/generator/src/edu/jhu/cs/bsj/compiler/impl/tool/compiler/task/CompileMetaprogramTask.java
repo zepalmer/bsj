@@ -17,6 +17,7 @@ import edu.jhu.cs.bsj.compiler.ast.MetaprogramLocalMode;
 import edu.jhu.cs.bsj.compiler.ast.MetaprogramPackageMode;
 import edu.jhu.cs.bsj.compiler.ast.NameCategory;
 import edu.jhu.cs.bsj.compiler.ast.node.BlockNode;
+import edu.jhu.cs.bsj.compiler.ast.node.BlockStatementListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
@@ -114,7 +115,6 @@ public class CompileMetaprogramTask extends AbstractBsjCompilerTask
 		}
 
 		// Clear the metaprogram from the anchor (so it can't reflect on itself or anything messy like that)
-		// TODO: is this necessary? has this already been done?
 		anchor.setMetaprogram(null);
 
 		// Register the metaprogram profile with the metacompilation manager
@@ -279,9 +279,12 @@ public class CompileMetaprogramTask extends AbstractBsjCompilerTask
 		PackageDeclarationNode packageDeclarationNode = factory.makePackageDeclarationNode(parseNameNode(
 				metaprogramPackageName, NameCategory.PACKAGE));
 
-		// TODO: don't deep copy here (for efficiency)? this means we have to null out the list's parent first?
-		BlockNode methodBlock = factory.makeBlockNode(metaprogramNode.getBody().deepCopy(factory));
+		// Steal the method body from the metaprogram node
+		BlockStatementListNode metaprogramBody = metaprogramNode.getBody();
+		metaprogramNode.setBody(null);
+		BlockNode methodBlock = factory.makeBlockNode(metaprogramBody);
 
+		// Build the contents of the metaprogram class
 		MethodDeclarationNode executeMethodImplementation = factory.makeMethodDeclarationNode(methodBlock,
 				factory.makeMethodModifiersNode(AccessModifier.PUBLIC), factory.makeIdentifierNode("execute"),
 				factory.makeVariableListNode(
