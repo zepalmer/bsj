@@ -90,7 +90,7 @@ public class BsjConfiguration extends SourceViewerConfiguration
         {
             metaScanner = new BsjMetaScanner(colorProvider);
             metaScanner.setDefaultReturnToken(new Token(new TextAttribute(
-                    colorProvider.getColor(BsjColorProvider.META_PROGRAM),
+                    colorProvider.getColor(BsjColorProvider.DEFAULT),
                     colorProvider.getColor(BsjColorProvider.META_BACKGROUND),
                     0)));
         }
