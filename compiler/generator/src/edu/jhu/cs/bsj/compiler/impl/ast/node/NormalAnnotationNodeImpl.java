@@ -34,10 +34,11 @@ public class NormalAnnotationNodeImpl extends AnnotationNodeImpl implements Norm
             UnparameterizedTypeNode annotationType,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
-            BsjNodeManager manager)
+            BsjNodeManager manager,
+            boolean binary)
     {
-        super(annotationType, startLocation, stopLocation, manager);
-        setArguments(arguments);
+        super(annotationType, startLocation, stopLocation, manager, binary);
+        setArguments(arguments, false);
     }
     
     /**
@@ -56,7 +57,15 @@ public class NormalAnnotationNodeImpl extends AnnotationNodeImpl implements Norm
      */
     public void setArguments(AnnotationElementListNode arguments)
     {
-        getManager().assertMutatable(this);
+            setArguments(arguments, true);
+    }
+    
+    private void setArguments(AnnotationElementListNode arguments, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.ARGUMENTS, Attribute.AccessType.STRONG_WRITE);
         if (this.arguments instanceof NodeImpl)
         {

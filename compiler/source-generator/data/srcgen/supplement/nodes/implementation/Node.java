@@ -214,5 +214,13 @@ public abstract class NodeImpl
 		
 		this.accessRecordMap.put(attribute, new AccessRecord(accessType, this.manager.getCurrentMetaprogramId()));
 	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	public boolean isBinary()
+	{
+		return this.binary;
+	}
 	/* GEN:stop */
 }

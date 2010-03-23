@@ -46,12 +46,13 @@ public class VariableNodeImpl extends NodeImpl implements VariableNode
             IdentifierNode identifier,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
-            BsjNodeManager manager)
+            BsjNodeManager manager,
+            boolean binary)
     {
-        super(startLocation, stopLocation, manager);
-        setModifiers(modifiers);
-        setType(type);
-        setIdentifier(identifier);
+        super(startLocation, stopLocation, manager, binary);
+        setModifiers(modifiers, false);
+        setType(type, false);
+        setIdentifier(identifier, false);
     }
     
     /**
@@ -70,7 +71,15 @@ public class VariableNodeImpl extends NodeImpl implements VariableNode
      */
     public void setModifiers(VariableModifiersNode modifiers)
     {
-        getManager().assertMutatable(this);
+            setModifiers(modifiers, true);
+    }
+    
+    private void setModifiers(VariableModifiersNode modifiers, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.MODIFIERS, Attribute.AccessType.STRONG_WRITE);
         if (this.modifiers instanceof NodeImpl)
         {
@@ -99,7 +108,15 @@ public class VariableNodeImpl extends NodeImpl implements VariableNode
      */
     public void setType(TypeNode type)
     {
-        getManager().assertMutatable(this);
+            setType(type, true);
+    }
+    
+    private void setType(TypeNode type, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.TYPE, Attribute.AccessType.STRONG_WRITE);
         if (this.type instanceof NodeImpl)
         {
@@ -128,7 +145,15 @@ public class VariableNodeImpl extends NodeImpl implements VariableNode
      */
     public void setIdentifier(IdentifierNode identifier)
     {
-        getManager().assertMutatable(this);
+            setIdentifier(identifier, true);
+    }
+    
+    private void setIdentifier(IdentifierNode identifier, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.STRONG_WRITE);
         if (this.identifier instanceof NodeImpl)
         {

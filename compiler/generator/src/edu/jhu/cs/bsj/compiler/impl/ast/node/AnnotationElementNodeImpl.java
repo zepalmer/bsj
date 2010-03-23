@@ -39,11 +39,12 @@ public class AnnotationElementNodeImpl extends NodeImpl implements AnnotationEle
             AnnotationValueNode value,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
-            BsjNodeManager manager)
+            BsjNodeManager manager,
+            boolean binary)
     {
-        super(startLocation, stopLocation, manager);
-        setIdentifier(identifier);
-        setValue(value);
+        super(startLocation, stopLocation, manager, binary);
+        setIdentifier(identifier, false);
+        setValue(value, false);
     }
     
     /**
@@ -62,7 +63,15 @@ public class AnnotationElementNodeImpl extends NodeImpl implements AnnotationEle
      */
     public void setIdentifier(IdentifierNode identifier)
     {
-        getManager().assertMutatable(this);
+            setIdentifier(identifier, true);
+    }
+    
+    private void setIdentifier(IdentifierNode identifier, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.STRONG_WRITE);
         if (this.identifier instanceof NodeImpl)
         {
@@ -91,7 +100,15 @@ public class AnnotationElementNodeImpl extends NodeImpl implements AnnotationEle
      */
     public void setValue(AnnotationValueNode value)
     {
-        getManager().assertMutatable(this);
+            setValue(value, true);
+    }
+    
+    private void setValue(AnnotationValueNode value, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.VALUE, Attribute.AccessType.STRONG_WRITE);
         if (this.value instanceof NodeImpl)
         {

@@ -40,11 +40,12 @@ public class MetaprogramNodeImpl extends NodeImpl implements MetaprogramNode
             BlockStatementListNode body,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
-            BsjNodeManager manager)
+            BsjNodeManager manager,
+            boolean binary)
     {
-        super(startLocation, stopLocation, manager);
-        setPreamble(preamble);
-        setBody(body);
+        super(startLocation, stopLocation, manager, binary);
+        setPreamble(preamble, false);
+        setBody(body, false);
     }
     
     /**
@@ -63,7 +64,15 @@ public class MetaprogramNodeImpl extends NodeImpl implements MetaprogramNode
      */
     public void setPreamble(MetaprogramPreambleNode preamble)
     {
-        getManager().assertMutatable(this);
+            setPreamble(preamble, true);
+    }
+    
+    private void setPreamble(MetaprogramPreambleNode preamble, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.PREAMBLE, Attribute.AccessType.STRONG_WRITE);
         if (this.preamble instanceof NodeImpl)
         {
@@ -92,7 +101,15 @@ public class MetaprogramNodeImpl extends NodeImpl implements MetaprogramNode
      */
     public void setBody(BlockStatementListNode body)
     {
-        getManager().assertMutatable(this);
+            setBody(body, true);
+    }
+    
+    private void setBody(BlockStatementListNode body, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.BODY, Attribute.AccessType.STRONG_WRITE);
         if (this.body instanceof NodeImpl)
         {

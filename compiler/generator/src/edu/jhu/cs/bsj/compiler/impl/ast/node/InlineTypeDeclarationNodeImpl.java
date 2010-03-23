@@ -32,10 +32,11 @@ public class InlineTypeDeclarationNodeImpl extends NodeImpl implements InlineTyp
             InlineTypeDeclarableNode declaration,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
-            BsjNodeManager manager)
+            BsjNodeManager manager,
+            boolean binary)
     {
-        super(startLocation, stopLocation, manager);
-        setDeclaration(declaration);
+        super(startLocation, stopLocation, manager, binary);
+        setDeclaration(declaration, false);
     }
     
     /**
@@ -54,7 +55,15 @@ public class InlineTypeDeclarationNodeImpl extends NodeImpl implements InlineTyp
      */
     public void setDeclaration(InlineTypeDeclarableNode declaration)
     {
-        getManager().assertMutatable(this);
+            setDeclaration(declaration, true);
+    }
+    
+    private void setDeclaration(InlineTypeDeclarableNode declaration, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.DECLARATION, Attribute.AccessType.STRONG_WRITE);
         if (this.declaration instanceof NodeImpl)
         {

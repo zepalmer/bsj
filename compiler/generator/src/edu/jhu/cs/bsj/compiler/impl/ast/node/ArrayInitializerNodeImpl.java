@@ -32,10 +32,11 @@ public class ArrayInitializerNodeImpl extends NodeImpl implements ArrayInitializ
             VariableInitializerListNode initializers,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
-            BsjNodeManager manager)
+            BsjNodeManager manager,
+            boolean binary)
     {
-        super(startLocation, stopLocation, manager);
-        setInitializers(initializers);
+        super(startLocation, stopLocation, manager, binary);
+        setInitializers(initializers, false);
     }
     
     /**
@@ -54,7 +55,15 @@ public class ArrayInitializerNodeImpl extends NodeImpl implements ArrayInitializ
      */
     public void setInitializers(VariableInitializerListNode initializers)
     {
-        getManager().assertMutatable(this);
+            setInitializers(initializers, true);
+    }
+    
+    private void setInitializers(VariableInitializerListNode initializers, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.INITIALIZERS, Attribute.AccessType.STRONG_WRITE);
         if (this.initializers instanceof NodeImpl)
         {

@@ -33,9 +33,10 @@ public class VariableModifiersNodeImpl extends ModifiersNodeImpl implements Vari
             AnnotationListNode annotations,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
-            BsjNodeManager manager)
+            BsjNodeManager manager,
+            boolean binary)
     {
-        super(annotations, startLocation, stopLocation, manager);
+        super(annotations, startLocation, stopLocation, manager, binary);
         this.finalFlag = finalFlag;
     }
     
@@ -55,7 +56,15 @@ public class VariableModifiersNodeImpl extends ModifiersNodeImpl implements Vari
      */
     public void setFinalFlag(boolean finalFlag)
     {
-        getManager().assertMutatable(this);
+            setFinalFlag(finalFlag, true);
+    }
+    
+    private void setFinalFlag(boolean finalFlag, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.FINAL_FLAG, Attribute.AccessType.STRONG_WRITE);
         this.finalFlag = finalFlag;
     }

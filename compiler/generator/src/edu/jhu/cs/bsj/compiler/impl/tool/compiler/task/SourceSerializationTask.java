@@ -31,7 +31,12 @@ public class SourceSerializationTask extends AbstractBsjCompilerTask
 	@Override
 	public void execute(MetacompilationContext context) throws IOException
 	{
-		// TODO: don't try to serialize code for read-only compilation units
+		// don't try to serialize code for read-only compilation units
+		if (this.compilationUnitNode.isBinary())
+		{
+			return;
+		}
+
 		BsjSourceSerializer serializer = context.getToolkit().getSerializer();
 		String source = serializer.executeCompilationUnitNode(compilationUnitNode, null);
 		

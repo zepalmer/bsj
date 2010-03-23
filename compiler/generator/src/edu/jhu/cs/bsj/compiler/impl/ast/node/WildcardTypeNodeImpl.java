@@ -38,10 +38,11 @@ public class WildcardTypeNodeImpl extends NodeImpl implements WildcardTypeNode
             boolean upperBound,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
-            BsjNodeManager manager)
+            BsjNodeManager manager,
+            boolean binary)
     {
-        super(startLocation, stopLocation, manager);
-        setBound(bound);
+        super(startLocation, stopLocation, manager, binary);
+        setBound(bound, false);
         this.upperBound = upperBound;
     }
     
@@ -61,7 +62,15 @@ public class WildcardTypeNodeImpl extends NodeImpl implements WildcardTypeNode
      */
     public void setBound(ReferenceTypeNode bound)
     {
-        getManager().assertMutatable(this);
+            setBound(bound, true);
+    }
+    
+    private void setBound(ReferenceTypeNode bound, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.BOUND, Attribute.AccessType.STRONG_WRITE);
         if (this.bound instanceof NodeImpl)
         {
@@ -90,7 +99,15 @@ public class WildcardTypeNodeImpl extends NodeImpl implements WildcardTypeNode
      */
     public void setUpperBound(boolean upperBound)
     {
-        getManager().assertMutatable(this);
+            setUpperBound(upperBound, true);
+    }
+    
+    private void setUpperBound(boolean upperBound, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.UPPER_BOUND, Attribute.AccessType.STRONG_WRITE);
         this.upperBound = upperBound;
     }

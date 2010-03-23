@@ -24,9 +24,10 @@ public class AnnotationMemberMetaprogramAnchorNodeImpl extends MetaprogramAnchor
             MetaprogramNode metaprogram,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
-            BsjNodeManager manager)
+            BsjNodeManager manager,
+            boolean binary)
     {
-        super(replacement, metaprogram, startLocation, stopLocation, manager);
+        super(replacement, metaprogram, startLocation, stopLocation, manager, binary);
     }
     
     /**

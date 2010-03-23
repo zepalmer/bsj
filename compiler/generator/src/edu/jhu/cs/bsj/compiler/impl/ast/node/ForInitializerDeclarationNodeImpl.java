@@ -32,10 +32,11 @@ public class ForInitializerDeclarationNodeImpl extends NodeImpl implements ForIn
             VariableDeclarationNode declaration,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
-            BsjNodeManager manager)
+            BsjNodeManager manager,
+            boolean binary)
     {
-        super(startLocation, stopLocation, manager);
-        setDeclaration(declaration);
+        super(startLocation, stopLocation, manager, binary);
+        setDeclaration(declaration, false);
     }
     
     /**
@@ -54,7 +55,15 @@ public class ForInitializerDeclarationNodeImpl extends NodeImpl implements ForIn
      */
     public void setDeclaration(VariableDeclarationNode declaration)
     {
-        getManager().assertMutatable(this);
+            setDeclaration(declaration, true);
+    }
+    
+    private void setDeclaration(VariableDeclarationNode declaration, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.DECLARATION, Attribute.AccessType.STRONG_WRITE);
         if (this.declaration instanceof NodeImpl)
         {

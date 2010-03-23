@@ -46,12 +46,13 @@ public class VariableDeclaratorNodeImpl extends NodeImpl implements VariableDecl
             VariableInitializerNode initializer,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
-            BsjNodeManager manager)
+            BsjNodeManager manager,
+            boolean binary)
     {
-        super(startLocation, stopLocation, manager);
-        setType(type);
-        setName(name);
-        setInitializer(initializer);
+        super(startLocation, stopLocation, manager, binary);
+        setType(type, false);
+        setName(name, false);
+        setInitializer(initializer, false);
     }
     
     /**
@@ -70,7 +71,15 @@ public class VariableDeclaratorNodeImpl extends NodeImpl implements VariableDecl
      */
     public void setType(TypeNode type)
     {
-        getManager().assertMutatable(this);
+            setType(type, true);
+    }
+    
+    private void setType(TypeNode type, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.TYPE, Attribute.AccessType.STRONG_WRITE);
         if (this.type instanceof NodeImpl)
         {
@@ -99,7 +108,15 @@ public class VariableDeclaratorNodeImpl extends NodeImpl implements VariableDecl
      */
     public void setName(IdentifierNode name)
     {
-        getManager().assertMutatable(this);
+            setName(name, true);
+    }
+    
+    private void setName(IdentifierNode name, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.NAME, Attribute.AccessType.STRONG_WRITE);
         if (this.name instanceof NodeImpl)
         {
@@ -128,7 +145,15 @@ public class VariableDeclaratorNodeImpl extends NodeImpl implements VariableDecl
      */
     public void setInitializer(VariableInitializerNode initializer)
     {
-        getManager().assertMutatable(this);
+            setInitializer(initializer, true);
+    }
+    
+    private void setInitializer(VariableInitializerNode initializer, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.INITIALIZER, Attribute.AccessType.STRONG_WRITE);
         if (this.initializer instanceof NodeImpl)
         {

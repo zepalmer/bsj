@@ -32,9 +32,10 @@ public class PrimitiveTypeNodeImpl extends NodeImpl implements PrimitiveTypeNode
             PrimitiveType primitiveType,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
-            BsjNodeManager manager)
+            BsjNodeManager manager,
+            boolean binary)
     {
-        super(startLocation, stopLocation, manager);
+        super(startLocation, stopLocation, manager, binary);
         this.primitiveType = primitiveType;
     }
     
@@ -54,7 +55,15 @@ public class PrimitiveTypeNodeImpl extends NodeImpl implements PrimitiveTypeNode
      */
     public void setPrimitiveType(PrimitiveType primitiveType)
     {
-        getManager().assertMutatable(this);
+            setPrimitiveType(primitiveType, true);
+    }
+    
+    private void setPrimitiveType(PrimitiveType primitiveType, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.PRIMITIVE_TYPE, Attribute.AccessType.STRONG_WRITE);
         this.primitiveType = primitiveType;
     }

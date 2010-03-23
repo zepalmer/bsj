@@ -20,9 +20,10 @@ public class NoOperationNodeImpl extends NodeImpl implements NoOperationNode
     public NoOperationNodeImpl(
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
-            BsjNodeManager manager)
+            BsjNodeManager manager,
+            boolean binary)
     {
-        super(startLocation, stopLocation, manager);
+        super(startLocation, stopLocation, manager, binary);
     }
     
     /**

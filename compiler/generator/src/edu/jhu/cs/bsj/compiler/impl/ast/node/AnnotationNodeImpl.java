@@ -29,10 +29,11 @@ public abstract class AnnotationNodeImpl extends NodeImpl implements AnnotationN
             UnparameterizedTypeNode annotationType,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
-            BsjNodeManager manager)
+            BsjNodeManager manager,
+            boolean binary)
     {
-        super(startLocation, stopLocation, manager);
-        setAnnotationType(annotationType);
+        super(startLocation, stopLocation, manager, binary);
+        setAnnotationType(annotationType, false);
     }
     
     /**
@@ -51,7 +52,15 @@ public abstract class AnnotationNodeImpl extends NodeImpl implements AnnotationN
      */
     public void setAnnotationType(UnparameterizedTypeNode annotationType)
     {
-        getManager().assertMutatable(this);
+            setAnnotationType(annotationType, true);
+    }
+    
+    private void setAnnotationType(UnparameterizedTypeNode annotationType, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.ANNOTATION_TYPE, Attribute.AccessType.STRONG_WRITE);
         if (this.annotationType instanceof NodeImpl)
         {

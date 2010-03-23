@@ -24,9 +24,10 @@ public class SimpleNameNodeImpl extends NameNodeImpl implements SimpleNameNode
             NameCategory category,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
-            BsjNodeManager manager)
+            BsjNodeManager manager,
+            boolean binary)
     {
-        super(identifier, category, startLocation, stopLocation, manager);
+        super(identifier, category, startLocation, stopLocation, manager, binary);
     }
     
     /**

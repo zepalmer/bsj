@@ -40,9 +40,10 @@ public class EnumModifiersNodeImpl extends ModifiersNodeImpl implements EnumModi
             AnnotationListNode annotations,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
-            BsjNodeManager manager)
+            BsjNodeManager manager,
+            boolean binary)
     {
-        super(annotations, startLocation, stopLocation, manager);
+        super(annotations, startLocation, stopLocation, manager, binary);
         this.access = access;
         this.strictfpFlag = strictfpFlag;
     }
@@ -63,7 +64,15 @@ public class EnumModifiersNodeImpl extends ModifiersNodeImpl implements EnumModi
      */
     public void setAccess(AccessModifier access)
     {
-        getManager().assertMutatable(this);
+            setAccess(access, true);
+    }
+    
+    private void setAccess(AccessModifier access, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.ACCESS, Attribute.AccessType.STRONG_WRITE);
         this.access = access;
     }
@@ -84,7 +93,15 @@ public class EnumModifiersNodeImpl extends ModifiersNodeImpl implements EnumModi
      */
     public void setStrictfpFlag(boolean strictfpFlag)
     {
-        getManager().assertMutatable(this);
+            setStrictfpFlag(strictfpFlag, true);
+    }
+    
+    private void setStrictfpFlag(boolean strictfpFlag, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.STRICTFP_FLAG, Attribute.AccessType.STRONG_WRITE);
         this.strictfpFlag = strictfpFlag;
     }

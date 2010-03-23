@@ -24,9 +24,10 @@ public class BlockStatementMetaprogramAnchorNodeImpl extends MetaprogramAnchorNo
             MetaprogramNode metaprogram,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
-            BsjNodeManager manager)
+            BsjNodeManager manager,
+            boolean binary)
     {
-        super(replacement, metaprogram, startLocation, stopLocation, manager);
+        super(replacement, metaprogram, startLocation, stopLocation, manager, binary);
     }
     
     /**

@@ -58,9 +58,10 @@ public class FieldModifiersNodeImpl extends ModifiersNodeImpl implements FieldMo
             AnnotationListNode annotations,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
-            BsjNodeManager manager)
+            BsjNodeManager manager,
+            boolean binary)
     {
-        super(annotations, startLocation, stopLocation, manager);
+        super(annotations, startLocation, stopLocation, manager, binary);
         this.access = access;
         this.staticFlag = staticFlag;
         this.finalFlag = finalFlag;
@@ -84,7 +85,15 @@ public class FieldModifiersNodeImpl extends ModifiersNodeImpl implements FieldMo
      */
     public void setAccess(AccessModifier access)
     {
-        getManager().assertMutatable(this);
+            setAccess(access, true);
+    }
+    
+    private void setAccess(AccessModifier access, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.ACCESS, Attribute.AccessType.STRONG_WRITE);
         this.access = access;
     }
@@ -105,7 +114,15 @@ public class FieldModifiersNodeImpl extends ModifiersNodeImpl implements FieldMo
      */
     public void setStaticFlag(boolean staticFlag)
     {
-        getManager().assertMutatable(this);
+            setStaticFlag(staticFlag, true);
+    }
+    
+    private void setStaticFlag(boolean staticFlag, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.STATIC_FLAG, Attribute.AccessType.STRONG_WRITE);
         this.staticFlag = staticFlag;
     }
@@ -126,7 +143,15 @@ public class FieldModifiersNodeImpl extends ModifiersNodeImpl implements FieldMo
      */
     public void setFinalFlag(boolean finalFlag)
     {
-        getManager().assertMutatable(this);
+            setFinalFlag(finalFlag, true);
+    }
+    
+    private void setFinalFlag(boolean finalFlag, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.FINAL_FLAG, Attribute.AccessType.STRONG_WRITE);
         this.finalFlag = finalFlag;
     }
@@ -147,7 +172,15 @@ public class FieldModifiersNodeImpl extends ModifiersNodeImpl implements FieldMo
      */
     public void setTransientFlag(boolean transientFlag)
     {
-        getManager().assertMutatable(this);
+            setTransientFlag(transientFlag, true);
+    }
+    
+    private void setTransientFlag(boolean transientFlag, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.TRANSIENT_FLAG, Attribute.AccessType.STRONG_WRITE);
         this.transientFlag = transientFlag;
     }
@@ -168,7 +201,15 @@ public class FieldModifiersNodeImpl extends ModifiersNodeImpl implements FieldMo
      */
     public void setVolatileFlag(boolean volatileFlag)
     {
-        getManager().assertMutatable(this);
+            setVolatileFlag(volatileFlag, true);
+    }
+    
+    private void setVolatileFlag(boolean volatileFlag, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.VOLATILE_FLAG, Attribute.AccessType.STRONG_WRITE);
         this.volatileFlag = volatileFlag;
     }

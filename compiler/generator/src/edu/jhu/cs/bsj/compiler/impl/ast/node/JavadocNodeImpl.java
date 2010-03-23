@@ -31,9 +31,10 @@ public class JavadocNodeImpl extends NodeImpl implements JavadocNode
             String text,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
-            BsjNodeManager manager)
+            BsjNodeManager manager,
+            boolean binary)
     {
-        super(startLocation, stopLocation, manager);
+        super(startLocation, stopLocation, manager, binary);
         this.text = text;
     }
     
@@ -53,7 +54,15 @@ public class JavadocNodeImpl extends NodeImpl implements JavadocNode
      */
     public void setText(String text)
     {
-        getManager().assertMutatable(this);
+            setText(text, true);
+    }
+    
+    private void setText(String text, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.TEXT, Attribute.AccessType.STRONG_WRITE);
         this.text = text;
     }

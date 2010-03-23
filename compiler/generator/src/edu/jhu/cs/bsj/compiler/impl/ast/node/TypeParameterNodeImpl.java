@@ -39,11 +39,12 @@ public class TypeParameterNodeImpl extends NodeImpl implements TypeParameterNode
             DeclaredTypeListNode bounds,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
-            BsjNodeManager manager)
+            BsjNodeManager manager,
+            boolean binary)
     {
-        super(startLocation, stopLocation, manager);
-        setIdentifier(identifier);
-        setBounds(bounds);
+        super(startLocation, stopLocation, manager, binary);
+        setIdentifier(identifier, false);
+        setBounds(bounds, false);
     }
     
     /**
@@ -62,7 +63,15 @@ public class TypeParameterNodeImpl extends NodeImpl implements TypeParameterNode
      */
     public void setIdentifier(IdentifierNode identifier)
     {
-        getManager().assertMutatable(this);
+            setIdentifier(identifier, true);
+    }
+    
+    private void setIdentifier(IdentifierNode identifier, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.STRONG_WRITE);
         if (this.identifier instanceof NodeImpl)
         {
@@ -91,7 +100,15 @@ public class TypeParameterNodeImpl extends NodeImpl implements TypeParameterNode
      */
     public void setBounds(DeclaredTypeListNode bounds)
     {
-        getManager().assertMutatable(this);
+            setBounds(bounds, true);
+    }
+    
+    private void setBounds(DeclaredTypeListNode bounds, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.BOUNDS, Attribute.AccessType.STRONG_WRITE);
         if (this.bounds instanceof NodeImpl)
         {

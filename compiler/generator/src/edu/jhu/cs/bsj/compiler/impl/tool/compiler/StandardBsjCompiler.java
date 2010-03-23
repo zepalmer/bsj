@@ -163,6 +163,7 @@ public class StandardBsjCompiler implements BsjCompiler
 		JavaFileManager objectProgramFileManager = new LocationMappedFileManager(objectProgramLocationMap);
 
 		// Retrieve generated source files
+		// TODO: rather than doing this, get a list of the files which were serialized from the metacompiler
 		Iterable<? extends BsjFileObject> files = bsjFileManager.listFiles(
 				BsjCompilerLocation.GENERATED_SOURCE_PATH, "", Arrays.asList(Kind.SOURCE), true);
 

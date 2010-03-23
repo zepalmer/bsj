@@ -32,10 +32,11 @@ public class ExpressionStatementNodeImpl extends NodeImpl implements ExpressionS
             StatementExpressionNode expression,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
-            BsjNodeManager manager)
+            BsjNodeManager manager,
+            boolean binary)
     {
-        super(startLocation, stopLocation, manager);
-        setExpression(expression);
+        super(startLocation, stopLocation, manager, binary);
+        setExpression(expression, false);
     }
     
     /**
@@ -54,7 +55,15 @@ public class ExpressionStatementNodeImpl extends NodeImpl implements ExpressionS
      */
     public void setExpression(StatementExpressionNode expression)
     {
-        getManager().assertMutatable(this);
+            setExpression(expression, true);
+    }
+    
+    private void setExpression(StatementExpressionNode expression, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.EXPRESSION, Attribute.AccessType.STRONG_WRITE);
         if (this.expression instanceof NodeImpl)
         {

@@ -22,9 +22,10 @@ public class ClassLiteralNodeImpl extends LiteralNodeImpl<LiteralizableTypeNode>
             LiteralizableTypeNode value,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
-            BsjNodeManager manager)
+            BsjNodeManager manager,
+            boolean binary)
     {
-        super(value, startLocation, stopLocation, manager);
+        super(value, startLocation, stopLocation, manager, binary);
     }
     
     /**

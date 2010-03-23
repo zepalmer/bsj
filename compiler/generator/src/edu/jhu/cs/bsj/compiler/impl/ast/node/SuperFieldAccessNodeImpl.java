@@ -39,11 +39,12 @@ public class SuperFieldAccessNodeImpl extends NodeImpl implements SuperFieldAcce
             IdentifierNode identifier,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
-            BsjNodeManager manager)
+            BsjNodeManager manager,
+            boolean binary)
     {
-        super(startLocation, stopLocation, manager);
-        setType(type);
-        setIdentifier(identifier);
+        super(startLocation, stopLocation, manager, binary);
+        setType(type, false);
+        setIdentifier(identifier, false);
     }
     
     /**
@@ -62,7 +63,15 @@ public class SuperFieldAccessNodeImpl extends NodeImpl implements SuperFieldAcce
      */
     public void setType(UnparameterizedTypeNode type)
     {
-        getManager().assertMutatable(this);
+            setType(type, true);
+    }
+    
+    private void setType(UnparameterizedTypeNode type, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.TYPE, Attribute.AccessType.STRONG_WRITE);
         if (this.type instanceof NodeImpl)
         {
@@ -91,7 +100,15 @@ public class SuperFieldAccessNodeImpl extends NodeImpl implements SuperFieldAcce
      */
     public void setIdentifier(IdentifierNode identifier)
     {
-        getManager().assertMutatable(this);
+            setIdentifier(identifier, true);
+    }
+    
+    private void setIdentifier(IdentifierNode identifier, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.STRONG_WRITE);
         if (this.identifier instanceof NodeImpl)
         {

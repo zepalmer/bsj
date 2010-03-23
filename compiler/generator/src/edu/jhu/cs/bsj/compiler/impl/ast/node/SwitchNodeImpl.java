@@ -39,11 +39,12 @@ public class SwitchNodeImpl extends NodeImpl implements SwitchNode
             CaseListNode cases,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
-            BsjNodeManager manager)
+            BsjNodeManager manager,
+            boolean binary)
     {
-        super(startLocation, stopLocation, manager);
-        setExpression(expression);
-        setCases(cases);
+        super(startLocation, stopLocation, manager, binary);
+        setExpression(expression, false);
+        setCases(cases, false);
     }
     
     /**
@@ -62,7 +63,15 @@ public class SwitchNodeImpl extends NodeImpl implements SwitchNode
      */
     public void setExpression(ExpressionNode expression)
     {
-        getManager().assertMutatable(this);
+            setExpression(expression, true);
+    }
+    
+    private void setExpression(ExpressionNode expression, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.EXPRESSION, Attribute.AccessType.STRONG_WRITE);
         if (this.expression instanceof NodeImpl)
         {
@@ -91,7 +100,15 @@ public class SwitchNodeImpl extends NodeImpl implements SwitchNode
      */
     public void setCases(CaseListNode cases)
     {
-        getManager().assertMutatable(this);
+            setCases(cases, true);
+    }
+    
+    private void setCases(CaseListNode cases, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.CASES, Attribute.AccessType.STRONG_WRITE);
         if (this.cases instanceof NodeImpl)
         {

@@ -36,11 +36,12 @@ public abstract class MethodInvocationNodeImpl extends NodeImpl implements Metho
             ReferenceTypeListNode typeArguments,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
-            BsjNodeManager manager)
+            BsjNodeManager manager,
+            boolean binary)
     {
-        super(startLocation, stopLocation, manager);
-        setArguments(arguments);
-        setTypeArguments(typeArguments);
+        super(startLocation, stopLocation, manager, binary);
+        setArguments(arguments, false);
+        setTypeArguments(typeArguments, false);
     }
     
     /**
@@ -59,7 +60,15 @@ public abstract class MethodInvocationNodeImpl extends NodeImpl implements Metho
      */
     public void setArguments(ExpressionListNode arguments)
     {
-        getManager().assertMutatable(this);
+            setArguments(arguments, true);
+    }
+    
+    private void setArguments(ExpressionListNode arguments, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.ARGUMENTS, Attribute.AccessType.STRONG_WRITE);
         if (this.arguments instanceof NodeImpl)
         {
@@ -88,7 +97,15 @@ public abstract class MethodInvocationNodeImpl extends NodeImpl implements Metho
      */
     public void setTypeArguments(ReferenceTypeListNode typeArguments)
     {
-        getManager().assertMutatable(this);
+            setTypeArguments(typeArguments, true);
+    }
+    
+    private void setTypeArguments(ReferenceTypeListNode typeArguments, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.TYPE_ARGUMENTS, Attribute.AccessType.STRONG_WRITE);
         if (this.typeArguments instanceof NodeImpl)
         {

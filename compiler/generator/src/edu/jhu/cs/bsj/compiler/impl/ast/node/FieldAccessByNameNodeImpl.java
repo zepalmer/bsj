@@ -32,10 +32,11 @@ public class FieldAccessByNameNodeImpl extends NodeImpl implements FieldAccessBy
             NameNode name,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
-            BsjNodeManager manager)
+            BsjNodeManager manager,
+            boolean binary)
     {
-        super(startLocation, stopLocation, manager);
-        setName(name);
+        super(startLocation, stopLocation, manager, binary);
+        setName(name, false);
     }
     
     /**
@@ -54,7 +55,15 @@ public class FieldAccessByNameNodeImpl extends NodeImpl implements FieldAccessBy
      */
     public void setName(NameNode name)
     {
-        getManager().assertMutatable(this);
+            setName(name, true);
+    }
+    
+    private void setName(NameNode name, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.NAME, Attribute.AccessType.STRONG_WRITE);
         if (this.name instanceof NodeImpl)
         {

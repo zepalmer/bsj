@@ -81,17 +81,18 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
             JavadocNode javadoc,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
-            BsjNodeManager manager)
+            BsjNodeManager manager,
+            boolean binary)
     {
-        super(startLocation, stopLocation, manager);
-        setIdentifier(identifier);
-        setBody(body);
-        setModifiers(modifiers);
-        setParameters(parameters);
-        setVarargParameter(varargParameter);
-        setThrowTypes(throwTypes);
-        setTypeParameters(typeParameters);
-        setJavadoc(javadoc);
+        super(startLocation, stopLocation, manager, binary);
+        setIdentifier(identifier, false);
+        setBody(body, false);
+        setModifiers(modifiers, false);
+        setParameters(parameters, false);
+        setVarargParameter(varargParameter, false);
+        setThrowTypes(throwTypes, false);
+        setTypeParameters(typeParameters, false);
+        setJavadoc(javadoc, false);
     }
     
     /**
@@ -110,7 +111,15 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
      */
     public void setIdentifier(IdentifierNode identifier)
     {
-        getManager().assertMutatable(this);
+            setIdentifier(identifier, true);
+    }
+    
+    private void setIdentifier(IdentifierNode identifier, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.STRONG_WRITE);
         if (this.identifier instanceof NodeImpl)
         {
@@ -139,7 +148,15 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
      */
     public void setBody(ConstructorBodyNode body)
     {
-        getManager().assertMutatable(this);
+            setBody(body, true);
+    }
+    
+    private void setBody(ConstructorBodyNode body, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.BODY, Attribute.AccessType.STRONG_WRITE);
         if (this.body instanceof NodeImpl)
         {
@@ -168,7 +185,15 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
      */
     public void setModifiers(ConstructorModifiersNode modifiers)
     {
-        getManager().assertMutatable(this);
+            setModifiers(modifiers, true);
+    }
+    
+    private void setModifiers(ConstructorModifiersNode modifiers, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.MODIFIERS, Attribute.AccessType.STRONG_WRITE);
         if (this.modifiers instanceof NodeImpl)
         {
@@ -197,7 +222,15 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
      */
     public void setParameters(VariableListNode parameters)
     {
-        getManager().assertMutatable(this);
+            setParameters(parameters, true);
+    }
+    
+    private void setParameters(VariableListNode parameters, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.PARAMETERS, Attribute.AccessType.STRONG_WRITE);
         if (this.parameters instanceof NodeImpl)
         {
@@ -226,7 +259,15 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
      */
     public void setVarargParameter(VariableNode varargParameter)
     {
-        getManager().assertMutatable(this);
+            setVarargParameter(varargParameter, true);
+    }
+    
+    private void setVarargParameter(VariableNode varargParameter, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.VARARG_PARAMETER, Attribute.AccessType.STRONG_WRITE);
         if (this.varargParameter instanceof NodeImpl)
         {
@@ -255,7 +296,15 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
      */
     public void setThrowTypes(UnparameterizedTypeListNode throwTypes)
     {
-        getManager().assertMutatable(this);
+            setThrowTypes(throwTypes, true);
+    }
+    
+    private void setThrowTypes(UnparameterizedTypeListNode throwTypes, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.THROW_TYPES, Attribute.AccessType.STRONG_WRITE);
         if (this.throwTypes instanceof NodeImpl)
         {
@@ -284,7 +333,15 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
      */
     public void setTypeParameters(TypeParameterListNode typeParameters)
     {
-        getManager().assertMutatable(this);
+            setTypeParameters(typeParameters, true);
+    }
+    
+    private void setTypeParameters(TypeParameterListNode typeParameters, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.TYPE_PARAMETERS, Attribute.AccessType.STRONG_WRITE);
         if (this.typeParameters instanceof NodeImpl)
         {
@@ -313,7 +370,15 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
      */
     public void setJavadoc(JavadocNode javadoc)
     {
-        getManager().assertMutatable(this);
+            setJavadoc(javadoc, true);
+    }
+    
+    private void setJavadoc(JavadocNode javadoc, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.JAVADOC, Attribute.AccessType.STRONG_WRITE);
         if (this.javadoc instanceof NodeImpl)
         {

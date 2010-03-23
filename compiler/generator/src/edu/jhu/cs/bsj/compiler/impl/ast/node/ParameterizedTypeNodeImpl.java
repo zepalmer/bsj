@@ -39,11 +39,12 @@ public class ParameterizedTypeNodeImpl extends NodeImpl implements Parameterized
             TypeArgumentListNode typeArguments,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
-            BsjNodeManager manager)
+            BsjNodeManager manager,
+            boolean binary)
     {
-        super(startLocation, stopLocation, manager);
-        setBaseType(baseType);
-        setTypeArguments(typeArguments);
+        super(startLocation, stopLocation, manager, binary);
+        setBaseType(baseType, false);
+        setTypeArguments(typeArguments, false);
     }
     
     /**
@@ -62,7 +63,15 @@ public class ParameterizedTypeNodeImpl extends NodeImpl implements Parameterized
      */
     public void setBaseType(UnparameterizedTypeNode baseType)
     {
-        getManager().assertMutatable(this);
+            setBaseType(baseType, true);
+    }
+    
+    private void setBaseType(UnparameterizedTypeNode baseType, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.BASE_TYPE, Attribute.AccessType.STRONG_WRITE);
         if (this.baseType instanceof NodeImpl)
         {
@@ -91,7 +100,15 @@ public class ParameterizedTypeNodeImpl extends NodeImpl implements Parameterized
      */
     public void setTypeArguments(TypeArgumentListNode typeArguments)
     {
-        getManager().assertMutatable(this);
+            setTypeArguments(typeArguments, true);
+    }
+    
+    private void setTypeArguments(TypeArgumentListNode typeArguments, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.TYPE_ARGUMENTS, Attribute.AccessType.STRONG_WRITE);
         if (this.typeArguments instanceof NodeImpl)
         {

@@ -36,10 +36,11 @@ public class MethodInvocationByNameNodeImpl extends MethodInvocationNodeImpl imp
             ReferenceTypeListNode typeArguments,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
-            BsjNodeManager manager)
+            BsjNodeManager manager,
+            boolean binary)
     {
-        super(arguments, typeArguments, startLocation, stopLocation, manager);
-        setName(name);
+        super(arguments, typeArguments, startLocation, stopLocation, manager, binary);
+        setName(name, false);
     }
     
     /**
@@ -58,7 +59,15 @@ public class MethodInvocationByNameNodeImpl extends MethodInvocationNodeImpl imp
      */
     public void setName(NameNode name)
     {
-        getManager().assertMutatable(this);
+            setName(name, true);
+    }
+    
+    private void setName(NameNode name, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.NAME, Attribute.AccessType.STRONG_WRITE);
         if (this.name instanceof NodeImpl)
         {

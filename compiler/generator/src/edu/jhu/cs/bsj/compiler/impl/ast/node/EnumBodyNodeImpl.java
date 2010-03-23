@@ -39,11 +39,12 @@ public class EnumBodyNodeImpl extends NodeImpl implements EnumBodyNode
             ClassMemberListNode members,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
-            BsjNodeManager manager)
+            BsjNodeManager manager,
+            boolean binary)
     {
-        super(startLocation, stopLocation, manager);
-        setConstants(constants);
-        setMembers(members);
+        super(startLocation, stopLocation, manager, binary);
+        setConstants(constants, false);
+        setMembers(members, false);
     }
     
     /**
@@ -62,7 +63,15 @@ public class EnumBodyNodeImpl extends NodeImpl implements EnumBodyNode
      */
     public void setConstants(EnumConstantDeclarationListNode constants)
     {
-        getManager().assertMutatable(this);
+            setConstants(constants, true);
+    }
+    
+    private void setConstants(EnumConstantDeclarationListNode constants, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.CONSTANTS, Attribute.AccessType.STRONG_WRITE);
         if (this.constants instanceof NodeImpl)
         {
@@ -91,7 +100,15 @@ public class EnumBodyNodeImpl extends NodeImpl implements EnumBodyNode
      */
     public void setMembers(ClassMemberListNode members)
     {
-        getManager().assertMutatable(this);
+            setMembers(members, true);
+    }
+    
+    private void setMembers(ClassMemberListNode members, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.MEMBERS, Attribute.AccessType.STRONG_WRITE);
         if (this.members instanceof NodeImpl)
         {

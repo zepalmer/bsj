@@ -45,11 +45,12 @@ public class BinaryExpressionNodeImpl extends NodeImpl implements BinaryExpressi
             BinaryOperator operator,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
-            BsjNodeManager manager)
+            BsjNodeManager manager,
+            boolean binary)
     {
-        super(startLocation, stopLocation, manager);
-        setLeftOperand(leftOperand);
-        setRightOperand(rightOperand);
+        super(startLocation, stopLocation, manager, binary);
+        setLeftOperand(leftOperand, false);
+        setRightOperand(rightOperand, false);
         this.operator = operator;
     }
     
@@ -69,7 +70,15 @@ public class BinaryExpressionNodeImpl extends NodeImpl implements BinaryExpressi
      */
     public void setLeftOperand(ExpressionNode leftOperand)
     {
-        getManager().assertMutatable(this);
+            setLeftOperand(leftOperand, true);
+    }
+    
+    private void setLeftOperand(ExpressionNode leftOperand, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.LEFT_OPERAND, Attribute.AccessType.STRONG_WRITE);
         if (this.leftOperand instanceof NodeImpl)
         {
@@ -98,7 +107,15 @@ public class BinaryExpressionNodeImpl extends NodeImpl implements BinaryExpressi
      */
     public void setRightOperand(ExpressionNode rightOperand)
     {
-        getManager().assertMutatable(this);
+            setRightOperand(rightOperand, true);
+    }
+    
+    private void setRightOperand(ExpressionNode rightOperand, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.RIGHT_OPERAND, Attribute.AccessType.STRONG_WRITE);
         if (this.rightOperand instanceof NodeImpl)
         {
@@ -127,7 +144,15 @@ public class BinaryExpressionNodeImpl extends NodeImpl implements BinaryExpressi
      */
     public void setOperator(BinaryOperator operator)
     {
-        getManager().assertMutatable(this);
+            setOperator(operator, true);
+    }
+    
+    private void setOperator(BinaryOperator operator, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.OPERATOR, Attribute.AccessType.STRONG_WRITE);
         this.operator = operator;
     }

@@ -35,10 +35,11 @@ public class ArrayInitializerCreationNodeImpl extends ArrayCreationNodeImpl impl
             int arrayLevels,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
-            BsjNodeManager manager)
+            BsjNodeManager manager,
+            boolean binary)
     {
-        super(baseType, arrayLevels, startLocation, stopLocation, manager);
-        setInitializer(initializer);
+        super(baseType, arrayLevels, startLocation, stopLocation, manager, binary);
+        setInitializer(initializer, false);
     }
     
     /**
@@ -57,7 +58,15 @@ public class ArrayInitializerCreationNodeImpl extends ArrayCreationNodeImpl impl
      */
     public void setInitializer(ArrayInitializerNode initializer)
     {
-        getManager().assertMutatable(this);
+            setInitializer(initializer, true);
+    }
+    
+    private void setInitializer(ArrayInitializerNode initializer, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.INITIALIZER, Attribute.AccessType.STRONG_WRITE);
         if (this.initializer instanceof NodeImpl)
         {

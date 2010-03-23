@@ -32,10 +32,11 @@ public class AnonymousClassBodyNodeImpl extends NodeImpl implements AnonymousCla
             AnonymousClassMemberListNode members,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
-            BsjNodeManager manager)
+            BsjNodeManager manager,
+            boolean binary)
     {
-        super(startLocation, stopLocation, manager);
-        setMembers(members);
+        super(startLocation, stopLocation, manager, binary);
+        setMembers(members, false);
     }
     
     /**
@@ -54,7 +55,15 @@ public class AnonymousClassBodyNodeImpl extends NodeImpl implements AnonymousCla
      */
     public void setMembers(AnonymousClassMemberListNode members)
     {
-        getManager().assertMutatable(this);
+            setMembers(members, true);
+    }
+    
+    private void setMembers(AnonymousClassMemberListNode members, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.MEMBERS, Attribute.AccessType.STRONG_WRITE);
         if (this.members instanceof NodeImpl)
         {

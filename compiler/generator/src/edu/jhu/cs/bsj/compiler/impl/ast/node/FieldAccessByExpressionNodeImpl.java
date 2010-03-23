@@ -39,11 +39,12 @@ public class FieldAccessByExpressionNodeImpl extends NodeImpl implements FieldAc
             IdentifierNode identifier,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
-            BsjNodeManager manager)
+            BsjNodeManager manager,
+            boolean binary)
     {
-        super(startLocation, stopLocation, manager);
-        setExpression(expression);
-        setIdentifier(identifier);
+        super(startLocation, stopLocation, manager, binary);
+        setExpression(expression, false);
+        setIdentifier(identifier, false);
     }
     
     /**
@@ -62,7 +63,15 @@ public class FieldAccessByExpressionNodeImpl extends NodeImpl implements FieldAc
      */
     public void setExpression(PrimaryExpressionNode expression)
     {
-        getManager().assertMutatable(this);
+            setExpression(expression, true);
+    }
+    
+    private void setExpression(PrimaryExpressionNode expression, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.EXPRESSION, Attribute.AccessType.STRONG_WRITE);
         if (this.expression instanceof NodeImpl)
         {
@@ -91,7 +100,15 @@ public class FieldAccessByExpressionNodeImpl extends NodeImpl implements FieldAc
      */
     public void setIdentifier(IdentifierNode identifier)
     {
-        getManager().assertMutatable(this);
+            setIdentifier(identifier, true);
+    }
+    
+    private void setIdentifier(IdentifierNode identifier, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.STRONG_WRITE);
         if (this.identifier instanceof NodeImpl)
         {

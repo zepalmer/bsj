@@ -59,14 +59,15 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
             TypeDeclarationListNode typeDecls,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
-            BsjNodeManager manager)
+            BsjNodeManager manager,
+            boolean binary)
     {
-        super(startLocation, stopLocation, manager);
+        super(startLocation, stopLocation, manager, binary);
         this.name = name;
-        setPackageDeclaration(packageDeclaration);
-        setMetaimports(metaimports);
-        setImports(imports);
-        setTypeDecls(typeDecls);
+        setPackageDeclaration(packageDeclaration, false);
+        setMetaimports(metaimports, false);
+        setImports(imports, false);
+        setTypeDecls(typeDecls, false);
     }
     
     /**
@@ -95,7 +96,15 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
      */
     public void setPackageDeclaration(PackageDeclarationNode packageDeclaration)
     {
-        getManager().assertMutatable(this);
+            setPackageDeclaration(packageDeclaration, true);
+    }
+    
+    private void setPackageDeclaration(PackageDeclarationNode packageDeclaration, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.PACKAGE_DECLARATION, Attribute.AccessType.STRONG_WRITE);
         if (this.packageDeclaration instanceof NodeImpl)
         {
@@ -124,7 +133,15 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
      */
     public void setMetaimports(MetaprogramImportListNode metaimports)
     {
-        getManager().assertMutatable(this);
+            setMetaimports(metaimports, true);
+    }
+    
+    private void setMetaimports(MetaprogramImportListNode metaimports, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.METAIMPORTS, Attribute.AccessType.STRONG_WRITE);
         if (this.metaimports instanceof NodeImpl)
         {
@@ -153,7 +170,15 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
      */
     public void setImports(ImportListNode imports)
     {
-        getManager().assertMutatable(this);
+            setImports(imports, true);
+    }
+    
+    private void setImports(ImportListNode imports, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.IMPORTS, Attribute.AccessType.STRONG_WRITE);
         if (this.imports instanceof NodeImpl)
         {
@@ -182,7 +207,15 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
      */
     public void setTypeDecls(TypeDeclarationListNode typeDecls)
     {
-        getManager().assertMutatable(this);
+            setTypeDecls(typeDecls, true);
+    }
+    
+    private void setTypeDecls(TypeDeclarationListNode typeDecls, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.TYPE_DECLS, Attribute.AccessType.STRONG_WRITE);
         if (this.typeDecls instanceof NodeImpl)
         {

@@ -32,10 +32,11 @@ public class ThisNodeImpl extends NodeImpl implements ThisNode
             UnparameterizedTypeNode type,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
-            BsjNodeManager manager)
+            BsjNodeManager manager,
+            boolean binary)
     {
-        super(startLocation, stopLocation, manager);
-        setType(type);
+        super(startLocation, stopLocation, manager, binary);
+        setType(type, false);
     }
     
     /**
@@ -54,7 +55,15 @@ public class ThisNodeImpl extends NodeImpl implements ThisNode
      */
     public void setType(UnparameterizedTypeNode type)
     {
-        getManager().assertMutatable(this);
+            setType(type, true);
+    }
+    
+    private void setType(UnparameterizedTypeNode type, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.TYPE, Attribute.AccessType.STRONG_WRITE);
         if (this.type instanceof NodeImpl)
         {

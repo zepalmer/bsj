@@ -70,9 +70,10 @@ public class MethodModifiersNodeImpl extends ModifiersNodeImpl implements Method
             AnnotationListNode annotations,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
-            BsjNodeManager manager)
+            BsjNodeManager manager,
+            boolean binary)
     {
-        super(annotations, startLocation, stopLocation, manager);
+        super(annotations, startLocation, stopLocation, manager, binary);
         this.access = access;
         this.abstractFlag = abstractFlag;
         this.staticFlag = staticFlag;
@@ -98,7 +99,15 @@ public class MethodModifiersNodeImpl extends ModifiersNodeImpl implements Method
      */
     public void setAccess(AccessModifier access)
     {
-        getManager().assertMutatable(this);
+            setAccess(access, true);
+    }
+    
+    private void setAccess(AccessModifier access, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.ACCESS, Attribute.AccessType.STRONG_WRITE);
         this.access = access;
     }
@@ -119,7 +128,15 @@ public class MethodModifiersNodeImpl extends ModifiersNodeImpl implements Method
      */
     public void setAbstractFlag(boolean abstractFlag)
     {
-        getManager().assertMutatable(this);
+            setAbstractFlag(abstractFlag, true);
+    }
+    
+    private void setAbstractFlag(boolean abstractFlag, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.ABSTRACT_FLAG, Attribute.AccessType.STRONG_WRITE);
         this.abstractFlag = abstractFlag;
     }
@@ -140,7 +157,15 @@ public class MethodModifiersNodeImpl extends ModifiersNodeImpl implements Method
      */
     public void setStaticFlag(boolean staticFlag)
     {
-        getManager().assertMutatable(this);
+            setStaticFlag(staticFlag, true);
+    }
+    
+    private void setStaticFlag(boolean staticFlag, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.STATIC_FLAG, Attribute.AccessType.STRONG_WRITE);
         this.staticFlag = staticFlag;
     }
@@ -161,7 +186,15 @@ public class MethodModifiersNodeImpl extends ModifiersNodeImpl implements Method
      */
     public void setFinalFlag(boolean finalFlag)
     {
-        getManager().assertMutatable(this);
+            setFinalFlag(finalFlag, true);
+    }
+    
+    private void setFinalFlag(boolean finalFlag, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.FINAL_FLAG, Attribute.AccessType.STRONG_WRITE);
         this.finalFlag = finalFlag;
     }
@@ -182,7 +215,15 @@ public class MethodModifiersNodeImpl extends ModifiersNodeImpl implements Method
      */
     public void setSynchronizedFlag(boolean synchronizedFlag)
     {
-        getManager().assertMutatable(this);
+            setSynchronizedFlag(synchronizedFlag, true);
+    }
+    
+    private void setSynchronizedFlag(boolean synchronizedFlag, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.SYNCHRONIZED_FLAG, Attribute.AccessType.STRONG_WRITE);
         this.synchronizedFlag = synchronizedFlag;
     }
@@ -203,7 +244,15 @@ public class MethodModifiersNodeImpl extends ModifiersNodeImpl implements Method
      */
     public void setNativeFlag(boolean nativeFlag)
     {
-        getManager().assertMutatable(this);
+            setNativeFlag(nativeFlag, true);
+    }
+    
+    private void setNativeFlag(boolean nativeFlag, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.NATIVE_FLAG, Attribute.AccessType.STRONG_WRITE);
         this.nativeFlag = nativeFlag;
     }
@@ -224,7 +273,15 @@ public class MethodModifiersNodeImpl extends ModifiersNodeImpl implements Method
      */
     public void setStrictfpFlag(boolean strictfpFlag)
     {
-        getManager().assertMutatable(this);
+            setStrictfpFlag(strictfpFlag, true);
+    }
+    
+    private void setStrictfpFlag(boolean strictfpFlag, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.STRICTFP_FLAG, Attribute.AccessType.STRONG_WRITE);
         this.strictfpFlag = strictfpFlag;
     }

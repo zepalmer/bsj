@@ -45,12 +45,13 @@ public class TryNodeImpl extends NodeImpl implements TryNode
             BlockNode finallyBlock,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
-            BsjNodeManager manager)
+            BsjNodeManager manager,
+            boolean binary)
     {
-        super(startLocation, stopLocation, manager);
-        setBlock(block);
-        setCatches(catches);
-        setFinallyBlock(finallyBlock);
+        super(startLocation, stopLocation, manager, binary);
+        setBlock(block, false);
+        setCatches(catches, false);
+        setFinallyBlock(finallyBlock, false);
     }
     
     /**
@@ -69,7 +70,15 @@ public class TryNodeImpl extends NodeImpl implements TryNode
      */
     public void setBlock(BlockNode block)
     {
-        getManager().assertMutatable(this);
+            setBlock(block, true);
+    }
+    
+    private void setBlock(BlockNode block, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.BLOCK, Attribute.AccessType.STRONG_WRITE);
         if (this.block instanceof NodeImpl)
         {
@@ -98,7 +107,15 @@ public class TryNodeImpl extends NodeImpl implements TryNode
      */
     public void setCatches(CatchListNode catches)
     {
-        getManager().assertMutatable(this);
+            setCatches(catches, true);
+    }
+    
+    private void setCatches(CatchListNode catches, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.CATCHES, Attribute.AccessType.STRONG_WRITE);
         if (this.catches instanceof NodeImpl)
         {
@@ -127,7 +144,15 @@ public class TryNodeImpl extends NodeImpl implements TryNode
      */
     public void setFinallyBlock(BlockNode finallyBlock)
     {
-        getManager().assertMutatable(this);
+            setFinallyBlock(finallyBlock, true);
+    }
+    
+    private void setFinallyBlock(BlockNode finallyBlock, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.FINALLY_BLOCK, Attribute.AccessType.STRONG_WRITE);
         if (this.finallyBlock instanceof NodeImpl)
         {

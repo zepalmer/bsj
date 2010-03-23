@@ -100,6 +100,16 @@ public class PackageNodeCallback
 					files.add(file);
 				}
 			}
+
+			for (BsjFileObject file : this.fileManager.listFiles(BsjCompilerLocation.OBJECT_PROGRAM_SYSTEM_CLASSPATH,
+					pname, Arrays.asList(Kind.CLASS), false))
+			{
+				// TODO: exclude class files which represent inner classes, etc.
+				if (names.add(getCompilationUnitName(file)))
+				{
+					files.add(file);
+				}
+			}
 		} catch (IOException ioe)
 		{
 			// TODO: how do we handle this?
@@ -187,7 +197,7 @@ public class PackageNodeCallback
 		}
 		return names;
 	}
-	
+
 	/**
 	 * Retrieves a factory to use to create nodes.
 	 */

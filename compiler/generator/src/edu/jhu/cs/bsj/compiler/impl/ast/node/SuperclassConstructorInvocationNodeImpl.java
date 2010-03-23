@@ -36,10 +36,11 @@ public class SuperclassConstructorInvocationNodeImpl extends ConstructorInvocati
             ReferenceTypeListNode typeArguments,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
-            BsjNodeManager manager)
+            BsjNodeManager manager,
+            boolean binary)
     {
-        super(arguments, typeArguments, startLocation, stopLocation, manager);
-        setQualifyingExpression(qualifyingExpression);
+        super(arguments, typeArguments, startLocation, stopLocation, manager, binary);
+        setQualifyingExpression(qualifyingExpression, false);
     }
     
     /**
@@ -58,7 +59,15 @@ public class SuperclassConstructorInvocationNodeImpl extends ConstructorInvocati
      */
     public void setQualifyingExpression(PrimaryExpressionNode qualifyingExpression)
     {
-        getManager().assertMutatable(this);
+            setQualifyingExpression(qualifyingExpression, true);
+    }
+    
+    private void setQualifyingExpression(PrimaryExpressionNode qualifyingExpression, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.QUALIFYING_EXPRESSION, Attribute.AccessType.STRONG_WRITE);
         if (this.qualifyingExpression instanceof NodeImpl)
         {

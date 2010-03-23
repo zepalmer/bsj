@@ -75,16 +75,17 @@ public class ClassDeclarationNodeImpl extends NodeImpl implements ClassDeclarati
             JavadocNode javadoc,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
-            BsjNodeManager manager)
+            BsjNodeManager manager,
+            boolean binary)
     {
-        super(startLocation, stopLocation, manager);
-        setModifiers(modifiers);
-        setExtendsClause(extendsClause);
-        setImplementsClause(implementsClause);
-        setBody(body);
-        setTypeParameters(typeParameters);
-        setIdentifier(identifier);
-        setJavadoc(javadoc);
+        super(startLocation, stopLocation, manager, binary);
+        setModifiers(modifiers, false);
+        setExtendsClause(extendsClause, false);
+        setImplementsClause(implementsClause, false);
+        setBody(body, false);
+        setTypeParameters(typeParameters, false);
+        setIdentifier(identifier, false);
+        setJavadoc(javadoc, false);
     }
     
     /**
@@ -103,7 +104,15 @@ public class ClassDeclarationNodeImpl extends NodeImpl implements ClassDeclarati
      */
     public void setModifiers(ClassModifiersNode modifiers)
     {
-        getManager().assertMutatable(this);
+            setModifiers(modifiers, true);
+    }
+    
+    private void setModifiers(ClassModifiersNode modifiers, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.MODIFIERS, Attribute.AccessType.STRONG_WRITE);
         if (this.modifiers instanceof NodeImpl)
         {
@@ -132,7 +141,15 @@ public class ClassDeclarationNodeImpl extends NodeImpl implements ClassDeclarati
      */
     public void setExtendsClause(DeclaredTypeNode extendsClause)
     {
-        getManager().assertMutatable(this);
+            setExtendsClause(extendsClause, true);
+    }
+    
+    private void setExtendsClause(DeclaredTypeNode extendsClause, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.EXTENDS_CLAUSE, Attribute.AccessType.STRONG_WRITE);
         if (this.extendsClause instanceof NodeImpl)
         {
@@ -161,7 +178,15 @@ public class ClassDeclarationNodeImpl extends NodeImpl implements ClassDeclarati
      */
     public void setImplementsClause(DeclaredTypeListNode implementsClause)
     {
-        getManager().assertMutatable(this);
+            setImplementsClause(implementsClause, true);
+    }
+    
+    private void setImplementsClause(DeclaredTypeListNode implementsClause, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.IMPLEMENTS_CLAUSE, Attribute.AccessType.STRONG_WRITE);
         if (this.implementsClause instanceof NodeImpl)
         {
@@ -190,7 +215,15 @@ public class ClassDeclarationNodeImpl extends NodeImpl implements ClassDeclarati
      */
     public void setBody(ClassBodyNode body)
     {
-        getManager().assertMutatable(this);
+            setBody(body, true);
+    }
+    
+    private void setBody(ClassBodyNode body, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.BODY, Attribute.AccessType.STRONG_WRITE);
         if (this.body instanceof NodeImpl)
         {
@@ -219,7 +252,15 @@ public class ClassDeclarationNodeImpl extends NodeImpl implements ClassDeclarati
      */
     public void setTypeParameters(TypeParameterListNode typeParameters)
     {
-        getManager().assertMutatable(this);
+            setTypeParameters(typeParameters, true);
+    }
+    
+    private void setTypeParameters(TypeParameterListNode typeParameters, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.TYPE_PARAMETERS, Attribute.AccessType.STRONG_WRITE);
         if (this.typeParameters instanceof NodeImpl)
         {
@@ -248,7 +289,15 @@ public class ClassDeclarationNodeImpl extends NodeImpl implements ClassDeclarati
      */
     public void setIdentifier(IdentifierNode identifier)
     {
-        getManager().assertMutatable(this);
+            setIdentifier(identifier, true);
+    }
+    
+    private void setIdentifier(IdentifierNode identifier, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.STRONG_WRITE);
         if (this.identifier instanceof NodeImpl)
         {
@@ -277,7 +326,15 @@ public class ClassDeclarationNodeImpl extends NodeImpl implements ClassDeclarati
      */
     public void setJavadoc(JavadocNode javadoc)
     {
-        getManager().assertMutatable(this);
+            setJavadoc(javadoc, true);
+    }
+    
+    private void setJavadoc(JavadocNode javadoc, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.JAVADOC, Attribute.AccessType.STRONG_WRITE);
         if (this.javadoc instanceof NodeImpl)
         {

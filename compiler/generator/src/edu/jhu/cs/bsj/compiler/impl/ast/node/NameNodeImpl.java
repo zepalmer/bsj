@@ -35,10 +35,11 @@ public abstract class NameNodeImpl extends NodeImpl implements NameNode
             NameCategory category,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
-            BsjNodeManager manager)
+            BsjNodeManager manager,
+            boolean binary)
     {
-        super(startLocation, stopLocation, manager);
-        setIdentifier(identifier);
+        super(startLocation, stopLocation, manager, binary);
+        setIdentifier(identifier, false);
         this.category = category;
     }
     
@@ -58,7 +59,15 @@ public abstract class NameNodeImpl extends NodeImpl implements NameNode
      */
     public void setIdentifier(IdentifierNode identifier)
     {
-        getManager().assertMutatable(this);
+            setIdentifier(identifier, true);
+    }
+    
+    private void setIdentifier(IdentifierNode identifier, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.STRONG_WRITE);
         if (this.identifier instanceof NodeImpl)
         {

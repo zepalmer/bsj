@@ -32,10 +32,11 @@ public class BlockNodeImpl extends NodeImpl implements BlockNode
             BlockStatementListNode statements,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
-            BsjNodeManager manager)
+            BsjNodeManager manager,
+            boolean binary)
     {
-        super(startLocation, stopLocation, manager);
-        setStatements(statements);
+        super(startLocation, stopLocation, manager, binary);
+        setStatements(statements, false);
     }
     
     /**
@@ -54,7 +55,15 @@ public class BlockNodeImpl extends NodeImpl implements BlockNode
      */
     public void setStatements(BlockStatementListNode statements)
     {
-        getManager().assertMutatable(this);
+            setStatements(statements, true);
+    }
+    
+    private void setStatements(BlockStatementListNode statements, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.STATEMENTS, Attribute.AccessType.STRONG_WRITE);
         if (this.statements instanceof NodeImpl)
         {

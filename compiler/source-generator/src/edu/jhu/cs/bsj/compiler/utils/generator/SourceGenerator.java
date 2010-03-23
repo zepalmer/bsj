@@ -853,7 +853,7 @@ public class SourceGenerator
 				}
 				if (propInstanceOf(p.getBaseType(), "Node") && !p.isReadOnly())
 				{
-					ps.println("set" + capFirst(p.getName()) + "(" + expr + ");");
+					ps.println("set" + capFirst(p.getName()) + "(" + expr + ", false);");
 				} else
 				{
 					ps.println("this." + p.getName() + " = " + expr + ";");
@@ -912,7 +912,21 @@ public class SourceGenerator
 								+ p.getName() + ")");
 						ps.println("{");
 						ps.incPrependCount();
-						ps.println("getManager().assertMutatable(this);");
+						ps.println("    set" + capFirst(p.getName()) + "(" + p.getName() + ", true);");
+						ps.decPrependCount();
+						ps.println("}");
+						ps.println();
+						
+						// this separation is necessary to allow the constructor to use every aspect of the setter
+						// method except for the permission check
+						ps.println("private void set" + capFirst(p.getName()) + "(" + p.getFullType() + " "
+								+ p.getName() + ", boolean checkPermissions)");
+						ps.println("{");
+						ps.incPrependCount();
+						ps.println("if (checkPermissions)");
+						ps.println("{");
+						ps.println("    getManager().assertMutatable(this);");
+						ps.println("}");
 						ps.println("recordAccess(LocalAttribute."
 								+ StringUtilities.convertCamelCaseToUpperCase(p.getName())
 								+ ", Attribute.AccessType.STRONG_WRITE);");

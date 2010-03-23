@@ -39,11 +39,12 @@ public class ArrayAccessNodeImpl extends NodeImpl implements ArrayAccessNode
             ExpressionNode indexExpression,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
-            BsjNodeManager manager)
+            BsjNodeManager manager,
+            boolean binary)
     {
-        super(startLocation, stopLocation, manager);
-        setArrayExpression(arrayExpression);
-        setIndexExpression(indexExpression);
+        super(startLocation, stopLocation, manager, binary);
+        setArrayExpression(arrayExpression, false);
+        setIndexExpression(indexExpression, false);
     }
     
     /**
@@ -62,7 +63,15 @@ public class ArrayAccessNodeImpl extends NodeImpl implements ArrayAccessNode
      */
     public void setArrayExpression(RestrictedPrimaryExpressionNode arrayExpression)
     {
-        getManager().assertMutatable(this);
+            setArrayExpression(arrayExpression, true);
+    }
+    
+    private void setArrayExpression(RestrictedPrimaryExpressionNode arrayExpression, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.ARRAY_EXPRESSION, Attribute.AccessType.STRONG_WRITE);
         if (this.arrayExpression instanceof NodeImpl)
         {
@@ -91,7 +100,15 @@ public class ArrayAccessNodeImpl extends NodeImpl implements ArrayAccessNode
      */
     public void setIndexExpression(ExpressionNode indexExpression)
     {
-        getManager().assertMutatable(this);
+            setIndexExpression(indexExpression, true);
+    }
+    
+    private void setIndexExpression(ExpressionNode indexExpression, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.INDEX_EXPRESSION, Attribute.AccessType.STRONG_WRITE);
         if (this.indexExpression instanceof NodeImpl)
         {

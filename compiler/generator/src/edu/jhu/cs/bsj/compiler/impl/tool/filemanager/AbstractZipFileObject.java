@@ -57,6 +57,6 @@ public abstract class AbstractZipFileObject extends AbstractFileObject
 	@Override
 	public String getSimpleName()
 	{
-		return StringUtilities.removeSuffix(getName(), '/');
+		return StringUtilities.getSuffix(getName(), '/');
 	}
 }

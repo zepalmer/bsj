@@ -53,9 +53,10 @@ public class PackageNodeImpl extends NodeImpl implements PackageNode
             PackageNodeCallback packageNodeCallback,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
-            BsjNodeManager manager)
+            BsjNodeManager manager,
+            boolean binary)
     {
-        super(startLocation, stopLocation, manager);
+        super(startLocation, stopLocation, manager, binary);
         this.name = name;
         this.packageNodeCallback = packageNodeCallback;
     }

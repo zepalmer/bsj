@@ -32,10 +32,11 @@ public class AnnotationBodyNodeImpl extends NodeImpl implements AnnotationBodyNo
             AnnotationMemberListNode members,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
-            BsjNodeManager manager)
+            BsjNodeManager manager,
+            boolean binary)
     {
-        super(startLocation, stopLocation, manager);
-        setMembers(members);
+        super(startLocation, stopLocation, manager, binary);
+        setMembers(members, false);
     }
     
     /**
@@ -54,7 +55,15 @@ public class AnnotationBodyNodeImpl extends NodeImpl implements AnnotationBodyNo
      */
     public void setMembers(AnnotationMemberListNode members)
     {
-        getManager().assertMutatable(this);
+            setMembers(members, true);
+    }
+    
+    private void setMembers(AnnotationMemberListNode members, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.MEMBERS, Attribute.AccessType.STRONG_WRITE);
         if (this.members instanceof NodeImpl)
         {

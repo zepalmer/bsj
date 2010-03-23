@@ -32,10 +32,11 @@ public class ForInitializerExpressionNodeImpl extends NodeImpl implements ForIni
             StatementExpressionListNode expressions,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
-            BsjNodeManager manager)
+            BsjNodeManager manager,
+            boolean binary)
     {
-        super(startLocation, stopLocation, manager);
-        setExpressions(expressions);
+        super(startLocation, stopLocation, manager, binary);
+        setExpressions(expressions, false);
     }
     
     /**
@@ -54,7 +55,15 @@ public class ForInitializerExpressionNodeImpl extends NodeImpl implements ForIni
      */
     public void setExpressions(StatementExpressionListNode expressions)
     {
-        getManager().assertMutatable(this);
+            setExpressions(expressions, true);
+    }
+    
+    private void setExpressions(StatementExpressionListNode expressions, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.EXPRESSIONS, Attribute.AccessType.STRONG_WRITE);
         if (this.expressions instanceof NodeImpl)
         {

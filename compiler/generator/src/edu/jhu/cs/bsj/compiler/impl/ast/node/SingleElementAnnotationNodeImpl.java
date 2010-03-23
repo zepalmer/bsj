@@ -34,10 +34,11 @@ public class SingleElementAnnotationNodeImpl extends AnnotationNodeImpl implemen
             UnparameterizedTypeNode annotationType,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
-            BsjNodeManager manager)
+            BsjNodeManager manager,
+            boolean binary)
     {
-        super(annotationType, startLocation, stopLocation, manager);
-        setValue(value);
+        super(annotationType, startLocation, stopLocation, manager, binary);
+        setValue(value, false);
     }
     
     /**
@@ -56,7 +57,15 @@ public class SingleElementAnnotationNodeImpl extends AnnotationNodeImpl implemen
      */
     public void setValue(AnnotationValueNode value)
     {
-        getManager().assertMutatable(this);
+            setValue(value, true);
+    }
+    
+    private void setValue(AnnotationValueNode value, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.VALUE, Attribute.AccessType.STRONG_WRITE);
         if (this.value instanceof NodeImpl)
         {

@@ -23,9 +23,10 @@ public class AnnotationMemberListNodeImpl extends ListNodeImpl<AnnotationMemberN
             List<AnnotationMemberNode> children,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
-            BsjNodeManager manager)
+            BsjNodeManager manager,
+            boolean binary)
     {
-        super(children, startLocation, stopLocation, manager);
+        super(children, startLocation, stopLocation, manager, binary);
     }
     
     /**

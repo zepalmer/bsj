@@ -60,14 +60,15 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
             JavadocNode javadoc,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
-            BsjNodeManager manager)
+            BsjNodeManager manager,
+            boolean binary)
     {
-        super(startLocation, stopLocation, manager);
-        setAnnotations(annotations);
-        setIdentifier(identifier);
-        setArguments(arguments);
-        setBody(body);
-        setJavadoc(javadoc);
+        super(startLocation, stopLocation, manager, binary);
+        setAnnotations(annotations, false);
+        setIdentifier(identifier, false);
+        setArguments(arguments, false);
+        setBody(body, false);
+        setJavadoc(javadoc, false);
     }
     
     /**
@@ -86,7 +87,15 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
      */
     public void setAnnotations(AnnotationListNode annotations)
     {
-        getManager().assertMutatable(this);
+            setAnnotations(annotations, true);
+    }
+    
+    private void setAnnotations(AnnotationListNode annotations, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.ANNOTATIONS, Attribute.AccessType.STRONG_WRITE);
         if (this.annotations instanceof NodeImpl)
         {
@@ -115,7 +124,15 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
      */
     public void setIdentifier(IdentifierNode identifier)
     {
-        getManager().assertMutatable(this);
+            setIdentifier(identifier, true);
+    }
+    
+    private void setIdentifier(IdentifierNode identifier, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.STRONG_WRITE);
         if (this.identifier instanceof NodeImpl)
         {
@@ -144,7 +161,15 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
      */
     public void setArguments(ExpressionListNode arguments)
     {
-        getManager().assertMutatable(this);
+            setArguments(arguments, true);
+    }
+    
+    private void setArguments(ExpressionListNode arguments, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.ARGUMENTS, Attribute.AccessType.STRONG_WRITE);
         if (this.arguments instanceof NodeImpl)
         {
@@ -173,7 +198,15 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
      */
     public void setBody(AnonymousClassBodyNode body)
     {
-        getManager().assertMutatable(this);
+            setBody(body, true);
+    }
+    
+    private void setBody(AnonymousClassBodyNode body, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.BODY, Attribute.AccessType.STRONG_WRITE);
         if (this.body instanceof NodeImpl)
         {
@@ -202,7 +235,15 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
      */
     public void setJavadoc(JavadocNode javadoc)
     {
-        getManager().assertMutatable(this);
+            setJavadoc(javadoc, true);
+    }
+    
+    private void setJavadoc(JavadocNode javadoc, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.JAVADOC, Attribute.AccessType.STRONG_WRITE);
         if (this.javadoc instanceof NodeImpl)
         {

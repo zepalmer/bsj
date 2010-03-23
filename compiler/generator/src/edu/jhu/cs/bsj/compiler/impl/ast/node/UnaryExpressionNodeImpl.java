@@ -39,10 +39,11 @@ public class UnaryExpressionNodeImpl extends NodeImpl implements UnaryExpression
             UnaryOperator operator,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
-            BsjNodeManager manager)
+            BsjNodeManager manager,
+            boolean binary)
     {
-        super(startLocation, stopLocation, manager);
-        setExpression(expression);
+        super(startLocation, stopLocation, manager, binary);
+        setExpression(expression, false);
         this.operator = operator;
     }
     
@@ -62,7 +63,15 @@ public class UnaryExpressionNodeImpl extends NodeImpl implements UnaryExpression
      */
     public void setExpression(ExpressionNode expression)
     {
-        getManager().assertMutatable(this);
+            setExpression(expression, true);
+    }
+    
+    private void setExpression(ExpressionNode expression, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.EXPRESSION, Attribute.AccessType.STRONG_WRITE);
         if (this.expression instanceof NodeImpl)
         {
@@ -91,7 +100,15 @@ public class UnaryExpressionNodeImpl extends NodeImpl implements UnaryExpression
      */
     public void setOperator(UnaryOperator operator)
     {
-        getManager().assertMutatable(this);
+            setOperator(operator, true);
+    }
+    
+    private void setOperator(UnaryOperator operator, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.OPERATOR, Attribute.AccessType.STRONG_WRITE);
         this.operator = operator;
     }

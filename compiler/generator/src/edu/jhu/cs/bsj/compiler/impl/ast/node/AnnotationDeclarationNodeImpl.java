@@ -54,13 +54,14 @@ public class AnnotationDeclarationNodeImpl extends NodeImpl implements Annotatio
             JavadocNode javadoc,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
-            BsjNodeManager manager)
+            BsjNodeManager manager,
+            boolean binary)
     {
-        super(startLocation, stopLocation, manager);
-        setModifiers(modifiers);
-        setBody(body);
-        setIdentifier(identifier);
-        setJavadoc(javadoc);
+        super(startLocation, stopLocation, manager, binary);
+        setModifiers(modifiers, false);
+        setBody(body, false);
+        setIdentifier(identifier, false);
+        setJavadoc(javadoc, false);
     }
     
     /**
@@ -79,7 +80,15 @@ public class AnnotationDeclarationNodeImpl extends NodeImpl implements Annotatio
      */
     public void setModifiers(AnnotationModifiersNode modifiers)
     {
-        getManager().assertMutatable(this);
+            setModifiers(modifiers, true);
+    }
+    
+    private void setModifiers(AnnotationModifiersNode modifiers, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.MODIFIERS, Attribute.AccessType.STRONG_WRITE);
         if (this.modifiers instanceof NodeImpl)
         {
@@ -108,7 +117,15 @@ public class AnnotationDeclarationNodeImpl extends NodeImpl implements Annotatio
      */
     public void setBody(AnnotationBodyNode body)
     {
-        getManager().assertMutatable(this);
+            setBody(body, true);
+    }
+    
+    private void setBody(AnnotationBodyNode body, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.BODY, Attribute.AccessType.STRONG_WRITE);
         if (this.body instanceof NodeImpl)
         {
@@ -137,7 +154,15 @@ public class AnnotationDeclarationNodeImpl extends NodeImpl implements Annotatio
      */
     public void setIdentifier(IdentifierNode identifier)
     {
-        getManager().assertMutatable(this);
+            setIdentifier(identifier, true);
+    }
+    
+    private void setIdentifier(IdentifierNode identifier, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.STRONG_WRITE);
         if (this.identifier instanceof NodeImpl)
         {
@@ -166,7 +191,15 @@ public class AnnotationDeclarationNodeImpl extends NodeImpl implements Annotatio
      */
     public void setJavadoc(JavadocNode javadoc)
     {
-        getManager().assertMutatable(this);
+            setJavadoc(javadoc, true);
+    }
+    
+    private void setJavadoc(JavadocNode javadoc, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.JAVADOC, Attribute.AccessType.STRONG_WRITE);
         if (this.javadoc instanceof NodeImpl)
         {

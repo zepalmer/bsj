@@ -39,11 +39,12 @@ public class SynchronizedNodeImpl extends NodeImpl implements SynchronizedNode
             BlockNode block,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
-            BsjNodeManager manager)
+            BsjNodeManager manager,
+            boolean binary)
     {
-        super(startLocation, stopLocation, manager);
-        setExpression(expression);
-        setBlock(block);
+        super(startLocation, stopLocation, manager, binary);
+        setExpression(expression, false);
+        setBlock(block, false);
     }
     
     /**
@@ -62,7 +63,15 @@ public class SynchronizedNodeImpl extends NodeImpl implements SynchronizedNode
      */
     public void setExpression(ExpressionNode expression)
     {
-        getManager().assertMutatable(this);
+            setExpression(expression, true);
+    }
+    
+    private void setExpression(ExpressionNode expression, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.EXPRESSION, Attribute.AccessType.STRONG_WRITE);
         if (this.expression instanceof NodeImpl)
         {
@@ -91,7 +100,15 @@ public class SynchronizedNodeImpl extends NodeImpl implements SynchronizedNode
      */
     public void setBlock(BlockNode block)
     {
-        getManager().assertMutatable(this);
+            setBlock(block, true);
+    }
+    
+    private void setBlock(BlockNode block, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.BLOCK, Attribute.AccessType.STRONG_WRITE);
         if (this.block instanceof NodeImpl)
         {

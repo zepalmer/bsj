@@ -36,10 +36,11 @@ public class QualifiedNameNodeImpl extends NameNodeImpl implements QualifiedName
             NameCategory category,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
-            BsjNodeManager manager)
+            BsjNodeManager manager,
+            boolean binary)
     {
-        super(identifier, category, startLocation, stopLocation, manager);
-        setBase(base);
+        super(identifier, category, startLocation, stopLocation, manager, binary);
+        setBase(base, false);
     }
     
     /**
@@ -58,7 +59,15 @@ public class QualifiedNameNodeImpl extends NameNodeImpl implements QualifiedName
      */
     public void setBase(NameNode base)
     {
-        getManager().assertMutatable(this);
+            setBase(base, true);
+    }
+    
+    private void setBase(NameNode base, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.BASE, Attribute.AccessType.STRONG_WRITE);
         if (this.base instanceof NodeImpl)
         {

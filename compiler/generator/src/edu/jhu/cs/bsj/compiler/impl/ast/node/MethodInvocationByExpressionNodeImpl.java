@@ -43,11 +43,12 @@ public class MethodInvocationByExpressionNodeImpl extends MethodInvocationNodeIm
             ReferenceTypeListNode typeArguments,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
-            BsjNodeManager manager)
+            BsjNodeManager manager,
+            boolean binary)
     {
-        super(arguments, typeArguments, startLocation, stopLocation, manager);
-        setExpression(expression);
-        setIdentifier(identifier);
+        super(arguments, typeArguments, startLocation, stopLocation, manager, binary);
+        setExpression(expression, false);
+        setIdentifier(identifier, false);
     }
     
     /**
@@ -66,7 +67,15 @@ public class MethodInvocationByExpressionNodeImpl extends MethodInvocationNodeIm
      */
     public void setExpression(PrimaryExpressionNode expression)
     {
-        getManager().assertMutatable(this);
+            setExpression(expression, true);
+    }
+    
+    private void setExpression(PrimaryExpressionNode expression, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.EXPRESSION, Attribute.AccessType.STRONG_WRITE);
         if (this.expression instanceof NodeImpl)
         {
@@ -95,7 +104,15 @@ public class MethodInvocationByExpressionNodeImpl extends MethodInvocationNodeIm
      */
     public void setIdentifier(IdentifierNode identifier)
     {
-        getManager().assertMutatable(this);
+            setIdentifier(identifier, true);
+    }
+    
+    private void setIdentifier(IdentifierNode identifier, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.STRONG_WRITE);
         if (this.identifier instanceof NodeImpl)
         {

@@ -32,10 +32,11 @@ public class BreakNodeImpl extends NodeImpl implements BreakNode
             IdentifierNode label,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
-            BsjNodeManager manager)
+            BsjNodeManager manager,
+            boolean binary)
     {
-        super(startLocation, stopLocation, manager);
-        setLabel(label);
+        super(startLocation, stopLocation, manager, binary);
+        setLabel(label, false);
     }
     
     /**
@@ -54,7 +55,15 @@ public class BreakNodeImpl extends NodeImpl implements BreakNode
      */
     public void setLabel(IdentifierNode label)
     {
-        getManager().assertMutatable(this);
+            setLabel(label, true);
+    }
+    
+    private void setLabel(IdentifierNode label, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.LABEL, Attribute.AccessType.STRONG_WRITE);
         if (this.label instanceof NodeImpl)
         {

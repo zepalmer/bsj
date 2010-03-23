@@ -31,9 +31,10 @@ public class IdentifierNodeImpl extends NodeImpl implements IdentifierNode
             String identifier,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
-            BsjNodeManager manager)
+            BsjNodeManager manager,
+            boolean binary)
     {
-        super(startLocation, stopLocation, manager);
+        super(startLocation, stopLocation, manager, binary);
         this.identifier = identifier;
     }
     
@@ -53,7 +54,15 @@ public class IdentifierNodeImpl extends NodeImpl implements IdentifierNode
      */
     public void setIdentifier(String identifier)
     {
-        getManager().assertMutatable(this);
+            setIdentifier(identifier, true);
+    }
+    
+    private void setIdentifier(String identifier, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.STRONG_WRITE);
         this.identifier = identifier;
     }

@@ -39,11 +39,12 @@ public class ConstructorBodyNodeImpl extends NodeImpl implements ConstructorBody
             BlockStatementListNode statements,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
-            BsjNodeManager manager)
+            BsjNodeManager manager,
+            boolean binary)
     {
-        super(startLocation, stopLocation, manager);
-        setConstructorInvocation(constructorInvocation);
-        setStatements(statements);
+        super(startLocation, stopLocation, manager, binary);
+        setConstructorInvocation(constructorInvocation, false);
+        setStatements(statements, false);
     }
     
     /**
@@ -62,7 +63,15 @@ public class ConstructorBodyNodeImpl extends NodeImpl implements ConstructorBody
      */
     public void setConstructorInvocation(ConstructorInvocationNode constructorInvocation)
     {
-        getManager().assertMutatable(this);
+            setConstructorInvocation(constructorInvocation, true);
+    }
+    
+    private void setConstructorInvocation(ConstructorInvocationNode constructorInvocation, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.CONSTRUCTOR_INVOCATION, Attribute.AccessType.STRONG_WRITE);
         if (this.constructorInvocation instanceof NodeImpl)
         {
@@ -91,7 +100,15 @@ public class ConstructorBodyNodeImpl extends NodeImpl implements ConstructorBody
      */
     public void setStatements(BlockStatementListNode statements)
     {
-        getManager().assertMutatable(this);
+            setStatements(statements, true);
+    }
+    
+    private void setStatements(BlockStatementListNode statements, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.STATEMENTS, Attribute.AccessType.STRONG_WRITE);
         if (this.statements instanceof NodeImpl)
         {

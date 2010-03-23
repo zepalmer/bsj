@@ -53,13 +53,14 @@ public class SuperMethodInvocationNodeImpl extends NodeImpl implements SuperMeth
             ReferenceTypeListNode typeArguments,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
-            BsjNodeManager manager)
+            BsjNodeManager manager,
+            boolean binary)
     {
-        super(startLocation, stopLocation, manager);
-        setType(type);
-        setIdentifier(identifier);
-        setArguments(arguments);
-        setTypeArguments(typeArguments);
+        super(startLocation, stopLocation, manager, binary);
+        setType(type, false);
+        setIdentifier(identifier, false);
+        setArguments(arguments, false);
+        setTypeArguments(typeArguments, false);
     }
     
     /**
@@ -78,7 +79,15 @@ public class SuperMethodInvocationNodeImpl extends NodeImpl implements SuperMeth
      */
     public void setType(UnparameterizedTypeNode type)
     {
-        getManager().assertMutatable(this);
+            setType(type, true);
+    }
+    
+    private void setType(UnparameterizedTypeNode type, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.TYPE, Attribute.AccessType.STRONG_WRITE);
         if (this.type instanceof NodeImpl)
         {
@@ -107,7 +116,15 @@ public class SuperMethodInvocationNodeImpl extends NodeImpl implements SuperMeth
      */
     public void setIdentifier(IdentifierNode identifier)
     {
-        getManager().assertMutatable(this);
+            setIdentifier(identifier, true);
+    }
+    
+    private void setIdentifier(IdentifierNode identifier, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.STRONG_WRITE);
         if (this.identifier instanceof NodeImpl)
         {
@@ -136,7 +153,15 @@ public class SuperMethodInvocationNodeImpl extends NodeImpl implements SuperMeth
      */
     public void setArguments(ExpressionListNode arguments)
     {
-        getManager().assertMutatable(this);
+            setArguments(arguments, true);
+    }
+    
+    private void setArguments(ExpressionListNode arguments, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.ARGUMENTS, Attribute.AccessType.STRONG_WRITE);
         if (this.arguments instanceof NodeImpl)
         {
@@ -165,7 +190,15 @@ public class SuperMethodInvocationNodeImpl extends NodeImpl implements SuperMeth
      */
     public void setTypeArguments(ReferenceTypeListNode typeArguments)
     {
-        getManager().assertMutatable(this);
+            setTypeArguments(typeArguments, true);
+    }
+    
+    private void setTypeArguments(ReferenceTypeListNode typeArguments, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.TYPE_ARGUMENTS, Attribute.AccessType.STRONG_WRITE);
         if (this.typeArguments instanceof NodeImpl)
         {

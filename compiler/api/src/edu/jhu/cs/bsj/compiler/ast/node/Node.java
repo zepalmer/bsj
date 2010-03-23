@@ -135,4 +135,12 @@ public interface Node
 	 * package).
 	 */
 	public PackageNode getRootPackage();
+	
+	/**
+	 * Determines whether or not this node represents a binary node.  Binary nodes are nodes which are constructed from
+	 * binary files on the classpath.  Binary nodes are always read-only and lack certain information (such as method
+	 * bodies).
+	 * @return <code>true</code> if this node is a binary node; <code>false</code> if it is not.
+	 */
+	public boolean isBinary();
 }

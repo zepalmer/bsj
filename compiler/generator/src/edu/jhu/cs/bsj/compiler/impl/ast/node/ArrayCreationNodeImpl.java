@@ -35,10 +35,11 @@ public abstract class ArrayCreationNodeImpl extends NodeImpl implements ArrayCre
             int arrayLevels,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
-            BsjNodeManager manager)
+            BsjNodeManager manager,
+            boolean binary)
     {
-        super(startLocation, stopLocation, manager);
-        setBaseType(baseType);
+        super(startLocation, stopLocation, manager, binary);
+        setBaseType(baseType, false);
         this.arrayLevels = arrayLevels;
     }
     
@@ -58,7 +59,15 @@ public abstract class ArrayCreationNodeImpl extends NodeImpl implements ArrayCre
      */
     public void setBaseType(BaseTypeNode baseType)
     {
-        getManager().assertMutatable(this);
+            setBaseType(baseType, true);
+    }
+    
+    private void setBaseType(BaseTypeNode baseType, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.BASE_TYPE, Attribute.AccessType.STRONG_WRITE);
         if (this.baseType instanceof NodeImpl)
         {
@@ -87,7 +96,15 @@ public abstract class ArrayCreationNodeImpl extends NodeImpl implements ArrayCre
      */
     public void setArrayLevels(int arrayLevels)
     {
-        getManager().assertMutatable(this);
+            setArrayLevels(arrayLevels, true);
+    }
+    
+    private void setArrayLevels(int arrayLevels, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.ARRAY_LEVELS, Attribute.AccessType.STRONG_WRITE);
         this.arrayLevels = arrayLevels;
     }

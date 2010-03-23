@@ -38,10 +38,11 @@ public class UnqualifiedClassInstantiationNodeImpl extends ClassInstantiationNod
             AnonymousClassBodyNode body,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
-            BsjNodeManager manager)
+            BsjNodeManager manager,
+            boolean binary)
     {
-        super(constructorTypeArguments, arguments, body, startLocation, stopLocation, manager);
-        setType(type);
+        super(constructorTypeArguments, arguments, body, startLocation, stopLocation, manager, binary);
+        setType(type, false);
     }
     
     /**
@@ -60,7 +61,15 @@ public class UnqualifiedClassInstantiationNodeImpl extends ClassInstantiationNod
      */
     public void setType(DeclaredTypeNode type)
     {
-        getManager().assertMutatable(this);
+            setType(type, true);
+    }
+    
+    private void setType(DeclaredTypeNode type, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.TYPE, Attribute.AccessType.STRONG_WRITE);
         if (this.type instanceof NodeImpl)
         {

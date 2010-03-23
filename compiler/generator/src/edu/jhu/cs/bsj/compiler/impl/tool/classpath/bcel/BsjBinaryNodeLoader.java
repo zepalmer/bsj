@@ -25,7 +25,6 @@ import org.apache.log4j.Logger;
 import edu.jhu.cs.bsj.compiler.ast.AccessModifier;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 import edu.jhu.cs.bsj.compiler.ast.PrimitiveType;
-import edu.jhu.cs.bsj.compiler.ast.node.BlockNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassBodyNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassMemberListNode;
@@ -60,6 +59,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclaratorListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclaratorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableNode;
+import edu.jhu.cs.bsj.compiler.impl.utils.StringUtilities;
 import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjFileObject;
 import edu.jhu.cs.bsj.compiler.tool.filemanager.LocationManager;
 
@@ -103,29 +103,48 @@ public class BsjBinaryNodeLoader
             String className, LocationManager location) 
             throws IOException
     {
-        // locate the actual file we need to load
         BsjFileObject file = location.getJavaFile(className, Kind.CLASS, false);
-        InputStream inputStream = file.openInputStream();
-        
-        //TODO handle loading of referenced class files
-
-        // load and parse the class file into a BCEL JavaClass
-        ClassParser parser = new ClassParser(inputStream, className + Kind.CLASS.extension);
-        JavaClass clazz = parser.parse();
-
-        // TODO add isBinary field to nodes
-        
-        CompilationUnitNode retNode = factory.makeCompilationUnitNode(
-                className, 
-                buildPackageDeclarationNode(clazz), 
-                factory.makeImportListNode(),
-                factory.makeTypeDeclarationListNode(
-                        buildTypeDeclarationNode(clazz)));
-
-        return retNode;
+        return loadNodesFromBinary(file);
     }
     
-    //=========================================================================
+    /**
+     * Loads a binary compilation unit from the specified file object.
+     * @param file The file from which to load the class.
+     * @return The loaded class.
+     * @throws IOException If an I/O error occurs.
+     */
+    public CompilationUnitNode loadNodesFromBinary(BsjFileObject file)
+    		throws IOException
+	{
+        boolean binary = this.factory.getBinary();
+    	this.factory.setBinary(true);
+    	
+    	try
+    	{
+	        // locate the actual file we need to load
+	        InputStream inputStream = file.openInputStream();
+	        
+	        //TODO handle loading of referenced class files
+	
+	        // load and parse the class file into a BCEL JavaClass
+	        ClassParser parser = new ClassParser(inputStream, file.getSimpleName());
+	        JavaClass clazz = parser.parse();
+	
+	        CompilationUnitNode retNode = factory.makeCompilationUnitNode(
+	                StringUtilities.removeSuffix(file.getSimpleName(), '.'), 
+	                buildPackageDeclarationNode(clazz), 
+	                factory.makeImportListNode(),
+	                factory.makeTypeDeclarationListNode(
+	                        buildTypeDeclarationNode(clazz)));
+	
+	        return retNode;
+    	} finally
+    	{
+    		this.factory.setBinary(binary);
+    	}
+	}
+
+	//=========================================================================
     // Private methods for constructing AST nodes.
     //=========================================================================
 
@@ -480,7 +499,7 @@ public class BsjBinaryNodeLoader
     {
         MethodDeclarationNode retNode = 
             factory.makeMethodDeclarationNode(
-                buildEmptyBlockNode(), 
+                null, 
                 buildMethodModifiersNode(method), 
                 factory.makeIdentifierNode(method.getName()), 
                 buildVariableListNode(method), 
@@ -645,11 +664,6 @@ public class BsjBinaryNodeLoader
         }
         
         return factory.makePrimitiveTypeNode(primitiveType);
-    }
-
-    private BlockNode buildEmptyBlockNode()
-    {
-        return factory.makeBlockNode(factory.makeBlockStatementListNode());
     }
 
     private ClassModifiersNode buildClassModifiersNode(JavaClass clazz)

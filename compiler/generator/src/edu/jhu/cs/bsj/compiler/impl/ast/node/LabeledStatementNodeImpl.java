@@ -39,11 +39,12 @@ public class LabeledStatementNodeImpl extends NodeImpl implements LabeledStateme
             StatementNode statement,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
-            BsjNodeManager manager)
+            BsjNodeManager manager,
+            boolean binary)
     {
-        super(startLocation, stopLocation, manager);
-        setLabel(label);
-        setStatement(statement);
+        super(startLocation, stopLocation, manager, binary);
+        setLabel(label, false);
+        setStatement(statement, false);
     }
     
     /**
@@ -62,7 +63,15 @@ public class LabeledStatementNodeImpl extends NodeImpl implements LabeledStateme
      */
     public void setLabel(IdentifierNode label)
     {
-        getManager().assertMutatable(this);
+            setLabel(label, true);
+    }
+    
+    private void setLabel(IdentifierNode label, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.LABEL, Attribute.AccessType.STRONG_WRITE);
         if (this.label instanceof NodeImpl)
         {
@@ -91,7 +100,15 @@ public class LabeledStatementNodeImpl extends NodeImpl implements LabeledStateme
      */
     public void setStatement(StatementNode statement)
     {
-        getManager().assertMutatable(this);
+            setStatement(statement, true);
+    }
+    
+    private void setStatement(StatementNode statement, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.STATEMENT, Attribute.AccessType.STRONG_WRITE);
         if (this.statement instanceof NodeImpl)
         {

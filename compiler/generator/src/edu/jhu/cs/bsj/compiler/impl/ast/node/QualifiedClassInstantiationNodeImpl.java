@@ -51,12 +51,13 @@ public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeI
             AnonymousClassBodyNode body,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
-            BsjNodeManager manager)
+            BsjNodeManager manager,
+            boolean binary)
     {
-        super(constructorTypeArguments, arguments, body, startLocation, stopLocation, manager);
-        setEnclosingExpression(enclosingExpression);
-        setIdentifier(identifier);
-        setTypeArguments(typeArguments);
+        super(constructorTypeArguments, arguments, body, startLocation, stopLocation, manager, binary);
+        setEnclosingExpression(enclosingExpression, false);
+        setIdentifier(identifier, false);
+        setTypeArguments(typeArguments, false);
     }
     
     /**
@@ -75,7 +76,15 @@ public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeI
      */
     public void setEnclosingExpression(ExpressionNode enclosingExpression)
     {
-        getManager().assertMutatable(this);
+            setEnclosingExpression(enclosingExpression, true);
+    }
+    
+    private void setEnclosingExpression(ExpressionNode enclosingExpression, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.ENCLOSING_EXPRESSION, Attribute.AccessType.STRONG_WRITE);
         if (this.enclosingExpression instanceof NodeImpl)
         {
@@ -104,7 +113,15 @@ public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeI
      */
     public void setIdentifier(IdentifierNode identifier)
     {
-        getManager().assertMutatable(this);
+            setIdentifier(identifier, true);
+    }
+    
+    private void setIdentifier(IdentifierNode identifier, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.STRONG_WRITE);
         if (this.identifier instanceof NodeImpl)
         {
@@ -133,7 +150,15 @@ public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeI
      */
     public void setTypeArguments(TypeArgumentListNode typeArguments)
     {
-        getManager().assertMutatable(this);
+            setTypeArguments(typeArguments, true);
+    }
+    
+    private void setTypeArguments(TypeArgumentListNode typeArguments, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.TYPE_ARGUMENTS, Attribute.AccessType.STRONG_WRITE);
         if (this.typeArguments instanceof NodeImpl)
         {

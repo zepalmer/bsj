@@ -24,9 +24,10 @@ public class ClassMemberMetaprogramAnchorNodeImpl extends MetaprogramAnchorNodeI
             MetaprogramNode metaprogram,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
-            BsjNodeManager manager)
+            BsjNodeManager manager,
+            boolean binary)
     {
-        super(replacement, metaprogram, startLocation, stopLocation, manager);
+        super(replacement, metaprogram, startLocation, stopLocation, manager, binary);
     }
     
     /**

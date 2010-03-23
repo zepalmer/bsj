@@ -46,12 +46,13 @@ public class FieldDeclarationNodeImpl extends NodeImpl implements FieldDeclarati
             JavadocNode javadoc,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
-            BsjNodeManager manager)
+            BsjNodeManager manager,
+            boolean binary)
     {
-        super(startLocation, stopLocation, manager);
-        setModifiers(modifiers);
-        setDeclarators(declarators);
-        setJavadoc(javadoc);
+        super(startLocation, stopLocation, manager, binary);
+        setModifiers(modifiers, false);
+        setDeclarators(declarators, false);
+        setJavadoc(javadoc, false);
     }
     
     /**
@@ -70,7 +71,15 @@ public class FieldDeclarationNodeImpl extends NodeImpl implements FieldDeclarati
      */
     public void setModifiers(FieldModifiersNode modifiers)
     {
-        getManager().assertMutatable(this);
+            setModifiers(modifiers, true);
+    }
+    
+    private void setModifiers(FieldModifiersNode modifiers, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.MODIFIERS, Attribute.AccessType.STRONG_WRITE);
         if (this.modifiers instanceof NodeImpl)
         {
@@ -99,7 +108,15 @@ public class FieldDeclarationNodeImpl extends NodeImpl implements FieldDeclarati
      */
     public void setDeclarators(VariableDeclaratorListNode declarators)
     {
-        getManager().assertMutatable(this);
+            setDeclarators(declarators, true);
+    }
+    
+    private void setDeclarators(VariableDeclaratorListNode declarators, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.DECLARATORS, Attribute.AccessType.STRONG_WRITE);
         if (this.declarators instanceof NodeImpl)
         {
@@ -128,7 +145,15 @@ public class FieldDeclarationNodeImpl extends NodeImpl implements FieldDeclarati
      */
     public void setJavadoc(JavadocNode javadoc)
     {
-        getManager().assertMutatable(this);
+            setJavadoc(javadoc, true);
+    }
+    
+    private void setJavadoc(JavadocNode javadoc, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.JAVADOC, Attribute.AccessType.STRONG_WRITE);
         if (this.javadoc instanceof NodeImpl)
         {

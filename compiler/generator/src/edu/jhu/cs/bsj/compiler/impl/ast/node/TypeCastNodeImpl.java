@@ -39,11 +39,12 @@ public class TypeCastNodeImpl extends NodeImpl implements TypeCastNode
             TypeNode type,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
-            BsjNodeManager manager)
+            BsjNodeManager manager,
+            boolean binary)
     {
-        super(startLocation, stopLocation, manager);
-        setExpression(expression);
-        setType(type);
+        super(startLocation, stopLocation, manager, binary);
+        setExpression(expression, false);
+        setType(type, false);
     }
     
     /**
@@ -62,7 +63,15 @@ public class TypeCastNodeImpl extends NodeImpl implements TypeCastNode
      */
     public void setExpression(ExpressionNode expression)
     {
-        getManager().assertMutatable(this);
+            setExpression(expression, true);
+    }
+    
+    private void setExpression(ExpressionNode expression, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.EXPRESSION, Attribute.AccessType.STRONG_WRITE);
         if (this.expression instanceof NodeImpl)
         {
@@ -91,7 +100,15 @@ public class TypeCastNodeImpl extends NodeImpl implements TypeCastNode
      */
     public void setType(TypeNode type)
     {
-        getManager().assertMutatable(this);
+            setType(type, true);
+    }
+    
+    private void setType(TypeNode type, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.TYPE, Attribute.AccessType.STRONG_WRITE);
         if (this.type instanceof NodeImpl)
         {

@@ -32,10 +32,11 @@ public class ClassBodyNodeImpl extends NodeImpl implements ClassBodyNode
             ClassMemberListNode members,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
-            BsjNodeManager manager)
+            BsjNodeManager manager,
+            boolean binary)
     {
-        super(startLocation, stopLocation, manager);
-        setMembers(members);
+        super(startLocation, stopLocation, manager, binary);
+        setMembers(members, false);
     }
     
     /**
@@ -54,7 +55,15 @@ public class ClassBodyNodeImpl extends NodeImpl implements ClassBodyNode
      */
     public void setMembers(ClassMemberListNode members)
     {
-        getManager().assertMutatable(this);
+            setMembers(members, true);
+    }
+    
+    private void setMembers(ClassMemberListNode members, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.MEMBERS, Attribute.AccessType.STRONG_WRITE);
         if (this.members instanceof NodeImpl)
         {

@@ -24,9 +24,10 @@ public class AlternateConstructorInvocationNodeImpl extends ConstructorInvocatio
             ReferenceTypeListNode typeArguments,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
-            BsjNodeManager manager)
+            BsjNodeManager manager,
+            boolean binary)
     {
-        super(arguments, typeArguments, startLocation, stopLocation, manager);
+        super(arguments, typeArguments, startLocation, stopLocation, manager, binary);
     }
     
     /**

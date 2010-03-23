@@ -31,6 +31,9 @@ public abstract class NodeImpl implements Node
     /** The BSJ node manager for this node. */
     private BsjNodeManager manager;
     
+    /** Whether or not this node originated in a binary file. */
+    private boolean binary;
+    
     private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
     {
         /** Attribute for the startLocation property. */
@@ -39,18 +42,22 @@ public abstract class NodeImpl implements Node
         STOP_LOCATION,
         /** Attribute for the manager property. */
         MANAGER,
+        /** Attribute for the binary property. */
+        BINARY,
     }
     
     /** General constructor. */
     protected NodeImpl(
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
-            BsjNodeManager manager)
+            BsjNodeManager manager,
+            boolean binary)
     {
         super();
         this.startLocation = startLocation;
         this.stopLocation = stopLocation;
         this.manager = manager;
+        this.binary = binary;
     }
     
     /**
@@ -342,5 +349,13 @@ public abstract class NodeImpl implements Node
 		}
 		
 		this.accessRecordMap.put(attribute, new AccessRecord(accessType, this.manager.getCurrentMetaprogramId()));
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	public boolean isBinary()
+	{
+		return this.binary;
 	}
 }

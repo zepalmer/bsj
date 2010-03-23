@@ -38,11 +38,12 @@ public class AssertStatementNodeImpl extends NodeImpl implements AssertStatement
             ExpressionNode messageExpression,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
-            BsjNodeManager manager)
+            BsjNodeManager manager,
+            boolean binary)
     {
-        super(startLocation, stopLocation, manager);
-        setTestExpression(testExpression);
-        setMessageExpression(messageExpression);
+        super(startLocation, stopLocation, manager, binary);
+        setTestExpression(testExpression, false);
+        setMessageExpression(messageExpression, false);
     }
     
     /**
@@ -61,7 +62,15 @@ public class AssertStatementNodeImpl extends NodeImpl implements AssertStatement
      */
     public void setTestExpression(ExpressionNode testExpression)
     {
-        getManager().assertMutatable(this);
+            setTestExpression(testExpression, true);
+    }
+    
+    private void setTestExpression(ExpressionNode testExpression, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.TEST_EXPRESSION, Attribute.AccessType.STRONG_WRITE);
         if (this.testExpression instanceof NodeImpl)
         {
@@ -90,7 +99,15 @@ public class AssertStatementNodeImpl extends NodeImpl implements AssertStatement
      */
     public void setMessageExpression(ExpressionNode messageExpression)
     {
-        getManager().assertMutatable(this);
+            setMessageExpression(messageExpression, true);
+    }
+    
+    private void setMessageExpression(ExpressionNode messageExpression, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.MESSAGE_EXPRESSION, Attribute.AccessType.STRONG_WRITE);
         if (this.messageExpression instanceof NodeImpl)
         {

@@ -21,9 +21,10 @@ public class StringLiteralNodeImpl extends LiteralNodeImpl<String> implements St
             String value,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
-            BsjNodeManager manager)
+            BsjNodeManager manager,
+            boolean binary)
     {
-        super(value, startLocation, stopLocation, manager);
+        super(value, startLocation, stopLocation, manager, binary);
     }
     
     /**

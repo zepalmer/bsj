@@ -39,11 +39,12 @@ public class VariableDeclarationNodeImpl extends NodeImpl implements VariableDec
             VariableDeclaratorListNode declarators,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
-            BsjNodeManager manager)
+            BsjNodeManager manager,
+            boolean binary)
     {
-        super(startLocation, stopLocation, manager);
-        setModifiers(modifiers);
-        setDeclarators(declarators);
+        super(startLocation, stopLocation, manager, binary);
+        setModifiers(modifiers, false);
+        setDeclarators(declarators, false);
     }
     
     /**
@@ -62,7 +63,15 @@ public class VariableDeclarationNodeImpl extends NodeImpl implements VariableDec
      */
     public void setModifiers(VariableModifiersNode modifiers)
     {
-        getManager().assertMutatable(this);
+            setModifiers(modifiers, true);
+    }
+    
+    private void setModifiers(VariableModifiersNode modifiers, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.MODIFIERS, Attribute.AccessType.STRONG_WRITE);
         if (this.modifiers instanceof NodeImpl)
         {
@@ -91,7 +100,15 @@ public class VariableDeclarationNodeImpl extends NodeImpl implements VariableDec
      */
     public void setDeclarators(VariableDeclaratorListNode declarators)
     {
-        getManager().assertMutatable(this);
+            setDeclarators(declarators, true);
+    }
+    
+    private void setDeclarators(VariableDeclaratorListNode declarators, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.DECLARATORS, Attribute.AccessType.STRONG_WRITE);
         if (this.declarators instanceof NodeImpl)
         {

@@ -36,9 +36,10 @@ public abstract class ListNodeImpl<T extends Node> extends NodeImpl implements L
             List<T> children,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
-            BsjNodeManager manager)
+            BsjNodeManager manager,
+            boolean binary)
     {
-        super(startLocation, stopLocation, manager);
+        super(startLocation, stopLocation, manager, binary);
         this.children = new ListNodeList(new ArrayList<T>(children));
     }
     
@@ -183,7 +184,10 @@ public abstract class ListNodeImpl<T extends Node> extends NodeImpl implements L
 
 		public ListNodeList(List<T> data)
 		{
-			addAll(data);
+			for (T t : data)
+			{
+				this.add(this.size(), t, false);
+			}
 		}
 		
 		/**
@@ -314,11 +318,13 @@ public abstract class ListNodeImpl<T extends Node> extends NodeImpl implements L
 			elementRemoved(t);
 			return t;
 		}
-
-		@Override
-		public void add(int index, T element)
+		
+		private void add(int index, T element, boolean checkPermission)
 		{
-			getManager().assertInsertable(ListNodeImpl.this);
+			if (checkPermission)
+			{
+				getManager().assertInsertable(ListNodeImpl.this);
+			}
 			
 			this.beforeAttributes.add(index, new ListAttribute());
 			this.presentAttributes.add(index, new ListAttribute());
@@ -329,6 +335,12 @@ public abstract class ListNodeImpl<T extends Node> extends NodeImpl implements L
 			writePresentAttribute(index);
 			writeBetweenAttribute(index+1, element);
 			writeSizeAttribute();
+		}
+
+		@Override
+		public void add(int index, T element)
+		{
+			add(index, element, true);
 		}
 
 		@Override

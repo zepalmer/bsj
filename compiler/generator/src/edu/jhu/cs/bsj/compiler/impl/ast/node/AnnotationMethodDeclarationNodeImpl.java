@@ -60,14 +60,15 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
             JavadocNode javadoc,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
-            BsjNodeManager manager)
+            BsjNodeManager manager,
+            boolean binary)
     {
-        super(startLocation, stopLocation, manager);
-        setModifiers(modifiers);
-        setType(type);
-        setIdentifier(identifier);
-        setDefaultValue(defaultValue);
-        setJavadoc(javadoc);
+        super(startLocation, stopLocation, manager, binary);
+        setModifiers(modifiers, false);
+        setType(type, false);
+        setIdentifier(identifier, false);
+        setDefaultValue(defaultValue, false);
+        setJavadoc(javadoc, false);
     }
     
     /**
@@ -86,7 +87,15 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
      */
     public void setModifiers(AnnotationMethodModifiersNode modifiers)
     {
-        getManager().assertMutatable(this);
+            setModifiers(modifiers, true);
+    }
+    
+    private void setModifiers(AnnotationMethodModifiersNode modifiers, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.MODIFIERS, Attribute.AccessType.STRONG_WRITE);
         if (this.modifiers instanceof NodeImpl)
         {
@@ -115,7 +124,15 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
      */
     public void setType(TypeNode type)
     {
-        getManager().assertMutatable(this);
+            setType(type, true);
+    }
+    
+    private void setType(TypeNode type, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.TYPE, Attribute.AccessType.STRONG_WRITE);
         if (this.type instanceof NodeImpl)
         {
@@ -144,7 +161,15 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
      */
     public void setIdentifier(IdentifierNode identifier)
     {
-        getManager().assertMutatable(this);
+            setIdentifier(identifier, true);
+    }
+    
+    private void setIdentifier(IdentifierNode identifier, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.STRONG_WRITE);
         if (this.identifier instanceof NodeImpl)
         {
@@ -173,7 +198,15 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
      */
     public void setDefaultValue(AnnotationValueNode defaultValue)
     {
-        getManager().assertMutatable(this);
+            setDefaultValue(defaultValue, true);
+    }
+    
+    private void setDefaultValue(AnnotationValueNode defaultValue, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.DEFAULT_VALUE, Attribute.AccessType.STRONG_WRITE);
         if (this.defaultValue instanceof NodeImpl)
         {
@@ -202,7 +235,15 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
      */
     public void setJavadoc(JavadocNode javadoc)
     {
-        getManager().assertMutatable(this);
+            setJavadoc(javadoc, true);
+    }
+    
+    private void setJavadoc(JavadocNode javadoc, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.JAVADOC, Attribute.AccessType.STRONG_WRITE);
         if (this.javadoc instanceof NodeImpl)
         {

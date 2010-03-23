@@ -49,7 +49,10 @@ public class ListNodeImpl<T extends Node> extends Node implements ListNode<T>
 
 		public ListNodeList(List<T> data)
 		{
-			addAll(data);
+			for (T t : data)
+			{
+				this.add(this.size(), t, false);
+			}
 		}
 		
 		/**
@@ -180,11 +183,13 @@ public class ListNodeImpl<T extends Node> extends Node implements ListNode<T>
 			elementRemoved(t);
 			return t;
 		}
-
-		@Override
-		public void add(int index, T element)
+		
+		private void add(int index, T element, boolean checkPermission)
 		{
-			getManager().assertInsertable(ListNodeImpl.this);
+			if (checkPermission)
+			{
+				getManager().assertInsertable(ListNodeImpl.this);
+			}
 			
 			this.beforeAttributes.add(index, new ListAttribute());
 			this.presentAttributes.add(index, new ListAttribute());
@@ -195,6 +200,12 @@ public class ListNodeImpl<T extends Node> extends Node implements ListNode<T>
 			writePresentAttribute(index);
 			writeBetweenAttribute(index+1, element);
 			writeSizeAttribute();
+		}
+
+		@Override
+		public void add(int index, T element)
+		{
+			add(index, element, true);
 		}
 
 		@Override

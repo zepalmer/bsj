@@ -39,11 +39,12 @@ public class CaseNodeImpl extends NodeImpl implements CaseNode
             BlockStatementListNode statements,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
-            BsjNodeManager manager)
+            BsjNodeManager manager,
+            boolean binary)
     {
-        super(startLocation, stopLocation, manager);
-        setExpression(expression);
-        setStatements(statements);
+        super(startLocation, stopLocation, manager, binary);
+        setExpression(expression, false);
+        setStatements(statements, false);
     }
     
     /**
@@ -62,7 +63,15 @@ public class CaseNodeImpl extends NodeImpl implements CaseNode
      */
     public void setExpression(ExpressionNode expression)
     {
-        getManager().assertMutatable(this);
+            setExpression(expression, true);
+    }
+    
+    private void setExpression(ExpressionNode expression, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.EXPRESSION, Attribute.AccessType.STRONG_WRITE);
         if (this.expression instanceof NodeImpl)
         {
@@ -91,7 +100,15 @@ public class CaseNodeImpl extends NodeImpl implements CaseNode
      */
     public void setStatements(BlockStatementListNode statements)
     {
-        getManager().assertMutatable(this);
+            setStatements(statements, true);
+    }
+    
+    private void setStatements(BlockStatementListNode statements, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.STATEMENTS, Attribute.AccessType.STRONG_WRITE);
         if (this.statements instanceof NodeImpl)
         {

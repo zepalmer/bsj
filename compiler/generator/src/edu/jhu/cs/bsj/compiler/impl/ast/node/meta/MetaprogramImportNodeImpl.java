@@ -33,10 +33,11 @@ public class MetaprogramImportNodeImpl extends NodeImpl implements MetaprogramIm
             ImportNode importNode,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
-            BsjNodeManager manager)
+            BsjNodeManager manager,
+            boolean binary)
     {
-        super(startLocation, stopLocation, manager);
-        setImportNode(importNode);
+        super(startLocation, stopLocation, manager, binary);
+        setImportNode(importNode, false);
     }
     
     /**
@@ -55,7 +56,15 @@ public class MetaprogramImportNodeImpl extends NodeImpl implements MetaprogramIm
      */
     public void setImportNode(ImportNode importNode)
     {
-        getManager().assertMutatable(this);
+            setImportNode(importNode, true);
+    }
+    
+    private void setImportNode(ImportNode importNode, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.IMPORT_NODE, Attribute.AccessType.STRONG_WRITE);
         if (this.importNode instanceof NodeImpl)
         {

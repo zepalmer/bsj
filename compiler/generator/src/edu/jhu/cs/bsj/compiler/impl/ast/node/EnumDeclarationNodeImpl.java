@@ -61,14 +61,15 @@ public class EnumDeclarationNodeImpl extends NodeImpl implements EnumDeclaration
             JavadocNode javadoc,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
-            BsjNodeManager manager)
+            BsjNodeManager manager,
+            boolean binary)
     {
-        super(startLocation, stopLocation, manager);
-        setModifiers(modifiers);
-        setImplementsClause(implementsClause);
-        setBody(body);
-        setIdentifier(identifier);
-        setJavadoc(javadoc);
+        super(startLocation, stopLocation, manager, binary);
+        setModifiers(modifiers, false);
+        setImplementsClause(implementsClause, false);
+        setBody(body, false);
+        setIdentifier(identifier, false);
+        setJavadoc(javadoc, false);
     }
     
     /**
@@ -87,7 +88,15 @@ public class EnumDeclarationNodeImpl extends NodeImpl implements EnumDeclaration
      */
     public void setModifiers(EnumModifiersNode modifiers)
     {
-        getManager().assertMutatable(this);
+            setModifiers(modifiers, true);
+    }
+    
+    private void setModifiers(EnumModifiersNode modifiers, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.MODIFIERS, Attribute.AccessType.STRONG_WRITE);
         if (this.modifiers instanceof NodeImpl)
         {
@@ -116,7 +125,15 @@ public class EnumDeclarationNodeImpl extends NodeImpl implements EnumDeclaration
      */
     public void setImplementsClause(DeclaredTypeListNode implementsClause)
     {
-        getManager().assertMutatable(this);
+            setImplementsClause(implementsClause, true);
+    }
+    
+    private void setImplementsClause(DeclaredTypeListNode implementsClause, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.IMPLEMENTS_CLAUSE, Attribute.AccessType.STRONG_WRITE);
         if (this.implementsClause instanceof NodeImpl)
         {
@@ -145,7 +162,15 @@ public class EnumDeclarationNodeImpl extends NodeImpl implements EnumDeclaration
      */
     public void setBody(EnumBodyNode body)
     {
-        getManager().assertMutatable(this);
+            setBody(body, true);
+    }
+    
+    private void setBody(EnumBodyNode body, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.BODY, Attribute.AccessType.STRONG_WRITE);
         if (this.body instanceof NodeImpl)
         {
@@ -174,7 +199,15 @@ public class EnumDeclarationNodeImpl extends NodeImpl implements EnumDeclaration
      */
     public void setIdentifier(IdentifierNode identifier)
     {
-        getManager().assertMutatable(this);
+            setIdentifier(identifier, true);
+    }
+    
+    private void setIdentifier(IdentifierNode identifier, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.STRONG_WRITE);
         if (this.identifier instanceof NodeImpl)
         {
@@ -203,7 +236,15 @@ public class EnumDeclarationNodeImpl extends NodeImpl implements EnumDeclaration
      */
     public void setJavadoc(JavadocNode javadoc)
     {
-        getManager().assertMutatable(this);
+            setJavadoc(javadoc, true);
+    }
+    
+    private void setJavadoc(JavadocNode javadoc, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.JAVADOC, Attribute.AccessType.STRONG_WRITE);
         if (this.javadoc instanceof NodeImpl)
         {

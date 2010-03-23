@@ -39,11 +39,12 @@ public class WhileLoopNodeImpl extends NodeImpl implements WhileLoopNode
             StatementNode statement,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
-            BsjNodeManager manager)
+            BsjNodeManager manager,
+            boolean binary)
     {
-        super(startLocation, stopLocation, manager);
-        setCondition(condition);
-        setStatement(statement);
+        super(startLocation, stopLocation, manager, binary);
+        setCondition(condition, false);
+        setStatement(statement, false);
     }
     
     /**
@@ -62,7 +63,15 @@ public class WhileLoopNodeImpl extends NodeImpl implements WhileLoopNode
      */
     public void setCondition(ExpressionNode condition)
     {
-        getManager().assertMutatable(this);
+            setCondition(condition, true);
+    }
+    
+    private void setCondition(ExpressionNode condition, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.CONDITION, Attribute.AccessType.STRONG_WRITE);
         if (this.condition instanceof NodeImpl)
         {
@@ -91,7 +100,15 @@ public class WhileLoopNodeImpl extends NodeImpl implements WhileLoopNode
      */
     public void setStatement(StatementNode statement)
     {
-        getManager().assertMutatable(this);
+            setStatement(statement, true);
+    }
+    
+    private void setStatement(StatementNode statement, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.STATEMENT, Attribute.AccessType.STRONG_WRITE);
         if (this.statement instanceof NodeImpl)
         {

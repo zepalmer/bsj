@@ -53,13 +53,14 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
             StatementNode statement,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
-            BsjNodeManager manager)
+            BsjNodeManager manager,
+            boolean binary)
     {
-        super(startLocation, stopLocation, manager);
-        setInitializer(initializer);
-        setCondition(condition);
-        setUpdate(update);
-        setStatement(statement);
+        super(startLocation, stopLocation, manager, binary);
+        setInitializer(initializer, false);
+        setCondition(condition, false);
+        setUpdate(update, false);
+        setStatement(statement, false);
     }
     
     /**
@@ -78,7 +79,15 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
      */
     public void setInitializer(ForInitializerNode initializer)
     {
-        getManager().assertMutatable(this);
+            setInitializer(initializer, true);
+    }
+    
+    private void setInitializer(ForInitializerNode initializer, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.INITIALIZER, Attribute.AccessType.STRONG_WRITE);
         if (this.initializer instanceof NodeImpl)
         {
@@ -107,7 +116,15 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
      */
     public void setCondition(ExpressionNode condition)
     {
-        getManager().assertMutatable(this);
+            setCondition(condition, true);
+    }
+    
+    private void setCondition(ExpressionNode condition, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.CONDITION, Attribute.AccessType.STRONG_WRITE);
         if (this.condition instanceof NodeImpl)
         {
@@ -136,7 +153,15 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
      */
     public void setUpdate(StatementExpressionListNode update)
     {
-        getManager().assertMutatable(this);
+            setUpdate(update, true);
+    }
+    
+    private void setUpdate(StatementExpressionListNode update, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.UPDATE, Attribute.AccessType.STRONG_WRITE);
         if (this.update instanceof NodeImpl)
         {
@@ -165,7 +190,15 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
      */
     public void setStatement(StatementNode statement)
     {
-        getManager().assertMutatable(this);
+            setStatement(statement, true);
+    }
+    
+    private void setStatement(StatementNode statement, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.STATEMENT, Attribute.AccessType.STRONG_WRITE);
         if (this.statement instanceof NodeImpl)
         {

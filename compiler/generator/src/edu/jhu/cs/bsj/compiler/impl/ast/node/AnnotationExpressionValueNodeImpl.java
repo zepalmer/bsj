@@ -32,10 +32,11 @@ public class AnnotationExpressionValueNodeImpl extends NodeImpl implements Annot
             NonAssignmentExpressionNode expression,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
-            BsjNodeManager manager)
+            BsjNodeManager manager,
+            boolean binary)
     {
-        super(startLocation, stopLocation, manager);
-        setExpression(expression);
+        super(startLocation, stopLocation, manager, binary);
+        setExpression(expression, false);
     }
     
     /**
@@ -54,7 +55,15 @@ public class AnnotationExpressionValueNodeImpl extends NodeImpl implements Annot
      */
     public void setExpression(NonAssignmentExpressionNode expression)
     {
-        getManager().assertMutatable(this);
+            setExpression(expression, true);
+    }
+    
+    private void setExpression(NonAssignmentExpressionNode expression, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.EXPRESSION, Attribute.AccessType.STRONG_WRITE);
         if (this.expression instanceof NodeImpl)
         {

@@ -45,12 +45,13 @@ public class IfNodeImpl extends NodeImpl implements IfNode
             StatementNode elseStatement,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
-            BsjNodeManager manager)
+            BsjNodeManager manager,
+            boolean binary)
     {
-        super(startLocation, stopLocation, manager);
-        setCondition(condition);
-        setThenStatement(thenStatement);
-        setElseStatement(elseStatement);
+        super(startLocation, stopLocation, manager, binary);
+        setCondition(condition, false);
+        setThenStatement(thenStatement, false);
+        setElseStatement(elseStatement, false);
     }
     
     /**
@@ -69,7 +70,15 @@ public class IfNodeImpl extends NodeImpl implements IfNode
      */
     public void setCondition(ExpressionNode condition)
     {
-        getManager().assertMutatable(this);
+            setCondition(condition, true);
+    }
+    
+    private void setCondition(ExpressionNode condition, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.CONDITION, Attribute.AccessType.STRONG_WRITE);
         if (this.condition instanceof NodeImpl)
         {
@@ -98,7 +107,15 @@ public class IfNodeImpl extends NodeImpl implements IfNode
      */
     public void setThenStatement(StatementNode thenStatement)
     {
-        getManager().assertMutatable(this);
+            setThenStatement(thenStatement, true);
+    }
+    
+    private void setThenStatement(StatementNode thenStatement, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.THEN_STATEMENT, Attribute.AccessType.STRONG_WRITE);
         if (this.thenStatement instanceof NodeImpl)
         {
@@ -127,7 +144,15 @@ public class IfNodeImpl extends NodeImpl implements IfNode
      */
     public void setElseStatement(StatementNode elseStatement)
     {
-        getManager().assertMutatable(this);
+            setElseStatement(elseStatement, true);
+    }
+    
+    private void setElseStatement(StatementNode elseStatement, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.ELSE_STATEMENT, Attribute.AccessType.STRONG_WRITE);
         if (this.elseStatement instanceof NodeImpl)
         {

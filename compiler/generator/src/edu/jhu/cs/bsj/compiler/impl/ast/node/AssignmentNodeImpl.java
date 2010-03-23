@@ -45,12 +45,13 @@ public class AssignmentNodeImpl extends NodeImpl implements AssignmentNode
             ExpressionNode expression,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
-            BsjNodeManager manager)
+            BsjNodeManager manager,
+            boolean binary)
     {
-        super(startLocation, stopLocation, manager);
-        setVariable(variable);
+        super(startLocation, stopLocation, manager, binary);
+        setVariable(variable, false);
         this.operator = operator;
-        setExpression(expression);
+        setExpression(expression, false);
     }
     
     /**
@@ -69,7 +70,15 @@ public class AssignmentNodeImpl extends NodeImpl implements AssignmentNode
      */
     public void setVariable(ExpressionNode variable)
     {
-        getManager().assertMutatable(this);
+            setVariable(variable, true);
+    }
+    
+    private void setVariable(ExpressionNode variable, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.VARIABLE, Attribute.AccessType.STRONG_WRITE);
         if (this.variable instanceof NodeImpl)
         {
@@ -98,7 +107,15 @@ public class AssignmentNodeImpl extends NodeImpl implements AssignmentNode
      */
     public void setOperator(AssignmentOperator operator)
     {
-        getManager().assertMutatable(this);
+            setOperator(operator, true);
+    }
+    
+    private void setOperator(AssignmentOperator operator, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.OPERATOR, Attribute.AccessType.STRONG_WRITE);
         this.operator = operator;
     }
@@ -119,7 +136,15 @@ public class AssignmentNodeImpl extends NodeImpl implements AssignmentNode
      */
     public void setExpression(ExpressionNode expression)
     {
-        getManager().assertMutatable(this);
+            setExpression(expression, true);
+    }
+    
+    private void setExpression(ExpressionNode expression, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.EXPRESSION, Attribute.AccessType.STRONG_WRITE);
         if (this.expression instanceof NodeImpl)
         {

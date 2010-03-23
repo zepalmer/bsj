@@ -44,12 +44,13 @@ public class ConditionalExpressionNodeImpl extends NodeImpl implements Condition
             ExpressionNode falseExpression,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
-            BsjNodeManager manager)
+            BsjNodeManager manager,
+            boolean binary)
     {
-        super(startLocation, stopLocation, manager);
-        setCondition(condition);
-        setTrueExpression(trueExpression);
-        setFalseExpression(falseExpression);
+        super(startLocation, stopLocation, manager, binary);
+        setCondition(condition, false);
+        setTrueExpression(trueExpression, false);
+        setFalseExpression(falseExpression, false);
     }
     
     /**
@@ -68,7 +69,15 @@ public class ConditionalExpressionNodeImpl extends NodeImpl implements Condition
      */
     public void setCondition(ExpressionNode condition)
     {
-        getManager().assertMutatable(this);
+            setCondition(condition, true);
+    }
+    
+    private void setCondition(ExpressionNode condition, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.CONDITION, Attribute.AccessType.STRONG_WRITE);
         if (this.condition instanceof NodeImpl)
         {
@@ -97,7 +106,15 @@ public class ConditionalExpressionNodeImpl extends NodeImpl implements Condition
      */
     public void setTrueExpression(ExpressionNode trueExpression)
     {
-        getManager().assertMutatable(this);
+            setTrueExpression(trueExpression, true);
+    }
+    
+    private void setTrueExpression(ExpressionNode trueExpression, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.TRUE_EXPRESSION, Attribute.AccessType.STRONG_WRITE);
         if (this.trueExpression instanceof NodeImpl)
         {
@@ -126,7 +143,15 @@ public class ConditionalExpressionNodeImpl extends NodeImpl implements Condition
      */
     public void setFalseExpression(ExpressionNode falseExpression)
     {
-        getManager().assertMutatable(this);
+            setFalseExpression(falseExpression, true);
+    }
+    
+    private void setFalseExpression(ExpressionNode falseExpression, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.FALSE_EXPRESSION, Attribute.AccessType.STRONG_WRITE);
         if (this.falseExpression instanceof NodeImpl)
         {

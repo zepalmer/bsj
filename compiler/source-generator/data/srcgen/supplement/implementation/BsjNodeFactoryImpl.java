@@ -19,6 +19,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
 
 	/** The node manager to provide to all nodes. */
 	private BsjNodeManager manager;
+	
+	/** Whether or not to mark created nodes as binary nodes. */
+	private boolean binary;
 
 	/**
 	 * Creates a new node factory.
@@ -32,6 +35,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
 	{
 		this.packageNodeCallback = packageNodeCallback;
 		this.manager = manager;
+		this.binary = false;
 	}
 
 	/**
@@ -78,6 +82,24 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
 	public void setStopSourceLocation(BsjSourceLocation stopLocation)
 	{
 		this.stopLocation = stopLocation;
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean getBinary()
+	{
+		return this.binary;
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void setBinary(boolean binary)
+	{
+		this.binary = binary;
 	}
 
 	// MANUALLY SPECIFIED MAKE METHODS ///////////////////////////////////////

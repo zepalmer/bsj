@@ -32,10 +32,11 @@ public class ParenthesizedExpressionNodeImpl extends NodeImpl implements Parenth
             ExpressionNode expression,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
-            BsjNodeManager manager)
+            BsjNodeManager manager,
+            boolean binary)
     {
-        super(startLocation, stopLocation, manager);
-        setExpression(expression);
+        super(startLocation, stopLocation, manager, binary);
+        setExpression(expression, false);
     }
     
     /**
@@ -54,7 +55,15 @@ public class ParenthesizedExpressionNodeImpl extends NodeImpl implements Parenth
      */
     public void setExpression(ExpressionNode expression)
     {
-        getManager().assertMutatable(this);
+            setExpression(expression, true);
+    }
+    
+    private void setExpression(ExpressionNode expression, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.EXPRESSION, Attribute.AccessType.STRONG_WRITE);
         if (this.expression instanceof NodeImpl)
         {

@@ -35,10 +35,11 @@ public class ArrayInstantiatorCreationNodeImpl extends ArrayCreationNodeImpl imp
             int arrayLevels,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
-            BsjNodeManager manager)
+            BsjNodeManager manager,
+            boolean binary)
     {
-        super(baseType, arrayLevels, startLocation, stopLocation, manager);
-        setDimExpressions(dimExpressions);
+        super(baseType, arrayLevels, startLocation, stopLocation, manager, binary);
+        setDimExpressions(dimExpressions, false);
     }
     
     /**
@@ -57,7 +58,15 @@ public class ArrayInstantiatorCreationNodeImpl extends ArrayCreationNodeImpl imp
      */
     public void setDimExpressions(ExpressionListNode dimExpressions)
     {
-        getManager().assertMutatable(this);
+            setDimExpressions(dimExpressions, true);
+    }
+    
+    private void setDimExpressions(ExpressionListNode dimExpressions, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.DIM_EXPRESSIONS, Attribute.AccessType.STRONG_WRITE);
         if (this.dimExpressions instanceof NodeImpl)
         {

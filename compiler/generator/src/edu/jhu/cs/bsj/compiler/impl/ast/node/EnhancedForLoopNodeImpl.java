@@ -46,12 +46,13 @@ public class EnhancedForLoopNodeImpl extends NodeImpl implements EnhancedForLoop
             StatementNode statement,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
-            BsjNodeManager manager)
+            BsjNodeManager manager,
+            boolean binary)
     {
-        super(startLocation, stopLocation, manager);
-        setVariable(variable);
-        setExpression(expression);
-        setStatement(statement);
+        super(startLocation, stopLocation, manager, binary);
+        setVariable(variable, false);
+        setExpression(expression, false);
+        setStatement(statement, false);
     }
     
     /**
@@ -70,7 +71,15 @@ public class EnhancedForLoopNodeImpl extends NodeImpl implements EnhancedForLoop
      */
     public void setVariable(VariableNode variable)
     {
-        getManager().assertMutatable(this);
+            setVariable(variable, true);
+    }
+    
+    private void setVariable(VariableNode variable, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.VARIABLE, Attribute.AccessType.STRONG_WRITE);
         if (this.variable instanceof NodeImpl)
         {
@@ -99,7 +108,15 @@ public class EnhancedForLoopNodeImpl extends NodeImpl implements EnhancedForLoop
      */
     public void setExpression(ExpressionNode expression)
     {
-        getManager().assertMutatable(this);
+            setExpression(expression, true);
+    }
+    
+    private void setExpression(ExpressionNode expression, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.EXPRESSION, Attribute.AccessType.STRONG_WRITE);
         if (this.expression instanceof NodeImpl)
         {
@@ -128,7 +145,15 @@ public class EnhancedForLoopNodeImpl extends NodeImpl implements EnhancedForLoop
      */
     public void setStatement(StatementNode statement)
     {
-        getManager().assertMutatable(this);
+            setStatement(statement, true);
+    }
+    
+    private void setStatement(StatementNode statement, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.STATEMENT, Attribute.AccessType.STRONG_WRITE);
         if (this.statement instanceof NodeImpl)
         {

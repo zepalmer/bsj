@@ -20,9 +20,10 @@ public class VoidTypeNodeImpl extends NodeImpl implements VoidTypeNode
     public VoidTypeNodeImpl(
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
-            BsjNodeManager manager)
+            BsjNodeManager manager,
+            boolean binary)
     {
-        super(startLocation, stopLocation, manager);
+        super(startLocation, stopLocation, manager, binary);
     }
     
     /**

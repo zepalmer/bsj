@@ -28,9 +28,10 @@ public abstract class LiteralNodeImpl<T> extends NodeImpl implements LiteralNode
             T value,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
-            BsjNodeManager manager)
+            BsjNodeManager manager,
+            boolean binary)
     {
-        super(startLocation, stopLocation, manager);
+        super(startLocation, stopLocation, manager, binary);
         this.value = value;
     }
     
@@ -50,7 +51,15 @@ public abstract class LiteralNodeImpl<T> extends NodeImpl implements LiteralNode
      */
     public void setValue(T value)
     {
-        getManager().assertMutatable(this);
+            setValue(value, true);
+    }
+    
+    private void setValue(T value, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.VALUE, Attribute.AccessType.STRONG_WRITE);
         this.value = value;
     }

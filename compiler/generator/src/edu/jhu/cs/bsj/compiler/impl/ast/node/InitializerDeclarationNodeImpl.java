@@ -38,11 +38,12 @@ public class InitializerDeclarationNodeImpl extends NodeImpl implements Initiali
             BlockNode body,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
-            BsjNodeManager manager)
+            BsjNodeManager manager,
+            boolean binary)
     {
-        super(startLocation, stopLocation, manager);
+        super(startLocation, stopLocation, manager, binary);
         this.staticInitializer = staticInitializer;
-        setBody(body);
+        setBody(body, false);
     }
     
     /**
@@ -61,7 +62,15 @@ public class InitializerDeclarationNodeImpl extends NodeImpl implements Initiali
      */
     public void setStaticInitializer(boolean staticInitializer)
     {
-        getManager().assertMutatable(this);
+            setStaticInitializer(staticInitializer, true);
+    }
+    
+    private void setStaticInitializer(boolean staticInitializer, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.STATIC_INITIALIZER, Attribute.AccessType.STRONG_WRITE);
         this.staticInitializer = staticInitializer;
     }
@@ -82,7 +91,15 @@ public class InitializerDeclarationNodeImpl extends NodeImpl implements Initiali
      */
     public void setBody(BlockNode body)
     {
-        getManager().assertMutatable(this);
+            setBody(body, true);
+    }
+    
+    private void setBody(BlockNode body, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.BODY, Attribute.AccessType.STRONG_WRITE);
         if (this.body instanceof NodeImpl)
         {

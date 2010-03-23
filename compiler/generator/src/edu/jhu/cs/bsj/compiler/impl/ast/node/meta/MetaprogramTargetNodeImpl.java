@@ -33,10 +33,11 @@ public class MetaprogramTargetNodeImpl extends NodeImpl implements MetaprogramTa
             IdentifierListNode targets,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
-            BsjNodeManager manager)
+            BsjNodeManager manager,
+            boolean binary)
     {
-        super(startLocation, stopLocation, manager);
-        setTargets(targets);
+        super(startLocation, stopLocation, manager, binary);
+        setTargets(targets, false);
     }
     
     /**
@@ -55,7 +56,15 @@ public class MetaprogramTargetNodeImpl extends NodeImpl implements MetaprogramTa
      */
     public void setTargets(IdentifierListNode targets)
     {
-        getManager().assertMutatable(this);
+            setTargets(targets, true);
+    }
+    
+    private void setTargets(IdentifierListNode targets, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.TARGETS, Attribute.AccessType.STRONG_WRITE);
         if (this.targets instanceof NodeImpl)
         {

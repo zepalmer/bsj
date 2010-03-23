@@ -21,9 +21,10 @@ public class LongLiteralNodeImpl extends LiteralNodeImpl<Long> implements LongLi
             Long value,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
-            BsjNodeManager manager)
+            BsjNodeManager manager,
+            boolean binary)
     {
-        super(value, startLocation, stopLocation, manager);
+        super(value, startLocation, stopLocation, manager, binary);
     }
     
     /**

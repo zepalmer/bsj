@@ -33,10 +33,11 @@ public class MetaprogramDependsNodeImpl extends NodeImpl implements MetaprogramD
             NameListNode targetNames,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
-            BsjNodeManager manager)
+            BsjNodeManager manager,
+            boolean binary)
     {
-        super(startLocation, stopLocation, manager);
-        setTargetNames(targetNames);
+        super(startLocation, stopLocation, manager, binary);
+        setTargetNames(targetNames, false);
     }
     
     /**
@@ -55,7 +56,15 @@ public class MetaprogramDependsNodeImpl extends NodeImpl implements MetaprogramD
      */
     public void setTargetNames(NameListNode targetNames)
     {
-        getManager().assertMutatable(this);
+            setTargetNames(targetNames, true);
+    }
+    
+    private void setTargetNames(NameListNode targetNames, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.TARGET_NAMES, Attribute.AccessType.STRONG_WRITE);
         if (this.targetNames instanceof NodeImpl)
         {

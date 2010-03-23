@@ -37,11 +37,12 @@ public abstract class MetaprogramAnchorNodeImpl<T extends Node> extends NodeImpl
             MetaprogramNode metaprogram,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
-            BsjNodeManager manager)
+            BsjNodeManager manager,
+            boolean binary)
     {
-        super(startLocation, stopLocation, manager);
+        super(startLocation, stopLocation, manager, binary);
         this.replacement = replacement;
-        setMetaprogram(metaprogram);
+        setMetaprogram(metaprogram, false);
     }
     
     /**
@@ -60,7 +61,15 @@ public abstract class MetaprogramAnchorNodeImpl<T extends Node> extends NodeImpl
      */
     public void setMetaprogram(MetaprogramNode metaprogram)
     {
-        getManager().assertMutatable(this);
+            setMetaprogram(metaprogram, true);
+    }
+    
+    private void setMetaprogram(MetaprogramNode metaprogram, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.METAPROGRAM, Attribute.AccessType.STRONG_WRITE);
         if (this.metaprogram instanceof NodeImpl)
         {

@@ -46,9 +46,10 @@ public class AnnotationModifiersNodeImpl extends ModifiersNodeImpl implements An
             AnnotationListNode annotations,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
-            BsjNodeManager manager)
+            BsjNodeManager manager,
+            boolean binary)
     {
-        super(annotations, startLocation, stopLocation, manager);
+        super(annotations, startLocation, stopLocation, manager, binary);
         this.access = access;
         this.staticFlag = staticFlag;
         this.strictfpFlag = strictfpFlag;
@@ -70,7 +71,15 @@ public class AnnotationModifiersNodeImpl extends ModifiersNodeImpl implements An
      */
     public void setAccess(AccessModifier access)
     {
-        getManager().assertMutatable(this);
+            setAccess(access, true);
+    }
+    
+    private void setAccess(AccessModifier access, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.ACCESS, Attribute.AccessType.STRONG_WRITE);
         this.access = access;
     }
@@ -91,7 +100,15 @@ public class AnnotationModifiersNodeImpl extends ModifiersNodeImpl implements An
      */
     public void setStaticFlag(boolean staticFlag)
     {
-        getManager().assertMutatable(this);
+            setStaticFlag(staticFlag, true);
+    }
+    
+    private void setStaticFlag(boolean staticFlag, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.STATIC_FLAG, Attribute.AccessType.STRONG_WRITE);
         this.staticFlag = staticFlag;
     }
@@ -112,7 +129,15 @@ public class AnnotationModifiersNodeImpl extends ModifiersNodeImpl implements An
      */
     public void setStrictfpFlag(boolean strictfpFlag)
     {
-        getManager().assertMutatable(this);
+            setStrictfpFlag(strictfpFlag, true);
+    }
+    
+    private void setStrictfpFlag(boolean strictfpFlag, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.STRICTFP_FLAG, Attribute.AccessType.STRONG_WRITE);
         this.strictfpFlag = strictfpFlag;
     }

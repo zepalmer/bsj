@@ -32,10 +32,11 @@ public class AnnotationAnnotationValueNodeImpl extends NodeImpl implements Annot
             AnnotationNode annotation,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
-            BsjNodeManager manager)
+            BsjNodeManager manager,
+            boolean binary)
     {
-        super(startLocation, stopLocation, manager);
-        setAnnotation(annotation);
+        super(startLocation, stopLocation, manager, binary);
+        setAnnotation(annotation, false);
     }
     
     /**
@@ -54,7 +55,15 @@ public class AnnotationAnnotationValueNodeImpl extends NodeImpl implements Annot
      */
     public void setAnnotation(AnnotationNode annotation)
     {
-        getManager().assertMutatable(this);
+            setAnnotation(annotation, true);
+    }
+    
+    private void setAnnotation(AnnotationNode annotation, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.ANNOTATION, Attribute.AccessType.STRONG_WRITE);
         if (this.annotation instanceof NodeImpl)
         {

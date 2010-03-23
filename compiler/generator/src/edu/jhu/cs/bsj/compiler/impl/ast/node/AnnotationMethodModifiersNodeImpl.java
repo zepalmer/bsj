@@ -22,9 +22,10 @@ public class AnnotationMethodModifiersNodeImpl extends ModifiersNodeImpl impleme
             AnnotationListNode annotations,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
-            BsjNodeManager manager)
+            BsjNodeManager manager,
+            boolean binary)
     {
-        super(annotations, startLocation, stopLocation, manager);
+        super(annotations, startLocation, stopLocation, manager, binary);
     }
     
     /**

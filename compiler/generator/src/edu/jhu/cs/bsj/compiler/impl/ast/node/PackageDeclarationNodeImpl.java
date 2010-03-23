@@ -39,11 +39,12 @@ public class PackageDeclarationNodeImpl extends NodeImpl implements PackageDecla
             AnnotationListNode annotations,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
-            BsjNodeManager manager)
+            BsjNodeManager manager,
+            boolean binary)
     {
-        super(startLocation, stopLocation, manager);
-        setName(name);
-        setAnnotations(annotations);
+        super(startLocation, stopLocation, manager, binary);
+        setName(name, false);
+        setAnnotations(annotations, false);
     }
     
     /**
@@ -62,7 +63,15 @@ public class PackageDeclarationNodeImpl extends NodeImpl implements PackageDecla
      */
     public void setName(NameNode name)
     {
-        getManager().assertMutatable(this);
+            setName(name, true);
+    }
+    
+    private void setName(NameNode name, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.NAME, Attribute.AccessType.STRONG_WRITE);
         if (this.name instanceof NodeImpl)
         {
@@ -91,7 +100,15 @@ public class PackageDeclarationNodeImpl extends NodeImpl implements PackageDecla
      */
     public void setAnnotations(AnnotationListNode annotations)
     {
-        getManager().assertMutatable(this);
+            setAnnotations(annotations, true);
+    }
+    
+    private void setAnnotations(AnnotationListNode annotations, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.ANNOTATIONS, Attribute.AccessType.STRONG_WRITE);
         if (this.annotations instanceof NodeImpl)
         {

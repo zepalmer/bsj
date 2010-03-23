@@ -15,8 +15,10 @@ import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
 import edu.jhu.cs.bsj.compiler.ast.node.PackageNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.dependency.DependencyManager;
+import edu.jhu.cs.bsj.compiler.impl.tool.compiler.task.AbstractCompilationUnitBuilderTask;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.task.BsjCompilerTask;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.task.ExecuteMetaprogramTask;
+import edu.jhu.cs.bsj.compiler.impl.tool.compiler.task.LoadBinaryCompilationUnitTask;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.task.ParseCompilationUnitTask;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.task.TaskPriority;
 import edu.jhu.cs.bsj.compiler.tool.BsjToolkit;
@@ -80,7 +82,7 @@ public class MetacompilationManager implements MetacompilationContext
 		this.observedBinaryNames = new HashSet<String>();
 		this.priorityQueue = new PriorityQueue<BsjCompilerTask>();
 		this.dependencyManager = new DependencyManager();
-		
+
 		this.toolkit = toolkit;
 		this.nodeManager = nodeManager;
 		this.diagnosticListener = diagnosticListener;
@@ -120,17 +122,23 @@ public class MetacompilationManager implements MetacompilationContext
 			return false;
 		}
 
-		// TODO: what if the file is a binary?
-
 		observedBinaryNames.add(binaryName);
-		
-		ParseCompilationUnitTask parseCompilationUnitTask = new ParseCompilationUnitTask(file);
-		this.registerTask(parseCompilationUnitTask);
+
+		// pick a task based on whether or not the file appears to be a binary
+		AbstractCompilationUnitBuilderTask task;
+		if (file.getName().endsWith(".class"))
+		{
+			task = new LoadBinaryCompilationUnitTask(file);
+		} else
+		{
+			task = new ParseCompilationUnitTask(file);
+		}
+		this.registerTask(task);
 		return true;
 	}
 
 	/**
-	 * Adds a compilation unit target.  This method does not schedule the file for parsing in the queue but rather
+	 * Adds a compilation unit target. This method does not schedule the file for parsing in the queue but rather
 	 * performs the immediate parsing and metaprogram extraction of the named compilation unit.
 	 * 
 	 * @param file The file to load.
@@ -141,10 +149,10 @@ public class MetacompilationManager implements MetacompilationContext
 		String binaryName = file.inferBinaryName();
 		if (observedBinaryNames.contains(binaryName))
 		{
-			// Already have that target.  Let's go find it.
+			// Already have that target. Let's go find it.
 			String compilationUnitName;
 			PackageNode packageNode = rootPackage;
-			if (binaryName.indexOf('.')!=-1)
+			if (binaryName.indexOf('.') != -1)
 			{
 				String packageName;
 				packageName = binaryName.substring(0, binaryName.lastIndexOf('.'));
@@ -156,9 +164,9 @@ public class MetacompilationManager implements MetacompilationContext
 			}
 			return packageNode.getCompilationUnit(compilationUnitName);
 		}
-		
+
 		observedBinaryNames.add(binaryName);
-		
+
 		// Rather than blindly executing tasks, let's proxy out task addition so we can actively execute the ones we
 		// want
 		final PriorityQueue<BsjCompilerTask> queue = new PriorityQueue<BsjCompilerTask>();
@@ -175,7 +183,7 @@ public class MetacompilationManager implements MetacompilationContext
 					MetacompilationManager.this.registerTask(task);
 				}
 			}
-			
+
 			@Override
 			public PackageNode getRootPackage()
 			{
@@ -199,14 +207,24 @@ public class MetacompilationManager implements MetacompilationContext
 			{
 				return MetacompilationManager.this.getDiagnosticListener();
 			}
-			
+
 			@Override
 			public DependencyManager getDependencyManager()
 			{
 				return MetacompilationManager.this.getDependencyManager();
 			}
 		};
-		queue.offer(new ParseCompilationUnitTask(file));
+		
+		AbstractCompilationUnitBuilderTask task;
+		if (file.getSimpleName().endsWith(".class"))
+		{
+			task = new LoadBinaryCompilationUnitTask(file);
+		} else
+		{
+			task = new ParseCompilationUnitTask(file);
+		}
+		queue.offer(task);
+		
 		while (queue.size() > 0)
 		{
 			try
@@ -218,10 +236,10 @@ public class MetacompilationManager implements MetacompilationContext
 				throw new IllegalStateException(e);
 			}
 		}
-		
+
 		String compilationUnitName;
 		PackageNode packageNode = rootPackage;
-		if (binaryName.indexOf('.')!=-1)
+		if (binaryName.indexOf('.') != -1)
 		{
 			String packageName;
 			packageName = binaryName.substring(0, binaryName.lastIndexOf('.'));
@@ -300,7 +318,7 @@ public class MetacompilationManager implements MetacompilationContext
 	{
 		return toolkit;
 	}
-	
+
 	public BsjNodeManager getNodeManager()
 	{
 		return nodeManager;

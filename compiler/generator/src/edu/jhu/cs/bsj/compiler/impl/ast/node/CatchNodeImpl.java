@@ -39,11 +39,12 @@ public class CatchNodeImpl extends NodeImpl implements CatchNode
             VariableNode parameter,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
-            BsjNodeManager manager)
+            BsjNodeManager manager,
+            boolean binary)
     {
-        super(startLocation, stopLocation, manager);
-        setBlock(block);
-        setParameter(parameter);
+        super(startLocation, stopLocation, manager, binary);
+        setBlock(block, false);
+        setParameter(parameter, false);
     }
     
     /**
@@ -62,7 +63,15 @@ public class CatchNodeImpl extends NodeImpl implements CatchNode
      */
     public void setBlock(BlockNode block)
     {
-        getManager().assertMutatable(this);
+            setBlock(block, true);
+    }
+    
+    private void setBlock(BlockNode block, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.BLOCK, Attribute.AccessType.STRONG_WRITE);
         if (this.block instanceof NodeImpl)
         {
@@ -91,7 +100,15 @@ public class CatchNodeImpl extends NodeImpl implements CatchNode
      */
     public void setParameter(VariableNode parameter)
     {
-        getManager().assertMutatable(this);
+            setParameter(parameter, true);
+    }
+    
+    private void setParameter(VariableNode parameter, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.PARAMETER, Attribute.AccessType.STRONG_WRITE);
         if (this.parameter instanceof NodeImpl)
         {

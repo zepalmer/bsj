@@ -64,6 +64,9 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
 
 	/** The node manager to provide to all nodes. */
 	private BsjNodeManager manager;
+	
+	/** Whether or not to mark created nodes as binary nodes. */
+	private boolean binary;
 
 	/**
 	 * Creates a new node factory.
@@ -77,6 +80,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
 	{
 		this.packageNodeCallback = packageNodeCallback;
 		this.manager = manager;
+		this.binary = false;
 	}
 
 	/**
@@ -124,6 +128,24 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
 	{
 		this.stopLocation = stopLocation;
 	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public boolean getBinary()
+	{
+		return this.binary;
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public void setBinary(boolean binary)
+	{
+		this.binary = binary;
+	}
 
 	// MANUALLY SPECIFIED MAKE METHODS ///////////////////////////////////////
 
@@ -157,7 +179,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ExpressionListNode arguments,
             ReferenceTypeListNode typeArguments)
     {
-        AlternateConstructorInvocationNode ret = new AlternateConstructorInvocationNodeImpl(arguments, typeArguments, startLocation, stopLocation, manager);
+        AlternateConstructorInvocationNode ret = new AlternateConstructorInvocationNodeImpl(arguments, typeArguments, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -172,7 +194,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        AlternateConstructorInvocationNode ret = new AlternateConstructorInvocationNodeImpl(arguments, typeArguments, startLocation, stopLocation, manager);
+        AlternateConstructorInvocationNode ret = new AlternateConstructorInvocationNodeImpl(arguments, typeArguments, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -184,7 +206,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public AlternateConstructorInvocationNode makeAlternateConstructorInvocationNode(
             ExpressionListNode arguments)
     {
-        AlternateConstructorInvocationNode ret = new AlternateConstructorInvocationNodeImpl(arguments, makeReferenceTypeListNode(), startLocation, stopLocation, manager);
+        AlternateConstructorInvocationNode ret = new AlternateConstructorInvocationNodeImpl(arguments, makeReferenceTypeListNode(), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -198,7 +220,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        AlternateConstructorInvocationNode ret = new AlternateConstructorInvocationNodeImpl(arguments, makeReferenceTypeListNode(), startLocation, stopLocation, manager);
+        AlternateConstructorInvocationNode ret = new AlternateConstructorInvocationNodeImpl(arguments, makeReferenceTypeListNode(), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -210,7 +232,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public AnnotationAnnotationValueNode makeAnnotationAnnotationValueNode(
             AnnotationNode annotation)
     {
-        AnnotationAnnotationValueNode ret = new AnnotationAnnotationValueNodeImpl(annotation, startLocation, stopLocation, manager);
+        AnnotationAnnotationValueNode ret = new AnnotationAnnotationValueNodeImpl(annotation, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -224,7 +246,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        AnnotationAnnotationValueNode ret = new AnnotationAnnotationValueNodeImpl(annotation, startLocation, stopLocation, manager);
+        AnnotationAnnotationValueNode ret = new AnnotationAnnotationValueNodeImpl(annotation, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -236,7 +258,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public AnnotationArrayValueNode makeAnnotationArrayValueNode(
             AnnotationValueListNode values)
     {
-        AnnotationArrayValueNode ret = new AnnotationArrayValueNodeImpl(values, startLocation, stopLocation, manager);
+        AnnotationArrayValueNode ret = new AnnotationArrayValueNodeImpl(values, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -250,7 +272,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        AnnotationArrayValueNode ret = new AnnotationArrayValueNodeImpl(values, startLocation, stopLocation, manager);
+        AnnotationArrayValueNode ret = new AnnotationArrayValueNodeImpl(values, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -262,7 +284,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public AnnotationBodyNode makeAnnotationBodyNode(
             AnnotationMemberListNode members)
     {
-        AnnotationBodyNode ret = new AnnotationBodyNodeImpl(members, startLocation, stopLocation, manager);
+        AnnotationBodyNode ret = new AnnotationBodyNodeImpl(members, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -276,7 +298,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        AnnotationBodyNode ret = new AnnotationBodyNodeImpl(members, startLocation, stopLocation, manager);
+        AnnotationBodyNode ret = new AnnotationBodyNodeImpl(members, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -291,7 +313,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             IdentifierNode identifier,
             JavadocNode javadoc)
     {
-        AnnotationDeclarationNode ret = new AnnotationDeclarationNodeImpl(modifiers, body, identifier, javadoc, startLocation, stopLocation, manager);
+        AnnotationDeclarationNode ret = new AnnotationDeclarationNodeImpl(modifiers, body, identifier, javadoc, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -308,7 +330,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        AnnotationDeclarationNode ret = new AnnotationDeclarationNodeImpl(modifiers, body, identifier, javadoc, startLocation, stopLocation, manager);
+        AnnotationDeclarationNode ret = new AnnotationDeclarationNodeImpl(modifiers, body, identifier, javadoc, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -320,7 +342,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public AnnotationElementListNode makeAnnotationElementListNode(
             List<AnnotationElementNode> children)
     {
-        AnnotationElementListNode ret = new AnnotationElementListNodeImpl(children, startLocation, stopLocation, manager);
+        AnnotationElementListNode ret = new AnnotationElementListNodeImpl(children, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -346,7 +368,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        AnnotationElementListNode ret = new AnnotationElementListNodeImpl(children, startLocation, stopLocation, manager);
+        AnnotationElementListNode ret = new AnnotationElementListNodeImpl(children, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -373,7 +395,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             IdentifierNode identifier,
             AnnotationValueNode value)
     {
-        AnnotationElementNode ret = new AnnotationElementNodeImpl(identifier, value, startLocation, stopLocation, manager);
+        AnnotationElementNode ret = new AnnotationElementNodeImpl(identifier, value, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -388,7 +410,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        AnnotationElementNode ret = new AnnotationElementNodeImpl(identifier, value, startLocation, stopLocation, manager);
+        AnnotationElementNode ret = new AnnotationElementNodeImpl(identifier, value, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -400,7 +422,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public AnnotationExpressionValueNode makeAnnotationExpressionValueNode(
             NonAssignmentExpressionNode expression)
     {
-        AnnotationExpressionValueNode ret = new AnnotationExpressionValueNodeImpl(expression, startLocation, stopLocation, manager);
+        AnnotationExpressionValueNode ret = new AnnotationExpressionValueNodeImpl(expression, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -414,7 +436,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        AnnotationExpressionValueNode ret = new AnnotationExpressionValueNodeImpl(expression, startLocation, stopLocation, manager);
+        AnnotationExpressionValueNode ret = new AnnotationExpressionValueNodeImpl(expression, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -426,7 +448,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public AnnotationListNode makeAnnotationListNode(
             List<AnnotationNode> children)
     {
-        AnnotationListNode ret = new AnnotationListNodeImpl(children, startLocation, stopLocation, manager);
+        AnnotationListNode ret = new AnnotationListNodeImpl(children, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -452,7 +474,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        AnnotationListNode ret = new AnnotationListNodeImpl(children, startLocation, stopLocation, manager);
+        AnnotationListNode ret = new AnnotationListNodeImpl(children, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -478,7 +500,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public AnnotationMemberListNode makeAnnotationMemberListNode(
             List<AnnotationMemberNode> children)
     {
-        AnnotationMemberListNode ret = new AnnotationMemberListNodeImpl(children, startLocation, stopLocation, manager);
+        AnnotationMemberListNode ret = new AnnotationMemberListNodeImpl(children, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -504,7 +526,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        AnnotationMemberListNode ret = new AnnotationMemberListNodeImpl(children, startLocation, stopLocation, manager);
+        AnnotationMemberListNode ret = new AnnotationMemberListNodeImpl(children, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -530,7 +552,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public AnnotationMemberMetaprogramAnchorNode makeAnnotationMemberMetaprogramAnchorNode(
             MetaprogramNode metaprogram)
     {
-        AnnotationMemberMetaprogramAnchorNode ret = new AnnotationMemberMetaprogramAnchorNodeImpl(makeNoOperationNode(), metaprogram, startLocation, stopLocation, manager);
+        AnnotationMemberMetaprogramAnchorNode ret = new AnnotationMemberMetaprogramAnchorNodeImpl(makeNoOperationNode(), metaprogram, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -544,7 +566,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        AnnotationMemberMetaprogramAnchorNode ret = new AnnotationMemberMetaprogramAnchorNodeImpl(makeNoOperationNode(), metaprogram, startLocation, stopLocation, manager);
+        AnnotationMemberMetaprogramAnchorNode ret = new AnnotationMemberMetaprogramAnchorNodeImpl(makeNoOperationNode(), metaprogram, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -560,7 +582,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             AnnotationValueNode defaultValue,
             JavadocNode javadoc)
     {
-        AnnotationMethodDeclarationNode ret = new AnnotationMethodDeclarationNodeImpl(modifiers, type, identifier, defaultValue, javadoc, startLocation, stopLocation, manager);
+        AnnotationMethodDeclarationNode ret = new AnnotationMethodDeclarationNodeImpl(modifiers, type, identifier, defaultValue, javadoc, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -578,7 +600,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        AnnotationMethodDeclarationNode ret = new AnnotationMethodDeclarationNodeImpl(modifiers, type, identifier, defaultValue, javadoc, startLocation, stopLocation, manager);
+        AnnotationMethodDeclarationNode ret = new AnnotationMethodDeclarationNodeImpl(modifiers, type, identifier, defaultValue, javadoc, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -590,7 +612,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public AnnotationMethodModifiersNode makeAnnotationMethodModifiersNode(
             AnnotationListNode annotations)
     {
-        AnnotationMethodModifiersNode ret = new AnnotationMethodModifiersNodeImpl(annotations, startLocation, stopLocation, manager);
+        AnnotationMethodModifiersNode ret = new AnnotationMethodModifiersNodeImpl(annotations, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -604,7 +626,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        AnnotationMethodModifiersNode ret = new AnnotationMethodModifiersNodeImpl(annotations, startLocation, stopLocation, manager);
+        AnnotationMethodModifiersNode ret = new AnnotationMethodModifiersNodeImpl(annotations, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -619,7 +641,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             boolean strictfpFlag,
             AnnotationListNode annotations)
     {
-        AnnotationModifiersNode ret = new AnnotationModifiersNodeImpl(access, staticFlag, strictfpFlag, annotations, startLocation, stopLocation, manager);
+        AnnotationModifiersNode ret = new AnnotationModifiersNodeImpl(access, staticFlag, strictfpFlag, annotations, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -636,7 +658,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        AnnotationModifiersNode ret = new AnnotationModifiersNodeImpl(access, staticFlag, strictfpFlag, annotations, startLocation, stopLocation, manager);
+        AnnotationModifiersNode ret = new AnnotationModifiersNodeImpl(access, staticFlag, strictfpFlag, annotations, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -648,7 +670,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public AnnotationModifiersNode makeAnnotationModifiersNode(
             AccessModifier access)
     {
-        AnnotationModifiersNode ret = new AnnotationModifiersNodeImpl(access, false, false, makeAnnotationListNode(), startLocation, stopLocation, manager);
+        AnnotationModifiersNode ret = new AnnotationModifiersNodeImpl(access, false, false, makeAnnotationListNode(), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -662,7 +684,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        AnnotationModifiersNode ret = new AnnotationModifiersNodeImpl(access, false, false, makeAnnotationListNode(), startLocation, stopLocation, manager);
+        AnnotationModifiersNode ret = new AnnotationModifiersNodeImpl(access, false, false, makeAnnotationListNode(), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -674,7 +696,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public AnnotationValueListNode makeAnnotationValueListNode(
             List<AnnotationValueNode> children)
     {
-        AnnotationValueListNode ret = new AnnotationValueListNodeImpl(children, startLocation, stopLocation, manager);
+        AnnotationValueListNode ret = new AnnotationValueListNodeImpl(children, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -700,7 +722,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        AnnotationValueListNode ret = new AnnotationValueListNodeImpl(children, startLocation, stopLocation, manager);
+        AnnotationValueListNode ret = new AnnotationValueListNodeImpl(children, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -726,7 +748,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public AnonymousClassBodyNode makeAnonymousClassBodyNode(
             AnonymousClassMemberListNode members)
     {
-        AnonymousClassBodyNode ret = new AnonymousClassBodyNodeImpl(members, startLocation, stopLocation, manager);
+        AnonymousClassBodyNode ret = new AnonymousClassBodyNodeImpl(members, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -740,7 +762,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        AnonymousClassBodyNode ret = new AnonymousClassBodyNodeImpl(members, startLocation, stopLocation, manager);
+        AnonymousClassBodyNode ret = new AnonymousClassBodyNodeImpl(members, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -752,7 +774,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public AnonymousClassMemberListNode makeAnonymousClassMemberListNode(
             List<AnonymousClassMemberNode> children)
     {
-        AnonymousClassMemberListNode ret = new AnonymousClassMemberListNodeImpl(children, startLocation, stopLocation, manager);
+        AnonymousClassMemberListNode ret = new AnonymousClassMemberListNodeImpl(children, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -778,7 +800,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        AnonymousClassMemberListNode ret = new AnonymousClassMemberListNodeImpl(children, startLocation, stopLocation, manager);
+        AnonymousClassMemberListNode ret = new AnonymousClassMemberListNodeImpl(children, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -804,7 +826,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public AnonymousClassMemberMetaprogramAnchorNode makeAnonymousClassMemberMetaprogramAnchorNode(
             MetaprogramNode metaprogram)
     {
-        AnonymousClassMemberMetaprogramAnchorNode ret = new AnonymousClassMemberMetaprogramAnchorNodeImpl(makeNoOperationNode(), metaprogram, startLocation, stopLocation, manager);
+        AnonymousClassMemberMetaprogramAnchorNode ret = new AnonymousClassMemberMetaprogramAnchorNodeImpl(makeNoOperationNode(), metaprogram, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -818,7 +840,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        AnonymousClassMemberMetaprogramAnchorNode ret = new AnonymousClassMemberMetaprogramAnchorNodeImpl(makeNoOperationNode(), metaprogram, startLocation, stopLocation, manager);
+        AnonymousClassMemberMetaprogramAnchorNode ret = new AnonymousClassMemberMetaprogramAnchorNodeImpl(makeNoOperationNode(), metaprogram, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -831,7 +853,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             RestrictedPrimaryExpressionNode arrayExpression,
             ExpressionNode indexExpression)
     {
-        ArrayAccessNode ret = new ArrayAccessNodeImpl(arrayExpression, indexExpression, startLocation, stopLocation, manager);
+        ArrayAccessNode ret = new ArrayAccessNodeImpl(arrayExpression, indexExpression, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -846,7 +868,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        ArrayAccessNode ret = new ArrayAccessNodeImpl(arrayExpression, indexExpression, startLocation, stopLocation, manager);
+        ArrayAccessNode ret = new ArrayAccessNodeImpl(arrayExpression, indexExpression, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -860,7 +882,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BaseTypeNode baseType,
             int arrayLevels)
     {
-        ArrayInitializerCreationNode ret = new ArrayInitializerCreationNodeImpl(initializer, baseType, arrayLevels, startLocation, stopLocation, manager);
+        ArrayInitializerCreationNode ret = new ArrayInitializerCreationNodeImpl(initializer, baseType, arrayLevels, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -876,7 +898,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        ArrayInitializerCreationNode ret = new ArrayInitializerCreationNodeImpl(initializer, baseType, arrayLevels, startLocation, stopLocation, manager);
+        ArrayInitializerCreationNode ret = new ArrayInitializerCreationNodeImpl(initializer, baseType, arrayLevels, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -888,7 +910,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public ArrayInitializerNode makeArrayInitializerNode(
             VariableInitializerListNode initializers)
     {
-        ArrayInitializerNode ret = new ArrayInitializerNodeImpl(initializers, startLocation, stopLocation, manager);
+        ArrayInitializerNode ret = new ArrayInitializerNodeImpl(initializers, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -902,7 +924,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        ArrayInitializerNode ret = new ArrayInitializerNodeImpl(initializers, startLocation, stopLocation, manager);
+        ArrayInitializerNode ret = new ArrayInitializerNodeImpl(initializers, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -916,7 +938,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BaseTypeNode baseType,
             int arrayLevels)
     {
-        ArrayInstantiatorCreationNode ret = new ArrayInstantiatorCreationNodeImpl(dimExpressions, baseType, arrayLevels, startLocation, stopLocation, manager);
+        ArrayInstantiatorCreationNode ret = new ArrayInstantiatorCreationNodeImpl(dimExpressions, baseType, arrayLevels, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -932,7 +954,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        ArrayInstantiatorCreationNode ret = new ArrayInstantiatorCreationNodeImpl(dimExpressions, baseType, arrayLevels, startLocation, stopLocation, manager);
+        ArrayInstantiatorCreationNode ret = new ArrayInstantiatorCreationNodeImpl(dimExpressions, baseType, arrayLevels, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -944,7 +966,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public ArrayTypeNode makeArrayTypeNode(
             TypeNode type)
     {
-        ArrayTypeNode ret = new ArrayTypeNodeImpl(type, startLocation, stopLocation, manager);
+        ArrayTypeNode ret = new ArrayTypeNodeImpl(type, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -958,7 +980,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        ArrayTypeNode ret = new ArrayTypeNodeImpl(type, startLocation, stopLocation, manager);
+        ArrayTypeNode ret = new ArrayTypeNodeImpl(type, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -971,7 +993,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ExpressionNode testExpression,
             ExpressionNode messageExpression)
     {
-        AssertStatementNode ret = new AssertStatementNodeImpl(testExpression, messageExpression, startLocation, stopLocation, manager);
+        AssertStatementNode ret = new AssertStatementNodeImpl(testExpression, messageExpression, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -986,7 +1008,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        AssertStatementNode ret = new AssertStatementNodeImpl(testExpression, messageExpression, startLocation, stopLocation, manager);
+        AssertStatementNode ret = new AssertStatementNodeImpl(testExpression, messageExpression, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -998,7 +1020,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public AssertStatementNode makeAssertStatementNode(
             ExpressionNode testExpression)
     {
-        AssertStatementNode ret = new AssertStatementNodeImpl(testExpression, null, startLocation, stopLocation, manager);
+        AssertStatementNode ret = new AssertStatementNodeImpl(testExpression, null, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -1012,7 +1034,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        AssertStatementNode ret = new AssertStatementNodeImpl(testExpression, null, startLocation, stopLocation, manager);
+        AssertStatementNode ret = new AssertStatementNodeImpl(testExpression, null, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -1026,7 +1048,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             AssignmentOperator operator,
             ExpressionNode expression)
     {
-        AssignmentNode ret = new AssignmentNodeImpl(variable, operator, expression, startLocation, stopLocation, manager);
+        AssignmentNode ret = new AssignmentNodeImpl(variable, operator, expression, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -1042,7 +1064,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        AssignmentNode ret = new AssignmentNodeImpl(variable, operator, expression, startLocation, stopLocation, manager);
+        AssignmentNode ret = new AssignmentNodeImpl(variable, operator, expression, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -1056,7 +1078,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ExpressionNode rightOperand,
             BinaryOperator operator)
     {
-        BinaryExpressionNode ret = new BinaryExpressionNodeImpl(leftOperand, rightOperand, operator, startLocation, stopLocation, manager);
+        BinaryExpressionNode ret = new BinaryExpressionNodeImpl(leftOperand, rightOperand, operator, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -1072,7 +1094,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        BinaryExpressionNode ret = new BinaryExpressionNodeImpl(leftOperand, rightOperand, operator, startLocation, stopLocation, manager);
+        BinaryExpressionNode ret = new BinaryExpressionNodeImpl(leftOperand, rightOperand, operator, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -1084,7 +1106,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public BlockNode makeBlockNode(
             BlockStatementListNode statements)
     {
-        BlockNode ret = new BlockNodeImpl(statements, startLocation, stopLocation, manager);
+        BlockNode ret = new BlockNodeImpl(statements, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -1098,7 +1120,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        BlockNode ret = new BlockNodeImpl(statements, startLocation, stopLocation, manager);
+        BlockNode ret = new BlockNodeImpl(statements, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -1110,7 +1132,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public BlockStatementListNode makeBlockStatementListNode(
             List<BlockStatementNode> children)
     {
-        BlockStatementListNode ret = new BlockStatementListNodeImpl(children, startLocation, stopLocation, manager);
+        BlockStatementListNode ret = new BlockStatementListNodeImpl(children, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -1136,7 +1158,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        BlockStatementListNode ret = new BlockStatementListNodeImpl(children, startLocation, stopLocation, manager);
+        BlockStatementListNode ret = new BlockStatementListNodeImpl(children, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -1162,7 +1184,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public BlockStatementMetaprogramAnchorNode makeBlockStatementMetaprogramAnchorNode(
             MetaprogramNode metaprogram)
     {
-        BlockStatementMetaprogramAnchorNode ret = new BlockStatementMetaprogramAnchorNodeImpl(makeNoOperationNode(), metaprogram, startLocation, stopLocation, manager);
+        BlockStatementMetaprogramAnchorNode ret = new BlockStatementMetaprogramAnchorNodeImpl(makeNoOperationNode(), metaprogram, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -1176,7 +1198,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        BlockStatementMetaprogramAnchorNode ret = new BlockStatementMetaprogramAnchorNodeImpl(makeNoOperationNode(), metaprogram, startLocation, stopLocation, manager);
+        BlockStatementMetaprogramAnchorNode ret = new BlockStatementMetaprogramAnchorNodeImpl(makeNoOperationNode(), metaprogram, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -1188,7 +1210,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public BooleanLiteralNode makeBooleanLiteralNode(
             Boolean value)
     {
-        BooleanLiteralNode ret = new BooleanLiteralNodeImpl(value, startLocation, stopLocation, manager);
+        BooleanLiteralNode ret = new BooleanLiteralNodeImpl(value, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -1202,7 +1224,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        BooleanLiteralNode ret = new BooleanLiteralNodeImpl(value, startLocation, stopLocation, manager);
+        BooleanLiteralNode ret = new BooleanLiteralNodeImpl(value, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -1214,7 +1236,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public BreakNode makeBreakNode(
             IdentifierNode label)
     {
-        BreakNode ret = new BreakNodeImpl(label, startLocation, stopLocation, manager);
+        BreakNode ret = new BreakNodeImpl(label, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -1228,7 +1250,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        BreakNode ret = new BreakNodeImpl(label, startLocation, stopLocation, manager);
+        BreakNode ret = new BreakNodeImpl(label, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -1239,7 +1261,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     @Override
     public BreakNode makeBreakNode()
     {
-        BreakNode ret = new BreakNodeImpl(null, startLocation, stopLocation, manager);
+        BreakNode ret = new BreakNodeImpl(null, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -1252,7 +1274,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        BreakNode ret = new BreakNodeImpl(null, startLocation, stopLocation, manager);
+        BreakNode ret = new BreakNodeImpl(null, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -1264,7 +1286,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public CaseListNode makeCaseListNode(
             List<CaseNode> children)
     {
-        CaseListNode ret = new CaseListNodeImpl(children, startLocation, stopLocation, manager);
+        CaseListNode ret = new CaseListNodeImpl(children, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -1290,7 +1312,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        CaseListNode ret = new CaseListNodeImpl(children, startLocation, stopLocation, manager);
+        CaseListNode ret = new CaseListNodeImpl(children, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -1317,7 +1339,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ExpressionNode expression,
             BlockStatementListNode statements)
     {
-        CaseNode ret = new CaseNodeImpl(expression, statements, startLocation, stopLocation, manager);
+        CaseNode ret = new CaseNodeImpl(expression, statements, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -1332,7 +1354,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        CaseNode ret = new CaseNodeImpl(expression, statements, startLocation, stopLocation, manager);
+        CaseNode ret = new CaseNodeImpl(expression, statements, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -1344,7 +1366,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public CatchListNode makeCatchListNode(
             List<CatchNode> children)
     {
-        CatchListNode ret = new CatchListNodeImpl(children, startLocation, stopLocation, manager);
+        CatchListNode ret = new CatchListNodeImpl(children, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -1370,7 +1392,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        CatchListNode ret = new CatchListNodeImpl(children, startLocation, stopLocation, manager);
+        CatchListNode ret = new CatchListNodeImpl(children, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -1397,7 +1419,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BlockNode block,
             VariableNode parameter)
     {
-        CatchNode ret = new CatchNodeImpl(block, parameter, startLocation, stopLocation, manager);
+        CatchNode ret = new CatchNodeImpl(block, parameter, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -1412,7 +1434,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        CatchNode ret = new CatchNodeImpl(block, parameter, startLocation, stopLocation, manager);
+        CatchNode ret = new CatchNodeImpl(block, parameter, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -1424,7 +1446,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public CharLiteralNode makeCharLiteralNode(
             Character value)
     {
-        CharLiteralNode ret = new CharLiteralNodeImpl(value, startLocation, stopLocation, manager);
+        CharLiteralNode ret = new CharLiteralNodeImpl(value, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -1438,7 +1460,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        CharLiteralNode ret = new CharLiteralNodeImpl(value, startLocation, stopLocation, manager);
+        CharLiteralNode ret = new CharLiteralNodeImpl(value, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -1450,7 +1472,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public ClassBodyNode makeClassBodyNode(
             ClassMemberListNode members)
     {
-        ClassBodyNode ret = new ClassBodyNodeImpl(members, startLocation, stopLocation, manager);
+        ClassBodyNode ret = new ClassBodyNodeImpl(members, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -1464,7 +1486,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        ClassBodyNode ret = new ClassBodyNodeImpl(members, startLocation, stopLocation, manager);
+        ClassBodyNode ret = new ClassBodyNodeImpl(members, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -1482,7 +1504,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             IdentifierNode identifier,
             JavadocNode javadoc)
     {
-        ClassDeclarationNode ret = new ClassDeclarationNodeImpl(modifiers, extendsClause, implementsClause, body, typeParameters, identifier, javadoc, startLocation, stopLocation, manager);
+        ClassDeclarationNode ret = new ClassDeclarationNodeImpl(modifiers, extendsClause, implementsClause, body, typeParameters, identifier, javadoc, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -1502,7 +1524,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        ClassDeclarationNode ret = new ClassDeclarationNodeImpl(modifiers, extendsClause, implementsClause, body, typeParameters, identifier, javadoc, startLocation, stopLocation, manager);
+        ClassDeclarationNode ret = new ClassDeclarationNodeImpl(modifiers, extendsClause, implementsClause, body, typeParameters, identifier, javadoc, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -1514,7 +1536,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public ClassLiteralNode makeClassLiteralNode(
             LiteralizableTypeNode value)
     {
-        ClassLiteralNode ret = new ClassLiteralNodeImpl(value, startLocation, stopLocation, manager);
+        ClassLiteralNode ret = new ClassLiteralNodeImpl(value, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -1528,7 +1550,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        ClassLiteralNode ret = new ClassLiteralNodeImpl(value, startLocation, stopLocation, manager);
+        ClassLiteralNode ret = new ClassLiteralNodeImpl(value, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -1540,7 +1562,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public ClassMemberListNode makeClassMemberListNode(
             List<ClassMemberNode> children)
     {
-        ClassMemberListNode ret = new ClassMemberListNodeImpl(children, startLocation, stopLocation, manager);
+        ClassMemberListNode ret = new ClassMemberListNodeImpl(children, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -1566,7 +1588,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        ClassMemberListNode ret = new ClassMemberListNodeImpl(children, startLocation, stopLocation, manager);
+        ClassMemberListNode ret = new ClassMemberListNodeImpl(children, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -1592,7 +1614,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public ClassMemberMetaprogramAnchorNode makeClassMemberMetaprogramAnchorNode(
             MetaprogramNode metaprogram)
     {
-        ClassMemberMetaprogramAnchorNode ret = new ClassMemberMetaprogramAnchorNodeImpl(makeNoOperationNode(), metaprogram, startLocation, stopLocation, manager);
+        ClassMemberMetaprogramAnchorNode ret = new ClassMemberMetaprogramAnchorNodeImpl(makeNoOperationNode(), metaprogram, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -1606,7 +1628,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        ClassMemberMetaprogramAnchorNode ret = new ClassMemberMetaprogramAnchorNodeImpl(makeNoOperationNode(), metaprogram, startLocation, stopLocation, manager);
+        ClassMemberMetaprogramAnchorNode ret = new ClassMemberMetaprogramAnchorNodeImpl(makeNoOperationNode(), metaprogram, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -1623,7 +1645,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             boolean strictfpFlag,
             AnnotationListNode annotations)
     {
-        ClassModifiersNode ret = new ClassModifiersNodeImpl(access, abstractFlag, staticFlag, finalFlag, strictfpFlag, annotations, startLocation, stopLocation, manager);
+        ClassModifiersNode ret = new ClassModifiersNodeImpl(access, abstractFlag, staticFlag, finalFlag, strictfpFlag, annotations, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -1642,7 +1664,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        ClassModifiersNode ret = new ClassModifiersNodeImpl(access, abstractFlag, staticFlag, finalFlag, strictfpFlag, annotations, startLocation, stopLocation, manager);
+        ClassModifiersNode ret = new ClassModifiersNodeImpl(access, abstractFlag, staticFlag, finalFlag, strictfpFlag, annotations, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -1654,7 +1676,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public ClassModifiersNode makeClassModifiersNode(
             AccessModifier access)
     {
-        ClassModifiersNode ret = new ClassModifiersNodeImpl(access, false, false, false, false, makeAnnotationListNode(), startLocation, stopLocation, manager);
+        ClassModifiersNode ret = new ClassModifiersNodeImpl(access, false, false, false, false, makeAnnotationListNode(), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -1668,7 +1690,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        ClassModifiersNode ret = new ClassModifiersNodeImpl(access, false, false, false, false, makeAnnotationListNode(), startLocation, stopLocation, manager);
+        ClassModifiersNode ret = new ClassModifiersNodeImpl(access, false, false, false, false, makeAnnotationListNode(), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -1680,7 +1702,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public CodeLiteralNode makeCodeLiteralNode(
             Node value)
     {
-        CodeLiteralNode ret = new CodeLiteralNodeImpl(value, startLocation, stopLocation, manager);
+        CodeLiteralNode ret = new CodeLiteralNodeImpl(value, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -1694,7 +1716,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        CodeLiteralNode ret = new CodeLiteralNodeImpl(value, startLocation, stopLocation, manager);
+        CodeLiteralNode ret = new CodeLiteralNodeImpl(value, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -1710,7 +1732,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ImportListNode imports,
             TypeDeclarationListNode typeDecls)
     {
-        CompilationUnitNode ret = new CompilationUnitNodeImpl(name, packageDeclaration, metaimports, imports, typeDecls, startLocation, stopLocation, manager);
+        CompilationUnitNode ret = new CompilationUnitNodeImpl(name, packageDeclaration, metaimports, imports, typeDecls, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -1728,7 +1750,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        CompilationUnitNode ret = new CompilationUnitNodeImpl(name, packageDeclaration, metaimports, imports, typeDecls, startLocation, stopLocation, manager);
+        CompilationUnitNode ret = new CompilationUnitNodeImpl(name, packageDeclaration, metaimports, imports, typeDecls, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -1743,7 +1765,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ImportListNode imports,
             TypeDeclarationListNode typeDecls)
     {
-        CompilationUnitNode ret = new CompilationUnitNodeImpl(name, packageDeclaration, makeMetaprogramImportListNode(), imports, typeDecls, startLocation, stopLocation, manager);
+        CompilationUnitNode ret = new CompilationUnitNodeImpl(name, packageDeclaration, makeMetaprogramImportListNode(), imports, typeDecls, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -1760,7 +1782,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        CompilationUnitNode ret = new CompilationUnitNodeImpl(name, packageDeclaration, makeMetaprogramImportListNode(), imports, typeDecls, startLocation, stopLocation, manager);
+        CompilationUnitNode ret = new CompilationUnitNodeImpl(name, packageDeclaration, makeMetaprogramImportListNode(), imports, typeDecls, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -1774,7 +1796,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ExpressionNode trueExpression,
             ExpressionNode falseExpression)
     {
-        ConditionalExpressionNode ret = new ConditionalExpressionNodeImpl(condition, trueExpression, falseExpression, startLocation, stopLocation, manager);
+        ConditionalExpressionNode ret = new ConditionalExpressionNodeImpl(condition, trueExpression, falseExpression, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -1790,7 +1812,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        ConditionalExpressionNode ret = new ConditionalExpressionNodeImpl(condition, trueExpression, falseExpression, startLocation, stopLocation, manager);
+        ConditionalExpressionNode ret = new ConditionalExpressionNodeImpl(condition, trueExpression, falseExpression, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -1803,7 +1825,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ConstructorInvocationNode constructorInvocation,
             BlockStatementListNode statements)
     {
-        ConstructorBodyNode ret = new ConstructorBodyNodeImpl(constructorInvocation, statements, startLocation, stopLocation, manager);
+        ConstructorBodyNode ret = new ConstructorBodyNodeImpl(constructorInvocation, statements, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -1818,7 +1840,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        ConstructorBodyNode ret = new ConstructorBodyNodeImpl(constructorInvocation, statements, startLocation, stopLocation, manager);
+        ConstructorBodyNode ret = new ConstructorBodyNodeImpl(constructorInvocation, statements, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -1837,7 +1859,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             TypeParameterListNode typeParameters,
             JavadocNode javadoc)
     {
-        ConstructorDeclarationNode ret = new ConstructorDeclarationNodeImpl(identifier, body, modifiers, parameters, varargParameter, throwTypes, typeParameters, javadoc, startLocation, stopLocation, manager);
+        ConstructorDeclarationNode ret = new ConstructorDeclarationNodeImpl(identifier, body, modifiers, parameters, varargParameter, throwTypes, typeParameters, javadoc, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -1858,7 +1880,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        ConstructorDeclarationNode ret = new ConstructorDeclarationNodeImpl(identifier, body, modifiers, parameters, varargParameter, throwTypes, typeParameters, javadoc, startLocation, stopLocation, manager);
+        ConstructorDeclarationNode ret = new ConstructorDeclarationNodeImpl(identifier, body, modifiers, parameters, varargParameter, throwTypes, typeParameters, javadoc, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -1874,7 +1896,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             VariableListNode parameters,
             JavadocNode javadoc)
     {
-        ConstructorDeclarationNode ret = new ConstructorDeclarationNodeImpl(identifier, body, modifiers, parameters, null, makeUnparameterizedTypeListNode(), makeTypeParameterListNode(), javadoc, startLocation, stopLocation, manager);
+        ConstructorDeclarationNode ret = new ConstructorDeclarationNodeImpl(identifier, body, modifiers, parameters, null, makeUnparameterizedTypeListNode(), makeTypeParameterListNode(), javadoc, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -1892,7 +1914,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        ConstructorDeclarationNode ret = new ConstructorDeclarationNodeImpl(identifier, body, modifiers, parameters, null, makeUnparameterizedTypeListNode(), makeTypeParameterListNode(), javadoc, startLocation, stopLocation, manager);
+        ConstructorDeclarationNode ret = new ConstructorDeclarationNodeImpl(identifier, body, modifiers, parameters, null, makeUnparameterizedTypeListNode(), makeTypeParameterListNode(), javadoc, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -1905,7 +1927,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             AccessModifier access,
             AnnotationListNode annotations)
     {
-        ConstructorModifiersNode ret = new ConstructorModifiersNodeImpl(access, annotations, startLocation, stopLocation, manager);
+        ConstructorModifiersNode ret = new ConstructorModifiersNodeImpl(access, annotations, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -1920,7 +1942,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        ConstructorModifiersNode ret = new ConstructorModifiersNodeImpl(access, annotations, startLocation, stopLocation, manager);
+        ConstructorModifiersNode ret = new ConstructorModifiersNodeImpl(access, annotations, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -1932,7 +1954,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public ConstructorModifiersNode makeConstructorModifiersNode(
             AccessModifier access)
     {
-        ConstructorModifiersNode ret = new ConstructorModifiersNodeImpl(access, makeAnnotationListNode(), startLocation, stopLocation, manager);
+        ConstructorModifiersNode ret = new ConstructorModifiersNodeImpl(access, makeAnnotationListNode(), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -1946,7 +1968,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        ConstructorModifiersNode ret = new ConstructorModifiersNodeImpl(access, makeAnnotationListNode(), startLocation, stopLocation, manager);
+        ConstructorModifiersNode ret = new ConstructorModifiersNodeImpl(access, makeAnnotationListNode(), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -1958,7 +1980,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public ContinueNode makeContinueNode(
             IdentifierNode label)
     {
-        ContinueNode ret = new ContinueNodeImpl(label, startLocation, stopLocation, manager);
+        ContinueNode ret = new ContinueNodeImpl(label, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -1972,7 +1994,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        ContinueNode ret = new ContinueNodeImpl(label, startLocation, stopLocation, manager);
+        ContinueNode ret = new ContinueNodeImpl(label, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -1983,7 +2005,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     @Override
     public ContinueNode makeContinueNode()
     {
-        ContinueNode ret = new ContinueNodeImpl(null, startLocation, stopLocation, manager);
+        ContinueNode ret = new ContinueNodeImpl(null, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -1996,7 +2018,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        ContinueNode ret = new ContinueNodeImpl(null, startLocation, stopLocation, manager);
+        ContinueNode ret = new ContinueNodeImpl(null, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -2008,7 +2030,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public DeclaredTypeListNode makeDeclaredTypeListNode(
             List<DeclaredTypeNode> children)
     {
-        DeclaredTypeListNode ret = new DeclaredTypeListNodeImpl(children, startLocation, stopLocation, manager);
+        DeclaredTypeListNode ret = new DeclaredTypeListNodeImpl(children, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -2034,7 +2056,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        DeclaredTypeListNode ret = new DeclaredTypeListNodeImpl(children, startLocation, stopLocation, manager);
+        DeclaredTypeListNode ret = new DeclaredTypeListNodeImpl(children, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -2061,7 +2083,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ExpressionNode condition,
             StatementNode statement)
     {
-        DoWhileLoopNode ret = new DoWhileLoopNodeImpl(condition, statement, startLocation, stopLocation, manager);
+        DoWhileLoopNode ret = new DoWhileLoopNodeImpl(condition, statement, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -2076,7 +2098,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        DoWhileLoopNode ret = new DoWhileLoopNodeImpl(condition, statement, startLocation, stopLocation, manager);
+        DoWhileLoopNode ret = new DoWhileLoopNodeImpl(condition, statement, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -2088,7 +2110,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public DoubleLiteralNode makeDoubleLiteralNode(
             Double value)
     {
-        DoubleLiteralNode ret = new DoubleLiteralNodeImpl(value, startLocation, stopLocation, manager);
+        DoubleLiteralNode ret = new DoubleLiteralNodeImpl(value, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -2102,7 +2124,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        DoubleLiteralNode ret = new DoubleLiteralNodeImpl(value, startLocation, stopLocation, manager);
+        DoubleLiteralNode ret = new DoubleLiteralNodeImpl(value, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -2116,7 +2138,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ExpressionNode expression,
             StatementNode statement)
     {
-        EnhancedForLoopNode ret = new EnhancedForLoopNodeImpl(variable, expression, statement, startLocation, stopLocation, manager);
+        EnhancedForLoopNode ret = new EnhancedForLoopNodeImpl(variable, expression, statement, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -2132,7 +2154,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        EnhancedForLoopNode ret = new EnhancedForLoopNodeImpl(variable, expression, statement, startLocation, stopLocation, manager);
+        EnhancedForLoopNode ret = new EnhancedForLoopNodeImpl(variable, expression, statement, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -2145,7 +2167,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             EnumConstantDeclarationListNode constants,
             ClassMemberListNode members)
     {
-        EnumBodyNode ret = new EnumBodyNodeImpl(constants, members, startLocation, stopLocation, manager);
+        EnumBodyNode ret = new EnumBodyNodeImpl(constants, members, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -2160,7 +2182,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        EnumBodyNode ret = new EnumBodyNodeImpl(constants, members, startLocation, stopLocation, manager);
+        EnumBodyNode ret = new EnumBodyNodeImpl(constants, members, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -2172,7 +2194,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public EnumConstantDeclarationListNode makeEnumConstantDeclarationListNode(
             List<EnumConstantDeclarationNode> children)
     {
-        EnumConstantDeclarationListNode ret = new EnumConstantDeclarationListNodeImpl(children, startLocation, stopLocation, manager);
+        EnumConstantDeclarationListNode ret = new EnumConstantDeclarationListNodeImpl(children, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -2198,7 +2220,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        EnumConstantDeclarationListNode ret = new EnumConstantDeclarationListNodeImpl(children, startLocation, stopLocation, manager);
+        EnumConstantDeclarationListNode ret = new EnumConstantDeclarationListNodeImpl(children, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -2228,7 +2250,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             AnonymousClassBodyNode body,
             JavadocNode javadoc)
     {
-        EnumConstantDeclarationNode ret = new EnumConstantDeclarationNodeImpl(annotations, identifier, arguments, body, javadoc, startLocation, stopLocation, manager);
+        EnumConstantDeclarationNode ret = new EnumConstantDeclarationNodeImpl(annotations, identifier, arguments, body, javadoc, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -2246,7 +2268,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        EnumConstantDeclarationNode ret = new EnumConstantDeclarationNodeImpl(annotations, identifier, arguments, body, javadoc, startLocation, stopLocation, manager);
+        EnumConstantDeclarationNode ret = new EnumConstantDeclarationNodeImpl(annotations, identifier, arguments, body, javadoc, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -2261,7 +2283,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ExpressionListNode arguments,
             JavadocNode javadoc)
     {
-        EnumConstantDeclarationNode ret = new EnumConstantDeclarationNodeImpl(annotations, identifier, arguments, null, javadoc, startLocation, stopLocation, manager);
+        EnumConstantDeclarationNode ret = new EnumConstantDeclarationNodeImpl(annotations, identifier, arguments, null, javadoc, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -2278,7 +2300,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        EnumConstantDeclarationNode ret = new EnumConstantDeclarationNodeImpl(annotations, identifier, arguments, null, javadoc, startLocation, stopLocation, manager);
+        EnumConstantDeclarationNode ret = new EnumConstantDeclarationNodeImpl(annotations, identifier, arguments, null, javadoc, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -2294,7 +2316,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             IdentifierNode identifier,
             JavadocNode javadoc)
     {
-        EnumDeclarationNode ret = new EnumDeclarationNodeImpl(modifiers, implementsClause, body, identifier, javadoc, startLocation, stopLocation, manager);
+        EnumDeclarationNode ret = new EnumDeclarationNodeImpl(modifiers, implementsClause, body, identifier, javadoc, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -2312,7 +2334,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        EnumDeclarationNode ret = new EnumDeclarationNodeImpl(modifiers, implementsClause, body, identifier, javadoc, startLocation, stopLocation, manager);
+        EnumDeclarationNode ret = new EnumDeclarationNodeImpl(modifiers, implementsClause, body, identifier, javadoc, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -2326,7 +2348,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             boolean strictfpFlag,
             AnnotationListNode annotations)
     {
-        EnumModifiersNode ret = new EnumModifiersNodeImpl(access, strictfpFlag, annotations, startLocation, stopLocation, manager);
+        EnumModifiersNode ret = new EnumModifiersNodeImpl(access, strictfpFlag, annotations, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -2342,7 +2364,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        EnumModifiersNode ret = new EnumModifiersNodeImpl(access, strictfpFlag, annotations, startLocation, stopLocation, manager);
+        EnumModifiersNode ret = new EnumModifiersNodeImpl(access, strictfpFlag, annotations, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -2354,7 +2376,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public EnumModifiersNode makeEnumModifiersNode(
             AccessModifier access)
     {
-        EnumModifiersNode ret = new EnumModifiersNodeImpl(access, false, makeAnnotationListNode(), startLocation, stopLocation, manager);
+        EnumModifiersNode ret = new EnumModifiersNodeImpl(access, false, makeAnnotationListNode(), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -2368,7 +2390,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        EnumModifiersNode ret = new EnumModifiersNodeImpl(access, false, makeAnnotationListNode(), startLocation, stopLocation, manager);
+        EnumModifiersNode ret = new EnumModifiersNodeImpl(access, false, makeAnnotationListNode(), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -2380,7 +2402,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public ExpressionListNode makeExpressionListNode(
             List<ExpressionNode> children)
     {
-        ExpressionListNode ret = new ExpressionListNodeImpl(children, startLocation, stopLocation, manager);
+        ExpressionListNode ret = new ExpressionListNodeImpl(children, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -2406,7 +2428,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        ExpressionListNode ret = new ExpressionListNodeImpl(children, startLocation, stopLocation, manager);
+        ExpressionListNode ret = new ExpressionListNodeImpl(children, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -2432,7 +2454,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public ExpressionStatementNode makeExpressionStatementNode(
             StatementExpressionNode expression)
     {
-        ExpressionStatementNode ret = new ExpressionStatementNodeImpl(expression, startLocation, stopLocation, manager);
+        ExpressionStatementNode ret = new ExpressionStatementNodeImpl(expression, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -2446,7 +2468,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        ExpressionStatementNode ret = new ExpressionStatementNodeImpl(expression, startLocation, stopLocation, manager);
+        ExpressionStatementNode ret = new ExpressionStatementNodeImpl(expression, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -2459,7 +2481,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             PrimaryExpressionNode expression,
             IdentifierNode identifier)
     {
-        FieldAccessByExpressionNode ret = new FieldAccessByExpressionNodeImpl(expression, identifier, startLocation, stopLocation, manager);
+        FieldAccessByExpressionNode ret = new FieldAccessByExpressionNodeImpl(expression, identifier, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -2474,7 +2496,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        FieldAccessByExpressionNode ret = new FieldAccessByExpressionNodeImpl(expression, identifier, startLocation, stopLocation, manager);
+        FieldAccessByExpressionNode ret = new FieldAccessByExpressionNodeImpl(expression, identifier, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -2486,7 +2508,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public FieldAccessByNameNode makeFieldAccessByNameNode(
             NameNode name)
     {
-        FieldAccessByNameNode ret = new FieldAccessByNameNodeImpl(name, startLocation, stopLocation, manager);
+        FieldAccessByNameNode ret = new FieldAccessByNameNodeImpl(name, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -2500,7 +2522,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        FieldAccessByNameNode ret = new FieldAccessByNameNodeImpl(name, startLocation, stopLocation, manager);
+        FieldAccessByNameNode ret = new FieldAccessByNameNodeImpl(name, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -2514,7 +2536,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             VariableDeclaratorListNode declarators,
             JavadocNode javadoc)
     {
-        FieldDeclarationNode ret = new FieldDeclarationNodeImpl(modifiers, declarators, javadoc, startLocation, stopLocation, manager);
+        FieldDeclarationNode ret = new FieldDeclarationNodeImpl(modifiers, declarators, javadoc, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -2530,7 +2552,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        FieldDeclarationNode ret = new FieldDeclarationNodeImpl(modifiers, declarators, javadoc, startLocation, stopLocation, manager);
+        FieldDeclarationNode ret = new FieldDeclarationNodeImpl(modifiers, declarators, javadoc, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -2547,7 +2569,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             boolean volatileFlag,
             AnnotationListNode annotations)
     {
-        FieldModifiersNode ret = new FieldModifiersNodeImpl(access, staticFlag, finalFlag, transientFlag, volatileFlag, annotations, startLocation, stopLocation, manager);
+        FieldModifiersNode ret = new FieldModifiersNodeImpl(access, staticFlag, finalFlag, transientFlag, volatileFlag, annotations, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -2566,7 +2588,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        FieldModifiersNode ret = new FieldModifiersNodeImpl(access, staticFlag, finalFlag, transientFlag, volatileFlag, annotations, startLocation, stopLocation, manager);
+        FieldModifiersNode ret = new FieldModifiersNodeImpl(access, staticFlag, finalFlag, transientFlag, volatileFlag, annotations, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -2578,7 +2600,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public FieldModifiersNode makeFieldModifiersNode(
             AccessModifier access)
     {
-        FieldModifiersNode ret = new FieldModifiersNodeImpl(access, false, false, false, false, makeAnnotationListNode(), startLocation, stopLocation, manager);
+        FieldModifiersNode ret = new FieldModifiersNodeImpl(access, false, false, false, false, makeAnnotationListNode(), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -2592,7 +2614,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        FieldModifiersNode ret = new FieldModifiersNodeImpl(access, false, false, false, false, makeAnnotationListNode(), startLocation, stopLocation, manager);
+        FieldModifiersNode ret = new FieldModifiersNodeImpl(access, false, false, false, false, makeAnnotationListNode(), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -2604,7 +2626,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public FloatLiteralNode makeFloatLiteralNode(
             Float value)
     {
-        FloatLiteralNode ret = new FloatLiteralNodeImpl(value, startLocation, stopLocation, manager);
+        FloatLiteralNode ret = new FloatLiteralNodeImpl(value, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -2618,7 +2640,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        FloatLiteralNode ret = new FloatLiteralNodeImpl(value, startLocation, stopLocation, manager);
+        FloatLiteralNode ret = new FloatLiteralNodeImpl(value, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -2630,7 +2652,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public ForInitializerDeclarationNode makeForInitializerDeclarationNode(
             VariableDeclarationNode declaration)
     {
-        ForInitializerDeclarationNode ret = new ForInitializerDeclarationNodeImpl(declaration, startLocation, stopLocation, manager);
+        ForInitializerDeclarationNode ret = new ForInitializerDeclarationNodeImpl(declaration, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -2644,7 +2666,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        ForInitializerDeclarationNode ret = new ForInitializerDeclarationNodeImpl(declaration, startLocation, stopLocation, manager);
+        ForInitializerDeclarationNode ret = new ForInitializerDeclarationNodeImpl(declaration, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -2656,7 +2678,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public ForInitializerExpressionNode makeForInitializerExpressionNode(
             StatementExpressionListNode expressions)
     {
-        ForInitializerExpressionNode ret = new ForInitializerExpressionNodeImpl(expressions, startLocation, stopLocation, manager);
+        ForInitializerExpressionNode ret = new ForInitializerExpressionNodeImpl(expressions, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -2670,7 +2692,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        ForInitializerExpressionNode ret = new ForInitializerExpressionNodeImpl(expressions, startLocation, stopLocation, manager);
+        ForInitializerExpressionNode ret = new ForInitializerExpressionNodeImpl(expressions, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -2685,7 +2707,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             StatementExpressionListNode update,
             StatementNode statement)
     {
-        ForLoopNode ret = new ForLoopNodeImpl(initializer, condition, update, statement, startLocation, stopLocation, manager);
+        ForLoopNode ret = new ForLoopNodeImpl(initializer, condition, update, statement, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -2702,7 +2724,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        ForLoopNode ret = new ForLoopNodeImpl(initializer, condition, update, statement, startLocation, stopLocation, manager);
+        ForLoopNode ret = new ForLoopNodeImpl(initializer, condition, update, statement, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -2714,7 +2736,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public IdentifierListNode makeIdentifierListNode(
             List<IdentifierNode> children)
     {
-        IdentifierListNode ret = new IdentifierListNodeImpl(children, startLocation, stopLocation, manager);
+        IdentifierListNode ret = new IdentifierListNodeImpl(children, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -2740,7 +2762,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        IdentifierListNode ret = new IdentifierListNodeImpl(children, startLocation, stopLocation, manager);
+        IdentifierListNode ret = new IdentifierListNodeImpl(children, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -2766,7 +2788,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public IdentifierNode makeIdentifierNode(
             String identifier)
     {
-        IdentifierNode ret = new IdentifierNodeImpl(identifier, startLocation, stopLocation, manager);
+        IdentifierNode ret = new IdentifierNodeImpl(identifier, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -2780,7 +2802,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        IdentifierNode ret = new IdentifierNodeImpl(identifier, startLocation, stopLocation, manager);
+        IdentifierNode ret = new IdentifierNodeImpl(identifier, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -2794,7 +2816,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             StatementNode thenStatement,
             StatementNode elseStatement)
     {
-        IfNode ret = new IfNodeImpl(condition, thenStatement, elseStatement, startLocation, stopLocation, manager);
+        IfNode ret = new IfNodeImpl(condition, thenStatement, elseStatement, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -2810,7 +2832,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        IfNode ret = new IfNodeImpl(condition, thenStatement, elseStatement, startLocation, stopLocation, manager);
+        IfNode ret = new IfNodeImpl(condition, thenStatement, elseStatement, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -2823,7 +2845,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ExpressionNode condition,
             StatementNode thenStatement)
     {
-        IfNode ret = new IfNodeImpl(condition, thenStatement, null, startLocation, stopLocation, manager);
+        IfNode ret = new IfNodeImpl(condition, thenStatement, null, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -2838,7 +2860,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        IfNode ret = new IfNodeImpl(condition, thenStatement, null, startLocation, stopLocation, manager);
+        IfNode ret = new IfNodeImpl(condition, thenStatement, null, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -2850,7 +2872,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public ImportListNode makeImportListNode(
             List<ImportNode> children)
     {
-        ImportListNode ret = new ImportListNodeImpl(children, startLocation, stopLocation, manager);
+        ImportListNode ret = new ImportListNodeImpl(children, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -2876,7 +2898,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        ImportListNode ret = new ImportListNodeImpl(children, startLocation, stopLocation, manager);
+        ImportListNode ret = new ImportListNodeImpl(children, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -2902,7 +2924,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public ImportOnDemandNode makeImportOnDemandNode(
             NameNode name)
     {
-        ImportOnDemandNode ret = new ImportOnDemandNodeImpl(name, startLocation, stopLocation, manager);
+        ImportOnDemandNode ret = new ImportOnDemandNodeImpl(name, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -2916,7 +2938,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        ImportOnDemandNode ret = new ImportOnDemandNodeImpl(name, startLocation, stopLocation, manager);
+        ImportOnDemandNode ret = new ImportOnDemandNodeImpl(name, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -2928,7 +2950,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public ImportSingleTypeNode makeImportSingleTypeNode(
             NameNode name)
     {
-        ImportSingleTypeNode ret = new ImportSingleTypeNodeImpl(name, startLocation, stopLocation, manager);
+        ImportSingleTypeNode ret = new ImportSingleTypeNodeImpl(name, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -2942,7 +2964,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        ImportSingleTypeNode ret = new ImportSingleTypeNodeImpl(name, startLocation, stopLocation, manager);
+        ImportSingleTypeNode ret = new ImportSingleTypeNodeImpl(name, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -2955,7 +2977,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             boolean staticInitializer,
             BlockNode body)
     {
-        InitializerDeclarationNode ret = new InitializerDeclarationNodeImpl(staticInitializer, body, startLocation, stopLocation, manager);
+        InitializerDeclarationNode ret = new InitializerDeclarationNodeImpl(staticInitializer, body, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -2970,7 +2992,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        InitializerDeclarationNode ret = new InitializerDeclarationNodeImpl(staticInitializer, body, startLocation, stopLocation, manager);
+        InitializerDeclarationNode ret = new InitializerDeclarationNodeImpl(staticInitializer, body, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -2982,7 +3004,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public InlineTypeDeclarationNode makeInlineTypeDeclarationNode(
             InlineTypeDeclarableNode declaration)
     {
-        InlineTypeDeclarationNode ret = new InlineTypeDeclarationNodeImpl(declaration, startLocation, stopLocation, manager);
+        InlineTypeDeclarationNode ret = new InlineTypeDeclarationNodeImpl(declaration, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -2996,7 +3018,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        InlineTypeDeclarationNode ret = new InlineTypeDeclarationNodeImpl(declaration, startLocation, stopLocation, manager);
+        InlineTypeDeclarationNode ret = new InlineTypeDeclarationNodeImpl(declaration, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3009,7 +3031,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ExpressionNode expression,
             TypeNode type)
     {
-        InstanceOfNode ret = new InstanceOfNodeImpl(expression, type, startLocation, stopLocation, manager);
+        InstanceOfNode ret = new InstanceOfNodeImpl(expression, type, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3024,7 +3046,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        InstanceOfNode ret = new InstanceOfNodeImpl(expression, type, startLocation, stopLocation, manager);
+        InstanceOfNode ret = new InstanceOfNodeImpl(expression, type, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3036,7 +3058,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public IntLiteralNode makeIntLiteralNode(
             Integer value)
     {
-        IntLiteralNode ret = new IntLiteralNodeImpl(value, startLocation, stopLocation, manager);
+        IntLiteralNode ret = new IntLiteralNodeImpl(value, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3050,7 +3072,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        IntLiteralNode ret = new IntLiteralNodeImpl(value, startLocation, stopLocation, manager);
+        IntLiteralNode ret = new IntLiteralNodeImpl(value, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3062,7 +3084,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public InterfaceBodyNode makeInterfaceBodyNode(
             InterfaceMemberListNode members)
     {
-        InterfaceBodyNode ret = new InterfaceBodyNodeImpl(members, startLocation, stopLocation, manager);
+        InterfaceBodyNode ret = new InterfaceBodyNodeImpl(members, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3076,7 +3098,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        InterfaceBodyNode ret = new InterfaceBodyNodeImpl(members, startLocation, stopLocation, manager);
+        InterfaceBodyNode ret = new InterfaceBodyNodeImpl(members, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3093,7 +3115,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             IdentifierNode identifier,
             JavadocNode javadoc)
     {
-        InterfaceDeclarationNode ret = new InterfaceDeclarationNodeImpl(modifiers, extendsClause, body, typeParameters, identifier, javadoc, startLocation, stopLocation, manager);
+        InterfaceDeclarationNode ret = new InterfaceDeclarationNodeImpl(modifiers, extendsClause, body, typeParameters, identifier, javadoc, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3112,7 +3134,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        InterfaceDeclarationNode ret = new InterfaceDeclarationNodeImpl(modifiers, extendsClause, body, typeParameters, identifier, javadoc, startLocation, stopLocation, manager);
+        InterfaceDeclarationNode ret = new InterfaceDeclarationNodeImpl(modifiers, extendsClause, body, typeParameters, identifier, javadoc, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3124,7 +3146,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public InterfaceMemberListNode makeInterfaceMemberListNode(
             List<InterfaceMemberNode> children)
     {
-        InterfaceMemberListNode ret = new InterfaceMemberListNodeImpl(children, startLocation, stopLocation, manager);
+        InterfaceMemberListNode ret = new InterfaceMemberListNodeImpl(children, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3150,7 +3172,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        InterfaceMemberListNode ret = new InterfaceMemberListNodeImpl(children, startLocation, stopLocation, manager);
+        InterfaceMemberListNode ret = new InterfaceMemberListNodeImpl(children, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3176,7 +3198,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public InterfaceMemberMetaprogramAnchorNode makeInterfaceMemberMetaprogramAnchorNode(
             MetaprogramNode metaprogram)
     {
-        InterfaceMemberMetaprogramAnchorNode ret = new InterfaceMemberMetaprogramAnchorNodeImpl(makeNoOperationNode(), metaprogram, startLocation, stopLocation, manager);
+        InterfaceMemberMetaprogramAnchorNode ret = new InterfaceMemberMetaprogramAnchorNodeImpl(makeNoOperationNode(), metaprogram, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3190,7 +3212,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        InterfaceMemberMetaprogramAnchorNode ret = new InterfaceMemberMetaprogramAnchorNodeImpl(makeNoOperationNode(), metaprogram, startLocation, stopLocation, manager);
+        InterfaceMemberMetaprogramAnchorNode ret = new InterfaceMemberMetaprogramAnchorNodeImpl(makeNoOperationNode(), metaprogram, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3205,7 +3227,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             boolean strictfpFlag,
             AnnotationListNode annotations)
     {
-        InterfaceModifiersNode ret = new InterfaceModifiersNodeImpl(access, staticFlag, strictfpFlag, annotations, startLocation, stopLocation, manager);
+        InterfaceModifiersNode ret = new InterfaceModifiersNodeImpl(access, staticFlag, strictfpFlag, annotations, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3222,7 +3244,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        InterfaceModifiersNode ret = new InterfaceModifiersNodeImpl(access, staticFlag, strictfpFlag, annotations, startLocation, stopLocation, manager);
+        InterfaceModifiersNode ret = new InterfaceModifiersNodeImpl(access, staticFlag, strictfpFlag, annotations, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3234,7 +3256,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public InterfaceModifiersNode makeInterfaceModifiersNode(
             AccessModifier access)
     {
-        InterfaceModifiersNode ret = new InterfaceModifiersNodeImpl(access, false, false, makeAnnotationListNode(), startLocation, stopLocation, manager);
+        InterfaceModifiersNode ret = new InterfaceModifiersNodeImpl(access, false, false, makeAnnotationListNode(), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3248,7 +3270,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        InterfaceModifiersNode ret = new InterfaceModifiersNodeImpl(access, false, false, makeAnnotationListNode(), startLocation, stopLocation, manager);
+        InterfaceModifiersNode ret = new InterfaceModifiersNodeImpl(access, false, false, makeAnnotationListNode(), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3260,7 +3282,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public JavadocNode makeJavadocNode(
             String text)
     {
-        JavadocNode ret = new JavadocNodeImpl(text, startLocation, stopLocation, manager);
+        JavadocNode ret = new JavadocNodeImpl(text, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3274,7 +3296,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        JavadocNode ret = new JavadocNodeImpl(text, startLocation, stopLocation, manager);
+        JavadocNode ret = new JavadocNodeImpl(text, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3287,7 +3309,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             IdentifierNode label,
             StatementNode statement)
     {
-        LabeledStatementNode ret = new LabeledStatementNodeImpl(label, statement, startLocation, stopLocation, manager);
+        LabeledStatementNode ret = new LabeledStatementNodeImpl(label, statement, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3302,7 +3324,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        LabeledStatementNode ret = new LabeledStatementNodeImpl(label, statement, startLocation, stopLocation, manager);
+        LabeledStatementNode ret = new LabeledStatementNodeImpl(label, statement, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3314,7 +3336,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public LongLiteralNode makeLongLiteralNode(
             Long value)
     {
-        LongLiteralNode ret = new LongLiteralNodeImpl(value, startLocation, stopLocation, manager);
+        LongLiteralNode ret = new LongLiteralNodeImpl(value, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3328,7 +3350,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        LongLiteralNode ret = new LongLiteralNodeImpl(value, startLocation, stopLocation, manager);
+        LongLiteralNode ret = new LongLiteralNodeImpl(value, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3340,7 +3362,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public MetaprogramDependsNode makeMetaprogramDependsNode(
             NameListNode targetNames)
     {
-        MetaprogramDependsNode ret = new MetaprogramDependsNodeImpl(targetNames, startLocation, stopLocation, manager);
+        MetaprogramDependsNode ret = new MetaprogramDependsNodeImpl(targetNames, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3354,7 +3376,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        MetaprogramDependsNode ret = new MetaprogramDependsNodeImpl(targetNames, startLocation, stopLocation, manager);
+        MetaprogramDependsNode ret = new MetaprogramDependsNodeImpl(targetNames, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3366,7 +3388,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public MetaprogramImportListNode makeMetaprogramImportListNode(
             List<MetaprogramImportNode> children)
     {
-        MetaprogramImportListNode ret = new MetaprogramImportListNodeImpl(children, startLocation, stopLocation, manager);
+        MetaprogramImportListNode ret = new MetaprogramImportListNodeImpl(children, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3392,7 +3414,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        MetaprogramImportListNode ret = new MetaprogramImportListNodeImpl(children, startLocation, stopLocation, manager);
+        MetaprogramImportListNode ret = new MetaprogramImportListNodeImpl(children, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3418,7 +3440,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public MetaprogramImportNode makeMetaprogramImportNode(
             ImportNode importNode)
     {
-        MetaprogramImportNode ret = new MetaprogramImportNodeImpl(importNode, startLocation, stopLocation, manager);
+        MetaprogramImportNode ret = new MetaprogramImportNodeImpl(importNode, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3432,7 +3454,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        MetaprogramImportNode ret = new MetaprogramImportNodeImpl(importNode, startLocation, stopLocation, manager);
+        MetaprogramImportNode ret = new MetaprogramImportNodeImpl(importNode, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3445,7 +3467,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             MetaprogramPreambleNode preamble,
             BlockStatementListNode body)
     {
-        MetaprogramNode ret = new MetaprogramNodeImpl(preamble, body, startLocation, stopLocation, manager);
+        MetaprogramNode ret = new MetaprogramNodeImpl(preamble, body, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3460,7 +3482,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        MetaprogramNode ret = new MetaprogramNodeImpl(preamble, body, startLocation, stopLocation, manager);
+        MetaprogramNode ret = new MetaprogramNodeImpl(preamble, body, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3476,7 +3498,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             MetaprogramTargetNode target,
             MetaprogramDependsNode depends)
     {
-        MetaprogramPreambleNode ret = new MetaprogramPreambleNodeImpl(imports, localMode, packageMode, target, depends, startLocation, stopLocation, manager);
+        MetaprogramPreambleNode ret = new MetaprogramPreambleNodeImpl(imports, localMode, packageMode, target, depends, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3494,7 +3516,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        MetaprogramPreambleNode ret = new MetaprogramPreambleNodeImpl(imports, localMode, packageMode, target, depends, startLocation, stopLocation, manager);
+        MetaprogramPreambleNode ret = new MetaprogramPreambleNodeImpl(imports, localMode, packageMode, target, depends, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3508,7 +3530,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             MetaprogramTargetNode target,
             MetaprogramDependsNode depends)
     {
-        MetaprogramPreambleNode ret = new MetaprogramPreambleNodeImpl(imports, MetaprogramLocalMode.INSERT, MetaprogramPackageMode.READ_ONLY, target, depends, startLocation, stopLocation, manager);
+        MetaprogramPreambleNode ret = new MetaprogramPreambleNodeImpl(imports, MetaprogramLocalMode.INSERT, MetaprogramPackageMode.READ_ONLY, target, depends, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3524,7 +3546,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        MetaprogramPreambleNode ret = new MetaprogramPreambleNodeImpl(imports, MetaprogramLocalMode.INSERT, MetaprogramPackageMode.READ_ONLY, target, depends, startLocation, stopLocation, manager);
+        MetaprogramPreambleNode ret = new MetaprogramPreambleNodeImpl(imports, MetaprogramLocalMode.INSERT, MetaprogramPackageMode.READ_ONLY, target, depends, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3536,7 +3558,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public MetaprogramTargetNode makeMetaprogramTargetNode(
             IdentifierListNode targets)
     {
-        MetaprogramTargetNode ret = new MetaprogramTargetNodeImpl(targets, startLocation, stopLocation, manager);
+        MetaprogramTargetNode ret = new MetaprogramTargetNodeImpl(targets, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3550,7 +3572,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        MetaprogramTargetNode ret = new MetaprogramTargetNodeImpl(targets, startLocation, stopLocation, manager);
+        MetaprogramTargetNode ret = new MetaprogramTargetNodeImpl(targets, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3570,7 +3592,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             TypeParameterListNode typeParameters,
             JavadocNode javadoc)
     {
-        MethodDeclarationNode ret = new MethodDeclarationNodeImpl(body, modifiers, identifier, parameters, varargParameter, returnType, throwTypes, typeParameters, javadoc, startLocation, stopLocation, manager);
+        MethodDeclarationNode ret = new MethodDeclarationNodeImpl(body, modifiers, identifier, parameters, varargParameter, returnType, throwTypes, typeParameters, javadoc, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3592,7 +3614,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        MethodDeclarationNode ret = new MethodDeclarationNodeImpl(body, modifiers, identifier, parameters, varargParameter, returnType, throwTypes, typeParameters, javadoc, startLocation, stopLocation, manager);
+        MethodDeclarationNode ret = new MethodDeclarationNodeImpl(body, modifiers, identifier, parameters, varargParameter, returnType, throwTypes, typeParameters, javadoc, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3609,7 +3631,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             TypeNode returnType,
             JavadocNode javadoc)
     {
-        MethodDeclarationNode ret = new MethodDeclarationNodeImpl(body, modifiers, identifier, parameters, null, returnType, makeUnparameterizedTypeListNode(), makeTypeParameterListNode(), javadoc, startLocation, stopLocation, manager);
+        MethodDeclarationNode ret = new MethodDeclarationNodeImpl(body, modifiers, identifier, parameters, null, returnType, makeUnparameterizedTypeListNode(), makeTypeParameterListNode(), javadoc, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3628,7 +3650,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        MethodDeclarationNode ret = new MethodDeclarationNodeImpl(body, modifiers, identifier, parameters, null, returnType, makeUnparameterizedTypeListNode(), makeTypeParameterListNode(), javadoc, startLocation, stopLocation, manager);
+        MethodDeclarationNode ret = new MethodDeclarationNodeImpl(body, modifiers, identifier, parameters, null, returnType, makeUnparameterizedTypeListNode(), makeTypeParameterListNode(), javadoc, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3643,7 +3665,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ExpressionListNode arguments,
             ReferenceTypeListNode typeArguments)
     {
-        MethodInvocationByExpressionNode ret = new MethodInvocationByExpressionNodeImpl(expression, identifier, arguments, typeArguments, startLocation, stopLocation, manager);
+        MethodInvocationByExpressionNode ret = new MethodInvocationByExpressionNodeImpl(expression, identifier, arguments, typeArguments, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3660,7 +3682,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        MethodInvocationByExpressionNode ret = new MethodInvocationByExpressionNodeImpl(expression, identifier, arguments, typeArguments, startLocation, stopLocation, manager);
+        MethodInvocationByExpressionNode ret = new MethodInvocationByExpressionNodeImpl(expression, identifier, arguments, typeArguments, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3674,7 +3696,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ExpressionListNode arguments,
             ReferenceTypeListNode typeArguments)
     {
-        MethodInvocationByNameNode ret = new MethodInvocationByNameNodeImpl(name, arguments, typeArguments, startLocation, stopLocation, manager);
+        MethodInvocationByNameNode ret = new MethodInvocationByNameNodeImpl(name, arguments, typeArguments, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3690,7 +3712,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        MethodInvocationByNameNode ret = new MethodInvocationByNameNodeImpl(name, arguments, typeArguments, startLocation, stopLocation, manager);
+        MethodInvocationByNameNode ret = new MethodInvocationByNameNodeImpl(name, arguments, typeArguments, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3709,7 +3731,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             boolean strictfpFlag,
             AnnotationListNode annotations)
     {
-        MethodModifiersNode ret = new MethodModifiersNodeImpl(access, abstractFlag, staticFlag, finalFlag, synchronizedFlag, nativeFlag, strictfpFlag, annotations, startLocation, stopLocation, manager);
+        MethodModifiersNode ret = new MethodModifiersNodeImpl(access, abstractFlag, staticFlag, finalFlag, synchronizedFlag, nativeFlag, strictfpFlag, annotations, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3730,7 +3752,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        MethodModifiersNode ret = new MethodModifiersNodeImpl(access, abstractFlag, staticFlag, finalFlag, synchronizedFlag, nativeFlag, strictfpFlag, annotations, startLocation, stopLocation, manager);
+        MethodModifiersNode ret = new MethodModifiersNodeImpl(access, abstractFlag, staticFlag, finalFlag, synchronizedFlag, nativeFlag, strictfpFlag, annotations, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3742,7 +3764,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public MethodModifiersNode makeMethodModifiersNode(
             AccessModifier access)
     {
-        MethodModifiersNode ret = new MethodModifiersNodeImpl(access, false, false, false, false, false, false, makeAnnotationListNode(), startLocation, stopLocation, manager);
+        MethodModifiersNode ret = new MethodModifiersNodeImpl(access, false, false, false, false, false, false, makeAnnotationListNode(), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3756,7 +3778,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        MethodModifiersNode ret = new MethodModifiersNodeImpl(access, false, false, false, false, false, false, makeAnnotationListNode(), startLocation, stopLocation, manager);
+        MethodModifiersNode ret = new MethodModifiersNodeImpl(access, false, false, false, false, false, false, makeAnnotationListNode(), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3768,7 +3790,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public NameListNode makeNameListNode(
             List<NameNode> children)
     {
-        NameListNode ret = new NameListNodeImpl(children, startLocation, stopLocation, manager);
+        NameListNode ret = new NameListNodeImpl(children, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3794,7 +3816,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        NameListNode ret = new NameListNodeImpl(children, startLocation, stopLocation, manager);
+        NameListNode ret = new NameListNodeImpl(children, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3820,7 +3842,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public NoOperationNode makeNoOperationNode(
     )
     {
-        NoOperationNode ret = new NoOperationNodeImpl(startLocation, stopLocation, manager);
+        NoOperationNode ret = new NoOperationNodeImpl(startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3833,7 +3855,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        NoOperationNode ret = new NoOperationNodeImpl(startLocation, stopLocation, manager);
+        NoOperationNode ret = new NoOperationNodeImpl(startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3846,7 +3868,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             AnnotationElementListNode arguments,
             UnparameterizedTypeNode annotationType)
     {
-        NormalAnnotationNode ret = new NormalAnnotationNodeImpl(arguments, annotationType, startLocation, stopLocation, manager);
+        NormalAnnotationNode ret = new NormalAnnotationNodeImpl(arguments, annotationType, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3861,7 +3883,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        NormalAnnotationNode ret = new NormalAnnotationNodeImpl(arguments, annotationType, startLocation, stopLocation, manager);
+        NormalAnnotationNode ret = new NormalAnnotationNodeImpl(arguments, annotationType, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3873,7 +3895,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public NullLiteralNode makeNullLiteralNode(
             Void value)
     {
-        NullLiteralNode ret = new NullLiteralNodeImpl(null, startLocation, stopLocation, manager);
+        NullLiteralNode ret = new NullLiteralNodeImpl(null, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3887,7 +3909,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        NullLiteralNode ret = new NullLiteralNodeImpl(null, startLocation, stopLocation, manager);
+        NullLiteralNode ret = new NullLiteralNodeImpl(null, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3898,7 +3920,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     @Override
     public NullLiteralNode makeNullLiteralNode()
     {
-        NullLiteralNode ret = new NullLiteralNodeImpl(null, startLocation, stopLocation, manager);
+        NullLiteralNode ret = new NullLiteralNodeImpl(null, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3911,7 +3933,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        NullLiteralNode ret = new NullLiteralNodeImpl(null, startLocation, stopLocation, manager);
+        NullLiteralNode ret = new NullLiteralNodeImpl(null, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3924,7 +3946,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             NameNode name,
             AnnotationListNode annotations)
     {
-        PackageDeclarationNode ret = new PackageDeclarationNodeImpl(name, annotations, startLocation, stopLocation, manager);
+        PackageDeclarationNode ret = new PackageDeclarationNodeImpl(name, annotations, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3939,7 +3961,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        PackageDeclarationNode ret = new PackageDeclarationNodeImpl(name, annotations, startLocation, stopLocation, manager);
+        PackageDeclarationNode ret = new PackageDeclarationNodeImpl(name, annotations, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3951,7 +3973,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public PackageDeclarationNode makePackageDeclarationNode(
             NameNode name)
     {
-        PackageDeclarationNode ret = new PackageDeclarationNodeImpl(name, makeAnnotationListNode(), startLocation, stopLocation, manager);
+        PackageDeclarationNode ret = new PackageDeclarationNodeImpl(name, makeAnnotationListNode(), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3965,7 +3987,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        PackageDeclarationNode ret = new PackageDeclarationNodeImpl(name, makeAnnotationListNode(), startLocation, stopLocation, manager);
+        PackageDeclarationNode ret = new PackageDeclarationNodeImpl(name, makeAnnotationListNode(), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3977,7 +3999,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public PackageNode makePackageNode(
             IdentifierNode name)
     {
-        PackageNode ret = new PackageNodeImpl(name, packageNodeCallback, startLocation, stopLocation, manager);
+        PackageNode ret = new PackageNodeImpl(name, packageNodeCallback, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3991,7 +4013,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        PackageNode ret = new PackageNodeImpl(name, packageNodeCallback, startLocation, stopLocation, manager);
+        PackageNode ret = new PackageNodeImpl(name, packageNodeCallback, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -4004,7 +4026,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             UnparameterizedTypeNode baseType,
             TypeArgumentListNode typeArguments)
     {
-        ParameterizedTypeNode ret = new ParameterizedTypeNodeImpl(baseType, typeArguments, startLocation, stopLocation, manager);
+        ParameterizedTypeNode ret = new ParameterizedTypeNodeImpl(baseType, typeArguments, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -4019,7 +4041,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        ParameterizedTypeNode ret = new ParameterizedTypeNodeImpl(baseType, typeArguments, startLocation, stopLocation, manager);
+        ParameterizedTypeNode ret = new ParameterizedTypeNodeImpl(baseType, typeArguments, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -4032,7 +4054,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ParameterizedTypeNode base,
             DeclaredTypeNode select)
     {
-        ParameterizedTypeSelectNode ret = new ParameterizedTypeSelectNodeImpl(base, select, startLocation, stopLocation, manager);
+        ParameterizedTypeSelectNode ret = new ParameterizedTypeSelectNodeImpl(base, select, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -4047,7 +4069,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        ParameterizedTypeSelectNode ret = new ParameterizedTypeSelectNodeImpl(base, select, startLocation, stopLocation, manager);
+        ParameterizedTypeSelectNode ret = new ParameterizedTypeSelectNodeImpl(base, select, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -4059,7 +4081,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public ParenthesizedExpressionNode makeParenthesizedExpressionNode(
             ExpressionNode expression)
     {
-        ParenthesizedExpressionNode ret = new ParenthesizedExpressionNodeImpl(expression, startLocation, stopLocation, manager);
+        ParenthesizedExpressionNode ret = new ParenthesizedExpressionNodeImpl(expression, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -4073,7 +4095,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        ParenthesizedExpressionNode ret = new ParenthesizedExpressionNodeImpl(expression, startLocation, stopLocation, manager);
+        ParenthesizedExpressionNode ret = new ParenthesizedExpressionNodeImpl(expression, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -4085,7 +4107,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public PrimitiveTypeNode makePrimitiveTypeNode(
             PrimitiveType primitiveType)
     {
-        PrimitiveTypeNode ret = new PrimitiveTypeNodeImpl(primitiveType, startLocation, stopLocation, manager);
+        PrimitiveTypeNode ret = new PrimitiveTypeNodeImpl(primitiveType, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -4099,7 +4121,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        PrimitiveTypeNode ret = new PrimitiveTypeNodeImpl(primitiveType, startLocation, stopLocation, manager);
+        PrimitiveTypeNode ret = new PrimitiveTypeNodeImpl(primitiveType, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -4116,7 +4138,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ExpressionListNode arguments,
             AnonymousClassBodyNode body)
     {
-        QualifiedClassInstantiationNode ret = new QualifiedClassInstantiationNodeImpl(enclosingExpression, identifier, typeArguments, constructorTypeArguments, arguments, body, startLocation, stopLocation, manager);
+        QualifiedClassInstantiationNode ret = new QualifiedClassInstantiationNodeImpl(enclosingExpression, identifier, typeArguments, constructorTypeArguments, arguments, body, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -4135,7 +4157,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        QualifiedClassInstantiationNode ret = new QualifiedClassInstantiationNodeImpl(enclosingExpression, identifier, typeArguments, constructorTypeArguments, arguments, body, startLocation, stopLocation, manager);
+        QualifiedClassInstantiationNode ret = new QualifiedClassInstantiationNodeImpl(enclosingExpression, identifier, typeArguments, constructorTypeArguments, arguments, body, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -4149,7 +4171,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             IdentifierNode identifier,
             NameCategory category)
     {
-        QualifiedNameNode ret = new QualifiedNameNodeImpl(base, identifier, category, startLocation, stopLocation, manager);
+        QualifiedNameNode ret = new QualifiedNameNodeImpl(base, identifier, category, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -4165,7 +4187,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        QualifiedNameNode ret = new QualifiedNameNodeImpl(base, identifier, category, startLocation, stopLocation, manager);
+        QualifiedNameNode ret = new QualifiedNameNodeImpl(base, identifier, category, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -4177,7 +4199,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public ReferenceTypeListNode makeReferenceTypeListNode(
             List<ReferenceTypeNode> children)
     {
-        ReferenceTypeListNode ret = new ReferenceTypeListNodeImpl(children, startLocation, stopLocation, manager);
+        ReferenceTypeListNode ret = new ReferenceTypeListNodeImpl(children, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -4203,7 +4225,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        ReferenceTypeListNode ret = new ReferenceTypeListNodeImpl(children, startLocation, stopLocation, manager);
+        ReferenceTypeListNode ret = new ReferenceTypeListNodeImpl(children, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -4229,7 +4251,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public ReturnNode makeReturnNode(
             ExpressionNode expression)
     {
-        ReturnNode ret = new ReturnNodeImpl(expression, startLocation, stopLocation, manager);
+        ReturnNode ret = new ReturnNodeImpl(expression, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -4243,7 +4265,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        ReturnNode ret = new ReturnNodeImpl(expression, startLocation, stopLocation, manager);
+        ReturnNode ret = new ReturnNodeImpl(expression, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -4256,7 +4278,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             IdentifierNode identifier,
             NameCategory category)
     {
-        SimpleNameNode ret = new SimpleNameNodeImpl(identifier, category, startLocation, stopLocation, manager);
+        SimpleNameNode ret = new SimpleNameNodeImpl(identifier, category, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -4271,7 +4293,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        SimpleNameNode ret = new SimpleNameNodeImpl(identifier, category, startLocation, stopLocation, manager);
+        SimpleNameNode ret = new SimpleNameNodeImpl(identifier, category, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -4284,7 +4306,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             AnnotationValueNode value,
             UnparameterizedTypeNode annotationType)
     {
-        SingleElementAnnotationNode ret = new SingleElementAnnotationNodeImpl(value, annotationType, startLocation, stopLocation, manager);
+        SingleElementAnnotationNode ret = new SingleElementAnnotationNodeImpl(value, annotationType, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -4299,7 +4321,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        SingleElementAnnotationNode ret = new SingleElementAnnotationNodeImpl(value, annotationType, startLocation, stopLocation, manager);
+        SingleElementAnnotationNode ret = new SingleElementAnnotationNodeImpl(value, annotationType, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -4312,7 +4334,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             NameNode name,
             IdentifierNode identifier)
     {
-        SingleStaticImportNode ret = new SingleStaticImportNodeImpl(name, identifier, startLocation, stopLocation, manager);
+        SingleStaticImportNode ret = new SingleStaticImportNodeImpl(name, identifier, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -4327,7 +4349,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        SingleStaticImportNode ret = new SingleStaticImportNodeImpl(name, identifier, startLocation, stopLocation, manager);
+        SingleStaticImportNode ret = new SingleStaticImportNodeImpl(name, identifier, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -4339,7 +4361,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public StatementExpressionListNode makeStatementExpressionListNode(
             List<StatementExpressionNode> children)
     {
-        StatementExpressionListNode ret = new StatementExpressionListNodeImpl(children, startLocation, stopLocation, manager);
+        StatementExpressionListNode ret = new StatementExpressionListNodeImpl(children, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -4365,7 +4387,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        StatementExpressionListNode ret = new StatementExpressionListNodeImpl(children, startLocation, stopLocation, manager);
+        StatementExpressionListNode ret = new StatementExpressionListNodeImpl(children, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -4391,7 +4413,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public StaticImportOnDemandNode makeStaticImportOnDemandNode(
             NameNode name)
     {
-        StaticImportOnDemandNode ret = new StaticImportOnDemandNodeImpl(name, startLocation, stopLocation, manager);
+        StaticImportOnDemandNode ret = new StaticImportOnDemandNodeImpl(name, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -4405,7 +4427,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        StaticImportOnDemandNode ret = new StaticImportOnDemandNodeImpl(name, startLocation, stopLocation, manager);
+        StaticImportOnDemandNode ret = new StaticImportOnDemandNodeImpl(name, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -4417,7 +4439,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public StringLiteralNode makeStringLiteralNode(
             String value)
     {
-        StringLiteralNode ret = new StringLiteralNodeImpl(value, startLocation, stopLocation, manager);
+        StringLiteralNode ret = new StringLiteralNodeImpl(value, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -4431,7 +4453,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        StringLiteralNode ret = new StringLiteralNodeImpl(value, startLocation, stopLocation, manager);
+        StringLiteralNode ret = new StringLiteralNodeImpl(value, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -4444,7 +4466,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             UnparameterizedTypeNode type,
             IdentifierNode identifier)
     {
-        SuperFieldAccessNode ret = new SuperFieldAccessNodeImpl(type, identifier, startLocation, stopLocation, manager);
+        SuperFieldAccessNode ret = new SuperFieldAccessNodeImpl(type, identifier, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -4459,7 +4481,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        SuperFieldAccessNode ret = new SuperFieldAccessNodeImpl(type, identifier, startLocation, stopLocation, manager);
+        SuperFieldAccessNode ret = new SuperFieldAccessNodeImpl(type, identifier, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -4471,7 +4493,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public SuperFieldAccessNode makeSuperFieldAccessNode(
             IdentifierNode identifier)
     {
-        SuperFieldAccessNode ret = new SuperFieldAccessNodeImpl(null, identifier, startLocation, stopLocation, manager);
+        SuperFieldAccessNode ret = new SuperFieldAccessNodeImpl(null, identifier, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -4485,7 +4507,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        SuperFieldAccessNode ret = new SuperFieldAccessNodeImpl(null, identifier, startLocation, stopLocation, manager);
+        SuperFieldAccessNode ret = new SuperFieldAccessNodeImpl(null, identifier, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -4500,7 +4522,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ExpressionListNode arguments,
             ReferenceTypeListNode typeArguments)
     {
-        SuperMethodInvocationNode ret = new SuperMethodInvocationNodeImpl(type, identifier, arguments, typeArguments, startLocation, stopLocation, manager);
+        SuperMethodInvocationNode ret = new SuperMethodInvocationNodeImpl(type, identifier, arguments, typeArguments, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -4517,7 +4539,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        SuperMethodInvocationNode ret = new SuperMethodInvocationNodeImpl(type, identifier, arguments, typeArguments, startLocation, stopLocation, manager);
+        SuperMethodInvocationNode ret = new SuperMethodInvocationNodeImpl(type, identifier, arguments, typeArguments, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -4530,7 +4552,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             IdentifierNode identifier,
             ExpressionListNode arguments)
     {
-        SuperMethodInvocationNode ret = new SuperMethodInvocationNodeImpl(null, identifier, arguments, makeReferenceTypeListNode(), startLocation, stopLocation, manager);
+        SuperMethodInvocationNode ret = new SuperMethodInvocationNodeImpl(null, identifier, arguments, makeReferenceTypeListNode(), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -4545,7 +4567,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        SuperMethodInvocationNode ret = new SuperMethodInvocationNodeImpl(null, identifier, arguments, makeReferenceTypeListNode(), startLocation, stopLocation, manager);
+        SuperMethodInvocationNode ret = new SuperMethodInvocationNodeImpl(null, identifier, arguments, makeReferenceTypeListNode(), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -4559,7 +4581,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ExpressionListNode arguments,
             ReferenceTypeListNode typeArguments)
     {
-        SuperMethodInvocationNode ret = new SuperMethodInvocationNodeImpl(null, identifier, arguments, typeArguments, startLocation, stopLocation, manager);
+        SuperMethodInvocationNode ret = new SuperMethodInvocationNodeImpl(null, identifier, arguments, typeArguments, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -4575,7 +4597,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        SuperMethodInvocationNode ret = new SuperMethodInvocationNodeImpl(null, identifier, arguments, typeArguments, startLocation, stopLocation, manager);
+        SuperMethodInvocationNode ret = new SuperMethodInvocationNodeImpl(null, identifier, arguments, typeArguments, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -4589,7 +4611,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ExpressionListNode arguments,
             ReferenceTypeListNode typeArguments)
     {
-        SuperclassConstructorInvocationNode ret = new SuperclassConstructorInvocationNodeImpl(qualifyingExpression, arguments, typeArguments, startLocation, stopLocation, manager);
+        SuperclassConstructorInvocationNode ret = new SuperclassConstructorInvocationNodeImpl(qualifyingExpression, arguments, typeArguments, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -4605,7 +4627,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        SuperclassConstructorInvocationNode ret = new SuperclassConstructorInvocationNodeImpl(qualifyingExpression, arguments, typeArguments, startLocation, stopLocation, manager);
+        SuperclassConstructorInvocationNode ret = new SuperclassConstructorInvocationNodeImpl(qualifyingExpression, arguments, typeArguments, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -4617,7 +4639,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public SuperclassConstructorInvocationNode makeSuperclassConstructorInvocationNode(
             ExpressionListNode arguments)
     {
-        SuperclassConstructorInvocationNode ret = new SuperclassConstructorInvocationNodeImpl(null, arguments, makeReferenceTypeListNode(), startLocation, stopLocation, manager);
+        SuperclassConstructorInvocationNode ret = new SuperclassConstructorInvocationNodeImpl(null, arguments, makeReferenceTypeListNode(), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -4631,7 +4653,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        SuperclassConstructorInvocationNode ret = new SuperclassConstructorInvocationNodeImpl(null, arguments, makeReferenceTypeListNode(), startLocation, stopLocation, manager);
+        SuperclassConstructorInvocationNode ret = new SuperclassConstructorInvocationNodeImpl(null, arguments, makeReferenceTypeListNode(), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -4644,7 +4666,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ExpressionNode expression,
             CaseListNode cases)
     {
-        SwitchNode ret = new SwitchNodeImpl(expression, cases, startLocation, stopLocation, manager);
+        SwitchNode ret = new SwitchNodeImpl(expression, cases, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -4659,7 +4681,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        SwitchNode ret = new SwitchNodeImpl(expression, cases, startLocation, stopLocation, manager);
+        SwitchNode ret = new SwitchNodeImpl(expression, cases, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -4672,7 +4694,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ExpressionNode expression,
             BlockNode block)
     {
-        SynchronizedNode ret = new SynchronizedNodeImpl(expression, block, startLocation, stopLocation, manager);
+        SynchronizedNode ret = new SynchronizedNodeImpl(expression, block, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -4687,7 +4709,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        SynchronizedNode ret = new SynchronizedNodeImpl(expression, block, startLocation, stopLocation, manager);
+        SynchronizedNode ret = new SynchronizedNodeImpl(expression, block, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -4699,7 +4721,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public ThisNode makeThisNode(
             UnparameterizedTypeNode type)
     {
-        ThisNode ret = new ThisNodeImpl(type, startLocation, stopLocation, manager);
+        ThisNode ret = new ThisNodeImpl(type, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -4713,7 +4735,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        ThisNode ret = new ThisNodeImpl(type, startLocation, stopLocation, manager);
+        ThisNode ret = new ThisNodeImpl(type, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -4724,7 +4746,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     @Override
     public ThisNode makeThisNode()
     {
-        ThisNode ret = new ThisNodeImpl(null, startLocation, stopLocation, manager);
+        ThisNode ret = new ThisNodeImpl(null, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -4737,7 +4759,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        ThisNode ret = new ThisNodeImpl(null, startLocation, stopLocation, manager);
+        ThisNode ret = new ThisNodeImpl(null, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -4749,7 +4771,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public ThrowNode makeThrowNode(
             ExpressionNode expression)
     {
-        ThrowNode ret = new ThrowNodeImpl(expression, startLocation, stopLocation, manager);
+        ThrowNode ret = new ThrowNodeImpl(expression, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -4763,7 +4785,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        ThrowNode ret = new ThrowNodeImpl(expression, startLocation, stopLocation, manager);
+        ThrowNode ret = new ThrowNodeImpl(expression, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -4777,7 +4799,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             CatchListNode catches,
             BlockNode finallyBlock)
     {
-        TryNode ret = new TryNodeImpl(block, catches, finallyBlock, startLocation, stopLocation, manager);
+        TryNode ret = new TryNodeImpl(block, catches, finallyBlock, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -4793,7 +4815,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        TryNode ret = new TryNodeImpl(block, catches, finallyBlock, startLocation, stopLocation, manager);
+        TryNode ret = new TryNodeImpl(block, catches, finallyBlock, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -4806,7 +4828,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BlockNode block,
             BlockNode finallyBlock)
     {
-        TryNode ret = new TryNodeImpl(block, makeCatchListNode(), finallyBlock, startLocation, stopLocation, manager);
+        TryNode ret = new TryNodeImpl(block, makeCatchListNode(), finallyBlock, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -4821,7 +4843,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        TryNode ret = new TryNodeImpl(block, makeCatchListNode(), finallyBlock, startLocation, stopLocation, manager);
+        TryNode ret = new TryNodeImpl(block, makeCatchListNode(), finallyBlock, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -4834,7 +4856,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BlockNode block,
             CatchListNode catches)
     {
-        TryNode ret = new TryNodeImpl(block, catches, null, startLocation, stopLocation, manager);
+        TryNode ret = new TryNodeImpl(block, catches, null, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -4849,7 +4871,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        TryNode ret = new TryNodeImpl(block, catches, null, startLocation, stopLocation, manager);
+        TryNode ret = new TryNodeImpl(block, catches, null, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -4861,7 +4883,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public TypeArgumentListNode makeTypeArgumentListNode(
             List<TypeArgumentNode> children)
     {
-        TypeArgumentListNode ret = new TypeArgumentListNodeImpl(children, startLocation, stopLocation, manager);
+        TypeArgumentListNode ret = new TypeArgumentListNodeImpl(children, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -4887,7 +4909,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        TypeArgumentListNode ret = new TypeArgumentListNodeImpl(children, startLocation, stopLocation, manager);
+        TypeArgumentListNode ret = new TypeArgumentListNodeImpl(children, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -4914,7 +4936,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ExpressionNode expression,
             TypeNode type)
     {
-        TypeCastNode ret = new TypeCastNodeImpl(expression, type, startLocation, stopLocation, manager);
+        TypeCastNode ret = new TypeCastNodeImpl(expression, type, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -4929,7 +4951,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        TypeCastNode ret = new TypeCastNodeImpl(expression, type, startLocation, stopLocation, manager);
+        TypeCastNode ret = new TypeCastNodeImpl(expression, type, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -4941,7 +4963,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public TypeDeclarationListNode makeTypeDeclarationListNode(
             List<TypeDeclarationNode> children)
     {
-        TypeDeclarationListNode ret = new TypeDeclarationListNodeImpl(children, startLocation, stopLocation, manager);
+        TypeDeclarationListNode ret = new TypeDeclarationListNodeImpl(children, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -4967,7 +4989,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        TypeDeclarationListNode ret = new TypeDeclarationListNodeImpl(children, startLocation, stopLocation, manager);
+        TypeDeclarationListNode ret = new TypeDeclarationListNodeImpl(children, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -4993,7 +5015,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public TypeDeclarationMetaprogramAnchorNode makeTypeDeclarationMetaprogramAnchorNode(
             MetaprogramNode metaprogram)
     {
-        TypeDeclarationMetaprogramAnchorNode ret = new TypeDeclarationMetaprogramAnchorNodeImpl(makeNoOperationNode(), metaprogram, startLocation, stopLocation, manager);
+        TypeDeclarationMetaprogramAnchorNode ret = new TypeDeclarationMetaprogramAnchorNodeImpl(makeNoOperationNode(), metaprogram, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -5007,7 +5029,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        TypeDeclarationMetaprogramAnchorNode ret = new TypeDeclarationMetaprogramAnchorNodeImpl(makeNoOperationNode(), metaprogram, startLocation, stopLocation, manager);
+        TypeDeclarationMetaprogramAnchorNode ret = new TypeDeclarationMetaprogramAnchorNodeImpl(makeNoOperationNode(), metaprogram, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -5019,7 +5041,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public TypeParameterListNode makeTypeParameterListNode(
             List<TypeParameterNode> children)
     {
-        TypeParameterListNode ret = new TypeParameterListNodeImpl(children, startLocation, stopLocation, manager);
+        TypeParameterListNode ret = new TypeParameterListNodeImpl(children, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -5045,7 +5067,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        TypeParameterListNode ret = new TypeParameterListNodeImpl(children, startLocation, stopLocation, manager);
+        TypeParameterListNode ret = new TypeParameterListNodeImpl(children, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -5072,7 +5094,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             IdentifierNode identifier,
             DeclaredTypeListNode bounds)
     {
-        TypeParameterNode ret = new TypeParameterNodeImpl(identifier, bounds, startLocation, stopLocation, manager);
+        TypeParameterNode ret = new TypeParameterNodeImpl(identifier, bounds, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -5087,7 +5109,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        TypeParameterNode ret = new TypeParameterNodeImpl(identifier, bounds, startLocation, stopLocation, manager);
+        TypeParameterNode ret = new TypeParameterNodeImpl(identifier, bounds, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -5100,7 +5122,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ExpressionNode expression,
             UnaryOperator operator)
     {
-        UnaryExpressionNode ret = new UnaryExpressionNodeImpl(expression, operator, startLocation, stopLocation, manager);
+        UnaryExpressionNode ret = new UnaryExpressionNodeImpl(expression, operator, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -5115,7 +5137,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        UnaryExpressionNode ret = new UnaryExpressionNodeImpl(expression, operator, startLocation, stopLocation, manager);
+        UnaryExpressionNode ret = new UnaryExpressionNodeImpl(expression, operator, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -5128,7 +5150,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ExpressionNode expression,
             UnaryStatementOperator operator)
     {
-        UnaryStatementExpressionNode ret = new UnaryStatementExpressionNodeImpl(expression, operator, startLocation, stopLocation, manager);
+        UnaryStatementExpressionNode ret = new UnaryStatementExpressionNodeImpl(expression, operator, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -5143,7 +5165,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        UnaryStatementExpressionNode ret = new UnaryStatementExpressionNodeImpl(expression, operator, startLocation, stopLocation, manager);
+        UnaryStatementExpressionNode ret = new UnaryStatementExpressionNodeImpl(expression, operator, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -5155,7 +5177,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public UnparameterizedTypeListNode makeUnparameterizedTypeListNode(
             List<UnparameterizedTypeNode> children)
     {
-        UnparameterizedTypeListNode ret = new UnparameterizedTypeListNodeImpl(children, startLocation, stopLocation, manager);
+        UnparameterizedTypeListNode ret = new UnparameterizedTypeListNodeImpl(children, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -5181,7 +5203,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        UnparameterizedTypeListNode ret = new UnparameterizedTypeListNodeImpl(children, startLocation, stopLocation, manager);
+        UnparameterizedTypeListNode ret = new UnparameterizedTypeListNodeImpl(children, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -5207,7 +5229,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public UnparameterizedTypeNode makeUnparameterizedTypeNode(
             NameNode name)
     {
-        UnparameterizedTypeNode ret = new UnparameterizedTypeNodeImpl(name, startLocation, stopLocation, manager);
+        UnparameterizedTypeNode ret = new UnparameterizedTypeNodeImpl(name, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -5221,7 +5243,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        UnparameterizedTypeNode ret = new UnparameterizedTypeNodeImpl(name, startLocation, stopLocation, manager);
+        UnparameterizedTypeNode ret = new UnparameterizedTypeNodeImpl(name, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -5236,7 +5258,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ExpressionListNode arguments,
             AnonymousClassBodyNode body)
     {
-        UnqualifiedClassInstantiationNode ret = new UnqualifiedClassInstantiationNodeImpl(type, constructorTypeArguments, arguments, body, startLocation, stopLocation, manager);
+        UnqualifiedClassInstantiationNode ret = new UnqualifiedClassInstantiationNodeImpl(type, constructorTypeArguments, arguments, body, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -5253,7 +5275,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        UnqualifiedClassInstantiationNode ret = new UnqualifiedClassInstantiationNodeImpl(type, constructorTypeArguments, arguments, body, startLocation, stopLocation, manager);
+        UnqualifiedClassInstantiationNode ret = new UnqualifiedClassInstantiationNodeImpl(type, constructorTypeArguments, arguments, body, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -5265,7 +5287,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public UnqualifiedClassInstantiationNode makeUnqualifiedClassInstantiationNode(
             DeclaredTypeNode type)
     {
-        UnqualifiedClassInstantiationNode ret = new UnqualifiedClassInstantiationNodeImpl(type, makeTypeArgumentListNode(), makeExpressionListNode(), null, startLocation, stopLocation, manager);
+        UnqualifiedClassInstantiationNode ret = new UnqualifiedClassInstantiationNodeImpl(type, makeTypeArgumentListNode(), makeExpressionListNode(), null, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -5279,7 +5301,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        UnqualifiedClassInstantiationNode ret = new UnqualifiedClassInstantiationNodeImpl(type, makeTypeArgumentListNode(), makeExpressionListNode(), null, startLocation, stopLocation, manager);
+        UnqualifiedClassInstantiationNode ret = new UnqualifiedClassInstantiationNodeImpl(type, makeTypeArgumentListNode(), makeExpressionListNode(), null, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -5292,7 +5314,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             DeclaredTypeNode type,
             ExpressionListNode arguments)
     {
-        UnqualifiedClassInstantiationNode ret = new UnqualifiedClassInstantiationNodeImpl(type, makeTypeArgumentListNode(), arguments, null, startLocation, stopLocation, manager);
+        UnqualifiedClassInstantiationNode ret = new UnqualifiedClassInstantiationNodeImpl(type, makeTypeArgumentListNode(), arguments, null, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -5307,7 +5329,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        UnqualifiedClassInstantiationNode ret = new UnqualifiedClassInstantiationNodeImpl(type, makeTypeArgumentListNode(), arguments, null, startLocation, stopLocation, manager);
+        UnqualifiedClassInstantiationNode ret = new UnqualifiedClassInstantiationNodeImpl(type, makeTypeArgumentListNode(), arguments, null, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -5320,7 +5342,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             VariableModifiersNode modifiers,
             VariableDeclaratorListNode declarators)
     {
-        VariableDeclarationNode ret = new VariableDeclarationNodeImpl(modifiers, declarators, startLocation, stopLocation, manager);
+        VariableDeclarationNode ret = new VariableDeclarationNodeImpl(modifiers, declarators, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -5335,7 +5357,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        VariableDeclarationNode ret = new VariableDeclarationNodeImpl(modifiers, declarators, startLocation, stopLocation, manager);
+        VariableDeclarationNode ret = new VariableDeclarationNodeImpl(modifiers, declarators, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -5347,7 +5369,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public VariableDeclaratorListNode makeVariableDeclaratorListNode(
             List<VariableDeclaratorNode> children)
     {
-        VariableDeclaratorListNode ret = new VariableDeclaratorListNodeImpl(children, startLocation, stopLocation, manager);
+        VariableDeclaratorListNode ret = new VariableDeclaratorListNodeImpl(children, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -5373,7 +5395,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        VariableDeclaratorListNode ret = new VariableDeclaratorListNodeImpl(children, startLocation, stopLocation, manager);
+        VariableDeclaratorListNode ret = new VariableDeclaratorListNodeImpl(children, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -5401,7 +5423,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             IdentifierNode name,
             VariableInitializerNode initializer)
     {
-        VariableDeclaratorNode ret = new VariableDeclaratorNodeImpl(type, name, initializer, startLocation, stopLocation, manager);
+        VariableDeclaratorNode ret = new VariableDeclaratorNodeImpl(type, name, initializer, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -5417,7 +5439,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        VariableDeclaratorNode ret = new VariableDeclaratorNodeImpl(type, name, initializer, startLocation, stopLocation, manager);
+        VariableDeclaratorNode ret = new VariableDeclaratorNodeImpl(type, name, initializer, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -5429,7 +5451,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public VariableInitializerListNode makeVariableInitializerListNode(
             List<VariableInitializerNode> children)
     {
-        VariableInitializerListNode ret = new VariableInitializerListNodeImpl(children, startLocation, stopLocation, manager);
+        VariableInitializerListNode ret = new VariableInitializerListNodeImpl(children, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -5455,7 +5477,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        VariableInitializerListNode ret = new VariableInitializerListNodeImpl(children, startLocation, stopLocation, manager);
+        VariableInitializerListNode ret = new VariableInitializerListNodeImpl(children, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -5481,7 +5503,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public VariableListNode makeVariableListNode(
             List<VariableNode> children)
     {
-        VariableListNode ret = new VariableListNodeImpl(children, startLocation, stopLocation, manager);
+        VariableListNode ret = new VariableListNodeImpl(children, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -5507,7 +5529,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        VariableListNode ret = new VariableListNodeImpl(children, startLocation, stopLocation, manager);
+        VariableListNode ret = new VariableListNodeImpl(children, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -5534,7 +5556,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             boolean finalFlag,
             AnnotationListNode annotations)
     {
-        VariableModifiersNode ret = new VariableModifiersNodeImpl(finalFlag, annotations, startLocation, stopLocation, manager);
+        VariableModifiersNode ret = new VariableModifiersNodeImpl(finalFlag, annotations, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -5549,7 +5571,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        VariableModifiersNode ret = new VariableModifiersNodeImpl(finalFlag, annotations, startLocation, stopLocation, manager);
+        VariableModifiersNode ret = new VariableModifiersNodeImpl(finalFlag, annotations, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -5560,7 +5582,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     @Override
     public VariableModifiersNode makeVariableModifiersNode()
     {
-        VariableModifiersNode ret = new VariableModifiersNodeImpl(false, makeAnnotationListNode(), startLocation, stopLocation, manager);
+        VariableModifiersNode ret = new VariableModifiersNodeImpl(false, makeAnnotationListNode(), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -5573,7 +5595,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        VariableModifiersNode ret = new VariableModifiersNodeImpl(false, makeAnnotationListNode(), startLocation, stopLocation, manager);
+        VariableModifiersNode ret = new VariableModifiersNodeImpl(false, makeAnnotationListNode(), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -5587,7 +5609,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             TypeNode type,
             IdentifierNode identifier)
     {
-        VariableNode ret = new VariableNodeImpl(modifiers, type, identifier, startLocation, stopLocation, manager);
+        VariableNode ret = new VariableNodeImpl(modifiers, type, identifier, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -5603,7 +5625,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        VariableNode ret = new VariableNodeImpl(modifiers, type, identifier, startLocation, stopLocation, manager);
+        VariableNode ret = new VariableNodeImpl(modifiers, type, identifier, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -5615,7 +5637,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public VoidTypeNode makeVoidTypeNode(
     )
     {
-        VoidTypeNode ret = new VoidTypeNodeImpl(startLocation, stopLocation, manager);
+        VoidTypeNode ret = new VoidTypeNodeImpl(startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -5628,7 +5650,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        VoidTypeNode ret = new VoidTypeNodeImpl(startLocation, stopLocation, manager);
+        VoidTypeNode ret = new VoidTypeNodeImpl(startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -5641,7 +5663,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ExpressionNode condition,
             StatementNode statement)
     {
-        WhileLoopNode ret = new WhileLoopNodeImpl(condition, statement, startLocation, stopLocation, manager);
+        WhileLoopNode ret = new WhileLoopNodeImpl(condition, statement, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -5656,7 +5678,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        WhileLoopNode ret = new WhileLoopNodeImpl(condition, statement, startLocation, stopLocation, manager);
+        WhileLoopNode ret = new WhileLoopNodeImpl(condition, statement, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -5669,7 +5691,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             ReferenceTypeNode bound,
             boolean upperBound)
     {
-        WildcardTypeNode ret = new WildcardTypeNodeImpl(bound, upperBound, startLocation, stopLocation, manager);
+        WildcardTypeNode ret = new WildcardTypeNodeImpl(bound, upperBound, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -5684,7 +5706,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        WildcardTypeNode ret = new WildcardTypeNodeImpl(bound, upperBound, startLocation, stopLocation, manager);
+        WildcardTypeNode ret = new WildcardTypeNodeImpl(bound, upperBound, startLocation, stopLocation, manager, binary);
         return ret;
     }
     

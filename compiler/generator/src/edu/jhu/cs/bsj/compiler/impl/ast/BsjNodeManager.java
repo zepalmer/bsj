@@ -81,7 +81,10 @@ public class BsjNodeManager
 	 */
 	public NodePermission getPermission(Node node)
 	{
-		if (this.permissionPolicyManager == null)
+		if (node.isBinary())
+		{
+			return NodePermission.READ;
+		} else if (this.permissionPolicyManager == null)
 		{
 			return NodePermission.MUTATE;
 		} else

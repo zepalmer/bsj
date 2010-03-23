@@ -39,11 +39,12 @@ public class SingleStaticImportNodeImpl extends NodeImpl implements SingleStatic
             IdentifierNode identifier,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
-            BsjNodeManager manager)
+            BsjNodeManager manager,
+            boolean binary)
     {
-        super(startLocation, stopLocation, manager);
-        setName(name);
-        setIdentifier(identifier);
+        super(startLocation, stopLocation, manager, binary);
+        setName(name, false);
+        setIdentifier(identifier, false);
     }
     
     /**
@@ -62,7 +63,15 @@ public class SingleStaticImportNodeImpl extends NodeImpl implements SingleStatic
      */
     public void setName(NameNode name)
     {
-        getManager().assertMutatable(this);
+            setName(name, true);
+    }
+    
+    private void setName(NameNode name, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.NAME, Attribute.AccessType.STRONG_WRITE);
         if (this.name instanceof NodeImpl)
         {
@@ -91,7 +100,15 @@ public class SingleStaticImportNodeImpl extends NodeImpl implements SingleStatic
      */
     public void setIdentifier(IdentifierNode identifier)
     {
-        getManager().assertMutatable(this);
+            setIdentifier(identifier, true);
+    }
+    
+    private void setIdentifier(IdentifierNode identifier, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.STRONG_WRITE);
         if (this.identifier instanceof NodeImpl)
         {

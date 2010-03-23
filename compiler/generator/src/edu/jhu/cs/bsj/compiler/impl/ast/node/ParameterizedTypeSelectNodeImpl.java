@@ -39,11 +39,12 @@ public class ParameterizedTypeSelectNodeImpl extends NodeImpl implements Paramet
             DeclaredTypeNode select,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
-            BsjNodeManager manager)
+            BsjNodeManager manager,
+            boolean binary)
     {
-        super(startLocation, stopLocation, manager);
-        setBase(base);
-        setSelect(select);
+        super(startLocation, stopLocation, manager, binary);
+        setBase(base, false);
+        setSelect(select, false);
     }
     
     /**
@@ -62,7 +63,15 @@ public class ParameterizedTypeSelectNodeImpl extends NodeImpl implements Paramet
      */
     public void setBase(ParameterizedTypeNode base)
     {
-        getManager().assertMutatable(this);
+            setBase(base, true);
+    }
+    
+    private void setBase(ParameterizedTypeNode base, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.BASE, Attribute.AccessType.STRONG_WRITE);
         if (this.base instanceof NodeImpl)
         {
@@ -91,7 +100,15 @@ public class ParameterizedTypeSelectNodeImpl extends NodeImpl implements Paramet
      */
     public void setSelect(DeclaredTypeNode select)
     {
-        getManager().assertMutatable(this);
+            setSelect(select, true);
+    }
+    
+    private void setSelect(DeclaredTypeNode select, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
         recordAccess(LocalAttribute.SELECT, Attribute.AccessType.STRONG_WRITE);
         if (this.select instanceof NodeImpl)
         {
