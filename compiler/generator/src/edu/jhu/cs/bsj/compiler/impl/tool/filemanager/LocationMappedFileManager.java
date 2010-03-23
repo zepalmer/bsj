@@ -178,8 +178,18 @@ public class LocationMappedFileManager implements BsjFileManager
 	@Override
 	public boolean isSameFile(FileObject a, FileObject b)
 	{
-		// TODO Auto-generated method stub
-		return false;
+		if (!(a instanceof BsjFileObject))
+		{
+			String classname = (a != null) ? a.getClass().getName() : "null";
+			throw new IllegalArgumentException("Unsupported type of FileObject for isSameFile: " + classname);
+		}
+		if (!(b instanceof BsjFileObject))
+		{
+			String classname = (b != null) ? b.getClass().getName() : "null";
+			throw new IllegalArgumentException("Unsupported type of FileObject for isSameFile: " + classname);
+		}
+
+		return a.equals(b);
 	}
 
 	@Override

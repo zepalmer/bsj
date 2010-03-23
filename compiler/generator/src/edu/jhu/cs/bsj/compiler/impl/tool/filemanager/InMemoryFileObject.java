@@ -15,6 +15,12 @@ import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjFileObject;
 public class InMemoryFileObject extends AbstractFileObject implements BsjFileObject
 {
 	/**
+	 * The location manager controlling this file object. This reference is used to prevent two in-memory file objects
+	 * from being equal if they have different location managers but the same pathname.
+	 */
+	private InMemoryLocationManager manager;
+
+	/**
 	 * Stores the content of this file object.
 	 */
 	private byte[] bytes = null;
@@ -38,13 +44,16 @@ public class InMemoryFileObject extends AbstractFileObject implements BsjFileObj
 	/**
 	 * Constructor.
 	 * 
+	 * @param manager The location manager for this file object.
 	 * @param encodingName the name of the encoding to use.
 	 * @param filename The filename of the file represented by this object.
 	 * @param bytes the content of the class.
 	 */
-	public InMemoryFileObject(String encodingName, String filename, Kind kind)
+	public InMemoryFileObject(InMemoryLocationManager manager, String encodingName, String filename, Kind kind)
 	{
 		super(encodingName);
+
+		this.manager = manager;
 		if (filename.contains("/"))
 		{
 			this.path = filename.substring(0, filename.lastIndexOf('/'));
@@ -199,4 +208,44 @@ public class InMemoryFileObject extends AbstractFileObject implements BsjFileObj
 		return name;
 	}
 
+	@Override
+	public int hashCode()
+	{
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + ((path == null) ? 0 : path.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj)
+	{
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		InMemoryFileObject other = (InMemoryFileObject) obj;
+		if (manager == null)
+		{
+			if (other.manager != null)
+				return false;
+		} else if (manager != other.manager) // managers cannot be compared using equals - go for identity
+			return false;
+		if (name == null)
+		{
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		if (path == null)
+		{
+			if (other.path != null)
+				return false;
+		} else if (!path.equals(other.path))
+			return false;
+		return true;
+	}
 }

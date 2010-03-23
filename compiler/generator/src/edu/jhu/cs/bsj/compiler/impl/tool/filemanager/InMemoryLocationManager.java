@@ -66,7 +66,7 @@ public class InMemoryLocationManager extends AbstractLocationManager
 		if (fileObject == null)
 		{
 			// create object
-			fileObject = new InMemoryFileObject(null, filename, JavaFileManagerUtilities.getKindFor(relativeName));
+			fileObject = new InMemoryFileObject(this, null, filename, JavaFileManagerUtilities.getKindFor(relativeName));
 			fileObjectMap.put(filename, fileObject);
 		}
 
@@ -96,7 +96,7 @@ public class InMemoryLocationManager extends AbstractLocationManager
 		if (fileObject == null)
 		{
 			// create the object
-			fileObject = new InMemoryFileObject(null, filename, kind);
+			fileObject = new InMemoryFileObject(this, null, filename, kind);
 			this.fileObjectMap.put(filename, fileObject);
 		}
 		

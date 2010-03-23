@@ -59,4 +59,34 @@ public abstract class AbstractZipFileObject extends AbstractFileObject
 	{
 		return StringUtilities.getSuffix(getName(), '/');
 	}
+
+	@Override
+	public int hashCode()
+	{
+		return this.file.getName().hashCode() ^ this.getName().hashCode();
+	}
+
+	@Override
+	public boolean equals(Object obj)
+	{
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		AbstractZipFileObject other = (AbstractZipFileObject)obj;
+		
+		if (!(this.file.getName().equals(other.file.getName())))
+		{
+			return false;
+		}
+		
+		if (!(this.getName().equals(other.getName())))
+		{
+			return false;
+		}
+		
+		return true;
+	}
 }
