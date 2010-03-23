@@ -200,8 +200,6 @@ public class InitialNameCategorizationVisitor extends BsjTypedNodeNoOpVisitor
         	return NameCategory.TYPE;
         }
         
-        // TODO: assign more categories
-
         throw new IllegalStateException("Could not find a name categorization for " + node.getNameString()
                 + (node.getStartLocation() == null ? "" : " at " + node.getStartLocation()));
     }
