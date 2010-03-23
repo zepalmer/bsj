@@ -1667,8 +1667,6 @@ public class SourceGenerator
 			printFactoryArgumentList(cps, recProps, def.getFactoryOverrideMap(), methodDefinition, def);
 
 			cps.println(";");
-			// TODO: later, this is where we register created nodes with the central dependency validation
-			// authority
 			cps.println("return ret;");
 			cps.decPrependCount();
 			cps.println("}");
