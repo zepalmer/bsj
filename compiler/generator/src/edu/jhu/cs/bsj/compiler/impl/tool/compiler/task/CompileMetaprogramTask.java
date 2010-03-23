@@ -233,8 +233,7 @@ public class CompileMetaprogramTask extends AbstractBsjCompilerTask
 		}
 
 		// *** Start by building the metaprogram compilation unit
-		// TODO: what kind of package declaration should a metaprogram have?
-		String metaprogramPackageName = "foo";
+		String metaprogramPackageName = "edu.jhu.cs.bsj.generated.metaprogram";
 
 		// Process default imports
 		List<ImportNode> imports = new ArrayList<ImportNode>();
