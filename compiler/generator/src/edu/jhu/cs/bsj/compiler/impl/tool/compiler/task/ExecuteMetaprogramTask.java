@@ -49,8 +49,10 @@ public class ExecuteMetaprogramTask extends AbstractBsjCompilerTask
 		while (it.hasNext())
 		{
 			CompilationUnitNode node = it.next();
-			// TODO: skip nodes which represent binary files
-			context.registerTask(new SourceSerializationTask(node));
+			if (!node.isBinary())
+			{
+				context.registerTask(new SourceSerializationTask(node));
+			}
 		}
 	}
 
