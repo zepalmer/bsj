@@ -18,9 +18,6 @@ public abstract class AbstractBsjMetaprogram<T extends MetaprogramAnchorNode<?>>
 	/** The ID number of this metaprogram. */
 	private int id = NEXT_ID.getAndIncrement();
 	
-	// TODO: do we want to move the context to a field on execute()?
-	// this would decrease the amount of control we have over the field (user could write to it)... but do we care?
-	// it's their own fault if they foul up their context field
 	/**
 	 * Instantiates this metaprogram.
 	 * @param context The context this metaprogram will use.
