@@ -50,7 +50,7 @@ public class BsjCodeScanner extends RuleBasedScanner
         IToken comment = new Token(new TextAttribute(provider.getColor(BsjColorProvider.SINGLE_LINE_COMMENT)));
         IToken other = new Token(new TextAttribute(provider.getColor(BsjColorProvider.DEFAULT)));
         IToken meta = new Token(new TextAttribute(provider.getColor(BsjColorProvider.META_PROGRAM)));
-        List<IRule> rules= new ArrayList<IRule>();
+        List<IRule> rules = new ArrayList<IRule>();
 
         // Add rule for single line comments.
         rules.add(new EndOfLineRule("//", comment));
@@ -68,24 +68,24 @@ public class BsjCodeScanner extends RuleBasedScanner
         // Add word rule for keywords, types, and constants.
         WordRule wordRule= new WordRule(new JavaWordDetector(), other);
         
-        for (int i= 0; i < fgKeywords.length; i++)
+        for (int i = 0; i < fgKeywords.length; i++)
         {
             wordRule.addWord(fgKeywords[i], keyword);
         }
         
-        for (int i= 0; i < fgTypes.length; i++)
+        for (int i = 0; i < fgTypes.length; i++)
         {
             wordRule.addWord(fgTypes[i], type);
         }
         
-        for (int i= 0; i < fgConstants.length; i++)
+        for (int i = 0; i < fgConstants.length; i++)
         {
             wordRule.addWord(fgConstants[i], type);
         }
         
         rules.add(wordRule);
 
-        IRule[] result= new IRule[rules.size()];
+        IRule[] result = new IRule[rules.size()];
         rules.toArray(result);
         setRules(result);
     }

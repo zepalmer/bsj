@@ -23,16 +23,17 @@ public class BsjPartitionScanner extends RuleBasedPartitionScanner
     public final static String JAVA_MULTILINE_COMMENT = "__java_multiline_comment";
     public final static String JAVA_DOC = "__java_javadoc";
     
-    public final static String META_PROGRAM = "__meta";//TODO remvoe
+    public final static String META_PROGRAM = "__meta";
     
     public BsjPartitionScanner() 
     {
         super();
 
-        IToken javaDoc= new Token(JAVA_DOC);
-        IToken comment= new Token(JAVA_MULTILINE_COMMENT);
-
-        List<IRule> rules= new ArrayList<IRule>();
+        IToken javaDoc = new Token(JAVA_DOC);
+        IToken comment = new Token(JAVA_MULTILINE_COMMENT);
+        IToken meta = new Token(META_PROGRAM);
+        
+        List<IRule> rules = new ArrayList<IRule>();
 
         // Add rule for single line comments.
         rules.add(new EndOfLineRule("//", Token.UNDEFINED));
@@ -48,7 +49,7 @@ public class BsjPartitionScanner extends RuleBasedPartitionScanner
         rules.add(new MultiLineRule("/**", "*/", javaDoc, (char) 0, true));
         rules.add(new MultiLineRule("/*", "*/", comment, (char) 0, true));
         
-        IToken meta= new Token(META_PROGRAM);//TODO REMOVE
+        // Add rule for meta programs
         rules.add(new MultiLineRule("[:", ":]", meta, (char) 0, true));
         
         IPredicateRule[] result= new IPredicateRule[rules.size()];
@@ -61,7 +62,6 @@ public class BsjPartitionScanner extends RuleBasedPartitionScanner
      */
     static class EmptyCommentDetector implements IWordDetector 
     {
-
         /* (non-Javadoc)
         * Method declared on IWordDetector
         */

@@ -20,14 +20,13 @@ import org.eclipse.jface.text.presentation.IPresentationReconciler;
 import org.eclipse.jface.text.presentation.PresentationReconciler;
 import org.eclipse.jface.text.rules.BufferedRuleBasedScanner;
 import org.eclipse.jface.text.rules.DefaultDamagerRepairer;
-import org.eclipse.jface.text.rules.ITokenScanner;
 import org.eclipse.jface.text.rules.Token;
 import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.jface.text.source.SourceViewerConfiguration;
 
+import edu.jhu.cs.bsj.plugin.scanners.BsjCodeScanner;
 import edu.jhu.cs.bsj.plugin.scanners.BsjMetaScanner;
 import edu.jhu.cs.bsj.plugin.scanners.BsjPartitionScanner;
-import edu.jhu.cs.bsj.plugin.scanners.BsjCodeScanner;
 import edu.jhu.cs.bsj.plugin.scanners.JavadocScanner;
 
 
@@ -91,7 +90,9 @@ public class BsjConfiguration extends SourceViewerConfiguration
         {
             metaScanner = new BsjMetaScanner(colorProvider);
             metaScanner.setDefaultReturnToken(new Token(new TextAttribute(
-                    colorProvider.getColor(BsjColorProvider.META_PROGRAM))));
+                    colorProvider.getColor(BsjColorProvider.META_PROGRAM),
+                    colorProvider.getColor(BsjColorProvider.META_BACKGROUND),
+                    0)));
         }
         return metaScanner;
     }

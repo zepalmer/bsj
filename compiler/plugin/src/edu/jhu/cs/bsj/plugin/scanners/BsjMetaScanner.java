@@ -50,7 +50,7 @@ public class BsjMetaScanner extends RuleBasedScanner
     private IToken makeToken(RGB color, BsjColorProvider provider)
     {
         return new Token(new TextAttribute(
-                provider.getColor(BsjColorProvider.KEYWORD), 
+                provider.getColor(color), 
                 provider.getColor(BsjColorProvider.META_BACKGROUND), 
                 0));
     }
@@ -68,7 +68,7 @@ public class BsjMetaScanner extends RuleBasedScanner
         IToken comment = makeToken(BsjColorProvider.SINGLE_LINE_COMMENT, provider);
         IToken other = makeToken(BsjColorProvider.DEFAULT, provider);
         IToken meta = makeToken(BsjColorProvider.META_PROGRAM, provider);
-        List<IRule> rules= new ArrayList<IRule>();
+        List<IRule> rules = new ArrayList<IRule>();
 
         // Add rule for single line comments.
         rules.add(new EndOfLineRule("//", comment));
@@ -78,34 +78,34 @@ public class BsjMetaScanner extends RuleBasedScanner
         rules.add(new SingleLineRule("'", "'", string, '\\'));
         
         // Add generic whitespace rule.
-        rules.add(new WhitespaceRule(new JavaWhitespaceDetector(),meta));
+        rules.add(new WhitespaceRule(new JavaWhitespaceDetector(), other));
 
         // Add word rule for keywords, types, constants, and meta characters.
-        WordRule wordRule= new WordRule(new JavaWordDetector(), other);
+        WordRule wordRule = new WordRule(new JavaWordDetector(), other);
         
-        for (int i= 0; i < fgKeywords.length; i++)
+        for (int i = 0; i < fgKeywords.length; i++)
         {
             wordRule.addWord(fgKeywords[i], keyword);
         }
         
-        for (int i= 0; i < fgTypes.length; i++)
+        for (int i = 0; i < fgTypes.length; i++)
         {
             wordRule.addWord(fgTypes[i], type);
         }
         
-        for (int i= 0; i < fgConstants.length; i++)
+        for (int i = 0; i < fgConstants.length; i++)
         {
             wordRule.addWord(fgConstants[i], type);
         }
         
-        for (int i= 0; i < metaChars.length; i++)
+        for (int i = 0; i < metaChars.length; i++)
         {
             wordRule.addWord(metaChars[i], meta);
         }
         
         rules.add(wordRule);
 
-        IRule[] result= new IRule[rules.size()];
+        IRule[] result = new IRule[rules.size()];
         rules.toArray(result);
         setRules(result);
     }
