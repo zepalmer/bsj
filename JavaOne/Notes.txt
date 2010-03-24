@@ -1,0 +1,127 @@
+Title:
+	Backstage Java: Practical Abstraction of Design Patterns through Metaprogramming
+
+Abstract:
+	A core tension exists between design patterns and language features. Design patterns approximate language features at the cost of maintenance and readability, but languages which support these features are often overly complex; thus, this support exists only for the most common problems. But this is a subjective rule; the commonality of a problem is vague and often domain-specific. Backstage Java is a Java extension that is a bridge between design patterns and language features, allowing abstraction of design patterns without complicating the underlying language.
+	
+	Java experience is a must; knowledge of compilers is helpful, not required.  Key topics:
+	
+	* Metaprogramming
+	* The BSJ language
+	* How BSJ improves maintenance and readability
+
+Outline:
+
+	* Introduction
+		- Speaker bios
+		- Motivation: redundant code examples
+		- Examples of poor solutions
+		- Examples of desirable solution
+	* Metaprogramming
+		- Traditional
+		- BSJ metaprogramming and the JSP analogy
+	* Explanation of BSJ code
+		- Walkthrough of BSJ syntax
+		- External methods
+		- Meta-annotations
+	* Metaprogram dependencies
+		- Targets and dependency graphs
+		- Reassembling the fragmented metaprogram
+		- Church-Rosser approximation: conflict detection
+	* Summary of features
+	* Conclusion
+	* Q&A
+
+Materials:
+
+	A fundamental tension exists between design patterns and language features.  Design patterns promote the use of well-considered solutions but also increase code maintenance and decrease readability when compared with language feature support.  Conversely, languages which support numerous features are often complicated and difficult to learn.  Language support is therefore only introduced for the most common problems.  Unfortunately, this is a subjective rule; the commonality of a problem is difficult to judge and often domain-specific.
+
+	Backstage Java is a Java language extension (including its own compiler and set of development tools) that provides a style of development which serves as a middle ground between design patterns and language features.  By using metaprogramming to explicitly represent design patterns, BSJ allows abstraction of these common constructs without further complicating the underlying language.  Additionally, metaprograms may be developed by the BSJ developer, allowing for extensions similar to those provided by a domain-specific language without incurring the dramatic overhead of the DSL's development and maintenance.
+	
+	Training components will include samples of repetitious Java code and equivalent BSJ code.  Several different examples will be used throughout the presentation but most focus on key design patterns and idioms and how their verbosity is reduced.  For instance, the following is one example of Java code which is repetitious (likely to be shown on multiple slides):
+	
+		public class Card implements Comparable<Card> {
+			private Suit suit;
+			private Rank rank;
+			
+			public Card(Suit suit, Rank rank) {
+				super();
+				this.suit = suit;
+				this.rank = rank;
+			}
+			
+			public Suit getSuit() {
+				return suit;
+			}
+		
+			public Rank getRank() {
+				return rank;
+			}
+		
+			@Override
+			public int compareTo(Card o) {
+				return this.getRank().compareTo(o.getRank());
+			}
+		
+			@Override
+			public String toString() {
+				return "Card [rank=" + rank + ", suit=" + suit + "]";
+			}
+		
+			@Override
+			public int hashCode() {
+				final int prime = 31;
+				int result = 1;
+
+				result = prime * result + ((rank == null) ? 0 : rank.hashCode());
+				result = prime * result + ((suit == null) ? 0 : suit.hashCode());
+				return result;
+			}
+		
+			@Override
+			public boolean equals(Object obj) {
+				if (this == obj)
+					return true;
+				if (obj == null)
+					return false;
+				if (getClass() != obj.getClass())
+					return false;
+				Card other = (Card) obj;
+				if (rank == null) {
+					if (other.rank != null)
+						return false;
+				} else if (!rank.equals(other.rank))
+					return false;
+				if (suit == null) {
+					if (other.suit != null)
+						return false;
+				} else if (!suit.equals(other.suit))
+					return false;
+				return true;
+			}
+		}
+
+	This is an example of the BSJ code which replaces it:
+	
+		@@GenerateEqualsAndHashCode
+		@@GenerateToString
+		@@GenerateConstructor
+		@@ComparedBy("rank")
+		public class Card {
+			@@Property(setter=false) private Rank rank;
+			@@Property(setter=false) private Suit suit;
+		}
+
+Bios:
+
+	Joseph Riley
+	Graduate student at The Johns Hopkins University
+	joseph.riley@jhu.edu
+	
+	Joseph Riley is a masters degree student in the department of Computer Science at The Johns Hopkins University.  He leads a double life as a full-time software engineer working within the aerospace and defense industry with over 5 years of Java development experience.  His research interests include programming language theory and design, compiler design, and machine learning.  This is his first speaking engagement at a conference.
+
+	Zachary Palmer
+	Graduate student at The Johns Hopkins University
+	zachary.palmer@jhu.edu
+	
+	Zachary Palmer thoroughly enjoys his position as a doctoral student in the department of Computer Science at The Johns Hopkins University.  His past experience includes two years of professional software development and countless hours of off-the-record tinkering.  Zach's research is motivated by three parts enthusiasm, two parts curiosity, and a healthy share of laziness; his interests lie in metaprogramming and the practical application of well-founded theory.  He has regularly presented as a teaching assistant and course instructor at Johns Hopkins classes and looks forward to his first conference speaking engagement.  In his spare time, he enjoys rambling incessantly about things he thinks are neat and listening likewise.

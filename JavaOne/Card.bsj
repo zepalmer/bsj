@@ -1,0 +1,8 @@
+@@GenerateEqualsAndHashCode
+@@GenerateToString
+@@GenerateConstructor
+@@ComparedBy("rank")
+public class Card {
+	@@Property(setter=false) private Rank rank;
+	@@Property(setter=false) private Suit suit;
+}
