@@ -4735,7 +4735,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     @Override
     public NormalMetaAnnotationNode makeNormalMetaAnnotationNode(
             MetaAnnotationElementListNode arguments,
-            DeclaredTypeNode annotationType)
+            UnparameterizedTypeNode annotationType)
     {
         this.before();
         NormalMetaAnnotationNode node = factory.makeNormalMetaAnnotationNode(arguments, annotationType);
@@ -4750,7 +4750,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     @Override
     public NormalMetaAnnotationNode makeNormalMetaAnnotationNode(
             MetaAnnotationElementListNode arguments,
-            DeclaredTypeNode annotationType,
+            UnparameterizedTypeNode annotationType,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
@@ -5271,7 +5271,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     @Override
     public SingleElementMetaAnnotationNode makeSingleElementMetaAnnotationNode(
             MetaAnnotationValueNode value,
-            DeclaredTypeNode annotationType)
+            UnparameterizedTypeNode annotationType)
     {
         this.before();
         SingleElementMetaAnnotationNode node = factory.makeSingleElementMetaAnnotationNode(value, annotationType);
@@ -5286,7 +5286,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     @Override
     public SingleElementMetaAnnotationNode makeSingleElementMetaAnnotationNode(
             MetaAnnotationValueNode value,
-            DeclaredTypeNode annotationType,
+            UnparameterizedTypeNode annotationType,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {

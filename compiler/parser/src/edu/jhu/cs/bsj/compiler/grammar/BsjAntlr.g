@@ -1003,12 +1003,11 @@ metaAnnotation returns [MetaAnnotationNode ret]
             ruleStop();
         }
     :   
-        // TODO: this shouldn't be "name"; it should be something that produces a DeclaredTypeNode
-        '@' '@' classOrInterfaceType
+        '@' '@' name
         {
             $ret = factory.makeNormalMetaAnnotationNode(
                     factory.makeMetaAnnotationElementListNode(new ArrayList<MetaAnnotationElementNode>()),
-                    $classOrInterfaceType.ret);
+                    factory.makeUnparameterizedTypeNode($name.ret));
         }
         (
             '('   
@@ -1017,14 +1016,14 @@ metaAnnotation returns [MetaAnnotationNode ret]
                 {
                     $ret = factory.makeNormalMetaAnnotationNode(
                             $metaAnnotationElementValuePairs.ret,
-                            $classOrInterfaceType.ret);
+                            factory.makeUnparameterizedTypeNode($name.ret));
                 }
             |
                 metaAnnotationElementValue
                 {
                     $ret = factory.makeSingleElementMetaAnnotationNode(
                             $metaAnnotationElementValue.ret,
-                            $classOrInterfaceType.ret);
+                            factory.makeUnparameterizedTypeNode($name.ret));
                 }
             )? 
             ')' 

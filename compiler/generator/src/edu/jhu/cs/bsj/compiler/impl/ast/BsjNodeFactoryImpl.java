@@ -4192,7 +4192,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     @Override
     public NormalMetaAnnotationNode makeNormalMetaAnnotationNode(
             MetaAnnotationElementListNode arguments,
-            DeclaredTypeNode annotationType)
+            UnparameterizedTypeNode annotationType)
     {
         NormalMetaAnnotationNode ret = new NormalMetaAnnotationNodeImpl(arguments, annotationType, startLocation, stopLocation, manager, binary);
         return ret;
@@ -4205,7 +4205,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     @Override
     public NormalMetaAnnotationNode makeNormalMetaAnnotationNode(
             MetaAnnotationElementListNode arguments,
-            DeclaredTypeNode annotationType,
+            UnparameterizedTypeNode annotationType,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
@@ -4660,7 +4660,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     @Override
     public SingleElementMetaAnnotationNode makeSingleElementMetaAnnotationNode(
             MetaAnnotationValueNode value,
-            DeclaredTypeNode annotationType)
+            UnparameterizedTypeNode annotationType)
     {
         SingleElementMetaAnnotationNode ret = new SingleElementMetaAnnotationNodeImpl(value, annotationType, startLocation, stopLocation, manager, binary);
         return ret;
@@ -4673,7 +4673,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     @Override
     public SingleElementMetaAnnotationNode makeSingleElementMetaAnnotationNode(
             MetaAnnotationValueNode value,
-            DeclaredTypeNode annotationType,
+            UnparameterizedTypeNode annotationType,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {

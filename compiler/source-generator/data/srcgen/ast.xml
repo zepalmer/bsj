@@ -2284,7 +2284,7 @@
         </type>
 
         <type name="MetaAnnotationNode" super="Node" mode="abstract">
-            <prop name="annotationType" type="DeclaredTypeNode" desc="the annotation type" />
+            <prop name="annotationType" type="UnparameterizedTypeNode" desc="the annotation type" />
             <doc><![CDATA[
                 Acts as a base class for meta-annotation nodes.  Subclasses distinguish between the different types of
                 meta-annotation sugar.

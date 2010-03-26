@@ -9,8 +9,8 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
-import edu.jhu.cs.bsj.compiler.ast.node.DeclaredTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
+import edu.jhu.cs.bsj.compiler.ast.node.UnparameterizedTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationElementListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.NormalMetaAnnotationNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
@@ -32,7 +32,7 @@ public class NormalMetaAnnotationNodeImpl extends MetaAnnotationNodeImpl impleme
     /** General constructor. */
     public NormalMetaAnnotationNodeImpl(
             MetaAnnotationElementListNode arguments,
-            DeclaredTypeNode annotationType,
+            UnparameterizedTypeNode annotationType,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
             BsjNodeManager manager,
@@ -209,9 +209,9 @@ public class NormalMetaAnnotationNodeImpl extends MetaAnnotationNodeImpl impleme
             setArguments((MetaAnnotationElementListNode)after);
             return true;
         }
-        if (before.equals(this.getAnnotationType()) && (after instanceof DeclaredTypeNode))
+        if (before.equals(this.getAnnotationType()) && (after instanceof UnparameterizedTypeNode))
         {
-            setAnnotationType((DeclaredTypeNode)after);
+            setAnnotationType((UnparameterizedTypeNode)after);
             return true;
         }
         return false;

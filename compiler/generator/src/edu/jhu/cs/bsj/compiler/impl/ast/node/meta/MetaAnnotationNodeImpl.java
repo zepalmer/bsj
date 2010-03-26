@@ -7,7 +7,7 @@ import javax.annotation.Generated;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
-import edu.jhu.cs.bsj.compiler.ast.node.DeclaredTypeNode;
+import edu.jhu.cs.bsj.compiler.ast.node.UnparameterizedTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
@@ -17,7 +17,7 @@ import edu.jhu.cs.bsj.compiler.impl.ast.node.NodeImpl;
 public abstract class MetaAnnotationNodeImpl extends NodeImpl implements MetaAnnotationNode
 {
     /** The annotation type. */
-    private DeclaredTypeNode annotationType;
+    private UnparameterizedTypeNode annotationType;
     
     private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
     {
@@ -27,7 +27,7 @@ public abstract class MetaAnnotationNodeImpl extends NodeImpl implements MetaAnn
     
     /** General constructor. */
     protected MetaAnnotationNodeImpl(
-            DeclaredTypeNode annotationType,
+            UnparameterizedTypeNode annotationType,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
             BsjNodeManager manager,
@@ -41,7 +41,7 @@ public abstract class MetaAnnotationNodeImpl extends NodeImpl implements MetaAnn
      * Gets the annotation type.
      * @return The annotation type.
      */
-    public DeclaredTypeNode getAnnotationType()
+    public UnparameterizedTypeNode getAnnotationType()
     {
         recordAccess(LocalAttribute.ANNOTATION_TYPE, Attribute.AccessType.READ);
         return this.annotationType;
@@ -51,12 +51,12 @@ public abstract class MetaAnnotationNodeImpl extends NodeImpl implements MetaAnn
      * Changes the annotation type.
      * @param annotationType The annotation type.
      */
-    public void setAnnotationType(DeclaredTypeNode annotationType)
+    public void setAnnotationType(UnparameterizedTypeNode annotationType)
     {
             setAnnotationType(annotationType, true);
     }
     
-    private void setAnnotationType(DeclaredTypeNode annotationType, boolean checkPermissions)
+    private void setAnnotationType(UnparameterizedTypeNode annotationType, boolean checkPermissions)
     {
         if (checkPermissions)
         {

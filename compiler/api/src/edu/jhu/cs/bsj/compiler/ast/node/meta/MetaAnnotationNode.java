@@ -3,8 +3,8 @@ package edu.jhu.cs.bsj.compiler.ast.node.meta;
 import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
-import edu.jhu.cs.bsj.compiler.ast.node.DeclaredTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
+import edu.jhu.cs.bsj.compiler.ast.node.UnparameterizedTypeNode;
 
 /**
  * Acts as a base class for meta-annotation nodes.  Subclasses distinguish between the different types of
@@ -17,13 +17,13 @@ public interface MetaAnnotationNode extends Node
      * Gets the annotation type.
      * @return The annotation type.
      */
-    public DeclaredTypeNode getAnnotationType();
+    public UnparameterizedTypeNode getAnnotationType();
     
     /**
      * Changes the annotation type.
      * @param annotationType The annotation type.
      */
-    public void setAnnotationType(DeclaredTypeNode annotationType);
+    public void setAnnotationType(UnparameterizedTypeNode annotationType);
     
     /**
      * Generates a deep copy of this node.

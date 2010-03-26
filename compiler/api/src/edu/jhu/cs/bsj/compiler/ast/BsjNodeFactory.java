@@ -2678,7 +2678,7 @@ public interface BsjNodeFactory
      */
     public NormalMetaAnnotationNode makeNormalMetaAnnotationNode(
             MetaAnnotationElementListNode arguments,
-            DeclaredTypeNode annotationType);
+            UnparameterizedTypeNode annotationType);
     
     /**
      * Creates a NormalMetaAnnotationNode.
@@ -2686,7 +2686,7 @@ public interface BsjNodeFactory
      */
     public NormalMetaAnnotationNode makeNormalMetaAnnotationNode(
             MetaAnnotationElementListNode arguments,
-            DeclaredTypeNode annotationType,
+            UnparameterizedTypeNode annotationType,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
     
@@ -2976,7 +2976,7 @@ public interface BsjNodeFactory
      */
     public SingleElementMetaAnnotationNode makeSingleElementMetaAnnotationNode(
             MetaAnnotationValueNode value,
-            DeclaredTypeNode annotationType);
+            UnparameterizedTypeNode annotationType);
     
     /**
      * Creates a SingleElementMetaAnnotationNode.
@@ -2984,7 +2984,7 @@ public interface BsjNodeFactory
      */
     public SingleElementMetaAnnotationNode makeSingleElementMetaAnnotationNode(
             MetaAnnotationValueNode value,
-            DeclaredTypeNode annotationType,
+            UnparameterizedTypeNode annotationType,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
     
