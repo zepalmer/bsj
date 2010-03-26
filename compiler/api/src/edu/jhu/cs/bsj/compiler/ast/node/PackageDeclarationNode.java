@@ -3,6 +3,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
 import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationListNode;
 
 /**
  * A node representing a package declaration, as in
@@ -29,6 +30,18 @@ public interface PackageDeclarationNode extends Node
      * @param name The name of the package.
      */
     public void setName(NameNode name);
+    
+    /**
+     * Gets the meta-annotations on the package declaration.
+     * @return The meta-annotations on the package declaration.
+     */
+    public MetaAnnotationListNode getMetaAnnotations();
+    
+    /**
+     * Changes the meta-annotations on the package declaration.
+     * @param metaAnnotations The meta-annotations on the package declaration.
+     */
+    public void setMetaAnnotations(MetaAnnotationListNode metaAnnotations);
     
     /**
      * Gets the annotations on the package declaration.

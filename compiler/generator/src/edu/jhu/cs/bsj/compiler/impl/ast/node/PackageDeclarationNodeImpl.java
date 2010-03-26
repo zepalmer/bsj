@@ -13,6 +13,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.AnnotationListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.NameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.PackageDeclarationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationListNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
@@ -22,6 +23,9 @@ public class PackageDeclarationNodeImpl extends NodeImpl implements PackageDecla
     /** The name of the package. */
     private NameNode name;
     
+    /** The meta-annotations on the package declaration. */
+    private MetaAnnotationListNode metaAnnotations;
+    
     /** The annotations on the package declaration. */
     private AnnotationListNode annotations;
     
@@ -29,6 +33,8 @@ public class PackageDeclarationNodeImpl extends NodeImpl implements PackageDecla
     {
         /** Attribute for the name property. */
         NAME,
+        /** Attribute for the metaAnnotations property. */
+        META_ANNOTATIONS,
         /** Attribute for the annotations property. */
         ANNOTATIONS,
     }
@@ -36,6 +42,7 @@ public class PackageDeclarationNodeImpl extends NodeImpl implements PackageDecla
     /** General constructor. */
     public PackageDeclarationNodeImpl(
             NameNode name,
+            MetaAnnotationListNode metaAnnotations,
             AnnotationListNode annotations,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
@@ -44,6 +51,7 @@ public class PackageDeclarationNodeImpl extends NodeImpl implements PackageDecla
     {
         super(startLocation, stopLocation, manager, binary);
         setName(name, false);
+        setMetaAnnotations(metaAnnotations, false);
         setAnnotations(annotations, false);
     }
     
@@ -81,6 +89,43 @@ public class PackageDeclarationNodeImpl extends NodeImpl implements PackageDecla
         if (this.name instanceof NodeImpl)
         {
             ((NodeImpl)this.name).setParent(this);
+        }
+    }
+    
+    /**
+     * Gets the meta-annotations on the package declaration.
+     * @return The meta-annotations on the package declaration.
+     */
+    public MetaAnnotationListNode getMetaAnnotations()
+    {
+        recordAccess(LocalAttribute.META_ANNOTATIONS, Attribute.AccessType.READ);
+        return this.metaAnnotations;
+    }
+    
+    /**
+     * Changes the meta-annotations on the package declaration.
+     * @param metaAnnotations The meta-annotations on the package declaration.
+     */
+    public void setMetaAnnotations(MetaAnnotationListNode metaAnnotations)
+    {
+            setMetaAnnotations(metaAnnotations, true);
+    }
+    
+    private void setMetaAnnotations(MetaAnnotationListNode metaAnnotations, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
+        recordAccess(LocalAttribute.META_ANNOTATIONS, Attribute.AccessType.STRONG_WRITE);
+        if (this.metaAnnotations instanceof NodeImpl)
+        {
+            ((NodeImpl)this.metaAnnotations).setParent(null);
+        }
+        this.metaAnnotations = metaAnnotations;
+        if (this.metaAnnotations instanceof NodeImpl)
+        {
+            ((NodeImpl)this.metaAnnotations).setParent(this);
         }
     }
     
@@ -136,6 +181,10 @@ public class PackageDeclarationNodeImpl extends NodeImpl implements PackageDecla
         {
             this.name.receive(visitor);
         }
+        if (this.metaAnnotations != null)
+        {
+            this.metaAnnotations.receive(visitor);
+        }
         if (this.annotations != null)
         {
             this.annotations.receive(visitor);
@@ -156,6 +205,10 @@ public class PackageDeclarationNodeImpl extends NodeImpl implements PackageDecla
         if (this.name != null)
         {
             this.name.receiveTyped(visitor);
+        }
+        if (this.metaAnnotations != null)
+        {
+            this.metaAnnotations.receiveTyped(visitor);
         }
         if (this.annotations != null)
         {
@@ -187,6 +240,7 @@ public class PackageDeclarationNodeImpl extends NodeImpl implements PackageDecla
     {
         List<Object> list = super.getChildObjects();
         list.add(getName());
+        list.add(getMetaAnnotations());
         list.add(getAnnotations());
         return list;
     }
@@ -202,6 +256,9 @@ public class PackageDeclarationNodeImpl extends NodeImpl implements PackageDecla
         sb.append('[');
         sb.append("name=");
         sb.append(this.getName() == null? "null" : this.getName().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("metaAnnotations=");
+        sb.append(this.getMetaAnnotations() == null? "null" : this.getMetaAnnotations().getClass().getSimpleName());
         sb.append(',');
         sb.append("annotations=");
         sb.append(this.getAnnotations() == null? "null" : this.getAnnotations().getClass().getSimpleName());
@@ -237,6 +294,7 @@ public class PackageDeclarationNodeImpl extends NodeImpl implements PackageDecla
     {
         return factory.makePackageDeclarationNode(
                 getName().deepCopy(factory),
+                getMetaAnnotations().deepCopy(factory),
                 getAnnotations().deepCopy(factory),
                 getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
                 getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
@@ -256,6 +314,11 @@ public class PackageDeclarationNodeImpl extends NodeImpl implements PackageDecla
         if (before.equals(this.getName()) && (after instanceof NameNode))
         {
             setName((NameNode)after);
+            return true;
+        }
+        if (before.equals(this.getMetaAnnotations()) && (after instanceof MetaAnnotationListNode))
+        {
+            setMetaAnnotations((MetaAnnotationListNode)after);
             return true;
         }
         if (before.equals(this.getAnnotations()) && (after instanceof AnnotationListNode))

@@ -9,23 +9,30 @@ import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ModifiersNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationListNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public abstract class ModifiersNodeImpl extends NodeImpl implements ModifiersNode
 {
+    /** The meta-annotations modifying the subject. */
+    private MetaAnnotationListNode metaAnnotations;
+    
     /** The annotations modifying the subject. */
     private AnnotationListNode annotations;
     
     private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
     {
+        /** Attribute for the metaAnnotations property. */
+        META_ANNOTATIONS,
         /** Attribute for the annotations property. */
         ANNOTATIONS,
     }
     
     /** General constructor. */
     protected ModifiersNodeImpl(
+            MetaAnnotationListNode metaAnnotations,
             AnnotationListNode annotations,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
@@ -33,7 +40,45 @@ public abstract class ModifiersNodeImpl extends NodeImpl implements ModifiersNod
             boolean binary)
     {
         super(startLocation, stopLocation, manager, binary);
+        setMetaAnnotations(metaAnnotations, false);
         setAnnotations(annotations, false);
+    }
+    
+    /**
+     * Gets the meta-annotations modifying the subject.
+     * @return The meta-annotations modifying the subject.
+     */
+    public MetaAnnotationListNode getMetaAnnotations()
+    {
+        recordAccess(LocalAttribute.META_ANNOTATIONS, Attribute.AccessType.READ);
+        return this.metaAnnotations;
+    }
+    
+    /**
+     * Changes the meta-annotations modifying the subject.
+     * @param metaAnnotations The meta-annotations modifying the subject.
+     */
+    public void setMetaAnnotations(MetaAnnotationListNode metaAnnotations)
+    {
+            setMetaAnnotations(metaAnnotations, true);
+    }
+    
+    private void setMetaAnnotations(MetaAnnotationListNode metaAnnotations, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
+        recordAccess(LocalAttribute.META_ANNOTATIONS, Attribute.AccessType.STRONG_WRITE);
+        if (this.metaAnnotations instanceof NodeImpl)
+        {
+            ((NodeImpl)this.metaAnnotations).setParent(null);
+        }
+        this.metaAnnotations = metaAnnotations;
+        if (this.metaAnnotations instanceof NodeImpl)
+        {
+            ((NodeImpl)this.metaAnnotations).setParent(this);
+        }
     }
     
     /**
@@ -84,6 +129,10 @@ public abstract class ModifiersNodeImpl extends NodeImpl implements ModifiersNod
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
+        if (this.metaAnnotations != null)
+        {
+            this.metaAnnotations.receive(visitor);
+        }
         if (this.annotations != null)
         {
             this.annotations.receive(visitor);
@@ -101,6 +150,10 @@ public abstract class ModifiersNodeImpl extends NodeImpl implements ModifiersNod
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
+        if (this.metaAnnotations != null)
+        {
+            this.metaAnnotations.receiveTyped(visitor);
+        }
         if (this.annotations != null)
         {
             this.annotations.receiveTyped(visitor);
@@ -130,6 +183,7 @@ public abstract class ModifiersNodeImpl extends NodeImpl implements ModifiersNod
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
+        list.add(getMetaAnnotations());
         list.add(getAnnotations());
         return list;
     }
@@ -143,6 +197,9 @@ public abstract class ModifiersNodeImpl extends NodeImpl implements ModifiersNod
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
+        sb.append("metaAnnotations=");
+        sb.append(this.getMetaAnnotations() == null? "null" : this.getMetaAnnotations().getClass().getSimpleName());
+        sb.append(',');
         sb.append("annotations=");
         sb.append(this.getAnnotations() == null? "null" : this.getAnnotations().getClass().getSimpleName());
         sb.append(',');

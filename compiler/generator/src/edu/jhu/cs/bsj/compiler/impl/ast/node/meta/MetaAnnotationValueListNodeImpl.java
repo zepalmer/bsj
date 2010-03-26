@@ -1,5 +1,6 @@
-package edu.jhu.cs.bsj.compiler.impl.ast.node;
+package edu.jhu.cs.bsj.compiler.impl.ast.node.meta;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Generated;
@@ -9,25 +10,33 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
-import edu.jhu.cs.bsj.compiler.ast.node.AnnotationListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.AnnotationMethodModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationValueListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationValueNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.node.ListNodeImpl;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public class AnnotationMethodModifiersNodeImpl extends ModifiersNodeImpl implements AnnotationMethodModifiersNode
+public class MetaAnnotationValueListNodeImpl extends ListNodeImpl<MetaAnnotationValueNode> implements MetaAnnotationValueListNode
 {
     /** General constructor. */
-    public AnnotationMethodModifiersNodeImpl(
-            MetaAnnotationListNode metaAnnotations,
-            AnnotationListNode annotations,
+    public MetaAnnotationValueListNodeImpl(
+            List<MetaAnnotationValueNode> children,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
             BsjNodeManager manager,
             boolean binary)
     {
-        super(metaAnnotations, annotations, startLocation, stopLocation, manager, binary);
+        super(children, startLocation, stopLocation, manager, binary);
+    }
+    
+    /**
+     * Gets whether or not this list's contents are always order-dependent.
+     * @return Whether or not this list's contents are always order-dependent.
+     */
+    public boolean getAlwaysOrdered()
+    {
+        return true;
     }
     
     /**
@@ -60,15 +69,15 @@ public class AnnotationMethodModifiersNodeImpl extends ModifiersNodeImpl impleme
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
         visitor.visitStartBegin(this);
-        visitor.visitAnnotationMethodModifiersNodeStart(this, true);
-        visitor.visitModifiersNodeStart(this);
+        visitor.visitMetaAnnotationValueListNodeStart(this, true);
+        visitor.visitListNodeStart(this);
         visitor.visitNodeStart(this);
         visitor.visitStartEnd(this);
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
         visitor.visitNodeStop(this);
-        visitor.visitModifiersNodeStop(this);
-        visitor.visitAnnotationMethodModifiersNodeStop(this, true);
+        visitor.visitListNodeStop(this);
+        visitor.visitMetaAnnotationValueListNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
     
@@ -93,11 +102,8 @@ public class AnnotationMethodModifiersNodeImpl extends ModifiersNodeImpl impleme
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
-        sb.append("metaAnnotations=");
-        sb.append(this.getMetaAnnotations() == null? "null" : this.getMetaAnnotations().getClass().getSimpleName());
-        sb.append(',');
-        sb.append("annotations=");
-        sb.append(this.getAnnotations() == null? "null" : this.getAnnotations().getClass().getSimpleName());
+        sb.append("children=");
+        sb.append(String.valueOf(this.getChildren()) + ":" + (this.getChildren() != null ? this.getChildren().getClass().getSimpleName() : "null"));
         sb.append(',');
         sb.append("startLocation=");
         sb.append(String.valueOf(this.getStartLocation()) + ":" + (this.getStartLocation() != null ? this.getStartLocation().getClass().getSimpleName() : "null"));
@@ -117,7 +123,7 @@ public class AnnotationMethodModifiersNodeImpl extends ModifiersNodeImpl impleme
     @Override
     public <P,R> R executeOperation(BsjNodeOperation<P,R> operation, P p)
     {
-        return operation.executeAnnotationMethodModifiersNode(this, p);
+        return operation.executeMetaAnnotationValueListNode(this, p);
     }
     
     /**
@@ -126,11 +132,10 @@ public class AnnotationMethodModifiersNodeImpl extends ModifiersNodeImpl impleme
      * @return The resulting deep copy node.
      */
     @Override
-    public AnnotationMethodModifiersNode deepCopy(BsjNodeFactory factory)
+    public MetaAnnotationValueListNode deepCopy(BsjNodeFactory factory)
     {
-        return factory.makeAnnotationMethodModifiersNode(
-                getMetaAnnotations().deepCopy(factory),
-                getAnnotations().deepCopy(factory),
+        return factory.makeMetaAnnotationValueListNode(
+                new ArrayList<MetaAnnotationValueNode>(getChildren()),
                 getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
                 getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
     }
@@ -146,15 +151,11 @@ public class AnnotationMethodModifiersNodeImpl extends ModifiersNodeImpl impleme
         if (before==null)
             throw new IllegalArgumentException("Cannot replace node with before value of null.");
         
-        if (before.equals(this.getMetaAnnotations()) && (after instanceof MetaAnnotationListNode))
+        if (after instanceof MetaAnnotationValueNode)
         {
-            setMetaAnnotations((MetaAnnotationListNode)after);
-            return true;
-        }
-        if (before.equals(this.getAnnotations()) && (after instanceof AnnotationListNode))
-        {
-            setAnnotations((AnnotationListNode)after);
-            return true;
+            int index = getChildren().indexOf(before);
+            if (index != -1)
+                getChildren().set(index, (MetaAnnotationValueNode)after);
         }
         return false;
     }

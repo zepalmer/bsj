@@ -74,6 +74,24 @@ public class BsjNodeFactoryDecorator implements BsjNodeFactory
     {
         this.factory.setStopSourceLocation(stopLocation);
     }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean getBinary()
+    {
+    	return this.factory.getBinary();
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setBinary(boolean binary)
+    {
+    	this.factory.setBinary(binary);
+    }
 
 	// MANUALLY SPECIFIED MAKE METHODS ///////////////////////////////////////
     // Since these methods call out to the other factory make methods, we don't decorate them.

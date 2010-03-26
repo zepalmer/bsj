@@ -228,6 +228,7 @@ public class BsjBinaryNodeLoader
         return factory.makeEnumModifiersNode(
                 buildAccessModifier(clazz), 
                 clazz.isStrictfp(), 
+                factory.makeMetaAnnotationListNode(),
                 factory.makeAnnotationListNode());
     }
 
@@ -278,6 +279,7 @@ public class BsjBinaryNodeLoader
             if (field.isEnum() && !field.isSynthetic())
             {
                 list.add(factory.makeEnumConstantDeclarationNode(
+                		factory.makeMetaAnnotationListNode(),
                         factory.makeAnnotationListNode(), 
                         factory.makeIdentifierNode(field.getName()), 
                         factory.makeExpressionListNode(),
@@ -325,6 +327,7 @@ public class BsjBinaryNodeLoader
                 buildAccessModifier(clazz), 
                 clazz.isStatic(), 
                 clazz.isStrictfp(), 
+                factory.makeMetaAnnotationListNode(),
                 factory.makeAnnotationListNode());
     }
 
@@ -492,6 +495,7 @@ public class BsjBinaryNodeLoader
                 field.isFinal(), 
                 field.isTransient(), 
                 field.isVolatile(), 
+                factory.makeMetaAnnotationListNode(),
                 factory.makeAnnotationListNode());
     }
 
@@ -553,6 +557,7 @@ public class BsjBinaryNodeLoader
                 method.isSynchronized(), 
                 method.isNative(), 
                 method.isStrictfp(), 
+                factory.makeMetaAnnotationListNode(),
                 factory.makeAnnotationListNode());
     }
 
@@ -674,6 +679,7 @@ public class BsjBinaryNodeLoader
                 clazz.isStatic(), 
                 clazz.isFinal(), 
                 clazz.isStrictfp(), 
+                factory.makeMetaAnnotationListNode(),
                 factory.makeAnnotationListNode());
     }
 

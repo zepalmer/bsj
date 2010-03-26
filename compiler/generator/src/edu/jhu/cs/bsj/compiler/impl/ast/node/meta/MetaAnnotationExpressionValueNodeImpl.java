@@ -1,4 +1,4 @@
-package edu.jhu.cs.bsj.compiler.impl.ast.node;
+package edu.jhu.cs.bsj.compiler.impl.ast.node.meta;
 
 import java.util.List;
 
@@ -9,25 +9,72 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
-import edu.jhu.cs.bsj.compiler.ast.node.AnnotationListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.AnnotationMethodModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.NonAssignmentExpressionNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationExpressionValueNode;
+import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.node.NodeImpl;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public class AnnotationMethodModifiersNodeImpl extends ModifiersNodeImpl implements AnnotationMethodModifiersNode
+public class MetaAnnotationExpressionValueNodeImpl extends NodeImpl implements MetaAnnotationExpressionValueNode
 {
+    /** The expression. */
+    private NonAssignmentExpressionNode expression;
+    
+    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    {
+        /** Attribute for the expression property. */
+        EXPRESSION,
+    }
+    
     /** General constructor. */
-    public AnnotationMethodModifiersNodeImpl(
-            MetaAnnotationListNode metaAnnotations,
-            AnnotationListNode annotations,
+    public MetaAnnotationExpressionValueNodeImpl(
+            NonAssignmentExpressionNode expression,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
             BsjNodeManager manager,
             boolean binary)
     {
-        super(metaAnnotations, annotations, startLocation, stopLocation, manager, binary);
+        super(startLocation, stopLocation, manager, binary);
+        setExpression(expression, false);
+    }
+    
+    /**
+     * Gets the expression.
+     * @return The expression.
+     */
+    public NonAssignmentExpressionNode getExpression()
+    {
+        recordAccess(LocalAttribute.EXPRESSION, Attribute.AccessType.READ);
+        return this.expression;
+    }
+    
+    /**
+     * Changes the expression.
+     * @param expression The expression.
+     */
+    public void setExpression(NonAssignmentExpressionNode expression)
+    {
+            setExpression(expression, true);
+    }
+    
+    private void setExpression(NonAssignmentExpressionNode expression, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
+        recordAccess(LocalAttribute.EXPRESSION, Attribute.AccessType.STRONG_WRITE);
+        if (this.expression instanceof NodeImpl)
+        {
+            ((NodeImpl)this.expression).setParent(null);
+        }
+        this.expression = expression;
+        if (this.expression instanceof NodeImpl)
+        {
+            ((NodeImpl)this.expression).setParent(this);
+        }
     }
     
     /**
@@ -41,6 +88,10 @@ public class AnnotationMethodModifiersNodeImpl extends ModifiersNodeImpl impleme
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
+        if (this.expression != null)
+        {
+            this.expression.receive(visitor);
+        }
     }
     
     /**
@@ -54,21 +105,25 @@ public class AnnotationMethodModifiersNodeImpl extends ModifiersNodeImpl impleme
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
+        if (this.expression != null)
+        {
+            this.expression.receiveTyped(visitor);
+        }
     }
     
     @Override
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
         visitor.visitStartBegin(this);
-        visitor.visitAnnotationMethodModifiersNodeStart(this, true);
-        visitor.visitModifiersNodeStart(this);
+        visitor.visitMetaAnnotationExpressionValueNodeStart(this, true);
         visitor.visitNodeStart(this);
+        visitor.visitMetaAnnotationValueNodeStart(this);
         visitor.visitStartEnd(this);
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
+        visitor.visitMetaAnnotationValueNodeStop(this);
         visitor.visitNodeStop(this);
-        visitor.visitModifiersNodeStop(this);
-        visitor.visitAnnotationMethodModifiersNodeStop(this, true);
+        visitor.visitMetaAnnotationExpressionValueNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
     
@@ -81,6 +136,7 @@ public class AnnotationMethodModifiersNodeImpl extends ModifiersNodeImpl impleme
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
+        list.add(getExpression());
         return list;
     }
     
@@ -93,11 +149,8 @@ public class AnnotationMethodModifiersNodeImpl extends ModifiersNodeImpl impleme
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
-        sb.append("metaAnnotations=");
-        sb.append(this.getMetaAnnotations() == null? "null" : this.getMetaAnnotations().getClass().getSimpleName());
-        sb.append(',');
-        sb.append("annotations=");
-        sb.append(this.getAnnotations() == null? "null" : this.getAnnotations().getClass().getSimpleName());
+        sb.append("expression=");
+        sb.append(this.getExpression() == null? "null" : this.getExpression().getClass().getSimpleName());
         sb.append(',');
         sb.append("startLocation=");
         sb.append(String.valueOf(this.getStartLocation()) + ":" + (this.getStartLocation() != null ? this.getStartLocation().getClass().getSimpleName() : "null"));
@@ -117,7 +170,7 @@ public class AnnotationMethodModifiersNodeImpl extends ModifiersNodeImpl impleme
     @Override
     public <P,R> R executeOperation(BsjNodeOperation<P,R> operation, P p)
     {
-        return operation.executeAnnotationMethodModifiersNode(this, p);
+        return operation.executeMetaAnnotationExpressionValueNode(this, p);
     }
     
     /**
@@ -126,11 +179,10 @@ public class AnnotationMethodModifiersNodeImpl extends ModifiersNodeImpl impleme
      * @return The resulting deep copy node.
      */
     @Override
-    public AnnotationMethodModifiersNode deepCopy(BsjNodeFactory factory)
+    public MetaAnnotationExpressionValueNode deepCopy(BsjNodeFactory factory)
     {
-        return factory.makeAnnotationMethodModifiersNode(
-                getMetaAnnotations().deepCopy(factory),
-                getAnnotations().deepCopy(factory),
+        return factory.makeMetaAnnotationExpressionValueNode(
+                getExpression().deepCopy(factory),
                 getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
                 getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
     }
@@ -146,14 +198,9 @@ public class AnnotationMethodModifiersNodeImpl extends ModifiersNodeImpl impleme
         if (before==null)
             throw new IllegalArgumentException("Cannot replace node with before value of null.");
         
-        if (before.equals(this.getMetaAnnotations()) && (after instanceof MetaAnnotationListNode))
+        if (before.equals(this.getExpression()) && (after instanceof NonAssignmentExpressionNode))
         {
-            setMetaAnnotations((MetaAnnotationListNode)after);
-            return true;
-        }
-        if (before.equals(this.getAnnotations()) && (after instanceof AnnotationListNode))
-        {
-            setAnnotations((AnnotationListNode)after);
+            setExpression((NonAssignmentExpressionNode)after);
             return true;
         }
         return false;

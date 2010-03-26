@@ -9,6 +9,15 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.BlockStatementMetaprogramAnchorNode
 import edu.jhu.cs.bsj.compiler.ast.node.meta.ClassMemberMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.CodeLiteralNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.InterfaceMemberMetaprogramAnchorNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationArrayValueNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationElementListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationElementNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationExpressionValueNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaAnnotationValueNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationValueListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationValueNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependsNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportListNode;
@@ -16,6 +25,8 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramPreambleNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramTargetNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.NormalMetaAnnotationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.SingleElementMetaAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.TypeDeclarationMetaprogramAnchorNode;
 
 /**
@@ -1003,6 +1014,81 @@ public interface BsjTypedNodeVisitor
     public void visitLongLiteralNodeStart(LongLiteralNode node, boolean mostSpecific);
 
     /**
+     * Starts a visit for nodes of type MetaAnnotationArrayValueNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitMetaAnnotationArrayValueNodeStart(MetaAnnotationArrayValueNode node, boolean mostSpecific);
+
+    /**
+     * Starts a visit for nodes of type MetaAnnotationElementListNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitMetaAnnotationElementListNodeStart(MetaAnnotationElementListNode node, boolean mostSpecific);
+
+    /**
+     * Starts a visit for nodes of type MetaAnnotationElementNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitMetaAnnotationElementNodeStart(MetaAnnotationElementNode node, boolean mostSpecific);
+
+    /**
+     * Starts a visit for nodes of type MetaAnnotationExpressionValueNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitMetaAnnotationExpressionValueNodeStart(MetaAnnotationExpressionValueNode node, boolean mostSpecific);
+
+    /**
+     * Starts a visit for nodes of type MetaAnnotationListNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitMetaAnnotationListNodeStart(MetaAnnotationListNode node, boolean mostSpecific);
+
+    /**
+     * Starts a visit for nodes of type MetaAnnotationMetaAnnotationValueNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitMetaAnnotationMetaAnnotationValueNodeStart(MetaAnnotationMetaAnnotationValueNode node, boolean mostSpecific);
+
+    /**
+     * Starts a visit for nodes of type MetaAnnotationNode.
+     * @param node The node being visited.
+     */
+    public void visitMetaAnnotationNodeStart(MetaAnnotationNode node);
+
+    /**
+     * Starts a visit for nodes of type MetaAnnotationValueListNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitMetaAnnotationValueListNodeStart(MetaAnnotationValueListNode node, boolean mostSpecific);
+
+    /**
+     * Starts a visit for nodes of type MetaAnnotationValueNode.
+     * @param node The node being visited.
+     */
+    public void visitMetaAnnotationValueNodeStart(MetaAnnotationValueNode node);
+
+    /**
      * Starts a visit for nodes of type MetaprogramAnchorNode.
      * @param node The node being visited.
      */
@@ -1162,6 +1248,15 @@ public interface BsjTypedNodeVisitor
     public void visitNormalAnnotationNodeStart(NormalAnnotationNode node, boolean mostSpecific);
 
     /**
+     * Starts a visit for nodes of type NormalMetaAnnotationNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitNormalMetaAnnotationNodeStart(NormalMetaAnnotationNode node, boolean mostSpecific);
+
+    /**
      * Starts a visit for nodes of type NullLiteralNode.
      * @param node The node being visited.
      * @param mostSpecific <code>true</code> if this is the most specific call
@@ -1295,6 +1390,15 @@ public interface BsjTypedNodeVisitor
      *                     otherwise.
      */
     public void visitSingleElementAnnotationNodeStart(SingleElementAnnotationNode node, boolean mostSpecific);
+
+    /**
+     * Starts a visit for nodes of type SingleElementMetaAnnotationNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitSingleElementMetaAnnotationNodeStart(SingleElementMetaAnnotationNode node, boolean mostSpecific);
 
     /**
      * Starts a visit for nodes of type SingleStaticImportNode.
@@ -2530,6 +2634,81 @@ public interface BsjTypedNodeVisitor
     public void visitLongLiteralNodeStop(LongLiteralNode node, boolean mostSpecific);
 
     /**
+     * Stops a visit for nodes of type MetaAnnotationArrayValueNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitMetaAnnotationArrayValueNodeStop(MetaAnnotationArrayValueNode node, boolean mostSpecific);
+
+    /**
+     * Stops a visit for nodes of type MetaAnnotationElementListNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitMetaAnnotationElementListNodeStop(MetaAnnotationElementListNode node, boolean mostSpecific);
+
+    /**
+     * Stops a visit for nodes of type MetaAnnotationElementNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitMetaAnnotationElementNodeStop(MetaAnnotationElementNode node, boolean mostSpecific);
+
+    /**
+     * Stops a visit for nodes of type MetaAnnotationExpressionValueNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitMetaAnnotationExpressionValueNodeStop(MetaAnnotationExpressionValueNode node, boolean mostSpecific);
+
+    /**
+     * Stops a visit for nodes of type MetaAnnotationListNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitMetaAnnotationListNodeStop(MetaAnnotationListNode node, boolean mostSpecific);
+
+    /**
+     * Stops a visit for nodes of type MetaAnnotationMetaAnnotationValueNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitMetaAnnotationMetaAnnotationValueNodeStop(MetaAnnotationMetaAnnotationValueNode node, boolean mostSpecific);
+
+    /**
+     * Stops a visit for nodes of type MetaAnnotationNode.
+     * @param node The node being visited.
+     */
+    public void visitMetaAnnotationNodeStop(MetaAnnotationNode node);
+
+    /**
+     * Stops a visit for nodes of type MetaAnnotationValueListNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitMetaAnnotationValueListNodeStop(MetaAnnotationValueListNode node, boolean mostSpecific);
+
+    /**
+     * Stops a visit for nodes of type MetaAnnotationValueNode.
+     * @param node The node being visited.
+     */
+    public void visitMetaAnnotationValueNodeStop(MetaAnnotationValueNode node);
+
+    /**
      * Stops a visit for nodes of type MetaprogramAnchorNode.
      * @param node The node being visited.
      */
@@ -2689,6 +2868,15 @@ public interface BsjTypedNodeVisitor
     public void visitNormalAnnotationNodeStop(NormalAnnotationNode node, boolean mostSpecific);
 
     /**
+     * Stops a visit for nodes of type NormalMetaAnnotationNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitNormalMetaAnnotationNodeStop(NormalMetaAnnotationNode node, boolean mostSpecific);
+
+    /**
      * Stops a visit for nodes of type NullLiteralNode.
      * @param node The node being visited.
      * @param mostSpecific <code>true</code> if this is the most specific call
@@ -2822,6 +3010,15 @@ public interface BsjTypedNodeVisitor
      *                     otherwise.
      */
     public void visitSingleElementAnnotationNodeStop(SingleElementAnnotationNode node, boolean mostSpecific);
+
+    /**
+     * Stops a visit for nodes of type SingleElementMetaAnnotationNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitSingleElementMetaAnnotationNodeStop(SingleElementMetaAnnotationNode node, boolean mostSpecific);
 
     /**
      * Stops a visit for nodes of type SingleStaticImportNode.

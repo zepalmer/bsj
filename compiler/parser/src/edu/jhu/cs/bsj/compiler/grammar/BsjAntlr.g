@@ -988,6 +988,171 @@ blockStatementBsjMetaprogramAnchor returns [BlockStatementMetaprogramAnchorNode 
         }
     ;
 
+// Parses a meta-annotation.
+// For example, in
+//     @@Test("foo")
+//     public void foo() { }
+// This rule would parse
+//     @@Test("foo")
+metaAnnotation returns [MetaAnnotationNode ret]
+        scope Rule;
+        @init {
+            ruleStart("metaAnnotation");
+        }
+        @after {
+            ruleStop();
+        }
+    :   
+        // TODO: this shouldn't be "name"; it should be something that produces a DeclaredTypeNode
+        '@' '@' classOrInterfaceType
+        {
+            $ret = factory.makeNormalMetaAnnotationNode(
+                    factory.makeMetaAnnotationElementListNode(new ArrayList<MetaAnnotationElementNode>()),
+                    $classOrInterfaceType.ret);
+        }
+        (
+            '('   
+            (
+                metaAnnotationElementValuePairs
+                {
+                    $ret = factory.makeNormalMetaAnnotationNode(
+                            $metaAnnotationElementValuePairs.ret,
+                            $classOrInterfaceType.ret);
+                }
+            |
+                metaAnnotationElementValue
+                {
+                    $ret = factory.makeSingleElementMetaAnnotationNode(
+                            $metaAnnotationElementValue.ret,
+                            $classOrInterfaceType.ret);
+                }
+            )? 
+            ')' 
+        )?
+    ;
+
+// Parses a meta-annotation's element-value pairs.
+// For example, in
+//     @@Foo(bar="baz",happy=5)
+// this rule would parse
+//     bar="baz",happy=5
+metaAnnotationElementValuePairs returns [MetaAnnotationElementListNode ret]
+        scope Rule;
+        @init {
+            ruleStart("metaAnnotationElementValuePairs");
+            List<MetaAnnotationElementNode> list = new ArrayList<MetaAnnotationElementNode>();
+        }
+        @after {
+            $ret = factory.makeMetaAnnotationElementListNode(list);
+            ruleStop();
+        }
+    :
+        a=metaAnnotationElementValuePair
+        {
+            list.add($a.ret);
+        }
+        (
+            ','
+            b=metaAnnotationElementValuePair
+            {
+                list.add($b.ret);
+            }
+        )*
+    ;
+
+// Parses a single meta-annotation element-value pair.
+// For example, in
+//     @@Foo(bar="baz",happy=5)
+// this rule would parse either
+//     bar="baz"
+// or
+//     happy=5
+metaAnnotationElementValuePair returns [MetaAnnotationElementNode ret]
+        scope Rule;
+        @init {
+            ruleStart("metaAnnotationElementValuePair");
+        }
+        @after {
+            ruleStop();
+        }
+    :
+        id=identifier '=' metaAnnotationElementValue
+        {
+            $ret = factory.makeMetaAnnotationElementNode($id.ret, $metaAnnotationElementValue.ret);
+        }
+    ;
+
+// Parses a meta-annotation element value.
+// For example, in
+//    @@Ann(a=5,b={7,8},c=@@Test)
+// this rule would parse one of
+//    5
+// or
+//    {7,8}
+// or
+//    @@Test
+metaAnnotationElementValue returns [MetaAnnotationValueNode ret]
+        scope Rule;
+        @init {
+            ruleStart("metaAnnotationElementValue");
+        }
+        @after {
+            ruleStop();
+        }
+    :   
+        conditionalExpression
+        {
+            $ret = factory.makeMetaAnnotationExpressionValueNode($conditionalExpression.ret);
+        }
+    |   
+        metaAnnotation
+        {
+            $ret = factory.makeMetaAnnotationMetaAnnotationValueNode($metaAnnotation.ret);
+        }
+    |   
+        metaAnnotationElementValueArrayInitializer
+        {
+            $ret = $metaAnnotationElementValueArrayInitializer.ret;
+        }
+    ;
+
+// Parses a meta-annotation element array.
+// For example, in
+//     @@Ann({@@Foo,@@Bar(5)})
+// this rule would parse
+//     {@@Foo,@@Bar(5)}
+// and in
+//     @@Test({1,2,3})
+// this rule would parse
+//     {1,2,3}
+metaAnnotationElementValueArrayInitializer returns [MetaAnnotationArrayValueNode ret]
+        scope Rule;
+        @init {
+            ruleStart("metaAnnotationElementValueArrayInitializer");
+            List<MetaAnnotationValueNode> list = new ArrayList<MetaAnnotationValueNode>();
+        }
+        @after {
+            $ret = factory.makeMetaAnnotationArrayValueNode(factory.makeMetaAnnotationValueListNode(list));
+            ruleStop();
+        }
+    :   
+        '{'
+        (
+            a=metaAnnotationElementValue
+            {
+                list.add($a.ret);
+            }
+            (
+                ',' b=metaAnnotationElementValue
+                {
+                    list.add($b.ret);
+                }
+            )*
+        )?
+        ','?
+        '}'
+    ;
+
 /* ===========================================================================
  * These are the Java grammar rules.
  * ===========================================================================
@@ -1020,8 +1185,8 @@ packageDeclaration returns [PackageDeclarationNode ret]
         scope Rule;
         @init{
             ruleStart("packageDeclaration");
-            AnnotationListNode annotationsNode = 
-                factory.makeAnnotationListNode(Collections.<AnnotationNode>emptyList());
+            AnnotationListNode annotationsNode = factory.makeAnnotationListNode();
+            MetaAnnotationListNode metaAnnotationsNode = factory.makeMetaAnnotationListNode();
         }
         @after {
             ruleStop();
@@ -1030,13 +1195,15 @@ packageDeclaration returns [PackageDeclarationNode ret]
         (
             annotations
             {
-                annotationsNode = $annotations.ret;
+                annotationsNode = $annotations.annotations;
+                metaAnnotationsNode = $annotations.metaAnnotations;
             }
         )?
         'package' name ';'
         {
             $ret = factory.makePackageDeclarationNode(
                     $name.ret,
+                    metaAnnotationsNode,
                     annotationsNode);
         }
     ;
@@ -1239,11 +1406,13 @@ classOrInterfaceDeclaration returns [TypeDeclarationNode ret]
 // * whether or not access modifiers are allowed (if false, access modifiers are parsed like normal modifiers)
 // * a list of those modifiers which are allowed
 modifiers[boolean accessAllowed, Modifier... mods]
-    returns [ModifierSet modifiers, AccessModifier access, AnnotationListNode annotations]
+    returns [ModifierSet modifiers, AccessModifier access, AnnotationListNode annotations,
+             MetaAnnotationListNode metaAnnotations]
         scope Rule;
         @init {
             ruleStart("classOrInterfaceDeclaration");
             List<AnnotationNode> annotationList = new ArrayList<AnnotationNode>();
+            List<MetaAnnotationNode> metaAnnotationList = new ArrayList<MetaAnnotationNode>();
             $access = AccessModifier.PACKAGE;
             $modifiers = new ModifierSet(mods);
             AccessModifier currentAccess = null;
@@ -1251,10 +1420,16 @@ modifiers[boolean accessAllowed, Modifier... mods]
         }
         @after {
             $annotations = factory.makeAnnotationListNode(annotationList);
+            $metaAnnotations = factory.makeMetaAnnotationListNode(metaAnnotationList);
             ruleStop();
         }
     :
         (
+            metaAnnotation
+            {
+                metaAnnotationList.add($metaAnnotation.ret);
+            }
+        |
             annotation
             {
                 annotationList.add($annotation.ret);
@@ -1365,7 +1540,7 @@ annotationMethodModifiers returns [AnnotationMethodModifiersNode ret]
     :
         modifiers[false, Modifier.PUBLIC, Modifier.ABSTRACT]
         {
-            $ret = factory.makeAnnotationMethodModifiersNode($modifiers.annotations);
+            $ret = factory.makeAnnotationMethodModifiersNode($modifiers.metaAnnotations, $modifiers.annotations);
         }
     ;
 
@@ -1384,6 +1559,7 @@ annotationModifiers returns [AnnotationModifiersNode ret]
                     $modifiers.access,
                     $modifiers.modifiers.has(Modifier.STATIC),
                     $modifiers.modifiers.has(Modifier.STRICTFP),
+                    $modifiers.metaAnnotations,
                     $modifiers.annotations);
         }
     ;
@@ -1405,6 +1581,7 @@ classModifiers returns [ClassModifiersNode ret]
                     $modifiers.modifiers.has(Modifier.STATIC),
                     $modifiers.modifiers.has(Modifier.FINAL),
                     $modifiers.modifiers.has(Modifier.STRICTFP),
+                    $modifiers.metaAnnotations,
                     $modifiers.annotations);
         }
     ;
@@ -1420,7 +1597,8 @@ constructorModifiers returns [ConstructorModifiersNode ret]
     :
         modifiers[true]
         {
-            $ret = factory.makeConstructorModifiersNode($modifiers.access, $modifiers.annotations);
+            $ret = factory.makeConstructorModifiersNode($modifiers.access, $modifiers.metaAnnotations,
+                    $modifiers.annotations);
         }
     ;
     
@@ -1438,6 +1616,7 @@ enumModifiers returns [EnumModifiersNode ret]
             $ret = factory.makeEnumModifiersNode(
                     $modifiers.access,
                     $modifiers.modifiers.has(Modifier.STRICTFP),
+                    $modifiers.metaAnnotations,
                     $modifiers.annotations);
         }
     ;
@@ -1459,6 +1638,7 @@ fieldModifiers returns [FieldModifiersNode ret]
                     $modifiers.modifiers.has(Modifier.FINAL),
                     $modifiers.modifiers.has(Modifier.TRANSIENT),
                     $modifiers.modifiers.has(Modifier.VOLATILE),
+                    $modifiers.metaAnnotations,
                     $modifiers.annotations);
         }
     ;
@@ -1478,6 +1658,7 @@ interfaceModifiers returns [InterfaceModifiersNode ret]
                     $modifiers.access,
                     $modifiers.modifiers.has(Modifier.STATIC),
                     $modifiers.modifiers.has(Modifier.STRICTFP),
+                    $modifiers.metaAnnotations,
                     $modifiers.annotations);
         }
     ;
@@ -1502,6 +1683,7 @@ methodModifiers returns [MethodModifiersNode ret]
                     $modifiers.modifiers.has(Modifier.SYNCHRONIZED),
                     $modifiers.modifiers.has(Modifier.NATIVE),
                     $modifiers.modifiers.has(Modifier.STRICTFP),
+                    $modifiers.metaAnnotations,
                     $modifiers.annotations);
         }
     ;
@@ -1519,6 +1701,7 @@ variableModifiers returns [VariableModifiersNode ret]
         {
             $ret = factory.makeVariableModifiersNode(
                     $modifiers.modifiers.has(Modifier.FINAL),
+                    $modifiers.metaAnnotations,
                     $modifiers.annotations);
         }
     ;
@@ -1751,7 +1934,8 @@ enumConstant returns [EnumConstantDeclarationNode ret]
         scope Rule;
         @init {
             ruleStart("enumConstant");
-            AnnotationListNode annotationsNode = factory.makeAnnotationListNode(Collections.<AnnotationNode>emptyList());
+            AnnotationListNode annotationsNode = factory.makeAnnotationListNode();
+            MetaAnnotationListNode metaAnnotationsNode = factory.makeMetaAnnotationListNode();
             ExpressionListNode argumentsNode = factory.makeExpressionListNode(Collections.<ExpressionNode>emptyList());
             AnonymousClassBodyNode anonymousClassBodyNode = null;
         }
@@ -1763,7 +1947,8 @@ enumConstant returns [EnumConstantDeclarationNode ret]
         (
             annotations
             {
-                annotationsNode = $annotations.ret;
+                annotationsNode = $annotations.annotations;
+                metaAnnotationsNode = $annotations.metaAnnotations;
             }
         )?
         id=identifier
@@ -1781,6 +1966,7 @@ enumConstant returns [EnumConstantDeclarationNode ret]
         )?
         {
             $ret = factory.makeEnumConstantDeclarationNode(
+                metaAnnotationsNode,
                 annotationsNode,
                 $id.ret,
                 argumentsNode,
@@ -1870,7 +2056,7 @@ normalInterfaceDeclaration returns [InterfaceDeclarationNode ret]
 declaredTypeList returns [DeclaredTypeListNode ret]
         scope Rule;
         @init {
-            ruleStart("typeList");
+            ruleStart("declaredTypeList");
             List<DeclaredTypeNode> list = new ArrayList<DeclaredTypeNode>();
         }
         @after {
@@ -1893,7 +2079,7 @@ declaredTypeList returns [DeclaredTypeListNode ret]
 referenceTypeList returns [ReferenceTypeListNode ret]
         scope Rule;
         @init {
-            ruleStart("typeList");
+            ruleStart("referenceTypeList");
             List<ReferenceTypeNode> list = new ArrayList<ReferenceTypeNode>();
         }
         @after {
@@ -1913,6 +2099,8 @@ referenceTypeList returns [ReferenceTypeListNode ret]
         )*
     ;
 
+/*
+TODO: remove?
 typeList returns [TypeListNode ret]
         scope Rule;
         @init {
@@ -1935,6 +2123,7 @@ typeList returns [TypeListNode ret]
             }
         )*
     ;
+*/
 
 classBody returns [ClassBodyNode ret]
         scope Rule;
@@ -2828,21 +3017,28 @@ explicitConstructorInvocation returns [ConstructorInvocationNode ret]
         }
     ;
 
-annotations returns [AnnotationListNode ret]
+annotations returns [AnnotationListNode annotations, MetaAnnotationListNode metaAnnotations]
         scope Rule;
         @init {
             ruleStart("annotations");
-            List<AnnotationNode> list = new ArrayList<AnnotationNode>();
+            List<AnnotationNode> annotationsList = new ArrayList<AnnotationNode>();
+            List<MetaAnnotationNode> metaAnnotationsList = new ArrayList<MetaAnnotationNode>();
         }
         @after {
-            $ret = factory.makeAnnotationListNode(list);
+            $annotations = factory.makeAnnotationListNode(annotationsList);
+            $metaAnnotations = factory.makeMetaAnnotationListNode(metaAnnotationsList);
             ruleStop();
         }
     :   
         (
             annotation
             {
-                list.add($annotation.ret);
+                annotationsList.add($annotation.ret);
+            }
+        |
+            metaAnnotation
+            {
+                metaAnnotationsList.add($metaAnnotation.ret);
             }
         )+
     ;

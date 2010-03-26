@@ -1,4 +1,4 @@
-package edu.jhu.cs.bsj.compiler.impl.ast.node;
+package edu.jhu.cs.bsj.compiler.impl.ast.node.meta;
 
 import java.util.List;
 
@@ -9,25 +9,74 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
-import edu.jhu.cs.bsj.compiler.ast.node.AnnotationListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.AnnotationMethodModifiersNode;
+import edu.jhu.cs.bsj.compiler.ast.node.DeclaredTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationElementListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.NormalMetaAnnotationNode;
+import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.node.NodeImpl;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public class AnnotationMethodModifiersNodeImpl extends ModifiersNodeImpl implements AnnotationMethodModifiersNode
+public class NormalMetaAnnotationNodeImpl extends MetaAnnotationNodeImpl implements NormalMetaAnnotationNode
 {
+    /** The arguments. */
+    private MetaAnnotationElementListNode arguments;
+    
+    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    {
+        /** Attribute for the arguments property. */
+        ARGUMENTS,
+    }
+    
     /** General constructor. */
-    public AnnotationMethodModifiersNodeImpl(
-            MetaAnnotationListNode metaAnnotations,
-            AnnotationListNode annotations,
+    public NormalMetaAnnotationNodeImpl(
+            MetaAnnotationElementListNode arguments,
+            DeclaredTypeNode annotationType,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
             BsjNodeManager manager,
             boolean binary)
     {
-        super(metaAnnotations, annotations, startLocation, stopLocation, manager, binary);
+        super(annotationType, startLocation, stopLocation, manager, binary);
+        setArguments(arguments, false);
+    }
+    
+    /**
+     * Gets the arguments.
+     * @return The arguments.
+     */
+    public MetaAnnotationElementListNode getArguments()
+    {
+        recordAccess(LocalAttribute.ARGUMENTS, Attribute.AccessType.READ);
+        return this.arguments;
+    }
+    
+    /**
+     * Changes the arguments.
+     * @param arguments The arguments.
+     */
+    public void setArguments(MetaAnnotationElementListNode arguments)
+    {
+            setArguments(arguments, true);
+    }
+    
+    private void setArguments(MetaAnnotationElementListNode arguments, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
+        recordAccess(LocalAttribute.ARGUMENTS, Attribute.AccessType.STRONG_WRITE);
+        if (this.arguments instanceof NodeImpl)
+        {
+            ((NodeImpl)this.arguments).setParent(null);
+        }
+        this.arguments = arguments;
+        if (this.arguments instanceof NodeImpl)
+        {
+            ((NodeImpl)this.arguments).setParent(this);
+        }
     }
     
     /**
@@ -41,6 +90,10 @@ public class AnnotationMethodModifiersNodeImpl extends ModifiersNodeImpl impleme
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
+        if (this.arguments != null)
+        {
+            this.arguments.receive(visitor);
+        }
     }
     
     /**
@@ -54,21 +107,25 @@ public class AnnotationMethodModifiersNodeImpl extends ModifiersNodeImpl impleme
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
+        if (this.arguments != null)
+        {
+            this.arguments.receiveTyped(visitor);
+        }
     }
     
     @Override
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
         visitor.visitStartBegin(this);
-        visitor.visitAnnotationMethodModifiersNodeStart(this, true);
-        visitor.visitModifiersNodeStart(this);
+        visitor.visitNormalMetaAnnotationNodeStart(this, true);
+        visitor.visitMetaAnnotationNodeStart(this);
         visitor.visitNodeStart(this);
         visitor.visitStartEnd(this);
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
         visitor.visitNodeStop(this);
-        visitor.visitModifiersNodeStop(this);
-        visitor.visitAnnotationMethodModifiersNodeStop(this, true);
+        visitor.visitMetaAnnotationNodeStop(this);
+        visitor.visitNormalMetaAnnotationNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
     
@@ -81,6 +138,7 @@ public class AnnotationMethodModifiersNodeImpl extends ModifiersNodeImpl impleme
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
+        list.add(getArguments());
         return list;
     }
     
@@ -93,11 +151,11 @@ public class AnnotationMethodModifiersNodeImpl extends ModifiersNodeImpl impleme
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
-        sb.append("metaAnnotations=");
-        sb.append(this.getMetaAnnotations() == null? "null" : this.getMetaAnnotations().getClass().getSimpleName());
+        sb.append("arguments=");
+        sb.append(this.getArguments() == null? "null" : this.getArguments().getClass().getSimpleName());
         sb.append(',');
-        sb.append("annotations=");
-        sb.append(this.getAnnotations() == null? "null" : this.getAnnotations().getClass().getSimpleName());
+        sb.append("annotationType=");
+        sb.append(this.getAnnotationType() == null? "null" : this.getAnnotationType().getClass().getSimpleName());
         sb.append(',');
         sb.append("startLocation=");
         sb.append(String.valueOf(this.getStartLocation()) + ":" + (this.getStartLocation() != null ? this.getStartLocation().getClass().getSimpleName() : "null"));
@@ -117,7 +175,7 @@ public class AnnotationMethodModifiersNodeImpl extends ModifiersNodeImpl impleme
     @Override
     public <P,R> R executeOperation(BsjNodeOperation<P,R> operation, P p)
     {
-        return operation.executeAnnotationMethodModifiersNode(this, p);
+        return operation.executeNormalMetaAnnotationNode(this, p);
     }
     
     /**
@@ -126,11 +184,11 @@ public class AnnotationMethodModifiersNodeImpl extends ModifiersNodeImpl impleme
      * @return The resulting deep copy node.
      */
     @Override
-    public AnnotationMethodModifiersNode deepCopy(BsjNodeFactory factory)
+    public NormalMetaAnnotationNode deepCopy(BsjNodeFactory factory)
     {
-        return factory.makeAnnotationMethodModifiersNode(
-                getMetaAnnotations().deepCopy(factory),
-                getAnnotations().deepCopy(factory),
+        return factory.makeNormalMetaAnnotationNode(
+                getArguments().deepCopy(factory),
+                getAnnotationType().deepCopy(factory),
                 getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
                 getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
     }
@@ -146,14 +204,14 @@ public class AnnotationMethodModifiersNodeImpl extends ModifiersNodeImpl impleme
         if (before==null)
             throw new IllegalArgumentException("Cannot replace node with before value of null.");
         
-        if (before.equals(this.getMetaAnnotations()) && (after instanceof MetaAnnotationListNode))
+        if (before.equals(this.getArguments()) && (after instanceof MetaAnnotationElementListNode))
         {
-            setMetaAnnotations((MetaAnnotationListNode)after);
+            setArguments((MetaAnnotationElementListNode)after);
             return true;
         }
-        if (before.equals(this.getAnnotations()) && (after instanceof AnnotationListNode))
+        if (before.equals(this.getAnnotationType()) && (after instanceof DeclaredTypeNode))
         {
-            setAnnotations((AnnotationListNode)after);
+            setAnnotationType((DeclaredTypeNode)after);
             return true;
         }
         return false;

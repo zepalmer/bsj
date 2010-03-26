@@ -13,6 +13,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.AnnotationListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ConstructorModifiersNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationListNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
@@ -31,13 +32,14 @@ public class ConstructorModifiersNodeImpl extends ModifiersNodeImpl implements C
     /** General constructor. */
     public ConstructorModifiersNodeImpl(
             AccessModifier access,
+            MetaAnnotationListNode metaAnnotations,
             AnnotationListNode annotations,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
             BsjNodeManager manager,
             boolean binary)
     {
-        super(annotations, startLocation, stopLocation, manager, binary);
+        super(metaAnnotations, annotations, startLocation, stopLocation, manager, binary);
         this.access = access;
     }
     
@@ -137,6 +139,9 @@ public class ConstructorModifiersNodeImpl extends ModifiersNodeImpl implements C
         sb.append("access=");
         sb.append(String.valueOf(this.getAccess()) + ":" + (this.getAccess() != null ? this.getAccess().getClass().getSimpleName() : "null"));
         sb.append(',');
+        sb.append("metaAnnotations=");
+        sb.append(this.getMetaAnnotations() == null? "null" : this.getMetaAnnotations().getClass().getSimpleName());
+        sb.append(',');
         sb.append("annotations=");
         sb.append(this.getAnnotations() == null? "null" : this.getAnnotations().getClass().getSimpleName());
         sb.append(',');
@@ -171,6 +176,7 @@ public class ConstructorModifiersNodeImpl extends ModifiersNodeImpl implements C
     {
         return factory.makeConstructorModifiersNode(
                 getAccess(),
+                getMetaAnnotations().deepCopy(factory),
                 getAnnotations().deepCopy(factory),
                 getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
                 getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
@@ -187,6 +193,11 @@ public class ConstructorModifiersNodeImpl extends ModifiersNodeImpl implements C
         if (before==null)
             throw new IllegalArgumentException("Cannot replace node with before value of null.");
         
+        if (before.equals(this.getMetaAnnotations()) && (after instanceof MetaAnnotationListNode))
+        {
+            setMetaAnnotations((MetaAnnotationListNode)after);
+            return true;
+        }
         if (before.equals(this.getAnnotations()) && (after instanceof AnnotationListNode))
         {
             setAnnotations((AnnotationListNode)after);

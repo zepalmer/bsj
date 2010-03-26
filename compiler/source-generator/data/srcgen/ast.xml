@@ -274,9 +274,9 @@
 
         <type name="AnnotationMethodModifiersNode" super="ModifiersNode">
             <doc><![CDATA[
-                Represents the modifiers which can be associated with an annotation method.  As all annotation methods are
-                implicitly <tt>public</tt> and <tt>abstract</tt> and these are the only legal modifiers, no flags exist for
-                annotation methods.
+                Represents the modifiers which can be associated with an annotation method.  As all annotation methods
+                are implicitly <tt>public</tt> and <tt>abstract</tt> and these are the only legal modifiers, no flags
+                exist for annotation methods.
             ]]></doc>
         </type>
 
@@ -393,6 +393,8 @@
         </type>
 
         <type name="ModifiersNode" super="Node" mode="abstract">
+            <prop name="metaAnnotations" type="MetaAnnotationListNode" desc="the meta-annotations modifying the subject"
+                default="makeMetaAnnotationListNode()" />
             <prop name="annotations" type="AnnotationListNode" desc="the annotations modifying the subject"
                 default="makeAnnotationListNode()" />
             <doc><![CDATA[
@@ -1303,7 +1305,10 @@
         </type>
 
         <type name="EnumConstantDeclarationNode" super="Node">
-            <prop name="annotations" type="AnnotationListNode" desc="the annotations on this constant" />
+            <prop name="metaAnnotations" type="MetaAnnotationListNode" desc="the meta-annotations on this constant"
+                default="makeMetaAnnotationListNode()" />
+            <prop name="annotations" type="AnnotationListNode" desc="the annotations on this constant" 
+                default="makeAnnotationListNode()" />
             <prop name="identifier" type="IdentifierNode" desc="the name of this constant" />
             <prop name="arguments" type="ExpressionListNode" desc="the arguments to the enum constructor" />
             <prop name="body" type="AnonymousClassBodyNode" desc="the body used to anonymously subclass the constant"
@@ -1987,6 +1992,8 @@
 
         <type name="PackageDeclarationNode" super="Node">
             <prop name="name" type="NameNode" desc="the name of the package" />
+            <prop name="metaAnnotations" type="MetaAnnotationListNode" desc="the meta-annotations on the package declaration"
+                default="makeMetaAnnotationListNode()" />
             <prop name="annotations" type="AnnotationListNode" desc="the annotations on the package declaration"
                 default="makeAnnotationListNode()" />
             <doc><![CDATA[
@@ -2113,6 +2120,12 @@
 
         <!-- ==================== TAGGING INTERFACES ==================== -->
 
+        <type name="MetaAnnotationValueNode" super="Node" mode="tag">
+            <doc><![CDATA[
+                This tagging interface is used to denote AST nodes which represent meta-annotation values.
+            ]]></doc>
+        </type>
+
         <!-- ====================== PREAMBLE NODES ====================== -->
 
         <type name="MetaprogramDependsNode" super="Node">
@@ -2236,8 +2249,101 @@
             ]]></doc>
             <factory-override prop="replacement" expr="makeNoOperationNode()" />
         </type>
+        
+        <!-- ================== META-ANNOTATION NODES =================== -->
+
+        <type name="MetaAnnotationMetaAnnotationValueNode" super="Node">
+            <tag name="MetaAnnotationValueNode" />
+            <prop name="annotation" type="MetaAnnotationNode" desc="the annotation" />
+            <doc><![CDATA[
+                A value in a meta-annotation which is another meta-annotation.  This node is used for complex
+                meta-annotations, such as
+                <pre>@@Foo(a=@@Bar)</pre>
+                In the above snippet, this node would represent the
+                <pre>@@Bar</pre>
+                portion.
+            ]]></doc>
+        </type>
+
+        <type name="MetaAnnotationArrayValueNode" super="Node">
+            <tag name="MetaAnnotationValueNode" />
+            <prop name="values" type="MetaAnnotationValueListNode" desc="the array values" />
+            <doc><![CDATA[
+                A value in a meta-annotation representing an array.  This node is distinct from the
+                {@link ArrayInitializerNode} because it allows annotations (by way of
+                {@link MetaAnnotationMetaAnnotationValueNode}) as well as expressions.
+            ]]></doc>
+        </type>
+
+        <type name="MetaAnnotationExpressionValueNode" super="Node">
+            <tag name="MetaAnnotationValueNode" />
+            <prop name="expression" type="NonAssignmentExpressionNode" desc="the expression" />
+            <doc><![CDATA[
+                A value in a meta-annotation which is an expression.  This value may not be an assignment expression.
+            ]]></doc>
+        </type>
+
+        <type name="MetaAnnotationNode" super="Node" mode="abstract">
+            <prop name="annotationType" type="DeclaredTypeNode" desc="the annotation type" />
+            <doc><![CDATA[
+                Acts as a base class for meta-annotation nodes.  Subclasses distinguish between the different types of
+                meta-annotation sugar.
+            ]]></doc>
+        </type>
+
+        <type name="MetaAnnotationElementNode" super="Node">
+            <prop name="identifier" type="IdentifierNode" desc="the identifier" />
+            <prop name="value" type="MetaAnnotationValueNode" desc="the element's value" />
+            <doc><![CDATA[
+                Represents a meta-annotation element, as in
+                <pre>
+                <i>ident</i>=<i>value</i>
+                </pre>
+            ]]></doc>
+        </type>
+
+        <type name="NormalMetaAnnotationNode" super="MetaAnnotationNode">
+            <prop name="arguments" type="MetaAnnotationElementListNode" desc="the arguments" />
+            <doc><![CDATA[
+                Represents the usage of a meta-annotation, as in:
+                <pre>@@<i>type</i></pre>
+                or
+                <pre>@@<i>type</i>(<i>key</i>=<i>value</i>,...)</pre>
+                Note that this node does not handle the single element meta-annotation format (<pre>@@Foo("bar")</pre>).
+                That is handled by the {@link SingleElementMetaAnnotationNode} class.
+            ]]></doc>
+        </type>
+
+        <type name="SingleElementMetaAnnotationNode" super="MetaAnnotationNode">
+            <prop name="value" type="MetaAnnotationValueNode" desc="the value of the &quot;value&quot; element" />
+            <doc><![CDATA[
+                Represents a single element meta-annotation, as in:
+                <pre>@@<i>type</i>(<i>value</i>)</pre>
+            ]]></doc>
+        </type>
 
         <!-- ========================= LIST NODES ======================= -->
+        
+        <type name="MetaAnnotationElementListNode" super="ListNode" superTypeArg="MetaAnnotationElementNode">
+            <constant name="alwaysOrdered" type="boolean" default="true" desc="whether or not this list's contents are always order-dependent"/>
+            <doc><![CDATA[
+                Represents a list of {@link MetaAnnotationElementNode}s.
+            ]]></doc>
+        </type>
+
+        <type name="MetaAnnotationListNode" super="ListNode" superTypeArg="MetaAnnotationNode">
+            <constant name="alwaysOrdered" type="boolean" default="false" desc="whether or not this list's contents are always order-dependent"/>
+            <doc><![CDATA[
+                Represents a list of {@link MetaAnnotationNode}s.
+            ]]></doc>
+        </type>
+
+        <type name="MetaAnnotationValueListNode" super="ListNode" superTypeArg="MetaAnnotationValueNode">
+            <constant name="alwaysOrdered" type="boolean" default="true" desc="whether or not this list's contents are always order-dependent"/>
+            <doc><![CDATA[
+                Represents a list of {@link MetaAnnotationValueNode}s.
+            ]]></doc>
+        </type>
 
         <type name="MetaprogramImportListNode" super="ListNode" superTypeArg="MetaprogramImportNode">
             <constant name="alwaysOrdered" type="boolean" default="false" desc="whether or not this list's contents are always order-dependent"/>

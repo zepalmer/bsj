@@ -34,8 +34,8 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramPreambleNode;
-import edu.jhu.cs.bsj.compiler.impl.metaprogram.BsjMetaprogram;
 import edu.jhu.cs.bsj.compiler.impl.metaprogram.ContextImpl;
+import edu.jhu.cs.bsj.compiler.impl.metaprogram.Metaprogram;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.MetacompilationContext;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.MetaprogramProfile;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.operations.EnclosingNameNodeOperation;
@@ -215,13 +215,13 @@ public class CompileMetaprogramTask extends AbstractBsjCompilerTask
 
 		// now build the metaprogram itself
 		Context<A> context = new ContextImpl<A>(anchor, factory);
-		BsjMetaprogram<A> metaprogram = compileMetaprogram(metaprogramNode, anchor.getClass().getName());
+		Metaprogram<A> metaprogram = compileMetaprogram(metaprogramNode, anchor.getClass().getName());
 
 		return new MetaprogramProfile<A>(metaprogram, anchor, dependencyNames, qualifiedTargetNames, localMode,
 				packageMode, context);
 	}
 
-	private <A extends MetaprogramAnchorNode<? extends Node>> BsjMetaprogram<A> compileMetaprogram(
+	private <A extends MetaprogramAnchorNode<? extends Node>> Metaprogram<A> compileMetaprogram(
 			MetaprogramNode metaprogramNode, String anchorClassName) throws IOException
 	{
 		String metaprogramDescription = null;
@@ -272,7 +272,7 @@ public class CompileMetaprogramTask extends AbstractBsjCompilerTask
 		}
 
 		// Get metaprogram class name
-		String metaprogramClassName = "BsjMetaprogram" + metaprogramNode.getUid();
+		String metaprogramClassName = "Metaprogram" + metaprogramNode.getUid();
 		String fullyQualifiedMetaprogramClassName = metaprogramPackageName + "." + metaprogramClassName;
 
 		// Create nodes for this metaprogram
@@ -306,7 +306,7 @@ public class CompileMetaprogramTask extends AbstractBsjCompilerTask
 		TypeDeclarationNode metaprogramClassNode = factory.makeClassDeclarationNode(
 				factory.makeClassModifiersNode(AccessModifier.PUBLIC),
 				factory.makeParameterizedTypeNode(factory.makeUnparameterizedTypeNode(parseNameNode(
-						"AbstractBsjMetaprogram", NameCategory.TYPE)),
+						"AbstractMetaprogram", NameCategory.TYPE)),
 						factory.makeTypeArgumentListNode(factory.makeUnparameterizedTypeNode(parseNameNode(
 								anchorClassName, NameCategory.AMBIGUOUS)))), factory.makeDeclaredTypeListNode(), body,
 				factory.makeTypeParameterListNode(), factory.makeIdentifierNode(metaprogramClassName), null);
@@ -364,7 +364,7 @@ public class CompileMetaprogramTask extends AbstractBsjCompilerTask
 		compiler.compile(Arrays.asList(metaprogramSourceFile), this.metacompilationContext.getDiagnosticListener());
 
 		ClassLoader metaprogramClassLoader = fileManager.getClassLoader(BsjCompilerLocation.CLASS_OUTPUT);
-		Class<? extends BsjMetaprogram<A>> metaprogramClass;
+		Class<? extends Metaprogram<A>> metaprogramClass;
 		try
 		{
 			metaprogramClass = metaprogramClassCast(metaprogramClassLoader.loadClass(fullyQualifiedMetaprogramClassName));
@@ -373,7 +373,7 @@ public class CompileMetaprogramTask extends AbstractBsjCompilerTask
 			throw new IllegalStateException("Class " + fullyQualifiedMetaprogramClassName
 					+ " that we just compiled is not found!", e);
 		}
-		Constructor<? extends BsjMetaprogram<A>> constructor;
+		Constructor<? extends Metaprogram<A>> constructor;
 		try
 		{
 			constructor = metaprogramClass.getConstructor();
@@ -411,9 +411,9 @@ public class CompileMetaprogramTask extends AbstractBsjCompilerTask
 	 * @return The casted result.
 	 */
 	@SuppressWarnings("unchecked")
-	private <A extends MetaprogramAnchorNode<? extends Node>> Class<? extends BsjMetaprogram<A>> metaprogramClassCast(
+	private <A extends MetaprogramAnchorNode<? extends Node>> Class<? extends Metaprogram<A>> metaprogramClassCast(
 			Class<?> loadClass)
 	{
-		return (Class<? extends BsjMetaprogram<A>>) loadClass;
+		return (Class<? extends Metaprogram<A>>) loadClass;
 	}
 }

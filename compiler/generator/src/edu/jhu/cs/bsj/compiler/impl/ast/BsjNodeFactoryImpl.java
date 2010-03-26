@@ -23,12 +23,23 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.BlockStatementMetaprogramAnchorNode
 import edu.jhu.cs.bsj.compiler.ast.node.meta.ClassMemberMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.CodeLiteralNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.InterfaceMemberMetaprogramAnchorNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationArrayValueNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationElementListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationElementNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationExpressionValueNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaAnnotationValueNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationValueListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationValueNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependsNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramPreambleNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramTargetNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.NormalMetaAnnotationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.SingleElementMetaAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.TypeDeclarationMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.*;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.meta.AnnotationMemberMetaprogramAnchorNodeImpl;
@@ -37,12 +48,21 @@ import edu.jhu.cs.bsj.compiler.impl.ast.node.meta.BlockStatementMetaprogramAncho
 import edu.jhu.cs.bsj.compiler.impl.ast.node.meta.ClassMemberMetaprogramAnchorNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.meta.CodeLiteralNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.meta.InterfaceMemberMetaprogramAnchorNodeImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.node.meta.MetaAnnotationArrayValueNodeImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.node.meta.MetaAnnotationElementListNodeImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.node.meta.MetaAnnotationElementNodeImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.node.meta.MetaAnnotationExpressionValueNodeImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.node.meta.MetaAnnotationListNodeImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.node.meta.MetaAnnotationMetaAnnotationValueNodeImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.node.meta.MetaAnnotationValueListNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.meta.MetaprogramDependsNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.meta.MetaprogramImportListNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.meta.MetaprogramImportNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.meta.MetaprogramNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.meta.MetaprogramPreambleNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.meta.MetaprogramTargetNodeImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.node.meta.NormalMetaAnnotationNodeImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.node.meta.SingleElementMetaAnnotationNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.meta.TypeDeclarationMetaprogramAnchorNodeImpl;
 
 /**
@@ -610,9 +630,10 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     @Override
     public AnnotationMethodModifiersNode makeAnnotationMethodModifiersNode(
+            MetaAnnotationListNode metaAnnotations,
             AnnotationListNode annotations)
     {
-        AnnotationMethodModifiersNode ret = new AnnotationMethodModifiersNodeImpl(annotations, startLocation, stopLocation, manager, binary);
+        AnnotationMethodModifiersNode ret = new AnnotationMethodModifiersNodeImpl(metaAnnotations, annotations, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -622,11 +643,12 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     @Override
     public AnnotationMethodModifiersNode makeAnnotationMethodModifiersNode(
+            MetaAnnotationListNode metaAnnotations,
             AnnotationListNode annotations,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        AnnotationMethodModifiersNode ret = new AnnotationMethodModifiersNodeImpl(annotations, startLocation, stopLocation, manager, binary);
+        AnnotationMethodModifiersNode ret = new AnnotationMethodModifiersNodeImpl(metaAnnotations, annotations, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -639,9 +661,10 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             AccessModifier access,
             boolean staticFlag,
             boolean strictfpFlag,
+            MetaAnnotationListNode metaAnnotations,
             AnnotationListNode annotations)
     {
-        AnnotationModifiersNode ret = new AnnotationModifiersNodeImpl(access, staticFlag, strictfpFlag, annotations, startLocation, stopLocation, manager, binary);
+        AnnotationModifiersNode ret = new AnnotationModifiersNodeImpl(access, staticFlag, strictfpFlag, metaAnnotations, annotations, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -654,11 +677,12 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             AccessModifier access,
             boolean staticFlag,
             boolean strictfpFlag,
+            MetaAnnotationListNode metaAnnotations,
             AnnotationListNode annotations,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        AnnotationModifiersNode ret = new AnnotationModifiersNodeImpl(access, staticFlag, strictfpFlag, annotations, startLocation, stopLocation, manager, binary);
+        AnnotationModifiersNode ret = new AnnotationModifiersNodeImpl(access, staticFlag, strictfpFlag, metaAnnotations, annotations, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -670,7 +694,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public AnnotationModifiersNode makeAnnotationModifiersNode(
             AccessModifier access)
     {
-        AnnotationModifiersNode ret = new AnnotationModifiersNodeImpl(access, false, false, makeAnnotationListNode(), startLocation, stopLocation, manager, binary);
+        AnnotationModifiersNode ret = new AnnotationModifiersNodeImpl(access, false, false, makeMetaAnnotationListNode(), makeAnnotationListNode(), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -684,7 +708,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        AnnotationModifiersNode ret = new AnnotationModifiersNodeImpl(access, false, false, makeAnnotationListNode(), startLocation, stopLocation, manager, binary);
+        AnnotationModifiersNode ret = new AnnotationModifiersNodeImpl(access, false, false, makeMetaAnnotationListNode(), makeAnnotationListNode(), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -1643,9 +1667,10 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             boolean staticFlag,
             boolean finalFlag,
             boolean strictfpFlag,
+            MetaAnnotationListNode metaAnnotations,
             AnnotationListNode annotations)
     {
-        ClassModifiersNode ret = new ClassModifiersNodeImpl(access, abstractFlag, staticFlag, finalFlag, strictfpFlag, annotations, startLocation, stopLocation, manager, binary);
+        ClassModifiersNode ret = new ClassModifiersNodeImpl(access, abstractFlag, staticFlag, finalFlag, strictfpFlag, metaAnnotations, annotations, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -1660,11 +1685,12 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             boolean staticFlag,
             boolean finalFlag,
             boolean strictfpFlag,
+            MetaAnnotationListNode metaAnnotations,
             AnnotationListNode annotations,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        ClassModifiersNode ret = new ClassModifiersNodeImpl(access, abstractFlag, staticFlag, finalFlag, strictfpFlag, annotations, startLocation, stopLocation, manager, binary);
+        ClassModifiersNode ret = new ClassModifiersNodeImpl(access, abstractFlag, staticFlag, finalFlag, strictfpFlag, metaAnnotations, annotations, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -1676,7 +1702,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public ClassModifiersNode makeClassModifiersNode(
             AccessModifier access)
     {
-        ClassModifiersNode ret = new ClassModifiersNodeImpl(access, false, false, false, false, makeAnnotationListNode(), startLocation, stopLocation, manager, binary);
+        ClassModifiersNode ret = new ClassModifiersNodeImpl(access, false, false, false, false, makeMetaAnnotationListNode(), makeAnnotationListNode(), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -1690,7 +1716,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        ClassModifiersNode ret = new ClassModifiersNodeImpl(access, false, false, false, false, makeAnnotationListNode(), startLocation, stopLocation, manager, binary);
+        ClassModifiersNode ret = new ClassModifiersNodeImpl(access, false, false, false, false, makeMetaAnnotationListNode(), makeAnnotationListNode(), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -1925,9 +1951,10 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     @Override
     public ConstructorModifiersNode makeConstructorModifiersNode(
             AccessModifier access,
+            MetaAnnotationListNode metaAnnotations,
             AnnotationListNode annotations)
     {
-        ConstructorModifiersNode ret = new ConstructorModifiersNodeImpl(access, annotations, startLocation, stopLocation, manager, binary);
+        ConstructorModifiersNode ret = new ConstructorModifiersNodeImpl(access, metaAnnotations, annotations, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -1938,11 +1965,12 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     @Override
     public ConstructorModifiersNode makeConstructorModifiersNode(
             AccessModifier access,
+            MetaAnnotationListNode metaAnnotations,
             AnnotationListNode annotations,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        ConstructorModifiersNode ret = new ConstructorModifiersNodeImpl(access, annotations, startLocation, stopLocation, manager, binary);
+        ConstructorModifiersNode ret = new ConstructorModifiersNodeImpl(access, metaAnnotations, annotations, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -1954,7 +1982,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public ConstructorModifiersNode makeConstructorModifiersNode(
             AccessModifier access)
     {
-        ConstructorModifiersNode ret = new ConstructorModifiersNodeImpl(access, makeAnnotationListNode(), startLocation, stopLocation, manager, binary);
+        ConstructorModifiersNode ret = new ConstructorModifiersNodeImpl(access, makeMetaAnnotationListNode(), makeAnnotationListNode(), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -1968,7 +1996,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        ConstructorModifiersNode ret = new ConstructorModifiersNodeImpl(access, makeAnnotationListNode(), startLocation, stopLocation, manager, binary);
+        ConstructorModifiersNode ret = new ConstructorModifiersNodeImpl(access, makeMetaAnnotationListNode(), makeAnnotationListNode(), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -2244,13 +2272,14 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     @Override
     public EnumConstantDeclarationNode makeEnumConstantDeclarationNode(
+            MetaAnnotationListNode metaAnnotations,
             AnnotationListNode annotations,
             IdentifierNode identifier,
             ExpressionListNode arguments,
             AnonymousClassBodyNode body,
             JavadocNode javadoc)
     {
-        EnumConstantDeclarationNode ret = new EnumConstantDeclarationNodeImpl(annotations, identifier, arguments, body, javadoc, startLocation, stopLocation, manager, binary);
+        EnumConstantDeclarationNode ret = new EnumConstantDeclarationNodeImpl(metaAnnotations, annotations, identifier, arguments, body, javadoc, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -2260,6 +2289,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     @Override
     public EnumConstantDeclarationNode makeEnumConstantDeclarationNode(
+            MetaAnnotationListNode metaAnnotations,
             AnnotationListNode annotations,
             IdentifierNode identifier,
             ExpressionListNode arguments,
@@ -2268,7 +2298,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        EnumConstantDeclarationNode ret = new EnumConstantDeclarationNodeImpl(annotations, identifier, arguments, body, javadoc, startLocation, stopLocation, manager, binary);
+        EnumConstantDeclarationNode ret = new EnumConstantDeclarationNodeImpl(metaAnnotations, annotations, identifier, arguments, body, javadoc, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -2278,12 +2308,11 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     @Override
     public EnumConstantDeclarationNode makeEnumConstantDeclarationNode(
-            AnnotationListNode annotations,
             IdentifierNode identifier,
             ExpressionListNode arguments,
             JavadocNode javadoc)
     {
-        EnumConstantDeclarationNode ret = new EnumConstantDeclarationNodeImpl(annotations, identifier, arguments, null, javadoc, startLocation, stopLocation, manager, binary);
+        EnumConstantDeclarationNode ret = new EnumConstantDeclarationNodeImpl(makeMetaAnnotationListNode(), makeAnnotationListNode(), identifier, arguments, null, javadoc, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -2293,14 +2322,13 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     @Override
     public EnumConstantDeclarationNode makeEnumConstantDeclarationNode(
-            AnnotationListNode annotations,
             IdentifierNode identifier,
             ExpressionListNode arguments,
             JavadocNode javadoc,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        EnumConstantDeclarationNode ret = new EnumConstantDeclarationNodeImpl(annotations, identifier, arguments, null, javadoc, startLocation, stopLocation, manager, binary);
+        EnumConstantDeclarationNode ret = new EnumConstantDeclarationNodeImpl(makeMetaAnnotationListNode(), makeAnnotationListNode(), identifier, arguments, null, javadoc, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -2346,9 +2374,10 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public EnumModifiersNode makeEnumModifiersNode(
             AccessModifier access,
             boolean strictfpFlag,
+            MetaAnnotationListNode metaAnnotations,
             AnnotationListNode annotations)
     {
-        EnumModifiersNode ret = new EnumModifiersNodeImpl(access, strictfpFlag, annotations, startLocation, stopLocation, manager, binary);
+        EnumModifiersNode ret = new EnumModifiersNodeImpl(access, strictfpFlag, metaAnnotations, annotations, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -2360,11 +2389,12 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public EnumModifiersNode makeEnumModifiersNode(
             AccessModifier access,
             boolean strictfpFlag,
+            MetaAnnotationListNode metaAnnotations,
             AnnotationListNode annotations,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        EnumModifiersNode ret = new EnumModifiersNodeImpl(access, strictfpFlag, annotations, startLocation, stopLocation, manager, binary);
+        EnumModifiersNode ret = new EnumModifiersNodeImpl(access, strictfpFlag, metaAnnotations, annotations, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -2376,7 +2406,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public EnumModifiersNode makeEnumModifiersNode(
             AccessModifier access)
     {
-        EnumModifiersNode ret = new EnumModifiersNodeImpl(access, false, makeAnnotationListNode(), startLocation, stopLocation, manager, binary);
+        EnumModifiersNode ret = new EnumModifiersNodeImpl(access, false, makeMetaAnnotationListNode(), makeAnnotationListNode(), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -2390,7 +2420,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        EnumModifiersNode ret = new EnumModifiersNodeImpl(access, false, makeAnnotationListNode(), startLocation, stopLocation, manager, binary);
+        EnumModifiersNode ret = new EnumModifiersNodeImpl(access, false, makeMetaAnnotationListNode(), makeAnnotationListNode(), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -2567,9 +2597,10 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             boolean finalFlag,
             boolean transientFlag,
             boolean volatileFlag,
+            MetaAnnotationListNode metaAnnotations,
             AnnotationListNode annotations)
     {
-        FieldModifiersNode ret = new FieldModifiersNodeImpl(access, staticFlag, finalFlag, transientFlag, volatileFlag, annotations, startLocation, stopLocation, manager, binary);
+        FieldModifiersNode ret = new FieldModifiersNodeImpl(access, staticFlag, finalFlag, transientFlag, volatileFlag, metaAnnotations, annotations, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -2584,11 +2615,12 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             boolean finalFlag,
             boolean transientFlag,
             boolean volatileFlag,
+            MetaAnnotationListNode metaAnnotations,
             AnnotationListNode annotations,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        FieldModifiersNode ret = new FieldModifiersNodeImpl(access, staticFlag, finalFlag, transientFlag, volatileFlag, annotations, startLocation, stopLocation, manager, binary);
+        FieldModifiersNode ret = new FieldModifiersNodeImpl(access, staticFlag, finalFlag, transientFlag, volatileFlag, metaAnnotations, annotations, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -2600,7 +2632,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public FieldModifiersNode makeFieldModifiersNode(
             AccessModifier access)
     {
-        FieldModifiersNode ret = new FieldModifiersNodeImpl(access, false, false, false, false, makeAnnotationListNode(), startLocation, stopLocation, manager, binary);
+        FieldModifiersNode ret = new FieldModifiersNodeImpl(access, false, false, false, false, makeMetaAnnotationListNode(), makeAnnotationListNode(), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -2614,7 +2646,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        FieldModifiersNode ret = new FieldModifiersNodeImpl(access, false, false, false, false, makeAnnotationListNode(), startLocation, stopLocation, manager, binary);
+        FieldModifiersNode ret = new FieldModifiersNodeImpl(access, false, false, false, false, makeMetaAnnotationListNode(), makeAnnotationListNode(), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3225,9 +3257,10 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             AccessModifier access,
             boolean staticFlag,
             boolean strictfpFlag,
+            MetaAnnotationListNode metaAnnotations,
             AnnotationListNode annotations)
     {
-        InterfaceModifiersNode ret = new InterfaceModifiersNodeImpl(access, staticFlag, strictfpFlag, annotations, startLocation, stopLocation, manager, binary);
+        InterfaceModifiersNode ret = new InterfaceModifiersNodeImpl(access, staticFlag, strictfpFlag, metaAnnotations, annotations, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3240,11 +3273,12 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             AccessModifier access,
             boolean staticFlag,
             boolean strictfpFlag,
+            MetaAnnotationListNode metaAnnotations,
             AnnotationListNode annotations,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        InterfaceModifiersNode ret = new InterfaceModifiersNodeImpl(access, staticFlag, strictfpFlag, annotations, startLocation, stopLocation, manager, binary);
+        InterfaceModifiersNode ret = new InterfaceModifiersNodeImpl(access, staticFlag, strictfpFlag, metaAnnotations, annotations, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3256,7 +3290,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public InterfaceModifiersNode makeInterfaceModifiersNode(
             AccessModifier access)
     {
-        InterfaceModifiersNode ret = new InterfaceModifiersNodeImpl(access, false, false, makeAnnotationListNode(), startLocation, stopLocation, manager, binary);
+        InterfaceModifiersNode ret = new InterfaceModifiersNodeImpl(access, false, false, makeMetaAnnotationListNode(), makeAnnotationListNode(), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3270,7 +3304,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        InterfaceModifiersNode ret = new InterfaceModifiersNodeImpl(access, false, false, makeAnnotationListNode(), startLocation, stopLocation, manager, binary);
+        InterfaceModifiersNode ret = new InterfaceModifiersNodeImpl(access, false, false, makeMetaAnnotationListNode(), makeAnnotationListNode(), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3352,6 +3386,268 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     {
         LongLiteralNode ret = new LongLiteralNodeImpl(value, startLocation, stopLocation, manager, binary);
         return ret;
+    }
+    
+    /**
+     * Creates a MetaAnnotationArrayValueNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public MetaAnnotationArrayValueNode makeMetaAnnotationArrayValueNode(
+            MetaAnnotationValueListNode values)
+    {
+        MetaAnnotationArrayValueNode ret = new MetaAnnotationArrayValueNodeImpl(values, startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a MetaAnnotationArrayValueNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public MetaAnnotationArrayValueNode makeMetaAnnotationArrayValueNode(
+            MetaAnnotationValueListNode values,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        MetaAnnotationArrayValueNode ret = new MetaAnnotationArrayValueNodeImpl(values, startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a MetaAnnotationElementListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public MetaAnnotationElementListNode makeMetaAnnotationElementListNode(
+            List<MetaAnnotationElementNode> children)
+    {
+        MetaAnnotationElementListNode ret = new MetaAnnotationElementListNodeImpl(children, startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a MetaAnnotationElementListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public MetaAnnotationElementListNode makeMetaAnnotationElementListNode(
+            MetaAnnotationElementNode... childrenElements)
+    {
+        List<MetaAnnotationElementNode> children = Arrays.asList(childrenElements);
+        return makeMetaAnnotationElementListNode(children, startLocation, stopLocation);
+    }
+    
+    /**
+     * Creates a MetaAnnotationElementListNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public MetaAnnotationElementListNode makeMetaAnnotationElementListNode(
+            List<MetaAnnotationElementNode> children,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        MetaAnnotationElementListNode ret = new MetaAnnotationElementListNodeImpl(children, startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a MetaAnnotationElementListNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public MetaAnnotationElementListNode makeMetaAnnotationElementListNode(
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation,
+            MetaAnnotationElementNode... childrenElements)
+    {
+        List<MetaAnnotationElementNode> children = Arrays.asList(childrenElements);
+        return makeMetaAnnotationElementListNode(children, startLocation, stopLocation);
+    }
+    
+    /**
+     * Creates a MetaAnnotationElementNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public MetaAnnotationElementNode makeMetaAnnotationElementNode(
+            IdentifierNode identifier,
+            MetaAnnotationValueNode value)
+    {
+        MetaAnnotationElementNode ret = new MetaAnnotationElementNodeImpl(identifier, value, startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a MetaAnnotationElementNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public MetaAnnotationElementNode makeMetaAnnotationElementNode(
+            IdentifierNode identifier,
+            MetaAnnotationValueNode value,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        MetaAnnotationElementNode ret = new MetaAnnotationElementNodeImpl(identifier, value, startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a MetaAnnotationExpressionValueNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public MetaAnnotationExpressionValueNode makeMetaAnnotationExpressionValueNode(
+            NonAssignmentExpressionNode expression)
+    {
+        MetaAnnotationExpressionValueNode ret = new MetaAnnotationExpressionValueNodeImpl(expression, startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a MetaAnnotationExpressionValueNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public MetaAnnotationExpressionValueNode makeMetaAnnotationExpressionValueNode(
+            NonAssignmentExpressionNode expression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        MetaAnnotationExpressionValueNode ret = new MetaAnnotationExpressionValueNodeImpl(expression, startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a MetaAnnotationListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public MetaAnnotationListNode makeMetaAnnotationListNode(
+            List<MetaAnnotationNode> children)
+    {
+        MetaAnnotationListNode ret = new MetaAnnotationListNodeImpl(children, startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a MetaAnnotationListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public MetaAnnotationListNode makeMetaAnnotationListNode(
+            MetaAnnotationNode... childrenElements)
+    {
+        List<MetaAnnotationNode> children = Arrays.asList(childrenElements);
+        return makeMetaAnnotationListNode(children, startLocation, stopLocation);
+    }
+    
+    /**
+     * Creates a MetaAnnotationListNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public MetaAnnotationListNode makeMetaAnnotationListNode(
+            List<MetaAnnotationNode> children,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        MetaAnnotationListNode ret = new MetaAnnotationListNodeImpl(children, startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a MetaAnnotationListNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public MetaAnnotationListNode makeMetaAnnotationListNode(
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation,
+            MetaAnnotationNode... childrenElements)
+    {
+        List<MetaAnnotationNode> children = Arrays.asList(childrenElements);
+        return makeMetaAnnotationListNode(children, startLocation, stopLocation);
+    }
+    
+    /**
+     * Creates a MetaAnnotationMetaAnnotationValueNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public MetaAnnotationMetaAnnotationValueNode makeMetaAnnotationMetaAnnotationValueNode(
+            MetaAnnotationNode annotation)
+    {
+        MetaAnnotationMetaAnnotationValueNode ret = new MetaAnnotationMetaAnnotationValueNodeImpl(annotation, startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a MetaAnnotationMetaAnnotationValueNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public MetaAnnotationMetaAnnotationValueNode makeMetaAnnotationMetaAnnotationValueNode(
+            MetaAnnotationNode annotation,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        MetaAnnotationMetaAnnotationValueNode ret = new MetaAnnotationMetaAnnotationValueNodeImpl(annotation, startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a MetaAnnotationValueListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public MetaAnnotationValueListNode makeMetaAnnotationValueListNode(
+            List<MetaAnnotationValueNode> children)
+    {
+        MetaAnnotationValueListNode ret = new MetaAnnotationValueListNodeImpl(children, startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a MetaAnnotationValueListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public MetaAnnotationValueListNode makeMetaAnnotationValueListNode(
+            MetaAnnotationValueNode... childrenElements)
+    {
+        List<MetaAnnotationValueNode> children = Arrays.asList(childrenElements);
+        return makeMetaAnnotationValueListNode(children, startLocation, stopLocation);
+    }
+    
+    /**
+     * Creates a MetaAnnotationValueListNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public MetaAnnotationValueListNode makeMetaAnnotationValueListNode(
+            List<MetaAnnotationValueNode> children,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        MetaAnnotationValueListNode ret = new MetaAnnotationValueListNodeImpl(children, startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a MetaAnnotationValueListNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public MetaAnnotationValueListNode makeMetaAnnotationValueListNode(
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation,
+            MetaAnnotationValueNode... childrenElements)
+    {
+        List<MetaAnnotationValueNode> children = Arrays.asList(childrenElements);
+        return makeMetaAnnotationValueListNode(children, startLocation, stopLocation);
     }
     
     /**
@@ -3729,9 +4025,10 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             boolean synchronizedFlag,
             boolean nativeFlag,
             boolean strictfpFlag,
+            MetaAnnotationListNode metaAnnotations,
             AnnotationListNode annotations)
     {
-        MethodModifiersNode ret = new MethodModifiersNodeImpl(access, abstractFlag, staticFlag, finalFlag, synchronizedFlag, nativeFlag, strictfpFlag, annotations, startLocation, stopLocation, manager, binary);
+        MethodModifiersNode ret = new MethodModifiersNodeImpl(access, abstractFlag, staticFlag, finalFlag, synchronizedFlag, nativeFlag, strictfpFlag, metaAnnotations, annotations, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3748,11 +4045,12 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             boolean synchronizedFlag,
             boolean nativeFlag,
             boolean strictfpFlag,
+            MetaAnnotationListNode metaAnnotations,
             AnnotationListNode annotations,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        MethodModifiersNode ret = new MethodModifiersNodeImpl(access, abstractFlag, staticFlag, finalFlag, synchronizedFlag, nativeFlag, strictfpFlag, annotations, startLocation, stopLocation, manager, binary);
+        MethodModifiersNode ret = new MethodModifiersNodeImpl(access, abstractFlag, staticFlag, finalFlag, synchronizedFlag, nativeFlag, strictfpFlag, metaAnnotations, annotations, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3764,7 +4062,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public MethodModifiersNode makeMethodModifiersNode(
             AccessModifier access)
     {
-        MethodModifiersNode ret = new MethodModifiersNodeImpl(access, false, false, false, false, false, false, makeAnnotationListNode(), startLocation, stopLocation, manager, binary);
+        MethodModifiersNode ret = new MethodModifiersNodeImpl(access, false, false, false, false, false, false, makeMetaAnnotationListNode(), makeAnnotationListNode(), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3778,7 +4076,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        MethodModifiersNode ret = new MethodModifiersNodeImpl(access, false, false, false, false, false, false, makeAnnotationListNode(), startLocation, stopLocation, manager, binary);
+        MethodModifiersNode ret = new MethodModifiersNodeImpl(access, false, false, false, false, false, false, makeMetaAnnotationListNode(), makeAnnotationListNode(), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3888,6 +4186,34 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     }
     
     /**
+     * Creates a NormalMetaAnnotationNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public NormalMetaAnnotationNode makeNormalMetaAnnotationNode(
+            MetaAnnotationElementListNode arguments,
+            DeclaredTypeNode annotationType)
+    {
+        NormalMetaAnnotationNode ret = new NormalMetaAnnotationNodeImpl(arguments, annotationType, startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a NormalMetaAnnotationNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public NormalMetaAnnotationNode makeNormalMetaAnnotationNode(
+            MetaAnnotationElementListNode arguments,
+            DeclaredTypeNode annotationType,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        NormalMetaAnnotationNode ret = new NormalMetaAnnotationNodeImpl(arguments, annotationType, startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
      * Creates a NullLiteralNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -3944,9 +4270,10 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     @Override
     public PackageDeclarationNode makePackageDeclarationNode(
             NameNode name,
+            MetaAnnotationListNode metaAnnotations,
             AnnotationListNode annotations)
     {
-        PackageDeclarationNode ret = new PackageDeclarationNodeImpl(name, annotations, startLocation, stopLocation, manager, binary);
+        PackageDeclarationNode ret = new PackageDeclarationNodeImpl(name, metaAnnotations, annotations, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3957,11 +4284,12 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     @Override
     public PackageDeclarationNode makePackageDeclarationNode(
             NameNode name,
+            MetaAnnotationListNode metaAnnotations,
             AnnotationListNode annotations,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        PackageDeclarationNode ret = new PackageDeclarationNodeImpl(name, annotations, startLocation, stopLocation, manager, binary);
+        PackageDeclarationNode ret = new PackageDeclarationNodeImpl(name, metaAnnotations, annotations, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3973,7 +4301,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public PackageDeclarationNode makePackageDeclarationNode(
             NameNode name)
     {
-        PackageDeclarationNode ret = new PackageDeclarationNodeImpl(name, makeAnnotationListNode(), startLocation, stopLocation, manager, binary);
+        PackageDeclarationNode ret = new PackageDeclarationNodeImpl(name, makeMetaAnnotationListNode(), makeAnnotationListNode(), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3987,7 +4315,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        PackageDeclarationNode ret = new PackageDeclarationNodeImpl(name, makeAnnotationListNode(), startLocation, stopLocation, manager, binary);
+        PackageDeclarationNode ret = new PackageDeclarationNodeImpl(name, makeMetaAnnotationListNode(), makeAnnotationListNode(), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -4322,6 +4650,34 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation stopLocation)
     {
         SingleElementAnnotationNode ret = new SingleElementAnnotationNodeImpl(value, annotationType, startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a SingleElementMetaAnnotationNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public SingleElementMetaAnnotationNode makeSingleElementMetaAnnotationNode(
+            MetaAnnotationValueNode value,
+            DeclaredTypeNode annotationType)
+    {
+        SingleElementMetaAnnotationNode ret = new SingleElementMetaAnnotationNodeImpl(value, annotationType, startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a SingleElementMetaAnnotationNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public SingleElementMetaAnnotationNode makeSingleElementMetaAnnotationNode(
+            MetaAnnotationValueNode value,
+            DeclaredTypeNode annotationType,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        SingleElementMetaAnnotationNode ret = new SingleElementMetaAnnotationNodeImpl(value, annotationType, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -5554,9 +5910,10 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     @Override
     public VariableModifiersNode makeVariableModifiersNode(
             boolean finalFlag,
+            MetaAnnotationListNode metaAnnotations,
             AnnotationListNode annotations)
     {
-        VariableModifiersNode ret = new VariableModifiersNodeImpl(finalFlag, annotations, startLocation, stopLocation, manager, binary);
+        VariableModifiersNode ret = new VariableModifiersNodeImpl(finalFlag, metaAnnotations, annotations, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -5567,11 +5924,12 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     @Override
     public VariableModifiersNode makeVariableModifiersNode(
             boolean finalFlag,
+            MetaAnnotationListNode metaAnnotations,
             AnnotationListNode annotations,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        VariableModifiersNode ret = new VariableModifiersNodeImpl(finalFlag, annotations, startLocation, stopLocation, manager, binary);
+        VariableModifiersNode ret = new VariableModifiersNodeImpl(finalFlag, metaAnnotations, annotations, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -5582,7 +5940,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     @Override
     public VariableModifiersNode makeVariableModifiersNode()
     {
-        VariableModifiersNode ret = new VariableModifiersNodeImpl(false, makeAnnotationListNode(), startLocation, stopLocation, manager, binary);
+        VariableModifiersNode ret = new VariableModifiersNodeImpl(false, makeMetaAnnotationListNode(), makeAnnotationListNode(), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -5595,7 +5953,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        VariableModifiersNode ret = new VariableModifiersNodeImpl(false, makeAnnotationListNode(), startLocation, stopLocation, manager, binary);
+        VariableModifiersNode ret = new VariableModifiersNodeImpl(false, makeMetaAnnotationListNode(), makeAnnotationListNode(), startLocation, stopLocation, manager, binary);
         return ret;
     }
     

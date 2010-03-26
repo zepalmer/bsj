@@ -10,12 +10,21 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.BlockStatementMetaprogramAnchorNode
 import edu.jhu.cs.bsj.compiler.ast.node.meta.ClassMemberMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.CodeLiteralNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.InterfaceMemberMetaprogramAnchorNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationArrayValueNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationElementListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationElementNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationExpressionValueNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaAnnotationValueNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationValueListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependsNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramPreambleNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramTargetNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.NormalMetaAnnotationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.SingleElementMetaAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.TypeDeclarationMetaprogramAnchorNode;
 
 /**
@@ -900,6 +909,76 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
      * @param node The node in question.
      * @param p The parameter to this node operation.
      */
+    public R executeMetaAnnotationArrayValueNode(MetaAnnotationArrayValueNode node, P p)
+    {
+        return executeDefault(node, p);
+    }
+
+    /**
+     * Executes the default operation for this node.
+     * @param node The node in question.
+     * @param p The parameter to this node operation.
+     */
+    public R executeMetaAnnotationElementListNode(MetaAnnotationElementListNode node, P p)
+    {
+        return executeDefault(node, p);
+    }
+
+    /**
+     * Executes the default operation for this node.
+     * @param node The node in question.
+     * @param p The parameter to this node operation.
+     */
+    public R executeMetaAnnotationElementNode(MetaAnnotationElementNode node, P p)
+    {
+        return executeDefault(node, p);
+    }
+
+    /**
+     * Executes the default operation for this node.
+     * @param node The node in question.
+     * @param p The parameter to this node operation.
+     */
+    public R executeMetaAnnotationExpressionValueNode(MetaAnnotationExpressionValueNode node, P p)
+    {
+        return executeDefault(node, p);
+    }
+
+    /**
+     * Executes the default operation for this node.
+     * @param node The node in question.
+     * @param p The parameter to this node operation.
+     */
+    public R executeMetaAnnotationListNode(MetaAnnotationListNode node, P p)
+    {
+        return executeDefault(node, p);
+    }
+
+    /**
+     * Executes the default operation for this node.
+     * @param node The node in question.
+     * @param p The parameter to this node operation.
+     */
+    public R executeMetaAnnotationMetaAnnotationValueNode(MetaAnnotationMetaAnnotationValueNode node, P p)
+    {
+        return executeDefault(node, p);
+    }
+
+    /**
+     * Executes the default operation for this node.
+     * @param node The node in question.
+     * @param p The parameter to this node operation.
+     */
+    public R executeMetaAnnotationValueListNode(MetaAnnotationValueListNode node, P p)
+    {
+        return executeDefault(node, p);
+    }
+
+    /**
+     * Executes the default operation for this node.
+     * @param node The node in question.
+     * @param p The parameter to this node operation.
+     */
     public R executeMetaprogramDependsNode(MetaprogramDependsNode node, P p)
     {
         return executeDefault(node, p);
@@ -1030,6 +1109,16 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
      * @param node The node in question.
      * @param p The parameter to this node operation.
      */
+    public R executeNormalMetaAnnotationNode(NormalMetaAnnotationNode node, P p)
+    {
+        return executeDefault(node, p);
+    }
+
+    /**
+     * Executes the default operation for this node.
+     * @param node The node in question.
+     * @param p The parameter to this node operation.
+     */
     public R executeNullLiteralNode(NullLiteralNode node, P p)
     {
         return executeDefault(node, p);
@@ -1151,6 +1240,16 @@ public abstract class BsjDefaultNodeOperation<P,R> implements BsjNodeOperation<P
      * @param p The parameter to this node operation.
      */
     public R executeSingleElementAnnotationNode(SingleElementAnnotationNode node, P p)
+    {
+        return executeDefault(node, p);
+    }
+
+    /**
+     * Executes the default operation for this node.
+     * @param node The node in question.
+     * @param p The parameter to this node operation.
+     */
+    public R executeSingleElementMetaAnnotationNode(SingleElementMetaAnnotationNode node, P p)
     {
         return executeDefault(node, p);
     }

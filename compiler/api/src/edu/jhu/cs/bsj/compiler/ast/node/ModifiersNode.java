@@ -3,6 +3,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
 import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationListNode;
 
 /**
  * A node representing the modifiers applied to another node.  Modifiers may include flags (such as <tt>final</tt>
@@ -12,6 +13,18 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public interface ModifiersNode extends Node
 {
+    /**
+     * Gets the meta-annotations modifying the subject.
+     * @return The meta-annotations modifying the subject.
+     */
+    public MetaAnnotationListNode getMetaAnnotations();
+    
+    /**
+     * Changes the meta-annotations modifying the subject.
+     * @param metaAnnotations The meta-annotations modifying the subject.
+     */
+    public void setMetaAnnotations(MetaAnnotationListNode metaAnnotations);
+    
     /**
      * Gets the annotations modifying the subject.
      * @return The annotations modifying the subject.

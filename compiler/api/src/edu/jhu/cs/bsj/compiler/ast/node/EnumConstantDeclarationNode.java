@@ -3,6 +3,7 @@ package edu.jhu.cs.bsj.compiler.ast.node;
 import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationListNode;
 
 /**
  * A node representing an enum constant.  While enum constants typically consist of a single name, many optional
@@ -12,6 +13,18 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public interface EnumConstantDeclarationNode extends Node
 {
+    /**
+     * Gets the meta-annotations on this constant.
+     * @return The meta-annotations on this constant.
+     */
+    public MetaAnnotationListNode getMetaAnnotations();
+    
+    /**
+     * Changes the meta-annotations on this constant.
+     * @param metaAnnotations The meta-annotations on this constant.
+     */
+    public void setMetaAnnotations(MetaAnnotationListNode metaAnnotations);
+    
     /**
      * Gets the annotations on this constant.
      * @return The annotations on this constant.

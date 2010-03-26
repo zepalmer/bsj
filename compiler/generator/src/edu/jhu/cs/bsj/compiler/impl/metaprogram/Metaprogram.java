@@ -9,7 +9,7 @@ import edu.jhu.cs.bsj.compiler.metaprogram.Context;
  *
  * @param <T> The type of anchor for this metaprogram.
  */
-public interface BsjMetaprogram<T extends MetaprogramAnchorNode<?>>
+public interface Metaprogram<T extends MetaprogramAnchorNode<?>>
 {
 	/**
 	 * Executes this metaprogram.  This method should be overridden with an implementation that contains the

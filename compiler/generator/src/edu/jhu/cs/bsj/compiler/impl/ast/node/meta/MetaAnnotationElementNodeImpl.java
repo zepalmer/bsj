@@ -1,111 +1,125 @@
-package edu.jhu.cs.bsj.compiler.impl.ast.node;
+package edu.jhu.cs.bsj.compiler.impl.ast.node.meta;
 
 import java.util.List;
 
 import javax.annotation.Generated;
 
-import edu.jhu.cs.bsj.compiler.ast.AccessModifier;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
-import edu.jhu.cs.bsj.compiler.ast.node.AnnotationListNode;
-import edu.jhu.cs.bsj.compiler.ast.node.EnumModifiersNode;
+import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationElementNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationValueNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.node.NodeImpl;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public class EnumModifiersNodeImpl extends ModifiersNodeImpl implements EnumModifiersNode
+public class MetaAnnotationElementNodeImpl extends NodeImpl implements MetaAnnotationElementNode
 {
-    /** The access for the associated enum. */
-    private AccessModifier access;
+    /** The identifier. */
+    private IdentifierNode identifier;
     
-    /** Whether or not the associated enum uses strict floating-point. */
-    private boolean strictfpFlag;
+    /** The element's value. */
+    private MetaAnnotationValueNode value;
     
     private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
     {
-        /** Attribute for the access property. */
-        ACCESS,
-        /** Attribute for the strictfpFlag property. */
-        STRICTFP_FLAG,
+        /** Attribute for the identifier property. */
+        IDENTIFIER,
+        /** Attribute for the value property. */
+        VALUE,
     }
     
     /** General constructor. */
-    public EnumModifiersNodeImpl(
-            AccessModifier access,
-            boolean strictfpFlag,
-            MetaAnnotationListNode metaAnnotations,
-            AnnotationListNode annotations,
+    public MetaAnnotationElementNodeImpl(
+            IdentifierNode identifier,
+            MetaAnnotationValueNode value,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
             BsjNodeManager manager,
             boolean binary)
     {
-        super(metaAnnotations, annotations, startLocation, stopLocation, manager, binary);
-        this.access = access;
-        this.strictfpFlag = strictfpFlag;
+        super(startLocation, stopLocation, manager, binary);
+        setIdentifier(identifier, false);
+        setValue(value, false);
     }
     
     /**
-     * Gets the access for the associated enum.
-     * @return The access for the associated enum.
+     * Gets the identifier.
+     * @return The identifier.
      */
-    public AccessModifier getAccess()
+    public IdentifierNode getIdentifier()
     {
-        recordAccess(LocalAttribute.ACCESS, Attribute.AccessType.READ);
-        return this.access;
+        recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.READ);
+        return this.identifier;
     }
     
     /**
-     * Changes the access for the associated enum.
-     * @param access The access for the associated enum.
+     * Changes the identifier.
+     * @param identifier The identifier.
      */
-    public void setAccess(AccessModifier access)
+    public void setIdentifier(IdentifierNode identifier)
     {
-            setAccess(access, true);
+            setIdentifier(identifier, true);
     }
     
-    private void setAccess(AccessModifier access, boolean checkPermissions)
+    private void setIdentifier(IdentifierNode identifier, boolean checkPermissions)
     {
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
         }
-        recordAccess(LocalAttribute.ACCESS, Attribute.AccessType.STRONG_WRITE);
-        this.access = access;
+        recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.STRONG_WRITE);
+        if (this.identifier instanceof NodeImpl)
+        {
+            ((NodeImpl)this.identifier).setParent(null);
+        }
+        this.identifier = identifier;
+        if (this.identifier instanceof NodeImpl)
+        {
+            ((NodeImpl)this.identifier).setParent(this);
+        }
     }
     
     /**
-     * Gets whether or not the associated enum uses strict floating-point.
-     * @return Whether or not the associated enum uses strict floating-point.
+     * Gets the element's value.
+     * @return The element's value.
      */
-    public boolean getStrictfpFlag()
+    public MetaAnnotationValueNode getValue()
     {
-        recordAccess(LocalAttribute.STRICTFP_FLAG, Attribute.AccessType.READ);
-        return this.strictfpFlag;
+        recordAccess(LocalAttribute.VALUE, Attribute.AccessType.READ);
+        return this.value;
     }
     
     /**
-     * Changes whether or not the associated enum uses strict floating-point.
-     * @param strictfpFlag Whether or not the associated enum uses strict floating-point.
+     * Changes the element's value.
+     * @param value The element's value.
      */
-    public void setStrictfpFlag(boolean strictfpFlag)
+    public void setValue(MetaAnnotationValueNode value)
     {
-            setStrictfpFlag(strictfpFlag, true);
+            setValue(value, true);
     }
     
-    private void setStrictfpFlag(boolean strictfpFlag, boolean checkPermissions)
+    private void setValue(MetaAnnotationValueNode value, boolean checkPermissions)
     {
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
         }
-        recordAccess(LocalAttribute.STRICTFP_FLAG, Attribute.AccessType.STRONG_WRITE);
-        this.strictfpFlag = strictfpFlag;
+        recordAccess(LocalAttribute.VALUE, Attribute.AccessType.STRONG_WRITE);
+        if (this.value instanceof NodeImpl)
+        {
+            ((NodeImpl)this.value).setParent(null);
+        }
+        this.value = value;
+        if (this.value instanceof NodeImpl)
+        {
+            ((NodeImpl)this.value).setParent(this);
+        }
     }
     
     /**
@@ -119,6 +133,14 @@ public class EnumModifiersNodeImpl extends ModifiersNodeImpl implements EnumModi
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
+        if (this.identifier != null)
+        {
+            this.identifier.receive(visitor);
+        }
+        if (this.value != null)
+        {
+            this.value.receive(visitor);
+        }
     }
     
     /**
@@ -132,21 +154,27 @@ public class EnumModifiersNodeImpl extends ModifiersNodeImpl implements EnumModi
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
+        if (this.identifier != null)
+        {
+            this.identifier.receiveTyped(visitor);
+        }
+        if (this.value != null)
+        {
+            this.value.receiveTyped(visitor);
+        }
     }
     
     @Override
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
         visitor.visitStartBegin(this);
-        visitor.visitEnumModifiersNodeStart(this, true);
-        visitor.visitModifiersNodeStart(this);
+        visitor.visitMetaAnnotationElementNodeStart(this, true);
         visitor.visitNodeStart(this);
         visitor.visitStartEnd(this);
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
         visitor.visitNodeStop(this);
-        visitor.visitModifiersNodeStop(this);
-        visitor.visitEnumModifiersNodeStop(this, true);
+        visitor.visitMetaAnnotationElementNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
     
@@ -159,8 +187,8 @@ public class EnumModifiersNodeImpl extends ModifiersNodeImpl implements EnumModi
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(getAccess());
-        list.add(getStrictfpFlag());
+        list.add(getIdentifier());
+        list.add(getValue());
         return list;
     }
     
@@ -173,17 +201,11 @@ public class EnumModifiersNodeImpl extends ModifiersNodeImpl implements EnumModi
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
-        sb.append("access=");
-        sb.append(String.valueOf(this.getAccess()) + ":" + (this.getAccess() != null ? this.getAccess().getClass().getSimpleName() : "null"));
+        sb.append("identifier=");
+        sb.append(this.getIdentifier() == null? "null" : this.getIdentifier().getClass().getSimpleName());
         sb.append(',');
-        sb.append("strictfpFlag=");
-        sb.append(String.valueOf(this.getStrictfpFlag()) + ":" + ("boolean"));
-        sb.append(',');
-        sb.append("metaAnnotations=");
-        sb.append(this.getMetaAnnotations() == null? "null" : this.getMetaAnnotations().getClass().getSimpleName());
-        sb.append(',');
-        sb.append("annotations=");
-        sb.append(this.getAnnotations() == null? "null" : this.getAnnotations().getClass().getSimpleName());
+        sb.append("value=");
+        sb.append(this.getValue() == null? "null" : this.getValue().getClass().getSimpleName());
         sb.append(',');
         sb.append("startLocation=");
         sb.append(String.valueOf(this.getStartLocation()) + ":" + (this.getStartLocation() != null ? this.getStartLocation().getClass().getSimpleName() : "null"));
@@ -203,7 +225,7 @@ public class EnumModifiersNodeImpl extends ModifiersNodeImpl implements EnumModi
     @Override
     public <P,R> R executeOperation(BsjNodeOperation<P,R> operation, P p)
     {
-        return operation.executeEnumModifiersNode(this, p);
+        return operation.executeMetaAnnotationElementNode(this, p);
     }
     
     /**
@@ -212,13 +234,11 @@ public class EnumModifiersNodeImpl extends ModifiersNodeImpl implements EnumModi
      * @return The resulting deep copy node.
      */
     @Override
-    public EnumModifiersNode deepCopy(BsjNodeFactory factory)
+    public MetaAnnotationElementNode deepCopy(BsjNodeFactory factory)
     {
-        return factory.makeEnumModifiersNode(
-                getAccess(),
-                getStrictfpFlag(),
-                getMetaAnnotations().deepCopy(factory),
-                getAnnotations().deepCopy(factory),
+        return factory.makeMetaAnnotationElementNode(
+                getIdentifier().deepCopy(factory),
+                getValue().deepCopy(factory),
                 getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
                 getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
     }
@@ -234,14 +254,14 @@ public class EnumModifiersNodeImpl extends ModifiersNodeImpl implements EnumModi
         if (before==null)
             throw new IllegalArgumentException("Cannot replace node with before value of null.");
         
-        if (before.equals(this.getMetaAnnotations()) && (after instanceof MetaAnnotationListNode))
+        if (before.equals(this.getIdentifier()) && (after instanceof IdentifierNode))
         {
-            setMetaAnnotations((MetaAnnotationListNode)after);
+            setIdentifier((IdentifierNode)after);
             return true;
         }
-        if (before.equals(this.getAnnotations()) && (after instanceof AnnotationListNode))
+        if (before.equals(this.getValue()) && (after instanceof MetaAnnotationValueNode))
         {
-            setAnnotations((AnnotationListNode)after);
+            setValue((MetaAnnotationValueNode)after);
             return true;
         }
         return false;

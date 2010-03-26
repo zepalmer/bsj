@@ -168,7 +168,8 @@ public class BsjLiftedCodeVisitor extends BsjTypedNodeNoOpVisitor
                     				factory.makeReturnNode(argExpr))), 
                     factory.makeMethodModifiersNode(
                             AccessModifier.PUBLIC, false, false, false, false, 
-                            false, false, factory.makeAnnotationListNode()), 
+                            false, false, factory.makeMetaAnnotationListNode(),
+                            factory.makeAnnotationListNode()), 
                     factory.makeIdentifierNode(methodName), 
                     factory.makeVariableListNode(), 
                     returnType, 

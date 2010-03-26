@@ -9,12 +9,21 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.BlockStatementMetaprogramAnchorNode
 import edu.jhu.cs.bsj.compiler.ast.node.meta.ClassMemberMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.CodeLiteralNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.InterfaceMemberMetaprogramAnchorNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationArrayValueNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationElementListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationElementNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationExpressionValueNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaAnnotationValueNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationValueListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependsNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramPreambleNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramTargetNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.NormalMetaAnnotationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.SingleElementMetaAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.TypeDeclarationMetaprogramAnchorNode;
 
 /**
@@ -724,6 +733,62 @@ public interface BsjNodeOperation<P,R>
     public R executeLongLiteralNode(LongLiteralNode node, P p);
 
     /**
+     * Executes this operation against a MetaAnnotationArrayValueNode.
+     * @param node The MetaAnnotationArrayValueNode in question.
+     * @param p The parameter to use.
+     * @return The result of the operation.
+     */
+    public R executeMetaAnnotationArrayValueNode(MetaAnnotationArrayValueNode node, P p);
+
+    /**
+     * Executes this operation against a MetaAnnotationElementListNode.
+     * @param node The MetaAnnotationElementListNode in question.
+     * @param p The parameter to use.
+     * @return The result of the operation.
+     */
+    public R executeMetaAnnotationElementListNode(MetaAnnotationElementListNode node, P p);
+
+    /**
+     * Executes this operation against a MetaAnnotationElementNode.
+     * @param node The MetaAnnotationElementNode in question.
+     * @param p The parameter to use.
+     * @return The result of the operation.
+     */
+    public R executeMetaAnnotationElementNode(MetaAnnotationElementNode node, P p);
+
+    /**
+     * Executes this operation against a MetaAnnotationExpressionValueNode.
+     * @param node The MetaAnnotationExpressionValueNode in question.
+     * @param p The parameter to use.
+     * @return The result of the operation.
+     */
+    public R executeMetaAnnotationExpressionValueNode(MetaAnnotationExpressionValueNode node, P p);
+
+    /**
+     * Executes this operation against a MetaAnnotationListNode.
+     * @param node The MetaAnnotationListNode in question.
+     * @param p The parameter to use.
+     * @return The result of the operation.
+     */
+    public R executeMetaAnnotationListNode(MetaAnnotationListNode node, P p);
+
+    /**
+     * Executes this operation against a MetaAnnotationMetaAnnotationValueNode.
+     * @param node The MetaAnnotationMetaAnnotationValueNode in question.
+     * @param p The parameter to use.
+     * @return The result of the operation.
+     */
+    public R executeMetaAnnotationMetaAnnotationValueNode(MetaAnnotationMetaAnnotationValueNode node, P p);
+
+    /**
+     * Executes this operation against a MetaAnnotationValueListNode.
+     * @param node The MetaAnnotationValueListNode in question.
+     * @param p The parameter to use.
+     * @return The result of the operation.
+     */
+    public R executeMetaAnnotationValueListNode(MetaAnnotationValueListNode node, P p);
+
+    /**
      * Executes this operation against a MetaprogramDependsNode.
      * @param node The MetaprogramDependsNode in question.
      * @param p The parameter to use.
@@ -828,6 +893,14 @@ public interface BsjNodeOperation<P,R>
     public R executeNormalAnnotationNode(NormalAnnotationNode node, P p);
 
     /**
+     * Executes this operation against a NormalMetaAnnotationNode.
+     * @param node The NormalMetaAnnotationNode in question.
+     * @param p The parameter to use.
+     * @return The result of the operation.
+     */
+    public R executeNormalMetaAnnotationNode(NormalMetaAnnotationNode node, P p);
+
+    /**
      * Executes this operation against a NullLiteralNode.
      * @param node The NullLiteralNode in question.
      * @param p The parameter to use.
@@ -930,6 +1003,14 @@ public interface BsjNodeOperation<P,R>
      * @return The result of the operation.
      */
     public R executeSingleElementAnnotationNode(SingleElementAnnotationNode node, P p);
+
+    /**
+     * Executes this operation against a SingleElementMetaAnnotationNode.
+     * @param node The SingleElementMetaAnnotationNode in question.
+     * @param p The parameter to use.
+     * @return The result of the operation.
+     */
+    public R executeSingleElementMetaAnnotationNode(SingleElementMetaAnnotationNode node, P p);
 
     /**
      * Executes this operation against a SingleStaticImportNode.

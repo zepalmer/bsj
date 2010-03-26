@@ -16,12 +16,16 @@ import edu.jhu.cs.bsj.compiler.ast.node.ExpressionListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.JavadocNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationListNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumConstantDeclarationNode
 {
+    /** The meta-annotations on this constant. */
+    private MetaAnnotationListNode metaAnnotations;
+    
     /** The annotations on this constant. */
     private AnnotationListNode annotations;
     
@@ -39,6 +43,8 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
     
     private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
     {
+        /** Attribute for the metaAnnotations property. */
+        META_ANNOTATIONS,
         /** Attribute for the annotations property. */
         ANNOTATIONS,
         /** Attribute for the identifier property. */
@@ -53,6 +59,7 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
     
     /** General constructor. */
     public EnumConstantDeclarationNodeImpl(
+            MetaAnnotationListNode metaAnnotations,
             AnnotationListNode annotations,
             IdentifierNode identifier,
             ExpressionListNode arguments,
@@ -64,11 +71,49 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
             boolean binary)
     {
         super(startLocation, stopLocation, manager, binary);
+        setMetaAnnotations(metaAnnotations, false);
         setAnnotations(annotations, false);
         setIdentifier(identifier, false);
         setArguments(arguments, false);
         setBody(body, false);
         setJavadoc(javadoc, false);
+    }
+    
+    /**
+     * Gets the meta-annotations on this constant.
+     * @return The meta-annotations on this constant.
+     */
+    public MetaAnnotationListNode getMetaAnnotations()
+    {
+        recordAccess(LocalAttribute.META_ANNOTATIONS, Attribute.AccessType.READ);
+        return this.metaAnnotations;
+    }
+    
+    /**
+     * Changes the meta-annotations on this constant.
+     * @param metaAnnotations The meta-annotations on this constant.
+     */
+    public void setMetaAnnotations(MetaAnnotationListNode metaAnnotations)
+    {
+            setMetaAnnotations(metaAnnotations, true);
+    }
+    
+    private void setMetaAnnotations(MetaAnnotationListNode metaAnnotations, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
+        recordAccess(LocalAttribute.META_ANNOTATIONS, Attribute.AccessType.STRONG_WRITE);
+        if (this.metaAnnotations instanceof NodeImpl)
+        {
+            ((NodeImpl)this.metaAnnotations).setParent(null);
+        }
+        this.metaAnnotations = metaAnnotations;
+        if (this.metaAnnotations instanceof NodeImpl)
+        {
+            ((NodeImpl)this.metaAnnotations).setParent(this);
+        }
     }
     
     /**
@@ -267,6 +312,10 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
+        if (this.metaAnnotations != null)
+        {
+            this.metaAnnotations.receive(visitor);
+        }
         if (this.annotations != null)
         {
             this.annotations.receive(visitor);
@@ -300,6 +349,10 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
+        if (this.metaAnnotations != null)
+        {
+            this.metaAnnotations.receiveTyped(visitor);
+        }
         if (this.annotations != null)
         {
             this.annotations.receiveTyped(visitor);
@@ -345,6 +398,7 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
+        list.add(getMetaAnnotations());
         list.add(getAnnotations());
         list.add(getIdentifier());
         list.add(getArguments());
@@ -362,6 +416,9 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
+        sb.append("metaAnnotations=");
+        sb.append(this.getMetaAnnotations() == null? "null" : this.getMetaAnnotations().getClass().getSimpleName());
+        sb.append(',');
         sb.append("annotations=");
         sb.append(this.getAnnotations() == null? "null" : this.getAnnotations().getClass().getSimpleName());
         sb.append(',');
@@ -407,6 +464,7 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
     public EnumConstantDeclarationNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeEnumConstantDeclarationNode(
+                getMetaAnnotations().deepCopy(factory),
                 getAnnotations().deepCopy(factory),
                 getIdentifier().deepCopy(factory),
                 getArguments().deepCopy(factory),
@@ -427,6 +485,11 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
         if (before==null)
             throw new IllegalArgumentException("Cannot replace node with before value of null.");
         
+        if (before.equals(this.getMetaAnnotations()) && (after instanceof MetaAnnotationListNode))
+        {
+            setMetaAnnotations((MetaAnnotationListNode)after);
+            return true;
+        }
         if (before.equals(this.getAnnotations()) && (after instanceof AnnotationListNode))
         {
             setAnnotations((AnnotationListNode)after);

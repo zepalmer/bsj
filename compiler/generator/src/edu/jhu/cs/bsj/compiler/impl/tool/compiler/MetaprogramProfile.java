@@ -6,7 +6,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.MetaprogramLocalMode;
 import edu.jhu.cs.bsj.compiler.ast.MetaprogramPackageMode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramAnchorNode;
-import edu.jhu.cs.bsj.compiler.impl.metaprogram.BsjMetaprogram;
+import edu.jhu.cs.bsj.compiler.impl.metaprogram.Metaprogram;
 import edu.jhu.cs.bsj.compiler.metaprogram.Context;
 
 /**
@@ -19,7 +19,7 @@ import edu.jhu.cs.bsj.compiler.metaprogram.Context;
 public class MetaprogramProfile<T extends MetaprogramAnchorNode<?>>
 {
 	/** The metaprogram object which will be executed. */
-	private BsjMetaprogram<T> metaprogram;
+	private Metaprogram<T> metaprogram;
 	/** The anchor for this metaprogram. */
 	private T anchor;
 	
@@ -34,7 +34,7 @@ public class MetaprogramProfile<T extends MetaprogramAnchorNode<?>>
 	/** The context in which to execute the metaprogram. */
 	private Context<T> context;
 	
-	public MetaprogramProfile(BsjMetaprogram<T> metaprogram, T anchor, Collection<String> dependencyNames,
+	public MetaprogramProfile(Metaprogram<T> metaprogram, T anchor, Collection<String> dependencyNames,
 			Collection<String> targetNames, MetaprogramLocalMode localMode, MetaprogramPackageMode packageMode,
 			Context<T> context)
 	{
@@ -48,7 +48,7 @@ public class MetaprogramProfile<T extends MetaprogramAnchorNode<?>>
 		this.context = context;
 	}
 
-	public BsjMetaprogram<T> getMetaprogram()
+	public Metaprogram<T> getMetaprogram()
 	{
 		return metaprogram;
 	}

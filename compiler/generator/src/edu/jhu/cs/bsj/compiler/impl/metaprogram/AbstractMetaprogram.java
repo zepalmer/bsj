@@ -10,7 +10,7 @@ import edu.jhu.cs.bsj.compiler.metaprogram.Context;
  * @author Zachary Palmer
  * @param <T> The type of anchor node associated with this metaprogram.
  */
-public abstract class AbstractBsjMetaprogram<T extends MetaprogramAnchorNode<?>> implements BsjMetaprogram<T>
+public abstract class AbstractMetaprogram<T extends MetaprogramAnchorNode<?>> implements Metaprogram<T>
 {
 	/** The next UID to be assigned to a metaprogram. */
 	private static final AtomicInteger NEXT_ID = new AtomicInteger(0);
@@ -22,7 +22,7 @@ public abstract class AbstractBsjMetaprogram<T extends MetaprogramAnchorNode<?>>
 	 * Instantiates this metaprogram.
 	 * @param context The context this metaprogram will use.
 	 */
-	public AbstractBsjMetaprogram()
+	public AbstractMetaprogram()
 	{
 		super();
 	}

@@ -4,14 +4,17 @@ import java.util.List;
 
 import edu.jhu.cs.bsj.compiler.ast.MetaprogramLocalMode;
 import edu.jhu.cs.bsj.compiler.ast.MetaprogramPackageMode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramAnchorNode;
 
 /**
- * This interface is implemented by classes in the metacompiler runtime which represent annotational metaprograms.
+ * This interface is implemented by those classes which are intended to represent metaprograms in the BSJ compilation
+ * system. Meta-annotations which represent metaprograms use this interface to provide metaprograms to the BSJ compiler
+ * upon request.
  * 
+ * @param T The type of metaprogram anchor node used by this metaprogram.
  * @author Zachary Palmer
  */
-// TODO: finish
-public interface BsjAnnotationalMetaprogram
+public interface BsjMetaprogram<T extends MetaprogramAnchorNode<?>>
 {
 	/**
 	 * Obtains a list of the targets in which this metaprogram participates. The metaprogram object is obligated to
@@ -46,11 +49,11 @@ public interface BsjAnnotationalMetaprogram
 	 * @return The package mode for this metaprogram.
 	 */
 	public MetaprogramPackageMode getPackageMode();
-	
+
 	/**
 	 * Executes this annotational metaprogram.
+	 * 
 	 * @param context The context in which to execute this metaprogram.
 	 */
-	// TODO: context should be parameterized with metaprogram annotation anchor type
-	public void execute(Context<?> context);
+	public void execute(Context<T> context);
 }

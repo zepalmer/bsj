@@ -13,12 +13,21 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.BlockStatementMetaprogramAnchorNode
 import edu.jhu.cs.bsj.compiler.ast.node.meta.ClassMemberMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.CodeLiteralNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.InterfaceMemberMetaprogramAnchorNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationArrayValueNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationElementListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationElementNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationExpressionValueNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaAnnotationValueNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationValueListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependsNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramPreambleNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramTargetNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.NormalMetaAnnotationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.SingleElementMetaAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.TypeDeclarationMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.impl.utils.PrependablePrintStream;
 
@@ -138,6 +147,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	@Override
 	public Void executeAnnotationMethodModifiersNode(AnnotationMethodModifiersNode node, PrependablePrintStream p)
 	{
+		handleListNode(node.getMetaAnnotations(), "", "\n", "\n", p, true);
 		handleListNode(node.getAnnotations(), "", "\n", "\n", p, true);
 		return null;
 	}
@@ -145,6 +155,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	@Override
 	public Void executeAnnotationModifiersNode(AnnotationModifiersNode node, PrependablePrintStream p)
 	{
+		handleListNode(node.getMetaAnnotations(), "", "\n", "\n", p, true);
 		handleListNode(node.getAnnotations(), "", "\n", "\n", p, true);
 		p.print(accessModifierToString(node.getAccess()));
 
@@ -450,6 +461,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	@Override
 	public Void executeClassModifiersNode(ClassModifiersNode node, PrependablePrintStream p)
 	{
+		handleListNode(node.getMetaAnnotations(), "", "\n", "\n", p, true);
 		handleListNode(node.getAnnotations(), "", "\n", "\n", p, true);
 		p.print(accessModifierToString(node.getAccess()));
 
@@ -596,6 +608,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	@Override
 	public Void executeConstructorModifiersNode(ConstructorModifiersNode node, PrependablePrintStream p)
 	{
+		handleListNode(node.getMetaAnnotations(), "", "\n", "\n", p, true);
 		handleListNode(node.getAnnotations(), "", "\n", "\n", p, true);
 		p.print(accessModifierToString(node.getAccess()));
 		return null;
@@ -678,6 +691,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 			node.getJavadoc().executeOperation(this, p);
 			p.print("\n");
 		}
+		handleListNode(node.getMetaAnnotations(), "", "\n", "\n", p, true);
 		handleListNode(node.getAnnotations(), "", "\n", "\n", p, true);
 		node.getIdentifier().executeOperation(this, p);
 		handleListNode(node.getArguments(), "(", ", ", ")", p, true);
@@ -709,6 +723,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	@Override
 	public Void executeEnumModifiersNode(EnumModifiersNode node, PrependablePrintStream p)
 	{
+		handleListNode(node.getMetaAnnotations(), "", "\n", "\n", p, true);
 		handleListNode(node.getAnnotations(), "", "\n", "\n", p, true);
 		p.print(accessModifierToString(node.getAccess()));
 		if (node.getStrictfpFlag())
@@ -778,6 +793,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	@Override
 	public Void executeFieldModifiersNode(FieldModifiersNode node, PrependablePrintStream p)
 	{
+		handleListNode(node.getMetaAnnotations(), "", "\n", "\n", p, true);
 		handleListNode(node.getAnnotations(), "", "\n", "\n", p, true);
 		p.print(accessModifierToString(node.getAccess()));
 
@@ -994,6 +1010,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	@Override
 	public Void executeInterfaceModifiersNode(InterfaceModifiersNode node, PrependablePrintStream p)
 	{
+		handleListNode(node.getMetaAnnotations(), "", "\n", "\n", p, true);
 		handleListNode(node.getAnnotations(), "", "\n", "\n", p, true);
 		p.print(accessModifierToString(node.getAccess()));
 
@@ -1103,6 +1120,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	@Override
 	public Void executeMethodModifiersNode(MethodModifiersNode node, PrependablePrintStream p)
 	{
+		handleListNode(node.getMetaAnnotations(), "", "\n", "\n", p, true);
 		handleListNode(node.getAnnotations(), "", "\n", "\n", p, true);
 		p.print(accessModifierToString(node.getAccess()));
 
@@ -1190,6 +1208,7 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	@Override
 	public Void executePackageDeclarationNode(PackageDeclarationNode node, PrependablePrintStream p)
 	{
+		handleListNode(node.getMetaAnnotations(), "", "\n", "\n", p, true);
 		handleListNode(node.getAnnotations(), "", "\n", "\n", p, true);
 		p.print("package ");
 		node.getName().executeOperation(this, p);
@@ -1701,6 +1720,59 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 	}
 
 	@Override
+	public Void executeMetaAnnotationArrayValueNode(MetaAnnotationArrayValueNode node, PrependablePrintStream p)
+	{
+		handleListNode(node.getValues(), "{", ", ", "}", p, true);
+		return null;
+	}
+
+	@Override
+	public Void executeMetaAnnotationElementListNode(MetaAnnotationElementListNode node, PrependablePrintStream p)
+	{
+		executeListNode(node, p);
+		return null;
+	}
+
+	@Override
+	public Void executeMetaAnnotationElementNode(MetaAnnotationElementNode node, PrependablePrintStream p)
+	{
+		node.getIdentifier().executeOperation(this, p);
+		p.print(" = ");
+		node.getValue().executeOperation(this, p);
+		return null;
+	}
+
+	@Override
+	public Void executeMetaAnnotationListNode(MetaAnnotationListNode node, PrependablePrintStream p)
+	{
+		executeListNode(node, p);
+		return null;
+	}
+
+	@Override
+	public Void executeMetaAnnotationMetaAnnotationValueNode(MetaAnnotationMetaAnnotationValueNode node,
+			PrependablePrintStream p)
+	{
+		node.getAnnotation().executeOperation(this, p);
+		return null;
+	}
+
+	@Override
+	public Void executeMetaAnnotationValueListNode(MetaAnnotationValueListNode node, PrependablePrintStream p)
+	{
+		executeListNode(node, p);
+		return null;
+	}
+
+	@Override
+	public Void executeMetaAnnotationExpressionValueNode(MetaAnnotationExpressionValueNode node,
+			PrependablePrintStream p)
+	{
+		node.getExpression().executeOperation(this, p);
+		return null;
+	}
+
+	@Override
 	public Void executeMetaprogramDependsNode(MetaprogramDependsNode node, PrependablePrintStream p)
 	{
 		p.print("#depends ");
@@ -1758,6 +1830,44 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 		p.print("#target ");
 		this.handleListNode(node.getTargets(), "", ",", "", p, true);
 		p.println(";");
+		return null;
+	}
+
+	@Override
+	public Void executeNormalMetaAnnotationNode(NormalMetaAnnotationNode node, PrependablePrintStream p)
+	{
+		p.print("@@");
+		node.getAnnotationType().executeOperation(this, p);
+		if (!(node.getArguments().getChildren().isEmpty()))
+		{
+			p.print("(\n");
+			boolean first = true;
+			p.incPrependCount();
+			for (Node item : node.getArguments().getChildren())
+			{
+				if (first)
+				{
+					first = false;
+				} else
+				{
+					p.print(",\n");
+				}
+				item.executeOperation(this, p);
+			}
+			p.decPrependCount();
+			p.print("\n)");
+		}
+		return null;
+	}
+
+	@Override
+	public Void executeSingleElementMetaAnnotationNode(SingleElementMetaAnnotationNode node, PrependablePrintStream p)
+	{
+		p.print("@");
+		node.getAnnotationType().executeOperation(this, p);
+		p.print("(");
+		node.getValue().executeOperation(this, p);
+		p.print(")");
 		return null;
 	}
 

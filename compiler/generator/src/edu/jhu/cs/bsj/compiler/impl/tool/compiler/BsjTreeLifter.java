@@ -24,12 +24,23 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.BlockStatementMetaprogramAnchorNode
 import edu.jhu.cs.bsj.compiler.ast.node.meta.ClassMemberMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.CodeLiteralNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.InterfaceMemberMetaprogramAnchorNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationArrayValueNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationElementListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationElementNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationExpressionValueNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaAnnotationValueNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationValueListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationValueNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependsNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramPreambleNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramTargetNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.NormalMetaAnnotationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.SingleElementMetaAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.TypeDeclarationMetaprogramAnchorNode;
 
 /**
@@ -709,6 +720,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
     @Override
     public ExpressionNode executeAnnotationMethodModifiersNode(AnnotationMethodModifiersNode node, ExpressionNode factoryNode)
     {
+        ExpressionNode liftMetaAnnotations = 
+                node.getMetaAnnotations() != null ?
+                        node.getMetaAnnotations().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         ExpressionNode liftAnnotations = 
                 node.getAnnotations() != null ?
                         node.getAnnotations().executeOperation(this,factoryNode) :
@@ -723,6 +738,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
                         factory.makeIdentifierNode("makeAnnotationMethodModifiersNode"),
                         factory.makeExpressionListNode(
+                                liftMetaAnnotations,
                                 liftAnnotations,
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
@@ -740,6 +756,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getStaticFlag();
         boolean liftStrictfpFlagValue = 
                 node.getStrictfpFlag();
+        ExpressionNode liftMetaAnnotations = 
+                node.getMetaAnnotations() != null ?
+                        node.getMetaAnnotations().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         ExpressionNode liftAnnotations = 
                 node.getAnnotations() != null ?
                         node.getAnnotations().executeOperation(this,factoryNode) :
@@ -757,6 +777,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 expressionizeAccessModifier(liftAccessValue),
                                 expressionizeBoolean(liftStaticFlagValue),
                                 expressionizeBoolean(liftStrictfpFlagValue),
+                                liftMetaAnnotations,
                                 liftAnnotations,
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
@@ -1663,6 +1684,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getFinalFlag();
         boolean liftStrictfpFlagValue = 
                 node.getStrictfpFlag();
+        ExpressionNode liftMetaAnnotations = 
+                node.getMetaAnnotations() != null ?
+                        node.getMetaAnnotations().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         ExpressionNode liftAnnotations = 
                 node.getAnnotations() != null ?
                         node.getAnnotations().executeOperation(this,factoryNode) :
@@ -1682,6 +1707,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 expressionizeBoolean(liftStaticFlagValue),
                                 expressionizeBoolean(liftFinalFlagValue),
                                 expressionizeBoolean(liftStrictfpFlagValue),
+                                liftMetaAnnotations,
                                 liftAnnotations,
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
@@ -1888,6 +1914,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
     {
         AccessModifier liftAccessValue = 
                 node.getAccess();
+        ExpressionNode liftMetaAnnotations = 
+                node.getMetaAnnotations() != null ?
+                        node.getMetaAnnotations().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         ExpressionNode liftAnnotations = 
                 node.getAnnotations() != null ?
                         node.getAnnotations().executeOperation(this,factoryNode) :
@@ -1903,6 +1933,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeIdentifierNode("makeConstructorModifiersNode"),
                         factory.makeExpressionListNode(
                                 expressionizeAccessModifier(liftAccessValue),
+                                liftMetaAnnotations,
                                 liftAnnotations,
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
@@ -2151,6 +2182,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
     @Override
     public ExpressionNode executeEnumConstantDeclarationNode(EnumConstantDeclarationNode node, ExpressionNode factoryNode)
     {
+        ExpressionNode liftMetaAnnotations = 
+                node.getMetaAnnotations() != null ?
+                        node.getMetaAnnotations().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         ExpressionNode liftAnnotations = 
                 node.getAnnotations() != null ?
                         node.getAnnotations().executeOperation(this,factoryNode) :
@@ -2181,6 +2216,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
                         factory.makeIdentifierNode("makeEnumConstantDeclarationNode"),
                         factory.makeExpressionListNode(
+                                liftMetaAnnotations,
                                 liftAnnotations,
                                 liftIdentifier,
                                 liftArguments,
@@ -2245,6 +2281,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getAccess();
         boolean liftStrictfpFlagValue = 
                 node.getStrictfpFlag();
+        ExpressionNode liftMetaAnnotations = 
+                node.getMetaAnnotations() != null ?
+                        node.getMetaAnnotations().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         ExpressionNode liftAnnotations = 
                 node.getAnnotations() != null ?
                         node.getAnnotations().executeOperation(this,factoryNode) :
@@ -2261,6 +2301,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeExpressionListNode(
                                 expressionizeAccessModifier(liftAccessValue),
                                 expressionizeBoolean(liftStrictfpFlagValue),
+                                liftMetaAnnotations,
                                 liftAnnotations,
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
@@ -2444,6 +2485,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getTransientFlag();
         boolean liftVolatileFlagValue = 
                 node.getVolatileFlag();
+        ExpressionNode liftMetaAnnotations = 
+                node.getMetaAnnotations() != null ?
+                        node.getMetaAnnotations().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         ExpressionNode liftAnnotations = 
                 node.getAnnotations() != null ?
                         node.getAnnotations().executeOperation(this,factoryNode) :
@@ -2463,6 +2508,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 expressionizeBoolean(liftFinalFlagValue),
                                 expressionizeBoolean(liftTransientFlagValue),
                                 expressionizeBoolean(liftVolatileFlagValue),
+                                liftMetaAnnotations,
                                 liftAnnotations,
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
@@ -3048,6 +3094,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getStaticFlag();
         boolean liftStrictfpFlagValue = 
                 node.getStrictfpFlag();
+        ExpressionNode liftMetaAnnotations = 
+                node.getMetaAnnotations() != null ?
+                        node.getMetaAnnotations().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         ExpressionNode liftAnnotations = 
                 node.getAnnotations() != null ?
                         node.getAnnotations().executeOperation(this,factoryNode) :
@@ -3065,6 +3115,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 expressionizeAccessModifier(liftAccessValue),
                                 expressionizeBoolean(liftStaticFlagValue),
                                 expressionizeBoolean(liftStrictfpFlagValue),
+                                liftMetaAnnotations,
                                 liftAnnotations,
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
@@ -3142,6 +3193,252 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeIdentifierNode("makeLongLiteralNode"),
                         factory.makeExpressionListNode(
                                 expressionizeLong(liftValueValue),
+                                liftStartLocationMetaClone,
+                                liftStopLocationMetaClone),
+                        factory.makeReferenceTypeListNode());
+        
+        return ret;
+    }
+    
+    @Override
+    public ExpressionNode executeMetaAnnotationArrayValueNode(MetaAnnotationArrayValueNode node, ExpressionNode factoryNode)
+    {
+        ExpressionNode liftValues = 
+                node.getValues() != null ?
+                        node.getValues().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        ExpressionNode liftStartLocationMetaClone = 
+                expressionizeBsjSourceLocation(node.getStartLocation());
+        ExpressionNode liftStopLocationMetaClone = 
+                expressionizeBsjSourceLocation(node.getStopLocation());
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeMetaAnnotationArrayValueNode"),
+                        factory.makeExpressionListNode(
+                                liftValues,
+                                liftStartLocationMetaClone,
+                                liftStopLocationMetaClone),
+                        factory.makeReferenceTypeListNode());
+        
+        return ret;
+    }
+    
+    @Override
+    public ExpressionNode executeMetaAnnotationElementListNode(MetaAnnotationElementListNode node, ExpressionNode factoryNode)
+    {
+        List<ExpressionNode> liftChildrenList = new ArrayList<ExpressionNode>();
+        for (MetaAnnotationElementNode listval : node.getChildren())
+        {
+            liftChildrenList.add(
+                    listval != null ? 
+        			        listval.executeOperation(this,factoryNode) :
+                            null);
+        }
+        ExpressionNode liftStartLocationMetaClone = 
+                expressionizeBsjSourceLocation(node.getStartLocation());
+        ExpressionNode liftStopLocationMetaClone = 
+                expressionizeBsjSourceLocation(node.getStopLocation());
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeMetaAnnotationElementListNode"),
+                        factory.makeExpressionListNode(
+                                factory.makeMethodInvocationByNameNode(
+                                        factory.makeQualifiedNameNode(
+                                                factory.makeQualifiedNameNode(
+                                                        factory.makeQualifiedNameNode(
+                                                                factory.makeSimpleNameNode(
+                                                                        factory.makeIdentifierNode("java"),
+                                                                        NameCategory.PACKAGE),
+                                                                factory.makeIdentifierNode("util"),
+                                                                NameCategory.PACKAGE),
+                                                        factory.makeIdentifierNode("Arrays"),
+                                                        NameCategory.TYPE),
+                                                factory.makeIdentifierNode("asList"),
+                                                NameCategory.METHOD),
+                                        factory.makeExpressionListNode(liftChildrenList),
+                                        factory.makeReferenceTypeListNode(
+                                                factory.makeUnparameterizedTypeNode(
+                                                        factory.makeSimpleNameNode(
+                                                                factory.makeIdentifierNode("MetaAnnotationElementNode"),
+                                                                NameCategory.TYPE)))),
+                                liftStartLocationMetaClone,
+                                liftStopLocationMetaClone),
+                        factory.makeReferenceTypeListNode());
+        
+        return ret;
+    }
+    
+    @Override
+    public ExpressionNode executeMetaAnnotationElementNode(MetaAnnotationElementNode node, ExpressionNode factoryNode)
+    {
+        ExpressionNode liftIdentifier = 
+                node.getIdentifier() != null ?
+                        node.getIdentifier().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        ExpressionNode liftValue = 
+                node.getValue() != null ?
+                        node.getValue().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        ExpressionNode liftStartLocationMetaClone = 
+                expressionizeBsjSourceLocation(node.getStartLocation());
+        ExpressionNode liftStopLocationMetaClone = 
+                expressionizeBsjSourceLocation(node.getStopLocation());
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeMetaAnnotationElementNode"),
+                        factory.makeExpressionListNode(
+                                liftIdentifier,
+                                liftValue,
+                                liftStartLocationMetaClone,
+                                liftStopLocationMetaClone),
+                        factory.makeReferenceTypeListNode());
+        
+        return ret;
+    }
+    
+    @Override
+    public ExpressionNode executeMetaAnnotationExpressionValueNode(MetaAnnotationExpressionValueNode node, ExpressionNode factoryNode)
+    {
+        ExpressionNode liftExpression = 
+                node.getExpression() != null ?
+                        node.getExpression().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        ExpressionNode liftStartLocationMetaClone = 
+                expressionizeBsjSourceLocation(node.getStartLocation());
+        ExpressionNode liftStopLocationMetaClone = 
+                expressionizeBsjSourceLocation(node.getStopLocation());
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeMetaAnnotationExpressionValueNode"),
+                        factory.makeExpressionListNode(
+                                liftExpression,
+                                liftStartLocationMetaClone,
+                                liftStopLocationMetaClone),
+                        factory.makeReferenceTypeListNode());
+        
+        return ret;
+    }
+    
+    @Override
+    public ExpressionNode executeMetaAnnotationListNode(MetaAnnotationListNode node, ExpressionNode factoryNode)
+    {
+        List<ExpressionNode> liftChildrenList = new ArrayList<ExpressionNode>();
+        for (MetaAnnotationNode listval : node.getChildren())
+        {
+            liftChildrenList.add(
+                    listval != null ? 
+        			        listval.executeOperation(this,factoryNode) :
+                            null);
+        }
+        ExpressionNode liftStartLocationMetaClone = 
+                expressionizeBsjSourceLocation(node.getStartLocation());
+        ExpressionNode liftStopLocationMetaClone = 
+                expressionizeBsjSourceLocation(node.getStopLocation());
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeMetaAnnotationListNode"),
+                        factory.makeExpressionListNode(
+                                factory.makeMethodInvocationByNameNode(
+                                        factory.makeQualifiedNameNode(
+                                                factory.makeQualifiedNameNode(
+                                                        factory.makeQualifiedNameNode(
+                                                                factory.makeSimpleNameNode(
+                                                                        factory.makeIdentifierNode("java"),
+                                                                        NameCategory.PACKAGE),
+                                                                factory.makeIdentifierNode("util"),
+                                                                NameCategory.PACKAGE),
+                                                        factory.makeIdentifierNode("Arrays"),
+                                                        NameCategory.TYPE),
+                                                factory.makeIdentifierNode("asList"),
+                                                NameCategory.METHOD),
+                                        factory.makeExpressionListNode(liftChildrenList),
+                                        factory.makeReferenceTypeListNode(
+                                                factory.makeUnparameterizedTypeNode(
+                                                        factory.makeSimpleNameNode(
+                                                                factory.makeIdentifierNode("MetaAnnotationNode"),
+                                                                NameCategory.TYPE)))),
+                                liftStartLocationMetaClone,
+                                liftStopLocationMetaClone),
+                        factory.makeReferenceTypeListNode());
+        
+        return ret;
+    }
+    
+    @Override
+    public ExpressionNode executeMetaAnnotationMetaAnnotationValueNode(MetaAnnotationMetaAnnotationValueNode node, ExpressionNode factoryNode)
+    {
+        ExpressionNode liftAnnotation = 
+                node.getAnnotation() != null ?
+                        node.getAnnotation().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        ExpressionNode liftStartLocationMetaClone = 
+                expressionizeBsjSourceLocation(node.getStartLocation());
+        ExpressionNode liftStopLocationMetaClone = 
+                expressionizeBsjSourceLocation(node.getStopLocation());
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeMetaAnnotationMetaAnnotationValueNode"),
+                        factory.makeExpressionListNode(
+                                liftAnnotation,
+                                liftStartLocationMetaClone,
+                                liftStopLocationMetaClone),
+                        factory.makeReferenceTypeListNode());
+        
+        return ret;
+    }
+    
+    @Override
+    public ExpressionNode executeMetaAnnotationValueListNode(MetaAnnotationValueListNode node, ExpressionNode factoryNode)
+    {
+        List<ExpressionNode> liftChildrenList = new ArrayList<ExpressionNode>();
+        for (MetaAnnotationValueNode listval : node.getChildren())
+        {
+            liftChildrenList.add(
+                    listval != null ? 
+        			        listval.executeOperation(this,factoryNode) :
+                            null);
+        }
+        ExpressionNode liftStartLocationMetaClone = 
+                expressionizeBsjSourceLocation(node.getStartLocation());
+        ExpressionNode liftStopLocationMetaClone = 
+                expressionizeBsjSourceLocation(node.getStopLocation());
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeMetaAnnotationValueListNode"),
+                        factory.makeExpressionListNode(
+                                factory.makeMethodInvocationByNameNode(
+                                        factory.makeQualifiedNameNode(
+                                                factory.makeQualifiedNameNode(
+                                                        factory.makeQualifiedNameNode(
+                                                                factory.makeSimpleNameNode(
+                                                                        factory.makeIdentifierNode("java"),
+                                                                        NameCategory.PACKAGE),
+                                                                factory.makeIdentifierNode("util"),
+                                                                NameCategory.PACKAGE),
+                                                        factory.makeIdentifierNode("Arrays"),
+                                                        NameCategory.TYPE),
+                                                factory.makeIdentifierNode("asList"),
+                                                NameCategory.METHOD),
+                                        factory.makeExpressionListNode(liftChildrenList),
+                                        factory.makeReferenceTypeListNode(
+                                                factory.makeUnparameterizedTypeNode(
+                                                        factory.makeSimpleNameNode(
+                                                                factory.makeIdentifierNode("MetaAnnotationValueNode"),
+                                                                NameCategory.TYPE)))),
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
                         factory.makeReferenceTypeListNode());
@@ -3499,6 +3796,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getNativeFlag();
         boolean liftStrictfpFlagValue = 
                 node.getStrictfpFlag();
+        ExpressionNode liftMetaAnnotations = 
+                node.getMetaAnnotations() != null ?
+                        node.getMetaAnnotations().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         ExpressionNode liftAnnotations = 
                 node.getAnnotations() != null ?
                         node.getAnnotations().executeOperation(this,factoryNode) :
@@ -3520,6 +3821,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                                 expressionizeBoolean(liftSynchronizedFlagValue),
                                 expressionizeBoolean(liftNativeFlagValue),
                                 expressionizeBoolean(liftStrictfpFlagValue),
+                                liftMetaAnnotations,
                                 liftAnnotations,
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
@@ -3626,6 +3928,36 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
     }
     
     @Override
+    public ExpressionNode executeNormalMetaAnnotationNode(NormalMetaAnnotationNode node, ExpressionNode factoryNode)
+    {
+        ExpressionNode liftArguments = 
+                node.getArguments() != null ?
+                        node.getArguments().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        ExpressionNode liftAnnotationType = 
+                node.getAnnotationType() != null ?
+                        node.getAnnotationType().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        ExpressionNode liftStartLocationMetaClone = 
+                expressionizeBsjSourceLocation(node.getStartLocation());
+        ExpressionNode liftStopLocationMetaClone = 
+                expressionizeBsjSourceLocation(node.getStopLocation());
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeNormalMetaAnnotationNode"),
+                        factory.makeExpressionListNode(
+                                liftArguments,
+                                liftAnnotationType,
+                                liftStartLocationMetaClone,
+                                liftStopLocationMetaClone),
+                        factory.makeReferenceTypeListNode());
+        
+        return ret;
+    }
+    
+    @Override
     public ExpressionNode executeNullLiteralNode(NullLiteralNode node, ExpressionNode factoryNode)
     {
         ExpressionNode liftStartLocationMetaClone = 
@@ -3653,6 +3985,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 node.getName() != null ?
                         node.getName().executeOperation(this,factoryNode) :
                         factory.makeNullLiteralNode(null);
+        ExpressionNode liftMetaAnnotations = 
+                node.getMetaAnnotations() != null ?
+                        node.getMetaAnnotations().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         ExpressionNode liftAnnotations = 
                 node.getAnnotations() != null ?
                         node.getAnnotations().executeOperation(this,factoryNode) :
@@ -3668,6 +4004,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeIdentifierNode("makePackageDeclarationNode"),
                         factory.makeExpressionListNode(
                                 liftName,
+                                liftMetaAnnotations,
                                 liftAnnotations,
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),
@@ -4012,6 +4349,36 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                 factory.makeMethodInvocationByExpressionNode(
                         factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
                         factory.makeIdentifierNode("makeSingleElementAnnotationNode"),
+                        factory.makeExpressionListNode(
+                                liftValue,
+                                liftAnnotationType,
+                                liftStartLocationMetaClone,
+                                liftStopLocationMetaClone),
+                        factory.makeReferenceTypeListNode());
+        
+        return ret;
+    }
+    
+    @Override
+    public ExpressionNode executeSingleElementMetaAnnotationNode(SingleElementMetaAnnotationNode node, ExpressionNode factoryNode)
+    {
+        ExpressionNode liftValue = 
+                node.getValue() != null ?
+                        node.getValue().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        ExpressionNode liftAnnotationType = 
+                node.getAnnotationType() != null ?
+                        node.getAnnotationType().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
+        ExpressionNode liftStartLocationMetaClone = 
+                expressionizeBsjSourceLocation(node.getStartLocation());
+        ExpressionNode liftStopLocationMetaClone = 
+                expressionizeBsjSourceLocation(node.getStopLocation());
+        
+        ExpressionNode ret =
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeParenthesizedExpressionNode(factoryNode.deepCopy(factory)),
+                        factory.makeIdentifierNode("makeSingleElementMetaAnnotationNode"),
                         factory.makeExpressionListNode(
                                 liftValue,
                                 liftAnnotationType,
@@ -5002,6 +5369,10 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
     {
         boolean liftFinalFlagValue = 
                 node.getFinalFlag();
+        ExpressionNode liftMetaAnnotations = 
+                node.getMetaAnnotations() != null ?
+                        node.getMetaAnnotations().executeOperation(this,factoryNode) :
+                        factory.makeNullLiteralNode(null);
         ExpressionNode liftAnnotations = 
                 node.getAnnotations() != null ?
                         node.getAnnotations().executeOperation(this,factoryNode) :
@@ -5017,6 +5388,7 @@ public class BsjTreeLifter implements BsjNodeOperation<ExpressionNode,Expression
                         factory.makeIdentifierNode("makeVariableModifiersNode"),
                         factory.makeExpressionListNode(
                                 expressionizeBoolean(liftFinalFlagValue),
+                                liftMetaAnnotations,
                                 liftAnnotations,
                                 liftStartLocationMetaClone,
                                 liftStopLocationMetaClone),

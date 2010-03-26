@@ -393,6 +393,10 @@ public abstract class ListNodeImpl<T extends Node> extends NodeImpl implements L
 					return true;
 				}
 			}
+			for (int i=0;i<=this.backingList.size();i++)
+			{
+				readBetweenAttribute(i);
+			}
 			return false;
 		}
 
@@ -419,6 +423,7 @@ public abstract class ListNodeImpl<T extends Node> extends NodeImpl implements L
 		@Override
 		public int indexOf(Object o)
 		{
+			readSizeAttribute();
 			ListIterator<T> it = listIterator();
 			while (it.hasNext())
 			{
@@ -446,6 +451,7 @@ public abstract class ListNodeImpl<T extends Node> extends NodeImpl implements L
 		@Override
 		public int lastIndexOf(Object o)
 		{
+			readSizeAttribute();
 			ListIterator<T> it = listIterator(size());
 			while (it.hasPrevious())
 			{
@@ -521,6 +527,7 @@ public abstract class ListNodeImpl<T extends Node> extends NodeImpl implements L
 				@Override
 				public int nextIndex()
 				{
+					readSizeAttribute();
 					return iterator.nextIndex();
 				}
 
@@ -538,6 +545,7 @@ public abstract class ListNodeImpl<T extends Node> extends NodeImpl implements L
 				@Override
 				public int previousIndex()
 				{
+					readSizeAttribute();
 					return iterator.previousIndex();
 				}
 

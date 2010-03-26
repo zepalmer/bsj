@@ -11,12 +11,23 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.BlockStatementMetaprogramAnchorNode
 import edu.jhu.cs.bsj.compiler.ast.node.meta.ClassMemberMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.CodeLiteralNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.InterfaceMemberMetaprogramAnchorNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationArrayValueNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationElementListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationElementNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationExpressionValueNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaAnnotationValueNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationValueListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationValueNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependsNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramPreambleNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramTargetNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.NormalMetaAnnotationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.SingleElementMetaAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.TypeDeclarationMetaprogramAnchorNode;
 
 /**
@@ -375,6 +386,7 @@ public interface BsjNodeFactory
      * The start and stop locations which have been set as properties of this factory are used.
      */
     public AnnotationMethodModifiersNode makeAnnotationMethodModifiersNode(
+            MetaAnnotationListNode metaAnnotations,
             AnnotationListNode annotations);
     
     /**
@@ -382,6 +394,7 @@ public interface BsjNodeFactory
      * The specified start and stop locations are used.
      */
     public AnnotationMethodModifiersNode makeAnnotationMethodModifiersNode(
+            MetaAnnotationListNode metaAnnotations,
             AnnotationListNode annotations,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
@@ -394,6 +407,7 @@ public interface BsjNodeFactory
             AccessModifier access,
             boolean staticFlag,
             boolean strictfpFlag,
+            MetaAnnotationListNode metaAnnotations,
             AnnotationListNode annotations);
     
     /**
@@ -404,6 +418,7 @@ public interface BsjNodeFactory
             AccessModifier access,
             boolean staticFlag,
             boolean strictfpFlag,
+            MetaAnnotationListNode metaAnnotations,
             AnnotationListNode annotations,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
@@ -1028,6 +1043,7 @@ public interface BsjNodeFactory
             boolean staticFlag,
             boolean finalFlag,
             boolean strictfpFlag,
+            MetaAnnotationListNode metaAnnotations,
             AnnotationListNode annotations);
     
     /**
@@ -1040,6 +1056,7 @@ public interface BsjNodeFactory
             boolean staticFlag,
             boolean finalFlag,
             boolean strictfpFlag,
+            MetaAnnotationListNode metaAnnotations,
             AnnotationListNode annotations,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
@@ -1220,6 +1237,7 @@ public interface BsjNodeFactory
      */
     public ConstructorModifiersNode makeConstructorModifiersNode(
             AccessModifier access,
+            MetaAnnotationListNode metaAnnotations,
             AnnotationListNode annotations);
     
     /**
@@ -1228,6 +1246,7 @@ public interface BsjNodeFactory
      */
     public ConstructorModifiersNode makeConstructorModifiersNode(
             AccessModifier access,
+            MetaAnnotationListNode metaAnnotations,
             AnnotationListNode annotations,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
@@ -1419,6 +1438,7 @@ public interface BsjNodeFactory
      * The start and stop locations which have been set as properties of this factory are used.
      */
     public EnumConstantDeclarationNode makeEnumConstantDeclarationNode(
+            MetaAnnotationListNode metaAnnotations,
             AnnotationListNode annotations,
             IdentifierNode identifier,
             ExpressionListNode arguments,
@@ -1430,6 +1450,7 @@ public interface BsjNodeFactory
      * The specified start and stop locations are used.
      */
     public EnumConstantDeclarationNode makeEnumConstantDeclarationNode(
+            MetaAnnotationListNode metaAnnotations,
             AnnotationListNode annotations,
             IdentifierNode identifier,
             ExpressionListNode arguments,
@@ -1443,7 +1464,6 @@ public interface BsjNodeFactory
      * The start and stop locations which have been set as properties of this factory are used.
      */
     public EnumConstantDeclarationNode makeEnumConstantDeclarationNode(
-            AnnotationListNode annotations,
             IdentifierNode identifier,
             ExpressionListNode arguments,
             JavadocNode javadoc);
@@ -1453,7 +1473,6 @@ public interface BsjNodeFactory
      * The specified start and stop locations are used.
      */
     public EnumConstantDeclarationNode makeEnumConstantDeclarationNode(
-            AnnotationListNode annotations,
             IdentifierNode identifier,
             ExpressionListNode arguments,
             JavadocNode javadoc,
@@ -1491,6 +1510,7 @@ public interface BsjNodeFactory
     public EnumModifiersNode makeEnumModifiersNode(
             AccessModifier access,
             boolean strictfpFlag,
+            MetaAnnotationListNode metaAnnotations,
             AnnotationListNode annotations);
     
     /**
@@ -1500,6 +1520,7 @@ public interface BsjNodeFactory
     public EnumModifiersNode makeEnumModifiersNode(
             AccessModifier access,
             boolean strictfpFlag,
+            MetaAnnotationListNode metaAnnotations,
             AnnotationListNode annotations,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
@@ -1632,6 +1653,7 @@ public interface BsjNodeFactory
             boolean finalFlag,
             boolean transientFlag,
             boolean volatileFlag,
+            MetaAnnotationListNode metaAnnotations,
             AnnotationListNode annotations);
     
     /**
@@ -1644,6 +1666,7 @@ public interface BsjNodeFactory
             boolean finalFlag,
             boolean transientFlag,
             boolean volatileFlag,
+            MetaAnnotationListNode metaAnnotations,
             AnnotationListNode annotations,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
@@ -2050,6 +2073,7 @@ public interface BsjNodeFactory
             AccessModifier access,
             boolean staticFlag,
             boolean strictfpFlag,
+            MetaAnnotationListNode metaAnnotations,
             AnnotationListNode annotations);
     
     /**
@@ -2060,6 +2084,7 @@ public interface BsjNodeFactory
             AccessModifier access,
             boolean staticFlag,
             boolean strictfpFlag,
+            MetaAnnotationListNode metaAnnotations,
             AnnotationListNode annotations,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
@@ -2129,6 +2154,168 @@ public interface BsjNodeFactory
             Long value,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
+    
+    /**
+     * Creates a MetaAnnotationArrayValueNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public MetaAnnotationArrayValueNode makeMetaAnnotationArrayValueNode(
+            MetaAnnotationValueListNode values);
+    
+    /**
+     * Creates a MetaAnnotationArrayValueNode.
+     * The specified start and stop locations are used.
+     */
+    public MetaAnnotationArrayValueNode makeMetaAnnotationArrayValueNode(
+            MetaAnnotationValueListNode values,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+    
+    /**
+     * Creates a MetaAnnotationElementListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public MetaAnnotationElementListNode makeMetaAnnotationElementListNode(
+            List<MetaAnnotationElementNode> children);
+    
+    /**
+     * Creates a MetaAnnotationElementListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public MetaAnnotationElementListNode makeMetaAnnotationElementListNode(
+            MetaAnnotationElementNode... childrenElements);
+    
+    /**
+     * Creates a MetaAnnotationElementListNode.
+     * The specified start and stop locations are used.
+     */
+    public MetaAnnotationElementListNode makeMetaAnnotationElementListNode(
+            List<MetaAnnotationElementNode> children,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+    
+    /**
+     * Creates a MetaAnnotationElementListNode.
+     * The specified start and stop locations are used.
+     */
+    public MetaAnnotationElementListNode makeMetaAnnotationElementListNode(
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation,
+            MetaAnnotationElementNode... childrenElements);
+    
+    /**
+     * Creates a MetaAnnotationElementNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public MetaAnnotationElementNode makeMetaAnnotationElementNode(
+            IdentifierNode identifier,
+            MetaAnnotationValueNode value);
+    
+    /**
+     * Creates a MetaAnnotationElementNode.
+     * The specified start and stop locations are used.
+     */
+    public MetaAnnotationElementNode makeMetaAnnotationElementNode(
+            IdentifierNode identifier,
+            MetaAnnotationValueNode value,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+    
+    /**
+     * Creates a MetaAnnotationExpressionValueNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public MetaAnnotationExpressionValueNode makeMetaAnnotationExpressionValueNode(
+            NonAssignmentExpressionNode expression);
+    
+    /**
+     * Creates a MetaAnnotationExpressionValueNode.
+     * The specified start and stop locations are used.
+     */
+    public MetaAnnotationExpressionValueNode makeMetaAnnotationExpressionValueNode(
+            NonAssignmentExpressionNode expression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+    
+    /**
+     * Creates a MetaAnnotationListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public MetaAnnotationListNode makeMetaAnnotationListNode(
+            List<MetaAnnotationNode> children);
+    
+    /**
+     * Creates a MetaAnnotationListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public MetaAnnotationListNode makeMetaAnnotationListNode(
+            MetaAnnotationNode... childrenElements);
+    
+    /**
+     * Creates a MetaAnnotationListNode.
+     * The specified start and stop locations are used.
+     */
+    public MetaAnnotationListNode makeMetaAnnotationListNode(
+            List<MetaAnnotationNode> children,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+    
+    /**
+     * Creates a MetaAnnotationListNode.
+     * The specified start and stop locations are used.
+     */
+    public MetaAnnotationListNode makeMetaAnnotationListNode(
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation,
+            MetaAnnotationNode... childrenElements);
+    
+    /**
+     * Creates a MetaAnnotationMetaAnnotationValueNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public MetaAnnotationMetaAnnotationValueNode makeMetaAnnotationMetaAnnotationValueNode(
+            MetaAnnotationNode annotation);
+    
+    /**
+     * Creates a MetaAnnotationMetaAnnotationValueNode.
+     * The specified start and stop locations are used.
+     */
+    public MetaAnnotationMetaAnnotationValueNode makeMetaAnnotationMetaAnnotationValueNode(
+            MetaAnnotationNode annotation,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+    
+    /**
+     * Creates a MetaAnnotationValueListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public MetaAnnotationValueListNode makeMetaAnnotationValueListNode(
+            List<MetaAnnotationValueNode> children);
+    
+    /**
+     * Creates a MetaAnnotationValueListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public MetaAnnotationValueListNode makeMetaAnnotationValueListNode(
+            MetaAnnotationValueNode... childrenElements);
+    
+    /**
+     * Creates a MetaAnnotationValueListNode.
+     * The specified start and stop locations are used.
+     */
+    public MetaAnnotationValueListNode makeMetaAnnotationValueListNode(
+            List<MetaAnnotationValueNode> children,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+    
+    /**
+     * Creates a MetaAnnotationValueListNode.
+     * The specified start and stop locations are used.
+     */
+    public MetaAnnotationValueListNode makeMetaAnnotationValueListNode(
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation,
+            MetaAnnotationValueNode... childrenElements);
     
     /**
      * Creates a MetaprogramDependsNode.
@@ -2384,6 +2571,7 @@ public interface BsjNodeFactory
             boolean synchronizedFlag,
             boolean nativeFlag,
             boolean strictfpFlag,
+            MetaAnnotationListNode metaAnnotations,
             AnnotationListNode annotations);
     
     /**
@@ -2398,6 +2586,7 @@ public interface BsjNodeFactory
             boolean synchronizedFlag,
             boolean nativeFlag,
             boolean strictfpFlag,
+            MetaAnnotationListNode metaAnnotations,
             AnnotationListNode annotations,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
@@ -2484,6 +2673,24 @@ public interface BsjNodeFactory
             BsjSourceLocation stopLocation);
     
     /**
+     * Creates a NormalMetaAnnotationNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public NormalMetaAnnotationNode makeNormalMetaAnnotationNode(
+            MetaAnnotationElementListNode arguments,
+            DeclaredTypeNode annotationType);
+    
+    /**
+     * Creates a NormalMetaAnnotationNode.
+     * The specified start and stop locations are used.
+     */
+    public NormalMetaAnnotationNode makeNormalMetaAnnotationNode(
+            MetaAnnotationElementListNode arguments,
+            DeclaredTypeNode annotationType,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+    
+    /**
      * Creates a NullLiteralNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -2519,6 +2726,7 @@ public interface BsjNodeFactory
      */
     public PackageDeclarationNode makePackageDeclarationNode(
             NameNode name,
+            MetaAnnotationListNode metaAnnotations,
             AnnotationListNode annotations);
     
     /**
@@ -2527,6 +2735,7 @@ public interface BsjNodeFactory
      */
     public PackageDeclarationNode makePackageDeclarationNode(
             NameNode name,
+            MetaAnnotationListNode metaAnnotations,
             AnnotationListNode annotations,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
@@ -2758,6 +2967,24 @@ public interface BsjNodeFactory
     public SingleElementAnnotationNode makeSingleElementAnnotationNode(
             AnnotationValueNode value,
             UnparameterizedTypeNode annotationType,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+    
+    /**
+     * Creates a SingleElementMetaAnnotationNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public SingleElementMetaAnnotationNode makeSingleElementMetaAnnotationNode(
+            MetaAnnotationValueNode value,
+            DeclaredTypeNode annotationType);
+    
+    /**
+     * Creates a SingleElementMetaAnnotationNode.
+     * The specified start and stop locations are used.
+     */
+    public SingleElementMetaAnnotationNode makeSingleElementMetaAnnotationNode(
+            MetaAnnotationValueNode value,
+            DeclaredTypeNode annotationType,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
     
@@ -3539,6 +3766,7 @@ public interface BsjNodeFactory
      */
     public VariableModifiersNode makeVariableModifiersNode(
             boolean finalFlag,
+            MetaAnnotationListNode metaAnnotations,
             AnnotationListNode annotations);
     
     /**
@@ -3547,6 +3775,7 @@ public interface BsjNodeFactory
      */
     public VariableModifiersNode makeVariableModifiersNode(
             boolean finalFlag,
+            MetaAnnotationListNode metaAnnotations,
             AnnotationListNode annotations,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);

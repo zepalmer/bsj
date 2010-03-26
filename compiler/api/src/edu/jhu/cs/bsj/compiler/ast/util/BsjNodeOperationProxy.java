@@ -10,12 +10,21 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.BlockStatementMetaprogramAnchorNode
 import edu.jhu.cs.bsj.compiler.ast.node.meta.ClassMemberMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.CodeLiteralNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.InterfaceMemberMetaprogramAnchorNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationArrayValueNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationElementListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationElementNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationExpressionValueNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaAnnotationValueNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationValueListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependsNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramPreambleNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramTargetNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.NormalMetaAnnotationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.SingleElementMetaAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.TypeDeclarationMetaprogramAnchorNode;
 
 /**
@@ -1185,6 +1194,97 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
      * @param p The value to pass through the proxy filter and into the backing operation.
      * @return The result of this operation (after being passed through the proxy filter).
      */
+    public RNew executeMetaAnnotationArrayValueNode(MetaAnnotationArrayValueNode node, PNew p)
+    {
+        POrig porig = before(p);
+        ROrig rorig = this.backingOp.executeMetaAnnotationArrayValueNode(node, porig);
+        return after(rorig);
+    }
+
+    /**
+     * Decorates this operation, turning it over to the backing operation.
+     * @param node The node to affect.
+     * @param p The value to pass through the proxy filter and into the backing operation.
+     * @return The result of this operation (after being passed through the proxy filter).
+     */
+    public RNew executeMetaAnnotationElementListNode(MetaAnnotationElementListNode node, PNew p)
+    {
+        POrig porig = before(p);
+        ROrig rorig = this.backingOp.executeMetaAnnotationElementListNode(node, porig);
+        return after(rorig);
+    }
+
+    /**
+     * Decorates this operation, turning it over to the backing operation.
+     * @param node The node to affect.
+     * @param p The value to pass through the proxy filter and into the backing operation.
+     * @return The result of this operation (after being passed through the proxy filter).
+     */
+    public RNew executeMetaAnnotationElementNode(MetaAnnotationElementNode node, PNew p)
+    {
+        POrig porig = before(p);
+        ROrig rorig = this.backingOp.executeMetaAnnotationElementNode(node, porig);
+        return after(rorig);
+    }
+
+    /**
+     * Decorates this operation, turning it over to the backing operation.
+     * @param node The node to affect.
+     * @param p The value to pass through the proxy filter and into the backing operation.
+     * @return The result of this operation (after being passed through the proxy filter).
+     */
+    public RNew executeMetaAnnotationExpressionValueNode(MetaAnnotationExpressionValueNode node, PNew p)
+    {
+        POrig porig = before(p);
+        ROrig rorig = this.backingOp.executeMetaAnnotationExpressionValueNode(node, porig);
+        return after(rorig);
+    }
+
+    /**
+     * Decorates this operation, turning it over to the backing operation.
+     * @param node The node to affect.
+     * @param p The value to pass through the proxy filter and into the backing operation.
+     * @return The result of this operation (after being passed through the proxy filter).
+     */
+    public RNew executeMetaAnnotationListNode(MetaAnnotationListNode node, PNew p)
+    {
+        POrig porig = before(p);
+        ROrig rorig = this.backingOp.executeMetaAnnotationListNode(node, porig);
+        return after(rorig);
+    }
+
+    /**
+     * Decorates this operation, turning it over to the backing operation.
+     * @param node The node to affect.
+     * @param p The value to pass through the proxy filter and into the backing operation.
+     * @return The result of this operation (after being passed through the proxy filter).
+     */
+    public RNew executeMetaAnnotationMetaAnnotationValueNode(MetaAnnotationMetaAnnotationValueNode node, PNew p)
+    {
+        POrig porig = before(p);
+        ROrig rorig = this.backingOp.executeMetaAnnotationMetaAnnotationValueNode(node, porig);
+        return after(rorig);
+    }
+
+    /**
+     * Decorates this operation, turning it over to the backing operation.
+     * @param node The node to affect.
+     * @param p The value to pass through the proxy filter and into the backing operation.
+     * @return The result of this operation (after being passed through the proxy filter).
+     */
+    public RNew executeMetaAnnotationValueListNode(MetaAnnotationValueListNode node, PNew p)
+    {
+        POrig porig = before(p);
+        ROrig rorig = this.backingOp.executeMetaAnnotationValueListNode(node, porig);
+        return after(rorig);
+    }
+
+    /**
+     * Decorates this operation, turning it over to the backing operation.
+     * @param node The node to affect.
+     * @param p The value to pass through the proxy filter and into the backing operation.
+     * @return The result of this operation (after being passed through the proxy filter).
+     */
     public RNew executeMetaprogramDependsNode(MetaprogramDependsNode node, PNew p)
     {
         POrig porig = before(p);
@@ -1354,6 +1454,19 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
      * @param p The value to pass through the proxy filter and into the backing operation.
      * @return The result of this operation (after being passed through the proxy filter).
      */
+    public RNew executeNormalMetaAnnotationNode(NormalMetaAnnotationNode node, PNew p)
+    {
+        POrig porig = before(p);
+        ROrig rorig = this.backingOp.executeNormalMetaAnnotationNode(node, porig);
+        return after(rorig);
+    }
+
+    /**
+     * Decorates this operation, turning it over to the backing operation.
+     * @param node The node to affect.
+     * @param p The value to pass through the proxy filter and into the backing operation.
+     * @return The result of this operation (after being passed through the proxy filter).
+     */
     public RNew executeNullLiteralNode(NullLiteralNode node, PNew p)
     {
         POrig porig = before(p);
@@ -1514,6 +1627,19 @@ public abstract class BsjNodeOperationProxy<POrig,ROrig,PNew,RNew> implements Bs
     {
         POrig porig = before(p);
         ROrig rorig = this.backingOp.executeSingleElementAnnotationNode(node, porig);
+        return after(rorig);
+    }
+
+    /**
+     * Decorates this operation, turning it over to the backing operation.
+     * @param node The node to affect.
+     * @param p The value to pass through the proxy filter and into the backing operation.
+     * @return The result of this operation (after being passed through the proxy filter).
+     */
+    public RNew executeSingleElementMetaAnnotationNode(SingleElementMetaAnnotationNode node, PNew p)
+    {
+        POrig porig = before(p);
+        ROrig rorig = this.backingOp.executeSingleElementMetaAnnotationNode(node, porig);
         return after(rorig);
     }
 

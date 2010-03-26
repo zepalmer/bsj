@@ -22,12 +22,23 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.BlockStatementMetaprogramAnchorNode
 import edu.jhu.cs.bsj.compiler.ast.node.meta.ClassMemberMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.CodeLiteralNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.InterfaceMemberMetaprogramAnchorNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationArrayValueNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationElementListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationElementNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationExpressionValueNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaAnnotationValueNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationValueListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationValueNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependsNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramPreambleNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramTargetNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.NormalMetaAnnotationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.SingleElementMetaAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.TypeDeclarationMetaprogramAnchorNode;
 
 /**
@@ -103,6 +114,24 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     public void setStopSourceLocation(BsjSourceLocation stopLocation)
     {
         this.factory.setStopSourceLocation(stopLocation);
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean getBinary()
+    {
+    	return this.factory.getBinary();
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void setBinary(boolean binary)
+    {
+    	this.factory.setBinary(binary);
     }
 
 	// MANUALLY SPECIFIED MAKE METHODS ///////////////////////////////////////
@@ -636,10 +665,11 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
      */
     @Override
     public AnnotationMethodModifiersNode makeAnnotationMethodModifiersNode(
+            MetaAnnotationListNode metaAnnotations,
             AnnotationListNode annotations)
     {
         this.before();
-        AnnotationMethodModifiersNode node = factory.makeAnnotationMethodModifiersNode(annotations);
+        AnnotationMethodModifiersNode node = factory.makeAnnotationMethodModifiersNode(metaAnnotations, annotations);
         this.after(node);
         return node;
     }
@@ -650,12 +680,13 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
      */
     @Override
     public AnnotationMethodModifiersNode makeAnnotationMethodModifiersNode(
+            MetaAnnotationListNode metaAnnotations,
             AnnotationListNode annotations,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
         this.before();
-        AnnotationMethodModifiersNode node = factory.makeAnnotationMethodModifiersNode(annotations, startLocation, stopLocation);
+        AnnotationMethodModifiersNode node = factory.makeAnnotationMethodModifiersNode(metaAnnotations, annotations, startLocation, stopLocation);
         this.after(node);
         return node;
     }
@@ -669,10 +700,11 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
             AccessModifier access,
             boolean staticFlag,
             boolean strictfpFlag,
+            MetaAnnotationListNode metaAnnotations,
             AnnotationListNode annotations)
     {
         this.before();
-        AnnotationModifiersNode node = factory.makeAnnotationModifiersNode(access, staticFlag, strictfpFlag, annotations);
+        AnnotationModifiersNode node = factory.makeAnnotationModifiersNode(access, staticFlag, strictfpFlag, metaAnnotations, annotations);
         this.after(node);
         return node;
     }
@@ -686,12 +718,13 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
             AccessModifier access,
             boolean staticFlag,
             boolean strictfpFlag,
+            MetaAnnotationListNode metaAnnotations,
             AnnotationListNode annotations,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
         this.before();
-        AnnotationModifiersNode node = factory.makeAnnotationModifiersNode(access, staticFlag, strictfpFlag, annotations, startLocation, stopLocation);
+        AnnotationModifiersNode node = factory.makeAnnotationModifiersNode(access, staticFlag, strictfpFlag, metaAnnotations, annotations, startLocation, stopLocation);
         this.after(node);
         return node;
     }
@@ -1821,10 +1854,11 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
             boolean staticFlag,
             boolean finalFlag,
             boolean strictfpFlag,
+            MetaAnnotationListNode metaAnnotations,
             AnnotationListNode annotations)
     {
         this.before();
-        ClassModifiersNode node = factory.makeClassModifiersNode(access, abstractFlag, staticFlag, finalFlag, strictfpFlag, annotations);
+        ClassModifiersNode node = factory.makeClassModifiersNode(access, abstractFlag, staticFlag, finalFlag, strictfpFlag, metaAnnotations, annotations);
         this.after(node);
         return node;
     }
@@ -1840,12 +1874,13 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
             boolean staticFlag,
             boolean finalFlag,
             boolean strictfpFlag,
+            MetaAnnotationListNode metaAnnotations,
             AnnotationListNode annotations,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
         this.before();
-        ClassModifiersNode node = factory.makeClassModifiersNode(access, abstractFlag, staticFlag, finalFlag, strictfpFlag, annotations, startLocation, stopLocation);
+        ClassModifiersNode node = factory.makeClassModifiersNode(access, abstractFlag, staticFlag, finalFlag, strictfpFlag, metaAnnotations, annotations, startLocation, stopLocation);
         this.after(node);
         return node;
     }
@@ -2139,10 +2174,11 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     @Override
     public ConstructorModifiersNode makeConstructorModifiersNode(
             AccessModifier access,
+            MetaAnnotationListNode metaAnnotations,
             AnnotationListNode annotations)
     {
         this.before();
-        ConstructorModifiersNode node = factory.makeConstructorModifiersNode(access, annotations);
+        ConstructorModifiersNode node = factory.makeConstructorModifiersNode(access, metaAnnotations, annotations);
         this.after(node);
         return node;
     }
@@ -2154,12 +2190,13 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     @Override
     public ConstructorModifiersNode makeConstructorModifiersNode(
             AccessModifier access,
+            MetaAnnotationListNode metaAnnotations,
             AnnotationListNode annotations,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
         this.before();
-        ConstructorModifiersNode node = factory.makeConstructorModifiersNode(access, annotations, startLocation, stopLocation);
+        ConstructorModifiersNode node = factory.makeConstructorModifiersNode(access, metaAnnotations, annotations, startLocation, stopLocation);
         this.after(node);
         return node;
     }
@@ -2506,6 +2543,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
      */
     @Override
     public EnumConstantDeclarationNode makeEnumConstantDeclarationNode(
+            MetaAnnotationListNode metaAnnotations,
             AnnotationListNode annotations,
             IdentifierNode identifier,
             ExpressionListNode arguments,
@@ -2513,7 +2551,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
             JavadocNode javadoc)
     {
         this.before();
-        EnumConstantDeclarationNode node = factory.makeEnumConstantDeclarationNode(annotations, identifier, arguments, body, javadoc);
+        EnumConstantDeclarationNode node = factory.makeEnumConstantDeclarationNode(metaAnnotations, annotations, identifier, arguments, body, javadoc);
         this.after(node);
         return node;
     }
@@ -2524,6 +2562,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
      */
     @Override
     public EnumConstantDeclarationNode makeEnumConstantDeclarationNode(
+            MetaAnnotationListNode metaAnnotations,
             AnnotationListNode annotations,
             IdentifierNode identifier,
             ExpressionListNode arguments,
@@ -2533,7 +2572,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
             BsjSourceLocation stopLocation)
     {
         this.before();
-        EnumConstantDeclarationNode node = factory.makeEnumConstantDeclarationNode(annotations, identifier, arguments, body, javadoc, startLocation, stopLocation);
+        EnumConstantDeclarationNode node = factory.makeEnumConstantDeclarationNode(metaAnnotations, annotations, identifier, arguments, body, javadoc, startLocation, stopLocation);
         this.after(node);
         return node;
     }
@@ -2544,13 +2583,12 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
      */
     @Override
     public EnumConstantDeclarationNode makeEnumConstantDeclarationNode(
-            AnnotationListNode annotations,
             IdentifierNode identifier,
             ExpressionListNode arguments,
             JavadocNode javadoc)
     {
         this.before();
-        EnumConstantDeclarationNode node = factory.makeEnumConstantDeclarationNode(annotations, identifier, arguments, javadoc);
+        EnumConstantDeclarationNode node = factory.makeEnumConstantDeclarationNode(identifier, arguments, javadoc);
         this.after(node);
         return node;
     }
@@ -2561,7 +2599,6 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
      */
     @Override
     public EnumConstantDeclarationNode makeEnumConstantDeclarationNode(
-            AnnotationListNode annotations,
             IdentifierNode identifier,
             ExpressionListNode arguments,
             JavadocNode javadoc,
@@ -2569,7 +2606,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
             BsjSourceLocation stopLocation)
     {
         this.before();
-        EnumConstantDeclarationNode node = factory.makeEnumConstantDeclarationNode(annotations, identifier, arguments, javadoc, startLocation, stopLocation);
+        EnumConstantDeclarationNode node = factory.makeEnumConstantDeclarationNode(identifier, arguments, javadoc, startLocation, stopLocation);
         this.after(node);
         return node;
     }
@@ -2620,10 +2657,11 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     public EnumModifiersNode makeEnumModifiersNode(
             AccessModifier access,
             boolean strictfpFlag,
+            MetaAnnotationListNode metaAnnotations,
             AnnotationListNode annotations)
     {
         this.before();
-        EnumModifiersNode node = factory.makeEnumModifiersNode(access, strictfpFlag, annotations);
+        EnumModifiersNode node = factory.makeEnumModifiersNode(access, strictfpFlag, metaAnnotations, annotations);
         this.after(node);
         return node;
     }
@@ -2636,12 +2674,13 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     public EnumModifiersNode makeEnumModifiersNode(
             AccessModifier access,
             boolean strictfpFlag,
+            MetaAnnotationListNode metaAnnotations,
             AnnotationListNode annotations,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
         this.before();
-        EnumModifiersNode node = factory.makeEnumModifiersNode(access, strictfpFlag, annotations, startLocation, stopLocation);
+        EnumModifiersNode node = factory.makeEnumModifiersNode(access, strictfpFlag, metaAnnotations, annotations, startLocation, stopLocation);
         this.after(node);
         return node;
     }
@@ -2873,10 +2912,11 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
             boolean finalFlag,
             boolean transientFlag,
             boolean volatileFlag,
+            MetaAnnotationListNode metaAnnotations,
             AnnotationListNode annotations)
     {
         this.before();
-        FieldModifiersNode node = factory.makeFieldModifiersNode(access, staticFlag, finalFlag, transientFlag, volatileFlag, annotations);
+        FieldModifiersNode node = factory.makeFieldModifiersNode(access, staticFlag, finalFlag, transientFlag, volatileFlag, metaAnnotations, annotations);
         this.after(node);
         return node;
     }
@@ -2892,12 +2932,13 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
             boolean finalFlag,
             boolean transientFlag,
             boolean volatileFlag,
+            MetaAnnotationListNode metaAnnotations,
             AnnotationListNode annotations,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
         this.before();
-        FieldModifiersNode node = factory.makeFieldModifiersNode(access, staticFlag, finalFlag, transientFlag, volatileFlag, annotations, startLocation, stopLocation);
+        FieldModifiersNode node = factory.makeFieldModifiersNode(access, staticFlag, finalFlag, transientFlag, volatileFlag, metaAnnotations, annotations, startLocation, stopLocation);
         this.after(node);
         return node;
     }
@@ -3627,10 +3668,11 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
             AccessModifier access,
             boolean staticFlag,
             boolean strictfpFlag,
+            MetaAnnotationListNode metaAnnotations,
             AnnotationListNode annotations)
     {
         this.before();
-        InterfaceModifiersNode node = factory.makeInterfaceModifiersNode(access, staticFlag, strictfpFlag, annotations);
+        InterfaceModifiersNode node = factory.makeInterfaceModifiersNode(access, staticFlag, strictfpFlag, metaAnnotations, annotations);
         this.after(node);
         return node;
     }
@@ -3644,12 +3686,13 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
             AccessModifier access,
             boolean staticFlag,
             boolean strictfpFlag,
+            MetaAnnotationListNode metaAnnotations,
             AnnotationListNode annotations,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
         this.before();
-        InterfaceModifiersNode node = factory.makeInterfaceModifiersNode(access, staticFlag, strictfpFlag, annotations, startLocation, stopLocation);
+        InterfaceModifiersNode node = factory.makeInterfaceModifiersNode(access, staticFlag, strictfpFlag, metaAnnotations, annotations, startLocation, stopLocation);
         this.after(node);
         return node;
     }
@@ -3772,6 +3815,308 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     {
         this.before();
         LongLiteralNode node = factory.makeLongLiteralNode(value, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a MetaAnnotationArrayValueNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public MetaAnnotationArrayValueNode makeMetaAnnotationArrayValueNode(
+            MetaAnnotationValueListNode values)
+    {
+        this.before();
+        MetaAnnotationArrayValueNode node = factory.makeMetaAnnotationArrayValueNode(values);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a MetaAnnotationArrayValueNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public MetaAnnotationArrayValueNode makeMetaAnnotationArrayValueNode(
+            MetaAnnotationValueListNode values,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        MetaAnnotationArrayValueNode node = factory.makeMetaAnnotationArrayValueNode(values, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a MetaAnnotationElementListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public MetaAnnotationElementListNode makeMetaAnnotationElementListNode(
+            List<MetaAnnotationElementNode> children)
+    {
+        this.before();
+        MetaAnnotationElementListNode node = factory.makeMetaAnnotationElementListNode(children);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a MetaAnnotationElementListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public MetaAnnotationElementListNode makeMetaAnnotationElementListNode(
+            MetaAnnotationElementNode... childrenElements)
+    {
+        this.before();
+        MetaAnnotationElementListNode node = factory.makeMetaAnnotationElementListNode(childrenElements);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a MetaAnnotationElementListNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public MetaAnnotationElementListNode makeMetaAnnotationElementListNode(
+            List<MetaAnnotationElementNode> children,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        MetaAnnotationElementListNode node = factory.makeMetaAnnotationElementListNode(children, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a MetaAnnotationElementListNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public MetaAnnotationElementListNode makeMetaAnnotationElementListNode(
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation,
+            MetaAnnotationElementNode... childrenElements)
+    {
+        this.before();
+        MetaAnnotationElementListNode node = factory.makeMetaAnnotationElementListNode(startLocation, stopLocation, childrenElements);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a MetaAnnotationElementNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public MetaAnnotationElementNode makeMetaAnnotationElementNode(
+            IdentifierNode identifier,
+            MetaAnnotationValueNode value)
+    {
+        this.before();
+        MetaAnnotationElementNode node = factory.makeMetaAnnotationElementNode(identifier, value);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a MetaAnnotationElementNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public MetaAnnotationElementNode makeMetaAnnotationElementNode(
+            IdentifierNode identifier,
+            MetaAnnotationValueNode value,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        MetaAnnotationElementNode node = factory.makeMetaAnnotationElementNode(identifier, value, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a MetaAnnotationExpressionValueNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public MetaAnnotationExpressionValueNode makeMetaAnnotationExpressionValueNode(
+            NonAssignmentExpressionNode expression)
+    {
+        this.before();
+        MetaAnnotationExpressionValueNode node = factory.makeMetaAnnotationExpressionValueNode(expression);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a MetaAnnotationExpressionValueNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public MetaAnnotationExpressionValueNode makeMetaAnnotationExpressionValueNode(
+            NonAssignmentExpressionNode expression,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        MetaAnnotationExpressionValueNode node = factory.makeMetaAnnotationExpressionValueNode(expression, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a MetaAnnotationListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public MetaAnnotationListNode makeMetaAnnotationListNode(
+            List<MetaAnnotationNode> children)
+    {
+        this.before();
+        MetaAnnotationListNode node = factory.makeMetaAnnotationListNode(children);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a MetaAnnotationListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public MetaAnnotationListNode makeMetaAnnotationListNode(
+            MetaAnnotationNode... childrenElements)
+    {
+        this.before();
+        MetaAnnotationListNode node = factory.makeMetaAnnotationListNode(childrenElements);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a MetaAnnotationListNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public MetaAnnotationListNode makeMetaAnnotationListNode(
+            List<MetaAnnotationNode> children,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        MetaAnnotationListNode node = factory.makeMetaAnnotationListNode(children, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a MetaAnnotationListNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public MetaAnnotationListNode makeMetaAnnotationListNode(
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation,
+            MetaAnnotationNode... childrenElements)
+    {
+        this.before();
+        MetaAnnotationListNode node = factory.makeMetaAnnotationListNode(startLocation, stopLocation, childrenElements);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a MetaAnnotationMetaAnnotationValueNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public MetaAnnotationMetaAnnotationValueNode makeMetaAnnotationMetaAnnotationValueNode(
+            MetaAnnotationNode annotation)
+    {
+        this.before();
+        MetaAnnotationMetaAnnotationValueNode node = factory.makeMetaAnnotationMetaAnnotationValueNode(annotation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a MetaAnnotationMetaAnnotationValueNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public MetaAnnotationMetaAnnotationValueNode makeMetaAnnotationMetaAnnotationValueNode(
+            MetaAnnotationNode annotation,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        MetaAnnotationMetaAnnotationValueNode node = factory.makeMetaAnnotationMetaAnnotationValueNode(annotation, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a MetaAnnotationValueListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public MetaAnnotationValueListNode makeMetaAnnotationValueListNode(
+            List<MetaAnnotationValueNode> children)
+    {
+        this.before();
+        MetaAnnotationValueListNode node = factory.makeMetaAnnotationValueListNode(children);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a MetaAnnotationValueListNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public MetaAnnotationValueListNode makeMetaAnnotationValueListNode(
+            MetaAnnotationValueNode... childrenElements)
+    {
+        this.before();
+        MetaAnnotationValueListNode node = factory.makeMetaAnnotationValueListNode(childrenElements);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a MetaAnnotationValueListNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public MetaAnnotationValueListNode makeMetaAnnotationValueListNode(
+            List<MetaAnnotationValueNode> children,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        MetaAnnotationValueListNode node = factory.makeMetaAnnotationValueListNode(children, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a MetaAnnotationValueListNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public MetaAnnotationValueListNode makeMetaAnnotationValueListNode(
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation,
+            MetaAnnotationValueNode... childrenElements)
+    {
+        this.before();
+        MetaAnnotationValueListNode node = factory.makeMetaAnnotationValueListNode(startLocation, stopLocation, childrenElements);
         this.after(node);
         return node;
     }
@@ -4199,10 +4544,11 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
             boolean synchronizedFlag,
             boolean nativeFlag,
             boolean strictfpFlag,
+            MetaAnnotationListNode metaAnnotations,
             AnnotationListNode annotations)
     {
         this.before();
-        MethodModifiersNode node = factory.makeMethodModifiersNode(access, abstractFlag, staticFlag, finalFlag, synchronizedFlag, nativeFlag, strictfpFlag, annotations);
+        MethodModifiersNode node = factory.makeMethodModifiersNode(access, abstractFlag, staticFlag, finalFlag, synchronizedFlag, nativeFlag, strictfpFlag, metaAnnotations, annotations);
         this.after(node);
         return node;
     }
@@ -4220,12 +4566,13 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
             boolean synchronizedFlag,
             boolean nativeFlag,
             boolean strictfpFlag,
+            MetaAnnotationListNode metaAnnotations,
             AnnotationListNode annotations,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
         this.before();
-        MethodModifiersNode node = factory.makeMethodModifiersNode(access, abstractFlag, staticFlag, finalFlag, synchronizedFlag, nativeFlag, strictfpFlag, annotations, startLocation, stopLocation);
+        MethodModifiersNode node = factory.makeMethodModifiersNode(access, abstractFlag, staticFlag, finalFlag, synchronizedFlag, nativeFlag, strictfpFlag, metaAnnotations, annotations, startLocation, stopLocation);
         this.after(node);
         return node;
     }
@@ -4382,6 +4729,38 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     }
     
     /**
+     * Creates a NormalMetaAnnotationNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public NormalMetaAnnotationNode makeNormalMetaAnnotationNode(
+            MetaAnnotationElementListNode arguments,
+            DeclaredTypeNode annotationType)
+    {
+        this.before();
+        NormalMetaAnnotationNode node = factory.makeNormalMetaAnnotationNode(arguments, annotationType);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a NormalMetaAnnotationNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public NormalMetaAnnotationNode makeNormalMetaAnnotationNode(
+            MetaAnnotationElementListNode arguments,
+            DeclaredTypeNode annotationType,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        NormalMetaAnnotationNode node = factory.makeNormalMetaAnnotationNode(arguments, annotationType, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
      * Creates a NullLiteralNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -4446,10 +4825,11 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     @Override
     public PackageDeclarationNode makePackageDeclarationNode(
             NameNode name,
+            MetaAnnotationListNode metaAnnotations,
             AnnotationListNode annotations)
     {
         this.before();
-        PackageDeclarationNode node = factory.makePackageDeclarationNode(name, annotations);
+        PackageDeclarationNode node = factory.makePackageDeclarationNode(name, metaAnnotations, annotations);
         this.after(node);
         return node;
     }
@@ -4461,12 +4841,13 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     @Override
     public PackageDeclarationNode makePackageDeclarationNode(
             NameNode name,
+            MetaAnnotationListNode metaAnnotations,
             AnnotationListNode annotations,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
         this.before();
-        PackageDeclarationNode node = factory.makePackageDeclarationNode(name, annotations, startLocation, stopLocation);
+        PackageDeclarationNode node = factory.makePackageDeclarationNode(name, metaAnnotations, annotations, startLocation, stopLocation);
         this.after(node);
         return node;
     }
@@ -4879,6 +5260,38 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     {
         this.before();
         SingleElementAnnotationNode node = factory.makeSingleElementAnnotationNode(value, annotationType, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a SingleElementMetaAnnotationNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public SingleElementMetaAnnotationNode makeSingleElementMetaAnnotationNode(
+            MetaAnnotationValueNode value,
+            DeclaredTypeNode annotationType)
+    {
+        this.before();
+        SingleElementMetaAnnotationNode node = factory.makeSingleElementMetaAnnotationNode(value, annotationType);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a SingleElementMetaAnnotationNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public SingleElementMetaAnnotationNode makeSingleElementMetaAnnotationNode(
+            MetaAnnotationValueNode value,
+            DeclaredTypeNode annotationType,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        SingleElementMetaAnnotationNode node = factory.makeSingleElementMetaAnnotationNode(value, annotationType, startLocation, stopLocation);
         this.after(node);
         return node;
     }
@@ -6292,10 +6705,11 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     @Override
     public VariableModifiersNode makeVariableModifiersNode(
             boolean finalFlag,
+            MetaAnnotationListNode metaAnnotations,
             AnnotationListNode annotations)
     {
         this.before();
-        VariableModifiersNode node = factory.makeVariableModifiersNode(finalFlag, annotations);
+        VariableModifiersNode node = factory.makeVariableModifiersNode(finalFlag, metaAnnotations, annotations);
         this.after(node);
         return node;
     }
@@ -6307,12 +6721,13 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     @Override
     public VariableModifiersNode makeVariableModifiersNode(
             boolean finalFlag,
+            MetaAnnotationListNode metaAnnotations,
             AnnotationListNode annotations,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
         this.before();
-        VariableModifiersNode node = factory.makeVariableModifiersNode(finalFlag, annotations, startLocation, stopLocation);
+        VariableModifiersNode node = factory.makeVariableModifiersNode(finalFlag, metaAnnotations, annotations, startLocation, stopLocation);
         this.after(node);
         return node;
     }
