@@ -47,6 +47,8 @@ public class BsjMetaScanner extends RuleBasedScanner
     
     private static String[] fgConstants = {"false", "null", "true"};
     
+    //TODO add code literals/splice when needed
+    //TODO handle whitespace gaps (i.e. [  :  ... : ] )
     private static String[] metaSymbols = {"[:", ":]", "#target", "#depends", "@@"};
 
     /**
