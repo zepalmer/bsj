@@ -9,6 +9,18 @@ public abstract class NodeImpl
 {
 	/* GEN:start */
 	/**
+	 * The attribute type which controls the parent variable in a node.
+	 */
+	private static class ParentAttribute implements Attribute
+	{
+	}
+	
+	/**
+	 * The parent attribute for this node.
+	 */
+	private Attribute parentAttribute = new ParentAttribute();
+	
+	/**
 	 * The next globally unique UID to assign.
 	 */
 	private static AtomicLong sUid = new AtomicLong(0);
@@ -90,6 +102,7 @@ public abstract class NodeImpl
 	 */
 	public Node getParent()
 	{
+		recordAccess(this.parentAttribute, Attribute.AccessType.READ);
 		return this.parent;
 	}
 	
@@ -99,6 +112,7 @@ public abstract class NodeImpl
 	 */
 	public void setParent(Node node)
 	{
+		recordAccess(this.parentAttribute, Attribute.AccessType.STRONG_WRITE);
 		this.parent = node;
 	}
 	
