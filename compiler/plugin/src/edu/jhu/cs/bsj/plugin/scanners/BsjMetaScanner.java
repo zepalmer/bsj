@@ -31,6 +31,7 @@ import edu.jhu.cs.bsj.plugin.editor.BsjColorProvider;
 
 public class BsjMetaScanner extends RuleBasedScanner 
 {
+    //TODO DOCUMENT PARTITIONER FIX    
     private BsjColorProvider provider;
     
     private static String[] fgKeywords = { 

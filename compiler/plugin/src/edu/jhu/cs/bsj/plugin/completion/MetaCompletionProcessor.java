@@ -10,14 +10,14 @@ public class MetaCompletionProcessor implements IContentAssistProcessor
 {
 
     @Override
-    public ICompletionProposal[] computeCompletionProposals(ITextViewer arg0, int arg1)
+    public ICompletionProposal[] computeCompletionProposals(ITextViewer viewer, int offset)
     {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public IContextInformation[] computeContextInformation(ITextViewer arg0, int arg1)
+    public IContextInformation[] computeContextInformation(ITextViewer viewer, int offset)
     {
         // TODO Auto-generated method stub
         return null;

@@ -44,6 +44,10 @@ public class BsjCodeScanner extends RuleBasedScanner
     
     private static String[] fgConstants = {"false", "null", "true"};
     
+    //TODO add code literals/splice when needed
+    //TODO handle whitespace gaps (i.e. [  :  ... : ] )
+    private static String[] metaSymbols = {"[:", ":]", "#target", "#depends", "@@"};
+    
     /**
      * Creates a Java code scanner with the given color provider.
      *
@@ -56,6 +60,7 @@ public class BsjCodeScanner extends RuleBasedScanner
         IToken string = new Token(new TextAttribute(provider.getColor(BsjColorProvider.STRING)));
         IToken comment = new Token(new TextAttribute(provider.getColor(BsjColorProvider.SINGLE_LINE_COMMENT)));
         IToken other = new Token(new TextAttribute(provider.getColor(BsjColorProvider.DEFAULT)));
+        IToken meta = new Token(new TextAttribute(provider.getColor(BsjColorProvider.META_PROGRAM)));
         List<IRule> rules = new ArrayList<IRule>();
 
         // Add rule for single line comments.
@@ -83,6 +88,14 @@ public class BsjCodeScanner extends RuleBasedScanner
             wordRule.addWord(fgConstants[i], type);
         }
         rules.add(wordRule);
+        
+        // Add word rule for meta characters.
+        WordRule metaRule = new WordRule(new MetaWordDetector(), meta);
+        for (int i = 0; i < metaSymbols.length; i++)
+        {
+            metaRule.addWord(metaSymbols[i], meta);
+        }
+        rules.add(metaRule);
 
         IRule[] result = new IRule[rules.size()];
         rules.toArray(result);

@@ -27,6 +27,7 @@ import org.eclipse.jface.text.rules.DefaultDamagerRepairer;
 import org.eclipse.jface.text.rules.Token;
 import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.jface.text.source.SourceViewerConfiguration;
+import org.eclipse.ui.texteditor.HippieProposalProcessor;
 
 import edu.jhu.cs.bsj.plugin.completion.JavaCompletionProcessor;
 import edu.jhu.cs.bsj.plugin.completion.JavadocCompletionProcessor;
@@ -57,8 +58,7 @@ public class BsjConfiguration extends SourceViewerConfiguration
         return new String[] { 
                 IDocument.DEFAULT_CONTENT_TYPE,
                 BsjPartitionScanner.JAVA_DOC, 
-                BsjPartitionScanner.JAVA_MULTILINE_COMMENT,
-                BsjPartitionScanner.META_PROGRAM};
+                BsjPartitionScanner.JAVA_MULTILINE_COMMENT};
     }
 
     public ITextDoubleClickStrategy getDoubleClickStrategy(
@@ -93,26 +93,27 @@ public class BsjConfiguration extends SourceViewerConfiguration
         return tagScanner;
     }
     
-    protected BsjMetaScanner getBsjMetaScanner()
-    {
-        if (metaScanner == null)
-        {
-            metaScanner = new BsjMetaScanner(colorProvider);
-            metaScanner.setDefaultReturnToken(new Token(new TextAttribute(
-                    colorProvider.getColor(BsjColorProvider.DEFAULT),
-                    colorProvider.getColor(BsjColorProvider.META_BACKGROUND),
-                    0)));
-        }
-        return metaScanner;
-    }
+//    protected BsjMetaScanner getBsjMetaScanner()
+//    {
+//        if (metaScanner == null)
+//        {
+//            metaScanner = new BsjMetaScanner(colorProvider);
+//            metaScanner.setDefaultReturnToken(new Token(new TextAttribute(
+//                    colorProvider.getColor(BsjColorProvider.DEFAULT),
+//                    colorProvider.getColor(BsjColorProvider.META_BACKGROUND),
+//                    0)));
+//        }
+//        return metaScanner;
+//    }
     
     public IContentAssistant getContentAssistant(ISourceViewer sourceViewer) 
     {
         ContentAssistant assistant= new ContentAssistant();
         assistant.setDocumentPartitioning(getConfiguredDocumentPartitioning(sourceViewer));
-        assistant.setContentAssistProcessor(new JavaCompletionProcessor(), IDocument.DEFAULT_CONTENT_TYPE);
+        //assistant.setContentAssistProcessor(new JavaCompletionProcessor(), IDocument.DEFAULT_CONTENT_TYPE);
+        assistant.setContentAssistProcessor(new HippieProposalProcessor(), IDocument.DEFAULT_CONTENT_TYPE);
         assistant.setContentAssistProcessor(new JavadocCompletionProcessor(), BsjPartitionScanner.JAVA_DOC);
-        assistant.setContentAssistProcessor(new MetaCompletionProcessor(), BsjPartitionScanner.META_PROGRAM);
+        //assistant.setContentAssistProcessor(new MetaCompletionProcessor(), BsjPartitionScanner.META_PROGRAM);
 
         assistant.enableAutoActivation(true);
         assistant.setAutoActivationDelay(500);
@@ -152,9 +153,9 @@ public class BsjConfiguration extends SourceViewerConfiguration
         reconciler.setRepairer(dr, BsjPartitionScanner.JAVA_MULTILINE_COMMENT);
         
         // Meta program scanner
-        dr = new DefaultDamagerRepairer(getBsjMetaScanner());
-        reconciler.setDamager(dr, BsjPartitionScanner.META_PROGRAM);
-        reconciler.setRepairer(dr, BsjPartitionScanner.META_PROGRAM);
+//        dr = new DefaultDamagerRepairer(getBsjMetaScanner());
+//        reconciler.setDamager(dr, BsjPartitionScanner.META_PROGRAM);
+//        reconciler.setRepairer(dr, BsjPartitionScanner.META_PROGRAM);
         
         return reconciler;
     }

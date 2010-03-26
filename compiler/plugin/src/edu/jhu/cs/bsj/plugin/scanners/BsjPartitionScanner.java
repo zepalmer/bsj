@@ -24,7 +24,7 @@ public class BsjPartitionScanner extends RuleBasedPartitionScanner
     // normal (non-meta) code is the default
     public final static String JAVA_MULTILINE_COMMENT = "__java_multiline_comment";
     public final static String JAVA_DOC = "__java_javadoc";
-    public final static String META_PROGRAM = "__meta";
+    //public final static String META_PROGRAM = "__meta";
     
     public BsjPartitionScanner() 
     {
@@ -33,7 +33,7 @@ public class BsjPartitionScanner extends RuleBasedPartitionScanner
         // define tokens for documen partitions
         IToken javaDoc = new Token(JAVA_DOC);
         IToken comment = new Token(JAVA_MULTILINE_COMMENT);
-        IToken meta = new Token(META_PROGRAM);
+        //IToken meta = new Token(META_PROGRAM);
         
         List<IRule> rules = new ArrayList<IRule>();
 
@@ -52,8 +52,8 @@ public class BsjPartitionScanner extends RuleBasedPartitionScanner
         rules.add(new MultiLineRule("/*", "*/", comment, (char) 0, true));
         
         // Add rules for meta programs
-        rules.add(new MultiLineRule("[:", ":]", meta, (char) 0, true));
-        rules.add(new EndOfLineRule("@@", meta));
+        //rules.add(new MultiLineRule("[:", ":]", meta, (char) 0, true));
+        //rules.add(new EndOfLineRule("@@", meta));
         
         IPredicateRule[] result= new IPredicateRule[rules.size()];
         rules.toArray(result);

@@ -35,8 +35,7 @@ public class BsjDocumentProvider extends FileDocumentProvider
 					new BsjPartitionScanner(),
 					new String[] {
 						BsjPartitionScanner.JAVA_DOC,
-						BsjPartitionScanner.JAVA_MULTILINE_COMMENT,
-						BsjPartitionScanner.META_PROGRAM});
+						BsjPartitionScanner.JAVA_MULTILINE_COMMENT});
 			partitioner.connect(document);
 			document.setDocumentPartitioner(partitioner);
 		}
