@@ -13,6 +13,8 @@
 
 package edu.jhu.cs.bsj.plugin.editor;
 
+import org.eclipse.jface.text.DefaultIndentLineAutoEditStrategy;
+import org.eclipse.jface.text.IAutoEditStrategy;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.ITextDoubleClickStrategy;
 import org.eclipse.jface.text.TextAttribute;
@@ -34,6 +36,7 @@ import edu.jhu.cs.bsj.plugin.scanners.BsjMetaScanner;
 import edu.jhu.cs.bsj.plugin.scanners.BsjPartitionScanner;
 import edu.jhu.cs.bsj.plugin.scanners.JavadocScanner;
 import edu.jhu.cs.bsj.plugin.strategies.BsjDoubleClickStrategy;
+import edu.jhu.cs.bsj.plugin.strategies.JavaAutoIndentStrategy;
 
 
 public class BsjConfiguration extends SourceViewerConfiguration
@@ -119,6 +122,11 @@ public class BsjConfiguration extends SourceViewerConfiguration
         assistant.setContextInformationPopupBackground(colorProvider.getColor(BsjColorProvider.MULTI_LINE_COMMENT));
 
         return assistant;
+    }
+    
+    public IAutoEditStrategy[] getAutoEditStrategies(ISourceViewer sourceViewer, String contentType) {
+        IAutoEditStrategy strategy= (IDocument.DEFAULT_CONTENT_TYPE.equals(contentType) ? new JavaAutoIndentStrategy() : new DefaultIndentLineAutoEditStrategy());
+        return new IAutoEditStrategy[] { strategy };
     }
 
     public IPresentationReconciler getPresentationReconciler(
