@@ -27,6 +27,7 @@ import org.eclipse.swt.widgets.Display;
  */
 public class BsjColorProvider 
 {
+    //TODO pull these values from JDT    
 	public static final RGB MULTI_LINE_COMMENT = new RGB(0, 180, 0);
 	public static final RGB SINGLE_LINE_COMMENT = new RGB(50, 180, 50);
 	public static final RGB KEYWORD = new RGB(200, 50, 50);

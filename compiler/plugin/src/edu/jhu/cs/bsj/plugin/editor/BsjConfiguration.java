@@ -16,6 +16,8 @@ package edu.jhu.cs.bsj.plugin.editor;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.ITextDoubleClickStrategy;
 import org.eclipse.jface.text.TextAttribute;
+import org.eclipse.jface.text.contentassist.ContentAssistant;
+import org.eclipse.jface.text.contentassist.IContentAssistant;
 import org.eclipse.jface.text.presentation.IPresentationReconciler;
 import org.eclipse.jface.text.presentation.PresentationReconciler;
 import org.eclipse.jface.text.rules.BufferedRuleBasedScanner;
@@ -24,10 +26,14 @@ import org.eclipse.jface.text.rules.Token;
 import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.jface.text.source.SourceViewerConfiguration;
 
+import edu.jhu.cs.bsj.plugin.completion.JavaCompletionProcessor;
+import edu.jhu.cs.bsj.plugin.completion.JavadocCompletionProcessor;
+import edu.jhu.cs.bsj.plugin.completion.MetaCompletionProcessor;
 import edu.jhu.cs.bsj.plugin.scanners.BsjCodeScanner;
 import edu.jhu.cs.bsj.plugin.scanners.BsjMetaScanner;
 import edu.jhu.cs.bsj.plugin.scanners.BsjPartitionScanner;
 import edu.jhu.cs.bsj.plugin.scanners.JavadocScanner;
+import edu.jhu.cs.bsj.plugin.strategies.BsjDoubleClickStrategy;
 
 
 public class BsjConfiguration extends SourceViewerConfiguration
@@ -95,6 +101,24 @@ public class BsjConfiguration extends SourceViewerConfiguration
                     0)));
         }
         return metaScanner;
+    }
+    
+    public IContentAssistant getContentAssistant(ISourceViewer sourceViewer) 
+    {
+        ContentAssistant assistant= new ContentAssistant();
+        assistant.setDocumentPartitioning(getConfiguredDocumentPartitioning(sourceViewer));
+        assistant.setContentAssistProcessor(new JavaCompletionProcessor(), IDocument.DEFAULT_CONTENT_TYPE);
+        assistant.setContentAssistProcessor(new JavadocCompletionProcessor(), BsjPartitionScanner.JAVA_DOC);
+        assistant.setContentAssistProcessor(new MetaCompletionProcessor(), BsjPartitionScanner.META_PROGRAM);
+
+        assistant.enableAutoActivation(true);
+        assistant.setAutoActivationDelay(500);
+        assistant.setProposalPopupOrientation(IContentAssistant.PROPOSAL_OVERLAY);
+        assistant.setContextInformationPopupOrientation(IContentAssistant.CONTEXT_INFO_ABOVE);
+        //TODO fix color
+        assistant.setContextInformationPopupBackground(colorProvider.getColor(BsjColorProvider.MULTI_LINE_COMMENT));
+
+        return assistant;
     }
 
     public IPresentationReconciler getPresentationReconciler(
