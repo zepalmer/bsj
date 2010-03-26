@@ -17,6 +17,7 @@ import org.eclipse.jface.text.DefaultIndentLineAutoEditStrategy;
 import org.eclipse.jface.text.IAutoEditStrategy;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.ITextDoubleClickStrategy;
+import org.eclipse.jface.text.ITextHover;
 import org.eclipse.jface.text.TextAttribute;
 import org.eclipse.jface.text.contentassist.ContentAssistant;
 import org.eclipse.jface.text.contentassist.IContentAssistant;
@@ -27,16 +28,15 @@ import org.eclipse.jface.text.rules.DefaultDamagerRepairer;
 import org.eclipse.jface.text.rules.Token;
 import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.jface.text.source.SourceViewerConfiguration;
-import org.eclipse.ui.texteditor.HippieProposalProcessor;
 
 import edu.jhu.cs.bsj.plugin.completion.JavaCompletionProcessor;
 import edu.jhu.cs.bsj.plugin.completion.JavadocCompletionProcessor;
-import edu.jhu.cs.bsj.plugin.completion.MetaCompletionProcessor;
 import edu.jhu.cs.bsj.plugin.scanners.BsjCodeScanner;
 import edu.jhu.cs.bsj.plugin.scanners.BsjMetaScanner;
 import edu.jhu.cs.bsj.plugin.scanners.BsjPartitionScanner;
 import edu.jhu.cs.bsj.plugin.scanners.JavadocScanner;
 import edu.jhu.cs.bsj.plugin.strategies.BsjDoubleClickStrategy;
+import edu.jhu.cs.bsj.plugin.strategies.BsjTextHover;
 import edu.jhu.cs.bsj.plugin.strategies.JavaAutoIndentStrategy;
 
 
@@ -53,6 +53,7 @@ public class BsjConfiguration extends SourceViewerConfiguration
         this.colorProvider = colorManager;
     }
 
+    @Override
     public String[] getConfiguredContentTypes(ISourceViewer sourceViewer)
     {
         return new String[] { 
@@ -61,6 +62,7 @@ public class BsjConfiguration extends SourceViewerConfiguration
                 BsjPartitionScanner.JAVA_MULTILINE_COMMENT};
     }
 
+    @Override
     public ITextDoubleClickStrategy getDoubleClickStrategy(
             ISourceViewer sourceViewer, String contentType)
     {
@@ -106,12 +108,12 @@ public class BsjConfiguration extends SourceViewerConfiguration
 //        return metaScanner;
 //    }
     
+    @Override
     public IContentAssistant getContentAssistant(ISourceViewer sourceViewer) 
     {
         ContentAssistant assistant= new ContentAssistant();
         assistant.setDocumentPartitioning(getConfiguredDocumentPartitioning(sourceViewer));
-        //assistant.setContentAssistProcessor(new JavaCompletionProcessor(), IDocument.DEFAULT_CONTENT_TYPE);
-        assistant.setContentAssistProcessor(new HippieProposalProcessor(), IDocument.DEFAULT_CONTENT_TYPE);
+        assistant.setContentAssistProcessor(new JavaCompletionProcessor(), IDocument.DEFAULT_CONTENT_TYPE);
         assistant.setContentAssistProcessor(new JavadocCompletionProcessor(), BsjPartitionScanner.JAVA_DOC);
         //assistant.setContentAssistProcessor(new MetaCompletionProcessor(), BsjPartitionScanner.META_PROGRAM);
 
@@ -125,11 +127,20 @@ public class BsjConfiguration extends SourceViewerConfiguration
         return assistant;
     }
     
-    public IAutoEditStrategy[] getAutoEditStrategies(ISourceViewer sourceViewer, String contentType) {
+    @Override
+    public IAutoEditStrategy[] getAutoEditStrategies(ISourceViewer sourceViewer, String contentType) 
+    {
         IAutoEditStrategy strategy= (IDocument.DEFAULT_CONTENT_TYPE.equals(contentType) ? new JavaAutoIndentStrategy() : new DefaultIndentLineAutoEditStrategy());
         return new IAutoEditStrategy[] { strategy };
     }
-
+    
+    @Override
+    public ITextHover getTextHover(ISourceViewer sourceViewer, String contentType) 
+    {
+        return new BsjTextHover();
+    }
+    
+    @Override
     public IPresentationReconciler getPresentationReconciler(
             ISourceViewer sourceViewer)
     {
