@@ -504,6 +504,8 @@ public class BsjNodeManager
 				imports = Collections.emptySet();
 			}
 			Object result = evaluate(expressionNode, imports);
+			// TODO: this does not properly handle primitives - component type might be int
+			// and int.class.isInstance(5) fails because 5 is autoboxed to an Integer
 			if (type.getComponentType() != null && type.getComponentType().isInstance(result))
 			{
 				// Create a single-element array
