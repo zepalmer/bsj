@@ -21,7 +21,7 @@ public class SourceSerializationTask extends AbstractBsjCompilerTask
 {
 	/** The compilation unit to serialize. */
 	private CompilationUnitNode compilationUnitNode;
-	
+
 	public SourceSerializationTask(CompilationUnitNode compilationUnitNode)
 	{
 		super(TaskPriority.SERIALIZE);
@@ -39,12 +39,12 @@ public class SourceSerializationTask extends AbstractBsjCompilerTask
 
 		BsjSourceSerializer serializer = context.getToolkit().getSerializer();
 		String source = serializer.executeCompilationUnitNode(compilationUnitNode, null);
-		
+
 		String className;
 		if (compilationUnitNode.getParent() instanceof PackageNode)
 		{
-			className = ((PackageNode)compilationUnitNode.getParent()).getFullyQualifiedName();
-			if (className == null)
+			className = ((PackageNode) compilationUnitNode.getParent()).getFullyQualifiedName();
+			if (className == null || className.length() == 0)
 			{
 				className = compilationUnitNode.getName();
 			} else
@@ -55,17 +55,17 @@ public class SourceSerializationTask extends AbstractBsjCompilerTask
 		{
 			className = compilationUnitNode.getName();
 		}
-		
+
 		BsjFileObject bsjFileObject = context.getToolkit().getFileManager().getJavaFileForOutput(
 				BsjCompilerLocation.GENERATED_SOURCE_PATH, compilationUnitNode.getName(), Kind.SOURCE, null);
 		bsjFileObject.setCharContent(source);
 		context.addSerializedFile(bsjFileObject);
-		
+
 		if (LOGGER.isTraceEnabled())
 		{
 			LOGGER.trace("Serializing " + className + " as follows: \n" + source);
 		}
-		
+
 	}
 
 }

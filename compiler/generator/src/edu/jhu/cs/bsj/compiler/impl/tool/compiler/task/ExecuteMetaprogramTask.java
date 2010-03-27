@@ -51,7 +51,7 @@ public class ExecuteMetaprogramTask extends AbstractBsjCompilerTask
 			CompilationUnitNode node = it.next();
 			if (!node.isBinary())
 			{
-				context.registerTask(new SourceSerializationTask(node));
+				context.registerTask(new StripMetaAnnotationsTask(node));
 			}
 		}
 	}

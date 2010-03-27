@@ -77,5 +77,13 @@ public interface BsjNodeFactory
 	 */
 	public SingleStaticImportNode makeSingleStaticImportNode(QualifiedNameNode name, BsjSourceLocation startLocation,
 			BsjSourceLocation stopLocation);
+	
+	/**
+	 * Creates a {@link NameNode} based on the specified name string.
+	 * @param name The name argument from which to create a node.
+	 * @return The name node which was created.
+	 * @throws IllegalArgumentException If the provided string was not a valid name.
+	 */
+	public NameNode parseNameNode(String name);
 	/* GEN:stop */
 }

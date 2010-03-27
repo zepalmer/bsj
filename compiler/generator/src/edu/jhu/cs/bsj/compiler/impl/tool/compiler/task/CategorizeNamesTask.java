@@ -38,6 +38,7 @@ public class CategorizeNamesTask extends AbstractBsjCompilerTask
 
 		// TODO: now disambiguate AMBIGUOUS names (JLS v3 §6.5.2)
 
-		context.registerTask(new ExtractMetaprogramsTask(this.compilationUnitNode));
+		// Now enqueue the compilation unit for meta-annotation object instantiation
+		context.registerTask(new InstantiateMetaAnnotationObjectTask(this.compilationUnitNode));
 	}
 }

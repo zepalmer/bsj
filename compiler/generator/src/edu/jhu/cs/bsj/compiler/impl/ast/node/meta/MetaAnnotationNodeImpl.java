@@ -12,7 +12,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.NodeImpl;
-
+import edu.jhu.cs.bsj.compiler.metaannotation.BsjMetaAnnotation;
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public abstract class MetaAnnotationNodeImpl extends NodeImpl implements MetaAnnotationNode
 {
@@ -157,4 +157,24 @@ public abstract class MetaAnnotationNodeImpl extends NodeImpl implements MetaAnn
     }
     
     
+	/**
+	 * The meta-annotation object represented by this AST node.
+	 */
+	private BsjMetaAnnotation metaAnnotationObject = null;
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	public void instantiateMetaAnnotationObject()
+	{
+		this.metaAnnotationObject = getManager().instantiateMetaAnnotationObject(this);
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 */
+	public BsjMetaAnnotation getMetaAnnotationObject()
+	{
+		return this.metaAnnotationObject;
+	}
 }

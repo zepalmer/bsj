@@ -105,9 +105,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
 	// MANUALLY SPECIFIED MAKE METHODS ///////////////////////////////////////
 
 	/**
-	 * Creates a {@link SingleStaticImportNode}. The provided name is interpreted as the full name of the import; that
-	 * is, the name "<tt>java.utils.Arrays.asList</tt>" would be used to create an import for that method by splitting
-	 * the name between its type and final identifier. The default start and stop location are used.
+	 * {@inheritDoc}
 	 */
 	public SingleStaticImportNode makeSingleStaticImportNode(QualifiedNameNode name)
 	{
@@ -115,9 +113,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
 	}
 
 	/**
-	 * Creates a {@link SingleStaticImportNode}. The provided name is interpreted as the full name of the import; that
-	 * is, the name "<tt>java.utils.Arrays.asList</tt>" would be used to create an import for that method by splitting
-	 * the name between its type and final identifier. The specified start and stop locations are used.
+	 * {@inheritDoc}
 	 */
 	public SingleStaticImportNode makeSingleStaticImportNode(QualifiedNameNode name, BsjSourceLocation startLocation,
 			BsjSourceLocation stopLocation)
@@ -125,5 +121,24 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
 		return makeSingleStaticImportNode(name.getBase(), name.getIdentifier(), startLocation, stopLocation);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
+	public NameNode parseNameNode(String name)
+	{
+		String[] components = name.split("\\.");
+		NameNode node = null;
+		for (String component : components)
+		{
+			if (node == null)
+			{
+				node = makeSimpleNameNode(makeIdentifierNode(component), null);
+			} else
+			{
+				node = makeQualifiedNameNode(node, makeIdentifierNode(component), null);
+			}
+		}
+		return node;
+	}
 	/* GEN:stop */
 }

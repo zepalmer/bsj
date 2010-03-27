@@ -3,8 +3,6 @@ package edu.jhu.cs.bsj.compiler.impl.tool.filemanager;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.tools.JavaFileObject;
 import javax.tools.JavaFileObject.Kind;
@@ -73,9 +71,6 @@ public abstract class AbstractLocationManager extends IORegistry implements Loca
 	 */
 	private class LocationClassLoader extends ClassLoader
 	{
-		/** A mapping between class names and the corresponding class objects. */
-		private Map<String,Class<?>> classMap = new HashMap<String, Class<?>>();
-		
 		@Override
 		protected Class<?> findClass(String name) throws ClassNotFoundException
 		{
@@ -105,29 +100,6 @@ public abstract class AbstractLocationManager extends IORegistry implements Loca
 			}
 
 			return super.defineClass(name, classBytes, 0, classBytes.length);
-		}
-
-		@Override
-		protected synchronized Class<?> loadClass(String name, boolean resolve) throws ClassNotFoundException
-		{
-			if (classMap.containsKey(name))
-			{
-				return this.classMap.get(name);
-			}
-			
-			Class<?> ret = null;
-			// Always try our own loader first
-			try
-			{
-				ret = findClass(name);
-				if (resolve)
-					resolveClass(ret);
-			} catch (ClassNotFoundException e)
-			{
-				// Delegate to the default implementation
-				ret = super.loadClass(name, resolve);
-			}
-			return ret;
 		}
 	}
 }
