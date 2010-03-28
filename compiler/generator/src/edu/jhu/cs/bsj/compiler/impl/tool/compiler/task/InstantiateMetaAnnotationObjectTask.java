@@ -2,7 +2,7 @@ package edu.jhu.cs.bsj.compiler.impl.tool.compiler.task;
 
 import java.io.IOException;
 
-import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
+import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.util.BsjTypedNodeNoOpVisitor;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.MetacompilationContext;
@@ -14,13 +14,13 @@ import edu.jhu.cs.bsj.compiler.impl.tool.compiler.MetacompilationContext;
 public class InstantiateMetaAnnotationObjectTask extends AbstractBsjCompilerTask
 {
 	/** The node this task will use. */
-	private CompilationUnitNode root;
+	private Node root;
 	
 	/**
 	 * Creates an instance of this task.
 	 * @param root The node representing the root of the AST to walk.
 	 */
-	public InstantiateMetaAnnotationObjectTask(CompilationUnitNode root)
+	public InstantiateMetaAnnotationObjectTask(Node root)
 	{
 		super(TaskPriority.CREATE_METAANNOTATION_OBJECT);
 		this.root = root;

@@ -2,7 +2,7 @@ package edu.jhu.cs.bsj.compiler.impl.tool.compiler.task;
 
 import java.io.IOException;
 
-import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
+import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.MetacompilationContext;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.names.InitialNameCategorizationVisitor;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.names.PackageOrTypeNameCategorizationVisitor;
@@ -15,13 +15,13 @@ import edu.jhu.cs.bsj.compiler.impl.tool.compiler.names.PackageOrTypeNameCategor
  */
 public class CategorizeNamesTask extends AbstractBsjCompilerTask
 {
-	/** The compilation unit for which name categorization should occur. */
-	private CompilationUnitNode compilationUnitNode;
+	/** The node for which name categorization should occur. */
+	private Node node;
 
-	public CategorizeNamesTask(CompilationUnitNode compilationUnitNode)
+	public CategorizeNamesTask(Node node)
 	{
 		super(TaskPriority.CATEGORIZE);
-		this.compilationUnitNode = compilationUnitNode;
+		this.node = node;
 	}
 
 	@Override
@@ -29,16 +29,16 @@ public class CategorizeNamesTask extends AbstractBsjCompilerTask
 	{
 		// Assign initial name categories (JLS v3 §6.5.1)
 		InitialNameCategorizationVisitor initialNameCategorizationVisitor = new InitialNameCategorizationVisitor();
-		this.compilationUnitNode.receiveTyped(initialNameCategorizationVisitor);
+		this.node.receiveTyped(initialNameCategorizationVisitor);
 
 		// Disambiguate PACKAGE_OR_TYPE names (JLS v3 §6.5.3)
 		PackageOrTypeNameCategorizationVisitor packageOrTypeNameCategorizationVisitor = new PackageOrTypeNameCategorizationVisitor(
 				context.getToolkit().getNodeFactory());
-		this.compilationUnitNode.receiveTyped(packageOrTypeNameCategorizationVisitor);
+		this.node.receiveTyped(packageOrTypeNameCategorizationVisitor);
 
 		// TODO: now disambiguate AMBIGUOUS names (JLS v3 §6.5.2)
 
 		// Now enqueue the compilation unit for meta-annotation object instantiation
-		context.registerTask(new InstantiateMetaAnnotationObjectTask(this.compilationUnitNode));
+		context.registerTask(new InstantiateMetaAnnotationObjectTask(this.node));
 	}
 }

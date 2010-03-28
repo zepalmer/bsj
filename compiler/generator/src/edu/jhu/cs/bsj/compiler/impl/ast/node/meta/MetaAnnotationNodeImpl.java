@@ -167,7 +167,10 @@ public abstract class MetaAnnotationNodeImpl extends NodeImpl implements MetaAnn
 	 */
 	public void instantiateMetaAnnotationObject()
 	{
-		this.metaAnnotationObject = getManager().instantiateMetaAnnotationObject(this);
+		if (this.metaAnnotationObject == null)
+		{
+			this.metaAnnotationObject = getManager().instantiateMetaAnnotationObject(this);
+		}
 	}
 	
 	/**

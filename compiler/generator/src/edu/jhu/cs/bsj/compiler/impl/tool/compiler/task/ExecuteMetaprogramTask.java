@@ -79,8 +79,14 @@ public class ExecuteMetaprogramTask extends AbstractBsjCompilerTask
 		Node replacement = profile.getAnchor().getReplacement();
 		profile.getAnchor().getParent().replace(profile.getAnchor(), replacement);
 
-		// Schedule a task to walk over the replacement node and extract all of its descendent metaprograms
-		context.registerTask(new ExtractMetaprogramsTask(replacement));
+		// Pass the affected part of the AST back to allow name analysis, etc.
+		// TODO: what if more than just this compilation unit was changed? Need name analysis on inserted CUs too
+		Node target = replacement.getNearestAncestorOfType(CompilationUnitNode.class);
+		if (target == null)
+		{
+			target = replacement.getFurthestAncestor();
+		}
+		context.registerTask(new CategorizeNamesTask(target));
 
 		// Re-enqueue this task so we can execute the next metaprogram when the time comes (which is probably right now)
 		context.registerTask(this);

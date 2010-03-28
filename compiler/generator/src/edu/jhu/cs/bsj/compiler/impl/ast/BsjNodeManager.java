@@ -24,6 +24,7 @@ import org.apache.log4j.Logger;
 import edu.jhu.cs.bsj.compiler.BsjServiceRegistry;
 import edu.jhu.cs.bsj.compiler.ast.AccessModifier;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
+import edu.jhu.cs.bsj.compiler.ast.NameCategory;
 import edu.jhu.cs.bsj.compiler.ast.NodePermission;
 import edu.jhu.cs.bsj.compiler.ast.exception.InsufficientPermissionException;
 import edu.jhu.cs.bsj.compiler.ast.exception.MetaprogramConflictException;
@@ -358,45 +359,44 @@ public class BsjNodeManager
 		}
 
 		// Find most base name of meta-annotation's type
-		String baseName;
+		NameNode nameNode = node.getAnnotationType().getName();
 		NameNode baseNameNode = node.getAnnotationType().getName();
-		String suffix = "";
 		while (baseNameNode instanceof QualifiedNameNode)
 		{
-			suffix = "." + baseNameNode.getIdentifier().getIdentifier() + suffix;
 			baseNameNode = ((QualifiedNameNode) baseNameNode).getBase();
 		}
-		baseName = baseNameNode.getIdentifier().getIdentifier();
 
 		Class<?> clazz = null;
 
-		// Next, see if we can find a suitable class using a single type import
-		for (ImportNode importNode : imports)
+		// If the base name is a type, then an import might apply
+		if (baseNameNode.getCategory().equals(NameCategory.TYPE))
 		{
-			if (importNode instanceof ImportSingleTypeNode || importNode instanceof SingleStaticImportNode)
-			{
-				if (importNode.getName().getIdentifier().getIdentifier().equals(baseName))
-				{
-					String className = importNode.getName().getNameString() + suffix;
-					clazz = tryClass(className);
-					if (clazz != null)
-						break;
-				}
-			}
-		}
-
-		if (clazz == null)
-		{
-			// Didn't find anything direct. Let's look at the on-demand imports
+			// Next, see if we can find a suitable class using a single type import
 			for (ImportNode importNode : imports)
 			{
-				if (importNode instanceof ImportOnDemandNode || importNode instanceof StaticImportOnDemandNode)
+				if (importNode instanceof ImportSingleTypeNode || importNode instanceof SingleStaticImportNode)
 				{
-					String className = importNode.getName().getNameString() + "."
-							+ node.getAnnotationType().getName().getNameString();
-					clazz = tryClass(className);
-					if (clazz != null)
-						break;
+					if (importNode.getName().getIdentifier().getIdentifier().equals(
+							baseNameNode.getIdentifier().getIdentifier()))
+					{
+						clazz = tryClass(importNode.getName(), nameNode, true);
+						if (clazz != null)
+							break;
+					}
+				}
+			}
+
+			if (clazz == null)
+			{
+				// Didn't find anything direct. Let's look at the on-demand imports
+				for (ImportNode importNode : imports)
+				{
+					if (importNode instanceof ImportOnDemandNode || importNode instanceof StaticImportOnDemandNode)
+					{
+						clazz = tryClass(importNode.getName(), nameNode, false);
+						if (clazz != null)
+							break;
+					}
 				}
 			}
 		}
@@ -404,7 +404,7 @@ public class BsjNodeManager
 		if (clazz == null)
 		{
 			// The imports were no help. Does the class exist in the base package?
-			clazz = tryClass(node.getAnnotationType().getName().getNameString());
+			clazz = tryClass(null, node.getAnnotationType().getName(), false);
 		}
 
 		// If we don't have a class yet, it doesn't exist.
@@ -428,20 +428,77 @@ public class BsjNodeManager
 	/**
 	 * Attempts to obtain a class on the metaprogram classpath of the specified name.
 	 * 
-	 * @param name The name of the class.
+	 * @param importNode The import name to consider or <code>null</code> for no import name.
+	 * @param name The name of the type to consider.
+	 * @param ignoreLast <code>true</code> to ignore the last component of the import's name.
 	 * @return The class if it is found; <code>null</code> if it is not.
 	 */
-	private Class<?> tryClass(String name)
+	private Class<?> tryClass(NameNode importName, NameNode name, boolean ignoreLast)
 	{
-		// TODO: this is assuming that the name terminates in a single type (foo.bar.Baz) rather than an inner class
-		// (foo.Bar.Baz). The correct binary name for the latter case is "foo.Bar$Baz" and it's our job to make sure
-		// that we translate for the classloader. That means we have to know what parts of this name are package and
-		// what parts are class...
+		// Create a list of names to consider in order from right to left in the name string
+		List<NameNode> names;
+		if (importName == null)
+		{
+			names = Arrays.asList(name);
+		} else
+		{
+			if (ignoreLast)
+			{
+				if (importName instanceof QualifiedNameNode)
+				{
+					names= Arrays.asList(name, ((QualifiedNameNode)importName).getBase());
+				} else
+				{
+					names = Arrays.asList(name);
+				}
+			} else
+			{
+				names = Arrays.asList(name, importName);
+			}
+		}
+		
+		// Set up loop variables
+		boolean lastWasType = false;
+		StringBuilder sb = new StringBuilder();
+		
+		// For each name, remove the components and build the binary name appropriately
+		for (NameNode nameNode : names)
+		{
+			while (nameNode != null)
+			{
+				if (sb.length()>0)
+				{
+					if (lastWasType)
+					{
+						sb.insert(0, '$');
+					} else
+					{
+						sb.insert(0, '.');
+					}
+				}
+				
+				sb.insert(0, nameNode.getIdentifier().getIdentifier());
+				lastWasType = nameNode.getCategory().equals(NameCategory.TYPE);
+				
+				if (nameNode instanceof QualifiedNameNode)
+				{
+					nameNode = ((QualifiedNameNode)nameNode).getBase();
+				} else
+				{
+					nameNode = null;
+				}
+			}
+		}
+		
+		// Get the binary name
+		String binaryName = sb.toString();
+		
+		// Load the class by that name
 		try
 		{
 			ClassLoader loader = this.toolkit.getFileManager().getLocationManager(
 					BsjCompilerLocation.METAPROGRAM_CLASSPATH).getClassLoader();
-			return loader.loadClass(name);
+			return loader.loadClass(binaryName);
 		} catch (ClassNotFoundException e)
 		{
 			return null;
