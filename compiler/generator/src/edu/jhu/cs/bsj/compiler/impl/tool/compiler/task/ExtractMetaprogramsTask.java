@@ -37,7 +37,10 @@ public class ExtractMetaprogramsTask extends AbstractBsjCompilerTask
 		// Handle each anchor in turn
 		for (MetaprogramAnchorNode<?> anchor : anchors)
 		{
-			context.registerTask(new CompileMetaprogramTask(anchor));
+			if (anchor.getMetaprogram() != null)
+			{
+				context.registerTask(new CompileMetaprogramTask(anchor));
+			}
 		}
 	}
 
