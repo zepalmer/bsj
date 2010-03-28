@@ -7,7 +7,80 @@
 	#target a;
 	System.out.println("ALPHA");
 	BsjNodeFactory factory = context.getFactory();
-	context.getAnchor().setReplacement(factory.makeEnumDeclarationNode(factory.makeEnumModifiersNode(AccessModifier.PACKAGE, false, factory.makeAnnotationListNode(java.util.Arrays.<AnnotationNode>asList(), new BsjSourceLocation("<unknown>", 1, 1), new BsjSourceLocation("<unknown>", 1, 1)), new BsjSourceLocation("<unknown>", 1, 1), new BsjSourceLocation("<unknown>", 1, 1)), factory.makeDeclaredTypeListNode(java.util.Arrays.<DeclaredTypeNode>asList(), new BsjSourceLocation("<unknown>", 1, 1), new BsjSourceLocation("<unknown>", 1, 1)), factory.makeEnumBodyNode(factory.makeEnumConstantDeclarationListNode(java.util.Arrays.<EnumConstantDeclarationNode>asList(factory.makeEnumConstantDeclarationNode(factory.makeAnnotationListNode(java.util.Arrays.<AnnotationNode>asList(), new BsjSourceLocation("<unknown>", 1, 10), new BsjSourceLocation("<unknown>", 1, 10)), factory.makeIdentifierNode("A", new BsjSourceLocation("<unknown>", 1, 10), new BsjSourceLocation("<unknown>", 1, 11)), factory.makeExpressionListNode(java.util.Arrays.<ExpressionNode>asList(), new BsjSourceLocation("<unknown>", 1, 10), new BsjSourceLocation("<unknown>", 1, 10)), null, null, new BsjSourceLocation("<unknown>", 1, 10), new BsjSourceLocation("<unknown>", 1, 11)), factory.makeEnumConstantDeclarationNode(factory.makeAnnotationListNode(java.util.Arrays.<AnnotationNode>asList(), new BsjSourceLocation("<unknown>", 1, 13), new BsjSourceLocation("<unknown>", 1, 13)), factory.makeIdentifierNode("B", new BsjSourceLocation("<unknown>", 1, 13), new BsjSourceLocation("<unknown>", 1, 14)), factory.makeExpressionListNode(java.util.Arrays.<ExpressionNode>asList(), new BsjSourceLocation("<unknown>", 1, 13), new BsjSourceLocation("<unknown>", 1, 13)), null, null, new BsjSourceLocation("<unknown>", 1, 13), new BsjSourceLocation("<unknown>", 1, 14))), new BsjSourceLocation("<unknown>", 1, 10), new BsjSourceLocation("<unknown>", 1, 14)), factory.makeClassMemberListNode(java.util.Arrays.<ClassMemberNode>asList(), new BsjSourceLocation("<unknown>", 1, 8), new BsjSourceLocation("<unknown>", 1, 8)), new BsjSourceLocation("<unknown>", 1, 8), new BsjSourceLocation("<unknown>", 1, 16)), factory.makeIdentifierNode("E", new BsjSourceLocation("<unknown>", 1, 6), new BsjSourceLocation("<unknown>", 1, 7)), null, new BsjSourceLocation("<unknown>", 1, 1), new BsjSourceLocation("<unknown>", 1, 16)));
+	context.getAnchor().setReplacement(factory.makeEnumDeclarationNode(
+			factory.makeEnumModifiersNode(
+					AccessModifier.PACKAGE,
+					false,
+					factory.makeMetaAnnotationListNode(java.util.Arrays.<MetaAnnotationNode>asList(),
+							new BsjSourceLocation("<unknown>", 1, 1),
+							new BsjSourceLocation("<unknown>", 1, 1)),
+					factory.makeAnnotationListNode(java.util.Arrays.<AnnotationNode>asList(),
+							new BsjSourceLocation("<unknown>", 1, 1),
+							new BsjSourceLocation("<unknown>", 1, 1)),
+					new BsjSourceLocation("<unknown>", 1, 1), new BsjSourceLocation("<unknown>", 1, 1)),
+			factory.makeDeclaredTypeListNode(
+					java.util.Arrays.<DeclaredTypeNode>asList(),
+					new BsjSourceLocation("<unknown>", 1, 1), new BsjSourceLocation("<unknown>", 1, 1)),
+			factory.makeEnumBodyNode(
+					factory.makeEnumConstantDeclarationListNode(
+							java.util.Arrays.<EnumConstantDeclarationNode>asList(
+									factory.makeEnumConstantDeclarationNode(
+											factory.makeMetaAnnotationListNode(
+													java.util.Arrays.<MetaAnnotationNode>asList(),
+													new BsjSourceLocation("<unknown>", 1, 10),
+													new BsjSourceLocation("<unknown>", 1, 10)),
+											factory.makeAnnotationListNode(
+													java.util.Arrays.<AnnotationNode>asList(),
+													new BsjSourceLocation("<unknown>", 1, 10),
+													new BsjSourceLocation("<unknown>", 1, 10)),
+											factory.makeIdentifierNode(
+													"A",
+													new BsjSourceLocation("<unknown>", 1, 10),
+													new BsjSourceLocation("<unknown>", 1, 11)),
+											factory.makeExpressionListNode(
+													java.util.Arrays.<ExpressionNode>asList(),
+													new BsjSourceLocation("<unknown>", 1, 10),
+													new BsjSourceLocation("<unknown>", 1, 10)),
+											null,
+											null,
+											new BsjSourceLocation("<unknown>", 1, 10),
+											new BsjSourceLocation("<unknown>", 1, 11)),
+									factory.makeEnumConstantDeclarationNode(
+											factory.makeMetaAnnotationListNode(
+													java.util.Arrays.<MetaAnnotationNode>asList(),
+													new BsjSourceLocation("<unknown>", 1, 10),
+													new BsjSourceLocation("<unknown>", 1, 10)),
+											factory.makeAnnotationListNode(
+													java.util.Arrays.<AnnotationNode>asList(),
+													new BsjSourceLocation("<unknown>", 1, 13),
+													new BsjSourceLocation("<unknown>", 1, 13)),
+											factory.makeIdentifierNode(
+													"B",
+													new BsjSourceLocation("<unknown>", 1, 13),
+													new BsjSourceLocation("<unknown>", 1, 14)),
+											factory.makeExpressionListNode(
+													java.util.Arrays.<ExpressionNode>asList(),
+													new BsjSourceLocation("<unknown>", 1, 13),
+													new BsjSourceLocation("<unknown>", 1, 13)),
+											null,
+											null,
+											new BsjSourceLocation("<unknown>", 1, 13),
+											new BsjSourceLocation("<unknown>", 1, 14))),
+									new BsjSourceLocation("<unknown>", 1, 10),
+									new BsjSourceLocation("<unknown>", 1, 14)),
+							factory.makeClassMemberListNode(
+									java.util.Arrays.<ClassMemberNode>asList(),
+									new BsjSourceLocation("<unknown>", 1, 8),
+									new BsjSourceLocation("<unknown>", 1, 8)),
+							new BsjSourceLocation("<unknown>", 1, 8),
+							new BsjSourceLocation("<unknown>", 1, 16)),
+					factory.makeIdentifierNode(
+							"E",
+							new BsjSourceLocation("<unknown>", 1, 6),
+							new BsjSourceLocation("<unknown>", 1, 7)),
+					null,
+					new BsjSourceLocation("<unknown>", 1, 1),
+					new BsjSourceLocation("<unknown>", 1, 16)));
 :]
 
 public class BsjClass
