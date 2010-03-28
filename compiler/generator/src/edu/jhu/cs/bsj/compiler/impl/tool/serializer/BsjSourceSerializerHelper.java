@@ -903,7 +903,21 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 		p.print("if (");
 		node.getCondition().executeOperation(this, p);
 		p.print(")\n");
+		// Special grouping case - if the immediate child statement is also an if node, the child does not have an
+		// else clause, and we do then we must introduce a block to make sure that the dangling else works correctly
+		boolean dangingElse = (node.getElseStatement() != null && node.getThenStatement() instanceof IfNode &&
+				((IfNode)(node.getThenStatement())).getElseStatement() == null);
+		if (dangingElse)
+		{
+			p.println("{");
+			p.incPrependCount();
+		}
 		node.getThenStatement().executeOperation(this, p);
+		if (dangingElse)
+		{
+			p.decPrependCount();
+			p.println("}");
+		}
 		if (node.getElseStatement() != null)
 		{
 			p.print(" else\n");
