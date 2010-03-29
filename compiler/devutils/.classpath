@@ -7,7 +7,7 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/BSJ Generator"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/BSJ Parser"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/Source Generator"/>
-	<classpathentry kind="lib" path="lib/log4j.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/BSJ Utilities"/>
+	<classpathentry kind="lib" path="lib/log4j-1.2.15.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
