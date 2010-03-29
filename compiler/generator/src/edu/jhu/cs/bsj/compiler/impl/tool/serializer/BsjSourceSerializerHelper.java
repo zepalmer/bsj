@@ -19,6 +19,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationElementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationExpressionValueNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaAnnotationValueNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationValueListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramDependsNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportListNode;
@@ -1768,6 +1769,14 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 			PrependablePrintStream p)
 	{
 		node.getAnnotation().executeOperation(this, p);
+		return null;
+	}
+
+	@Override
+	public Void executeMetaAnnotationMetaprogramAnchorNode(MetaAnnotationMetaprogramAnchorNode node,
+			PrependablePrintStream p)
+	{
+		// meta-annotation metaprogram anchors are invisible and have no contents
 		return null;
 	}
 

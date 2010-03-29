@@ -1,5 +1,6 @@
 /* GEN:headerstart */
 import edu.jhu.cs.bsj.compiler.metaannotation.*;
+import edu.jhu.cs.bsj.compiler.metaprogram.*;
 /* GEN:headerstop */
 
 public class MetaAnnotationNodeImpl implements MetaAnnotationNode
@@ -9,7 +10,7 @@ public class MetaAnnotationNodeImpl implements MetaAnnotationNode
 	 * The meta-annotation object represented by this AST node.
 	 */
 	private BsjMetaAnnotation metaAnnotationObject = null;
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -18,9 +19,17 @@ public class MetaAnnotationNodeImpl implements MetaAnnotationNode
 		if (this.metaAnnotationObject == null)
 		{
 			this.metaAnnotationObject = getManager().instantiateMetaAnnotationObject(this);
+			if (this.metaAnnotationObject instanceof BsjMetaAnnotationMetaprogram)
+			{
+				this.metaprogramAnchor = getManager().instantiateMetaAnnotationMetaprogramAnchor(this);
+				if (this.metaprogramAnchor instanceof NodeImpl)
+				{
+					((NodeImpl)this.metaprogramAnchor).setParent(this);
+				}
+			}
 		}
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */

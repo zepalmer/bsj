@@ -5376,7 +5376,7 @@ lexicalLiteral returns [LiteralNode<?> ret]
     |   
         NULL
         {
-            $ret = factory.makeNullLiteralNode(null);
+            $ret = factory.makeNullLiteralNode();
         }
     ;
 

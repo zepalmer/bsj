@@ -12,6 +12,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.UnparameterizedTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationElementListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.NormalMetaAnnotationNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
@@ -33,12 +34,13 @@ public class NormalMetaAnnotationNodeImpl extends MetaAnnotationNodeImpl impleme
     public NormalMetaAnnotationNodeImpl(
             MetaAnnotationElementListNode arguments,
             UnparameterizedTypeNode annotationType,
+            MetaAnnotationMetaprogramAnchorNode metaprogramAnchor,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
             BsjNodeManager manager,
             boolean binary)
     {
-        super(annotationType, startLocation, stopLocation, manager, binary);
+        super(annotationType, metaprogramAnchor, startLocation, stopLocation, manager, binary);
         setArguments(arguments, false);
     }
     
@@ -156,6 +158,9 @@ public class NormalMetaAnnotationNodeImpl extends MetaAnnotationNodeImpl impleme
         sb.append(',');
         sb.append("annotationType=");
         sb.append(this.getAnnotationType() == null? "null" : this.getAnnotationType().getClass().getSimpleName());
+        sb.append(',');
+        sb.append("metaprogramAnchor=");
+        sb.append(this.getMetaprogramAnchor() == null? "null" : this.getMetaprogramAnchor().getClass().getSimpleName());
         sb.append(',');
         sb.append("startLocation=");
         sb.append(String.valueOf(this.getStartLocation()) + ":" + (this.getStartLocation() != null ? this.getStartLocation().getClass().getSimpleName() : "null"));

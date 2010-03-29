@@ -9,7 +9,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.AnonymousClassMemberNode;
  * A node representing a metaprogram found in an anonymous class body.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public interface AnonymousClassMemberMetaprogramAnchorNode extends MetaprogramAnchorNode<AnonymousClassMemberNode>, AnonymousClassMemberNode
+public interface AnonymousClassMemberMetaprogramAnchorNode extends ExplicitMetaprogramAnchorNode<AnonymousClassMemberNode>, AnonymousClassMemberNode
 {
     /**
      * Generates a deep copy of this node.

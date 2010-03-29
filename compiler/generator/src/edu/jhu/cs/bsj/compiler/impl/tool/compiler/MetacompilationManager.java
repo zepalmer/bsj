@@ -4,9 +4,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Set;
+import java.util.WeakHashMap;
 
 import javax.tools.DiagnosticListener;
 import javax.tools.JavaFileObject;
@@ -15,6 +17,7 @@ import org.apache.log4j.Logger;
 
 import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
 import edu.jhu.cs.bsj.compiler.ast.node.PackageNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.dependency.DependencyManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.task.AbstractCompilationUnitBuilderTask;
@@ -75,6 +78,10 @@ public class MetacompilationManager implements MetacompilationContext
 	 * The list of source files that this metacompilation manager has serialized.
 	 */
 	private List<BsjFileObject> serializedFiles;
+	/**
+	 * The set of observed metaprogram anchor nodes stored as a presence map.
+	 */
+	private Map<MetaprogramAnchorNode<?>,Object> observedAnchors;
 
 	/**
 	 * Creates a new compilation unit manager.
@@ -96,6 +103,7 @@ public class MetacompilationManager implements MetacompilationContext
 
 		this.rootPackage = toolkit.getNodeFactory().makePackageNode(null);
 		this.serializedFiles = new ArrayList<BsjFileObject>();
+		this.observedAnchors = new WeakHashMap<MetaprogramAnchorNode<?>,Object>();
 
 		this.priorityQueue.offer(new ExecuteMetaprogramTask());
 	}
@@ -327,5 +335,15 @@ public class MetacompilationManager implements MetacompilationContext
 	public void addSerializedFile(BsjFileObject file)
 	{
 		this.serializedFiles.add(file);
+	}
+
+	@Override
+	public boolean addObservedAnchor(MetaprogramAnchorNode<?> anchor)
+	{
+		if (this.observedAnchors.containsKey(anchor))
+			return false;
+		
+		this.observedAnchors.put(anchor, null);
+		return true;
 	}
 }

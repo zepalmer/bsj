@@ -1,30 +1,79 @@
-package edu.jhu.cs.bsj.compiler.impl.ast.node;
+package edu.jhu.cs.bsj.compiler.impl.ast.node.meta;
 
 import java.util.List;
 
 import javax.annotation.Generated;
 
-import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
-import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
-import edu.jhu.cs.bsj.compiler.ast.node.NullLiteralNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.ExplicitMetaprogramAnchorNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramNode;
+import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.node.NodeImpl;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public class NullLiteralNodeImpl extends LiteralNodeImpl<Void> implements NullLiteralNode
+public abstract class ExplicitMetaprogramAnchorNodeImpl<T extends Node> extends MetaprogramAnchorNodeImpl<T> implements ExplicitMetaprogramAnchorNode<T>
 {
+    /** The metaprogram on this node. */
+    private MetaprogramNode metaprogram;
+    
+    private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
+    {
+        /** Attribute for the metaprogram property. */
+        METAPROGRAM,
+    }
+    
     /** General constructor. */
-    public NullLiteralNodeImpl(
-            Void value,
+    protected ExplicitMetaprogramAnchorNodeImpl(
+            MetaprogramNode metaprogram,
+            T replacement,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
             BsjNodeManager manager,
             boolean binary)
     {
-        super(value, startLocation, stopLocation, manager, binary);
+        super(replacement, startLocation, stopLocation, manager, binary);
+        setMetaprogram(metaprogram, false);
+    }
+    
+    /**
+     * Gets the metaprogram on this node.
+     * @return The metaprogram on this node.
+     */
+    public MetaprogramNode getMetaprogram()
+    {
+        recordAccess(LocalAttribute.METAPROGRAM, Attribute.AccessType.READ);
+        return this.metaprogram;
+    }
+    
+    /**
+     * Changes the metaprogram on this node.
+     * @param metaprogram The metaprogram on this node.
+     */
+    public void setMetaprogram(MetaprogramNode metaprogram)
+    {
+            setMetaprogram(metaprogram, true);
+    }
+    
+    private void setMetaprogram(MetaprogramNode metaprogram, boolean checkPermissions)
+    {
+        if (checkPermissions)
+        {
+            getManager().assertMutatable(this);
+        }
+        recordAccess(LocalAttribute.METAPROGRAM, Attribute.AccessType.STRONG_WRITE);
+        if (this.metaprogram instanceof NodeImpl)
+        {
+            ((NodeImpl)this.metaprogram).setParent(null);
+        }
+        this.metaprogram = metaprogram;
+        if (this.metaprogram instanceof NodeImpl)
+        {
+            ((NodeImpl)this.metaprogram).setParent(this);
+        }
     }
     
     /**
@@ -38,6 +87,10 @@ public class NullLiteralNodeImpl extends LiteralNodeImpl<Void> implements NullLi
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
+        if (this.metaprogram != null)
+        {
+            this.metaprogram.receive(visitor);
+        }
     }
     
     /**
@@ -51,21 +104,25 @@ public class NullLiteralNodeImpl extends LiteralNodeImpl<Void> implements NullLi
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
+        if (this.metaprogram != null)
+        {
+            this.metaprogram.receiveTyped(visitor);
+        }
     }
     
     @Override
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
         visitor.visitStartBegin(this);
-        visitor.visitNullLiteralNodeStart(this, true);
-        visitor.visitLiteralNodeStart(this);
+        visitor.visitExplicitMetaprogramAnchorNodeStart(this);
+        visitor.visitMetaprogramAnchorNodeStart(this);
         visitor.visitNodeStart(this);
         visitor.visitStartEnd(this);
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
         visitor.visitNodeStop(this);
-        visitor.visitLiteralNodeStop(this);
-        visitor.visitNullLiteralNodeStop(this, true);
+        visitor.visitMetaprogramAnchorNodeStop(this);
+        visitor.visitExplicitMetaprogramAnchorNodeStop(this);
         visitor.visitStopEnd(this);
     }
     
@@ -78,6 +135,7 @@ public class NullLiteralNodeImpl extends LiteralNodeImpl<Void> implements NullLi
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
+        list.add(getMetaprogram());
         return list;
     }
     
@@ -90,8 +148,8 @@ public class NullLiteralNodeImpl extends LiteralNodeImpl<Void> implements NullLi
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
-        sb.append("value=");
-        sb.append(String.valueOf(this.getValue()) + ":" + (this.getValue() != null ? this.getValue().getClass().getSimpleName() : "null"));
+        sb.append("metaprogram=");
+        sb.append(this.getMetaprogram() == null? "null" : this.getMetaprogram().getClass().getSimpleName());
         sb.append(',');
         sb.append("startLocation=");
         sb.append(String.valueOf(this.getStartLocation()) + ":" + (this.getStartLocation() != null ? this.getStartLocation().getClass().getSimpleName() : "null"));
@@ -102,43 +160,5 @@ public class NullLiteralNodeImpl extends LiteralNodeImpl<Void> implements NullLi
         return sb.toString();
     }
     
-    /**
-     * Executes an operation on this node.
-     * @param operation The operation to perform.
-     * @param p The parameter to pass to the operation.
-     * @return The result of the operation.
-     */
-    @Override
-    public <P,R> R executeOperation(BsjNodeOperation<P,R> operation, P p)
-    {
-        return operation.executeNullLiteralNode(this, p);
-    }
-    
-    /**
-     * Generates a deep copy of this node.
-     * @param factory The node factory to use to create the deep copy.
-     * @return The resulting deep copy node.
-     */
-    @Override
-    public NullLiteralNode deepCopy(BsjNodeFactory factory)
-    {
-        return factory.makeNullLiteralNode(
-                getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
-                getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
-    }
-    /**
-     * Performs replacement for this node.
-     * @param before The node to replace.
-     * @param after The node to replace the <tt>before</tt> node.
-     * @return <code>true</code> if the replacement was successful; <code>false</code> if the
-     *         specified <tt>before</tt> node is not a child of this node.
-     */
-    public boolean replace(Node before, Node after)
-    {
-        if (before==null)
-            throw new IllegalArgumentException("Cannot replace node with before value of null.");
-        
-        return false;
-    }
     
 }

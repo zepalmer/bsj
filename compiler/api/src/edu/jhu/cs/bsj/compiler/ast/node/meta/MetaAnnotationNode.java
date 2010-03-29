@@ -8,7 +8,8 @@ import edu.jhu.cs.bsj.compiler.ast.node.UnparameterizedTypeNode;
 import edu.jhu.cs.bsj.compiler.metaannotation.BsjMetaAnnotation;
 /**
  * Acts as a base class for meta-annotation nodes.  Subclasses distinguish between the different types of
- * meta-annotation sugar.
+ * meta-annotation sugar.  The <tt>metaprogramAnchor</tt> field is used when the meta-annotation for this
+ * node represents a metaprogram; otherwise, it is <tt>null</tt>.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public interface MetaAnnotationNode extends Node
@@ -24,6 +25,12 @@ public interface MetaAnnotationNode extends Node
      * @param annotationType The annotation type.
      */
     public void setAnnotationType(UnparameterizedTypeNode annotationType);
+    
+    /**
+     * Gets the anchor of a metaprogram attached to this node.
+     * @return The anchor of a metaprogram attached to this node.
+     */
+    public MetaAnnotationMetaprogramAnchorNode getMetaprogramAnchor();
     
     /**
      * Generates a deep copy of this node.

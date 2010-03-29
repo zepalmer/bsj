@@ -120,5 +120,13 @@ public class BsjNodeFactoryDecorator implements BsjNodeFactory
     	return this.factory.makeSingleStaticImportNode(name, startLocation, stopLocation);
     }
 
+	/**
+	 * {@inheritDoc}
+	 */
+	public NameNode parseNameNode(String name)
+	{
+		return this.factory.parseNameNode(name);
+	}
+
 /* GEN:stop */
 }

@@ -11,7 +11,6 @@ import java.util.Map;
 
 import edu.jhu.cs.bsj.compiler.BsjServiceRegistry;
 import edu.jhu.cs.bsj.compiler.ast.AccessModifier;
-import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceSerializer;
 import edu.jhu.cs.bsj.compiler.ast.MetaprogramLocalMode;
 import edu.jhu.cs.bsj.compiler.ast.MetaprogramPackageMode;
@@ -30,15 +29,13 @@ import edu.jhu.cs.bsj.compiler.ast.node.PackageDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.QualifiedNameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.SimpleNameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeDeclarationNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramAnchorNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.ExplicitMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramPreambleNode;
 import edu.jhu.cs.bsj.compiler.impl.metaprogram.ContextImpl;
 import edu.jhu.cs.bsj.compiler.impl.metaprogram.Metaprogram;
-import edu.jhu.cs.bsj.compiler.impl.tool.compiler.MetacompilationContext;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.MetaprogramProfile;
-import edu.jhu.cs.bsj.compiler.impl.tool.compiler.operations.EnclosingNameNodeOperation;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.operations.TypeDeclarationLocatingNodeOperation;
 import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.InMemoryLocationManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.LocationMappedFileManager;
@@ -52,100 +49,34 @@ import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjFileObject;
 import edu.jhu.cs.bsj.compiler.tool.filemanager.LocationManager;
 
 /**
- * This compilation task compiles a metaprogram using its anchor node.
+ * This compilation task compiles an explicit metaprogram using its anchor node.
  * 
  * @author Zachary Palmer
  */
-public class CompileMetaprogramTask extends AbstractBsjCompilerTask
+public class CompileExplicitMetaprogramTask<R extends Node> extends
+		AbstractMetaprogramProfileBuildingTask<ExplicitMetaprogramAnchorNode<R>>
 {
 	/** The packages which should be imported by metaprograms. */
 	private static String[] IMPORT_PACKAGES = { "edu.jhu.cs.bsj.compiler.impl.metaprogram",
 			"edu.jhu.cs.bsj.compiler.ast", "edu.jhu.cs.bsj.compiler.ast.node", "edu.jhu.cs.bsj.compiler.ast.node.meta",
 			"edu.jhu.cs.bsj.compiler.metaprogram" };
 
-	/** A field containing the factory which should be used as this task is executing. */
-	private BsjNodeFactory factory;
-	/** A field containing the metacompilation context which should be used as this task is executing. */
-	private MetacompilationContext metacompilationContext;
-	/** A field containing the anchor of the metaprogram to extract. */
-	private MetaprogramAnchorNode<?> anchor;
-
-	public CompileMetaprogramTask(MetaprogramAnchorNode<?> anchor)
+	public CompileExplicitMetaprogramTask(ExplicitMetaprogramAnchorNode<R> anchor)
 	{
-		super(TaskPriority.COMPILE);
+		super(TaskPriority.COMPILE_EXPLICIT, anchor);
 		this.anchor = anchor;
 	}
 
 	@Override
-	public void execute(MetacompilationContext context) throws IOException
-	{
-		this.factory = context.getToolkit().getNodeFactory();
-		this.metacompilationContext = context;
-		handleAnchor(anchor);
-	}
-
-	/**
-	 * A convenience method for creating a name node given the provided string.
-	 * 
-	 * @param name The name of the node to create.
-	 * @param category The category to assign to all of the components in the name.
-	 * @return The created name.
-	 */
-	private NameNode parseNameNode(String name, NameCategory category)
-	{
-		if (name.indexOf('.') == -1)
-		{
-			return factory.makeSimpleNameNode(factory.makeIdentifierNode(name), category);
-		} else
-		{
-			int index = name.lastIndexOf('.');
-			return factory.makeQualifiedNameNode(parseNameNode(name.substring(0, index), category),
-					factory.makeIdentifierNode(name.substring(index + 1)), category);
-		}
-	}
-
-	private <A extends MetaprogramAnchorNode<? extends Node>> void handleAnchor(A anchor) throws IOException
-	{
-		// Build a metaprogram profile for this anchor
-		MetaprogramProfile<A> profile = buildProfile(anchor);
-		if (LOGGER.isTraceEnabled())
-		{
-			LOGGER.trace("Metaprogram " + profile.getMetaprogram().getID() + " created with deps "
-					+ profile.getDependencyNames() + " and targets " + profile.getTargetNames());
-		}
-
-		// Clear the metaprogram from the anchor (so it can't reflect on itself or anything messy like that)
-		anchor.setMetaprogram(null);
-
-		// Register the metaprogram profile with the metacompilation manager
-		metacompilationContext.getDependencyManager().registerMetaprogramProfile(profile);
-	}
-
-	private String getMetaprogramTypeName(MetaprogramAnchorNode<? extends Node> anchor)
-	{
-		NameNode nameNode = anchor.executeOperation(new EnclosingNameNodeOperation(factory), null);
-		if (nameNode == null)
-		{
-			// TODO: handle anonymous inner classes correctly
-			nameNode = factory.makeSimpleNameNode(factory.makeIdentifierNode(anchor.getNearestAncestorOfType(
-					CompilationUnitNode.class).getName()), NameCategory.TYPE);
-		} else if (nameNode.getCategory() == NameCategory.PACKAGE)
-		{
-			nameNode = factory.makeQualifiedNameNode(nameNode,
-					factory.makeIdentifierNode(anchor.getNearestAncestorOfType(CompilationUnitNode.class).getName()),
-					NameCategory.TYPE);
-		}
-		return nameNode.getNameString();
-	}
-
-	private <A extends MetaprogramAnchorNode<? extends Node>> MetaprogramProfile<A> buildProfile(A anchor)
-			throws IOException
+	protected MetaprogramProfile<ExplicitMetaprogramAnchorNode<R>> buildProfile() throws IOException
 	{
 		MetaprogramNode metaprogramNode = anchor.getMetaprogram();
+		anchor.setMetaprogram(null); // Clear the metaprogram from the anchor (so it can't reflect on itself)
 		MetaprogramLocalMode localMode = MetaprogramLocalMode.INSERT;
 		MetaprogramPackageMode packageMode = MetaprogramPackageMode.READ_ONLY;
 		List<String> qualifiedTargetNames = new ArrayList<String>();
 		List<String> dependencyNames = new ArrayList<String>();
+		final String metaprogramTypeName = getMetaprogramTypeName();
 
 		// if there's a preamble, deal with it
 		if (metaprogramNode.getPreamble() != null)
@@ -158,11 +89,9 @@ public class CompileMetaprogramTask extends AbstractBsjCompilerTask
 			if (metaprogramPreambleNode.getTarget() != null)
 			{
 				// determine qualifying prefix
-				String prefix = getMetaprogramTypeName(anchor);
-
 				for (IdentifierNode id : metaprogramPreambleNode.getTarget().getTargets().getChildren())
 				{
-					String targetName = prefix + "." + id.getIdentifier();
+					String targetName = metaprogramTypeName + "." + id.getIdentifier();
 					if (LOGGER.isTraceEnabled())
 					{
 						LOGGER.trace("Metaprogram for anchor " + anchor.getUid() + " has target " + targetName);
@@ -180,8 +109,7 @@ public class CompileMetaprogramTask extends AbstractBsjCompilerTask
 					if (dependsName instanceof SimpleNameNode)
 					{
 						// Then the base name is that of the enclosing type
-						String prefix = getMetaprogramTypeName(anchor);
-						qualifiedDependsName = prefix + "." + dependsName.getIdentifier().getIdentifier();
+						qualifiedDependsName = metaprogramTypeName + "." + dependsName.getIdentifier().getIdentifier();
 					} else if (dependsName instanceof QualifiedNameNode)
 					{
 						// Then the base name is the fully qualified form of the specified base name
@@ -194,8 +122,8 @@ public class CompileMetaprogramTask extends AbstractBsjCompilerTask
 							continue;
 						} else
 						{
-							String prefix = getMetaprogramTypeName(anchor);
-							qualifiedDependsName = prefix + "." + dependsName.getIdentifier().getIdentifier();
+							qualifiedDependsName = metaprogramTypeName + "."
+									+ dependsName.getIdentifier().getIdentifier();
 						}
 					} else
 					{
@@ -214,14 +142,16 @@ public class CompileMetaprogramTask extends AbstractBsjCompilerTask
 		}
 
 		// now build the metaprogram itself
-		Context<A> context = new ContextImpl<A>(anchor, factory);
-		Metaprogram<A> metaprogram = compileMetaprogram(metaprogramNode, anchor.getClass().getName());
+		Context<ExplicitMetaprogramAnchorNode<R>> context = new ContextImpl<ExplicitMetaprogramAnchorNode<R>>(anchor,
+				factory);
+		Metaprogram<ExplicitMetaprogramAnchorNode<R>> metaprogram = compileMetaprogram(metaprogramNode,
+				anchor.getClass().getName());
 
-		return new MetaprogramProfile<A>(metaprogram, anchor, dependencyNames, qualifiedTargetNames, localMode,
-				packageMode, context);
+		return new MetaprogramProfile<ExplicitMetaprogramAnchorNode<R>>(metaprogram, anchor, dependencyNames,
+				qualifiedTargetNames, localMode, packageMode, context);
 	}
 
-	private <A extends MetaprogramAnchorNode<? extends Node>> Metaprogram<A> compileMetaprogram(
+	private <A extends ExplicitMetaprogramAnchorNode<? extends Node>> Metaprogram<A> compileMetaprogram(
 			MetaprogramNode metaprogramNode, String anchorClassName) throws IOException
 	{
 		String metaprogramDescription = null;
@@ -239,7 +169,7 @@ public class CompileMetaprogramTask extends AbstractBsjCompilerTask
 		List<ImportNode> imports = new ArrayList<ImportNode>();
 		for (String packageString : IMPORT_PACKAGES)
 		{
-			imports.add(factory.makeImportOnDemandNode(parseNameNode(packageString, NameCategory.PACKAGE)));
+			imports.add(factory.makeImportOnDemandNode(factory.parseNameNode(packageString)));
 		}
 
 		// Find compilation unit
@@ -276,8 +206,7 @@ public class CompileMetaprogramTask extends AbstractBsjCompilerTask
 		String fullyQualifiedMetaprogramClassName = metaprogramPackageName + "." + metaprogramClassName;
 
 		// Create nodes for this metaprogram
-		PackageDeclarationNode packageDeclarationNode = factory.makePackageDeclarationNode(parseNameNode(
-				metaprogramPackageName, NameCategory.PACKAGE));
+		PackageDeclarationNode packageDeclarationNode = factory.makePackageDeclarationNode(factory.parseNameNode(metaprogramPackageName));
 
 		// Steal the method body from the metaprogram node
 		BlockStatementListNode metaprogramBody = metaprogramNode.getBody();
@@ -285,31 +214,27 @@ public class CompileMetaprogramTask extends AbstractBsjCompilerTask
 		BlockNode methodBlock = factory.makeBlockNode(metaprogramBody);
 
 		// Build the contents of the metaprogram class
-		MethodDeclarationNode executeMethodImplementation = factory.makeMethodDeclarationNode(methodBlock,
-				factory.makeMethodModifiersNode(AccessModifier.PUBLIC), factory.makeIdentifierNode("execute"),
-				factory.makeVariableListNode(
-						factory.makeVariableNode(factory.makeVariableModifiersNode(),
-								factory.makeParameterizedTypeNode(
-										factory.makeUnparameterizedTypeNode(
-												factory.makeSimpleNameNode(
-														factory.makeIdentifierNode("Context"),
-														NameCategory.TYPE)),
-										factory.makeTypeArgumentListNode(
-												factory.makeUnparameterizedTypeNode(parseNameNode(
-														anchorClassName, NameCategory.AMBIGUOUS))
-												)),
-										factory.makeIdentifierNode("context"))
-						), factory.makeVoidTypeNode(), null);
+		MethodDeclarationNode executeMethodImplementation = factory.makeMethodDeclarationNode(
+				methodBlock,
+				factory.makeMethodModifiersNode(AccessModifier.PUBLIC),
+				factory.makeIdentifierNode("execute"),
+				factory.makeVariableListNode(factory.makeVariableNode(
+						factory.makeVariableModifiersNode(),
+						factory.makeParameterizedTypeNode(
+								factory.makeUnparameterizedTypeNode(factory.makeSimpleNameNode(
+										factory.makeIdentifierNode("Context"), NameCategory.TYPE)),
+								factory.makeTypeArgumentListNode(factory.makeUnparameterizedTypeNode(factory.parseNameNode(anchorClassName)))),
+						factory.makeIdentifierNode("context"))), factory.makeVoidTypeNode(), null);
 
 		ClassBodyNode body = factory.makeClassBodyNode(factory.makeClassMemberListNode(executeMethodImplementation));
 
 		TypeDeclarationNode metaprogramClassNode = factory.makeClassDeclarationNode(
 				factory.makeClassModifiersNode(AccessModifier.PUBLIC),
-				factory.makeParameterizedTypeNode(factory.makeUnparameterizedTypeNode(parseNameNode(
-						"AbstractMetaprogram", NameCategory.TYPE)),
-						factory.makeTypeArgumentListNode(factory.makeUnparameterizedTypeNode(parseNameNode(
-								anchorClassName, NameCategory.AMBIGUOUS)))), factory.makeDeclaredTypeListNode(), body,
-				factory.makeTypeParameterListNode(), factory.makeIdentifierNode(metaprogramClassName), null);
+				factory.makeParameterizedTypeNode(
+						factory.makeUnparameterizedTypeNode(factory.parseNameNode("AbstractMetaprogram")),
+						factory.makeTypeArgumentListNode(factory.makeUnparameterizedTypeNode(factory.parseNameNode(anchorClassName)))),
+				factory.makeDeclaredTypeListNode(), body, factory.makeTypeParameterListNode(),
+				factory.makeIdentifierNode(metaprogramClassName), null);
 
 		CompilationUnitNode metaprogramCompilationUnitNode = factory.makeCompilationUnitNode(metaprogramClassName,
 				packageDeclarationNode, factory.makeImportListNode(imports),
@@ -411,7 +336,7 @@ public class CompileMetaprogramTask extends AbstractBsjCompilerTask
 	 * @return The casted result.
 	 */
 	@SuppressWarnings("unchecked")
-	private <A extends MetaprogramAnchorNode<? extends Node>> Class<? extends Metaprogram<A>> metaprogramClassCast(
+	private <A extends ExplicitMetaprogramAnchorNode<? extends Node>> Class<? extends Metaprogram<A>> metaprogramClassCast(
 			Class<?> loadClass)
 	{
 		return (Class<? extends Metaprogram<A>>) loadClass;

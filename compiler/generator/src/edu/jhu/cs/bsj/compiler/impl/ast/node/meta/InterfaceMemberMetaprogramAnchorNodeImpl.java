@@ -16,18 +16,18 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public class InterfaceMemberMetaprogramAnchorNodeImpl extends MetaprogramAnchorNodeImpl<InterfaceMemberNode> implements InterfaceMemberMetaprogramAnchorNode
+public class InterfaceMemberMetaprogramAnchorNodeImpl extends ExplicitMetaprogramAnchorNodeImpl<InterfaceMemberNode> implements InterfaceMemberMetaprogramAnchorNode
 {
     /** General constructor. */
     public InterfaceMemberMetaprogramAnchorNodeImpl(
-            InterfaceMemberNode replacement,
             MetaprogramNode metaprogram,
+            InterfaceMemberNode replacement,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
             BsjNodeManager manager,
             boolean binary)
     {
-        super(replacement, metaprogram, startLocation, stopLocation, manager, binary);
+        super(metaprogram, replacement, startLocation, stopLocation, manager, binary);
     }
     
     /**
@@ -61,6 +61,7 @@ public class InterfaceMemberMetaprogramAnchorNodeImpl extends MetaprogramAnchorN
     {
         visitor.visitStartBegin(this);
         visitor.visitInterfaceMemberMetaprogramAnchorNodeStart(this, true);
+        visitor.visitExplicitMetaprogramAnchorNodeStart(this);
         visitor.visitMetaprogramAnchorNodeStart(this);
         visitor.visitNodeStart(this);
         visitor.visitInterfaceMemberNodeStart(this);
@@ -70,6 +71,7 @@ public class InterfaceMemberMetaprogramAnchorNodeImpl extends MetaprogramAnchorN
         visitor.visitInterfaceMemberNodeStop(this);
         visitor.visitNodeStop(this);
         visitor.visitMetaprogramAnchorNodeStop(this);
+        visitor.visitExplicitMetaprogramAnchorNodeStop(this);
         visitor.visitInterfaceMemberMetaprogramAnchorNodeStop(this, true);
         visitor.visitStopEnd(this);
     }

@@ -16,18 +16,18 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public class AnonymousClassMemberMetaprogramAnchorNodeImpl extends MetaprogramAnchorNodeImpl<AnonymousClassMemberNode> implements AnonymousClassMemberMetaprogramAnchorNode
+public class AnonymousClassMemberMetaprogramAnchorNodeImpl extends ExplicitMetaprogramAnchorNodeImpl<AnonymousClassMemberNode> implements AnonymousClassMemberMetaprogramAnchorNode
 {
     /** General constructor. */
     public AnonymousClassMemberMetaprogramAnchorNodeImpl(
-            AnonymousClassMemberNode replacement,
             MetaprogramNode metaprogram,
+            AnonymousClassMemberNode replacement,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
             BsjNodeManager manager,
             boolean binary)
     {
-        super(replacement, metaprogram, startLocation, stopLocation, manager, binary);
+        super(metaprogram, replacement, startLocation, stopLocation, manager, binary);
     }
     
     /**
@@ -61,6 +61,7 @@ public class AnonymousClassMemberMetaprogramAnchorNodeImpl extends MetaprogramAn
     {
         visitor.visitStartBegin(this);
         visitor.visitAnonymousClassMemberMetaprogramAnchorNodeStart(this, true);
+        visitor.visitExplicitMetaprogramAnchorNodeStart(this);
         visitor.visitMetaprogramAnchorNodeStart(this);
         visitor.visitNodeStart(this);
         visitor.visitAnonymousClassMemberNodeStart(this);
@@ -70,6 +71,7 @@ public class AnonymousClassMemberMetaprogramAnchorNodeImpl extends MetaprogramAn
         visitor.visitAnonymousClassMemberNodeStop(this);
         visitor.visitNodeStop(this);
         visitor.visitMetaprogramAnchorNodeStop(this);
+        visitor.visitExplicitMetaprogramAnchorNodeStop(this);
         visitor.visitAnonymousClassMemberMetaprogramAnchorNodeStop(this, true);
         visitor.visitStopEnd(this);
     }

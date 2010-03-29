@@ -6,24 +6,14 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 
 /**
- * The replacement field on this node is used to indicate the node with which this node will be replaced once the
- * execution of this metaprogram terminates.  This is initially defaulted to a no-op.
+ * Represents the anchor for a metaprogram during its execution.  The replacement field on this node is
+ * used to indicate the node with which this node will be replaced once the execution of this metaprogram
+ * terminates.  This is initially defaulted to a no-op.  If the replacement field is <tt>null</tt>, no
+ * replacement occurs.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public interface MetaprogramAnchorNode<T extends Node> extends Node
 {
-    /**
-     * Gets the metaprogram on this node.
-     * @return The metaprogram on this node.
-     */
-    public MetaprogramNode getMetaprogram();
-    
-    /**
-     * Changes the metaprogram on this node.
-     * @param metaprogram The metaprogram on this node.
-     */
-    public void setMetaprogram(MetaprogramNode metaprogram);
-    
     /**
      * Generates a deep copy of this node.
      * @param factory The node factory to use to create the deep copy.

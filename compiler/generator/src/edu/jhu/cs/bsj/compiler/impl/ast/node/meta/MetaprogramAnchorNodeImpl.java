@@ -9,7 +9,6 @@ import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramAnchorNode;
-import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.NodeImpl;
@@ -20,21 +19,15 @@ public abstract class MetaprogramAnchorNodeImpl<T extends Node> extends NodeImpl
     /** The replacement node for this metaprogram. */
     private T replacement;
     
-    /** The metaprogram on this node. */
-    private MetaprogramNode metaprogram;
-    
     private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute
     {
         /** Attribute for the replacement property. */
         REPLACEMENT,
-        /** Attribute for the metaprogram property. */
-        METAPROGRAM,
     }
     
     /** General constructor. */
     protected MetaprogramAnchorNodeImpl(
             T replacement,
-            MetaprogramNode metaprogram,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
             BsjNodeManager manager,
@@ -42,44 +35,6 @@ public abstract class MetaprogramAnchorNodeImpl<T extends Node> extends NodeImpl
     {
         super(startLocation, stopLocation, manager, binary);
         this.replacement = replacement;
-        setMetaprogram(metaprogram, false);
-    }
-    
-    /**
-     * Gets the metaprogram on this node.
-     * @return The metaprogram on this node.
-     */
-    public MetaprogramNode getMetaprogram()
-    {
-        recordAccess(LocalAttribute.METAPROGRAM, Attribute.AccessType.READ);
-        return this.metaprogram;
-    }
-    
-    /**
-     * Changes the metaprogram on this node.
-     * @param metaprogram The metaprogram on this node.
-     */
-    public void setMetaprogram(MetaprogramNode metaprogram)
-    {
-            setMetaprogram(metaprogram, true);
-    }
-    
-    private void setMetaprogram(MetaprogramNode metaprogram, boolean checkPermissions)
-    {
-        if (checkPermissions)
-        {
-            getManager().assertMutatable(this);
-        }
-        recordAccess(LocalAttribute.METAPROGRAM, Attribute.AccessType.STRONG_WRITE);
-        if (this.metaprogram instanceof NodeImpl)
-        {
-            ((NodeImpl)this.metaprogram).setParent(null);
-        }
-        this.metaprogram = metaprogram;
-        if (this.metaprogram instanceof NodeImpl)
-        {
-            ((NodeImpl)this.metaprogram).setParent(this);
-        }
     }
     
     /**
@@ -93,10 +48,6 @@ public abstract class MetaprogramAnchorNodeImpl<T extends Node> extends NodeImpl
     protected void receiveToChildren(BsjNodeVisitor visitor)
     {
         super.receiveToChildren(visitor);
-        if (this.metaprogram != null)
-        {
-            this.metaprogram.receive(visitor);
-        }
     }
     
     /**
@@ -110,10 +61,6 @@ public abstract class MetaprogramAnchorNodeImpl<T extends Node> extends NodeImpl
     protected void receiveTypedToChildren(BsjTypedNodeVisitor visitor)
     {
         super.receiveTypedToChildren(visitor);
-        if (this.metaprogram != null)
-        {
-            this.metaprogram.receiveTyped(visitor);
-        }
     }
     
     @Override
@@ -139,7 +86,6 @@ public abstract class MetaprogramAnchorNodeImpl<T extends Node> extends NodeImpl
     public List<Object> getChildObjects()
     {
         List<Object> list = super.getChildObjects();
-        list.add(getMetaprogram());
         return list;
     }
     
@@ -152,9 +98,6 @@ public abstract class MetaprogramAnchorNodeImpl<T extends Node> extends NodeImpl
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
-        sb.append("metaprogram=");
-        sb.append(this.getMetaprogram() == null? "null" : this.getMetaprogram().getClass().getSimpleName());
-        sb.append(',');
         sb.append("startLocation=");
         sb.append(String.valueOf(this.getStartLocation()) + ":" + (this.getStartLocation() != null ? this.getStartLocation().getClass().getSimpleName() : "null"));
         sb.append(',');
@@ -171,6 +114,7 @@ public abstract class MetaprogramAnchorNodeImpl<T extends Node> extends NodeImpl
 	 */
 	public T getReplacement()
 	{
+		recordAccess(LocalAttribute.REPLACEMENT, Attribute.AccessType.READ);
 		return this.replacement;
 	}
 	
@@ -181,6 +125,7 @@ public abstract class MetaprogramAnchorNodeImpl<T extends Node> extends NodeImpl
 	public void setReplacement(T replacement)
 	{
 		// TODO: some kind of control on this; setReplacement should probably only be called one time?
+		recordAccess(LocalAttribute.REPLACEMENT, Attribute.AccessType.STRONG_WRITE);
 		if (this.replacement instanceof NodeImpl)
 		{
 			((NodeImpl)this.replacement).setParent(null);

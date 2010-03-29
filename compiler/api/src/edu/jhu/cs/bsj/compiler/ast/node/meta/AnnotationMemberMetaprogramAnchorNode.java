@@ -9,7 +9,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.AnnotationMemberNode;
  * A node representing a metaprogram found in an annotation declaration.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public interface AnnotationMemberMetaprogramAnchorNode extends MetaprogramAnchorNode<AnnotationMemberNode>, AnnotationMemberNode
+public interface AnnotationMemberMetaprogramAnchorNode extends ExplicitMetaprogramAnchorNode<AnnotationMemberNode>, AnnotationMemberNode
 {
     /**
      * Generates a deep copy of this node.

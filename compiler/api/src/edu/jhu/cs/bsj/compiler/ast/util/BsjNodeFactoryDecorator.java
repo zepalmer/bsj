@@ -28,6 +28,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationElementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationExpressionValueNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaAnnotationValueNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationValueListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationValueNode;
@@ -160,6 +161,14 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     {
     	return this.factory.makeSingleStaticImportNode(name, startLocation, stopLocation);
     }
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public NameNode parseNameNode(String name)
+	{
+		return this.factory.parseNameNode(name);
+	}
 
     /**
      * Creates a AlternateConstructorInvocationNode.
@@ -4062,6 +4071,35 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     }
     
     /**
+     * Creates a MetaAnnotationMetaprogramAnchorNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public MetaAnnotationMetaprogramAnchorNode makeMetaAnnotationMetaprogramAnchorNode(
+    )
+    {
+        this.before();
+        MetaAnnotationMetaprogramAnchorNode node = factory.makeMetaAnnotationMetaprogramAnchorNode();
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a MetaAnnotationMetaprogramAnchorNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public MetaAnnotationMetaprogramAnchorNode makeMetaAnnotationMetaprogramAnchorNode(
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        MetaAnnotationMetaprogramAnchorNode node = factory.makeMetaAnnotationMetaprogramAnchorNode(startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
      * Creates a MetaAnnotationValueListNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -4766,36 +4804,7 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
      */
     @Override
     public NullLiteralNode makeNullLiteralNode(
-            Void value)
-    {
-        this.before();
-        NullLiteralNode node = factory.makeNullLiteralNode(value);
-        this.after(node);
-        return node;
-    }
-    
-    /**
-     * Creates a NullLiteralNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public NullLiteralNode makeNullLiteralNode(
-            Void value,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        this.before();
-        NullLiteralNode node = factory.makeNullLiteralNode(value, startLocation, stopLocation);
-        this.after(node);
-        return node;
-    }
-    
-    /**
-     * Creates a NullLiteralNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    @Override
-    public NullLiteralNode makeNullLiteralNode()
+    )
     {
         this.before();
         NullLiteralNode node = factory.makeNullLiteralNode();

@@ -1,4 +1,4 @@
-package edu.jhu.cs.bsj.compiler.impl.ast.node;
+package edu.jhu.cs.bsj.compiler.impl.ast.node.meta;
 
 import java.util.List;
 
@@ -10,21 +10,21 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
-import edu.jhu.cs.bsj.compiler.ast.node.NullLiteralNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public class NullLiteralNodeImpl extends LiteralNodeImpl<Void> implements NullLiteralNode
+public class MetaAnnotationMetaprogramAnchorNodeImpl extends MetaprogramAnchorNodeImpl<MetaAnnotationMetaprogramAnchorNode> implements MetaAnnotationMetaprogramAnchorNode
 {
     /** General constructor. */
-    public NullLiteralNodeImpl(
-            Void value,
+    public MetaAnnotationMetaprogramAnchorNodeImpl(
+            MetaAnnotationMetaprogramAnchorNode replacement,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation,
             BsjNodeManager manager,
             boolean binary)
     {
-        super(value, startLocation, stopLocation, manager, binary);
+        super(replacement, startLocation, stopLocation, manager, binary);
     }
     
     /**
@@ -57,15 +57,15 @@ public class NullLiteralNodeImpl extends LiteralNodeImpl<Void> implements NullLi
     public void receiveTyped(BsjTypedNodeVisitor visitor)
     {
         visitor.visitStartBegin(this);
-        visitor.visitNullLiteralNodeStart(this, true);
-        visitor.visitLiteralNodeStart(this);
+        visitor.visitMetaAnnotationMetaprogramAnchorNodeStart(this, true);
+        visitor.visitMetaprogramAnchorNodeStart(this);
         visitor.visitNodeStart(this);
         visitor.visitStartEnd(this);
         receiveTypedToChildren(visitor);
         visitor.visitStopBegin(this);
         visitor.visitNodeStop(this);
-        visitor.visitLiteralNodeStop(this);
-        visitor.visitNullLiteralNodeStop(this, true);
+        visitor.visitMetaprogramAnchorNodeStop(this);
+        visitor.visitMetaAnnotationMetaprogramAnchorNodeStop(this, true);
         visitor.visitStopEnd(this);
     }
     
@@ -90,9 +90,6 @@ public class NullLiteralNodeImpl extends LiteralNodeImpl<Void> implements NullLi
         StringBuilder sb = new StringBuilder();
         sb.append(this.getClass().getSimpleName());
         sb.append('[');
-        sb.append("value=");
-        sb.append(String.valueOf(this.getValue()) + ":" + (this.getValue() != null ? this.getValue().getClass().getSimpleName() : "null"));
-        sb.append(',');
         sb.append("startLocation=");
         sb.append(String.valueOf(this.getStartLocation()) + ":" + (this.getStartLocation() != null ? this.getStartLocation().getClass().getSimpleName() : "null"));
         sb.append(',');
@@ -111,7 +108,7 @@ public class NullLiteralNodeImpl extends LiteralNodeImpl<Void> implements NullLi
     @Override
     public <P,R> R executeOperation(BsjNodeOperation<P,R> operation, P p)
     {
-        return operation.executeNullLiteralNode(this, p);
+        return operation.executeMetaAnnotationMetaprogramAnchorNode(this, p);
     }
     
     /**
@@ -120,9 +117,9 @@ public class NullLiteralNodeImpl extends LiteralNodeImpl<Void> implements NullLi
      * @return The resulting deep copy node.
      */
     @Override
-    public NullLiteralNode deepCopy(BsjNodeFactory factory)
+    public MetaAnnotationMetaprogramAnchorNode deepCopy(BsjNodeFactory factory)
     {
-        return factory.makeNullLiteralNode(
+        return factory.makeMetaAnnotationMetaprogramAnchorNode(
                 getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
                 getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
     }

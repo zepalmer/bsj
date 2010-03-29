@@ -17,6 +17,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationElementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationExpressionValueNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaAnnotationValueNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationValueListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationValueNode;
@@ -2294,6 +2295,21 @@ public interface BsjNodeFactory
             BsjSourceLocation stopLocation);
     
     /**
+     * Creates a MetaAnnotationMetaprogramAnchorNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public MetaAnnotationMetaprogramAnchorNode makeMetaAnnotationMetaprogramAnchorNode(
+    );
+    
+    /**
+     * Creates a MetaAnnotationMetaprogramAnchorNode.
+     * The specified start and stop locations are used.
+     */
+    public MetaAnnotationMetaprogramAnchorNode makeMetaAnnotationMetaprogramAnchorNode(
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+    
+    /**
      * Creates a MetaAnnotationValueListNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -2703,22 +2719,7 @@ public interface BsjNodeFactory
      * The start and stop locations which have been set as properties of this factory are used.
      */
     public NullLiteralNode makeNullLiteralNode(
-            Void value);
-    
-    /**
-     * Creates a NullLiteralNode.
-     * The specified start and stop locations are used.
-     */
-    public NullLiteralNode makeNullLiteralNode(
-            Void value,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation);
-    
-    /**
-     * Creates a NullLiteralNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    public NullLiteralNode makeNullLiteralNode();
+    );
     
     /**
      * Creates a NullLiteralNode.

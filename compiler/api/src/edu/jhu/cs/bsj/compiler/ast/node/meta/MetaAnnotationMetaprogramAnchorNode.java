@@ -3,13 +3,12 @@ package edu.jhu.cs.bsj.compiler.ast.node.meta;
 import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
-import edu.jhu.cs.bsj.compiler.ast.node.BlockStatementNode;
 
 /**
- * A node representing a metaprogram as a block statement.
+ * A node representing a metaprogram attached to a meta-annotation.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public interface BlockStatementMetaprogramAnchorNode extends ExplicitMetaprogramAnchorNode<BlockStatementNode>, BlockStatementNode
+public interface MetaAnnotationMetaprogramAnchorNode extends MetaprogramAnchorNode<MetaAnnotationMetaprogramAnchorNode>
 {
     /**
      * Generates a deep copy of this node.
@@ -17,5 +16,5 @@ public interface BlockStatementMetaprogramAnchorNode extends ExplicitMetaprogram
      * @return The resulting deep copy node.
      */
     @Override
-    public BlockStatementMetaprogramAnchorNode deepCopy(BsjNodeFactory factory);
+    public MetaAnnotationMetaprogramAnchorNode deepCopy(BsjNodeFactory factory);
 }

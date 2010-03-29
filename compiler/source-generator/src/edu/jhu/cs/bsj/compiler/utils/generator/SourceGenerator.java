@@ -1218,6 +1218,8 @@ public class SourceGenerator
 				{
 					if (p.isHide())
 						continue;
+					if (def.getRecursiveFactoryOverrideMap().containsKey(p.getName()))
+						continue;
 					if (first)
 					{
 						first = false;
@@ -1616,12 +1618,13 @@ public class SourceGenerator
 			String typeParamS = typeParam == null ? "" : ("<" + typeParam + "> ");
 
 			// Property analysis: what is required as input?
+			Map<String,String> factoryOverrideMap = def.getRecursiveFactoryOverrideMap();
 			List<PropertyDefinition> recProps = def.getRecursiveProperties();
 			List<PropertyDefinition> argProps = new ArrayList<PropertyDefinition>();
 			for (PropertyDefinition recProp : recProps)
 			{
 				if ((methodDefinition.isVisible(recProp.getName()) || (recProp.isSkipMake() && !skipMake))
-						&& !recProp.isHide())
+						&& !recProp.isHide() && !factoryOverrideMap.containsKey(recProp.getName()))
 				{
 					argProps.add(recProp);
 				}
@@ -1664,7 +1667,7 @@ public class SourceGenerator
 			String classname = def.getBaseName() + "Impl" + typeArg;
 			cps.print(typeName + " ret = new " + classname);
 
-			printFactoryArgumentList(cps, recProps, def.getFactoryOverrideMap(), methodDefinition, def);
+			printFactoryArgumentList(cps, recProps, factoryOverrideMap, methodDefinition, def);
 
 			cps.println(";");
 			cps.println("return ret;");
@@ -2059,7 +2062,7 @@ public class SourceGenerator
 						ps.println("node.get" + capFirst(p.getName()) + "() != null ?");
 						ps.incPrependCount(2);
 						ps.println("node.get" + capFirst(p.getName()) + "().executeOperation(this,factoryNode) :");
-						ps.println("factory.makeNullLiteralNode(null);");
+						ps.println("factory.makeNullLiteralNode();");
 						ps.decPrependCount(4);
 						if (generic)
 						{
@@ -2123,7 +2126,7 @@ public class SourceGenerator
 				{
 					public void voidType(PrependablePrintStream ps, PropertyDefinition p)
 					{
-						ps.print("factory.makeNullLiteralNode(null)");
+						ps.print("factory.makeNullLiteralNode()");
 					}
 
 					public void node(PrependablePrintStream ps, PropertyDefinition p)

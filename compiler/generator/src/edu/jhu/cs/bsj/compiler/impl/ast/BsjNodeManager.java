@@ -61,6 +61,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationArrayValueNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationElementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationExpressionValueNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaAnnotationValueNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationValueNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportNode;
@@ -241,6 +242,20 @@ public class BsjNodeManager
 
 		throw new MetaprogramConflictException(this.dependencyManager.getMetaprogramProfileByID(id).getAnchor(),
 				this.dependencyManager.getMetaprogramProfileByID(this.currentMetaprogramId).getAnchor(), node);
+	}
+
+	/**
+	 * Creates a new meta-annotation metaprogram anchor. This functionality is provided here to prevent nodes from
+	 * needing access to a factory. It is intended to be used by the {@link MetaAnnotationNode} when an anchor is
+	 * required to support its annotation object.
+	 * 
+	 * @param node The node for which the anchor is being created.
+	 * @return A new meta-annotation metaprogram anchor.
+	 */
+	public MetaAnnotationMetaprogramAnchorNode instantiateMetaAnnotationMetaprogramAnchor(Node node)
+	{
+		return this.toolkit.getNodeFactory().makeMetaAnnotationMetaprogramAnchorNode(node.getStartLocation(),
+				node.getStopLocation());
 	}
 
 	/**
@@ -446,7 +461,7 @@ public class BsjNodeManager
 			{
 				if (importName instanceof QualifiedNameNode)
 				{
-					names= Arrays.asList(name, ((QualifiedNameNode)importName).getBase());
+					names = Arrays.asList(name, ((QualifiedNameNode) importName).getBase());
 				} else
 				{
 					names = Arrays.asList(name);
@@ -456,17 +471,17 @@ public class BsjNodeManager
 				names = Arrays.asList(name, importName);
 			}
 		}
-		
+
 		// Set up loop variables
 		boolean lastWasType = false;
 		StringBuilder sb = new StringBuilder();
-		
+
 		// For each name, remove the components and build the binary name appropriately
 		for (NameNode nameNode : names)
 		{
 			while (nameNode != null)
 			{
-				if (sb.length()>0)
+				if (sb.length() > 0)
 				{
 					if (lastWasType)
 					{
@@ -476,23 +491,23 @@ public class BsjNodeManager
 						sb.insert(0, '.');
 					}
 				}
-				
+
 				sb.insert(0, nameNode.getIdentifier().getIdentifier());
 				lastWasType = nameNode.getCategory().equals(NameCategory.TYPE);
-				
+
 				if (nameNode instanceof QualifiedNameNode)
 				{
-					nameNode = ((QualifiedNameNode)nameNode).getBase();
+					nameNode = ((QualifiedNameNode) nameNode).getBase();
 				} else
 				{
 					nameNode = null;
 				}
 			}
 		}
-		
+
 		// Get the binary name
 		String binaryName = sb.toString();
-		
+
 		// Load the class by that name
 		try
 		{

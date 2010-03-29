@@ -1252,7 +1252,6 @@
                 A node representing a null literal.
             ]]></doc>
             <factory-override prop="value" expr="null" />
-            <factory-method />
         </type>
 
         <type name="StringLiteralNode" super="LiteralNode" superTypeArg="String">
@@ -1307,7 +1306,7 @@
         <type name="EnumConstantDeclarationNode" super="Node">
             <prop name="metaAnnotations" type="MetaAnnotationListNode" desc="the meta-annotations on this constant"
                 default="makeMetaAnnotationListNode()" />
-            <prop name="annotations" type="AnnotationListNode" desc="the annotations on this constant" 
+            <prop name="annotations" type="AnnotationListNode" desc="the annotations on this constant"
                 default="makeAnnotationListNode()" />
             <prop name="identifier" type="IdentifierNode" desc="the name of this constant" />
             <prop name="arguments" type="ExpressionListNode" desc="the arguments to the enum constructor" />
@@ -1614,7 +1613,8 @@
 
         <type name="ListNode" typeParam="T extends Node" super="Node" mode="abstract">
             <interface name="List&lt;T&gt;" />
-            <constant name="alwaysOrdered" type="boolean" desc="whether or not this list's contents are always order-dependent"/>
+            <constant name="alwaysOrdered" type="boolean"
+                desc="whether or not this list's contents are always order-dependent" />
             <prop name="children" type="List" typeArg="T" mode="readOnly" desc="the list of children" />
             <include file="ListNode.java" />
             <doc><![CDATA[
@@ -1641,175 +1641,200 @@
         </type>
 
         <type name="AnnotationElementListNode" super="ListNode" superTypeArg="AnnotationElementNode">
-            <constant name="alwaysOrdered" type="boolean" default="true" desc="whether or not this list's contents are always order-dependent"/>
+            <constant name="alwaysOrdered" type="boolean" default="true"
+                desc="whether or not this list's contents are always order-dependent" />
             <doc><![CDATA[
                 Represents a list of {@link AnnotationElementNode}s.
             ]]></doc>
         </type>
 
         <type name="AnnotationListNode" super="ListNode" superTypeArg="AnnotationNode">
-            <constant name="alwaysOrdered" type="boolean" default="false" desc="whether or not this list's contents are always order-dependent"/>
+            <constant name="alwaysOrdered" type="boolean" default="false"
+                desc="whether or not this list's contents are always order-dependent" />
             <doc><![CDATA[
                 Represents a list of {@link AnnotationNode}s.
             ]]></doc>
         </type>
 
         <type name="AnnotationMemberListNode" super="ListNode" superTypeArg="AnnotationMemberNode">
-            <constant name="alwaysOrdered" type="boolean" default="false" desc="whether or not this list's contents are always order-dependent"/>
+            <constant name="alwaysOrdered" type="boolean" default="false"
+                desc="whether or not this list's contents are always order-dependent" />
             <doc><![CDATA[
                 Represents a list of {@link AnnotationMemberNode}s.
             ]]></doc>
         </type>
 
         <type name="AnnotationValueListNode" super="ListNode" superTypeArg="AnnotationValueNode">
-            <constant name="alwaysOrdered" type="boolean" default="true" desc="whether or not this list's contents are always order-dependent"/>
+            <constant name="alwaysOrdered" type="boolean" default="true"
+                desc="whether or not this list's contents are always order-dependent" />
             <doc><![CDATA[
                 Represents a list of {@link AnnotationValueNode}s.
             ]]></doc>
         </type>
 
         <type name="AnonymousClassMemberListNode" super="ListNode" superTypeArg="AnonymousClassMemberNode">
-            <constant name="alwaysOrdered" type="boolean" default="false" desc="whether or not this list's contents are always order-dependent"/>
+            <constant name="alwaysOrdered" type="boolean" default="false"
+                desc="whether or not this list's contents are always order-dependent" />
             <doc><![CDATA[
                 Represents a list of {@link AnonymousClassMemberNode}s.
             ]]></doc>
         </type>
 
         <type name="BlockStatementListNode" super="ListNode" superTypeArg="BlockStatementNode">
-            <constant name="alwaysOrdered" type="boolean" default="true" desc="whether or not this list's contents are always order-dependent"/>
+            <constant name="alwaysOrdered" type="boolean" default="true"
+                desc="whether or not this list's contents are always order-dependent" />
             <doc><![CDATA[
                 Represents a list of {@link BlockStatementNode}s.
             ]]></doc>
         </type>
 
         <type name="CaseListNode" super="ListNode" superTypeArg="CaseNode">
-            <constant name="alwaysOrdered" type="boolean" default="true" desc="whether or not this list's contents are always order-dependent"/>
+            <constant name="alwaysOrdered" type="boolean" default="true"
+                desc="whether or not this list's contents are always order-dependent" />
             <doc><![CDATA[
                 Represents a list of {@link CaseNode}s.
             ]]></doc>
         </type>
 
         <type name="CatchListNode" super="ListNode" superTypeArg="CatchNode">
-            <constant name="alwaysOrdered" type="boolean" default="true" desc="whether or not this list's contents are always order-dependent"/>
+            <constant name="alwaysOrdered" type="boolean" default="true"
+                desc="whether or not this list's contents are always order-dependent" />
             <doc><![CDATA[
                 Represents a list of {@link CatchNode}s.
             ]]></doc>
         </type>
 
         <type name="ClassMemberListNode" super="ListNode" superTypeArg="ClassMemberNode">
-            <constant name="alwaysOrdered" type="boolean" default="false" desc="whether or not this list's contents are always order-dependent"/>
+            <constant name="alwaysOrdered" type="boolean" default="false"
+                desc="whether or not this list's contents are always order-dependent" />
             <doc><![CDATA[
                 Represents a list of {@link ClassMemberNode}s.
             ]]></doc>
         </type>
 
         <type name="DeclaredTypeListNode" super="ListNode" superTypeArg="DeclaredTypeNode">
-            <constant name="alwaysOrdered" type="boolean" default="true" desc="whether or not this list's contents are always order-dependent"/>
+            <constant name="alwaysOrdered" type="boolean" default="true"
+                desc="whether or not this list's contents are always order-dependent" />
             <doc><![CDATA[
                 Represents a list of {@link DeclaredTypeNode}s.
             ]]></doc>
         </type>
 
         <type name="EnumConstantDeclarationListNode" super="ListNode" superTypeArg="EnumConstantDeclarationNode">
-            <constant name="alwaysOrdered" type="boolean" default="true" desc="whether or not this list's contents are always order-dependent"/>
+            <constant name="alwaysOrdered" type="boolean" default="true"
+                desc="whether or not this list's contents are always order-dependent" />
             <doc><![CDATA[
                 Represents a list of {@link EnumConstantDeclarationNode}s.
             ]]></doc>
         </type>
 
         <type name="ExpressionListNode" super="ListNode" superTypeArg="ExpressionNode">
-            <constant name="alwaysOrdered" type="boolean" default="true" desc="whether or not this list's contents are always order-dependent"/>
+            <constant name="alwaysOrdered" type="boolean" default="true"
+                desc="whether or not this list's contents are always order-dependent" />
             <doc><![CDATA[
                 Represents a list of {@link ExpressionNode}s.
             ]]></doc>
         </type>
 
         <type name="IdentifierListNode" super="ListNode" superTypeArg="IdentifierNode">
-            <constant name="alwaysOrdered" type="boolean" default="false" desc="whether or not this list's contents are always order-dependent"/>
+            <constant name="alwaysOrdered" type="boolean" default="false"
+                desc="whether or not this list's contents are always order-dependent" />
             <doc><![CDATA[
                 Represents a list of {@link IdentifierNode}s.
             ]]></doc>
         </type>
 
         <type name="ImportListNode" super="ListNode" superTypeArg="ImportNode">
-            <constant name="alwaysOrdered" type="boolean" default="false" desc="whether or not this list's contents are always order-dependent"/>
+            <constant name="alwaysOrdered" type="boolean" default="false"
+                desc="whether or not this list's contents are always order-dependent" />
             <doc><![CDATA[
                 Represents a list of {@link ImportNode}s.
             ]]></doc>
         </type>
 
         <type name="InterfaceMemberListNode" super="ListNode" superTypeArg="InterfaceMemberNode">
-            <constant name="alwaysOrdered" type="boolean" default="false" desc="whether or not this list's contents are always order-dependent"/>
+            <constant name="alwaysOrdered" type="boolean" default="false"
+                desc="whether or not this list's contents are always order-dependent" />
             <doc><![CDATA[
                 Represents a list of {@link InterfaceMemberNode}s.
             ]]></doc>
         </type>
 
         <type name="NameListNode" super="ListNode" superTypeArg="NameNode">
-            <constant name="alwaysOrdered" type="boolean" default="false" desc="whether or not this list's contents are always order-dependent"/>
+            <constant name="alwaysOrdered" type="boolean" default="false"
+                desc="whether or not this list's contents are always order-dependent" />
             <doc><![CDATA[
                 Represents a list of {@link NameNode}s.
             ]]></doc>
         </type>
 
         <type name="ReferenceTypeListNode" super="ListNode" superTypeArg="ReferenceTypeNode">
-            <constant name="alwaysOrdered" type="boolean" default="true" desc="whether or not this list's contents are always order-dependent"/>
+            <constant name="alwaysOrdered" type="boolean" default="true"
+                desc="whether or not this list's contents are always order-dependent" />
             <doc><![CDATA[
                 Represents a list of {@link ReferenceTypeNode}s.
             ]]></doc>
         </type>
 
         <type name="StatementExpressionListNode" super="ListNode" superTypeArg="StatementExpressionNode">
-            <constant name="alwaysOrdered" type="boolean" default="true" desc="whether or not this list's contents are always order-dependent"/>
+            <constant name="alwaysOrdered" type="boolean" default="true"
+                desc="whether or not this list's contents are always order-dependent" />
             <doc><![CDATA[
                 Represents a list of {@link StatementExpressionNode}s.
             ]]></doc>
         </type>
 
         <type name="TypeArgumentListNode" super="ListNode" superTypeArg="TypeArgumentNode">
-            <constant name="alwaysOrdered" type="boolean" default="true" desc="whether or not this list's contents are always order-dependent"/>
+            <constant name="alwaysOrdered" type="boolean" default="true"
+                desc="whether or not this list's contents are always order-dependent" />
             <doc><![CDATA[
                 Represents a list of {@link TypeArgumentNode}s.
             ]]></doc>
         </type>
 
         <type name="TypeDeclarationListNode" super="ListNode" superTypeArg="TypeDeclarationNode">
-            <constant name="alwaysOrdered" type="boolean" default="false" desc="whether or not this list's contents are always order-dependent"/>
+            <constant name="alwaysOrdered" type="boolean" default="false"
+                desc="whether or not this list's contents are always order-dependent" />
             <doc><![CDATA[
                 Represents a list of {@link TypeDeclarationNode}s.
             ]]></doc>
         </type>
 
         <type name="TypeParameterListNode" super="ListNode" superTypeArg="TypeParameterNode">
-            <constant name="alwaysOrdered" type="boolean" default="true" desc="whether or not this list's contents are always order-dependent"/>
+            <constant name="alwaysOrdered" type="boolean" default="true"
+                desc="whether or not this list's contents are always order-dependent" />
             <doc><![CDATA[
                 Represents a list of {@link TypeParameterNode}s.
             ]]></doc>
         </type>
 
         <type name="UnparameterizedTypeListNode" super="ListNode" superTypeArg="UnparameterizedTypeNode">
-            <constant name="alwaysOrdered" type="boolean" default="false" desc="whether or not this list's contents are always order-dependent"/>
+            <constant name="alwaysOrdered" type="boolean" default="false"
+                desc="whether or not this list's contents are always order-dependent" />
             <doc><![CDATA[
                 Represents a list of {@link UnparameterizedTypeNode}s.
             ]]></doc>
         </type>
 
         <type name="VariableDeclaratorListNode" super="ListNode" superTypeArg="VariableDeclaratorNode">
-            <constant name="alwaysOrdered" type="boolean" default="true" desc="whether or not this list's contents are always order-dependent"/>
+            <constant name="alwaysOrdered" type="boolean" default="true"
+                desc="whether or not this list's contents are always order-dependent" />
             <doc><![CDATA[
                 Represents a list of {@link VariableDeclaratorNode}s.
             ]]></doc>
         </type>
 
         <type name="VariableInitializerListNode" super="ListNode" superTypeArg="VariableInitializerNode">
-            <constant name="alwaysOrdered" type="boolean" default="true" desc="whether or not this list's contents are always order-dependent"/>
+            <constant name="alwaysOrdered" type="boolean" default="true"
+                desc="whether or not this list's contents are always order-dependent" />
             <doc><![CDATA[
                 Represents a list of {@link VariableInitializerNode}s.
             ]]></doc>
         </type>
 
         <type name="VariableListNode" super="ListNode" superTypeArg="VariableNode">
-            <constant name="alwaysOrdered" type="boolean" default="true" desc="whether or not this list's contents are always order-dependent"/>
+            <constant name="alwaysOrdered" type="boolean" default="true"
+                desc="whether or not this list's contents are always order-dependent" />
             <doc><![CDATA[
                 Represents a list of {@link VariableNode}s.
             ]]></doc>
@@ -1970,7 +1995,8 @@
             <prop name="stopLocation" type="BsjSourceLocation" mode="skip"
                 desc="the location at which this node's text stops (exclusive)" />
             <prop name="manager" type="BsjNodeManager" mode="hide" desc="the BSJ node manager for this node" />
-            <prop name="binary" type="boolean" mode="hide" desc="whether or not this node originated in a binary file"/>
+            <prop name="binary" type="boolean" mode="hide"
+                desc="whether or not this node originated in a binary file" />
             <include file="Node.java" />
             <doc><![CDATA[
                 The parent class for all BSJ AST nodes.
@@ -2164,7 +2190,7 @@
                 This node represents a metaprogram's preamble.
             ]]></doc>
             <factory-method>
-                <use-defaults/>
+                <use-defaults />
             </factory-method>
         </type>
 
@@ -2182,11 +2208,22 @@
 
         <type name="MetaprogramAnchorNode" typeParam="T extends Node" super="Node" mode="abstract">
             <prop name="replacement" type="T" mode="hide" desc="the replacement node for this metaprogram" />
-            <prop name="metaprogram" type="MetaprogramNode" desc="the metaprogram on this node" />
             <include file="MetaprogramAnchorNode.java" />
             <doc><![CDATA[
-                The replacement field on this node is used to indicate the node with which this node will be replaced once the
-                execution of this metaprogram terminates.  This is initially defaulted to a no-op.
+                Represents the anchor for a metaprogram during its execution.  The replacement field on this node is
+                used to indicate the node with which this node will be replaced once the execution of this metaprogram
+                terminates.  This is initially defaulted to a no-op.  If the replacement field is <tt>null</tt>, no
+                replacement occurs.
+            ]]></doc>
+        </type>
+
+        <type name="ExplicitMetaprogramAnchorNode" typeParam="T extends Node" super="MetaprogramAnchorNode"
+            superTypeArg="T" mode="abstract">
+            <prop name="metaprogram" type="MetaprogramNode" desc="the metaprogram on this node" />
+            <doc><![CDATA[
+                Represents an anchor node for an explicit metaprogram (one declared using the <tt>[: :]</tt>
+                delimiters).  <tt>metaprogram</tt> may be <tt>null</tt> if the metaprogram has already been extracted
+                and prepared for execution by the compiler.
             ]]></doc>
         </type>
 
@@ -2201,7 +2238,8 @@
             ]]></doc>
         </type>
 
-        <type name="BlockStatementMetaprogramAnchorNode" super="MetaprogramAnchorNode" superTypeArg="BlockStatementNode">
+        <type name="BlockStatementMetaprogramAnchorNode" super="ExplicitMetaprogramAnchorNode"
+            superTypeArg="BlockStatementNode">
             <tag name="BlockStatementNode" />
             <doc><![CDATA[
                 A node representing a metaprogram as a block statement.
@@ -2209,7 +2247,8 @@
             <factory-override prop="replacement" expr="makeNoOperationNode()" />
         </type>
 
-        <type name="AnnotationMemberMetaprogramAnchorNode" super="MetaprogramAnchorNode" superTypeArg="AnnotationMemberNode">
+        <type name="AnnotationMemberMetaprogramAnchorNode" super="ExplicitMetaprogramAnchorNode"
+            superTypeArg="AnnotationMemberNode">
             <tag name="AnnotationMemberNode" />
             <doc><![CDATA[
                 A node representing a metaprogram found in an annotation declaration.
@@ -2217,7 +2256,7 @@
             <factory-override prop="replacement" expr="makeNoOperationNode()" />
         </type>
 
-        <type name="AnonymousClassMemberMetaprogramAnchorNode" super="MetaprogramAnchorNode"
+        <type name="AnonymousClassMemberMetaprogramAnchorNode" super="ExplicitMetaprogramAnchorNode"
             superTypeArg="AnonymousClassMemberNode">
             <tag name="AnonymousClassMemberNode" />
             <doc><![CDATA[
@@ -2226,7 +2265,7 @@
             <factory-override prop="replacement" expr="makeNoOperationNode()" />
         </type>
 
-        <type name="ClassMemberMetaprogramAnchorNode" super="MetaprogramAnchorNode" superTypeArg="ClassMemberNode">
+        <type name="ClassMemberMetaprogramAnchorNode" super="ExplicitMetaprogramAnchorNode" superTypeArg="ClassMemberNode">
             <tag name="ClassMemberNode" />
             <doc><![CDATA[
                 A node representing a metaprogram found in a class body.
@@ -2234,7 +2273,8 @@
             <factory-override prop="replacement" expr="makeNoOperationNode()" />
         </type>
 
-        <type name="InterfaceMemberMetaprogramAnchorNode" super="MetaprogramAnchorNode" superTypeArg="InterfaceMemberNode">
+        <type name="InterfaceMemberMetaprogramAnchorNode" super="ExplicitMetaprogramAnchorNode"
+            superTypeArg="InterfaceMemberNode">
             <tag name="InterfaceMemberNode" />
             <doc><![CDATA[
                 A node representing a metaprogram found in an intereface body.
@@ -2242,14 +2282,23 @@
             <factory-override prop="replacement" expr="makeNoOperationNode()" />
         </type>
 
-        <type name="TypeDeclarationMetaprogramAnchorNode" super="MetaprogramAnchorNode" superTypeArg="TypeDeclarationNode">
+        <type name="MetaAnnotationMetaprogramAnchorNode" super="MetaprogramAnchorNode" superTypeArg="MetaAnnotationMetaprogramAnchorNode">
+            <include file="MetaAnnotationMetaprogramAnchorNode.java" />
+            <doc><![CDATA[
+                A node representing a metaprogram attached to a meta-annotation.
+            ]]></doc>
+            <factory-override prop="replacement" expr="null" />
+        </type>
+
+        <type name="TypeDeclarationMetaprogramAnchorNode" super="ExplicitMetaprogramAnchorNode"
+            superTypeArg="TypeDeclarationNode">
             <tag name="TypeDeclarationNode" />
             <doc><![CDATA[
                 A node representing a metaprogram found at the top level of a source file.
             ]]></doc>
             <factory-override prop="replacement" expr="makeNoOperationNode()" />
         </type>
-        
+
         <!-- ================== META-ANNOTATION NODES =================== -->
 
         <type name="MetaAnnotationMetaAnnotationValueNode" super="Node">
@@ -2283,15 +2332,6 @@
             ]]></doc>
         </type>
 
-        <type name="MetaAnnotationNode" super="Node" mode="abstract">
-            <prop name="annotationType" type="UnparameterizedTypeNode" desc="the annotation type" />
-            <include file="MetaAnnotationNode.java"/>
-            <doc><![CDATA[
-                Acts as a base class for meta-annotation nodes.  Subclasses distinguish between the different types of
-                meta-annotation sugar.
-            ]]></doc>
-        </type>
-
         <type name="MetaAnnotationElementNode" super="Node">
             <prop name="identifier" type="IdentifierNode" desc="the identifier" />
             <prop name="value" type="MetaAnnotationValueNode" desc="the element's value" />
@@ -2301,6 +2341,19 @@
                 <i>ident</i>=<i>value</i>
                 </pre>
             ]]></doc>
+        </type>
+
+        <type name="MetaAnnotationNode" super="Node" mode="abstract">
+            <prop name="annotationType" type="UnparameterizedTypeNode" desc="the annotation type" />
+            <prop name="metaprogramAnchor" type="MetaAnnotationMetaprogramAnchorNode" default="null"
+                mode="readOnly" desc="the anchor of a metaprogram attached to this node" />
+            <include file="MetaAnnotationNode.java" />
+            <doc><![CDATA[
+                Acts as a base class for meta-annotation nodes.  Subclasses distinguish between the different types of
+                meta-annotation sugar.  The <tt>metaprogramAnchor</tt> field is used when the meta-annotation for this
+                node represents a metaprogram; otherwise, it is <tt>null</tt>.
+            ]]></doc>
+            <factory-override prop="metaprogramAnchor" expr="null"/>
         </type>
 
         <type name="NormalMetaAnnotationNode" super="MetaAnnotationNode">
@@ -2324,30 +2377,34 @@
         </type>
 
         <!-- ========================= LIST NODES ======================= -->
-        
+
         <type name="MetaAnnotationElementListNode" super="ListNode" superTypeArg="MetaAnnotationElementNode">
-            <constant name="alwaysOrdered" type="boolean" default="true" desc="whether or not this list's contents are always order-dependent"/>
+            <constant name="alwaysOrdered" type="boolean" default="true"
+                desc="whether or not this list's contents are always order-dependent" />
             <doc><![CDATA[
                 Represents a list of {@link MetaAnnotationElementNode}s.
             ]]></doc>
         </type>
 
         <type name="MetaAnnotationListNode" super="ListNode" superTypeArg="MetaAnnotationNode">
-            <constant name="alwaysOrdered" type="boolean" default="false" desc="whether or not this list's contents are always order-dependent"/>
+            <constant name="alwaysOrdered" type="boolean" default="false"
+                desc="whether or not this list's contents are always order-dependent" />
             <doc><![CDATA[
                 Represents a list of {@link MetaAnnotationNode}s.
             ]]></doc>
         </type>
 
         <type name="MetaAnnotationValueListNode" super="ListNode" superTypeArg="MetaAnnotationValueNode">
-            <constant name="alwaysOrdered" type="boolean" default="true" desc="whether or not this list's contents are always order-dependent"/>
+            <constant name="alwaysOrdered" type="boolean" default="true"
+                desc="whether or not this list's contents are always order-dependent" />
             <doc><![CDATA[
                 Represents a list of {@link MetaAnnotationValueNode}s.
             ]]></doc>
         </type>
 
         <type name="MetaprogramImportListNode" super="ListNode" superTypeArg="MetaprogramImportNode">
-            <constant name="alwaysOrdered" type="boolean" default="false" desc="whether or not this list's contents are always order-dependent"/>
+            <constant name="alwaysOrdered" type="boolean" default="false"
+                desc="whether or not this list's contents are always order-dependent" />
             <doc><![CDATA[
                 Represents a list of {@link MetaprogramImportNode}s.
             ]]></doc>

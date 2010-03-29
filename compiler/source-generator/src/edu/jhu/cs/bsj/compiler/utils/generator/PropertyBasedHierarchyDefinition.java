@@ -48,11 +48,13 @@ public abstract class PropertyBasedHierarchyDefinition<T extends PropertyBasedHi
 		eliminateDuplicates(props, parentFirst);
 		return props;
 	}
-	
+
 	/**
 	 * Eliminates duplicates from the provided properties list.
+	 * 
 	 * @param list The list to filter.
-	 * @param parentFirst <code>true</code> if the list is sorted with parent properties first; <code>false</code> otherwise.
+	 * @param parentFirst <code>true</code> if the list is sorted with parent properties first; <code>false</code>
+	 *            otherwise.
 	 */
 	protected void eliminateDuplicates(List<PropertyDefinition> list, boolean parentFirst)
 	{
@@ -105,6 +107,6 @@ public abstract class PropertyBasedHierarchyDefinition<T extends PropertyBasedHi
 		eliminateDuplicates(props, parentFirst);
 		return props;
 	}
-	
+
 	public abstract List<PropertyDefinition> getProperties();
 }

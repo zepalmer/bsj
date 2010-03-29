@@ -45,7 +45,7 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode, List
 	{
 		if (s == null)
 		{
-			return factory.makeNullLiteralNode(null);
+			return factory.makeNullLiteralNode();
 		} else
 		{
 			return factory.makeStringLiteralNode(s);
@@ -66,7 +66,7 @@ public class BsjTreeLifter implements BsjNodeOperation<Pair<ExpressionNode, List
 	{
 		if (location == null)
 		{
-			return factory.makeNullLiteralNode(null);
+			return factory.makeNullLiteralNode();
 		} else
 		{
 			return factory.makeUnqualifiedClassInstantiationNode(

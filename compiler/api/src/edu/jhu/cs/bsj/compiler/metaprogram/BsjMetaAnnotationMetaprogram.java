@@ -1,5 +1,6 @@
 package edu.jhu.cs.bsj.compiler.metaprogram;
 
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.metaannotation.BsjMetaAnnotation;
 
 /**
@@ -14,6 +15,5 @@ public interface BsjMetaAnnotationMetaprogram extends BsjMetaAnnotation
 	 * Retrieves the metaprogram represented by this meta-annotation.
 	 * @return The metaprorgam represented by this meta-annotation.
 	 */
-	// TODO: BsjMetaprogram here should be parameterized with the meta-annotation metaprogram anchor
-	public BsjMetaprogram<?> getMetaprogram();
+	public BsjMetaprogram<MetaAnnotationMetaprogramAnchorNode> getMetaprogram();
 }

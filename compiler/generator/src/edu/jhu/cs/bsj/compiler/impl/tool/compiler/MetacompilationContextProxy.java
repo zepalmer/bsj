@@ -4,6 +4,7 @@ import javax.tools.DiagnosticListener;
 import javax.tools.JavaFileObject;
 
 import edu.jhu.cs.bsj.compiler.ast.node.PackageNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.dependency.DependencyManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.task.BsjCompilerTask;
@@ -68,5 +69,11 @@ public class MetacompilationContextProxy implements MetacompilationContext
 	public void registerTask(BsjCompilerTask task)
 	{
 		this.context.registerTask(task);
+	}
+
+	@Override
+	public boolean addObservedAnchor(MetaprogramAnchorNode<?> anchor)
+	{
+		return this.context.addObservedAnchor(anchor);
 	}
 }

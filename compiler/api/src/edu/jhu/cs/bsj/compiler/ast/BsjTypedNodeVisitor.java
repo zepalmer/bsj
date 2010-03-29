@@ -8,6 +8,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.AnonymousClassMemberMetaprogramAnch
 import edu.jhu.cs.bsj.compiler.ast.node.meta.BlockStatementMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.ClassMemberMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.CodeLiteralNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.ExplicitMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.InterfaceMemberMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationArrayValueNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationElementListNode;
@@ -15,6 +16,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationElementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationExpressionValueNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaAnnotationValueNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationValueListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationValueNode;
@@ -708,6 +710,12 @@ public interface BsjTypedNodeVisitor
     public void visitEnumModifiersNodeStart(EnumModifiersNode node, boolean mostSpecific);
 
     /**
+     * Starts a visit for nodes of type ExplicitMetaprogramAnchorNode.
+     * @param node The node being visited.
+     */
+    public void visitExplicitMetaprogramAnchorNodeStart(ExplicitMetaprogramAnchorNode<?> node);
+
+    /**
      * Starts a visit for nodes of type ExpressionListNode.
      * @param node The node being visited.
      * @param mostSpecific <code>true</code> if this is the most specific call
@@ -1066,6 +1074,15 @@ public interface BsjTypedNodeVisitor
      *                     otherwise.
      */
     public void visitMetaAnnotationMetaAnnotationValueNodeStart(MetaAnnotationMetaAnnotationValueNode node, boolean mostSpecific);
+
+    /**
+     * Starts a visit for nodes of type MetaAnnotationMetaprogramAnchorNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitMetaAnnotationMetaprogramAnchorNodeStart(MetaAnnotationMetaprogramAnchorNode node, boolean mostSpecific);
 
     /**
      * Starts a visit for nodes of type MetaAnnotationNode.
@@ -2328,6 +2345,12 @@ public interface BsjTypedNodeVisitor
     public void visitEnumModifiersNodeStop(EnumModifiersNode node, boolean mostSpecific);
 
     /**
+     * Stops a visit for nodes of type ExplicitMetaprogramAnchorNode.
+     * @param node The node being visited.
+     */
+    public void visitExplicitMetaprogramAnchorNodeStop(ExplicitMetaprogramAnchorNode<?> node);
+
+    /**
      * Stops a visit for nodes of type ExpressionListNode.
      * @param node The node being visited.
      * @param mostSpecific <code>true</code> if this is the most specific call
@@ -2686,6 +2709,15 @@ public interface BsjTypedNodeVisitor
      *                     otherwise.
      */
     public void visitMetaAnnotationMetaAnnotationValueNodeStop(MetaAnnotationMetaAnnotationValueNode node, boolean mostSpecific);
+
+    /**
+     * Stops a visit for nodes of type MetaAnnotationMetaprogramAnchorNode.
+     * @param node The node being visited.
+     * @param mostSpecific <code>true</code> if this is the most specific call
+     *                     which can be made for this node; <code>false</code>
+     *                     otherwise.
+     */
+    public void visitMetaAnnotationMetaprogramAnchorNodeStop(MetaAnnotationMetaprogramAnchorNode node, boolean mostSpecific);
 
     /**
      * Stops a visit for nodes of type MetaAnnotationNode.

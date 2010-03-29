@@ -9,7 +9,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.InterfaceMemberNode;
  * A node representing a metaprogram found in an intereface body.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public interface InterfaceMemberMetaprogramAnchorNode extends MetaprogramAnchorNode<InterfaceMemberNode>, InterfaceMemberNode
+public interface InterfaceMemberMetaprogramAnchorNode extends ExplicitMetaprogramAnchorNode<InterfaceMemberNode>, InterfaceMemberNode
 {
     /**
      * Generates a deep copy of this node.

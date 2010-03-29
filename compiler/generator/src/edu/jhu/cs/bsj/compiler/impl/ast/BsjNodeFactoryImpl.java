@@ -29,6 +29,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationElementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationExpressionValueNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaAnnotationValueNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationValueListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationValueNode;
@@ -54,6 +55,7 @@ import edu.jhu.cs.bsj.compiler.impl.ast.node.meta.MetaAnnotationElementNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.meta.MetaAnnotationExpressionValueNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.meta.MetaAnnotationListNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.meta.MetaAnnotationMetaAnnotationValueNodeImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.node.meta.MetaAnnotationMetaprogramAnchorNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.meta.MetaAnnotationValueListNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.meta.MetaprogramDependsNodeImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.node.meta.MetaprogramImportListNodeImpl;
@@ -587,7 +589,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public AnnotationMemberMetaprogramAnchorNode makeAnnotationMemberMetaprogramAnchorNode(
             MetaprogramNode metaprogram)
     {
-        AnnotationMemberMetaprogramAnchorNode ret = new AnnotationMemberMetaprogramAnchorNodeImpl(makeNoOperationNode(), metaprogram, startLocation, stopLocation, manager, binary);
+        AnnotationMemberMetaprogramAnchorNode ret = new AnnotationMemberMetaprogramAnchorNodeImpl(metaprogram, makeNoOperationNode(), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -601,7 +603,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        AnnotationMemberMetaprogramAnchorNode ret = new AnnotationMemberMetaprogramAnchorNodeImpl(makeNoOperationNode(), metaprogram, startLocation, stopLocation, manager, binary);
+        AnnotationMemberMetaprogramAnchorNode ret = new AnnotationMemberMetaprogramAnchorNodeImpl(metaprogram, makeNoOperationNode(), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -865,7 +867,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public AnonymousClassMemberMetaprogramAnchorNode makeAnonymousClassMemberMetaprogramAnchorNode(
             MetaprogramNode metaprogram)
     {
-        AnonymousClassMemberMetaprogramAnchorNode ret = new AnonymousClassMemberMetaprogramAnchorNodeImpl(makeNoOperationNode(), metaprogram, startLocation, stopLocation, manager, binary);
+        AnonymousClassMemberMetaprogramAnchorNode ret = new AnonymousClassMemberMetaprogramAnchorNodeImpl(metaprogram, makeNoOperationNode(), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -879,7 +881,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        AnonymousClassMemberMetaprogramAnchorNode ret = new AnonymousClassMemberMetaprogramAnchorNodeImpl(makeNoOperationNode(), metaprogram, startLocation, stopLocation, manager, binary);
+        AnonymousClassMemberMetaprogramAnchorNode ret = new AnonymousClassMemberMetaprogramAnchorNodeImpl(metaprogram, makeNoOperationNode(), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -1223,7 +1225,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public BlockStatementMetaprogramAnchorNode makeBlockStatementMetaprogramAnchorNode(
             MetaprogramNode metaprogram)
     {
-        BlockStatementMetaprogramAnchorNode ret = new BlockStatementMetaprogramAnchorNodeImpl(makeNoOperationNode(), metaprogram, startLocation, stopLocation, manager, binary);
+        BlockStatementMetaprogramAnchorNode ret = new BlockStatementMetaprogramAnchorNodeImpl(metaprogram, makeNoOperationNode(), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -1237,7 +1239,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        BlockStatementMetaprogramAnchorNode ret = new BlockStatementMetaprogramAnchorNodeImpl(makeNoOperationNode(), metaprogram, startLocation, stopLocation, manager, binary);
+        BlockStatementMetaprogramAnchorNode ret = new BlockStatementMetaprogramAnchorNodeImpl(metaprogram, makeNoOperationNode(), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -1653,7 +1655,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public ClassMemberMetaprogramAnchorNode makeClassMemberMetaprogramAnchorNode(
             MetaprogramNode metaprogram)
     {
-        ClassMemberMetaprogramAnchorNode ret = new ClassMemberMetaprogramAnchorNodeImpl(makeNoOperationNode(), metaprogram, startLocation, stopLocation, manager, binary);
+        ClassMemberMetaprogramAnchorNode ret = new ClassMemberMetaprogramAnchorNodeImpl(metaprogram, makeNoOperationNode(), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -1667,7 +1669,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        ClassMemberMetaprogramAnchorNode ret = new ClassMemberMetaprogramAnchorNodeImpl(makeNoOperationNode(), metaprogram, startLocation, stopLocation, manager, binary);
+        ClassMemberMetaprogramAnchorNode ret = new ClassMemberMetaprogramAnchorNodeImpl(metaprogram, makeNoOperationNode(), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3245,7 +3247,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public InterfaceMemberMetaprogramAnchorNode makeInterfaceMemberMetaprogramAnchorNode(
             MetaprogramNode metaprogram)
     {
-        InterfaceMemberMetaprogramAnchorNode ret = new InterfaceMemberMetaprogramAnchorNodeImpl(makeNoOperationNode(), metaprogram, startLocation, stopLocation, manager, binary);
+        InterfaceMemberMetaprogramAnchorNode ret = new InterfaceMemberMetaprogramAnchorNodeImpl(metaprogram, makeNoOperationNode(), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3259,7 +3261,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        InterfaceMemberMetaprogramAnchorNode ret = new InterfaceMemberMetaprogramAnchorNodeImpl(makeNoOperationNode(), metaprogram, startLocation, stopLocation, manager, binary);
+        InterfaceMemberMetaprogramAnchorNode ret = new InterfaceMemberMetaprogramAnchorNodeImpl(metaprogram, makeNoOperationNode(), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -3610,6 +3612,31 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation stopLocation)
     {
         MetaAnnotationMetaAnnotationValueNode ret = new MetaAnnotationMetaAnnotationValueNodeImpl(annotation, startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a MetaAnnotationMetaprogramAnchorNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public MetaAnnotationMetaprogramAnchorNode makeMetaAnnotationMetaprogramAnchorNode(
+    )
+    {
+        MetaAnnotationMetaprogramAnchorNode ret = new MetaAnnotationMetaprogramAnchorNodeImpl(null, startLocation, stopLocation, manager, binary);
+        return ret;
+    }
+    
+    /**
+     * Creates a MetaAnnotationMetaprogramAnchorNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public MetaAnnotationMetaprogramAnchorNode makeMetaAnnotationMetaprogramAnchorNode(
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        MetaAnnotationMetaprogramAnchorNode ret = new MetaAnnotationMetaprogramAnchorNodeImpl(null, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -4209,7 +4236,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             MetaAnnotationElementListNode arguments,
             UnparameterizedTypeNode annotationType)
     {
-        NormalMetaAnnotationNode ret = new NormalMetaAnnotationNodeImpl(arguments, annotationType, startLocation, stopLocation, manager, binary);
+        NormalMetaAnnotationNode ret = new NormalMetaAnnotationNodeImpl(arguments, annotationType, null, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -4224,7 +4251,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        NormalMetaAnnotationNode ret = new NormalMetaAnnotationNodeImpl(arguments, annotationType, startLocation, stopLocation, manager, binary);
+        NormalMetaAnnotationNode ret = new NormalMetaAnnotationNodeImpl(arguments, annotationType, null, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -4234,32 +4261,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
      */
     @Override
     public NullLiteralNode makeNullLiteralNode(
-            Void value)
-    {
-        NullLiteralNode ret = new NullLiteralNodeImpl(null, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a NullLiteralNode.
-     * The specified start and stop locations are used.
-     */
-    @Override
-    public NullLiteralNode makeNullLiteralNode(
-            Void value,
-            BsjSourceLocation startLocation,
-            BsjSourceLocation stopLocation)
-    {
-        NullLiteralNode ret = new NullLiteralNodeImpl(null, startLocation, stopLocation, manager, binary);
-        return ret;
-    }
-    
-    /**
-     * Creates a NullLiteralNode.
-     * The start and stop locations which have been set as properties of this factory are used.
-     */
-    @Override
-    public NullLiteralNode makeNullLiteralNode()
+    )
     {
         NullLiteralNode ret = new NullLiteralNodeImpl(null, startLocation, stopLocation, manager, binary);
         return ret;
@@ -4677,7 +4679,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             MetaAnnotationValueNode value,
             UnparameterizedTypeNode annotationType)
     {
-        SingleElementMetaAnnotationNode ret = new SingleElementMetaAnnotationNodeImpl(value, annotationType, startLocation, stopLocation, manager, binary);
+        SingleElementMetaAnnotationNode ret = new SingleElementMetaAnnotationNodeImpl(value, annotationType, null, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -4692,7 +4694,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        SingleElementMetaAnnotationNode ret = new SingleElementMetaAnnotationNodeImpl(value, annotationType, startLocation, stopLocation, manager, binary);
+        SingleElementMetaAnnotationNode ret = new SingleElementMetaAnnotationNodeImpl(value, annotationType, null, startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -5386,7 +5388,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
     public TypeDeclarationMetaprogramAnchorNode makeTypeDeclarationMetaprogramAnchorNode(
             MetaprogramNode metaprogram)
     {
-        TypeDeclarationMetaprogramAnchorNode ret = new TypeDeclarationMetaprogramAnchorNodeImpl(makeNoOperationNode(), metaprogram, startLocation, stopLocation, manager, binary);
+        TypeDeclarationMetaprogramAnchorNode ret = new TypeDeclarationMetaprogramAnchorNodeImpl(metaprogram, makeNoOperationNode(), startLocation, stopLocation, manager, binary);
         return ret;
     }
     
@@ -5400,7 +5402,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation)
     {
-        TypeDeclarationMetaprogramAnchorNode ret = new TypeDeclarationMetaprogramAnchorNodeImpl(makeNoOperationNode(), metaprogram, startLocation, stopLocation, manager, binary);
+        TypeDeclarationMetaprogramAnchorNode ret = new TypeDeclarationMetaprogramAnchorNodeImpl(metaprogram, makeNoOperationNode(), startLocation, stopLocation, manager, binary);
         return ret;
     }
     

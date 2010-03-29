@@ -4,6 +4,7 @@ import javax.tools.DiagnosticListener;
 import javax.tools.JavaFileObject;
 
 import edu.jhu.cs.bsj.compiler.ast.node.PackageNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.dependency.DependencyManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.task.BsjCompilerTask;
@@ -52,4 +53,12 @@ public interface MetacompilationContext
 	 * @param file The file to add.
 	 */
 	public void addSerializedFile(BsjFileObject file);
+	
+	/**
+	 * Adds a node to the set of observed anchor nodes.  This set is used primarily to ensure that the same metaprogram
+	 * does not get extracted twice.
+	 * @param anchor The anchor to add to the observed set.
+	 * @return <code>true</code> if the anchor has not been seen before.
+	 */
+	public boolean addObservedAnchor(MetaprogramAnchorNode<?> anchor);
 }

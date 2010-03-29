@@ -204,7 +204,7 @@ public class TypeDefinition extends PropertyBasedHierarchyDefinition<TypeDefinit
 	{
 		return factoryOverrideMap;
 	}
-
+	
 	public Map<String, String> getConstructorOverrideMap()
 	{
 		return constructorOverrideMap;
@@ -281,7 +281,11 @@ public class TypeDefinition extends PropertyBasedHierarchyDefinition<TypeDefinit
 				String typeParam = def.getParent().getTypeParameter();
 				if (typeParam.indexOf(' ') != -1)
 					typeParam = typeParam.substring(0, typeParam.indexOf(' '));
-				typeArgMap.put(typeParam, def.getSuperTypeArg());
+				// Hack to allow multiple levels of type arguments... as long as they're the same letter
+				if (!typeParam.equals(def.superTypeArg)) // avoid storing T=T
+				{
+					typeArgMap.put(typeParam, def.getSuperTypeArg());
+				}
 			}
 			for (TagReferenceDefinition tag : def.getTags())
 			{
@@ -323,4 +327,19 @@ public class TypeDefinition extends PropertyBasedHierarchyDefinition<TypeDefinit
 	{
 		this.namespaceMap = namespaceMap;
 	}	
+
+	public Map<String, String> getRecursiveFactoryOverrideMap()
+	{
+		Map<String,String> map = new HashMap<String, String>();
+		map.putAll(this.getFactoryOverrideMap());
+		for (TagReferenceDefinition tag : this.getTags())
+		{
+			map.putAll(this.namespaceMap.get(tag.getName()).getRecursiveFactoryOverrideMap());
+		}
+		if (this.getParent() != null)
+		{
+			map.putAll(this.getParent().getRecursiveFactoryOverrideMap());
+		}
+		return map;
+	}
 }

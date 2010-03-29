@@ -77,16 +77,22 @@ public class ExecuteMetaprogramTask extends AbstractBsjCompilerTask
 		// Have the metaprogram replace itself with its replacement node
 		// TODO: what kind of policy should we put into place for this? can a read-only metaprogram replace itself?
 		Node replacement = profile.getAnchor().getReplacement();
-		profile.getAnchor().getParent().replace(profile.getAnchor(), replacement);
+		if (replacement != null)
+		{
+			profile.getAnchor().getParent().replace(profile.getAnchor(), replacement);
+		}
 
 		// Pass the affected part of the AST back to allow name analysis, etc.
 		// TODO: what if more than just this compilation unit was changed? Need name analysis on inserted CUs too
-		Node target = replacement.getNearestAncestorOfType(CompilationUnitNode.class);
-		if (target == null)
+		if (replacement != null)
 		{
-			target = replacement.getFurthestAncestor();
+			Node target = replacement.getNearestAncestorOfType(CompilationUnitNode.class);
+			if (target == null)
+			{
+				target = replacement.getFurthestAncestor();
+			}
+			context.registerTask(new CategorizeNamesTask(target));
 		}
-		context.registerTask(new CategorizeNamesTask(target));
 
 		// Re-enqueue this task so we can execute the next metaprogram when the time comes (which is probably right now)
 		context.registerTask(this);
