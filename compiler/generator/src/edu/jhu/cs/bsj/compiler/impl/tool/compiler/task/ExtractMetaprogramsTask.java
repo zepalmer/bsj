@@ -45,11 +45,14 @@ public class ExtractMetaprogramsTask extends AbstractBsjCompilerTask
 			if (anchor instanceof ExplicitMetaprogramAnchorNode<?>)
 			{
 				ExplicitMetaprogramAnchorNode<?> explicitAnchor = (ExplicitMetaprogramAnchorNode<?>) anchor;
-				if (LOGGER.isTraceEnabled())
+				if (explicitAnchor.getMetaprogram() != null)
 				{
-					LOGGER.trace("Found explicit metaprogram at " + explicitAnchor.getStartLocation());
+					if (LOGGER.isTraceEnabled())
+					{
+						LOGGER.trace("Found explicit metaprogram at " + explicitAnchor.getStartLocation());
+					}
+					context.registerTask(createCompileExplicitMetaprogramTask(explicitAnchor));
 				}
-				context.registerTask(createCompileExplicitMetaprogramTask(explicitAnchor));
 			} else if (anchor instanceof MetaAnnotationMetaprogramAnchorNode)
 			{
 				// TODO: consider: maybe apply this logic to all anchors?
