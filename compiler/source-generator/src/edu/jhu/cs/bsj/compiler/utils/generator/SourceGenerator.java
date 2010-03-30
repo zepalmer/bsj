@@ -2229,19 +2229,19 @@ public class SourceGenerator
 		{
 			String interfacePackage = def.getProfile().getProperty(GenerationProfile.GENERATED_INTERFACE_PACKAGE_NAME);
 			ifacePs = createOutputFile(interfacePackage, Mode.INTERFACE, Project.API, SupplementCategory.GENERAL,
-					def.getName() + "<T extends javax.tools.JavaFileObject>", false,
+					def.getName(), false,
 					"import edu.jhu.cs.bsj.compiler.diagnostic.*;\n\n/**\n * "
-							+ def.getDocString().replaceAll("\n", "\n * ") + "\n */", def.getSuperName() + "<T>");
+							+ def.getDocString().replaceAll("\n", "\n * ") + "\n */", def.getSuperName());
 			ifacePs.incPrependCount();
 
 			String classPackage = def.getProfile().getProperty(GenerationProfile.GENERATED_CLASS_PACKAGE_NAME);
 			classPs = createOutputFile(classPackage, def.getCode() == null ? Mode.ABSTRACT : Mode.CONCRETE,
 					def.getProfile().getProperty(GenerationProfile.TARGET_PROJECT), SupplementCategory.GENERAL,
-					def.getName() + "Impl<T extends javax.tools.JavaFileObject>", false,
+					def.getName() + "Impl", false,
 					"import edu.jhu.cs.bsj.compiler.diagnostic.*;\n"
 							+ "import edu.jhu.cs.bsj.compiler.impl.diagnostic.*;\n" + "import " + interfacePackage
 							+ ".*;\n" + "\n\n/**\n * " + def.getDocString().replaceAll("\n", "\n * ") + "\n */",
-					def.getSuperName() + "Impl<T>", def.getName() + "<T>");
+					def.getSuperName() + "Impl", def.getName());
 			classPs.incPrependCount();
 
 			if (def.getCode() != null)
@@ -2260,10 +2260,7 @@ public class SourceGenerator
 
 			// Create constructor definition
 			List<PropertyDefinition> consParams = new ArrayList<PropertyDefinition>();
-			consParams.add(new PropertyDefinition("lineNumber", "long", null, PropertyDefinition.Mode.NORMAL, "", null));
-			consParams.add(new PropertyDefinition("columnNumber", "long", null, PropertyDefinition.Mode.NORMAL, "",
-					null));
-			consParams.add(new PropertyDefinition("source", "T", null, PropertyDefinition.Mode.NORMAL, "", null));
+			consParams.add(new PropertyDefinition("source", "BsjSourceLocation", null, PropertyDefinition.Mode.NORMAL, "", null));
 			PropertyDefinition.Mode overrideMode = def.getCode() == null ? PropertyDefinition.Mode.NORMAL
 					: PropertyDefinition.Mode.SKIP;
 			consParams.add(new PropertyDefinition("code", "String", null, overrideMode, null,

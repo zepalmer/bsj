@@ -286,7 +286,7 @@ public class CompileExplicitMetaprogramTask<R extends Node> extends
 		// TODO: if this compilation fails, the resulting exception won't make much sense; we need to translate it back
 		// to the file from which it originated
 		// TODO: perhaps we want to surround the diagnostics that this compilation subprocess produces in a wrapper?
-		compiler.compile(Arrays.asList(metaprogramSourceFile), this.metacompilationContext.getDiagnosticListener());
+		compiler.compile(Arrays.asList(metaprogramSourceFile), null);
 
 		ClassLoader metaprogramClassLoader = fileManager.getClassLoader(BsjCompilerLocation.CLASS_OUTPUT);
 		Class<? extends Metaprogram<A>> metaprogramClass;

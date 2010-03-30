@@ -6,7 +6,7 @@ import javax.annotation.Generated;
  * A diagnostic which represents a conflicting access modifier.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public interface ConflictingAccessModifierDiagnostic<T extends javax.tools.JavaFileObject> extends BsjParserDiagnostic<T>
+public interface ConflictingAccessModifierDiagnostic extends BsjParserDiagnostic
 {
     /** The code for this diagnostic. */
     public static final String CODE = "bsj.parser.error.conflictingAccessModifier";

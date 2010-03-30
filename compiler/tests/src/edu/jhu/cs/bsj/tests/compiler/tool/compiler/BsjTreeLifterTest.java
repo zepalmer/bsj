@@ -12,7 +12,6 @@ import java.util.List;
 
 import javax.tools.Diagnostic;
 import javax.tools.DiagnosticListener;
-import javax.tools.JavaFileObject;
 import javax.tools.JavaFileObject.Kind;
 
 import junit.framework.Assert;
@@ -21,6 +20,7 @@ import org.junit.Test;
 
 import edu.jhu.cs.bsj.compiler.BsjServiceRegistry;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.NameCategory;
 import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
@@ -191,10 +191,10 @@ public class BsjTreeLifterTest extends AbstractPerFileTest
 
 		// compile
 		final boolean[] success = new boolean[] { true };
-		toolkit.getCompiler().compile(fileObjects, new DiagnosticListener<JavaFileObject>()
+		toolkit.getCompiler().compile(fileObjects, new DiagnosticListener<BsjSourceLocation>()
 		{
 			@Override
-			public void report(Diagnostic<? extends JavaFileObject> diagnostic)
+			public void report(Diagnostic<? extends BsjSourceLocation> diagnostic)
 			{
 				if (diagnostic.getKind() == Diagnostic.Kind.ERROR)
 				{

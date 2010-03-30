@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.annotation.Generated;
 
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.diagnostic.parser.FloatingPointLiteralTooLargeDiagnostic;
 
 
@@ -11,16 +12,14 @@ import edu.jhu.cs.bsj.compiler.diagnostic.parser.FloatingPointLiteralTooLargeDia
  * A diagnostic indicating that a floating point literal was too large to fit into its type.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public class FloatingPointLiteralTooLargeDiagnosticImpl<T extends javax.tools.JavaFileObject> extends InvalidFloatingPointLiteralDiagnosticImpl<T> implements FloatingPointLiteralTooLargeDiagnostic<T>
+public class FloatingPointLiteralTooLargeDiagnosticImpl extends InvalidFloatingPointLiteralDiagnosticImpl implements FloatingPointLiteralTooLargeDiagnostic
 {
     public FloatingPointLiteralTooLargeDiagnosticImpl(
-            long lineNumber,
-            long columnNumber,
-            T source,
+            BsjSourceLocation source,
             String ruleName,
             String literalText)
     {
-        super(lineNumber, columnNumber, source, FloatingPointLiteralTooLargeDiagnostic.CODE, Kind.ERROR, ruleName, literalText);
+        super(source, FloatingPointLiteralTooLargeDiagnostic.CODE, Kind.ERROR, ruleName, literalText);
     }
     
     @Override

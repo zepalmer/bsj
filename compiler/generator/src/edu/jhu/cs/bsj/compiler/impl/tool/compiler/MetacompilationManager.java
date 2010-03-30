@@ -11,10 +11,10 @@ import java.util.Set;
 import java.util.WeakHashMap;
 
 import javax.tools.DiagnosticListener;
-import javax.tools.JavaFileObject;
 
 import org.apache.log4j.Logger;
 
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
 import edu.jhu.cs.bsj.compiler.ast.node.PackageNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramAnchorNode;
@@ -63,7 +63,7 @@ public class MetacompilationManager implements MetacompilationContext
 	/**
 	 * The listener to which we will report events.
 	 */
-	private DiagnosticListener<? super JavaFileObject> diagnosticListener;
+	private DiagnosticListener<BsjSourceLocation> diagnosticListener;
 
 	/**
 	 * Represents the metaprogram dependency manager.
@@ -91,7 +91,7 @@ public class MetacompilationManager implements MetacompilationContext
 	 * @param diagnosticListener The listener to which diagnostics will be reported. Must not be <code>null</code>.
 	 */
 	public MetacompilationManager(BsjToolkit toolkit, BsjNodeManager nodeManager,
-			DiagnosticListener<? super JavaFileObject> diagnosticListener)
+			DiagnosticListener<BsjSourceLocation> diagnosticListener)
 	{
 		this.observedBinaryNames = new HashSet<String>();
 		this.priorityQueue = new PriorityQueue<BsjCompilerTask>();
@@ -297,6 +297,7 @@ public class MetacompilationManager implements MetacompilationContext
 		{
 			LOGGER.trace("Executing next compilation task: " + task.toString());
 		}
+		// TODO: use a proxied diagnostic listener so we can find out if this task failed
 		task.execute(this);
 	}
 
@@ -310,7 +311,7 @@ public class MetacompilationManager implements MetacompilationContext
 		return nodeManager;
 	}
 
-	public DiagnosticListener<? super JavaFileObject> getDiagnosticListener()
+	public DiagnosticListener<BsjSourceLocation> getDiagnosticListener()
 	{
 		return diagnosticListener;
 	}

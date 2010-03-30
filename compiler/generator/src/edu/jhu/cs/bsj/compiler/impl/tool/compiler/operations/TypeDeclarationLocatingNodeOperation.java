@@ -238,7 +238,6 @@ public class TypeDeclarationLocatingNodeOperation extends BsjDefaultNodeOperatio
 		// (perhaps get every type which we think fits? how do we accommodate shadowing?)
 		// TODO: handle type parameters
 		// TODO: handle local class declarations
-		// TODO: handle default package classes
 
 		@Override
 		public NamedTypeDeclarationNode<?> executeAnnotationDeclarationNode(AnnotationDeclarationNode node, List<Node> p)
@@ -326,6 +325,31 @@ public class TypeDeclarationLocatingNodeOperation extends BsjDefaultNodeOperatio
 					if (namedTypeDeclarationNode != null)
 					{
 						return namedTypeDeclarationNode;
+					}
+				}
+			}
+			return null;
+		}
+
+		@Override
+		public NamedTypeDeclarationNode<?> executePackageNode(PackageNode node, List<Node> p)
+		{
+			// Handle default package classes
+			if (node.getName() == null)
+			{
+				CompilationUnitNode compilationUnitNode = node.load(name);
+				if (compilationUnitNode != null)
+				{
+					for (TypeDeclarationNode typeDecl : compilationUnitNode.getTypeDecls())
+					{
+						if (typeDecl instanceof NamedTypeDeclarationNode<?>)
+						{
+							NamedTypeDeclarationNode<?> namedTypeDecl = (NamedTypeDeclarationNode<?>)typeDecl;
+							if (namedTypeDecl.getIdentifier().getIdentifier().equals(name))
+							{
+								return namedTypeDecl;
+							}
+						}
 					}
 				}
 			}

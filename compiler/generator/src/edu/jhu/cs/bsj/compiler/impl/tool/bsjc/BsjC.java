@@ -20,7 +20,6 @@ import java.util.Map;
 import java.util.Properties;
 
 import javax.tools.DiagnosticListener;
-import javax.tools.JavaFileObject;
 import javax.tools.JavaFileObject.Kind;
 
 import org.apache.commons.cli.CommandLine;
@@ -33,6 +32,7 @@ import org.apache.commons.cli.PosixParser;
 import org.apache.log4j.PropertyConfigurator;
 
 import edu.jhu.cs.bsj.compiler.BsjServiceRegistry;
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.StandardBsjCompiler;
 import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.RegularFileLocationManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.UnionLocationManager;
@@ -81,7 +81,7 @@ public class BsjC
 	/**
 	 * Diagnostic listener for compilation.
 	 */
-	private DiagnosticListener<? super JavaFileObject> listener;
+	private DiagnosticListener<BsjSourceLocation> listener;
 	
 	/**
 	 * Objects to be compiled.
@@ -94,7 +94,7 @@ public class BsjC
 	 */
 	public BsjC()
 	{
-		listener = new DiagnosticPrintingListener<JavaFileObject>(System.err);
+		listener = new DiagnosticPrintingListener<BsjSourceLocation>(System.err);
 	}
 	
 	/**
@@ -380,18 +380,12 @@ public class BsjC
 		this.bsjFileManager = bsjFileManager;
 	}
 
-	/**
-	 * @return the listener
-	 */
-	public DiagnosticListener<? super JavaFileObject> getListener()
+	public DiagnosticListener<BsjSourceLocation> getListener()
 	{
 		return listener;
 	}
 
-	/**
-	 * @param listener the listener to set
-	 */
-	public void setListener(DiagnosticListener<? super JavaFileObject> listener)
+	public void setListener(DiagnosticListener<BsjSourceLocation> listener)
 	{
 		this.listener = listener;
 	}

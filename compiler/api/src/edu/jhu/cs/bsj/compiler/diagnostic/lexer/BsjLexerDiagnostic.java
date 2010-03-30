@@ -8,7 +8,7 @@ import edu.jhu.cs.bsj.compiler.diagnostic.BsjDiagnostic;
  * A diagnostic which acts as a supertype for all BSJ lexer diagnostics.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public interface BsjLexerDiagnostic<T extends javax.tools.JavaFileObject> extends BsjDiagnostic<T>
+public interface BsjLexerDiagnostic extends BsjDiagnostic
 {
     /**
      * Retrieves the character which caused this diagnostic.

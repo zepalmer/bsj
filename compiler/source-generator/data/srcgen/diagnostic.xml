@@ -149,5 +149,83 @@
                 ]]></doc>
             </diagnostic>
         </srcgen>
+        <srcgen ipkg="edu.jhu.cs.bsj.compiler.diagnostic.compiler" cpkg="edu.jhu.cs.bsj.compiler.impl.diagnostic.compiler"
+            ctgt="generator">
+            <diagnostic name="BsjCompilerDiagnostic" super="BsjDiagnostic">
+                <doc><![CDATA[
+                    A diagnostic which acts as a supertype for all BSJ compiler diagnostics.
+                ]]></doc>
+            </diagnostic>
+
+            <diagnostic name="InvalidMetaAnnotationDiagnostic" super="BsjCompilerDiagnostic">
+                <doc><![CDATA[
+                    A diagnostic which represents some problem in the use of a meta-annotation.
+                ]]></doc>
+            </diagnostic>
+
+            <diagnostic name="InvalidMetaAnnotationMethodDiagnostic" super="InvalidMetaAnnotationDiagnostic">
+                <prop name="methodType" type="MetaAnnotationMethodType" desc="the type of method with which there is a problem" />
+                <prop name="methodName" type="String" desc="the name of the method with which there is a problem" />
+                <doc><![CDATA[
+                    A diagnostic which represents some problem in the definition of a meta-annotation type's getter or
+                    setter methods.
+                ]]></doc>
+            </diagnostic>
+
+            <diagnostic name="InvalidMetaAnnotationMethodNameDiagnostic" super="InvalidMetaAnnotationMethodDiagnostic"
+                code="bsj.compiler.metaAnnotation.method.name">
+                <prop name="methodNameError" type="MetaAnnotationMethodNameErrorType" desc="the type of error that occurred" />
+                <doc><![CDATA[
+                    A diagnostic indicating that the name of a meta-annotation getter or setter method is invalid.
+                ]]></doc>
+            </diagnostic>
+
+            <diagnostic name="InvalidMetaAnnotationMethodReturnTypeDiagnostic" super="InvalidMetaAnnotationMethodDiagnostic"
+                code="bsj.compiler.metaAnnotation.method.returnType">
+                <doc><![CDATA[
+                    A diagnostic indicating that the return type of a meta-annotation getter or setter method is incorrect.
+                ]]></doc>
+            </diagnostic>
+
+            <diagnostic name="InvalidMetaAnnotationMethodParameterCountDiagnostic" super="InvalidMetaAnnotationMethodDiagnostic"
+                code="bsj.compiler.metaAnnotation.method.parameterCount">
+                <prop name="expectedCount" type="int" desc="the number of parameters expected" />
+                <prop name="observedCount" type="int" desc="the number of parameters observed" />
+                <doc><![CDATA[
+                    A diagnostic indicating that the number of parameters to a meta-annotation getter or setter method
+                    is incorrect.
+                ]]></doc>
+            </diagnostic>
+
+            <diagnostic name="IncorrectlyStaticMetaAnnotationMethodDiagnostic" super="InvalidMetaAnnotationMethodDiagnostic"
+                code="bsj.compiler.metaAnnotation.method.static">
+                <doc><![CDATA[
+                    A diagnostic indicating that the specified method was static when it should not be.
+                ]]></doc>
+            </diagnostic>
+
+            <diagnostic name="InvalidMetaAnnotationPropertyDiagnostic" super="InvalidMetaAnnotationDiagnostic">
+                <prop name="propertyName" type="String" desc="the name of the property with which there is a problem" />
+                <doc><![CDATA[
+                    A diagnostic which represents some problem with a meta-annotation's properties.
+                ]]></doc>
+            </diagnostic>
+
+            <diagnostic name="MetaAnnotationPropertyMissingMethodDiagnostic" super="InvalidMetaAnnotationPropertyDiagnostic"
+                code="bsj.compiler.metaAnnotation.property.missingMethod">
+                <prop name="methodType" type="MetaAnnotationMethodType" desc="the type of method missing" />
+                <doc><![CDATA[
+                    A diagnostic indicating that a property's getter or setter is missing.
+                ]]></doc>
+            </diagnostic>
+
+            <diagnostic name="MetaAnnotationPropertyTypeMismatchDiagnostic" super="InvalidMetaAnnotationPropertyDiagnostic"
+                code="bsj.compiler.metaAnnotation.property.typeMismatch">
+                <doc><![CDATA[
+                    A diagnostic indicating that the return type of a property's getter is not assignable from the
+                    argument of the property's setter.
+                ]]></doc>
+            </diagnostic>
+        </srcgen>
     </srcgen>
 </srcgen>

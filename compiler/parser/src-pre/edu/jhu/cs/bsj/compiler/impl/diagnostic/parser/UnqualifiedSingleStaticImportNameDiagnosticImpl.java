@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.annotation.Generated;
 
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.diagnostic.parser.UnqualifiedSingleStaticImportNameDiagnostic;
 
 
@@ -11,19 +12,17 @@ import edu.jhu.cs.bsj.compiler.diagnostic.parser.UnqualifiedSingleStaticImportNa
  * A diagnostic representing a single static import which used an unqualified name.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public class UnqualifiedSingleStaticImportNameDiagnosticImpl<T extends javax.tools.JavaFileObject> extends BsjParserDiagnosticImpl<T> implements UnqualifiedSingleStaticImportNameDiagnostic<T>
+public class UnqualifiedSingleStaticImportNameDiagnosticImpl extends BsjParserDiagnosticImpl implements UnqualifiedSingleStaticImportNameDiagnostic
 {
     /** The name which was provided. */
     private String name;
     
     public UnqualifiedSingleStaticImportNameDiagnosticImpl(
-            long lineNumber,
-            long columnNumber,
-            T source,
+            BsjSourceLocation source,
             String ruleName,
             String name)
     {
-        super(lineNumber, columnNumber, source, UnqualifiedSingleStaticImportNameDiagnostic.CODE, Kind.ERROR, ruleName);
+        super(source, UnqualifiedSingleStaticImportNameDiagnostic.CODE, Kind.ERROR, ruleName);
         this.name = name;
     }
     

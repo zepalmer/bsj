@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.annotation.Generated;
 
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.diagnostic.parser.ConflictingAccessModifierDiagnostic;
 
 
@@ -11,7 +12,7 @@ import edu.jhu.cs.bsj.compiler.diagnostic.parser.ConflictingAccessModifierDiagno
  * A diagnostic which represents a conflicting access modifier.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public class ConflictingAccessModifierDiagnosticImpl<T extends javax.tools.JavaFileObject> extends BsjParserDiagnosticImpl<T> implements ConflictingAccessModifierDiagnostic<T>
+public class ConflictingAccessModifierDiagnosticImpl extends BsjParserDiagnosticImpl implements ConflictingAccessModifierDiagnostic
 {
     /** The first modifier which conflicts. */
     private String firstModifier;
@@ -20,14 +21,12 @@ public class ConflictingAccessModifierDiagnosticImpl<T extends javax.tools.JavaF
     private String secondModifier;
     
     public ConflictingAccessModifierDiagnosticImpl(
-            long lineNumber,
-            long columnNumber,
-            T source,
+            BsjSourceLocation source,
             String ruleName,
             String firstModifier,
             String secondModifier)
     {
-        super(lineNumber, columnNumber, source, ConflictingAccessModifierDiagnostic.CODE, Kind.ERROR, ruleName);
+        super(source, ConflictingAccessModifierDiagnostic.CODE, Kind.ERROR, ruleName);
         this.firstModifier = firstModifier;
         this.secondModifier = secondModifier;
     }

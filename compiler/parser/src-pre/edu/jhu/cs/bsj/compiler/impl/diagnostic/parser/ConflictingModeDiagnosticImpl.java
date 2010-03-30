@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.annotation.Generated;
 
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.diagnostic.parser.ConflictingModeDiagnostic;
 
 
@@ -11,7 +12,7 @@ import edu.jhu.cs.bsj.compiler.diagnostic.parser.ConflictingModeDiagnostic;
  * A diagnostic which represents a conflicting metaprogram mode.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public class ConflictingModeDiagnosticImpl<T extends javax.tools.JavaFileObject> extends BsjParserDiagnosticImpl<T> implements ConflictingModeDiagnostic<T>
+public class ConflictingModeDiagnosticImpl extends BsjParserDiagnosticImpl implements ConflictingModeDiagnostic
 {
     /** The first mode which conflicts. */
     private String firstMode;
@@ -20,14 +21,12 @@ public class ConflictingModeDiagnosticImpl<T extends javax.tools.JavaFileObject>
     private String secondMode;
     
     public ConflictingModeDiagnosticImpl(
-            long lineNumber,
-            long columnNumber,
-            T source,
+            BsjSourceLocation source,
             String ruleName,
             String firstMode,
             String secondMode)
     {
-        super(lineNumber, columnNumber, source, ConflictingModeDiagnostic.CODE, Kind.ERROR, ruleName);
+        super(source, ConflictingModeDiagnostic.CODE, Kind.ERROR, ruleName);
         this.firstMode = firstMode;
         this.secondMode = secondMode;
     }

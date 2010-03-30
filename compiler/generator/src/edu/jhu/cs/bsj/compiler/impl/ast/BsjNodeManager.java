@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicLong;
 
+import javax.tools.DiagnosticListener;
 import javax.tools.JavaCompiler;
 import javax.tools.StandardLocation;
 import javax.tools.ToolProvider;
@@ -24,6 +25,7 @@ import org.apache.log4j.Logger;
 import edu.jhu.cs.bsj.compiler.BsjServiceRegistry;
 import edu.jhu.cs.bsj.compiler.ast.AccessModifier;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.NameCategory;
 import edu.jhu.cs.bsj.compiler.ast.NodePermission;
 import edu.jhu.cs.bsj.compiler.ast.exception.InsufficientPermissionException;
@@ -264,17 +266,23 @@ public class BsjNodeManager
 	 * share information about the structure of that meta-annotation declaration.
 	 * 
 	 * @param node The meta-annotation node for which to instantiate an object.
+	 * @param listener The diagnostic listener to which to report errors.
 	 * @return The resulting meta-annotation object.
 	 * @throws IllegalArgumentException If the meta-annotation object cannot be instantiated or configured.
 	 */
 	// TODO: better error handling
-	public BsjMetaAnnotation instantiateMetaAnnotationObject(MetaAnnotationNode node)
+	public BsjMetaAnnotation instantiateMetaAnnotationObject(MetaAnnotationNode node,
+			DiagnosticListener<BsjSourceLocation> listener)
 	{
 		// Attempt to resolve the meta-annotation class
 		Class<? extends BsjMetaAnnotation> clazz = resolveMetaAnnotationClass(node);
 
 		// Obtain the meta-annotation profile for this class
-		MetaAnnotationProfile profile = metaAnnotationProfileManager.getProfile(clazz);
+		MetaAnnotationProfile profile = metaAnnotationProfileManager.getProfile(clazz, listener, node.getStartLocation());
+		if (profile == null)
+		{
+			throw new IllegalArgumentException("Could not retrieve profile for " + clazz);
+		}
 
 		// Instantiate the meta-annotation class
 		BsjMetaAnnotation metaAnnotationObject;

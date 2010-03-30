@@ -33,14 +33,19 @@ public class BsjToolkitImpl implements BsjToolkit
 	{
 		super();
 		this.fileManager = fileManager;
+		
 		PackageNodeCallback packageNodeCallback = new PackageNodeCallback();
 		packageNodeCallback.setFileManager(fileManager);
-		BsjNodeManager manager = new BsjNodeManager();
-		this.factory = new BsjNodeFactoryImpl(packageNodeCallback, manager);
-		manager.setToolkit(this);
+		
+		BsjNodeManager nodeManager = new BsjNodeManager();
+		nodeManager.setToolkit(this);
+		
+		this.factory = new BsjNodeFactoryImpl(packageNodeCallback, nodeManager);
+		
 		packageNodeCallback.setFactory(this.factory);
+		
 		this.parser = new BsjParserImpl(this.factory);
-		this.compiler = new StandardBsjCompiler(this, packageNodeCallback, manager);
+		this.compiler = new StandardBsjCompiler(this, packageNodeCallback, nodeManager);
 		this.serializer = new BsjSourceSerializerImpl();
 	}
 

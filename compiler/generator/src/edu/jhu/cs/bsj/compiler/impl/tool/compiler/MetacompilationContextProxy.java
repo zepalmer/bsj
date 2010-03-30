@@ -1,8 +1,8 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.compiler;
 
 import javax.tools.DiagnosticListener;
-import javax.tools.JavaFileObject;
 
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.node.PackageNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
@@ -42,7 +42,7 @@ public class MetacompilationContextProxy implements MetacompilationContext
 	}
 
 	@Override
-	public DiagnosticListener<? super JavaFileObject> getDiagnosticListener()
+	public DiagnosticListener<BsjSourceLocation> getDiagnosticListener()
 	{
 		return this.context.getDiagnosticListener();
 	}

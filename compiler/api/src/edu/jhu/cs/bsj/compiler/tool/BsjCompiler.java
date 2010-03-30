@@ -3,8 +3,8 @@ package edu.jhu.cs.bsj.compiler.tool;
 import java.io.IOException;
 
 import javax.tools.DiagnosticListener;
-import javax.tools.JavaFileObject;
 
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjFileManager;
 import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjFileObject;
 
@@ -24,6 +24,6 @@ public interface BsjCompiler
 	 *            listener is used which reports diagnostic messages to standard error.
 	 * @throws IOException If an I/O error occurs.
 	 */
-	public void compile(Iterable<BsjFileObject> units, DiagnosticListener<? super JavaFileObject> listener)
+	public void compile(Iterable<BsjFileObject> units, DiagnosticListener<BsjSourceLocation> listener)
 			throws IOException;
 }

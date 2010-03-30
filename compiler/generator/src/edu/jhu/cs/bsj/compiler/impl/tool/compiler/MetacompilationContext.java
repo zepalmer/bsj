@@ -1,8 +1,8 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.compiler;
 
 import javax.tools.DiagnosticListener;
-import javax.tools.JavaFileObject;
 
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.node.PackageNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
@@ -34,7 +34,7 @@ public interface MetacompilationContext
 	 * Retrieves a diagnostic listener to which diagnostics can be reported.
 	 * @return The diagnostic listener to use.
 	 */
-	public DiagnosticListener<? super JavaFileObject> getDiagnosticListener();
+	public DiagnosticListener<BsjSourceLocation> getDiagnosticListener();
 	
 	/**
 	 * Retrieves the dependency manager to use.

@@ -27,14 +27,14 @@ public class InstantiateMetaAnnotationObjectTask extends AbstractBsjCompilerTask
 	}
 
 	@Override
-	public void execute(MetacompilationContext context) throws IOException
+	public void execute(final MetacompilationContext context) throws IOException
 	{
 		this.root.receiveTyped(new BsjTypedNodeNoOpVisitor()
 		{
 			@Override
 			public void visitMetaAnnotationNodeStop(MetaAnnotationNode node)
 			{
-				node.instantiateMetaAnnotationObject();
+				node.instantiateMetaAnnotationObject(context.getDiagnosticListener());
 			}
 		});
 		

@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.annotation.Generated;
 
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.diagnostic.parser.InvalidModeDiagnostic;
 
 
@@ -13,19 +14,17 @@ import edu.jhu.cs.bsj.compiler.diagnostic.parser.InvalidModeDiagnostic;
  * meaning) is reported through this type of diagnostic rather than a typical parse failure.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public class InvalidModeDiagnosticImpl<T extends javax.tools.JavaFileObject> extends BsjParserDiagnosticImpl<T> implements InvalidModeDiagnostic<T>
+public class InvalidModeDiagnosticImpl extends BsjParserDiagnosticImpl implements InvalidModeDiagnostic
 {
     /** The invalid mode. */
     private String mode;
     
     public InvalidModeDiagnosticImpl(
-            long lineNumber,
-            long columnNumber,
-            T source,
+            BsjSourceLocation source,
             String ruleName,
             String mode)
     {
-        super(lineNumber, columnNumber, source, InvalidModeDiagnostic.CODE, Kind.ERROR, ruleName);
+        super(source, InvalidModeDiagnostic.CODE, Kind.ERROR, ruleName);
         this.mode = mode;
     }
     

@@ -1,6 +1,7 @@
 /* GEN:headerstart */
 import edu.jhu.cs.bsj.compiler.metaannotation.*;
 import edu.jhu.cs.bsj.compiler.metaprogram.*;
+import javax.tools.*;
 /* GEN:headerstop */
 
 public class MetaAnnotationNodeImpl implements MetaAnnotationNode
@@ -14,11 +15,11 @@ public class MetaAnnotationNodeImpl implements MetaAnnotationNode
 	/**
 	 * {@inheritDoc}
 	 */
-	public void instantiateMetaAnnotationObject()
+	public void instantiateMetaAnnotationObject(DiagnosticListener<BsjSourceLocation> listener)
 	{
 		if (this.metaAnnotationObject == null)
 		{
-			this.metaAnnotationObject = getManager().instantiateMetaAnnotationObject(this);
+			this.metaAnnotationObject = getManager().instantiateMetaAnnotationObject(this, listener);
 			if (this.metaAnnotationObject instanceof BsjMetaAnnotationMetaprogram)
 			{
 				this.metaprogramAnchor = getManager().instantiateMetaAnnotationMetaprogramAnchor(this);

@@ -4,13 +4,13 @@ import java.io.IOException;
 import java.io.Reader;
 
 import javax.tools.DiagnosticListener;
-import javax.tools.JavaFileObject;
 
 import org.antlr.runtime.ANTLRReaderStream;
 import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.TokenRewriteStream;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.parser.antlr.BsjAntlrLexer;
 import edu.jhu.cs.bsj.compiler.impl.tool.parser.antlr.BsjAntlrParser;
@@ -51,12 +51,12 @@ public class BsjParserImpl implements BsjParser
 	 *            listener is used which reports messages to standard error.
 	 * @throws IOException If an I/O error occurs.
 	 */
-	public CompilationUnitNode parse(String name, Reader reader, DiagnosticListener<? super JavaFileObject> diagnosticListener)
+	public CompilationUnitNode parse(String name, Reader reader, DiagnosticListener<BsjSourceLocation> diagnosticListener)
 			throws IOException
 	{
 		if (diagnosticListener==null)
 		{
-			diagnosticListener = new DiagnosticPrintingListener<JavaFileObject>(System.err);
+			diagnosticListener = new DiagnosticPrintingListener<BsjSourceLocation>(System.err);
 		}
 		BsjAntlrLexer lexer = new BsjAntlrLexer(new ANTLRReaderStream(new JavaUnicodeEscapeReader(reader)));
 		lexer.setDiagnosticListener(diagnosticListener);

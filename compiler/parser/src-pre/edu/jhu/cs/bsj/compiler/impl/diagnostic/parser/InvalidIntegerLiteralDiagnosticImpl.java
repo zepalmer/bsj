@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.annotation.Generated;
 
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.diagnostic.parser.InvalidIntegerLiteralDiagnostic;
 
 
@@ -11,19 +12,17 @@ import edu.jhu.cs.bsj.compiler.diagnostic.parser.InvalidIntegerLiteralDiagnostic
  * A diagnostic representing an invalid floating point literal.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public class InvalidIntegerLiteralDiagnosticImpl<T extends javax.tools.JavaFileObject> extends BsjParserDiagnosticImpl<T> implements InvalidIntegerLiteralDiagnostic<T>
+public class InvalidIntegerLiteralDiagnosticImpl extends BsjParserDiagnosticImpl implements InvalidIntegerLiteralDiagnostic
 {
     /** The text of the invalid literal. */
     private String literalText;
     
     public InvalidIntegerLiteralDiagnosticImpl(
-            long lineNumber,
-            long columnNumber,
-            T source,
+            BsjSourceLocation source,
             String ruleName,
             String literalText)
     {
-        super(lineNumber, columnNumber, source, InvalidIntegerLiteralDiagnostic.CODE, Kind.ERROR, ruleName);
+        super(source, InvalidIntegerLiteralDiagnostic.CODE, Kind.ERROR, ruleName);
         this.literalText = literalText;
     }
     

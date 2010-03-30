@@ -136,23 +136,23 @@ scope Rule {
     /**
      * Retrieves a source location object describing the start of the specified relative token index (as per input.LT).
      */
-    protected BsjSourceLocation getSourceLocation(int rel)
+    protected BsjSourceLocation getSourceLocation()
     {
         return new BsjSourceLocation(getResourceName(), this.getLine(), this.getCharPositionInLine() + 1);
     }
 
     // *** ERROR REPORTING AND HANDLING ***************************************
     /** The diagnostic listener to which we report events. */
-    private DiagnosticListener<? super JavaFileObject> diagnosticListener;
+    private DiagnosticListener<BsjSourceLocation> diagnosticListener;
     
     /** Assigns a diagnostic listener to this parser. */
-    public void setDiagnosticListener(DiagnosticListener<? super JavaFileObject> diagnosticListener)
+    public void setDiagnosticListener(DiagnosticListener<BsjSourceLocation> diagnosticListener)
     {
         this.diagnosticListener = diagnosticListener;
     }
     
     /** Reports a diagnostic. */
-    private void reportDiagnostic(Diagnostic<? extends JavaFileObject> diagnostic)
+    private void reportDiagnostic(BsjDiagnostic diagnostic)
     {
         this.diagnosticListener.report(diagnostic);
     }
@@ -167,7 +167,7 @@ scope Rule {
     {
         int character = input.LT(1);
         BsjLexerDiagnostic diagnostic = BsjAntlrParserUtils.convertFromLexer(
-                e, tokenNames, getLineNumber(), getColumnNumber(), resource, character);
+                e, tokenNames, getSourceLocation(), character);
         reportDiagnostic(diagnostic);
     }
 }
@@ -387,10 +387,8 @@ scope Rule {
             switch (state[mod.ordinal()])
             {
                 case DISALLOWED:
-                    reportDiagnostic(new InvalidModifierDiagnosticImpl<JavaFileObject>(
-                            getLineNumber(-1),
-                            getColumnNumber(-1),
-                            resource,
+                    reportDiagnostic(new InvalidModifierDiagnosticImpl(
+                            getSourceLocation(-1),
                             $Rule::name,
                             mod.toString().toLowerCase()));
                     break;
@@ -398,10 +396,8 @@ scope Rule {
                     state[mod.ordinal()] = ModifierState.SEEN;
                     break;
                 case SEEN:
-                    reportDiagnostic(new DuplicateModifierDiagnosticImpl<JavaFileObject>(
-                            getLineNumber(-1),
-                            getColumnNumber(-1),
-                            resource,
+                    reportDiagnostic(new DuplicateModifierDiagnosticImpl(
+                            getSourceLocation(-1),
                             $Rule::name,
                             mod.toString().toLowerCase()));
                     break;
@@ -422,18 +418,14 @@ scope Rule {
             
             if (oldObj == newObj)
             {
-                reportDiagnostic(new DuplicateModeDiagnosticImpl<JavaFileObject>(
-                        location.getLine(),
-                        location.getColumn(),
-                        resource,
+                reportDiagnostic(new DuplicateModeDiagnosticImpl(
+                        location,
                         $Rule::name,
                         newObj.toString()));
             } else
             {
-                reportDiagnostic(new ConflictingModeDiagnosticImpl<JavaFileObject>(
-                        location.getLine(),
-                        location.getColumn(),
-                        resource,
+                reportDiagnostic(new ConflictingModeDiagnosticImpl(
+                        location,
                         $Rule::name,
                         oldObj.toString(),
                         newObj.toString()));
@@ -497,10 +489,8 @@ scope Rule {
                 setPackageMode(MetaprogramPackageMode.INSERT, location);
             } else 
             {
-                reportDiagnostic(new InvalidModeDiagnosticImpl<JavaFileObject>(
-                        location.getLine(),
-                        location.getColumn(),
-                        resource,
+                reportDiagnostic(new InvalidModeDiagnosticImpl(
+                        location,
                         $Rule::name,
                         id));
             }
@@ -509,16 +499,16 @@ scope Rule {
     
     // *** ERROR REPORTING AND HANDLING ***************************************
     /** The diagnostic listener to which we report events. */
-    private DiagnosticListener<? super JavaFileObject> diagnosticListener;
+    private DiagnosticListener<BsjSourceLocation> diagnosticListener;
     
     /** Assigns a diagnostic listener to this parser. */
-    public void setDiagnosticListener(DiagnosticListener<? super JavaFileObject> diagnosticListener)
+    public void setDiagnosticListener(DiagnosticListener<BsjSourceLocation> diagnosticListener)
     {
         this.diagnosticListener = diagnosticListener;
     }
     
     /** Reports a diagnostic. */
-    private void reportDiagnostic(Diagnostic<? extends JavaFileObject> diagnostic)
+    private void reportDiagnostic(BsjDiagnostic diagnostic)
     {
         this.diagnosticListener.report(diagnostic);
     }
@@ -531,9 +521,8 @@ scope Rule {
     @Override
     public void displayRecognitionError(String[] tokenNames, RecognitionException e)
     {
-        Diagnostic<? extends JavaFileObject> diagnostic =
-                BsjAntlrParserUtils.convertFromParser(
-                        e, tokenNames, getLineNumber(1), getColumnNumber(1), resource, input.LT(1), $Rule::name);
+        BsjDiagnostic diagnostic =
+                BsjAntlrParserUtils.convertFromParser(e, tokenNames, getSourceLocation(1), input.LT(1), $Rule::name);
         reportDiagnostic(diagnostic);
     }
     
@@ -599,10 +588,8 @@ scope Rule {
                     return factory.makeSingleStaticImportNode((QualifiedNameNode)name);
                 } else
                 {
-                    reportDiagnostic(new UnqualifiedSingleStaticImportNameDiagnosticImpl<JavaFileObject>(
-                            getLineNumber(-1),
-                            getColumnNumber(-1),
-                            resource,
+                    reportDiagnostic(new UnqualifiedSingleStaticImportNameDiagnosticImpl(
+                            getSourceLocation(-1),
                             $Rule::name,
                             name.getNameString()));
                     return null;
@@ -1464,18 +1451,14 @@ modifiers[boolean accessAllowed, Modifier... mods]
                     {
                         if ($access == currentAccess)
                         {
-                            reportDiagnostic(new DuplicateModifierDiagnosticImpl<JavaFileObject>(
-                                    getLineNumber(-1),
-                                    getColumnNumber(-1),
-                                    resource,
+                            reportDiagnostic(new DuplicateModifierDiagnosticImpl(
+                                    getSourceLocation(-1),
                                     $Rule::name,
                                     currentAccess.toString().toLowerCase()));
                         } else
                         {
-                            reportDiagnostic(new ConflictingAccessModifierDiagnosticImpl<JavaFileObject>(
-                                    getLineNumber(-1),
-                                    getColumnNumber(-1),
-                                    resource,
+                            reportDiagnostic(new ConflictingAccessModifierDiagnosticImpl(
+                                    getSourceLocation(-1),
                                     $Rule::name,
                                     $access.toString().toLowerCase(),
                                     currentAccess.toString().toLowerCase()));
@@ -5269,9 +5252,7 @@ intLiteral [boolean isNegative] returns [LiteralNode<?> ret]
             Integer i = BsjAntlrParserUtils.parseInt(
                     s,
                     isNegative,
-                    getLineNumber(-1),
-                    getColumnNumber(-1),
-                    resource,
+                    getSourceLocation(-1),
                     diagnosticListener,
                     $Rule::name);
             $ret = factory.makeIntLiteralNode(i);
@@ -5293,9 +5274,7 @@ longLiteral [boolean isNegative] returns [LiteralNode<?> ret]
             Long l = BsjAntlrParserUtils.parseLong(
                     s,
                     isNegative,
-                    getLineNumber(-1),
-                    getColumnNumber(-1),
-                    resource,
+                    getSourceLocation(-1),
                     diagnosticListener,
                     $Rule::name);
             $ret = factory.makeLongLiteralNode(l);
@@ -5326,9 +5305,7 @@ lexicalLiteral returns [LiteralNode<?> ret]
             String s = $FLOATLITERAL.text;
             float f = BsjAntlrParserUtils.parseFloat(
                     s,
-                    getLineNumber(-1),
-                    getColumnNumber(-1),
-                    resource,
+                    getSourceLocation(-1),
                     diagnosticListener,
                     $Rule::name);
             $ret = factory.makeFloatLiteralNode(f);
@@ -5339,9 +5316,7 @@ lexicalLiteral returns [LiteralNode<?> ret]
             String s = $DOUBLELITERAL.text;
             double d = BsjAntlrParserUtils.parseDouble(
                     s,
-                    getLineNumber(-1),
-                    getColumnNumber(-1),
-                    resource,
+                    getSourceLocation(-1),
                     diagnosticListener,
                     $Rule::name);
             $ret = factory.makeDoubleLiteralNode(d);

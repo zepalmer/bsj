@@ -1,7 +1,6 @@
 package edu.jhu.cs.bsj.compiler.tool.parser.antlr.util;
 
 import javax.tools.DiagnosticListener;
-import javax.tools.JavaFileObject;
 
 import org.antlr.runtime.MismatchedTokenException;
 import org.antlr.runtime.MissingTokenException;
@@ -9,6 +8,7 @@ import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.Token;
 import org.antlr.runtime.UnwantedTokenException;
 
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.diagnostic.lexer.BsjLexerDiagnostic;
 import edu.jhu.cs.bsj.compiler.diagnostic.parser.BsjParserDiagnostic;
 import edu.jhu.cs.bsj.compiler.impl.diagnostic.lexer.GeneralLexerFailureDiagnosticImpl;
@@ -146,10 +146,11 @@ public class BsjAntlrParserUtils
 
 	/**
 	 * Determines the base of the specified character sequence if it is interpreted as a number.
+	 * 
 	 * @param c The character sequence.
 	 * @param i The index at which to start the examination.
-	 * @return The proposed base for this character sequence: one of <code>16</code>, <code>8</code>, or
-	 *         <code>10</code>.
+	 * @return The proposed base for this character sequence: one of <code>16</code>, <code>8</code>, or <code>10</code>
+	 *         .
 	 */
 	private static final int getBase(char[] c, int i)
 	{
@@ -170,37 +171,35 @@ public class BsjAntlrParserUtils
 	 * 
 	 * @param s The input string representing the literal.
 	 * @param isNegative <code>true</code> if this string is prepended with a minus sign; <code>false</code> otherwise.
-	 * @param lineNumber The line number at which the input string is found.
-	 * @param columnNumber The column number at which the input string starts.
-	 * @param resource The resource in which this input string is found.
+	 * @param location The {@link BsjSourceLocation} at which this parsing is occurring.
 	 * @param listener The listener to which diagnostics should be reported.
 	 * @param ruleName The name of the rule which is calling this method.
 	 * @return The resulting integer value. If an error occurs, <code>null</code> is returned.
 	 */
-	public static Integer parseInt(String s, boolean isNegative, int lineNumber, int columnNumber,
-			JavaFileObject resource, DiagnosticListener<? super JavaFileObject> listener, String ruleName)
+	public static Integer parseInt(String s, boolean isNegative, BsjSourceLocation location,
+			DiagnosticListener<BsjSourceLocation> listener, String ruleName)
 	{
 		// We use this int parsing routine because Integer.parseInt is not up to the job.
 		// Specifically, Integer.parseInt("0x80000000",16) causes an exception
 		char[] chars = s.toCharArray();
 		int index = 0;
-		
+
 		int base = getBase(chars, index);
-		int acc; 
+		int acc;
 		char c;
 		switch (base)
 		{
 			case 10:
-				return Integer.parseInt(isNegative?("-"+s):s);
+				return Integer.parseInt(isNegative ? ("-" + s) : s);
 			case 16:
 				if (chars.length <= 10)
 				{
 					acc = 0;
-					for (int i=2;i<chars.length;i++)
+					for (int i = 2; i < chars.length; i++)
 					{
 						acc <<= 4;
 						c = chars[i];
-						acc+=hexCharValue(c);
+						acc += hexCharValue(c);
 					}
 					if (isNegative)
 						acc = -acc;
@@ -211,7 +210,7 @@ public class BsjAntlrParserUtils
 				if (chars.length < 12 || (chars.length == 12 && chars[1] <= '3'))
 				{
 					acc = 0;
-					for (int i=1;i<chars.length;i++)
+					for (int i = 1; i < chars.length; i++)
 					{
 						acc <<= 3;
 						c = chars[i];
@@ -223,13 +222,8 @@ public class BsjAntlrParserUtils
 				}
 				break;
 		}
-		
-		listener.report(new InvalidIntegerLiteralDiagnosticImpl<JavaFileObject>(
-                        lineNumber,
-                        columnNumber,
-                        resource,
-                        ruleName,
-                        (isNegative?"-":"")+s));
+
+		listener.report(new InvalidIntegerLiteralDiagnosticImpl(location, ruleName, (isNegative ? "-" : "") + s));
 		return null;
 	}
 
@@ -238,44 +232,42 @@ public class BsjAntlrParserUtils
 	 * 
 	 * @param s The input string representing the literal.
 	 * @param isNegative <code>true</code> if this string is prepended with a minus sign; <code>false</code> otherwise.
-	 * @param lineNumber The line number at which the input string is found.
-	 * @param columnNumber The column number at which the input string starts.
-	 * @param resource The resource in which this input string is found.
+	 * @param location The {@link BsjSourceLocation} at which this parsing is occurring.
 	 * @param listener The listener to which diagnostics should be reported.
 	 * @param ruleName The name of the rule which is calling this method.
 	 * @return The resulting integer value. If an error occurs, <code>null</code> is returned.
 	 */
-	public static Long parseLong(String s, boolean isNegative, int lineNumber, int columnNumber,
-			JavaFileObject resource, DiagnosticListener<? super JavaFileObject> listener, String ruleName)
+	public static Long parseLong(String s, boolean isNegative, BsjSourceLocation location,
+			DiagnosticListener<BsjSourceLocation> listener, String ruleName)
 	{
 		// We use this int parsing routine because Long.parseLong is not up to the job.
 		// Specifically, Long.parseLong("0x8000000000000000",16) causes an exception
-		
+
 		// chop off the suffix if it is present
 		if (s.endsWith("L") || s.endsWith("l"))
 		{
-			s = s.substring(0, s.length()-1);
+			s = s.substring(0, s.length() - 1);
 		}
-		
+
 		char[] chars = s.toCharArray();
 		int index = 0;
-		
+
 		int base = getBase(chars, index);
-		long acc; 
+		long acc;
 		char c;
 		switch (base)
 		{
 			case 10:
-				return Long.parseLong(isNegative?("-"+s):s);
+				return Long.parseLong(isNegative ? ("-" + s) : s);
 			case 16:
 				if (chars.length <= 18)
 				{
 					acc = 0;
-					for (int i=2;i<chars.length;i++)
+					for (int i = 2; i < chars.length; i++)
 					{
 						acc <<= 4;
 						c = chars[i];
-						acc+=hexCharValue(c);
+						acc += hexCharValue(c);
 					}
 					return acc;
 				}
@@ -284,7 +276,7 @@ public class BsjAntlrParserUtils
 				if (chars.length < 23 || (chars.length == 23 && chars[1] <= '1'))
 				{
 					acc = 0;
-					for (int i=1;i<chars.length;i++)
+					for (int i = 1; i < chars.length; i++)
 					{
 						acc <<= 3;
 						c = chars[i];
@@ -294,25 +286,20 @@ public class BsjAntlrParserUtils
 				}
 				break;
 		}
-		
-		listener.report(new InvalidIntegerLiteralDiagnosticImpl<JavaFileObject>(
-                        lineNumber,
-                        columnNumber,
-                        resource,
-                        ruleName,
-                        (isNegative?"-":"")+s));
+
+		listener.report(new InvalidIntegerLiteralDiagnosticImpl(location, ruleName, (isNegative ? "-" : "") + s));
 		return null;
 	}
 
 	private static int hexCharValue(char c)
 	{
-		if (c>='0' && c<='9')
+		if (c >= '0' && c <= '9')
 		{
 			return c - '0';
-		} else if (c>='a' && c<='f')
+		} else if (c >= 'a' && c <= 'f')
 		{
 			return c - ('a' - 10);
-		} else if (c>='A' && c<='F')
+		} else if (c >= 'A' && c <= 'F')
 		{
 			return c - ('A' - 10);
 		} else
@@ -325,28 +312,24 @@ public class BsjAntlrParserUtils
 	 * Parses the provided string as a <tt>float</tt>.
 	 * 
 	 * @param s The input string representing the literal.
-	 * @param lineNumber The line number at which the input string is found.
-	 * @param columnNumber The column number at which the input string starts.
-	 * @param resource The resource in which this input string is found.
+	 * @param location The {@link BsjSourceLocation} at which this parsing is occurring.
 	 * @param listener The listener to which diagnostics should be reported.
 	 * @param ruleName The name of the rule which is calling this method.
 	 * @return The resulting floating point value, or {@link Float#NaN} if the value is invalid.
 	 */
-	public static float parseFloat(String s, int lineNumber, int columnNumber, JavaFileObject resource,
-			DiagnosticListener<? super JavaFileObject> listener, String ruleName)
+	public static float parseFloat(String s, BsjSourceLocation location,
+			DiagnosticListener<BsjSourceLocation> listener, String ruleName)
 	{
 		String nums = s.substring(0, s.length() - 1);
 		float f = Float.parseFloat(nums);
 		if (!isFloatingPointZero(s) && f == 0.0f)
 		{
-			listener.report(new FloatingPointLiteralTooSmallDiagnosticImpl<JavaFileObject>(lineNumber, columnNumber,
-					resource, ruleName, s));
+			listener.report(new FloatingPointLiteralTooSmallDiagnosticImpl(location, ruleName, s));
 			return Float.NaN;
 		}
 		if (Float.isInfinite(f))
 		{
-			listener.report(new FloatingPointLiteralTooLargeDiagnosticImpl<JavaFileObject>(lineNumber, columnNumber,
-					resource, ruleName, s));
+			listener.report(new FloatingPointLiteralTooLargeDiagnosticImpl(location, ruleName, s));
 			return Float.NaN;
 		}
 		return f;
@@ -356,15 +339,13 @@ public class BsjAntlrParserUtils
 	 * Parses the provided string as a <tt>float</tt>.
 	 * 
 	 * @param s The input string representing the literal.
-	 * @param lineNumber The line number at which the input string is found.
-	 * @param columnNumber The column number at which the input string starts.
-	 * @param resource The resource in which this input string is found.
+	 * @param location The {@link BsjSourceLocation} at which this parsing is occurring.
 	 * @param listener The listener to which diagnostics should be reported.
 	 * @param ruleName The name of the rule which is calling this method.
 	 * @return The resulting floating point value, or {@link Float#NaN} if the value is invalid.
 	 */
-	public static double parseDouble(String s, int lineNumber, int columnNumber, JavaFileObject resource,
-			DiagnosticListener<? super JavaFileObject> listener, String ruleName)
+	public static double parseDouble(String s, BsjSourceLocation location,
+			DiagnosticListener<BsjSourceLocation> listener, String ruleName)
 	{
 		String nums = s;
 		if (s.endsWith("d") || s.endsWith("D"))
@@ -374,14 +355,12 @@ public class BsjAntlrParserUtils
 		double d = Double.parseDouble(nums);
 		if (!isFloatingPointZero(s) && d == 0.0)
 		{
-			listener.report(new FloatingPointLiteralTooSmallDiagnosticImpl<JavaFileObject>(lineNumber, columnNumber,
-					resource, ruleName, s));
+			listener.report(new FloatingPointLiteralTooSmallDiagnosticImpl(location, ruleName, s));
 			return Double.NaN;
 		}
 		if (Double.isInfinite(d))
 		{
-			listener.report(new FloatingPointLiteralTooLargeDiagnosticImpl<JavaFileObject>(lineNumber, columnNumber,
-					resource, ruleName, s));
+			listener.report(new FloatingPointLiteralTooLargeDiagnosticImpl(location, ruleName, s));
 			return Double.NaN;
 		}
 		return d;
@@ -394,36 +373,34 @@ public class BsjAntlrParserUtils
 	 * 
 	 * @param e The ANTLR exception.
 	 * @param tokenNames The names of the tokens according to the parser.
-	 * @param lineNumber The line number on which the exception occurred.
-	 * @param columnNumber The column at which the exception occurred.
-	 * @param resource The resource being parsed when the exception occurred.
+	 * @param location The {@link BsjSourceLocation} on which the exception occurred.
 	 * @param last The most recently parsed token.
 	 * @param ruleName The name of the rule that threw the exception.
 	 * @return The corresponding {@link BsjParserDiagnostic}.
 	 */
-	public static BsjParserDiagnostic<? extends JavaFileObject> convertFromParser(RecognitionException re,
-			String[] tokenNames, int lineNumber, int columnNumber, JavaFileObject resource, Token last, String ruleName)
+	public static BsjParserDiagnostic convertFromParser(RecognitionException re, String[] tokenNames,
+			BsjSourceLocation location, Token last, String ruleName)
 	{
 		if (re instanceof UnwantedTokenException)
 		{
 			UnwantedTokenException ute = (UnwantedTokenException) re;
-			return new ExtraneousTokenDiagnosticImpl<JavaFileObject>(lineNumber, columnNumber, resource, ruleName,
-					ute.expecting == Token.EOF ? "EOF" : tokenNames[ute.expecting], last.getText());
+			return new ExtraneousTokenDiagnosticImpl(location, ruleName, ute.expecting == Token.EOF ? "EOF"
+					: tokenNames[ute.expecting], last.getText());
 		} else if (re instanceof org.antlr.runtime.MissingTokenException)
 		{
 			MissingTokenException mte = (MissingTokenException) re;
-			return new MissingTokenDiagnosticImpl<JavaFileObject>(lineNumber, columnNumber, resource, ruleName,
-					mte.expecting == Token.EOF ? "EOF" : tokenNames[mte.expecting]);
+			return new MissingTokenDiagnosticImpl(location, ruleName, mte.expecting == Token.EOF ? "EOF"
+					: tokenNames[mte.expecting]);
 		} else if (re instanceof MismatchedTokenException)
 		{
 			MismatchedTokenException mte = (MismatchedTokenException) re;
-			return new UnexpectedTokenDiagnosticImpl<JavaFileObject>(lineNumber, columnNumber, resource, ruleName,
-					last.getType() == Token.EOF ? "EOF" : tokenNames[last.getType()], last.getText(),
-					mte.expecting == Token.EOF ? "EOF" : tokenNames[mte.expecting]);
+			return new UnexpectedTokenDiagnosticImpl(location, ruleName, last.getType() == Token.EOF ? "EOF"
+					: tokenNames[last.getType()], last.getText(), mte.expecting == Token.EOF ? "EOF"
+					: tokenNames[mte.expecting]);
 		} else
 		{
-			return new GeneralParseFailureDiagnosticImpl<JavaFileObject>(lineNumber, columnNumber, resource, ruleName,
-					last.getType() == Token.EOF ? "EOF" : tokenNames[last.getType()], last.getText());
+			return new GeneralParseFailureDiagnosticImpl(location, ruleName, last.getType() == Token.EOF ? "EOF"
+					: tokenNames[last.getType()], last.getText());
 		}
 	}
 
@@ -434,16 +411,14 @@ public class BsjAntlrParserUtils
 	 * 
 	 * @param e The ANTLR exception.
 	 * @param tokenNames The names of the tokens according to the lexer.
-	 * @param lineNumber The line number on which the exception occurred.
-	 * @param columnNumber The column at which the exception occurred.
-	 * @param resource The resource being parsed when the exception occurred.
+	 * @param location The {@link BsjSourceLocation} on which the exception occurred.
 	 * @param last The most recently used character.
 	 * @return The corresponding {@link BsjLexerDiagnostic}.
 	 */
-	public static BsjLexerDiagnostic<? extends JavaFileObject> convertFromLexer(RecognitionException re,
-			String[] tokenNames, int lineNumber, int columnNumber, JavaFileObject resource, int last)
+	public static BsjLexerDiagnostic convertFromLexer(RecognitionException re, String[] tokenNames,
+			BsjSourceLocation location, int last)
 	{
 		// TODO: can we be more specific?
-		return new GeneralLexerFailureDiagnosticImpl<JavaFileObject>(lineNumber, columnNumber, resource, last);
+		return new GeneralLexerFailureDiagnosticImpl(location, last);
 	}
 }

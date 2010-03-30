@@ -6,7 +6,7 @@ import javax.annotation.Generated;
  * A diagnostic representing a missing token.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public interface MissingTokenDiagnostic<T extends javax.tools.JavaFileObject> extends BsjParserDiagnostic<T>
+public interface MissingTokenDiagnostic extends BsjParserDiagnostic
 {
     /** The code for this diagnostic. */
     public static final String CODE = "bsj.parser.error.missingToken";

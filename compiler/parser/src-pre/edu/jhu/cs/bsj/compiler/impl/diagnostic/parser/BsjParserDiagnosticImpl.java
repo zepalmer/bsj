@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.annotation.Generated;
 
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.diagnostic.parser.BsjParserDiagnostic;
 import edu.jhu.cs.bsj.compiler.impl.diagnostic.BsjDiagnosticImpl;
 
@@ -13,20 +14,18 @@ import edu.jhu.cs.bsj.compiler.impl.diagnostic.BsjDiagnosticImpl;
  * A diagnostic which acts as the parent for all parser diagnostics.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public abstract class BsjParserDiagnosticImpl<T extends javax.tools.JavaFileObject> extends BsjDiagnosticImpl<T> implements BsjParserDiagnostic<T>
+public abstract class BsjParserDiagnosticImpl extends BsjDiagnosticImpl implements BsjParserDiagnostic
 {
     /** The rule which caused this diagnostic. */
     private String ruleName;
     
     public BsjParserDiagnosticImpl(
-            long lineNumber,
-            long columnNumber,
-            T source,
+            BsjSourceLocation source,
             String code,
             javax.tools.Diagnostic.Kind kind,
             String ruleName)
     {
-        super(lineNumber, columnNumber, source, code, kind);
+        super(source, code, kind);
         this.ruleName = ruleName;
     }
     

@@ -6,7 +6,7 @@ import javax.annotation.Generated;
  * A diagnostic representing a duplicated metaprogram mode.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public interface DuplicateModeDiagnostic<T extends javax.tools.JavaFileObject> extends BsjParserDiagnostic<T>
+public interface DuplicateModeDiagnostic extends BsjParserDiagnostic
 {
     /** The code for this diagnostic. */
     public static final String CODE = "bsj.parser.error.duplicateMode";

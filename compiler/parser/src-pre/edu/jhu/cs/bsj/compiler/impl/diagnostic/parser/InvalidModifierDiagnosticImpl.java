@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.annotation.Generated;
 
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.diagnostic.parser.InvalidModifierDiagnostic;
 
 
@@ -11,19 +12,17 @@ import edu.jhu.cs.bsj.compiler.diagnostic.parser.InvalidModifierDiagnostic;
  * A diagnostic representing an invalid modifier (a modifier which appeared in an incorrect context).
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public class InvalidModifierDiagnosticImpl<T extends javax.tools.JavaFileObject> extends BsjParserDiagnosticImpl<T> implements InvalidModifierDiagnostic<T>
+public class InvalidModifierDiagnosticImpl extends BsjParserDiagnosticImpl implements InvalidModifierDiagnostic
 {
     /** The modifier which was used incorrectly. */
     private String modifier;
     
     public InvalidModifierDiagnosticImpl(
-            long lineNumber,
-            long columnNumber,
-            T source,
+            BsjSourceLocation source,
             String ruleName,
             String modifier)
     {
-        super(lineNumber, columnNumber, source, InvalidModifierDiagnostic.CODE, Kind.ERROR, ruleName);
+        super(source, InvalidModifierDiagnostic.CODE, Kind.ERROR, ruleName);
         this.modifier = modifier;
     }
     

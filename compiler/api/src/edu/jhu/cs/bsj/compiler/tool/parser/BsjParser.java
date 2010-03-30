@@ -4,8 +4,8 @@ import java.io.IOException;
 import java.io.Reader;
 
 import javax.tools.DiagnosticListener;
-import javax.tools.JavaFileObject;
 
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
 
 /**
@@ -24,6 +24,6 @@ public interface BsjParser
 	 * @throws IOException If an I/O error occurs.
 	 */
 	public CompilationUnitNode parse(String name, Reader reader,
-			DiagnosticListener<? super JavaFileObject> diagnosticListener) throws IOException;
+			DiagnosticListener<BsjSourceLocation> diagnosticListener) throws IOException;
 
 }

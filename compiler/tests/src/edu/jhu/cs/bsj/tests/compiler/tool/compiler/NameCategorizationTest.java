@@ -6,11 +6,11 @@ import java.io.InputStreamReader;
 
 import javax.tools.Diagnostic;
 import javax.tools.DiagnosticListener;
-import javax.tools.JavaFileObject;
 
 import org.junit.Assert;
 import org.junit.Test;
 
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
 import edu.jhu.cs.bsj.compiler.ast.node.NameNode;
 import edu.jhu.cs.bsj.compiler.ast.util.BsjTypedNodeNoOpVisitor;
@@ -39,10 +39,10 @@ public class NameCategorizationTest extends AbstractPerFileTest
 		BsjToolkit toolkit = getToolkit(null);
 		BsjParser parser = toolkit.getParser();
 		CompilationUnitNode node = parser.parse(StringUtilities.removeSuffix(file.getName(), '.'),
-				new InputStreamReader(new FileInputStream(file)), new DiagnosticListener<JavaFileObject>()
+				new InputStreamReader(new FileInputStream(file)), new DiagnosticListener<BsjSourceLocation>()
 				{
 					@Override
-					public void report(Diagnostic<? extends JavaFileObject> diagnostic)
+					public void report(Diagnostic<? extends BsjSourceLocation> diagnostic)
 					{
 						switch (diagnostic.getKind())
 						{

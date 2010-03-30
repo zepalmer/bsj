@@ -8,7 +8,7 @@ import edu.jhu.cs.bsj.compiler.diagnostic.BsjDiagnostic;
  * A diagnostic which acts as the parent for all parser diagnostics.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public interface BsjParserDiagnostic<T extends javax.tools.JavaFileObject> extends BsjDiagnostic<T>
+public interface BsjParserDiagnostic extends BsjDiagnostic
 {
     /**
      * Retrieves the rule which caused this diagnostic.

@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.annotation.Generated;
 
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.diagnostic.parser.DuplicateModeDiagnostic;
 
 
@@ -11,19 +12,17 @@ import edu.jhu.cs.bsj.compiler.diagnostic.parser.DuplicateModeDiagnostic;
  * A diagnostic representing a duplicated metaprogram mode.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public class DuplicateModeDiagnosticImpl<T extends javax.tools.JavaFileObject> extends BsjParserDiagnosticImpl<T> implements DuplicateModeDiagnostic<T>
+public class DuplicateModeDiagnosticImpl extends BsjParserDiagnosticImpl implements DuplicateModeDiagnostic
 {
     /** The mode which was duplicated. */
     private String mode;
     
     public DuplicateModeDiagnosticImpl(
-            long lineNumber,
-            long columnNumber,
-            T source,
+            BsjSourceLocation source,
             String ruleName,
             String mode)
     {
-        super(lineNumber, columnNumber, source, DuplicateModeDiagnostic.CODE, Kind.ERROR, ruleName);
+        super(source, DuplicateModeDiagnostic.CODE, Kind.ERROR, ruleName);
         this.mode = mode;
     }
     

@@ -6,7 +6,7 @@ import javax.annotation.Generated;
  * A diagnostic representing a general parsing failure starting at a given location.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public interface GeneralParseFailureDiagnostic<T extends javax.tools.JavaFileObject> extends BsjParserDiagnostic<T>
+public interface GeneralParseFailureDiagnostic extends BsjParserDiagnostic
 {
     /** The code for this diagnostic. */
     public static final String CODE = "bsj.parser.error.generalParseFailure";

@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.annotation.Generated;
 
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.diagnostic.parser.UnexpectedTokenDiagnostic;
 
 
@@ -11,7 +12,7 @@ import edu.jhu.cs.bsj.compiler.diagnostic.parser.UnexpectedTokenDiagnostic;
  * A diagnostic representing the presence of one token where another was expected.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public class UnexpectedTokenDiagnosticImpl<T extends javax.tools.JavaFileObject> extends BsjParserDiagnosticImpl<T> implements UnexpectedTokenDiagnostic<T>
+public class UnexpectedTokenDiagnosticImpl extends BsjParserDiagnosticImpl implements UnexpectedTokenDiagnostic
 {
     /** The type of the token which was found. */
     private String tokenType;
@@ -23,15 +24,13 @@ public class UnexpectedTokenDiagnosticImpl<T extends javax.tools.JavaFileObject>
     private String expectedType;
     
     public UnexpectedTokenDiagnosticImpl(
-            long lineNumber,
-            long columnNumber,
-            T source,
+            BsjSourceLocation source,
             String ruleName,
             String tokenType,
             String tokenText,
             String expectedType)
     {
-        super(lineNumber, columnNumber, source, UnexpectedTokenDiagnostic.CODE, Kind.ERROR, ruleName);
+        super(source, UnexpectedTokenDiagnostic.CODE, Kind.ERROR, ruleName);
         this.tokenType = tokenType;
         this.tokenText = tokenText;
         this.expectedType = expectedType;

@@ -7,6 +7,19 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import javax.tools.DiagnosticListener;
+import javax.tools.Diagnostic.Kind;
+
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
+import edu.jhu.cs.bsj.compiler.diagnostic.compiler.MetaAnnotationMethodNameErrorType;
+import edu.jhu.cs.bsj.compiler.diagnostic.compiler.MetaAnnotationMethodType;
+import edu.jhu.cs.bsj.compiler.impl.diagnostic.CountingDiagnosticProxyListener;
+import edu.jhu.cs.bsj.compiler.impl.diagnostic.compiler.IncorrectlyStaticMetaAnnotationMethodDiagnosticImpl;
+import edu.jhu.cs.bsj.compiler.impl.diagnostic.compiler.InvalidMetaAnnotationMethodNameDiagnosticImpl;
+import edu.jhu.cs.bsj.compiler.impl.diagnostic.compiler.InvalidMetaAnnotationMethodParameterCountDiagnosticImpl;
+import edu.jhu.cs.bsj.compiler.impl.diagnostic.compiler.InvalidMetaAnnotationMethodReturnTypeDiagnosticImpl;
+import edu.jhu.cs.bsj.compiler.impl.diagnostic.compiler.MetaAnnotationPropertyMissingMethodDiagnosticImpl;
+import edu.jhu.cs.bsj.compiler.impl.diagnostic.compiler.MetaAnnotationPropertyTypeMismatchDiagnosticImpl;
 import edu.jhu.cs.bsj.compiler.metaannotation.BsjMetaAnnotation;
 import edu.jhu.cs.bsj.compiler.metaannotation.BsjMetaAnnotationElementGetter;
 import edu.jhu.cs.bsj.compiler.metaannotation.BsjMetaAnnotationElementSetter;
@@ -35,14 +48,23 @@ public class MetaAnnotationProfileManager
 	 * Retrieves a profile for a meta-annotation.
 	 * 
 	 * @param clazz The class for which a profile is desired.
+	 * @param listener The listener to which errors will be reported.
+	 * @param location The location at which any errors should be logged.
 	 * @return A profile for the meta-annotation represented by that class.
 	 */
-	public MetaAnnotationProfile getProfile(Class<? extends BsjMetaAnnotation> clazz)
+	public MetaAnnotationProfile getProfile(Class<? extends BsjMetaAnnotation> clazz,
+			DiagnosticListener<BsjSourceLocation> listener, BsjSourceLocation location)
 	{
 		MetaAnnotationProfile profile = this.profileMap.get(clazz);
 		if (profile == null)
 		{
-			profile = buildProfile(clazz);
+			CountingDiagnosticProxyListener<BsjSourceLocation> proxy = new CountingDiagnosticProxyListener<BsjSourceLocation>(
+					listener);
+			profile = buildProfile(clazz, proxy, location);
+			if (proxy.getCount(Kind.ERROR) > 0)
+			{
+				return null;
+			}
 			this.profileMap.put(clazz, profile);
 		}
 		return profile;
@@ -52,18 +74,21 @@ public class MetaAnnotationProfileManager
 	 * Creates a profile for the specified meta-annotation class.
 	 * 
 	 * @param clazz The meta-annotation class.
+	 * @param listener The listener to which errors will be reported.
+	 * @param location The location at which any errors should be logged.
 	 * @return The profile for that class.
 	 * @throws IllegalArgumentException If the provided class is unsuitable.
 	 */
 	// TODO: something more informative and sensible than IllegalArgumentException
-	private MetaAnnotationProfile buildProfile(Class<? extends BsjMetaAnnotation> clazz)
+	private MetaAnnotationProfile buildProfile(Class<? extends BsjMetaAnnotation> clazz,
+			DiagnosticListener<BsjSourceLocation> listener, BsjSourceLocation location)
 	{
 		// Validate that the class is not abstract
 		if ((clazz.getModifiers() & Modifier.ABSTRACT) != 0)
 		{
 			throw new IllegalArgumentException("Attempted to build profile for abstract class " + clazz.getName());
 		}
-		
+
 		// Process getters and setters
 		Map<String, Method> getterMethods = new HashMap<String, Method>();
 		Map<String, Method> setterMethods = new HashMap<String, Method>();
@@ -73,75 +98,13 @@ public class MetaAnnotationProfileManager
 			// If the method has a getter annotation...
 			if (m.getAnnotation(BsjMetaAnnotationElementGetter.class) != null)
 			{
-				// Validate getter name
-				if (m.getName().length() < 4)
-				{
-					throw new IllegalArgumentException("Invalid getter name " + m.getName() + ": too short");
-				}
-				if (!m.getName().startsWith("get"))
-				{
-					throw new IllegalArgumentException("Invalid getter name " + m.getName()
-							+ ": does not start with \"get\"");
-				}
-				if (!Character.isUpperCase(m.getName().charAt(3)))
-				{
-					throw new IllegalArgumentException("Invalid getter name " + m.getName()
-							+ ": fourth character is not upper-case");
-				}
-				// Validate return type
-				if (m.getReturnType().equals(void.class))
-				{
-					throw new IllegalArgumentException("Getter named " + m.getName() + " has void return type");
-				}
-				// Validate lack of parameters
-				if (m.getParameterTypes().length > 0)
-				{
-					throw new IllegalArgumentException("Getter named " + m.getName() + " has non-empty parameter list");
-				}
-				// Validate non-static
-				if ((m.getModifiers() & Modifier.STATIC) != 0)
-				{
-					throw new IllegalArgumentException("Getter named " + m.getName() + " is declared static");
-				}
-				// Pass!
-				getterMethods.put(Character.toLowerCase(m.getName().charAt(3)) + m.getName().substring(4), m);
+				processMethod(m, getterMethods, "get", MetaAnnotationMethodType.GETTER, 0, false, location, listener);
 			}
 
 			// If the method has a setter annotation...
 			if (m.getAnnotation(BsjMetaAnnotationElementSetter.class) != null)
 			{
-				// Validate setter name
-				if (m.getName().length() < 4)
-				{
-					throw new IllegalArgumentException("Invalid setter name " + m.getName() + ": too short");
-				}
-				if (!m.getName().startsWith("set"))
-				{
-					throw new IllegalArgumentException("Invalid setter name " + m.getName()
-							+ ": does not start with \"set\"");
-				}
-				if (!Character.isUpperCase(m.getName().charAt(3)))
-				{
-					throw new IllegalArgumentException("Invalid setter name " + m.getName()
-							+ ": fourth character is not upper-case");
-				}
-				// Validate return type
-				if (!m.getReturnType().equals(void.class))
-				{
-					throw new IllegalArgumentException("Setter named " + m.getName() + " has non-void return type");
-				}
-				// Validate lack of parameters
-				if (m.getParameterTypes().length != 1)
-				{
-					throw new IllegalArgumentException("Setter named " + m.getName() + " must have single parameter");
-				}
-				// Validate non-static
-				if ((m.getModifiers() & Modifier.STATIC) != 0)
-				{
-					throw new IllegalArgumentException("Setter named " + m.getName() + " is declared static");
-				}
-				// Pass!
-				setterMethods.put(Character.toLowerCase(m.getName().charAt(3)) + m.getName().substring(4), m);
+				processMethod(m, setterMethods, "set", MetaAnnotationMethodType.SETTER, 1, true, location, listener);
 			}
 		}
 
@@ -156,22 +119,83 @@ public class MetaAnnotationProfileManager
 			// Validate that getter exists
 			if (getter == null)
 			{
-				throw new IllegalArgumentException("Property " + property + " has no getter");
+				listener.report(new MetaAnnotationPropertyMissingMethodDiagnosticImpl(location, property,
+						MetaAnnotationMethodType.GETTER));
+				continue;
 			}
 			// Validate that setter exists
 			if (setter == null)
 			{
-				throw new IllegalArgumentException("Property " + property + " has no setter");
+				listener.report(new MetaAnnotationPropertyMissingMethodDiagnosticImpl(location, property,
+						MetaAnnotationMethodType.SETTER));
+				continue;
 			}
 			// Validate that the getter's return type is assignable from the setter's parameter
 			if (!getter.getReturnType().isAssignableFrom(setter.getParameterTypes()[0]))
 			{
-				throw new IllegalArgumentException("Property " + property
-						+ " setter has an argument that isn't assignable to getter's return type.");
+				listener.report(new MetaAnnotationPropertyTypeMismatchDiagnosticImpl(location, property));
+				continue;
 			}
 		}
-		
+
 		// Everything looks good
 		return new MetaAnnotationProfile(clazz, setterMethods);
+	}
+
+	/**
+	 * Processes a method for profile building.
+	 * 
+	 * @param method The method in question.
+	 * @param map The mapping to which to add the method upon success.
+	 * @param string The name of the expected prefix for this method.
+	 * @param type The type of method being produced.
+	 * @param args The number of expected arguments.
+	 * @param returnsVoid <code>true</code> if the method should return void; <code>false</code> if it should not.
+	 * @param location The location to use when reporting errors.
+	 * @param listener The listener to which to report errors.
+	 */
+	private void processMethod(Method method, Map<String, Method> map, String prefix, MetaAnnotationMethodType type,
+			int args, boolean returnsVoid, BsjSourceLocation location, DiagnosticListener<BsjSourceLocation> listener)
+	{
+		// Validate name
+		if (method.getName().length() < 4)
+		{
+			listener.report(new InvalidMetaAnnotationMethodNameDiagnosticImpl(location, type, method.getName(),
+					MetaAnnotationMethodNameErrorType.TOO_SHORT));
+			return;
+		}
+		if (!method.getName().startsWith(prefix))
+		{
+			listener.report(new InvalidMetaAnnotationMethodNameDiagnosticImpl(location, type, method.getName(),
+					MetaAnnotationMethodNameErrorType.WRONG_PREFIX));
+			return;
+		}
+		if (!Character.isUpperCase(method.getName().charAt(3)))
+		{
+			listener.report(new InvalidMetaAnnotationMethodNameDiagnosticImpl(location, type, method.getName(),
+					MetaAnnotationMethodNameErrorType.BAD_FOURTH_CHARACTER));
+			return;
+		}
+		// Validate return type
+		if (method.getReturnType().equals(void.class) != returnsVoid)
+		{
+			listener.report(new InvalidMetaAnnotationMethodReturnTypeDiagnosticImpl(location, type, method.getName()));
+			return;
+		}
+		// Validate parameter count
+		if (method.getParameterTypes().length != args)
+		{
+			listener.report(new InvalidMetaAnnotationMethodParameterCountDiagnosticImpl(location, type,
+					method.getName(), 0, method.getParameterTypes().length));
+			return;
+		}
+		// Validate non-static
+		if ((method.getModifiers() & Modifier.STATIC) != 0)
+		{
+			listener.report(new IncorrectlyStaticMetaAnnotationMethodDiagnosticImpl(location, type, method.getName()));
+			return;
+		}
+		// Pass!
+		map.put(Character.toLowerCase(method.getName().charAt(3)) + method.getName().substring(4), method);
 	}
 }

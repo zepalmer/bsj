@@ -13,7 +13,10 @@
 
 package edu.jhu.cs.bsj.plugin.strategies;
 
-import org.eclipse.jface.text.*;
+import org.eclipse.jface.text.BadLocationException;
+import org.eclipse.jface.text.IDocument;
+import org.eclipse.jface.text.ITextDoubleClickStrategy;
+import org.eclipse.jface.text.ITextViewer;
 
 //TODO modify/fix/redo/etc
 public class BsjDoubleClickStrategy implements ITextDoubleClickStrategy

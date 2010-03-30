@@ -8,12 +8,12 @@ import java.util.Map;
 import javax.tools.DiagnosticListener;
 import javax.tools.JavaCompiler;
 import javax.tools.JavaFileManager;
-import javax.tools.JavaFileObject;
 import javax.tools.StandardLocation;
 import javax.tools.ToolProvider;
 
 import org.apache.log4j.Logger;
 
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 import edu.jhu.cs.bsj.compiler.impl.ast.PackageNodeCallback;
 import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.InMemoryLocationManager;
@@ -86,7 +86,7 @@ public class StandardBsjCompiler implements BsjCompiler
 	 *            listener is used which reports diagnostic messages to standard error.
 	 * @throws IOException If an I/O error occurs.
 	 */
-	public void compile(Iterable<BsjFileObject> units, DiagnosticListener<? super JavaFileObject> listener)
+	public void compile(Iterable<BsjFileObject> units, DiagnosticListener<BsjSourceLocation> listener)
 			throws IOException
 	{
 		if (LOGGER.isDebugEnabled())
@@ -111,7 +111,7 @@ public class StandardBsjCompiler implements BsjCompiler
 		// Ensure listener is sane
 		if (listener == null)
 		{
-			listener = new DiagnosticPrintingListener<JavaFileObject>(System.err);
+			listener = new DiagnosticPrintingListener<BsjSourceLocation>(System.err);
 		}
 
 		// Start compilation
@@ -200,7 +200,7 @@ public class StandardBsjCompiler implements BsjCompiler
 	/**
 	 * Initializes the data structures used by the compiler.
 	 */
-	private void initialize(DiagnosticListener<? super JavaFileObject> listener)
+	private void initialize(DiagnosticListener<BsjSourceLocation> listener)
 	{
 		if (LOGGER.isTraceEnabled())
 		{

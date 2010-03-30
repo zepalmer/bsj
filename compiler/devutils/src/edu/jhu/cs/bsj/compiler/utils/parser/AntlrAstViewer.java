@@ -38,11 +38,11 @@ import javax.swing.border.TitledBorder;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeNode;
-import javax.tools.JavaFileObject;
 
 import org.apache.log4j.PropertyConfigurator;
 
 import edu.jhu.cs.bsj.compiler.BsjServiceRegistry;
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.impl.tool.serializer.BsjSourceSerializerImpl;
 import edu.jhu.cs.bsj.compiler.impl.utils.PrependablePrintStream;
@@ -184,7 +184,7 @@ public class AntlrAstViewer
 	{
 		BsjParser parser = BsjServiceRegistry.newToolkitFactory().newToolkit().getParser();
 		return parser.parse(null, new InputStreamReader(new ByteArrayInputStream(s.getBytes())),
-				new DiagnosticPrintingListener<JavaFileObject>(ps));
+				new DiagnosticPrintingListener<BsjSourceLocation>(ps));
 	}
 
 	private static Properties properties = new Properties();

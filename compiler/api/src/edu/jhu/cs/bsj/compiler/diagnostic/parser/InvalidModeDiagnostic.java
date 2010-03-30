@@ -8,7 +8,7 @@ import javax.annotation.Generated;
  * meaning) is reported through this type of diagnostic rather than a typical parse failure.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public interface InvalidModeDiagnostic<T extends javax.tools.JavaFileObject> extends BsjParserDiagnostic<T>
+public interface InvalidModeDiagnostic extends BsjParserDiagnostic
 {
     /** The code for this diagnostic. */
     public static final String CODE = "bsj.parser.error.invalidMode";

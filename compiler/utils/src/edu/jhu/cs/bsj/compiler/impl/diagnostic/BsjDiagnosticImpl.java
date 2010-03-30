@@ -4,8 +4,8 @@ import java.util.List;
 import java.util.Locale;
 
 import javax.tools.Diagnostic;
-import javax.tools.JavaFileObject;
 
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.diagnostic.BsjDiagnostic;
 import edu.jhu.cs.bsj.compiler.impl.utils.i18n.InternationalizationUtilities;
 import edu.jhu.cs.bsj.compiler.impl.utils.i18n.PropertyBasedStringRepository;
@@ -17,14 +17,10 @@ import edu.jhu.cs.bsj.compiler.impl.utils.i18n.PropertyBasedStringRepository;
  * 
  * @param <T> The type of source represented by this diagnostic.
  */
-public abstract class BsjDiagnosticImpl<T extends JavaFileObject> implements BsjDiagnostic<T>
+public abstract class BsjDiagnosticImpl implements BsjDiagnostic
 {
-	/** The line number at which the event occurred. */
-	private long lineNumber;
-	/** The column number at which the event occurred. */
-	private long columnNumber;
-	/** The source of the event. */
-	private T source;
+	/** The location of the event. */
+	private BsjSourceLocation location;
 	/** The code used to describe the event. */
 	private String code;
 	/** The kind of event which occurred. */
@@ -33,19 +29,13 @@ public abstract class BsjDiagnosticImpl<T extends JavaFileObject> implements Bsj
 	/**
 	 * Creates a new diagnostic. The provided position is used for the start and end positions.
 	 * 
-	 * @param lineNumber The line number at which the event occurred. This value may be {@link Diagnostic#NOPOS} if no
-	 *            information is available.
-	 * @param columnNumber The column number at which the event occurred. This value may be {@link Diagnostic#NOPOS} if
-	 *            no information is available.
-	 * @param source The source of the event.
+	 * @param location The location of the event.
 	 * @param code The code used to describe the event.
 	 * @param kind The kind of event which occurred.
 	 */
-	public BsjDiagnosticImpl(long lineNumber, long columnNumber, T source, String code, Kind kind)
+	public BsjDiagnosticImpl(BsjSourceLocation location, String code, Kind kind)
 	{
-		this.lineNumber = lineNumber;
-		this.columnNumber = columnNumber;
-		this.source = source;
+		this.location = location;
 		this.code = code;
 		this.kind = kind;
 	}
@@ -69,7 +59,7 @@ public abstract class BsjDiagnosticImpl<T extends JavaFileObject> implements Bsj
 	@Override
 	public long getColumnNumber()
 	{
-		return this.columnNumber;
+		return this.location != null ? this.location.getColumn() : Diagnostic.NOPOS;
 	}
 
 	/**
@@ -102,7 +92,7 @@ public abstract class BsjDiagnosticImpl<T extends JavaFileObject> implements Bsj
 	@Override
 	public long getLineNumber()
 	{
-		return this.lineNumber;
+		return this.location != null ? this.location.getLine() : Diagnostic.NOPOS;
 	}
 
 	/**
@@ -131,22 +121,12 @@ public abstract class BsjDiagnosticImpl<T extends JavaFileObject> implements Bsj
 		String message = String.format(locale, formatString, args.toArray());
 
 		StringBuilder sb = new StringBuilder();
-		if (this.getSource() == null)
+		if (this.location == null)
 		{
 			sb.append("<unknown>");
 		} else
 		{
-			sb.append(this.getSource().getName());
-		}
-		if (this.getLineNumber() != Diagnostic.NOPOS)
-		{
-			sb.append(':');
-			sb.append(this.getLineNumber());
-			if (this.getColumnNumber() != Diagnostic.NOPOS)
-			{
-				sb.append(':');
-				sb.append(this.getColumnNumber());
-			}
+			sb.append(this.location.toString());
 		}
 		sb.append(": ");
 		sb.append(message);
@@ -177,9 +157,9 @@ public abstract class BsjDiagnosticImpl<T extends JavaFileObject> implements Bsj
 	 * @return The source of the event.
 	 */
 	@Override
-	public T getSource()
+	public BsjSourceLocation getSource()
 	{
-		return this.source;
+		return this.location;
 	}
 
 	/**

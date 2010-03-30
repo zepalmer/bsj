@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.annotation.Generated;
 
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.diagnostic.parser.ExtraneousTokenDiagnostic;
 
 
@@ -11,7 +12,7 @@ import edu.jhu.cs.bsj.compiler.diagnostic.parser.ExtraneousTokenDiagnostic;
  * A diagnostic representing the presence of an extraneous token.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public class ExtraneousTokenDiagnosticImpl<T extends javax.tools.JavaFileObject> extends BsjParserDiagnosticImpl<T> implements ExtraneousTokenDiagnostic<T>
+public class ExtraneousTokenDiagnosticImpl extends BsjParserDiagnosticImpl implements ExtraneousTokenDiagnostic
 {
     /** The type of the extraneous token. */
     private String extraneousType;
@@ -20,14 +21,12 @@ public class ExtraneousTokenDiagnosticImpl<T extends javax.tools.JavaFileObject>
     private String extraneousToken;
     
     public ExtraneousTokenDiagnosticImpl(
-            long lineNumber,
-            long columnNumber,
-            T source,
+            BsjSourceLocation source,
             String ruleName,
             String extraneousType,
             String extraneousToken)
     {
-        super(lineNumber, columnNumber, source, ExtraneousTokenDiagnostic.CODE, Kind.ERROR, ruleName);
+        super(source, ExtraneousTokenDiagnostic.CODE, Kind.ERROR, ruleName);
         this.extraneousType = extraneousType;
         this.extraneousToken = extraneousToken;
     }
