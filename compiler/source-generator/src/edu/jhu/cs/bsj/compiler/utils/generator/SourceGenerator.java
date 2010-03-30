@@ -36,16 +36,7 @@ public class SourceGenerator
 	private static final File CONTENTS_FILE = new File("data/srcgen/srcgen.xml");
 	private static final File SUPPLEMENTS_DIR = new File("data/srcgen/supplement/");
 	private static final File TARGET_DIR = new File("out/");
-	private static final File TARGET_IMPL_DIR = new File(TARGET_DIR.getAbsolutePath() + File.separator
-			+ "implementation");
-	private static final File TARGET_IFACE_DIR = new File(TARGET_DIR.getAbsolutePath() + File.separator + "interface");
-	private static final String[] IFACE_IMPORTS = { "edu.jhu.cs.bsj.compiler.ast.*",
-			"edu.jhu.cs.bsj.compiler.ast.node.*", "edu.jhu.cs.bsj.compiler.ast.node.meta.*",
-			"edu.jhu.cs.bsj.compiler.ast.exception.*", "java.util.*", "java.io.*", "javax.annotation.Generated" };
-	private static final String[] CLASS_IMPORTS = { "edu.jhu.cs.bsj.compiler.impl.ast.*",
-			"edu.jhu.cs.bsj.compiler.impl.ast.node.*", "edu.jhu.cs.bsj.compiler.impl.ast.node.meta.*",
-			"edu.jhu.cs.bsj.compiler.impl.utils.*", "javax.annotation.Generated",
-			"edu.jhu.cs.bsj.compiler.impl.tool.filemanager.*" };
+
 	private static final Set<String> PRIMITIVE_TYPES = new HashSet<String>(Arrays.asList("int", "long", "boolean",
 			"float", "double", "short", "byte", "char"));
 	private static final Set<String> PRIMITIVE_CONTAINER_TYPES = new HashSet<String>(Arrays.asList("Long", "Integer",
@@ -166,6 +157,21 @@ public class SourceGenerator
 			handler.finish();
 	}
 
+	public static File getTargetDir(Project p)
+	{
+		// Retrieves the base directory for files in the specified project.
+		File f = new File(TARGET_DIR.getAbsolutePath() + File.separator + p.getResourceDirName());
+		f.mkdirs();
+		return f;
+	}
+
+	public static File getSupplementDir(Project p, SupplementCategory category)
+	{
+		File f = new File(SUPPLEMENTS_DIR.getAbsolutePath() + category.getSubdirSuffix() + File.separator
+				+ p.getResourceDirName());
+		return f;
+	}
+
 	/**
 	 * Capitalizes the first letter of a string.
 	 * 
@@ -243,14 +249,15 @@ public class SourceGenerator
 	 * 
 	 * @param ps The {@link PrintStream} to which to write lines that need to be copied.
 	 * @param names The names of the include files.
-	 * @param dir The directory from which to obtain the include files.
+	 * @param project The project where the includes are stored.
+	 * @param category The category of includes to use.
 	 */
-	private static void includeAllBodies(PrintStream ps, Iterable<String> names, String dir) throws IOException
+	private static void includeAllBodies(PrintStream ps, Iterable<String> names, Project project,
+			SupplementCategory category) throws IOException
 	{
 		for (String name : names)
 		{
-			File f = new File(SUPPLEMENTS_DIR.getParent() + File.separator + "supplement" + File.separator + dir
-					+ File.separator + name);
+			File f = new File(getSupplementDir(project, category).getPath() + File.separator + name);
 			includeBody(f, ps);
 		}
 	}
@@ -260,14 +267,15 @@ public class SourceGenerator
 	 * 
 	 * @param ps The {@link PrintStream} to which to write lines that need to be copied.
 	 * @param names The names of the include files.
-	 * @param dir The directory from which to obtain the include files.
+	 * @param project The project where the includes are stored.
+	 * @param category The category of includes to use.
 	 */
-	private static void includeAllImports(PrintStream ps, Iterable<String> names, String dir) throws IOException
+	private static void includeAllImports(PrintStream ps, Iterable<String> names, Project project,
+			SupplementCategory category) throws IOException
 	{
 		for (String name : names)
 		{
-			File f = new File(SUPPLEMENTS_DIR.getParent() + File.separator + "supplement" + File.separator + dir
-					+ File.separator + name);
+			File f = new File(getSupplementDir(project, category).getPath() + File.separator + name);
 			includeImports(f, ps);
 		}
 	}
@@ -395,18 +403,11 @@ public class SourceGenerator
 	 * @param ps The stream on which to print.
 	 * @param classImp <code>true</code> to include class imports; <code>false</code> otherwise.
 	 */
-	private static void printImports(PrintStream ps, boolean classImp)
+	private static void printImports(PrintStream ps, Project project)
 	{
-		for (String s : IFACE_IMPORTS)
+		for (String importName : project.getImports())
 		{
-			ps.println("import " + s + ";");
-		}
-		if (classImp)
-		{
-			for (String s : CLASS_IMPORTS)
-			{
-				ps.println("import " + s + ";");
-			}
+			ps.println("import " + importName + ";");
 		}
 		ps.println();
 	}
@@ -446,7 +447,7 @@ public class SourceGenerator
 			String pkg = def.getProfile().getProperty(GenerationProfile.GENERATED_INTERFACE_PACKAGE_NAME);
 			if (pkg == null)
 				pkg = "";
-			File classFile = new File(TARGET_IFACE_DIR.getAbsolutePath() + File.separator
+			File classFile = new File(getTargetDir(Project.API) + File.separator
 					+ pkg.replaceAll("\\.", File.separator) + File.separator + def.getBaseName() + ".java");
 			classFile.getParentFile().mkdirs();
 			FileOutputStream fos = new FileOutputStream(classFile);
@@ -456,8 +457,8 @@ public class SourceGenerator
 			ps.println("");
 
 			// imports
-			printImports(ps, false);
-			includeAllImports(ps, def.getIncludes(), "nodes" + File.separator + "interface");
+			printImports(ps, Project.API);
+			includeAllImports(ps, def.getIncludes(), Project.API, SupplementCategory.NODE);
 
 			ps.println("/**");
 			ps.println(" * " + def.getDocString().replaceAll("\n", "\n * "));
@@ -528,7 +529,7 @@ public class SourceGenerator
 
 			// write bodies
 			ps.decPrependCount();
-			includeAllBodies(ps, def.getIncludes(), "nodes" + File.separator + "interface");
+			includeAllBodies(ps, def.getIncludes(), Project.API, SupplementCategory.NODE);
 			ps.println("}");
 		}
 	}
@@ -553,8 +554,8 @@ public class SourceGenerator
 		 * 
 		 * @param pkg The package for this file.
 		 * @param mode The mode for this file: concrete class, abstract class, or interface.
-		 * @param implementation <code>true</code> if this is an implementation class; <code>false</code> if it's an
-		 *            interface class.
+		 * @param project The project in which to create the output file.
+		 * @param category The category of supplements where imported files will be found.
 		 * @param type The name of the type. No extension is permitted; type arguments are allowed.
 		 * @param includes <code>true</code> if a supplemental include file should be expected.
 		 * @param headerString A string to insert before the class definition header (for programmatic Javadocs and the
@@ -565,9 +566,9 @@ public class SourceGenerator
 		 *         <code>}</code>.
 		 * @throws IOException If an I/O error occurs.
 		 */
-		protected PrependablePrintStream createOutputFile(String pkg, TypeDefinition.Mode mode, boolean implementation,
-				String type, boolean includes, String headerString, String extendsName, String... implementsNames)
-				throws IOException
+		protected PrependablePrintStream createOutputFile(String pkg, TypeDefinition.Mode mode, Project project,
+				SupplementCategory category, String type, boolean includes, String headerString, String extendsName,
+				String... implementsNames) throws IOException
 		{
 			String name;
 			if (type.indexOf('<') != -1)
@@ -579,16 +580,16 @@ public class SourceGenerator
 			}
 			name = name + ".java";
 
-			File f = new File((implementation ? TARGET_IMPL_DIR : TARGET_IFACE_DIR).getPath() + File.separator
+			File f = new File(getTargetDir(project).getAbsolutePath() + File.separator
 					+ pkg.replaceAll("\\.", File.separator) + File.separator + name);
 			f.getParentFile().mkdirs();
 			PrependablePrintStream ret = new PrependablePrintStream(new FileOutputStream(f), "    ", 0);
 			ret.println("package " + pkg + ";");
 			ret.println();
-			printImports(ret, implementation);
+			printImports(ret, project);
 			if (includes)
 			{
-				includeAllImports(ret, Collections.singleton(name), implementation ? "implementation" : "interface");
+				includeAllImports(ret, Collections.singleton(name), project, SupplementCategory.GENERAL);
 			}
 			if (headerString != null)
 			{
@@ -622,7 +623,7 @@ public class SourceGenerator
 			ret.println("{");
 			if (includes)
 			{
-				includeAllBodies(ret, Collections.singleton(name), implementation ? "implementation" : "interface");
+				includeAllBodies(ret, Collections.singleton(name), project, SupplementCategory.GENERAL);
 			}
 			return ret;
 		}
@@ -633,7 +634,8 @@ public class SourceGenerator
 	{
 		protected static enum ReviewMode
 		{
-			ALPHABETICAL, FILE_ORDER
+			ALPHABETICAL,
+			FILE_ORDER
 		}
 
 		protected Map<String, TypeDefinition> map;
@@ -777,7 +779,7 @@ public class SourceGenerator
 			String pkg = def.getProfile().getProperty(GenerationProfile.GENERATED_CLASS_PACKAGE_NAME);
 			if (pkg == null)
 				pkg = "";
-			File classFile = new File(TARGET_IMPL_DIR.getAbsolutePath() + File.separator
+			File classFile = new File(getTargetDir(Project.GENERATOR) + File.separator
 					+ pkg.replaceAll("\\.", File.separator) + File.separator + rawclassname + ".java");
 			classFile.getParentFile().mkdirs();
 			FileOutputStream fos = new FileOutputStream(classFile);
@@ -787,12 +789,12 @@ public class SourceGenerator
 				ps.println("package " + pkg + ";");
 			ps.println("");
 
-			printImports(ps, true);
-			String includesDir = "nodes" + File.separator + "implementation";
-			includeAllImports(ps, def.getIncludes(), includesDir);
+			printImports(ps, Project.GENERATOR);
+			includeAllImports(ps, def.getIncludes(), Project.GENERATOR, SupplementCategory.NODE);
 			for (TagReferenceDefinition tag : def.getTags())
 			{
-				includeAllImports(ps, def.getNamespaceMap().get(tag.getName()).getIncludes(), includesDir);
+				includeAllImports(ps, def.getNamespaceMap().get(tag.getName()).getIncludes(), Project.GENERATOR,
+						SupplementCategory.NODE);
 			}
 
 			printGeneratedClause(ps);
@@ -809,7 +811,7 @@ public class SourceGenerator
 				ps.println("private " + p.getFullType() + " " + p.getName() + ";");
 				ps.println();
 			}
-			
+
 			// gen attributes enum
 			if (def.getResponsibleProperties(false).size() > 0)
 			{
@@ -916,7 +918,7 @@ public class SourceGenerator
 						ps.decPrependCount();
 						ps.println("}");
 						ps.println();
-						
+
 						// this separation is necessary to allow the constructor to use every aspect of the setter
 						// method except for the permission check
 						ps.println("private void set" + capFirst(p.getName()) + "(" + p.getFullType() + " "
@@ -1344,10 +1346,11 @@ public class SourceGenerator
 			ps.decPrependCount();
 
 			// add supplements
-			includeAllBodies(ps, def.getIncludes(), includesDir);
+			includeAllBodies(ps, def.getIncludes(), Project.GENERATOR, SupplementCategory.NODE);
 			for (TagReferenceDefinition tag : def.getTags())
 			{
-				includeAllBodies(ps, def.getNamespaceMap().get(tag.getName()).getIncludes(), includesDir);
+				includeAllBodies(ps, def.getNamespaceMap().get(tag.getName()).getIncludes(), Project.GENERATOR,
+						SupplementCategory.NODE);
 			}
 
 			ps.println("}");
@@ -1413,15 +1416,15 @@ public class SourceGenerator
 			Collections.sort(sortedNames);
 
 			// Write interface
-			PrintStream ps = createOutputFile("edu.jhu.cs.bsj.compiler.ast", TypeDefinition.Mode.INTERFACE, false,
-					"BsjTypedNodeVisitor", true, null, null);
+			PrintStream ps = createOutputFile("edu.jhu.cs.bsj.compiler.ast", TypeDefinition.Mode.INTERFACE,
+					Project.API, SupplementCategory.GENERAL, "BsjTypedNodeVisitor", true, null, null);
 			writeTypeBody(ps, false, sortedNames, concreteTypeNameSet);
 			ps.println("}");
 			ps.close();
 
 			// Write default implementation
-			ps = createOutputFile("edu.jhu.cs.bsj.compiler.ast.util", TypeDefinition.Mode.CONCRETE, false,
-					"BsjTypedNodeNoOpVisitor", true, null, null, "BsjTypedNodeVisitor");
+			ps = createOutputFile("edu.jhu.cs.bsj.compiler.ast.util", TypeDefinition.Mode.CONCRETE, Project.API,
+					SupplementCategory.GENERAL, "BsjTypedNodeNoOpVisitor", true, null, null, "BsjTypedNodeVisitor");
 			writeTypeBody(ps, true, sortedNames, concreteTypeNameSet);
 			ps.println("}");
 			ps.close();
@@ -1498,8 +1501,8 @@ public class SourceGenerator
 			{
 				String typeName = StringUtilities.getSuffix(interfaceName, '.');
 				String packageName = StringUtilities.removeSuffix(interfaceName, '.');
-				PrependablePrintStream ips = createOutputFile(packageName, TypeDefinition.Mode.INTERFACE, false,
-						typeName, true, null, null);
+				PrependablePrintStream ips = createOutputFile(packageName, TypeDefinition.Mode.INTERFACE, Project.API,
+						SupplementCategory.GENERAL, typeName, true, null, null);
 				mapping.put(interfaceName, ips);
 			}
 			String className = generationProfile.getProperty(GenerationProfile.FACTORY_CLASS_NAME);
@@ -1508,8 +1511,8 @@ public class SourceGenerator
 				String typeName = StringUtilities.getSuffix(className, '.');
 				String packageName = StringUtilities.removeSuffix(className, '.');
 				String ifaceName = interfaceName != null ? StringUtilities.getSuffix(interfaceName, '.') : null;
-				PrependablePrintStream cps = createOutputFile(packageName, TypeDefinition.Mode.CONCRETE, true,
-						typeName, true, null, null, ifaceName);
+				PrependablePrintStream cps = createOutputFile(packageName, TypeDefinition.Mode.CONCRETE,
+						Project.GENERATOR, SupplementCategory.GENERAL, typeName, true, null, null, ifaceName);
 				mapping.put(className, cps);
 			}
 			String decoratorClassName = generationProfile.getProperty(GenerationProfile.FACTORY_DECORATOR_CLASS_NAME);
@@ -1518,8 +1521,8 @@ public class SourceGenerator
 				String typeName = StringUtilities.getSuffix(decoratorClassName, '.');
 				String packageName = StringUtilities.removeSuffix(decoratorClassName, '.');
 				String ifaceName = interfaceName != null ? StringUtilities.getSuffix(interfaceName, '.') : null;
-				PrependablePrintStream dps = createOutputFile(packageName, TypeDefinition.Mode.ABSTRACT, false,
-						typeName, true, null, null, ifaceName);
+				PrependablePrintStream dps = createOutputFile(packageName, TypeDefinition.Mode.ABSTRACT, Project.API,
+						SupplementCategory.GENERAL, typeName, true, null, null, ifaceName);
 				mapping.put(decoratorClassName, dps);
 			}
 		}
@@ -1618,7 +1621,7 @@ public class SourceGenerator
 			String typeParamS = typeParam == null ? "" : ("<" + typeParam + "> ");
 
 			// Property analysis: what is required as input?
-			Map<String,String> factoryOverrideMap = def.getRecursiveFactoryOverrideMap();
+			Map<String, String> factoryOverrideMap = def.getRecursiveFactoryOverrideMap();
 			List<PropertyDefinition> recProps = def.getRecursiveProperties();
 			List<PropertyDefinition> argProps = new ArrayList<PropertyDefinition>();
 			for (PropertyDefinition recProp : recProps)
@@ -1825,14 +1828,16 @@ public class SourceGenerator
 		{
 			super.init();
 
-			ips = createOutputFile("edu.jhu.cs.bsj.compiler.ast", TypeDefinition.Mode.INTERFACE, false,
-					"BsjNodeOperation<P,R>", true, null, null);
-			nps = createOutputFile("edu.jhu.cs.bsj.compiler.ast.util", TypeDefinition.Mode.CONCRETE, false,
-					"BsjNodeNoOpOperation<P,R>", true, null, null, "BsjNodeOperation<P,R>");
-			pps = createOutputFile("edu.jhu.cs.bsj.compiler.ast.util", TypeDefinition.Mode.ABSTRACT, false,
-					"BsjNodeOperationProxy<POrig,ROrig,PNew,RNew>", true, null, null, "BsjNodeOperation<PNew,RNew>");
-			dps = createOutputFile("edu.jhu.cs.bsj.compiler.ast.util", TypeDefinition.Mode.ABSTRACT, false,
-					"BsjDefaultNodeOperation<P,R>", true, null, null, "BsjNodeOperation<P,R>");
+			ips = createOutputFile("edu.jhu.cs.bsj.compiler.ast", TypeDefinition.Mode.INTERFACE, Project.API,
+					SupplementCategory.GENERAL, "BsjNodeOperation<P,R>", true, null, null);
+			nps = createOutputFile("edu.jhu.cs.bsj.compiler.ast.util", TypeDefinition.Mode.CONCRETE, Project.API,
+					SupplementCategory.GENERAL, "BsjNodeNoOpOperation<P,R>", true, null, null, "BsjNodeOperation<P,R>");
+			pps = createOutputFile("edu.jhu.cs.bsj.compiler.ast.util", TypeDefinition.Mode.ABSTRACT, Project.API,
+					SupplementCategory.GENERAL, "BsjNodeOperationProxy<POrig,ROrig,PNew,RNew>", true, null, null,
+					"BsjNodeOperation<PNew,RNew>");
+			dps = createOutputFile("edu.jhu.cs.bsj.compiler.ast.util", TypeDefinition.Mode.ABSTRACT, Project.API,
+					SupplementCategory.GENERAL, "BsjDefaultNodeOperation<P,R>", true, null, null,
+					"BsjNodeOperation<P,R>");
 		}
 
 		@Override
@@ -1950,8 +1955,9 @@ public class SourceGenerator
 		public void init() throws IOException
 		{
 			super.init();
-			ps = createOutputFile("edu.jhu.cs.bsj.compiler.impl.tool.compiler", TypeDefinition.Mode.CONCRETE, true,
-					"BsjTreeLifter", true, null, null, "BsjNodeOperation<ExpressionNode,ExpressionNode>");
+			ps = createOutputFile("edu.jhu.cs.bsj.compiler.impl.tool.compiler", TypeDefinition.Mode.CONCRETE,
+					Project.GENERATOR, SupplementCategory.GENERAL, "BsjTreeLifter", true, null, null,
+					"BsjNodeOperation<ExpressionNode,ExpressionNode>");
 			ps.incPrependCount();
 			ps.println("private BsjNodeFactory factory;");
 			ps.println();
@@ -2220,8 +2226,9 @@ public class SourceGenerator
 		@Override
 		public void handleDiagnosticDefinition(DiagnosticDefinition def) throws IOException
 		{
-			dps = createOutputFile(def.getClassPackage(), def.getCode() == null ? Mode.ABSTRACT : Mode.CONCRETE, false,
-					def.getName() + "<T extends javax.tools.JavaFileObject>", false,
+			String classPackage = def.getProfile().getProperty(GenerationProfile.GENERATED_CLASS_PACKAGE_NAME);
+			dps = createOutputFile(classPackage, def.getCode() == null ? Mode.ABSTRACT : Mode.CONCRETE, Project.API,
+					SupplementCategory.GENERAL, def.getName() + "<T extends javax.tools.JavaFileObject>", false,
 					"import edu.jhu.cs.bsj.compiler.diagnostic.*;\n\n/**\n * "
 							+ def.getDocString().replaceAll("\n", "\n * ") + "\n */", def.getSuperName() + "<T>");
 			dps.incPrependCount();

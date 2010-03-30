@@ -2,7 +2,7 @@
     <!-- Diagnostics -->
     <srcgen>
         <srcgen cpkg="edu.jhu.cs.bsj.compiler.diagnostic.lexer">
-            <diagnostic name="BsjLexerDiagnostic">
+            <diagnostic name="BsjLexerDiagnostic" super="AbstractBsjDiagnostic">
                 <prop name="character" type="int" desc="the character which caused this diagnostic" />
                 <doc><![CDATA[
                     A diagnostic which acts as a supertype for all BSJ lexer diagnostics.
@@ -18,7 +18,7 @@
         </srcgen>
 
         <srcgen cpkg="edu.jhu.cs.bsj.compiler.diagnostic.parser">
-            <diagnostic name="BsjParserDiagnostic">
+            <diagnostic name="BsjParserDiagnostic" super="AbstractBsjDiagnostic">
                 <prop name="ruleName" type="String" desc="the rule which caused this diagnostic" />
                 <doc><![CDATA[
                     A diagnostic which acts as the parent for all parser diagnostics.

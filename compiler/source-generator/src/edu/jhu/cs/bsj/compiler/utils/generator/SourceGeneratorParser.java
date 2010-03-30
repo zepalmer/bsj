@@ -225,6 +225,22 @@ public class SourceGeneratorParser
 			{
 				profile = profile.derive(GenerationProfile.GENERATED_CLASS_PACKAGE_NAME, e.getAttribute("cpkg"));
 			}
+			if (e.hasAttribute("ctgt"))
+			{
+				String target = e.getAttribute("ctgt");
+				Project project;
+				if (target.equals("generator"))
+				{
+					project = Project.GENERATOR;
+				} else if (target.equals("parser"))
+				{
+					project = Project.PARSER;
+				} else
+				{
+					throw new IllegalArgumentException("Unrecognized target project: " + target);
+				}
+				profile = profile.derive(GenerationProfile.TARGET_PROJECT, project);
+			}
 
 			NodeList children = e.getChildNodes();
 			for (int i = 0; i < children.getLength(); i++)
@@ -446,7 +462,7 @@ public class SourceGeneratorParser
 		{
 			super(profile);
 		}
-		
+
 		@Override
 		protected PropertyDefinition create(Element e, String name, String baseType, String typeArg,
 				String description, String defaultExpression)
@@ -477,7 +493,7 @@ public class SourceGeneratorParser
 			return new PropertyDefinition(name, baseType, typeArg, mode, description, defaultExpression);
 		}
 	}
-	
+
 	static class ConstantHandler extends AbstractPropertyHandler<ConstantDefinition>
 	{
 		public ConstantHandler(GenerationProfile profile)
@@ -547,10 +563,6 @@ public class SourceGeneratorParser
 		{
 			String name = e.getAttribute("name");
 			String superName = getAttributeValue(e, "super");
-			if (superName == null)
-			{
-				superName = "AbstractBsjDiagnostic";
-			}
 			List<PropertyDefinition> props = new ArrayList<PropertyDefinition>();
 			String docString = null;
 			String code = getAttributeValue(e, "code");
@@ -577,8 +589,8 @@ public class SourceGeneratorParser
 				}
 			}
 
-			DiagnosticDefinition diagnosticDefinition = new DiagnosticDefinition(name, superName,
-					profile.getProperty(GenerationProfile.GENERATED_CLASS_PACKAGE_NAME), props, docString, code);
+			DiagnosticDefinition diagnosticDefinition = new DiagnosticDefinition(name, superName, this.profile, props,
+					docString, code);
 			return diagnosticDefinition;
 		}
 	}

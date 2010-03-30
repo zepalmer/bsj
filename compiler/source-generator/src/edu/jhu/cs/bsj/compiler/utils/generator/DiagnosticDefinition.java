@@ -12,7 +12,7 @@ public class DiagnosticDefinition extends PropertyBasedHierarchyDefinition<Diagn
 {
 	private String name;
 	private String superName;
-	private String classPackage;
+	private GenerationProfile profile;
 	private List<PropertyDefinition> properties;
 	private String docString;
 	private String code;
@@ -20,13 +20,13 @@ public class DiagnosticDefinition extends PropertyBasedHierarchyDefinition<Diagn
 	private DiagnosticDefinition parent;
 	private Map<String,DiagnosticDefinition> namespaceMap;
 	
-	public DiagnosticDefinition(String name, String superName, String classPackage, List<PropertyDefinition> properties,
+	public DiagnosticDefinition(String name, String superName, GenerationProfile profile, List<PropertyDefinition> properties,
 			String docString, String code)
 	{
 		super();
 		this.name = name;
 		this.superName = superName;
-		this.classPackage = classPackage;
+		this.profile = profile;
 		this.properties = properties;
 		this.docString = docString;
 		this.code = code;
@@ -42,9 +42,9 @@ public class DiagnosticDefinition extends PropertyBasedHierarchyDefinition<Diagn
 		return superName;
 	}
 
-	public String getClassPackage()
+	public GenerationProfile getProfile()
 	{
-		return classPackage;
+		return profile;
 	}
 
 	public List<PropertyDefinition> getProperties()

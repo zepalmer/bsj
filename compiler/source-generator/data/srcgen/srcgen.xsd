@@ -142,6 +142,13 @@
     <xs:complexType name="import_T">
         <xs:attribute name="path" type="xs:string" use="required" />
     </xs:complexType>
+    
+    <xs:simpleType name="ctgt_T">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="generator" />
+            <xs:enumeration value="parser" />
+        </xs:restriction>
+    </xs:simpleType>
 
     <xs:complexType name="srcgen_T">
         <xs:choice>
@@ -166,6 +173,7 @@
         </xs:choice>
         <xs:attribute name="ipkg" type="xs:string" use="optional" />
         <xs:attribute name="cpkg" type="xs:string" use="optional" />
+        <xs:attribute name="ctgt" type="ctgt_T" use="optional" default="generator" />
     </xs:complexType>
 
     <xs:element name="srcgen" type="srcgen_T" />
