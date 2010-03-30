@@ -30,8 +30,6 @@ public class NameCategorizationTest extends AbstractPerFileTest
 	@Test
 	public void testNameCategorization()
 	{
-		log4jConfigure("trace", "edu.jhu.cs.bsj.compiler.impl.tool.filemanager/debug",
-				"edu.jhu.cs.bsj.compiler.tool.parser.antlr/debug");
 		findAndTestJavaFiles(EXAMPLES);
 	}
 

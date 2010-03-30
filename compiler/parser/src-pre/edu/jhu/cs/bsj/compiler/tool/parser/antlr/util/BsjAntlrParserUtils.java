@@ -10,15 +10,15 @@ import org.antlr.runtime.Token;
 import org.antlr.runtime.UnwantedTokenException;
 
 import edu.jhu.cs.bsj.compiler.diagnostic.lexer.BsjLexerDiagnostic;
-import edu.jhu.cs.bsj.compiler.diagnostic.lexer.GeneralLexerFailureDiagnostic;
 import edu.jhu.cs.bsj.compiler.diagnostic.parser.BsjParserDiagnostic;
-import edu.jhu.cs.bsj.compiler.diagnostic.parser.ExtraneousTokenDiagnostic;
-import edu.jhu.cs.bsj.compiler.diagnostic.parser.FloatingPointLiteralTooLargeDiagnostic;
-import edu.jhu.cs.bsj.compiler.diagnostic.parser.FloatingPointLiteralTooSmallDiagnostic;
-import edu.jhu.cs.bsj.compiler.diagnostic.parser.GeneralParseFailureDiagnostic;
-import edu.jhu.cs.bsj.compiler.diagnostic.parser.InvalidIntegerLiteralDiagnostic;
-import edu.jhu.cs.bsj.compiler.diagnostic.parser.MissingTokenDiagnostic;
-import edu.jhu.cs.bsj.compiler.diagnostic.parser.UnexpectedTokenDiagnostic;
+import edu.jhu.cs.bsj.compiler.impl.diagnostic.lexer.GeneralLexerFailureDiagnosticImpl;
+import edu.jhu.cs.bsj.compiler.impl.diagnostic.parser.ExtraneousTokenDiagnosticImpl;
+import edu.jhu.cs.bsj.compiler.impl.diagnostic.parser.FloatingPointLiteralTooLargeDiagnosticImpl;
+import edu.jhu.cs.bsj.compiler.impl.diagnostic.parser.FloatingPointLiteralTooSmallDiagnosticImpl;
+import edu.jhu.cs.bsj.compiler.impl.diagnostic.parser.GeneralParseFailureDiagnosticImpl;
+import edu.jhu.cs.bsj.compiler.impl.diagnostic.parser.InvalidIntegerLiteralDiagnosticImpl;
+import edu.jhu.cs.bsj.compiler.impl.diagnostic.parser.MissingTokenDiagnosticImpl;
+import edu.jhu.cs.bsj.compiler.impl.diagnostic.parser.UnexpectedTokenDiagnosticImpl;
 
 public class BsjAntlrParserUtils
 {
@@ -224,7 +224,7 @@ public class BsjAntlrParserUtils
 				break;
 		}
 		
-		listener.report(new InvalidIntegerLiteralDiagnostic<JavaFileObject>(
+		listener.report(new InvalidIntegerLiteralDiagnosticImpl<JavaFileObject>(
                         lineNumber,
                         columnNumber,
                         resource,
@@ -295,7 +295,7 @@ public class BsjAntlrParserUtils
 				break;
 		}
 		
-		listener.report(new InvalidIntegerLiteralDiagnostic<JavaFileObject>(
+		listener.report(new InvalidIntegerLiteralDiagnosticImpl<JavaFileObject>(
                         lineNumber,
                         columnNumber,
                         resource,
@@ -339,13 +339,13 @@ public class BsjAntlrParserUtils
 		float f = Float.parseFloat(nums);
 		if (!isFloatingPointZero(s) && f == 0.0f)
 		{
-			listener.report(new FloatingPointLiteralTooSmallDiagnostic<JavaFileObject>(lineNumber, columnNumber,
+			listener.report(new FloatingPointLiteralTooSmallDiagnosticImpl<JavaFileObject>(lineNumber, columnNumber,
 					resource, ruleName, s));
 			return Float.NaN;
 		}
 		if (Float.isInfinite(f))
 		{
-			listener.report(new FloatingPointLiteralTooLargeDiagnostic<JavaFileObject>(lineNumber, columnNumber,
+			listener.report(new FloatingPointLiteralTooLargeDiagnosticImpl<JavaFileObject>(lineNumber, columnNumber,
 					resource, ruleName, s));
 			return Float.NaN;
 		}
@@ -374,13 +374,13 @@ public class BsjAntlrParserUtils
 		double d = Double.parseDouble(nums);
 		if (!isFloatingPointZero(s) && d == 0.0)
 		{
-			listener.report(new FloatingPointLiteralTooSmallDiagnostic<JavaFileObject>(lineNumber, columnNumber,
+			listener.report(new FloatingPointLiteralTooSmallDiagnosticImpl<JavaFileObject>(lineNumber, columnNumber,
 					resource, ruleName, s));
 			return Double.NaN;
 		}
 		if (Double.isInfinite(d))
 		{
-			listener.report(new FloatingPointLiteralTooLargeDiagnostic<JavaFileObject>(lineNumber, columnNumber,
+			listener.report(new FloatingPointLiteralTooLargeDiagnosticImpl<JavaFileObject>(lineNumber, columnNumber,
 					resource, ruleName, s));
 			return Double.NaN;
 		}
@@ -407,22 +407,22 @@ public class BsjAntlrParserUtils
 		if (re instanceof UnwantedTokenException)
 		{
 			UnwantedTokenException ute = (UnwantedTokenException) re;
-			return new ExtraneousTokenDiagnostic<JavaFileObject>(lineNumber, columnNumber, resource, ruleName,
+			return new ExtraneousTokenDiagnosticImpl<JavaFileObject>(lineNumber, columnNumber, resource, ruleName,
 					ute.expecting == Token.EOF ? "EOF" : tokenNames[ute.expecting], last.getText());
 		} else if (re instanceof org.antlr.runtime.MissingTokenException)
 		{
 			MissingTokenException mte = (MissingTokenException) re;
-			return new MissingTokenDiagnostic<JavaFileObject>(lineNumber, columnNumber, resource, ruleName,
+			return new MissingTokenDiagnosticImpl<JavaFileObject>(lineNumber, columnNumber, resource, ruleName,
 					mte.expecting == Token.EOF ? "EOF" : tokenNames[mte.expecting]);
 		} else if (re instanceof MismatchedTokenException)
 		{
 			MismatchedTokenException mte = (MismatchedTokenException) re;
-			return new UnexpectedTokenDiagnostic<JavaFileObject>(lineNumber, columnNumber, resource, ruleName,
+			return new UnexpectedTokenDiagnosticImpl<JavaFileObject>(lineNumber, columnNumber, resource, ruleName,
 					last.getType() == Token.EOF ? "EOF" : tokenNames[last.getType()], last.getText(),
 					mte.expecting == Token.EOF ? "EOF" : tokenNames[mte.expecting]);
 		} else
 		{
-			return new GeneralParseFailureDiagnostic<JavaFileObject>(lineNumber, columnNumber, resource, ruleName,
+			return new GeneralParseFailureDiagnosticImpl<JavaFileObject>(lineNumber, columnNumber, resource, ruleName,
 					last.getType() == Token.EOF ? "EOF" : tokenNames[last.getType()], last.getText());
 		}
 	}
@@ -444,6 +444,6 @@ public class BsjAntlrParserUtils
 			String[] tokenNames, int lineNumber, int columnNumber, JavaFileObject resource, int last)
 	{
 		// TODO: can we be more specific?
-		return new GeneralLexerFailureDiagnostic<JavaFileObject>(lineNumber, columnNumber, resource, last);
+		return new GeneralLexerFailureDiagnosticImpl<JavaFileObject>(lineNumber, columnNumber, resource, last);
 	}
 }

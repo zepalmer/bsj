@@ -22,8 +22,10 @@
 	<property name="genbin" value=".gen/bin" />
 	<!-- Names the directory containing the parser's package. -->
 	<property name="parserPackage" value="${gensrc}/edu/jhu/cs/bsj/compiler/tool/parser/antlr" />
-	<!-- Names the directory containing compiled binaries for the BSJ Compiler API. -->
-	<property name="compilerApiPath" value="../api/bin" />
+    <!-- Names the directory containing compiled binaries for the BSJ Compiler API. -->
+    <property name="compilerApiPath" value="../api/bin" />
+    <!-- Names the directory containing compiled binaries for the BSJ Utilities project. -->
+    <property name="utilsPath" value="../utils/bin" />
 	<!-- Indicates the classpath for a build of the parser. -->
 	<path id="parser.classpath">
         <fileset dir="lib">
@@ -31,6 +33,7 @@
         </fileset>
 		<pathelement path="${genbin}"/>
 		<pathelement path="${compilerApiPath}"/>
+		<pathelement path="${utilsPath}"/>
 	</path>
 	
     <!-- - - - - - - - - - - - - - - - - - 

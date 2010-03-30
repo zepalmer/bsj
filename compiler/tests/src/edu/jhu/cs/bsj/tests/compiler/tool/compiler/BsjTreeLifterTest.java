@@ -58,8 +58,7 @@ public class BsjTreeLifterTest extends AbstractPerFileTest
 	@Test
 	public void testLifterOnExamples()
 	{
-		log4jConfigure("debug", "edu.jhu.cs.bsj.compiler.impl.tool.filemanager/debug",
-				"edu.jhu.cs.bsj.compiler.tool.parser.antlr/debug");
+		log4jConfigure("debug");
 		findAndTestJavaFiles(EXAMPLES);
 	}
 

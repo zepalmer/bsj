@@ -1,8 +1,9 @@
 <srcgen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="./srcgen.xsd">
     <!-- Diagnostics -->
     <srcgen>
-        <srcgen cpkg="edu.jhu.cs.bsj.compiler.diagnostic.lexer">
-            <diagnostic name="BsjLexerDiagnostic" super="AbstractBsjDiagnostic">
+        <srcgen ipkg="edu.jhu.cs.bsj.compiler.diagnostic.lexer" cpkg="edu.jhu.cs.bsj.compiler.impl.diagnostic.lexer"
+            ctgt="parser">
+            <diagnostic name="BsjLexerDiagnostic" super="BsjDiagnostic">
                 <prop name="character" type="int" desc="the character which caused this diagnostic" />
                 <doc><![CDATA[
                     A diagnostic which acts as a supertype for all BSJ lexer diagnostics.
@@ -17,8 +18,9 @@
             </diagnostic>
         </srcgen>
 
-        <srcgen cpkg="edu.jhu.cs.bsj.compiler.diagnostic.parser">
-            <diagnostic name="BsjParserDiagnostic" super="AbstractBsjDiagnostic">
+        <srcgen ipkg="edu.jhu.cs.bsj.compiler.diagnostic.parser" cpkg="edu.jhu.cs.bsj.compiler.impl.diagnostic.parser"
+            ctgt="parser">
+            <diagnostic name="BsjParserDiagnostic" super="BsjDiagnostic">
                 <prop name="ruleName" type="String" desc="the rule which caused this diagnostic" />
                 <doc><![CDATA[
                     A diagnostic which acts as the parent for all parser diagnostics.
@@ -33,7 +35,7 @@
                     A diagnostic which represents a conflicting access modifier.
                 ]]></doc>
             </diagnostic>
-            
+
             <diagnostic name="ConflictingModeDiagnostic" code="bsj.parser.error.conflictingMode"
                 super="BsjParserDiagnostic">
                 <prop name="firstMode" type="String" desc="the first mode which conflicts" />
@@ -42,9 +44,8 @@
                     A diagnostic which represents a conflicting metaprogram mode.
                 ]]></doc>
             </diagnostic>
-            
-            <diagnostic name="DuplicateModeDiagnostic" code="bsj.parser.error.duplicateMode"
-                super="BsjParserDiagnostic">
+
+            <diagnostic name="DuplicateModeDiagnostic" code="bsj.parser.error.duplicateMode" super="BsjParserDiagnostic">
                 <prop name="mode" type="String" desc="the mode which was duplicated" />
                 <doc><![CDATA[
                     A diagnostic representing a duplicated metaprogram mode.
@@ -114,8 +115,7 @@
                 ]]></doc>
             </diagnostic>
 
-            <diagnostic name="InvalidModeDiagnostic" code="bsj.parser.error.invalidMode"
-                super="BsjParserDiagnostic">
+            <diagnostic name="InvalidModeDiagnostic" code="bsj.parser.error.invalidMode" super="BsjParserDiagnostic">
                 <prop name="mode" type="String" desc="the invalid mode" />
                 <doc><![CDATA[
                     A diagnostic representing an invalid metaprogram mode.  Because metaprogram modes are identifiers

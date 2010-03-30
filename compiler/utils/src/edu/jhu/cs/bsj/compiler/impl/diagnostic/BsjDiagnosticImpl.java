@@ -1,4 +1,4 @@
-package edu.jhu.cs.bsj.compiler.diagnostic;
+package edu.jhu.cs.bsj.compiler.impl.diagnostic;
 
 import java.util.List;
 import java.util.Locale;
@@ -6,6 +6,7 @@ import java.util.Locale;
 import javax.tools.Diagnostic;
 import javax.tools.JavaFileObject;
 
+import edu.jhu.cs.bsj.compiler.diagnostic.BsjDiagnostic;
 import edu.jhu.cs.bsj.compiler.impl.utils.i18n.InternationalizationUtilities;
 import edu.jhu.cs.bsj.compiler.impl.utils.i18n.PropertyBasedStringRepository;
 
@@ -16,7 +17,7 @@ import edu.jhu.cs.bsj.compiler.impl.utils.i18n.PropertyBasedStringRepository;
  * 
  * @param <T> The type of source represented by this diagnostic.
  */
-public abstract class AbstractBsjDiagnostic<T extends JavaFileObject> implements BsjDiagnostic<T>
+public abstract class BsjDiagnosticImpl<T extends JavaFileObject> implements BsjDiagnostic<T>
 {
 	/** The line number at which the event occurred. */
 	private long lineNumber;
@@ -40,7 +41,7 @@ public abstract class AbstractBsjDiagnostic<T extends JavaFileObject> implements
 	 * @param code The code used to describe the event.
 	 * @param kind The kind of event which occurred.
 	 */
-	public AbstractBsjDiagnostic(long lineNumber, long columnNumber, T source, String code, Kind kind)
+	public BsjDiagnosticImpl(long lineNumber, long columnNumber, T source, String code, Kind kind)
 	{
 		this.lineNumber = lineNumber;
 		this.columnNumber = columnNumber;

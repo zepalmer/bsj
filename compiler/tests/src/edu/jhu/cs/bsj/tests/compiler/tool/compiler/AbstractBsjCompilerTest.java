@@ -25,9 +25,6 @@ public abstract class AbstractBsjCompilerTest extends AbstractTest
 	 */
 	protected void performTest(File sourcePath, String... paths) throws Exception
 	{
-		log4jConfigure("trace", "edu.jhu.cs.bsj.compiler.impl.tool.filemanager/debug",
-				"edu.jhu.cs.bsj.compiler.tool.parser.antlr/debug");
-
 		BsjFileManager bfm = getFileManager(sourcePath);
 
 		List<BsjFileObject> files = new ArrayList<BsjFileObject>();

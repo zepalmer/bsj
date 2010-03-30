@@ -78,6 +78,8 @@ scope Rule {
     import edu.jhu.cs.bsj.compiler.ast.*;
     import edu.jhu.cs.bsj.compiler.diagnostic.*;
     import edu.jhu.cs.bsj.compiler.diagnostic.lexer.*;
+    import edu.jhu.cs.bsj.compiler.impl.diagnostic.*;
+    import edu.jhu.cs.bsj.compiler.impl.diagnostic.lexer.*;
     
     import edu.jhu.cs.bsj.compiler.tool.parser.antlr.util.BsjAntlrParserUtils;
 }
@@ -196,6 +198,8 @@ scope Rule {
     import edu.jhu.cs.bsj.compiler.ast.util.*;
     import edu.jhu.cs.bsj.compiler.diagnostic.*;
     import edu.jhu.cs.bsj.compiler.diagnostic.parser.*;
+    import edu.jhu.cs.bsj.compiler.impl.diagnostic.*;
+    import edu.jhu.cs.bsj.compiler.impl.diagnostic.parser.*;
     
     import edu.jhu.cs.bsj.compiler.tool.parser.antlr.util.BsjAntlrParserUtils;
     import edu.jhu.cs.bsj.compiler.tool.parser.antlr.util.BsjParserConfiguration;
@@ -383,7 +387,7 @@ scope Rule {
             switch (state[mod.ordinal()])
             {
                 case DISALLOWED:
-                    reportDiagnostic(new InvalidModifierDiagnostic<JavaFileObject>(
+                    reportDiagnostic(new InvalidModifierDiagnosticImpl<JavaFileObject>(
                             getLineNumber(-1),
                             getColumnNumber(-1),
                             resource,
@@ -394,7 +398,7 @@ scope Rule {
                     state[mod.ordinal()] = ModifierState.SEEN;
                     break;
                 case SEEN:
-                    reportDiagnostic(new DuplicateModifierDiagnostic<JavaFileObject>(
+                    reportDiagnostic(new DuplicateModifierDiagnosticImpl<JavaFileObject>(
                             getLineNumber(-1),
                             getColumnNumber(-1),
                             resource,
@@ -418,7 +422,7 @@ scope Rule {
             
             if (oldObj == newObj)
             {
-                reportDiagnostic(new DuplicateModeDiagnostic<JavaFileObject>(
+                reportDiagnostic(new DuplicateModeDiagnosticImpl<JavaFileObject>(
                         location.getLine(),
                         location.getColumn(),
                         resource,
@@ -426,7 +430,7 @@ scope Rule {
                         newObj.toString()));
             } else
             {
-                reportDiagnostic(new ConflictingModeDiagnostic<JavaFileObject>(
+                reportDiagnostic(new ConflictingModeDiagnosticImpl<JavaFileObject>(
                         location.getLine(),
                         location.getColumn(),
                         resource,
@@ -493,7 +497,7 @@ scope Rule {
                 setPackageMode(MetaprogramPackageMode.INSERT, location);
             } else 
             {
-                reportDiagnostic(new InvalidModeDiagnostic<JavaFileObject>(
+                reportDiagnostic(new InvalidModeDiagnosticImpl<JavaFileObject>(
                         location.getLine(),
                         location.getColumn(),
                         resource,
@@ -595,7 +599,7 @@ scope Rule {
                     return factory.makeSingleStaticImportNode((QualifiedNameNode)name);
                 } else
                 {
-                    reportDiagnostic(new UnqualifiedSingleStaticImportNameDiagnostic<JavaFileObject>(
+                    reportDiagnostic(new UnqualifiedSingleStaticImportNameDiagnosticImpl<JavaFileObject>(
                             getLineNumber(-1),
                             getColumnNumber(-1),
                             resource,
@@ -1460,7 +1464,7 @@ modifiers[boolean accessAllowed, Modifier... mods]
                     {
                         if ($access == currentAccess)
                         {
-                            reportDiagnostic(new DuplicateModifierDiagnostic<JavaFileObject>(
+                            reportDiagnostic(new DuplicateModifierDiagnosticImpl<JavaFileObject>(
                                     getLineNumber(-1),
                                     getColumnNumber(-1),
                                     resource,
@@ -1468,7 +1472,7 @@ modifiers[boolean accessAllowed, Modifier... mods]
                                     currentAccess.toString().toLowerCase()));
                         } else
                         {
-                            reportDiagnostic(new ConflictingAccessModifierDiagnostic<JavaFileObject>(
+                            reportDiagnostic(new ConflictingAccessModifierDiagnosticImpl<JavaFileObject>(
                                     getLineNumber(-1),
                                     getColumnNumber(-1),
                                     resource,

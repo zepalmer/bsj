@@ -32,7 +32,7 @@ public abstract class AbstractTest
 	protected Logger LOGGER = null;
 	{
 		log4jConfigure("trace", "edu.jhu.cs.bsj.compiler.impl.tool.filemanager/debug",
-				"edu.jhu.cs.bsj.compiler.tool.parser.antlr/debug");
+				"edu.jhu.cs.bsj.compiler.impl.tool.parser.antlr/debug");
 	}
 
 	/**

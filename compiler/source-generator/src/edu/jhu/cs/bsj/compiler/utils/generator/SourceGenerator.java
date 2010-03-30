@@ -2216,7 +2216,8 @@ public class SourceGenerator
 
 	static class DiagnosticDefinitionHandler extends AbstractDefinitionHandler
 	{
-		private PrependablePrintStream dps;
+		private PrependablePrintStream classPs;
+		private PrependablePrintStream ifacePs;
 
 		@Override
 		public void init() throws IOException
@@ -2226,27 +2227,38 @@ public class SourceGenerator
 		@Override
 		public void handleDiagnosticDefinition(DiagnosticDefinition def) throws IOException
 		{
-			String classPackage = def.getProfile().getProperty(GenerationProfile.GENERATED_CLASS_PACKAGE_NAME);
-			dps = createOutputFile(classPackage, def.getCode() == null ? Mode.ABSTRACT : Mode.CONCRETE, Project.API,
-					SupplementCategory.GENERAL, def.getName() + "<T extends javax.tools.JavaFileObject>", false,
+			String interfacePackage = def.getProfile().getProperty(GenerationProfile.GENERATED_INTERFACE_PACKAGE_NAME);
+			ifacePs = createOutputFile(interfacePackage, Mode.INTERFACE, Project.API, SupplementCategory.GENERAL,
+					def.getName() + "<T extends javax.tools.JavaFileObject>", false,
 					"import edu.jhu.cs.bsj.compiler.diagnostic.*;\n\n/**\n * "
 							+ def.getDocString().replaceAll("\n", "\n * ") + "\n */", def.getSuperName() + "<T>");
-			dps.incPrependCount();
+			ifacePs.incPrependCount();
+
+			String classPackage = def.getProfile().getProperty(GenerationProfile.GENERATED_CLASS_PACKAGE_NAME);
+			classPs = createOutputFile(classPackage, def.getCode() == null ? Mode.ABSTRACT : Mode.CONCRETE,
+					def.getProfile().getProperty(GenerationProfile.TARGET_PROJECT), SupplementCategory.GENERAL,
+					def.getName() + "Impl<T extends javax.tools.JavaFileObject>", false,
+					"import edu.jhu.cs.bsj.compiler.diagnostic.*;\n"
+							+ "import edu.jhu.cs.bsj.compiler.impl.diagnostic.*;\n" + "import " + interfacePackage
+							+ ".*;\n" + "\n\n/**\n * " + def.getDocString().replaceAll("\n", "\n * ") + "\n */",
+					def.getSuperName() + "Impl<T>", def.getName() + "<T>");
+			classPs.incPrependCount();
 
 			if (def.getCode() != null)
 			{
-				dps.println("/** The code for this diagnostic. */");
-				dps.println("public static final String CODE = \"" + def.getCode() + "\";");
-				dps.println();
+				ifacePs.println("/** The code for this diagnostic. */");
+				ifacePs.println("public static final String CODE = \"" + def.getCode() + "\";");
+				ifacePs.println();
 			}
 
 			for (PropertyDefinition prop : def.getProperties())
 			{
-				dps.println("/** " + capFirst(prop.getDescription()) + ". */");
-				dps.println("private " + prop.getFullType() + " " + prop.getName() + ";");
-				dps.println();
+				classPs.println("/** " + capFirst(prop.getDescription()) + ". */");
+				classPs.println("private " + prop.getFullType() + " " + prop.getName() + ";");
+				classPs.println();
 			}
 
+			// Create constructor definition
 			List<PropertyDefinition> consParams = new ArrayList<PropertyDefinition>();
 			consParams.add(new PropertyDefinition("lineNumber", "long", null, PropertyDefinition.Mode.NORMAL, "", null));
 			consParams.add(new PropertyDefinition("columnNumber", "long", null, PropertyDefinition.Mode.NORMAL, "",
@@ -2255,7 +2267,7 @@ public class SourceGenerator
 			PropertyDefinition.Mode overrideMode = def.getCode() == null ? PropertyDefinition.Mode.NORMAL
 					: PropertyDefinition.Mode.SKIP;
 			consParams.add(new PropertyDefinition("code", "String", null, overrideMode, null,
-					def.getCode() == null ? null : "CODE"));
+					def.getCode() == null ? null : def.getName() + ".CODE"));
 			// TODO: parameterization of diagnostic kind
 			consParams.add(new PropertyDefinition("kind", "javax.tools.Diagnostic.Kind", null, overrideMode, null,
 					def.getCode() == null ? null : "Kind.ERROR"));
@@ -2264,12 +2276,13 @@ public class SourceGenerator
 			List<PropertyDefinition> superParams = new ArrayList<PropertyDefinition>(consParams);
 			superParams.removeAll(def.getProperties());
 
-			dps.print("public " + def.getName());
-			printParameterList(dps, consParams, true);
-			dps.println();
-			dps.println("{");
-			dps.incPrependCount();
-			dps.print("super");
+			// Write constructor
+			classPs.print("public " + def.getName() + "Impl");
+			printParameterList(classPs, consParams, true);
+			classPs.println();
+			classPs.println("{");
+			classPs.incPrependCount();
+			classPs.print("super");
 			Map<String, String> overrideMap = new HashMap<String, String>();
 			for (PropertyDefinition prop : superParams)
 			{
@@ -2278,55 +2291,70 @@ public class SourceGenerator
 					overrideMap.put(prop.getName(), prop.getDefaultExpression());
 				}
 			}
-			printArgumentList(dps, superParams, overrideMap);
-			dps.println(";");
+			printArgumentList(classPs, superParams, overrideMap);
+			classPs.println(";");
 
 			for (PropertyDefinition prop : def.getProperties())
 			{
-				dps.println("this." + prop.getName() + " = " + prop.getName() + ";");
+				classPs.println("this." + prop.getName() + " = " + prop.getName() + ";");
 			}
 
-			dps.decPrependCount();
-			dps.println("}");
-			dps.println();
+			classPs.decPrependCount();
+			classPs.println("}");
+			classPs.println();
 
+			// Write interface getters
 			for (PropertyDefinition prop : def.getProperties())
 			{
-				dps.println("/**");
-				dps.println(" * Retrieves " + prop.getDescription() + ".");
-				dps.println(" * @return " + capFirst(prop.getDescription()) + ".");
-				dps.println(" */");
-				dps.println("public " + prop.getFullType() + " get" + capFirst(prop.getName()) + "()");
-				dps.println("{");
-				dps.incPrependCount();
-				dps.println("return this." + prop.getName() + ";");
-				dps.decPrependCount();
-				dps.println("}");
-				dps.println();
+				ifacePs.println("/**");
+				ifacePs.println(" * Retrieves " + prop.getDescription() + ".");
+				ifacePs.println(" * @return " + capFirst(prop.getDescription()) + ".");
+				ifacePs.println(" */");
+				ifacePs.println("public " + prop.getFullType() + " get" + capFirst(prop.getName()) + "();");
+				ifacePs.println();
 			}
 
-			dps.println("@Override");
-			dps.println("protected List<Object> getMessageArgs()");
-			dps.println("{");
-			dps.incPrependCount();
-			dps.print("List<Object> args = ");
-			if (def.getSuperName().equals("AbstractBsjDiagnostic"))
+			// Write class getters
+			for (PropertyDefinition prop : def.getProperties())
 			{
-				dps.println("new ArrayList<Object>();");
+				classPs.println("/**");
+				classPs.println(" * {@inheritDoc}");
+				classPs.println(" */");
+				classPs.println("public " + prop.getFullType() + " get" + capFirst(prop.getName()) + "()");
+				classPs.println("{");
+				classPs.incPrependCount();
+				classPs.println("return this." + prop.getName() + ";");
+				classPs.decPrependCount();
+				classPs.println("}");
+				classPs.println();
+			}
+
+			// Write message argument implementation
+			classPs.println("@Override");
+			classPs.println("protected List<Object> getMessageArgs()");
+			classPs.println("{");
+			classPs.incPrependCount();
+			classPs.print("List<Object> args = ");
+			if (def.getSuperName().equals("BsjDiagnostic"))
+			{
+				classPs.println("new ArrayList<Object>();");
 			} else
 			{
-				dps.println("super.getMessageArgs();");
+				classPs.println("super.getMessageArgs();");
 			}
 			for (PropertyDefinition prop : def.getProperties())
 			{
-				dps.println("args.add(this." + prop.getName() + ");");
+				classPs.println("args.add(this." + prop.getName() + ");");
 			}
-			dps.println("return args;");
-			dps.decPrependCount();
-			dps.println("}");
+			classPs.println("return args;");
+			classPs.decPrependCount();
+			classPs.println("}");
 
-			dps.decPrependCount();
-			dps.println("}");
+			// Finish out
+			ifacePs.decPrependCount();
+			ifacePs.println("}");
+			classPs.decPrependCount();
+			classPs.println("}");
 		}
 
 		@Override
