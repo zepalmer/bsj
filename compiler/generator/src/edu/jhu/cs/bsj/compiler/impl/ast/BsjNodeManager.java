@@ -473,7 +473,6 @@ public class BsjNodeManager
 		}
 
 		// Set up loop variables
-		boolean lastWasType = false;
 		StringBuilder sb = new StringBuilder();
 
 		// For each name, remove the components and build the binary name appropriately
@@ -483,7 +482,7 @@ public class BsjNodeManager
 			{
 				if (sb.length() > 0)
 				{
-					if (lastWasType)
+					if (nameNode.getCategory() == NameCategory.TYPE)
 					{
 						sb.insert(0, '$');
 					} else
@@ -493,7 +492,6 @@ public class BsjNodeManager
 				}
 
 				sb.insert(0, nameNode.getIdentifier().getIdentifier());
-				lastWasType = nameNode.getCategory().equals(NameCategory.TYPE);
 
 				if (nameNode instanceof QualifiedNameNode)
 				{

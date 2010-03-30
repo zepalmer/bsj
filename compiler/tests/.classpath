@@ -8,5 +8,6 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/BSJ Utilities"/>
 	<classpathentry kind="lib" path="lib/junit-4.8.1.jar"/>
 	<classpathentry kind="lib" path="lib/log4j-1.2.15.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/BSJ Standard Libraries"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
