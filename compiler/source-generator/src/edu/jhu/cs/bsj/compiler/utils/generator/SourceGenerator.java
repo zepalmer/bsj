@@ -2039,6 +2039,8 @@ public class SourceGenerator
 			{
 				if (p.isSkipMake() && !p.getName().matches("st(art|op)Location"))
 					continue;
+				if (def.getRecursiveFactoryOverrideMap().containsKey(p.getName()))
+					continue;
 
 				propAbstract(new PropertyTypeAbstractor()
 				{
@@ -2113,6 +2115,8 @@ public class SourceGenerator
 			for (PropertyDefinition p : recProp)
 			{
 				if (p.isSkipMake() && !p.getName().matches("st(art|op)Location"))
+					continue;
+				if (def.getRecursiveFactoryOverrideMap().containsKey(p.getName()))
 					continue;
 				if (first)
 				{
