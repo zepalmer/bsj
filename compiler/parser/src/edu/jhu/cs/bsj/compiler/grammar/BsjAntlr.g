@@ -67,7 +67,7 @@ scope Rule {
 }
 
 @lexer::header{
-    package edu.jhu.cs.bsj.compiler.tool.parser.antlr;
+    package edu.jhu.cs.bsj.compiler.impl.tool.parser.antlr;
 
     import javax.tools.Diagnostic;
     import javax.tools.DiagnosticListener;
@@ -171,7 +171,7 @@ scope Rule {
 }
 
 @parser::header{
-    package edu.jhu.cs.bsj.compiler.tool.parser.antlr;
+    package edu.jhu.cs.bsj.compiler.impl.tool.parser.antlr;
     
     import java.io.ByteArrayOutputStream;
     import java.io.PrintStream;

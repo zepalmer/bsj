@@ -1,4 +1,4 @@
-package edu.jhu.cs.bsj.compiler.tool.parser;
+package edu.jhu.cs.bsj.compiler.impl.tool.parser;
 
 import java.io.IOException;
 import java.io.Reader;

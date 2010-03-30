@@ -1,4 +1,4 @@
-package edu.jhu.cs.bsj.compiler.tool.parser;
+package edu.jhu.cs.bsj.compiler.impl.tool.parser;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -12,9 +12,10 @@ import org.antlr.runtime.TokenRewriteStream;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
+import edu.jhu.cs.bsj.compiler.impl.tool.parser.antlr.BsjAntlrLexer;
+import edu.jhu.cs.bsj.compiler.impl.tool.parser.antlr.BsjAntlrParser;
 import edu.jhu.cs.bsj.compiler.impl.utils.diagnostic.DiagnosticPrintingListener;
-import edu.jhu.cs.bsj.compiler.tool.parser.antlr.BsjAntlrLexer;
-import edu.jhu.cs.bsj.compiler.tool.parser.antlr.BsjAntlrParser;
+import edu.jhu.cs.bsj.compiler.tool.parser.BsjParser;
 
 /**
  * This class contains the functionality necessary to parse BSJ source files into BSJ heterogeneous ASTs. It relies on a
