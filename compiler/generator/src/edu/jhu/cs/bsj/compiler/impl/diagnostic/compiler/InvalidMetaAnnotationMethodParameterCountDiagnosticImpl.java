@@ -7,6 +7,7 @@ import javax.annotation.Generated;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.diagnostic.compiler.InvalidMetaAnnotationMethodParameterCountDiagnostic;
 import edu.jhu.cs.bsj.compiler.diagnostic.compiler.MetaAnnotationMethodType;
+import edu.jhu.cs.bsj.compiler.metaannotation.BsjMetaAnnotation;
 
 
 /**
@@ -24,12 +25,13 @@ public class InvalidMetaAnnotationMethodParameterCountDiagnosticImpl extends Inv
     
     public InvalidMetaAnnotationMethodParameterCountDiagnosticImpl(
             BsjSourceLocation source,
+            Class<? extends BsjMetaAnnotation> metaAnnotationClass,
             MetaAnnotationMethodType methodType,
             String methodName,
             int expectedCount,
             int observedCount)
     {
-        super(source, InvalidMetaAnnotationMethodParameterCountDiagnostic.CODE, Kind.ERROR, methodType, methodName);
+        super(source, InvalidMetaAnnotationMethodParameterCountDiagnostic.CODE, Kind.ERROR, metaAnnotationClass, methodType, methodName);
         this.expectedCount = expectedCount;
         this.observedCount = observedCount;
     }

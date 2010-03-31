@@ -2227,18 +2227,19 @@ public class SourceGenerator
 		@Override
 		public void handleDiagnosticDefinition(DiagnosticDefinition def) throws IOException
 		{
+			String interfaceImports = "import edu.jhu.cs.bsj.compiler.diagnostic.*;\n"
+					+ "import edu.jhu.cs.bsj.compiler.metaannotation.*;\n";
+
 			String interfacePackage = def.getProfile().getProperty(GenerationProfile.GENERATED_INTERFACE_PACKAGE_NAME);
 			ifacePs = createOutputFile(interfacePackage, Mode.INTERFACE, Project.API, SupplementCategory.GENERAL,
-					def.getName(), false,
-					"import edu.jhu.cs.bsj.compiler.diagnostic.*;\n\n/**\n * "
+					def.getName(), false, interfaceImports + "\n/**\n * "
 							+ def.getDocString().replaceAll("\n", "\n * ") + "\n */", def.getSuperName());
 			ifacePs.incPrependCount();
 
 			String classPackage = def.getProfile().getProperty(GenerationProfile.GENERATED_CLASS_PACKAGE_NAME);
 			classPs = createOutputFile(classPackage, def.getCode() == null ? Mode.ABSTRACT : Mode.CONCRETE,
 					def.getProfile().getProperty(GenerationProfile.TARGET_PROJECT), SupplementCategory.GENERAL,
-					def.getName() + "Impl", false,
-					"import edu.jhu.cs.bsj.compiler.diagnostic.*;\n"
+					def.getName() + "Impl", false, interfaceImports
 							+ "import edu.jhu.cs.bsj.compiler.impl.diagnostic.*;\n" + "import " + interfacePackage
 							+ ".*;\n" + "\n\n/**\n * " + def.getDocString().replaceAll("\n", "\n * ") + "\n */",
 					def.getSuperName() + "Impl", def.getName());
@@ -2260,7 +2261,8 @@ public class SourceGenerator
 
 			// Create constructor definition
 			List<PropertyDefinition> consParams = new ArrayList<PropertyDefinition>();
-			consParams.add(new PropertyDefinition("source", "BsjSourceLocation", null, PropertyDefinition.Mode.NORMAL, "", null));
+			consParams.add(new PropertyDefinition("source", "BsjSourceLocation", null, PropertyDefinition.Mode.NORMAL,
+					"", null));
 			PropertyDefinition.Mode overrideMode = def.getCode() == null ? PropertyDefinition.Mode.NORMAL
 					: PropertyDefinition.Mode.SKIP;
 			consParams.add(new PropertyDefinition("code", "String", null, overrideMode, null,

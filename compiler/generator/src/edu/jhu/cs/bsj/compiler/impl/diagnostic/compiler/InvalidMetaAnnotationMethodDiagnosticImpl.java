@@ -7,6 +7,7 @@ import javax.annotation.Generated;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.diagnostic.compiler.InvalidMetaAnnotationMethodDiagnostic;
 import edu.jhu.cs.bsj.compiler.diagnostic.compiler.MetaAnnotationMethodType;
+import edu.jhu.cs.bsj.compiler.metaannotation.BsjMetaAnnotation;
 
 
 /**
@@ -26,10 +27,11 @@ public abstract class InvalidMetaAnnotationMethodDiagnosticImpl extends InvalidM
             BsjSourceLocation source,
             String code,
             javax.tools.Diagnostic.Kind kind,
+            Class<? extends BsjMetaAnnotation> metaAnnotationClass,
             MetaAnnotationMethodType methodType,
             String methodName)
     {
-        super(source, code, kind);
+        super(source, code, kind, metaAnnotationClass);
         this.methodType = methodType;
         this.methodName = methodName;
     }

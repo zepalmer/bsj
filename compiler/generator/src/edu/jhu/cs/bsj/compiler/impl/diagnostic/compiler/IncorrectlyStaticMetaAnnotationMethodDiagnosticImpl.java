@@ -7,6 +7,7 @@ import javax.annotation.Generated;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.diagnostic.compiler.IncorrectlyStaticMetaAnnotationMethodDiagnostic;
 import edu.jhu.cs.bsj.compiler.diagnostic.compiler.MetaAnnotationMethodType;
+import edu.jhu.cs.bsj.compiler.metaannotation.BsjMetaAnnotation;
 
 
 /**
@@ -17,10 +18,11 @@ public class IncorrectlyStaticMetaAnnotationMethodDiagnosticImpl extends Invalid
 {
     public IncorrectlyStaticMetaAnnotationMethodDiagnosticImpl(
             BsjSourceLocation source,
+            Class<? extends BsjMetaAnnotation> metaAnnotationClass,
             MetaAnnotationMethodType methodType,
             String methodName)
     {
-        super(source, IncorrectlyStaticMetaAnnotationMethodDiagnostic.CODE, Kind.ERROR, methodType, methodName);
+        super(source, IncorrectlyStaticMetaAnnotationMethodDiagnostic.CODE, Kind.ERROR, metaAnnotationClass, methodType, methodName);
     }
     
     @Override

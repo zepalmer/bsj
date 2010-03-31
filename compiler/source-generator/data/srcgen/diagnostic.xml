@@ -158,6 +158,7 @@
             </diagnostic>
 
             <diagnostic name="InvalidMetaAnnotationDiagnostic" super="BsjCompilerDiagnostic">
+                <prop name="metaAnnotationClass" type="Class&lt;? extends BsjMetaAnnotation&gt;" desc="the type of the meta-annotation" />
                 <doc><![CDATA[
                     A diagnostic which represents some problem in the use of a meta-annotation.
                 ]]></doc>
@@ -224,6 +225,20 @@
                 <doc><![CDATA[
                     A diagnostic indicating that the return type of a property's getter is not assignable from the
                     argument of the property's setter.
+                ]]></doc>
+            </diagnostic>
+
+            <diagnostic name="UninstantiableMetaAnnotationDiagnostic" super="InvalidMetaAnnotationDiagnostic">
+                <doc><![CDATA[
+                    A diagnostic indicating that a meta-annotation was used which is non-instantiable.
+                ]]></doc>
+            </diagnostic>
+
+            <diagnostic name="AbstractMetaAnnotationDiagnostic" super="UninstantiableMetaAnnotationDiagnostic"
+                code="bsj.compiler.metaAnnotation.abstract">
+                <doc><![CDATA[
+                    A diagnostic indicating that a meta-annotation was used which is non-instantiable due to being an
+                    abstract class.
                 ]]></doc>
             </diagnostic>
         </srcgen>

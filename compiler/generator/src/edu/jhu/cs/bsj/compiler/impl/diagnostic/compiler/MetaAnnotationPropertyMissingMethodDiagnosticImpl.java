@@ -7,6 +7,7 @@ import javax.annotation.Generated;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.diagnostic.compiler.MetaAnnotationMethodType;
 import edu.jhu.cs.bsj.compiler.diagnostic.compiler.MetaAnnotationPropertyMissingMethodDiagnostic;
+import edu.jhu.cs.bsj.compiler.metaannotation.BsjMetaAnnotation;
 
 
 /**
@@ -20,10 +21,11 @@ public class MetaAnnotationPropertyMissingMethodDiagnosticImpl extends InvalidMe
     
     public MetaAnnotationPropertyMissingMethodDiagnosticImpl(
             BsjSourceLocation source,
+            Class<? extends BsjMetaAnnotation> metaAnnotationClass,
             String propertyName,
             MetaAnnotationMethodType methodType)
     {
-        super(source, MetaAnnotationPropertyMissingMethodDiagnostic.CODE, Kind.ERROR, propertyName);
+        super(source, MetaAnnotationPropertyMissingMethodDiagnostic.CODE, Kind.ERROR, metaAnnotationClass, propertyName);
         this.methodType = methodType;
     }
     

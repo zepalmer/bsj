@@ -6,6 +6,7 @@ import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.diagnostic.compiler.MetaAnnotationPropertyTypeMismatchDiagnostic;
+import edu.jhu.cs.bsj.compiler.metaannotation.BsjMetaAnnotation;
 
 
 /**
@@ -17,9 +18,10 @@ public class MetaAnnotationPropertyTypeMismatchDiagnosticImpl extends InvalidMet
 {
     public MetaAnnotationPropertyTypeMismatchDiagnosticImpl(
             BsjSourceLocation source,
+            Class<? extends BsjMetaAnnotation> metaAnnotationClass,
             String propertyName)
     {
-        super(source, MetaAnnotationPropertyTypeMismatchDiagnostic.CODE, Kind.ERROR, propertyName);
+        super(source, MetaAnnotationPropertyTypeMismatchDiagnostic.CODE, Kind.ERROR, metaAnnotationClass, propertyName);
     }
     
     @Override

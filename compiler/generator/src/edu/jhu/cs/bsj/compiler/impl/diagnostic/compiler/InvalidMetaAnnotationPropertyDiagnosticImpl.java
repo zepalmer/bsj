@@ -6,6 +6,7 @@ import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.diagnostic.compiler.InvalidMetaAnnotationPropertyDiagnostic;
+import edu.jhu.cs.bsj.compiler.metaannotation.BsjMetaAnnotation;
 
 
 /**
@@ -21,9 +22,10 @@ public abstract class InvalidMetaAnnotationPropertyDiagnosticImpl extends Invali
             BsjSourceLocation source,
             String code,
             javax.tools.Diagnostic.Kind kind,
+            Class<? extends BsjMetaAnnotation> metaAnnotationClass,
             String propertyName)
     {
-        super(source, code, kind);
+        super(source, code, kind, metaAnnotationClass);
         this.propertyName = propertyName;
     }
     
