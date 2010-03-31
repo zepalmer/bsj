@@ -5,6 +5,7 @@ import javax.tools.DiagnosticListener;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
+import edu.jhu.cs.bsj.compiler.ast.exception.MetaAnnotationInstantiationFailureException;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.UnparameterizedTypeNode;
 import edu.jhu.cs.bsj.compiler.metaannotation.BsjMetaAnnotation;
@@ -48,8 +49,10 @@ public interface MetaAnnotationNode extends Node
 	 * normally.  This method is typically used by the BSJ compiler to instantiate meta-annotation objects; normal
 	 * metaprogram execution has no reason to invoke this method.
 	 * @param listener The listener to which diagnostics should be reported.
+	 * @throws MetaAnnotationInstantiationFailureException If instantiation of the meta-annotation object fails.
 	 */
-	public void instantiateMetaAnnotationObject(DiagnosticListener<BsjSourceLocation> listener);
+	public void instantiateMetaAnnotationObject(DiagnosticListener<BsjSourceLocation> listener)
+		throws MetaAnnotationInstantiationFailureException;
 	
 	/**
 	 * Retrieves the meta-annotation object for this node.

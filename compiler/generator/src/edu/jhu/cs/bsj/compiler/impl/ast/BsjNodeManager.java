@@ -29,6 +29,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.NameCategory;
 import edu.jhu.cs.bsj.compiler.ast.NodePermission;
 import edu.jhu.cs.bsj.compiler.ast.exception.InsufficientPermissionException;
+import edu.jhu.cs.bsj.compiler.ast.exception.MetaAnnotationInstantiationFailureException;
 import edu.jhu.cs.bsj.compiler.ast.exception.MetaprogramConflictException;
 import edu.jhu.cs.bsj.compiler.ast.node.BinaryExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.BooleanLiteralNode;
@@ -71,6 +72,8 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.NormalMetaAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.SingleElementMetaAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.util.BsjDefaultNodeOperation;
 import edu.jhu.cs.bsj.compiler.impl.diagnostic.compiler.InvalidMetaAnnotationArrayInitializerDiagnosticImpl;
+import edu.jhu.cs.bsj.compiler.impl.diagnostic.compiler.MetaAnnotationClassTypeMismatchDiagnosticImpl;
+import edu.jhu.cs.bsj.compiler.impl.diagnostic.compiler.MissingMetaAnnotationClassDiagnosticImpl;
 import edu.jhu.cs.bsj.compiler.impl.metaprogram.PermissionPolicyManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.dependency.DependencyManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.metaannotation.MetaAnnotationProfile;
@@ -269,20 +272,22 @@ public class BsjNodeManager
 	 * @param node The meta-annotation node for which to instantiate an object.
 	 * @param listener The diagnostic listener to which to report errors.
 	 * @return The resulting meta-annotation object.
-	 * @throws IllegalArgumentException If the meta-annotation object cannot be instantiated or configured.
+	 * @throws MetaAnnotationInstantiationFailureException If the meta-annotation object cannot be instantiated or
+	 *             configured correctly.
 	 */
-	// TODO: better error handling
+	// TODO: fix error handling (currently using IllegalArgumentException)
 	public BsjMetaAnnotation instantiateMetaAnnotationObject(MetaAnnotationNode node,
-			DiagnosticListener<BsjSourceLocation> listener)
+			DiagnosticListener<BsjSourceLocation> listener) throws MetaAnnotationInstantiationFailureException
 	{
 		// Attempt to resolve the meta-annotation class
-		Class<? extends BsjMetaAnnotation> clazz = resolveMetaAnnotationClass(node);
+		Class<? extends BsjMetaAnnotation> clazz = resolveMetaAnnotationClass(node, listener);
 
 		// Obtain the meta-annotation profile for this class
-		MetaAnnotationProfile profile = metaAnnotationProfileManager.getProfile(clazz, listener, node.getStartLocation());
+		MetaAnnotationProfile profile = metaAnnotationProfileManager.getProfile(clazz, listener,
+				node.getStartLocation());
 		if (profile == null)
 		{
-			throw new IllegalArgumentException("Could not retrieve profile for " + clazz);
+			throw new MetaAnnotationInstantiationFailureException();
 		}
 
 		// Instantiate the meta-annotation class
@@ -365,11 +370,12 @@ public class BsjNodeManager
 	 * compilation unit in which the node is placed (if any) to assist in finding the class.
 	 * 
 	 * @param node The node for which a class is desired.
+	 * @param listener The listener to which to report errors.
 	 * @return The class for that meta-annotation.
-	 * @throws IllegalArgumentException If no such class can be found.
+	 * @throws MetaAnnotationInstantiationFailureException If no such class can be found.
 	 */
-	// TODO: better error handling than IllegalArgumentException
-	private Class<? extends BsjMetaAnnotation> resolveMetaAnnotationClass(MetaAnnotationNode node)
+	private Class<? extends BsjMetaAnnotation> resolveMetaAnnotationClass(MetaAnnotationNode node,
+			DiagnosticListener<BsjSourceLocation> listener) throws MetaAnnotationInstantiationFailureException
 	{
 		// First, establish meta-import set
 		Set<ImportNode> imports = new HashSet<ImportNode>();
@@ -431,11 +437,13 @@ public class BsjNodeManager
 			clazz = tryClass(null, node.getAnnotationType().getName(), false);
 		}
 
+		BsjSourceLocation location = node.getStartLocation();
 		// If we don't have a class yet, it doesn't exist.
 		if (clazz == null)
 		{
-			throw new IllegalArgumentException("Class " + node.getAnnotationType().getName().getNameString()
-					+ " does not exist or is not in scope.");
+			listener.report(new MissingMetaAnnotationClassDiagnosticImpl(location, null,
+					node.getAnnotationType().getName().getNameString()));
+			throw new MetaAnnotationInstantiationFailureException();
 		}
 
 		// If this class represents a BSJ meta-annotation, we're home-free!
@@ -445,7 +453,8 @@ public class BsjNodeManager
 		} catch (ClassCastException e)
 		{
 			// Apparently, it doesn't.
-			throw new IllegalArgumentException("Class " + clazz.getName() + " does not implement BsjMetaAnnotation");
+			listener.report(new MetaAnnotationClassTypeMismatchDiagnosticImpl(location, null, clazz.getCanonicalName()));
+			throw new MetaAnnotationInstantiationFailureException();
 		}
 	}
 
@@ -534,7 +543,8 @@ public class BsjNodeManager
 	 * @param type The type of return value expected by the caller.
 	 * @param listener The listener to which to report problems.
 	 */
-	private Object evaluateValueNode(MetaAnnotationValueNode value, Class<?> type, DiagnosticListener<BsjSourceLocation> listener)
+	private Object evaluateValueNode(MetaAnnotationValueNode value, Class<?> type,
+			DiagnosticListener<BsjSourceLocation> listener)
 	{
 		if (value instanceof MetaAnnotationMetaAnnotationValueNode)
 		{

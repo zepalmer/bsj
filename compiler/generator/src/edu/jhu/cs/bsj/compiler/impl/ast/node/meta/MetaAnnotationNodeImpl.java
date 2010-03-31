@@ -8,6 +8,7 @@ import javax.tools.DiagnosticListener;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
+import edu.jhu.cs.bsj.compiler.ast.exception.MetaAnnotationInstantiationFailureException;
 import edu.jhu.cs.bsj.compiler.ast.node.UnparameterizedTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationNode;
@@ -198,6 +199,7 @@ public abstract class MetaAnnotationNodeImpl extends NodeImpl implements MetaAnn
 	 * {@inheritDoc}
 	 */
 	public void instantiateMetaAnnotationObject(DiagnosticListener<BsjSourceLocation> listener)
+		throws MetaAnnotationInstantiationFailureException
 	{
 		if (this.metaAnnotationObject == null)
 		{

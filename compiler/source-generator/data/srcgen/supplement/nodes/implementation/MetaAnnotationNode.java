@@ -16,6 +16,7 @@ public class MetaAnnotationNodeImpl implements MetaAnnotationNode
 	 * {@inheritDoc}
 	 */
 	public void instantiateMetaAnnotationObject(DiagnosticListener<BsjSourceLocation> listener)
+		throws MetaAnnotationInstantiationFailureException
 	{
 		if (this.metaAnnotationObject == null)
 		{

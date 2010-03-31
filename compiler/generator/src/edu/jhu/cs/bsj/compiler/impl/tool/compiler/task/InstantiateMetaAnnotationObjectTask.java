@@ -2,6 +2,7 @@ package edu.jhu.cs.bsj.compiler.impl.tool.compiler.task;
 
 import java.io.IOException;
 
+import edu.jhu.cs.bsj.compiler.ast.exception.MetaAnnotationInstantiationFailureException;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.util.BsjTypedNodeNoOpVisitor;
@@ -34,7 +35,14 @@ public class InstantiateMetaAnnotationObjectTask extends AbstractBsjCompilerTask
 			@Override
 			public void visitMetaAnnotationNodeStop(MetaAnnotationNode node)
 			{
-				node.instantiateMetaAnnotationObject(context.getDiagnosticListener());
+				try
+				{
+					node.instantiateMetaAnnotationObject(context.getDiagnosticListener());
+				} catch (MetaAnnotationInstantiationFailureException e)
+				{
+					// TODO: if this happens, the metacompilation manager needs to know that we failed
+					// Do we need to do anything special or does the error in the diagnostic listener handle that?
+				}
 			}
 		});
 		
