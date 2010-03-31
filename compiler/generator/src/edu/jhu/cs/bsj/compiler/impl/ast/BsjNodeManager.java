@@ -73,6 +73,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.SingleElementMetaAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.util.BsjDefaultNodeOperation;
 import edu.jhu.cs.bsj.compiler.impl.diagnostic.compiler.InvalidMetaAnnotationArrayInitializerDiagnosticImpl;
 import edu.jhu.cs.bsj.compiler.impl.diagnostic.compiler.MetaAnnotationClassTypeMismatchDiagnosticImpl;
+import edu.jhu.cs.bsj.compiler.impl.diagnostic.compiler.MetaAnnotationMissingPropertyDiagnosticImpl;
 import edu.jhu.cs.bsj.compiler.impl.diagnostic.compiler.MissingMetaAnnotationClassDiagnosticImpl;
 import edu.jhu.cs.bsj.compiler.impl.metaprogram.PermissionPolicyManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.dependency.DependencyManager;
@@ -328,9 +329,9 @@ public class BsjNodeManager
 			Class<?> propertyType = profile.getPropertyType(propertyName);
 			if (propertyType == null)
 			{
-				// TODO: distinguish between the getter/setter not existing and the getter/setter not having any
-				// annotations
-				throw new IllegalArgumentException("Invalid property " + propertyName);
+				listener.report(new MetaAnnotationMissingPropertyDiagnosticImpl(valueNode.getStartLocation(),
+						clazz, propertyName));
+				throw new MetaAnnotationInstantiationFailureException();
 			}
 			Object value = evaluateValueNode(valueNode, propertyType, listener);
 

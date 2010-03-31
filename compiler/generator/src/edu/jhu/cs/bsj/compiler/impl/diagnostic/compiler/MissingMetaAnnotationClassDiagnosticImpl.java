@@ -14,7 +14,7 @@ import edu.jhu.cs.bsj.compiler.metaannotation.BsjMetaAnnotation;
  * metaprogram classpath at runtime.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public class MissingMetaAnnotationClassDiagnosticImpl extends InvalidMetaAnnotationDefinitionDiagnosticImpl implements MissingMetaAnnotationClassDiagnostic
+public class MissingMetaAnnotationClassDiagnosticImpl extends UninstantiableMetaAnnotationDiagnosticImpl implements MissingMetaAnnotationClassDiagnostic
 {
     /** A string naming the class that was not found. */
     private String className;

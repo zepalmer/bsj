@@ -7,7 +7,7 @@ import javax.annotation.Generated;
  * metaprogram classpath at runtime.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public interface MissingMetaAnnotationClassDiagnostic extends InvalidMetaAnnotationDefinitionDiagnostic
+public interface MissingMetaAnnotationClassDiagnostic extends UninstantiableMetaAnnotationDiagnostic
 {
     /** The code for this diagnostic. */
     public static final String CODE = "bsj.compiler.metaAnnotation.missingClass";

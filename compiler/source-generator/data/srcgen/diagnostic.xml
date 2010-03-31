@@ -227,6 +227,16 @@
                     argument of the property's setter.
                 ]]></doc>
             </diagnostic>
+            
+            <diagnostic name="MetaAnnotationMissingPropertyDiagnostic" super="InvalidMetaAnnotationPropertyDiagnostic"
+                code="bsj.compiler.metaAnnotation.property.missing">
+                <doc><![CDATA[
+                    A diagnostic indicating that a property was used on the invocation of a meta-annotation which did
+                    not appear on the definition of the meta-annotation.  This may be because no getter or setter
+                    methods exist for that property or because those getter or setter methods are not properly annotated
+                    with {@link BsjMetaAnnotationElementGetter} and  {@link BsjMetaAnnotationElementSetter}.
+                ]]></doc>
+            </diagnostic>
 
             <diagnostic name="UninstantiableMetaAnnotationDiagnostic" super="InvalidMetaAnnotationDefinitionDiagnostic">
                 <doc><![CDATA[
@@ -242,7 +252,7 @@
                 ]]></doc>
             </diagnostic>
             
-            <diagnostic name="MissingMetaAnnotationClassDiagnostic" super="InvalidMetaAnnotationDefinitionDiagnostic"
+            <diagnostic name="MissingMetaAnnotationClassDiagnostic" super="UninstantiableMetaAnnotationDiagnostic"
                 code="bsj.compiler.metaAnnotation.missingClass">
                 <prop name="className" type="String" desc="a string naming the class that was not found" />
                 <doc><![CDATA[
