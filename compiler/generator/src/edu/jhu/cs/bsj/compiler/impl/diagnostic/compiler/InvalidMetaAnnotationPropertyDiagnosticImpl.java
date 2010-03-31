@@ -13,7 +13,7 @@ import edu.jhu.cs.bsj.compiler.metaannotation.BsjMetaAnnotation;
  * A diagnostic which represents some problem with a meta-annotation's properties.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public abstract class InvalidMetaAnnotationPropertyDiagnosticImpl extends InvalidMetaAnnotationDiagnosticImpl implements InvalidMetaAnnotationPropertyDiagnostic
+public abstract class InvalidMetaAnnotationPropertyDiagnosticImpl extends InvalidMetaAnnotationDefinitionDiagnosticImpl implements InvalidMetaAnnotationPropertyDiagnostic
 {
     /** The name of the property with which there is a problem. */
     private String propertyName;

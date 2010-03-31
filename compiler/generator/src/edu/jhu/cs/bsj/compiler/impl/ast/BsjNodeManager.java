@@ -70,6 +70,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.NormalMetaAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.SingleElementMetaAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.util.BsjDefaultNodeOperation;
+import edu.jhu.cs.bsj.compiler.impl.diagnostic.compiler.InvalidMetaAnnotationArrayInitializerDiagnosticImpl;
 import edu.jhu.cs.bsj.compiler.impl.metaprogram.PermissionPolicyManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.dependency.DependencyManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.metaannotation.MetaAnnotationProfile;
@@ -326,7 +327,7 @@ public class BsjNodeManager
 				// annotations
 				throw new IllegalArgumentException("Invalid property " + propertyName);
 			}
-			Object value = evaluateValueNode(valueNode, propertyType);
+			Object value = evaluateValueNode(valueNode, propertyType, listener);
 
 			Method setter = profile.getSetterMap().get(propertyName);
 			try
@@ -529,12 +530,11 @@ public class BsjNodeManager
 	/**
 	 * Evaluates the specified value node.
 	 * 
-	 * @param value The node which represents the value.
+	 * @param value The node which represents the value.2
 	 * @param type The type of return value expected by the caller.
-	 * @throws IllegalArgumentException If something goes wrong.
+	 * @param listener The listener to which to report problems.
 	 */
-	// TODO: better error handling
-	private Object evaluateValueNode(MetaAnnotationValueNode value, Class<?> type)
+	private Object evaluateValueNode(MetaAnnotationValueNode value, Class<?> type, DiagnosticListener<BsjSourceLocation> listener)
 	{
 		if (value instanceof MetaAnnotationMetaAnnotationValueNode)
 		{
@@ -556,7 +556,8 @@ public class BsjNodeManager
 			// If the type is not an array, bail
 			if (type.getComponentType() == null)
 			{
-				throw new IllegalArgumentException("Array initializer used for non-array type " + type.getName());
+				listener.report(new InvalidMetaAnnotationArrayInitializerDiagnosticImpl(value.getStartLocation()));
+				return null;
 			}
 
 			MetaAnnotationArrayValueNode node = (MetaAnnotationArrayValueNode) value;
@@ -564,7 +565,7 @@ public class BsjNodeManager
 			int index = 0;
 			for (MetaAnnotationValueNode childNode : node.getValues())
 			{
-				Object childValue = evaluateValueNode(childNode, type.getComponentType());
+				Object childValue = evaluateValueNode(childNode, type.getComponentType(), listener);
 				Array.set(array, index++, childValue);
 			}
 			return array;

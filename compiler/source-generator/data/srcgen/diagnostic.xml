@@ -157,14 +157,14 @@
                 ]]></doc>
             </diagnostic>
 
-            <diagnostic name="InvalidMetaAnnotationDiagnostic" super="BsjCompilerDiagnostic">
+            <diagnostic name="InvalidMetaAnnotationDefinitionDiagnostic" super="BsjCompilerDiagnostic">
                 <prop name="metaAnnotationClass" type="Class&lt;? extends BsjMetaAnnotation&gt;" desc="the type of the meta-annotation" />
                 <doc><![CDATA[
-                    A diagnostic which represents some problem in the use of a meta-annotation.
+                    A diagnostic which represents some problem in the definition of a meta-annotation.
                 ]]></doc>
             </diagnostic>
 
-            <diagnostic name="InvalidMetaAnnotationMethodDiagnostic" super="InvalidMetaAnnotationDiagnostic">
+            <diagnostic name="InvalidMetaAnnotationMethodDiagnostic" super="InvalidMetaAnnotationDefinitionDiagnostic">
                 <prop name="methodType" type="MetaAnnotationMethodType" desc="the type of method with which there is a problem" />
                 <prop name="methodName" type="String" desc="the name of the method with which there is a problem" />
                 <doc><![CDATA[
@@ -205,7 +205,7 @@
                 ]]></doc>
             </diagnostic>
 
-            <diagnostic name="InvalidMetaAnnotationPropertyDiagnostic" super="InvalidMetaAnnotationDiagnostic">
+            <diagnostic name="InvalidMetaAnnotationPropertyDiagnostic" super="InvalidMetaAnnotationDefinitionDiagnostic">
                 <prop name="propertyName" type="String" desc="the name of the property with which there is a problem" />
                 <doc><![CDATA[
                     A diagnostic which represents some problem with a meta-annotation's properties.
@@ -228,7 +228,7 @@
                 ]]></doc>
             </diagnostic>
 
-            <diagnostic name="UninstantiableMetaAnnotationDiagnostic" super="InvalidMetaAnnotationDiagnostic">
+            <diagnostic name="UninstantiableMetaAnnotationDiagnostic" super="InvalidMetaAnnotationDefinitionDiagnostic">
                 <doc><![CDATA[
                     A diagnostic indicating that a meta-annotation was used which is non-instantiable.
                 ]]></doc>
@@ -239,6 +239,22 @@
                 <doc><![CDATA[
                     A diagnostic indicating that a meta-annotation was used which is non-instantiable due to being an
                     abstract class.
+                ]]></doc>
+            </diagnostic>
+            
+            <diagnostic name="InvalidMetaAnnotationDiagnostic" super="BsjCompilerDiagnostic">
+                <doc><![CDATA[
+                    A diagnostic indicating a problem with a meta-annotation's use. 
+                ]]></doc>
+            </diagnostic>
+            
+            <diagnostic name="InvalidMetaAnnotationArrayInitializerDiagnostic" super="BsjCompilerDiagnostic"
+                code="bsj.compiler.metaAnnotation.inappropriateArrayInitializer">
+                <doc><![CDATA[
+                    A diagnostic indicating that a meta-annotation's element is initialized with an array initializer
+                    when its type is not an array type.  This may be the case if too many array types are nested, such
+                    as using the code <tt>{{"a","b"},{"c"}}</tt> to initialize a <tt>String[]</tt> (and not a
+                    <tt>String[][]</tt>).
                 ]]></doc>
             </diagnostic>
         </srcgen>

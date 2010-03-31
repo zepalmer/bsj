@@ -15,7 +15,7 @@ import edu.jhu.cs.bsj.compiler.metaannotation.BsjMetaAnnotation;
  * setter methods.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public abstract class InvalidMetaAnnotationMethodDiagnosticImpl extends InvalidMetaAnnotationDiagnosticImpl implements InvalidMetaAnnotationMethodDiagnostic
+public abstract class InvalidMetaAnnotationMethodDiagnosticImpl extends InvalidMetaAnnotationDefinitionDiagnosticImpl implements InvalidMetaAnnotationMethodDiagnostic
 {
     /** The type of method with which there is a problem. */
     private MetaAnnotationMethodType methodType;

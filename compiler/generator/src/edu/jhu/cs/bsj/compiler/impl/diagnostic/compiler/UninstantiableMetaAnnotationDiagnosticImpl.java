@@ -13,7 +13,7 @@ import edu.jhu.cs.bsj.compiler.metaannotation.BsjMetaAnnotation;
  * A diagnostic indicating that a meta-annotation was used which is non-instantiable.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public abstract class UninstantiableMetaAnnotationDiagnosticImpl extends InvalidMetaAnnotationDiagnosticImpl implements UninstantiableMetaAnnotationDiagnostic
+public abstract class UninstantiableMetaAnnotationDiagnosticImpl extends InvalidMetaAnnotationDefinitionDiagnosticImpl implements UninstantiableMetaAnnotationDiagnostic
 {
     public UninstantiableMetaAnnotationDiagnosticImpl(
             BsjSourceLocation source,

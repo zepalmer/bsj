@@ -7,7 +7,7 @@ import javax.annotation.Generated;
  * setter methods.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public interface InvalidMetaAnnotationMethodDiagnostic extends InvalidMetaAnnotationDiagnostic
+public interface InvalidMetaAnnotationMethodDiagnostic extends InvalidMetaAnnotationDefinitionDiagnostic
 {
     /**
      * Retrieves the type of method with which there is a problem.
