@@ -108,12 +108,26 @@ public abstract class BsjDiagnosticImpl implements BsjDiagnostic
 		{
 			// try to produce a default message in English with a warning
 			formatString = InternationalizationUtilities.MESSAGE_REPOSITORY.lookup(Locale.US, getCode());
-			;
 			if (formatString == null)
 			{
 				// no hope! no hope!
-				return "(could not get string for key " + getCode() + ")";
+				StringBuilder sb = new StringBuilder("(could not get string for key " + getCode() + "; [");
+				boolean first = true;
+				for (Object arg : getMessageArgs())
+				{
+					if (first)
+					{
+						first = false;
+					} else
+					{
+						sb.append(',');
+					}
+					sb.append(arg);
+				}
+				sb.append("])");
+				return sb.toString();
 			}
+			// 
 			formatString = "(no strings found for language=" + locale.getDisplayLanguage() + ") " + formatString;
 		}
 
