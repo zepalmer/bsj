@@ -11,6 +11,7 @@ import java.util.Set;
 import java.util.WeakHashMap;
 
 import javax.tools.DiagnosticListener;
+import javax.tools.Diagnostic.Kind;
 
 import org.apache.log4j.Logger;
 
@@ -19,6 +20,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
 import edu.jhu.cs.bsj.compiler.ast.node.PackageNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.diagnostic.CountingDiagnosticProxyListener;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.dependency.DependencyManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.task.AbstractCompilationUnitBuilderTask;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.task.BsjCompilerTask;
@@ -63,7 +65,7 @@ public class MetacompilationManager implements MetacompilationContext
 	/**
 	 * The listener to which we will report events.
 	 */
-	private DiagnosticListener<BsjSourceLocation> diagnosticListener;
+	private CountingDiagnosticProxyListener<BsjSourceLocation> diagnosticListener;
 
 	/**
 	 * Represents the metaprogram dependency manager.
@@ -99,7 +101,7 @@ public class MetacompilationManager implements MetacompilationContext
 
 		this.toolkit = toolkit;
 		this.nodeManager = nodeManager;
-		this.diagnosticListener = diagnosticListener;
+		this.diagnosticListener = new CountingDiagnosticProxyListener<BsjSourceLocation>(diagnosticListener);
 
 		this.rootPackage = toolkit.getNodeFactory().makePackageNode(null);
 		this.serializedFiles = new ArrayList<BsjFileObject>();
@@ -297,8 +299,14 @@ public class MetacompilationManager implements MetacompilationContext
 		{
 			LOGGER.trace("Executing next compilation task: " + task.toString());
 		}
-		// TODO: use a proxied diagnostic listener so we can find out if this task failed
+		
+		// TODO: more clever approach: continue executing unrelated tasks until we run out
 		task.execute(this);
+		if (this.getDiagnosticListener().getCount(Kind.ERROR) > 0)
+		{
+			// TODO: more graceful termination
+			throw new IllegalStateException("Error occurred during metacompilation");
+		}
 	}
 
 	public BsjToolkit getToolkit()
@@ -311,7 +319,7 @@ public class MetacompilationManager implements MetacompilationContext
 		return nodeManager;
 	}
 
-	public DiagnosticListener<BsjSourceLocation> getDiagnosticListener()
+	public CountingDiagnosticProxyListener<BsjSourceLocation> getDiagnosticListener()
 	{
 		return diagnosticListener;
 	}
