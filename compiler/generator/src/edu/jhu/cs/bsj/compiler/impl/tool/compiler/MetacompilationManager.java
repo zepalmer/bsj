@@ -27,6 +27,7 @@ import edu.jhu.cs.bsj.compiler.impl.tool.compiler.task.BsjCompilerTask;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.task.ExecuteMetaprogramTask;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.task.LoadBinaryCompilationUnitTask;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.task.ParseCompilationUnitTask;
+import edu.jhu.cs.bsj.compiler.impl.tool.compiler.task.SanityCheckTask;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.task.TaskPriority;
 import edu.jhu.cs.bsj.compiler.tool.BsjToolkit;
 import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjFileObject;
@@ -107,7 +108,9 @@ public class MetacompilationManager implements MetacompilationContext
 		this.serializedFiles = new ArrayList<BsjFileObject>();
 		this.observedAnchors = new WeakHashMap<MetaprogramAnchorNode<?>,Object>();
 
+		// Add some initial tasks to the task queue
 		this.priorityQueue.offer(new ExecuteMetaprogramTask());
+		this.priorityQueue.offer(new SanityCheckTask());
 	}
 
 	/**

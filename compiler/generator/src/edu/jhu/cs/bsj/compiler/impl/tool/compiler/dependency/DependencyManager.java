@@ -1,9 +1,13 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.compiler.dependency;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.Stack;
 
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.MetaprogramProfile;
 import edu.jhu.cs.bsj.compiler.impl.utils.Pair;
@@ -218,5 +222,209 @@ public class DependencyManager
 			}
 		}
 		return false;
+	}
+
+	/**
+	 * Causes this dependency manager to perform a sanity check for cycles in the dependency graph.
+	 * 
+	 * @throws IllegalStateException If a cycle exists in the dependency graph.
+	 */
+	public void assertNoCycles()
+	{
+		CycleDetector detector = new CycleDetector();
+		Set<BipartiteNode<?, ?, ?, ?>> nodes = new HashSet<BipartiteNode<?, ?, ?, ?>>();
+		nodes.addAll(this.profileToNodeMap.values());
+		nodes.addAll(this.nameToTargetNodeMap.values());
+		List<BipartiteNode<?, ?, ?, ?>> cycle = detector.detect(nodes);
+		if (cycle != null)
+		{
+			StringBuilder sb = new StringBuilder();
+			for (BipartiteNode<?, ?, ?, ?> node : cycle)
+			{
+				if (sb.length() > 0)
+				{
+					sb.append(", ");
+				}
+				sb.append(node.getData());
+			}
+			throw new IllegalStateException("Cycle detected in dependency graph: " + sb.toString());
+		}
+	}
+
+	/**
+	 * Causes this dependency manager to perform a search for injection conflicts in the dependency graph.
+	 * 
+	 * @throws IllegalStateException If an injection conflict is detected.
+	 */
+	public void assertNoInjectionConflict()
+	{
+		InjectionConflictDetector detector = new InjectionConflictDetector();
+		for (BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData> metaprogramNode : this.profileToNodeMap.values())
+		{
+			Pair<BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData>, BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData>> result = detector.findImmediateInjectionConflict(metaprogramNode);
+			if (result != null)
+			{
+				throw new IllegalStateException("Metaprogram node " + metaprogramNode + " has inferred dependency on " +
+						result.getSecond() + " based on injected metaprogram node " + result.getFirst());
+			}
+		}
+	}
+
+	/**
+	 * This module serves as a mechanism for cycle detection.
+	 * 
+	 * @author Zachary Palmer
+	 */
+	private static class CycleDetector
+	{
+		/** A set of the nodes which have not yet been visited. */
+		private Set<BipartiteNode<?, ?, ?, ?>> notVisited = new HashSet<BipartiteNode<?, ?, ?, ?>>();
+		/** A set of the nodes which are currently being visited. */
+		private Set<BipartiteNode<?, ?, ?, ?>> visiting = new HashSet<BipartiteNode<?, ?, ?, ?>>();
+		/** A stack indicating the current nodes being visited. */
+		private Stack<BipartiteNode<?, ?, ?, ?>> visitStack = new Stack<BipartiteNode<?, ?, ?, ?>>();
+
+		/**
+		 * Determines whether or not a cycle exists in this dependency manager's graph.
+		 * 
+		 * @param nodes A set of all nodes in the graph.
+		 * @return <code>null</code> if no cycle exists or a list of nodes comprising a cycle if one does exist.
+		 */
+		public List<BipartiteNode<?, ?, ?, ?>> detect(Set<BipartiteNode<?, ?, ?, ?>> nodes)
+		{
+			this.notVisited.addAll(nodes);
+			while (this.notVisited.size() > 0)
+			{
+				List<BipartiteNode<?, ?, ?, ?>> ret = visit(this.notVisited.iterator().next());
+				if (ret != null)
+				{
+					return ret;
+				}
+			}
+			return null;
+		}
+
+		/**
+		 * Visits the specified node in turn.
+		 * 
+		 * @param node The node to visit.
+		 * @return <code>null</code> if no cycle was detected or a list of nodes comprising a cycle if one was found.
+		 */
+		private <T, U, TE, UE> List<BipartiteNode<?, ?, ?, ?>> visit(BipartiteNode<T, U, TE, UE> node)
+		{
+			if (!this.notVisited.remove(node))
+			{
+				// Then this node has already been visited. This might happen if a node has multiple parents (like a
+				// target with multiple metaprograms depending on -- pointing to -- it). If there were a cycle here, we
+				// would've found it the first time.
+				return null;
+			}
+
+			this.visitStack.push(node);
+			if (!this.visiting.add(node))
+			{
+				// Okay, now we have a problem. We're already in the visiting list and we're being visited again; that
+				// means that we've found a cycle starting and ending at this node. Return a list.
+				return new ArrayList<BipartiteNode<?, ?, ?, ?>>(this.visitStack);
+			}
+			for (Pair<BipartiteNode<U, T, UE, TE>, ?> childEdge : node.getChildren())
+			{
+				List<BipartiteNode<?, ?, ?, ?>> ret = visit(childEdge.getFirst());
+				if (ret != null)
+				{
+					return ret;
+				}
+			}
+			this.visiting.remove(node);
+			this.visitStack.remove(node);
+
+			return null;
+		}
+	}
+
+	/**
+	 * This module serves as a mechanism for the detection of injection conflicts.
+	 * 
+	 * @author Zachary Palmer
+	 */
+	private static class InjectionConflictDetector
+	{
+		/**
+		 * Determines whether or not the provided metaprogram suffers from an injection conflict with an immediately
+		 * adjacent node.
+		 * 
+		 * @param node The node to check for an injection conflict.
+		 * @return <code>null</code> if no injection conflict occurs. Otherwise, a pairing between the injected node
+		 *         upon which the provided node directly depends and the node upon which the provided node must have an
+		 *         explicit dependency.
+		 */
+		public Pair<BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData>, BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData>> findImmediateInjectionConflict(
+				BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData> node)
+		{
+			// Calculate all of the metaprograms which must run before this one
+			Set<BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData>> allDependencies = new HashSet<BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData>>();
+			Stack<BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData>> explorationStack = new Stack<BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData>>();
+			explorationStack.add(node);
+			while (explorationStack.size() > 0)
+			{
+				BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData> current = explorationStack.pop();
+				Set<BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData>> explorationSet = current.getGrandchildren();
+				for (BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData> exploreTarget : explorationSet)
+				{
+					explorationStack.push(exploreTarget);
+				}
+				allDependencies.addAll(explorationSet);
+			}
+
+			// Get the first-level dependencies
+			for (BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData> dependency : node.getGrandchildren())
+			{
+				// For each dependency, find an inferred dependency edge and follow back to get an original metaprogram
+				BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData> original = findOriginalMetaprogram(dependency);
+				if (original != null)
+				{
+					// If we don't a dependency on this node, scream
+					if (!allDependencies.contains(original))
+					{
+						return new Pair<BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData>, BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData>>(
+								dependency, original);
+					}
+				}
+			}
+
+			return null;
+		}
+
+		private BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData> findOriginalMetaprogram(
+				BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData> start)
+		{
+			BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData> node = start;
+			boolean found;
+			do
+			{
+				found = false;
+				for (Pair<BipartiteNode<TargetNodeData, MetaprogramNodeData, EdgeData, EdgeData>, EdgeData> targetEdge : node.getChildren())
+				{
+					if (targetEdge.getSecond().isInferred())
+					{
+						// This edge is inferred, which means that the associated target is inferred.
+						// TODO: some kind of runtime safety check to ensure that the target is inferred
+						// As a result, we know that edges from it are inferred as well. Just get a metaprogram from
+						// the target and run with it.
+						found = true;
+						node = targetEdge.getFirst().getChildren().iterator().next().getFirst();
+					}
+				}
+			} while (found);
+
+			if (node != start)
+			{
+				return node;
+			} else
+			{
+				// We never found anything of consequence; none of the edges from the original were inferred.
+				return null;
+			}
+		}
 	}
 }
