@@ -18,10 +18,12 @@ public class DependencyManager
 {
 	/** A mapping from metaprogram IDs to the profiles of those metaprograms. */
 	private Map<Integer, MetaprogramProfile<?>> idMap;
-	/** A mapping from fully qualified target names to the nodes which are included in the targets. */
-	private Map<String, MetaprogramTarget> targetMap;
-	/** A collection indicating the nodes containing metaprograms which have yet to be executed. */
-	private Collection<MetaprogramProfile<?>> waitingMetaprograms;
+	/** A mapping from metaprogram profiles to the nodes containing them. */
+	private Map<MetaprogramProfile<?>, BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData>> profileToNodeMap;
+	/** A mapping from target names to the nodes representing them. */
+	private Map<String, BipartiteNode<TargetNodeData, MetaprogramNodeData, EdgeData, EdgeData>> nameToTargetNodeMap;
+	/** A collection containing all of the metaprogram nodes representing metaprograms which have yet to be executed. */
+	private Collection<BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData>> waitingNodes;
 
 	/** A cache of responses to cooperation queries. */
 	private Map<Pair<Integer, Integer>, Boolean> cooperationCache;
@@ -32,8 +34,9 @@ public class DependencyManager
 	public DependencyManager()
 	{
 		this.idMap = new HashMap<Integer, MetaprogramProfile<?>>();
-		this.targetMap = new HashMap<String, MetaprogramTarget>();
-		this.waitingMetaprograms = new HashSet<MetaprogramProfile<?>>();
+		this.profileToNodeMap = new HashMap<MetaprogramProfile<?>, BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData>>();
+		this.nameToTargetNodeMap = new HashMap<String, BipartiteNode<TargetNodeData, MetaprogramNodeData, EdgeData, EdgeData>>();
+		this.waitingNodes = new HashSet<BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData>>();
 		this.cooperationCache = new HashMap<Pair<Integer, Integer>, Boolean>();
 	}
 
@@ -45,30 +48,57 @@ public class DependencyManager
 	 */
 	public void registerMetaprogramProfile(MetaprogramProfile<?> profile)
 	{
+		// Create a node for the profile
+		BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData> metaprogramNode = new BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData>(
+				new MetaprogramNodeData(profile));
+
+		// For each target in the profile, add an edge from the target to this new node showing the target's dependency
+		// on us.
 		for (String targetName : profile.getTargetNames())
 		{
-			MetaprogramTarget target = targetMap.get(targetName);
-			if (target == null)
-			{
-				target = new MetaprogramTarget(targetName);
-				targetMap.put(targetName, target);
-			}
-			target.getMembers().add(profile);
+			BipartiteNode<TargetNodeData, MetaprogramNodeData, EdgeData, EdgeData> targetNode = getTargetNode(targetName);
+			targetNode.addChild(metaprogramNode, new EdgeData(false));
 		}
-		this.waitingMetaprograms.add(profile);
+
+		// For each dependency in the profile, add an edge from this new node to that target node showing our
+		// dependency on that target
+		for (String dependencyName : profile.getDependencyNames())
+		{
+			BipartiteNode<TargetNodeData, MetaprogramNodeData, EdgeData, EdgeData> targetNode = getTargetNode(dependencyName);
+			targetNode.addParent(metaprogramNode, new EdgeData(false));
+		}
+
+		// Add this metaprogram node to the collection of waiting metaprograms
+		this.waitingNodes.add(metaprogramNode);
+
+		// Add this metaprogram node to the profile map
+		this.profileToNodeMap.put(profile, metaprogramNode);
+
+		// Add this metaprogram's profile to the ID map
 		this.idMap.put(profile.getMetaprogram().getID(), profile);
-		// TODO: cycle detection
+
+		// TODO: cycle detection: did that create a cycle?
 	}
 
 	/**
-	 * Retrieves the profiles which are participating in the specified target.
+	 * Retrieves the node representing the target of the specified name, creating it if necessary.
 	 * 
-	 * @param targetName The name of the fully-qualified target.
-	 * @return The profiles of the metaprograms in that target.
+	 * @param targetName The name of the target.
+	 * @return The target node of that name.
 	 */
-	public Collection<MetaprogramProfile<?>> getTargetMembers(String targetName)
+	private BipartiteNode<TargetNodeData, MetaprogramNodeData, EdgeData, EdgeData> getTargetNode(String targetName)
 	{
-		return this.targetMap.get(targetName).getMembers();
+		// TODO: how do we check an empty target for compile-time errors? If a metaprogram explicitly depends on a
+		// target that doesn't exist, that should be a problem (as it probably represents a typo
+		BipartiteNode<TargetNodeData, MetaprogramNodeData, EdgeData, EdgeData> targetNode = this.nameToTargetNodeMap.get(targetName);
+		if (targetNode == null)
+		{
+			// If the target does not exist, infer it
+			targetNode = new BipartiteNode<TargetNodeData, MetaprogramNodeData, EdgeData, EdgeData>(new TargetNodeData(
+					targetName));
+			this.nameToTargetNodeMap.put(targetName, targetNode);
+		}
+		return targetNode;
 	}
 
 	/**
@@ -78,7 +108,7 @@ public class DependencyManager
 	 */
 	public void notifyExecuted(MetaprogramProfile<?> profile)
 	{
-		this.waitingMetaprograms.remove(profile);
+		this.waitingNodes.remove(this.profileToNodeMap.get(profile));
 	}
 
 	/**
@@ -89,42 +119,38 @@ public class DependencyManager
 	 */
 	public MetaprogramProfile<?> getNextMetaprogram()
 	{
-		if (this.waitingMetaprograms.size() == 0)
+		if (this.waitingNodes.size() == 0)
 			return null;
 
 		// TODO: this could be more efficient if we were a bit more clever
 		// the tricky part is that the graph is not static
-		MetaprogramProfile<?> profile = this.waitingMetaprograms.iterator().next();
+
+		// Pick a starting metaprogram
+		BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData> metaprogramNode = this.waitingNodes.iterator().next();
 		boolean found;
 		do
 		{
+			// Determine whether or not this metaprogram has any targets containing metaprograms which have not yet run
 			found = false;
-			outer: for (String targetName : profile.getDependencyNames())
+			for (BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData> dependencyNode : metaprogramNode.getGrandchildren())
 			{
-				MetaprogramTarget target = this.targetMap.get(targetName);
-				if (target == null)
+				if (this.waitingNodes.contains(dependencyNode))
 				{
-					// TODO: what if there are no members in this target? target will be null... this is a compile
-					// error?
-					continue;
-				}
-				for (MetaprogramProfile<?> dependency : target.getMembers())
-				{
-					if (this.waitingMetaprograms.contains(dependency))
-					{
-						found = true;
-						profile = dependency;
-						break outer;
-					}
+					// This metaprogram hasn't run yet; it's the new candidate for execution
+					// TODO: add the old one to a list; if we ever see it again, that's a cycle
+					metaprogramNode = dependencyNode;
+					found = true;
+					break;
 				}
 			}
 		} while (found);
 
-		return profile;
+		return metaprogramNode.getData().getProfile();
 	}
-	
+
 	/**
 	 * Retrieves a metaprogram by ID number.
+	 * 
 	 * @param id The ID of the metaprogram to retrieve.
 	 * @return The profile of the metaprogram or <code>null</code> if that metaprogram does not exist.
 	 */
@@ -159,7 +185,11 @@ public class DependencyManager
 				throw new IllegalArgumentException("Invalid metaprogram ID " + b
 						+ " given as second metaprogram in path check (" + a + "," + b + ")!");
 			}
-			value = checkPath(ma, mb) || checkPath(mb, ma);
+
+			BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData> nodeA = this.profileToNodeMap.get(ma);
+			BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData> nodeB = this.profileToNodeMap.get(mb);
+
+			value = checkPath(nodeA, nodeB) || checkPath(nodeB, nodeA);
 			this.cooperationCache.put(key, value);
 			this.cooperationCache.put(new Pair<Integer, Integer>(b, a), value);
 		}
@@ -169,34 +199,24 @@ public class DependencyManager
 	/**
 	 * Determines whether or not a path exists on the dependency graph from the first metaprogram to the second.
 	 * 
-	 * @param from The profile of the first metaprogram.
-	 * @param to The profile of the second metaprogram.
+	 * @param from The node for the first metaprogram.
+	 * @param to The node for the second metaprogram.
 	 * @return <code>true</code> if a path exists from the first metaprogram to the second; <code>false</code>
 	 *         otherwise.
 	 */
-	private boolean checkPath(MetaprogramProfile<?> from, MetaprogramProfile<?> to)
+	private boolean checkPath(BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData> from,
+			BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData> to)
 	{
-		if (from.getMetaprogram().getID() == to.getMetaprogram().getID())
+		if (from.getData().getProfile().getMetaprogram().getID() == to.getData().getProfile().getMetaprogram().getID())
 			return true;
 
-		for (String dependencyName : from.getDependencyNames())
+		for (BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData> dependencyNode : from.getGrandchildren())
 		{
-			MetaprogramTarget target = this.targetMap.get(dependencyName);
-			if (target == null)
+			if (checkPath(dependencyNode, to))
 			{
-				// TODO: this means a metaprogram depends on an empty target - do we explode here?
-			} else
-			{
-				for (MetaprogramProfile<?> dep : target.getMembers())
-				{
-					if (checkPath(dep, to))
-					{
-						return true;
-					}
-				}
+				return true;
 			}
 		}
-
 		return false;
 	}
 }
