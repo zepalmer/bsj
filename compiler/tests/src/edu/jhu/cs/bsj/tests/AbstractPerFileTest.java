@@ -5,6 +5,7 @@ import static org.junit.Assert.assertTrue;
 import java.io.File;
 
 import org.junit.Assert;
+import org.junit.Assume;
 
 /**
  * Represents a test class which assumes operations will be performed on a per-file basis.
@@ -19,6 +20,7 @@ public abstract class AbstractPerFileTest extends AbstractTest
 	 */
 	public void findAndTestJavaFiles(File dir)
 	{
+		Assume.assumeTrue(Boolean.getBoolean("bsj.tests.run.slow"));
 		for (File file : dir.listFiles())
 		{
 			if (file.isDirectory())

@@ -1,5 +1,6 @@
 package edu.jhu.cs.bsj.tests.compiler.ast;
 
+import org.junit.Assume;
 import org.junit.Test;
 
 import edu.jhu.cs.bsj.compiler.BsjServiceRegistry;
@@ -13,6 +14,7 @@ public class AstNodeMemoryLeakTest extends AbstractTest
 	@Test
 	public void leakTest()
 	{
+		Assume.assumeTrue(Boolean.getBoolean("bsj.tests.run.slow"));
 		BsjNodeFactory factory = BsjServiceRegistry.newToolkitFactory().newToolkit().getNodeFactory();
 
 		long memory = Runtime.getRuntime().maxMemory();
