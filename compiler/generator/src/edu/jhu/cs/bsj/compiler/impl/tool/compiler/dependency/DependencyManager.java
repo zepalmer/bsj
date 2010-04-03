@@ -327,7 +327,7 @@ public class DependencyManager
 				// means that we've found a cycle starting and ending at this node. Return a list.
 				return new ArrayList<BipartiteNode<?, ?, ?, ?>>(this.visitStack);
 			}
-			for (Pair<BipartiteNode<U, T, UE, TE>, ?> childEdge : node.getChildren())
+			for (Pair<BipartiteNode<U, T, UE, TE>, ?> childEdge : node.getChildEdges())
 			{
 				List<BipartiteNode<?, ?, ?, ?>> ret = visit(childEdge.getFirst());
 				if (ret != null)
@@ -371,11 +371,11 @@ public class DependencyManager
 				BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData> current = explorationStack.pop();
 				// We need to find all grandchildren of the current node which can be reached without using inferred
 				// edges
-				for (Pair<BipartiteNode<TargetNodeData, MetaprogramNodeData, EdgeData, EdgeData>, EdgeData> childEdge : current.getChildren())
+				for (Pair<BipartiteNode<TargetNodeData, MetaprogramNodeData, EdgeData, EdgeData>, EdgeData> childEdge : current.getChildEdges())
 				{
 					if (!childEdge.getSecond().isInferred())
 					{
-						for (Pair<BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData>, EdgeData> grandchildEdge : childEdge.getFirst().getChildren())
+						for (Pair<BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData>, EdgeData> grandchildEdge : childEdge.getFirst().getChildEdges())
 						{
 							if (grandchildEdge.getSecond().isInferred())
 							{
@@ -414,7 +414,7 @@ public class DependencyManager
 			do
 			{
 				found = false;
-				for (Pair<BipartiteNode<TargetNodeData, MetaprogramNodeData, EdgeData, EdgeData>, EdgeData> targetEdge : node.getChildren())
+				for (Pair<BipartiteNode<TargetNodeData, MetaprogramNodeData, EdgeData, EdgeData>, EdgeData> targetEdge : node.getChildEdges())
 				{
 					if (targetEdge.getSecond().isInferred())
 					{
@@ -423,7 +423,7 @@ public class DependencyManager
 						// As a result, we know that edges from it are inferred as well. Just get a metaprogram from
 						// the target and run with it.
 						found = true;
-						node = targetEdge.getFirst().getChildren().iterator().next().getFirst();
+						node = targetEdge.getFirst().getChildEdges().iterator().next().getFirst();
 					}
 				}
 			} while (found);

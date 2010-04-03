@@ -52,7 +52,7 @@ public class BipartiteNode<T, U, TE, UE>
 	 * 
 	 * @return The children of this node paired with their edge data.
 	 */
-	public Set<Pair<BipartiteNode<U, T, UE, TE>, TE>> getChildren()
+	public Set<Pair<BipartiteNode<U, T, UE, TE>, TE>> getChildEdges()
 	{
 		return CollectionUtilities.getPairSet(this.children);
 	}
@@ -62,7 +62,7 @@ public class BipartiteNode<T, U, TE, UE>
 	 * 
 	 * @return The parents of this node paired with their edge data.
 	 */
-	public Set<Pair<BipartiteNode<U, T, UE, TE>, UE>> getParents()
+	public Set<Pair<BipartiteNode<U, T, UE, TE>, UE>> getParentEdges()
 	{
 		return CollectionUtilities.getPairSet(this.parents);
 	}
