@@ -842,6 +842,7 @@ metaprogramTargetNameList returns [NameListNode ret]
             names.add($a.ret);
         }
         (
+            ','
             b=metaprogramTargetName
             {
                 names.add($b.ret);
