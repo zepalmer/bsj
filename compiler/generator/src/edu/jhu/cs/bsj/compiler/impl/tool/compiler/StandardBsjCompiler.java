@@ -130,6 +130,13 @@ public class StandardBsjCompiler implements BsjCompiler
 			{
 				this.metacompilationManager.doWork();
 			}
+			
+			// If errors occurred during metacompilation, bail out.
+			if (this.metacompilationManager.getErrorCount()!=0)
+			{
+				LOGGER.info(this.metacompilationManager.getErrorCount() + " errors during metacompilation");
+				return;
+			}
 
 			// Now compile everything in the generated source directory
 			compileGeneratedSources();

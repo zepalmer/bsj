@@ -272,13 +272,21 @@ public class MetacompilationManager implements MetacompilationContext
 			LOGGER.trace("Executing next compilation task: " + task.toString());
 		}
 		
-		// TODO: more clever approach: continue executing unrelated tasks until we run out
 		task.execute(this);
 		if (this.getDiagnosticListener().getCount(Kind.ERROR) > 0)
 		{
-			// TODO: more graceful termination
-			throw new IllegalStateException("Error occurred during metacompilation");
+			// TODO: more clever approach: continue executing unrelated tasks until we run out
+			// Dump all remaining tasks from the queue
+			this.priorityQueue.clear();
 		}
+	}
+	
+	/**
+	 * Retrieves the number of errors which have occurred during metacompilation.
+	 */
+	public int getErrorCount()
+	{
+		return this.diagnosticListener.getCount(Kind.ERROR);
 	}
 
 	public BsjToolkit getToolkit()
