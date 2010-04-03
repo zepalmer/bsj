@@ -98,6 +98,7 @@ public class DependencyManager
 		}
 
 		// TODO: cycle detection: did that create a cycle?
+		// TODO: injection conflict detection
 	}
 	
 	/**

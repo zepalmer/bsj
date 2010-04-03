@@ -7,6 +7,7 @@ import java.util.Set;
 
 import edu.jhu.cs.bsj.compiler.impl.utils.CollectionUtilities;
 import edu.jhu.cs.bsj.compiler.impl.utils.Pair;
+import edu.jhu.cs.bsj.compiler.impl.utils.function.Function;
 
 /**
  * A class representing a node in a directed bipartite graph.
@@ -29,6 +30,7 @@ public class BipartiteNode<T, U, TE, UE>
 
 	/**
 	 * Creates a new bipartite node with no edges.
+	 * 
 	 * @param data The data to store in this node.
 	 */
 	public BipartiteNode(T data)
@@ -37,9 +39,10 @@ public class BipartiteNode<T, U, TE, UE>
 		this.parents = new HashMap<BipartiteNode<U, T, UE, TE>, UE>();
 		this.data = data;
 	}
-	
+
 	/**
 	 * Retrieves the data stored in this node.
+	 * 
 	 * @return The data stored in this node.
 	 */
 	public T getData()
@@ -48,7 +51,7 @@ public class BipartiteNode<T, U, TE, UE>
 	}
 
 	/**
-	 * Retrieves the children of this node.  Changing this set will have no effect on the connectivity of the graph.
+	 * Retrieves the children of this node. Changing this set will have no effect on the connectivity of the graph.
 	 * 
 	 * @return The children of this node paired with their edge data.
 	 */
@@ -66,43 +69,98 @@ public class BipartiteNode<T, U, TE, UE>
 	{
 		return CollectionUtilities.getPairSet(this.parents);
 	}
-	
+
 	/**
-	 * Retrieves all of the second level children of this node. Changing this set will have no effect on the connectivity of the graph.
-	 * @return The grandchildren of this node.  
+	 * Performs filtering on a given map in this node.
+	 * 
+	 * @param map The map in question.
+	 * @param filter The filter function.
+	 * @return The elements in the map which passed the filter.
+	 * @param <E> The type of edge data leading to the filter.
+	 */
+	private <E> Set<BipartiteNode<U, T, UE, TE>> getFilteredFromMap(Map<BipartiteNode<U, T, UE, TE>, E> map,
+			Function<BipartiteNode<U, T, UE, TE>, Function<E, Boolean>> filter)
+	{
+		Set<BipartiteNode<U, T, UE, TE>> ret = new HashSet<BipartiteNode<U, T, UE, TE>>();
+		for (Map.Entry<BipartiteNode<U, T, UE, TE>, E> entry : map.entrySet())
+		{
+			if (filter.execute(entry.getKey()).execute(entry.getValue()))
+			{
+				ret.add(entry.getKey());
+			}
+		}
+		return ret;
+	}
+
+	/**
+	 * Retrieves the children of this node which meet a given criterion.
+	 * 
+	 * @param filter The filtering function used to filter child nodes. This is a curried function of two arguments: the
+	 *            child node and the data on the edge that connects it to this node. The return value should be
+	 *            <code>true</code> if the node is to be kept and <code>false</code> if it should be filtered out.
+	 * @return The children of this node which pass through the filtering function.
+	 */
+	public Set<BipartiteNode<U, T, UE, TE>> getFilteredChildren(
+			Function<BipartiteNode<U, T, UE, TE>, Function<TE, Boolean>> filter)
+	{
+		return getFilteredFromMap(this.children, filter);
+	}
+
+	/**
+	 * Retrieves the parents of this node which meet a given criterion.
+	 * 
+	 * @param filter The filtering function used to filter parent nodes. This is a curried function of two arguments:
+	 *            the parent node and the data on the edge that connects it to this node. The return value should be
+	 *            <code>true</code> if the node is to be kept and <code>false</code> if it should be filtered out.
+	 * @return The parents of this node which pass through the filtering function.
+	 */
+	public Set<BipartiteNode<U, T, UE, TE>> getFilteredParents(
+			Function<BipartiteNode<U, T, UE, TE>, Function<UE, Boolean>> filter)
+	{
+		return getFilteredFromMap(this.parents, filter);
+	}
+
+	/**
+	 * Retrieves all of the second level children of this node. Changing this set will have no effect on the
+	 * connectivity of the graph.
+	 * 
+	 * @return The grandchildren of this node.
 	 */
 	public Set<BipartiteNode<T, U, TE, UE>> getGrandchildren()
 	{
-		Set<BipartiteNode<T, U, TE, UE>> set = new HashSet<BipartiteNode<T,U,TE,UE>>();
+		Set<BipartiteNode<T, U, TE, UE>> set = new HashSet<BipartiteNode<T, U, TE, UE>>();
 		for (BipartiteNode<U, T, UE, TE> child : this.children.keySet())
 		{
 			set.addAll(child.children.keySet());
 		}
 		return set;
 	}
-	
+
 	/**
-	 * Retrieves all of the second level parents of this node. Changing this set will have no effect on the connectivity of the graph.
-	 * @return The grandparents of this node.  
+	 * Retrieves all of the second level parents of this node. Changing this set will have no effect on the connectivity
+	 * of the graph.
+	 * 
+	 * @return The grandparents of this node.
 	 */
 	public Set<BipartiteNode<T, U, TE, UE>> getGrandparents()
 	{
-		Set<BipartiteNode<T, U, TE, UE>> set = new HashSet<BipartiteNode<T,U,TE,UE>>();
+		Set<BipartiteNode<T, U, TE, UE>> set = new HashSet<BipartiteNode<T, U, TE, UE>>();
 		for (BipartiteNode<U, T, UE, TE> parent : this.parents.keySet())
 		{
 			set.addAll(parent.parents.keySet());
 		}
 		return set;
 	}
-	
+
 	/**
-	 * Adds a new element to one of this node's maps.  Optionally, adds this node to one of the adjacent node's maps.
+	 * Adds a new element to one of this node's maps. Optionally, adds this node to one of the adjacent node's maps.
 	 * This method is used internally to ensure bidirectional consistency.
+	 * 
 	 * @param ourMap The map on this node we are modifying.
 	 * @param other The node we are adding to the map.
 	 * @param edge The data to associate with the added edge.
 	 * @param otherMap The map on the other node to which to add this node or <code>null</code> if no such add should
-	 * occur.
+	 *            occur.
 	 */
 	private <E> void add(Map<BipartiteNode<U, T, UE, TE>, E> ourMap, BipartiteNode<U, T, UE, TE> other, E edge,
 			Map<BipartiteNode<T, U, TE, UE>, E> otherMap)
@@ -116,6 +174,7 @@ public class BipartiteNode<T, U, TE, UE>
 
 	/**
 	 * Adds a new child to this node.
+	 * 
 	 * @param child The child to add.
 	 * @param edge The data to associate with this edge.
 	 */
@@ -126,6 +185,7 @@ public class BipartiteNode<T, U, TE, UE>
 
 	/**
 	 * Adds a new parent to this node.
+	 * 
 	 * @param parent The parent to add.
 	 * @param edge The data to associate with this edge.
 	 */
