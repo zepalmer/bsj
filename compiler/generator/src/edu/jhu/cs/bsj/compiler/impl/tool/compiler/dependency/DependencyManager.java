@@ -9,6 +9,11 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
 
+import javax.tools.DiagnosticListener;
+
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
+import edu.jhu.cs.bsj.compiler.diagnostic.compiler.InjectionConfictDiagnostic;
+import edu.jhu.cs.bsj.compiler.impl.diagnostic.compiler.InjectionConfictDiagnosticImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.MetaprogramProfile;
 import edu.jhu.cs.bsj.compiler.impl.utils.Pair;
 import edu.jhu.cs.bsj.compiler.impl.utils.function.Function;
@@ -52,8 +57,10 @@ public class DependencyManager
 	 * @param profile The metaprogram profile to register.
 	 * @param parentProfile The profile of the metaprogram which generated this metaprogram or <code>null</code> if this
 	 *            is not the case.
+	 * @param diagnosticListener The diagnostic listener to which to report problems if they occur.
 	 */
-	public void registerMetaprogramProfile(MetaprogramProfile<?> profile, MetaprogramProfile<?> parentProfile)
+	public void registerMetaprogramProfile(MetaprogramProfile<?> profile, MetaprogramProfile<?> parentProfile,
+			DiagnosticListener<BsjSourceLocation> diagnosticListener)
 	{
 		// Create a node for the profile
 		BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData> metaprogramNode = new BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData>(
@@ -97,7 +104,50 @@ public class DependencyManager
 		}
 
 		// TODO: cycle detection: did that create a cycle?
-		// TODO: injection conflict detection
+
+		// Determine whether or not we just caused an injection conflict
+		InjectionConflictDetector injectionConflictDetector = new InjectionConflictDetector();
+		Pair<BipartiteNode<TargetNodeData, MetaprogramNodeData, EdgeData, EdgeData>, BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData>> conflict;
+		// Possibility 1: an injected program causes an injection conflict
+		if (parentProfile != null)
+		{
+			for (BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData> grandparent : metaprogramNode.getFilteredGrandparents(
+					new InferenceStateFilteringFunction<TargetNodeData, MetaprogramNodeData>(false),
+					new InferenceStateFilteringFunction<MetaprogramNodeData, TargetNodeData>(false)))
+			{
+				conflict = injectionConflictDetector.findImmediateInjectionConflict(grandparent);
+				if (conflict != null)
+				{
+					diagnosticListener.report(getInjectionConfictDiagnostic(grandparent, conflict));
+				}
+			}
+		}
+		// Possibility 2: an injected program may suffer from an injection conflict just like a normal metaprogram
+		conflict = injectionConflictDetector.findImmediateInjectionConflict(metaprogramNode);
+		if (conflict != null)
+		{
+			diagnosticListener.report(getInjectionConfictDiagnostic(metaprogramNode, conflict));
+		}
+		
+		// TODO: how is injection conflict detection affected by PackageNode.load?
+	}
+	
+	/**
+	 * Creates a diagnostic appropriate for an injection conflict pair.
+	 * @param conflict The conflict that occurred.
+	 * @param metaprogram The metaprogam experiencing the conflict.
+	 * @return The resulting diagnostic.
+	 */
+	private InjectionConfictDiagnostic getInjectionConfictDiagnostic(
+			BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData> metaprogram,
+			Pair<BipartiteNode<TargetNodeData, MetaprogramNodeData, EdgeData, EdgeData>, BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData>> conflict)
+	{
+		return new InjectionConfictDiagnosticImpl(
+				metaprogram.getData().getProfile().getLocation(),
+				conflict.getSecond().getData().getProfile().getLocation(),
+				metaprogram.getData().getProfile().getLocation(),
+				conflict.getFirst().getData().getTarget());
+				
 	}
 
 	/**
@@ -288,11 +338,14 @@ public class DependencyManager
 		InjectionConflictDetector detector = new InjectionConflictDetector();
 		for (BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData> metaprogramNode : this.profileToNodeMap.values())
 		{
-			Pair<BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData>, BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData>> result = detector.findImmediateInjectionConflict(metaprogramNode);
+			Pair<BipartiteNode<TargetNodeData, MetaprogramNodeData, EdgeData, EdgeData>, BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData>> result = detector.findImmediateInjectionConflict(metaprogramNode);
 			if (result != null)
 			{
-				throw new IllegalStateException("Metaprogram node " + metaprogramNode + " has inferred dependency on "
-						+ result.getSecond() + " based on injected metaprogram node " + result.getFirst());
+				throw new IllegalStateException("Metaprogram at "
+						+ metaprogramNode.getData().getProfile().getLocation() + " has inferred dependency on "
+						+ result.getSecond().getData().getProfile().getLocation()
+						+ " based on target of injected metaprogram node named "
+						+ result.getFirst().getData().getTarget());
 			}
 		}
 	}
@@ -381,11 +434,12 @@ public class DependencyManager
 		 * adjacent node.
 		 * 
 		 * @param node The node to check for an injection conflict.
-		 * @return <code>null</code> if no injection conflict occurs. Otherwise, a pairing between the injected node
-		 *         upon which the provided node directly depends and the node upon which the provided node must have an
-		 *         explicit dependency.
+		 * @return <code>null</code> if no injection conflict occurs. Otherwise, the first element of the pair is the
+		 *         target on which the provided node depends and in which an injected metaprogram participates. The
+		 *         second element is the node representing the metaprogram that the provided node should depend upon to
+		 *         break the injection conflict.
 		 */
-		public Pair<BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData>, BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData>> findImmediateInjectionConflict(
+		public Pair<BipartiteNode<TargetNodeData, MetaprogramNodeData, EdgeData, EdgeData>, BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData>> findImmediateInjectionConflict(
 				BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData> node)
 		{
 			// Calculate all of the metaprograms which must run before this one using the information we had at the
@@ -412,19 +466,23 @@ public class DependencyManager
 			}
 
 			// Get the first-level explicit dependencies
-			for (BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData> dependency : node.getFilteredGrandchildren(
-					new InferenceStateFilteringFunction<TargetNodeData, MetaprogramNodeData>(false),
-					new InferenceStateFilteringFunction<MetaprogramNodeData, TargetNodeData>(false)))
+			for (BipartiteNode<TargetNodeData, MetaprogramNodeData, EdgeData, EdgeData> targetDependency : node.getFilteredChildren(new InferenceStateFilteringFunction<TargetNodeData, MetaprogramNodeData>(
+					false)))
 			{
-				// For each dependency, find an inferred dependency edge and follow back to get an original metaprogram
-				BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData> original = findOriginalMetaprogram(dependency);
-				if (original != null)
+				for (BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData> dependency : targetDependency.getFilteredChildren(new InferenceStateFilteringFunction<MetaprogramNodeData, TargetNodeData>(
+						false)))
 				{
-					// If we don't a dependency on this node, scream
-					if (!allDependencies.contains(original))
+					// For each dependency, find an inferred dependency edge and follow back to get an original
+					// metaprogram
+					BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData> original = findOriginalMetaprogram(dependency);
+					if (original != null)
 					{
-						return new Pair<BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData>, BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData>>(
-								dependency, original);
+						// If we don't a dependency on this node, scream
+						if (!allDependencies.contains(original))
+						{
+							return new Pair<BipartiteNode<TargetNodeData, MetaprogramNodeData, EdgeData, EdgeData>, BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData>>(
+									targetDependency, original);
+						}
 					}
 				}
 			}

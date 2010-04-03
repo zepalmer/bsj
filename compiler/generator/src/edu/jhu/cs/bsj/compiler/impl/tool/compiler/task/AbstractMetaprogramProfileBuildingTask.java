@@ -46,7 +46,8 @@ public abstract class AbstractMetaprogramProfileBuildingTask<A extends Metaprogr
 		}
 
 		// Register the metaprogram profile with the metacompilation manager
-		metacompilationContext.getDependencyManager().registerMetaprogramProfile(profile, this.parentProfile);
+		metacompilationContext.getDependencyManager().registerMetaprogramProfile(profile, this.parentProfile,
+				metacompilationContext.getDiagnosticListener());
 	}
 
 	/**

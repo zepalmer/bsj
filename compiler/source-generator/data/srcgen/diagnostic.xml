@@ -227,7 +227,7 @@
                     argument of the property's setter.
                 ]]></doc>
             </diagnostic>
-            
+
             <diagnostic name="MetaAnnotationMissingPropertyDiagnostic" super="InvalidMetaAnnotationPropertyDiagnostic"
                 code="bsj.compiler.metaAnnotation.property.missing">
                 <doc><![CDATA[
@@ -251,7 +251,7 @@
                     abstract class.
                 ]]></doc>
             </diagnostic>
-            
+
             <diagnostic name="MissingMetaAnnotationClassDiagnostic" super="UninstantiableMetaAnnotationDiagnostic"
                 code="bsj.compiler.metaAnnotation.missingClass">
                 <prop name="className" type="String" desc="a string naming the class that was not found" />
@@ -260,7 +260,7 @@
                     metaprogram classpath at runtime.
                 ]]></doc>
             </diagnostic>
-            
+
             <diagnostic name="MetaAnnotationClassTypeMismatchDiagnostic" super="InvalidMetaAnnotationDefinitionDiagnostic"
                 code="bsj.compiler.metaAnnotation.typeMismatch">
                 <prop name="className" type="String" desc="a string naming the class that was used" />
@@ -269,13 +269,13 @@
                     {@link BsjMetaAnnotation} interface.
                 ]]></doc>
             </diagnostic>
-            
+
             <diagnostic name="InvalidMetaAnnotationDiagnostic" super="BsjCompilerDiagnostic">
                 <doc><![CDATA[
                     A diagnostic indicating a problem with a meta-annotation's use. 
                 ]]></doc>
             </diagnostic>
-            
+
             <diagnostic name="InvalidMetaAnnotationArrayInitializerDiagnostic" super="BsjCompilerDiagnostic"
                 code="bsj.compiler.metaAnnotation.inappropriateArrayInitializer">
                 <doc><![CDATA[
@@ -283,6 +283,18 @@
                     when its type is not an array type.  This may be the case if too many array types are nested, such
                     as using the code <tt>{{"a","b"},{"c"}}</tt> to initialize a <tt>String[]</tt> (and not a
                     <tt>String[][]</tt>).
+                ]]></doc>
+            </diagnostic>
+
+            <diagnostic name="InjectionConfictDiagnostic" super="BsjCompilerDiagnostic" code="bsj.compiler.conflict.injection">
+                <prop name="injectingMetaprogramLocation" type="BsjSourceLocation"
+                    desc="the location of the metaprogram that injected the conflicting metaprogram" />
+                <prop name="dependentMetaprogramLocation" type="BsjSourceLocation"
+                    desc="the location of the metaprogram that should depend on the injecting metaprogram" />
+                <prop name="injectionTarget" type="String"
+                    desc="the fully-qualified name of the metaprogram target on which the dependent metaprogram depends and in which the injected metaprogram participates" />
+                <doc><![CDATA[
+                    A diagnostic indicating that an injection conflict has occurred.
                 ]]></doc>
             </diagnostic>
         </srcgen>
