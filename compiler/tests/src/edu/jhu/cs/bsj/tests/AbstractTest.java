@@ -27,6 +27,9 @@ public abstract class AbstractTest
 {
 	/** The directory containing the example sources. */
 	public static final File EXAMPLES = new File("resources" + File.separator + "source-code");
+	/** The directory containing individual sources for specific tests. */
+	public static final File SPECIFIC_SOURCE_DIR = new File(EXAMPLES + File.separator + "individual-files"
+			+ File.separator + "hand-written");
 
 	/** The logger for this class. */
 	protected Logger LOGGER = null;

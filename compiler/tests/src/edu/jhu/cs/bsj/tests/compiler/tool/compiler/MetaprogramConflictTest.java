@@ -10,8 +10,7 @@ public class MetaprogramConflictTest extends AbstractBsjCompilerTest
 {
 	protected void testFile(String name) throws Exception
 	{
-		performTest(new File(EXAMPLES + File.separator + "individual-files" + File.separator + "hand-written" +
-				File.separator + "conflicts"), name);
+		performTest(new File(SPECIFIC_SOURCE_DIR + File.separator + "conflicts"), name);
 	}
 	
 	@Test(expected=MetaprogramConflictException.class)
