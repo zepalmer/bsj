@@ -1,4 +1,4 @@
-public class SimpleInjectionConflict
+public class SimpleInjectionConflictFix
 {
 	[:
 		#target a;
@@ -21,7 +21,7 @@ public class SimpleInjectionConflict
 		#target b;
 	:]
 	[:
-		#depends b;
+		#depends a, b;
 	:]
 	public static void main(String[] arg)
 	{

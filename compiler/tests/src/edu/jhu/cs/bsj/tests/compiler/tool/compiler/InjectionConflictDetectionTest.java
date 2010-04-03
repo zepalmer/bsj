@@ -27,4 +27,10 @@ public class InjectionConflictDetectionTest extends AbstractBsjCompilerTest
 	{
 		testFile("SimpleInjectionConflict", InjectionConfictDiagnostic.class);
 	}
+
+	@Test
+	public void testSimpleInjectionConflictFix() throws Exception
+	{
+		testFile("SimpleInjectionConflictFix");
+	}
 }
