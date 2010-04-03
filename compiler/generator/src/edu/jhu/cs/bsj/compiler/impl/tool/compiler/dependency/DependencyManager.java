@@ -11,6 +11,7 @@ import java.util.Stack;
 
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.MetaprogramProfile;
 import edu.jhu.cs.bsj.compiler.impl.utils.Pair;
+import edu.jhu.cs.bsj.compiler.impl.utils.function.Function;
 
 /**
  * This class contains information relating to metaprogram dependencies. An instance relates to a specific compilation
@@ -87,11 +88,9 @@ public class DependencyManager
 		if (parentProfile != null)
 		{
 			// Get parent profile's metaprogram node
-			BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData> injector =
-				this.profileToNodeMap.get(parentProfile);
+			BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData> injector = this.profileToNodeMap.get(parentProfile);
 			// Get inferred target for the parent profile's metaprogram
-			BipartiteNode<TargetNodeData, MetaprogramNodeData, EdgeData, EdgeData> target =
-				getTargetNode(getInferredTargetName(parentProfile));
+			BipartiteNode<TargetNodeData, MetaprogramNodeData, EdgeData, EdgeData> target = getTargetNode(getInferredTargetName(parentProfile));
 			// Create edges as appropriate
 			injector.addParent(target, new EdgeData(true));
 			metaprogramNode.addChild(target, new EdgeData(true));
@@ -100,9 +99,10 @@ public class DependencyManager
 		// TODO: cycle detection: did that create a cycle?
 		// TODO: injection conflict detection
 	}
-	
+
 	/**
 	 * Creates a name for an inferred dependency target on the specified metaprogram.
+	 * 
 	 * @param profile The profile of the metaprogram.
 	 * @return The name of the inferred target.
 	 */
@@ -398,24 +398,23 @@ public class DependencyManager
 				BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData> current = explorationStack.pop();
 				// We need to find all grandchildren of the current node which can be reached without using inferred
 				// edges
-				for (Pair<BipartiteNode<TargetNodeData, MetaprogramNodeData, EdgeData, EdgeData>, EdgeData> childEdge : current.getChildEdges())
+				for (BipartiteNode<TargetNodeData, MetaprogramNodeData, EdgeData, EdgeData> explicitChild : current.getFilteredChildren(new InferenceStateFilteringFunction<TargetNodeData, MetaprogramNodeData>(
+						false)))
 				{
-					if (!childEdge.getSecond().isInferred())
+					Set<BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData>> explicitGrandchildren = explicitChild.getFilteredChildren(new InferenceStateFilteringFunction<MetaprogramNodeData, TargetNodeData>(
+							false));
+					for (BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData> grandchild : explicitGrandchildren)
 					{
-						for (Pair<BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData>, EdgeData> grandchildEdge : childEdge.getFirst().getChildEdges())
-						{
-							if (grandchildEdge.getSecond().isInferred())
-							{
-								explorationStack.push(grandchildEdge.getFirst());
-								allDependencies.add(grandchildEdge.getFirst());
-							}
-						}
+						explorationStack.push(grandchild);
 					}
+					allDependencies.addAll(explicitGrandchildren);
 				}
 			}
 
-			// Get the first-level dependencies
-			for (BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData> dependency : node.getGrandchildren())
+			// Get the first-level explicit dependencies
+			for (BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData> dependency : node.getFilteredGrandchildren(
+					new InferenceStateFilteringFunction<TargetNodeData, MetaprogramNodeData>(false),
+					new InferenceStateFilteringFunction<MetaprogramNodeData, TargetNodeData>(false)))
 			{
 				// For each dependency, find an inferred dependency edge and follow back to get an original metaprogram
 				BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData> original = findOriginalMetaprogram(dependency);
@@ -441,16 +440,16 @@ public class DependencyManager
 			do
 			{
 				found = false;
-				for (Pair<BipartiteNode<TargetNodeData, MetaprogramNodeData, EdgeData, EdgeData>, EdgeData> targetEdge : node.getChildEdges())
+				Set<BipartiteNode<TargetNodeData, MetaprogramNodeData, EdgeData, EdgeData>> inferredTargets = node.getFilteredChildren(new InferenceStateFilteringFunction<TargetNodeData, MetaprogramNodeData>(
+						true));
+				if (inferredTargets.size() > 0)
 				{
-					if (targetEdge.getSecond().isInferred())
+					Set<BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData>> inferredDependencies = inferredTargets.iterator().next().getFilteredChildren(
+							new InferenceStateFilteringFunction<MetaprogramNodeData, TargetNodeData>(true));
+					if (inferredDependencies.size() > 0)
 					{
-						// This edge is inferred, which means that the associated target is inferred.
-						// TODO: some kind of runtime safety check to ensure that the target is inferred
-						// As a result, we know that edges from it are inferred as well. Just get a metaprogram from
-						// the target and run with it.
 						found = true;
-						node = targetEdge.getFirst().getChildEdges().iterator().next().getFirst();
+						node = inferredDependencies.iterator().next();
 					}
 				}
 			} while (found);
@@ -463,6 +462,42 @@ public class DependencyManager
 				// We never found anything of consequence; none of the edges from the original were inferred.
 				return null;
 			}
+		}
+	}
+
+	/**
+	 * A filtering function for nodes that retrieves the nodes on which they immediately depend using edges with a given
+	 * inference state.
+	 * 
+	 * @author Zachary Palmer
+	 * @param <D> The type data which is stored at nodes provided to this function.
+	 * @param <ND> The type of data which is stored at nodes adjacent to the nodes provided to this function.
+	 */
+	private static class InferenceStateFilteringFunction<D, ND>
+			implements
+			Function<BipartiteNode<? super D, ? super ND, ? super EdgeData, ? super EdgeData>, Function<? super EdgeData, Boolean>>
+	{
+		/** The desired inference state for nodes that pass the filter. */
+		private boolean inferred;
+
+		public InferenceStateFilteringFunction(boolean inferred)
+		{
+			super();
+			this.inferred = inferred;
+		}
+
+		@Override
+		public Function<EdgeData, Boolean> execute(
+				BipartiteNode<? super D, ? super ND, ? super EdgeData, ? super EdgeData> argument)
+		{
+			return new Function<EdgeData, Boolean>()
+			{
+				@Override
+				public Boolean execute(EdgeData argument)
+				{
+					return argument.isInferred() == InferenceStateFilteringFunction.this.inferred;
+				}
+			};
 		}
 	}
 }

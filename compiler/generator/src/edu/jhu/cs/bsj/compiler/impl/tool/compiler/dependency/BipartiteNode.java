@@ -79,7 +79,7 @@ public class BipartiteNode<T, U, TE, UE>
 	 * @param <E> The type of edge data leading to the filter.
 	 */
 	private <E> Set<BipartiteNode<U, T, UE, TE>> getFilteredFromMap(Map<BipartiteNode<U, T, UE, TE>, E> map,
-			Function<BipartiteNode<U, T, UE, TE>, Function<E, Boolean>> filter)
+			Function<BipartiteNode<? super U, ? super T, ? super UE, ? super TE>, Function<? super E, Boolean>> filter)
 	{
 		Set<BipartiteNode<U, T, UE, TE>> ret = new HashSet<BipartiteNode<U, T, UE, TE>>();
 		for (Map.Entry<BipartiteNode<U, T, UE, TE>, E> entry : map.entrySet())
@@ -101,7 +101,7 @@ public class BipartiteNode<T, U, TE, UE>
 	 * @return The children of this node which pass through the filtering function.
 	 */
 	public Set<BipartiteNode<U, T, UE, TE>> getFilteredChildren(
-			Function<BipartiteNode<U, T, UE, TE>, Function<TE, Boolean>> filter)
+			Function<BipartiteNode<? super U, ? super T, ? super UE, ? super TE>, Function<? super TE, Boolean>> filter)
 	{
 		return getFilteredFromMap(this.children, filter);
 	}
@@ -115,9 +115,49 @@ public class BipartiteNode<T, U, TE, UE>
 	 * @return The parents of this node which pass through the filtering function.
 	 */
 	public Set<BipartiteNode<U, T, UE, TE>> getFilteredParents(
-			Function<BipartiteNode<U, T, UE, TE>, Function<UE, Boolean>> filter)
+			Function<BipartiteNode<? super U, ? super T, ? super UE, ? super TE>, Function<? super UE, Boolean>> filter)
 	{
 		return getFilteredFromMap(this.parents, filter);
+	}
+
+	/**
+	 * Retrieves the grandchildren of this node which meet given criteria.
+	 * 
+	 * @param childFilter The filtering function used to filter child nodes. See {@link #getFilteredChildren(Function)}
+	 *            for a more complete description of this filter.
+	 * @param grandchildFilter The filtering function used to filter grandchild nodes.
+	 * @return The set of all grandchildren that passed both filters.
+	 */
+	public Set<BipartiteNode<T, U, TE, UE>> getFilteredGrandchildren(
+			Function<BipartiteNode<? super U, ? super T, ? super UE, ? super TE>, Function<? super TE, Boolean>> childFilter,
+			Function<BipartiteNode<? super T, ? super U, ? super TE, ? super UE>, Function<? super UE, Boolean>> grandchildFilter)
+	{
+		Set<BipartiteNode<T, U, TE, UE>> ret = new HashSet<BipartiteNode<T, U, TE, UE>>();
+		for (BipartiteNode<U, T, UE, TE> child : getFilteredChildren(childFilter))
+		{
+			ret.addAll(child.getFilteredChildren(grandchildFilter));
+		}
+		return ret;
+	}
+
+	/**
+	 * Retrieves the grandparents of this node which meet given criteria.
+	 * 
+	 * @param parentFilter The filtering function used to filter parent nodes. See {@link #getFilteredParents(Function)}
+	 *            for a more complete description of this filter.
+	 * @param grandparentFilter The filtering function used to filter grandparent nodes.
+	 * @return The set of all grandparents that passed both filters.
+	 */
+	public Set<BipartiteNode<T, U, TE, UE>> getFilteredGrandparents(
+			Function<BipartiteNode<? super U, ? super T, ? super UE, ? super TE>, Function<? super UE, Boolean>> parentFilter,
+			Function<BipartiteNode<? super T, ? super U, ? super TE, ? super UE>, Function<? super TE, Boolean>> grandparentFilter)
+	{
+		Set<BipartiteNode<T, U, TE, UE>> ret = new HashSet<BipartiteNode<T, U, TE, UE>>();
+		for (BipartiteNode<U, T, UE, TE> child : getFilteredParents(parentFilter))
+		{
+			ret.addAll(child.getFilteredParents(grandparentFilter));
+		}
+		return ret;
 	}
 
 	/**
