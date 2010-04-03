@@ -264,8 +264,8 @@ public class DependencyManager
 			Pair<BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData>, BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData>> result = detector.findImmediateInjectionConflict(metaprogramNode);
 			if (result != null)
 			{
-				throw new IllegalStateException("Metaprogram node " + metaprogramNode + " has inferred dependency on " +
-						result.getSecond() + " based on injected metaprogram node " + result.getFirst());
+				throw new IllegalStateException("Metaprogram node " + metaprogramNode + " has inferred dependency on "
+						+ result.getSecond() + " based on injected metaprogram node " + result.getFirst());
 			}
 		}
 	}
@@ -361,19 +361,30 @@ public class DependencyManager
 		public Pair<BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData>, BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData>> findImmediateInjectionConflict(
 				BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData> node)
 		{
-			// Calculate all of the metaprograms which must run before this one
+			// Calculate all of the metaprograms which must run before this one using the information we had at the
+			// beginning of metacompilation
 			Set<BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData>> allDependencies = new HashSet<BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData>>();
 			Stack<BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData>> explorationStack = new Stack<BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData>>();
 			explorationStack.add(node);
 			while (explorationStack.size() > 0)
 			{
 				BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData> current = explorationStack.pop();
-				Set<BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData>> explorationSet = current.getGrandchildren();
-				for (BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData> exploreTarget : explorationSet)
+				// We need to find all grandchildren of the current node which can be reached without using inferred
+				// edges
+				for (Pair<BipartiteNode<TargetNodeData, MetaprogramNodeData, EdgeData, EdgeData>, EdgeData> childEdge : current.getChildren())
 				{
-					explorationStack.push(exploreTarget);
+					if (!childEdge.getSecond().isInferred())
+					{
+						for (Pair<BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData>, EdgeData> grandchildEdge : childEdge.getFirst().getChildren())
+						{
+							if (grandchildEdge.getSecond().isInferred())
+							{
+								explorationStack.push(grandchildEdge.getFirst());
+								allDependencies.add(grandchildEdge.getFirst());
+							}
+						}
+					}
 				}
-				allDependencies.addAll(explorationSet);
 			}
 
 			// Get the first-level dependencies
