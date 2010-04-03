@@ -20,11 +20,15 @@ public abstract class AbstractMetaprogramProfileBuildingTask<A extends Metaprogr
 	protected MetacompilationContext metacompilationContext;
 	/** A field containing the anchor of the metaprogram to extract. */
 	protected A anchor;
+	/** A field containing the metaprogram which injected this new metaprogram into the AST.  This field is
+	 *  <code>null</code> if the metaprogram was not injected (that is, if it existed in original source). */
+	protected MetaprogramProfile<?> parentProfile;
 
-	public AbstractMetaprogramProfileBuildingTask(TaskPriority priority, A anchor)
+	public AbstractMetaprogramProfileBuildingTask(TaskPriority priority, A anchor, MetaprogramProfile<?> profile)
 	{
 		super(priority);
 		this.anchor = anchor;
+		this.parentProfile = profile;
 	}
 
 	@Override
@@ -42,7 +46,7 @@ public abstract class AbstractMetaprogramProfileBuildingTask<A extends Metaprogr
 		}
 
 		// Register the metaprogram profile with the metacompilation manager
-		metacompilationContext.getDependencyManager().registerMetaprogramProfile(profile);
+		metacompilationContext.getDependencyManager().registerMetaprogramProfile(profile, this.parentProfile);
 	}
 
 	/**

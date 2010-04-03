@@ -7,6 +7,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.util.BsjTypedNodeNoOpVisitor;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.MetacompilationContext;
+import edu.jhu.cs.bsj.compiler.impl.tool.compiler.MetaprogramProfile;
 
 /**
  * This task performs annotation object creation for a given AST.
@@ -16,15 +17,20 @@ public class InstantiateMetaAnnotationObjectTask extends AbstractBsjCompilerTask
 {
 	/** The node this task will use. */
 	private Node root;
-	
+	/** The metaprogram which most recentlymodified that node's subtree. */
+	private MetaprogramProfile<?> profile;
+
 	/**
 	 * Creates an instance of this task.
 	 * @param root The node representing the root of the AST to walk.
+	 * @param profile The metaprogram which was most recently responsible for modifying that subtree or
+	 *            <code>null</code> if no metaprogram has modified it.
 	 */
-	public InstantiateMetaAnnotationObjectTask(Node root)
+	public InstantiateMetaAnnotationObjectTask(Node root, MetaprogramProfile<?> profile)
 	{
 		super(TaskPriority.CREATE_METAANNOTATION_OBJECT);
 		this.root = root;
+		this.profile = profile;
 	}
 
 	@Override
@@ -47,6 +53,6 @@ public class InstantiateMetaAnnotationObjectTask extends AbstractBsjCompilerTask
 		});
 		
 		// Now enqueue for metaprogram extraction
-		context.registerTask(new ExtractMetaprogramsTask(this.root));
+		context.registerTask(new ExtractMetaprogramsTask(this.root, this.profile));
 	}
 }

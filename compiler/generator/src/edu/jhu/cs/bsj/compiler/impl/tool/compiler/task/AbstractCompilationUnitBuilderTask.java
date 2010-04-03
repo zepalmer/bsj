@@ -57,7 +57,7 @@ public abstract class AbstractCompilationUnitBuilderTask extends AbstractBsjComp
 		context.getNodeManager().setCurrentMetaprogramId(metaprogramID);
 
 		// Enqueue the compilation unit for name categorization
-		context.registerTask(new CategorizeNamesTask(node));
+		context.registerTask(new CategorizeNamesTask(node, null));
 	}
 
 	protected abstract CompilationUnitNode createCompilationUnit(MetacompilationContext context, BsjFileObject file)

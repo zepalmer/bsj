@@ -11,6 +11,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.util.BsjTypedNodeNoOpVisitor;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.MetacompilationContext;
+import edu.jhu.cs.bsj.compiler.impl.tool.compiler.MetaprogramProfile;
 import edu.jhu.cs.bsj.compiler.metaannotation.BsjMetaAnnotation;
 import edu.jhu.cs.bsj.compiler.metaprogram.BsjMetaAnnotationMetaprogram;
 
@@ -18,18 +19,21 @@ public class ExtractMetaprogramsTask extends AbstractBsjCompilerTask
 {
 	/** The node whose top-level descendent metaprograms should be extracted. */
 	private Node node;
+	/** The metaprogram which most recentlymodified that node's subtree. */
+	private MetaprogramProfile<?> profile;
 
 	/**
 	 * Creates a new task for metaprogram extraction.
 	 * 
 	 * @param node The node into which to descend.
+	 * @param profile The metaprogram which was most recently responsible for modifying that subtree or
+	 *            <code>null</code> if no metaprogram has modified it.
 	 */
-	// TODO: take an argument listing the metaprogram targets on which the extracted metaprograms should implicitly
-	// depend
-	public ExtractMetaprogramsTask(Node node)
+	public ExtractMetaprogramsTask(Node node, MetaprogramProfile<?> profile)
 	{
 		super(TaskPriority.EXTRACT);
 		this.node = node;
+		this.profile = profile;
 	}
 
 	@Override
@@ -69,7 +73,7 @@ public class ExtractMetaprogramsTask extends AbstractBsjCompilerTask
 							// register a task to build a metaprogram profile from this object
 							BsjMetaAnnotationMetaprogram metaprogramObject = (BsjMetaAnnotationMetaprogram) annotationObject;
 							context.registerTask(new PrepareMetaAnnotationMetaprorgamTask(metaAnnotationAnchor,
-									metaprogramObject.getMetaprogram()));
+									this.profile, metaprogramObject.getMetaprogram()));
 							if (LOGGER.isTraceEnabled())
 							{
 								LOGGER.trace("Found meta-annotation metaprogram for "
@@ -93,10 +97,10 @@ public class ExtractMetaprogramsTask extends AbstractBsjCompilerTask
 		}
 	}
 
-	private static <R extends Node> CompileExplicitMetaprogramTask<R> createCompileExplicitMetaprogramTask(
+	private <R extends Node> CompileExplicitMetaprogramTask<R> createCompileExplicitMetaprogramTask(
 			ExplicitMetaprogramAnchorNode<R> anchor)
 	{
-		return new CompileExplicitMetaprogramTask<R>(anchor);
+		return new CompileExplicitMetaprogramTask<R>(anchor, this.profile);
 	}
 
 	/**

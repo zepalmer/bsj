@@ -244,37 +244,6 @@ public class MetacompilationManager implements MetacompilationContext
 	}
 
 	/**
-	 * Registers a metaprogram for execution.
-	 * 
-	 * @param profile The profile of the metaprogram which will be executed.
-	 */
-	public void registerMetaprogramProfile(MetaprogramProfile<?> profile)
-	{
-		this.dependencyManager.registerMetaprogramProfile(profile);
-	}
-
-	/**
-	 * Retrieves the next metaprogram to execute. The caller of this method must execute the metaprogram in the provided
-	 * profile or else re-register it with this metacompilation manager.
-	 * 
-	 * @return The next metaprogram to execute or <code>null</code> if no metaprograms remain.
-	 */
-	public MetaprogramProfile<?> getNextMetaprogramProfile()
-	{
-		return this.dependencyManager.getNextMetaprogram();
-	}
-
-	/**
-	 * Indicates that the specified profile's metaprogram has been executed.
-	 * 
-	 * @param profile The profile of the metaprogram which was executed.
-	 */
-	public void notifyExecuted(MetaprogramProfile<?> profile)
-	{
-		this.dependencyManager.notifyExecuted(profile);
-	}
-
-	/**
 	 * Determines whether or not work on this manager is finished.
 	 * 
 	 * @return <code>true</code> if work on this manager is finished; <code>false</code> if there is more work to do.

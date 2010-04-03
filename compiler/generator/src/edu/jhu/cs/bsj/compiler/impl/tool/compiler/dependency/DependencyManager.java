@@ -49,8 +49,10 @@ public class DependencyManager
 	 * with this manager for the manager's dependency operations to function correctly.
 	 * 
 	 * @param profile The metaprogram profile to register.
+	 * @param parentProfile The profile of the metaprogram which generated this metaprogram or <code>null</code> if this
+	 *            is not the case.
 	 */
-	public void registerMetaprogramProfile(MetaprogramProfile<?> profile)
+	public void registerMetaprogramProfile(MetaprogramProfile<?> profile, MetaprogramProfile<?> parentProfile)
 	{
 		// Create a node for the profile
 		BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData> metaprogramNode = new BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData>(
@@ -81,7 +83,31 @@ public class DependencyManager
 		// Add this metaprogram's profile to the ID map
 		this.idMap.put(profile.getMetaprogram().getID(), profile);
 
+		// If this metaprogram was injected, create the appropriate inferred target and edges
+		if (parentProfile != null)
+		{
+			// Get parent profile's metaprogram node
+			BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData> injector =
+				this.profileToNodeMap.get(parentProfile);
+			// Get inferred target for the parent profile's metaprogram
+			BipartiteNode<TargetNodeData, MetaprogramNodeData, EdgeData, EdgeData> target =
+				getTargetNode(getInferredTargetName(parentProfile));
+			// Create edges as appropriate
+			injector.addParent(target, new EdgeData(true));
+			metaprogramNode.addChild(target, new EdgeData(true));
+		}
+
 		// TODO: cycle detection: did that create a cycle?
+	}
+	
+	/**
+	 * Creates a name for an inferred dependency target on the specified metaprogram.
+	 * @param profile The profile of the metaprogram.
+	 * @return The name of the inferred target.
+	 */
+	private String getInferredTargetName(MetaprogramProfile<?> profile)
+	{
+		return "#" + profile.getMetaprogram().getID();
 	}
 
 	/**

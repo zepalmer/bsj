@@ -18,9 +18,10 @@ public class PrepareMetaAnnotationMetaprorgamTask extends
 	private BsjMetaprogram<MetaAnnotationMetaprogramAnchorNode> metaprogramObject;
 
 	public PrepareMetaAnnotationMetaprorgamTask(MetaAnnotationMetaprogramAnchorNode anchor,
+			MetaprogramProfile<?> profile,
 			BsjMetaprogram<MetaAnnotationMetaprogramAnchorNode> metaprogramObject)
 	{
-		super(TaskPriority.PREPARE_METAANNOTATION_METAPROGRAM, anchor);
+		super(TaskPriority.PREPARE_METAANNOTATION_METAPROGRAM, anchor, profile);
 		this.metaprogramObject = metaprogramObject;
 	}
 

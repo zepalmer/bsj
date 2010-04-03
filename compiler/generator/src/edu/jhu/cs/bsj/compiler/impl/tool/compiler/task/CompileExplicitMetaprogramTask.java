@@ -61,10 +61,9 @@ public class CompileExplicitMetaprogramTask<R extends Node> extends
 			"edu.jhu.cs.bsj.compiler.ast", "edu.jhu.cs.bsj.compiler.ast.node", "edu.jhu.cs.bsj.compiler.ast.node.meta",
 			"edu.jhu.cs.bsj.compiler.metaprogram" };
 
-	public CompileExplicitMetaprogramTask(ExplicitMetaprogramAnchorNode<R> anchor)
+	public CompileExplicitMetaprogramTask(ExplicitMetaprogramAnchorNode<R> anchor, MetaprogramProfile<?> profile)
 	{
-		super(TaskPriority.COMPILE_EXPLICIT, anchor);
-		this.anchor = anchor;
+		super(TaskPriority.COMPILE_EXPLICIT, anchor, profile);
 	}
 
 	@Override

@@ -116,7 +116,7 @@ public class ExecuteMetaprogramTask extends AbstractBsjCompilerTask
 			{
 				target = replacement.getFurthestAncestor();
 			}
-			context.registerTask(new CategorizeNamesTask(target));
+			context.registerTask(new CategorizeNamesTask(target, profile));
 		}
 
 		// Re-enqueue this task so we can execute the next metaprogram when the time comes (which is probably right now)
