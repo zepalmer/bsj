@@ -128,12 +128,13 @@ public class DependencyManager
 		{
 			diagnosticListener.report(getInjectionConfictDiagnostic(metaprogramNode, conflict));
 		}
-		
+
 		// TODO: how is injection conflict detection affected by PackageNode.load?
 	}
-	
+
 	/**
 	 * Creates a diagnostic appropriate for an injection conflict pair.
+	 * 
 	 * @param conflict The conflict that occurred.
 	 * @param metaprogram The metaprogam experiencing the conflict.
 	 * @return The resulting diagnostic.
@@ -142,12 +143,10 @@ public class DependencyManager
 			BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData> metaprogram,
 			Pair<BipartiteNode<TargetNodeData, MetaprogramNodeData, EdgeData, EdgeData>, BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData>> conflict)
 	{
-		return new InjectionConfictDiagnosticImpl(
-				metaprogram.getData().getProfile().getLocation(),
+		return new InjectionConfictDiagnosticImpl(metaprogram.getData().getProfile().getLocation(),
 				conflict.getSecond().getData().getProfile().getLocation(),
-				metaprogram.getData().getProfile().getLocation(),
-				conflict.getFirst().getData().getTarget());
-				
+				metaprogram.getData().getProfile().getLocation(), conflict.getFirst().getData().getTarget());
+
 	}
 
 	/**
@@ -474,52 +473,21 @@ public class DependencyManager
 				{
 					// For each dependency, find an inferred dependency edge and follow back to get an original
 					// metaprogram
-					BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData> original = findOriginalMetaprogram(dependency);
-					if (original != null)
+					for (BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData> injector : dependency.getFilteredGrandchildren(
+							new InferenceStateFilteringFunction<TargetNodeData, MetaprogramNodeData>(true),
+							new InferenceStateFilteringFunction<MetaprogramNodeData, TargetNodeData>(true)))
 					{
 						// If we don't a dependency on this node, scream
-						if (!allDependencies.contains(original))
+						if (!allDependencies.contains(injector))
 						{
 							return new Pair<BipartiteNode<TargetNodeData, MetaprogramNodeData, EdgeData, EdgeData>, BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData>>(
-									targetDependency, original);
+									targetDependency, injector);
 						}
 					}
 				}
 			}
 
 			return null;
-		}
-
-		private BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData> findOriginalMetaprogram(
-				BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData> start)
-		{
-			BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData> node = start;
-			boolean found;
-			do
-			{
-				found = false;
-				Set<BipartiteNode<TargetNodeData, MetaprogramNodeData, EdgeData, EdgeData>> inferredTargets = node.getFilteredChildren(new InferenceStateFilteringFunction<TargetNodeData, MetaprogramNodeData>(
-						true));
-				if (inferredTargets.size() > 0)
-				{
-					Set<BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData>> inferredDependencies = inferredTargets.iterator().next().getFilteredChildren(
-							new InferenceStateFilteringFunction<MetaprogramNodeData, TargetNodeData>(true));
-					if (inferredDependencies.size() > 0)
-					{
-						found = true;
-						node = inferredDependencies.iterator().next();
-					}
-				}
-			} while (found);
-
-			if (node != start)
-			{
-				return node;
-			} else
-			{
-				// We never found anything of consequence; none of the edges from the original were inferred.
-				return null;
-			}
 		}
 	}
 
