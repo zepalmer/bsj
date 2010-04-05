@@ -12,7 +12,7 @@ public class UseDefaultsFactoryMethodDefinition implements FactoryMethodDefiniti
 	@Override
 	public boolean isVisible(String name)
 	{
-		for (PropertyDefinition def : this.parent.getRecursiveProperties())
+		for (ModalPropertyDefinition def : this.parent.getRecursiveProperties())
 		{
 			if (def.getName().equals(name))
 			{

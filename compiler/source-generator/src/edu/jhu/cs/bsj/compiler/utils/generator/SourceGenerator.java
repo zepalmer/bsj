@@ -299,7 +299,8 @@ public class SourceGenerator
 	 * @param skipMake <code>true</code> to skip properties which are excluded from the factory's make call;
 	 *            <code>false</code> otherwise.
 	 */
-	private static void printParameterList(PrependablePrintStream ps, List<PropertyDefinition> props, boolean skipMake)
+	private static void printParameterList(PrependablePrintStream ps, List<? extends ModalPropertyDefinition> props,
+			boolean skipMake)
 	{
 		boolean first = true;
 		ps.print("(");
@@ -307,9 +308,9 @@ public class SourceGenerator
 		{
 			ps.println();
 			ps.incPrependCount(2);
-			for (PropertyDefinition p : props)
+			for (ModalPropertyDefinition p : props)
 			{
-				if (p.getMode() != PropertyDefinition.Mode.SKIP || !skipMake)
+				if (p.getMode() != ModalPropertyDefinition.Mode.SKIP || !skipMake)
 				{
 					if (!first)
 					{
@@ -331,7 +332,7 @@ public class SourceGenerator
 	 * @param ps The stream to which to write the text.
 	 * @param props The properties to use as arguments.
 	 */
-	private static void printArgumentList(PrintStream ps, List<PropertyDefinition> props)
+	private static void printArgumentList(PrintStream ps, List<? extends ModalPropertyDefinition> props)
 	{
 		printArgumentList(ps, props, Collections.<String, String> emptyMap(), false);
 	}
@@ -343,7 +344,7 @@ public class SourceGenerator
 	 * @param props The properties to use as arguments.
 	 * @param overrideMap The override map for this argument list.
 	 */
-	private static void printArgumentList(PrintStream ps, List<PropertyDefinition> props,
+	private static void printArgumentList(PrintStream ps, List<? extends ModalPropertyDefinition> props,
 			Map<String, String> overrideMap)
 	{
 		printArgumentList(ps, props, overrideMap, false);
@@ -357,7 +358,8 @@ public class SourceGenerator
 	 * @param skipMake <code>true</code> to skip properties which are excluded from the factory's make call;
 	 *            <code>false</code> otherwise.
 	 */
-	private static void printArgumentList(PrintStream ps, List<PropertyDefinition> props, boolean skipMake)
+	private static void printArgumentList(PrintStream ps, List<? extends ModalPropertyDefinition> props,
+			boolean skipMake)
 	{
 		printArgumentList(ps, props, Collections.<String, String> emptyMap(), skipMake);
 	}
@@ -371,14 +373,14 @@ public class SourceGenerator
 	 * @param skipMake <code>true</code> to skip properties which are excluded from the factory's make call;
 	 *            <code>false</code> otherwise.
 	 */
-	private static void printArgumentList(PrintStream ps, List<PropertyDefinition> props,
+	private static void printArgumentList(PrintStream ps, List<? extends ModalPropertyDefinition> props,
 			Map<String, String> overrideMap, boolean skipMake)
 	{
 		boolean first = true;
 		ps.print("(");
-		for (PropertyDefinition p : props)
+		for (ModalPropertyDefinition p : props)
 		{
-			if (p.getMode() != PropertyDefinition.Mode.SKIP || !skipMake)
+			if (p.getMode() != ModalPropertyDefinition.Mode.SKIP || !skipMake)
 			{
 				if (!first)
 				{
@@ -494,7 +496,7 @@ public class SourceGenerator
 			ps.incPrependCount();
 
 			// gen getters and setters
-			for (PropertyDefinition p : def.getProperties())
+			for (ModalPropertyDefinition p : def.getProperties())
 			{
 				if (!p.isHide())
 				{
@@ -719,8 +721,8 @@ public class SourceGenerator
 
 		public abstract void useDefinition(TypeDefinition def) throws IOException;
 
-		protected void propAbstract(PropertyTypeAbstractor abstractor, PropertyDefinition p, PrependablePrintStream ps,
-				TypeDefinition def)
+		protected void propAbstract(PropertyTypeAbstractor abstractor, ModalPropertyDefinition p,
+				PrependablePrintStream ps, TypeDefinition def)
 		{
 			if (DIRECT_COPY_NAMES.contains(p.getBaseType()))
 			{
@@ -746,15 +748,15 @@ public class SourceGenerator
 
 		static interface PropertyTypeAbstractor
 		{
-			void directCopy(PrependablePrintStream ps, PropertyDefinition p);
+			void directCopy(PrependablePrintStream ps, ModalPropertyDefinition p);
 
-			void node(PrependablePrintStream ps, PropertyDefinition p);
+			void node(PrependablePrintStream ps, ModalPropertyDefinition p);
 
-			void cloneable(PrependablePrintStream ps, PropertyDefinition p);
+			void cloneable(PrependablePrintStream ps, ModalPropertyDefinition p);
 
-			void list(PrependablePrintStream ps, PropertyDefinition p);
+			void list(PrependablePrintStream ps, ModalPropertyDefinition p);
 
-			void voidType(PrependablePrintStream ps, PropertyDefinition p);
+			void voidType(PrependablePrintStream ps, ModalPropertyDefinition p);
 		}
 	}
 
@@ -805,7 +807,7 @@ public class SourceGenerator
 			ps.incPrependCount();
 
 			// gen properties
-			for (PropertyDefinition p : def.getResponsibleProperties(false))
+			for (ModalPropertyDefinition p : def.getResponsibleProperties(false))
 			{
 				ps.println("/** " + capFirst(p.getDescription()) + ". */");
 				ps.println("private " + p.getFullType() + " " + p.getName() + ";");
@@ -818,7 +820,7 @@ public class SourceGenerator
 				ps.println("private static enum LocalAttribute implements edu.jhu.cs.bsj.compiler.impl.ast.Attribute");
 				ps.println("{");
 				ps.incPrependCount();
-				for (PropertyDefinition p : def.getResponsibleProperties(false))
+				for (ModalPropertyDefinition p : def.getResponsibleProperties(false))
 				{
 					ps.println("/** Attribute for the " + p.getName() + " property. */");
 					ps.println(StringUtilities.convertCamelCaseToUpperCase(p.getName()) + ",");
@@ -843,7 +845,7 @@ public class SourceGenerator
 			superProps.removeAll(def.getResponsibleProperties(false));
 			printArgumentList(ps, superProps, def.getConstructorOverrideMap());
 			ps.println(";");
-			for (PropertyDefinition p : def.getResponsibleProperties(false))
+			for (ModalPropertyDefinition p : def.getResponsibleProperties(false))
 			{
 				String expr;
 				if (def.getConstructorOverrideMap().containsKey(p.getName()))
@@ -888,7 +890,7 @@ public class SourceGenerator
 			}
 
 			// gen getters and setters
-			for (PropertyDefinition p : def.getResponsibleProperties(false))
+			for (ModalPropertyDefinition p : def.getResponsibleProperties(false))
 			{
 				if (!p.isHide())
 				{
@@ -973,7 +975,7 @@ public class SourceGenerator
 			{
 				ps.println("super.receiveToChildren(visitor);");
 			}
-			for (PropertyDefinition p : def.getProperties())
+			for (ModalPropertyDefinition p : def.getProperties())
 			{
 				if (propInstanceOf(p.getBaseType(), "Node"))
 				{
@@ -1016,7 +1018,7 @@ public class SourceGenerator
 			{
 				ps.println("    super.receiveTypedToChildren(visitor);");
 			}
-			for (PropertyDefinition p : def.getProperties())
+			for (ModalPropertyDefinition p : def.getProperties())
 			{
 				if (propInstanceOf(p.getBaseType(), "Node"))
 				{
@@ -1103,7 +1105,7 @@ public class SourceGenerator
 			ps.println("{");
 			ps.println("    List<Object> list = "
 					+ (def.getBaseSuperName() == null ? "new ArrayList<Object>();" : "super.getChildObjects();"));
-			for (PropertyDefinition p : def.getProperties())
+			for (ModalPropertyDefinition p : def.getProperties())
 			{
 				// special handling for startLocation and stopLocation
 				if (p.getName().equals("startLocation"))
@@ -1137,7 +1139,7 @@ public class SourceGenerator
 				ps.println("    sb.append(this.getClass().getSimpleName());");
 				ps.println("    sb.append('[');");
 				boolean firstProp = true;
-				for (PropertyDefinition p : recProps)
+				for (ModalPropertyDefinition p : recProps)
 				{
 					if (p.isHide())
 						continue;
@@ -1216,7 +1218,7 @@ public class SourceGenerator
 				ps.println("return factory.make" + def.getBaseName() + "(");
 				ps.incPrependCount(2);
 				boolean first = true;
-				for (PropertyDefinition p : recProps)
+				for (ModalPropertyDefinition p : recProps)
 				{
 					if (p.isHide())
 						continue;
@@ -1231,28 +1233,28 @@ public class SourceGenerator
 					}
 					propAbstract(new PropertyTypeAbstractor()
 					{
-						public void directCopy(PrependablePrintStream ps, PropertyDefinition p)
+						public void directCopy(PrependablePrintStream ps, ModalPropertyDefinition p)
 						{
 							ps.print("get" + capFirst(p.getName()) + "()");
 						}
 
-						public void node(PrependablePrintStream ps, PropertyDefinition p)
+						public void node(PrependablePrintStream ps, ModalPropertyDefinition p)
 						{
 							ps.print("get" + capFirst(p.getName()) + "().deepCopy(factory)");
 						}
 
-						public void cloneable(PrependablePrintStream ps, PropertyDefinition p)
+						public void cloneable(PrependablePrintStream ps, ModalPropertyDefinition p)
 						{
 							ps.print("get" + capFirst(p.getName()) + "() == null ? null : (" + p.getFullType()
 									+ ")(get" + capFirst(p.getName()) + "().clone())");
 						}
 
-						public void list(PrependablePrintStream ps, PropertyDefinition p)
+						public void list(PrependablePrintStream ps, ModalPropertyDefinition p)
 						{
 							ps.print("new Array" + p.getFullType() + "(get" + capFirst(p.getName()) + "())");
 						}
 
-						public void voidType(PrependablePrintStream ps, PropertyDefinition p)
+						public void voidType(PrependablePrintStream ps, ModalPropertyDefinition p)
 						{
 							ps.print("null");
 						}
@@ -1283,7 +1285,7 @@ public class SourceGenerator
 				ps.println("if (before==null)");
 				ps.println("    throw new IllegalArgumentException(\"Cannot replace node with before value of null.\");");
 				ps.println();
-				for (PropertyDefinition p : def.getRecursiveProperties())
+				for (ModalPropertyDefinition p : def.getRecursiveProperties())
 				{
 					if (propInstanceOf(p.getBaseType(), "Node"))
 					{
@@ -1552,7 +1554,7 @@ public class SourceGenerator
 
 				// Write normal factory method
 				List<FactoryMethodPropertyDefinition> standardFactoryMethodProperties = new ArrayList<FactoryMethodPropertyDefinition>();
-				for (PropertyDefinition p : recProps)
+				for (ModalPropertyDefinition p : recProps)
 				{
 					standardFactoryMethodProperties.add(new FactoryMethodPropertyDefinition(p.getName(), !p.isHide()));
 				}
@@ -1715,7 +1717,7 @@ public class SourceGenerator
 
 				// Create a list to fake the parameter list printer into printing a vararg
 				List<PropertyDefinition> fakeProps = new ArrayList<PropertyDefinition>();
-				PropertyDefinition listDef = null;
+				ModalPropertyDefinition listDef = null;
 				for (PropertyDefinition propDef : argProps)
 				{
 					if (propDef.getBaseType().equals("List") && listDef == null)
@@ -1727,7 +1729,7 @@ public class SourceGenerator
 					}
 				}
 				fakeProps.add(new PropertyDefinition(listDef.getName() + "Elements", listDef.getTypeArg() + "...",
-						null, PropertyDefinition.Mode.NORMAL, "", listDef.getDefaultExpression()));
+						null, ModalPropertyDefinition.Mode.NORMAL, "", listDef.getDefaultExpression()));
 
 				// Write interface method description
 				ips.print("public " + typeName + " make" + def.getBaseName());
@@ -1779,7 +1781,7 @@ public class SourceGenerator
 		{
 			boolean first = true;
 			ps.print("(");
-			for (PropertyDefinition p : props)
+			for (ModalPropertyDefinition p : props)
 			{
 				if (!first)
 				{
@@ -2041,7 +2043,7 @@ public class SourceGenerator
 			}
 			ps.println("{");
 			ps.incPrependCount();
-			for (PropertyDefinition p : recProp)
+			for (ModalPropertyDefinition p : recProp)
 			{
 				if (p.isSkipMake() && !p.getName().matches("st(art|op)Location"))
 					continue;
@@ -2050,12 +2052,12 @@ public class SourceGenerator
 
 				propAbstract(new PropertyTypeAbstractor()
 				{
-					public void voidType(PrependablePrintStream ps, PropertyDefinition p)
+					public void voidType(PrependablePrintStream ps, ModalPropertyDefinition p)
 					{
 						// Intentionally doing nothing. We'll just use "null" below.
 					}
 
-					public void node(PrependablePrintStream ps, PropertyDefinition p)
+					public void node(PrependablePrintStream ps, ModalPropertyDefinition p)
 					{
 						boolean generic = (p.getTypeArg() != null);
 						String rawName = null;
@@ -2078,7 +2080,7 @@ public class SourceGenerator
 						}
 					}
 
-					public void list(PrependablePrintStream ps, PropertyDefinition p)
+					public void list(PrependablePrintStream ps, ModalPropertyDefinition p)
 					{
 						String typeArg = p.getTypeArg();
 						ps.println("List<ExpressionNode> lift" + capFirst(p.getName())
@@ -2092,13 +2094,13 @@ public class SourceGenerator
 						ps.println("}");
 					}
 
-					public void directCopy(PrependablePrintStream ps, PropertyDefinition p)
+					public void directCopy(PrependablePrintStream ps, ModalPropertyDefinition p)
 					{
 						ps.println(p.getFullType() + " lift" + capFirst(p.getName()) + "Value = ");
 						ps.println("        node.get" + capFirst(p.getName()) + "();");
 					}
 
-					public void cloneable(PrependablePrintStream ps, PropertyDefinition p)
+					public void cloneable(PrependablePrintStream ps, ModalPropertyDefinition p)
 					{
 						ps.println("ExpressionNode lift" + capFirst(p.getName()) + "MetaClone = ");
 						ps.println("        expressionize" + p.getBaseType() + "(node.get" + capFirst(p.getName())
@@ -2118,7 +2120,7 @@ public class SourceGenerator
 			ps.print("factory.makeExpressionListNode(");
 			ps.incPrependCount(2);
 			boolean first = true;
-			for (PropertyDefinition p : recProp)
+			for (ModalPropertyDefinition p : recProp)
 			{
 				if (p.isSkipMake() && !p.getName().matches("st(art|op)Location"))
 					continue;
@@ -2134,17 +2136,17 @@ public class SourceGenerator
 				ps.println();
 				propAbstract(new PropertyTypeAbstractor()
 				{
-					public void voidType(PrependablePrintStream ps, PropertyDefinition p)
+					public void voidType(PrependablePrintStream ps, ModalPropertyDefinition p)
 					{
 						ps.print("factory.makeNullLiteralNode()");
 					}
 
-					public void node(PrependablePrintStream ps, PropertyDefinition p)
+					public void node(PrependablePrintStream ps, ModalPropertyDefinition p)
 					{
 						ps.print("lift" + capFirst(p.getName()));
 					}
 
-					public void list(PrependablePrintStream ps, PropertyDefinition p)
+					public void list(PrependablePrintStream ps, ModalPropertyDefinition p)
 					{
 						ps.println("factory.makeMethodInvocationByNameNode(");
 						ps.incPrependCount(2);
@@ -2180,13 +2182,13 @@ public class SourceGenerator
 						ps.decPrependCount(8);
 					}
 
-					public void directCopy(PrependablePrintStream ps, PropertyDefinition p)
+					public void directCopy(PrependablePrintStream ps, ModalPropertyDefinition p)
 					{
 						ps.print("expressionize" + capFirst(p.getBaseType()) + "(lift" + capFirst(p.getName())
 								+ "Value)");
 					}
 
-					public void cloneable(PrependablePrintStream ps, PropertyDefinition p)
+					public void cloneable(PrependablePrintStream ps, ModalPropertyDefinition p)
 					{
 						ps.print("lift" + capFirst(p.getName()) + "MetaClone");
 					}
@@ -2252,7 +2254,7 @@ public class SourceGenerator
 				ifacePs.println();
 			}
 
-			for (PropertyDefinition prop : def.getProperties())
+			for (DiagnosticPropertyDefinition prop : def.getProperties())
 			{
 				classPs.println("/** " + capFirst(prop.getDescription()) + ". */");
 				classPs.println("private " + prop.getFullType() + " " + prop.getName() + ";");
@@ -2260,19 +2262,19 @@ public class SourceGenerator
 			}
 
 			// Create constructor definition
-			List<PropertyDefinition> consParams = new ArrayList<PropertyDefinition>();
-			consParams.add(new PropertyDefinition("source", "BsjSourceLocation", null, PropertyDefinition.Mode.NORMAL,
-					"", null));
-			PropertyDefinition.Mode overrideMode = def.getCode() == null ? PropertyDefinition.Mode.NORMAL
-					: PropertyDefinition.Mode.SKIP;
-			consParams.add(new PropertyDefinition("code", "String", null, overrideMode, null,
-					def.getCode() == null ? null : def.getName() + ".CODE"));
+			List<DiagnosticPropertyDefinition> consParams = new ArrayList<DiagnosticPropertyDefinition>();
+			consParams.add(new DiagnosticPropertyDefinition("source", "BsjSourceLocation", null,
+					ModalPropertyDefinition.Mode.NORMAL, "", null, null));
+			PropertyDefinition.Mode overrideMode = def.getCode() == null ? ModalPropertyDefinition.Mode.NORMAL
+					: ModalPropertyDefinition.Mode.SKIP;
+			consParams.add(new DiagnosticPropertyDefinition("code", "String", null, overrideMode, null,
+					def.getCode() == null ? null : def.getName() + ".CODE", null));
 			// TODO: parameterization of diagnostic kind
-			consParams.add(new PropertyDefinition("kind", "javax.tools.Diagnostic.Kind", null, overrideMode, null,
-					def.getCode() == null ? null : "Kind.ERROR"));
+			consParams.add(new DiagnosticPropertyDefinition("kind", "javax.tools.Diagnostic.Kind", null, overrideMode,
+					null, def.getCode() == null ? null : "Kind.ERROR", null));
 			consParams.addAll(def.getRecursiveProperties(true));
 
-			List<PropertyDefinition> superParams = new ArrayList<PropertyDefinition>(consParams);
+			List<DiagnosticPropertyDefinition> superParams = new ArrayList<DiagnosticPropertyDefinition>(consParams);
 			superParams.removeAll(def.getProperties());
 
 			// Write constructor
@@ -2283,7 +2285,7 @@ public class SourceGenerator
 			classPs.incPrependCount();
 			classPs.print("super");
 			Map<String, String> overrideMap = new HashMap<String, String>();
-			for (PropertyDefinition prop : superParams)
+			for (ModalPropertyDefinition prop : superParams)
 			{
 				if (prop.getDefaultExpression() != null)
 				{
@@ -2293,7 +2295,7 @@ public class SourceGenerator
 			printArgumentList(classPs, superParams, overrideMap);
 			classPs.println(";");
 
-			for (PropertyDefinition prop : def.getProperties())
+			for (DiagnosticPropertyDefinition prop : def.getProperties())
 			{
 				classPs.println("this." + prop.getName() + " = " + prop.getName() + ";");
 			}
@@ -2303,7 +2305,7 @@ public class SourceGenerator
 			classPs.println();
 
 			// Write interface getters
-			for (PropertyDefinition prop : def.getProperties())
+			for (DiagnosticPropertyDefinition prop : def.getProperties())
 			{
 				ifacePs.println("/**");
 				ifacePs.println(" * Retrieves " + prop.getDescription() + ".");
@@ -2314,7 +2316,7 @@ public class SourceGenerator
 			}
 
 			// Write class getters
-			for (PropertyDefinition prop : def.getProperties())
+			for (DiagnosticPropertyDefinition prop : def.getProperties())
 			{
 				classPs.println("/**");
 				classPs.println(" * {@inheritDoc}");
@@ -2341,9 +2343,21 @@ public class SourceGenerator
 			{
 				classPs.println("super.getMessageArgs();");
 			}
-			for (PropertyDefinition prop : def.getProperties())
+			for (DiagnosticPropertyDefinition prop : def.getProperties())
 			{
-				classPs.println("args.add(this." + prop.getName() + ");");
+				classPs.print("args.add(");
+				if (prop.getMessageExpression() != null)
+				{
+					classPs.print(prop.getMessageExpression().replaceAll("\\$", "this." + prop.getName()));
+				} else
+				{
+					classPs.print("this." + prop.getName());
+				}
+				classPs.println(");");
+			}
+			for (String messagePropertyExpression : def.getMessagePropertyExpressions())
+			{
+				classPs.println("args.add(" + messagePropertyExpression + ");");
 			}
 			classPs.println("return args;");
 			classPs.decPrependCount();

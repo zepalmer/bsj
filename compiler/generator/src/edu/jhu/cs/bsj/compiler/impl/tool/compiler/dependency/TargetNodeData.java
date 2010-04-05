@@ -47,4 +47,10 @@ public class TargetNodeData
 			return false;
 		return true;
 	}
+
+	@Override
+	public String toString()
+	{
+		return "TargetNodeData [target=" + target + "]";
+	}
 }

@@ -192,6 +192,31 @@ public class SourceGeneratorParser
 		}
 		return mode;
 	}
+	
+	private static ModalPropertyDefinition.Mode getPropertyModeFromString(GenerationProfile profile, String modeString)
+	{
+		ModalPropertyDefinition.Mode mode;
+		if (modeString == null)
+		{
+			mode = profile.getProperty(GenerationProfile.DEFAULT_PROPERTY_MODE);
+		} else if (modeString.equals("normal"))
+		{
+			mode = ModalPropertyDefinition.Mode.NORMAL;
+		} else if (modeString.equals("readOnly"))
+		{
+			mode = ModalPropertyDefinition.Mode.READ_ONLY;
+		} else if (modeString.equals("skip"))
+		{
+			mode = ModalPropertyDefinition.Mode.SKIP;
+		} else if (modeString.equals("hide"))
+		{
+			mode = ModalPropertyDefinition.Mode.HIDE;
+		} else
+		{
+			throw new IllegalStateException("Unknown property mode: " + modeString);
+		}
+		return mode;
+	}
 
 	static interface ElementHandler<T>
 	{
@@ -305,7 +330,7 @@ public class SourceGeneratorParser
 						{
 							String defaultPropertyMode = childElement.getAttribute("propertyMode");
 							this.profile = this.profile.derive(GenerationProfile.DEFAULT_PROPERTY_MODE,
-									Utilities.getEnumByName(PropertyDefinition.Mode.values(),
+									Utilities.getEnumByName(ModalPropertyDefinition.Mode.values(),
 											StringUtilities.convertCamelCaseToUpperCase(defaultPropertyMode)));
 						}
 					} else
@@ -467,29 +492,7 @@ public class SourceGeneratorParser
 		protected PropertyDefinition create(Element e, String name, String baseType, String typeArg,
 				String description, String defaultExpression)
 		{
-			PropertyDefinition.Mode mode;
-
-			String modeString = getAttributeValue(e, "mode");
-			if (modeString == null)
-			{
-				mode = profile.getProperty(GenerationProfile.DEFAULT_PROPERTY_MODE);
-			} else if (modeString.equals("normal"))
-			{
-				mode = PropertyDefinition.Mode.NORMAL;
-			} else if (modeString.equals("readOnly"))
-			{
-				mode = PropertyDefinition.Mode.READ_ONLY;
-			} else if (modeString.equals("skip"))
-			{
-				mode = PropertyDefinition.Mode.SKIP;
-			} else if (modeString.equals("hide"))
-			{
-				mode = PropertyDefinition.Mode.HIDE;
-			} else
-			{
-				throw new IllegalStateException("Unknown property mode: " + modeString);
-			}
-
+			ModalPropertyDefinition.Mode mode = getPropertyModeFromString(this.profile, getAttributeValue(e, "mode"));
 			return new PropertyDefinition(name, baseType, typeArg, mode, description, defaultExpression);
 		}
 	}
@@ -506,6 +509,26 @@ public class SourceGeneratorParser
 				String description, String defaultExpression)
 		{
 			return new ConstantDefinition(name, baseType, typeArg, description, defaultExpression);
+		}
+	}
+	
+	static class DiagnosticPropertyHandler extends AbstractPropertyHandler<DiagnosticPropertyDefinition>
+	{
+		public DiagnosticPropertyHandler(GenerationProfile profile)
+		{
+			super(profile);
+		}
+
+		@Override
+		protected DiagnosticPropertyDefinition create(Element e, String name, String baseType, String typeArg,
+				String description, String defaultExpression)
+		{
+			ModalPropertyDefinition.Mode mode = getPropertyModeFromString(this.profile, getAttributeValue(e, "mode"));
+			
+			String messageExpression = getAttributeValue(e, "messageExpression");
+			
+			return new DiagnosticPropertyDefinition(name, baseType, typeArg, mode, description, defaultExpression,
+					messageExpression);
 		}
 	}
 
@@ -563,7 +586,8 @@ public class SourceGeneratorParser
 		{
 			String name = e.getAttribute("name");
 			String superName = getAttributeValue(e, "super");
-			List<PropertyDefinition> props = new ArrayList<PropertyDefinition>();
+			List<DiagnosticPropertyDefinition> props = new ArrayList<DiagnosticPropertyDefinition>();
+			List<String> messagePropertyExpressions = new ArrayList<String>();
 			String docString = null;
 			String code = getAttributeValue(e, "code");
 
@@ -577,8 +601,11 @@ public class SourceGeneratorParser
 					String childTag = childElement.getTagName();
 					if (childTag.equals("prop"))
 					{
-						PropertyHandler handler = new PropertyHandler(this.profile);
+						DiagnosticPropertyHandler handler = new DiagnosticPropertyHandler(this.profile);
 						props.add(handler.handle(childElement));
+					} else if (childTag.equals("messageProp"))
+					{
+						messagePropertyExpressions.add(childElement.getAttribute("expression"));
 					} else if (childTag.equals("doc"))
 					{
 						docString = unindent(childElement.getTextContent());
@@ -590,7 +617,7 @@ public class SourceGeneratorParser
 			}
 
 			DiagnosticDefinition diagnosticDefinition = new DiagnosticDefinition(name, superName, this.profile, props,
-					docString, code);
+					messagePropertyExpressions, docString, code);
 			return diagnosticDefinition;
 		}
 	}

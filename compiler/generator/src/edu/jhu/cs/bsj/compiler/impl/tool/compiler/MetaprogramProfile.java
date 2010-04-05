@@ -108,4 +108,10 @@ public class MetaprogramProfile<T extends MetaprogramAnchorNode<?>>
 	{
 		return getMetaprogram().getID();
 	}
+
+	@Override
+	public String toString()
+	{
+		return "MetaprogramProfile [location=" + getLocation() + ", id=" + getMetaprogram().getID() + "]";
+	}
 }

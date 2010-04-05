@@ -2,6 +2,7 @@ package edu.jhu.cs.bsj.compiler.impl.tool.compiler.dependency;
 
 /**
  * Represents the data associated with an edge on the dependency graph.
+ * 
  * @author Zachary Palmer
  */
 public class EdgeData
@@ -42,5 +43,11 @@ public class EdgeData
 		if (inferred != other.inferred)
 			return false;
 		return true;
+	}
+
+	@Override
+	public String toString()
+	{
+		return "EdgeData [inferred=" + inferred + "]";
 	}
 }

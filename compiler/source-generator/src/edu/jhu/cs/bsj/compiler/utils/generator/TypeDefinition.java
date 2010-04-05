@@ -9,11 +9,13 @@ import java.util.Map;
  * 
  * @author Zachary Palmer
  */
-public class TypeDefinition extends PropertyBasedHierarchyDefinition<TypeDefinition>
+public class TypeDefinition extends PropertyBasedHierarchyDefinition<TypeDefinition, PropertyDefinition>
 {
 	enum Mode
 	{
-		CONCRETE, ABSTRACT, INTERFACE
+		CONCRETE,
+		ABSTRACT,
+		INTERFACE
 	}
 
 	private String baseName;
@@ -41,9 +43,10 @@ public class TypeDefinition extends PropertyBasedHierarchyDefinition<TypeDefinit
 
 	public TypeDefinition(String baseName, String typeParameter, String superName, String superTypeArg,
 			GenerationProfile profile, List<String> interfaces, List<TagReferenceDefinition> tags,
-			List<ConstantDefinition> constants, List<PropertyDefinition> properties, List<String> includes, String docString, List<String> toStringLines,
-			Map<String, String> factoryOverrideMap, Map<String, String> constructorOverrideMap, boolean genConstructor,
-			boolean genChildren, boolean genReplace, List<FactoryMethodDefinition> factoryMethods, Mode mode)
+			List<ConstantDefinition> constants, List<PropertyDefinition> properties, List<String> includes,
+			String docString, List<String> toStringLines, Map<String, String> factoryOverrideMap,
+			Map<String, String> constructorOverrideMap, boolean genConstructor, boolean genChildren,
+			boolean genReplace, List<FactoryMethodDefinition> factoryMethods, Mode mode)
 	{
 		super();
 		this.baseName = baseName;
@@ -204,7 +207,7 @@ public class TypeDefinition extends PropertyBasedHierarchyDefinition<TypeDefinit
 	{
 		return factoryOverrideMap;
 	}
-	
+
 	public Map<String, String> getConstructorOverrideMap()
 	{
 		return constructorOverrideMap;
@@ -267,7 +270,7 @@ public class TypeDefinition extends PropertyBasedHierarchyDefinition<TypeDefinit
 	{
 		return "TypeDef:" + getFullName();
 	}
-	
+
 	@Override
 	public List<PropertyDefinition> getRecursiveProperties(boolean parentFirst)
 	{
@@ -289,7 +292,7 @@ public class TypeDefinition extends PropertyBasedHierarchyDefinition<TypeDefinit
 			}
 			for (TagReferenceDefinition tag : def.getTags())
 			{
-				if (tag.getTypeArg()!=null)
+				if (tag.getTypeArg() != null)
 				{
 					typeArgMap.put(getNamespaceMap().get(tag.getName()).getTypeParameter(), tag.getTypeArg());
 				}
@@ -326,11 +329,11 @@ public class TypeDefinition extends PropertyBasedHierarchyDefinition<TypeDefinit
 	public void setNamespaceMap(Map<String, TypeDefinition> namespaceMap)
 	{
 		this.namespaceMap = namespaceMap;
-	}	
+	}
 
 	public Map<String, String> getRecursiveFactoryOverrideMap()
 	{
-		Map<String,String> map = new HashMap<String, String>();
+		Map<String, String> map = new HashMap<String, String>();
 		map.putAll(this.getFactoryOverrideMap());
 		for (TagReferenceDefinition tag : this.getTags())
 		{

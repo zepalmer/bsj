@@ -7,14 +7,14 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-public abstract class PropertyBasedHierarchyDefinition<T extends PropertyBasedHierarchyDefinition<T>> implements
+public abstract class PropertyBasedHierarchyDefinition<T extends PropertyBasedHierarchyDefinition<T,U>, U extends AbstractPropertyDefinition> implements
 		HierarchyDefinition<T>
 {
 	/**
 	 * Retrieves the properties for this definition as well as all of its parent definitions. Assumes parent definitions
 	 * should follow child definitions (instead of preceeding them).
 	 */
-	public List<PropertyDefinition> getRecursiveProperties()
+	public List<U> getRecursiveProperties()
 	{
 		return getRecursiveProperties(false);
 	}
@@ -25,14 +25,14 @@ public abstract class PropertyBasedHierarchyDefinition<T extends PropertyBasedHi
 	 * 
 	 * @return The list of property definitions.
 	 */
-	public List<PropertyDefinition> getResponsibleProperties(boolean parentFirst)
+	public List<U> getResponsibleProperties(boolean parentFirst)
 	{
-		List<PropertyDefinition> props = new ArrayList<PropertyDefinition>();
+		List<U> props = new ArrayList<U>();
 		if (parentFirst)
 		{
 			for (TagReferenceDefinition tag : this.getTags())
 			{
-				PropertyBasedHierarchyDefinition<T> tagDef = this.getNamespaceMap().get(tag.getName());
+				PropertyBasedHierarchyDefinition<T,U> tagDef = this.getNamespaceMap().get(tag.getName());
 				props.addAll(0, tagDef.getProperties());
 			}
 			props.addAll(0, this.getProperties());
@@ -41,7 +41,7 @@ public abstract class PropertyBasedHierarchyDefinition<T extends PropertyBasedHi
 			props.addAll(this.getProperties());
 			for (TagReferenceDefinition tag : this.getTags())
 			{
-				PropertyBasedHierarchyDefinition<T> tagDef = this.getNamespaceMap().get(tag.getName());
+				PropertyBasedHierarchyDefinition<T,U> tagDef = this.getNamespaceMap().get(tag.getName());
 				props.addAll(tagDef.getProperties());
 			}
 		}
@@ -56,14 +56,14 @@ public abstract class PropertyBasedHierarchyDefinition<T extends PropertyBasedHi
 	 * @param parentFirst <code>true</code> if the list is sorted with parent properties first; <code>false</code>
 	 *            otherwise.
 	 */
-	protected void eliminateDuplicates(List<PropertyDefinition> list, boolean parentFirst)
+	protected void eliminateDuplicates(List<U> list, boolean parentFirst)
 	{
 		// Eliminate duplicates
 		Set<String> propertyNames = new HashSet<String>();
 		if (parentFirst)
 		{
 			Collections.reverse(list);
-			Iterator<PropertyDefinition> iterator = list.iterator();
+			Iterator<U> iterator = list.iterator();
 			while (iterator.hasNext())
 			{
 				if (!propertyNames.add(iterator.next().getName()))
@@ -72,7 +72,7 @@ public abstract class PropertyBasedHierarchyDefinition<T extends PropertyBasedHi
 			Collections.reverse(list);
 		} else
 		{
-			Iterator<PropertyDefinition> iterator = list.iterator();
+			Iterator<U> iterator = list.iterator();
 			while (iterator.hasNext())
 			{
 				if (!propertyNames.add(iterator.next().getName()))
@@ -88,10 +88,10 @@ public abstract class PropertyBasedHierarchyDefinition<T extends PropertyBasedHi
 	 *            <code>false</code> otherwise.
 	 * @return The list of property definitions.
 	 */
-	public List<PropertyDefinition> getRecursiveProperties(boolean parentFirst)
+	public List<U> getRecursiveProperties(boolean parentFirst)
 	{
-		List<PropertyDefinition> props = new ArrayList<PropertyDefinition>();
-		PropertyBasedHierarchyDefinition<T> def = this;
+		List<U> props = new ArrayList<U>();
+		PropertyBasedHierarchyDefinition<T,U> def = this;
 		while (def != null)
 		{
 			if (parentFirst)
@@ -108,5 +108,5 @@ public abstract class PropertyBasedHierarchyDefinition<T extends PropertyBasedHi
 		return props;
 	}
 
-	public abstract List<PropertyDefinition> getProperties();
+	public abstract List<U> getProperties();
 }

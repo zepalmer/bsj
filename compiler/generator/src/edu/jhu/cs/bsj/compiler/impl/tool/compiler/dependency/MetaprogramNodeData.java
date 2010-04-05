@@ -49,4 +49,11 @@ public class MetaprogramNodeData
 			return false;
 		return true;
 	}
+
+	@Override
+	public String toString()
+	{
+		return "MetaprogramNodeData [profile=" + profile + "]";
+	}
+
 }

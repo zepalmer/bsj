@@ -6,28 +6,32 @@ import java.util.Map;
 
 /**
  * This class represents the definition for a BSJ diagnostic.
+ * 
  * @author Zachary Palmer
  */
-public class DiagnosticDefinition extends PropertyBasedHierarchyDefinition<DiagnosticDefinition>
+public class DiagnosticDefinition extends
+		PropertyBasedHierarchyDefinition<DiagnosticDefinition, DiagnosticPropertyDefinition>
 {
 	private String name;
 	private String superName;
 	private GenerationProfile profile;
-	private List<PropertyDefinition> properties;
+	private List<DiagnosticPropertyDefinition> properties;
+	private List<String> messagePropertyExpressions;
 	private String docString;
 	private String code;
-	
+
 	private DiagnosticDefinition parent;
-	private Map<String,DiagnosticDefinition> namespaceMap;
-	
-	public DiagnosticDefinition(String name, String superName, GenerationProfile profile, List<PropertyDefinition> properties,
-			String docString, String code)
+	private Map<String, DiagnosticDefinition> namespaceMap;
+
+	public DiagnosticDefinition(String name, String superName, GenerationProfile profile,
+			List<DiagnosticPropertyDefinition> properties, List<String> messagePropertyExpressions, String docString, String code)
 	{
 		super();
 		this.name = name;
 		this.superName = superName;
 		this.profile = profile;
 		this.properties = properties;
+		this.messagePropertyExpressions = messagePropertyExpressions;
 		this.docString = docString;
 		this.code = code;
 	}
@@ -47,7 +51,7 @@ public class DiagnosticDefinition extends PropertyBasedHierarchyDefinition<Diagn
 		return profile;
 	}
 
-	public List<PropertyDefinition> getProperties()
+	public List<DiagnosticPropertyDefinition> getProperties()
 	{
 		return properties;
 	}
@@ -88,5 +92,10 @@ public class DiagnosticDefinition extends PropertyBasedHierarchyDefinition<Diagn
 	public List<TagReferenceDefinition> getTags()
 	{
 		return Collections.emptyList();
+	}
+
+	public List<String> getMessagePropertyExpressions()
+	{
+		return messagePropertyExpressions;
 	}
 }

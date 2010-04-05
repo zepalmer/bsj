@@ -1,0 +1,11 @@
+public class CyclicDependency
+{
+	[:
+		#target a;
+		#depends b;
+	:]
+	[:
+		#target b;
+		#depends a;
+	:]
+}

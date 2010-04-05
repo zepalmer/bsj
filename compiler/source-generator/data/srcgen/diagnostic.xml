@@ -297,6 +297,17 @@
                     A diagnostic indicating that an injection conflict has occurred.
                 ]]></doc>
             </diagnostic>
+
+            <diagnostic name="DependencyCycleDiagnostic" super="BsjCompilerDiagnostic" code="bsj.compiler.dependency.cycle">
+                <prop name="targets" type="List&lt;String&gt;" desc="the targets in the cycle" />
+                <prop name="metaprograms" type="List&lt;BsjSourceLocation&gt;" desc="the locations of the metaprograms in the cycle" />
+                <messageProp expression="DiagnosticMessageUtilities.getDependencyString(getMetaprograms(),getTargets())" />
+                <doc><![CDATA[
+                    A diagnostic indicating that a cycle was found in the dependency graph.  The list of metaprograms is
+                    always one larger than the list of targets and contains the same metaprogram at the beginning and
+                    end.
+                ]]></doc>
+            </diagnostic>
         </srcgen>
     </srcgen>
 </srcgen>

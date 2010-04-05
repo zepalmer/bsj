@@ -233,4 +233,12 @@ public class BipartiteNode<T, U, TE, UE>
 	{
 		add(this.parents, parent, edge, parent.children);
 	}
+	
+	/**
+	 * Generates a string representation of this node using the data it contains.
+	 */
+	public String toString()
+	{
+		return "BipartiteNode[data=" + this.data + "]";
+	}
 }

@@ -13,6 +13,7 @@ import javax.tools.DiagnosticListener;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.diagnostic.compiler.InjectionConfictDiagnostic;
+import edu.jhu.cs.bsj.compiler.impl.diagnostic.compiler.DependencyCycleDiagnosticImpl;
 import edu.jhu.cs.bsj.compiler.impl.diagnostic.compiler.InjectionConfictDiagnosticImpl;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.MetaprogramProfile;
 import edu.jhu.cs.bsj.compiler.impl.utils.Pair;
@@ -103,7 +104,37 @@ public class DependencyManager
 			metaprogramNode.addChild(target, new EdgeData(true));
 		}
 
-		// TODO: cycle detection: did that create a cycle?
+		// Determine whether or not we just caused a cycle
+		// TODO: is there more efficient cycle detection algorithm than this?
+		CycleDetector cycleDetector = new CycleDetector();
+		Set<BipartiteNode<?, ?, ?, ?>> allNodes = new HashSet<BipartiteNode<?, ?, ?, ?>>();
+		allNodes.addAll(this.profileToNodeMap.values());
+		allNodes.addAll(this.nameToTargetNodeMap.values());
+		List<BipartiteNode<?, ?, ?, ?>> cycle = cycleDetector.detect(allNodes, metaprogramNode);
+		if (cycle != null)
+		{
+			List<BsjSourceLocation> metaprogramLocations = new ArrayList<BsjSourceLocation>();
+			List<String> targetNames = new ArrayList<String>();
+			for (BipartiteNode<?, ?, ?, ?> node : cycle)
+			{
+				if (node.getData() instanceof MetaprogramNodeData)
+				{
+					metaprogramLocations.add(((MetaprogramNodeData) node.getData()).getProfile().getLocation());
+				} else if (node.getData() instanceof TargetNodeData)
+				{
+					targetNames.add(((TargetNodeData) node.getData()).getTarget());
+				} else
+				{
+					throw new IllegalStateException("Unrecognized bipartite dependency node data type: "
+							+ node.getData().getClass());
+				}
+			}
+			diagnosticListener.report(new DependencyCycleDiagnosticImpl(profile.getLocation(), targetNames,
+					metaprogramLocations));
+			// If there's a cycle, it's no longer safe to proceed for fear of infinite loops.  Let the caller handle our
+			// reported error diagnostic.
+			return;
+		}
 
 		// Determine whether or not we just caused an injection conflict
 		InjectionConflictDetector injectionConflictDetector = new InjectionConflictDetector();
@@ -384,6 +415,22 @@ public class DependencyManager
 		}
 
 		/**
+		 * Determines whether or not a cycle exists in this dependency manager's graph which contains the specified
+		 * node.
+		 * 
+		 * @param nodes A set of all nodes in the graph.
+		 * @param node The node which must be contained in the cycle.
+		 * @return <code>null</code> if no cycle exists or a list of nodes comprising a cycle if one does exist.
+		 */
+		public List<BipartiteNode<?, ?, ?, ?>> detect(Set<BipartiteNode<?, ?, ?, ?>> nodes,
+				BipartiteNode<?, ?, ?, ?> node)
+		{
+			this.notVisited.addAll(nodes);
+			List<BipartiteNode<?, ?, ?, ?>> ret = visit(node);
+			return ret;
+		}
+
+		/**
 		 * Visits the specified node in turn.
 		 * 
 		 * @param node The node to visit.
@@ -391,21 +438,23 @@ public class DependencyManager
 		 */
 		private <T, U, TE, UE> List<BipartiteNode<?, ?, ?, ?>> visit(BipartiteNode<T, U, TE, UE> node)
 		{
-			if (!this.notVisited.remove(node))
-			{
-				// Then this node has already been visited. This might happen if a node has multiple parents (like a
-				// target with multiple metaprograms depending on -- pointing to -- it). If there were a cycle here, we
-				// would've found it the first time.
-				return null;
-			}
-
-			this.visitStack.push(node);
 			if (!this.visiting.add(node))
 			{
 				// Okay, now we have a problem. We're already in the visiting list and we're being visited again; that
 				// means that we've found a cycle starting and ending at this node. Return a list.
 				return new ArrayList<BipartiteNode<?, ?, ?, ?>>(this.visitStack);
 			}
+			
+			if (!this.notVisited.remove(node))
+			{
+				// Then this node has already been visited. This might happen if a node has multiple parents (like a
+				// target with multiple metaprograms depending on -- pointing to -- it). If there were a cycle here, we
+				// would've found it the first time.
+				this.visiting.remove(node);
+				return null;
+			}
+
+			this.visitStack.push(node);
 			for (Pair<BipartiteNode<U, T, UE, TE>, ?> childEdge : node.getChildEdges())
 			{
 				List<BipartiteNode<?, ?, ?, ?>> ret = visit(childEdge.getFirst());

@@ -33,8 +33,8 @@
         <xs:attribute name="name" type="xs:string" use="required" />
         <xs:attribute name="typeArg" type="xs:string" use="optional" />
     </xs:complexType>
-
-    <xs:complexType name="constant_T">
+    
+    <xs:complexType name="abstractProp_T">
         <xs:attribute name="name" type="xs:string" use="required" />
         <xs:attribute name="type" type="xs:string" use="required" />
         <xs:attribute name="typeArg" type="xs:string" use="optional" />
@@ -42,13 +42,28 @@
         <xs:attribute name="default" type="xs:string" use="optional" />
     </xs:complexType>
 
+    <xs:complexType name="constant_T">
+        <xs:complexContent>
+            <xs:extension base="abstractProp_T">
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
     <xs:complexType name="prop_T">
-        <xs:attribute name="name" type="xs:string" use="required" />
-        <xs:attribute name="type" type="xs:string" use="required" />
-        <xs:attribute name="typeArg" type="xs:string" use="optional" />
-        <xs:attribute name="mode" type="propMode_T" use="optional" default="normal" />
-        <xs:attribute name="desc" type="xs:string" use="required" />
-        <xs:attribute name="default" type="xs:string" use="optional" />
+        <xs:complexContent>
+            <xs:extension base="abstractProp_T">
+                <xs:attribute name="mode" type="propMode_T" use="optional" default="normal" />
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="diagnosticProp_T">
+        <xs:complexContent>
+            <xs:extension base="abstractProp_T">
+                <xs:attribute name="mode" type="propMode_T" use="optional" default="normal" />
+                <xs:attribute name="messageExpression" type="xs:string" use="optional"/>
+            </xs:extension>
+        </xs:complexContent>
     </xs:complexType>
 
     <xs:complexType name="include_T">
@@ -128,10 +143,15 @@
         <xs:attribute name="superTypeArg" type="xs:string" use="optional" />
         <xs:attribute name="mode" type="typeMode_T" use="optional" default="concrete" />
     </xs:complexType>
+    
+    <xs:complexType name="diagnosticMessageProp_T">
+        <xs:attribute name="expression" type="xs:string" use="required"/>
+    </xs:complexType>
 
     <xs:complexType name="diagnostic_T">
         <xs:sequence>
-            <xs:element name="prop" type="prop_T" minOccurs="0" maxOccurs="unbounded" />
+            <xs:element name="prop" type="diagnosticProp_T" minOccurs="0" maxOccurs="unbounded" />
+            <xs:element name="messageProp" type="diagnosticMessageProp_T" minOccurs="0" maxOccurs="unbounded" />
             <xs:element name="doc" type="doc_T" />
         </xs:sequence>
         <xs:attribute name="name" type="xs:string" use="required" />
