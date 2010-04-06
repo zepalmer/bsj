@@ -59,8 +59,9 @@ public class CompileExplicitMetaprogramTask<R extends Node> extends
 {
 	/** The packages which should be imported by metaprograms. */
 	private static String[] IMPORT_PACKAGES = { "edu.jhu.cs.bsj.compiler.impl.metaprogram",
-			"edu.jhu.cs.bsj.compiler.ast", "edu.jhu.cs.bsj.compiler.ast.node", "edu.jhu.cs.bsj.compiler.ast.node.meta",
-			"edu.jhu.cs.bsj.compiler.metaprogram" };
+			"edu.jhu.cs.bsj.compiler.ast", "edu.jhu.cs.bsj.compiler.ast.exception",
+			"edu.jhu.cs.bsj.compiler.diagnostic.user", "edu.jhu.cs.bsj.compiler.ast.node",
+			"edu.jhu.cs.bsj.compiler.ast.node.meta", "edu.jhu.cs.bsj.compiler.metaprogram" };
 
 	public CompileExplicitMetaprogramTask(ExplicitMetaprogramAnchorNode<R> anchor, MetaprogramProfile<?> profile)
 	{
@@ -145,7 +146,7 @@ public class CompileExplicitMetaprogramTask<R extends Node> extends
 		Context<ExplicitMetaprogramAnchorNode<R>> context = new ContextImpl<ExplicitMetaprogramAnchorNode<R>>(anchor,
 				factory, new BsjUserDiagnosticTranslatingListener(this.metacompilationContext.getDiagnosticListener(),
 						this.anchor.getStartLocation()));
-						
+
 		Metaprogram<ExplicitMetaprogramAnchorNode<R>> metaprogram = compileMetaprogram(metaprogramNode,
 				anchor.getClass().getName());
 

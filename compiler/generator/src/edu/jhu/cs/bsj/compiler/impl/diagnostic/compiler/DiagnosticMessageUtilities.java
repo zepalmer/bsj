@@ -48,6 +48,9 @@ public class DiagnosticMessageUtilities
 	 * @param exception The exception to use.
 	 * @return The resulting string.
 	 */
+	// TODO: rather than using this method, write another which generates stack traces differently
+	// diagnostic error messages displayed to the user should show nothing above the metaprogram execute() method
+	// they should also be easily distinguished from a normal Java stack trace
 	public static String getIndentedStackTraceString(Throwable e)
 	{
 		ByteArrayOutputStream buffer = new ByteArrayOutputStream();

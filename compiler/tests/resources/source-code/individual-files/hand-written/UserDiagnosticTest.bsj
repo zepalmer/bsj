@@ -1,0 +1,8 @@
+public class UserDiagnosticTest
+{
+	[:
+		BsjUserDiagnosticListener listener = context.getDiagnosticListener();
+		listener.report(new edu.jhu.cs.bsj.tests.compiler.tool.compiler.UserDiagnosticTest.TestDiagnostic());
+		throw new MetaprogramExecutionFailureException();
+	:]
+}
