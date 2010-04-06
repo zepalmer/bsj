@@ -1,6 +1,6 @@
 package edu.jhu.cs.bsj.compiler.utils.generator;
 
-public class AbstractPropertyDefinition
+public abstract class AbstractPropertyDefinition<T extends AbstractPropertyDefinition<T>>
 {
 	private String name;
 	private String baseType;
@@ -64,5 +64,8 @@ public class AbstractPropertyDefinition
 	{
 		return "PropDef:" + getName() + ":" + getFullType();
 	}
-
+	
+	public abstract T deriveWithBaseType(String name);
+	
+	public abstract T deriveWithTypeArg(String arg);
 }

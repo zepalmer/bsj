@@ -14,7 +14,6 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjTypedNodeVisitor;
-import edu.jhu.cs.bsj.compiler.ast.exception.DuplicatePackageMemberException;
 import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.NameNode;
@@ -27,9 +26,8 @@ import edu.jhu.cs.bsj.compiler.ast.node.TypeDeclarationNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 import edu.jhu.cs.bsj.compiler.impl.ast.PackageNodeCallback;
+import edu.jhu.cs.bsj.compiler.impl.ast.exception.DuplicatePackageMemberExceptionImpl;
 import edu.jhu.cs.bsj.compiler.impl.utils.CompoundIterator;
-
-
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class PackageNodeImpl extends NodeImpl implements PackageNode
 {
@@ -205,7 +203,7 @@ public class PackageNodeImpl extends NodeImpl implements PackageNode
 	{
 		if (this.packageNodes.containsKey(packageNode.getName().getIdentifier()))
 		{
-			throw new DuplicatePackageMemberException(this, packageNode, packageNode.getName().getIdentifier());
+			throw new DuplicatePackageMemberExceptionImpl(this, packageNode, packageNode.getName().getIdentifier());
 		}
 		getManager().assertInsertable(this);
 		this.packageNodes.put(packageNode.getName().getIdentifier(), packageNode);
@@ -243,7 +241,7 @@ public class PackageNodeImpl extends NodeImpl implements PackageNode
 		if (this.compilationUnitNodes.containsKey(compilationUnit.getName()) ||
 				this.load(compilationUnit.getName()) != null)
 		{
-			throw new DuplicatePackageMemberException(this, compilationUnit, compilationUnit.getName());
+			throw new DuplicatePackageMemberExceptionImpl(this, compilationUnit, compilationUnit.getName());
 		}
 		getManager().assertInsertable(this);
 		this.compilationUnitNodes.put(compilationUnit.getName(), compilationUnit);

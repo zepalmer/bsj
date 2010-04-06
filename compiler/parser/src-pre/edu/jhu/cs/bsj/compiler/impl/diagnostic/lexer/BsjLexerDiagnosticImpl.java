@@ -2,6 +2,7 @@ package edu.jhu.cs.bsj.compiler.impl.diagnostic.lexer;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import javax.annotation.Generated;
 
@@ -38,10 +39,11 @@ public abstract class BsjLexerDiagnosticImpl extends BsjDiagnosticImpl implement
     }
     
     @Override
-    protected List<Object> getMessageArgs()
+    protected List<Object> getMessageArgs(Locale locale)
     {
         List<Object> args = new ArrayList<Object>();
         args.add(this.character);
         return args;
     }
+    
 }

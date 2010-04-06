@@ -7,7 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-public abstract class PropertyBasedHierarchyDefinition<T extends PropertyBasedHierarchyDefinition<T,U>, U extends AbstractPropertyDefinition> implements
+public abstract class PropertyBasedHierarchyDefinition<T extends PropertyBasedHierarchyDefinition<T,U>, U extends AbstractPropertyDefinition<U>> implements
 		HierarchyDefinition<T>
 {
 	/**

@@ -2,6 +2,7 @@ package edu.jhu.cs.bsj.compiler.impl.diagnostic.compiler;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import javax.annotation.Generated;
 
@@ -25,9 +26,10 @@ public abstract class BsjCompilerDiagnosticImpl extends BsjDiagnosticImpl implem
     }
     
     @Override
-    protected List<Object> getMessageArgs()
+    protected List<Object> getMessageArgs(Locale locale)
     {
         List<Object> args = new ArrayList<Object>();
         return args;
     }
+    
 }

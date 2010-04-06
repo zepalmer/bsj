@@ -71,6 +71,8 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.NormalMetaAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.SingleElementMetaAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.util.BsjDefaultNodeOperation;
+import edu.jhu.cs.bsj.compiler.impl.ast.exception.InsufficientPermissionExceptionImpl;
+import edu.jhu.cs.bsj.compiler.impl.ast.exception.MetaprogramConflictExceptionImpl;
 import edu.jhu.cs.bsj.compiler.impl.diagnostic.compiler.InvalidMetaAnnotationArrayInitializerDiagnosticImpl;
 import edu.jhu.cs.bsj.compiler.impl.diagnostic.compiler.MetaAnnotationClassTypeMismatchDiagnosticImpl;
 import edu.jhu.cs.bsj.compiler.impl.diagnostic.compiler.MetaAnnotationMissingPropertyDiagnosticImpl;
@@ -197,7 +199,7 @@ public class BsjNodeManager
 		NodePermission permission = getPermission(node);
 		if (!permission.isReadable())
 		{
-			throw new InsufficientPermissionException(node, NodePermission.READ, permission);
+			throw new InsufficientPermissionExceptionImpl(node, NodePermission.READ, permission);
 		}
 	}
 
@@ -212,7 +214,7 @@ public class BsjNodeManager
 		NodePermission permission = getPermission(node);
 		if (!permission.isInsertable())
 		{
-			throw new InsufficientPermissionException(node, NodePermission.INSERT, permission);
+			throw new InsufficientPermissionExceptionImpl(node, NodePermission.INSERT, permission);
 		}
 	}
 
@@ -227,7 +229,7 @@ public class BsjNodeManager
 		NodePermission permission = getPermission(node);
 		if (!permission.isMutatable())
 		{
-			throw new InsufficientPermissionException(node, NodePermission.MUTATE, permission);
+			throw new InsufficientPermissionExceptionImpl(node, NodePermission.MUTATE, permission);
 		}
 	}
 
@@ -247,7 +249,7 @@ public class BsjNodeManager
 		if (this.dependencyManager.checkCooperation(this.currentMetaprogramId, id))
 			return;
 
-		throw new MetaprogramConflictException(this.dependencyManager.getMetaprogramProfileByID(id).getAnchor(),
+		throw new MetaprogramConflictExceptionImpl(this.dependencyManager.getMetaprogramProfileByID(id).getAnchor(),
 				this.dependencyManager.getMetaprogramProfileByID(this.currentMetaprogramId).getAnchor(), node);
 	}
 

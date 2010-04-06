@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaprogramAnchorNode;
+import edu.jhu.cs.bsj.compiler.impl.metaprogram.BsjUserDiagnosticTranslatingListener;
 import edu.jhu.cs.bsj.compiler.impl.metaprogram.ContextImpl;
 import edu.jhu.cs.bsj.compiler.impl.metaprogram.UserMetaprogramWrapper;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.MetaprogramProfile;
@@ -34,7 +35,9 @@ public class PrepareMetaAnnotationMetaprorgamTask extends
 		// TODO: validate that the target names and dependency names are not bogus
 		
 		Context<MetaAnnotationMetaprogramAnchorNode> context = new ContextImpl<MetaAnnotationMetaprogramAnchorNode>(
-				this.anchor, this.metacompilationContext.getToolkit().getNodeFactory());
+				this.anchor, this.metacompilationContext.getToolkit().getNodeFactory(),
+				new BsjUserDiagnosticTranslatingListener(
+						this.metacompilationContext.getDiagnosticListener(), this.anchor.getStartLocation()));
 		
 		MetaprogramProfile<MetaAnnotationMetaprogramAnchorNode> profile = new MetaprogramProfile<MetaAnnotationMetaprogramAnchorNode>(
 				new UserMetaprogramWrapper<MetaAnnotationMetaprogramAnchorNode>(this.metaprogramObject), this.anchor,

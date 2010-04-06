@@ -94,11 +94,13 @@ public abstract class BsjDiagnosticImpl implements BsjDiagnostic
 	{
 		return this.location != null ? this.location.getLine() : Diagnostic.NOPOS;
 	}
-
+	
 	/**
 	 * Retrieves a message for this diagnostic. The message is generated from a classpath properties file's format
 	 * string (see {@link PropertyBasedStringRepository}) using this diagnostic's code. The format strings make use of
 	 * positional format arguments where necessary to ensure that the appropriate information is used.
+	 * @param locale The locale for which to format the message.
+	 * @return The resulting message.
 	 */
 	@Override
 	public String getMessage(Locale locale)
@@ -113,7 +115,7 @@ public abstract class BsjDiagnosticImpl implements BsjDiagnostic
 				// no hope! no hope!
 				StringBuilder sb = new StringBuilder("(could not get string for key " + getCode() + "; [");
 				boolean first = true;
-				for (Object arg : getMessageArgs())
+				for (Object arg : getMessageArgs(locale))
 				{
 					if (first)
 					{
@@ -131,7 +133,7 @@ public abstract class BsjDiagnosticImpl implements BsjDiagnostic
 			formatString = "(no strings found for language=" + locale.getDisplayLanguage() + ") " + formatString;
 		}
 
-		List<Object> args = getMessageArgs();
+		List<Object> args = getMessageArgs(locale);
 		String message = String.format(locale, formatString, args.toArray());
 
 		StringBuilder sb = new StringBuilder();
@@ -150,9 +152,10 @@ public abstract class BsjDiagnosticImpl implements BsjDiagnostic
 	/**
 	 * Retrieves arguments which should be used to format the message for this diagnostic.
 	 * 
+	 * @param locale The locale for which to prepare these arguments (for recursive formatting if necessary).
 	 * @return The arguments to use.
 	 */
-	protected abstract List<Object> getMessageArgs();
+	protected abstract List<Object> getMessageArgs(Locale locale);
 
 	/**
 	 * Retrieves the character index from the beginning of the file at which the event occurred.

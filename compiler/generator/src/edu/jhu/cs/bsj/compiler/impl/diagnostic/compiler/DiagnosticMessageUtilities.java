@@ -1,9 +1,11 @@
 package edu.jhu.cs.bsj.compiler.impl.diagnostic.compiler;
 
+import java.io.ByteArrayOutputStream;
 import java.util.List;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.diagnostic.compiler.DependencyCycleDiagnostic;
+import edu.jhu.cs.bsj.compiler.impl.utils.PrependablePrintStream;
 
 /**
  * This class contains functions which are convenient for the generated source of diagnostic messages.
@@ -39,5 +41,19 @@ public class DiagnosticMessageUtilities
 		}
 		sb.append(metaprograms.get(metaprograms.size()-1));
 		return sb.toString();
+	}
+	
+	/**
+	 * Creates a string containing an indented version of the stack trace of the provided exception.
+	 * @param exception The exception to use.
+	 * @return The resulting string.
+	 */
+	public static String getIndentedStackTraceString(Throwable e)
+	{
+		ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+		PrependablePrintStream ps = new PrependablePrintStream(buffer, "\t", 1);
+		e.printStackTrace(ps);
+		ps.close();
+		return buffer.toString();
 	}
 }

@@ -1,6 +1,7 @@
 package edu.jhu.cs.bsj.compiler.impl.diagnostic.parser;
 
 import java.util.List;
+import java.util.Locale;
 
 import javax.annotation.Generated;
 
@@ -48,11 +49,12 @@ public class ConflictingAccessModifierDiagnosticImpl extends BsjParserDiagnostic
     }
     
     @Override
-    protected List<Object> getMessageArgs()
+    protected List<Object> getMessageArgs(Locale locale)
     {
-        List<Object> args = super.getMessageArgs();
+        List<Object> args = super.getMessageArgs(locale);
         args.add(this.firstModifier);
         args.add(this.secondModifier);
         return args;
     }
+    
 }

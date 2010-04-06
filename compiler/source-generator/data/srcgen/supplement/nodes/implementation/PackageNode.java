@@ -12,7 +12,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.TypeDeclarationNode;
 import edu.jhu.cs.bsj.compiler.impl.utils.StringUtilities;
 
 /* GEN:headerstart */
-
+import edu.jhu.cs.bsj.compiler.impl.ast.exception.*;
 /* GEN:headerstop */
 public class PackageNodeImpl
 {
@@ -29,7 +29,7 @@ public class PackageNodeImpl
 	{
 		if (this.packageNodes.containsKey(packageNode.getName().getIdentifier()))
 		{
-			throw new DuplicatePackageMemberException(this, packageNode, packageNode.getName().getIdentifier());
+			throw new DuplicatePackageMemberExceptionImpl(this, packageNode, packageNode.getName().getIdentifier());
 		}
 		getManager().assertInsertable(this);
 		this.packageNodes.put(packageNode.getName().getIdentifier(), packageNode);
@@ -67,7 +67,7 @@ public class PackageNodeImpl
 		if (this.compilationUnitNodes.containsKey(compilationUnit.getName()) ||
 				this.load(compilationUnit.getName()) != null)
 		{
-			throw new DuplicatePackageMemberException(this, compilationUnit, compilationUnit.getName());
+			throw new DuplicatePackageMemberExceptionImpl(this, compilationUnit, compilationUnit.getName());
 		}
 		getManager().assertInsertable(this);
 		this.compilationUnitNodes.put(compilationUnit.getName(), compilationUnit);

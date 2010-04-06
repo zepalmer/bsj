@@ -3,9 +3,12 @@ package edu.jhu.cs.bsj.compiler.impl.tool.compiler.task;
 import java.io.IOException;
 import java.util.Iterator;
 
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.MetaprogramLocalMode;
 import edu.jhu.cs.bsj.compiler.ast.MetaprogramPackageMode;
 import edu.jhu.cs.bsj.compiler.ast.NodePermission;
+import edu.jhu.cs.bsj.compiler.ast.exception.MetaprogramDetectedErrorException;
+import edu.jhu.cs.bsj.compiler.ast.exception.MetaprogramExecutionFailureException;
 import edu.jhu.cs.bsj.compiler.ast.node.BlockNode;
 import edu.jhu.cs.bsj.compiler.ast.node.BlockStatementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.CatchNode;
@@ -29,9 +32,14 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaAnnotationValueNo
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramAnchorNode;
+import edu.jhu.cs.bsj.compiler.diagnostic.BsjDiagnostic;
+import edu.jhu.cs.bsj.compiler.impl.diagnostic.compiler.MetaprogramExceptionDiagnosticImpl;
+import edu.jhu.cs.bsj.compiler.impl.diagnostic.compiler.MetaprogramExecutionFailureDiagnosticImpl;
+import edu.jhu.cs.bsj.compiler.impl.metaprogram.Metaprogram;
 import edu.jhu.cs.bsj.compiler.impl.metaprogram.PermissionPolicyManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.MetacompilationContext;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.MetaprogramProfile;
+import edu.jhu.cs.bsj.compiler.metaprogram.Context;
 
 /**
  * This metacompilation task attempts to execute a single metaprogram. If a metaprogram is available for execution, it
@@ -87,7 +95,13 @@ public class ExecuteMetaprogramTask extends AbstractBsjCompilerTask
 		{
 			LOGGER.trace("Executing metaprogram " + profile.getMetaprogram().getID());
 		}
-		profile.getMetaprogram().execute(profile.getContext());
+
+		BsjDiagnostic diagnostic = doExecute(profile);
+		if (diagnostic!=null)
+		{
+			context.getDiagnosticListener().report(diagnostic);
+		}
+
 		context.getDependencyManager().notifyExecuted(profile);
 		if (LOGGER.isTraceEnabled())
 		{
@@ -334,5 +348,44 @@ public class ExecuteMetaprogramTask extends AbstractBsjCompilerTask
 		}
 
 		return policyManager;
+	}
+
+	/**
+	 * Performs actual metaprogram execution. This method calls the metaprogram's execute method and responds to runtime
+	 * exceptions by returning an appropriate diagnostic.
+	 * 
+	 * @param profile The profile of the metaprogram to execute.
+	 * @return A diagnostic if one should be reported or <code>null</code> if everything went fine.
+	 */
+	private <A extends MetaprogramAnchorNode<?>> BsjDiagnostic doExecute(MetaprogramProfile<A> profile)
+	{
+		Context<A> context = profile.getContext();
+		Metaprogram<A> metaprogram = profile.getMetaprogram();
+		if (context==null)
+		{
+			throw new IllegalStateException("Attempted to execute metaprogram profile with null context!");
+		}
+		if (metaprogram==null)
+		{
+			throw new IllegalStateException("Attempted to execute metaprogram profile with null metaprogram!");
+		}
+		
+		BsjSourceLocation sourceLocation = profile.getLocation();
+		try
+		{
+			metaprogram.execute(context);
+		} catch (MetaprogramDetectedErrorException mdee)
+		{
+			return mdee.getDiagnostic(sourceLocation);
+		} catch (MetaprogramExecutionFailureException mefe)
+		{
+			return new MetaprogramExecutionFailureDiagnosticImpl(sourceLocation, mefe);
+		} catch (Exception e)
+		{
+			// The metaprogram threw something unexpected (like NullPointerException); handle it.
+			return new MetaprogramExceptionDiagnosticImpl(sourceLocation, e);
+		}
+		
+		return null;
 	}
 }

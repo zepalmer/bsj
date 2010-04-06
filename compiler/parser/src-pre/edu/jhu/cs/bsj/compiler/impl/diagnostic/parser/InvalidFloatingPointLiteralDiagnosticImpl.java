@@ -1,6 +1,7 @@
 package edu.jhu.cs.bsj.compiler.impl.diagnostic.parser;
 
 import java.util.List;
+import java.util.Locale;
 
 import javax.annotation.Generated;
 
@@ -37,10 +38,11 @@ public abstract class InvalidFloatingPointLiteralDiagnosticImpl extends BsjParse
     }
     
     @Override
-    protected List<Object> getMessageArgs()
+    protected List<Object> getMessageArgs(Locale locale)
     {
-        List<Object> args = super.getMessageArgs();
+        List<Object> args = super.getMessageArgs(locale);
         args.add(this.literalText);
         return args;
     }
+    
 }

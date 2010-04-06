@@ -33,6 +33,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.ExplicitMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramPreambleNode;
+import edu.jhu.cs.bsj.compiler.impl.metaprogram.BsjUserDiagnosticTranslatingListener;
 import edu.jhu.cs.bsj.compiler.impl.metaprogram.ContextImpl;
 import edu.jhu.cs.bsj.compiler.impl.metaprogram.Metaprogram;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.MetaprogramProfile;
@@ -142,7 +143,9 @@ public class CompileExplicitMetaprogramTask<R extends Node> extends
 
 		// now build the metaprogram itself
 		Context<ExplicitMetaprogramAnchorNode<R>> context = new ContextImpl<ExplicitMetaprogramAnchorNode<R>>(anchor,
-				factory);
+				factory, new BsjUserDiagnosticTranslatingListener(this.metacompilationContext.getDiagnosticListener(),
+						this.anchor.getStartLocation()));
+						
 		Metaprogram<ExplicitMetaprogramAnchorNode<R>> metaprogram = compileMetaprogram(metaprogramNode,
 				anchor.getClass().getName());
 

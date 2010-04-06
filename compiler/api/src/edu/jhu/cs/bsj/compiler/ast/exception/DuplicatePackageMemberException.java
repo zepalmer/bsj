@@ -1,50 +1,73 @@
 package edu.jhu.cs.bsj.compiler.ast.exception;
 
+import javax.annotation.Generated;
+
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.PackageNode;
+import edu.jhu.cs.bsj.compiler.diagnostic.BsjDiagnostic;
+import edu.jhu.cs.bsj.compiler.diagnostic.compiler.DuplicatePackageMemberDiagnostic;
 
 /**
- * This exception is thrown whenever a subpackage or compilation unit is added to a package when that package already
- * contains a subpackage or compilation unit of the same name.
- * @author Zachary Palmer
+ * An exception indicating that a metaprogram attempted to insert a member into a package node when
+ * another member of the same type (compilation unit or package) and the same name already existed.
  */
-public class DuplicatePackageMemberException extends RuntimeException
+@Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
+public abstract class DuplicatePackageMemberException extends MetaprogramDetectedErrorException
 {
-	private static final long serialVersionUID = 1L;
-	
-	/** The package node containing the duplicate. */
-	private PackageNode packageNode;
-	/** The node representing the duplicate member. */
-	private Node duplicateMember;
-	/** The name of the duplicate member. */
-	private String duplicateMemberName;
-	
-	/**
-	 * Creates a new duplicate package member exception.
-	 * @param packageNode The package node containing the duplicate.
-	 * @param duplicateMember The node representing the duplicate member.
-	 * @param duplicateMemberName The name of the duplicate member.
-	 */
-	public DuplicatePackageMemberException(PackageNode packageNode, Node duplicateMember, String duplicateMemberName)
-	{
-		super();
-		this.packageNode = packageNode;
-		this.duplicateMember = duplicateMember;
-		this.duplicateMemberName = duplicateMemberName;
-	}
-
-	public PackageNode getPackageNode()
-	{
-		return packageNode;
-	}
-
-	public Node getDuplicateMember()
-	{
-		return duplicateMember;
-	}
-
-	public String getDuplicateMemberName()
-	{
-		return duplicateMemberName;
-	}
+    private static final long serialVersionUID = 1L;
+    
+    /** The package node containing the duplicate. */
+    private PackageNode packageNode;
+    
+    /** The node representing the duplicate member. */
+    private Node duplicateMember;
+    
+    /** The name of the member which was duplicated. */
+    private String duplicateMemberName;
+    
+    public DuplicatePackageMemberException(
+            PackageNode packageNode,
+            Node duplicateMember,
+            String duplicateMemberName)
+    {
+        super();
+        this.packageNode = packageNode;
+        this.duplicateMember = duplicateMember;
+        this.duplicateMemberName = duplicateMemberName;
+    }
+    
+    /**
+     * Retrieves the package node containing the duplicate.
+     * @return The package node containing the duplicate.
+     */
+    public PackageNode getPackageNode()
+    {
+        return this.packageNode;
+    }
+    
+    /**
+     * Retrieves the node representing the duplicate member.
+     * @return The node representing the duplicate member.
+     */
+    public Node getDuplicateMember()
+    {
+        return this.duplicateMember;
+    }
+    
+    /**
+     * Retrieves the name of the member which was duplicated.
+     * @return The name of the member which was duplicated.
+     */
+    public String getDuplicateMemberName()
+    {
+        return this.duplicateMemberName;
+    }
+    
+    /**
+     * Creates a {@link BsjDiagnostic} corresponding to this exception type.
+     * @param location The source location to report as the cause for the diagnostic.
+     * @return A suitable diagnostic.
+     */
+    public abstract DuplicatePackageMemberDiagnostic getDiagnostic(BsjSourceLocation location);
 }

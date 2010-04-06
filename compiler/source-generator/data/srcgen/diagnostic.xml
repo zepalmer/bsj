@@ -308,6 +308,96 @@
                     end.
                 ]]></doc>
             </diagnostic>
+
+            <diagnostic name="MetaprogramErrorDiagnostic" super="BsjCompilerDiagnostic">
+                <doc><![CDATA[
+                    This diagnostic class is the ancestor of any diagnostic which indicates a runtime failure on the
+                    part of a metaprogram.
+                ]]></doc>
+            </diagnostic>
+            
+            <diagnostic name="MetaprogramExceptionDiagnostic" super="MetaprogramErrorDiagnostic"
+                code="bsj.compiler.metaprogram.failure.exception">
+                <prop name="exception" type="Exception" desc="the exception which was raised by the metaprogram"/>
+                <doc><![CDATA[
+                    This diagnostic indicates that the body of a metaprogram terminated by raising an exception.
+                ]]></doc>
+            </diagnostic>
+
+            <diagnostic name="MetaprogramExecutionFailureDiagnostic" super="MetaprogramErrorDiagnostic"
+                code="bsj.compiler.metaprogram.failure.general">
+                <prop name="exception" type="MetaprogramExecutionFailureException" desc="the exception which was raised to indicate failure" />
+                <messageProp expression="DiagnosticMessageUtilities.getIndentedStackTraceString(exception)" />
+                <doc><![CDATA[
+                    A diagnostic indicating that the execution of a metaprogram failed due to the metaprogram itself
+                    raising a {@link MetaprogramExecutionFailureException}.  The exception is provided to allow the
+                    creation of its stack trace.
+                ]]></doc>
+            </diagnostic>
+
+            <diagnostic name="MetaprogramDetectedErrorDiagnostic" typeParam="T extends MetaprogramErrorException"
+                super="MetaprogramErrorDiagnostic">
+                <exception>
+                    <doc><![CDATA[
+                        An exception indicating that the BSJ compiler detected an error in a metaprogram through a
+                        library call.
+                    ]]></doc>
+                </exception>
+                <prop name="exception" type="T" desc="the exception which was caught by the compiler" />
+                <doc><![CDATA[
+                    A diagnostic indicating that some kind of exception was raised by the compiler from within a
+                    metaprogram's library call which represents an error in a BSJ metaprogram.
+                ]]></doc>
+            </diagnostic>
+
+            <diagnostic name="DuplicatePackageMemberDiagnostic" super="MetaprogramDetectedErrorDiagnostic"
+                superTypeArg="DuplicatePackageMemberException" code="bsj.compiler.metaprogram.failure.duplicate.packageMember">
+                <exception>
+                    <doc><![CDATA[
+                        An exception indicating that a metaprogram attempted to insert a member into a package node when
+                        another member of the same type (compilation unit or package) and the same name already existed.
+                    ]]></doc>
+                </exception>
+                <prop name="packageNode" type="PackageNode" desc="the package node containing the duplicate" />
+                <prop name="duplicateMember" type="Node" desc="the node representing the duplicate member" />
+                <prop name="duplicateMemberName" type="String" desc="the name of the member which was duplicated" />
+                <doc><![CDATA[
+                    A diagnostic indicating that a metaprogram attempted to insert a member into a package node when
+                    another member of the same type (compilation unit or package) and the same name already existed.
+                ]]></doc>
+            </diagnostic>
+
+            <diagnostic name="InsufficientPermissionDiagnostic" super="MetaprogramDetectedErrorDiagnostic"
+                superTypeArg="InsufficientPermissionException" code="bsj.compiler.metaprogram.failure.permission">
+                <exception>
+                    <doc><![CDATA[
+                        Indicates that a metaprogram attempted to access a node in a fashion which is not permitted.
+                    ]]></doc>
+                </exception>
+                <prop name="node" type="Node" desc="the node that was accessed" />
+                <prop name="requiredPermission" type="NodePermission" desc="the permission required to access the node" />
+                <prop name="availablePermission" type="NodePermission" desc="the permission that the metaprogram actually had" />
+                <doc><![CDATA[
+                    Indicates that a metaprogram attempted to access a node in a fashion which is not permitted.
+                ]]></doc>
+            </diagnostic>
+
+            <diagnostic name="MetaprogramConflictDiagnostic" super="MetaprogramDetectedErrorDiagnostic"
+                superTypeArg="MetaprogramConflictException" code="bsj.compiler.metaprogram.failure.accessConflict">
+                <exception>
+                    <doc><![CDATA[
+                        Indicates that two metaprograms are in conflict because of the manner in which they accessed the
+                        same attribute of a given node.
+                    ]]></doc>
+                </exception>
+                <prop name="firstAnchor" type="MetaprogramAnchorNode&lt;?&gt;" desc="the anchor of the first metaprogram that conflicted" />
+                <prop name="secondAnchor" type="MetaprogramAnchorNode&lt;?&gt;" desc="the anchor of the second metaprogram that conflicted" />
+                <prop name="conflictNode" type="Node" desc="the node over which the metaprograms conflicted" />
+                <doc><![CDATA[
+                    Indicates that two metaprograms are in conflict because of the manner in which they accessed the same
+                    attribute of a given node.
+                ]]></doc>
+            </diagnostic>
         </srcgen>
     </srcgen>
 </srcgen>

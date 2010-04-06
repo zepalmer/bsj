@@ -1,6 +1,7 @@
 package edu.jhu.cs.bsj.compiler.impl.diagnostic.compiler;
 
 import java.util.List;
+import java.util.Locale;
 
 import javax.annotation.Generated;
 
@@ -60,12 +61,13 @@ public class InjectionConfictDiagnosticImpl extends BsjCompilerDiagnosticImpl im
     }
     
     @Override
-    protected List<Object> getMessageArgs()
+    protected List<Object> getMessageArgs(Locale locale)
     {
-        List<Object> args = super.getMessageArgs();
+        List<Object> args = super.getMessageArgs(locale);
         args.add(this.injectingMetaprogramLocation);
         args.add(this.dependentMetaprogramLocation);
         args.add(this.injectionTarget);
         return args;
     }
+    
 }

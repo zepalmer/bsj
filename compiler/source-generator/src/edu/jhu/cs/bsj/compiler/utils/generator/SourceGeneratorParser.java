@@ -192,7 +192,7 @@ public class SourceGeneratorParser
 		}
 		return mode;
 	}
-	
+
 	private static ModalPropertyDefinition.Mode getPropertyModeFromString(GenerationProfile profile, String modeString)
 	{
 		ModalPropertyDefinition.Mode mode;
@@ -455,7 +455,7 @@ public class SourceGeneratorParser
 		}
 	}
 
-	static abstract class AbstractPropertyHandler<T extends AbstractPropertyDefinition> implements ElementHandler<T>
+	static abstract class AbstractPropertyHandler<T extends AbstractPropertyDefinition<T>> implements ElementHandler<T>
 	{
 		protected GenerationProfile profile;
 
@@ -511,7 +511,7 @@ public class SourceGeneratorParser
 			return new ConstantDefinition(name, baseType, typeArg, description, defaultExpression);
 		}
 	}
-	
+
 	static class DiagnosticPropertyHandler extends AbstractPropertyHandler<DiagnosticPropertyDefinition>
 	{
 		public DiagnosticPropertyHandler(GenerationProfile profile)
@@ -524,9 +524,9 @@ public class SourceGeneratorParser
 				String description, String defaultExpression)
 		{
 			ModalPropertyDefinition.Mode mode = getPropertyModeFromString(this.profile, getAttributeValue(e, "mode"));
-			
+
 			String messageExpression = getAttributeValue(e, "messageExpression");
-			
+
 			return new DiagnosticPropertyDefinition(name, baseType, typeArg, mode, description, defaultExpression,
 					messageExpression);
 		}
@@ -584,8 +584,11 @@ public class SourceGeneratorParser
 		@Override
 		public DiagnosticDefinition handle(Element e)
 		{
+			DiagnosticExceptionDefinition exception = null;
 			String name = e.getAttribute("name");
+			String typeParam = getAttributeValue(e, "typeParam");
 			String superName = getAttributeValue(e, "super");
+			String superArg = getAttributeValue(e, "superTypeArg");
 			List<DiagnosticPropertyDefinition> props = new ArrayList<DiagnosticPropertyDefinition>();
 			List<String> messagePropertyExpressions = new ArrayList<String>();
 			String docString = null;
@@ -599,7 +602,11 @@ public class SourceGeneratorParser
 				{
 					Element childElement = (Element) node;
 					String childTag = childElement.getTagName();
-					if (childTag.equals("prop"))
+					if (childTag.equals("exception"))
+					{
+						DiagnosticExceptionHandler handler = new DiagnosticExceptionHandler(this.profile);
+						exception = handler.handle(childElement);
+					} else if (childTag.equals("prop"))
 					{
 						DiagnosticPropertyHandler handler = new DiagnosticPropertyHandler(this.profile);
 						props.add(handler.handle(childElement));
@@ -616,9 +623,47 @@ public class SourceGeneratorParser
 				}
 			}
 
-			DiagnosticDefinition diagnosticDefinition = new DiagnosticDefinition(name, superName, this.profile, props,
-					messagePropertyExpressions, docString, code);
+			DiagnosticDefinition diagnosticDefinition = new DiagnosticDefinition(name, typeParam, superName, superArg,
+					this.profile, exception, props, messagePropertyExpressions, docString, code);
 			return diagnosticDefinition;
+		}
+	}
+
+	static class DiagnosticExceptionHandler implements ElementHandler<DiagnosticExceptionDefinition>
+	{
+		public DiagnosticExceptionHandler(GenerationProfile profile)
+		{
+		}
+
+		@Override
+		public DiagnosticExceptionDefinition handle(Element e)
+		{
+			String docString = null;
+			String property = getAttributeValue(e, "property");
+			if (property == null)
+			{
+				property = "exception";
+			}
+
+			NodeList children = e.getChildNodes();
+			for (int i = 0; i < children.getLength(); i++)
+			{
+				Node node = children.item(i);
+				if (node instanceof Element)
+				{
+					Element childElement = (Element) node;
+					String childTag = childElement.getTagName();
+					if (childTag.equals("doc"))
+					{
+						docString = unindent(childElement.getTextContent());
+					} else
+					{
+						throw new IllegalStateException("Unknown subtag for type: " + childTag);
+					}
+				}
+			}
+
+			return new DiagnosticExceptionDefinition(docString, property);
 		}
 	}
 }

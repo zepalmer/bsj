@@ -1,6 +1,7 @@
 package edu.jhu.cs.bsj.compiler.impl.diagnostic.compiler;
 
 import java.util.List;
+import java.util.Locale;
 
 import javax.annotation.Generated;
 
@@ -24,9 +25,10 @@ public class InvalidMetaAnnotationArrayInitializerDiagnosticImpl extends BsjComp
     }
     
     @Override
-    protected List<Object> getMessageArgs()
+    protected List<Object> getMessageArgs(Locale locale)
     {
-        List<Object> args = super.getMessageArgs();
+        List<Object> args = super.getMessageArgs(locale);
         return args;
     }
+    
 }

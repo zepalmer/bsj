@@ -1,6 +1,6 @@
 package edu.jhu.cs.bsj.compiler.utils.generator;
 
-public class ModalPropertyDefinition extends AbstractPropertyDefinition
+public abstract class ModalPropertyDefinition<T extends ModalPropertyDefinition<T>> extends AbstractPropertyDefinition<T>
 {
 
 	public static enum Mode

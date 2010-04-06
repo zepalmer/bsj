@@ -2,6 +2,7 @@ package edu.jhu.cs.bsj.compiler.metaprogram;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramAnchorNode;
+import edu.jhu.cs.bsj.compiler.diagnostic.user.BsjUserDiagnosticListener;
 
 /**
  * Represents the execution context for a metaprogram.  Instances of this interface are provided to metaprograms to
@@ -26,4 +27,13 @@ public interface Context<T extends MetaprogramAnchorNode<?>>
 	 * @return The node factory to use.
 	 */
 	public BsjNodeFactory getFactory();
+	
+	/**
+	 * Retrieves the listener for user diagnostics.  Metaprograms should create and provide diagnostic objects to this
+	 * interface in order to report events to the compiler.  The compiler will then report those same events in a
+	 * translated form to its programmatic caller, resulting in (for example) these messages being reported to the
+	 * compiler's CLI user.
+	 * @return The listener to which a metaprogram should report diagnostics.
+	 */
+	public BsjUserDiagnosticListener getDiagnosticListener();
 }

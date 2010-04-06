@@ -1,6 +1,7 @@
 package edu.jhu.cs.bsj.compiler.impl.diagnostic.parser;
 
 import java.util.List;
+import java.util.Locale;
 
 import javax.annotation.Generated;
 
@@ -35,10 +36,11 @@ public class MissingTokenDiagnosticImpl extends BsjParserDiagnosticImpl implemen
     }
     
     @Override
-    protected List<Object> getMessageArgs()
+    protected List<Object> getMessageArgs(Locale locale)
     {
-        List<Object> args = super.getMessageArgs();
+        List<Object> args = super.getMessageArgs(locale);
         args.add(this.tokenType);
         return args;
     }
+    
 }

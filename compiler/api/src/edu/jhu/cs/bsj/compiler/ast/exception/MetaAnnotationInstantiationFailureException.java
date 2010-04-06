@@ -5,7 +5,7 @@ package edu.jhu.cs.bsj.compiler.ast.exception;
  * the cause of this exception is reported to the diagnostic listener provided in the call.
  * @author Zachary Palmer
  */
-public class MetaAnnotationInstantiationFailureException extends Exception
+public class MetaAnnotationInstantiationFailureException extends MetaprogramErrorException
 {
 	private static final long serialVersionUID = 1L;
 }

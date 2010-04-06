@@ -1,6 +1,7 @@
 package edu.jhu.cs.bsj.compiler.impl.diagnostic.compiler;
 
 import java.util.List;
+import java.util.Locale;
 
 import javax.annotation.Generated;
 
@@ -49,12 +50,13 @@ public class DependencyCycleDiagnosticImpl extends BsjCompilerDiagnosticImpl imp
     }
     
     @Override
-    protected List<Object> getMessageArgs()
+    protected List<Object> getMessageArgs(Locale locale)
     {
-        List<Object> args = super.getMessageArgs();
+        List<Object> args = super.getMessageArgs(locale);
         args.add(this.targets);
         args.add(this.metaprograms);
         args.add(DiagnosticMessageUtilities.getDependencyString(getMetaprograms(),getTargets()));
         return args;
     }
+    
 }
