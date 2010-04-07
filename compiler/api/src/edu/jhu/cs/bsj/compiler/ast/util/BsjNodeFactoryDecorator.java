@@ -4536,6 +4536,72 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     }
     
     /**
+     * Creates a MethodInvocationByExpressionNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public MethodInvocationByExpressionNode makeMethodInvocationByExpressionNode(
+            PrimaryExpressionNode expression,
+            IdentifierNode identifier)
+    {
+        this.before();
+        MethodInvocationByExpressionNode node = factory.makeMethodInvocationByExpressionNode(expression, identifier);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a MethodInvocationByExpressionNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public MethodInvocationByExpressionNode makeMethodInvocationByExpressionNode(
+            PrimaryExpressionNode expression,
+            IdentifierNode identifier,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        MethodInvocationByExpressionNode node = factory.makeMethodInvocationByExpressionNode(expression, identifier, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a MethodInvocationByExpressionNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public MethodInvocationByExpressionNode makeMethodInvocationByExpressionNode(
+            PrimaryExpressionNode expression,
+            IdentifierNode identifier,
+            ExpressionListNode arguments)
+    {
+        this.before();
+        MethodInvocationByExpressionNode node = factory.makeMethodInvocationByExpressionNode(expression, identifier, arguments);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a MethodInvocationByExpressionNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public MethodInvocationByExpressionNode makeMethodInvocationByExpressionNode(
+            PrimaryExpressionNode expression,
+            IdentifierNode identifier,
+            ExpressionListNode arguments,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        MethodInvocationByExpressionNode node = factory.makeMethodInvocationByExpressionNode(expression, identifier, arguments, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
      * Creates a MethodInvocationByNameNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -4565,6 +4631,68 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     {
         this.before();
         MethodInvocationByNameNode node = factory.makeMethodInvocationByNameNode(name, arguments, typeArguments, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a MethodInvocationByNameNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public MethodInvocationByNameNode makeMethodInvocationByNameNode(
+            NameNode name)
+    {
+        this.before();
+        MethodInvocationByNameNode node = factory.makeMethodInvocationByNameNode(name);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a MethodInvocationByNameNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public MethodInvocationByNameNode makeMethodInvocationByNameNode(
+            NameNode name,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        MethodInvocationByNameNode node = factory.makeMethodInvocationByNameNode(name, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a MethodInvocationByNameNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public MethodInvocationByNameNode makeMethodInvocationByNameNode(
+            NameNode name,
+            ExpressionListNode arguments)
+    {
+        this.before();
+        MethodInvocationByNameNode node = factory.makeMethodInvocationByNameNode(name, arguments);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a MethodInvocationByNameNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public MethodInvocationByNameNode makeMethodInvocationByNameNode(
+            NameNode name,
+            ExpressionListNode arguments,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        MethodInvocationByNameNode node = factory.makeMethodInvocationByNameNode(name, arguments, startLocation, stopLocation);
         this.after(node);
         return node;
     }
@@ -6494,6 +6622,36 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     }
     
     /**
+     * Creates a VariableDeclarationNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public VariableDeclarationNode makeVariableDeclarationNode(
+            VariableDeclaratorListNode declarators)
+    {
+        this.before();
+        VariableDeclarationNode node = factory.makeVariableDeclarationNode(declarators);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a VariableDeclarationNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public VariableDeclarationNode makeVariableDeclarationNode(
+            VariableDeclaratorListNode declarators,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        VariableDeclarationNode node = factory.makeVariableDeclarationNode(declarators, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
      * Creates a VariableDeclaratorListNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -6799,6 +6957,38 @@ public abstract class BsjNodeFactoryDecorator implements BsjNodeFactory
     {
         this.before();
         VariableNode node = factory.makeVariableNode(modifiers, type, identifier, startLocation, stopLocation);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a VariableNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    @Override
+    public VariableNode makeVariableNode(
+            TypeNode type,
+            IdentifierNode identifier)
+    {
+        this.before();
+        VariableNode node = factory.makeVariableNode(type, identifier);
+        this.after(node);
+        return node;
+    }
+    
+    /**
+     * Creates a VariableNode.
+     * The specified start and stop locations are used.
+     */
+    @Override
+    public VariableNode makeVariableNode(
+            TypeNode type,
+            IdentifierNode identifier,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation)
+    {
+        this.before();
+        VariableNode node = factory.makeVariableNode(type, identifier, startLocation, stopLocation);
         this.after(node);
         return node;
     }

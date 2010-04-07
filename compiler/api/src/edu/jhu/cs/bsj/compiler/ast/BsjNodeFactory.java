@@ -2564,6 +2564,44 @@ public interface BsjNodeFactory
             BsjSourceLocation stopLocation);
     
     /**
+     * Creates a MethodInvocationByExpressionNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public MethodInvocationByExpressionNode makeMethodInvocationByExpressionNode(
+            PrimaryExpressionNode expression,
+            IdentifierNode identifier);
+    
+    /**
+     * Creates a MethodInvocationByExpressionNode.
+     * The specified start and stop locations are used.
+     */
+    public MethodInvocationByExpressionNode makeMethodInvocationByExpressionNode(
+            PrimaryExpressionNode expression,
+            IdentifierNode identifier,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+    
+    /**
+     * Creates a MethodInvocationByExpressionNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public MethodInvocationByExpressionNode makeMethodInvocationByExpressionNode(
+            PrimaryExpressionNode expression,
+            IdentifierNode identifier,
+            ExpressionListNode arguments);
+    
+    /**
+     * Creates a MethodInvocationByExpressionNode.
+     * The specified start and stop locations are used.
+     */
+    public MethodInvocationByExpressionNode makeMethodInvocationByExpressionNode(
+            PrimaryExpressionNode expression,
+            IdentifierNode identifier,
+            ExpressionListNode arguments,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+    
+    /**
      * Creates a MethodInvocationByNameNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -2580,6 +2618,40 @@ public interface BsjNodeFactory
             NameNode name,
             ExpressionListNode arguments,
             ReferenceTypeListNode typeArguments,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+    
+    /**
+     * Creates a MethodInvocationByNameNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public MethodInvocationByNameNode makeMethodInvocationByNameNode(
+            NameNode name);
+    
+    /**
+     * Creates a MethodInvocationByNameNode.
+     * The specified start and stop locations are used.
+     */
+    public MethodInvocationByNameNode makeMethodInvocationByNameNode(
+            NameNode name,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+    
+    /**
+     * Creates a MethodInvocationByNameNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public MethodInvocationByNameNode makeMethodInvocationByNameNode(
+            NameNode name,
+            ExpressionListNode arguments);
+    
+    /**
+     * Creates a MethodInvocationByNameNode.
+     * The specified start and stop locations are used.
+     */
+    public MethodInvocationByNameNode makeMethodInvocationByNameNode(
+            NameNode name,
+            ExpressionListNode arguments,
             BsjSourceLocation startLocation,
             BsjSourceLocation stopLocation);
     
@@ -3654,6 +3726,22 @@ public interface BsjNodeFactory
             BsjSourceLocation stopLocation);
     
     /**
+     * Creates a VariableDeclarationNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public VariableDeclarationNode makeVariableDeclarationNode(
+            VariableDeclaratorListNode declarators);
+    
+    /**
+     * Creates a VariableDeclarationNode.
+     * The specified start and stop locations are used.
+     */
+    public VariableDeclarationNode makeVariableDeclarationNode(
+            VariableDeclaratorListNode declarators,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+    
+    /**
      * Creates a VariableDeclaratorListNode.
      * The start and stop locations which have been set as properties of this factory are used.
      */
@@ -3818,6 +3906,24 @@ public interface BsjNodeFactory
      */
     public VariableNode makeVariableNode(
             VariableModifiersNode modifiers,
+            TypeNode type,
+            IdentifierNode identifier,
+            BsjSourceLocation startLocation,
+            BsjSourceLocation stopLocation);
+    
+    /**
+     * Creates a VariableNode.
+     * The start and stop locations which have been set as properties of this factory are used.
+     */
+    public VariableNode makeVariableNode(
+            TypeNode type,
+            IdentifierNode identifier);
+    
+    /**
+     * Creates a VariableNode.
+     * The specified start and stop locations are used.
+     */
+    public VariableNode makeVariableNode(
             TypeNode type,
             IdentifierNode identifier,
             BsjSourceLocation startLocation,

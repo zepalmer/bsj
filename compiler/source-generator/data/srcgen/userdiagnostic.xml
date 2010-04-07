@@ -34,6 +34,21 @@
                     meta-annotation is attached to a code fragment and not a descendent of the root package).
                 ]]></doc>
             </userDiagnostic>
+            
+            <userDiagnostic name="MissingDeclarationDiagnostic" super="BsjUtilDiagnostic">
+                <prop name="node" type="Node" desc="the node from which the declaration is missing"/>
+                <prop name="name" type="String" desc="the name of the declaration which is missing"/>
+                <doc><![CDATA[
+                    A diagnostic indicating that an expected declaration is missing.
+                ]]></doc>
+            </userDiagnostic>
+            
+            <userDiagnostic name="MissingMethodDeclarationDiagnostic" super="MissingDeclarationDiagnostic"
+                code="bsj.stdlib.metaannotation.declaration.missing.method">
+                <doc><![CDATA[
+                    A diagnostic indicating that an expected method declaration is missing.
+                ]]></doc>
+            </userDiagnostic>
         </srcgen>
     </srcgen>
 </srcgen>

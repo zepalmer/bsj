@@ -590,6 +590,14 @@
                 For simple method invocations (such as <tt>myObjectReference.myMethod()</tt>), see
                 {@link MethodInvocationByNameNode}.
             ]]></doc>
+            <factory-method>
+                <use-defaults />
+            </factory-method>
+            <factory-method>
+                <prop name="expression" />
+                <prop name="identifier" />
+                <prop name="arguments" />
+            </factory-method>
         </type>
 
         <type name="MethodInvocationByNameNode" super="MethodInvocationNode">
@@ -606,12 +614,20 @@
                 This node is used for simple method calls (such as <tt>x.y()</tt>) and not for expression-based method calls
                 (such as <tt>x().y()</tt>).  For expression-based method calls, see {@link MethodInvocationByExpressionNode}.
             ]]></doc>
+            <factory-method>
+                <use-defaults />
+            </factory-method>
+            <factory-method>
+                <prop name="name" />
+                <prop name="arguments" />
+            </factory-method>
         </type>
 
         <type name="MethodInvocationNode" super="Node" mode="abstract">
             <tag name="RestrictedPrimaryExpressionNode" />
             <tag name="StatementExpressionNode" />
-            <prop name="arguments" type="ExpressionListNode" desc="the arguments to pass to the method" />
+            <prop name="arguments" type="ExpressionListNode" desc="the arguments to pass to the method"
+                default="makeExpressionListNode()" />
             <prop name="typeArguments" type="ReferenceTypeListNode" desc="the type arguments for the method"
                 default="makeReferenceTypeListNode()" />
             <doc><![CDATA[
@@ -1086,7 +1102,8 @@
 
         <type name="VariableDeclarationNode" super="Node">
             <tag name="BlockStatementNode" />
-            <prop name="modifiers" type="VariableModifiersNode" desc="the modifiers for this variable" />
+            <prop name="modifiers" type="VariableModifiersNode" desc="the modifiers for this variable"
+                default="makeVariableModifiersNode()" />
             <prop name="declarators" type="VariableDeclaratorListNode" desc="the variable declarators for this node" />
             <doc><![CDATA[
                 A node for the declaration of a variable, as in:
@@ -1102,6 +1119,9 @@
                     <i>type identifier</i> = <i>expression</i>, <i>identifier</i> = <i>expression</i>, ...;
                     </pre>
             ]]></doc>
+            <factory-method>
+                <use-defaults />
+            </factory-method>
         </type>
 
         <type name="VariableDeclaratorNode" super="Node">
@@ -2106,7 +2126,8 @@
         </type>
 
         <type name="VariableNode" super="Node">
-            <prop name="modifiers" type="VariableModifiersNode" desc="the modifiers of this parameter" />
+            <prop name="modifiers" type="VariableModifiersNode" desc="the modifiers of this parameter"
+                default="makeVariableModifiersNode()" />
             <prop name="type" type="TypeNode" desc="the type of the variable" />
             <prop name="identifier" type="IdentifierNode" desc="the name of the variable" />
             <doc><![CDATA[
@@ -2115,6 +2136,9 @@
                     <i>type identifier</i>
                     </pre>        
             ]]></doc>
+            <factory-method>
+                <use-defaults/>
+            </factory-method>
         </type>
 
         <type name="WildcardTypeNode" super="Node">

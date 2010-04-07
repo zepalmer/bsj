@@ -913,7 +913,15 @@ public class BsjSourceSerializerHelper implements BsjNodeOperation<PrependablePr
 			p.println("{");
 			p.incPrependCount();
 		}
+		if (!dangingElse && !(node.getThenStatement() instanceof BlockNode))
+		{
+			p.incPrependCount();
+		}
 		node.getThenStatement().executeOperation(this, p);
+		if (!dangingElse && !(node.getThenStatement() instanceof BlockNode))
+		{
+			p.decPrependCount();
+		}
 		if (dangingElse)
 		{
 			p.decPrependCount();

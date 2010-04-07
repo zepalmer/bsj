@@ -60,6 +60,7 @@ public class Property extends AbstractBsjMetaAnnotationMetaprogram
 		}
 
 		// Try to find the list of members for this field declaration
+		// TODO: we're not necessarily in a type declaration... not exactly.  Consider anonymous classes.
 		ListNode<? super MethodDeclarationNode> list;
 		list = fieldNode.getNearestAncestorOfType(ClassMemberListNode.class);
 		if (list == null)
