@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import org.eclipse.jdt.ui.text.IColorManager;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.widgets.Display;
@@ -25,7 +26,7 @@ import org.eclipse.swt.widgets.Display;
 /**
  * Manager for colors used in the BSJ editor
  */
-public class BsjColorProvider 
+public class BsjColorProvider implements IColorManager
 {
     //TODO pull these values from JDT    
 	public static final RGB MULTI_LINE_COMMENT = new RGB(0, 180, 0);
@@ -72,4 +73,11 @@ public class BsjColorProvider
 		}
 		return color;
 	}
+
+    @Override
+    public Color getColor(String arg0)
+    {
+        // TODO Auto-generated method stub
+        return getColor(DEFAULT);
+    }
 }
