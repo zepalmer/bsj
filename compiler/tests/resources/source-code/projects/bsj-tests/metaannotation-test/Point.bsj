@@ -1,0 +1,21 @@
+#import edu.jhu.cs.bsj.stdlib.metaannotations.*;
+
+@@GenerateEqualsAndHashCode(properties={"x","y"})
+public class Point
+{
+	@@Property private double x;
+	@@Property private double y;
+	
+	public Point(int x, int y)
+	{
+		this.x = x;
+		this.y = y;
+	}
+	
+	public double getDistance(Point p)
+	{
+		double dx = x - p.getX();
+		double dy = y - p.getY();
+		return Math.sqrt(dx*dx+dy*dy);
+	}
+}

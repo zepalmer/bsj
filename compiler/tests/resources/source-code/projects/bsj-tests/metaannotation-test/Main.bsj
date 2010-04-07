@@ -1,0 +1,19 @@
+import java.util.*;
+
+public class Main
+{
+	public static void main(String[] arg)
+	{
+		Point p1 = new Point(0,0);
+		Point p2 = new Point(1,2);
+		Point p3 = new Point(0,0);
+		
+		Set<Point> set = new HashSet<Point>();
+		set.add(p1);
+		set.add(p2);
+		set.add(p3);
+		
+		System.out.println("Set size = " + set.size());
+		System.out.println("Distance = " + p1.getDistance(p2));
+	}
+}
