@@ -11,7 +11,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.Node;
  * <code>annotatedNode</code> field is a hint and may be <code>null</code>.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public interface InvalidAnnotatedDeclaration extends InvalidMetaAnnotationUseDiagnostic
+public interface InvalidAnnotatedDeclarationDiagnostic extends InvalidMetaAnnotationUseDiagnostic
 {
     /** The code for this diagnostic. */
     public static final String CODE = "bsj.stdlib.metaannotation.invalid.declaration.type";

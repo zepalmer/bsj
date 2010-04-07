@@ -10,7 +10,7 @@
                 ]]></doc>
             </userDiagnostic>
 
-            <userDiagnostic name="InvalidAnnotatedDeclaration" super="InvalidMetaAnnotationUseDiagnostic"
+            <userDiagnostic name="InvalidAnnotatedDeclarationDiagnostic" super="InvalidMetaAnnotationUseDiagnostic"
                 code="bsj.stdlib.metaannotation.invalid.declaration.type">
                 <prop name="annotatedNode" type="Node" desc="the node that was annotated" />
                 <prop name="legalTypes" type="List&lt;Class&lt;? extends Node&gt;&gt;"
@@ -19,6 +19,19 @@
                 <doc><![CDATA[
                     Indicates that the meta-annotation cannot be used on the specified type of node.  The
                     <code>annotatedNode</code> field is a hint and may be <code>null</code>.
+                ]]></doc>
+            </userDiagnostic>
+
+            <userDiagnostic name="InvalidEnclosingTypeDiagnostic" super="InvalidMetaAnnotationUseDiagnostic"
+                code="bsj.stdlib.metaannotation.invalid.enclosing.type">
+                <prop name="node" type="TypeDeclarationNode" desc="the enclosing type declaration" />
+                <prop name="legalTypes" type="List&lt;Class&lt;? extends TypeDeclarationNode&gt;&gt;"
+                    desc="the legal types that could be annotated by the meta-annotation" />
+                <messageProp expression="node!=null?node.getClass().getName():null" />
+                <doc><![CDATA[
+                    Indicates that the meta-annotation cannot be used in the enclosing type in which it is found.  The
+                    <code>enclosingNode</code> field is a hint and may be <code>null</code> (especially if the
+                    meta-annotation is attached to a code fragment and not a descendent of the root package).
                 ]]></doc>
             </userDiagnostic>
         </srcgen>

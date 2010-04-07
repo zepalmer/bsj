@@ -8,7 +8,7 @@ import javax.tools.Diagnostic.Kind;
 
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.metaprogram.AbstractBsjMetaAnnotationMetaprogram;
-import edu.jhu.cs.bsj.stdlib.diagnostic.InvalidAnnotatedDeclaration;
+import edu.jhu.cs.bsj.stdlib.diagnostic.InvalidAnnotatedDeclarationDiagnostic;
 
 
 /**
@@ -16,7 +16,7 @@ import edu.jhu.cs.bsj.stdlib.diagnostic.InvalidAnnotatedDeclaration;
  * <code>annotatedNode</code> field is a hint and may be <code>null</code>.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public class InvalidAnnotatedDeclarationImpl extends InvalidMetaAnnotationUseDiagnosticImpl implements InvalidAnnotatedDeclaration
+public class InvalidAnnotatedDeclarationDiagnosticImpl extends InvalidMetaAnnotationUseDiagnosticImpl implements InvalidAnnotatedDeclarationDiagnostic
 {
     /** The node that was annotated. */
     private Node annotatedNode;
@@ -24,12 +24,12 @@ public class InvalidAnnotatedDeclarationImpl extends InvalidMetaAnnotationUseDia
     /** The legal types that could be annotated by the meta-annotation. */
     private List<Class<? extends Node>> legalTypes;
     
-    public InvalidAnnotatedDeclarationImpl(
+    public InvalidAnnotatedDeclarationDiagnosticImpl(
             Class<? extends AbstractBsjMetaAnnotationMetaprogram> metaAnnotationClass,
             Node annotatedNode,
             List<Class<? extends Node>> legalTypes)
     {
-        super(InvalidAnnotatedDeclaration.CODE, Kind.ERROR, metaAnnotationClass);
+        super(InvalidAnnotatedDeclarationDiagnostic.CODE, Kind.ERROR, metaAnnotationClass);
         this.annotatedNode = annotatedNode;
         this.legalTypes = legalTypes;
     }

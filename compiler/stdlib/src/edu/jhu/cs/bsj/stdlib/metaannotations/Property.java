@@ -1,6 +1,8 @@
 package edu.jhu.cs.bsj.stdlib.metaannotations;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 import edu.jhu.cs.bsj.compiler.ast.AccessModifier;
 import edu.jhu.cs.bsj.compiler.ast.AssignmentOperator;
@@ -8,19 +10,24 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 import edu.jhu.cs.bsj.compiler.ast.NameCategory;
 import edu.jhu.cs.bsj.compiler.ast.exception.MetaprogramExecutionFailureException;
 import edu.jhu.cs.bsj.compiler.ast.node.AnonymousClassMemberListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.ClassDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassMemberListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.EnumDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.FieldDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
+import edu.jhu.cs.bsj.compiler.ast.node.InterfaceDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.InterfaceMemberListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.MethodDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
+import edu.jhu.cs.bsj.compiler.ast.node.TypeDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclaratorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.metaannotation.InvalidMetaAnnotationConfigurationException;
 import edu.jhu.cs.bsj.compiler.metaprogram.AbstractBsjMetaAnnotationMetaprogram;
 import edu.jhu.cs.bsj.compiler.metaprogram.Context;
-import edu.jhu.cs.bsj.stdlib.diagnostic.impl.InvalidAnnotatedDeclarationImpl;
+import edu.jhu.cs.bsj.stdlib.diagnostic.impl.InvalidAnnotatedDeclarationDiagnosticImpl;
+import edu.jhu.cs.bsj.stdlib.diagnostic.impl.InvalidEnclosingTypeDiagnosticImpl;
 
 /**
  * This BSJ meta-annotation class represents a metaprogram which creates a getter and a setter for the field that it
@@ -47,7 +54,7 @@ public class Property extends AbstractBsjMetaAnnotationMetaprogram
 		if (fieldNode == null)
 		{
 			context.getDiagnosticListener().report(
-					new InvalidAnnotatedDeclarationImpl(getClass(), null,
+					new InvalidAnnotatedDeclarationDiagnosticImpl(getClass(), null,
 							Collections.<Class<? extends Node>> singletonList(FieldDeclarationNode.class)));
 			throw new MetaprogramExecutionFailureException();
 		}
@@ -65,9 +72,13 @@ public class Property extends AbstractBsjMetaAnnotationMetaprogram
 		}
 		if (list == null)
 		{
-			// TODO: better error handling
-			throw new IllegalArgumentException("No class, interface, or anonymous class as a parent of the field "
-					+ "annotated with @@Property at " + context.getAnchor().getStartLocation());
+			List<Class<? extends TypeDeclarationNode>> legalEnclosingTypeDeclarationsList = new ArrayList<Class<? extends TypeDeclarationNode>>();
+			legalEnclosingTypeDeclarationsList.add(InterfaceDeclarationNode.class);
+			legalEnclosingTypeDeclarationsList.add(ClassDeclarationNode.class);
+			legalEnclosingTypeDeclarationsList.add(EnumDeclarationNode.class);
+			context.getDiagnosticListener().report(
+					new InvalidEnclosingTypeDiagnosticImpl(getClass(), null, legalEnclosingTypeDeclarationsList));
+			throw new MetaprogramExecutionFailureException();
 		}
 
 		// Create a getter and a setter for each field
