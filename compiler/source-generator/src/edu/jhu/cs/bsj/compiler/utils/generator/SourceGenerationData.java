@@ -11,12 +11,15 @@ public class SourceGenerationData
 {
 	private Collection<TypeDefinition> types;
 	private Collection<DiagnosticDefinition> diagnostics;
+	private Collection<UserDiagnosticDefinition> userDiagnostics;
 
-	public SourceGenerationData(Collection<TypeDefinition> types, Collection<DiagnosticDefinition> diagnostics)
+	public SourceGenerationData(Collection<TypeDefinition> types, Collection<DiagnosticDefinition> diagnostics,
+			Collection<UserDiagnosticDefinition> userDiagnostics)
 	{
 		super();
 		this.types = types;
 		this.diagnostics = diagnostics;
+		this.userDiagnostics = userDiagnostics;
 	}
 
 	public Collection<TypeDefinition> getTypes()
@@ -27,6 +30,11 @@ public class SourceGenerationData
 	public Collection<DiagnosticDefinition> getDiagnostics()
 	{
 		return diagnostics;
+	}
+
+	public Collection<UserDiagnosticDefinition> getUserDiagnostics()
+	{
+		return userDiagnostics;
 	}
 
 }

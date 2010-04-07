@@ -14,12 +14,13 @@ public enum Project
 {
 	API("interface", Arrays.asList("edu.jhu.cs.bsj.compiler.ast.*", "edu.jhu.cs.bsj.compiler.ast.node.*",
 			"edu.jhu.cs.bsj.compiler.ast.node.meta.*", "edu.jhu.cs.bsj.compiler.ast.exception.*", "java.util.*",
-			"java.io.*", "javax.annotation.Generated"), Arrays.<Project>asList()),
-	PARSER("parser", Arrays.<String>asList(), Arrays.asList(API)),
+			"java.io.*", "javax.annotation.Generated"), Arrays.<Project> asList()),
+	PARSER("parser", Arrays.<String> asList(), Arrays.asList(API)),
 	GENERATOR("implementation", Arrays.asList("edu.jhu.cs.bsj.compiler.impl.ast.*",
 			"edu.jhu.cs.bsj.compiler.impl.ast.node.*", "edu.jhu.cs.bsj.compiler.impl.ast.node.meta.*",
 			"edu.jhu.cs.bsj.compiler.impl.utils.*", "javax.annotation.Generated",
-			"edu.jhu.cs.bsj.compiler.impl.tool.filemanager.*"), Arrays.asList(API));
+			"edu.jhu.cs.bsj.compiler.impl.tool.filemanager.*"), Arrays.asList(API)),
+	BSJ_UTILS("utils", Arrays.<String> asList(), Arrays.asList(API));
 
 	/** The name of the resource directory for this project. */
 	private String resourceDirName;

@@ -71,6 +71,7 @@ public class SourceGeneratorParser
 
 		establishHierarchy(data.getTypes(), true);
 		establishHierarchy(data.getDiagnostics(), false);
+		establishHierarchy(data.getUserDiagnostics(), false);
 
 		return data;
 	}
@@ -218,6 +219,26 @@ public class SourceGeneratorParser
 		return mode;
 	}
 
+	private static Project parseProjectFromString(String project)
+	{
+		if (project.equals("api"))
+		{
+			return Project.API;
+		} else if (project.equals("generator"))
+		{
+			return Project.GENERATOR;
+		} else if (project.equals("parser"))
+		{
+			return Project.PARSER;
+		} else if (project.equals("bsjutils"))
+		{
+			return Project.BSJ_UTILS;
+		} else
+		{
+			throw new IllegalArgumentException("Unrecognized target project: " + project);
+		}
+	}
+
 	static interface ElementHandler<T>
 	{
 		public T handle(Element e);
@@ -241,6 +262,7 @@ public class SourceGeneratorParser
 		{
 			Collection<TypeDefinition> types = new ArrayList<TypeDefinition>();
 			Collection<DiagnosticDefinition> diagnostics = new ArrayList<DiagnosticDefinition>();
+			Collection<UserDiagnosticDefinition> userDiagnostics = new ArrayList<UserDiagnosticDefinition>();
 
 			if (e.hasAttribute("ipkg"))
 			{
@@ -250,21 +272,15 @@ public class SourceGeneratorParser
 			{
 				profile = profile.derive(GenerationProfile.GENERATED_CLASS_PACKAGE_NAME, e.getAttribute("cpkg"));
 			}
+			if (e.hasAttribute("itgt"))
+			{
+				profile = profile.derive(GenerationProfile.INTERFACE_PROJECT,
+						parseProjectFromString(e.getAttribute("itgt")));
+			}
 			if (e.hasAttribute("ctgt"))
 			{
-				String target = e.getAttribute("ctgt");
-				Project project;
-				if (target.equals("generator"))
-				{
-					project = Project.GENERATOR;
-				} else if (target.equals("parser"))
-				{
-					project = Project.PARSER;
-				} else
-				{
-					throw new IllegalArgumentException("Unrecognized target project: " + target);
-				}
-				profile = profile.derive(GenerationProfile.TARGET_PROJECT, project);
+				profile = profile.derive(GenerationProfile.IMPLEMENTATION_PROJECT,
+						parseProjectFromString(e.getAttribute("ctgt")));
 			}
 
 			NodeList children = e.getChildNodes();
@@ -281,6 +297,7 @@ public class SourceGeneratorParser
 						SourceGenerationData childData = handler.handle(childElement);
 						types.addAll(childData.getTypes());
 						diagnostics.addAll(childData.getDiagnostics());
+						userDiagnostics.addAll(childData.getUserDiagnostics());
 					} else if (childTag.equals("type"))
 					{
 						TypeHandler handler = new TypeHandler(profile);
@@ -289,6 +306,10 @@ public class SourceGeneratorParser
 					{
 						DiagnosticHandler handler = new DiagnosticHandler(profile);
 						diagnostics.add(handler.handle(childElement));
+					} else if (childTag.equals("userDiagnostic"))
+					{
+						UserDiagnosticHandler handler = new UserDiagnosticHandler(profile);
+						userDiagnostics.add(handler.handle(childElement));
 					} else if (childTag.equals("import"))
 					{
 						SourceGeneratorParser parser = new SourceGeneratorParser();
@@ -310,6 +331,7 @@ public class SourceGeneratorParser
 						}
 						types.addAll(childData.getTypes());
 						diagnostics.addAll(childData.getDiagnostics());
+						userDiagnostics.addAll(childData.getUserDiagnostics());
 					} else if (childTag.equals("factory"))
 					{
 						String factoryInterfaceName = childElement.getAttribute("interface");
@@ -340,7 +362,7 @@ public class SourceGeneratorParser
 				}
 			}
 
-			return new SourceGenerationData(types, diagnostics);
+			return new SourceGenerationData(types, diagnostics, userDiagnostics);
 		}
 	}
 
@@ -664,6 +686,59 @@ public class SourceGeneratorParser
 			}
 
 			return new DiagnosticExceptionDefinition(docString, property);
+		}
+	}
+
+	static class UserDiagnosticHandler implements ElementHandler<UserDiagnosticDefinition>
+	{
+		private GenerationProfile profile;
+
+		public UserDiagnosticHandler(GenerationProfile profile)
+		{
+			super();
+			this.profile = profile;
+		}
+
+		@Override
+		public UserDiagnosticDefinition handle(Element e)
+		{
+			String name = e.getAttribute("name");
+			String typeParam = getAttributeValue(e, "typeParam");
+			String superName = getAttributeValue(e, "super");
+			String superArg = getAttributeValue(e, "superTypeArg");
+			List<DiagnosticPropertyDefinition> props = new ArrayList<DiagnosticPropertyDefinition>();
+			List<String> messagePropertyExpressions = new ArrayList<String>();
+			String docString = null;
+			String code = getAttributeValue(e, "code");
+
+			NodeList children = e.getChildNodes();
+			for (int i = 0; i < children.getLength(); i++)
+			{
+				Node node = children.item(i);
+				if (node instanceof Element)
+				{
+					Element childElement = (Element) node;
+					String childTag = childElement.getTagName();
+					if (childTag.equals("prop"))
+					{
+						DiagnosticPropertyHandler handler = new DiagnosticPropertyHandler(this.profile);
+						props.add(handler.handle(childElement));
+					} else if (childTag.equals("messageProp"))
+					{
+						messagePropertyExpressions.add(childElement.getAttribute("expression"));
+					} else if (childTag.equals("doc"))
+					{
+						docString = unindent(childElement.getTextContent());
+					} else
+					{
+						throw new IllegalStateException("Unknown subtag for type: " + childTag);
+					}
+				}
+			}
+
+			UserDiagnosticDefinition def = new UserDiagnosticDefinition(name, typeParam, superName, superArg,
+					this.profile, props, messagePropertyExpressions, docString, code);
+			return def;
 		}
 	}
 }

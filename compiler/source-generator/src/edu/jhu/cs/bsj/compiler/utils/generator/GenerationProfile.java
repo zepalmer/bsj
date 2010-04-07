@@ -25,7 +25,8 @@ public class GenerationProfile
 			TypeDefinition.Mode.CONCRETE);
 	public static final Element<PropertyDefinition.Mode> DEFAULT_PROPERTY_MODE = new Element<PropertyDefinition.Mode>(
 			PropertyDefinition.Mode.NORMAL);
-	public static final Element<Project> TARGET_PROJECT = new Element<Project>(Project.GENERATOR);
+	public static final Element<Project> INTERFACE_PROJECT = new Element<Project>(Project.API);
+	public static final Element<Project> IMPLEMENTATION_PROJECT = new Element<Project>(Project.GENERATOR);
 
 	public static final class Element<T>
 	{

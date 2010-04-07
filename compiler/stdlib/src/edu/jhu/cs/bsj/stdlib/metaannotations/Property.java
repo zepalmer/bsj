@@ -6,6 +6,7 @@ import edu.jhu.cs.bsj.compiler.ast.AccessModifier;
 import edu.jhu.cs.bsj.compiler.ast.AssignmentOperator;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 import edu.jhu.cs.bsj.compiler.ast.NameCategory;
+import edu.jhu.cs.bsj.compiler.ast.exception.MetaprogramExecutionFailureException;
 import edu.jhu.cs.bsj.compiler.ast.node.AnonymousClassMemberListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassMemberListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.FieldDeclarationNode;
@@ -13,11 +14,13 @@ import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.InterfaceMemberListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.MethodDeclarationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.VariableDeclaratorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.metaannotation.InvalidMetaAnnotationConfigurationException;
 import edu.jhu.cs.bsj.compiler.metaprogram.AbstractBsjMetaAnnotationMetaprogram;
 import edu.jhu.cs.bsj.compiler.metaprogram.Context;
+import edu.jhu.cs.bsj.stdlib.diagnostic.impl.InvalidAnnotatedDeclarationImpl;
 
 /**
  * This BSJ meta-annotation class represents a metaprogram which creates a getter and a setter for the field that it
@@ -43,9 +46,10 @@ public class Property extends AbstractBsjMetaAnnotationMetaprogram
 		FieldDeclarationNode fieldNode = context.getAnchor().getNearestAncestorOfType(FieldDeclarationNode.class);
 		if (fieldNode == null)
 		{
-			// TODO: better error handling
-			throw new IllegalArgumentException("Property annotation used without field declaration at "
-					+ context.getAnchor().getStartLocation());
+			context.getDiagnosticListener().report(
+					new InvalidAnnotatedDeclarationImpl(getClass(), null,
+							Collections.<Class<? extends Node>> singletonList(FieldDeclarationNode.class)));
+			throw new MetaprogramExecutionFailureException();
 		}
 
 		// Try to find the list of members for this field declaration

@@ -319,6 +319,7 @@
             <diagnostic name="MetaprogramExceptionDiagnostic" super="MetaprogramErrorDiagnostic"
                 code="bsj.compiler.metaprogram.failure.exception">
                 <prop name="exception" type="Exception" desc="the exception which was raised by the metaprogram"/>
+                <messageProp expression="DiagnosticMessageUtilities.getIndentedStackTraceString(exception)"/>
                 <doc><![CDATA[
                     This diagnostic indicates that the body of a metaprogram terminated by raising an exception.
                 ]]></doc>

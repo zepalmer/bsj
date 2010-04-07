@@ -38,6 +38,12 @@ public class UserDiagnosticTest extends AbstractBsjCompilerTest
 		{
 			return Kind.ERROR;
 		}
+		
+		@Override
+		public String getCode()
+		{
+			return "bsj.test.diagnostic.TestDiagnostic";
+		}
 
 		@Override
 		public String getMessage(Locale locale)

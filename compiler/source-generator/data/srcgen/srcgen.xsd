@@ -148,7 +148,7 @@
         <xs:sequence>
             <xs:element name="doc" type="doc_T" />
         </xs:sequence>
-        <xs:attribute name="prop" type="xs:string" use="optional" default="exception"/>
+        <xs:attribute name="prop" type="xs:string" use="optional" default="exception" />
     </xs:complexType>
 
     <xs:complexType name="diagnosticMessageProp_T">
@@ -169,14 +169,29 @@
         <xs:attribute name="code" type="xs:string" use="optional" />
     </xs:complexType>
 
+    <xs:complexType name="userDiagnostic_T">
+        <xs:sequence>
+            <xs:element name="prop" type="diagnosticProp_T" minOccurs="0" maxOccurs="unbounded" />
+            <xs:element name="messageProp" type="diagnosticMessageProp_T" minOccurs="0" maxOccurs="unbounded" />
+            <xs:element name="doc" type="doc_T" />
+        </xs:sequence>
+        <xs:attribute name="name" type="xs:string" use="required" />
+        <xs:attribute name="typeParam" type="xs:string" use="optional" />
+        <xs:attribute name="super" type="xs:string" use="optional" />
+        <xs:attribute name="superTypeArg" type="xs:string" use="optional" />
+        <xs:attribute name="code" type="xs:string" use="optional" />
+    </xs:complexType>
+
     <xs:complexType name="import_T">
         <xs:attribute name="path" type="xs:string" use="required" />
     </xs:complexType>
 
-    <xs:simpleType name="ctgt_T">
+    <xs:simpleType name="project_T">
         <xs:restriction base="xs:string">
-            <xs:enumeration value="generator" />
+            <xs:enumeration value="api" />
             <xs:enumeration value="parser" />
+            <xs:enumeration value="generator" />
+            <xs:enumeration value="bsjutils" />
         </xs:restriction>
     </xs:simpleType>
 
@@ -198,12 +213,16 @@
                 <xs:element name="diagnostic" type="diagnostic_T" minOccurs="0" maxOccurs="unbounded" />
             </xs:sequence>
             <xs:sequence>
+                <xs:element name="userDiagnostic" type="userDiagnostic_T" minOccurs="0" maxOccurs="unbounded" />
+            </xs:sequence>
+            <xs:sequence>
                 <xs:element name="import" type="import_T" minOccurs="0" maxOccurs="unbounded" />
             </xs:sequence>
         </xs:choice>
         <xs:attribute name="ipkg" type="xs:string" use="optional" />
         <xs:attribute name="cpkg" type="xs:string" use="optional" />
-        <xs:attribute name="ctgt" type="ctgt_T" use="optional" default="generator" />
+        <xs:attribute name="itgt" type="project_T" use="optional" default="api" />
+        <xs:attribute name="ctgt" type="project_T" use="optional" default="generator" />
     </xs:complexType>
 
     <xs:element name="srcgen" type="srcgen_T" />

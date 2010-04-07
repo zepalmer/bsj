@@ -2353,7 +2353,7 @@
                 meta-annotation sugar.  The <tt>metaprogramAnchor</tt> field is used when the meta-annotation for this
                 node represents a metaprogram; otherwise, it is <tt>null</tt>.
             ]]></doc>
-            <factory-override prop="metaprogramAnchor" expr="null"/>
+            <factory-override prop="metaprogramAnchor" expr="null" />
         </type>
 
         <type name="NormalMetaAnnotationNode" super="MetaAnnotationNode">

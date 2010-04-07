@@ -3,6 +3,7 @@ package edu.jhu.cs.bsj.compiler.impl.utils.i18n;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
@@ -77,4 +78,37 @@ public class PropertyBasedStringRepository implements StringRepository
 		return p.getProperty(key);
 	}
 
+	@Override
+	public String getFormattedMessage(Locale locale, String key, List<Object> args)
+	{
+		String formatString = InternationalizationUtilities.MESSAGE_REPOSITORY.lookup(locale, key);
+		if (formatString == null)
+		{
+			// try to produce a default message in English with a warning
+			formatString = InternationalizationUtilities.MESSAGE_REPOSITORY.lookup(Locale.US, key);
+			if (formatString == null)
+			{
+				// no hope! no hope!
+				StringBuilder sb = new StringBuilder("(could not get string for key " + key + "; [");
+				boolean first = true;
+				for (Object arg : args)
+				{
+					if (first)
+					{
+						first = false;
+					} else
+					{
+						sb.append(',');
+					}
+					sb.append(arg);
+				}
+				sb.append("])");
+				return sb.toString();
+			}
+			// 
+			formatString = "(no strings found for language=" + locale.getDisplayLanguage() + ") " + formatString;
+		}
+
+		return String.format(locale, formatString, args.toArray());
+	}
 }

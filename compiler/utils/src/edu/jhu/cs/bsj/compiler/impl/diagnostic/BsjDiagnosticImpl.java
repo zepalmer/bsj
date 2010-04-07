@@ -105,36 +105,8 @@ public abstract class BsjDiagnosticImpl implements BsjDiagnostic
 	@Override
 	public String getMessage(Locale locale)
 	{
-		String formatString = InternationalizationUtilities.MESSAGE_REPOSITORY.lookup(locale, getCode());
-		if (formatString == null)
-		{
-			// try to produce a default message in English with a warning
-			formatString = InternationalizationUtilities.MESSAGE_REPOSITORY.lookup(Locale.US, getCode());
-			if (formatString == null)
-			{
-				// no hope! no hope!
-				StringBuilder sb = new StringBuilder("(could not get string for key " + getCode() + "; [");
-				boolean first = true;
-				for (Object arg : getMessageArgs(locale))
-				{
-					if (first)
-					{
-						first = false;
-					} else
-					{
-						sb.append(',');
-					}
-					sb.append(arg);
-				}
-				sb.append("])");
-				return sb.toString();
-			}
-			// 
-			formatString = "(no strings found for language=" + locale.getDisplayLanguage() + ") " + formatString;
-		}
-
-		List<Object> args = getMessageArgs(locale);
-		String message = String.format(locale, formatString, args.toArray());
+		String message = InternationalizationUtilities.MESSAGE_REPOSITORY.getFormattedMessage(locale, getCode(),
+				getMessageArgs(locale));
 
 		StringBuilder sb = new StringBuilder();
 		if (this.location == null)

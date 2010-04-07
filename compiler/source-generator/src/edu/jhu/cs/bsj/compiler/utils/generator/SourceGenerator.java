@@ -152,6 +152,15 @@ public class SourceGenerator
 			}
 		}
 
+		// For each user diagnostic, inform each handler
+		for (UserDiagnosticDefinition userDiagnostic : data.getUserDiagnostics())
+		{
+			for (DefinitionHandler handler : handlers)
+			{
+				handler.handleUserDiagnosticDefinition(userDiagnostic);
+			}
+		}
+
 		// Finish each handler
 		for (DefinitionHandler handler : handlers)
 			handler.finish();
@@ -435,6 +444,8 @@ public class SourceGenerator
 
 		public void handleDiagnosticDefinition(DiagnosticDefinition def) throws IOException;
 
+		public void handleUserDiagnosticDefinition(UserDiagnosticDefinition def) throws IOException;
+
 		public void finish() throws IOException;
 	}
 
@@ -449,8 +460,9 @@ public class SourceGenerator
 			String pkg = def.getProfile().getProperty(GenerationProfile.GENERATED_INTERFACE_PACKAGE_NAME);
 			if (pkg == null)
 				pkg = "";
-			File classFile = new File(getTargetDir(Project.API) + File.separator
-					+ pkg.replaceAll("\\.", File.separator) + File.separator + def.getBaseName() + ".java");
+			Project project = def.getProfile().getProperty(GenerationProfile.INTERFACE_PROJECT);
+			File classFile = new File(getTargetDir(project) + File.separator + pkg.replaceAll("\\.", File.separator)
+					+ File.separator + def.getBaseName() + ".java");
 			classFile.getParentFile().mkdirs();
 			FileOutputStream fos = new FileOutputStream(classFile);
 			PrependablePrintStream ps = new PrependablePrintStream(fos, "    ", 0);
@@ -459,8 +471,8 @@ public class SourceGenerator
 			ps.println("");
 
 			// imports
-			printImports(ps, Project.API);
-			includeAllImports(ps, def.getIncludes(), Project.API, SupplementCategory.NODE);
+			printImports(ps, project);
+			includeAllImports(ps, def.getIncludes(), project, SupplementCategory.NODE);
 
 			ps.println("/**");
 			ps.println(" * " + def.getDocString().replaceAll("\n", "\n * "));
@@ -531,7 +543,7 @@ public class SourceGenerator
 
 			// write bodies
 			ps.decPrependCount();
-			includeAllBodies(ps, def.getIncludes(), Project.API, SupplementCategory.NODE);
+			includeAllBodies(ps, def.getIncludes(), project, SupplementCategory.NODE);
 			ps.println("}");
 		}
 	}
@@ -548,6 +560,14 @@ public class SourceGenerator
 		 */
 		@Override
 		public void handleDiagnosticDefinition(DiagnosticDefinition def) throws IOException
+		{
+		}
+
+		/**
+		 * A do-nothing user diagnostic definition handling method for backwards compatibility.
+		 */
+		@Override
+		public void handleUserDiagnosticDefinition(UserDiagnosticDefinition def) throws IOException
 		{
 		}
 
@@ -2213,38 +2233,35 @@ public class SourceGenerator
 			ps.println("}");
 			ps.close();
 		}
-
 	}
 
-	static class DiagnosticDefinitionHandler extends AbstractDefinitionHandler
+	static abstract class AbstractDiagnosticDefinitionHandler<T extends AbstractDiagnosticDefinition<T>> extends
+			AbstractDefinitionHandler
 	{
-		private PrependablePrintStream classPs;
-		private PrependablePrintStream ifacePs;
-		private Set<String> generatedExceptionClasses;
+		protected final String INTERFACE_IMPORTS = "import edu.jhu.cs.bsj.compiler.diagnostic.*;\n"
+				+ "import edu.jhu.cs.bsj.compiler.metaannotation.*;\n"
+				+ "import edu.jhu.cs.bsj.compiler.metaprogram.*;\n"
+				+ "import javax.tools.Diagnostic.Kind;\n";
+		protected final String CLASS_IMPORTS = INTERFACE_IMPORTS
+				+ "import edu.jhu.cs.bsj.compiler.impl.diagnostic.*;\n";
 
-		@Override
-		public void init() throws IOException
+		protected void handleAbstractDiagnosticDefinition(T def) throws IOException
 		{
-			generatedExceptionClasses = new HashSet<String>();
-		}
-
-		@Override
-		public void handleDiagnosticDefinition(DiagnosticDefinition def) throws IOException
-		{
-			String interfaceImports = "import edu.jhu.cs.bsj.compiler.diagnostic.*;\n"
-					+ "import edu.jhu.cs.bsj.compiler.metaannotation.*;\n";
+			PrependablePrintStream classPs;
+			PrependablePrintStream ifacePs;
 
 			String interfacePackage = def.getProfile().getProperty(GenerationProfile.GENERATED_INTERFACE_PACKAGE_NAME);
-			ifacePs = createOutputFile(interfacePackage, Mode.INTERFACE, Project.API, SupplementCategory.GENERAL,
-					def.getFullName(), false, interfaceImports + "\n/**\n * "
+			Project ifaceProject = def.getProfile().getProperty(GenerationProfile.INTERFACE_PROJECT);
+			Project classProject = def.getProfile().getProperty(GenerationProfile.IMPLEMENTATION_PROJECT);
+			ifacePs = createOutputFile(interfacePackage, Mode.INTERFACE, ifaceProject, SupplementCategory.GENERAL,
+					def.getFullName(), false, INTERFACE_IMPORTS + "\n/**\n * "
 							+ def.getDocString().replaceAll("\n", "\n * ") + "\n */", def.getFullSuper());
 			ifacePs.incPrependCount();
 
 			String classPackage = def.getProfile().getProperty(GenerationProfile.GENERATED_CLASS_PACKAGE_NAME);
 			classPs = createOutputFile(classPackage, def.getCode() == null ? Mode.ABSTRACT : Mode.CONCRETE,
-					def.getProfile().getProperty(GenerationProfile.TARGET_PROJECT), SupplementCategory.GENERAL,
-					def.getName() + "Impl" + def.getTypeParameterWithDelimiters(), false, interfaceImports
-							+ "import edu.jhu.cs.bsj.compiler.impl.diagnostic.*;\n" + "import " + interfacePackage
+					classProject, SupplementCategory.GENERAL, def.getName() + "Impl"
+							+ def.getTypeParameterWithDelimiters(), false, CLASS_IMPORTS + "import " + interfacePackage
 							+ ".*;\n" + "\n\n/**\n * " + def.getDocString().replaceAll("\n", "\n * ") + "\n */",
 					def.getFullSuper().replaceAll(def.getSuperName(), def.getSuperName() + "Impl"),
 					def.getNameWithTypeParameters());
@@ -2265,16 +2282,7 @@ public class SourceGenerator
 			}
 
 			// Create constructor definition
-			List<DiagnosticPropertyDefinition> consParams = new ArrayList<DiagnosticPropertyDefinition>();
-			consParams.add(new DiagnosticPropertyDefinition("source", "BsjSourceLocation", null,
-					ModalPropertyDefinition.Mode.NORMAL, "", null, null));
-			PropertyDefinition.Mode overrideMode = def.getCode() == null ? ModalPropertyDefinition.Mode.NORMAL
-					: ModalPropertyDefinition.Mode.SKIP;
-			consParams.add(new DiagnosticPropertyDefinition("code", "String", null, overrideMode, null,
-					def.getCode() == null ? null : def.getName() + ".CODE", null));
-			// TODO: parameterization of diagnostic kind
-			consParams.add(new DiagnosticPropertyDefinition("kind", "javax.tools.Diagnostic.Kind", null, overrideMode,
-					null, def.getCode() == null ? null : "Kind.ERROR", null));
+			List<DiagnosticPropertyDefinition> consParams = getDefaultConstructorParameters(def);
 			consParams.addAll(def.getRecursiveProperties(true));
 
 			List<DiagnosticPropertyDefinition> superParams = new ArrayList<DiagnosticPropertyDefinition>(consParams);
@@ -2339,7 +2347,7 @@ public class SourceGenerator
 			classPs.println("{");
 			classPs.incPrependCount();
 			classPs.print("List<Object> args = ");
-			if (def.getSuperName().equals("BsjDiagnostic"))
+			if (def.getSuperName().equals(getTopAncestorName()))
 			{
 				classPs.println("new ArrayList<Object>();");
 			} else
@@ -2367,6 +2375,105 @@ public class SourceGenerator
 			classPs.println("}");
 			classPs.println();
 
+			suffix(def, ifacePs, classPs);
+
+			// Finish out
+			ifacePs.decPrependCount();
+			ifacePs.println("}");
+			classPs.decPrependCount();
+			classPs.println("}");
+		}
+
+		protected List<DiagnosticPropertyDefinition> getDefaultConstructorParameters(T def)
+		{
+			List<DiagnosticPropertyDefinition> consParams = new ArrayList<DiagnosticPropertyDefinition>();
+			PropertyDefinition.Mode overrideMode = def.getCode() == null ? ModalPropertyDefinition.Mode.NORMAL
+					: ModalPropertyDefinition.Mode.SKIP;
+			consParams.add(new DiagnosticPropertyDefinition("code", "String", null, overrideMode, null,
+					def.getCode() == null ? null : def.getName() + ".CODE", null));
+			// TODO: parameterization of diagnostic kind
+			consParams.add(new DiagnosticPropertyDefinition("kind", "javax.tools.Diagnostic.Kind", null, overrideMode,
+					null, def.getCode() == null ? null : "Kind.ERROR", null));
+			return consParams;
+		}
+
+		protected abstract String getTopAncestorName();
+
+		protected abstract void suffix(T def, PrependablePrintStream ifacePs, PrependablePrintStream classPs)
+				throws IOException;
+	}
+
+	static class UserDiagnosticDefinitionHandler extends AbstractDiagnosticDefinitionHandler<UserDiagnosticDefinition>
+	{
+		@Override
+		public void init() throws IOException
+		{
+		}
+
+		@Override
+		protected void suffix(UserDiagnosticDefinition def, PrependablePrintStream classPs,
+				PrependablePrintStream ifacePs) throws IOException
+		{
+		}
+
+		@Override
+		protected String getTopAncestorName()
+		{
+			return "BsjUtilDiagnostic";
+		}
+
+		@Override
+		public void handleUserDiagnosticDefinition(UserDiagnosticDefinition def) throws IOException
+		{
+			handleAbstractDiagnosticDefinition(def);
+		}
+
+		@Override
+		public void handleTypeDefinition(TypeDefinition def) throws IOException
+		{
+		}
+
+		@Override
+		public void finish() throws IOException
+		{
+		}
+	}
+
+	static class DiagnosticDefinitionHandler extends AbstractDiagnosticDefinitionHandler<DiagnosticDefinition>
+	{
+		private Set<String> generatedExceptionClasses;
+
+		@Override
+		public void init() throws IOException
+		{
+			generatedExceptionClasses = new HashSet<String>();
+		}
+
+		@Override
+		public void handleDiagnosticDefinition(DiagnosticDefinition def) throws IOException
+		{
+			handleAbstractDiagnosticDefinition(def);
+		}
+
+		@Override
+		protected String getTopAncestorName()
+		{
+			return "BsjDiagnostic";
+		}
+
+		@Override
+		protected List<DiagnosticPropertyDefinition> getDefaultConstructorParameters(DiagnosticDefinition def)
+		{
+			List<DiagnosticPropertyDefinition> params = super.getDefaultConstructorParameters(def);
+			params.add(0, new DiagnosticPropertyDefinition("source", "BsjSourceLocation", null,
+					ModalPropertyDefinition.Mode.NORMAL, "", null, null));
+			return params;
+		}
+
+		@Override
+		protected void suffix(DiagnosticDefinition def, PrependablePrintStream ifacePs, PrependablePrintStream classPs)
+				throws IOException
+		{
 			// If an exception should be created for this diagnostic...
 			if (def.getException() != null)
 			{
@@ -2405,12 +2512,6 @@ public class SourceGenerator
 					classPs.println();
 				}
 			}
-
-			// Finish out
-			ifacePs.decPrependCount();
-			ifacePs.println("}");
-			classPs.decPrependCount();
-			classPs.println("}");
 		}
 
 		/**
@@ -2445,7 +2546,10 @@ public class SourceGenerator
 
 			String docString = "/**\n * " + def.getException().getDocString().replaceAll("\n", "\n * ") + "\n */";
 
-			PrependablePrintStream ps = createOutputFile(exceptionPackage, Mode.ABSTRACT, Project.API,
+			Project ifaceProject = def.getProfile().getProperty(GenerationProfile.INTERFACE_PROJECT);
+			Project classProject = def.getProfile().getProperty(GenerationProfile.IMPLEMENTATION_PROJECT);
+
+			PrependablePrintStream ps = createOutputFile(exceptionPackage, Mode.ABSTRACT, ifaceProject,
 					SupplementCategory.GENERAL, typeName, false, imports + "\n" + docString, supertypeName);
 			ps.incPrependCount();
 
@@ -2544,7 +2648,7 @@ public class SourceGenerator
 			String implImports = imports + "import edu.jhu.cs.bsj.compiler.impl.diagnostic.*;\n"
 					+ "import edu.jhu.cs.bsj.compiler.impl.diagnostic.compiler.*;\n";
 			ps = createOutputFile(exceptionImplPackage, def.getCode() != null ? Mode.CONCRETE : Mode.ABSTRACT,
-					Project.GENERATOR, SupplementCategory.GENERAL, typeName + "Impl", false, implImports
+					classProject, SupplementCategory.GENERAL, typeName + "Impl", false, implImports
 							+ "\n/*\n * {@inheritDoc}\n */\n", typeName);
 			ps.incPrependCount();
 
