@@ -102,22 +102,20 @@ scope Rule {
     
     // *** SOURCE LOCATION TRACKING *******************************************
     /** The resource which is being parsed. */
-    private JavaFileObject resource;
-    /** Getter for the resource name indicating which resource is being parsed. */
-    public JavaFileObject getResource()
+    private String resourceName;
+    /**
+     * Produces a resource name for the resource in this parser.
+     */
+    public String getResourceName()
     {
-        return resource;
-    }
-    public void setResource(JavaFileObject resource)
-    {
-        this.resource = resource;
+        return (this.resourceName == null) ? "<unknown>" : resourceName;
     }
     /**
      * Produces a resource name for the resource in this parser.
      */
-    protected String getResourceName()
+    public void setResourceName(String resourceName)
     {
-        return this.resource == null ? "<unknown>" : this.resource.toString();
+        this.resourceName = resourceName;
     }
     /**
      * Retrieves the line number for the specified relative token index (as per input.LT).
@@ -222,22 +220,20 @@ scope Rule {
     
     // *** SOURCE LOCATION TRACKING *******************************************
     /** The resource which is being parsed. */
-    private JavaFileObject resource;
-    /** Getter for the resource name indicating which resource is being parsed. */
-    public JavaFileObject getResource()
+    private String resourceName;
+    /**
+     * Produces a resource name for the resource in this parser.
+     */
+    public String getResourceName()
     {
-        return resource;
-    }
-    public void setResource(JavaFileObject resource)
-    {
-        this.resource = resource;
+        return (this.resourceName == null) ? "<unknown>" : resourceName;
     }
     /**
      * Produces a resource name for the resource in this parser.
      */
-    protected String getResourceName()
+    public void setResourceName(String resourceName)
     {
-        return this.resource == null ? "<unknown>" : this.resource.toString();
+        this.resourceName = resourceName;
     }
     /**
      * Retrieves the line number for the specified relative token index (as per input.LT).

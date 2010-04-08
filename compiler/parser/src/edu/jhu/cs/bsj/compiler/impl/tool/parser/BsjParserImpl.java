@@ -63,6 +63,7 @@ public class BsjParserImpl implements BsjParser
 		BsjAntlrParser parser = new BsjAntlrParser(new TokenRewriteStream(lexer));
 		parser.setDiagnosticListener(diagnosticListener);
 		parser.setFactory(factory);
+		parser.setResourceName(name);
 
 		CompilationUnitNode compilationUnitNode;
 		try
