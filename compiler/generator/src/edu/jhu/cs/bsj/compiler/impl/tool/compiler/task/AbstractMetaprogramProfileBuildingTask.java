@@ -20,8 +20,10 @@ public abstract class AbstractMetaprogramProfileBuildingTask<A extends Metaprogr
 	protected MetacompilationContext metacompilationContext;
 	/** A field containing the anchor of the metaprogram to extract. */
 	protected A anchor;
-	/** A field containing the metaprogram which injected this new metaprogram into the AST.  This field is
-	 *  <code>null</code> if the metaprogram was not injected (that is, if it existed in original source). */
+	/**
+	 * A field containing the metaprogram which injected this new metaprogram into the AST. This field is
+	 * <code>null</code> if the metaprogram was not injected (that is, if it existed in original source).
+	 */
 	protected MetaprogramProfile<?> parentProfile;
 
 	public AbstractMetaprogramProfileBuildingTask(TaskPriority priority, A anchor, MetaprogramProfile<?> profile)
@@ -38,7 +40,15 @@ public abstract class AbstractMetaprogramProfileBuildingTask<A extends Metaprogr
 		this.metacompilationContext = context;
 
 		// Build a metaprogram profile for this anchor
-		MetaprogramProfile<?> profile = buildProfile();
+		MetaprogramProfile<?> profile = buildProfile(context);
+		if (profile == null)
+		{
+			if (LOGGER.isTraceEnabled())
+			{
+				LOGGER.trace("Metaprogram at " + this.anchor.getStartLocation() + " could not be profiled.");
+				return;
+			}
+		}
 		if (LOGGER.isTraceEnabled())
 		{
 			LOGGER.trace("Metaprogram " + profile.getMetaprogram().getID() + " created with deps "
@@ -74,8 +84,11 @@ public abstract class AbstractMetaprogramProfileBuildingTask<A extends Metaprogr
 
 	/**
 	 * This stub indicates to the subclass that it should use the anchor to create a metaprogram profile.
-	 * @return The profile for the anchor that this task contains.
+	 * 
+	 * @param context The metacompilation context for this profile.
+	 * @return The profile for the anchor that this task contains or <code>null</code> if some error prevented the
+	 *         profile's construction.
 	 * @throws IOException If an I/O error occurs.
 	 */
-	protected abstract MetaprogramProfile<A> buildProfile() throws IOException;
+	protected abstract MetaprogramProfile<A> buildProfile(MetacompilationContext context) throws IOException;
 }

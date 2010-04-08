@@ -33,9 +33,11 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.ExplicitMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramPreambleNode;
+import edu.jhu.cs.bsj.compiler.impl.diagnostic.compiler.MetaprogramDependencyTypeNameResolutionDiagnosticImpl;
 import edu.jhu.cs.bsj.compiler.impl.metaprogram.BsjUserDiagnosticTranslatingListener;
 import edu.jhu.cs.bsj.compiler.impl.metaprogram.ContextImpl;
 import edu.jhu.cs.bsj.compiler.impl.metaprogram.Metaprogram;
+import edu.jhu.cs.bsj.compiler.impl.tool.compiler.MetacompilationContext;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.MetaprogramProfile;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.operations.TypeDeclarationLocatingNodeOperation;
 import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.InMemoryLocationManager;
@@ -69,7 +71,8 @@ public class CompileExplicitMetaprogramTask<R extends Node> extends
 	}
 
 	@Override
-	protected MetaprogramProfile<ExplicitMetaprogramAnchorNode<R>> buildProfile() throws IOException
+	protected MetaprogramProfile<ExplicitMetaprogramAnchorNode<R>> buildProfile(
+			MetacompilationContext metacompilationContext) throws IOException
 	{
 		// TODO: this whole name building process relies on strings - fix it
 		// this is a bit of a hack because it allows type and package name collision
@@ -77,9 +80,8 @@ public class CompileExplicitMetaprogramTask<R extends Node> extends
 		// suppose that package foo also has a class bar with inner class Baz
 		// the string name foo.bar.Baz.a is now ambiguous even though the BLS specifically indicates that this should
 		// not be a problem (fix by using binary names?)
-		
+
 		MetaprogramNode metaprogramNode = anchor.getMetaprogram();
-		anchor.setMetaprogram(null); // Clear the metaprogram from the anchor (so it can't reflect on itself)
 		MetaprogramLocalMode localMode = MetaprogramLocalMode.INSERT;
 		MetaprogramPackageMode packageMode = MetaprogramPackageMode.READ_ONLY;
 		List<String> qualifiedTargetNames = new ArrayList<String>();
@@ -126,8 +128,12 @@ public class CompileExplicitMetaprogramTask<R extends Node> extends
 								new TypeDeclarationLocatingNodeOperation(qualifiedNameNode.getBase()), null);
 						if (namedTypeDeclarationNode == null)
 						{
-							// TODO: this is an error - produce a diagnostic
-							continue;
+							// We could not find the type name contained in the dependency.  This is an error; the
+							// metaprogram is referring to a type which does not exist in the object program namespace.
+							metacompilationContext.getDiagnosticListener().report(
+									new MetaprogramDependencyTypeNameResolutionDiagnosticImpl(
+											this.anchor.getStartLocation(), qualifiedNameNode.getBase().getNameString()));
+							return null;
 						} else
 						{
 							qualifiedDependsName = metaprogramTypeName + "."
@@ -149,6 +155,9 @@ public class CompileExplicitMetaprogramTask<R extends Node> extends
 			}
 		}
 
+		// Clear the metaprogram from the anchor (so it can't reflect on itself)
+		anchor.setMetaprogram(null);
+		
 		// now build the metaprogram itself
 		Context<ExplicitMetaprogramAnchorNode<R>> context = new ContextImpl<ExplicitMetaprogramAnchorNode<R>>(anchor,
 				factory, new BsjUserDiagnosticTranslatingListener(this.metacompilationContext.getDiagnosticListener(),

@@ -156,6 +156,15 @@
                     A diagnostic which acts as a supertype for all BSJ compiler diagnostics.
                 ]]></doc>
             </diagnostic>
+            
+            <diagnostic name="MetaprogramDependencyTypeNameResolutionDiagnostic" super="BsjCompilerDiagnostic"
+                code="bsj.compiler.metaprogram.dependency.resolution.typeName">
+                <prop name="typeName" type="String" desc="the name of the type which could not be resolved"/>
+                <doc><![CDATA[
+                    A diagnostic indicating that a metaprogram's dependency list contains a target whose type name could
+                    not be resolved.
+                ]]></doc>
+            </diagnostic>
 
             <diagnostic name="InvalidMetaAnnotationDefinitionDiagnostic" super="BsjCompilerDiagnostic">
                 <prop name="metaAnnotationClass" type="Class&lt;? extends BsjMetaAnnotation&gt;" desc="the type of the meta-annotation" />

@@ -1,33 +1,33 @@
 package edu.jhu.cs.bsj.tests.compiler.tool.compiler;
 
 import java.io.File;
+import java.util.Arrays;
+import java.util.Collections;
 
 import org.junit.Test;
 
-import edu.jhu.cs.bsj.compiler.ast.exception.MetaprogramConflictException;
+import edu.jhu.cs.bsj.compiler.diagnostic.compiler.MetaprogramConflictDiagnostic;
 
 public class MetaprogramConflictTest extends AbstractBsjCompilerTest
 {
-	protected void testFile(String name) throws Exception
-	{
-		performTest(new File(SPECIFIC_SOURCE_DIR + File.separator + "conflicts"), name);
-	}
-	
-	@Test(expected=MetaprogramConflictException.class)
+	private static final File SOURCE_DIR = new File(SPECIFIC_SOURCE_DIR + File.separator + "conflicts");
+
+	@Test
 	public void testPermissionViolation() throws Exception
 	{
-		testFile("MetaprogramConflict");
+		performTest(SOURCE_DIR, Arrays.asList("MetaprogramConflict"),
+				Collections.singletonList(MetaprogramConflictDiagnostic.class));
 	}
-	
+
 	@Test
 	public void testPermissionsWithExplicitOrder() throws Exception
 	{
-		testFile("MetaprogramCooperation");
+		performTest(SOURCE_DIR, "MetaprogramCooperation");
 	}
-	
+
 	@Test
 	public void testPermissionsWithOrderIndependentWrites() throws Exception
 	{
-		testFile("MetaprogramDualWriteCooperation");
+		performTest(SOURCE_DIR, "MetaprogramDualWriteCooperation");
 	}
 }
