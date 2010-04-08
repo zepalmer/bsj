@@ -71,6 +71,13 @@ public class CompileExplicitMetaprogramTask<R extends Node> extends
 	@Override
 	protected MetaprogramProfile<ExplicitMetaprogramAnchorNode<R>> buildProfile() throws IOException
 	{
+		// TODO: this whole name building process relies on strings - fix it
+		// this is a bit of a hack because it allows type and package name collision
+		// suppose the existence of a package foo with subpackage bar and class Baz
+		// suppose that package foo also has a class bar with inner class Baz
+		// the string name foo.bar.Baz.a is now ambiguous even though the BLS specifically indicates that this should
+		// not be a problem (fix by using binary names?)
+		
 		MetaprogramNode metaprogramNode = anchor.getMetaprogram();
 		anchor.setMetaprogram(null); // Clear the metaprogram from the anchor (so it can't reflect on itself)
 		MetaprogramLocalMode localMode = MetaprogramLocalMode.INSERT;

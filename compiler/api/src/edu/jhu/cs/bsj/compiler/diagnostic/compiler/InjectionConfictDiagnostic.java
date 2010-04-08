@@ -1,5 +1,7 @@
 package edu.jhu.cs.bsj.compiler.diagnostic.compiler;
 
+import java.util.Set;
+
 import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
@@ -14,14 +16,20 @@ public interface InjectionConfictDiagnostic extends BsjCompilerDiagnostic
     public static final String CODE = "bsj.compiler.conflict.injection";
     
     /**
-     * Retrieves the location of the metaprogram that injected the conflicting metaprogram.
-     * @return The location of the metaprogram that injected the conflicting metaprogram.
+     * Retrieves the location of the metaprograms that injected the conflicting metaprogram.
+     * @return The location of the metaprograms that injected the conflicting metaprogram.
      */
-    public BsjSourceLocation getInjectingMetaprogramLocation();
+    public Set<BsjSourceLocation> getInjectingMetaprogramLocations();
     
     /**
-     * Retrieves the location of the metaprogram that should depend on the injecting metaprogram.
-     * @return The location of the metaprogram that should depend on the injecting metaprogram.
+     * Retrieves the location of the metaprogram that was injected.
+     * @return The location of the metaprogram that was injected.
+     */
+    public BsjSourceLocation getInjectedMetaprogramLocation();
+    
+    /**
+     * Retrieves the location of the metaprogram that should depend on one of the injecting metaprograms.
+     * @return The location of the metaprogram that should depend on one of the injecting metaprograms.
      */
     public BsjSourceLocation getDependentMetaprogramLocation();
     

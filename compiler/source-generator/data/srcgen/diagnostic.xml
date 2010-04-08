@@ -287,10 +287,12 @@
             </diagnostic>
 
             <diagnostic name="InjectionConfictDiagnostic" super="BsjCompilerDiagnostic" code="bsj.compiler.conflict.injection">
-                <prop name="injectingMetaprogramLocation" type="BsjSourceLocation"
-                    desc="the location of the metaprogram that injected the conflicting metaprogram" />
+                <prop name="injectingMetaprogramLocations" type="Set&lt;BsjSourceLocation&gt;"
+                    desc="the location of the metaprograms that injected the conflicting metaprogram" />
+                <prop name="injectedMetaprogramLocation" type="BsjSourceLocation"
+                    desc="the location of the metaprogram that was injected" />
                 <prop name="dependentMetaprogramLocation" type="BsjSourceLocation"
-                    desc="the location of the metaprogram that should depend on the injecting metaprogram" />
+                    desc="the location of the metaprogram that should depend on one of the injecting metaprograms" />
                 <prop name="injectionTarget" type="String"
                     desc="the fully-qualified name of the metaprogram target on which the dependent metaprogram depends and in which the injected metaprogram participates" />
                 <doc><![CDATA[

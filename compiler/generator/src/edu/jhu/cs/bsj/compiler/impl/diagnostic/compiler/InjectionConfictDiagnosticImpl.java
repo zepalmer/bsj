@@ -2,6 +2,7 @@ package edu.jhu.cs.bsj.compiler.impl.diagnostic.compiler;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 import javax.annotation.Generated;
 
@@ -15,10 +16,13 @@ import edu.jhu.cs.bsj.compiler.diagnostic.compiler.InjectionConfictDiagnostic;
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class InjectionConfictDiagnosticImpl extends BsjCompilerDiagnosticImpl implements InjectionConfictDiagnostic
 {
-    /** The location of the metaprogram that injected the conflicting metaprogram. */
-    private BsjSourceLocation injectingMetaprogramLocation;
+    /** The location of the metaprograms that injected the conflicting metaprogram. */
+    private Set<BsjSourceLocation> injectingMetaprogramLocations;
     
-    /** The location of the metaprogram that should depend on the injecting metaprogram. */
+    /** The location of the metaprogram that was injected. */
+    private BsjSourceLocation injectedMetaprogramLocation;
+    
+    /** The location of the metaprogram that should depend on one of the injecting metaprograms. */
     private BsjSourceLocation dependentMetaprogramLocation;
     
     /** The fully-qualified name of the metaprogram target on which the dependent metaprogram depends and in which the injected metaprogram participates. */
@@ -26,12 +30,14 @@ public class InjectionConfictDiagnosticImpl extends BsjCompilerDiagnosticImpl im
     
     public InjectionConfictDiagnosticImpl(
             BsjSourceLocation source,
-            BsjSourceLocation injectingMetaprogramLocation,
+            Set<BsjSourceLocation> injectingMetaprogramLocations,
+            BsjSourceLocation injectedMetaprogramLocation,
             BsjSourceLocation dependentMetaprogramLocation,
             String injectionTarget)
     {
         super(source, InjectionConfictDiagnostic.CODE, Kind.ERROR);
-        this.injectingMetaprogramLocation = injectingMetaprogramLocation;
+        this.injectingMetaprogramLocations = injectingMetaprogramLocations;
+        this.injectedMetaprogramLocation = injectedMetaprogramLocation;
         this.dependentMetaprogramLocation = dependentMetaprogramLocation;
         this.injectionTarget = injectionTarget;
     }
@@ -39,9 +45,17 @@ public class InjectionConfictDiagnosticImpl extends BsjCompilerDiagnosticImpl im
     /**
      * {@inheritDoc}
      */
-    public BsjSourceLocation getInjectingMetaprogramLocation()
+    public Set<BsjSourceLocation> getInjectingMetaprogramLocations()
     {
-        return this.injectingMetaprogramLocation;
+        return this.injectingMetaprogramLocations;
+    }
+    
+    /**
+     * {@inheritDoc}
+     */
+    public BsjSourceLocation getInjectedMetaprogramLocation()
+    {
+        return this.injectedMetaprogramLocation;
     }
     
     /**
@@ -64,7 +78,8 @@ public class InjectionConfictDiagnosticImpl extends BsjCompilerDiagnosticImpl im
     protected List<Object> getMessageArgs(Locale locale)
     {
         List<Object> args = super.getMessageArgs(locale);
-        args.add(this.injectingMetaprogramLocation);
+        args.add(this.injectingMetaprogramLocations);
+        args.add(this.injectedMetaprogramLocation);
         args.add(this.dependentMetaprogramLocation);
         args.add(this.injectionTarget);
         return args;

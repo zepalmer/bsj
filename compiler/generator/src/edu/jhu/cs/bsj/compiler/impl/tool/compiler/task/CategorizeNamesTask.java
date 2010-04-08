@@ -25,7 +25,7 @@ public class CategorizeNamesTask extends AbstractBsjCompilerTask
 	 * Creates a new task for name categorization of an AST subtree.
 	 * 
 	 * @param node The subtree to categorize.
-	 * @param profile The metaprogram which was most recently responsible for modifying that subtree or
+	 * @param profile The metaprogram which was most recently responsible for creating or modifying that subtree or
 	 *            <code>null</code> if no metaprogram has modified it.
 	 */
 	public CategorizeNamesTask(Node node, MetaprogramProfile<?> profile)

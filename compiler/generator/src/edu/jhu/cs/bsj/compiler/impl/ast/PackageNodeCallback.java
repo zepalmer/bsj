@@ -10,6 +10,8 @@ import java.util.Set;
 
 import javax.tools.JavaFileObject.Kind;
 
+import org.apache.log4j.Logger;
+
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
 import edu.jhu.cs.bsj.compiler.ast.node.PackageNode;
@@ -27,6 +29,9 @@ import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjFileObject;
  */
 public class PackageNodeCallback
 {
+	/** The logger for this class. */
+	private static final Logger LOGGER = Logger.getLogger(PackageNodeCallback.class);
+
 	/** The factory to use when creating nodes. */
 	private BsjNodeFactory factory;
 	/** The file manager to use in this callback. */
@@ -159,6 +164,12 @@ public class PackageNodeCallback
 		if (this.metacompilationManager == null)
 			throw new IllegalStateException("Request to load source when no compilation is under way.");
 
+		if (LOGGER.isTraceEnabled())
+		{
+			LOGGER.trace("Loading compilation unit " + name + " in package node \""
+					+ packageNode.getFullyQualifiedName() + "\"");
+		}
+
 		String pname = packageNode.getFullyQualifiedName();
 		if (pname == null)
 		{
@@ -204,5 +215,25 @@ public class PackageNodeCallback
 	public BsjNodeFactory getFactory()
 	{
 		return factory;
+	}
+
+	/**
+	 * Registers the currently-running metaprogram as an injector of the specified compilation unit node. This operation
+	 * is used to ensure that metaprograms which were extracted when the specified compilation unit node was loaded will
+	 * be dependent upon the currently running metaprogram (because it would've been one of potentially many
+	 * metaprograms which could load that compilation unit).
+	 * 
+	 * @param node The compilation unit for which to register as an injector.
+	 */
+	public void registerAsInjectorOf(CompilationUnitNode node)
+	{
+		Integer id = this.metacompilationManager.getNodeManager().getCurrentMetaprogramId();
+		if (id == null)
+		{
+			return;
+		}
+		this.metacompilationManager.getDependencyManager().registerAsInjectorOf(
+				this.metacompilationManager.getDependencyManager().getMetaprogramProfileByID(id), node,
+				this.metacompilationManager.getDiagnosticListener());
 	}
 }

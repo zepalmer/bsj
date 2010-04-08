@@ -76,7 +76,7 @@ public class MetacompilationManager implements MetacompilationContext
 	 * The root package used during this compilation process.
 	 */
 	private PackageNode rootPackage;
-	
+
 	/**
 	 * The list of source files that this metacompilation manager has serialized.
 	 */
@@ -84,7 +84,7 @@ public class MetacompilationManager implements MetacompilationContext
 	/**
 	 * The set of observed metaprogram anchor nodes stored as a presence map.
 	 */
-	private Map<MetaprogramAnchorNode<?>,Object> observedAnchors;
+	private Map<MetaprogramAnchorNode<?>, Object> observedAnchors;
 
 	/**
 	 * Creates a new compilation unit manager.
@@ -106,7 +106,7 @@ public class MetacompilationManager implements MetacompilationContext
 
 		this.rootPackage = toolkit.getNodeFactory().makePackageNode(null);
 		this.serializedFiles = new ArrayList<BsjFileObject>();
-		this.observedAnchors = new WeakHashMap<MetaprogramAnchorNode<?>,Object>();
+		this.observedAnchors = new WeakHashMap<MetaprogramAnchorNode<?>, Object>();
 
 		// Add some initial tasks to the task queue
 		this.priorityQueue.offer(new ExecuteMetaprogramTask());
@@ -139,8 +139,14 @@ public class MetacompilationManager implements MetacompilationContext
 		String binaryName = file.inferBinaryName();
 		if (observedBinaryNames.contains(binaryName))
 		{
+			LOGGER.trace("Not loading " + file + ": already loaded.");
 			// Already have that target.
 			return false;
+		}
+
+		if (LOGGER.isTraceEnabled())
+		{
+			LOGGER.trace("Loading " + file);
 		}
 
 		observedBinaryNames.add(binaryName);
@@ -149,10 +155,10 @@ public class MetacompilationManager implements MetacompilationContext
 		AbstractCompilationUnitBuilderTask task;
 		if (file.getName().endsWith(".class"))
 		{
-			task = new LoadBinaryCompilationUnitTask(file);
+			task = new LoadBinaryCompilationUnitTask(file, getCurrentMetaprogram());
 		} else
 		{
-			task = new ParseCompilationUnitTask(file);
+			task = new ParseCompilationUnitTask(file, getCurrentMetaprogram());
 		}
 		this.registerTask(task);
 		return true;
@@ -171,6 +177,7 @@ public class MetacompilationManager implements MetacompilationContext
 		if (observedBinaryNames.contains(binaryName))
 		{
 			// Already have that target. Let's go find it.
+			LOGGER.trace("Not loading " + file + " immediately: already loaded.");
 			String compilationUnitName;
 			PackageNode packageNode = rootPackage;
 			if (binaryName.indexOf('.') != -1)
@@ -186,6 +193,11 @@ public class MetacompilationManager implements MetacompilationContext
 			return packageNode.getCompilationUnit(compilationUnitName);
 		}
 
+		if (LOGGER.isTraceEnabled())
+		{
+			LOGGER.trace("Loading " + file + " immediately.");
+		}
+
 		observedBinaryNames.add(binaryName);
 
 		// Rather than blindly executing tasks, let's proxy out task addition so we can actively execute the ones we
@@ -196,7 +208,7 @@ public class MetacompilationManager implements MetacompilationContext
 			@Override
 			public void registerTask(BsjCompilerTask task)
 			{
-				if (task.getPriority().getPriority() <= TaskPriority.EXTRACT.getPriority())
+				if (task.getPriority().getPriority() >= TaskPriority.EXECUTE.getPriority())
 				{
 					queue.offer(task);
 				} else
@@ -205,19 +217,23 @@ public class MetacompilationManager implements MetacompilationContext
 				}
 			}
 		};
-		
+
 		AbstractCompilationUnitBuilderTask task;
 		if (file.getSimpleName().endsWith(".class"))
 		{
-			task = new LoadBinaryCompilationUnitTask(file);
+			task = new LoadBinaryCompilationUnitTask(file, getCurrentMetaprogram());
 		} else
 		{
-			task = new ParseCompilationUnitTask(file);
+			task = new ParseCompilationUnitTask(file, getCurrentMetaprogram());
 		}
 		queue.offer(task);
-		
+
 		while (queue.size() > 0)
 		{
+			if (LOGGER.isTraceEnabled())
+			{
+				LOGGER.trace("Executing task " + task + " for immediate load of " + file);
+			}
 			try
 			{
 				queue.poll().execute(contextProxy);
@@ -241,6 +257,23 @@ public class MetacompilationManager implements MetacompilationContext
 			compilationUnitName = binaryName;
 		}
 		return packageNode.getCompilationUnit(compilationUnitName);
+	}
+
+	/**
+	 * Retrieves the profile of the currently running metaprogram.
+	 * 
+	 * @return The profile of the currently running metaprogram or <code>null</code> if no such metaprogram exists.
+	 */
+	private MetaprogramProfile<?> getCurrentMetaprogram()
+	{
+		Integer id = getNodeManager().getCurrentMetaprogramId();
+		if (id != null)
+		{
+			return getDependencyManager().getMetaprogramProfileByID(id);
+		} else
+		{
+			return null;
+		}
 	}
 
 	/**
@@ -271,7 +304,7 @@ public class MetacompilationManager implements MetacompilationContext
 		{
 			LOGGER.trace("Executing next compilation task: " + task.toString());
 		}
-		
+
 		task.execute(this);
 		if (this.getDiagnosticListener().getCount(Kind.ERROR) > 0)
 		{
@@ -280,7 +313,7 @@ public class MetacompilationManager implements MetacompilationContext
 			this.priorityQueue.clear();
 		}
 	}
-	
+
 	/**
 	 * Retrieves the number of errors which have occurred during metacompilation.
 	 */
@@ -331,7 +364,7 @@ public class MetacompilationManager implements MetacompilationContext
 	{
 		if (this.observedAnchors.containsKey(anchor))
 			return false;
-		
+
 		this.observedAnchors.put(anchor, null);
 		return true;
 	}

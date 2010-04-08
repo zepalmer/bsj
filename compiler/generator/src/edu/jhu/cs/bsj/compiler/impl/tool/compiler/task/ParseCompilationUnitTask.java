@@ -5,6 +5,7 @@ import java.io.Reader;
 
 import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.MetacompilationContext;
+import edu.jhu.cs.bsj.compiler.impl.tool.compiler.MetaprogramProfile;
 import edu.jhu.cs.bsj.compiler.impl.utils.StringUtilities;
 import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjFileObject;
 import edu.jhu.cs.bsj.compiler.tool.parser.BsjParser;
@@ -21,9 +22,9 @@ public class ParseCompilationUnitTask extends AbstractCompilationUnitBuilderTask
 	 * 
 	 * @param file The source file to parse.
 	 */
-	public ParseCompilationUnitTask(BsjFileObject file)
+	public ParseCompilationUnitTask(BsjFileObject file, MetaprogramProfile<?> profile)
 	{
-		super(TaskPriority.PARSE, file);
+		super(TaskPriority.PARSE, file, profile);
 	}
 
 	@Override

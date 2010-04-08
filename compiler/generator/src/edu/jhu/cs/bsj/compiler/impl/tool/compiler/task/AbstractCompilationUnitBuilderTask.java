@@ -6,6 +6,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
 import edu.jhu.cs.bsj.compiler.ast.node.PackageNode;
 import edu.jhu.cs.bsj.compiler.impl.metaprogram.PermissionPolicyManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.MetacompilationContext;
+import edu.jhu.cs.bsj.compiler.impl.tool.compiler.MetaprogramProfile;
 import edu.jhu.cs.bsj.compiler.impl.utils.StringUtilities;
 import edu.jhu.cs.bsj.compiler.tool.filemanager.BsjFileObject;
 
@@ -18,11 +19,14 @@ public abstract class AbstractCompilationUnitBuilderTask extends AbstractBsjComp
 {
 	/** The source file to parse. */
 	private BsjFileObject file;
+	/** The injector of this file. */
+	private MetaprogramProfile<?> profile;
 
-	public AbstractCompilationUnitBuilderTask(TaskPriority priority, BsjFileObject file)
+	public AbstractCompilationUnitBuilderTask(TaskPriority priority, BsjFileObject file, MetaprogramProfile<?> profile)
 	{
 		super(priority);
 		this.file = file;
+		this.profile = profile;
 	}
 
 	@Override
@@ -57,7 +61,7 @@ public abstract class AbstractCompilationUnitBuilderTask extends AbstractBsjComp
 		context.getNodeManager().setCurrentMetaprogramId(metaprogramID);
 
 		// Enqueue the compilation unit for name categorization
-		context.registerTask(new CategorizeNamesTask(node, null));
+		context.registerTask(new CategorizeNamesTask(node, this.profile));
 	}
 
 	protected abstract CompilationUnitNode createCompilationUnit(MetacompilationContext context, BsjFileObject file)

@@ -3,9 +3,11 @@ package edu.jhu.cs.bsj.compiler.impl.ast.node;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.Generated;
 
@@ -28,6 +30,7 @@ import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 import edu.jhu.cs.bsj.compiler.impl.ast.PackageNodeCallback;
 import edu.jhu.cs.bsj.compiler.impl.ast.exception.DuplicatePackageMemberExceptionImpl;
 import edu.jhu.cs.bsj.compiler.impl.utils.CompoundIterator;
+
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
 public class PackageNodeImpl extends NodeImpl implements PackageNode
 {
@@ -195,6 +198,12 @@ public class PackageNodeImpl extends NodeImpl implements PackageNode
 	private Map<String, PackageNode> packageNodes = new HashMap<String, PackageNode>();
 	/** The compilation units we are currently maintaining. */
 	private Map<String, CompilationUnitNode> compilationUnitNodes = new HashMap<String, CompilationUnitNode>();
+	/**
+	 * The compilation units which cannot be loaded.  Requests to load these compilation units will result in
+	 * <code>null</code> returns.  This set is used primarily to cache failed loads but is also used to prevent the
+	 * call to {@link #addPackageNode(PackageNode)} which is caused by {@link #load(String)} from causing a loop.
+	 */
+	private Set<String> unloadableCompilationUnitNames = new HashSet<String>();
 
 	/**
 	 * {@inheritDoc}
@@ -210,7 +219,7 @@ public class PackageNodeImpl extends NodeImpl implements PackageNode
 		if (packageNode instanceof PackageNodeImpl)
 		{
 			// TODO: exception if the node in question already has a parent
-			((PackageNodeImpl)packageNode).setParent(this);
+			((PackageNodeImpl) packageNode).setParent(this);
 		}
 	}
 
@@ -226,7 +235,7 @@ public class PackageNodeImpl extends NodeImpl implements PackageNode
 			packageNode = factory.makePackageNode(factory.makeIdentifierNode(name));
 			if (packageNode instanceof PackageNodeImpl)
 			{
-				((PackageNodeImpl)packageNode).setParent(this);
+				((PackageNodeImpl) packageNode).setParent(this);
 			}
 			this.packageNodes.put(name, packageNode);
 		}
@@ -238,8 +247,7 @@ public class PackageNodeImpl extends NodeImpl implements PackageNode
 	 */
 	public void addCompilationUnitNode(CompilationUnitNode compilationUnit)
 	{
-		if (this.compilationUnitNodes.containsKey(compilationUnit.getName()) ||
-				this.load(compilationUnit.getName()) != null)
+		if (this.load(compilationUnit.getName()) != null)
 		{
 			throw new DuplicatePackageMemberExceptionImpl(this, compilationUnit, compilationUnit.getName());
 		}
@@ -248,7 +256,7 @@ public class PackageNodeImpl extends NodeImpl implements PackageNode
 		if (compilationUnit instanceof CompilationUnitNodeImpl)
 		{
 			// TODO: exception if the node in question already has a parent
-			((CompilationUnitNodeImpl)compilationUnit).setParent(this);
+			((CompilationUnitNodeImpl) compilationUnit).setParent(this);
 		}
 	}
 
@@ -307,7 +315,7 @@ public class PackageNodeImpl extends NodeImpl implements PackageNode
 	{
 		if (name instanceof QualifiedNameNode)
 		{
-			QualifiedNameNode qualifiedNameNode = (QualifiedNameNode)name;
+			QualifiedNameNode qualifiedNameNode = (QualifiedNameNode) name;
 			PackageNode packageNode = getSubpackageByQualifiedName(qualifiedNameNode.getBase());
 			return packageNode.getSubpackage(name.getIdentifier().getIdentifier());
 		} else if (name instanceof SimpleNameNode)
@@ -318,7 +326,7 @@ public class PackageNodeImpl extends NodeImpl implements PackageNode
 			throw new IllegalStateException("Unrecognized name node type " + name.getClass().getName());
 		}
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -327,8 +335,7 @@ public class PackageNodeImpl extends NodeImpl implements PackageNode
 		CompilationUnitNode compilationUnitNode = getCompilationUnit(name);
 		if (compilationUnitNode != null)
 		{
-			NamedTypeDeclarationNode<?> namedTypeDeclarationNode = tryCompilationUnitNode(compilationUnitNode,
-					name);
+			NamedTypeDeclarationNode<?> namedTypeDeclarationNode = tryCompilationUnitNode(compilationUnitNode, name);
 			if (namedTypeDeclarationNode != null)
 			{
 				return namedTypeDeclarationNode;
@@ -348,10 +355,11 @@ public class PackageNodeImpl extends NodeImpl implements PackageNode
 
 		return null;
 	}
-	
+
 	// TODO: consider generalizing this to a public function of CompilationUnitNode
 	/**
 	 * Searches the specified child for a top-level type declaration of the specified name.
+	 * 
 	 * @param compilationUnitNode The child in question.
 	 * @param name The name of the type declaration.
 	 * @return The resulting top-level type declaration.
@@ -372,7 +380,7 @@ public class PackageNodeImpl extends NodeImpl implements PackageNode
 		}
 		return null;
 	}
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -418,12 +426,32 @@ public class PackageNodeImpl extends NodeImpl implements PackageNode
 	 */
 	public CompilationUnitNode load(String name)
 	{
-		// If we've already loaded this compilation unit, bail out.
+		CompilationUnitNode compilationUnitNode;
+
 		if (compilationUnitNodes.get(name) != null)
 		{
-			return compilationUnitNodes.get(name);
+			compilationUnitNode = compilationUnitNodes.get(name);
+		} else if (unloadableCompilationUnitNames.contains(name))
+		{
+			return null;
+		} else
+		{
+			// Try to load the compilation unit.  Temporarily add it to the unloadable names set to prevent a loop.
+			unloadableCompilationUnitNames.add(name);
+			compilationUnitNode = this.packageNodeCallback.load(this, name);
+			unloadableCompilationUnitNames.remove(name);
+			
+			if (compilationUnitNode == null)
+			{
+				unloadableCompilationUnitNames.add(name);
+				return null;
+			}
+			this.compilationUnitNodes.put(compilationUnitNode.getName(), compilationUnitNode);
 		}
-		return this.packageNodeCallback.load(this, name);
+
+		this.packageNodeCallback.registerAsInjectorOf(compilationUnitNode);
+
+		return compilationUnitNode;
 	}
 
 	/**
