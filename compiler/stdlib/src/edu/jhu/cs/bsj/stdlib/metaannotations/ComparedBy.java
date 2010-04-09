@@ -171,34 +171,41 @@ public class ComparedBy extends AbstractBsjMetaAnnotationMetaprogram
         {
             String getterName = getter.getFirst();
             TypeNode type = getter.getSecond();
-            ExpressionNode toStringValueNode;
-            PrimaryExpressionNode getterCallNode = factory.makeMethodInvocationByNameNode(
-                    factory.parseNameNode(getterName));
+            ExpressionNode lessThanExpression = null;
+            ExpressionNode greaterThanExpression = null;
+            
+            PrimaryExpressionNode thisGetterNode = factory.makeMethodInvocationByNameNode(factory.parseNameNode(getterName));
+            PrimaryExpressionNode otherGetterNode = factory.makeMethodInvocationByExpressionNode(
+                    factory.makeFieldAccessByNameNode(factory.parseNameNode("o")),
+                    factory.makeIdentifierNode(getterName));
             
             if (type instanceof PrimitiveTypeNode)
             {
-                // then compare using ==
-//                comparisonExpressionNode = factory.makeBinaryExpressionNode(thisGetterNode, otherGetterNode,
-//                        BinaryOperator.EQUAL);
+                lessThanExpression = factory.makeBinaryExpressionNode(thisGetterNode, otherGetterNode,
+                      BinaryOperator.LESS_THAN);
+                greaterThanExpression = factory.makeBinaryExpressionNode(
+                        thisGetterNode.deepCopy(factory), otherGetterNode.deepCopy(factory),
+                        BinaryOperator.GREATER_THAN);
             }
             else if (type instanceof ArrayTypeNode)
             {
                 // TODO punt?
+                throw new IllegalStateException();
             } 
             else
             {
-                // anything other than arrays can just be passed
-                toStringValueNode = getterCallNode;
+                throw new IllegalStateException();
             }
 
             
             // if (this.getX() < o.getX()) {return -1;}
-            
-            
+            statements.add(factory.makeIfNode(lessThanExpression, 
+                    factory.makeReturnNode(factory.makeIntLiteralNode(-1))));            
             
             
             // if (this.getX() > o.getX()) {return 1;}
-            
+            statements.add(factory.makeIfNode(greaterThanExpression, 
+                    factory.makeReturnNode(factory.makeIntLiteralNode(1)))); 
         }
         
         // return 0;
