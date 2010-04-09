@@ -33,7 +33,7 @@ public class TypeDeclUtils
             Context<MetaAnnotationMetaprogramAnchorNode> context,
             AbstractBsjMetaAnnotationMetaprogram caller)
     {
-        // Find our enclosing type declaration. It must be an enum or a class for this to work.
+        // Find our enclosing type declaration. It must be an enum, class, or interface for this to work.
         TypeDeclarationNode enclosingTypeDeclaration = context.getAnchor().getNearestAncestorOfType(
                 TypeDeclarationNode.class);
         
