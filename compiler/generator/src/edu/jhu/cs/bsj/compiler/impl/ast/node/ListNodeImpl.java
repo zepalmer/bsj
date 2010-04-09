@@ -396,7 +396,9 @@ public abstract class ListNodeImpl<T extends Node> extends NodeImpl implements L
 			for (int i=0;i<=this.backingList.size();i++)
 			{
 				readBetweenAttribute(i);
+				readPresentAttribute(i);
 			}
+			readBetweenAttribute(this.backingList.size());
 			return false;
 		}
 

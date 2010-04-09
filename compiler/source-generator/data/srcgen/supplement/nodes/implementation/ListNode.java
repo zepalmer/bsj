@@ -261,7 +261,9 @@ public class ListNodeImpl<T extends Node> extends Node implements ListNode<T>
 			for (int i=0;i<=this.backingList.size();i++)
 			{
 				readBetweenAttribute(i);
+				readPresentAttribute(i);
 			}
+			readBetweenAttribute(this.backingList.size());
 			return false;
 		}
 
