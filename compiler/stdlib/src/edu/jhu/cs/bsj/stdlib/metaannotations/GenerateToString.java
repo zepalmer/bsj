@@ -124,6 +124,13 @@ public class GenerateToString extends AbstractBsjMetaAnnotationMetaprogram
                 context, getterDescriptions, utils.getEnclosingTypeName(context, this)));
     }
 
+    /**
+     * Create a toString method declaration based on our enclosing class.
+     * @param context our context.
+     * @param getters the getter names and types for our enclosing class.
+     * @param classIdentifier the identifier of our enclosing class.
+     * @return a method declaration for toString.
+     */
     private MethodDeclarationNode createToString(
             Context<MetaAnnotationMetaprogramAnchorNode> context,
             List<Pair<String, TypeNode>> getters, IdentifierNode classIdentifier)
