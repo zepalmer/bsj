@@ -2,6 +2,7 @@ package edu.jhu.cs.bsj.compiler.impl.tool.serializer;
 
 import java.io.ByteArrayOutputStream;
 
+import edu.jhu.cs.bsj.compiler.ast.BsjNodeOperation;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceSerializer;
 import edu.jhu.cs.bsj.compiler.ast.util.BsjNodeOperationProxy;
 import edu.jhu.cs.bsj.compiler.impl.utils.PrependablePrintStream;
@@ -15,11 +16,20 @@ public class BsjSourceSerializerImpl extends BsjNodeOperationProxy<PrependablePr
 	private ByteArrayOutputStream buffer;
 	
 	/**
-	 * Creates a {@link BsjSourceSerializerImpl}.
+	 * Creates a serializer using a default helper.
 	 */
 	public BsjSourceSerializerImpl()
 	{
-		super(new BsjSourceSerializerHelper());
+		this(new BsjSourceSerializerHelper());
+	}
+	
+	/**
+	 * Creates a serializer using the specified helper.
+	 * @param helper The helper to use.
+	 */
+	public BsjSourceSerializerImpl(BsjNodeOperation<PrependablePrintStream, Void> helper)
+	{
+		super(helper);
 	}
 
 	@Override
