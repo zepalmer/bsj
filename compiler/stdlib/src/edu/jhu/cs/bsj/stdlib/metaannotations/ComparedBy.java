@@ -189,7 +189,7 @@ public class ComparedBy extends AbstractBsjMetaAnnotationMetaprogram
             }
             else if (type instanceof ArrayTypeNode)
             {
-                // TODO punt?
+                // TODO better error handling
                 throw new IllegalStateException();
             } 
             else

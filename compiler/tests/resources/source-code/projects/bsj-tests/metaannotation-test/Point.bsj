@@ -1,6 +1,6 @@
 #import edu.jhu.cs.bsj.stdlib.metaannotations.*;
 
-@@ComparedBy(properties={"x","y"})
+@@ComparedBy(properties={"y","x"})
 @@GenerateToString()
 @@GenerateEqualsAndHashCode(properties={"x","y"})
 public class Point

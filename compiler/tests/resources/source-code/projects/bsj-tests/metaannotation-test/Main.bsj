@@ -16,5 +16,9 @@ public class Main
 		System.out.println("Set size = " + set.size());
 		System.out.println("Distance = " + p1.getDistance(p2));
 		System.out.println("toString = " + p2.toString());
+		
+		System.out.println("p1.compareTo(p2) = " + p1.compareTo(p2));
+		System.out.println("p2.compareTo(p1) = " + p2.compareTo(p1));
+		System.out.println("p1.compareTo(p3) = " + p1.compareTo(p3));
 	}
 }
