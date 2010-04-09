@@ -36,6 +36,7 @@ import edu.jhu.cs.bsj.compiler.metaprogram.AbstractBsjMetaAnnotationMetaprogram;
 import edu.jhu.cs.bsj.compiler.metaprogram.Context;
 import edu.jhu.cs.bsj.stdlib.diagnostic.impl.InvalidEnclosingTypeDiagnosticImpl;
 import edu.jhu.cs.bsj.stdlib.diagnostic.impl.MissingMethodDeclarationDiagnosticImpl;
+import edu.jhu.cs.bsj.stdlib.utils.TypeDeclUtils;
 
 /**
  * This meta-annotation metaprogram generates the toString method for a class. It generates this function
@@ -73,6 +74,9 @@ public class GenerateToString extends AbstractBsjMetaAnnotationMetaprogram
     @Override
     protected void execute(Context<MetaAnnotationMetaprogramAnchorNode> context)
     {
+        // Utility methods
+        TypeDeclUtils utils = new TypeDeclUtils();
+        
         //TODO code lifted from GenerateEqualsAndHashCode, roll it into a util class 
         // Find our enclosing type declaration. It must be an enum or a class for this to work.
         TypeDeclarationNode enclosingTypeDeclaration = context.getAnchor().getNearestAncestorOfType(
@@ -138,50 +142,15 @@ public class GenerateToString extends AbstractBsjMetaAnnotationMetaprogram
         }
 
         // create and add the actual toString method
-        members.add(createToString(context, getterDescriptions, getEnclosingTypeName(context)));
-    }
-
-    /**
-     * Determines the identifier for this context's enclosing class.
-     * @param context the context referenced.
-     * @return an IdentifierNode corresponding to the enclosing class for the context.
-     */
-    private IdentifierNode getEnclosingTypeName(Context<MetaAnnotationMetaprogramAnchorNode> context)
-    {
-        // TODO move to util class
-        TypeDeclarationNode enclosingTypeDeclaration = context.getAnchor().getNearestAncestorOfType(
-                TypeDeclarationNode.class);
-        
-        if (enclosingTypeDeclaration instanceof ClassDeclarationNode)
-        {
-            return ((ClassDeclarationNode) enclosingTypeDeclaration).getIdentifier();
-        } 
-        else if (enclosingTypeDeclaration instanceof EnumDeclarationNode)
-        {
-            return ((EnumDeclarationNode) enclosingTypeDeclaration).getIdentifier();
-        } 
-        else if (enclosingTypeDeclaration instanceof InterfaceDeclarationNode)
-        {
-            return ((InterfaceDeclarationNode) enclosingTypeDeclaration).getIdentifier();
-        }
-        else
-        {
-            List<Class<? extends TypeDeclarationNode>> typeDeclarationList = new ArrayList<Class<? extends TypeDeclarationNode>>();
-            typeDeclarationList.add(ClassDeclarationNode.class);
-            typeDeclarationList.add(EnumDeclarationNode.class);
-            typeDeclarationList.add(InterfaceDeclarationNode.class);
-            context.getDiagnosticListener().report(
-                    new InvalidEnclosingTypeDiagnosticImpl(getClass(), enclosingTypeDeclaration, typeDeclarationList));
-            throw new MetaprogramExecutionFailureException();
-        }
+        members.add(createToString(
+                context, getterDescriptions, utils.getEnclosingTypeName(context, this)));
     }
 
     private MethodDeclarationNode createToString(
             Context<MetaAnnotationMetaprogramAnchorNode> context,
             List<Pair<String, TypeNode>> getters, IdentifierNode classIdentifier)
     {
-        BsjNodeFactory factory = context.getFactory();
-        
+        BsjNodeFactory factory = context.getFactory();        
         List<BlockStatementNode> statements = new ArrayList<BlockStatementNode>();
         
         // String ret = "ClassName [";
