@@ -1,5 +1,6 @@
 /* GEN:headerstart */
 import java.util.concurrent.atomic.AtomicLong;
+import edu.jhu.cs.bsj.compiler.impl.ast.exception.*;
 /* GEN:headerstop */
 
 import edu.jhu.cs.bsj.compiler.impl.utils.MultiMap;
@@ -112,6 +113,10 @@ public abstract class NodeImpl
 	 */
 	public void setParent(Node node)
 	{
+		if (this.parent != null && node != null)
+		{
+			throw new MultipleParentNodeExceptionImpl(node, this);
+		}
 		recordAccess(this.parentAttribute, Attribute.AccessType.STRONG_WRITE);
 		this.parent = node;
 	}

@@ -118,6 +118,7 @@ public class ExecuteMetaprogramTask extends AbstractBsjCompilerTask
 		Node replacement = profile.getAnchor().getReplacement();
 		if (replacement != null)
 		{
+			profile.getAnchor().setReplacement(null);
 			profile.getAnchor().getParent().replace(profile.getAnchor(), replacement);
 		}
 

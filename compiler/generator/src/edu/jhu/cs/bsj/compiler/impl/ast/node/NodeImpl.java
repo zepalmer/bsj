@@ -16,6 +16,7 @@ import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.PackageNode;
 import edu.jhu.cs.bsj.compiler.impl.ast.Attribute;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
+import edu.jhu.cs.bsj.compiler.impl.ast.exception.MultipleParentNodeExceptionImpl;
 import edu.jhu.cs.bsj.compiler.impl.utils.HashMultiMap;
 import edu.jhu.cs.bsj.compiler.impl.utils.MultiMap;
 import edu.jhu.cs.bsj.compiler.impl.utils.Pair;
@@ -248,6 +249,10 @@ public abstract class NodeImpl implements Node
 	 */
 	public void setParent(Node node)
 	{
+		if (this.parent != null && node != null)
+		{
+			throw new MultipleParentNodeExceptionImpl(node, this);
+		}
 		recordAccess(this.parentAttribute, Attribute.AccessType.STRONG_WRITE);
 		this.parent = node;
 	}

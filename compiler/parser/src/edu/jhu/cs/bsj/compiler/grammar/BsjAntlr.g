@@ -1004,14 +1004,14 @@ metaAnnotation returns [MetaAnnotationNode ret]
                 {
                     $ret = factory.makeNormalMetaAnnotationNode(
                             $metaAnnotationElementValuePairs.ret,
-                            factory.makeUnparameterizedTypeNode($name.ret));
+                            factory.makeUnparameterizedTypeNode($name.ret.deepCopy(factory)));
                 }
             |
                 metaAnnotationElementValue
                 {
                     $ret = factory.makeSingleElementMetaAnnotationNode(
                             $metaAnnotationElementValue.ret,
-                            factory.makeUnparameterizedTypeNode($name.ret));
+                            factory.makeUnparameterizedTypeNode($name.ret.deepCopy(factory)));
                 }
             )? 
             ')' 
@@ -3054,14 +3054,14 @@ annotation returns [AnnotationNode ret]
                 {
                     $ret = factory.makeNormalAnnotationNode(
                             $elementValuePairs.ret,
-                            factory.makeUnparameterizedTypeNode($name.ret));
+                            factory.makeUnparameterizedTypeNode($name.ret.deepCopy(factory)));
                 }
             |
                 elementValue
                 {
                     $ret = factory.makeSingleElementAnnotationNode(
                             $elementValue.ret,
-                            factory.makeUnparameterizedTypeNode($name.ret));
+                            factory.makeUnparameterizedTypeNode($name.ret.deepCopy(factory)));
                 }
             )? 
             ')' 
