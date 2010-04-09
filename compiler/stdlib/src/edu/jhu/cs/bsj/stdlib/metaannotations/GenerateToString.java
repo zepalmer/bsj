@@ -38,7 +38,12 @@ import edu.jhu.cs.bsj.stdlib.diagnostic.impl.InvalidEnclosingTypeDiagnosticImpl;
 import edu.jhu.cs.bsj.stdlib.diagnostic.impl.MissingMethodDeclarationDiagnosticImpl;
 
 /**
- * TODO
+ * This meta-annotation metaprogram generates the toString method for a class. It generates this function
+ * based on the getters for properties which exist on that class; that is, all methods of the form <code>getFoo()</code>
+ * where <code>Foo</code> is an arbitrary name are invoked by the generated methods.
+ * <p/>
+ * If the optional "properties" property is specified, the getters for properties of the indicated names are called
+ * instead.
  * 
  * @author Joseph Riley
  */
@@ -136,6 +141,11 @@ public class GenerateToString extends AbstractBsjMetaAnnotationMetaprogram
         members.add(createToString(context, getterDescriptions, getEnclosingTypeName(context)));
     }
 
+    /**
+     * Determines the identifier for this context's enclosing class.
+     * @param context the context referenced.
+     * @return an IdentifierNode corresponding to the enclosing class for the context.
+     */
     private IdentifierNode getEnclosingTypeName(Context<MetaAnnotationMetaprogramAnchorNode> context)
     {
         // TODO move to util class
