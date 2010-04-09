@@ -1,15 +1,20 @@
 #import edu.jhu.cs.bsj.stdlib.metaannotations.*;
 
+@@GenerateToString()
 @@GenerateEqualsAndHashCode(properties={"x","y"})
 public class Point
 {
+	@@Property private Boolean b;
 	@@Property private double x;
 	@@Property private double y;
+	@@Property private String z;
 	
 	public Point(int x, int y)
 	{
 		this.x = x;
 		this.y = y;
+		this.z = "testing";
+		this.b = new Boolean(true);
 	}
 	
 	public double getDistance(Point p)

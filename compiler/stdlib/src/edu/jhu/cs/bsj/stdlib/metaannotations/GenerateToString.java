@@ -1,0 +1,256 @@
+package edu.jhu.cs.bsj.stdlib.metaannotations;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import edu.jhu.cs.bsj.compiler.ast.AccessModifier;
+import edu.jhu.cs.bsj.compiler.ast.AssignmentOperator;
+import edu.jhu.cs.bsj.compiler.ast.BinaryOperator;
+import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
+import edu.jhu.cs.bsj.compiler.ast.NameCategory;
+import edu.jhu.cs.bsj.compiler.ast.PrimitiveType;
+import edu.jhu.cs.bsj.compiler.ast.exception.MetaprogramExecutionFailureException;
+import edu.jhu.cs.bsj.compiler.ast.node.ArrayTypeNode;
+import edu.jhu.cs.bsj.compiler.ast.node.BlockStatementNode;
+import edu.jhu.cs.bsj.compiler.ast.node.ClassDeclarationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.ClassMemberListNode;
+import edu.jhu.cs.bsj.compiler.ast.node.ClassMemberNode;
+import edu.jhu.cs.bsj.compiler.ast.node.EnumDeclarationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
+import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
+import edu.jhu.cs.bsj.compiler.ast.node.InterfaceDeclarationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.MethodDeclarationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.PrimaryExpressionNode;
+import edu.jhu.cs.bsj.compiler.ast.node.PrimitiveTypeNode;
+import edu.jhu.cs.bsj.compiler.ast.node.TypeDeclarationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
+import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaprogramAnchorNode;
+import edu.jhu.cs.bsj.compiler.impl.utils.Pair;
+import edu.jhu.cs.bsj.compiler.metaannotation.BsjMetaAnnotationElementGetter;
+import edu.jhu.cs.bsj.compiler.metaannotation.BsjMetaAnnotationElementSetter;
+import edu.jhu.cs.bsj.compiler.metaannotation.InvalidMetaAnnotationConfigurationException;
+import edu.jhu.cs.bsj.compiler.metaprogram.AbstractBsjMetaAnnotationMetaprogram;
+import edu.jhu.cs.bsj.compiler.metaprogram.Context;
+import edu.jhu.cs.bsj.stdlib.diagnostic.impl.InvalidEnclosingTypeDiagnosticImpl;
+import edu.jhu.cs.bsj.stdlib.diagnostic.impl.MissingMethodDeclarationDiagnosticImpl;
+
+/**
+ * TODO
+ * 
+ * @author Joseph Riley
+ */
+public class GenerateToString extends AbstractBsjMetaAnnotationMetaprogram
+{
+    /** The explicitly-specified list of properties. */
+    private String[] properties = null;
+
+    public GenerateToString()
+    {
+        //TODO remove dependency on equalsAndHashCode
+        super(Arrays.asList("toString"), Arrays.asList("property", "equalsAndHashCode"));
+    }
+
+    @BsjMetaAnnotationElementGetter
+    public String[] getProperties()
+    {
+        return this.properties;
+    }
+
+    @BsjMetaAnnotationElementSetter
+    public void setProperties(String[] properties)
+    {
+        this.properties = properties;
+    }
+    
+    @Override
+    protected void execute(Context<MetaAnnotationMetaprogramAnchorNode> context)
+    {
+        //TODO code lifted from GenerateEqualsAndHashCode, roll it into a util class 
+        // Find our enclosing type declaration. It must be an enum or a class for this to work.
+        TypeDeclarationNode enclosingTypeDeclaration = context.getAnchor().getNearestAncestorOfType(
+                TypeDeclarationNode.class);
+        ClassMemberListNode members;
+        if (enclosingTypeDeclaration instanceof ClassDeclarationNode)
+        {
+            members = ((ClassDeclarationNode) enclosingTypeDeclaration).getBody().getMembers();
+        } else if (enclosingTypeDeclaration instanceof EnumDeclarationNode)
+        {
+            members = ((EnumDeclarationNode) enclosingTypeDeclaration).getBody().getMembers();
+        } else
+        {
+            List<Class<? extends TypeDeclarationNode>> typeDeclarationList = new ArrayList<Class<? extends TypeDeclarationNode>>();
+            typeDeclarationList.add(ClassDeclarationNode.class);
+            typeDeclarationList.add(EnumDeclarationNode.class);
+            context.getDiagnosticListener().report(
+                    new InvalidEnclosingTypeDiagnosticImpl(getClass(), enclosingTypeDeclaration, typeDeclarationList));
+            throw new MetaprogramExecutionFailureException();
+        }
+        //TODO code lifted from GenerateEqualsAndHashCode, roll it into a util class 
+        // Establish the list of properties we will be using
+        List<Pair<String, TypeNode>> getterDescriptions = new ArrayList<Pair<String, TypeNode>>();
+        if (this.properties == null)
+        {
+            for (ClassMemberNode member : members)
+            {
+                if (member instanceof MethodDeclarationNode)
+                {
+                    MethodDeclarationNode methodDecl = (MethodDeclarationNode) member;
+                    if (methodDecl.getIdentifier().getIdentifier().startsWith("get")
+                            && methodDecl.getParameters().size() == 0
+                            && (!(methodDecl.getReturnType() instanceof PrimitiveTypeNode) || (((PrimitiveTypeNode) (methodDecl.getReturnType())).getPrimitiveType() != PrimitiveType.VOID)))
+                    {
+                        getterDescriptions.add(new Pair<String, TypeNode>(methodDecl.getIdentifier().getIdentifier(),
+                                methodDecl.getReturnType()));
+                    }
+                }
+            }
+        } else
+        {
+            Map<String, MethodDeclarationNode> methodMap = new HashMap<String, MethodDeclarationNode>();
+            for (ClassMemberNode member : members)
+            {
+                if (member instanceof MethodDeclarationNode)
+                {
+                    MethodDeclarationNode methodDecl = (MethodDeclarationNode) member;
+                    methodMap.put(methodDecl.getIdentifier().getIdentifier(), methodDecl);
+                }
+            }
+            for (String propName : this.properties)
+            {
+                String getterName = "get" + Character.toUpperCase(propName.charAt(0)) + propName.substring(1);
+                MethodDeclarationNode getterDeclaration = methodMap.get(getterName);
+                if (getterDeclaration == null)
+                {
+                    context.getDiagnosticListener().report(
+                            new MissingMethodDeclarationDiagnosticImpl(members, getterName));
+                    throw new MetaprogramExecutionFailureException();
+                }
+                getterDescriptions.add(new Pair<String, TypeNode>(getterName, getterDeclaration.getReturnType()));
+            }
+        }
+
+        // create and add the actual toString method
+        members.add(createToString(context, getterDescriptions, getEnclosingTypeName(context)));
+    }
+
+    private IdentifierNode getEnclosingTypeName(Context<MetaAnnotationMetaprogramAnchorNode> context)
+    {
+        // TODO move to util class
+        TypeDeclarationNode enclosingTypeDeclaration = context.getAnchor().getNearestAncestorOfType(
+                TypeDeclarationNode.class);
+        
+        if (enclosingTypeDeclaration instanceof ClassDeclarationNode)
+        {
+            return ((ClassDeclarationNode) enclosingTypeDeclaration).getIdentifier();
+        } 
+        else if (enclosingTypeDeclaration instanceof EnumDeclarationNode)
+        {
+            return ((EnumDeclarationNode) enclosingTypeDeclaration).getIdentifier();
+        } 
+        else if (enclosingTypeDeclaration instanceof InterfaceDeclarationNode)
+        {
+            return ((InterfaceDeclarationNode) enclosingTypeDeclaration).getIdentifier();
+        }
+        else
+        {
+            List<Class<? extends TypeDeclarationNode>> typeDeclarationList = new ArrayList<Class<? extends TypeDeclarationNode>>();
+            typeDeclarationList.add(ClassDeclarationNode.class);
+            typeDeclarationList.add(EnumDeclarationNode.class);
+            typeDeclarationList.add(InterfaceDeclarationNode.class);
+            context.getDiagnosticListener().report(
+                    new InvalidEnclosingTypeDiagnosticImpl(getClass(), enclosingTypeDeclaration, typeDeclarationList));
+            throw new MetaprogramExecutionFailureException();
+        }
+    }
+
+    private MethodDeclarationNode createToString(
+            Context<MetaAnnotationMetaprogramAnchorNode> context,
+            List<Pair<String, TypeNode>> getters, IdentifierNode classIdentifier)
+    {
+        BsjNodeFactory factory = context.getFactory();
+        
+        List<BlockStatementNode> statements = new ArrayList<BlockStatementNode>();
+        
+        // String ret = "ClassName [";
+        statements.add(factory.makeVariableDeclarationNode(
+                factory.makeVariableDeclaratorListNode(
+                        factory.makeVariableDeclaratorNode(
+                        factory.makeUnparameterizedTypeNode(
+                                factory.makeSimpleNameNode(
+                                factory.makeIdentifierNode("String"), 
+                                NameCategory.TYPE)), 
+                                factory.makeIdentifierNode("ret"),
+                factory.makeStringLiteralNode(classIdentifier.getIdentifier() + " [")))));
+
+        // for each property, add its string form into our return value
+        boolean first = true;
+        for (Pair<String, TypeNode> getter : getters)
+        {
+            String getterName = getter.getFirst();
+            String fieldName = getterName.substring(3);
+            fieldName = fieldName.substring(0, 1).toLowerCase() + fieldName.substring(1);
+            TypeNode type = getter.getSecond();
+            ExpressionNode toStringValueNode;
+            PrimaryExpressionNode getterCallNode = factory.makeMethodInvocationByNameNode(
+                    factory.parseNameNode(getterName));
+                
+            if (type instanceof ArrayTypeNode)
+            {
+                // use Arrays.toString
+                toStringValueNode = factory.makeMethodInvocationByNameNode(
+                        factory.parseNameNode("java.util.Arrays.toString"),
+                        factory.makeExpressionListNode(getterCallNode));
+            } 
+            else
+            {
+                // anything other than arrays can just be passed
+                toStringValueNode = getterCallNode;
+            }
+
+            // now add our property's string representation to the whole
+            statements.add(factory.makeExpressionStatementNode(factory.makeAssignmentNode(
+                    factory.makeFieldAccessByNameNode(factory.parseNameNode("ret")), 
+                    AssignmentOperator.PLUS_ASSIGNMENT, 
+                    factory.makeBinaryExpressionNode(
+                            factory.makeStringLiteralNode((first ? "" : ", ") + fieldName + "="), 
+                            toStringValueNode, 
+                            BinaryOperator.PLUS))));
+            
+            // allows us to skip a preceding comma in for the first property
+            first = false;
+        }
+        
+        // ret += "]";
+        statements.add(factory.makeExpressionStatementNode(factory.makeAssignmentNode(
+                factory.makeFieldAccessByNameNode(factory.parseNameNode("ret")), 
+                AssignmentOperator.PLUS_ASSIGNMENT, 
+                factory.makeStringLiteralNode("]"))));
+        
+        // return ret;
+        statements.add(factory.makeReturnNode(
+                factory.makeFieldAccessByNameNode(
+                        factory.makeSimpleNameNode(
+                                factory.makeIdentifierNode("ret"), NameCategory.EXPRESSION))));
+        
+        // create a method declaration for toString()
+        return factory.makeMethodDeclarationNode(
+                factory.makeBlockNode(factory.makeBlockStatementListNode(statements)), 
+                factory.makeMethodModifiersNode(AccessModifier.PUBLIC), 
+                factory.makeIdentifierNode("toString"), 
+                factory.makeVariableListNode(), 
+                factory.makeUnparameterizedTypeNode(
+                        factory.makeSimpleNameNode(
+                        factory.makeIdentifierNode("String"), NameCategory.TYPE)), 
+                factory.makeJavadocNode(
+                        "Implementation of toString.\n" +
+                		"@return a string representation of this object."));
+    }
+
+    @Override
+    public void complete() throws InvalidMetaAnnotationConfigurationException
+    {
+    }
+}

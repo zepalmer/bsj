@@ -15,5 +15,6 @@ public class Main
 		
 		System.out.println("Set size = " + set.size());
 		System.out.println("Distance = " + p1.getDistance(p2));
+		System.out.println("toString = " + p2.toString());
 	}
 }
