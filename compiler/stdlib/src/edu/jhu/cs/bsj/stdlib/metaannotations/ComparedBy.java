@@ -7,18 +7,25 @@ import java.util.List;
 import java.util.Map;
 
 import edu.jhu.cs.bsj.compiler.ast.AccessModifier;
+import edu.jhu.cs.bsj.compiler.ast.AssignmentOperator;
+import edu.jhu.cs.bsj.compiler.ast.BinaryOperator;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 import edu.jhu.cs.bsj.compiler.ast.NameCategory;
 import edu.jhu.cs.bsj.compiler.ast.PrimitiveType;
 import edu.jhu.cs.bsj.compiler.ast.exception.MetaprogramExecutionFailureException;
+import edu.jhu.cs.bsj.compiler.ast.node.ArrayTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.BlockStatementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassMemberListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassMemberNode;
 import edu.jhu.cs.bsj.compiler.ast.node.DeclaredTypeListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.EnumDeclarationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
+import edu.jhu.cs.bsj.compiler.ast.node.InterfaceDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.MethodDeclarationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.PrimaryExpressionNode;
+import edu.jhu.cs.bsj.compiler.ast.node.PrimitiveTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaprogramAnchorNode;
@@ -28,6 +35,7 @@ import edu.jhu.cs.bsj.compiler.metaannotation.BsjMetaAnnotationElementSetter;
 import edu.jhu.cs.bsj.compiler.metaannotation.InvalidMetaAnnotationConfigurationException;
 import edu.jhu.cs.bsj.compiler.metaprogram.AbstractBsjMetaAnnotationMetaprogram;
 import edu.jhu.cs.bsj.compiler.metaprogram.Context;
+import edu.jhu.cs.bsj.stdlib.diagnostic.impl.InvalidEnclosingTypeDiagnosticImpl;
 import edu.jhu.cs.bsj.stdlib.diagnostic.impl.MissingMethodDeclarationDiagnosticImpl;
 import edu.jhu.cs.bsj.stdlib.utils.TypeDeclUtils;
 
@@ -90,7 +98,6 @@ public class ComparedBy extends AbstractBsjMetaAnnotationMetaprogram
             getterDescriptions.add(new Pair<String, TypeNode>(getterName, getterDeclaration.getReturnType()));
         }
        
-        // TODO finish
         IdentifierNode className = TypeDeclUtils.getEnclosingTypeName(context, this);
         addComparableInterface(context, className);
         members.add(generateCompareTo(context, getterDescriptions, className));
@@ -118,7 +125,12 @@ public class ComparedBy extends AbstractBsjMetaAnnotationMetaprogram
         } 
         else
         {
-            //TODO blow up
+            List<Class<? extends TypeDeclarationNode>> typeDeclarationList = new ArrayList<Class<? extends TypeDeclarationNode>>();
+            typeDeclarationList.add(ClassDeclarationNode.class);
+            typeDeclarationList.add(EnumDeclarationNode.class);
+            context.getDiagnosticListener().report(
+                    new InvalidEnclosingTypeDiagnosticImpl(getClass(), enclosingTypeDeclaration, typeDeclarationList));
+            throw new MetaprogramExecutionFailureException();
         }
         
         // adding "implements Comparable<T>"
@@ -129,12 +141,21 @@ public class ComparedBy extends AbstractBsjMetaAnnotationMetaprogram
     }
 
     private ClassMemberNode generateCompareTo(Context<MetaAnnotationMetaprogramAnchorNode> context,
-            List<Pair<String, TypeNode>> getterDescriptions, IdentifierNode className)
+            List<Pair<String, TypeNode>> getters, IdentifierNode className)
     {
         // TODO finish
         
         BsjNodeFactory factory = context.getFactory();        
         List<BlockStatementNode> statements = new ArrayList<BlockStatementNode>();
+        
+        // if (o == null) {throw new NullPointerException();}        
+        statements.add(factory.makeIfNode(
+                factory.makeBinaryExpressionNode(
+                        factory.makeFieldAccessByNameNode(factory.parseNameNode("o")), 
+                        factory.makeNullLiteralNode(), 
+                        BinaryOperator.EQUAL),
+                factory.makeThrowNode(factory.makeUnqualifiedClassInstantiationNode(
+                        factory.makeUnparameterizedTypeNode(factory.parseNameNode("NullPointerException"))))));
         
         // if (this.equals(o)) {return 0;}        
         statements.add(factory.makeIfNode(
@@ -145,6 +166,42 @@ public class ComparedBy extends AbstractBsjMetaAnnotationMetaprogram
                                 factory.makeFieldAccessByNameNode(factory.parseNameNode("o")))), 
                 factory.makeReturnNode(factory.makeIntLiteralNode(0))));
         
+        // for each property, in order compare it to the other
+        for (Pair<String, TypeNode> getter : getters)
+        {
+            String getterName = getter.getFirst();
+            TypeNode type = getter.getSecond();
+            ExpressionNode toStringValueNode;
+            PrimaryExpressionNode getterCallNode = factory.makeMethodInvocationByNameNode(
+                    factory.parseNameNode(getterName));
+            
+            if (type instanceof PrimitiveTypeNode)
+            {
+                // then compare using ==
+//                comparisonExpressionNode = factory.makeBinaryExpressionNode(thisGetterNode, otherGetterNode,
+//                        BinaryOperator.EQUAL);
+            }
+            else if (type instanceof ArrayTypeNode)
+            {
+                // TODO punt?
+            } 
+            else
+            {
+                // anything other than arrays can just be passed
+                toStringValueNode = getterCallNode;
+            }
+
+            
+            // if (this.getX() < o.getX()) {return -1;}
+            
+            
+            
+            
+            // if (this.getX() > o.getX()) {return 1;}
+            
+        }
+        
+        // return 0;
         statements.add(factory.makeReturnNode(factory.makeIntLiteralNode(0)));
         
         // create a method declaration for compareTo(T o)
