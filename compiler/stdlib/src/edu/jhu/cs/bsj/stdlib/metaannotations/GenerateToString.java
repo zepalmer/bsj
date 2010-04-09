@@ -15,17 +15,13 @@ import edu.jhu.cs.bsj.compiler.ast.PrimitiveType;
 import edu.jhu.cs.bsj.compiler.ast.exception.MetaprogramExecutionFailureException;
 import edu.jhu.cs.bsj.compiler.ast.node.ArrayTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.BlockStatementNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ClassDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassMemberListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassMemberNode;
-import edu.jhu.cs.bsj.compiler.ast.node.EnumDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
-import edu.jhu.cs.bsj.compiler.ast.node.InterfaceDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.MethodDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.PrimaryExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.PrimitiveTypeNode;
-import edu.jhu.cs.bsj.compiler.ast.node.TypeDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.impl.utils.Pair;
@@ -34,7 +30,6 @@ import edu.jhu.cs.bsj.compiler.metaannotation.BsjMetaAnnotationElementSetter;
 import edu.jhu.cs.bsj.compiler.metaannotation.InvalidMetaAnnotationConfigurationException;
 import edu.jhu.cs.bsj.compiler.metaprogram.AbstractBsjMetaAnnotationMetaprogram;
 import edu.jhu.cs.bsj.compiler.metaprogram.Context;
-import edu.jhu.cs.bsj.stdlib.diagnostic.impl.InvalidEnclosingTypeDiagnosticImpl;
 import edu.jhu.cs.bsj.stdlib.diagnostic.impl.MissingMethodDeclarationDiagnosticImpl;
 import edu.jhu.cs.bsj.stdlib.utils.TypeDeclUtils;
 
@@ -74,31 +69,14 @@ public class GenerateToString extends AbstractBsjMetaAnnotationMetaprogram
     @Override
     protected void execute(Context<MetaAnnotationMetaprogramAnchorNode> context)
     {
-        // Utility methods
+        // utility methods
         TypeDeclUtils utils = new TypeDeclUtils();
-        
-        //TODO code lifted from GenerateEqualsAndHashCode, roll it into a util class 
-        // Find our enclosing type declaration. It must be an enum or a class for this to work.
-        TypeDeclarationNode enclosingTypeDeclaration = context.getAnchor().getNearestAncestorOfType(
-                TypeDeclarationNode.class);
-        ClassMemberListNode members;
-        if (enclosingTypeDeclaration instanceof ClassDeclarationNode)
-        {
-            members = ((ClassDeclarationNode) enclosingTypeDeclaration).getBody().getMembers();
-        } else if (enclosingTypeDeclaration instanceof EnumDeclarationNode)
-        {
-            members = ((EnumDeclarationNode) enclosingTypeDeclaration).getBody().getMembers();
-        } else
-        {
-            List<Class<? extends TypeDeclarationNode>> typeDeclarationList = new ArrayList<Class<? extends TypeDeclarationNode>>();
-            typeDeclarationList.add(ClassDeclarationNode.class);
-            typeDeclarationList.add(EnumDeclarationNode.class);
-            context.getDiagnosticListener().report(
-                    new InvalidEnclosingTypeDiagnosticImpl(getClass(), enclosingTypeDeclaration, typeDeclarationList));
-            throw new MetaprogramExecutionFailureException();
-        }
-        //TODO code lifted from GenerateEqualsAndHashCode, roll it into a util class 
-        // Establish the list of properties we will be using
+
+        // get all the members of our enclosing class
+        ClassMemberListNode members = utils.getClassMembers(context, this);
+
+        //TODO roll into utilities class?
+        // establish the list of properties we will be using
         List<Pair<String, TypeNode>> getterDescriptions = new ArrayList<Pair<String, TypeNode>>();
         if (this.properties == null)
         {

@@ -5,6 +5,7 @@ import java.util.List;
 
 import edu.jhu.cs.bsj.compiler.ast.exception.MetaprogramExecutionFailureException;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassDeclarationNode;
+import edu.jhu.cs.bsj.compiler.ast.node.ClassMemberListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.EnumDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.InterfaceDeclarationNode;
@@ -32,6 +33,7 @@ public class TypeDeclUtils
             Context<MetaAnnotationMetaprogramAnchorNode> context,
             AbstractBsjMetaAnnotationMetaprogram caller)
     {
+        // Find our enclosing type declaration. It must be an enum or a class for this to work.
         TypeDeclarationNode enclosingTypeDeclaration = context.getAnchor().getNearestAncestorOfType(
                 TypeDeclarationNode.class);
         
@@ -57,5 +59,40 @@ public class TypeDeclUtils
                     new InvalidEnclosingTypeDiagnosticImpl(caller.getClass(), enclosingTypeDeclaration, typeDeclarationList));
             throw new MetaprogramExecutionFailureException();
         }
+    }
+
+    /**
+     * Gets a list of the class members of the enclosing class.
+     * @param context the context referenced.
+     * @param caller the metaprogram calling this method.
+     * @return a list of class members of the enclosing class.
+     */
+    public ClassMemberListNode getClassMembers(
+            Context<MetaAnnotationMetaprogramAnchorNode> context,
+            AbstractBsjMetaAnnotationMetaprogram caller)
+    {
+        // Find our enclosing type declaration. It must be an enum or a class for this to work.
+        TypeDeclarationNode enclosingTypeDeclaration = context.getAnchor().getNearestAncestorOfType(
+                TypeDeclarationNode.class);
+        ClassMemberListNode members;
+        
+        if (enclosingTypeDeclaration instanceof ClassDeclarationNode)
+        {
+            members = ((ClassDeclarationNode) enclosingTypeDeclaration).getBody().getMembers();
+        }
+        else if (enclosingTypeDeclaration instanceof EnumDeclarationNode)
+        {
+            members = ((EnumDeclarationNode) enclosingTypeDeclaration).getBody().getMembers();
+        }
+        else
+        {
+            List<Class<? extends TypeDeclarationNode>> typeDeclarationList = new ArrayList<Class<? extends TypeDeclarationNode>>();
+            typeDeclarationList.add(ClassDeclarationNode.class);
+            typeDeclarationList.add(EnumDeclarationNode.class);
+            context.getDiagnosticListener().report(
+                    new InvalidEnclosingTypeDiagnosticImpl(caller.getClass(), enclosingTypeDeclaration, typeDeclarationList));
+            throw new MetaprogramExecutionFailureException();
+        }
+        return members;
     }
 }
