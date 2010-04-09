@@ -45,7 +45,7 @@ public class ComparedBy extends AbstractBsjMetaAnnotationMetaprogram
 
     public ComparedBy()
     {
-        //TODO remove dependencies on targets other than property
+        //TODO remove dependency on toString, keep property and equalsAndHashCode
         super(Arrays.asList("comparedBy"), Arrays.asList("property", "equalsAndHashCode", "toString"));
     }
 
@@ -136,14 +136,25 @@ public class ComparedBy extends AbstractBsjMetaAnnotationMetaprogram
         BsjNodeFactory factory = context.getFactory();        
         List<BlockStatementNode> statements = new ArrayList<BlockStatementNode>();
         
+        // if (this.equals(o)) {return 0;}        
+        statements.add(factory.makeIfNode(
+                factory.makeMethodInvocationByExpressionNode(
+                        factory.makeThisNode(), 
+                        factory.makeIdentifierNode("equals"), 
+                        factory.makeExpressionListNode(
+                                factory.makeFieldAccessByNameNode(factory.parseNameNode("o")))), 
+                factory.makeReturnNode(factory.makeIntLiteralNode(0))));
         
+        statements.add(factory.makeReturnNode(factory.makeIntLiteralNode(0)));
         
         // create a method declaration for compareTo(T o)
         return factory.makeMethodDeclarationNode(
                 factory.makeBlockNode(factory.makeBlockStatementListNode(statements)), 
                 factory.makeMethodModifiersNode(AccessModifier.PUBLIC), 
                 factory.makeIdentifierNode("compareTo"), 
-                factory.makeVariableListNode(), 
+                factory.makeVariableListNode(factory.makeVariableNode(
+                        factory.makeUnparameterizedTypeNode(factory.parseNameNode(className.getIdentifier())),
+                        factory.makeIdentifierNode("o"))), 
                 factory.makePrimitiveTypeNode(PrimitiveType.INT), 
                 factory.makeJavadocNode(
                         "Implementation of compareTo.\n" +
