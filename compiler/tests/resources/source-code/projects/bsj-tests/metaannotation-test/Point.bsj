@@ -8,6 +8,7 @@ public class Point
 	@@Property private double x;
 	@@Property private double y;
 	@@Property private String z;
+	@@Property private int[] a;
 	
 	public Point(int x, int y)
 	{
@@ -15,6 +16,7 @@ public class Point
 		this.y = y;
 		this.z = "testing";
 		this.b = new Boolean(true);
+		this.a = new int[] {1,2,3};
 	}
 	
 	public double getDistance(Point p)

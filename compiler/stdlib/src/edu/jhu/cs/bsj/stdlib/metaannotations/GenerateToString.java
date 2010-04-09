@@ -69,11 +69,8 @@ public class GenerateToString extends AbstractBsjMetaAnnotationMetaprogram
     @Override
     protected void execute(Context<MetaAnnotationMetaprogramAnchorNode> context)
     {
-        // utility methods
-        TypeDeclUtils utils = new TypeDeclUtils();
-
         // get all the members of our enclosing class
-        ClassMemberListNode members = utils.getClassMembers(context, this);
+        ClassMemberListNode members = TypeDeclUtils.getClassMembers(context, this);
 
         //TODO roll into utilities class?
         // establish the list of properties we will be using
@@ -121,7 +118,7 @@ public class GenerateToString extends AbstractBsjMetaAnnotationMetaprogram
 
         // create and add the actual toString method
         members.add(createToString(
-                context, getterDescriptions, utils.getEnclosingTypeName(context, this)));
+                context, getterDescriptions, TypeDeclUtils.getEnclosingTypeName(context, this)));
     }
 
     /**
@@ -183,7 +180,7 @@ public class GenerateToString extends AbstractBsjMetaAnnotationMetaprogram
                             toStringValueNode, 
                             BinaryOperator.PLUS))));
             
-            // allows us to skip a preceding comma in for the first property
+            // allows us to skip a preceding comma for the first property
             first = false;
         }
         

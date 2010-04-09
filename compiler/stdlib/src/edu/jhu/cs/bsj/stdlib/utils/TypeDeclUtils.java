@@ -24,12 +24,20 @@ import edu.jhu.cs.bsj.stdlib.diagnostic.impl.InvalidEnclosingTypeDiagnosticImpl;
 public class TypeDeclUtils
 {
     /**
+     * Private constructor prevents instantiation.
+     */
+    private TypeDeclUtils()
+    {
+        
+    }
+    
+    /**
      * Determines the identifier for this context's enclosing class.
      * @param context the context referenced.
      * @param caller the metaprogram calling this method.
      * @return an IdentifierNode corresponding to the enclosing class for the context.
      */
-    public IdentifierNode getEnclosingTypeName(
+    public static IdentifierNode getEnclosingTypeName(
             Context<MetaAnnotationMetaprogramAnchorNode> context,
             AbstractBsjMetaAnnotationMetaprogram caller)
     {
@@ -67,7 +75,7 @@ public class TypeDeclUtils
      * @param caller the metaprogram calling this method.
      * @return a list of class members of the enclosing class.
      */
-    public ClassMemberListNode getClassMembers(
+    public static ClassMemberListNode getClassMembers(
             Context<MetaAnnotationMetaprogramAnchorNode> context,
             AbstractBsjMetaAnnotationMetaprogram caller)
     {
