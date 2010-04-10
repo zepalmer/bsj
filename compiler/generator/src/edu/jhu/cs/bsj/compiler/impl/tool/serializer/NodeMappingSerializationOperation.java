@@ -249,12 +249,12 @@ public class NodeMappingSerializationOperation extends
 	 * 
 	 * @author Zachary Palmer
 	 */
-	private static class MapBuildingHelper extends BsjSourceSerializerHelper
+	public static class MapBuildingHelper extends BsjSourceSerializerHelper
 	{
 		private Stack<Pair<Integer, Integer>> startPositionStack = new Stack<Pair<Integer, Integer>>();
 		private NodeMappingSerializationOperation owner = null;
 
-		public MapBuildingHelper()
+		private MapBuildingHelper()
 		{
 			super();
 		}
