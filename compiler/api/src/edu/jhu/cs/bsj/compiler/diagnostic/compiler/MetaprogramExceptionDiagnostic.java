@@ -1,7 +1,6 @@
 package edu.jhu.cs.bsj.compiler.diagnostic.compiler;
 
 import javax.annotation.Generated;
-
 /**
  * This diagnostic indicates that the body of a metaprogram terminated by raising an exception.
  */

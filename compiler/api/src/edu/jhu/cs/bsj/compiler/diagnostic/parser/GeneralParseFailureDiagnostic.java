@@ -1,7 +1,6 @@
 package edu.jhu.cs.bsj.compiler.diagnostic.parser;
 
 import javax.annotation.Generated;
-
 /**
  * A diagnostic representing a general parsing failure starting at a given location.
  */

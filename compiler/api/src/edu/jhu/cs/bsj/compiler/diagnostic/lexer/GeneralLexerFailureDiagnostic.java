@@ -1,7 +1,6 @@
 package edu.jhu.cs.bsj.compiler.diagnostic.lexer;
 
 import javax.annotation.Generated;
-
 /**
  * A diagnostic indicating a general lexer failure.
  */

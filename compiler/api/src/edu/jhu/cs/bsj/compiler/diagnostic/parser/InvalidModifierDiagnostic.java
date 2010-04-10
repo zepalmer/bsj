@@ -1,7 +1,6 @@
 package edu.jhu.cs.bsj.compiler.diagnostic.parser;
 
 import javax.annotation.Generated;
-
 /**
  * A diagnostic representing an invalid modifier (a modifier which appeared in an incorrect context).
  */

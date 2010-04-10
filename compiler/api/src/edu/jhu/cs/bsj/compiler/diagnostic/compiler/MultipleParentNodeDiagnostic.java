@@ -4,7 +4,6 @@ import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.exception.MultipleParentNodeException;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
-
 /**
  * A diagnostic indicating that a metaprogram as assigned as a child to a node when another node was
  * already listed as its parent.

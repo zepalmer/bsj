@@ -157,6 +157,26 @@
                 ]]></doc>
             </diagnostic>
 
+            <diagnostic name="JavaCompilationErrorDiagnostic" super="BsjCompilerDiagnostic"
+                typeParam="T extends JavaFileObject" code="bsj.compiler.compilation.java.error">
+                <prop name="diagnostic" type="Diagnostic" typeArg="T"
+                    desc="the underlying Java compiler diagnostic" />
+                <messageProp expression="diagnostic.getMessage(locale)" />
+                <doc><![CDATA[
+                    A diagnostic indicating that a Java compilation error occurred.
+                ]]></doc>
+            </diagnostic>
+
+            <diagnostic name="MetaprogramCompilationErrorDiagnostic" super="BsjCompilerDiagnostic"
+                typeParam="T extends BsjSourceLocation" code="bsj.compiler.metaprogram.subcompilation.failure">
+                <prop name="diagnostic" type="Diagnostic" typeArg="T"
+                    desc="the underlying BSJ compiler diagnostic" />
+                <messageProp expression="diagnostic.getMessage(locale)" />
+                <doc><![CDATA[
+                    A diagnostic indicating that a subcompilation of a metaprogram failed.
+                ]]></doc>
+            </diagnostic>
+
             <diagnostic name="MetaprogramDependencyTypeNameResolutionDiagnostic" super="BsjCompilerDiagnostic"
                 code="bsj.compiler.metaprogram.dependency.resolution.typeName">
                 <prop name="typeName" type="String" desc="the name of the type which could not be resolved" />
@@ -419,8 +439,9 @@
                         was already listed as its parent.
                     ]]></doc>
                 </exception>
-                <prop name="parent" type="Node" desc="the node which was attempting to become the parent of the child"/>
-                <prop name="child" type="Node" desc="the child node which already had a parent"/>
+                <prop name="parent" type="Node"
+                    desc="the node which was attempting to become the parent of the child" />
+                <prop name="child" type="Node" desc="the child node which already had a parent" />
                 <doc><![CDATA[
                     A diagnostic indicating that a metaprogram as assigned as a child to a node when another node was
                     already listed as its parent.

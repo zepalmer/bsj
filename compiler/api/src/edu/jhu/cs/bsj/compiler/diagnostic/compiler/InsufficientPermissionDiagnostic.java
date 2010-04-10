@@ -5,7 +5,6 @@ import javax.annotation.Generated;
 import edu.jhu.cs.bsj.compiler.ast.NodePermission;
 import edu.jhu.cs.bsj.compiler.ast.exception.InsufficientPermissionException;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
-
 /**
  * Indicates that a metaprogram attempted to access a node in a fashion which is not permitted.
  */

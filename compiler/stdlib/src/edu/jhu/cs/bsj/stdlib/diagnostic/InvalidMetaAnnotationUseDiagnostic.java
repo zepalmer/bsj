@@ -3,7 +3,6 @@ package edu.jhu.cs.bsj.stdlib.diagnostic;
 import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.metaprogram.AbstractBsjMetaAnnotationMetaprogram;
-
 /**
  * A diagnostic indicating that a meta-annotation is used incorrectly.
  */

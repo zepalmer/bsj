@@ -5,7 +5,6 @@ import java.util.List;
 import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
-
 /**
  * A diagnostic indicating that a cycle was found in the dependency graph.  The list of metaprograms is
  * always one larger than the list of targets and contains the same metaprogram at the beginning and

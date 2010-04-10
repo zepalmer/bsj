@@ -3,7 +3,6 @@ package edu.jhu.cs.bsj.compiler.diagnostic.compiler;
 import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.exception.MetaprogramErrorException;
-
 /**
  * A diagnostic indicating that some kind of exception was raised by the compiler from within a
  * metaprogram's library call which represents an error in a BSJ metaprogram.

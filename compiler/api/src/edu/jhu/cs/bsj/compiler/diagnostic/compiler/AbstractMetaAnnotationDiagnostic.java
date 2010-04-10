@@ -1,7 +1,6 @@
 package edu.jhu.cs.bsj.compiler.diagnostic.compiler;
 
 import javax.annotation.Generated;
-
 /**
  * A diagnostic indicating that a meta-annotation was used which is non-instantiable due to being an
  * abstract class.

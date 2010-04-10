@@ -8,14 +8,18 @@ import java.util.Map;
 import javax.tools.DiagnosticListener;
 import javax.tools.JavaCompiler;
 import javax.tools.JavaFileManager;
+import javax.tools.JavaFileObject;
 import javax.tools.StandardLocation;
 import javax.tools.ToolProvider;
+import javax.tools.Diagnostic.Kind;
 
 import org.apache.log4j.Logger;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.impl.ast.BsjNodeManager;
 import edu.jhu.cs.bsj.compiler.impl.ast.PackageNodeCallback;
+import edu.jhu.cs.bsj.compiler.impl.diagnostic.CountingDiagnosticProxyListener;
+import edu.jhu.cs.bsj.compiler.impl.diagnostic.JavaToBsjAdaptiveDiagnosticListener;
 import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.InMemoryLocationManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.LocationMappedFileManager;
 import edu.jhu.cs.bsj.compiler.impl.utils.diagnostic.DiagnosticPrintingListener;
@@ -51,7 +55,7 @@ public class StandardBsjCompiler implements BsjCompiler
 	 */
 	private BsjNodeManager manager;
 
-	/*   *** The following fields are used in compilation. They are not valid unless compilation is in progress. */
+	/*    *** The following fields are used in compilation. They are not valid unless compilation is in progress. */
 
 	/**
 	 * Tracks the progress of compilation units through the compilation process. This data structure performs the
@@ -130,16 +134,16 @@ public class StandardBsjCompiler implements BsjCompiler
 			{
 				this.metacompilationManager.doWork();
 			}
-			
+
 			// If errors occurred during metacompilation, bail out.
-			if (this.metacompilationManager.getErrorCount()!=0)
+			if (this.metacompilationManager.getErrorCount() != 0)
 			{
 				LOGGER.info(this.metacompilationManager.getErrorCount() + " errors during metacompilation");
 				return;
 			}
 
 			// Now compile everything in the generated source directory
-			compileGeneratedSources();
+			compileGeneratedSources(listener);
 		} finally
 		{
 			// Clean up
@@ -152,7 +156,13 @@ public class StandardBsjCompiler implements BsjCompiler
 		}
 	}
 
-	private void compileGeneratedSources() throws IOException
+	/**
+	 * Compiles the generated sources for this compiler.
+	 * @param listener The listener to which to report diagnostic messages.
+	 * @return <code>true</code> on success; <code>false</code> on failure.
+	 * @throws IOException If an I/O error occurs.
+	 */
+	private boolean compileGeneratedSources(DiagnosticListener<BsjSourceLocation> listener) throws IOException
 	{
 		if (LOGGER.isDebugEnabled())
 		{
@@ -189,19 +199,22 @@ public class StandardBsjCompiler implements BsjCompiler
 
 		// Perform compilation
 		JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+		CountingDiagnosticProxyListener<JavaFileObject> wrapperListener = new CountingDiagnosticProxyListener<JavaFileObject>(
+				new JavaToBsjAdaptiveDiagnosticListener(listener));
 		// TODO: trap writer output and diagnostics and interpret them accordingly
-		JavaCompiler.CompilationTask task = compiler.getTask(null, objectProgramFileManager, null,
+		JavaCompiler.CompilationTask task = compiler.getTask(null, objectProgramFileManager, wrapperListener,
 				Collections.<String> emptyList(), Collections.<String> emptyList(), files);
-		if (!task.call())
+		if (!task.call() || wrapperListener.getCount(Kind.ERROR) > 0)
 		{
-			LOGGER.error("Compilation of generated sources failed!");
-			// TODO: something a teensy bit more elegant
-			throw new IllegalStateException("Error during compilation!");
+			LOGGER.debug("Compilation of generated sources failed!");
+			return false;
 		}
 		if (LOGGER.isDebugEnabled())
 		{
 			LOGGER.debug("Finished compilation of generated sources");
 		}
+		
+		return true;
 	}
 
 	/**

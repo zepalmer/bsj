@@ -1,7 +1,6 @@
 package edu.jhu.cs.bsj.compiler.diagnostic.compiler;
 
 import javax.annotation.Generated;
-
 /**
  * A diagnostic indicating that a meta-annotation's element is initialized with an array initializer
  * when its type is not an array type.  This may be the case if too many array types are nested, such

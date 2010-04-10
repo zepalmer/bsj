@@ -1,7 +1,6 @@
 package edu.jhu.cs.bsj.stdlib.diagnostic;
 
 import javax.annotation.Generated;
-
 /**
  * A diagnostic indicating that an expected method declaration is missing.
  */

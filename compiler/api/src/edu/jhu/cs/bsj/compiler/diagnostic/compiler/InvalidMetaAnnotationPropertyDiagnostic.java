@@ -1,7 +1,6 @@
 package edu.jhu.cs.bsj.compiler.diagnostic.compiler;
 
 import javax.annotation.Generated;
-
 /**
  * A diagnostic which represents some problem with a meta-annotation's properties.
  */

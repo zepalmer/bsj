@@ -3,7 +3,6 @@ package edu.jhu.cs.bsj.compiler.diagnostic.compiler;
 import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.diagnostic.BsjDiagnostic;
-
 /**
  * A diagnostic which acts as a supertype for all BSJ compiler diagnostics.
  */

@@ -1,7 +1,6 @@
 package edu.jhu.cs.bsj.compiler.diagnostic.compiler;
 
 import javax.annotation.Generated;
-
 /**
  * A diagnostic indicating that a metaprogram's dependency list contains a target whose type name could
  * not be resolved.

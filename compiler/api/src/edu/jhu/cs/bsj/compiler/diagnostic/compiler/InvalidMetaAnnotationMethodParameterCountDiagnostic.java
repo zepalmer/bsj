@@ -1,7 +1,6 @@
 package edu.jhu.cs.bsj.compiler.diagnostic.compiler;
 
 import javax.annotation.Generated;
-
 /**
  * A diagnostic indicating that the number of parameters to a meta-annotation getter or setter method
  * is incorrect.

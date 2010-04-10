@@ -3,7 +3,6 @@ package edu.jhu.cs.bsj.stdlib.diagnostic;
 import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
-
 /**
  * A diagnostic indicating that an expected declaration is missing.
  */

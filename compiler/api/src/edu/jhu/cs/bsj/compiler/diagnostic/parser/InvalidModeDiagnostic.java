@@ -1,7 +1,6 @@
 package edu.jhu.cs.bsj.compiler.diagnostic.parser;
 
 import javax.annotation.Generated;
-
 /**
  * A diagnostic representing an invalid metaprogram mode.  Because metaprogram modes are identifiers
  * and not keywords, use of an incorrect mode (one which is parseable as a keyword but has no BSJ

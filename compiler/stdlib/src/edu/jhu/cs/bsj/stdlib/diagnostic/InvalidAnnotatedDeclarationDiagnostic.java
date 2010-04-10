@@ -5,7 +5,6 @@ import java.util.List;
 import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
-
 /**
  * Indicates that the meta-annotation cannot be used on the specified type of node.  The
  * <code>annotatedNode</code> field is a hint and may be <code>null</code>.

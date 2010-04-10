@@ -3,7 +3,6 @@ package edu.jhu.cs.bsj.compiler.diagnostic.compiler;
 import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.exception.MetaprogramExecutionFailureException;
-
 /**
  * A diagnostic indicating that the execution of a metaprogram failed due to the metaprogram itself
  * raising a {@link MetaprogramExecutionFailureException}.  The exception is provided to allow the

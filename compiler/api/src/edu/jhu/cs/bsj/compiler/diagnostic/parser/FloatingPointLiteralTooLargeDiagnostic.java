@@ -1,7 +1,6 @@
 package edu.jhu.cs.bsj.compiler.diagnostic.parser;
 
 import javax.annotation.Generated;
-
 /**
  * A diagnostic indicating that a floating point literal was too large to fit into its type.
  */

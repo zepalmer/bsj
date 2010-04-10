@@ -5,7 +5,6 @@ import javax.annotation.Generated;
 import edu.jhu.cs.bsj.compiler.ast.exception.MetaprogramConflictException;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramAnchorNode;
-
 /**
  * Indicates that two metaprograms are in conflict because of the manner in which they accessed the same
  * attribute of a given node.

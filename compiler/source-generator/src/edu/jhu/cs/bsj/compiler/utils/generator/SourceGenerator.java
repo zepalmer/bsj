@@ -2284,7 +2284,8 @@ public class SourceGenerator
 	{
 		protected final String INTERFACE_IMPORTS = "import edu.jhu.cs.bsj.compiler.diagnostic.*;\n"
 				+ "import edu.jhu.cs.bsj.compiler.metaannotation.*;\n"
-				+ "import edu.jhu.cs.bsj.compiler.metaprogram.*;\n" + "import javax.tools.Diagnostic.Kind;\n";
+				+ "import edu.jhu.cs.bsj.compiler.metaprogram.*;\n" + "import javax.tools.Diagnostic.Kind;\n"
+				+ "import javax.tools.*\n;";
 		protected final String CLASS_IMPORTS = INTERFACE_IMPORTS
 				+ "import edu.jhu.cs.bsj.compiler.impl.diagnostic.*;\n";
 

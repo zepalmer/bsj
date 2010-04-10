@@ -5,7 +5,6 @@ import javax.annotation.Generated;
 import edu.jhu.cs.bsj.compiler.ast.exception.DuplicatePackageMemberException;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
 import edu.jhu.cs.bsj.compiler.ast.node.PackageNode;
-
 /**
  * A diagnostic indicating that a metaprogram attempted to insert a member into a package node when
  * another member of the same type (compilation unit or package) and the same name already existed.

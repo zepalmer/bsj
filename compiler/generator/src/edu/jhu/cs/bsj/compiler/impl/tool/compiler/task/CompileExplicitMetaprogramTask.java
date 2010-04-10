@@ -9,8 +9,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.tools.DiagnosticListener;
+import javax.tools.Diagnostic.Kind;
+
 import edu.jhu.cs.bsj.compiler.BsjServiceRegistry;
 import edu.jhu.cs.bsj.compiler.ast.AccessModifier;
+import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceSerializer;
 import edu.jhu.cs.bsj.compiler.ast.MetaprogramLocalMode;
 import edu.jhu.cs.bsj.compiler.ast.MetaprogramPackageMode;
@@ -33,6 +37,8 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.ExplicitMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramPreambleNode;
+import edu.jhu.cs.bsj.compiler.impl.diagnostic.CountingDiagnosticProxyListener;
+import edu.jhu.cs.bsj.compiler.impl.diagnostic.LocationTranslatingDiagnosticListener;
 import edu.jhu.cs.bsj.compiler.impl.diagnostic.compiler.MetaprogramDependencyTypeNameResolutionDiagnosticImpl;
 import edu.jhu.cs.bsj.compiler.impl.metaprogram.BsjUserDiagnosticTranslatingListener;
 import edu.jhu.cs.bsj.compiler.impl.metaprogram.ContextImpl;
@@ -42,6 +48,9 @@ import edu.jhu.cs.bsj.compiler.impl.tool.compiler.MetaprogramProfile;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.operations.TypeDeclarationLocatingNodeOperation;
 import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.InMemoryLocationManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.filemanager.LocationMappedFileManager;
+import edu.jhu.cs.bsj.compiler.impl.tool.serializer.NodeMappingSerializationOperation;
+import edu.jhu.cs.bsj.compiler.impl.tool.serializer.SerializedNodeMap;
+import edu.jhu.cs.bsj.compiler.impl.utils.Pair;
 import edu.jhu.cs.bsj.compiler.metaprogram.Context;
 import edu.jhu.cs.bsj.compiler.tool.BsjCompiler;
 import edu.jhu.cs.bsj.compiler.tool.BsjToolkit;
@@ -128,7 +137,7 @@ public class CompileExplicitMetaprogramTask<R extends Node> extends
 								new TypeDeclarationLocatingNodeOperation(qualifiedNameNode.getBase()), null);
 						if (namedTypeDeclarationNode == null)
 						{
-							// We could not find the type name contained in the dependency.  This is an error; the
+							// We could not find the type name contained in the dependency. This is an error; the
 							// metaprogram is referring to a type which does not exist in the object program namespace.
 							metacompilationContext.getDiagnosticListener().report(
 									new MetaprogramDependencyTypeNameResolutionDiagnosticImpl(
@@ -157,21 +166,27 @@ public class CompileExplicitMetaprogramTask<R extends Node> extends
 
 		// Clear the metaprogram from the anchor (so it can't reflect on itself)
 		anchor.setMetaprogram(null);
-		
+
 		// now build the metaprogram itself
 		Context<ExplicitMetaprogramAnchorNode<R>> context = new ContextImpl<ExplicitMetaprogramAnchorNode<R>>(anchor,
 				factory, new BsjUserDiagnosticTranslatingListener(this.metacompilationContext.getDiagnosticListener(),
 						this.anchor.getStartLocation()));
 
 		Metaprogram<ExplicitMetaprogramAnchorNode<R>> metaprogram = compileMetaprogram(metaprogramNode,
-				anchor.getClass().getName());
+				anchor.getClass().getName(), this.metacompilationContext.getDiagnosticListener());
+		
+		if (metaprogram == null)
+		{
+			return null;
+		}
 
 		return new MetaprogramProfile<ExplicitMetaprogramAnchorNode<R>>(metaprogram, anchor, dependencyNames,
 				qualifiedTargetNames, localMode, packageMode, context);
 	}
 
 	private <A extends ExplicitMetaprogramAnchorNode<? extends Node>> Metaprogram<A> compileMetaprogram(
-			MetaprogramNode metaprogramNode, String anchorClassName) throws IOException
+			MetaprogramNode metaprogramNode, String anchorClassName,
+			DiagnosticListener<BsjSourceLocation> diagnosticListener) throws IOException
 	{
 		String metaprogramDescription = null;
 		if (LOGGER.isTraceEnabled())
@@ -293,8 +308,11 @@ public class CompileExplicitMetaprogramTask<R extends Node> extends
 		BsjFileManager fileManager = new LocationMappedFileManager(locationMap);
 		BsjFileObject metaprogramSourceFile = fileManager.getFileForOutput(BsjCompilerLocation.SOURCE_PATH,
 				metaprogramPackageName, metaprogramClassName + ".bsj", null);
-		BsjSourceSerializer serializer = metacompilationContext.getToolkit().getSerializer();
-		String source = serializer.executeCompilationUnitNode(metaprogramCompilationUnitNode, null);
+		NodeMappingSerializationOperation serializer = NodeMappingSerializationOperation.make();
+		Pair<String, SerializedNodeMap> serialized = serializer.executeCompilationUnitNode(
+				metaprogramCompilationUnitNode, null);
+		String source = serialized.getFirst();
+		SerializedNodeMap nodeMap = serialized.getSecond();
 		metaprogramSourceFile.setCharContent(source);
 
 		BsjToolkitFactory toolkitFactory = BsjServiceRegistry.newToolkitFactory();
@@ -302,10 +320,15 @@ public class CompileExplicitMetaprogramTask<R extends Node> extends
 		BsjToolkit toolkit = toolkitFactory.newToolkit();
 
 		BsjCompiler compiler = toolkit.getCompiler();
-		// TODO: if this compilation fails, the resulting exception won't make much sense; we need to translate it back
-		// to the file from which it originated
-		// TODO: perhaps we want to surround the diagnostics that this compilation subprocess produces in a wrapper?
-		compiler.compile(Arrays.asList(metaprogramSourceFile), null);
+		CountingDiagnosticProxyListener<BsjSourceLocation> wrappingDiagnosticListener = new CountingDiagnosticProxyListener<BsjSourceLocation>(
+				new LocationTranslatingDiagnosticListener(
+						diagnosticListener, nodeMap));
+		compiler.compile(Arrays.asList(metaprogramSourceFile), wrappingDiagnosticListener);
+		if (wrappingDiagnosticListener.getCount(Kind.ERROR) > 0)
+		{
+			// A compilation error occurred; bail out
+			return null;
+		}
 
 		ClassLoader metaprogramClassLoader = fileManager.getClassLoader(BsjCompilerLocation.CLASS_OUTPUT);
 		Class<? extends Metaprogram<A>> metaprogramClass;

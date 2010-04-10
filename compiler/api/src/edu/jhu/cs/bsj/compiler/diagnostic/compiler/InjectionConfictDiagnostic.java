@@ -5,7 +5,6 @@ import java.util.Set;
 import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
-
 /**
  * A diagnostic indicating that an injection conflict has occurred.
  */

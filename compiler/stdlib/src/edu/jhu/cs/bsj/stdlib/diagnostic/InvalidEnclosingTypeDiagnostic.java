@@ -5,7 +5,6 @@ import java.util.List;
 import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.node.TypeDeclarationNode;
-
 /**
  * Indicates that the meta-annotation cannot be used in the enclosing type in which it is found.  The
  * <code>enclosingNode</code> field is a hint and may be <code>null</code> (especially if the

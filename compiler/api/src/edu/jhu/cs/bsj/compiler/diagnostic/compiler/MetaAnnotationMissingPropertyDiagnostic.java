@@ -4,7 +4,6 @@ import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.metaannotation.BsjMetaAnnotationElementGetter;
 import edu.jhu.cs.bsj.compiler.metaannotation.BsjMetaAnnotationElementSetter;
-
 /**
  * A diagnostic indicating that a property was used on the invocation of a meta-annotation which did
  * not appear on the definition of the meta-annotation.  This may be because no getter or setter

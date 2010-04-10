@@ -3,7 +3,6 @@ package edu.jhu.cs.bsj.compiler.diagnostic.compiler;
 import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.metaannotation.BsjMetaAnnotation;
-
 /**
  * A diagnostic indicating that a meta-annotation refers to a class which does not implement the
  * {@link BsjMetaAnnotation} interface.

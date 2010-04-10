@@ -3,7 +3,6 @@ package edu.jhu.cs.bsj.compiler.diagnostic.parser;
 import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.diagnostic.BsjDiagnostic;
-
 /**
  * A diagnostic which acts as the parent for all parser diagnostics.
  */
