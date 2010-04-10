@@ -133,8 +133,14 @@ public class InterfaceMemberListNodeImpl extends ListNodeImpl<InterfaceMemberNod
     @Override
     public InterfaceMemberListNode deepCopy(BsjNodeFactory factory)
     {
+        List<InterfaceMemberNode> childrenCopy = new ArrayList<InterfaceMemberNode>(getChildren().size());
+        for (InterfaceMemberNode element : getChildren())
+        {
+            childrenCopy.add(element.deepCopy(factory));
+        }
+        
         return factory.makeInterfaceMemberListNode(
-                new ArrayList<InterfaceMemberNode>(getChildren()),
+                childrenCopy,
                 getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
                 getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
     }

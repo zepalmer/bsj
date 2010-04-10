@@ -133,8 +133,14 @@ public class ExpressionListNodeImpl extends ListNodeImpl<ExpressionNode> impleme
     @Override
     public ExpressionListNode deepCopy(BsjNodeFactory factory)
     {
+        List<ExpressionNode> childrenCopy = new ArrayList<ExpressionNode>(getChildren().size());
+        for (ExpressionNode element : getChildren())
+        {
+            childrenCopy.add(element.deepCopy(factory));
+        }
+        
         return factory.makeExpressionListNode(
-                new ArrayList<ExpressionNode>(getChildren()),
+                childrenCopy,
                 getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
                 getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
     }

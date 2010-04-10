@@ -449,12 +449,12 @@ public class InterfaceDeclarationNodeImpl extends NodeImpl implements InterfaceD
     public InterfaceDeclarationNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeInterfaceDeclarationNode(
-                getModifiers().deepCopy(factory),
-                getExtendsClause().deepCopy(factory),
-                getBody().deepCopy(factory),
-                getTypeParameters().deepCopy(factory),
-                getIdentifier().deepCopy(factory),
-                getJavadoc().deepCopy(factory),
+                getModifiers()==null?null:getModifiers().deepCopy(factory),
+                getExtendsClause()==null?null:getExtendsClause().deepCopy(factory),
+                getBody()==null?null:getBody().deepCopy(factory),
+                getTypeParameters()==null?null:getTypeParameters().deepCopy(factory),
+                getIdentifier()==null?null:getIdentifier().deepCopy(factory),
+                getJavadoc()==null?null:getJavadoc().deepCopy(factory),
                 getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
                 getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
     }

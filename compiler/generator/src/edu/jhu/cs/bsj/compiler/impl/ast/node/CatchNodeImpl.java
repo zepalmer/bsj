@@ -236,8 +236,8 @@ public class CatchNodeImpl extends NodeImpl implements CatchNode
     public CatchNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeCatchNode(
-                getBlock().deepCopy(factory),
-                getParameter().deepCopy(factory),
+                getBlock()==null?null:getBlock().deepCopy(factory),
+                getParameter()==null?null:getParameter().deepCopy(factory),
                 getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
                 getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
     }

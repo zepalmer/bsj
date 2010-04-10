@@ -130,7 +130,7 @@ public class AnonymousClassMemberMetaprogramAnchorNodeImpl extends ExplicitMetap
     public AnonymousClassMemberMetaprogramAnchorNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeAnonymousClassMemberMetaprogramAnchorNode(
-                getMetaprogram().deepCopy(factory),
+                getMetaprogram()==null?null:getMetaprogram().deepCopy(factory),
                 getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
                 getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
     }

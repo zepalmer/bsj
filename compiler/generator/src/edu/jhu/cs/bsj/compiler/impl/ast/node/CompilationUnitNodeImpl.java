@@ -372,10 +372,10 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
     {
         return factory.makeCompilationUnitNode(
                 getName(),
-                getPackageDeclaration().deepCopy(factory),
-                getMetaimports().deepCopy(factory),
-                getImports().deepCopy(factory),
-                getTypeDecls().deepCopy(factory),
+                getPackageDeclaration()==null?null:getPackageDeclaration().deepCopy(factory),
+                getMetaimports()==null?null:getMetaimports().deepCopy(factory),
+                getImports()==null?null:getImports().deepCopy(factory),
+                getTypeDecls()==null?null:getTypeDecls().deepCopy(factory),
                 getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
                 getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
     }

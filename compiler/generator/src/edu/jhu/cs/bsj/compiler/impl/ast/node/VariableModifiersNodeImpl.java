@@ -175,8 +175,8 @@ public class VariableModifiersNodeImpl extends ModifiersNodeImpl implements Vari
     {
         return factory.makeVariableModifiersNode(
                 getFinalFlag(),
-                getMetaAnnotations().deepCopy(factory),
-                getAnnotations().deepCopy(factory),
+                getMetaAnnotations()==null?null:getMetaAnnotations().deepCopy(factory),
+                getAnnotations()==null?null:getAnnotations().deepCopy(factory),
                 getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
                 getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
     }

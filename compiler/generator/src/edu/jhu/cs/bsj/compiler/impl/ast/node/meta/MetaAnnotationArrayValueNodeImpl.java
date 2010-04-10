@@ -182,7 +182,7 @@ public class MetaAnnotationArrayValueNodeImpl extends NodeImpl implements MetaAn
     public MetaAnnotationArrayValueNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeMetaAnnotationArrayValueNode(
-                getValues().deepCopy(factory),
+                getValues()==null?null:getValues().deepCopy(factory),
                 getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
                 getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
     }

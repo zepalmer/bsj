@@ -130,7 +130,7 @@ public class ClassMemberMetaprogramAnchorNodeImpl extends ExplicitMetaprogramAnc
     public ClassMemberMetaprogramAnchorNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeClassMemberMetaprogramAnchorNode(
-                getMetaprogram().deepCopy(factory),
+                getMetaprogram()==null?null:getMetaprogram().deepCopy(factory),
                 getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
                 getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
     }

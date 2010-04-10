@@ -238,8 +238,8 @@ public class TypeCastNodeImpl extends NodeImpl implements TypeCastNode
     public TypeCastNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeTypeCastNode(
-                getExpression().deepCopy(factory),
-                getType().deepCopy(factory),
+                getExpression()==null?null:getExpression().deepCopy(factory),
+                getType()==null?null:getType().deepCopy(factory),
                 getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
                 getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
     }

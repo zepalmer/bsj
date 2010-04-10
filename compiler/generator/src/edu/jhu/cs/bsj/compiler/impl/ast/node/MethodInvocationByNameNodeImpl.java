@@ -191,9 +191,9 @@ public class MethodInvocationByNameNodeImpl extends MethodInvocationNodeImpl imp
     public MethodInvocationByNameNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeMethodInvocationByNameNode(
-                getName().deepCopy(factory),
-                getArguments().deepCopy(factory),
-                getTypeArguments().deepCopy(factory),
+                getName()==null?null:getName().deepCopy(factory),
+                getArguments()==null?null:getArguments().deepCopy(factory),
+                getTypeArguments()==null?null:getTypeArguments().deepCopy(factory),
                 getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
                 getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
     }

@@ -115,14 +115,14 @@ public class BsjLiftedCodeVisitor extends BsjTypedNodeNoOpVisitor
         	//TODO clean this up
         	if (argExpr instanceof UnqualifiedClassInstantiationNode)
         	{
-        	    returnType = ((UnqualifiedClassInstantiationNode)argExpr).getType();
+        	    returnType = ((UnqualifiedClassInstantiationNode)argExpr).getType().deepCopy(factory);
         	}
         	else if (argExpr instanceof MethodInvocationByExpressionNode)
             {
         	    String retName = ((MethodInvocationByExpressionNode)argExpr).getIdentifier().getIdentifier();
         	    if (retName.endsWith("asList"))
         	    {
-                    newArgList.add(argExpr);
+                    newArgList.add(argExpr.deepCopy(factory));
                     continue;
         	    }
         	    else
@@ -137,7 +137,7 @@ public class BsjLiftedCodeVisitor extends BsjTypedNodeNoOpVisitor
                 String retName = ((MethodInvocationByNameNode)argExpr).getName().getNameString();
                 if (retName.endsWith("asList"))
                 {
-                    newArgList.add(argExpr);
+                    newArgList.add(argExpr.deepCopy(factory));
                     continue;
                 }
                 else
@@ -150,7 +150,7 @@ public class BsjLiftedCodeVisitor extends BsjTypedNodeNoOpVisitor
         	else if (argExpr instanceof LiteralNode<?> || argExpr instanceof FieldAccessNode)
         	{
         	    // skip over the nodes we won't know how to handle
-        	    newArgList.add(argExpr);
+        	    newArgList.add(argExpr.deepCopy(factory));
         	    continue;
         	}
         	else
@@ -165,7 +165,7 @@ public class BsjLiftedCodeVisitor extends BsjTypedNodeNoOpVisitor
             MethodDeclarationNode newMethod = factory.makeMethodDeclarationNode(
                     factory.makeBlockNode(
                     		factory.makeBlockStatementListNode(
-                    				factory.makeReturnNode(argExpr))), 
+                    				factory.makeReturnNode(argExpr.deepCopy(factory)))), 
                     factory.makeMethodModifiersNode(
                             AccessModifier.PUBLIC, false, false, false, false, 
                             false, false, factory.makeMetaAnnotationListNode(),

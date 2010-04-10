@@ -190,8 +190,8 @@ public class ArrayInstantiatorCreationNodeImpl extends ArrayCreationNodeImpl imp
     public ArrayInstantiatorCreationNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeArrayInstantiatorCreationNode(
-                getDimExpressions().deepCopy(factory),
-                getBaseType().deepCopy(factory),
+                getDimExpressions()==null?null:getDimExpressions().deepCopy(factory),
+                getBaseType()==null?null:getBaseType().deepCopy(factory),
                 getArrayLevels(),
                 getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
                 getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));

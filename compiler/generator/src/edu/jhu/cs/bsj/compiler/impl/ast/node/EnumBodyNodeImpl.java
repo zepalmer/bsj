@@ -238,8 +238,8 @@ public class EnumBodyNodeImpl extends NodeImpl implements EnumBodyNode
     public EnumBodyNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeEnumBodyNode(
-                getConstants().deepCopy(factory),
-                getMembers().deepCopy(factory),
+                getConstants()==null?null:getConstants().deepCopy(factory),
+                getMembers()==null?null:getMembers().deepCopy(factory),
                 getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
                 getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
     }

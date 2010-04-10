@@ -238,8 +238,8 @@ public class SingleStaticImportNodeImpl extends NodeImpl implements SingleStatic
     public SingleStaticImportNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeSingleStaticImportNode(
-                getName().deepCopy(factory),
-                getIdentifier().deepCopy(factory),
+                getName()==null?null:getName().deepCopy(factory),
+                getIdentifier()==null?null:getIdentifier().deepCopy(factory),
                 getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
                 getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
     }

@@ -133,8 +133,14 @@ public class AnnotationMemberListNodeImpl extends ListNodeImpl<AnnotationMemberN
     @Override
     public AnnotationMemberListNode deepCopy(BsjNodeFactory factory)
     {
+        List<AnnotationMemberNode> childrenCopy = new ArrayList<AnnotationMemberNode>(getChildren().size());
+        for (AnnotationMemberNode element : getChildren())
+        {
+            childrenCopy.add(element.deepCopy(factory));
+        }
+        
         return factory.makeAnnotationMemberListNode(
-                new ArrayList<AnnotationMemberNode>(getChildren()),
+                childrenCopy,
                 getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
                 getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
     }

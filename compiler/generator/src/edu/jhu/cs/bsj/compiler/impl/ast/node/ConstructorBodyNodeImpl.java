@@ -236,8 +236,8 @@ public class ConstructorBodyNodeImpl extends NodeImpl implements ConstructorBody
     public ConstructorBodyNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeConstructorBodyNode(
-                getConstructorInvocation().deepCopy(factory),
-                getStatements().deepCopy(factory),
+                getConstructorInvocation()==null?null:getConstructorInvocation().deepCopy(factory),
+                getStatements()==null?null:getStatements().deepCopy(factory),
                 getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
                 getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
     }

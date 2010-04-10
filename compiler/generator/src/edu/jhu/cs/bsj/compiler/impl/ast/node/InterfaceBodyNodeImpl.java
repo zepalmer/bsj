@@ -181,7 +181,7 @@ public class InterfaceBodyNodeImpl extends NodeImpl implements InterfaceBodyNode
     public InterfaceBodyNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeInterfaceBodyNode(
-                getMembers().deepCopy(factory),
+                getMembers()==null?null:getMembers().deepCopy(factory),
                 getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
                 getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
     }

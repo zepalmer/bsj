@@ -237,8 +237,8 @@ public class MetaAnnotationElementNodeImpl extends NodeImpl implements MetaAnnot
     public MetaAnnotationElementNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeMetaAnnotationElementNode(
-                getIdentifier().deepCopy(factory),
-                getValue().deepCopy(factory),
+                getIdentifier()==null?null:getIdentifier().deepCopy(factory),
+                getValue()==null?null:getValue().deepCopy(factory),
                 getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
                 getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
     }

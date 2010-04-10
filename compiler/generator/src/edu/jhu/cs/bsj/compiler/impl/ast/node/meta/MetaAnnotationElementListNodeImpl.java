@@ -134,8 +134,14 @@ public class MetaAnnotationElementListNodeImpl extends ListNodeImpl<MetaAnnotati
     @Override
     public MetaAnnotationElementListNode deepCopy(BsjNodeFactory factory)
     {
+        List<MetaAnnotationElementNode> childrenCopy = new ArrayList<MetaAnnotationElementNode>(getChildren().size());
+        for (MetaAnnotationElementNode element : getChildren())
+        {
+            childrenCopy.add(element.deepCopy(factory));
+        }
+        
         return factory.makeMetaAnnotationElementListNode(
-                new ArrayList<MetaAnnotationElementNode>(getChildren()),
+                childrenCopy,
                 getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
                 getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
     }

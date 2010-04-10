@@ -181,7 +181,7 @@ public class InlineTypeDeclarationNodeImpl extends NodeImpl implements InlineTyp
     public InlineTypeDeclarationNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeInlineTypeDeclarationNode(
-                getDeclaration().deepCopy(factory),
+                getDeclaration()==null?null:getDeclaration().deepCopy(factory),
                 getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
                 getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
     }

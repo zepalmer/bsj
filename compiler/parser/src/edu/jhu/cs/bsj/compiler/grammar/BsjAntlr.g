@@ -556,10 +556,19 @@ scope Rule {
     {
         $Rule::name = ruleName;
         $Rule::firstToken = input.LT(1);
+        if (logger.isTraceEnabled())
+        {
+            logger.trace("Rule started: " + ruleName);
+            logger.trace("    state.backtracking = " + state.backtracking);
+        }
     }
     
     private void ruleStop()
     {
+        if (logger.isTraceEnabled())
+        {
+            logger.trace("Rule stopped: " + $Rule::name);
+        }
     }
     
     // *** PARSER ACTION SUBROUTINES ******************************************
@@ -617,7 +626,7 @@ variableDeclarator[TypeNode inType] returns [VariableDeclaratorNode ret]
         scope Rule;
         @init {
             ruleStart("variableDeclarator");
-            TypeNode type = inType;
+            TypeNode type = inType==null ? null : inType.deepCopy(factory);
             VariableInitializerNode initializer = null;
         }
         @after {
@@ -632,7 +641,7 @@ variableDeclarator[TypeNode inType] returns [VariableDeclaratorNode ret]
             }
         }
         (
-            arrayTypeIndicator[inType]
+            arrayTypeIndicator[type]
             {
                 type = $arrayTypeIndicator.ret;
             }
@@ -2640,17 +2649,29 @@ type returns [TypeNode ret]
             classOrInterfaceType
             {
                 $ret = $classOrInterfaceType.ret;
+                if (logger.isTraceEnabled())
+                {
+                    logger.trace("type rule produced " + $ret.toString());
+                }
             }
         |
             primitiveType
             {
                 $ret = $primitiveType.ret;
+                if (logger.isTraceEnabled())
+                {
+                    logger.trace("type rule produced " + $ret.toString());
+                }
             }
         )
         (
             arrayTypeIndicator[ret]
             {
                 $ret = $arrayTypeIndicator.ret;
+                if (logger.isTraceEnabled())
+                {
+                    logger.trace("type rule produced " + $ret.toString());
+                }
             }
         )?
     ;
@@ -2912,7 +2933,7 @@ normalParameterDecl returns [VariableNode ret]
             }
         )?
         {
-            $ret = factory.makeVariableNode($mod.ret, $t.ret, $id.ret);
+            $ret = factory.makeVariableNode($mod.ret, typeNode, $id.ret);
         }
     ;
 

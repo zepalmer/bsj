@@ -181,7 +181,7 @@ public class StaticImportOnDemandNodeImpl extends NodeImpl implements StaticImpo
     public StaticImportOnDemandNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeStaticImportOnDemandNode(
-                getName().deepCopy(factory),
+                getName()==null?null:getName().deepCopy(factory),
                 getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
                 getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
     }

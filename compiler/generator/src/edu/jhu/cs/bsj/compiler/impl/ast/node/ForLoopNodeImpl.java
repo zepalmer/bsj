@@ -352,10 +352,10 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
     public ForLoopNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeForLoopNode(
-                getInitializer().deepCopy(factory),
-                getCondition().deepCopy(factory),
-                getUpdate().deepCopy(factory),
-                getStatement().deepCopy(factory),
+                getInitializer()==null?null:getInitializer().deepCopy(factory),
+                getCondition()==null?null:getCondition().deepCopy(factory),
+                getUpdate()==null?null:getUpdate().deepCopy(factory),
+                getStatement()==null?null:getStatement().deepCopy(factory),
                 getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
                 getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
     }

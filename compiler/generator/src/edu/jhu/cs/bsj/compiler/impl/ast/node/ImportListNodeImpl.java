@@ -133,8 +133,14 @@ public class ImportListNodeImpl extends ListNodeImpl<ImportNode> implements Impo
     @Override
     public ImportListNode deepCopy(BsjNodeFactory factory)
     {
+        List<ImportNode> childrenCopy = new ArrayList<ImportNode>(getChildren().size());
+        for (ImportNode element : getChildren())
+        {
+            childrenCopy.add(element.deepCopy(factory));
+        }
+        
         return factory.makeImportListNode(
-                new ArrayList<ImportNode>(getChildren()),
+                childrenCopy,
                 getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
                 getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
     }

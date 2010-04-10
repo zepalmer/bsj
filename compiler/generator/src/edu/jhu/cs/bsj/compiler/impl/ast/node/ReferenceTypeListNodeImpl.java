@@ -133,8 +133,14 @@ public class ReferenceTypeListNodeImpl extends ListNodeImpl<ReferenceTypeNode> i
     @Override
     public ReferenceTypeListNode deepCopy(BsjNodeFactory factory)
     {
+        List<ReferenceTypeNode> childrenCopy = new ArrayList<ReferenceTypeNode>(getChildren().size());
+        for (ReferenceTypeNode element : getChildren())
+        {
+            childrenCopy.add(element.deepCopy(factory));
+        }
+        
         return factory.makeReferenceTypeListNode(
-                new ArrayList<ReferenceTypeNode>(getChildren()),
+                childrenCopy,
                 getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
                 getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
     }

@@ -293,9 +293,9 @@ public class ConditionalExpressionNodeImpl extends NodeImpl implements Condition
     public ConditionalExpressionNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeConditionalExpressionNode(
-                getCondition().deepCopy(factory),
-                getTrueExpression().deepCopy(factory),
-                getFalseExpression().deepCopy(factory),
+                getCondition()==null?null:getCondition().deepCopy(factory),
+                getTrueExpression()==null?null:getTrueExpression().deepCopy(factory),
+                getFalseExpression()==null?null:getFalseExpression().deepCopy(factory),
                 getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
                 getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
     }

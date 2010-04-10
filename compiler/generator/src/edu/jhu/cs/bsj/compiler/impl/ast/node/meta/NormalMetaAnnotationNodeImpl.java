@@ -192,8 +192,8 @@ public class NormalMetaAnnotationNodeImpl extends MetaAnnotationNodeImpl impleme
     public NormalMetaAnnotationNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeNormalMetaAnnotationNode(
-                getArguments().deepCopy(factory),
-                getAnnotationType().deepCopy(factory),
+                getArguments()==null?null:getArguments().deepCopy(factory),
+                getAnnotationType()==null?null:getAnnotationType().deepCopy(factory),
                 getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
                 getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
     }

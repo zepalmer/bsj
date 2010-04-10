@@ -191,9 +191,9 @@ public class SuperclassConstructorInvocationNodeImpl extends ConstructorInvocati
     public SuperclassConstructorInvocationNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeSuperclassConstructorInvocationNode(
-                getQualifyingExpression().deepCopy(factory),
-                getArguments().deepCopy(factory),
-                getTypeArguments().deepCopy(factory),
+                getQualifyingExpression()==null?null:getQualifyingExpression().deepCopy(factory),
+                getArguments()==null?null:getArguments().deepCopy(factory),
+                getTypeArguments()==null?null:getTypeArguments().deepCopy(factory),
                 getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
                 getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
     }

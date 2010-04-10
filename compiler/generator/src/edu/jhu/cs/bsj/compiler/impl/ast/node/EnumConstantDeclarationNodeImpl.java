@@ -464,12 +464,12 @@ public class EnumConstantDeclarationNodeImpl extends NodeImpl implements EnumCon
     public EnumConstantDeclarationNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeEnumConstantDeclarationNode(
-                getMetaAnnotations().deepCopy(factory),
-                getAnnotations().deepCopy(factory),
-                getIdentifier().deepCopy(factory),
-                getArguments().deepCopy(factory),
-                getBody().deepCopy(factory),
-                getJavadoc().deepCopy(factory),
+                getMetaAnnotations()==null?null:getMetaAnnotations().deepCopy(factory),
+                getAnnotations()==null?null:getAnnotations().deepCopy(factory),
+                getIdentifier()==null?null:getIdentifier().deepCopy(factory),
+                getArguments()==null?null:getArguments().deepCopy(factory),
+                getBody()==null?null:getBody().deepCopy(factory),
+                getJavadoc()==null?null:getJavadoc().deepCopy(factory),
                 getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
                 getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
     }

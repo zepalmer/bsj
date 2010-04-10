@@ -238,8 +238,8 @@ public class InstanceOfNodeImpl extends NodeImpl implements InstanceOfNode
     public InstanceOfNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeInstanceOfNode(
-                getExpression().deepCopy(factory),
-                getType().deepCopy(factory),
+                getExpression()==null?null:getExpression().deepCopy(factory),
+                getType()==null?null:getType().deepCopy(factory),
                 getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
                 getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
     }

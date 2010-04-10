@@ -133,8 +133,14 @@ public class BlockStatementListNodeImpl extends ListNodeImpl<BlockStatementNode>
     @Override
     public BlockStatementListNode deepCopy(BsjNodeFactory factory)
     {
+        List<BlockStatementNode> childrenCopy = new ArrayList<BlockStatementNode>(getChildren().size());
+        for (BlockStatementNode element : getChildren())
+        {
+            childrenCopy.add(element.deepCopy(factory));
+        }
+        
         return factory.makeBlockStatementListNode(
-                new ArrayList<BlockStatementNode>(getChildren()),
+                childrenCopy,
                 getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
                 getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
     }

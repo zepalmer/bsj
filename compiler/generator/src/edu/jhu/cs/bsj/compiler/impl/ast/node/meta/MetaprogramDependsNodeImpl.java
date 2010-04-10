@@ -180,7 +180,7 @@ public class MetaprogramDependsNodeImpl extends NodeImpl implements MetaprogramD
     public MetaprogramDependsNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeMetaprogramDependsNode(
-                getTargetNames().deepCopy(factory),
+                getTargetNames()==null?null:getTargetNames().deepCopy(factory),
                 getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
                 getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
     }

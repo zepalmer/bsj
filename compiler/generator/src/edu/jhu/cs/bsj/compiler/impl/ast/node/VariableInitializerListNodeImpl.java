@@ -133,8 +133,14 @@ public class VariableInitializerListNodeImpl extends ListNodeImpl<VariableInitia
     @Override
     public VariableInitializerListNode deepCopy(BsjNodeFactory factory)
     {
+        List<VariableInitializerNode> childrenCopy = new ArrayList<VariableInitializerNode>(getChildren().size());
+        for (VariableInitializerNode element : getChildren())
+        {
+            childrenCopy.add(element.deepCopy(factory));
+        }
+        
         return factory.makeVariableInitializerListNode(
-                new ArrayList<VariableInitializerNode>(getChildren()),
+                childrenCopy,
                 getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
                 getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
     }

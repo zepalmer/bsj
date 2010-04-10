@@ -133,8 +133,14 @@ public class AnonymousClassMemberListNodeImpl extends ListNodeImpl<AnonymousClas
     @Override
     public AnonymousClassMemberListNode deepCopy(BsjNodeFactory factory)
     {
+        List<AnonymousClassMemberNode> childrenCopy = new ArrayList<AnonymousClassMemberNode>(getChildren().size());
+        for (AnonymousClassMemberNode element : getChildren())
+        {
+            childrenCopy.add(element.deepCopy(factory));
+        }
+        
         return factory.makeAnonymousClassMemberListNode(
-                new ArrayList<AnonymousClassMemberNode>(getChildren()),
+                childrenCopy,
                 getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
                 getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
     }

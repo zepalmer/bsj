@@ -222,7 +222,7 @@ public class UnaryExpressionNodeImpl extends NodeImpl implements UnaryExpression
     public UnaryExpressionNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeUnaryExpressionNode(
-                getExpression().deepCopy(factory),
+                getExpression()==null?null:getExpression().deepCopy(factory),
                 getOperator(),
                 getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
                 getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));

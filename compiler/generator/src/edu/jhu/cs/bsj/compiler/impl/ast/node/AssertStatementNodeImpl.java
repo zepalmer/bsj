@@ -237,8 +237,8 @@ public class AssertStatementNodeImpl extends NodeImpl implements AssertStatement
     public AssertStatementNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeAssertStatementNode(
-                getTestExpression().deepCopy(factory),
-                getMessageExpression().deepCopy(factory),
+                getTestExpression()==null?null:getTestExpression().deepCopy(factory),
+                getMessageExpression()==null?null:getMessageExpression().deepCopy(factory),
                 getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
                 getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
     }

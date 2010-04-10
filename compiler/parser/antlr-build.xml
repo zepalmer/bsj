@@ -21,7 +21,7 @@
 	<!-- Names the directory which will contain the compiled ANTLR parser. -->
 	<property name="genbin" value=".gen/bin" />
 	<!-- Names the directory containing the parser's package. -->
-	<property name="parserPackage" value="${gensrc}/edu/jhu/cs/bsj/compiler/tool/parser/antlr" />
+	<property name="parserPackage" value="${gensrc}/edu/jhu/cs/bsj/compiler/impl/tool/parser/antlr" />
     <!-- Names the directory containing compiled binaries for the BSJ Compiler API. -->
     <property name="compilerApiPath" value="../api/bin" />
     <!-- Names the directory containing compiled binaries for the BSJ Utilities project. -->

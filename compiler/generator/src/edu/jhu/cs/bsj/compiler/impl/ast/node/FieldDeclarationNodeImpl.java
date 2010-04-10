@@ -301,9 +301,9 @@ public class FieldDeclarationNodeImpl extends NodeImpl implements FieldDeclarati
     public FieldDeclarationNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeFieldDeclarationNode(
-                getModifiers().deepCopy(factory),
-                getDeclarators().deepCopy(factory),
-                getJavadoc().deepCopy(factory),
+                getModifiers()==null?null:getModifiers().deepCopy(factory),
+                getDeclarators()==null?null:getDeclarators().deepCopy(factory),
+                getJavadoc()==null?null:getJavadoc().deepCopy(factory),
                 getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
                 getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
     }

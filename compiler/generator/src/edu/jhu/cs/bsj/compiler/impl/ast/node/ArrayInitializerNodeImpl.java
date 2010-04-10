@@ -181,7 +181,7 @@ public class ArrayInitializerNodeImpl extends NodeImpl implements ArrayInitializ
     public ArrayInitializerNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeArrayInitializerNode(
-                getInitializers().deepCopy(factory),
+                getInitializers()==null?null:getInitializers().deepCopy(factory),
                 getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
                 getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
     }

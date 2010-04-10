@@ -376,11 +376,11 @@ public class MetaprogramPreambleNodeImpl extends NodeImpl implements Metaprogram
     public MetaprogramPreambleNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeMetaprogramPreambleNode(
-                getImports().deepCopy(factory),
+                getImports()==null?null:getImports().deepCopy(factory),
                 getLocalMode(),
                 getPackageMode(),
-                getTarget().deepCopy(factory),
-                getDepends().deepCopy(factory),
+                getTarget()==null?null:getTarget().deepCopy(factory),
+                getDepends()==null?null:getDepends().deepCopy(factory),
                 getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
                 getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
     }

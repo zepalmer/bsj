@@ -217,8 +217,8 @@ public class EnumModifiersNodeImpl extends ModifiersNodeImpl implements EnumModi
         return factory.makeEnumModifiersNode(
                 getAccess(),
                 getStrictfpFlag(),
-                getMetaAnnotations().deepCopy(factory),
-                getAnnotations().deepCopy(factory),
+                getMetaAnnotations()==null?null:getMetaAnnotations().deepCopy(factory),
+                getAnnotations()==null?null:getAnnotations().deepCopy(factory),
                 getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
                 getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
     }

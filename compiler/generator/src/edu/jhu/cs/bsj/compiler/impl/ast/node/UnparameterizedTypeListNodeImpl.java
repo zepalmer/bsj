@@ -133,8 +133,14 @@ public class UnparameterizedTypeListNodeImpl extends ListNodeImpl<Unparameterize
     @Override
     public UnparameterizedTypeListNode deepCopy(BsjNodeFactory factory)
     {
+        List<UnparameterizedTypeNode> childrenCopy = new ArrayList<UnparameterizedTypeNode>(getChildren().size());
+        for (UnparameterizedTypeNode element : getChildren())
+        {
+            childrenCopy.add(element.deepCopy(factory));
+        }
+        
         return factory.makeUnparameterizedTypeListNode(
-                new ArrayList<UnparameterizedTypeNode>(getChildren()),
+                childrenCopy,
                 getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
                 getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
     }

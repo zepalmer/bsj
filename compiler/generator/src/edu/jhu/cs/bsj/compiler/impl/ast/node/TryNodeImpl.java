@@ -294,9 +294,9 @@ public class TryNodeImpl extends NodeImpl implements TryNode
     public TryNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeTryNode(
-                getBlock().deepCopy(factory),
-                getCatches().deepCopy(factory),
-                getFinallyBlock().deepCopy(factory),
+                getBlock()==null?null:getBlock().deepCopy(factory),
+                getCatches()==null?null:getCatches().deepCopy(factory),
+                getFinallyBlock()==null?null:getFinallyBlock().deepCopy(factory),
                 getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
                 getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
     }

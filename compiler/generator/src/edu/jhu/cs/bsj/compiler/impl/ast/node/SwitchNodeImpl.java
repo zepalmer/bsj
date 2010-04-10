@@ -238,8 +238,8 @@ public class SwitchNodeImpl extends NodeImpl implements SwitchNode
     public SwitchNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeSwitchNode(
-                getExpression().deepCopy(factory),
-                getCases().deepCopy(factory),
+                getExpression()==null?null:getExpression().deepCopy(factory),
+                getCases()==null?null:getCases().deepCopy(factory),
                 getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
                 getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
     }

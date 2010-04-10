@@ -133,8 +133,14 @@ public class StatementExpressionListNodeImpl extends ListNodeImpl<StatementExpre
     @Override
     public StatementExpressionListNode deepCopy(BsjNodeFactory factory)
     {
+        List<StatementExpressionNode> childrenCopy = new ArrayList<StatementExpressionNode>(getChildren().size());
+        for (StatementExpressionNode element : getChildren())
+        {
+            childrenCopy.add(element.deepCopy(factory));
+        }
+        
         return factory.makeStatementExpressionListNode(
-                new ArrayList<StatementExpressionNode>(getChildren()),
+                childrenCopy,
                 getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
                 getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
     }

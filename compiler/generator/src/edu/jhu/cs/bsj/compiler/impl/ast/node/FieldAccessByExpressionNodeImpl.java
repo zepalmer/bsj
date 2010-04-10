@@ -238,8 +238,8 @@ public class FieldAccessByExpressionNodeImpl extends NodeImpl implements FieldAc
     public FieldAccessByExpressionNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeFieldAccessByExpressionNode(
-                getExpression().deepCopy(factory),
-                getIdentifier().deepCopy(factory),
+                getExpression()==null?null:getExpression().deepCopy(factory),
+                getIdentifier()==null?null:getIdentifier().deepCopy(factory),
                 getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
                 getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
     }

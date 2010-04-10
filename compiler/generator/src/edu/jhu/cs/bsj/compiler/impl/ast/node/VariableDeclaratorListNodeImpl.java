@@ -133,8 +133,14 @@ public class VariableDeclaratorListNodeImpl extends ListNodeImpl<VariableDeclara
     @Override
     public VariableDeclaratorListNode deepCopy(BsjNodeFactory factory)
     {
+        List<VariableDeclaratorNode> childrenCopy = new ArrayList<VariableDeclaratorNode>(getChildren().size());
+        for (VariableDeclaratorNode element : getChildren())
+        {
+            childrenCopy.add(element.deepCopy(factory));
+        }
+        
         return factory.makeVariableDeclaratorListNode(
-                new ArrayList<VariableDeclaratorNode>(getChildren()),
+                childrenCopy,
                 getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
                 getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
     }

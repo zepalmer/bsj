@@ -238,8 +238,8 @@ public class LabeledStatementNodeImpl extends NodeImpl implements LabeledStateme
     public LabeledStatementNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeLabeledStatementNode(
-                getLabel().deepCopy(factory),
-                getStatement().deepCopy(factory),
+                getLabel()==null?null:getLabel().deepCopy(factory),
+                getStatement()==null?null:getStatement().deepCopy(factory),
                 getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
                 getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
     }

@@ -133,8 +133,14 @@ public class DeclaredTypeListNodeImpl extends ListNodeImpl<DeclaredTypeNode> imp
     @Override
     public DeclaredTypeListNode deepCopy(BsjNodeFactory factory)
     {
+        List<DeclaredTypeNode> childrenCopy = new ArrayList<DeclaredTypeNode>(getChildren().size());
+        for (DeclaredTypeNode element : getChildren())
+        {
+            childrenCopy.add(element.deepCopy(factory));
+        }
+        
         return factory.makeDeclaredTypeListNode(
-                new ArrayList<DeclaredTypeNode>(getChildren()),
+                childrenCopy,
                 getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
                 getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
     }

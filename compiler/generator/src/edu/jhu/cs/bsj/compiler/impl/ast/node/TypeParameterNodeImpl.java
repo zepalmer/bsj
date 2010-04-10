@@ -236,8 +236,8 @@ public class TypeParameterNodeImpl extends NodeImpl implements TypeParameterNode
     public TypeParameterNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeTypeParameterNode(
-                getIdentifier().deepCopy(factory),
-                getBounds().deepCopy(factory),
+                getIdentifier()==null?null:getIdentifier().deepCopy(factory),
+                getBounds()==null?null:getBounds().deepCopy(factory),
                 getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
                 getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
     }

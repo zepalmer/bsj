@@ -176,7 +176,7 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
 	 */
 	public SingleStaticImportNode makeSingleStaticImportNode(QualifiedNameNode name)
 	{
-		return makeSingleStaticImportNode(name.getBase(), name.getIdentifier());
+		return makeSingleStaticImportNode(name.getBase().deepCopy(this), name.getIdentifier().deepCopy(this));
 	}
 
 	/**
@@ -185,7 +185,8 @@ public class BsjNodeFactoryImpl implements BsjNodeFactory
 	public SingleStaticImportNode makeSingleStaticImportNode(QualifiedNameNode name, BsjSourceLocation startLocation,
 			BsjSourceLocation stopLocation)
 	{
-		return makeSingleStaticImportNode(name.getBase(), name.getIdentifier(), startLocation, stopLocation);
+		return makeSingleStaticImportNode(name.getBase().deepCopy(this), name.getIdentifier().deepCopy(this),
+				startLocation, stopLocation);
 	}
 
 	/**

@@ -133,8 +133,14 @@ public class TypeParameterListNodeImpl extends ListNodeImpl<TypeParameterNode> i
     @Override
     public TypeParameterListNode deepCopy(BsjNodeFactory factory)
     {
+        List<TypeParameterNode> childrenCopy = new ArrayList<TypeParameterNode>(getChildren().size());
+        for (TypeParameterNode element : getChildren())
+        {
+            childrenCopy.add(element.deepCopy(factory));
+        }
+        
         return factory.makeTypeParameterListNode(
-                new ArrayList<TypeParameterNode>(getChildren()),
+                childrenCopy,
                 getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
                 getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
     }

@@ -175,7 +175,7 @@ public class PackageNodeImpl extends NodeImpl implements PackageNode
     public PackageNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makePackageNode(
-                getName().deepCopy(factory),
+                getName()==null?null:getName().deepCopy(factory),
                 getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
                 getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
     }

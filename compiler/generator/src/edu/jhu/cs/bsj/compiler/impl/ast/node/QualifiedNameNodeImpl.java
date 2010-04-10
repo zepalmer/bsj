@@ -192,8 +192,8 @@ public class QualifiedNameNodeImpl extends NameNodeImpl implements QualifiedName
     public QualifiedNameNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeQualifiedNameNode(
-                getBase().deepCopy(factory),
-                getIdentifier().deepCopy(factory),
+                getBase()==null?null:getBase().deepCopy(factory),
+                getIdentifier()==null?null:getIdentifier().deepCopy(factory),
                 getCategory(),
                 getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
                 getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));

@@ -196,10 +196,10 @@ public class UnqualifiedClassInstantiationNodeImpl extends ClassInstantiationNod
     public UnqualifiedClassInstantiationNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeUnqualifiedClassInstantiationNode(
-                getType().deepCopy(factory),
-                getConstructorTypeArguments().deepCopy(factory),
-                getArguments().deepCopy(factory),
-                getBody().deepCopy(factory),
+                getType()==null?null:getType().deepCopy(factory),
+                getConstructorTypeArguments()==null?null:getConstructorTypeArguments().deepCopy(factory),
+                getArguments()==null?null:getArguments().deepCopy(factory),
+                getBody()==null?null:getBody().deepCopy(factory),
                 getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
                 getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
     }

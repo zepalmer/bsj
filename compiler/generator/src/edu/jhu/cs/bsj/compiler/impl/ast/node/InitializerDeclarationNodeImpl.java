@@ -224,7 +224,7 @@ public class InitializerDeclarationNodeImpl extends NodeImpl implements Initiali
     {
         return factory.makeInitializerDeclarationNode(
                 getStaticInitializer(),
-                getBody().deepCopy(factory),
+                getBody()==null?null:getBody().deepCopy(factory),
                 getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
                 getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
     }

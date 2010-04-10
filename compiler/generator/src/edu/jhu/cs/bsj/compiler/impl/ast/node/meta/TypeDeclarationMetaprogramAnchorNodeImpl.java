@@ -130,7 +130,7 @@ public class TypeDeclarationMetaprogramAnchorNodeImpl extends ExplicitMetaprogra
     public TypeDeclarationMetaprogramAnchorNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeTypeDeclarationMetaprogramAnchorNode(
-                getMetaprogram().deepCopy(factory),
+                getMetaprogram()==null?null:getMetaprogram().deepCopy(factory),
                 getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
                 getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
     }

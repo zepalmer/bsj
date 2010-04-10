@@ -182,7 +182,7 @@ public class MetaAnnotationExpressionValueNodeImpl extends NodeImpl implements M
     public MetaAnnotationExpressionValueNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeMetaAnnotationExpressionValueNode(
-                getExpression().deepCopy(factory),
+                getExpression()==null?null:getExpression().deepCopy(factory),
                 getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
                 getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
     }

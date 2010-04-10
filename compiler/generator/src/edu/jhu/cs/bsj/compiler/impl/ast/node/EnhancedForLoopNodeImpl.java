@@ -295,9 +295,9 @@ public class EnhancedForLoopNodeImpl extends NodeImpl implements EnhancedForLoop
     public EnhancedForLoopNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeEnhancedForLoopNode(
-                getVariable().deepCopy(factory),
-                getExpression().deepCopy(factory),
-                getStatement().deepCopy(factory),
+                getVariable()==null?null:getVariable().deepCopy(factory),
+                getExpression()==null?null:getExpression().deepCopy(factory),
+                getStatement()==null?null:getStatement().deepCopy(factory),
                 getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
                 getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
     }

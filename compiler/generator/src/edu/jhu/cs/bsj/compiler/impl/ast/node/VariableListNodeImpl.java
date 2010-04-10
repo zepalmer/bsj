@@ -133,8 +133,14 @@ public class VariableListNodeImpl extends ListNodeImpl<VariableNode> implements 
     @Override
     public VariableListNode deepCopy(BsjNodeFactory factory)
     {
+        List<VariableNode> childrenCopy = new ArrayList<VariableNode>(getChildren().size());
+        for (VariableNode element : getChildren())
+        {
+            childrenCopy.add(element.deepCopy(factory));
+        }
+        
         return factory.makeVariableListNode(
-                new ArrayList<VariableNode>(getChildren()),
+                childrenCopy,
                 getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
                 getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
     }

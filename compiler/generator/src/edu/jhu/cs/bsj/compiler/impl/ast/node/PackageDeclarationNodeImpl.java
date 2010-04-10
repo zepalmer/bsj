@@ -293,9 +293,9 @@ public class PackageDeclarationNodeImpl extends NodeImpl implements PackageDecla
     public PackageDeclarationNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makePackageDeclarationNode(
-                getName().deepCopy(factory),
-                getMetaAnnotations().deepCopy(factory),
-                getAnnotations().deepCopy(factory),
+                getName()==null?null:getName().deepCopy(factory),
+                getMetaAnnotations()==null?null:getMetaAnnotations().deepCopy(factory),
+                getAnnotations()==null?null:getAnnotations().deepCopy(factory),
                 getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
                 getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
     }

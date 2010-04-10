@@ -238,8 +238,8 @@ public class SuperFieldAccessNodeImpl extends NodeImpl implements SuperFieldAcce
     public SuperFieldAccessNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeSuperFieldAccessNode(
-                getType().deepCopy(factory),
-                getIdentifier().deepCopy(factory),
+                getType()==null?null:getType().deepCopy(factory),
+                getIdentifier()==null?null:getIdentifier().deepCopy(factory),
                 getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
                 getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
     }

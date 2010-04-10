@@ -335,10 +335,10 @@ public class AnnotationDeclarationNodeImpl extends NodeImpl implements Annotatio
     public AnnotationDeclarationNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeAnnotationDeclarationNode(
-                getModifiers().deepCopy(factory),
-                getBody().deepCopy(factory),
-                getIdentifier().deepCopy(factory),
-                getJavadoc().deepCopy(factory),
+                getModifiers()==null?null:getModifiers().deepCopy(factory),
+                getBody()==null?null:getBody().deepCopy(factory),
+                getIdentifier()==null?null:getIdentifier().deepCopy(factory),
+                getJavadoc()==null?null:getJavadoc().deepCopy(factory),
                 getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
                 getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
     }

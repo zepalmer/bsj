@@ -580,14 +580,14 @@ public class ConstructorDeclarationNodeImpl extends NodeImpl implements Construc
     public ConstructorDeclarationNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeConstructorDeclarationNode(
-                getIdentifier().deepCopy(factory),
-                getBody().deepCopy(factory),
-                getModifiers().deepCopy(factory),
-                getParameters().deepCopy(factory),
-                getVarargParameter().deepCopy(factory),
-                getThrowTypes().deepCopy(factory),
-                getTypeParameters().deepCopy(factory),
-                getJavadoc().deepCopy(factory),
+                getIdentifier()==null?null:getIdentifier().deepCopy(factory),
+                getBody()==null?null:getBody().deepCopy(factory),
+                getModifiers()==null?null:getModifiers().deepCopy(factory),
+                getParameters()==null?null:getParameters().deepCopy(factory),
+                getVarargParameter()==null?null:getVarargParameter().deepCopy(factory),
+                getThrowTypes()==null?null:getThrowTypes().deepCopy(factory),
+                getTypeParameters()==null?null:getTypeParameters().deepCopy(factory),
+                getJavadoc()==null?null:getJavadoc().deepCopy(factory),
                 getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
                 getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
     }

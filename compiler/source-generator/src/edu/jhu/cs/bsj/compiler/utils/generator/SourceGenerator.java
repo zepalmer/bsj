@@ -1235,6 +1235,49 @@ public class SourceGenerator
 				ps.println("public " + def.getNameWithTypeParameters() + " deepCopy(BsjNodeFactory factory)");
 				ps.println("{");
 				ps.incPrependCount();
+				for (ModalPropertyDefinition<?> p : recProps)
+				{
+					if (p.isHide())
+						continue;
+					if (def.getRecursiveFactoryOverrideMap().containsKey(p.getName()))
+						continue;
+					propAbstract(new PropertyTypeAbstractor()
+					{
+						@Override
+						public void cloneable(PrependablePrintStream ps, ModalPropertyDefinition<?> p)
+						{
+						}
+
+						@Override
+						public void directCopy(PrependablePrintStream ps, ModalPropertyDefinition<?> p)
+						{
+						}
+
+						@Override
+						public void list(PrependablePrintStream ps, ModalPropertyDefinition<?> p)
+						{
+							ps.println(p.getFullType() + " " + p.getName() + "Copy = new Array" + p.getFullType()
+									+ "(get" + capFirst(p.getName()) + "().size());");
+							ps.println("for (" + p.getTypeArg() + " element : get" + capFirst(p.getName()) + "())");
+							ps.println("{");
+							ps.incPrependCount();
+							ps.println(p.getName() + "Copy.add(element.deepCopy(factory));");
+							ps.decPrependCount();
+							ps.println("}");
+							ps.println();
+						}
+
+						@Override
+						public void node(PrependablePrintStream ps, ModalPropertyDefinition<?> p)
+						{
+						}
+
+						@Override
+						public void voidType(PrependablePrintStream ps, ModalPropertyDefinition<?> p)
+						{
+						}
+					}, p, ps, def);
+				}
 				ps.println("return factory.make" + def.getBaseName() + "(");
 				ps.incPrependCount(2);
 				boolean first = true;
@@ -1260,7 +1303,8 @@ public class SourceGenerator
 
 						public void node(PrependablePrintStream ps, ModalPropertyDefinition<?> p)
 						{
-							ps.print("get" + capFirst(p.getName()) + "().deepCopy(factory)");
+							ps.print("get" + capFirst(p.getName()) + "()==null?null:get" + capFirst(p.getName())
+									+ "().deepCopy(factory)");
 						}
 
 						public void cloneable(PrependablePrintStream ps, ModalPropertyDefinition<?> p)
@@ -1271,7 +1315,7 @@ public class SourceGenerator
 
 						public void list(PrependablePrintStream ps, ModalPropertyDefinition<?> p)
 						{
-							ps.print("new Array" + p.getFullType() + "(get" + capFirst(p.getName()) + "())");
+							ps.print(p.getName() + "Copy");
 						}
 
 						public void voidType(PrependablePrintStream ps, ModalPropertyDefinition<?> p)
@@ -2240,8 +2284,7 @@ public class SourceGenerator
 	{
 		protected final String INTERFACE_IMPORTS = "import edu.jhu.cs.bsj.compiler.diagnostic.*;\n"
 				+ "import edu.jhu.cs.bsj.compiler.metaannotation.*;\n"
-				+ "import edu.jhu.cs.bsj.compiler.metaprogram.*;\n"
-				+ "import javax.tools.Diagnostic.Kind;\n";
+				+ "import edu.jhu.cs.bsj.compiler.metaprogram.*;\n" + "import javax.tools.Diagnostic.Kind;\n";
 		protected final String CLASS_IMPORTS = INTERFACE_IMPORTS
 				+ "import edu.jhu.cs.bsj.compiler.impl.diagnostic.*;\n";
 

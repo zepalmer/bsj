@@ -236,8 +236,8 @@ public class AnnotationElementNodeImpl extends NodeImpl implements AnnotationEle
     public AnnotationElementNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeAnnotationElementNode(
-                getIdentifier().deepCopy(factory),
-                getValue().deepCopy(factory),
+                getIdentifier()==null?null:getIdentifier().deepCopy(factory),
+                getValue()==null?null:getValue().deepCopy(factory),
                 getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
                 getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
     }

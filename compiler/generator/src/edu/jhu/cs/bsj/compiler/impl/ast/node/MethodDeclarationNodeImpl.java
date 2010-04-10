@@ -641,15 +641,15 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
     public MethodDeclarationNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeMethodDeclarationNode(
-                getBody().deepCopy(factory),
-                getModifiers().deepCopy(factory),
-                getIdentifier().deepCopy(factory),
-                getParameters().deepCopy(factory),
-                getVarargParameter().deepCopy(factory),
-                getReturnType().deepCopy(factory),
-                getThrowTypes().deepCopy(factory),
-                getTypeParameters().deepCopy(factory),
-                getJavadoc().deepCopy(factory),
+                getBody()==null?null:getBody().deepCopy(factory),
+                getModifiers()==null?null:getModifiers().deepCopy(factory),
+                getIdentifier()==null?null:getIdentifier().deepCopy(factory),
+                getParameters()==null?null:getParameters().deepCopy(factory),
+                getVarargParameter()==null?null:getVarargParameter().deepCopy(factory),
+                getReturnType()==null?null:getReturnType().deepCopy(factory),
+                getThrowTypes()==null?null:getThrowTypes().deepCopy(factory),
+                getTypeParameters()==null?null:getTypeParameters().deepCopy(factory),
+                getJavadoc()==null?null:getJavadoc().deepCopy(factory),
                 getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
                 getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
     }

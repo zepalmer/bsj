@@ -133,8 +133,14 @@ public class ClassMemberListNodeImpl extends ListNodeImpl<ClassMemberNode> imple
     @Override
     public ClassMemberListNode deepCopy(BsjNodeFactory factory)
     {
+        List<ClassMemberNode> childrenCopy = new ArrayList<ClassMemberNode>(getChildren().size());
+        for (ClassMemberNode element : getChildren())
+        {
+            childrenCopy.add(element.deepCopy(factory));
+        }
+        
         return factory.makeClassMemberListNode(
-                new ArrayList<ClassMemberNode>(getChildren()),
+                childrenCopy,
                 getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
                 getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
     }

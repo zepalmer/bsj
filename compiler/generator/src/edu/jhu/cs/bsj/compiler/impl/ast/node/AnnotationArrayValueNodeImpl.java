@@ -181,7 +181,7 @@ public class AnnotationArrayValueNodeImpl extends NodeImpl implements Annotation
     public AnnotationArrayValueNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeAnnotationArrayValueNode(
-                getValues().deepCopy(factory),
+                getValues()==null?null:getValues().deepCopy(factory),
                 getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
                 getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
     }

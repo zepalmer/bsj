@@ -133,8 +133,14 @@ public class EnumConstantDeclarationListNodeImpl extends ListNodeImpl<EnumConsta
     @Override
     public EnumConstantDeclarationListNode deepCopy(BsjNodeFactory factory)
     {
+        List<EnumConstantDeclarationNode> childrenCopy = new ArrayList<EnumConstantDeclarationNode>(getChildren().size());
+        for (EnumConstantDeclarationNode element : getChildren())
+        {
+            childrenCopy.add(element.deepCopy(factory));
+        }
+        
         return factory.makeEnumConstantDeclarationListNode(
-                new ArrayList<EnumConstantDeclarationNode>(getChildren()),
+                childrenCopy,
                 getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
                 getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
     }

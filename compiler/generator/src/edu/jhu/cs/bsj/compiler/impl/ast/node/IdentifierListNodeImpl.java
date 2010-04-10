@@ -133,8 +133,14 @@ public class IdentifierListNodeImpl extends ListNodeImpl<IdentifierNode> impleme
     @Override
     public IdentifierListNode deepCopy(BsjNodeFactory factory)
     {
+        List<IdentifierNode> childrenCopy = new ArrayList<IdentifierNode>(getChildren().size());
+        for (IdentifierNode element : getChildren())
+        {
+            childrenCopy.add(element.deepCopy(factory));
+        }
+        
         return factory.makeIdentifierListNode(
-                new ArrayList<IdentifierNode>(getChildren()),
+                childrenCopy,
                 getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
                 getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
     }

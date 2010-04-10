@@ -248,10 +248,10 @@ public class MethodInvocationByExpressionNodeImpl extends MethodInvocationNodeIm
     public MethodInvocationByExpressionNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeMethodInvocationByExpressionNode(
-                getExpression().deepCopy(factory),
-                getIdentifier().deepCopy(factory),
-                getArguments().deepCopy(factory),
-                getTypeArguments().deepCopy(factory),
+                getExpression()==null?null:getExpression().deepCopy(factory),
+                getIdentifier()==null?null:getIdentifier().deepCopy(factory),
+                getArguments()==null?null:getArguments().deepCopy(factory),
+                getTypeArguments()==null?null:getTypeArguments().deepCopy(factory),
                 getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
                 getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
     }

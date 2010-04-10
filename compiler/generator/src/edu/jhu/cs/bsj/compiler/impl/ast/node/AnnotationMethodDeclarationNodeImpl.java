@@ -409,11 +409,11 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
     public AnnotationMethodDeclarationNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeAnnotationMethodDeclarationNode(
-                getModifiers().deepCopy(factory),
-                getType().deepCopy(factory),
-                getIdentifier().deepCopy(factory),
-                getDefaultValue().deepCopy(factory),
-                getJavadoc().deepCopy(factory),
+                getModifiers()==null?null:getModifiers().deepCopy(factory),
+                getType()==null?null:getType().deepCopy(factory),
+                getIdentifier()==null?null:getIdentifier().deepCopy(factory),
+                getDefaultValue()==null?null:getDefaultValue().deepCopy(factory),
+                getJavadoc()==null?null:getJavadoc().deepCopy(factory),
                 getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
                 getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
     }

@@ -190,8 +190,8 @@ public class ArrayInitializerCreationNodeImpl extends ArrayCreationNodeImpl impl
     public ArrayInitializerCreationNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeArrayInitializerCreationNode(
-                getInitializer().deepCopy(factory),
-                getBaseType().deepCopy(factory),
+                getInitializer()==null?null:getInitializer().deepCopy(factory),
+                getBaseType()==null?null:getBaseType().deepCopy(factory),
                 getArrayLevels(),
                 getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
                 getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));

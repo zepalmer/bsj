@@ -294,9 +294,9 @@ public class IfNodeImpl extends NodeImpl implements IfNode
     public IfNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeIfNode(
-                getCondition().deepCopy(factory),
-                getThenStatement().deepCopy(factory),
-                getElseStatement().deepCopy(factory),
+                getCondition()==null?null:getCondition().deepCopy(factory),
+                getThenStatement()==null?null:getThenStatement().deepCopy(factory),
+                getElseStatement()==null?null:getElseStatement().deepCopy(factory),
                 getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
                 getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
     }

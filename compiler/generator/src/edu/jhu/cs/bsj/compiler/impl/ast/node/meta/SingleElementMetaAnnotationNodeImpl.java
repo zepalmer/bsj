@@ -192,8 +192,8 @@ public class SingleElementMetaAnnotationNodeImpl extends MetaAnnotationNodeImpl 
     public SingleElementMetaAnnotationNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeSingleElementMetaAnnotationNode(
-                getValue().deepCopy(factory),
-                getAnnotationType().deepCopy(factory),
+                getValue()==null?null:getValue().deepCopy(factory),
+                getAnnotationType()==null?null:getAnnotationType().deepCopy(factory),
                 getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
                 getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
     }

@@ -394,11 +394,11 @@ public class EnumDeclarationNodeImpl extends NodeImpl implements EnumDeclaration
     public EnumDeclarationNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeEnumDeclarationNode(
-                getModifiers().deepCopy(factory),
-                getImplementsClause().deepCopy(factory),
-                getBody().deepCopy(factory),
-                getIdentifier().deepCopy(factory),
-                getJavadoc().deepCopy(factory),
+                getModifiers()==null?null:getModifiers().deepCopy(factory),
+                getImplementsClause()==null?null:getImplementsClause().deepCopy(factory),
+                getBody()==null?null:getBody().deepCopy(factory),
+                getIdentifier()==null?null:getIdentifier().deepCopy(factory),
+                getJavadoc()==null?null:getJavadoc().deepCopy(factory),
                 getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
                 getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
     }

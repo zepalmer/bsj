@@ -309,12 +309,12 @@ public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeI
     public QualifiedClassInstantiationNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeQualifiedClassInstantiationNode(
-                getEnclosingExpression().deepCopy(factory),
-                getIdentifier().deepCopy(factory),
-                getTypeArguments().deepCopy(factory),
-                getConstructorTypeArguments().deepCopy(factory),
-                getArguments().deepCopy(factory),
-                getBody().deepCopy(factory),
+                getEnclosingExpression()==null?null:getEnclosingExpression().deepCopy(factory),
+                getIdentifier()==null?null:getIdentifier().deepCopy(factory),
+                getTypeArguments()==null?null:getTypeArguments().deepCopy(factory),
+                getConstructorTypeArguments()==null?null:getConstructorTypeArguments().deepCopy(factory),
+                getArguments()==null?null:getArguments().deepCopy(factory),
+                getBody()==null?null:getBody().deepCopy(factory),
                 getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
                 getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
     }

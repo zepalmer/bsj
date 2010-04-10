@@ -238,8 +238,8 @@ public class ParameterizedTypeSelectNodeImpl extends NodeImpl implements Paramet
     public ParameterizedTypeSelectNode deepCopy(BsjNodeFactory factory)
     {
         return factory.makeParameterizedTypeSelectNode(
-                getBase().deepCopy(factory),
-                getSelect().deepCopy(factory),
+                getBase()==null?null:getBase().deepCopy(factory),
+                getSelect()==null?null:getSelect().deepCopy(factory),
                 getStartLocation() == null ? null : (BsjSourceLocation)(getStartLocation().clone()),
                 getStopLocation() == null ? null : (BsjSourceLocation)(getStopLocation().clone()));
     }

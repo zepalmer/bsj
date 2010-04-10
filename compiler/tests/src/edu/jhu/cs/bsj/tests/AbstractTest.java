@@ -1,6 +1,7 @@
 package edu.jhu.cs.bsj.tests;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -34,8 +35,18 @@ public abstract class AbstractTest
 	/** The logger for this class. */
 	protected Logger LOGGER = null;
 	{
-		log4jConfigure("trace", "edu.jhu.cs.bsj.compiler.impl.tool.filemanager/debug",
-				"edu.jhu.cs.bsj.compiler.impl.tool.parser.antlr/debug");
+		String s = System.getProperty("bsj.tests.logging");
+		if (s == null || s.length() == 0)
+		{
+			log4jConfigure("trace", "edu.jhu.cs.bsj.compiler.impl.tool.filemanager/debug",
+					"edu.jhu.cs.bsj.compiler.impl.tool.parser.antlr/debug");
+		} else
+		{
+			String[] values = s.split("&");
+			String level = values[0];
+			values = Arrays.copyOfRange(values, 1, values.length);
+			log4jConfigure(level, values);
+		}
 	}
 
 	/**
