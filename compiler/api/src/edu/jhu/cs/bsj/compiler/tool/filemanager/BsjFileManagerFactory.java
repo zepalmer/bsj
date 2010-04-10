@@ -46,12 +46,19 @@ import edu.jhu.cs.bsj.compiler.tool.BsjToolkitFactory;
  * <td>{@link BsjCompilerLocation#CLASS_OUTPUT}</td>
  * <td>(cwd)</td>
  * </tr>
+ * <tr>
+ * <td>{@link BsjCompilerLocation#ANNOTATION_PROCESSOR_PATH}</td>
+ * <td>(current JVM classpath)</td>
+ * </tr>
+ * <tr>
+ * <td>{@link BsjCompilerLocation#ANNOTATION_PROCESSOR_OUTPUT}</td>
+ * <td>(cwd)</td>
+ * </tr>
  * </table>
  * 
  * @see BsjFileManager
  * @author Zachary Palmer
  */
-// TODO: add defaults for annotation processor paths and such
 public interface BsjFileManagerFactory
 {
 	/**

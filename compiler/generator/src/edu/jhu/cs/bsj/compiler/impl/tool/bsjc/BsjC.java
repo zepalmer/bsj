@@ -1,14 +1,6 @@
 package edu.jhu.cs.bsj.compiler.impl.tool.bsjc;
 
-import static edu.jhu.cs.bsj.compiler.impl.tool.bsjc.BsjcCmdLineArgs.DEBUG_ARG;
-import static edu.jhu.cs.bsj.compiler.impl.tool.bsjc.BsjcCmdLineArgs.DESTINATION_ARG;
-import static edu.jhu.cs.bsj.compiler.impl.tool.bsjc.BsjcCmdLineArgs.GEN_SOURCEPATH_ARG;
-import static edu.jhu.cs.bsj.compiler.impl.tool.bsjc.BsjcCmdLineArgs.HELP_ARG;
-import static edu.jhu.cs.bsj.compiler.impl.tool.bsjc.BsjcCmdLineArgs.META_CLASSPATH_ARG;
-import static edu.jhu.cs.bsj.compiler.impl.tool.bsjc.BsjcCmdLineArgs.OBJECT_CLASSPATH_ARG;
-import static edu.jhu.cs.bsj.compiler.impl.tool.bsjc.BsjcCmdLineArgs.SOURCEPATH_ARG;
-import static edu.jhu.cs.bsj.compiler.impl.tool.bsjc.BsjcCmdLineArgs.TRACE_ARG;
-import static edu.jhu.cs.bsj.compiler.impl.tool.bsjc.BsjcCmdLineArgs.VERSION_ARG;
+import static edu.jhu.cs.bsj.compiler.impl.tool.bsjc.BsjcCmdLineArgs.*;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -164,6 +156,7 @@ public class BsjC
                 }
                 
                 // extract package and relative name from full sourcefile name
+                // TODO: pull off sourcepath prefix first
                 int separatorIndex = sourceFile.lastIndexOf(File.separator);
                 String packageName = separatorIndex == -1 ? "" : sourceFile.substring(0, separatorIndex);
                 String relativeName = sourceFile.substring(separatorIndex + 1);
@@ -246,6 +239,7 @@ public class BsjC
 		File bsjSourcePath = new File("." + File.separator + "bsjgensrc");
 		String metaProgramClasspath = System.getProperty("java.class.path");
 		String objectProgramClasspath = System.getProperty("java.class.path");
+		String annotationProcessorPath = objectProgramClasspath;
 		
 		// set the sourcepath
 		if (cmd.hasOption(SOURCEPATH_ARG))
@@ -299,6 +293,17 @@ public class BsjC
 		map.put(BsjCompilerLocation.METAPROGRAM_SYSTEM_CLASSPATH, 
 		        new UnionLocationManager(null, System.getProperty("sun.boot.class.path")));
 		
+		// set up annotation processor stuff
+		if (cmd.hasOption(ANNOTATION_PROCESSOR_PATH_ARG))
+		{
+		    annotationProcessorPath = cmd.getOptionValue(ANNOTATION_PROCESSOR_PATH_ARG);
+		}
+		map.put(BsjCompilerLocation.ANNOTATION_PROCESSOR_PATH, 
+		        new UnionLocationManager(null, annotationProcessorPath));
+		// TODO: is there a way in javac to control the annotation processor's output?
+		map.put(BsjCompilerLocation.ANNOTATION_PROCESSOR_OUTPUT,
+				map.get(BsjCompilerLocation.CLASS_OUTPUT));
+		
 		// create file manager from registry service
 		BsjFileManagerFactory factory = BsjServiceRegistry.newFileManagerFactory();
 		factory.setLocationManagerMappingsByManager(map);
@@ -317,14 +322,19 @@ public class BsjC
 		
 		// options with arguments:
         Option objectClasspath = new Option(OBJECT_CLASSPATH_ARG, true, 
-                "Specify where to find user class files and annotation processors");
+                "Specify where to find user class files");
         objectClasspath.setArgName("path");
         options.addOption(objectClasspath);
         
         Option metaClasspath = new Option(META_CLASSPATH_ARG, true, 
-                "Specify where to find metaprogram class files and annotation processors");
+                "Specify where to find metaprogram class files");
         metaClasspath.setArgName("path");
         options.addOption(metaClasspath);
+        
+        Option annotationProcessorClasspath = new Option(ANNOTATION_PROCESSOR_PATH_ARG, true,
+        		"Specify where to find annotation processors");
+        annotationProcessorClasspath.setArgName("path");
+        options.addOption(annotationProcessorClasspath);
         
         Option destination = new Option(DESTINATION_ARG, true, 
                 "Specify where to place generated class files");

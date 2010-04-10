@@ -16,6 +16,11 @@ public class BsjcCmdLineArgs
      * Argument for metaprogram classpath.
      */
     public static final String META_CLASSPATH_ARG = "mcp";
+    
+    /**
+     * Argument for annotation processor search path.
+     */
+    public static final String ANNOTATION_PROCESSOR_PATH_ARG = "processorpath";
 
     /**
      * Argument for compiled classes destination directory.

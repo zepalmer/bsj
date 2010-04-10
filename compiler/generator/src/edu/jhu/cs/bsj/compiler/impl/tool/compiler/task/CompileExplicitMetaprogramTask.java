@@ -303,7 +303,8 @@ public class CompileExplicitMetaprogramTask<R extends Node> extends
 				bsjFileManager.getLocationManager(BsjCompilerLocation.METAPROGRAM_CLASSPATH));
 		locationMap.put(BsjCompilerLocation.OBJECT_PROGRAM_SYSTEM_CLASSPATH,
 				bsjFileManager.getLocationManager(BsjCompilerLocation.METAPROGRAM_SYSTEM_CLASSPATH));
-		// TODO: annotation processors should be set to in-memory locations
+		locationMap.put(BsjCompilerLocation.ANNOTATION_PROCESSOR_PATH, new InMemoryLocationManager(null));
+		locationMap.put(BsjCompilerLocation.ANNOTATION_PROCESSOR_OUTPUT, new InMemoryLocationManager(null));
 
 		BsjFileManager fileManager = new LocationMappedFileManager(locationMap);
 		BsjFileObject metaprogramSourceFile = fileManager.getFileForOutput(BsjCompilerLocation.SOURCE_PATH,

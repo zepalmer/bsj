@@ -38,7 +38,14 @@ public enum BsjCompilerLocation implements JavaFileManager.Location
 	 * The location containing the object program system classpath.
 	 */
 	OBJECT_PROGRAM_SYSTEM_CLASSPATH(false),
-	// TODO: something for annotation processors (ANNOTATION_PROCESSOR_PATH and ANNOTATION_PROCESSOR_OUTPUT)
+	/**
+	 * The location containing the annotation processor classes.
+	 */
+	ANNOTATION_PROCESSOR_PATH(false),
+	/**
+	 * The location containing the source generated from annotation processors.
+	 */
+	ANNOTATION_PROCESSOR_OUTPUT(true)
 	;
 	
 	/** <code>true</code> if this is an output location; </code>false</code> otherwise. */

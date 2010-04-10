@@ -42,6 +42,10 @@ public class BsjFileManagerFactoryImpl implements BsjFileManagerFactory
 		locationMap.put(BsjCompilerLocation.OBJECT_PROGRAM_SYSTEM_CLASSPATH, new UnionLocationManager(null,
 				System.getProperty("sun.boot.class.path")));
 		locationMap.put(BsjCompilerLocation.SOURCE_PATH, new RegularFileLocationManager(null, new File(".")));
+		locationMap.put(BsjCompilerLocation.ANNOTATION_PROCESSOR_OUTPUT, new UnionLocationManager(null,
+				System.getProperty("java.class.path")));
+		locationMap.put(BsjCompilerLocation.ANNOTATION_PROCESSOR_OUTPUT, new RegularFileLocationManager(null, new File(
+				".")));
 	}
 
 	@Override
