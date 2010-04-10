@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicLong;
 
+import javax.tools.Diagnostic;
 import javax.tools.DiagnosticListener;
 import javax.tools.JavaCompiler;
 import javax.tools.StandardLocation;
@@ -25,6 +26,7 @@ import org.apache.log4j.Logger;
 import edu.jhu.cs.bsj.compiler.BsjServiceRegistry;
 import edu.jhu.cs.bsj.compiler.ast.AccessModifier;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
+import edu.jhu.cs.bsj.compiler.ast.BsjNodeVisitor;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.ast.NameCategory;
 import edu.jhu.cs.bsj.compiler.ast.NodePermission;
@@ -32,20 +34,14 @@ import edu.jhu.cs.bsj.compiler.ast.exception.InsufficientPermissionException;
 import edu.jhu.cs.bsj.compiler.ast.exception.MetaAnnotationInstantiationFailureException;
 import edu.jhu.cs.bsj.compiler.ast.exception.MetaprogramConflictException;
 import edu.jhu.cs.bsj.compiler.ast.node.BinaryExpressionNode;
-import edu.jhu.cs.bsj.compiler.ast.node.BooleanLiteralNode;
-import edu.jhu.cs.bsj.compiler.ast.node.CharLiteralNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassDeclarationNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ClassLiteralNode;
 import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ConditionalExpressionNode;
-import edu.jhu.cs.bsj.compiler.ast.node.DoubleLiteralNode;
 import edu.jhu.cs.bsj.compiler.ast.node.FieldAccessByNameNode;
-import edu.jhu.cs.bsj.compiler.ast.node.FloatLiteralNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ImportNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ImportOnDemandNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ImportSingleTypeNode;
-import edu.jhu.cs.bsj.compiler.ast.node.IntLiteralNode;
-import edu.jhu.cs.bsj.compiler.ast.node.LongLiteralNode;
+import edu.jhu.cs.bsj.compiler.ast.node.LiteralNode;
 import edu.jhu.cs.bsj.compiler.ast.node.MethodDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.NameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.Node;
@@ -55,7 +51,6 @@ import edu.jhu.cs.bsj.compiler.ast.node.PrimitiveTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.QualifiedNameNode;
 import edu.jhu.cs.bsj.compiler.ast.node.SingleStaticImportNode;
 import edu.jhu.cs.bsj.compiler.ast.node.StaticImportOnDemandNode;
-import edu.jhu.cs.bsj.compiler.ast.node.StringLiteralNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeCastNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.UnaryExpressionNode;
@@ -70,12 +65,13 @@ import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationValueNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaprogramImportNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.NormalMetaAnnotationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.SingleElementMetaAnnotationNode;
-import edu.jhu.cs.bsj.compiler.ast.util.BsjDefaultNodeOperation;
 import edu.jhu.cs.bsj.compiler.impl.ast.exception.InsufficientPermissionExceptionImpl;
 import edu.jhu.cs.bsj.compiler.impl.ast.exception.MetaprogramConflictExceptionImpl;
+import edu.jhu.cs.bsj.compiler.impl.diagnostic.CountingDiagnosticProxyListener;
 import edu.jhu.cs.bsj.compiler.impl.diagnostic.compiler.InvalidMetaAnnotationArrayInitializerDiagnosticImpl;
 import edu.jhu.cs.bsj.compiler.impl.diagnostic.compiler.MetaAnnotationClassTypeMismatchDiagnosticImpl;
 import edu.jhu.cs.bsj.compiler.impl.diagnostic.compiler.MetaAnnotationMissingPropertyDiagnosticImpl;
+import edu.jhu.cs.bsj.compiler.impl.diagnostic.compiler.MetaAnnotationNonConstantPropertyValueDiagnosticImpl;
 import edu.jhu.cs.bsj.compiler.impl.diagnostic.compiler.MissingMetaAnnotationClassDiagnosticImpl;
 import edu.jhu.cs.bsj.compiler.impl.metaprogram.PermissionPolicyManager;
 import edu.jhu.cs.bsj.compiler.impl.tool.compiler.dependency.DependencyManager;
@@ -331,11 +327,11 @@ public class BsjNodeManager
 			Class<?> propertyType = profile.getPropertyType(propertyName);
 			if (propertyType == null)
 			{
-				listener.report(new MetaAnnotationMissingPropertyDiagnosticImpl(valueNode.getStartLocation(),
-						clazz, propertyName));
+				listener.report(new MetaAnnotationMissingPropertyDiagnosticImpl(valueNode.getStartLocation(), clazz,
+						propertyName));
 				throw new MetaAnnotationInstantiationFailureException();
 			}
-			Object value = evaluateValueNode(valueNode, propertyType, listener);
+			Object value = evaluateValueNode(valueNode, propertyType, clazz, listener, propertyName);
 
 			Method setter = profile.getSetterMap().get(propertyName);
 			try
@@ -544,10 +540,13 @@ public class BsjNodeManager
 	 * 
 	 * @param value The node which represents the value.2
 	 * @param type The type of return value expected by the caller.
+	 * @param annotationClass The class of meta-annotation being processed.
 	 * @param listener The listener to which to report problems.
+	 * @param propertyName The name of the property for which this evaluation is occurring.
+	 * @return The value object for this value node.
 	 */
-	private Object evaluateValueNode(MetaAnnotationValueNode value, Class<?> type,
-			DiagnosticListener<BsjSourceLocation> listener)
+	private Object evaluateValueNode(MetaAnnotationValueNode value, Class<?> type, Class<? extends BsjMetaAnnotation> annotationClass, 
+			DiagnosticListener<BsjSourceLocation> listener, String propertyName)
 	{
 		if (value instanceof MetaAnnotationMetaAnnotationValueNode)
 		{
@@ -578,7 +577,7 @@ public class BsjNodeManager
 			int index = 0;
 			for (MetaAnnotationValueNode childNode : node.getValues())
 			{
-				Object childValue = evaluateValueNode(childNode, type.getComponentType(), listener);
+				Object childValue = evaluateValueNode(childNode, type.getComponentType(), annotationClass, listener, propertyName);
 				Array.set(array, index++, childValue);
 			}
 			return array;
@@ -595,7 +594,7 @@ public class BsjNodeManager
 			{
 				imports = Collections.emptySet();
 			}
-			Object result = evaluate(expressionNode, imports);
+			Object result = evaluate(expressionNode, imports, annotationClass, listener, propertyName);
 			// TODO: this does not properly handle primitives - component type might be int
 			// and int.class.isInstance(5) fails because 5 is autoboxed to an Integer
 			if (type.getComponentType() != null && type.getComponentType().isInstance(result))
@@ -620,9 +619,14 @@ public class BsjNodeManager
 	 * 
 	 * @param node The expression node to evaluate.
 	 * @param imports The metaprogram imports to use in this environment.
+	 * @param annotationClass The class of meta-annotation being processed.
+	 * @param listener The listener to use to report errors.
+	 * @param propertyName The name of the property for which this evaluation is occurring.
 	 * @return The object which was produced by evaluating that expression.
 	 */
-	private Object evaluate(NonAssignmentExpressionNode node, Collection<MetaprogramImportNode> imports)
+	private Object evaluate(NonAssignmentExpressionNode node, Collection<MetaprogramImportNode> imports,
+			Class<? extends BsjMetaAnnotation> annotationClass, DiagnosticListener<BsjSourceLocation> listener,
+			String propertyName)
 	{
 		// TODO: write a far more efficient implementation of this!
 		// Using the compiler here is just a hack. There really should just be a node operation which operates over
@@ -633,8 +637,15 @@ public class BsjNodeManager
 		// caught by the compiler, which then reports the diagnostic
 		// Walk the node and make sure it contains only those nodes which would produce a valid meta-annotation
 		// assignment.
-		MetaAnnotationElementValueValidator validator = new MetaAnnotationElementValueValidator();
-		node.executeOperation(validator, null);
+		CountingDiagnosticProxyListener<BsjSourceLocation> listenerWrapper = new CountingDiagnosticProxyListener<BsjSourceLocation>(
+				listener);
+		MetaAnnotationElementValueValidator validator = new MetaAnnotationElementValueValidator(listenerWrapper,
+				annotationClass, propertyName, node);
+		node.receive(validator);
+		if (listenerWrapper.getCount(Diagnostic.Kind.ERROR) > 0)
+		{
+			return null;
+		}
 
 		// Create a copy of the node
 		BsjNodeFactory factory = this.toolkit.getNodeFactory();
@@ -751,131 +762,92 @@ public class BsjNodeManager
 	}
 
 	/**
-	 * This validator raises an exception whenever it sees a meta-annotation value which contains nodes that are not
-	 * valid.
+	 * This validator determines whether or not any nodes exist in a subtree which are not constant expressions. This is
+	 * used to ensure that meta-annotation values are constant expressions.
 	 * 
 	 * @author Zachary Palmer
 	 */
-	private static class MetaAnnotationElementValueValidator extends BsjDefaultNodeOperation<Void, Void>
+	private static class MetaAnnotationElementValueValidator implements BsjNodeVisitor
 	{
+		/** The diagnostic listener to which to report errors. */
+		private DiagnosticListener<BsjSourceLocation> listener;
+		/** The class of meta-annotation which was used. */
+		private Class<? extends BsjMetaAnnotation> clazz;
+		/** The name of the property we are checking. */
+		private String name;
+		/** The node which represents the top level value we are checking. */
+		private Node top;
+
 		/**
-		 * A method used to abstract error handling in this validator. This method is called whenever an error occurs
-		 * and raises an appropriate exception.
-		 * 
-		 * @param node The offending node.
+		 * The most recently reported problem which is an ancestor of the current node or <code>null</code> if no such
+		 * problem node exists.
 		 */
-		private void error(Node node)
+		private Node problemNode;
+
+		public MetaAnnotationElementValueValidator(DiagnosticListener<BsjSourceLocation> listener,
+				Class<? extends BsjMetaAnnotation> clazz, String name, Node top)
 		{
-			// TODO: better error handling
-			throw new IllegalStateException("Invalid node for element value validator: " + node.getClass());
+			super();
+			this.listener = listener;
+			this.clazz = clazz;
+			this.name = name;
+			this.top = top;
 		}
 
 		@Override
-		public Void executeDefault(Node node, Void p)
+		public void visitStart(Node node)
 		{
-			error(node);
-			return null;
-		}
+			if (this.problemNode != null)
+				return;
 
-		@Override
-		public Void executeBooleanLiteralNode(BooleanLiteralNode node, Void p)
-		{
-			return null;
-		}
-
-		@Override
-		public Void executeClassLiteralNode(ClassLiteralNode node, Void p)
-		{
-			return null;
-		}
-
-		@Override
-		public Void executeCharLiteralNode(CharLiteralNode node, Void p)
-		{
-			return null;
-		}
-
-		@Override
-		public Void executeDoubleLiteralNode(DoubleLiteralNode node, Void p)
-		{
-			return null;
-		}
-
-		@Override
-		public Void executeFloatLiteralNode(FloatLiteralNode node, Void p)
-		{
-			return null;
-		}
-
-		@Override
-		public Void executeIntLiteralNode(IntLiteralNode node, Void p)
-		{
-			return null;
-		}
-
-		@Override
-		public Void executeLongLiteralNode(LongLiteralNode node, Void p)
-		{
-			return null;
-		}
-
-		@Override
-		public Void executeStringLiteralNode(StringLiteralNode node, Void p)
-		{
-			return null;
-		}
-
-		@Override
-		public Void executeTypeCastNode(TypeCastNode node, Void p)
-		{
-			TypeNode type = node.getType();
-			if (type instanceof PrimitiveTypeNode)
+			if (node instanceof LiteralNode<?>)
+				return;
+			if (node instanceof TypeCastNode)
 			{
-				return null;
-			}
-			if (type instanceof UnparameterizedTypeNode)
-			{
-				UnparameterizedTypeNode unparameterizedTypeNode = (UnparameterizedTypeNode) node;
-				String nameString = unparameterizedTypeNode.getName().getNameString();
-				if (nameString.equals("String") || nameString.equals("java.lang.String"))
+				TypeNode type = ((TypeCastNode) node).getType();
+				if (type instanceof PrimitiveTypeNode)
 				{
-					return null;
+					return;
+				}
+				if (type instanceof UnparameterizedTypeNode)
+				{
+					UnparameterizedTypeNode unparameterizedTypeNode = (UnparameterizedTypeNode) node;
+					String nameString = unparameterizedTypeNode.getName().getNameString();
+					if (nameString.equals("String") || nameString.equals("java.lang.String"))
+					{
+						return;
+					}
 				}
 			}
 
-			error(node);
-			return null;
+			if (node instanceof UnaryExpressionNode)
+				return;
+			if (node instanceof BinaryExpressionNode)
+				return;
+			if (node instanceof ConditionalExpressionNode)
+				return;
+			if (node instanceof ParenthesizedExpressionNode)
+				return;
+
+			if (node instanceof FieldAccessByNameNode)
+			{
+				// TODO: Ensure that the field being accessed is final or an enum-constant (and therefore final)
+				return;
+			}
+
+			// Non-constant node found. Issue a complaint.
+			this.problemNode = node;
+			this.listener.report(new MetaAnnotationNonConstantPropertyValueDiagnosticImpl(top.getStartLocation(),
+					clazz, name, top, node));
 		}
 
 		@Override
-		public Void executeUnaryExpressionNode(UnaryExpressionNode node, Void p)
+		public void visitStop(Node node)
 		{
-			return null;
-		}
-
-		@Override
-		public Void executeBinaryExpressionNode(BinaryExpressionNode node, Void p)
-		{
-			return null;
-		}
-
-		@Override
-		public Void executeConditionalExpressionNode(ConditionalExpressionNode node, Void p)
-		{
-			return null;
-		}
-
-		@Override
-		public Void executeParenthesizedExpressionNode(ParenthesizedExpressionNode node, Void p)
-		{
-			return node.getExpression().executeOperation(this, p);
-		}
-
-		@Override
-		public Void executeFieldAccessByNameNode(FieldAccessByNameNode node, Void p)
-		{
-			// TODO: Ensure that the field being accessed is final or an enum-constant (and therefore final)
-			return null;
+			if (node == this.problemNode)
+			{
+				this.problemNode = null;
+			}
 		}
 	}
 }
