@@ -187,7 +187,7 @@ public class ComparedBy extends AbstractBsjMetaAnnotationMetaprogram
             else if (type instanceof ArrayTypeNode)
             {
                 // TODO better error handling
-                throw new IllegalStateException();
+                throw new IllegalStateException("Arrays not supported by @@ComparedBy meta-annotation");
             } 
             else
             {

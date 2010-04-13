@@ -1,0 +1,41 @@
+import java.util.*;
+
+public class NullCheckMain
+{
+	public static void main(String[] arg)
+	{
+	    NullCheck nc = new NullCheck();
+	    
+	    nc.foo(2, new Object(), "test");
+	    
+	    try 
+	    {
+	        nc.foo(2, null, "test");
+	    }
+	    catch (IllegalArgumentException e)
+	    {
+	        System.out.println("test 1 passed");
+	    }
+	    
+	    try 
+        {
+            nc.foo(2, new Object(), null);
+        }
+        catch (IllegalArgumentException e)
+        {
+            System.out.println("test 2 passed");
+        }
+        
+        try 
+        {
+            nc.bar(2, null, "test");
+        }
+        catch (IllegalArgumentException e)
+        {
+            System.out.println("test 3 passed");
+        }
+        
+        // tests allowing a null
+        nc.bar(2, new Object(), null);
+	}
+}
