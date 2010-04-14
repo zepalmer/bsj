@@ -8,14 +8,14 @@ public class NullCheck
     }
     
     @@GenerateNullChecks
-    public void foo (int x, Object y, String s)
+    public void foo (int x, Object y, String s, int[] a)
     {
         System.out.println("from foo():");
         System.out.println("x=" + x + ", y=" + y + ", s=" + s);
     }
     
     @@GenerateNullChecks(parameters={"y"})
-    public void bar (int x, Object y, String s)
+    public void bar (int x, Object y, String s, int[] a)
     {
         System.out.println("from bar():");
         System.out.println("x=" + x + ", y=" + y + ", s=" + s);

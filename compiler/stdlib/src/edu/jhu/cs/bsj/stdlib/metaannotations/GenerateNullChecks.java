@@ -7,7 +7,6 @@ import java.util.List;
 
 import edu.jhu.cs.bsj.compiler.ast.BinaryOperator;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
-import edu.jhu.cs.bsj.compiler.ast.node.ArrayTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.BlockStatementNode;
 import edu.jhu.cs.bsj.compiler.ast.node.IfNode;
 import edu.jhu.cs.bsj.compiler.ast.node.MethodDeclarationNode;
@@ -24,7 +23,7 @@ import edu.jhu.cs.bsj.compiler.metaprogram.Context;
 import edu.jhu.cs.bsj.stdlib.utils.MethodDeclUtils;
 
 /**
- * This meta-annotation metaprogram generates null checks for a method.  All non-primitive, non-array parameters
+ * This meta-annotation metaprogram generates null checks for a method.  All non-primitive parameters
  * of the method are checked.  The "parameters" property can be used to override the default functionality by
  * explicitly listing what parameters are to be null checked, thus allowing unlisted parameters to be null.
  * 
@@ -68,8 +67,8 @@ public class GenerateNullChecks extends AbstractBsjMetaAnnotationMetaprogram
             TypeNode type = variable.getType();
             String varName = variable.getIdentifier().getIdentifier();
             
-            // only create null checks for non-primitive, non-array parameters
-            if (type instanceof PrimitiveTypeNode || type instanceof ArrayTypeNode)
+            // only create null checks for non-primitive parameters
+            if (type instanceof PrimitiveTypeNode)
             {
                 continue;
             }
