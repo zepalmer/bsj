@@ -14,6 +14,6 @@ public class MetaAnnotationObservableMetaprogramTest extends AbstractBsjCompiler
 	public void testBsjCompiler() throws Exception
 	{
 		performTest(new File(EXAMPLES + File.separator + "projects" + File.separator + "bsj-tests" + File.separator
-				+ "metaannotation-test"), "ObservableClass");
+				+ "metaannotation-test"), "ObservableClass", "MyEvent");
 	}
 }
