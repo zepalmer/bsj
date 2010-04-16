@@ -46,10 +46,25 @@ public class DependencyManager
 	/** A cache of responses to cooperation queries. */
 	private Map<Pair<Integer, Integer>, Boolean> cooperationCache;
 
+	/** A random number generator used to select the order in which metaprograms are executed. */
+	private Random random;
+
 	/**
 	 * Creates a new dependency manager.
 	 */
 	public DependencyManager()
+	{
+		this(null);
+	}
+
+	/**
+	 * Creates a new dependency manager.
+	 * 
+	 * @param r The random number generator used to select the order in which metaprograms run. If <code>null</code>,
+	 *            metaprograms are executed in an arbitrary order. This parameter is useful for debugging as a random
+	 *            number generator using the same seed on the same code will always produce the same execution order.
+	 */
+	public DependencyManager(Random r)
 	{
 		this.idMap = new HashMap<Integer, MetaprogramProfile<?>>();
 		this.profileToNodeMap = new HashMap<MetaprogramProfile<?>, BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData>>();
@@ -57,6 +72,7 @@ public class DependencyManager
 		this.waitingNodes = new HashSet<BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData>>();
 		this.cooperationCache = new HashMap<Pair<Integer, Integer>, Boolean>();
 		this.compilationUnitMap = new HashMultiMap<CompilationUnitNode, MetaprogramProfile<?>>();
+		this.random = r;
 	}
 
 	/**
@@ -110,7 +126,6 @@ public class DependencyManager
 		}
 
 		// Determine whether or not we just caused a cycle
-		// TODO: is there more efficient cycle detection algorithm than this?
 		CycleDetector cycleDetector = new CycleDetector();
 		Set<BipartiteNode<?, ?, ?, ?>> allNodes = new HashSet<BipartiteNode<?, ?, ?, ?>>();
 		allNodes.addAll(this.profileToNodeMap.values());
@@ -156,10 +171,10 @@ public class DependencyManager
 			DiagnosticListener<BsjSourceLocation> diagnosticListener)
 	{
 		boolean found = false;
-		
+
 		InjectionConflictDetector injectionConflictDetector = new InjectionConflictDetector();
 		Collection<InjectionConflict> conflicts;
-		
+
 		// Possibility 1: an injected program causes an injection conflict
 		for (BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData> grandparent : metaprogramNode.getFilteredGrandparents(
 				new InferenceStateFilteringFunction<TargetNodeData, MetaprogramNodeData>(false),
@@ -175,7 +190,7 @@ public class DependencyManager
 				}
 			}
 		}
-		
+
 		// Possibility 2: an injected program may suffer from an injection conflict just like a normal metaprogram
 		conflicts = injectionConflictDetector.findImmediateInjectionConflict(metaprogramNode);
 		if (conflicts != null)
@@ -186,7 +201,7 @@ public class DependencyManager
 				found = true;
 			}
 		}
-		
+
 		return found;
 	}
 
@@ -304,19 +319,22 @@ public class DependencyManager
 		// the tricky part is that the graph is not static
 
 		// Pick a starting metaprogram
-		BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData> metaprogramNode = this.waitingNodes.iterator().next();
-		// TODO: create debugging option for randomly selecting metaprogram execution order, perhaps by specified seed
-		/*
-		BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData> metaprogramNode = null;
-		Iterator<BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData>> it =
-			this.waitingNodes.iterator();
-		int n = new Random().nextInt(this.waitingNodes.size());
-		for (int i=0;i<=n;i++)
+		BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData> metaprogramNode;
+
+		if (this.random == null)
 		{
+			metaprogramNode = this.waitingNodes.iterator().next();
+		} else
+		{
+			int count = this.random.nextInt(this.waitingNodes.size());
+			Iterator<BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData>> it = waitingNodes.iterator();
 			metaprogramNode = it.next();
+			for (int i = 0; i < count; i++)
+			{
+				metaprogramNode = it.next();
+			}
 		}
-		*/
-		
+
 		boolean found;
 		do
 		{

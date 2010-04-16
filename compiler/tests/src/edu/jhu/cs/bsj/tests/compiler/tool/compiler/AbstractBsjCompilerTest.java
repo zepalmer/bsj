@@ -5,6 +5,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 import javax.tools.Diagnostic;
 import javax.tools.Diagnostic.Kind;
@@ -120,7 +121,15 @@ public abstract class AbstractBsjCompilerTest extends AbstractTest
 		BsjCompiler compiler = toolkit.getCompiler();
 		RecordingDiagnosticProxyListener<BsjSourceLocation> diagnosticListener = new RecordingDiagnosticProxyListener<BsjSourceLocation>(
 				new DiagnosticPrintingListener<BsjSourceLocation>(System.err));
-		compiler.compile(files, diagnosticListener);
+		Random random;
+		if (System.getProperty("bsj.tests.seed") == null)
+		{
+			random = null;
+		} else
+		{
+			random = new Random(Integer.parseInt(System.getProperty("bsj.tests.seed")));
+		}
+		compiler.compile(files, diagnosticListener, random);
 
 		return diagnosticListener.getDiagnostics();
 	}

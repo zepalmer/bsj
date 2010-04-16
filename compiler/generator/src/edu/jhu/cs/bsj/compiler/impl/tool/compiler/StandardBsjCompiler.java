@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 import javax.tools.DiagnosticListener;
 import javax.tools.JavaCompiler;
@@ -55,7 +56,7 @@ public class StandardBsjCompiler implements BsjCompiler
 	 */
 	private BsjNodeManager manager;
 
-	/*    *** The following fields are used in compilation. They are not valid unless compilation is in progress. */
+	/*       *** The following fields are used in compilation. They are not valid unless compilation is in progress. */
 
 	/**
 	 * Tracks the progress of compilation units through the compilation process. This data structure performs the
@@ -82,15 +83,18 @@ public class StandardBsjCompiler implements BsjCompiler
 	// see JSR-199's JavaCompiler.getTask for more info
 
 	/**
-	 * Compiles the specified compilation units. These units must exist on the {@link BsjFileManager} provided to this
-	 * compiler at construction. If this method terminates normally, compilation was successful.
-	 * 
-	 * @param units The compilation units to compile.
-	 * @param listener The diagnostic listener to which events should be reported. If <code>null</code>, a default
-	 *            listener is used which reports diagnostic messages to standard error.
-	 * @throws IOException If an I/O error occurs.
+	 * {@inheritDoc}
 	 */
 	public void compile(Iterable<BsjFileObject> units, DiagnosticListener<BsjSourceLocation> listener)
+			throws IOException
+	{
+		compile(units, listener, null);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public void compile(Iterable<BsjFileObject> units, DiagnosticListener<BsjSourceLocation> listener, Random random)
 			throws IOException
 	{
 		if (LOGGER.isDebugEnabled())
@@ -119,7 +123,7 @@ public class StandardBsjCompiler implements BsjCompiler
 		}
 
 		// Start compilation
-		initialize(listener);
+		initialize(listener, random);
 
 		try
 		{
@@ -158,6 +162,7 @@ public class StandardBsjCompiler implements BsjCompiler
 
 	/**
 	 * Compiles the generated sources for this compiler.
+	 * 
 	 * @param listener The listener to which to report diagnostic messages.
 	 * @return <code>true</code> on success; <code>false</code> on failure.
 	 * @throws IOException If an I/O error occurs.
@@ -213,20 +218,20 @@ public class StandardBsjCompiler implements BsjCompiler
 		{
 			LOGGER.debug("Finished compilation of generated sources");
 		}
-		
+
 		return true;
 	}
 
 	/**
 	 * Initializes the data structures used by the compiler.
 	 */
-	private void initialize(DiagnosticListener<BsjSourceLocation> listener)
+	private void initialize(DiagnosticListener<BsjSourceLocation> listener, Random random)
 	{
 		if (LOGGER.isTraceEnabled())
 		{
 			LOGGER.trace("Initializing compiler data structures.");
 		}
-		this.metacompilationManager = new MetacompilationManager(this.toolkit, this.manager, listener);
+		this.metacompilationManager = new MetacompilationManager(this.toolkit, this.manager, listener, random);
 		this.packageNodeCallback.setMetacompilationManager(metacompilationManager);
 	}
 

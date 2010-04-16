@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Queue;
+import java.util.Random;
 import java.util.Set;
 import java.util.WeakHashMap;
 
@@ -92,13 +93,17 @@ public class MetacompilationManager implements MetacompilationContext
 	 * @param toolkit The toolkit to use.
 	 * @param nodeManager The node manager to use.
 	 * @param diagnosticListener The listener to which diagnostics will be reported. Must not be <code>null</code>.
+	 * @param random A random number generator used to select the order in which operations are performed. If
+	 *            <code>null</code>, operations are performed in an arbitrary order. This generator can be used to
+	 *            produce repeatable compilation passes over the same source code.  This is intended for debugging
+	 *            purposes and reduces the performance of the metacompiler somewhat.
 	 */
 	public MetacompilationManager(BsjToolkit toolkit, BsjNodeManager nodeManager,
-			DiagnosticListener<BsjSourceLocation> diagnosticListener)
+			DiagnosticListener<BsjSourceLocation> diagnosticListener, Random random)
 	{
 		this.observedBinaryNames = new HashSet<String>();
 		this.priorityQueue = new PriorityQueue<BsjCompilerTask>();
-		this.dependencyManager = new DependencyManager();
+		this.dependencyManager = new DependencyManager(random);
 
 		this.toolkit = toolkit;
 		this.nodeManager = nodeManager;
