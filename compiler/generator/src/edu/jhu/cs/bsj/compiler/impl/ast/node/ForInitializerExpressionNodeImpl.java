@@ -64,7 +64,7 @@ public class ForInitializerExpressionNodeImpl extends NodeImpl implements ForIni
         {
             getManager().assertMutatable(this);
         }
-        recordAccess(LocalAttribute.EXPRESSIONS, Attribute.AccessType.STRONG_WRITE);
+        recordAccess(LocalAttribute.EXPRESSIONS, Attribute.AccessType.WRITE);
         if (this.expressions instanceof NodeImpl)
         {
             ((NodeImpl)this.expressions).setParent(null);

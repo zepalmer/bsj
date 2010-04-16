@@ -69,7 +69,7 @@ public class SingleElementMetaAnnotationNodeImpl extends MetaAnnotationNodeImpl 
         {
             getManager().assertMutatable(this);
         }
-        recordAccess(LocalAttribute.VALUE, Attribute.AccessType.STRONG_WRITE);
+        recordAccess(LocalAttribute.VALUE, Attribute.AccessType.WRITE);
         if (this.value instanceof NodeImpl)
         {
             ((NodeImpl)this.value).setParent(null);

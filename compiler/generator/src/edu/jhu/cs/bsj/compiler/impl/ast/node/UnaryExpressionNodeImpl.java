@@ -72,7 +72,7 @@ public class UnaryExpressionNodeImpl extends NodeImpl implements UnaryExpression
         {
             getManager().assertMutatable(this);
         }
-        recordAccess(LocalAttribute.EXPRESSION, Attribute.AccessType.STRONG_WRITE);
+        recordAccess(LocalAttribute.EXPRESSION, Attribute.AccessType.WRITE);
         if (this.expression instanceof NodeImpl)
         {
             ((NodeImpl)this.expression).setParent(null);
@@ -109,7 +109,7 @@ public class UnaryExpressionNodeImpl extends NodeImpl implements UnaryExpression
         {
             getManager().assertMutatable(this);
         }
-        recordAccess(LocalAttribute.OPERATOR, Attribute.AccessType.STRONG_WRITE);
+        recordAccess(LocalAttribute.OPERATOR, Attribute.AccessType.WRITE);
         this.operator = operator;
     }
     

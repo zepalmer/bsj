@@ -95,23 +95,25 @@ public class ExecuteMetaprogramTask extends AbstractBsjCompilerTask
 		{
 			LOGGER.trace("Executing metaprogram " + profile.getMetaprogram().getID());
 		}
-
 		BsjDiagnostic diagnostic = doExecute(profile);
+		
+		// Release the managers
+		context.getNodeManager().setPermissionPolicyManager(null);
+		context.getNodeManager().setCurrentMetaprogramId(null);
+		context.getNodeManager().setDependencyManager(null);
+
+		// Respond to error as necessary
 		if (diagnostic!=null)
 		{
 			context.getDiagnosticListener().report(diagnostic);
 		}
 
+		// Notify the dependency manager that execution has finished
 		context.getDependencyManager().notifyExecuted(profile);
 		if (LOGGER.isTraceEnabled())
 		{
 			LOGGER.trace("Metaprogram " + profile.getMetaprogram().getID() + " execution complete.");
 		}
-
-		// Release the managers
-		context.getNodeManager().setPermissionPolicyManager(null);
-		context.getNodeManager().setCurrentMetaprogramId(null);
-		context.getNodeManager().setDependencyManager(null);
 
 		// Have the metaprogram replace itself with its replacement node
 		// TODO: what kind of policy should we put into place for this? can a read-only metaprogram replace itself?

@@ -230,6 +230,23 @@ public class BsjNodeManager
 	}
 
 	/**
+	 * Determines whether or not the metaprogram with the specified ID cooperates with the current metaprogram.
+	 * 
+	 * @param id The ID of the metaprogram to check.
+	 * @return <code>true</code> if the metaprograms cooperate; <code>false</code> if they do not.
+	 */
+	public boolean hasCooperation(int id)
+	{
+		if (this.dependencyManager == null || this.currentMetaprogramId == null)
+			return true;
+
+		if (this.dependencyManager.checkCooperation(this.currentMetaprogramId, id))
+			return true;
+
+		return false;
+	}
+
+	/**
 	 * Asserts that the metaprogram with the specified ID cooperates with the current metaprogram.
 	 * 
 	 * @param id The ID of the metaprogram to check.
@@ -239,14 +256,12 @@ public class BsjNodeManager
 	 */
 	public void assertCooperation(int id, Node node) throws MetaprogramConflictException
 	{
-		if (this.dependencyManager == null || this.currentMetaprogramId == null)
-			return;
-
-		if (this.dependencyManager.checkCooperation(this.currentMetaprogramId, id))
-			return;
-
-		throw new MetaprogramConflictExceptionImpl(this.dependencyManager.getMetaprogramProfileByID(id).getAnchor(),
-				this.dependencyManager.getMetaprogramProfileByID(this.currentMetaprogramId).getAnchor(), node);
+		if (!hasCooperation(id))
+		{
+			throw new MetaprogramConflictExceptionImpl(
+					this.dependencyManager.getMetaprogramProfileByID(id).getAnchor(),
+					this.dependencyManager.getMetaprogramProfileByID(this.currentMetaprogramId).getAnchor(), node);
+		}
 	}
 
 	/**
@@ -545,8 +560,9 @@ public class BsjNodeManager
 	 * @param propertyName The name of the property for which this evaluation is occurring.
 	 * @return The value object for this value node.
 	 */
-	private Object evaluateValueNode(MetaAnnotationValueNode value, Class<?> type, Class<? extends BsjMetaAnnotation> annotationClass, 
-			DiagnosticListener<BsjSourceLocation> listener, String propertyName)
+	private Object evaluateValueNode(MetaAnnotationValueNode value, Class<?> type,
+			Class<? extends BsjMetaAnnotation> annotationClass, DiagnosticListener<BsjSourceLocation> listener,
+			String propertyName)
 	{
 		if (value instanceof MetaAnnotationMetaAnnotationValueNode)
 		{
@@ -577,7 +593,8 @@ public class BsjNodeManager
 			int index = 0;
 			for (MetaAnnotationValueNode childNode : node.getValues())
 			{
-				Object childValue = evaluateValueNode(childNode, type.getComponentType(), annotationClass, listener, propertyName);
+				Object childValue = evaluateValueNode(childNode, type.getComponentType(), annotationClass, listener,
+						propertyName);
 				Array.set(array, index++, childValue);
 			}
 			return array;

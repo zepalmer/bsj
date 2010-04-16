@@ -65,7 +65,7 @@ public class MetaprogramTargetNodeImpl extends NodeImpl implements MetaprogramTa
         {
             getManager().assertMutatable(this);
         }
-        recordAccess(LocalAttribute.TARGETS, Attribute.AccessType.STRONG_WRITE);
+        recordAccess(LocalAttribute.TARGETS, Attribute.AccessType.WRITE);
         if (this.targets instanceof NodeImpl)
         {
             ((NodeImpl)this.targets).setParent(null);

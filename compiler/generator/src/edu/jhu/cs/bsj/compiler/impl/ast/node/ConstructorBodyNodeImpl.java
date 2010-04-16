@@ -72,7 +72,7 @@ public class ConstructorBodyNodeImpl extends NodeImpl implements ConstructorBody
         {
             getManager().assertMutatable(this);
         }
-        recordAccess(LocalAttribute.CONSTRUCTOR_INVOCATION, Attribute.AccessType.STRONG_WRITE);
+        recordAccess(LocalAttribute.CONSTRUCTOR_INVOCATION, Attribute.AccessType.WRITE);
         if (this.constructorInvocation instanceof NodeImpl)
         {
             ((NodeImpl)this.constructorInvocation).setParent(null);
@@ -109,7 +109,7 @@ public class ConstructorBodyNodeImpl extends NodeImpl implements ConstructorBody
         {
             getManager().assertMutatable(this);
         }
-        recordAccess(LocalAttribute.STATEMENTS, Attribute.AccessType.STRONG_WRITE);
+        recordAccess(LocalAttribute.STATEMENTS, Attribute.AccessType.WRITE);
         if (this.statements instanceof NodeImpl)
         {
             ((NodeImpl)this.statements).setParent(null);

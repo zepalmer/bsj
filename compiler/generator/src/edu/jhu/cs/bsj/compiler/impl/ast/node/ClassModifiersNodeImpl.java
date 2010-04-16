@@ -96,7 +96,7 @@ public class ClassModifiersNodeImpl extends ModifiersNodeImpl implements ClassMo
         {
             getManager().assertMutatable(this);
         }
-        recordAccess(LocalAttribute.ACCESS, Attribute.AccessType.STRONG_WRITE);
+        recordAccess(LocalAttribute.ACCESS, Attribute.AccessType.WRITE);
         this.access = access;
     }
     
@@ -125,7 +125,7 @@ public class ClassModifiersNodeImpl extends ModifiersNodeImpl implements ClassMo
         {
             getManager().assertMutatable(this);
         }
-        recordAccess(LocalAttribute.ABSTRACT_FLAG, Attribute.AccessType.STRONG_WRITE);
+        recordAccess(LocalAttribute.ABSTRACT_FLAG, Attribute.AccessType.WRITE);
         this.abstractFlag = abstractFlag;
     }
     
@@ -154,7 +154,7 @@ public class ClassModifiersNodeImpl extends ModifiersNodeImpl implements ClassMo
         {
             getManager().assertMutatable(this);
         }
-        recordAccess(LocalAttribute.STATIC_FLAG, Attribute.AccessType.STRONG_WRITE);
+        recordAccess(LocalAttribute.STATIC_FLAG, Attribute.AccessType.WRITE);
         this.staticFlag = staticFlag;
     }
     
@@ -183,7 +183,7 @@ public class ClassModifiersNodeImpl extends ModifiersNodeImpl implements ClassMo
         {
             getManager().assertMutatable(this);
         }
-        recordAccess(LocalAttribute.FINAL_FLAG, Attribute.AccessType.STRONG_WRITE);
+        recordAccess(LocalAttribute.FINAL_FLAG, Attribute.AccessType.WRITE);
         this.finalFlag = finalFlag;
     }
     
@@ -212,7 +212,7 @@ public class ClassModifiersNodeImpl extends ModifiersNodeImpl implements ClassMo
         {
             getManager().assertMutatable(this);
         }
-        recordAccess(LocalAttribute.STRICTFP_FLAG, Attribute.AccessType.STRONG_WRITE);
+        recordAccess(LocalAttribute.STRICTFP_FLAG, Attribute.AccessType.WRITE);
         this.strictfpFlag = strictfpFlag;
     }
     

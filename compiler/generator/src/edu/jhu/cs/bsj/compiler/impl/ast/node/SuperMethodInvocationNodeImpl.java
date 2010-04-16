@@ -88,7 +88,7 @@ public class SuperMethodInvocationNodeImpl extends NodeImpl implements SuperMeth
         {
             getManager().assertMutatable(this);
         }
-        recordAccess(LocalAttribute.TYPE, Attribute.AccessType.STRONG_WRITE);
+        recordAccess(LocalAttribute.TYPE, Attribute.AccessType.WRITE);
         if (this.type instanceof NodeImpl)
         {
             ((NodeImpl)this.type).setParent(null);
@@ -125,7 +125,7 @@ public class SuperMethodInvocationNodeImpl extends NodeImpl implements SuperMeth
         {
             getManager().assertMutatable(this);
         }
-        recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.STRONG_WRITE);
+        recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.WRITE);
         if (this.identifier instanceof NodeImpl)
         {
             ((NodeImpl)this.identifier).setParent(null);
@@ -162,7 +162,7 @@ public class SuperMethodInvocationNodeImpl extends NodeImpl implements SuperMeth
         {
             getManager().assertMutatable(this);
         }
-        recordAccess(LocalAttribute.ARGUMENTS, Attribute.AccessType.STRONG_WRITE);
+        recordAccess(LocalAttribute.ARGUMENTS, Attribute.AccessType.WRITE);
         if (this.arguments instanceof NodeImpl)
         {
             ((NodeImpl)this.arguments).setParent(null);
@@ -199,7 +199,7 @@ public class SuperMethodInvocationNodeImpl extends NodeImpl implements SuperMeth
         {
             getManager().assertMutatable(this);
         }
-        recordAccess(LocalAttribute.TYPE_ARGUMENTS, Attribute.AccessType.STRONG_WRITE);
+        recordAccess(LocalAttribute.TYPE_ARGUMENTS, Attribute.AccessType.WRITE);
         if (this.typeArguments instanceof NodeImpl)
         {
             ((NodeImpl)this.typeArguments).setParent(null);

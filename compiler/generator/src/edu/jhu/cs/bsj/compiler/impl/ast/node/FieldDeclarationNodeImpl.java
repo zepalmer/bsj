@@ -80,7 +80,7 @@ public class FieldDeclarationNodeImpl extends NodeImpl implements FieldDeclarati
         {
             getManager().assertMutatable(this);
         }
-        recordAccess(LocalAttribute.MODIFIERS, Attribute.AccessType.STRONG_WRITE);
+        recordAccess(LocalAttribute.MODIFIERS, Attribute.AccessType.WRITE);
         if (this.modifiers instanceof NodeImpl)
         {
             ((NodeImpl)this.modifiers).setParent(null);
@@ -117,7 +117,7 @@ public class FieldDeclarationNodeImpl extends NodeImpl implements FieldDeclarati
         {
             getManager().assertMutatable(this);
         }
-        recordAccess(LocalAttribute.DECLARATORS, Attribute.AccessType.STRONG_WRITE);
+        recordAccess(LocalAttribute.DECLARATORS, Attribute.AccessType.WRITE);
         if (this.declarators instanceof NodeImpl)
         {
             ((NodeImpl)this.declarators).setParent(null);
@@ -154,7 +154,7 @@ public class FieldDeclarationNodeImpl extends NodeImpl implements FieldDeclarati
         {
             getManager().assertMutatable(this);
         }
-        recordAccess(LocalAttribute.JAVADOC, Attribute.AccessType.STRONG_WRITE);
+        recordAccess(LocalAttribute.JAVADOC, Attribute.AccessType.WRITE);
         if (this.javadoc instanceof NodeImpl)
         {
             ((NodeImpl)this.javadoc).setParent(null);

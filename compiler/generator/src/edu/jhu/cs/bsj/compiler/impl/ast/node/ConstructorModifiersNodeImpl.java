@@ -68,7 +68,7 @@ public class ConstructorModifiersNodeImpl extends ModifiersNodeImpl implements C
         {
             getManager().assertMutatable(this);
         }
-        recordAccess(LocalAttribute.ACCESS, Attribute.AccessType.STRONG_WRITE);
+        recordAccess(LocalAttribute.ACCESS, Attribute.AccessType.WRITE);
         this.access = access;
     }
     

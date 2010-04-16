@@ -74,6 +74,10 @@ public abstract class AbstractBsjCompilerTest extends AbstractTest
 			}
 			if (!found)
 			{
+				for (Diagnostic<? extends BsjSourceLocation> diagnostic : diagnostics)
+				{
+					LOGGER.debug(diagnostic);
+				}
 				Assert.fail("Diagnostic type " + type + " was not observed!");
 			}
 		}

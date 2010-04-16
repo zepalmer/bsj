@@ -67,7 +67,7 @@ public class VariableModifiersNodeImpl extends ModifiersNodeImpl implements Vari
         {
             getManager().assertMutatable(this);
         }
-        recordAccess(LocalAttribute.FINAL_FLAG, Attribute.AccessType.STRONG_WRITE);
+        recordAccess(LocalAttribute.FINAL_FLAG, Attribute.AccessType.WRITE);
         this.finalFlag = finalFlag;
     }
     

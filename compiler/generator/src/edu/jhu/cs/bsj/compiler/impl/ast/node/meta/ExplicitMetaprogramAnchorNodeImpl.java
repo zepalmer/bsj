@@ -64,7 +64,7 @@ public abstract class ExplicitMetaprogramAnchorNodeImpl<T extends Node> extends 
         {
             getManager().assertMutatable(this);
         }
-        recordAccess(LocalAttribute.METAPROGRAM, Attribute.AccessType.STRONG_WRITE);
+        recordAccess(LocalAttribute.METAPROGRAM, Attribute.AccessType.WRITE);
         if (this.metaprogram instanceof NodeImpl)
         {
             ((NodeImpl)this.metaprogram).setParent(null);

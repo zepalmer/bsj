@@ -105,7 +105,7 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
         {
             getManager().assertMutatable(this);
         }
-        recordAccess(LocalAttribute.PACKAGE_DECLARATION, Attribute.AccessType.STRONG_WRITE);
+        recordAccess(LocalAttribute.PACKAGE_DECLARATION, Attribute.AccessType.WRITE);
         if (this.packageDeclaration instanceof NodeImpl)
         {
             ((NodeImpl)this.packageDeclaration).setParent(null);
@@ -142,7 +142,7 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
         {
             getManager().assertMutatable(this);
         }
-        recordAccess(LocalAttribute.METAIMPORTS, Attribute.AccessType.STRONG_WRITE);
+        recordAccess(LocalAttribute.METAIMPORTS, Attribute.AccessType.WRITE);
         if (this.metaimports instanceof NodeImpl)
         {
             ((NodeImpl)this.metaimports).setParent(null);
@@ -179,7 +179,7 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
         {
             getManager().assertMutatable(this);
         }
-        recordAccess(LocalAttribute.IMPORTS, Attribute.AccessType.STRONG_WRITE);
+        recordAccess(LocalAttribute.IMPORTS, Attribute.AccessType.WRITE);
         if (this.imports instanceof NodeImpl)
         {
             ((NodeImpl)this.imports).setParent(null);
@@ -216,7 +216,7 @@ public class CompilationUnitNodeImpl extends NodeImpl implements CompilationUnit
         {
             getManager().assertMutatable(this);
         }
-        recordAccess(LocalAttribute.TYPE_DECLS, Attribute.AccessType.STRONG_WRITE);
+        recordAccess(LocalAttribute.TYPE_DECLS, Attribute.AccessType.WRITE);
         if (this.typeDecls instanceof NodeImpl)
         {
             ((NodeImpl)this.typeDecls).setParent(null);

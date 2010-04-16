@@ -71,7 +71,7 @@ public class WildcardTypeNodeImpl extends NodeImpl implements WildcardTypeNode
         {
             getManager().assertMutatable(this);
         }
-        recordAccess(LocalAttribute.BOUND, Attribute.AccessType.STRONG_WRITE);
+        recordAccess(LocalAttribute.BOUND, Attribute.AccessType.WRITE);
         if (this.bound instanceof NodeImpl)
         {
             ((NodeImpl)this.bound).setParent(null);
@@ -108,7 +108,7 @@ public class WildcardTypeNodeImpl extends NodeImpl implements WildcardTypeNode
         {
             getManager().assertMutatable(this);
         }
-        recordAccess(LocalAttribute.UPPER_BOUND, Attribute.AccessType.STRONG_WRITE);
+        recordAccess(LocalAttribute.UPPER_BOUND, Attribute.AccessType.WRITE);
         this.upperBound = upperBound;
     }
     

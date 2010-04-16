@@ -79,7 +79,7 @@ public class IfNodeImpl extends NodeImpl implements IfNode
         {
             getManager().assertMutatable(this);
         }
-        recordAccess(LocalAttribute.CONDITION, Attribute.AccessType.STRONG_WRITE);
+        recordAccess(LocalAttribute.CONDITION, Attribute.AccessType.WRITE);
         if (this.condition instanceof NodeImpl)
         {
             ((NodeImpl)this.condition).setParent(null);
@@ -116,7 +116,7 @@ public class IfNodeImpl extends NodeImpl implements IfNode
         {
             getManager().assertMutatable(this);
         }
-        recordAccess(LocalAttribute.THEN_STATEMENT, Attribute.AccessType.STRONG_WRITE);
+        recordAccess(LocalAttribute.THEN_STATEMENT, Attribute.AccessType.WRITE);
         if (this.thenStatement instanceof NodeImpl)
         {
             ((NodeImpl)this.thenStatement).setParent(null);
@@ -153,7 +153,7 @@ public class IfNodeImpl extends NodeImpl implements IfNode
         {
             getManager().assertMutatable(this);
         }
-        recordAccess(LocalAttribute.ELSE_STATEMENT, Attribute.AccessType.STRONG_WRITE);
+        recordAccess(LocalAttribute.ELSE_STATEMENT, Attribute.AccessType.WRITE);
         if (this.elseStatement instanceof NodeImpl)
         {
             ((NodeImpl)this.elseStatement).setParent(null);

@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 import java.util.Stack;
 
@@ -303,6 +305,18 @@ public class DependencyManager
 
 		// Pick a starting metaprogram
 		BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData> metaprogramNode = this.waitingNodes.iterator().next();
+		// TODO: create debugging option for randomly selecting metaprogram execution order, perhaps by specified seed
+		/*
+		BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData> metaprogramNode = null;
+		Iterator<BipartiteNode<MetaprogramNodeData, TargetNodeData, EdgeData, EdgeData>> it =
+			this.waitingNodes.iterator();
+		int n = new Random().nextInt(this.waitingNodes.size());
+		for (int i=0;i<=n;i++)
+		{
+			metaprogramNode = it.next();
+		}
+		*/
+		
 		boolean found;
 		do
 		{

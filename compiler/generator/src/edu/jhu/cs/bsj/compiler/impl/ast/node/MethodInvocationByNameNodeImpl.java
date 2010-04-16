@@ -68,7 +68,7 @@ public class MethodInvocationByNameNodeImpl extends MethodInvocationNodeImpl imp
         {
             getManager().assertMutatable(this);
         }
-        recordAccess(LocalAttribute.NAME, Attribute.AccessType.STRONG_WRITE);
+        recordAccess(LocalAttribute.NAME, Attribute.AccessType.WRITE);
         if (this.name instanceof NodeImpl)
         {
             ((NodeImpl)this.name).setParent(null);

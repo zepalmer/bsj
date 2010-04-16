@@ -5,6 +5,7 @@ import java.util.List;
 import javax.annotation.Generated;
 
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
+import edu.jhu.cs.bsj.compiler.ast.NodeList;
 
 /**
  * Represents a list of nodes.  Nodes do not simply have lists as properties as the ListNode allows
@@ -25,7 +26,7 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
  * which is guaranteed to be type checked at runtime.
  */
 @Generated(value={"edu.jhu.cs.bsj.compiler.utils.generator.SourceGenerator"})
-public interface ListNode<T extends Node> extends Node, List<T>
+public interface ListNode<T extends Node> extends Node, List<T>, NodeList<T>
 {
     /**
      * Gets the list of children.

@@ -1633,6 +1633,7 @@
 
         <type name="ListNode" typeParam="T extends Node" super="Node" mode="abstract">
             <interface name="List&lt;T&gt;" />
+            <interface name="NodeList&lt;T&gt;" />
             <constant name="alwaysOrdered" type="boolean"
                 desc="whether or not this list's contents are always order-dependent" />
             <prop name="children" type="List" typeArg="T" mode="readOnly" desc="the list of children" />
@@ -1655,8 +1656,7 @@
                 </pre>
                 which is guaranteed to be type checked at runtime.
             ]]></doc>
-            <constructor-override prop="children"
-                expr="new ListNodeList(new ArrayList&lt;T&gt;(children))" />
+            <constructor-override prop="children" expr="getChildrenList(children)" />
             <nogen id="children" />
         </type>
 
@@ -2137,7 +2137,7 @@
                     </pre>        
             ]]></doc>
             <factory-method>
-                <use-defaults/>
+                <use-defaults />
             </factory-method>
         </type>
 

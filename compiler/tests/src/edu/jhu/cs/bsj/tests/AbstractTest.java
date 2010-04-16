@@ -39,7 +39,8 @@ public abstract class AbstractTest
 		if (s == null || s.length() == 0)
 		{
 			log4jConfigure("trace", "edu.jhu.cs.bsj.compiler.impl.tool.filemanager/debug",
-					"edu.jhu.cs.bsj.compiler.impl.tool.parser.antlr/debug");
+					"edu.jhu.cs.bsj.compiler.impl.tool.parser.antlr/debug",
+					"edu.jhu.cs.bsj.compiler.impl.tool.compiler.names/debug");
 		} else
 		{
 			String[] values = s.split("&");

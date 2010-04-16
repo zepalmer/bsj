@@ -441,4 +441,10 @@ public abstract class ProxyList<T> implements List<T>
 		sizeChecked();
 		return this.backingList.toArray(a);
 	}
+
+	@Override
+	public String toString()
+	{
+		return "ProxyList [backingList=" + backingList + "]";
+	}
 }

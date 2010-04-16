@@ -72,7 +72,7 @@ public class SynchronizedNodeImpl extends NodeImpl implements SynchronizedNode
         {
             getManager().assertMutatable(this);
         }
-        recordAccess(LocalAttribute.EXPRESSION, Attribute.AccessType.STRONG_WRITE);
+        recordAccess(LocalAttribute.EXPRESSION, Attribute.AccessType.WRITE);
         if (this.expression instanceof NodeImpl)
         {
             ((NodeImpl)this.expression).setParent(null);
@@ -109,7 +109,7 @@ public class SynchronizedNodeImpl extends NodeImpl implements SynchronizedNode
         {
             getManager().assertMutatable(this);
         }
-        recordAccess(LocalAttribute.BLOCK, Attribute.AccessType.STRONG_WRITE);
+        recordAccess(LocalAttribute.BLOCK, Attribute.AccessType.WRITE);
         if (this.block instanceof NodeImpl)
         {
             ((NodeImpl)this.block).setParent(null);

@@ -72,7 +72,7 @@ public class VariableDeclarationNodeImpl extends NodeImpl implements VariableDec
         {
             getManager().assertMutatable(this);
         }
-        recordAccess(LocalAttribute.MODIFIERS, Attribute.AccessType.STRONG_WRITE);
+        recordAccess(LocalAttribute.MODIFIERS, Attribute.AccessType.WRITE);
         if (this.modifiers instanceof NodeImpl)
         {
             ((NodeImpl)this.modifiers).setParent(null);
@@ -109,7 +109,7 @@ public class VariableDeclarationNodeImpl extends NodeImpl implements VariableDec
         {
             getManager().assertMutatable(this);
         }
-        recordAccess(LocalAttribute.DECLARATORS, Attribute.AccessType.STRONG_WRITE);
+        recordAccess(LocalAttribute.DECLARATORS, Attribute.AccessType.WRITE);
         if (this.declarators instanceof NodeImpl)
         {
             ((NodeImpl)this.declarators).setParent(null);

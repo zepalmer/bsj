@@ -72,7 +72,7 @@ public class SwitchNodeImpl extends NodeImpl implements SwitchNode
         {
             getManager().assertMutatable(this);
         }
-        recordAccess(LocalAttribute.EXPRESSION, Attribute.AccessType.STRONG_WRITE);
+        recordAccess(LocalAttribute.EXPRESSION, Attribute.AccessType.WRITE);
         if (this.expression instanceof NodeImpl)
         {
             ((NodeImpl)this.expression).setParent(null);
@@ -109,7 +109,7 @@ public class SwitchNodeImpl extends NodeImpl implements SwitchNode
         {
             getManager().assertMutatable(this);
         }
-        recordAccess(LocalAttribute.CASES, Attribute.AccessType.STRONG_WRITE);
+        recordAccess(LocalAttribute.CASES, Attribute.AccessType.WRITE);
         if (this.cases instanceof NodeImpl)
         {
             ((NodeImpl)this.cases).setParent(null);

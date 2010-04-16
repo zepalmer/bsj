@@ -60,7 +60,7 @@ public abstract class LiteralNodeImpl<T> extends NodeImpl implements LiteralNode
         {
             getManager().assertMutatable(this);
         }
-        recordAccess(LocalAttribute.VALUE, Attribute.AccessType.STRONG_WRITE);
+        recordAccess(LocalAttribute.VALUE, Attribute.AccessType.WRITE);
         this.value = value;
     }
     

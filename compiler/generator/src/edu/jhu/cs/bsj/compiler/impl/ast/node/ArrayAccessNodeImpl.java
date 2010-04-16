@@ -72,7 +72,7 @@ public class ArrayAccessNodeImpl extends NodeImpl implements ArrayAccessNode
         {
             getManager().assertMutatable(this);
         }
-        recordAccess(LocalAttribute.ARRAY_EXPRESSION, Attribute.AccessType.STRONG_WRITE);
+        recordAccess(LocalAttribute.ARRAY_EXPRESSION, Attribute.AccessType.WRITE);
         if (this.arrayExpression instanceof NodeImpl)
         {
             ((NodeImpl)this.arrayExpression).setParent(null);
@@ -109,7 +109,7 @@ public class ArrayAccessNodeImpl extends NodeImpl implements ArrayAccessNode
         {
             getManager().assertMutatable(this);
         }
-        recordAccess(LocalAttribute.INDEX_EXPRESSION, Attribute.AccessType.STRONG_WRITE);
+        recordAccess(LocalAttribute.INDEX_EXPRESSION, Attribute.AccessType.WRITE);
         if (this.indexExpression instanceof NodeImpl)
         {
             ((NodeImpl)this.indexExpression).setParent(null);

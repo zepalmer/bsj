@@ -64,7 +64,7 @@ public class AnnotationBodyNodeImpl extends NodeImpl implements AnnotationBodyNo
         {
             getManager().assertMutatable(this);
         }
-        recordAccess(LocalAttribute.MEMBERS, Attribute.AccessType.STRONG_WRITE);
+        recordAccess(LocalAttribute.MEMBERS, Attribute.AccessType.WRITE);
         if (this.members instanceof NodeImpl)
         {
             ((NodeImpl)this.members).setParent(null);

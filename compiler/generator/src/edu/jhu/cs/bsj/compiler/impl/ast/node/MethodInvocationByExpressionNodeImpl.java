@@ -76,7 +76,7 @@ public class MethodInvocationByExpressionNodeImpl extends MethodInvocationNodeIm
         {
             getManager().assertMutatable(this);
         }
-        recordAccess(LocalAttribute.EXPRESSION, Attribute.AccessType.STRONG_WRITE);
+        recordAccess(LocalAttribute.EXPRESSION, Attribute.AccessType.WRITE);
         if (this.expression instanceof NodeImpl)
         {
             ((NodeImpl)this.expression).setParent(null);
@@ -113,7 +113,7 @@ public class MethodInvocationByExpressionNodeImpl extends MethodInvocationNodeIm
         {
             getManager().assertMutatable(this);
         }
-        recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.STRONG_WRITE);
+        recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.WRITE);
         if (this.identifier instanceof NodeImpl)
         {
             ((NodeImpl)this.identifier).setParent(null);

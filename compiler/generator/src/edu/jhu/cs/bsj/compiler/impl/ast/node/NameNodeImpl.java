@@ -78,7 +78,7 @@ public abstract class NameNodeImpl extends NodeImpl implements NameNode
         {
             getManager().assertMutatable(this);
         }
-        recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.STRONG_WRITE);
+        recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.WRITE);
         if (this.identifier instanceof NodeImpl)
         {
             ((NodeImpl)this.identifier).setParent(null);

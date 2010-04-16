@@ -66,7 +66,7 @@ public class NormalAnnotationNodeImpl extends AnnotationNodeImpl implements Norm
         {
             getManager().assertMutatable(this);
         }
-        recordAccess(LocalAttribute.ARGUMENTS, Attribute.AccessType.STRONG_WRITE);
+        recordAccess(LocalAttribute.ARGUMENTS, Attribute.AccessType.WRITE);
         if (this.arguments instanceof NodeImpl)
         {
             ((NodeImpl)this.arguments).setParent(null);

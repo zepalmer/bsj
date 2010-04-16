@@ -85,7 +85,7 @@ public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeI
         {
             getManager().assertMutatable(this);
         }
-        recordAccess(LocalAttribute.ENCLOSING_EXPRESSION, Attribute.AccessType.STRONG_WRITE);
+        recordAccess(LocalAttribute.ENCLOSING_EXPRESSION, Attribute.AccessType.WRITE);
         if (this.enclosingExpression instanceof NodeImpl)
         {
             ((NodeImpl)this.enclosingExpression).setParent(null);
@@ -122,7 +122,7 @@ public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeI
         {
             getManager().assertMutatable(this);
         }
-        recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.STRONG_WRITE);
+        recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.WRITE);
         if (this.identifier instanceof NodeImpl)
         {
             ((NodeImpl)this.identifier).setParent(null);
@@ -159,7 +159,7 @@ public class QualifiedClassInstantiationNodeImpl extends ClassInstantiationNodeI
         {
             getManager().assertMutatable(this);
         }
-        recordAccess(LocalAttribute.TYPE_ARGUMENTS, Attribute.AccessType.STRONG_WRITE);
+        recordAccess(LocalAttribute.TYPE_ARGUMENTS, Attribute.AccessType.WRITE);
         if (this.typeArguments instanceof NodeImpl)
         {
             ((NodeImpl)this.typeArguments).setParent(null);

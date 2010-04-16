@@ -75,7 +75,7 @@ public class EnumModifiersNodeImpl extends ModifiersNodeImpl implements EnumModi
         {
             getManager().assertMutatable(this);
         }
-        recordAccess(LocalAttribute.ACCESS, Attribute.AccessType.STRONG_WRITE);
+        recordAccess(LocalAttribute.ACCESS, Attribute.AccessType.WRITE);
         this.access = access;
     }
     
@@ -104,7 +104,7 @@ public class EnumModifiersNodeImpl extends ModifiersNodeImpl implements EnumModi
         {
             getManager().assertMutatable(this);
         }
-        recordAccess(LocalAttribute.STRICTFP_FLAG, Attribute.AccessType.STRONG_WRITE);
+        recordAccess(LocalAttribute.STRICTFP_FLAG, Attribute.AccessType.WRITE);
         this.strictfpFlag = strictfpFlag;
     }
     

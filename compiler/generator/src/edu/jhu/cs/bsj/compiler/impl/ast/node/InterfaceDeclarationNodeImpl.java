@@ -105,7 +105,7 @@ public class InterfaceDeclarationNodeImpl extends NodeImpl implements InterfaceD
         {
             getManager().assertMutatable(this);
         }
-        recordAccess(LocalAttribute.MODIFIERS, Attribute.AccessType.STRONG_WRITE);
+        recordAccess(LocalAttribute.MODIFIERS, Attribute.AccessType.WRITE);
         if (this.modifiers instanceof NodeImpl)
         {
             ((NodeImpl)this.modifiers).setParent(null);
@@ -142,7 +142,7 @@ public class InterfaceDeclarationNodeImpl extends NodeImpl implements InterfaceD
         {
             getManager().assertMutatable(this);
         }
-        recordAccess(LocalAttribute.EXTENDS_CLAUSE, Attribute.AccessType.STRONG_WRITE);
+        recordAccess(LocalAttribute.EXTENDS_CLAUSE, Attribute.AccessType.WRITE);
         if (this.extendsClause instanceof NodeImpl)
         {
             ((NodeImpl)this.extendsClause).setParent(null);
@@ -179,7 +179,7 @@ public class InterfaceDeclarationNodeImpl extends NodeImpl implements InterfaceD
         {
             getManager().assertMutatable(this);
         }
-        recordAccess(LocalAttribute.BODY, Attribute.AccessType.STRONG_WRITE);
+        recordAccess(LocalAttribute.BODY, Attribute.AccessType.WRITE);
         if (this.body instanceof NodeImpl)
         {
             ((NodeImpl)this.body).setParent(null);
@@ -216,7 +216,7 @@ public class InterfaceDeclarationNodeImpl extends NodeImpl implements InterfaceD
         {
             getManager().assertMutatable(this);
         }
-        recordAccess(LocalAttribute.TYPE_PARAMETERS, Attribute.AccessType.STRONG_WRITE);
+        recordAccess(LocalAttribute.TYPE_PARAMETERS, Attribute.AccessType.WRITE);
         if (this.typeParameters instanceof NodeImpl)
         {
             ((NodeImpl)this.typeParameters).setParent(null);
@@ -253,7 +253,7 @@ public class InterfaceDeclarationNodeImpl extends NodeImpl implements InterfaceD
         {
             getManager().assertMutatable(this);
         }
-        recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.STRONG_WRITE);
+        recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.WRITE);
         if (this.identifier instanceof NodeImpl)
         {
             ((NodeImpl)this.identifier).setParent(null);
@@ -290,7 +290,7 @@ public class InterfaceDeclarationNodeImpl extends NodeImpl implements InterfaceD
         {
             getManager().assertMutatable(this);
         }
-        recordAccess(LocalAttribute.JAVADOC, Attribute.AccessType.STRONG_WRITE);
+        recordAccess(LocalAttribute.JAVADOC, Attribute.AccessType.WRITE);
         if (this.javadoc instanceof NodeImpl)
         {
             ((NodeImpl)this.javadoc).setParent(null);

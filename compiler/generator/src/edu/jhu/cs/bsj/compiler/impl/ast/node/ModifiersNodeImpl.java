@@ -69,7 +69,7 @@ public abstract class ModifiersNodeImpl extends NodeImpl implements ModifiersNod
         {
             getManager().assertMutatable(this);
         }
-        recordAccess(LocalAttribute.META_ANNOTATIONS, Attribute.AccessType.STRONG_WRITE);
+        recordAccess(LocalAttribute.META_ANNOTATIONS, Attribute.AccessType.WRITE);
         if (this.metaAnnotations instanceof NodeImpl)
         {
             ((NodeImpl)this.metaAnnotations).setParent(null);
@@ -106,7 +106,7 @@ public abstract class ModifiersNodeImpl extends NodeImpl implements ModifiersNod
         {
             getManager().assertMutatable(this);
         }
-        recordAccess(LocalAttribute.ANNOTATIONS, Attribute.AccessType.STRONG_WRITE);
+        recordAccess(LocalAttribute.ANNOTATIONS, Attribute.AccessType.WRITE);
         if (this.annotations instanceof NodeImpl)
         {
             ((NodeImpl)this.annotations).setParent(null);

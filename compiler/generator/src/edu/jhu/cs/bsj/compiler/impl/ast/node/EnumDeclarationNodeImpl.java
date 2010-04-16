@@ -97,7 +97,7 @@ public class EnumDeclarationNodeImpl extends NodeImpl implements EnumDeclaration
         {
             getManager().assertMutatable(this);
         }
-        recordAccess(LocalAttribute.MODIFIERS, Attribute.AccessType.STRONG_WRITE);
+        recordAccess(LocalAttribute.MODIFIERS, Attribute.AccessType.WRITE);
         if (this.modifiers instanceof NodeImpl)
         {
             ((NodeImpl)this.modifiers).setParent(null);
@@ -134,7 +134,7 @@ public class EnumDeclarationNodeImpl extends NodeImpl implements EnumDeclaration
         {
             getManager().assertMutatable(this);
         }
-        recordAccess(LocalAttribute.IMPLEMENTS_CLAUSE, Attribute.AccessType.STRONG_WRITE);
+        recordAccess(LocalAttribute.IMPLEMENTS_CLAUSE, Attribute.AccessType.WRITE);
         if (this.implementsClause instanceof NodeImpl)
         {
             ((NodeImpl)this.implementsClause).setParent(null);
@@ -171,7 +171,7 @@ public class EnumDeclarationNodeImpl extends NodeImpl implements EnumDeclaration
         {
             getManager().assertMutatable(this);
         }
-        recordAccess(LocalAttribute.BODY, Attribute.AccessType.STRONG_WRITE);
+        recordAccess(LocalAttribute.BODY, Attribute.AccessType.WRITE);
         if (this.body instanceof NodeImpl)
         {
             ((NodeImpl)this.body).setParent(null);
@@ -208,7 +208,7 @@ public class EnumDeclarationNodeImpl extends NodeImpl implements EnumDeclaration
         {
             getManager().assertMutatable(this);
         }
-        recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.STRONG_WRITE);
+        recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.WRITE);
         if (this.identifier instanceof NodeImpl)
         {
             ((NodeImpl)this.identifier).setParent(null);
@@ -245,7 +245,7 @@ public class EnumDeclarationNodeImpl extends NodeImpl implements EnumDeclaration
         {
             getManager().assertMutatable(this);
         }
-        recordAccess(LocalAttribute.JAVADOC, Attribute.AccessType.STRONG_WRITE);
+        recordAccess(LocalAttribute.JAVADOC, Attribute.AccessType.WRITE);
         if (this.javadoc instanceof NodeImpl)
         {
             ((NodeImpl)this.javadoc).setParent(null);

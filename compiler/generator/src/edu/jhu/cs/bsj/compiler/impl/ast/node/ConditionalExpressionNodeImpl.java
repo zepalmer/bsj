@@ -78,7 +78,7 @@ public class ConditionalExpressionNodeImpl extends NodeImpl implements Condition
         {
             getManager().assertMutatable(this);
         }
-        recordAccess(LocalAttribute.CONDITION, Attribute.AccessType.STRONG_WRITE);
+        recordAccess(LocalAttribute.CONDITION, Attribute.AccessType.WRITE);
         if (this.condition instanceof NodeImpl)
         {
             ((NodeImpl)this.condition).setParent(null);
@@ -115,7 +115,7 @@ public class ConditionalExpressionNodeImpl extends NodeImpl implements Condition
         {
             getManager().assertMutatable(this);
         }
-        recordAccess(LocalAttribute.TRUE_EXPRESSION, Attribute.AccessType.STRONG_WRITE);
+        recordAccess(LocalAttribute.TRUE_EXPRESSION, Attribute.AccessType.WRITE);
         if (this.trueExpression instanceof NodeImpl)
         {
             ((NodeImpl)this.trueExpression).setParent(null);
@@ -152,7 +152,7 @@ public class ConditionalExpressionNodeImpl extends NodeImpl implements Condition
         {
             getManager().assertMutatable(this);
         }
-        recordAccess(LocalAttribute.FALSE_EXPRESSION, Attribute.AccessType.STRONG_WRITE);
+        recordAccess(LocalAttribute.FALSE_EXPRESSION, Attribute.AccessType.WRITE);
         if (this.falseExpression instanceof NodeImpl)
         {
             ((NodeImpl)this.falseExpression).setParent(null);

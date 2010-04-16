@@ -7,6 +7,7 @@ public class MetaprogramConflict
 		{
 			;
 		}
+		System.out.println(body.getMembers());
 	:]
 	
 	[:
@@ -22,6 +23,7 @@ public class MetaprogramConflict
 										factory.makeIdentifierNode("x"),
 										null)),
 						null));
+		System.out.println(body.getMembers());
 	:]
 	
     public static void main(String[] arg)
