@@ -15,16 +15,13 @@ import edu.jhu.cs.bsj.compiler.ast.UnaryOperator;
 import edu.jhu.cs.bsj.compiler.ast.exception.MetaprogramExecutionFailureException;
 import edu.jhu.cs.bsj.compiler.ast.node.ArrayTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.BlockStatementNode;
-import edu.jhu.cs.bsj.compiler.ast.node.ClassDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassMemberListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassMemberNode;
-import edu.jhu.cs.bsj.compiler.ast.node.EnumDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.MethodDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.NamedTypeDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.PrimaryExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.PrimitiveTypeNode;
-import edu.jhu.cs.bsj.compiler.ast.node.TypeDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.impl.utils.Pair;
@@ -33,8 +30,9 @@ import edu.jhu.cs.bsj.compiler.metaannotation.BsjMetaAnnotationElementSetter;
 import edu.jhu.cs.bsj.compiler.metaannotation.InvalidMetaAnnotationConfigurationException;
 import edu.jhu.cs.bsj.compiler.metaprogram.AbstractBsjMetaAnnotationMetaprogram;
 import edu.jhu.cs.bsj.compiler.metaprogram.Context;
-import edu.jhu.cs.bsj.stdlib.diagnostic.impl.InvalidEnclosingTypeDiagnosticImpl;
 import edu.jhu.cs.bsj.stdlib.diagnostic.impl.MissingMethodDeclarationDiagnosticImpl;
+import edu.jhu.cs.bsj.stdlib.utils.GetterFilter;
+import edu.jhu.cs.bsj.stdlib.utils.TypeDeclUtils;
 
 /**
  * This meta-annotation metaprogram generates the equals and hashCode methods for a class. It generates these functions
@@ -71,55 +69,27 @@ public class GenerateEqualsAndHashCode extends AbstractBsjMetaAnnotationMetaprog
 	@Override
 	protected void execute(Context<MetaAnnotationMetaprogramAnchorNode> context)
 	{
-		// Find our enclosing type declaration. It must be an enum or a class for this to work.
-		TypeDeclarationNode enclosingTypeDeclaration = context.getAnchor().getNearestAncestorOfType(
-				TypeDeclarationNode.class);
-		ClassMemberListNode members;
-		if (enclosingTypeDeclaration instanceof ClassDeclarationNode)
-		{
-			members = ((ClassDeclarationNode) enclosingTypeDeclaration).getBody().getMembers();
-		} else if (enclosingTypeDeclaration instanceof EnumDeclarationNode)
-		{
-			members = ((EnumDeclarationNode) enclosingTypeDeclaration).getBody().getMembers();
-		} else
-		{
-			List<Class<? extends TypeDeclarationNode>> typeDeclarationList = new ArrayList<Class<? extends TypeDeclarationNode>>();
-			typeDeclarationList.add(ClassDeclarationNode.class);
-			typeDeclarationList.add(EnumDeclarationNode.class);
-			context.getDiagnosticListener().report(
-					new InvalidEnclosingTypeDiagnosticImpl(getClass(), enclosingTypeDeclaration, typeDeclarationList));
-			throw new MetaprogramExecutionFailureException();
-		}
+	    // get the other members of our class
+		ClassMemberListNode members = TypeDeclUtils.getClassMembers(context, this);
 
 		// Establish the list of properties we will be using
 		List<Pair<String, TypeNode>> getterDescriptions = new ArrayList<Pair<String, TypeNode>>();
 		if (this.properties == null)
 		{
-			for (ClassMemberNode member : members)
-			{
-				if (member instanceof MethodDeclarationNode)
-				{
-					MethodDeclarationNode methodDecl = (MethodDeclarationNode) member;
-					if (methodDecl.getIdentifier().getIdentifier().startsWith("get")
-							&& methodDecl.getParameters().size() == 0
-							&& (!(methodDecl.getReturnType() instanceof PrimitiveTypeNode) || (((PrimitiveTypeNode) (methodDecl.getReturnType())).getPrimitiveType() != PrimitiveType.VOID)))
-					{
-						getterDescriptions.add(new Pair<String, TypeNode>(methodDecl.getIdentifier().getIdentifier(),
-								methodDecl.getReturnType()));
-					}
-				}
-			}
+            for (ClassMemberNode member : members.filter(new GetterFilter()))
+            {
+                MethodDeclarationNode methodDecl = (MethodDeclarationNode) member;
+                getterDescriptions.add(new Pair<String, TypeNode>(methodDecl.getIdentifier().getIdentifier(),
+                      methodDecl.getReturnType()));
+            }
 		} else
 		{
 			Map<String, MethodDeclarationNode> methodMap = new HashMap<String, MethodDeclarationNode>();
-			for (ClassMemberNode member : members)
-			{
-				if (member instanceof MethodDeclarationNode)
-				{
-					MethodDeclarationNode methodDecl = (MethodDeclarationNode) member;
-					methodMap.put(methodDecl.getIdentifier().getIdentifier(), methodDecl);
-				}
-			}
+            for (ClassMemberNode member : members.filter(new GetterFilter()))
+            {
+                MethodDeclarationNode methodDecl = (MethodDeclarationNode) member;
+                methodMap.put(methodDecl.getIdentifier().getIdentifier(), methodDecl);
+            }
 			for (String propName : this.properties)
 			{
 				String getterName = "get" + Character.toUpperCase(propName.charAt(0)) + propName.substring(1);
@@ -135,8 +105,8 @@ public class GenerateEqualsAndHashCode extends AbstractBsjMetaAnnotationMetaprog
 		}
 
 		// Now generate equals and hashCode methods
-		members.add(generateEquals(context, getterDescriptions));
-		members.add(generateHashCode(context, getterDescriptions));
+		members.addLast(generateEquals(context, getterDescriptions));
+		members.addLast(generateHashCode(context, getterDescriptions));
 	}
 
 	private MethodDeclarationNode generateEquals(Context<MetaAnnotationMetaprogramAnchorNode> context,

@@ -8,7 +8,10 @@ import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 import edu.jhu.cs.bsj.compiler.ast.node.BlockStatementListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassMemberListNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ClassMemberNode;
+import edu.jhu.cs.bsj.compiler.ast.node.CompilationUnitNode;
 import edu.jhu.cs.bsj.compiler.ast.node.ExpressionStatementNode;
+import edu.jhu.cs.bsj.compiler.ast.node.InterfaceBodyNode;
+import edu.jhu.cs.bsj.compiler.ast.node.InterfaceDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.metaannotation.BsjMetaAnnotationElementGetter;
 import edu.jhu.cs.bsj.compiler.metaannotation.BsjMetaAnnotationElementSetter;
@@ -62,7 +65,7 @@ public class MakeObservable extends AbstractBsjMetaAnnotationMetaprogram
     @Override
     protected void execute(Context<MetaAnnotationMetaprogramAnchorNode> context)
     {
-        // TODO generate interface, test listening
+        // TODO test listening
 
         // get all the members of our enclosing class
         ClassMemberListNode members = TypeDeclUtils.getClassMembers(context, this);
@@ -98,6 +101,45 @@ public class MakeObservable extends AbstractBsjMetaAnnotationMetaprogram
         members.add(generateAddListenerMethod(context, factory));
         members.add(generateRemoveListenerMethod(context, factory));
         members.add(generateFireEventMethod(context, factory));
+        
+        // generate the listener interface
+        generateListenerInterface(context, factory);
+    }
+
+    private void generateListenerInterface(
+            Context<MetaAnnotationMetaprogramAnchorNode> context, BsjNodeFactory factory)
+    {
+        // Find our enclosing compilation unit.
+        CompilationUnitNode enclosingCompilationUnit = context.getAnchor().getNearestAncestorOfType(
+                CompilationUnitNode.class);
+        
+        // public void ~:eventOccurredName:~(~:eventName:~ e);
+        InterfaceBodyNode interfaceBody = factory.makeInterfaceBodyNode(
+                factory.makeInterfaceMemberListNode(
+                        factory.makeMethodDeclarationNode(
+                                null, 
+                                factory.makeMethodModifiersNode(AccessModifier.PUBLIC), 
+                                factory.makeIdentifierNode(eventOccurredName), 
+                                factory.makeVariableListNode(
+                                        factory.makeVariableNode(
+                                                factory.makeUnparameterizedTypeNode(
+                                                        factory.parseNameNode(eventName)), 
+                                                        factory.makeIdentifierNode("event"))), 
+                                factory.makeVoidTypeNode(), 
+                                factory.makeJavadocNode("Notifies this listener of an event.\n@param event the event that occurred."))));
+        
+        // build the interface itself
+        InterfaceDeclarationNode interfaceDecl = factory.makeInterfaceDeclarationNode(
+                factory.makeInterfaceModifiersNode(AccessModifier.PUBLIC), 
+                factory.makeDeclaredTypeListNode(), 
+                interfaceBody, 
+                factory.makeTypeParameterListNode(), 
+                factory.makeIdentifierNode(listenerName), 
+                factory.makeJavadocNode("Interface " + listenerName + "."));
+        
+        // add the interface to our compilation unit
+        //TODO permission problem here? could just add as a public inner class
+        //enclosingCompilationUnit.getTypeDecls().addLast(interfaceDecl);
     }
 
     private ClassMemberNode generateAddListenerMethod(
@@ -161,7 +203,7 @@ public class MakeObservable extends AbstractBsjMetaAnnotationMetaprogram
         String paramName = "event";
         String varName = "listener";
         
-        // listener.<:eventName:>Occurred(event);
+        // listener.~:eventName:~Occurred(event);
         ExpressionStatementNode methodCall = factory.makeExpressionStatementNode(
             factory.makeMethodInvocationByExpressionNode(
                     factory.makeFieldAccessByNameNode(factory.parseNameNode(varName)), 
@@ -169,7 +211,7 @@ public class MakeObservable extends AbstractBsjMetaAnnotationMetaprogram
                     factory.makeExpressionListNode(factory.makeFieldAccessByNameNode(factory.parseNameNode(paramName))), 
                     factory.makeReferenceTypeListNode()));
         
-        // for(<:listenerName:> listener : listeners){listener.<:eventName:>Occurred(event);}
+        // for(~:listenerName:~ listener : listeners){listener.~:eventName:~Occurred(event);}
         BlockStatementListNode statements = factory.makeBlockStatementListNode();
         statements.add(factory.makeEnhancedForLoopNode(
                 factory.makeVariableNode(factory.makeUnparameterizedTypeNode(factory.parseNameNode(listenerName)), factory.makeIdentifierNode(varName)), 

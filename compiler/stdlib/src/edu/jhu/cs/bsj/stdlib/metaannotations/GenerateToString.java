@@ -11,7 +11,6 @@ import edu.jhu.cs.bsj.compiler.ast.AssignmentOperator;
 import edu.jhu.cs.bsj.compiler.ast.BinaryOperator;
 import edu.jhu.cs.bsj.compiler.ast.BsjNodeFactory;
 import edu.jhu.cs.bsj.compiler.ast.NameCategory;
-import edu.jhu.cs.bsj.compiler.ast.PrimitiveType;
 import edu.jhu.cs.bsj.compiler.ast.exception.MetaprogramExecutionFailureException;
 import edu.jhu.cs.bsj.compiler.ast.node.ArrayTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.BlockStatementNode;
@@ -21,7 +20,6 @@ import edu.jhu.cs.bsj.compiler.ast.node.ExpressionNode;
 import edu.jhu.cs.bsj.compiler.ast.node.IdentifierNode;
 import edu.jhu.cs.bsj.compiler.ast.node.MethodDeclarationNode;
 import edu.jhu.cs.bsj.compiler.ast.node.PrimaryExpressionNode;
-import edu.jhu.cs.bsj.compiler.ast.node.PrimitiveTypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.TypeNode;
 import edu.jhu.cs.bsj.compiler.ast.node.meta.MetaAnnotationMetaprogramAnchorNode;
 import edu.jhu.cs.bsj.compiler.impl.utils.Pair;
@@ -31,6 +29,7 @@ import edu.jhu.cs.bsj.compiler.metaannotation.InvalidMetaAnnotationConfiguration
 import edu.jhu.cs.bsj.compiler.metaprogram.AbstractBsjMetaAnnotationMetaprogram;
 import edu.jhu.cs.bsj.compiler.metaprogram.Context;
 import edu.jhu.cs.bsj.stdlib.diagnostic.impl.MissingMethodDeclarationDiagnosticImpl;
+import edu.jhu.cs.bsj.stdlib.utils.GetterFilter;
 import edu.jhu.cs.bsj.stdlib.utils.TypeDeclUtils;
 
 /**
@@ -77,30 +76,19 @@ public class GenerateToString extends AbstractBsjMetaAnnotationMetaprogram
         List<Pair<String, TypeNode>> getterDescriptions = new ArrayList<Pair<String, TypeNode>>();
         if (this.properties == null)
         {
-            for (ClassMemberNode member : members)
+            for (ClassMemberNode member : members.filter(new GetterFilter()))
             {
-                if (member instanceof MethodDeclarationNode)
-                {
-                    MethodDeclarationNode methodDecl = (MethodDeclarationNode) member;
-                    if (methodDecl.getIdentifier().getIdentifier().startsWith("get")
-                            && methodDecl.getParameters().size() == 0
-                            && (!(methodDecl.getReturnType() instanceof PrimitiveTypeNode) || (((PrimitiveTypeNode) (methodDecl.getReturnType())).getPrimitiveType() != PrimitiveType.VOID)))
-                    {
-                        getterDescriptions.add(new Pair<String, TypeNode>(methodDecl.getIdentifier().getIdentifier(),
-                                methodDecl.getReturnType()));
-                    }
-                }
+                MethodDeclarationNode methodDecl = (MethodDeclarationNode) member;
+                getterDescriptions.add(new Pair<String, TypeNode>(methodDecl.getIdentifier().getIdentifier(),
+                      methodDecl.getReturnType()));
             }
         } else
         {
             Map<String, MethodDeclarationNode> methodMap = new HashMap<String, MethodDeclarationNode>();
-            for (ClassMemberNode member : members)
+            for (ClassMemberNode member : members.filter(new GetterFilter()))
             {
-                if (member instanceof MethodDeclarationNode)
-                {
-                    MethodDeclarationNode methodDecl = (MethodDeclarationNode) member;
-                    methodMap.put(methodDecl.getIdentifier().getIdentifier(), methodDecl);
-                }
+                MethodDeclarationNode methodDecl = (MethodDeclarationNode) member;
+                methodMap.put(methodDecl.getIdentifier().getIdentifier(), methodDecl);
             }
             for (String propName : this.properties)
             {
@@ -117,7 +105,7 @@ public class GenerateToString extends AbstractBsjMetaAnnotationMetaprogram
         }
 
         // create and add the actual toString method
-        members.add(createToString(
+        members.addLast(createToString(
                 context, getterDescriptions, TypeDeclUtils.getEnclosingTypeName(context, this)));
     }
 
