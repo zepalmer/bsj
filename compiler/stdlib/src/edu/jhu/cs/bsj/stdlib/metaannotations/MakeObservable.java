@@ -138,8 +138,8 @@ public class MakeObservable extends AbstractBsjMetaAnnotationMetaprogram
                 factory.makeJavadocNode("Interface " + listenerName + "."));
         
         // add the interface to our compilation unit
-        //TODO permission problem here? could just add as a public inner class
-        //enclosingCompilationUnit.getTypeDecls().addLast(interfaceDecl);
+        //TODO permission problem here?
+        enclosingCompilationUnit.getTypeDecls().addLast(interfaceDecl);
     }
 
     private ClassMemberNode generateAddListenerMethod(
