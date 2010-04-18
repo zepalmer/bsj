@@ -117,7 +117,7 @@ public abstract class NodeImpl
 		{
 			throw new MultipleParentNodeExceptionImpl(node, this);
 		}
-		recordAccess(this.parentAttribute, Attribute.AccessType.STRONG_WRITE);
+		recordAccess(this.parentAttribute, Attribute.AccessType.WRITE);
 		this.parent = node;
 	}
 	

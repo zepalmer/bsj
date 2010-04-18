@@ -63,8 +63,8 @@ public class ImportSingleTypeNodeImpl extends NodeImpl implements ImportSingleTy
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
+            recordAccess(LocalAttribute.NAME, Attribute.AccessType.WRITE);
         }
-        recordAccess(LocalAttribute.NAME, Attribute.AccessType.WRITE);
         if (this.name instanceof NodeImpl)
         {
             ((NodeImpl)this.name).setParent(null);

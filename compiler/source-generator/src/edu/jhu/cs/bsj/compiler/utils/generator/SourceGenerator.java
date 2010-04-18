@@ -950,10 +950,10 @@ public class SourceGenerator
 						ps.println("if (checkPermissions)");
 						ps.println("{");
 						ps.println("    getManager().assertMutatable(this);");
-						ps.println("}");
-						ps.println("recordAccess(LocalAttribute."
+						ps.println("    recordAccess(LocalAttribute."
 								+ StringUtilities.convertCamelCaseToUpperCase(p.getName())
-								+ ", Attribute.AccessType.STRONG_WRITE);");
+								+ ", Attribute.AccessType.WRITE);");
+						ps.println("}");
 						if (propInstanceOf(p.getBaseType(), "Node"))
 						{
 							ps.println("if (this." + p.getName() + " instanceof NodeImpl)");

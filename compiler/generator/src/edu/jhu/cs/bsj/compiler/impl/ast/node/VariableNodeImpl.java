@@ -79,8 +79,8 @@ public class VariableNodeImpl extends NodeImpl implements VariableNode
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
+            recordAccess(LocalAttribute.MODIFIERS, Attribute.AccessType.WRITE);
         }
-        recordAccess(LocalAttribute.MODIFIERS, Attribute.AccessType.WRITE);
         if (this.modifiers instanceof NodeImpl)
         {
             ((NodeImpl)this.modifiers).setParent(null);
@@ -116,8 +116,8 @@ public class VariableNodeImpl extends NodeImpl implements VariableNode
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
+            recordAccess(LocalAttribute.TYPE, Attribute.AccessType.WRITE);
         }
-        recordAccess(LocalAttribute.TYPE, Attribute.AccessType.WRITE);
         if (this.type instanceof NodeImpl)
         {
             ((NodeImpl)this.type).setParent(null);
@@ -153,8 +153,8 @@ public class VariableNodeImpl extends NodeImpl implements VariableNode
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
+            recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.WRITE);
         }
-        recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.WRITE);
         if (this.identifier instanceof NodeImpl)
         {
             ((NodeImpl)this.identifier).setParent(null);

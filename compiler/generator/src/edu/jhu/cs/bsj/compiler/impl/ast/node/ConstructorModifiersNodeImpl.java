@@ -67,8 +67,8 @@ public class ConstructorModifiersNodeImpl extends ModifiersNodeImpl implements C
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
+            recordAccess(LocalAttribute.ACCESS, Attribute.AccessType.WRITE);
         }
-        recordAccess(LocalAttribute.ACCESS, Attribute.AccessType.WRITE);
         this.access = access;
     }
     

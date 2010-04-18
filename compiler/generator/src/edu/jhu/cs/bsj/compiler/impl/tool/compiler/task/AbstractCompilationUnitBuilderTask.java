@@ -38,8 +38,7 @@ public abstract class AbstractCompilationUnitBuilderTask extends AbstractBsjComp
 		// This might be necessary if we are within the scope of a metaprogram (such as with a call to PackageNode.load)
 		PermissionPolicyManager policyManager = context.getNodeManager().getPermissionPolicyManager();
 		context.getNodeManager().setPermissionPolicyManager(null);
-		Integer metaprogramID = context.getNodeManager().getCurrentMetaprogramId();
-		context.getNodeManager().setCurrentMetaprogramId(null);
+		context.getNodeManager().pushCurrentMetaprogramId(null);
 		
 		// Parse the file into a compilation unit
 		CompilationUnitNode node = createCompilationUnit(context, this.file);
@@ -58,7 +57,7 @@ public abstract class AbstractCompilationUnitBuilderTask extends AbstractBsjComp
 
 		// Reinstate policy management and conflict detection
 		context.getNodeManager().setPermissionPolicyManager(policyManager);
-		context.getNodeManager().setCurrentMetaprogramId(metaprogramID);
+		context.getNodeManager().popCurrentMetaprogramId();
 
 		// Enqueue the compilation unit for name categorization
 		context.registerTask(new CategorizeNamesTask(node, this.profile));

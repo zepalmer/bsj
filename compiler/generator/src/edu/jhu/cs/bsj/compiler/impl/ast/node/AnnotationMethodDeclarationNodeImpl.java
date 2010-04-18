@@ -95,8 +95,8 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
+            recordAccess(LocalAttribute.MODIFIERS, Attribute.AccessType.WRITE);
         }
-        recordAccess(LocalAttribute.MODIFIERS, Attribute.AccessType.WRITE);
         if (this.modifiers instanceof NodeImpl)
         {
             ((NodeImpl)this.modifiers).setParent(null);
@@ -132,8 +132,8 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
+            recordAccess(LocalAttribute.TYPE, Attribute.AccessType.WRITE);
         }
-        recordAccess(LocalAttribute.TYPE, Attribute.AccessType.WRITE);
         if (this.type instanceof NodeImpl)
         {
             ((NodeImpl)this.type).setParent(null);
@@ -169,8 +169,8 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
+            recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.WRITE);
         }
-        recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.WRITE);
         if (this.identifier instanceof NodeImpl)
         {
             ((NodeImpl)this.identifier).setParent(null);
@@ -206,8 +206,8 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
+            recordAccess(LocalAttribute.DEFAULT_VALUE, Attribute.AccessType.WRITE);
         }
-        recordAccess(LocalAttribute.DEFAULT_VALUE, Attribute.AccessType.WRITE);
         if (this.defaultValue instanceof NodeImpl)
         {
             ((NodeImpl)this.defaultValue).setParent(null);
@@ -243,8 +243,8 @@ public class AnnotationMethodDeclarationNodeImpl extends NodeImpl implements Ann
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
+            recordAccess(LocalAttribute.JAVADOC, Attribute.AccessType.WRITE);
         }
-        recordAccess(LocalAttribute.JAVADOC, Attribute.AccessType.WRITE);
         if (this.javadoc instanceof NodeImpl)
         {
             ((NodeImpl)this.javadoc).setParent(null);

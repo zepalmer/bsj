@@ -13,6 +13,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Stack;
 import java.util.concurrent.atomic.AtomicLong;
 
 import javax.tools.Diagnostic;
@@ -100,7 +101,6 @@ public class BsjNodeManager
 	private static AtomicLong expressionClassUID = new AtomicLong(0);
 
 	/** A logger for this object. */
-	@SuppressWarnings("unused")
 	private Logger LOGGER = Logger.getLogger(this.getClass());
 
 	/**
@@ -121,16 +121,17 @@ public class BsjNodeManager
 	private BsjToolkit toolkit;
 
 	/**
-	 * The ID of the currently-running metaprogram. If null, no metaprogram is currently running and no dependency
-	 * restrictions are active.
+	 * The stack of running metaprogram IDs. This is specifically in place to permit code to temporarily suspend the
+	 * running metaprograms (by pushing <code>null</code> onto the stack).
 	 */
-	private Integer currentMetaprogramId;
+	private Stack<Integer> metaprogramIdStack;
 
 	/**
 	 * Creates a new node manager.
 	 */
 	public BsjNodeManager()
 	{
+		this.metaprogramIdStack = new Stack<Integer>();
 		this.permissionPolicyManager = null;
 	}
 
@@ -156,12 +157,23 @@ public class BsjNodeManager
 
 	public Integer getCurrentMetaprogramId()
 	{
-		return currentMetaprogramId;
+		if (metaprogramIdStack.isEmpty())
+		{
+			return null;
+		} else
+		{
+			return metaprogramIdStack.peek();
+		}
 	}
-
-	public void setCurrentMetaprogramId(Integer currentMetaprogramId)
+	
+	public void pushCurrentMetaprogramId(Integer id)
 	{
-		this.currentMetaprogramId = currentMetaprogramId;
+		this.metaprogramIdStack.push(id);
+	}
+	
+	public void popCurrentMetaprogramId()
+	{
+		this.metaprogramIdStack.pop();
 	}
 
 	/**
@@ -237,10 +249,10 @@ public class BsjNodeManager
 	 */
 	public boolean hasCooperation(int id)
 	{
-		if (this.dependencyManager == null || this.currentMetaprogramId == null)
+		if (this.dependencyManager == null || getCurrentMetaprogramId() == null)
 			return true;
 
-		if (this.dependencyManager.checkCooperation(this.currentMetaprogramId, id))
+		if (this.dependencyManager.checkCooperation(getCurrentMetaprogramId(), id))
 			return true;
 
 		return false;
@@ -258,9 +270,14 @@ public class BsjNodeManager
 	{
 		if (!hasCooperation(id))
 		{
+			if (LOGGER.isDebugEnabled())
+			{
+				LOGGER.debug("Attempted to assert cooperation between " + id + " and " + getCurrentMetaprogramId()
+						+ " over node " + node.getUid() + " and failed.");
+			}
 			throw new MetaprogramConflictExceptionImpl(
 					this.dependencyManager.getMetaprogramProfileByID(id).getAnchor(),
-					this.dependencyManager.getMetaprogramProfileByID(this.currentMetaprogramId).getAnchor(), node);
+					this.dependencyManager.getMetaprogramProfileByID(getCurrentMetaprogramId()).getAnchor(), node);
 		}
 	}
 

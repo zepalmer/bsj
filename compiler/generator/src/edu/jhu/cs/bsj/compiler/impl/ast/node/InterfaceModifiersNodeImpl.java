@@ -81,8 +81,8 @@ public class InterfaceModifiersNodeImpl extends ModifiersNodeImpl implements Int
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
+            recordAccess(LocalAttribute.ACCESS, Attribute.AccessType.WRITE);
         }
-        recordAccess(LocalAttribute.ACCESS, Attribute.AccessType.WRITE);
         this.access = access;
     }
     
@@ -110,8 +110,8 @@ public class InterfaceModifiersNodeImpl extends ModifiersNodeImpl implements Int
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
+            recordAccess(LocalAttribute.STATIC_FLAG, Attribute.AccessType.WRITE);
         }
-        recordAccess(LocalAttribute.STATIC_FLAG, Attribute.AccessType.WRITE);
         this.staticFlag = staticFlag;
     }
     
@@ -139,8 +139,8 @@ public class InterfaceModifiersNodeImpl extends ModifiersNodeImpl implements Int
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
+            recordAccess(LocalAttribute.STRICTFP_FLAG, Attribute.AccessType.WRITE);
         }
-        recordAccess(LocalAttribute.STRICTFP_FLAG, Attribute.AccessType.WRITE);
         this.strictfpFlag = strictfpFlag;
     }
     

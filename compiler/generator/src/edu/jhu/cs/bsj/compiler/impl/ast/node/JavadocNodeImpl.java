@@ -62,8 +62,8 @@ public class JavadocNodeImpl extends NodeImpl implements JavadocNode
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
+            recordAccess(LocalAttribute.TEXT, Attribute.AccessType.WRITE);
         }
-        recordAccess(LocalAttribute.TEXT, Attribute.AccessType.WRITE);
         this.text = text;
     }
     

@@ -127,8 +127,8 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
+            recordAccess(LocalAttribute.BODY, Attribute.AccessType.WRITE);
         }
-        recordAccess(LocalAttribute.BODY, Attribute.AccessType.WRITE);
         if (this.body instanceof NodeImpl)
         {
             ((NodeImpl)this.body).setParent(null);
@@ -164,8 +164,8 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
+            recordAccess(LocalAttribute.MODIFIERS, Attribute.AccessType.WRITE);
         }
-        recordAccess(LocalAttribute.MODIFIERS, Attribute.AccessType.WRITE);
         if (this.modifiers instanceof NodeImpl)
         {
             ((NodeImpl)this.modifiers).setParent(null);
@@ -201,8 +201,8 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
+            recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.WRITE);
         }
-        recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.WRITE);
         if (this.identifier instanceof NodeImpl)
         {
             ((NodeImpl)this.identifier).setParent(null);
@@ -238,8 +238,8 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
+            recordAccess(LocalAttribute.PARAMETERS, Attribute.AccessType.WRITE);
         }
-        recordAccess(LocalAttribute.PARAMETERS, Attribute.AccessType.WRITE);
         if (this.parameters instanceof NodeImpl)
         {
             ((NodeImpl)this.parameters).setParent(null);
@@ -275,8 +275,8 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
+            recordAccess(LocalAttribute.VARARG_PARAMETER, Attribute.AccessType.WRITE);
         }
-        recordAccess(LocalAttribute.VARARG_PARAMETER, Attribute.AccessType.WRITE);
         if (this.varargParameter instanceof NodeImpl)
         {
             ((NodeImpl)this.varargParameter).setParent(null);
@@ -312,8 +312,8 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
+            recordAccess(LocalAttribute.RETURN_TYPE, Attribute.AccessType.WRITE);
         }
-        recordAccess(LocalAttribute.RETURN_TYPE, Attribute.AccessType.WRITE);
         if (this.returnType instanceof NodeImpl)
         {
             ((NodeImpl)this.returnType).setParent(null);
@@ -349,8 +349,8 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
+            recordAccess(LocalAttribute.THROW_TYPES, Attribute.AccessType.WRITE);
         }
-        recordAccess(LocalAttribute.THROW_TYPES, Attribute.AccessType.WRITE);
         if (this.throwTypes instanceof NodeImpl)
         {
             ((NodeImpl)this.throwTypes).setParent(null);
@@ -386,8 +386,8 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
+            recordAccess(LocalAttribute.TYPE_PARAMETERS, Attribute.AccessType.WRITE);
         }
-        recordAccess(LocalAttribute.TYPE_PARAMETERS, Attribute.AccessType.WRITE);
         if (this.typeParameters instanceof NodeImpl)
         {
             ((NodeImpl)this.typeParameters).setParent(null);
@@ -423,8 +423,8 @@ public class MethodDeclarationNodeImpl extends NodeImpl implements MethodDeclara
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
+            recordAccess(LocalAttribute.JAVADOC, Attribute.AccessType.WRITE);
         }
-        recordAccess(LocalAttribute.JAVADOC, Attribute.AccessType.WRITE);
         if (this.javadoc instanceof NodeImpl)
         {
             ((NodeImpl)this.javadoc).setParent(null);

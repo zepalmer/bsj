@@ -67,8 +67,8 @@ public class SuperclassConstructorInvocationNodeImpl extends ConstructorInvocati
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
+            recordAccess(LocalAttribute.QUALIFYING_EXPRESSION, Attribute.AccessType.WRITE);
         }
-        recordAccess(LocalAttribute.QUALIFYING_EXPRESSION, Attribute.AccessType.WRITE);
         if (this.qualifyingExpression instanceof NodeImpl)
         {
             ((NodeImpl)this.qualifyingExpression).setParent(null);

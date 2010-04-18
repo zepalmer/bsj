@@ -62,8 +62,8 @@ public class IdentifierNodeImpl extends NodeImpl implements IdentifierNode
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
+            recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.WRITE);
         }
-        recordAccess(LocalAttribute.IDENTIFIER, Attribute.AccessType.WRITE);
         this.identifier = identifier;
     }
     

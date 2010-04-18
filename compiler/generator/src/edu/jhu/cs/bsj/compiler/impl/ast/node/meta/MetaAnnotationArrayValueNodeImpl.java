@@ -64,8 +64,8 @@ public class MetaAnnotationArrayValueNodeImpl extends NodeImpl implements MetaAn
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
+            recordAccess(LocalAttribute.VALUES, Attribute.AccessType.WRITE);
         }
-        recordAccess(LocalAttribute.VALUES, Attribute.AccessType.WRITE);
         if (this.values instanceof NodeImpl)
         {
             ((NodeImpl)this.values).setParent(null);

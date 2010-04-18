@@ -68,8 +68,8 @@ public abstract class MethodInvocationNodeImpl extends NodeImpl implements Metho
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
+            recordAccess(LocalAttribute.ARGUMENTS, Attribute.AccessType.WRITE);
         }
-        recordAccess(LocalAttribute.ARGUMENTS, Attribute.AccessType.WRITE);
         if (this.arguments instanceof NodeImpl)
         {
             ((NodeImpl)this.arguments).setParent(null);
@@ -105,8 +105,8 @@ public abstract class MethodInvocationNodeImpl extends NodeImpl implements Metho
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
+            recordAccess(LocalAttribute.TYPE_ARGUMENTS, Attribute.AccessType.WRITE);
         }
-        recordAccess(LocalAttribute.TYPE_ARGUMENTS, Attribute.AccessType.WRITE);
         if (this.typeArguments instanceof NodeImpl)
         {
             ((NodeImpl)this.typeArguments).setParent(null);

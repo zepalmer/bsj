@@ -64,8 +64,8 @@ public class MetaAnnotationMetaAnnotationValueNodeImpl extends NodeImpl implemen
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
+            recordAccess(LocalAttribute.ANNOTATION, Attribute.AccessType.WRITE);
         }
-        recordAccess(LocalAttribute.ANNOTATION, Attribute.AccessType.WRITE);
         if (this.annotation instanceof NodeImpl)
         {
             ((NodeImpl)this.annotation).setParent(null);

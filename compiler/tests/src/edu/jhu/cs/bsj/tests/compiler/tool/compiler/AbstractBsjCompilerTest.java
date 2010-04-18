@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Random;
 
 import javax.tools.Diagnostic;
+import javax.tools.DiagnosticListener;
 import javax.tools.Diagnostic.Kind;
 
 import org.junit.Assert;
@@ -15,8 +16,8 @@ import org.junit.Assert;
 import edu.jhu.cs.bsj.compiler.BsjServiceRegistry;
 import edu.jhu.cs.bsj.compiler.ast.BsjSourceLocation;
 import edu.jhu.cs.bsj.compiler.diagnostic.BsjDiagnostic;
+import edu.jhu.cs.bsj.compiler.diagnostic.compiler.MetaprogramDetectedErrorDiagnostic;
 import edu.jhu.cs.bsj.compiler.impl.diagnostic.RecordingDiagnosticProxyListener;
-import edu.jhu.cs.bsj.compiler.impl.utils.diagnostic.DiagnosticPrintingListener;
 import edu.jhu.cs.bsj.compiler.tool.BsjCompiler;
 import edu.jhu.cs.bsj.compiler.tool.BsjToolkit;
 import edu.jhu.cs.bsj.compiler.tool.BsjToolkitFactory;
@@ -120,7 +121,19 @@ public abstract class AbstractBsjCompilerTest extends AbstractTest
 
 		BsjCompiler compiler = toolkit.getCompiler();
 		RecordingDiagnosticProxyListener<BsjSourceLocation> diagnosticListener = new RecordingDiagnosticProxyListener<BsjSourceLocation>(
-				new DiagnosticPrintingListener<BsjSourceLocation>(System.err));
+				new DiagnosticListener<BsjSourceLocation>(){
+					@Override
+					public void report(Diagnostic<? extends BsjSourceLocation> diagnostic)
+					{
+						System.err.println(diagnostic.getMessage(null));
+						if (diagnostic instanceof MetaprogramDetectedErrorDiagnostic<?>)
+						{
+							MetaprogramDetectedErrorDiagnostic<?> d = (MetaprogramDetectedErrorDiagnostic<?>)diagnostic;
+							System.err.println("Exception is: ");
+							d.getException().printStackTrace();
+						}
+					}
+				});
 		Random random;
 		if (System.getProperty("bsj.tests.seed") == null)
 		{

@@ -63,8 +63,8 @@ public class ReturnNodeImpl extends NodeImpl implements ReturnNode
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
+            recordAccess(LocalAttribute.EXPRESSION, Attribute.AccessType.WRITE);
         }
-        recordAccess(LocalAttribute.EXPRESSION, Attribute.AccessType.WRITE);
         if (this.expression instanceof NodeImpl)
         {
             ((NodeImpl)this.expression).setParent(null);

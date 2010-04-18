@@ -63,8 +63,8 @@ public class BreakNodeImpl extends NodeImpl implements BreakNode
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
+            recordAccess(LocalAttribute.LABEL, Attribute.AccessType.WRITE);
         }
-        recordAccess(LocalAttribute.LABEL, Attribute.AccessType.WRITE);
         if (this.label instanceof NodeImpl)
         {
             ((NodeImpl)this.label).setParent(null);

@@ -71,8 +71,8 @@ public class CatchNodeImpl extends NodeImpl implements CatchNode
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
+            recordAccess(LocalAttribute.BLOCK, Attribute.AccessType.WRITE);
         }
-        recordAccess(LocalAttribute.BLOCK, Attribute.AccessType.WRITE);
         if (this.block instanceof NodeImpl)
         {
             ((NodeImpl)this.block).setParent(null);
@@ -108,8 +108,8 @@ public class CatchNodeImpl extends NodeImpl implements CatchNode
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
+            recordAccess(LocalAttribute.PARAMETER, Attribute.AccessType.WRITE);
         }
-        recordAccess(LocalAttribute.PARAMETER, Attribute.AccessType.WRITE);
         if (this.parameter instanceof NodeImpl)
         {
             ((NodeImpl)this.parameter).setParent(null);

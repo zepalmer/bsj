@@ -6,6 +6,9 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicLong;
+
+import org.apache.log4j.Logger;
 
 import edu.jhu.cs.bsj.compiler.ast.NodeFilter;
 import edu.jhu.cs.bsj.compiler.ast.NodeList;
@@ -30,6 +33,15 @@ public class NodeListImpl<T extends Node> implements NodeList<T>
 	private static final String INVARIANT_LEFT = "╙";
 	/** The Unicode character we will use to represent the right delimiter of invariants. */
 	private static final String INVARIANT_RIGHT = "╜";
+	
+	/** The logger to use for this class. */
+	private static final Logger LOGGER = Logger.getLogger(NodeListImpl.class);
+	
+	/** The next UID to give to a list node implementation. */
+	private static final AtomicLong NEXT_UID = new AtomicLong(0);
+	
+	/** The UID for this list. */
+	private final long uid = NEXT_UID.getAndIncrement();
 
 	/** The node manager for this list. */
 	private BsjNodeManager manager;
@@ -104,6 +116,11 @@ public class NodeListImpl<T extends Node> implements NodeList<T>
 	@Override
 	public void addAfter(T member, T node) throws IllegalArgumentException
 	{
+		if (LOGGER.isTraceEnabled())
+		{
+			LOGGER.trace(uid + ".addAfter(" + member + "," + node + ")");
+		}
+		
 		if (member == null)
 			throw new NullPointerException();
 		if (node == null)
@@ -125,6 +142,11 @@ public class NodeListImpl<T extends Node> implements NodeList<T>
 	@Override
 	public void addBefore(T member, T node) throws IllegalArgumentException
 	{
+		if (LOGGER.isTraceEnabled())
+		{
+			LOGGER.trace(uid + ".addBefore(" + member + "," + node + ")");
+		}
+
 		if (member == null)
 			throw new NullPointerException();
 		if (node == null)
@@ -146,6 +168,11 @@ public class NodeListImpl<T extends Node> implements NodeList<T>
 	@Override
 	public void addFirst(T node)
 	{
+		if (LOGGER.isTraceEnabled())
+		{
+			LOGGER.trace(uid + ".addFirst(" + node + ")");
+		}
+
 		if (node == null)
 			throw new NullPointerException();
 		this.backing.add(0, node);
@@ -160,6 +187,11 @@ public class NodeListImpl<T extends Node> implements NodeList<T>
 	@Override
 	public void addLast(T node)
 	{
+		if (LOGGER.isTraceEnabled())
+		{
+			LOGGER.trace(uid + ".addLast(" + node + ")");
+		}
+
 		if (node == null)
 			throw new NullPointerException();
 		this.backing.add(node);
@@ -174,6 +206,11 @@ public class NodeListImpl<T extends Node> implements NodeList<T>
 	@Override
 	public Set<T> filter(NodeFilter<? super T> filter)
 	{
+		if (LOGGER.isTraceEnabled())
+		{
+			LOGGER.trace(uid + ".filter(" + filter + ")");
+		}
+
 		Set<T> ret = new HashSet<T>();
 		for (T t : this.backing)
 		{
@@ -192,6 +229,11 @@ public class NodeListImpl<T extends Node> implements NodeList<T>
 	@Override
 	public T getAfter(T member) throws IllegalArgumentException
 	{
+		if (LOGGER.isTraceEnabled())
+		{
+			LOGGER.trace(uid + ".getAfter(" + member + ")");
+		}
+
 		if (member == null)
 			throw new NullPointerException();
 		T ret;
@@ -222,6 +264,11 @@ public class NodeListImpl<T extends Node> implements NodeList<T>
 	@Override
 	public T getBefore(T member) throws IllegalArgumentException
 	{
+		if (LOGGER.isTraceEnabled())
+		{
+			LOGGER.trace(uid + ".getBefore(" + member + ")");
+		}
+
 		if (member == null)
 			throw new NullPointerException();
 		T ret;
@@ -252,6 +299,11 @@ public class NodeListImpl<T extends Node> implements NodeList<T>
 	@Override
 	public T getFirst()
 	{
+		if (LOGGER.isTraceEnabled())
+		{
+			LOGGER.trace(uid + ".getFirst()");
+		}
+
 		T ret;
 		SymbolicValue<T> value;
 		if (this.backing.size() > 0)
@@ -274,6 +326,11 @@ public class NodeListImpl<T extends Node> implements NodeList<T>
 	@Override
 	public T getLast()
 	{
+		if (LOGGER.isTraceEnabled())
+		{
+			LOGGER.trace(uid + ".getLast()");
+		}
+		
 		T ret;
 		SymbolicValue<T> value;
 		if (this.backing.size() > 0)
@@ -296,6 +353,11 @@ public class NodeListImpl<T extends Node> implements NodeList<T>
 	@Override
 	public boolean remove(T node)
 	{
+		if (LOGGER.isTraceEnabled())
+		{
+			LOGGER.trace(uid + ".remove(" + node + ")");
+		}
+		
 		boolean ret = this.backing.remove(node);
 		if (this.manager.getCurrentMetaprogramId() != null)
 		{
@@ -346,6 +408,11 @@ public class NodeListImpl<T extends Node> implements NodeList<T>
 	 */
 	private void addKnowledge(Collection<Knowledge<T>> knowledgeSet)
 	{
+		if (LOGGER.isTraceEnabled())
+		{
+			LOGGER.trace("Adding knowledge " + knowledgeSet + " to knowledge base " + this.base);
+		}
+		
 		// Calculate the set of knowledge for non-cooperating metaprograms
 		Set<Knowledge<T>> uncooperativeMetaprogramKnowledge = calculateUncooperativeMetaprogramKnowledge();
 

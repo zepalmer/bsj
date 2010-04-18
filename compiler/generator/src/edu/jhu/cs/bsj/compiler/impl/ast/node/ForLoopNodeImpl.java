@@ -87,8 +87,8 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
+            recordAccess(LocalAttribute.INITIALIZER, Attribute.AccessType.WRITE);
         }
-        recordAccess(LocalAttribute.INITIALIZER, Attribute.AccessType.WRITE);
         if (this.initializer instanceof NodeImpl)
         {
             ((NodeImpl)this.initializer).setParent(null);
@@ -124,8 +124,8 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
+            recordAccess(LocalAttribute.CONDITION, Attribute.AccessType.WRITE);
         }
-        recordAccess(LocalAttribute.CONDITION, Attribute.AccessType.WRITE);
         if (this.condition instanceof NodeImpl)
         {
             ((NodeImpl)this.condition).setParent(null);
@@ -161,8 +161,8 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
+            recordAccess(LocalAttribute.UPDATE, Attribute.AccessType.WRITE);
         }
-        recordAccess(LocalAttribute.UPDATE, Attribute.AccessType.WRITE);
         if (this.update instanceof NodeImpl)
         {
             ((NodeImpl)this.update).setParent(null);
@@ -198,8 +198,8 @@ public class ForLoopNodeImpl extends NodeImpl implements ForLoopNode
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
+            recordAccess(LocalAttribute.STATEMENT, Attribute.AccessType.WRITE);
         }
-        recordAccess(LocalAttribute.STATEMENT, Attribute.AccessType.WRITE);
         if (this.statement instanceof NodeImpl)
         {
             ((NodeImpl)this.statement).setParent(null);

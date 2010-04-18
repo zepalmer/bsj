@@ -49,8 +49,7 @@ public class GenerateToString extends AbstractBsjMetaAnnotationMetaprogram
 
     public GenerateToString()
     {
-        //TODO remove dependency on equalsAndHashCode
-        super(Arrays.asList("toString"), Arrays.asList("property", "equalsAndHashCode"));
+        super(Arrays.asList("toString"), Arrays.asList("property"));
     }
 
     @BsjMetaAnnotationElementGetter

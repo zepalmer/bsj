@@ -87,7 +87,7 @@ public class ExecuteMetaprogramTask extends AbstractBsjCompilerTask
 		// Set up the permission policy manager and dependency manager for this metaprogram
 		PermissionPolicyManager policyManager = createPermissionPolicyManager(profile, context.getRootPackage());
 		context.getNodeManager().setPermissionPolicyManager(policyManager);
-		context.getNodeManager().setCurrentMetaprogramId(profile.getMetaprogram().getID());
+		context.getNodeManager().pushCurrentMetaprogramId(profile.getMetaprogram().getID());
 		context.getNodeManager().setDependencyManager(context.getDependencyManager());
 
 		// Run the metaprogram
@@ -99,7 +99,7 @@ public class ExecuteMetaprogramTask extends AbstractBsjCompilerTask
 		
 		// Release the managers
 		context.getNodeManager().setPermissionPolicyManager(null);
-		context.getNodeManager().setCurrentMetaprogramId(null);
+		context.getNodeManager().popCurrentMetaprogramId();
 		context.getNodeManager().setDependencyManager(null);
 
 		// Respond to error as necessary

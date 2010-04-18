@@ -64,8 +64,8 @@ public class MetaAnnotationExpressionValueNodeImpl extends NodeImpl implements M
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
+            recordAccess(LocalAttribute.EXPRESSION, Attribute.AccessType.WRITE);
         }
-        recordAccess(LocalAttribute.EXPRESSION, Attribute.AccessType.WRITE);
         if (this.expression instanceof NodeImpl)
         {
             ((NodeImpl)this.expression).setParent(null);

@@ -72,8 +72,8 @@ public abstract class MetaAnnotationNodeImpl extends NodeImpl implements MetaAnn
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
+            recordAccess(LocalAttribute.ANNOTATION_TYPE, Attribute.AccessType.WRITE);
         }
-        recordAccess(LocalAttribute.ANNOTATION_TYPE, Attribute.AccessType.WRITE);
         if (this.annotationType instanceof NodeImpl)
         {
             ((NodeImpl)this.annotationType).setParent(null);

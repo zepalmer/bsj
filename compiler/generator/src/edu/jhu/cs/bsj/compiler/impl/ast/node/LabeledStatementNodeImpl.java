@@ -71,8 +71,8 @@ public class LabeledStatementNodeImpl extends NodeImpl implements LabeledStateme
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
+            recordAccess(LocalAttribute.LABEL, Attribute.AccessType.WRITE);
         }
-        recordAccess(LocalAttribute.LABEL, Attribute.AccessType.WRITE);
         if (this.label instanceof NodeImpl)
         {
             ((NodeImpl)this.label).setParent(null);
@@ -108,8 +108,8 @@ public class LabeledStatementNodeImpl extends NodeImpl implements LabeledStateme
         if (checkPermissions)
         {
             getManager().assertMutatable(this);
+            recordAccess(LocalAttribute.STATEMENT, Attribute.AccessType.WRITE);
         }
-        recordAccess(LocalAttribute.STATEMENT, Attribute.AccessType.WRITE);
         if (this.statement instanceof NodeImpl)
         {
             ((NodeImpl)this.statement).setParent(null);
